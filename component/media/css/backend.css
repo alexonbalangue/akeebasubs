@@ -1,0 +1,41 @@
+/**
+ * @package		akeebasubs
+ * @copyright	Copyright (c)2010 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ */
+
+@CHARSET "UTF-8";
+
+.icon-48-akeebasubs {
+	background: transparent url(../images/akeebasubs-48.png) no-repeat !important;
+}
+
+.icon-32-export { background: transparent url(../../lib_koowa/images/32/export.png) no-repeat !important; }
+
+.akeebasubs-clear { clear:both; }
+label.title, input.title { font-weight: bold; font-size: larger; }
+label.main { display: inline-block; width: 45%; background: #e0e0e0; border-bottom: 1px solid gray; padding: 2px; margin-bottom: 2px }
+
+#levels-basic, #subscriptions-basic { display: block; float: left; width: 45%; margin: 0 10px 1em 0; }
+#image-preview { display: block; width: 64px; height: 64px; border: thin solid gray; margin: 2px 2px 2px 48%; }
+
+.sublevelpic { float: left; margin-right: 3px; }
+.subslevel { float: left; margin-top: 10px; }
+.gravatar { margin-right: 3px; }
+
+.akeebasubs-subscription-netamount { display: block; color: #693; }
+.akeebasubs-subscription-taxamount { display: block; color: #963; font-style: italic; border-bottom: thin solid #999; }
+.akeebasubs-subscription-grossamount { display: block; font-weight: bold; color: #333; font-size: larger; }
+.akeebasubs-subscription-amount { text-align: right; width: 60px; }
+
+.akeebasubs-payment { display: block; position: relative; float: left: margin: 0px auto; padding: 0; width: 30px; height: 30px; background-image: url('../images/dollaricons.png'); background-repeat: no-repeat; }
+.akeebasubs-payment-n { background-position: 0px 0px }
+.akeebasubs-payment-p { background-position: -30px 0px }
+.akeebasubs-payment-c { background-position: -60px 0px }
+.akeebasubs-payment-x { background-position: -90px 0px }
+
+tr.expired td { background: rgba(255,220,220,128) !important; color: gray; }
+tr.expired td a { color: gray; }
+tr.expired td .akeebasubs-subscription-netamount { color: gray; }
+tr.expired td .akeebasubs-subscription-taxamount { color: gray; }
+tr.expired td .akeebasubs-subscription-grossamount { color: gray; }

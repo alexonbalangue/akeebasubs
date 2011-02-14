@@ -1,0 +1,20 @@
+<?php
+/**
+ * @package		akeebasubs
+ * @copyright	Copyright (c)2010-2011 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ */
+
+class ComAkeebasubsViewDashboardHtml extends ComAkeebasubsViewHtml
+{
+	public function display()
+	{
+		//Reset the toolbar
+		KFactory::get('admin::com.akeebasubs.toolbar.dashboard')
+			->reset()
+			->setTitle('COM_AKEEBASUBS_DASHBOARD_TITLE','dashboard')
+			->setIcon('akeebasubs');
+
+		return parent::display();
+	}
+}

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<project name="UniteGui" description="Akeeba Subscriptions component based on Nooku FW" default="svn" >
+	<property file="./build.properties" />
+	<!-- Default properties, set only if not already assigned in the build.properties file -->
+	<property name="dirs.root" value=".." />
+	<property name="dirs.component" value="../component" />
+	<property name="dirs.installers" value="../installers" />
+	<property name="dirs.release" value="../release" />
+	<property name="version" value="svn" />
+
+	<taskdef name="zipme" classname="phingext.ZipmeTask" />
+
+	<!--
+	====================================================================================================
+	File sets
+	====================================================================================================
+	-->
+	
+	<fileset dir="${dirs.component}" id="component">
+		<include name="backend/**" />
+		<include name="frontend/**" />
+		<include name="media/**" />
+		<include name="translations/**" />
+		<include name="akeebasubs.xml" />
+		<include name="LICENSE.txt" />
+	</fileset>
+
+	<!--
+	====================================================================================================
+	Tasks - General
+	====================================================================================================
+	-->
+	
+	<target name="all" description="Makes everything"
+		depends="svn">
+	</target>
+
+	<target name="svn" description="Makes only packages, not the documentation"
+		depends="new-release,setup-properties,component-package">
+	</target>
+
+	<target name="new-release" description="Recreate the release directory">
+		<!-- Recreate the release directory -->
+		<delete dir="${dirs.release}" quiet="yes" includeemptydirs="false" />
+		<mkdir dir="${dirs.release}" />
+	</target>
+	
+	<target name="setup-properties" description="Set up version and build properties">
+		<!-- Initialize the build.date timestamp -->
+		<tstamp>
+			<format property="build.date" pattern="%Y-%m-%d" />
+		</tstamp>
+
+		<!-- Initialize the version if it's not set -->
+		<if>
+			<equals arg1="${version}" arg2="svn" />
+			<then>
+				<tstamp>
+					<format property="DATE" pattern="%y%m%d" locale="C" />
+				</tstamp>
+				<property name="version" value="dev${DATE}${TSTAMP}" override="true" />
+			</then>
+		</if>
+	</target>
+
+	<!--
+	====================================================================================================
+	Tasks - Joomla! packages
+	====================================================================================================
+	-->
+	
+	<target name="component-package" description="Component package build"
+		depends="new-release,setup-properties">
+			
+		<!-- Create the package -->
+		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
+			<filterchain id="standard-tokens">
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+			<fileset refid="component" />
+		</zipme>
+	</target>
+</project>
