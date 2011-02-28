@@ -9,11 +9,11 @@ class ComAkeebasubsControllerSubscribe extends ComAkeebasubsControllerDefault
 {
 	protected function _actionValidate(KCommandContext $context)
 	{
+		// Set the model action to "validate" so that the JSON view knows what to do
 		$model = $this->getModel();
-		$data = $model->getValidation();
-
-		// TODO This is a butt-ugly hack!
-		header('Content-type: application/json');
-		echo json_encode($data);die();
+		$model->set('action','validate');
+		// Return nada. Let the view sort it out (which is wrong, because the view now
+		// partially becomes a controller).
+		return null;
 	}
 }
