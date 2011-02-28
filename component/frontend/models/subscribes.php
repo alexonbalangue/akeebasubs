@@ -24,6 +24,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// Koowa handle the automatic filtering for us
 		$this->_state
 			->insert('id'				, 'int', 0, true)
+			->insert('paymentmethod'	, 'cmd')
 			->insert('username'			, 'string')
 			->insert('password'			, 'raw')
 			->insert('password2'		, 'raw')
@@ -272,5 +273,15 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		}
 		return $bestTaxRule;
+	}
+	
+	public function getPaymentPlugins()
+	{
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akpayment');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKPaymentGetIdentity');
+
+		return $jResponse; // name, title
 	}
 }

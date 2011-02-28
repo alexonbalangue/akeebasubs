@@ -21,7 +21,7 @@
 	<?=@template('default_login')?>
 <?endif?>
 
-<form action="<?=@route('view=level&id='.KRequest::get('get.id','int',0))?>" method="post" >
+<form action="<?=@route('view=subscribe&id='.KRequest::get('get.id','int',0))?>" method="post" >
 <?if(KFactory::get('lib.joomla.user')->guest):?>
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></h3>
 	
@@ -129,7 +129,15 @@
 	<span id="akeebasubs-sum-total" class="currency total"><?=sprintf('%.02f', $level->price)?></span>
 	<span class="currency-symbol total"><?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	
-	<?php // TODO Show payment options ?>
+	<hr/>
+	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
+	<label for="paymentmethod" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
+	<?=@helper('admin::com.akeebasubs.template.helper.listbox.paymentmethods')?>
+	<br/>
+	<label for="subscribenow" class="main">&nbsp;</label>
+	<input id="subscribenow" type="submit" value="<?=@text('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>" />
+	
+	<?php // TODO Show a custom module position ("akeebasubscriptionsfooter") ?>
 	
 </form>
 

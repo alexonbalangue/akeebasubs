@@ -95,6 +95,10 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		'PE' => 'Prince Edward Island', 'QC' => 'Quebec', 'SK' => 'Saskatchewan', 'YT' => 'Yukon'
 	);
 	
+	/**
+	 * Gets a list of images under images/stories
+	 * @param unknown_type $config
+	 */
     public function images($config = array())
     {
         $config = new KConfig($config);
@@ -160,6 +164,9 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		return parent::_listbox($config);
 	}
 	
+	/**
+	 * Drop down list of payment states
+	 */
 	public function paystates($config = array())
  	{
 		$config = new KConfig($config);
@@ -187,6 +194,9 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		return $this->optionlist($config);
  	}
 
+ 	/**
+ 	 * Drop down list of countries on Earth
+ 	 */
  	public function countries($config = array())
  	{
 		$config = new KConfig($config);
@@ -214,6 +224,9 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		return $this->optionlist($config);
  	}
  	
+ 	/**
+ 	 * Drop down list of US and Canada states
+ 	 */
  	public function states($config = array())
  	{
 		$config = new KConfig($config);
@@ -234,6 +247,33 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		$config->options = $options;
 		
 		return $this->optionlist($config);
+ 	}
+ 	
+ 	/**
+ 	 * Drop down list of payment methods (active payment plugins)
+ 	 */
+ 	public function paymentmethods($config = array())
+ 	{
+ 		$config = new KConfig($config);
+ 		$config->append(array(
+ 			'name'		=> 'paymentmethod',
+ 			'attribs'	=> array(),
+ 			'deselect'	=> false,
+ 			'selected'	=> ''
+ 		));
+ 		
+ 		$options = array();
+ 		
+ 		$plugins = KFactory::get('site::com.akeebasubs.model.subscribes')
+					->getPaymentPlugins();
+ 		
+		foreach($plugins as $plugin) {
+ 			$options[] = $this->option(array('text' => $plugin->title, 'value' => $plugin->name));
+ 		}
+ 		
+ 		$config->options = $options;
+ 		
+ 		return $this->optionlist($config);
  	}
  	
 	public function formatCountry($config = array())
