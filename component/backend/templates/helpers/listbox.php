@@ -1,7 +1,7 @@
 <?php
 class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 {
-	private static $countries = array(
+	public static $countries = array(
 		'AD' =>'Andorra', 'AE' =>'United Arab Emirates', 'AF' =>'Afghanistan',
 		'AG' =>'Antigua and Barbuda', 'AI' =>'Anguilla', 'AL' =>'Albania',
 		'AM' =>'Armenia', 'AN' =>'Netherlands Antilles', 'AO' =>'Angola',
@@ -77,7 +77,7 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		'YT' =>'Mayotte', 'ZA' =>'South Africa', 'ZM' =>'Zambia', 'ZW' =>'Zimbabwe'
 	);
 
-	private static $states = array(
+	public static $states = array(
 		'' => 'N/A', 'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas',
 		'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DE' => 'Delaware',
 		'DC' => 'District of Columbia', 'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii',
@@ -203,6 +203,7 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 			$options[] =  $this->option(array('text' => '- '.JText::_( 'Select' ).' -'));
  		}
 		
+ 		asort(self::$countries);
  		foreach(self::$countries as $code => $name) {
  			$options[] = $this->option(array('text' => $name, 'value' => $code ));
  		}

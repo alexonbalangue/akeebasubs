@@ -122,7 +122,7 @@ table.asfelist tfoot td { text-align: center; }
 	color: #333;
 }
 
-#akeebasubs h3 {
+#akeebasubs h3.subs {
 	color: #333;
 	margin: 0.4em 0 !important;
 	padding: 0.2em !important;
@@ -173,4 +173,42 @@ table.asfelist tfoot td { text-align: center; }
 	font-weight: bold;
 	color: #333;
 	border-top: 2px solid #333;
+}
+
+#akeebasubs label.error {
+	background-color: #ffe0e0; 
+}
+
+#akeebasubs input.error {
+	background-color: #ffe0e0;
+}
+
+#akeebasubs #username_valid {
+	font-weight: bold;
+	font-size: 9pt;
+	color: green;
+}
+
+#akeebasubs #username_invalid {
+	font-weight: bold;
+	font-size: 9pt;
+	color: red;
+}
+
+#akeebasubs #username_checking {
+	font-weight: bold;
+	font-size: 9pt;
+	color: gray;
+} 
+
+#akeebasubs .invalid {
+	font-weight: bold;
+	font-size: 9pt;
+	color: red;	
+}
+
+#akeebasubs .valid {
+	font-weight: bold;
+	font-size: 9pt;
+	color: green;	
 }

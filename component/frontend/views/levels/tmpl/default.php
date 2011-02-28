@@ -38,5 +38,6 @@
 			</div>
 		</div>
 	</div>
-<?endforeach;?>	
+<?endforeach;?>
+<div class="level-clear"></div>	
 </div>

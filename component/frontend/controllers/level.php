@@ -30,10 +30,5 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 				->user_id(KFactory::get('lib.joomla.user')->id)
 				->getMergedData()
 		);
-	}
-	
-	protected function _actionValidate(KCommandContext $context)
-	{
-		die('ajax request');
-	}
+	}	
 } 
