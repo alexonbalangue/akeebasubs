@@ -13,7 +13,13 @@ class ComAkeebasubsModelUsers extends KModelTable
 
 		$this->_state
 			->insert('ordering'	, 'int')
-			->insert('enabled'	, 'int');
+			->insert('enabled'	, 'int')
+			// The user_id column is part of a unique index, causing invalid SQL to be output
+			// when only searching by user_id. Bummer. I fscked up the data modelling on that
+			// table :(
+			->remove('user_id')
+			->insert('user_id'	, 'int', null, false)
+			;
 	}
 
 	protected function _buildQueryWhere(KDatabaseQuery $query)
@@ -26,6 +32,10 @@ class ComAkeebasubsModelUsers extends KModelTable
 		
 		if(is_numeric($state->enabled)) {
 			$query->where('tbl.enabled','=', $state->enabled);
+		}
+		
+		if(is_numeric($state->user_id) && ($state->user_id > 0)) {
+			$query->where('tbl.user_id','=',$state->user_id);
 		}
 		
 		if($state->search)

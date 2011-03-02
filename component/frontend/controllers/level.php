@@ -31,5 +31,10 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 				->user_id(KFactory::get('lib.joomla.user')->id)
 				->getMergedData()
 		);
+		// Load any cached user supplied information
+		$view->assign('cache',
+			KFactory::get('site::com.akeebasubs.model.subscribes')
+				->getData()
+		);
 	}	
 } 

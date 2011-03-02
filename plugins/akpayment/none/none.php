@@ -27,14 +27,76 @@ class plgAkpaymentNone extends JPlugin
 		return (object)$ret;
 	}
 	
-	public function onAKPaymentNew($user, $level, $subscription)
+	/**
+	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
+	 * "paymentForm" and a visible submit button.
+	 * 
+	 * @param string $paymentmethod
+	 * @param JUser $user
+	 * @param KDatabaseRow $level
+	 * @param KDatabaseRow $subscription
+	 * @return string
+	 */
+	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
-		die('TODO: Must do something on new payments');
-		// TODO
+		if($paymentmethod != $this->ppName) return false;
+
+		$uri = JURI::base().'index.php?option=com_akeebasubs&view=subscribe&action=callback&paymentmethod=none';
+		
+		$form = <<<ENDFORM
+<form action="$uri" method="POST" id="paymentForm">
+	<input type="hidden" name="subscription" value="{$subscription->id}" />
+	<input type="submit" value="Complete subscription" />
+</form>
+ENDFORM;
+		
+		// This is a demo script; just add some GET parameters to the URI
+		return $form;
 	}
 	
-	public function onAKPaymentCallback($get, $post)
+	public function onAKPaymentCallback($paymentmethod, $data)
 	{
+		if($paymentmethod != $this->ppName) return false;
+		
+		// Enable the subscription
+		$id = (int)$data['subscription'];
+		$subscription = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
+			->id($id)
+			->getItem();
+		
+		if(empty($subscription)) return false;
+		
+		if($subscription->id != $id) return false;
+		
+		// Fix the starting date if the payment was accepted after the subscription's start date. This
+		// works around the case where someone pays by e-Check on January 1st and the check is cleared
+		// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
+		// the user would have paid us and we'd never given him a subscription!
+		$jNow = new JDate();
+		$jStart = new JDate($subscription->publish_up);
+		$jEnd = new JDate($subscription->publish_down);
+		$now = $jNow->toUnix();
+		$start = $jStart->toUnix();
+		$end = $jEnd->toUnix();
+		
+		if($start < $now) {
+			$duration = $end - $start;
+			$start = $now;
+			$end = $start + $duration;
+			$jStart = new JDate($start);
+			$jEnd = new JDate($end);
+		}
+		
+		$id = (int)$data['subscription'];
+		$updates = array(
+			'processor_key'		=> md5(microtime(false)),
+			'state'				=> 'C',
+			'enabled'			=> 1,
+			'publish_up'		=> $jStart->toMySQL(),
+			'publish_down'		=> $jEnd->toMySQL()
+		); 
+		$subscription->setData($updates)->save();
+		
 		// Everything is fine, no matter what
 		return true;
 	}

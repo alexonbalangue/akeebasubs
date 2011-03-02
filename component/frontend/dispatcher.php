@@ -69,5 +69,15 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
         	return false;
         }
 	}
-	
+
+	public function _actionForward(KCommandContext $context)
+	{
+		// Normally, Nooku will assume that a POST request saves data in the background and redirects to
+		// another URL. I DO NOT WANT TO REDIRECT TO ANOTHER URL! I just want to display a form, case the
+		// payment processors expect POST data, therefore I have to override this action to make it do
+		// my thing.
+		$view = KRequest::get('get.view', 'cmd');
+		$context->result = KFactory::get($this->getController())->execute('display');
+		return $context->result;
+	}	
 }

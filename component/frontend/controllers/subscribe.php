@@ -16,4 +16,20 @@ class ComAkeebasubsControllerSubscribe extends ComAkeebasubsControllerDefault
 		// partially becomes a controller).
 		return null;
 	}
+	
+	protected function _actionAdd(KCommandContext $context)
+	{
+		$result = $this->getModel()->createNewSubscription();
+
+		if($result) {
+			// Show the auto-submitting form to the user
+			$view = $this->getView();
+			$view->setLayout('form');
+			return $view->display();
+		} else {
+			// Redirect to the level page
+			$url = 'index.php?option=com_akeebasubs&view=level&id='.$this->getModel()->get('id','int',0);
+			$this->setRedirect($url);
+		}
+	}
 }
