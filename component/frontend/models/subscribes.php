@@ -569,6 +569,31 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		return true;
 	}
 	
+	public function runCallback()
+	{
+		$rawDataPost = JRequest::get('POST', 2);
+		$rawDataGet = JRequest::get('GET', 2);
+		$data = array_merge($rawDataGet, $rawDataPost);
+		
+		$dummy = $this->getPaymentPlugins();
+		
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKPaymentCallback',array(
+			$this->_state->paymentmethod,
+			$data
+		));
+		if(empty($jResponse)) return false;
+		
+		$status = false;
+		
+		foreach($jResponse as $response)
+		{
+			$status = $status || $response;
+		}
+		
+		return $status;
+	}
+	
 	/**
 	 * Get the form set by the active payment plugin
 	 */

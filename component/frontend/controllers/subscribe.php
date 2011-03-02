@@ -32,4 +32,11 @@ class ComAkeebasubsControllerSubscribe extends ComAkeebasubsControllerDefault
 			$this->setRedirect($url);
 		}
 	}
+	
+	protected function _actionCallback(KCommandContext $context)
+	{
+		$result = $this->getModel()->runCallback();
+		if($result) die('Success');
+		die('Failed');
+	}
 }
