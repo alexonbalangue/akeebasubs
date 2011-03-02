@@ -1,3 +1,5 @@
+/* @override http://dev15.local.web/media/com_akeebasubs/css/frontend.css */
+
 /**
  * @package		akeebasubs
  * @copyright	Copyright (c)2010 Nicholas K. Dionysopoulos / AkeebaBackup.com
@@ -31,7 +33,7 @@ table.asfelist tfoot td { text-align: center; }
 #akeebasubs div.level {
 	display: block;
 	margin: 0.5em 0.5%;
-	width: 49%;
+	width: 48%;
 	height: 200px;
 	float: left;
 	background-color: #f0f0f0;
@@ -46,6 +48,7 @@ table.asfelist tfoot td { text-align: center; }
 	display: block;
 	width: 100%;
 	padding: 0.4em 0;
+	margin: 0 0 0.5em 0;
 	font-size: 14pt;
 	font-weight: bold;
 	color: #333;

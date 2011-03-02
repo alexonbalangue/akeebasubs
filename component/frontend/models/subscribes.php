@@ -220,7 +220,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	private function _validatePrice()
 	{
 		// Get the default price value
-		$level = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
 			->id($this->_state->id)
 			->getItem();
 		$netPrice = (float)$level->price;
@@ -255,7 +255,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$isVIES = $validation->vatnumber && in_array($this->_state->country, $this->european_states);
 		
 		// Load the tax rules
-		$taxrules = KFactory::tmp('admin::com.akeebasubs.model.taxrules')
+		$taxrules = KFactory::tmp('site::com.akeebasubs.model.taxrules')
 			->enabled(1)
 			->sort('ordering')
 			->direction('ASC')
@@ -440,7 +440,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// Step #4. Create or add user extra fields
 		// ----------------------------------------------------------------------
 		// Find an existing record
-		$list = KFactory::tmp('admin::com.akeebasubs.model.users')
+		$list = KFactory::tmp('site::com.akeebasubs.model.users')
 			->user_id($user->id)
 			->getList();
 		
@@ -466,7 +466,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'zip'			=> $this->_state->zip,
 			'country'		=> $this->_state->country
 		);
-		KFactory::tmp('admin::com.akeebasubs.model.users')
+		KFactory::tmp('site::com.akeebasubs.model.users')
 			->id($id)
 			->getItem()
 			->setData($data)
@@ -536,7 +536,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'first_contact'			=> '0000-00-00 00:00:00',
 			'second_contact'		=> '0000-00-00 00:00:00'
 		);
-		$subscription = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+		$subscription = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
 			->id(0)
 			->getItem();
 		$subscription->setData($data)->save();

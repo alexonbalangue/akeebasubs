@@ -26,5 +26,7 @@ KFactory::map('site::com.akeebasubs.model.levels',			'admin::com.akeebasubs.mode
 KFactory::map('site::com.akeebasubs.model.configs',			'admin::com.akeebasubs.model.configs');
 KFactory::map('site::com.akeebasubs.model.jusers',			'admin::com.akeebasubs.model.jusers');
 KFactory::map('site::com.akeebasubs.model.taxrules',		'admin::com.akeebasubs.model.taxrules');
+KFactory::map('site::com.akeebasubs.model.users',			'admin::com.akeebasubs.model.users');
+KFactory::map('site::com.akeebasubs.model.messages',		'site::com.akeebasubs.model.levels');
 
 echo KFactory::get('site::com.akeebasubs.dispatcher')->dispatch();

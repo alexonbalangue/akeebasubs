@@ -115,19 +115,19 @@
 	
 	<label class="main"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_NET')?></label>
 	<span id="akeebasubs-sum-net" class="currency"><?=sprintf('%.02f', $level->price)?></span>
-	<span class="currency-symbol"><?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	<br/>
 	<label class="main"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')?></label>
 	<span id="akeebasubs-sum-discount" class="currency"></span>
-	<span class="currency-symbol"><?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	<br/>
 	<label class="main"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_VAT')?></label>
 	<span id="akeebasubs-sum-vat" class="currency"></span>
-	<span class="currency-symbol"><?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	<br/>
 	<label class="main  total"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')?></label>
 	<span id="akeebasubs-sum-total" class="currency total"><?=sprintf('%.02f', $level->price)?></span>
-	<span class="currency-symbol total"><?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol total"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	
 	<hr/>
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>

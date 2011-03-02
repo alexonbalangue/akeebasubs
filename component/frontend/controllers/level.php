@@ -27,7 +27,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		$view = $this->getView(); 
 		// Get the user model and load the user data
 		$view->assign('userparams',
-			KFactory::get('admin::com.akeebasubs.model.users')
+			KFactory::get('site::com.akeebasubs.model.users')
 				->user_id(KFactory::get('lib.joomla.user')->id)
 				->getMergedData()
 		);
