@@ -120,6 +120,9 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 	{
 		$ret = array();
 		
+		if(!property_exists($data,'_visual')) return $ret;
+		if($data->_visual != 1) return $ret;
+		
 		if(empty($data->user_id)) {
 			$ret[] = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_USER_ID');
 		}

@@ -14,6 +14,8 @@ class ComAkeebasubsViewDashboardHtml extends ComAkeebasubsViewHtml
 			->reset()
 			->setTitle('COM_AKEEBASUBS_DASHBOARD_TITLE','dashboard')
 			->setIcon('akeebasubs');
+			
+		KRequest::set('get.hidemainmenu', 0);
 
 		return parent::display();
 	}

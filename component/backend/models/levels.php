@@ -41,6 +41,9 @@ class ComAkeebasubsModelLevels extends KModelTable
 	public function validate($data)
 	{
 		$ret = array();
+		
+		if(!property_exists($data,'_visual')) return $ret;
+		if($data->_visual != 1) return $ret;
 
 		if(empty($data->title)) {
 			$ret[] = JText::_('COM_AKEEBASUBS_LEVEL_ERR_TITLE');
