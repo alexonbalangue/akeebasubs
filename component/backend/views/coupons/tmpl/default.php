@@ -19,6 +19,9 @@
 			<th width="8%">
 				<?= @helper('grid.sort', array('column' => 'coupon', 'title' => 'COM_AKEEBASUBS_COUPONS_COUPON')); ?>
 			</th>
+			<th width="8%">
+				<?= @helper('grid.sort', array('column' => 'value', 'title' => 'COM_AKEEBASUBS_COUPONS_VALUE')); ?>
+			</th>
 			<th>
 				<?= @text('COM_AKEEBASUBS_COUPONS_LIMITS') ?>
 			</th>
@@ -47,7 +50,9 @@
 			<td></td>
 			<td></td>
 			<td></td>
-			<td></td>
+			<td>
+				<td><?= @helper('listbox.enabled', array('attribs'=>array('onchange'=>'this.form.submit();'))) ?></td>
+			</td>
 		</tr>
 	</thead>
 	<tfoot>
@@ -75,6 +80,18 @@
 			</td>
 			<td>
 				<?= @escape($coupon->coupon) ?>
+			</td>
+			<td align="right">
+				<? if($coupon->type == 'value'): ?>
+				<span class="akeebasubs-coupon-discount-value">
+				<?= sprintf('%2.2f', (float)$coupon->value) ?>
+				<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				</span>
+				<? else: ?>
+				<span class="akeebasubs-coupon-discount-percent">
+				<?= sprintf('%2.2f', (float)$coupon->value) ?> %
+				</span>
+				<? endif; ?>
 			</td>
 			<td>
 				<?php

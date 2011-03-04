@@ -39,3 +39,8 @@ tr.expired td a { color: gray; }
 tr.expired td .akeebasubs-subscription-netamount { color: gray; }
 tr.expired td .akeebasubs-subscription-taxamount { color: gray; }
 tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
+
+.akeebasubs-coupon-discount-value:before{ content: '- '; }
+.akeebasubs-coupon-discount-value { color: red; font-weight: bold; }
+
+.akeebasubs-coupon-discount-percent { color: #336666; font-weight: bold; }

@@ -137,22 +137,6 @@ class ComAkeebasubsModelCoupons extends KModelTable
 			$data->value = 100;
 		}
 		
-		// Automatic ordering
-		if($data->ordering == 0) {
-			$lastEntry = KFactory::tmp('admin::com.akeebasubs.model.coupons')
-			->sort('ordering')->direction('DESC')->limit(1)->getList();
-			$rawList = $lastEntry->getData();
-			if(!empty($rawList)) {
-				$rawItem = array_pop($rawList);
-				$data->ordering = $rawItem['ordering'] + 1;
-			} else {
-				$data->ordering = 1;
-			}
-		}
-		
-		// NOTE: Created, modified, locked and hits are handled by Koowa's table
-		// behaviours, therefore no code is necessary here ;)
-		
 		return $ret;
 	}
 	
