@@ -1,10 +1,14 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 
 <?= @helper('behavior.tooltip'); ?>
+<!--
 <script src="media://lib_koowa/js/koowa.js" />
 <style src="media://com_akeebasubs/css/backend.css" />
+-->
 
 <form action="<?= @route('id='.$taxrule->id) ?>" method="post" class="adminform" name="adminForm">
+<input type="hidden" name="_visual" value="1" />
+
 	<label for="country" class="main"><?= @text('COM_AKEEBASUBS_TAXRULES_COUNTRY'); ?></label>
 	<?=@helper('admin::com.akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => $taxrule->country) ) ?>
 	<br/>

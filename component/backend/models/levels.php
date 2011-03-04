@@ -42,7 +42,6 @@ class ComAkeebasubsModelLevels extends KModelTable
 	{
 		$ret = array();
 		
-		if(!property_exists($data,'_visual')) return $ret;
 		if($data->_visual != 1) return $ret;
 
 		if(empty($data->title)) {

@@ -156,6 +156,7 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		$config->append(array(
 			'model'		=> 'levels',
 			'name' 		=> 'level',
+			'column'	=> 'id',
 			'value'		=> 'id',
 			'text'		=> 'title',
 			'deselect'	=> true
@@ -276,6 +277,34 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
  		return $this->optionlist($config);
  	}
  	
+	/**
+	 * Drop down list of payment states
+	 */
+	public function coupontypes($config = array())
+	{
+		$config = new KConfig($config);
+		$config->append(array(
+			'name'		=> 'type',
+			'attribs'	=> array(),
+			'deselect'	=> false,
+			'selected'  => 'value'
+		));
+		
+			$options  = array();
+			
+			if($config->deselect) {
+			$options[] =  $this->option(array('text' => '- '.JText::_( 'Select' ).' -'));
+			}
+		
+		$options[] = $this->option(array('text' => JText::_( 'COM_AKEEBASUBS_COUPON_TYPE_VALUE' ), 'value' => 'value' ));
+		$options[] = $this->option(array('text' => JText::_( 'COM_AKEEBASUBS_COUPON_TYPE_PERCENT' ), 'value' => 'percent' ));
+				
+		//Add the options to the config object
+		$config->options = $options;
+		
+		return $this->optionlist($config);
+	} 
+ 	
 	public function formatCountry($config = array())
 	{
 		$config = new KConfig($config);
@@ -306,5 +335,5 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
  		}
  		
  		return $name; 
-	}	
+	}		
 }

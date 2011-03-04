@@ -53,6 +53,8 @@ class ComAkeebasubsCommandValidate extends KCommand
 					->setRedirect((string)$referrer, implode('<br/>',$validationErrors), 'error' );
                 return false;
             } else {
+            	// Push back the (changed) data and nullify the data cache
+            	$context->data = $data;
 				KRequest::set('session.'.$identifier.'.errors', null);
 			}
         }

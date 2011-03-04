@@ -120,7 +120,6 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 	{
 		$ret = array();
 		
-		if(!property_exists($data,'_visual')) return $ret;
 		if($data->_visual != 1) return $ret;
 		
 		if(empty($data->user_id)) {

@@ -10,6 +10,8 @@
 <!--  -->
 
 <form action="<?= @route('id='.$subscription->id) ?>" method="post" class="adminform" name="adminForm">
+<input type="hidden" name="_visual" value="1" />
+
 	<fieldset id="subscriptions-basic">
 		<legend><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_LBL_SUB')?></legend>
 		

@@ -1,10 +1,14 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 
 <?= @helper('behavior.tooltip'); ?>
+<!--
 <script src="media://lib_koowa/js/koowa.js" />
 <style src="media://com_akeebasubs/css/backend.css" />
+-->
 
 <form action="<?= @route('id='.$level->id) ?>" method="post" class="adminform" name="adminForm">
+<input type="hidden" name="_visual" value="1" />
+
 	<fieldset id="levels-basic">
 		<legend><?= @text('COM_AKEEBASUBS_LEVEL_BASIC_TITLE'); ?></legend>
 		

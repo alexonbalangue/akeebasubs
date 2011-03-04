@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`subscriptions` VARCHAR(255) NULL,
-	`users` VARCHAR(255) NULL,
+	`user` int(10) DEFAULT NULL,
 	`params` TEXT,
 	`hitslimit` BIGINT(20) unsigned NULL,
 	`type` ENUM('value','percent') NOT NULL DEFAULT 'value',
