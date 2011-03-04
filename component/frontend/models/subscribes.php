@@ -226,6 +226,65 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$netPrice = (float)$level->price;
 
 		$couponDiscount = 0;
+		if($this->_state->coupon) {
+			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
+				->coupon(strtoupper($this->_state->coupon))
+				->getItem();
+				
+			if(is_object($coupon)) {
+				$valid = true;
+				if($coupon->enabled) {
+					$valid = true;
+				
+					// Check validity period
+					jimport('joomla.utilities.date');
+					$jFrom = new JDate($coupon->publish_up);
+					$jTo = new JDate($coupon->publish_down);
+					$jNow = new JDate();
+					
+					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
+					
+					// Check levels list
+					if($valid && !empty($coupon->subscriptions)) {
+						$levels = explode(',', $coupon->subscriptions);
+						$valid = in_array($this->_state->id, $levels);
+					}
+					
+					// Check user
+					if($valid && $coupon->user) {
+						$user_id = JFactory::getUser()->id;
+						$valid = $user_id == $coupon->user;
+					}
+					
+					// Check hits limit
+					if($valid && $coupon->hitslimit) {
+						if($coupon->hitslimit >= 0) {
+							$valid = $coupon->hits < $coupon->hitslimit;
+						}
+					}
+				} else {
+					$valid = false;
+				}
+				
+				// Calculate discount, if applicable
+				if($valid) {
+					switch($coupon->type) {
+						case 'value':
+							$couponDiscount = (float)$coupon->value;
+							if($couponDiscount > $netPrice) $couponDiscount = $netPrice;
+							if($couponDiscount <= 0) $couponDiscount = 0;
+							break;
+							
+						case 'percent':
+							$percent = (float)$coupon->value / 100.0;
+							if( $percent <= 0 ) $percent = 0;
+							if( $percent > 1 ) $percent = 1;
+							$couponDiscount = $percent * $netPrice;
+							break;
+					}
+				}
+			}
+		}
 		// TODO Coupon validation
 		
 		$autoDiscount = 0;
@@ -503,7 +562,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		}
 		
-		// TODO Step #6. Create a new subscription record
+		// Step #6. Create a new subscription record
 		// ----------------------------------------------------------------------
 		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
 			->id($this->_state->id)
