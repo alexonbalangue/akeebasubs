@@ -207,8 +207,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		}
 		
 		// 5. Coupon validation
-		// FIXME No coupon validation is performed!
-		$ret['coupon'] = true;
+		$ret['coupon'] = $this->_validateCoupon();
 		
 		return (object)$ret;
 	}
@@ -225,70 +224,53 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			->getItem();
 		$netPrice = (float)$level->price;
 
+		// Coupon discount
 		$couponDiscount = 0;
-		if($this->_state->coupon) {
+		$validCoupon = $this->_validateCoupon();
+		
+		$couponDiscount = 0;
+		if($validCoupon) {
 			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
 				->coupon(strtoupper($this->_state->coupon))
 				->getItem();
 				
-			if(is_object($coupon)) {
-				$valid = true;
-				if($coupon->enabled) {
-					$valid = true;
-				
-					// Check validity period
-					jimport('joomla.utilities.date');
-					$jFrom = new JDate($coupon->publish_up);
-					$jTo = new JDate($coupon->publish_down);
-					$jNow = new JDate();
+			switch($coupon->type) {
+				case 'value':
+					$couponDiscount = (float)$coupon->value;
+					if($couponDiscount > $netPrice) $couponDiscount = $netPrice;
+					if($couponDiscount <= 0) $couponDiscount = 0;
+					break;
 					
-					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
-					
-					// Check levels list
-					if($valid && !empty($coupon->subscriptions)) {
-						$levels = explode(',', $coupon->subscriptions);
-						$valid = in_array($this->_state->id, $levels);
-					}
-					
-					// Check user
-					if($valid && $coupon->user) {
-						$user_id = JFactory::getUser()->id;
-						$valid = $user_id == $coupon->user;
-					}
-					
-					// Check hits limit
-					if($valid && $coupon->hitslimit) {
-						if($coupon->hitslimit >= 0) {
-							$valid = $coupon->hits < $coupon->hitslimit;
-						}
-					}
-				} else {
-					$valid = false;
-				}
-				
-				// Calculate discount, if applicable
-				if($valid) {
-					switch($coupon->type) {
-						case 'value':
-							$couponDiscount = (float)$coupon->value;
-							if($couponDiscount > $netPrice) $couponDiscount = $netPrice;
-							if($couponDiscount <= 0) $couponDiscount = 0;
-							break;
-							
-						case 'percent':
-							$percent = (float)$coupon->value / 100.0;
-							if( $percent <= 0 ) $percent = 0;
-							if( $percent > 1 ) $percent = 1;
-							$couponDiscount = $percent * $netPrice;
-							break;
-					}
-				}
+				case 'percent':
+					$percent = (float)$coupon->value / 100.0;
+					if( $percent <= 0 ) $percent = 0;
+					if( $percent > 1 ) $percent = 1;
+					$couponDiscount = $percent * $netPrice;
+					break;
 			}
 		}
-		// TODO Coupon validation
 		
 		$autoDiscount = 0;
+		$validAuto = 0;
 		// TODO Auto-rule validation
+		
+		$useCoupon = false;
+		$useAuto = false;
+		if($validCoupon && $validAuto) {
+			if($autoDiscount > $couponDiscount) {
+				$discount = $autoDiscount;
+				$useAuto = true;
+			} else {
+				$discount = $couponDiscount;
+				$useCoupon = true;
+			}	
+		} elseif($validCoupon && !$validAuto) {
+			$discount = $couponDiscount;
+			$useCoupon = true;
+		} elseif(!$validCoupon && $validAuto) {
+			$discount = $autoDiscount;
+			$useAuto = true;
+		}
 		
 		$discount = (float)max($couponDiscount, $autoDiscount);
 		
@@ -300,7 +282,9 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'discount'	=> sprintf('%1.02f',$discount),
 			'taxrate'	=> sprintf('%1.02f',(float)$taxRule->taxrate),
 			'tax'		=> sprintf('%1.02f',0.01 * $taxRule->taxrate * ($netPrice - $discount)),
-			'gross'		=> sprintf('%1.02f',($netPrice - $discount) + 0.01 * $taxRule->taxrate * ($netPrice - $discount))
+			'gross'		=> sprintf('%1.02f',($netPrice - $discount) + 0.01 * $taxRule->taxrate * ($netPrice - $discount)),
+			'usecoupon'	=> $useCoupon ? 1 : 0,
+			'useauto'	=> $useAuto ? 1 : 0
 		);
 	}
 	
@@ -403,6 +387,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		{
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if($key == 'vatnumber') continue;
+			// A wrong coupon code is not a fatal error
+			if($key == 'coupon') continue;
 			
 			$isValid = $isValid && $validData;
 			if(!$isValid) {
@@ -600,8 +586,15 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			->getItem();
 		$subscription->setData($data)->save();
 
-		// TODO Step #7. Hit the coupon code
+		// Step #7. Hit the coupon code, if a coupon is indeed used
 		// ----------------------------------------------------------------------
+		if($validation->price->usecoupon) {
+			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
+				->coupon(strtoupper($this->_state->coupon))
+				->getItem();
+			$coupon->hits++;
+			$coupon->save();
+		}
 		
 		// TODO Step #8. If the price is 0, immediately activate the subscription and redirect to thank you page
 		// ----------------------------------------------------------------------
@@ -727,5 +720,63 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				JUtility::sendMail($mailfrom, $fromname, $row->email, $subject2, $message2);
 			}
 		}
-	}	
+	}
+	
+	private function _validateCoupon()
+	{
+		static $couponCode = null;
+		static $valid = false;
+	
+		if($this->_state->coupon) {
+			if($this->_state->coupon == $couponCode) {
+				return $valid;
+			}
+		}
+	
+		$valid = true;		
+		if($this->_state->coupon) {
+			$couponCode = $this->_state->coupon;
+			$valid = false;
+			
+			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
+				->coupon(strtoupper($this->_state->coupon))
+				->getItem();
+				
+			if(is_object($coupon)) {
+				$valid = false;
+				if($coupon->enabled) {
+					// Check validity period
+					jimport('joomla.utilities.date');
+					$jFrom = new JDate($coupon->publish_up);
+					$jTo = new JDate($coupon->publish_down);
+					$jNow = new JDate();
+					
+					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
+					
+					// Check levels list
+					if($valid && !empty($coupon->subscriptions)) {
+						$levels = explode(',', $coupon->subscriptions);
+						$valid = in_array($this->_state->id, $levels);
+					}
+					
+					// Check user
+					if($valid && $coupon->user) {
+						$user_id = JFactory::getUser()->id;
+						$valid = $user_id == $coupon->user;
+					}
+					
+					// Check hits limit
+					if($valid && $coupon->hitslimit) {
+						if($coupon->hitslimit >= 0) {
+							$valid = $coupon->hits < $coupon->hitslimit;
+						}
+					}
+				} else {
+					$valid = false;
+				}
+			}
+		}
+		
+		return $valid;
+	}
 }
