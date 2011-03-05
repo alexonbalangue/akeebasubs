@@ -61,9 +61,9 @@
 	<br/>
 
 	<label for="subscriptions_field" class="main"><?= @text('COM_AKEEBASUBS_COUPON_FIELD_SUBSCRIPTIONS'); ?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('name' => 'akeebasubs_level_id', 'selected' => new KConfig( array('selected' => empty($coupon->subscriptions) ? '-1' : explode(',',$coupon->subscriptions)) ), 'deselect' => true, 'attribs' => array('multiple' => 'multiple', 'size' => 3) ) ) ?>
-	<br />					
-
+	<?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('name' => 'subscriptions[]', 'selected' => empty($coupon->subscriptions) ? '-1' : explode(',',$coupon->subscriptions), 'deselect' => true, 'attribs' => array('multiple' => 'multiple', 'size' => 3) ) ) ?>
+	<br />
+	
 	<label for="hitslimit_field" class="main"><?= @text('COM_AKEEBASUBS_COUPON_FIELD_HITSLIMIT'); ?></label>
 	<input type="text" size="5" id="hitslimit_field" name="hitslimit" value="<?= @escape($coupon->hitslimit) ?>" />
 	<br/>

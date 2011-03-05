@@ -90,6 +90,11 @@ class ComAkeebasubsModelCoupons extends KModelTable
 		
 		// Make sure assigned subscriptions really do exist and normalize the list
 		if(!empty($data->subscriptions)) {
+			if($data->subscriptions instanceof KConfig) {
+				$rawdata = $data->subscriptions->toArray();
+				$data->subscriptions = implode(',', $rawdata);
+			}
+		
 			$subs = explode(',', $data->subscriptions);
 			if(empty($subs)) {
 				$data->subscriptions = '';

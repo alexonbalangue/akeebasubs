@@ -18,6 +18,7 @@ class ComAkeebasubsDatabaseTableCoupons extends KDatabaseTableAbstract
 		// Uncomment this if I add a view to handle this...
 		// $config->name = 'akeebasubs_view_levels';
 		$config->base = 'akeebasubs_coupons';
+		$config->name = 'akeebasubs_coupons';
   
 		parent::__construct($config);
     }

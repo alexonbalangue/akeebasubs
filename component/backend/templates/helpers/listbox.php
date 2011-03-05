@@ -154,15 +154,73 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 	{
 		$config = new KConfig($config);
 		$config->append(array(
-			'model'		=> 'levels',
 			'name' 		=> 'level',
-			'column'	=> 'id',
-			'value'		=> 'id',
-			'text'		=> 'title',
+			'state'     => null,
+			'attribs'   => array(),
+			'selected'	=> '',
 			'deselect'	=> true
 		));
 		
-		return parent::_listbox($config);
+		$identifier = 'admin::com.akeebasubs.model.levels';
+		$list = KFactory::tmp($identifier)
+			->sort('ordering')
+			->direction('ASC')
+			->limit(0)
+			->offset(0)
+			->getList();
+		
+		$options   = array();
+		if($config->deselect) {
+			$options[] = $this->option(array('text' => '- '.JText::_( 'Select').' -'));
+		}
+		
+		foreach($list as $item) {
+			$options[] = $this->option(array('text' => $item->title, 'value' => $item->id));
+		}
+		
+		$config->options = $options;
+		
+		$name    = $config->name;
+		$attribs = KHelperArray::toString($config->attribs);
+		
+		$html = array();
+		$html[] = '<select name="'. $name .'" '. $attribs .'>';
+       
+		foreach($config->options as $option)
+		{
+			$value  = $option->value;
+			$text   = $config->translate ? JText::_( $option->text ) : $option->text;
+			
+			$extra = '';
+			
+			if(isset($option->disable) && $option->disable) {
+				$extra .= 'disabled="disabled"';
+			}
+
+			if(isset($option->attribs)) {
+				$extra .= ' '.KHelperArray::toString($option->attribs);
+			}
+
+			if(!is_null($config->selected)) {
+				if ($config->selected instanceof KConfig) {
+					$seldata = $config->selected->toArray();
+					
+					foreach ($seldata as $sel) {
+						if ($value == $sel) {
+							$extra .= 'selected="selected"';
+							break;
+						}
+					}
+				} 
+				else $extra .= ((string) $value == $config->selected ? ' selected="selected"' : '');
+			}
+
+			$html[] = '<option value="'. $value .'" '. $extra .'>' . $text . '</option>';
+		}
+		
+		$html[] = '</select>';
+		
+		return implode(PHP_EOL, $html);		
 	}
 	
 	/**
