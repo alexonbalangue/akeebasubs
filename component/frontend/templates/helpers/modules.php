@@ -1,5 +1,5 @@
 <?php
-class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperAbstract
+class ComAkeebasubsTemplateHelperModules extends KTemplateHelperAbstract
 {
 
 	public function loadposition($config = array())

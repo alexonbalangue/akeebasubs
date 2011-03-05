@@ -29,3 +29,13 @@ defined('KOOWA') or die('Restricted access');?>
 		</a>
 	</div>
 </div>
+
+<div style="float:left;">
+	<div class="icon">
+		<a href="<?= @route('view=coupon') ?>">
+			<img alt="<?= @text('COM_AKEEBASUBS_DASHBOARD_ADD_COUPON');?>"
+				src="media://com_akeebasubs/images/dashboard/money.png" />
+			<span><?= @text('COM_AKEEBASUBS_DASHBOARD_ADD_COUPON');?></span>
+		</a>
+	</div>
+</div>

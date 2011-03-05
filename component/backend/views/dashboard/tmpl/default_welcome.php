@@ -10,3 +10,4 @@
 
 defined('KOOWA') or die('Restricted access');?>
 <p><?=@text('COM_AKEEBASUBS_DASHBOARD_WELCOME_MESSAGE')?></p>
+<p><?=@text('COM_AKEEBASUBS_DASHBOARD_WELCOME_MESSAGE_B')?></p>

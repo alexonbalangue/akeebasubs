@@ -11,7 +11,9 @@
 defined('KOOWA') or die('Restricted access');?>
 
 <?= @helper('behavior.tooltip'); ?>
+<!--
 <style src="media://com_unite/css/backend.css" />
+-->
 
 <div id="cpanel"  style="width:51%;float:left;">
 	<?= @helper('tabs.startPane', array('id' => 'quick', 'attribs' => array('height' => '275px'))) ?>
@@ -31,5 +33,5 @@ defined('KOOWA') or die('Restricted access');?>
 </div>
 
 <div style="width:47%;float:right;">
-	TODO DISPLAY SOME STATS HERE TOO
+	<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsstats'))?>
 </div>
