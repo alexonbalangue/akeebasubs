@@ -161,5 +161,5 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		}
 				
 		return $ret;
-	}
+	}	
 }

@@ -23,9 +23,14 @@ class ComAkeebasubsDatabaseTableSubscriptions extends KDatabaseTableAbstract
     
 	protected function _initialize(KConfig $config)
 	{
-		// TODO Instead of the expirable behaviour, use an onlyexpirable behaviour which won't
-		// disable a subscription before its publish_up date.
-		// $config->behaviors = array('admin::com.akeebasubs.database.behavior.expirable');
+		$config->behaviors = array(
+			// TODO Instead of the expirable behaviour, use an onlyexpirable behaviour which won't
+			// disable a subscription before its publish_up date.
+			//'admin::com.akeebasubs.database.behavior.subexpirable',
+			
+			// Subscriptions notifications
+			'admin::com.akeebasubs.database.behavior.subnotify'
+		);
 		parent::_initialize($config);
 	}
     

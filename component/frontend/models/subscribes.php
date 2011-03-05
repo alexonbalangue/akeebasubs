@@ -289,6 +289,68 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	}
 	
 	/**
+	 * Validates a coupon code, making sure it exists, it's activated, it's not expired,
+	 * it applies to the specific subscription and user.
+	 */
+	private function _validateCoupon()
+	{
+		static $couponCode = null;
+		static $valid = false;
+	
+		if($this->_state->coupon) {
+			if($this->_state->coupon == $couponCode) {
+				return $valid;
+			}
+		}
+	
+		$valid = true;		
+		if($this->_state->coupon) {
+			$couponCode = $this->_state->coupon;
+			$valid = false;
+			
+			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
+				->coupon(strtoupper($this->_state->coupon))
+				->getItem();
+				
+			if(is_object($coupon)) {
+				$valid = false;
+				if($coupon->enabled) {
+					// Check validity period
+					jimport('joomla.utilities.date');
+					$jFrom = new JDate($coupon->publish_up);
+					$jTo = new JDate($coupon->publish_down);
+					$jNow = new JDate();
+					
+					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
+					
+					// Check levels list
+					if($valid && !empty($coupon->subscriptions)) {
+						$levels = explode(',', $coupon->subscriptions);
+						$valid = in_array($this->_state->id, $levels);
+					}
+					
+					// Check user
+					if($valid && $coupon->user) {
+						$user_id = JFactory::getUser()->id;
+						$valid = $user_id == $coupon->user;
+					}
+					
+					// Check hits limit
+					if($valid && $coupon->hitslimit) {
+						if($coupon->hitslimit >= 0) {
+							$valid = $coupon->hits < $coupon->hitslimit;
+						}
+					}
+				} else {
+					$valid = false;
+				}
+			}
+		}
+		
+		return $valid;
+	}	
+	
+	/**
 	 * Gets the applicable tax rule based on the state variables
 	 */
 	private function _getTaxRule()
@@ -599,7 +661,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// TODO Step #8. If the price is 0, immediately activate the subscription and redirect to thank you page
 		// ----------------------------------------------------------------------
 		
-		// TODO Step #9. Call the specific plugin's onAKPaymentNew() method and get the redirection URL
+		// Step #9. Call the specific plugin's onAKPaymentNew() method and get the redirection URL
 		// ----------------------------------------------------------------------
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKPaymentNew',array(
@@ -621,6 +683,9 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		return true;
 	}
 	
+	/**
+	 * Runs a payment callback
+	 */
 	public function runCallback()
 	{
 		$rawDataPost = JRequest::get('POST', 2);
@@ -662,6 +727,10 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		return $this->_state->getData();
 	}
 	
+	/**
+	 * Sends out an email to a specific user about his new user account
+	 * and CC's the Super Administrators
+	 */
 	private function _sendMail(&$user, $password)
 	{
 		$password = preg_replace('/[\x00-\x1F\x7F]/', '', $password); //Disallow control chars in the email
@@ -721,62 +790,5 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		}
 	}
-	
-	private function _validateCoupon()
-	{
-		static $couponCode = null;
-		static $valid = false;
-	
-		if($this->_state->coupon) {
-			if($this->_state->coupon == $couponCode) {
-				return $valid;
-			}
-		}
-	
-		$valid = true;		
-		if($this->_state->coupon) {
-			$couponCode = $this->_state->coupon;
-			$valid = false;
-			
-			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
-				->coupon(strtoupper($this->_state->coupon))
-				->getItem();
-				
-			if(is_object($coupon)) {
-				$valid = false;
-				if($coupon->enabled) {
-					// Check validity period
-					jimport('joomla.utilities.date');
-					$jFrom = new JDate($coupon->publish_up);
-					$jTo = new JDate($coupon->publish_down);
-					$jNow = new JDate();
-					
-					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
-					
-					// Check levels list
-					if($valid && !empty($coupon->subscriptions)) {
-						$levels = explode(',', $coupon->subscriptions);
-						$valid = in_array($this->_state->id, $levels);
-					}
-					
-					// Check user
-					if($valid && $coupon->user) {
-						$user_id = JFactory::getUser()->id;
-						$valid = $user_id == $coupon->user;
-					}
-					
-					// Check hits limit
-					if($valid && $coupon->hitslimit) {
-						if($coupon->hitslimit >= 0) {
-							$valid = $coupon->hits < $coupon->hitslimit;
-						}
-					}
-				} else {
-					$valid = false;
-				}
-			}
-		}
-		
-		return $valid;
-	}
+
 }
