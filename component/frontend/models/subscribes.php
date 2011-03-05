@@ -7,8 +7,26 @@
 
 class ComAkeebasubsModelSubscribes extends KModelAbstract
 {
+	/**
+	 * List of European states
+	 *
+	 * @var array
+	 */
 	private $european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK');
+	
+	/**
+	 * Raw HTML source of the payment form, as returned by the payment plugin
+	 *
+	 * @var string
+	 */
 	private $paymentForm = '';
+	
+	/**
+	 * File handle
+	 *
+	 * @var resource
+	 */
+	protected $_urand;
 	
 	/**
 	 * We cache the results of all time-consuming operations, e.g. vat validation, subscription membership calculation,
@@ -630,10 +648,10 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'publish_up'			=> $mStartDate,
 			'publish_down'			=> $mEndDate,
 			'notes'					=> '',
-			'enabled'				=> 0,
-			'processor'				=> $this->_state->paymentmethod,
-			'processorkey'			=> '',
-			'state'					=> 'N',
+			'enabled'				=> ($validation->price->gross == 0),
+			'processor'				=> ($validation->price->gross == 0) ? 'none' : $this->_state->paymentmethod,
+			'processor_key'			=> ($validation->price->gross == 0) ? $this->_uuid(true) : '',
+			'state'					=> ($validation->price->gross == 0) ? 'C' : 'N',
 			'net_amount'			=> $validation->price->net - $validation->price->discount,
 			'tax_amount'			=> $validation->price->tax,
 			'gross_amount'			=> $validation->price->gross,
@@ -658,24 +676,30 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$coupon->save();
 		}
 		
-		// TODO Step #8. If the price is 0, immediately activate the subscription and redirect to thank you page
+		// Step #8. Call the specific plugin's onAKPaymentNew() method and get the redirection URL,
+		//          or redirect immediately on auto-activated subscriptions
 		// ----------------------------------------------------------------------
-		
-		// Step #9. Call the specific plugin's onAKPaymentNew() method and get the redirection URL
-		// ----------------------------------------------------------------------
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKPaymentNew',array(
-			$this->_state->paymentmethod,
-			$user,
-			$level,
-			$subscription
-		));
-		if(empty($jResponse)) return false;
-		
-		foreach($jResponse as $response) {
-			if($response === false) continue;
+		if($subscription->gross_amount != 0) {
+			// Non-zero charges; use the plugins
+			$app = JFactory::getApplication();
+			$jResponse = $app->triggerEvent('onAKPaymentNew',array(
+				$this->_state->paymentmethod,
+				$user,
+				$level,
+				$subscription
+			));
+			if(empty($jResponse)) return false;
 			
-			$this->paymentForm = $response;
+			foreach($jResponse as $response) {
+				if($response === false) continue;
+				
+				$this->paymentForm = $response;
+			}
+		} else {
+			// Zero charges; just redirect
+			$app = JFactory::getApplication();
+			$app->redirect( JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order') );
+			return false;
 		}
 		
 		// Return true
@@ -790,5 +814,71 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		}
 	}
+
+	/**
+	 * Generates a Universally Unique IDentifier, version 4.
+	 *
+	 * This function generates a truly random UUID.
+	 *
+	 * @paream boolean	If TRUE return the uuid in hex format, otherwise as a string
+	 * @see http://tools.ietf.org/html/rfc4122#section-4.4
+	 * @see http://en.wikipedia.org/wiki/UUID
+	 * @return string A UUID, made up of 36 characters or 16 hex digits.
+	 */
+	protected function _uuid($hex = false) 
+	{
+	    $pr_bits = false;
+	 	if (is_resource ( $this->_urand )) {
+	     	$pr_bits .= @fread ( $this->_urand, 16 );
+	   	}
+	    
+	    if (! $pr_bits) 
+	    {
+	        $fp = @fopen ( '/dev/urandom', 'rb' );
+	        if ($fp !== false) 
+	        {
+	            $pr_bits .= @fread ( $fp, 16 );
+	            @fclose ( $fp );
+	        } 
+	        else 
+	        {
+	            // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
+	            $pr_bits = "";
+	            for($cnt = 0; $cnt < 16; $cnt ++) {
+	                $pr_bits .= chr ( mt_rand ( 0, 255 ) );
+	            }
+	        }
+	    }
+	    
+	    $time_low = bin2hex ( substr ( $pr_bits, 0, 4 ) );
+	    $time_mid = bin2hex ( substr ( $pr_bits, 4, 2 ) );
+	    $time_hi_and_version = bin2hex ( substr ( $pr_bits, 6, 2 ) );
+	    $clock_seq_hi_and_reserved = bin2hex ( substr ( $pr_bits, 8, 2 ) );
+	    $node = bin2hex ( substr ( $pr_bits, 10, 6 ) );
+	   
+	    /**
+	     * Set the four most significant bits (bits 12 through 15) of the
+	     * time_hi_and_version field to the 4-bit version number from
+	     * Section 4.1.3.
+	     * @see http://tools.ietf.org/html/rfc4122#section-4.1.3
+	     */
+	    $time_hi_and_version = hexdec ( $time_hi_and_version );
+	    $time_hi_and_version = $time_hi_and_version >> 4;
+	    $time_hi_and_version = $time_hi_and_version | 0x4000;
+	   
+	    /**
+	     * Set the two most significant bits (bits 6 and 7) of the
+	     * clock_seq_hi_and_reserved to zero and one, respectively.
+	     */
+	    $clock_seq_hi_and_reserved = hexdec ( $clock_seq_hi_and_reserved );
+	    $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved >> 2;
+	    $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved | 0x8000;
+	   
+	    //Either return as hex or as string
+	    $format = $hex ? '%08s%04s%04x%04x%012s' : '%08s-%04s-%04x-%04x-%012s';
+	    
+	    return sprintf ( $format, $time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node );
+	}
+
 
 }

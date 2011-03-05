@@ -76,8 +76,22 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 		// another URL. I DO NOT WANT TO REDIRECT TO ANOTHER URL! I just want to display a form, case the
 		// payment processors expect POST data, therefore I have to override this action to make it do
 		// my thing.
-		$view = KRequest::get('get.view', 'cmd');
-		$context->result = KFactory::get($this->getController())->execute('display');
-		return $context->result;
+		if (KRequest::type() == 'HTTP') {
+			$view = KRequest::get('get.view', 'cmd');
+			$context->result = KFactory::get($this->getController())
+				->execute( $this->getAction() );
+			if($context->result === false) {
+				// I have to redirect
+				$redirect = KFactory::get($this->getController())->getRedirect();
+				KFactory::get('lib.koowa.application')
+					->redirect($redirect['url'], $redirect['message'], $redirect['type']);
+			} else {
+				return $context->result;
+			}
+		} elseif(KRequest::type() == 'AJAX') {
+			$view = KRequest::get('get.view', 'cmd');
+			$context->result = KFactory::get($this->getController())->execute('display');
+			return $context->result;
+		}
 	}	
 }
