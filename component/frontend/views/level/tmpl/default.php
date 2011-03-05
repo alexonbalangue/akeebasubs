@@ -10,6 +10,8 @@
 
 <div id="akeebasubs">
 
+<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader')?>
+
 <noscript>
 <hr/>
 <h1><?=@text('COM_AKEEBASUBS_LEVEL_ERR_NOJS_HEADER')?></h1>
@@ -137,9 +139,9 @@
 	<label for="subscribenow" class="main">&nbsp;</label>
 	<input id="subscribenow" type="submit" value="<?=@text('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>" />
 	
-	<?php // TODO Show a custom module position ("akeebasubscriptionsfooter") ?>
-	
 </form>
+
+<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsfooter')?>
 
 </div>
 
