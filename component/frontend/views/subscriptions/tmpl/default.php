@@ -85,7 +85,12 @@
 					<?endif;?>
 	            </td>
 	            <td>
+					<a href="<?=@route('view=subscription&id='.$subscription->id)?>">
+						<?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_VIEW')?>
+					</a>
+
 	            	<?if(($subscription->state == 'C')):?>
+	            	&bull;
 	            	<a href="<?=@route('view=level&id='.$subscription->akeebasubs_level_id)?>">
 	            		<?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>

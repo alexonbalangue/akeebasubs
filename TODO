@@ -1,4 +1,5 @@
 - Auto rules (upgrades & renewal policy)
+- Add "Show details" link in subscriptions view
 - PLUGIN akeebasubs/subscriptionemails : Email on subscription status change
 - PLUGIN system/asexpirationnotify : Notify users on imminent subscription expiration
 - PLUGIN system/asexpirationcontrol : Run a list of active subscriptions with expiration dates before today; Nooku does the rest

@@ -215,3 +215,13 @@ table.asfelist tfoot td { text-align: center; }
 	font-size: 9pt;
 	color: green;	
 }
+
+/**
+ * Subscription viewer
+ */
+
+#akeebasubs td.subscription-label {	
+	font-weight: bold;
+	min-width: 10em;
+	background-color: #e0e0e0;
+}
