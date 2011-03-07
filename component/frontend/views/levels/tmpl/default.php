@@ -8,7 +8,7 @@
 
 <div id="akeebasubs" class="levels">
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistheader')?>
+<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistheader'))?>
 
 <?if(!empty($levels)) foreach($levels as $level):?>
 	<div class="level">
@@ -44,5 +44,5 @@
 <?endforeach;?>
 <div class="level-clear"></div>	
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistfooter')?>
+<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistfooter'))?>
 </div>

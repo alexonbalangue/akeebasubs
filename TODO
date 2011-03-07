@@ -1,0 +1,12 @@
+- Auto rules (upgrades & renewal policy)
+- Front-end subscription UI. Do not block interface; use spinner next to button and disable the button
+- Front-end subscription UI. Hide payment method on 0-charge subscriptions
+- PLUGIN akeebasubs/subscriptionemails : Email on subscription status change
+- PLUGIN system/asexpirationnotify : Notify users on imminent subscription expiration
+- PLUGIN system/asexpirationcontrol : Run a list of active subscriptions with expiration dates before today; Nooku does the rest
+- PLUGIN akeebasubs/juga : Add/remove users from JUGA groups
+- PLUGIN content/asrestricted : Content hding based on subscription settings; add option to emulate AMBRA.subscriptions feature
+- Backend: allow running all integration plugins on all subscriptions (AJAX splitting required)
+- PLUGIN akpayment/paypal : Paypal payment method (needs live testing)
+- Backend: AMBRA.subscriptions import feature
+- Front-end: Allow user to alter his account information
