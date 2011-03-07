@@ -105,11 +105,21 @@
 	</div>
 	<br/>
 	
-	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')?></h3>
+	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
 	<label for="coupon" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?></label>
 	<input type="text" name="coupon" id="coupon" value="<?=@escape($cache['coupon'])?>" class="vat" />
 	<br/>
-	<hr />
+	
+	<div id="paymentmethod-container">
+		<label for="paymentmethod" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
+		<?=@helper('admin::com.akeebasubs.template.helper.listbox.paymentmethods')?>
+		<br/>
+	</div>
+	<label for="subscribenow" class="main">&nbsp;</label>
+	<input id="subscribenow" type="submit" value="<?=@text('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>" />
+	<img id="ui-disable-spinner" src="<?=JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />
+
+	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')?></h3>
 	
 	<noscript>
 	<?=@text('COM_AKEEBASUBS_LEVEL_SUM_NOSCRIPT')?>
@@ -131,14 +141,6 @@
 	<span id="akeebasubs-sum-total" class="currency total"><?=sprintf('%.02f', $level->price)?></span>
 	<span class="currency-symbol total"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	
-	<hr/>
-	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
-	<label for="paymentmethod" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.paymentmethods')?>
-	<br/>
-	<label for="subscribenow" class="main">&nbsp;</label>
-	<input id="subscribenow" type="submit" value="<?=@text('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>" />
-	<img id="ui-disable-spinner" src="<?=JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />
 	
 </form>
 
@@ -147,8 +149,8 @@
 </div>
 
 <script type="text/javascript">
-akeebasubs_validate_url = "<?=JURI::base().'index.php'?>";
-akeebasubs_level_id = <?=KRequest::get('get.id','int',0)?>
+var akeebasubs_validate_url = "<?=JURI::base().'index.php'?>";
+var akeebasubs_level_id = <?=$level->id?>
 
 (function($) {
 	$(document).ready(function(){

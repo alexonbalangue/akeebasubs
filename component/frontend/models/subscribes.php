@@ -225,7 +225,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		}
 		
 		// 5. Coupon validation
-		$ret['coupon'] = $this->_validateCoupon();
+		$ret['coupon'] = $this->_validateCoupon(true);
 		
 		return (object)$ret;
 	}
@@ -244,7 +244,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 
 		// Coupon discount
 		$couponDiscount = 0;
-		$validCoupon = $this->_validateCoupon();
+		$validCoupon = $this->_validateCoupon(false);
 		
 		$couponDiscount = 0;
 		if($validCoupon) {
@@ -310,7 +310,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	 * Validates a coupon code, making sure it exists, it's activated, it's not expired,
 	 * it applies to the specific subscription and user.
 	 */
-	private function _validateCoupon()
+	private function _validateCoupon($validIfNotExists = true)
 	{
 		static $couponCode = null;
 		static $valid = false;
@@ -321,7 +321,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		}
 	
-		$valid = true;		
+		$valid = $validIfNotExists;		
 		if($this->_state->coupon) {
 			$couponCode = $this->_state->coupon;
 			$valid = false;

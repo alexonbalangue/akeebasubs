@@ -4,10 +4,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-var akeebasubs_validate_url = '';
 var european_union_countries = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'];
 var akeebasubs_business_state = '';
-var akeebasubs_level_id = 0;
 var akeebasubs_blocked_gui = false;
 var akeebasubs_run_validation_after_unblock = false;
 
@@ -407,6 +405,12 @@ function applyPrice(response)
 		$('#akeebasubs-sum-discount').text(response.discount);
 		$('#akeebasubs-sum-vat').text(response.tax);
 		$('#akeebasubs-sum-total').text(response.gross);
+		
+		if(response.gross <= 0) {
+			$('#paymentmethod-container').css('display','none');
+		} else {
+			$('#paymentmethod-container').css('display','inline');
+		}
 	})(akeeba.jQuery);
 }
 
