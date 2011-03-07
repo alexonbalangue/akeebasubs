@@ -1,5 +1,4 @@
 - Auto rules (upgrades & renewal policy)
-- Front-end subscription UI. Do not block interface; use spinner next to button and disable the button
 - Front-end subscription UI. Hide payment method on 0-charge subscriptions
 - PLUGIN akeebasubs/subscriptionemails : Email on subscription status change
 - PLUGIN system/asexpirationnotify : Notify users on imminent subscription expiration

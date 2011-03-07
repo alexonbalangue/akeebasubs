@@ -10,7 +10,7 @@
 
 <div id="akeebasubs">
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader')?>
+<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader'))?>
 
 <noscript>
 <hr/>
@@ -138,23 +138,17 @@
 	<br/>
 	<label for="subscribenow" class="main">&nbsp;</label>
 	<input id="subscribenow" type="submit" value="<?=@text('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>" />
+	<img id="ui-disable-spinner" src="<?=JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />
 	
 </form>
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsfooter')?>
+<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsfooter'))?>
 
 </div>
 
 <script type="text/javascript">
 akeebasubs_validate_url = "<?=JURI::base().'index.php'?>";
 akeebasubs_level_id = <?=KRequest::get('get.id','int',0)?>
-
-function disableInterface()
-{
-	(function($) {
-		$.blockUI({ message: '<h3 style="padding-left: 5px;"><img src="<?php echo JURI::base() ?>media/com_akeebasubs/images/throbber.gif" /> <?=str_replace("'","\'",@text('COM_AKEEBASUBS_LEVELS_WORKING_MESSAGE'))?></h1>' });
-	})(akeeba.jQuery);
-}
 
 (function($) {
 	$(document).ready(function(){

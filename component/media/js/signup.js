@@ -9,11 +9,27 @@ var european_union_countries = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 
 var akeebasubs_business_state = '';
 var akeebasubs_level_id = 0;
 var akeebasubs_blocked_gui = false;
+var akeebasubs_run_validation_after_unblock = false;
+
+function blockInterface()
+{
+	(function($) {
+		$('#ui-disable-spinner').css('display','inline-block');
+		$('#subscribenow').attr('disabled','disabled');
+		akeebasubs_blocked_gui = true;
+	})(akeeba.jQuery);
+}
 
 function enableInterface()
 {
 	(function($) {
-		$.unblockUI();
+		$('#ui-disable-spinner').css('display','none');
+		$('#subscribenow').removeAttr('disabled');
+		akeebasubs_blocked_gui = false;
+		if(akeebasubs_run_validation_after_unblock) {
+			akeebasubs_run_validation_after_unblock = false;
+			validateBusiness();
+		}
 	})(akeeba.jQuery);
 }
 
@@ -26,6 +42,11 @@ function enableInterface()
  */
 function validateForm(callback_function)
 {
+	if(akeebasubs_blocked_gui) {
+		akeebasubs_run_validation_after_unblock = true;
+		return;
+	}
+
 	(function($) {
 		var data = {
 			// -- component parameters
@@ -56,7 +77,7 @@ function validateForm(callback_function)
 			data.password2 = $('#password2').val();
 		}
 		
-		disableInterface();
+		blockInterface();
 		
 		$.ajax({
 			type: 'POST',
@@ -64,9 +85,9 @@ function validateForm(callback_function)
 			data: data,
 			dataType: 'json',
 			success: function(msg, textStatus, xhr) {
-				enableInterface();
 				if(msg.validation) applyValidation(msg.validation, callback_function);
 				if(msg.price) applyPrice(msg.price);
+				enableInterface();
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				enableInterface();
