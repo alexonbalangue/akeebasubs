@@ -33,5 +33,23 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 		} else {
 			$this->getModel()->getState()->paystate = 'C,P';
 		}
-	}	
+	}
+	
+	protected function _actionEdit()
+	{
+		JError::raiseWarning(403, 'Forbidden');
+		return $this;
+	}
+	
+	protected function _actionAdd()
+	{
+		JError::raiseWarning(403, 'Forbidden');
+		return $this;
+	}
+	
+	protected function _actionDelete()
+	{
+		JError::raiseWarning(403, 'Forbidden');
+		return $this;
+	}		
 } 

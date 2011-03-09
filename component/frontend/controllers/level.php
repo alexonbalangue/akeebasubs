@@ -13,6 +13,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		
 		$this->registerCallback('before.browse', array($this, '_beforeBrowse'));
 		$this->registerCallback('before.read', array($this, '_beforeRead'));
+		$this->registerCallback('before.save', array($this, '_beforeSave'));
 	}
 	
 	public function _beforeBrowse(KCommandContext $context)
@@ -36,5 +37,31 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 			KFactory::get('site::com.akeebasubs.model.subscribes')
 				->getData()
 		);
+	}
+	
+	/**
+	 * Disallow saving from public front-end
+	 */
+	public function _beforeSave(KCommandContext $context)
+	{
+		return false;
+	}
+	
+	protected function _actionEdit()
+	{
+		JError::raiseWarning(403, 'Forbidden');
+		return $this;
+	}
+	
+	protected function _actionAdd()
+	{
+		JError::raiseWarning(403, 'Forbidden');
+		return $this;
+	}
+	
+	protected function _actionDelete()
+	{
+		JError::raiseWarning(403, 'Forbidden');
+		return $this;
 	}	
 } 
