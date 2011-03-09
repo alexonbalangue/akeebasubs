@@ -150,7 +150,7 @@
 
 <script type="text/javascript">
 var akeebasubs_validate_url = "<?=JURI::base().'index.php'?>";
-var akeebasubs_level_id = <?=$level->id?>
+var akeebasubs_level_id = <?=$level->id?>;
 
 (function($) {
 	$(document).ready(function(){

@@ -11,9 +11,10 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 	{
 		$config->views = array(
 			'dashboard' 		=> JText::_('COM_AKEEBASUBS_DASHBOARD'),
+			'levels' 			=> JText::_('COM_AKEEBASUBS_LEVELS_TITLE'),
 			'subscriptions'		=> JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE'),
 			'coupons'			=> JText::_('COM_AKEEBASUBS_COUPONS_TITLE'),
-			'levels' 			=> JText::_('COM_AKEEBASUBS_LEVELS_TITLE'),
+			'upgrades'			=> JText::_('COM_AKEEBASUBS_UPGRADES_TITLE'),
 			'taxrules'			=> JText::_('COM_AKEEBASUBS_TAXRULES_TITLE'),
         );
 		

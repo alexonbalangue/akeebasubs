@@ -268,13 +268,12 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		}
 		
-		$autoDiscount = 0;
-		$validAuto = 0;
-		// TODO Auto-rule validation
+		// Upgrades (auto-rule) validation
+		$autoDiscount = $this->_getAutoDiscount();
 		
 		$useCoupon = false;
 		$useAuto = false;
-		if($validCoupon && $validAuto) {
+		if($validCoupon) {
 			if($autoDiscount > $couponDiscount) {
 				$discount = $autoDiscount;
 				$useAuto = true;
@@ -282,10 +281,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				$discount = $couponDiscount;
 				$useCoupon = true;
 			}	
-		} elseif($validCoupon && !$validAuto) {
-			$discount = $couponDiscount;
-			$useCoupon = true;
-		} elseif(!$validCoupon && $validAuto) {
+		} else {
 			$discount = $autoDiscount;
 			$useAuto = true;
 		}
@@ -367,6 +363,76 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		return $valid;
 	}	
+	
+	/**
+	 * Loads any relevant upgade (auto discount) rules and returns the max discount possible
+	 * under those rules.
+	 *
+	 * @return array Discount type and value
+	 */
+	private function _getAutoDiscount()
+	{
+		// Check that we do have a user (if there's no logged in user, we have no subscription information,
+		// ergo upgrades are not applicable!)
+		$user_id = KFactory::get('lib.joomla.user')->id;
+		if(empty($user_id)) return 0;
+		
+		// Get applicable auto-rules
+		$autoRules = KFactory::tmp('admin::com.akeebasubs.model.upgrades')
+			->to_id($this->_state->id)
+			->enabled(1)
+			->getList();
+			
+		if(empty($autoRules)) return 0;
+		
+		// Get the user's list of subscriptions
+		$subscriptions = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
+			->user_id($user_id)
+			->enabled(1)
+			->getList();
+			
+		if(empty($subscriptions)) return 0;
+		
+		$subs = array();
+		jimport('joomla.utilities.date');
+		$jNow = new JDate();
+		$uNow = $jNow->toUnix();
+		foreach($subscriptions as $subscription) {
+			$jFrom = new JDate($subscription->publish_up);
+			$uFrom = $jFrom->toUnix();
+			$presence = $uNow - $uFrom;
+			$subs[$subscription->id] = $presence;
+		}
+		
+		// Get the current subscription level's net worth
+		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
+			->id($this->_state->id)
+			->getItem();
+		$net = (float)$level->price;
+		
+		if($net == 0) return 0;
+		
+		$discount = 0;
+		
+		foreach($autoRules as $rule) {
+			if(!array_key_exists($rule->from_id, $subs)) continue;
+			if($subs[$rule->from_id] < $rule->min_presence*86400) continue;
+			if($subs[$rule->from_id] > $rule->max_presence*86400) continue;
+			
+			switch($rule->type) {
+				case 'value':
+					if($rule->value > $discount) $discount = $rule->value;
+					break;
+					
+				case 'percent':
+					$newDiscount = $net * (float)$rule->value / 100.00;
+					if($newDiscount > $discount) $discount = $newDiscount;
+					break;
+			}
+		}
+		
+		return $discount;
+	}
 	
 	/**
 	 * Gets the applicable tax rule based on the state variables

@@ -1,9 +1,11 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 <?php JHTML::_('behavior.calendar'); ?>
 
+<!--
 <script src="media://lib_koowa/js/koowa.js" />
 <style src="media://lib_koowa/css/koowa.css" />
 <style src="media://com_akeebasubs/css/backend.css" />
+-->
 
 <?= @helper('behavior.tooltip'); ?>
 

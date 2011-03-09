@@ -393,5 +393,28 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
  		}
  		
  		return $name; 
-	}		
+	}
+	
+	public function formatLevel($config = array())
+	{
+		static $levels;
+		
+		$config = new KConfig($config);
+		$config->append(array(
+			'id'		=> ''
+		));
+		
+		if(empty($levels)) {
+			$levelsList = KFactory::tmp('admin::com.akeebasubs.model.levels')->getList();
+			if(!empty($levelsList)) foreach($levelsList as $level) {
+				$levels[$level->id] = $level->title;
+			}
+		}
+		
+		if(array_key_exists($config->id, $levels)) {
+			return $levels[$config->id];
+		} else {
+			return '&mdash;&mdash;&mdash;';
+		}
+	}
 }
