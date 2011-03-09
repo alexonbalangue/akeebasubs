@@ -13,6 +13,6 @@
 		Emails user when their subscription status changes
 	</description>
 	<files>
-		<filename plugin="subscriptionsemails">subscriptionsemails.php</filename>
+		<filename plugin="subscriptionemails">subscriptionemails.php</filename>
 	</files>
 </install>
