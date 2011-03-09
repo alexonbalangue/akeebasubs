@@ -104,6 +104,12 @@ table.asfelist tfoot td { text-align: center; }
 	-moz-border-radius: 8px;
 }
 
+#akeebasubs div.level-description-short {
+	min-height: 64px;
+	height: auto;
+	padding-bottom: 10px;
+}
+
 #akeebasubs div.level-description-inner {
 	width: 100%;
 	padding: 8px;

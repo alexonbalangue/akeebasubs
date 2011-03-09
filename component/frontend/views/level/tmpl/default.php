@@ -12,6 +12,8 @@
 
 <?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader'))?>
 
+<?=@template('default_level')?>
+
 <noscript>
 <hr/>
 <h1><?=@text('COM_AKEEBASUBS_LEVEL_ERR_NOJS_HEADER')?></h1>
