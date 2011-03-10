@@ -1,4 +1,3 @@
-- PLUGIN content/asrestricted : Content hding based on subscription settings; add option to emulate AMBRA.subscriptions feature
 - Backend: allow running all integration plugins on all subscriptions (AJAX splitting required)
 - PLUGIN akpayment/paypal : Paypal payment method (needs live testing)
 - Backend: AMBRA.subscriptions import feature

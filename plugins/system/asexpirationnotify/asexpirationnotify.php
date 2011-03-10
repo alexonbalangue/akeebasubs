@@ -7,6 +7,8 @@
 
 defined('_JEXEC') or die();
 
+jimport('joomla.plugin.plugin');
+
 class plgSystemAsexpirationnotify extends JPlugin
 {
 	/**

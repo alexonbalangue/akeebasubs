@@ -7,6 +7,8 @@
 
 defined('_JEXEC') or die();
 
+jimport('joomla.plugin.plugin');
+
 class plgAkpaymentNone extends JPlugin
 {
 	private $ppName = 'none';
