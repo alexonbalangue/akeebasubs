@@ -98,7 +98,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		if(!empty($from) && !empty($to)) {
 			// Filter from-to dates
 			$query->where('tbl.publish_up','>=',$from);
-			$query->where('tbl.publish_up','<=',$from);
+			$query->where('tbl.publish_up','<=',$to);
 		} elseif(!empty($from) && empty($to)) {
 			// Filter after date
 			$query->where('tbl.publish_up','>=',$from);

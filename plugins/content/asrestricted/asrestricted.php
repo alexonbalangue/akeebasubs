@@ -82,8 +82,10 @@ class plgContentAsrestricted extends JPlugin
 			$list = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 				->user_id($user->id)
 				->enabled(1)
-				->expires_to($jNow->toMySQL());
-				
+				->expires_from($jNow->toMySQL())
+				->publish_down($jNow->toMySQL())
+				->getList();
+			
 			if(count($list)) foreach($list as $sub) {
 				if($sub->enabled)
 					if(!in_array($sub->akeebasubs_level_id, $subscriptions))
