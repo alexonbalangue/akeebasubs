@@ -15,4 +15,7 @@
 	<files>
 		<filename plugin="juga">juga.php</filename>
 	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_akeebasubs_juga.ini</language>
+	</languages>
 </install>

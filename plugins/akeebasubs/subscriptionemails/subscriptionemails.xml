@@ -15,4 +15,7 @@
 	<files>
 		<filename plugin="subscriptionemails">subscriptionemails.php</filename>
 	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_akeebasubs_subscriptionemails.ini</language>
+	</languages>
 </install>

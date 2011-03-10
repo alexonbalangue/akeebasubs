@@ -16,4 +16,7 @@
 	<files>
 		<filename plugin="asexpirationcontrol">asexpirationcontrol.php</filename>
 	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_system_asexpirationcontrol.ini</language>
+	</languages>
 </install>

@@ -16,4 +16,7 @@
 	<files>
 		<filename plugin="none">none.php</filename>
 	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_akpayment_none.ini</language>
+	</languages>
 </install>

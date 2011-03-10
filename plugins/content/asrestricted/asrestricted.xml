@@ -20,4 +20,7 @@
 	<files>
 		<filename plugin="asrestricted">asrestricted.php</filename>
 	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_content_asrestricted.ini</language>
+	</languages>
 </install>
