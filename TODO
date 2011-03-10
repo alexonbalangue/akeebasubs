@@ -1,8 +1,31 @@
-- PLUGIN system/asexpirationnotify : Notify users on imminent subscription expiration
-- PLUGIN system/asexpirationcontrol : Run a list of active subscriptions with expiration dates before today; Nooku does the rest
-- PLUGIN akeebasubs/juga : Add/remove users from JUGA groups
+- PLUGIN system/asexpirationcontrol : Run a list of active subscriptions with expiration dates before today; Nooku does the rest. Store the last run date in component configuration plg_akeebasubs_asexpirationcontrol_timestamp. If we run out of time, set the timestamp to 0 so that we run on the next pageload.
 - PLUGIN content/asrestricted : Content hding based on subscription settings; add option to emulate AMBRA.subscriptions feature
 - Backend: allow running all integration plugins on all subscriptions (AJAX splitting required)
 - PLUGIN akpayment/paypal : Paypal payment method (needs live testing)
 - Backend: AMBRA.subscriptions import feature
 - Front-end: Allow user to alter his account information
+- PLUGIN akeebasubs/juga : Add/remove users from JUGA groups
+
+Future ideas:
+- Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
+- Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
+- Payment: Eurobank (Greece)
+- Payment: PayPal recurring subscriptions
+- Add/remove to Joomla! Groups
+- Add/remove to SOBI2
+- Add/remove to SOBIPro
+- Add/remove to K2 groups
+- Add/remove to JCE groups
+- Add/remove to Agora
+- Add/remove to Kunena
+- Add/remove to Jomres
+- Add/remove to Mailchimp
+- Payment: WorldPay
+- Payment: 2checkout
+- Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
+- Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
+- Payment: Avangate http://www.avangate.com/ecommerce/
+- Payment: Liberty Reserve http://www.libertyreserve.com/en/help/xmlapiguide
+- Payment: Moneris http://www.moneris.com/en/MerchantServices/MerchantDirect.aspx
+- Payment: PSIGate http://www.psigate.com/pages/techsupport.asp
+- Payment: Charge.com

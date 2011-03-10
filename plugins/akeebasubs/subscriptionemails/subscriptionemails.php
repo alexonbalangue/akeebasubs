@@ -9,6 +9,9 @@ defined('_JEXEC') or die();
 
 class plgAkeebasubsSubscriptionemails extends JPlugin
 {
+	/**
+	 * Public constructor. Overridden to load the language strings.
+	 */
 	public function __construct(& $subject, $config = array())
 	{
 		parent::__construct($subject, $config);
@@ -24,16 +27,30 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 	}
 
+	/**
+	 * Called when a new subscription is created, either manually or through
+	 * the front-end interface
+	 */
 	public function onAKSubscriptionCreate(KDatabaseRowDefault $row)
 	{
 		$this->sendEmail($row, true);
 	}
 	
+	/**
+	 * Called whenever a subscription is modified. Namely, when its enabled status,
+	 * payment status or valid from/to dates are changed.
+	 */
 	public function onAKSubscriptionChange(KDatabaseRowDefault $row)
 	{
 		$this->sendEmail($row, false);
 	}
 	
+	/**
+	 * Sends out the email to the owner of the subscription.
+	 * 
+	 * @param $row KDatabaseRowDefault The subscription row object
+	 * @param $new bool True if it's a new subscription, false if it's an existing subscription being modified
+	 */
 	private function sendEmail(KDatabaseRowDefault $row, $new = true)
 	{
 		// Get the site name

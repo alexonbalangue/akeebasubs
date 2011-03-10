@@ -19,7 +19,11 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			->insert('publish_down'		, 'date')
 			->insert('user_id'			, 'int')
 			->insert('paystate'			, 'string')
-			->insert('since'			, 'date');
+			->insert('since'			, 'date')
+			->insert('contact_flag'		, 'int')
+			->insert('expires_from'		, 'date')
+			->insert('expires_to'		, 'date')
+			;
 	}
 
 	protected function _buildQueryWhere(KDatabaseQuery $query)
@@ -59,6 +63,10 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			$query->where('tbl.state','IN',$states);
 		}
 		
+		if(is_numeric($state->contact_flag)) {
+			$query->where('tbl.contact_flag', '=', $state->contact_flag);
+		}
+		
 		// Filter the dates
 		jimport('joomla.utilities.date');
 		$from = trim($state->publish_up);
@@ -89,16 +97,17 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		
 		if(!empty($from) && !empty($to)) {
 			// Filter from-to dates
-			$dateFilterString = "'$from' AND '$to'";
-			$query->where('tbl.publish_up','BETWEEN',$dateFilterString);
+			$query->where('tbl.publish_up','>=',$from);
+			$query->where('tbl.publish_up','<=',$from);
 		} elseif(!empty($from) && empty($to)) {
 			// Filter after date
-			$query->where('tbl.publish_up','>=',"'$from'");
+			$query->where('tbl.publish_up','>=',$from);
 		} elseif(empty($from) && !empty($to)) {
 			// Filter up to a date
-			$query->where('tbl.publish_down','<=',"'$to'");
+			$query->where('tbl.publish_down','<=',$to);
 		}
 		
+		// "Since" queries
 		$since = trim($state->since);
 		if(empty($since)) {
 			$since = '';
@@ -110,8 +119,48 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			} else {
 				$since = $jFrom->toMySQL();
 			}
+			$query->where('tbl.created_on','>=',$since);
 		}
-		$query->where('tbl.created_on','>=',"$since");
+		
+		// Expiration control queries
+		jimport('joomla.utilities.date');
+		$from = trim($state->expires_from);
+		if(empty($from)) {
+			$from = '';
+		} else {
+			$jFrom = new JDate($from);
+			$from = $jFrom->toUnix();
+			if($from == 0) {
+				$from = '';
+			} else {
+				$from = $jFrom->toMySQL();
+			}
+		}
+		
+		$to = trim($state->expires_to);
+		if(empty($to)) {
+			$to = '';
+		} else {
+			$jTo = new JDate($to);
+			$to = $jTo->toUnix();
+			if($to == 0) {
+				$to = '';
+			} else {
+				$to = $jTo->toMySQL();
+			}
+		}
+		
+		if(!empty($from) && !empty($to)) {
+			// Filter from-to dates
+			$query->where('tbl.publish_down','>=',$from,'AND');
+			$query->where('tbl.publish_down','<=',$to,'AND');
+		} elseif(!empty($from) && empty($to)) {
+			// Filter after date
+			$query->where('tbl.publish_down','>=',$from);
+		} elseif(empty($from) && !empty($to)) {
+			// Filter up to a date
+			$query->where('tbl.publish_down','<=',$to);
+		}
 		
 		parent::_buildQueryWhere($query);
 	}
