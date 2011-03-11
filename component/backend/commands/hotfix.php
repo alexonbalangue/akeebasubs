@@ -5,6 +5,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('KOOWA') or die('');
+
 /**
  * Hotfixes for Nooku bugs not yet fixed in SVN
  * 

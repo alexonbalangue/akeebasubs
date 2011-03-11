@@ -6,6 +6,8 @@
  * @version 0.5.3
  */
 
+defined('KOOWA') or die('');
+
 /**
  * @brief Utility class
  *

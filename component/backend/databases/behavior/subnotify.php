@@ -5,6 +5,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('KOOWA') or die('');
+
 /**
  * Implements notifications for subscriptions status changes. What this behaviour
  * does is to monitor new and existing subscriptions. If the payment or enabled

@@ -5,6 +5,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('KOOWA') or die('');
+
 class ComAkeebasubsModelSubscriptions extends KModelTable
 {
 	public function __construct(KConfig $config)

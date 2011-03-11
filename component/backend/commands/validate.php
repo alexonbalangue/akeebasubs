@@ -5,6 +5,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('KOOWA') or die('');
+
 /**
  * A transparent server-side data validation solution with automatic redirection
  * back to the editor page on invalid data, without resetting user's input.

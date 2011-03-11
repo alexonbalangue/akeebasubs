@@ -1,7 +1,6 @@
 - Backend: allow running all integration plugins on all subscriptions (AJAX splitting required)
 - PLUGIN akpayment/paypal : Paypal payment method (needs live testing)
 - Backend: AMBRA.subscriptions import feature
-- Front-end: Allow user to alter his account information
 - PLUGIN akeebasubs/juga : Add/remove users from JUGA groups
 - MODULE admin/akstats : Display (textual) statistics
 - MODULE admin/akcharts : Display (graphical, charts) statistics
@@ -35,3 +34,4 @@ Future ideas:
 - Affiliates. Links an affiliate to a coupon code and calculates the total comissions per term (e.g. per month)
 - Resellers. A triangular sale: Reseller charges the user and uses our API to get a voucher (coupon) code. The user uses the coupon code on our site to subscribe. The reseller gets charged when the coupon is used.
 - Linked subscriptions. User B "inherits" the subscriptions of User A. Every change in User A's subscription status is replicated to User B. One-to-many relationship to easen the transition.
+- Front-end: Allow user to alter his account information

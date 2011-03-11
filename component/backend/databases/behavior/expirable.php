@@ -5,6 +5,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('KOOWA') or die('');
+
 /**
  * Implements expirable content, i.e. content which will be auto-enabled on a
  * publish_up date and auto-disabled on a publish_down date.

@@ -5,6 +5,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('KOOWA') or die('');
+
 /**
  * Implements hits-limitable content, i.e. content which will be auto-disabled
  * if it receives more hits than specified
