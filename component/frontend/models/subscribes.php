@@ -670,6 +670,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$subscriptions = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
 			->user_id($user->id)
 			->level($this->_state->id)
+			->enabled(1)
 			->getList();
 			
 		$jNow = new JDate();
