@@ -25,12 +25,73 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			->insert('contact_flag'		, 'int')
 			->insert('expires_from'		, 'date')
 			->insert('expires_to'		, 'date')
+			// When refresh=1 we run a GROUP BY query which returns user ID's linked to subscriptions
+			->insert('refresh'			, 'int')
+			// Nooku does some funky shit with the offset when the limit changes. I don't want it to happen!
+			->insert('forceoffset'		, 'int')
 			;
+	}
+	
+	public function getTotal()
+	{
+		if($this->_state->refresh == 1) {
+			// When we're running a refresh, we must specialise this method in
+			// order to take the GROUP BY clause into account
+			if (!isset($this->_total)) {
+				if($table = $this->getTable()) {
+					$query = $table->getDatabase()->getQuery();
+					
+					$this->_buildQueryFrom($query);
+					$this->_buildQueryJoins($query);
+					$this->_buildQueryWhere($query);
+					$this->_buildQueryGroup($query);
+					
+					$total = $table->count($query);
+					$total--;
+					
+					$this->_total = $total;
+				}
+			}
+		}
+		return parent::getTotal();
+	}
+	
+	protected function _buildQueryLimit(KDatabaseQuery $query)
+	{
+		if($this->_state->refresh == 1) {
+			$limit = $this->_state->limit;
+			$offset = ($this->_state->forceoffset > 0) ? $this->_state->forceoffset : $this->_state->offset;
+			
+			if($limit) {
+				$query->limit($limit, $offset);
+			}
+		} else {
+			parent::_buildQueryLimit($query);
+		}
+	
+	}	
+	
+	protected function _buildQueryColumns(KDatabaseQuery $query)
+	{
+		if($this->_state->refresh == 1) {
+			$query->select(array('tbl.akeebasubs_subscription_id', 'tbl.user_id'));
+		}
+	}
+	
+	protected function _buildQueryGroup(KDatabaseQuery $query)
+	{
+		if($this->_state->refresh == 1) {
+			$query->group(array('tbl.user_id'));
+		}
 	}
 
 	protected function _buildQueryWhere(KDatabaseQuery $query)
 	{
 		$state = $this->_state;
+		
+		if($state->refresh == 1) {
+			return;
+		}
 
 		if(is_numeric($state->enabled)) {
 			$query->where('tbl.enabled','=', $state->enabled);

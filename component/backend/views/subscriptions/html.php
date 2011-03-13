@@ -13,7 +13,8 @@ class ComAkeebasubsViewSubscriptionsHtml extends ComAkeebasubsViewHtml
 	{	
 		KFactory::get('admin::com.akeebasubs.toolbar.subscriptions')
                 ->setTitle('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE','akeebasubs') 
-				->setIcon('akeebasubs');
+				->setIcon('akeebasubs')
+				->append('subrefresh');
 		
 		return parent::display();
 	}

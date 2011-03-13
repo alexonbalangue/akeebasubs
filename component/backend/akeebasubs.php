@@ -11,4 +11,13 @@ if(!defined('KOOWA')) {
     return;
 }
 
+// Magic: merge the default translation with the current translation
+$jlang =& JFactory::getLanguage();
+$jlang->load('com_akeebasubs', JPATH_SITE, 'en-GB', true);
+$jlang->load('com_akeebasubs', JPATH_SITE, $jlang->getDefault(), true);
+$jlang->load('com_akeebasubs', JPATH_SITE, null, true);
+$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
+$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
+
 echo KFactory::get('admin::com.akeebasubs.dispatcher')->dispatch();

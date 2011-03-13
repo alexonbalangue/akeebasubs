@@ -28,8 +28,9 @@ class ComAkeebasubsDatabaseTableSubscriptions extends KDatabaseTableAbstract
 		// WARNING: ORDER MATTERS! $config->behaviors is a LIFO queue. The last behavior to
 		// be added fires first. We want the subnotify to always fire last.
 		$config->behaviors = array(
+			'admin::com.akeebasubs.database.behavior.subrefresh',
 			'admin::com.akeebasubs.database.behavior.subnotify',
-			'admin::com.akeebasubs.database.behavior.subexpirable',
+			'admin::com.akeebasubs.database.behavior.subexpirable'
 		);
 		parent::_initialize($config);
 	}

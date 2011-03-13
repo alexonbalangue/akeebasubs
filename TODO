@@ -1,4 +1,3 @@
-- Backend: allow running all integration plugins on all subscriptions (AJAX splitting required)
 - PLUGIN akpayment/paypal : Paypal payment method (needs live testing)
 - Backend: AMBRA.subscriptions import feature
 - MODULE admin/akstats : Display (textual) statistics
@@ -8,6 +7,7 @@
 
 Future ideas:
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
+- Payment: PayPal Pro
 - Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
 - Payment: Eurobank (Greece)
 - Payment: PayPal recurring subscriptions

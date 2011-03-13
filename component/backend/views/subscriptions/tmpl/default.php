@@ -5,6 +5,9 @@
 <script src="media://lib_koowa/js/koowa.js" />
 <style src="media://lib_koowa/css/koowa.css" />
 <style src="media://com_akeebasubs/css/backend.css" />
+<script src="media://com_akeebasubs/js/jquery.js" />
+<script src="media://com_akeebasubs/js/blockui.js" />
+<script src="media://com_akeebasubs/js/backend.js" />
 -->
 
 <?= @helper('behavior.tooltip'); ?>
@@ -156,3 +159,9 @@
 	</tbody>
 </table>
 </form>
+
+<div id="refreshMessage" style="display:none">
+	<h3><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_TITLE');?></h3>
+	<p><img id="asriSpinner" src="<?=JURI::base()?>../media/com_akeebasubs/images/throbber.gif" align="center" /></p>
+	<p><span id="asriPercent">0</span><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_PROGRESS')?></p>
+</div>

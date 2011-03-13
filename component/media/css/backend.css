@@ -12,6 +12,8 @@
 
 .icon-32-export { background: transparent url(../../lib_koowa/images/32/export.png) no-repeat !important; }
 
+.icon-32-subrefresh { background: transparent url(../images/subrefresh.png); }
+
 .akeebasubs-clear { clear:both; }
 label.title, input.title { font-weight: bold; font-size: larger; }
 label.main { display: inline-block; width: 45%; background: #e0e0e0; border-bottom: 1px solid gray; padding: 2px; margin-bottom: 2px }
@@ -44,3 +46,5 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 .akeebasubs-coupon-discount-value { color: red; font-weight: bold; }
 
 .akeebasubs-coupon-discount-percent { color: #336666; font-weight: bold; }
+
+#refreshMessage h3, #refreshMessage p { text-align: center; }
