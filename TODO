@@ -1,7 +1,6 @@
 - Backend: allow running all integration plugins on all subscriptions (AJAX splitting required)
 - PLUGIN akpayment/paypal : Paypal payment method (needs live testing)
 - Backend: AMBRA.subscriptions import feature
-- PLUGIN akeebasubs/juga : Add/remove users from JUGA groups
 - MODULE admin/akstats : Display (textual) statistics
 - MODULE admin/akcharts : Display (graphical, charts) statistics
 - MODULE site/akeebasubs : Display a list of active / all subscriptions (HMVC)

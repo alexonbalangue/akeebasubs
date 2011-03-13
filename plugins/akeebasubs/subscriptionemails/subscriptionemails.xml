@@ -9,9 +9,7 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>2011-03-04</creationDate>
 	<version>1.0</version>
-	<description>
-		Emails user when their subscription status changes
-	</description>
+	<description>PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_DESCRIPTION</description>
 	<files>
 		<filename plugin="subscriptionemails">subscriptionemails.php</filename>
 	</files>

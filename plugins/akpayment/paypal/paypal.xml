@@ -9,9 +9,7 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>2011-03-04</creationDate>
 	<version>1.0</version>
-	<description>
-		Paypal payment plugin.
-	</description>
+	<description>PLG_AKPAYMENT_PAYPAL_DESCRIPTION</description>
 	<files>
 		<filename plugin="paypal">paypal.php</filename>
 	</files>

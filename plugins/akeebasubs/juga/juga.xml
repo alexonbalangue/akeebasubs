@@ -9,13 +9,15 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>2011-03-04</creationDate>
 	<version>1.0</version>
-	<description>
-		Automatically assigns subscribed users to JUGA groups
-	</description>
+	<description>PLG_AKEEBASUBS_JUGA_DESCRIPTION</description>
 	<files>
 		<filename plugin="juga">juga.php</filename>
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_akeebasubs_juga.ini</language>
 	</languages>
+	<params>
+		<param name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_JUGA_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_JUGA_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />
+		<param name="removegroups" type="textarea" default="" label="PLG_AKEEBASUBS_JUGA_REMOVEGROUPS_TITLE" description="PLG_AKEEBASUBS_JUGA_REMOVEGROUPS_DESCRIPTION" rows="5" cols="30" />
+	</params>
 </install>

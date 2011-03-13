@@ -9,14 +9,7 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>2011-03-04</creationDate>
 	<version>1.0</version>
-	<description>
-		Shows content only to specific subscribers. Usage: {akeebasubs SubscriptionsList}your
-		content here{/akeebasubs} will show the content to subscribers of the subscriptions
-		levels listed. You can define multiple subscriptions using the || (OR) and && (AND)
-		operators. The AND operators are evaluated before OR operators, i.e. "SUB1 || SUB2 && SUB3"
-		will show the content to users having a SUB1 subscription or to users having both SUB2 and
-		SUB3.
-	</description>
+	<description>PLG_CONTENT_ASRESTRICTED_DESCRIPTION</description>
 	<files>
 		<filename plugin="asrestricted">asrestricted.php</filename>
 	</files>

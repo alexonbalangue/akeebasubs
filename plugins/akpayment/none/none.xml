@@ -9,10 +9,7 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>2011-02-28</creationDate>
 	<version>1.0</version>
-	<description>
-		Dummy payment plugin, only for testing. WARNING: Do not enable on live sites.
-		The plugin will accept all subscriptions without effecting an actual payment.
-	</description>
+	<description>PLG_AKPAYMENT_NONE_DESCRIPTION</description>
 	<files>
 		<filename plugin="none">none.php</filename>
 	</files>
