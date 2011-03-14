@@ -12,7 +12,9 @@
 
 <?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader'))?>
 
-<?=@template('default_level')?>
+<?=@template('steps',array('step' => 'subscribe'))?>
+
+<?=@template('default_level', array('level' => $level))?>
 
 <noscript>
 <hr/>

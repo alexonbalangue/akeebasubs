@@ -618,9 +618,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			// Update existing user's details
 			$params = array(
 				'name'			=> $this->_state->name,
-				'email'			=> $this->_state->email,
-				'password'		=> $this->_state->password,
-				'password2'		=> $this->_state->password2
+				'email'			=> $this->_state->email
 			);
 			if (!$user->bind( $params, 'usertype' )) {
 				JError::raiseError( 500, $user->getError());

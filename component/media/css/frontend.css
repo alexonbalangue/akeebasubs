@@ -126,9 +126,89 @@ table.asfelist tfoot td { text-align: center; }
 /*
  * Subscription page
  */
+ 
+#akeebasubs-steps {
+	margin: 0.5em;
+	padding: 0.5em;
+	background-color: #f0f0f0;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: #ccc 0px 0px 8px;
+}
+
+#akeebasubs-steps-header {
+	font-size: 8pt;
+	font-family: Helvetica, Arial, sans-serif;
+	color: #333;
+	text-shadow: #ccc 1px 1px 0px;
+	text-align: center;
+}
+
+#akeebasubs-steps-bar {
+	font-size: 14pt;
+	font-weight: bold;
+	color: #333;
+	text-shadow: #ccc 1px 1px 1px;
+	text-align: center;
+}
+
+#akeebasubs-steps-bar span.step {
+	display: inline-block;
+	padding: 3px 10px;
+}
+
+#akeebasubs-steps-bar .numbers {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	font-size: 12pt;
+	color: #fff;
+	background-color: #333;
+	border-radius: 9px;
+	-moz-border-radius: 9px;
+	text-shadow: #000 1px 1px 1px;
+}
+
+#akeebasubs-steps-bar span.text {
+	display: inline-block;
+}
+
+#akeebasubs-steps-bar span.active span.numbers {
+	color: #f0f0f0;
+	background-color: #cc9900;
+}
+
+#akeebasubs-steps-bar span.active span.text {
+	color: #000;
+	text-shadow: #ffcc00 0px 0px 3px;
+}
+ 
 #akeebasubs legend {
 	font-size: 12pt;
 	color: #333;
+}
+
+#akeebasubs-subscribe-level {
+	margin: 2em 0.5em;
+	background-color: #f0f0f0;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-box-shadow: #ccc 0px 0px 8px;	
+}
+
+#akeebasubs-subscribe-level h3.level-title {
+	margin: 0 !important;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+}
+
+#akeebasubs-subscribe-level .level-description {
+	margin: 0 !important;
+	border: none !important;
+	border-radius: 0 0 10px 10px !important;
+	-moz-border-radius: 0 0 10px 10px !important;
 }
 
 #akeebasubs h3.subs {

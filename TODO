@@ -30,7 +30,7 @@ Future ideas:
 - Payment: PSIGate http://www.psigate.com/pages/techsupport.asp
 - Payment: Charge.com
 - Invoicing, manual (issue or import invoice) or auto, ability to import Greek tax devices' b.txt files
-- Affiliates. Links an affiliate to a coupon code and calculates the total comissions per term (e.g. per month)
+- Affiliates. Links an affiliate to a coupon code and calculates the total commissions per term (e.g. per month)
 - Resellers. A triangular sale: Reseller charges the user and uses our API to get a voucher (coupon) code. The user uses the coupon code on our site to subscribe. The reseller gets charged when the coupon is used.
 - Linked subscriptions. User B "inherits" the subscriptions of User A. Every change in User A's subscription status is replicated to User B. One-to-many relationship to easen the transition.
 - Front-end: Allow user to alter his account information

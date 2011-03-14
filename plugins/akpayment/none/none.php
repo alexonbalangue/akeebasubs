@@ -45,7 +45,12 @@ class plgAkpaymentNone extends JPlugin
 
 		$uri = JURI::base().'index.php?option=com_akeebasubs&view=subscribe&action=callback&paymentmethod=none';
 		
+		$t1 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER');
+		$t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
+		
 		$form = <<<ENDFORM
+<h3>$t1</h3>
+<p>$t2</p>
 <form action="$uri" method="POST" id="paymentForm">
 	<input type="hidden" name="subscription" value="{$subscription->id}" />
 	<input type="submit" value="Complete subscription" />
