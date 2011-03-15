@@ -7,9 +7,18 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault 
+class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault 
 {
-	public function _actionRefresh()
+	public function __construct(KConfig $config)
+	{
+		$config->append(array(
+			'model'		=> KFactory::get('admin::com.akeebasubs.model.subscriptions')
+		));
+		
+		parent::__construct($config);
+	}
+
+	public function _actionBrowse()
 	{
 		// Run the plugin events on the list
 		$list = $this->getModel()->refresh(1)->getList()->subscriptionRefresh();

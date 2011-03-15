@@ -32,7 +32,7 @@ function akeebasubs_ri_step()
 	(function($) {
 		$.ajax({
 			type: 'GET',
-			url: 'index.php?option=com_akeebasubs&view=subscriptions&action=refresh&format=json',
+			url: 'index.php?option=com_akeebasubs&view=subrefreshes&format=json',
 			data: {
 				'forceoffset'		: akeebasubs_ri_offset,
 				'limit'				: 250
