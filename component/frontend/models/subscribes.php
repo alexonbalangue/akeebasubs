@@ -732,6 +732,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			->id(0)
 			->getItem();
 		$subscription->setData($data)->save();
+		$this->_item = $subscription;
 
 		// Step #7. Hit the coupon code, if a coupon is indeed used
 		// ----------------------------------------------------------------------

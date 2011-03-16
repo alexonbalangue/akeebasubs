@@ -96,12 +96,13 @@ ENDFORM;
 		
 		$id = (int)$data['subscription'];
 		$updates = array(
+			'id'				=> $id,
 			'processor_key'		=> md5(microtime(false)),
 			'state'				=> 'C',
 			'enabled'			=> 1,
 			'publish_up'		=> $jStart->toMySQL(),
 			'publish_down'		=> $jEnd->toMySQL()
-		); 
+		);
 		$subscription->setData($updates)->save();
 		
 		// This plugin is a tricky one; it will redirect you to the thank you page

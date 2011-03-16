@@ -1,5 +1,7 @@
 (function($) {
 	$(document).ready(function(){
-		$('#paymentForm').submit();
+		if($('#paymentForm')) {
+			$('#paymentForm').submit();
+		}
 	});
 })(akeeba.jQuery);
