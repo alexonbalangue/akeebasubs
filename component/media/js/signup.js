@@ -54,6 +54,7 @@ function validateForm(callback_function)
 			'action'	:	'read',
 			'format'	:	'json',
 			*/
+			'action'	:	'read',
 			// -- data
 			'id'		:	akeebasubs_level_id,
 			'username'	:	$('#username').val(),
@@ -81,7 +82,7 @@ function validateForm(callback_function)
 		
 		$.ajax({
 			type: 'POST',
-			url: akeebasubs_validate_url+'?option=com_akeebasubs&view=validate&action=read&format=json',
+			url: akeebasubs_validate_url+'?option=com_akeebasubs&view=validate&format=json',
 			data: data,
 			dataType: 'json',
 			success: function(msg, textStatus, xhr) {

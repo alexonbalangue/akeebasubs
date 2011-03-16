@@ -74,7 +74,7 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 			}
         }
         
-        return parent::_actionAuthorize();
+        return parent::_actionAuthorize($context);
 	}
 
 	public function _actionForward(KCommandContext $context)
@@ -86,7 +86,7 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 		if (KRequest::type() == 'HTTP') {
 			$view = KRequest::get('get.view', 'cmd');
 			$context->result = KFactory::get($this->getController())
-				->execute( $this->getAction() );
+				->execute( $this->getAction(), $context );
 			if($context->result === false) {
 				// I have to redirect
 				$redirect = KFactory::get($this->getController())->getRedirect();
@@ -96,8 +96,12 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 				return $context->result;
 			}
 		} elseif(KRequest::type() == 'AJAX') {
-			$view = KRequest::get('get.view', 'cmd');
-			$context->result = KFactory::get($this->getController())->execute('display');
+			$view = KRequest::get('post.view', 'cmd');
+			if(empty($view)) {
+				$view = KRequest::get('get.view', 'cmd');
+			}
+			
+			$context->result = KFactory::get($this->getController())->execute('display', $context);
 			return $context->result;
 		}
 	}	

@@ -28,6 +28,7 @@
 <?endif?>
 
 <form action="<?=@route('view=subscribe&id='.KRequest::get('get.id','int',0))?>" method="post" >
+	<input type="hidden" name="_token" value="<?=JUtility::getToken()?>" />
 <?if(KFactory::get('lib.joomla.user')->guest):?>
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></h3>
 	
