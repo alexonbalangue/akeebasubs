@@ -3,7 +3,8 @@
 - MODULE admin/akstats : Display (textual) statistics
 - MODULE admin/akcharts : Display (graphical, charts) statistics
 - MODULE site/akeebasubs : Display a list of active / all subscriptions (HMVC)
-- MODULE site/akslevels : Display a customizable list of subscription levels (HMVC)
+- MODULE site/akslevels : Display a customisable list of subscription levels (HMVC)
+- Build script to auto-install component, module, plugins and Nooku FW
 
 Future ideas:
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart

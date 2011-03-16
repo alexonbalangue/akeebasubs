@@ -15,7 +15,7 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 	 */
 	private $_unprotectedActions = array('callback');
 	
-	private $_unprotectedViews = array('validate','callback');
+	private $_unprotectedViews = array('validate','callback','message');
 	
     protected function _initialize(KConfig $config)
     {
