@@ -36,13 +36,6 @@ class ComAkeebasubsControllerSubscribe extends ComAkeebasubsControllerDefault
 		}
 	}
 	
-	protected function _actionCallback(KCommandContext $context)
-	{
-		$result = $this->getModel()->runCallback();
-		if($result) die('Success');
-		die('Failed');
-	}
-	
 	public function _denyAccess()
 	{
 		return false;

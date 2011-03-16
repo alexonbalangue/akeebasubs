@@ -43,7 +43,7 @@ class plgAkpaymentNone extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 
-		$uri = JURI::base().'index.php?option=com_akeebasubs&view=subscribe&action=callback&paymentmethod=none';
+		$uri = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=none';
 		
 		$t1 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER');
 		$t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
