@@ -13,7 +13,9 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 	 * Remove CSRF protection from specific actions
 	 * @var array
 	 */
-	private $_unprotectedActions = array('validate');
+	private $_unprotectedActions = array('callback');
+	
+	private $_unprotectedViews = array('validate','callback');
 	
     protected function _initialize(KConfig $config)
     {
@@ -24,7 +26,7 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
     }
     
     /**
-     * Overriden to allow defining the action in the GET part of the request
+     * Overriden to allow defining the action in the GET part of the request (for testing)
      */
 	public function getAction()
 	{
@@ -54,22 +56,25 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 	public function _actionAuthorize(KCommandContext $context)
 	{
         if(KRequest::method() != 'GET') {
+        	// Always allow POSTS to the 'validate' and 'callback' views
+        	$view = KRequest::get('post.view', 'cmd');
+        	if(empty($view)) {
+        		$view = KRequest::get('get.view', 'cmd');
+        	}
+        	if(in_array($view, $this->_unprotectedViews)) return true;
+        	
+        	// Always allow specific actions
 			$action = KRequest::get('post.action', 'cmd');
 			if(empty($action)) {
 				$action = KRequest::get('get.action', 'cmd');
 			}
 	
-			// Exception: When action=validate, do not try to use a CSRF check
 			if(in_array($action,$this->_unprotectedActions)) {
 				return true;
 			}
         }
-		
-        if( KRequest::token() !== JUtility::getToken())
-        {
-        	throw new KDispatcherException('Invalid token or session time-out.', KHttp::UNAUTHORIZED);
-        	return false;
-        }
+        
+        return parent::_actionAuthorize();
 	}
 
 	public function _actionForward(KCommandContext $context)

@@ -47,11 +47,13 @@ function validateForm(callback_function)
 
 	(function($) {
 		var data = {
-			// -- component parameters
+			// -- component parameters (they seem to be ignored, kill 'em)
+			/*
 			'option'	:	'com_akeebasubs',
-			'view'		:	'subscribe',
-			'action'	:	'validate',
+			'view'		:	'validate',
+			'action'	:	'read',
 			'format'	:	'json',
+			*/
 			// -- data
 			'id'		:	akeebasubs_level_id,
 			'username'	:	$('#username').val(),
@@ -79,7 +81,7 @@ function validateForm(callback_function)
 		
 		$.ajax({
 			type: 'POST',
-			url: akeebasubs_validate_url+'?option=com_akeebasubs&view=subscribe&action=validate&format=json',
+			url: akeebasubs_validate_url+'?option=com_akeebasubs&view=validate&action=read&format=json',
 			data: data,
 			dataType: 'json',
 			success: function(msg, textStatus, xhr) {

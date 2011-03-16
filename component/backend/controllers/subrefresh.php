@@ -16,6 +16,11 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 		));
 		
 		parent::__construct($config);
+		
+		$this->registerCallback('before.read', array($this, '_denyAccess'));
+		$this->registerCallback('before.edit', array($this, '_denyAccess'));
+		$this->registerCallback('before.add', array($this, '_denyAccess'));
+		$this->registerCallback('before.delete', array($this, '_denyAccess'));
 	}
 
 	public function _actionBrowse()
@@ -32,5 +37,10 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 		
 		// Return
 		KFactory::get('lib.koowa.application')->close();
+	}
+	
+	public function _denyAccess()
+	{
+		return false;
 	}
 }

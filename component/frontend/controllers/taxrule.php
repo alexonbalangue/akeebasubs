@@ -7,35 +7,6 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerTaxrule extends ComAkeebasubsControllerDefault
+class ComAkeebasubsControllerTaxrule extends ComAkeebasubsControllerConfig
 {
-	protected function _actionBrowse()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-	
-	protected function _actionRead()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-
-	protected function _actionEdit()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-	
-	protected function _actionAdd()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-	
-	protected function _actionDelete()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
 } 

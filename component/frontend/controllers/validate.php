@@ -7,23 +7,34 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerConfig extends ComAkeebasubsControllerDefault
+class ComAkeebasubsControllerValidate extends ComAkeebasubsControllerDefault
 {
-
 	public function __construct(KConfig $config)
 	{
+		$config->append(array(
+			'model'		=> KFactory::get('site::com.akeebasubs.model.subscribes')
+		));
+		
 		parent::__construct($config);
 		
 		$this->registerCallback('before.browse', array($this, '_denyAccess'));
-		$this->registerCallback('before.read', array($this, '_denyAccess'));
 		$this->registerCallback('before.edit', array($this, '_denyAccess'));
 		$this->registerCallback('before.add', array($this, '_denyAccess'));
 		$this->registerCallback('before.delete', array($this, '_denyAccess'));
+	}
+	
+	public function _actionRead(KCommandContext $context)
+	{
+		$data = $this->getModel()
+			->set('action','validate')
+			->getValidation();
+		echo json_encode($data);
+		
+		KFactory::get('lib.koowa.application')->close();
 	}
 	
 	public function _denyAccess()
 	{
 		return false;
 	}
-
-} 
+}

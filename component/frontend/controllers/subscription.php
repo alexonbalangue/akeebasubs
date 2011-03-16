@@ -14,13 +14,18 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 		parent::__construct($config);
 		
 		$this->registerCallback('before.browse', array($this, '_beforeBrowse'));
+		$this->registerCallback('before.read', array($this, '_beforeRead'));
+		
+		$this->registerCallback('before.edit', array($this, '_denyAccess'));
+		$this->registerCallback('before.add', array($this, '_denyAccess'));
+		$this->registerCallback('before.delete', array($this, '_denyAccess'));
 	}
 	
 	public function _beforeBrowse(KCommandContext $context)
 	{
 		// Do we have a user?
 		if(KFactory::get('lib.joomla.user')->guest) {
-			JError::raiseError('500',JText::_('ACCESS DENIED'));
+			JError::raiseError('403',JText::_('ACCESS DENIED'));
 			return;
 		}
 		
@@ -37,21 +42,26 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 		}
 	}
 	
-	protected function _actionEdit()
+	public function _beforeRead(KCommandContext $context)
 	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
+		// Do we have a user?
+		if(KFactory::get('lib.joomla.user')->guest) {
+			JError::raiseError('403',JText::_('ACCESS DENIED'));
+			return;
+		}
+
+		// Simple trick: filter rows by the current user's ID. If he tries to access someone else's
+		// subscription information, the ID will be 0. In that case, BUSTED! Of course, the same thing
+		// happens if he tries to access a non-existent subscription ID.
+		$this->getModel()->getState()->user_id = KFactory::get('lib.joomla.user')->id;
+		if($this->getModel()->getItem()->id == 0) {
+			JError::raiseError('403',JText::_('ACCESS DENIED'));
+			return;
+		}
 	}
 	
-	protected function _actionAdd()
+	public function _denyAccess()
 	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-	
-	protected function _actionDelete()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}		
+		return false;
+	}	
 } 

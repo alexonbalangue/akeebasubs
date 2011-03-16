@@ -13,17 +13,10 @@ class ComAkeebasubsControllerSubscribe extends ComAkeebasubsControllerDefault
 	{
 		parent::__construct($config);
 		
-		$this->registerCallback('before.save', array($this, '_beforeSave'));
-	}
-	
-	protected function _actionValidate(KCommandContext $context)
-	{
-		// Set the model action to "validate" so that the JSON view knows what to do
-		$model = $this->getModel();
-		$model->set('action','validate');
-		// Return nada. Let the view sort it out (which is wrong, because the view now
-		// partially becomes a controller).
-		return true;
+		$this->registerCallback('before.browse', array($this, '_denyAccess'));
+		$this->registerCallback('before.read', array($this, '_denyAccess'));
+		$this->registerCallback('before.edit', array($this, '_denyAccess'));
+		$this->registerCallback('before.delete', array($this, '_denyAccess'));
 	}
 	
 	protected function _actionAdd(KCommandContext $context)
@@ -50,29 +43,8 @@ class ComAkeebasubsControllerSubscribe extends ComAkeebasubsControllerDefault
 		die('Failed');
 	}
 	
-	/**
-	 * Disallow saving from public front-end
-	 */
-	public function _beforeSave(KCommandContext $context)
+	public function _denyAccess()
 	{
 		return false;
 	}
-	
-	protected function _actionBrowse()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-	
-	protected function _actionEdit()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-
-	protected function _actionDelete()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}	
 }

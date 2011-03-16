@@ -9,27 +9,19 @@ defined('KOOWA') or die('');
 
 class ComAkeebasubsControllerMessage extends ComAkeebasubsControllerDefault
 {
-	protected function _actionBrowse()
+
+	public function __construct(KConfig $config)
 	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
+		parent::__construct($config);
+		
+		$this->registerCallback('before.browse', array($this, '_denyAccess'));
+		$this->registerCallback('before.edit', array($this, '_denyAccess'));
+		$this->registerCallback('before.add', array($this, '_denyAccess'));
+		$this->registerCallback('before.delete', array($this, '_denyAccess'));
 	}
 	
-	protected function _actionEdit()
+	public function _denyAccess()
 	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-	
-	protected function _actionAdd()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
-	}
-	
-	protected function _actionDelete()
-	{
-		JError::raiseWarning(403, 'Forbidden');
-		return $this;
+		return false;
 	}
 } 
