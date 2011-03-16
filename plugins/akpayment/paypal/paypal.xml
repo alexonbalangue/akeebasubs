@@ -16,4 +16,24 @@
 	<languages>
 		<language tag="en-GB">en-GB.plg_akpayment_paypal.ini</language>
 	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_TITLE_LABEL" description="PLG_AKPAYMENT_PAYPAL_TITLE_DESC"/>
+		<param type="spacer" />
+		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_MERCHANT_LABEL" description="PLG_AKPAYMENT_PAYPAL_MERCHANT_DESC"/>
+		<param name="secureipn" type="radio" default="0" label="PLG_AKPAYMENT_PAYPAL_SECUREIPN_LABEL" description="PLG_AKPAYMENT_PAYPAL_SECUREIPN_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>		
+		<param type="spacer" />
+		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_PAYPAL_SANDBOX_LABEL" description="PLG_AKPAYMENT_PAYPAL_SANDBOX_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
+		<param name="sandbox_merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_SANDBOX_MERCHANT_LABEL" description="PLG_AKPAYMENT_PAYPAL_SANDBOX_MERCHANT_LABEL"/>
+		<param type="spacer" />
+		<param name="cbt" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_CBT_LABEL" description="PLG_AKPAYMENT_PAYPAL_CBT_DESC" />
+		<param name="cpp_header_image" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_HEADER_LABEL" description="PLG_AKPAYMENT_PAYPAL_HEADER_DESC" />
+		<param name="cpp_headerback_color" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_HEADERBACK_LABEL" description="PLG_AKPAYMENT_PAYPAL_HEADERBACK_DESC" />
+		<param name="cpp_headerborder_color" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_HEADERBORDER_LABEL" description="PLG_AKPAYMENT_PAYPAL_HEADERBORDER_DESC" />
+	</params>
 </install>
