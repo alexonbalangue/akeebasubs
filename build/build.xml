@@ -9,6 +9,7 @@
 	<property name="version" value="svn" />
 
 	<taskdef name="zipme" classname="phingext.ZipmeTask" />
+	<taskdef name="svnversion" classname="phingext.SvnVersionTask" />
 
 	<!--
 	====================================================================================================
@@ -39,7 +40,7 @@
 		depends="new-release,setup-properties,component-package">
 	</target>
 
-	<target name="new-release" description="Recreate the release directory">
+	<target name="new-release" description="Create the release directory afresh">
 		<!-- Recreate the release directory -->
 		<delete dir="${dirs.release}" quiet="yes" includeemptydirs="false" />
 		<mkdir dir="${dirs.release}" />
@@ -55,10 +56,8 @@
 		<if>
 			<equals arg1="${version}" arg2="svn" />
 			<then>
-				<tstamp>
-					<format property="DATE" pattern="%y%m%d" locale="C" />
-				</tstamp>
-				<property name="version" value="dev${DATE}${TSTAMP}" override="true" />
+				<svnversion workingcopy="${dirs.root}" propertyname="svn.lastrevision" />
+				<property name="version" value="svn${svn.lastrevision}" override="true" />
 			</then>
 		</if>
 	</target>

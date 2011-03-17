@@ -56,6 +56,14 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		return parent::getTotal();
 	}
 	
+	protected function _buildQueryJoins(KDatabaseQuery $query)
+	{
+		$query
+			->join('INNER', 'akeebasubs_levels AS l', 'l.akeebasubs_level_id = tbl.akeebasubs_level_id')
+			->join('INNER', 'users AS u', 'u.id = tbl.user_id')
+			->join('LEFT OUTER', 'akeebasubs_users AS a', 'a.user_id = tbl.user_id');
+	}
+	
 	protected function _buildQueryLimit(KDatabaseQuery $query)
 	{
 		if($this->_state->refresh == 1) {
@@ -75,6 +83,17 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 	{
 		if($this->_state->refresh == 1) {
 			$query->select(array('tbl.akeebasubs_subscription_id', 'tbl.user_id'));
+		} else {
+			$query->select(array(
+				'tbl.*',
+				'l.title',
+				'l.image',
+				'u.name',
+				'u.username',
+				'u.email',
+				'u.block',
+				'a.*'
+			));
 		}
 	}
 	

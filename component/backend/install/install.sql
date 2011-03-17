@@ -140,13 +140,6 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_configurations` (
 	PRIMARY KEY (`akeebasubs_configuration_id`)
 )  ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE OR REPLACE VIEW `#__akeebasubs_view_users` AS
-SELECT
-	a.*, u.name, u.username, u.email, u.block
-FROM
-	#__akeebasubs_users AS a
-	INNER JOIN #__users AS u ON(u.id = a.user_id);
-
 CREATE OR REPLACE VIEW `#__akeebasubs_view_subscriptions` AS
 SELECT
    `s`.*,

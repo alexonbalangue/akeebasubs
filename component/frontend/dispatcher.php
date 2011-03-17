@@ -25,30 +25,6 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
         parent::_initialize($config);
     }
     
-    /**
-     * Overriden to allow defining the action in the GET part of the request (for testing)
-     */
-	public function getAction()
-	{
-		$action = KRequest::get('post.action', 'cmd');
-		if(empty($action)) {
-			$action = KRequest::get('get.action', 'cmd');
-		}
-
-		if(empty($action))
-		{
-			switch(KRequest::method())
-			{
-				case 'GET'    : $action = 'display'; break;
-				case 'POST'   : $action = 'add'    ; break;
-				case 'PUT'    : $action = 'edit'   ; break;
-				case 'DELETE' : $action = 'delete' ; break;
-			}
-		}
-		
-		return $action;
-	}
-	
 	/**
 	 * Overriden to remove CSRF protection from specific actions
 	 * @param KCommandContext $context
@@ -77,6 +53,33 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
         return parent::_actionAuthorize($context);
 	}
 
+    /**
+     * Overriden to allow defining the action in the GET part of the request (for testing)
+     */
+    /* *
+	public function getAction()
+	{
+		$action = KRequest::get('post.action', 'cmd');
+		if(empty($action)) {
+			$action = KRequest::get('get.action', 'cmd');
+		}
+
+		if(empty($action))
+		{
+			switch(KRequest::method())
+			{
+				case 'GET'    : $action = 'display'; break;
+				case 'POST'   : $action = 'add'    ; break;
+				case 'PUT'    : $action = 'edit'   ; break;
+				case 'DELETE' : $action = 'delete' ; break;
+			}
+		}
+		
+		return $action;
+	}
+	/* */
+
+	/* *
 	public function _actionForward(KCommandContext $context)
 	{
 		// Normally, Nooku will assume that a POST request saves data in the background and redirects to
@@ -85,6 +88,7 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 		// my thing.
 		if (KRequest::type() == 'HTTP') {
 			$view = KRequest::get('get.view', 'cmd');
+			$action = KRequest::get('post.action', 'cmd', strtolower(KRequest::method()));
 			$context->result = KFactory::get($this->getController())
 				->execute( $this->getAction(), $context );
 			if($context->result === false) {
@@ -104,5 +108,6 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 			$context->result = KFactory::get($this->getController())->execute('display', $context);
 			return $context->result;
 		}
-	}	
+	}
+	/* */
 }

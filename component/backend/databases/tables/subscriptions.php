@@ -15,14 +15,6 @@ defined('KOOWA') or die('');
  */
 class ComAkeebasubsDatabaseTableSubscriptions extends KDatabaseTableAbstract
 {
-	public function __construct(KConfig $config)
-	{
-		$config->name = 'akeebasubs_view_subscriptions';
-		$config->base = 'akeebasubs_subscriptions';
-  
-		parent::__construct($config);
-    }
-    
 	protected function _initialize(KConfig $config)
 	{
 		// WARNING: ORDER MATTERS! $config->behaviors is a LIFO queue. The last behavior to

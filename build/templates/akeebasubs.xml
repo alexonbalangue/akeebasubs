@@ -6,7 +6,7 @@
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@akeebabackup.com</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
-	<copyright>Copyright (c)2010 Nicholas K. Dionysopoulos</copyright>
+	<copyright>Copyright (c)2010-2011 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU/GPL v3 or later</license>
 	<version>##VERSION##</version>
 	<description>Akeeba Subscriptions v.##VERSION##</description>
@@ -14,6 +14,8 @@
 	<!-- Public front end files -->
 	<files folder="frontend">
 		<filename>akeebasubs.php</filename>
+		<filename>dispatcher.php</filename>
+		<filename>index.html</filename>
 		<folder>controllers</folder>
 		<folder>models</folder>
 		<folder>templates</folder>
@@ -43,6 +45,7 @@
 	
 	<!-- Media files -->
 	<media destination="com_akeebasubs" folder="media">
+		<filename>index.html</filename>
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
@@ -55,14 +58,18 @@
 		<!-- Back-end files -->
 		<files folder="backend">
 			<filename>akeebasubs.php</filename>
+			<filename>config.json</filename>
 			<filename>dispatcher.php</filename>
-			
+			<filename>gChart.php</filename>
+			<filename>index.html</filename>
 			<folder>commands</folder>
 			<folder>controllers</folder>
 			<folder>databases</folder>
 			<folder>install</folder>
 			<folder>models</folder>
+			<folder>simpleforms</folder>
 			<folder>templates</folder>
+			<folder>toolbars</folder>
 			<folder>views</folder>
 		</files>
 

@@ -4,5 +4,4 @@ DROP TABLE IF EXISTS `#__akeebasubs_taxrules`;
 DROP TABLE IF EXISTS `#__akeebasubs_coupons`;
 DROP TABLE IF EXISTS `#__akeebasubs_upgrades`;
 DROP TABLE IF EXISTS `#__akeebasubs_users`;
-DROP VIEW IF EXISTS `#__akeebasubs_view_users`;
 DROP VIEW IF EXISTS #__akeebasubs_view_subscriptions;
