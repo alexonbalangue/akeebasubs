@@ -139,32 +139,3 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_configurations` (
 	`params` TEXT COMMENT '@Filter("json")',
 	PRIMARY KEY (`akeebasubs_configuration_id`)
 )  ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-CREATE OR REPLACE VIEW `#__akeebasubs_view_subscriptions` AS
-SELECT
-   `s`.*,
-   `l`.`title` AS `title`,
-   `l`.`image` as `image`,
-   `u`.`name` AS `name`,
-   `u`.`username` AS `username`,
-   `u`.`email` AS `email`,
-   `u`.`block` AS `block`,
-   `a`.`isbusiness` AS `isbusiness`,
-   `a`.`businessname` AS `businessname`,
-   `a`.`occupation` AS `occupation`,
-   `a`.`vatnumber` AS `vatnumber`,
-   `a`.`viesregistered` AS `viesregistered`,
-   `a`.`taxauthority` AS `taxauthority`,
-   `a`.`address1` AS `address1`,
-   `a`.`address2` AS `address2`,
-   `a`.`city` AS `city`,
-   `a`.`state` AS `geostate`,
-   `a`.`zip` AS `zip`,
-   `a`.`country` AS `country`,
-   `a`.`params` AS `userparams`,
-   `a`.`notes` AS `usernotes`
-FROM
-	`#__akeebasubs_subscriptions` `s`
-	inner join `#__akeebasubs_levels` `l` ON(`l`.`akeebasubs_level_id` = `s`.`akeebasubs_level_id`)
-	inner join `#__users` `u` on(`u`.`id` = `s`.`user_id`)
-	left outer join `#__akeebasubs_users` `a` on(`a`.`user_id` = `s`.`user_id`);
