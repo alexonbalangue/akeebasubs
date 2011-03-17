@@ -36,18 +36,15 @@ class ComAkeebasubsControllerDashboard extends ComAkeebasubsControllerDefault
      */
     public function _actionDisplay(KCommandContext $context)
     {
-    	$result = $this->execute('read', $context);
-    	
-    	$view = $this->getView();
-    	
-    	//Set the layout in the view
-	    if($view instanceof KViewTemplate && isset($this->_request->layout)) {
-		    $view->setLayout($this->_request->layout);
-	    }
-	    
-	    // I don't know why it happens, but if I return the result instead of echoing it,
-	    // I get a blank page. WTF?!
-		echo $view->display();
+		$view = $this->getView();
+		    
+        //Set the layout in the view
+	    if(isset($this->_request->layout)) {
+            $view->setLayout($this->_request->layout);
+	     }
+		
+        //Render the view and return the output
+		return $view->display();
     }
     
 }
