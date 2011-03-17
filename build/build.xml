@@ -2,8 +2,10 @@
 <project name="UniteGui" description="Akeeba Subscriptions component based on Nooku FW" default="svn" >
 	<property file="./build.properties" />
 	<!-- Default properties, set only if not already assigned in the build.properties file -->
-	<property name="dirs.root" value=".." />
+	<property name="dirs.root" value="../" />
 	<property name="dirs.component" value="../component" />
+	<property name="dirs.modules" value="../modules" />
+	<property name="dirs.plugins" value="../plugins" />
 	<property name="dirs.installers" value="../installers" />
 	<property name="dirs.release" value="../release" />
 	<property name="version" value="svn" />
@@ -22,8 +24,7 @@
 		<include name="frontend/**" />
 		<include name="media/**" />
 		<include name="translations/**" />
-		<include name="akeebasubs.xml" />
-		<include name="LICENSE.txt" />
+		<include name="*" />
 	</fileset>
 
 	<!--
@@ -83,6 +84,16 @@
 		
 		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset refid="component" />
+		</zipme>
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+			<fileset dir="${dirs.modules}">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+			<fileset dir="${dirs.plugins}">
+				<include name="**"/>
+			</fileset>
 		</zipme>
 	</target>
 </project>

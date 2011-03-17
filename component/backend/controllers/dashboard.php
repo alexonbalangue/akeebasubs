@@ -32,7 +32,10 @@ class ComAkeebasubsControllerDashboard extends ComAkeebasubsControllerDefault
     }
     
     /**
-     * Normally, I should NOT need this method. Nooku should just display the template.
+     * This method is required because KControllerBread (the default ancestor of all controllers)
+     * tries to load a row. We have no rows -or even a table- in this particular view, so...
+     * 
+     * @param $context KCommandContext The command context of the request
      */
     public function _actionDisplay(KCommandContext $context)
     {

@@ -34,6 +34,8 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	public function onAfterInitialise()
 	{
+		if(!defined('KOOWA')) return;
+		
 		// Check if we need to run
 		if(!$this->doIHaveToRun()) return;
 	

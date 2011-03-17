@@ -11,13 +11,6 @@ jimport('joomla.plugin.plugin');
 
 class plgContentAsrestricted extends JPlugin
 {
-
-	function __construct( &$subject, $params )
-	{
-		parent::__construct( $subject, $params );
-	}
-
-
 	/**
 	 * Gets the level ID out of a level title. If an ID was passed, it simply returns the ID.
 	 * If a non-existent subscription level is passed, it returns -1.
@@ -149,8 +142,11 @@ class plgContentAsrestricted extends JPlugin
 		return $ret;
 	}
 
+	
 	public function onPrepareContent( &$article, &$params, $limitstart )
 	{
+		if(!defined('KOOWA')) return;
+		
 		// Check whether the plugin should process or not
 		if ( JString::strpos( $article->text, 'akeebasubs' ) === false )
 		{

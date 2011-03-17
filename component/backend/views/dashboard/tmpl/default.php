@@ -12,7 +12,7 @@ defined('KOOWA') or die('Restricted access');?>
 
 <?= @helper('behavior.tooltip'); ?>
 <!--
-<style src="media://com_unite/css/backend.css" />
+<style src="media://com_akeebasubs/css/backend.css" />
 -->
 
 <div id="cpanel"  style="width:51%;float:left;">

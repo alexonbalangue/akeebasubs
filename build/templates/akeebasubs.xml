@@ -66,6 +66,7 @@
 			<folder>controllers</folder>
 			<folder>databases</folder>
 			<folder>install</folder>
+			<folder>language</folder>
 			<folder>models</folder>
 			<folder>simpleforms</folder>
 			<folder>templates</folder>
@@ -80,4 +81,10 @@
 		</languages>
 
 	</administration>
+	
+	<!-- Installation / uninstallation PHP scripts -->
+	<installfile>install.akeebasubs.php</installfile>
+	<uninstallfile>uninstall.akeebasubs.php</uninstallfile>
+	<scriptfile>script.akeebasubs.php</scriptfile>
+	
 </install>
