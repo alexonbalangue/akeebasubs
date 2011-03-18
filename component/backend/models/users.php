@@ -35,7 +35,7 @@ class ComAkeebasubsModelUsers extends KModelTable
 		if(is_numeric($state->enabled)) {
 			$query->where('tbl.enabled','=', $state->enabled);
 		}
-		
+
 		if(is_numeric($state->user_id) && ($state->user_id > 0)) {
 			$query->where('tbl.user_id','=',$state->user_id);
 		}
@@ -62,7 +62,7 @@ class ComAkeebasubsModelUsers extends KModelTable
 		$userRow = KFactory::tmp('admin::com.akeebasubs.model.jusers')->id($this->_state->user_id)->getItem();
 		$params = new JParameter($userRow->params);
 		$businessname = $params->get('business_name','');
-		$nativeData = array(
+		$nativeData_all = array(
 			'isbusiness' => empty($businessname) ? 0 : 1,
 			'businessname' => $params->get('business_name',''),
 			'occupation' => $params->get('occupation',''),
@@ -76,11 +76,17 @@ class ComAkeebasubsModelUsers extends KModelTable
 			'zip' => $params->get('zip',''),
 			'country' => $params->get('country',''),
 		);
+		
+		$nativeData = array();
+		foreach($nativeData_all as $key => $value) {
+			if(!empty($value)) $nativeData[$key] = $value;
+		}
+
 		$nativeData = array_merge($nativeData, $userRow->getData());
 		
-		$myData = $this->getItem()->getData();
-		if($this->getItem()->id > 0) {		
-			$myData = array_merge($nativeData, $myData);
+		$row = $this->getList()->find('user_id', $this->_state->user_id);
+		if($row instanceof KDatabaseRowInterface) {
+			$myData = array_merge($nativeData, $row->getData());
 		} else {
 			$myData = $nativeData;
 		}
