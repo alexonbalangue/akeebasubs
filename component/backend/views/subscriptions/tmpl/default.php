@@ -46,7 +46,7 @@
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" name="toggle" value="" onclick="checkAll(<?= count($subscriptions); ?>);" />
+				<input type="checkbox" name="toggle" value="" onclick="akeebasubs_checkall();" />
 			</td>
 			<td></td>
 			<td><?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('name' => 'level', 'attribs' => array('onchange' => 'this.form.submit();')) ) ?></td>

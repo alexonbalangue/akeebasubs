@@ -30,7 +30,7 @@
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" name="toggle" value="" onclick="checkAll(<?= count($levels); ?>);" />
+				<input type="checkbox" name="toggle" value="" onclick="akeebasubs_checkall();" />
 			</td>
 			<td>
 				<?= @text('Filter:'); ?> <?= @template('admin::com.default.view.list.search_form'); ?>

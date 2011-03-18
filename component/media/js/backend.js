@@ -8,6 +8,19 @@ var akeebasubs_ri_offset = 0;
 var akeebasubs_ri_total = 0;
 var akeebasubs_ri_done = 0;
 
+function akeebasubs_checkall()
+{
+	(function($) {
+		var c = document.forms.adminForm.toggle.checked;
+		var f = $(document.forms.adminForm);
+		$('input[type=checkbox]').each(function(i, el){
+			if($(el).attr('name') == 'id[]') {
+				$(el).attr('checked',document.forms.adminForm.toggle.checked);
+			}
+		});
+	})(akeeba.jQuery);
+}
+
 function akeebasubs_refresh_integrations()
 {
 	akeebasubs_ri_start();

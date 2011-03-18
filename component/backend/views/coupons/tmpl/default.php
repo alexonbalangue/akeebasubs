@@ -41,7 +41,7 @@
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" name="toggle" value="" onclick="checkAll(<?= count($coupons); ?>);" />
+				<input type="checkbox" name="toggle" value="" onclick="akeebasubs_checkall();" />
 			</td>
 			<td colspan="2">
 				<?= @text('Filter:'); ?> <?= @template('admin::com.default.view.list.search_form'); ?>
