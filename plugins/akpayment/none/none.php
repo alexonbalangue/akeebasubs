@@ -17,7 +17,7 @@ class plgAkpaymentNone extends JPlugin
 	public function __construct(&$subject, $config = array())
 	{
 		parent::__construct($subject, $config);
-		JPlugin::loadLanguage( 'plg_akpayment_none' );
+		JPlugin::loadLanguage( 'plg_akpayment_none', JPATH_ADMINISTRATOR );
 	}
 	
 	public function onAKPaymentGetIdentity()
@@ -106,7 +106,7 @@ ENDFORM;
 		$subscription->setData($updates)->save();
 		
 		// This plugin is a tricky one; it will redirect you to the thank you page
-		$url = JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order'); 
+		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order')); 
 		$app = JFactory::getApplication();
 		$app->redirect($url);
 		

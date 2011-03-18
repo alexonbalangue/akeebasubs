@@ -12,12 +12,12 @@ jimport('joomla.plugin.plugin');
 class plgAkpaymentPaypal extends JPlugin
 {
 	private $ppName = 'paypal';
-	private $ppKey = 'PayPal';
+	private $ppKey = 'PLG_AKPAYMENT_PAYPAL_TITLE';
 
 	public function __construct(&$subject, $config = array())
 	{
 		parent::__construct($subject, $config);
-		JPlugin::loadLanguage( 'plg_akpayment_paypal' );
+		JPlugin::loadLanguage( 'plg_akpayment_paypal', JPATH_ADMINISTRATOR );
 	}
 
 	public function onAKPaymentGetIdentity()
@@ -56,9 +56,9 @@ class plgAkpaymentPaypal extends JPlugin
 		$data = (object)array(
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->getMerchantID(),
-			'postback'		=> rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal'),
-			'success'		=> rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order'),
-			'cancel'		=> rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=cancel'),
+			'postback'		=> str_replace('&amp;','&', rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal')),
+			'success'		=> str_replace('&amp;','&', rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order')),
+			'cancel'		=> str_replace('&amp;','&', rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=cancel')),
 			'currency'		=> strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName

@@ -46,7 +46,7 @@ class ComAkeebasubsControllerSubscribe extends ComAkeebasubsControllerDefault
 			echo $view->display();
 		} else {
 			// Redirect to the level page
-			$url = JRoute::_('index.php?option=com_akeebasubs&view=level&id='.$this->getModel()->get('id','int',0));
+			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=level&id='.$this->getModel()->get('id','int',0)));
 			$this->setRedirect($url);
 			return false;
 		}

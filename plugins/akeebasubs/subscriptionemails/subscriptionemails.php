@@ -73,7 +73,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		// Get the "my subscriptions" URL
 		$baseURL = JURI::base();
 		$baseURL = str_replace('/administrator', '', $baseURL);
-		$url = $baseURL.JRoute::_('index.php?option=com_akeebasubs&view=subscriptions');
+		$url = str_replace('&amp;','&', $baseURL.JRoute::_('index.php?option=com_akeebasubs&view=subscriptions'));
 		
 		if($new) {
 			$subject_key = 'PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_NEWHEADER';

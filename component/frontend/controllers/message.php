@@ -25,7 +25,7 @@ class ComAkeebasubsControllerMessage extends ComAkeebasubsControllerDefault
 		$id = KRequest::get('get.id','int','-1');
 		$layout = KRequest::get('get.layout','cmd','');
 		if($id > 0) {
-			$this->setRedirect(JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$id.'&layout='.$layout));
+			$this->setRedirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$id.'&layout='.$layout)) );
 			return false;
 		}
 		

@@ -766,7 +766,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		} else {
 			// Zero charges; just redirect
 			$app = JFactory::getApplication();
-			$app->redirect( JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order') );
+			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order')) );
 			return false;
 		}
 		
