@@ -92,7 +92,20 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 				'u.username',
 				'u.email',
 				'u.block',
-				'a.*'
+				'a.isbusiness',
+				'a.businessname',
+				'a.occupation',
+				'a.vatnumber',
+				'a.viesregistered',
+				'a.taxauthority',
+				'a.address1',
+				'a.address2',
+				'a.city',
+				'a.state AS userstate',
+				'a.zip',
+				'a.country',
+				'a.params AS userparams',
+				'a.notes AS usernotes'
 			));
 		}
 	}
