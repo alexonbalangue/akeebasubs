@@ -10,6 +10,11 @@
 	background: transparent url(../images/akeebasubs-48.png) no-repeat !important;
 }
 
+.container_16 .icon-48-akeebasubs {
+	padding-right: 20px;
+	background: transparent url(../images/akeebasubs-16.png) 5px right no-repeat !important;
+}
+
 .icon-32-export { background: transparent url(../../lib_koowa/images/32/export.png) no-repeat !important; }
 
 .icon-32-subrefresh { background: transparent url(../images/subrefresh.png); }
