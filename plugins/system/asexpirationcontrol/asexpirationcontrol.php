@@ -18,7 +18,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	{
 		parent::__construct($subject, $config);
 		
-		// Load the language files
+		// Load the language files		
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);

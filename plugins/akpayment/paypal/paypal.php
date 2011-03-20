@@ -17,7 +17,12 @@ class plgAkpaymentPaypal extends JPlugin
 	public function __construct(&$subject, $config = array())
 	{
 		parent::__construct($subject, $config);
-		JPlugin::loadLanguage( 'plg_akpayment_paypal', JPATH_ADMINISTRATOR );
+		
+		// Load the language files
+		$jlang =& JFactory::getLanguage();
+		$jlang->load('plg_akpayment_paypal', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_akpayment_paypal', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_akpayment_paypal', JPATH_ADMINISTRATOR, null, true);
 	}
 
 	public function onAKPaymentGetIdentity()
@@ -56,9 +61,9 @@ class plgAkpaymentPaypal extends JPlugin
 		$data = (object)array(
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->getMerchantID(),
-			'postback'		=> str_replace('&amp;','&', rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal')),
-			'success'		=> str_replace('&amp;','&', rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order')),
-			'cancel'		=> str_replace('&amp;','&', rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=cancel')),
+			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal',
+			'success'		=> JURI::base().'index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order',
+			'cancel'		=> JURI::base().'index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=cancel',
 			'currency'		=> strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName
@@ -77,6 +82,8 @@ class plgAkpaymentPaypal extends JPlugin
 	
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
+		jimport('joomla.utilities.date');
+		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
@@ -94,7 +101,10 @@ class plgAkpaymentPaypal extends JPlugin
 					->getItem();
 				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
 					$subscription = null;
+					$isValid = false;
 				}
+			} else {
+				$isValid = false;
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
 		}
@@ -130,12 +140,12 @@ class plgAkpaymentPaypal extends JPlugin
 		// Check that mc_gross is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
-			$mc_gross = $data['mc_gross'];
+			$mc_gross = floatval($data['mc_gross']);
 			$gross = $subscription->gross_amount;
 			if($mc_gross > 0) {
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
-				$isValid = ($gross - $temp_mc_gross) < 0.01;
+				$isValid = ($gross - $mc_gross) < 0.01;
 			} else {
 				$isPartialRefund = false;
 				$temp_mc_gross = -1 * $mc_gross;
@@ -221,7 +231,7 @@ class plgAkpaymentPaypal extends JPlugin
 			
 			$updates['publish_up'] = $jStart->toMySQL();
 			$updates['publish_down'] = $jEnd->toMySQL();
-			$updates['enabled'] = 0;
+			$updates['enabled'] = 1;
 		}
 		$subscription->setData($updates)->save();
 		
@@ -313,24 +323,25 @@ class plgAkpaymentPaypal extends JPlugin
 	{
 		$config = JFactory::getConfig();
 		$logpath = $config->getValue('log_path');
-		$logFile = $logpath.DS.'akpayment_paypal_ipn_log.php';
+		$logFile = $logpath.'/akpayment_paypal_ipn.php';
 		jimport('joomla.filesystem.file');
 		if(!JFile::exists($logFile)) {
-			$die = "<?php die(); ?>\n";
-			JFile::write($logFile, $die);
+			$dummy = "<?php die(); ?>\n";
+			JFile::write($logFile, $dummy);
 		} else {
 			if(@filesize($logFile) > 1048756) {
-				$altLog = $logpath.DS.'akpayment_paypal_ipn_log-1.php';
+				$altLog = $logpath.DS.'akpayment_paypal_ipn-1.php';
 				if(JFile::exists($altLog)) {
 					JFile::delete($altLog);
 				}
 				JFile::copy($logFile, $altLog);
 				JFile::delete($logFile);
-				$die = "<?php die(); ?>\n";
-				JFile::write($logFile, $die);
+				$dummy = "<?php die(); ?>\n";
+				JFile::write($logFile, $dummy);
 			}
 		}
 		$logData = JFile::read($logFile);
+		if($logData === false) $logData = '';
 		$logData .= "\n" . str_repeat('-', 80);
 		$logData .= $isValid ? 'VALID PAYPAL IPN' : 'INVALID PAYPAL IPN *** FRAUD ATTEMPT OR INVALID NOTIFICATION ***';
 		$logData .= "\nDate/time : ".gmdate('Y-m-d H:i:s')." GMT\n\n";

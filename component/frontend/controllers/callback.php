@@ -7,32 +7,33 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerCallback extends ComAkeebasubsControllerDefault
+class ComAkeebasubsControllerCallback extends KControllerAbstract
 {
 	public function __construct(KConfig $config)
-	{
-		parent::__construct($config);
-		
-		$this->registerCallback('before.browse', array($this, '_denyAccess'));
-		$this->registerCallback('before.delete', array($this, '_denyAccess'));
-	}
-
+    {
+        parent::__construct($config);
+        
+        $config->action = 'read';
+    }
+    
+    public function execute($action, KCommandContext $context)
+    {
+    	$newAction = 'read';
+    	return parent::execute($newAction, $context);
+    }
+    
+    public function setAction($action)
+    {
+    	$newAction = 'read';
+    	return parent::setAction($newAction);
+    }
+    
 	public function _actionRead(KCommandContext $context)
 	{
-		$this->_doCallback();
+		$this->_doAkeebasubsCallback();
 	}
-	
-	public function _actionAdd(KCommandContext $context)
-	{
-		$this->_doCallback();
-	}
-	
-	public function _actionEdit(KCommandContext $context)
-	{
-		$this->_doCallback();
-	}
-	
-	private function _doCallback()
+
+	private function _doAkeebasubsCallback()
 	{
 		$result = KFactory::get('site::com.akeebasubs.model.subscribes')->runCallback();
 		echo $result ? 'OK' : 'FAILED';

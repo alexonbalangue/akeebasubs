@@ -17,7 +17,12 @@ class plgAkpaymentNone extends JPlugin
 	public function __construct(&$subject, $config = array())
 	{
 		parent::__construct($subject, $config);
-		JPlugin::loadLanguage( 'plg_akpayment_none', JPATH_ADMINISTRATOR );
+		
+		// Load the language files
+		$jlang =& JFactory::getLanguage();
+		$jlang->load('plg_akpayment_none', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_akpayment_none', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_akpayment_none', JPATH_ADMINISTRATOR, null, true);
 	}
 	
 	public function onAKPaymentGetIdentity()

@@ -20,9 +20,9 @@ class plgSystemAsexpirationnotify extends JPlugin
 		
 		// Load the language files
 		$jlang =& JFactory::getLanguage();
-		$jlang->load('plg_system_asexpirationnotify', JPATH_SITE, 'en-GB', true);
-		$jlang->load('plg_system_asexpirationnotify', JPATH_SITE, $jlang->getDefault(), true);
-		$jlang->load('plg_system_asexpirationnotify', JPATH_SITE, null, true);
+		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true);
 		
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);

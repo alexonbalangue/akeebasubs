@@ -37,6 +37,7 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
         	if(empty($view)) {
         		$view = KRequest::get('get.view', 'cmd');
         	}
+        	
         	if(in_array($view, $this->_unprotectedViews)) return true;
         	
         	// Always allow specific actions
