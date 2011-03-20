@@ -195,6 +195,8 @@ function validateEmail()
 		} else if(!echeck(email)) {
 			$('#email_invalid').css('display','inline');
 			return;
+		} else {
+			validateForm();
 		}
 	})(akeeba.jQuery);
 }
