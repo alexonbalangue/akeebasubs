@@ -172,7 +172,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$validEmail = true;
 			foreach($list as $item) {
 				if($item->email == $this->_state->email) {
-					if($item->id != JFactory::getUser()->id) $validEmail = false;
+					if($item->id != KFactory::get('lib.joomla.user')->id) $validEmail = false;
 					break;
 				}
 			}
@@ -556,7 +556,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$isValid = $isValid && $validData;
 			if(!$isValid) {
 				if($key == 'username') {
-					$user = JFactory::getUser();
+					$user = KFactory::get('lib.joomla.user');
 					if($user->username == $this->_state->username) {
 						$isValid = true;
 					} else {
