@@ -110,6 +110,14 @@ ENDFORM;
 		);
 		$subscription->setData($updates)->save();
 		
+		// Also update the user, enabling him
+		KFactory::tmp('admin::com.akeebasubs.model.jusers')
+			->id($subscription->user_id)
+			->getItem()
+			->setData(array(
+				'block'		=> 0
+			))->save();
+		
 		// This plugin is a tricky one; it will redirect you to the thank you page
 		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order')); 
 		$app = JFactory::getApplication();
