@@ -1,6 +1,3 @@
-Bugs(?):
-- The messages view doesn't work (results to page without content) when POST is used. Hardwire it to a read action, like the callback view + add it to safe views list in the dispatcher
-
 To-do:
 - Refactor plugins (except system and content) to use Koowa dispatcher: http://www.assembla.com/wiki/show/nooku-framework/Using_Plugins
 - Backend: AMBRA.subscriptions import feature

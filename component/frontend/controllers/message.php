@@ -7,7 +7,7 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerMessage extends ComAkeebasubsControllerDefault
+class ComAkeebasubsControllerMessage extends KControllerDefault
 {
 
 	public function __construct(KConfig $config)
