@@ -164,6 +164,21 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		$ret['rawDataForDebug'] = $this->_state->getData();
 		
+		// Email validation
+		if(!empty($this->_state->email)) {
+			$list = KFactory::tmp('admin::com.akeebasubs.model.jusers')
+				->email($this->_state->email)
+				->getList();
+			$validEmail = true;
+			foreach($list as $item) {
+				if($item->email == $this->_state->email) {
+					$validEmail = false;
+					break;
+				}
+			}
+			$ret['email'] = $validEmail;
+		}
+		
 		// 2. Country validation
 		if($ret['country']) {
 			$dummy = KFactory::get('admin::com.akeebasubs.template.helper.listbox');
@@ -551,9 +566,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				break;
 			}
 		}
-		
 		if(!$isValid) return false;
-		
+
 		// Step #2. Check that the payment plugin exists or return false
 		// ----------------------------------------------------------------------
 		$plugins = $this->getPaymentPlugins();

@@ -1,6 +1,4 @@
 Bugs(?):
-- If a disabled user info is passed, it doesn't say that the user account is already in use. Why?
-- Subscription doesn't work when adding a new user?
 - The messages view doesn't work (results to page without content) when POST is used. Hardwire it to a read action, like the callback view + add it to safe views list in the dispatcher
 
 To-do:
