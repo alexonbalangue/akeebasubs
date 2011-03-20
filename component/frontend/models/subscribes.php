@@ -172,7 +172,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$validEmail = true;
 			foreach($list as $item) {
 				if($item->email == $this->_state->email) {
-					$validEmail = false;
+					if($item->id != JFactory::getUser()->id) $validEmail = false;
 					break;
 				}
 			}
