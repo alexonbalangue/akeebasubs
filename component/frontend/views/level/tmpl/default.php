@@ -54,7 +54,7 @@
 	<br/>
 <?endif?>
 	<label for="name" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_NAME')?></label>
-	<input type="text" name="name" id="name" value="<?=@escape(!empty($userparams->name) ? $userparams->name : $cache['username'])?>" class="main" />
+	<input type="text" name="name" id="name" value="<?=@escape(!empty($userparams->name) ? $userparams->name : $cache['name'])?>" class="main" />
 	<span id="name_empty" class="invalid" style="display:none"><?=@text('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?></span>
 	<br/>
 	<label for="email" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL')?></label>
@@ -69,7 +69,7 @@
 	<input type="text" name="address2" id="address2" value="<?=@escape(!empty($userparams->address2) ? $userparams->address2 : $cache['address2'])?>" class="main" />
 	<br/>
 	<label for="country" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => ( !empty($userparams->country) ? $userparams->country : $cache['country'] ) ))?>
+	<?=@helper('admin::com.akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => ( !empty($userparams->country) && ($userparams->country != 'XX') ? $userparams->country : $cache['country'] ) ))?>
 	<span id="country_empty" class="invalid" style="display:none"><?=@text('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?></span>
 	<br/>
 	<div id="stateField">
