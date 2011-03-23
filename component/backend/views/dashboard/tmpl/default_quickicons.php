@@ -39,3 +39,13 @@ defined('KOOWA') or die('Restricted access');?>
 		</a>
 	</div>
 </div>
+
+<div style="float:left;">
+	<div class="icon">
+		<a href="<?= @route('view=tools') ?>">
+			<img alt="<?= @text('COM_AKEEBASUBS_DASHBOARD_TOOLS');?>"
+				src="media://com_akeebasubs/images/dashboard/db_update.png" />
+			<span><?= @text('COM_AKEEBASUBS_DASHBOARD_TOOLS');?></span>
+		</a>
+	</div>
+</div>

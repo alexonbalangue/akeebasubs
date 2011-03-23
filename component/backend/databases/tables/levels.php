@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * @package		akeebasubs
  * @copyright	Copyright (c)2010-2011 Nicholas K. Dionysopoulos / AkeebaBackup.com

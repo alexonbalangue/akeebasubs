@@ -5,6 +5,7 @@
  */
 
 var akeebasubs_ri_offset = 0;
+var akeebasubs_ri_limit = 0;
 var akeebasubs_ri_total = 0;
 var akeebasubs_ri_done = 0;
 
@@ -75,5 +76,74 @@ function akeebasubs_ri_step()
 			}
 		});		
 		
+	})(akeeba.jQuery);
+}
+
+function doStartConvertSubscriptions(converter)
+{
+	(function($){
+		$('#asriPercent').text('0');
+		$('#asriSpinner').show();
+		$.blockUI({message: $('#refreshMessage'), fadeOut: 2000});
+		
+		akeebasubs_ri_done = 0;
+		akeebasubs_ri_offset = -1;
+		
+		doConvertSubscriptions(converter);
+	})(akeeba.jQuery);
+}
+
+function doConvertSubscriptions(converter)
+{
+	(function($){
+		var myData = {
+			'option'			: 'com_akeebasubs',
+			'view'				: 'tool',
+			'action'			: 'import',
+			'import'			: converter,
+			'_token'			: akeebasubs_token
+		};
+		if(akeebasubs_ri_offset >= 0) {
+			myData.offset = akeebasubs_ri_offset;
+		}
+		$.ajax({
+			type: 'GET',
+			url: 'index.php',
+			data: myData,
+			dataType: 'json',
+			success: function(msg, textStatus, xhr) {
+				if(!msg.splittable) {
+					$('#asriPercent').text(100);
+					$.unblockUI();
+					return;
+				}
+				
+				if(msg.total) {
+					akeebasubs_ri_total = msg.steps;
+					akeebasubs_ri_done = 0;
+					akeebasubs_ri_offset = 0;
+					akeebasubs_ri_limit = msg.limit;
+				} else {
+					akeebasubs_ri_done = msg.step;
+					akeebasubs_ri_offset += akeebasubs_ri_limit;
+				}
+				
+				var percentage = 0;
+				if(akeebasubs_ri_total > 0) {
+					percentage = 100 * akeebasubs_ri_done / akeebasubs_ri_total;
+				}
+				$('#asriPercent').text(parseInt(percentage + ' '));
+				
+				if(msg.step == akeebasubs_ri_total) {
+					$('#asriSpinner').hide();
+					$.unblockUI();
+				} else {
+					doConvertSubscriptions(converter);
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				$.unblockUI();
+			}
+		});	
 	})(akeeba.jQuery);
 }

@@ -28,7 +28,7 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 		$name = $this->getName();
 		
 		//Apend enable and disbale button for all the list views
-		if($name != 'dashboard' && KInflector::isPlural($name) && KRequest::type() != 'AJAX')
+		if(!in_array($name, array('dashboard','tools')) && KInflector::isPlural($name) && KRequest::type() != 'AJAX')
 		{
 			KFactory::get('admin::com.akeebasubs.toolbar.'.$name)
 				//->append('divider')	

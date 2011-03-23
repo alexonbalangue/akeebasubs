@@ -1,6 +1,4 @@
 To-do:
-- Refactor plugins (except system and content) to use Koowa dispatcher: http://www.assembla.com/wiki/show/nooku-framework/Using_Plugins
-- Backend: AMBRA.subscriptions import feature
 - MODULE admin/akstats : Display (textual) statistics
 - MODULE admin/akcharts : Display (graphical, charts) statistics
 - MODULE site/akeebasubs : Display a list of active / all subscriptions (HMVC)
