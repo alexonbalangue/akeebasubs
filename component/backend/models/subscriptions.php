@@ -39,15 +39,19 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			// order to take the GROUP BY clause into account
 			if (!isset($this->_total)) {
 				if($table = $this->getTable()) {
-					$query = $table->getDatabase()->getQuery();
+					$query = $table->getDatabase()->getQuery()->count();
 					
 					$this->_buildQueryFrom($query);
 					$this->_buildQueryJoins($query);
 					$this->_buildQueryWhere($query);
 					$this->_buildQueryGroup($query);
 					
-					$total = $table->count($query);
-					$total--;
+					// $query retruns X rows, where X is the number of users. We need the count of users, so...
+					$query2 = $table->getDatabase()->getQuery()->count();
+					// Ugly, ugly, ugly hack...
+					$query2->from = array( '('.(string)$query.') AS `tbl`' );
+
+					$total = $table->count($query2);
 					
 					$this->_total = $total;
 				}
