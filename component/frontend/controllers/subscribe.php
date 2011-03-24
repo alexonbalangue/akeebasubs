@@ -62,4 +62,14 @@ class ComAkeebasubsControllerSubscribe extends KControllerDefault
 	{
 		return false;
 	}
+	
+	// I really DON'T want this to run
+	public function lockRow(KCommandContext $context)
+	{
+	}
+	
+	// Ditto. We don't want a lockable behaviour
+	public function unlockRow(KCommandContext $context)
+	{
+	}
 }
