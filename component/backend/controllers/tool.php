@@ -42,7 +42,7 @@ class ComAkeebasubsControllerTool extends ComAkeebasubsControllerDefault
 	protected function _actionImport(KCommandContext $context)
 	{
 		$request   = $this->getRequest();		
-		$converter = KFactory::get($this->getModel())->getItem()->convert();
+		$converter = $this->getModel()->getItem()->convert();
 
 		if($converter->splittable && !isset($request->offset))
 		{

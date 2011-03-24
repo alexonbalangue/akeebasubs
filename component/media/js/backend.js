@@ -101,18 +101,16 @@ function doConvertSubscriptions(converter)
 {
 	(function($){
 		var myData = {
-			'option'			: 'com_akeebasubs',
-			'view'				: 'tool',
+			'limit'				: 100,
 			'action'			: 'import',
-			'import'			: converter,
 			'_token'			: akeebasubs_token
 		};
 		if(akeebasubs_ri_offset >= 0) {
 			myData.offset = akeebasubs_ri_offset;
 		}
 		$.ajax({
-			type: 'GET',
-			url: 'index.php',
+			type: 'POST',
+			url: 'index.php?option=com_akeebasubs&view=tool&import='+converter,
 			data: myData,
 			dataType: 'json',
 			success: function(msg, textStatus, xhr) {
@@ -126,10 +124,10 @@ function doConvertSubscriptions(converter)
 					akeebasubs_ri_total = msg.steps;
 					akeebasubs_ri_done = 0;
 					akeebasubs_ri_offset = 0;
-					akeebasubs_ri_limit = msg.limit;
+					akeebasubs_ri_limit = msg.limit * 1;
 				} else {
 					akeebasubs_ri_done = msg.step;
-					akeebasubs_ri_offset += akeebasubs_ri_limit;
+					akeebasubs_ri_offset = akeebasubs_ri_offset * 1 + akeebasubs_ri_limit * 1;
 				}
 				
 				var percentage = 0;
