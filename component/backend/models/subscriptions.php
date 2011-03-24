@@ -30,6 +30,8 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			// Nooku does some funky stuff with the offset when the limit changes. I don't want it to happen!
 			->insert('forceoffset'		, 'int')
 			->insert('forcelimit'		, 'int')
+			->insert('groupbydate'		, 'int')
+			->insert('moneysum'			, 'int')
 			;
 	}
 	
@@ -57,12 +59,28 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 					$this->_total = $total;
 				}
 			}
+		} elseif($this->_state->moneysum == 1) {
+			if (!isset($this->_total)) {
+				if($table = $this->getTable()) {
+					$query = $table->getDatabase()->getQuery()->select('SUM(net_amount) AS x');
+					
+					$this->_buildQueryFrom($query);
+					$this->_buildQueryJoins($query);
+					$this->_buildQueryWhere($query);
+					$this->_buildQueryGroup($query);
+					
+					$total = $table->getDatabase()->select($query);
+					
+					$this->_total = $total[0]['x'];
+				}
+			}
 		}
 		return parent::getTotal();
 	}
 	
 	protected function _buildQueryJoins(KDatabaseQuery $query)
 	{
+		if($this->_state->groupbydate == 1) return;
 		$query
 			->join('INNER', 'akeebasubs_levels AS l', 'l.akeebasubs_level_id = tbl.akeebasubs_level_id')
 			->join('INNER', 'users AS u', 'u.id = tbl.user_id')
@@ -88,6 +106,8 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 	{
 		if($this->_state->refresh == 1) {
 			$query->select(array('tbl.akeebasubs_subscription_id', 'tbl.user_id'));
+		} elseif($this->_state->groupbydate == 1) {
+			$query->select(array('DATE(publish_up) AS date','SUM(net_amount) AS net'));
 		} else {
 			$query->select(array(
 				'tbl.*',
@@ -119,6 +139,8 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 	{
 		if($this->_state->refresh == 1) {
 			$query->group(array('tbl.user_id'));
+		} elseif($this->_state->groupbydate == 1) {
+			$query->group(array('DATE(tbl.publish_up)'));
 		}
 	}
 
@@ -311,4 +333,26 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 				
 		return $ret;
 	}	
+	
+	public function getSalesList()
+    {
+        // Get the data if it doesn't already exist
+        if (!isset($this->_saleslist))
+        {
+        	$query = $this->getTable()->getDatabase()->getQuery();
+        	
+    	    $this->_buildQueryColumns($query);
+    	    $this->_buildQueryFrom($query);
+    	    $this->_buildQueryJoins($query);
+    	    $this->_buildQueryWhere($query);
+    	    $this->_buildQueryGroup($query);
+    	    $this->_buildQueryHaving($query);
+    	    $this->_buildQueryOrder($query);
+    	    $this->_buildQueryLimit($query);
+            
+            $this->_saleslist = $this->getTable()->getDatabase()->select($query, KDatabase::FETCH_ROWSET);
+        }
+
+        return $this->_saleslist;
+    }
 }

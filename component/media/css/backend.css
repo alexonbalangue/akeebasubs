@@ -53,3 +53,7 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 .akeebasubs-coupon-discount-percent { color: #336666; font-weight: bold; }
 
 #refreshMessage h3, #refreshMessage p { text-align: center; }
+
+#akthrobber {
+	margin: 142px 198px;
+}

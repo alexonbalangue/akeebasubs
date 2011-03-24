@@ -1,8 +1,7 @@
 To-do:
-- MODULE admin/akstats : Display (textual) statistics
-- MODULE admin/akcharts : Display (graphical, charts) statistics
 - MODULE site/akeebasubs : Display a list of active / all subscriptions (HMVC)
 - MODULE site/akslevels : Display a customisable list of subscription levels (HMVC)
+- IMPORT from ""Akeeba Subscriptions with &quot;Paypal with VAT plugin&quot;"
 
 Future ideas:
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
