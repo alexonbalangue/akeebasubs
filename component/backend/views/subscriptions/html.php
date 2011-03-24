@@ -15,7 +15,7 @@ class ComAkeebasubsViewSubscriptionsHtml extends ComAkeebasubsViewHtml
                 ->setTitle('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE','akeebasubs') 
 				->setIcon('akeebasubs')
 				->append('subrefresh');
-		
+
 		return parent::display();
 	}
 }

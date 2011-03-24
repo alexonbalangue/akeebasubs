@@ -25,7 +25,7 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 				KFactory::get('lib.koowa.application')->close();
 			}
 		} else {
-			parent::_actionBrowse($context);
+			return parent::_actionBrowse($context);
 		}
 	}
 }

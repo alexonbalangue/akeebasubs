@@ -97,6 +97,10 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 				$query->limit($limit, $offset);
 			}
 		} else {
+			if(is_null($this->_state->limit)) {
+				$this->_state->limit = 10;
+				$this->_state->offset = 0;
+			}
 			parent::_buildQueryLimit($query);
 		}
 	
