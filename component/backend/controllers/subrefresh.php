@@ -17,15 +17,18 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 		
 		parent::__construct($config);
 		
+		$this->registerCallback('before.browse', array($this, '_denyAccess'));
 		$this->registerCallback('before.read', array($this, '_denyAccess'));
 		$this->registerCallback('before.edit', array($this, '_denyAccess'));
 		$this->registerCallback('before.add', array($this, '_denyAccess'));
 		$this->registerCallback('before.delete', array($this, '_denyAccess'));
 	}
 
-	public function _actionBrowse()
+	public function _actionProcess()
 	{
 		// Run the plugin events on the list
+		$this->getModel()->set('forceoffset', KRequest::get('post.forceoffset','int') );
+		$this->getModel()->set('forcelimit', KRequest::get('post.forcelimit','int') );
 		$list = $this->getModel()->refresh(1)->getList()->subscriptionRefresh();
 
 		$response = array(

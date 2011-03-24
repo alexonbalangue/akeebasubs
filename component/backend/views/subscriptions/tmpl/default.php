@@ -165,3 +165,7 @@
 	<p><img id="asriSpinner" src="<?=JURI::base()?>../media/com_akeebasubs/images/throbber.gif" align="center" /></p>
 	<p><span id="asriPercent">0</span><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_PROGRESS')?></p>
 </div>
+
+<script type="text/javascript">
+var akeebasubs_token = "<?=JUtility::getToken();?>";
+</script>

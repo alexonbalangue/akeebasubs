@@ -27,8 +27,9 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			->insert('expires_to'		, 'date')
 			// When refresh=1 we run a GROUP BY query which returns user ID's linked to subscriptions
 			->insert('refresh'			, 'int')
-			// Nooku does some funky shit with the offset when the limit changes. I don't want it to happen!
+			// Nooku does some funky stuff with the offset when the limit changes. I don't want it to happen!
 			->insert('forceoffset'		, 'int')
+			->insert('forcelimit'		, 'int')
 			;
 	}
 	
@@ -71,7 +72,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 	protected function _buildQueryLimit(KDatabaseQuery $query)
 	{
 		if($this->_state->refresh == 1) {
-			$limit = $this->_state->limit;
+			$limit = ($this->_state->forcelimit > 0) ? $this->_state->forcelimit : $this->_state->limit;
 			$offset = ($this->_state->forceoffset > 0) ? $this->_state->forceoffset : $this->_state->offset;
 			
 			if($limit) {
