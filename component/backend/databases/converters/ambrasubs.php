@@ -57,12 +57,12 @@ class ComAkeebasubsDatabaseConvertersAmbrasubs extends ComAkeebasubsDatabaseConv
 						'tbl.u2tid',
 						'tbl.userid AS user_id',
 						'tbl.typeid AS akeebasubs_level_id',
-						'IF(p.created_datetime IS NULL, \'0000-00-00 00:00:00\', p.created_datetime) AS publish_up',
-						'tbl.expires_datetime AS publish_down',
+						'p.created_datetime AS publish_up',
+						'IF(tbl.expires_datetime > \'2038-01-01\', \'NADA\', tbl.expires_datetime) AS publish_down',
 						'tbl.notes AS notes',
 						'tbl.status AS enabled',
-						'IF(p.payment_type IS NULL, \'none\', p.payment_type) AS processor',
-						'IF(p.payment_id IS NULL, \'import\', p.payment_id) AS processor_key',
+						'IF(p.payment_type IS NULL, \'None\', p.payment_type) AS processor',
+						'IF(p.payment_id IS NULL, \'Import\', p.payment_id) AS processor_key',
 						'IF(p.payment_status = 1, \'C\', IF(p.payment_status IS NULL, \'C\', \'X\')) AS state',
 						'IF(p.payment_amount IS NULL, 0, p.payment_amount) AS net_amount',
 						'0 AS tax_amount',
@@ -108,6 +108,20 @@ class ComAkeebasubsDatabaseConvertersAmbrasubs extends ComAkeebasubsDatabaseConv
 				}
 			}
 		}
+		
+		if(isset($this->data['subscriptions'])) {
+			foreach($this->data['subscriptions'] as $id => $subscription) {
+				if(empty($subscription['publish_up'])) {
+					$this->data['subscriptions'][$id]['publish_up'] = '2010-01-01 00:00:00';
+				}
+				// Fixes subscriptions w/out an expiration date, or with an expiration date set after UNIX' End Of Time.
+				$year = empty($subscription['publish_down']) ? 1970 : substr($subscription['publish_down'],0,4);
+				if(($year < 2000) || ($year>2038)) {
+					$this->data['subscriptions'][$id]['publish_down'] = '2038-01-01 00:00:00';
+				}
+			}
+		}
+		
 		parent::convert();
 		
 		return $this;

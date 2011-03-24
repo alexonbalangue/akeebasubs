@@ -169,11 +169,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		{
 			$search = '%'.$state->search.'%';
 			$query
-				->where('name', 'LIKE',  $search, 'OR')
-				->where('username', 'LIKE',  $search, 'OR')
-				->where('email', 'LIKE',  $search, 'OR')
-				->where('businessname', 'LIKE',  $search, 'OR')
-				->where('vatnumber', 'LIKE',  $search, 'OR');
+				->where('CONCAT(IF(u.name IS NULL,"",u.name),IF(u.username IS NULL,"",u.username),IF(u.email IS NULL, "", u.email),IF(a.businessname IS NULL, "", a.businessname), IF(a.vatnumber IS NULL,"",a.vatnumber))', 'LIKE',  $search);
 		}
 		
 		if(is_numeric($state->level)) {
