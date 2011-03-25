@@ -19,6 +19,7 @@ defined('KOOWA') or die('');
 
 <h1><?=@text('COM_AKEEBASUBS_TOOLS_IMPORT_TITLE');?></h1>
 
+<? if(!empty($tools)): ?>
 <? foreach($tools as $key => $tool): ?>
 <? if($tool->canConvert()): ?>
 	<button onclick="doStartConvertSubscriptions('<?=$tool->getName()?>')">
@@ -26,6 +27,11 @@ defined('KOOWA') or die('');
 	</button>
 <? endif; ?>
 <? endforeach; ?>
+<? else: ?>
+	<p>
+		<?=@text('COM_AKEEBASUBS_TOOLS_ERR_NOTOOLS')?>
+	</p>
+<? endif; ?>
 
 <div id="refreshMessage" style="display:none">
 	<h3><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_TOOLS_IMPORT_RUNNING');?></h3>

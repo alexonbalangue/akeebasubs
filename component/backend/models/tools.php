@@ -65,7 +65,7 @@ class ComAkeebasubsModelTools extends KModelTable
 	public function getList()
 	{
 		//Sort list by key
-		ksort($this->_list);
+		if(!empty($this->_list)) ksort($this->_list);
 	
 		return $this->_list;
 	}
