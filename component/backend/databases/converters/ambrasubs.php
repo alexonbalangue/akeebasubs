@@ -110,7 +110,11 @@ class ComAkeebasubsDatabaseConvertersAmbrasubs extends ComAkeebasubsDatabaseConv
 		}
 		
 		if(isset($this->data['subscriptions'])) {
+			jimport('joomla.utilities.date');
+			$jNow = new JDate();
+			$tsNow = $jNow->toUnix();
 			foreach($this->data['subscriptions'] as $id => $subscription) {
+				// Fixes subscriptions without an attached payment
 				if(empty($subscription['publish_up'])) {
 					$this->data['subscriptions'][$id]['publish_up'] = '2010-01-01 00:00:00';
 				}
@@ -118,6 +122,13 @@ class ComAkeebasubsDatabaseConvertersAmbrasubs extends ComAkeebasubsDatabaseConv
 				$year = empty($subscription['publish_down']) ? 1970 : substr($subscription['publish_down'],0,4);
 				if(($year < 2000) || ($year>2038)) {
 					$this->data['subscriptions'][$id]['publish_down'] = '2038-01-01 00:00:00';
+				}
+				// If the subscription is expired, mark it as if the user is already contacted
+				$jExp = new JDate($this->data['subscriptions'][$id]['publish_down']);
+				if($jExp->toUnix() < $tsNow) {
+					$this->data['subscriptions'][$id]['contact_flag'] = 2;
+					$this->data['subscriptions'][$id]['first_contact'] = $jNow->toMySQL();
+					$this->data['subscriptions'][$id]['second_contact'] = $jNow->toMySQL();
 				}
 			}
 		}

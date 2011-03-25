@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
 	`params` TEXT,
 
-	`contact_flag` tinyint(1) NOT NULL DEFAULT '1',
+	`contact_flag` tinyint(1) NOT NULL DEFAULT '0',
 	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY ( `akeebasubs_subscription_id` )
