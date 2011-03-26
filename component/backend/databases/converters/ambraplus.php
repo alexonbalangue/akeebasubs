@@ -87,6 +87,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 						'tbl.params AS rawparams'
 					))
 					->join('inner', 'ambrasubs_users2types AS s','tbl.id = s.userid')
+					->group('tbl.id')
 			),
 			array(
 				'name'	=> 'coupons',
@@ -160,26 +161,37 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 		
 		// Convert user parameters
 		if(isset($this->data['users'])) {
-			foreach($this->data['users'] as $id => $rawuser) {
+			$allUsers = $this->data['users'];
+			$this->data['users'] = array();
+			
+			foreach($allUsers as $id => $rawuser) {
 				if(empty($rawuser['rawparams'])) continue;
 				$user = $this->parse_ini_file_php($rawuser['rawparams']);
-				if(empty($user)) //continue;
 				$data = array();
-				if(array_key_exists('business_name', $user)) {
-					$data['businessname'] = $user['business_name'];
-					$data['isbusiness'] = 1;
-					if(array_key_exists('occupation', $user)) $data['occupation'] = $user['occupation'];
-					if(array_key_exists('vat_number', $user)) {
-						$data['vatnumber'] = $user['vat_number'];
-						$data['viesregistered'] = 1;
+				if(empty($user)) {
+					// Default dummy data
+					$data['isbusiness'] = 0;
+					$data['viesregistered'] = 0;
+					$data['country'] = 'XX';
+				} else {
+					if(array_key_exists('business_name', $user)) {
+						$data['businessname'] = $user['business_name'];
+						$data['isbusiness'] = 1;
+						if(array_key_exists('occupation', $user)) $data['occupation'] = $user['occupation'];
+						if(array_key_exists('vat_number', $user)) {
+							$data['vatnumber'] = $user['vat_number'];
+							$data['viesregistered'] = 1;
+						}
 					}
+					if(array_key_exists('address', $user)) $data['address1'] = $user['address'];
+					if(array_key_exists('address2', $user)) $data['address2'] = $user['address2'];
+					if(array_key_exists('city', $user)) $data['city'] = $user['city'];
+					if(array_key_exists('state', $user)) $data['state'] = $user['state'];
+					if(array_key_exists('zip', $user)) $data['zip'] = $user['zip'];
+					if(array_key_exists('country', $user)) $data['country'] = $user['country'];
 				}
-				if(array_key_exists('address', $user)) $data['address1'] = $user['address'];
-				if(array_key_exists('address2', $user)) $data['address2'] = $user['address2'];
-				if(array_key_exists('city', $user)) $data['city'] = $user['city'];
-				if(array_key_exists('state', $user)) $data['state'] = $user['state'];
-				if(array_key_exists('zip', $user)) $data['zip'] = $user['zip'];
-				if(array_key_exists('country', $user)) $data['country'] = $user['country'];
+				
+				$data['akeebasubs_user_id'] = $id;
 				$data['user_id'] = $id;
 				$data['params'] = '';
 				$data['notes'] = 'Imported from AMBRA.Subscriptions';
