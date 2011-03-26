@@ -44,7 +44,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// Since we have no table per se, we insert state variables to let
 		// Koowa handle the automatic filtering for us
 		$this->_state
-			->insert('slug'				, 'string', '', true)
+			->insert('slug'				, 'slug', '', true)
 			->insert('id'				, 'int')
 			->insert('paymentmethod'	, 'cmd')
 			->insert('processorkey'		, 'raw')

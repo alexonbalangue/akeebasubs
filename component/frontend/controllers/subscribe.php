@@ -47,7 +47,7 @@ class ComAkeebasubsControllerSubscribe extends KControllerDefault
 		} else {
 			// Redirect to the level page
 			
-			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$this->getModel()->get('slug','string')));
+			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$this->getModel()->get('slug','slug')));
 			
 			$this->setRedirect($url);
 			return false;

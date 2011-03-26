@@ -16,7 +16,7 @@ class ComAkeebasubsModelLevels extends KModelTable
 		$this->_state
 			->insert('ordering'	, 'int')
 			->insert('enabled'	, 'int')
-			->insert('slug'		, 'string');
+			->insert('slug'		, 'slug');
 	}
 
 	protected function _buildQueryWhere(KDatabaseQuery $query)

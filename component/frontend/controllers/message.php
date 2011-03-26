@@ -23,7 +23,7 @@ class ComAkeebasubsControllerMessage extends KControllerDefault
 	public function _actionAdd(KCommandContext $context)
 	{
 		$id = KRequest::get('get.id','int','-1');
-		$slug = KRequest::get('get.slug','string','');
+		$slug = KRequest::get('get.slug','slug','');
 		$action = !empty($slug) ? 'slug='.$slug : 'id='.$id;
 		$layout = KRequest::get('get.layout','cmd','');
 		if($id > 0) {
