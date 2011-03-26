@@ -87,12 +87,25 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 						'tbl.params AS rawparams'
 					))
 					->join('inner', 'ambrasubs_users2types AS s','tbl.id = s.userid')
+			),
+			array(
+				'name'	=> 'coupons',
+				'options' => array(
+					'name'	=> 'ambrasubs_coupons',
+					'identity_column' => 'id'
+				),
+				'query' => KFactory::tmp('lib.koowa.database.query')
+					->select(array(
+						'tbl.*'
+					))
 			)
 		);
 		
 		//This returns false if the import is big enough to be done in steps.
 		//So we need to stop the importing in this step, in order for it to initiate
 		if($this->importData($tables) === false) return $this;
+		
+		jimport('joomla.utilities.date');
 		
 		// Post-proc the subscription levels, merging the Joomla! articles to the ordertext and
 		// canceltext fields. Also take care of the image field.
@@ -123,7 +136,6 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 		}
 		
 		if(isset($this->data['subscriptions'])) {
-			jimport('joomla.utilities.date');
 			$jNow = new JDate();
 			$tsNow = $jNow->toUnix();
 			foreach($this->data['subscriptions'] as $id => $subscription) {
@@ -146,6 +158,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 			}
 		}
 		
+		// Convert user parameters
 		if(isset($this->data['users'])) {
 			foreach($this->data['users'] as $id => $rawuser) {
 				if(empty($rawuser['rawparams'])) continue;
@@ -171,6 +184,37 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 				$data['params'] = '';
 				$data['notes'] = 'Imported from AMBRA.Subscriptions';
 				$this->data['users'][$id] = $data;
+			}
+		}
+		
+		// Convert coupons
+		if(isset($this->data['coupons'])) {
+			$jNow = new JDate();
+			foreach($this->data['coupons'] as $id => $coupon) {
+				$jUp = new JDate($coupon['publish_up']);
+				$jDown = new JDate($coupon['publish_down']);
+				$this->data['coupons'][$id] = array(
+					'id'			=> $id,
+					'title'			=> $coupon['name'],
+					'coupon'		=> $coupon['code'],
+					'publish_up'	=> $jUp->toMySQL(),
+					'publish_down'	=> $jDown->toMySQL(),
+					'subscriptions'	=> str_replace(';',',',$coupon['sub_id']),
+					'type'			=> $coupon['type'],
+					'value'			=> $coupon['value'],
+					'enabled'		=> $coupon['published'],
+					'hits'			=> $coupon['hits'],
+					'user'			=> null,
+					'params'		=> '',
+					'hitslimit'		=> null,
+					'ordering'		=> 0,
+					'created_on'	=> $jNow->toMySQL(),
+					'created_by'	=> KFactory::get('lib.joomla.user')->id,
+					'modified_on'	=> '0000-00-00 00:00:00',
+					'modified_by'	=> 0,
+					'locked_on'		=> '0000-00-00 00:00:00',
+					'locked_by'		=> 0
+				);
 			}
 		}
 		

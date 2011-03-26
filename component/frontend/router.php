@@ -41,6 +41,9 @@ function AkeebasubsBuildRoute(&$query)
 	if(array_key_exists('slug', $query) && (KInflector::isSingular($segments[0]) || ($segments[0] == 'new')) ){
 		$segments[1] = $query['slug'];
 		unset($query['slug']);
+	} elseif(array_key_exists('id', $query) && ($segments[0] == 'subscription')) {
+		$segments[1] = $query['id'];
+		unset($query['id']);
 	}
 	
 	return $segments;
@@ -100,7 +103,11 @@ function AkeebasubsParseRoute($segments)
 
 		// if we are in a singular view, the next item is the slug
 		if(KInflector::isSingular($vars['view'])) {
-			$vars['slug'] = array_shift($segments);
+			if($vars['view'] == 'subscription') {
+				$vars['id'] = array_shift($segments);
+			} else {
+				$vars['slug'] = array_shift($segments);	
+			}
 		}
 	}
 	

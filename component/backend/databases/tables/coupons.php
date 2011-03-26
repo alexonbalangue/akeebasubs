@@ -15,16 +15,6 @@ defined('KOOWA') or die('');
  */
 class ComAkeebasubsDatabaseTableCoupons extends KDatabaseTableAbstract
 {
-	public function __construct(KConfig $config)
-	{
-		// Uncomment this if I add a view to handle this...
-		// $config->name = 'akeebasubs_view_levels';
-		$config->base = 'akeebasubs_coupons';
-		$config->name = 'akeebasubs_coupons';
-  
-		parent::__construct($config);
-    }
-    
 	protected function _initialize(KConfig $config)
     {
     	$config->behaviors = array('lockable', 'creatable', 'modifiable', 'orderable', 'hittable'

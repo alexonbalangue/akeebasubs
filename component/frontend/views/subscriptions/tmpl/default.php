@@ -91,7 +91,11 @@
 
 	            	<?if(($subscription->state == 'C')):?>
 	            	&bull;
-	            	<a href="<?=@route('view=level&slug='.$subscription->slug)?>">
+	            	<?$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+						->id($subscription->akeebasubs_level_id)
+						->getItem()
+						->slug;?>
+	            	<a href="<?=@route('view=level&slug='.$slug)?>">
 	            		<?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
 	            	<?endif;?>
