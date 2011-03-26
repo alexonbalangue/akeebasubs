@@ -19,6 +19,7 @@ defined('KOOWA') or die('Restricted access');?>
 <script src="media://com_akeebasubs/js/jquery.jqplot.min.js" />
 <script src="media://com_akeebasubs/js/jqplot.highlighter.min.js" />
 <script src="media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js" />
+<script src="media://com_akeebasubs/js/jqplot.barRenderer.min.js" />
 <script src="media://com_akeebasubs/js/jqplot.hermite.js" />
 -->
 
@@ -220,7 +221,7 @@ defined('KOOWA') or die('Restricted access');?>
 </div>
 
 <?php
-	$xday = gmdate('Y-m-d', time() - 30 * 24 * 3600);
+	$xday = gmdate('Y-m-d', time() - 90 * 24 * 3600);
 ?>
 <script type="text/javascript">
 (function($) {
@@ -229,23 +230,41 @@ defined('KOOWA') or die('Restricted access');?>
 		$.jqplot.config.enablePlugins = true;
 		$.getJSON(url, function(data){
 			var salesPoints = [];
+			var subsPoints = [];
 			$.each(data, function(index, item){
 				salesPoints.push([item.date, parseInt(item.net * 100) * 1 / 100]);
+				subsPoints.push([item.date, item.subs * 1]);
 			});
-			plot1 = $.jqplot('aksaleschart', [salesPoints], {
+			plot1 = $.jqplot('aksaleschart', [subsPoints, salesPoints], {
 				show: true,
 				axes:{
 					xaxis:{renderer:$.jqplot.DateAxisRenderer,tickInterval:'1 week'},
-					yaxis:{min: 0,tickOptions:{formatString:'%.2f'}}
+					yaxis:{min: 0,tickOptions:{formatString:'%.2f'}},
+					y2axis:{min: 0,tickOptions:{formatString:'%u'}}
 				},
 			    series:[ 
-			        {lineWidth:2, markerOptions:{style:'filledCircle', size:8}}
+			    	{
+			    		yaxis: 'y2axis',
+			    		lineWidth:1,
+			    		renderer:$.jqplot.BarRenderer,
+			    		rendererOptions:{barPadding: 0, barMargin: 0, barWidth: 5, shadowDepth: 0, varyBarColor: 0},
+			    		markerOptions: {
+			    			style:'none'
+			    		},
+			    		color: '#aae0aa'
+			    	},
+			        {
+			        	lineWidth:3,
+			        	markerOptions:{
+			        		style:'filledCircle',
+			        		size:8
+			        	},
+			        	renderer: $.jqplot.hermiteSplineRenderer,
+			        	rendererOptions:{steps: 60, tension: 0.6}
+			        }
 			    ],
 			    highlighter: {sizeAdjust: 7.5},
-			    seriesDefaults: {
-				    renderer: $.jqplot.hermiteSplineRenderer,
-				    rendererOptions:{steps: 60, tension: 0.6}
-			    }
+			    axesDefaults:{useSeriesColor: true}
 			});
 		});
 	});

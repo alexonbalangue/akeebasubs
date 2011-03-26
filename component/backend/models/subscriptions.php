@@ -111,7 +111,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		if($this->_state->refresh == 1) {
 			$query->select(array('tbl.akeebasubs_subscription_id', 'tbl.user_id'));
 		} elseif($this->_state->groupbydate == 1) {
-			$query->select(array('DATE(publish_up) AS date','SUM(net_amount) AS net'));
+			$query->select(array('DATE(publish_up) AS date','SUM(net_amount) AS net','COUNT(akeebasubs_subscription_id) AS subs'));
 		} else {
 			$query->select(array(
 				'tbl.*',
