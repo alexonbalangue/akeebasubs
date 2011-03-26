@@ -14,6 +14,7 @@ defined('KOOWA') or die('Restricted access');?>
 <!--
 <style src="media://com_akeebasubs/css/backend.css" />
 <style src="media://com_akeebasubs/css/jquery.jqplot.min.css" />
+<script src="media://com_akeebasubs/js/backend.js" />
 <script src="media://com_akeebasubs/js/excanvas.min.js" />
 <script src="media://com_akeebasubs/js/jquery.js" />
 <script src="media://com_akeebasubs/js/jquery.jqplot.min.js" />
@@ -44,8 +45,11 @@ defined('KOOWA') or die('Restricted access');?>
 	<?= @helper('tabs.startPane', array('id' => 'stats', 'attribs' => array('height' => '300px'))) ?>
 	
 	<?= @helper('tabs.startPanel', array('title' => @text('COM_AKEEBASUBS_DASHBOARD_SALES'))) ?>
-		<div id="aksaleschart" style="width: 400px; height: 300px;">
+		<div id="aksaleschart">
 			<img src="media://com_akeebasubs/images/throbber.gif" id="akthrobber" />
+			<p id="aksaleschart-nodata" style="display:none">
+				<?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_NODATA')?>
+			</p>
 		</div>
 	<?= @helper('tabs.endPanel') ?>
 	
@@ -56,7 +60,7 @@ defined('KOOWA') or die('Restricted access');?>
 				<td width="50%"><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_LASTYEAR')?></td>
 				<td align="right" width="25%">
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
-						->publish_up((gmdate('Y')-1).'-01-01')
+						->publish_up((gmdate('Y')-1).'-01-01 00:00:00')
 						->publish_down((gmdate('Y')-1).'-12-31 23:59:59')
 						->getTotal()
 					?>
@@ -221,7 +225,7 @@ defined('KOOWA') or die('Restricted access');?>
 </div>
 
 <?php
-	$xday = gmdate('Y-m-d', time() - 90 * 24 * 3600);
+	$xday = gmdate('Y-m-d', time() - 30 * 24 * 3600);
 ?>
 <script type="text/javascript">
 (function($) {
@@ -235,6 +239,10 @@ defined('KOOWA') or die('Restricted access');?>
 				salesPoints.push([item.date, parseInt(item.net * 100) * 1 / 100]);
 				subsPoints.push([item.date, item.subs * 1]);
 			});
+			if(salesPoints.length == 0) {
+				$('#akthrobber').hide();
+				$('#aksaleschart-nodata').show();
+			}
 			plot1 = $.jqplot('aksaleschart', [subsPoints, salesPoints], {
 				show: true,
 				axes:{

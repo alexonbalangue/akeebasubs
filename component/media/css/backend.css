@@ -55,5 +55,15 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 #refreshMessage h3, #refreshMessage p { text-align: center; }
 
 #akthrobber {
-	margin: 142px 198px;
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin: auto;
+	padding-top: 142px;
+}
+
+#aksaleschart {
+	width: 100%;
+	min-width: 450px;
+	height: 300px;
 }
