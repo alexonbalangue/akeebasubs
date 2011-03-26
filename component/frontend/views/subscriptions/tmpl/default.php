@@ -91,7 +91,7 @@
 
 	            	<?if(($subscription->state == 'C')):?>
 	            	&bull;
-	            	<a href="<?=@route('view=level&id='.$subscription->akeebasubs_level_id)?>">
+	            	<a href="<?=@route('view=level&slug='.$subscription->slug)?>">
 	            		<?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
 	            	<?endif;?>

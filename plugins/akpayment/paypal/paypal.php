@@ -58,12 +58,16 @@ class plgAkpaymentPaypal extends JPlugin
 			$lastName = '';
 		}
 		
+		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+				->id($subscription->akeebasubs_level_id)
+				->getItem()
+				->slug;
 		$data = (object)array(
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->getMerchantID(),
-			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal',
-			'success'		=> JURI::base().'index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order',
-			'cancel'		=> JURI::base().'index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=cancel',
+			'postback'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal')),
+			'success'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order')),
+			'cancel'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel')),
 			'currency'		=> strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName

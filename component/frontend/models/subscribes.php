@@ -44,7 +44,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// Since we have no table per se, we insert state variables to let
 		// Koowa handle the automatic filtering for us
 		$this->_state
-			->insert('id'				, 'int', 0, true)
+			->insert('slug'				, 'string', '', true)
+			->insert('id'				, 'int')
 			->insert('paymentmethod'	, 'cmd')
 			->insert('processorkey'		, 'raw')
 			->insert('username'			, 'string')
@@ -113,6 +114,13 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	public function getValidation()
 	{
 		$response = new stdClass();
+		
+		if($this->_state->slug) {
+			$this->_state->id = KFactory::tmp('admin::com.akeebasubs.model.levels')
+				->slug($this->_state->slug)
+				->getItem()
+				->id;
+		}
 		
 		switch($this->_state->opt)
 		{
@@ -630,16 +638,18 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		} else {
 			// Update existing user's details
-			$params = array(
-				'name'			=> $this->_state->name,
-				'email'			=> $this->_state->email
-			);
-			if (!$user->bind( $params, 'usertype' )) {
-				JError::raiseError( 500, $user->getError());
+			$userRecord = KFactory::get('admin::com.akeebasubs.model.jusers')
+				->id($user->id)
+				->getItem();
+			if( ($userRecord->name != $this->_state->name) || ($userRecord->email != $this->_state->email) ) {
+				$userIsSaved = $userRecord->setData(array(
+						'name'			=> $this->_state->name,
+						'email'			=> $this->_state->email
+					))->save();
+			} else {
+				$userIsSaved = true;
 			}
-			$userIsSaved = $user->save();
 		}
-		
 		if(!$userIsSaved) return false;
 		
 		// Step #4. Create or add user extra fields
@@ -780,7 +790,11 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		} else {
 			// Zero charges; just redirect
 			$app = JFactory::getApplication();
-			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&id='.$subscription->akeebasubs_level_id.'&layout=order')) );
+			$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+				->id($subscription->akeebasubs_level_id)
+				->getItem()
+				->slug;
+			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order')) );
 			return false;
 		}
 		

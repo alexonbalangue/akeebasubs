@@ -40,11 +40,11 @@ table.asfelist tfoot td { text-align: center; }
 	border: thin solid #333;
 }
 
-#akeebasubs h3.level-title:before {
+#akeebasubs .level-title:before {
 	content: " ";
 }
 
-#akeebasubs h3.level-title {
+#akeebasubs .level-title {
 	display: block;
 	width: 100%;
 	padding: 0.4em 0;
@@ -56,7 +56,7 @@ table.asfelist tfoot td { text-align: center; }
 	text-shadow: 1px 1px 1px white;
 }
 
-#akeebasubs h3.level-title a {
+#akeebasubs .level-title a {
 	font-size: 14pt;
 	font-weight: bold;
 	color: #333;
