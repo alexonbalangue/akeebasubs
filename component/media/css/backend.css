@@ -67,3 +67,17 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 	min-width: 450px;
 	height: 300px;
 }
+
+.desc {
+	background: transparent url(../images/sort_desc.png) 4px right no-repeat;
+	padding: 0 11px
+}
+
+.asc {
+	background: transparent url(../images/sort_asc.png) 4px left no-repeat;
+	padding: 0 11px
+}
+
+.submitable {
+	cursor: pointer;
+}
