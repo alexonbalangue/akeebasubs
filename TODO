@@ -1,5 +1,4 @@
 To-do:
-- Show no VAT error for countries with dual taxrules having a non-zero VAT
 - Nooku Framework installer bundled with the extension (step 2 & 3 in a special J!-only view):
 	1. Nooku -> JPA archive during build
 	2. Extract to site root on install
