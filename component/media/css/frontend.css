@@ -272,16 +272,50 @@ table.asfelist tfoot td { text-align: center; }
 	background-color: #ffe0e0;
 }
 
-#akeebasubs #username_valid {
+#akeebasubs .valid {
 	font-weight: bold;
 	font-size: 9pt;
 	color: green;
+	display: none;
+	height: 18px;
+	padding: 0 3px 0 0;
+	margin: 0 0 0 5px;
+	border-left: 1px solid #090;
+	background-color: #efe;
 }
 
-#akeebasubs #username_invalid {
-	font-weight: bold;
+#akeebasubs .invalid {
+	font-weight: normal;
 	font-size: 9pt;
 	color: red;
+	display: none;
+	height: 18px;
+	padding: 0 3px 0 0;
+	margin: 0 0 0 5px;
+	border-left: 1px solid #900;
+	background-color: #ffe;
+}
+
+.akstriangle {
+	display: inline-block !important;
+	float: left;
+	position: relative;
+	left: -3px;
+	top: 2px;
+	width: 0px;
+	height: 0px;
+	margin: 0 0 0 -11px;
+	padding: 0;
+	border: 7px solid red;
+	border-color: transparent #900 transparent transparent;
+}
+
+.akstriangle-red {
+	border-color: transparent #900 transparent transparent;
+}
+
+.akstriangle-green {
+	border-color: transparent #090 transparent transparent;
 }
 
 #akeebasubs #username_checking {
@@ -289,18 +323,6 @@ table.asfelist tfoot td { text-align: center; }
 	font-size: 9pt;
 	color: gray;
 } 
-
-#akeebasubs .invalid {
-	font-weight: bold;
-	font-size: 9pt;
-	color: red;	
-}
-
-#akeebasubs .valid {
-	font-weight: bold;
-	font-size: 9pt;
-	color: green;	
-}
 
 /**
  * Subscription viewer

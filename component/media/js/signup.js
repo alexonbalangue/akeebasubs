@@ -113,10 +113,10 @@ function validatePassword()
 		$('#password2_invalid').css('display','none');
 		
 		if(password == '') {
-			$('#password_invalid').css('display','inline');
+			$('#password_invalid').css('display','inline-block');
 		} else {
 			if(password2 != password) {
-				$('#password2_invalid').css('display','inline');
+				$('#password2_invalid').css('display','inline-block');
 			}
 		}
 	})(akeeba.jQuery);
@@ -132,7 +132,7 @@ function validateName()
 		$('#name_empty').css('display','none');
 		var name = $('#name').val();
 		if(name == '') {
-			$('#name_empty').css('display','inline');
+			$('#name_empty').css('display','inline-block');
 			return;
 		}
 	})(akeeba.jQuery);
@@ -190,10 +190,10 @@ function validateEmail()
 		$('#email_invalid').css('display','none');
 		var email = $('#email').val();
 		if(email == '') {
-			$('#email_empty').css('display','inline');
+			$('#email_empty').css('display','inline-block');
 			return;
 		} else if(!echeck(email)) {
-			$('#email_invalid').css('display','inline');
+			$('#email_invalid').css('display','inline-block');
 			return;
 		} else {
 			validateForm();
@@ -213,14 +213,14 @@ function validateAddress()
 		var hasErrors = false;
 		
 		if(address == '') {
-			$('#address1_empty').css('display','inline');
+			$('#address1_empty').css('display','inline-block');
 			hasErrors = true;
 		} else {
 			$('#address1_empty').css('display','none');
 		}
 
 		if(country == '') {
-			$('#country_empty').css('display','inline');
+			$('#country_empty').css('display','inline-block');
 			hasErrors = true;
 		} else {
 			$('#country_empty').css('display','none');
@@ -241,7 +241,7 @@ function validateAddress()
 		if( (country == 'US') || (country == 'CA') ) {
 			$('#stateField').css('display','block');
 			if(state == '') {
-				$('#state_empty').css('display','inline');
+				$('#state_empty').css('display','inline-block');
 				hasErrors = true;
 			} else {
 				$('#state_empty').css('display','none');
@@ -251,14 +251,14 @@ function validateAddress()
 		}
 	
 		if(state == '') {
-			$('#state_empty').css('display','inline');
+			$('#state_empty').css('display','inline-block');
 			hasErrors = true;
 		} else {
 			$('#state_empty').css('display','none');
 		}
 
 		if(zip == '') {
-			$('#zip_empty').css('display','inline');
+			$('#zip_empty').css('display','inline-block');
 			hasErrors = true;
 		} else {
 			$('#zip_empty').css('display','none');
@@ -331,73 +331,78 @@ function applyValidation(response, callback)
 	(function($) {
 		if($('#username_valid')) {
 			if(response.username) {
-				$('#username_valid').css('display','inline');
+				$('#username_valid').css('display','inline-block');
 				$('#username_invalid').css('display','none');
 			} else {
 				$('#username_valid').css('display','none');
-				$('#username_invalid').css('display','inline');
+				$('#username_invalid').css('display','inline-block');
 			}
 		}
 		
 		if(response.name) {
 			$('#name_empty').css('display','none');
 		} else {
-			$('#name_empty').css('display','inline');
+			$('#name_empty').css('display','inline-block');
 		}
 		
 		if(response.email) {
 			$('#email_invalid').css('display','none');
 		} else {
-			$('#email_invalid').css('display','inline');
+			$('#email_invalid').css('display','inline-block');
 		}
 		
 		if(response.address1) {
 			$('#address1_empty').css('display','none');
 		} else {
-			$('#address1_empty').css('display','inline');
+			$('#address1_empty').css('display','inline-block');
 		}
 		
 		if(response.country) {
 			$('#country_empty').css('display','none');
 		} else {
-			$('#country_empty').css('display','inline');
+			$('#country_empty').css('display','inline-block');
 		}
 		
 		if(response.state) {
 			$('#state_empty').css('display','none');
 		} else {
-			$('#state_empty').css('display','inline');
+			$('#state_empty').css('display','inline-block');
 		}
 			
 		if(response.city) {
 			$('#city_empty').css('display','none');
 		} else {
-			$('#city_empty').css('display','inline');
+			$('#city_empty').css('display','inline-block');
 		}
 		
 		if(response.zip) {
 			$('#zip_empty').css('display','none');
 		} else {
-			$('#zip_empty').css('display','inline');
+			$('#zip_empty').css('display','inline-block');
 		}
 
 		if(response.businessname) {
 			$('#businessname_empty').css('display','none');
 		} else {
-			$('#businessname_empty').css('display','inline');
+			$('#businessname_empty').css('display','inline-block');
 		}
 		
 		if(response.occupation) {
 			$('#occupation_empty').css('display','none');
 		} else {
-			$('#occupation_empty').css('display','inline');
+			$('#occupation_empty').css('display','inline-block');
 		}
 		
 		if(response.vatnumber && ($('#vatfields').css('display') != 'none')) {
 			$('#vat-status-invalid').css('display','none');
-			$('#vat-status-valid').css('display','inline');
+			$('#vat-status-valid').css('display','inline-block');
 		} else {
-			$('#vat-status-invalid').css('display','inline');
+			$('#vat-status-invalid').css('display','inline-block');
+			$('#vat-status-valid').css('display','none');
+		}
+		
+		if(response.novatrequired) {
+			$('#vat-status-invalid').css('display','none');
 			$('#vat-status-valid').css('display','none');
 		}
 	})(akeeba.jQuery);

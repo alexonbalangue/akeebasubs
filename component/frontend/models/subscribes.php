@@ -209,42 +209,69 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		} else {
 			// Do I have to check the VAT number?
 			if(in_array($this->_state->country, $this->european_states)) {
-				// Validate VAT number
-				$country = ($this->_state->country == 'GR') ? 'EL' : $this->_state->country;
-				$vat = trim(strtoupper($this->_state->vatnumber));
-				$url = 'http://isvat.appspot.com/'.$country.'/'.$vat.'/';
-				
-				// Is the validation already cached?
-				$key = $country.$vat;
-				$ret['vatnumber'] = null;
-				if(array_key_exists('vat', $this->_cache)) {
-					if(array_key_exists($key, $this->_cache['vat'])) {
-						$ret['vatnumber'] = $this->_cache['vat'][$key];
+				// If the country has two rules with VIES enabled/disabled and a non-zero VAT,
+				// we will skip VIES validation. We'll also skip validation if there are no
+				// rules for this country (the default tax rate will be applied)
+				$taxrules = KFactory::tmp('site::com.akeebasubs.model.taxrules')
+					->enabled(1)
+					->country($this->_state->country)
+					->sort('ordering')
+					->direction('ASC')
+					->limit(0)
+					->offset(0)
+					->getList();
+				$catchRules = 0;
+				$lastVies = null;
+				if(!empty($taxrules)) foreach($taxrules as $ruleRow) {
+					$rule = (object)$ruleRow->getData();
+					if( empty($rule->state) && empty($rule->city) && $rule->taxrate && ($lastVies != $rule->vies) ) {
+						$catchRules++;
+						$lastVies = $rule->vies;
 					}
-				}				
-				
-				if(is_null($ret['vatnumber']))
-				{
-					$res = @file_get_contents($url);
-					if($res === false) {
-						$ch = curl_init($url);
-						url_setopt($ch, CURLOPT_HEADER, 0);
-						url_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-						$res = @curl_exec($ch);
-					}
-	
-					if($res !== false) {
-						$res = @json_decode($res);
-					}
+				}
+				$mustCheck = ($catchRules < 2) && ($catchRules > 0);
+			
+				if($mustCheck) {
+					// Validate VAT number
+					$country = ($this->_state->country == 'GR') ? 'EL' : $this->_state->country;
+					$vat = trim(strtoupper($this->_state->vatnumber));
+					$url = 'http://isvat.appspot.com/'.$country.'/'.$vat.'/';
 					
-					$ret['vatnumber'] = $res === true;
+					// Is the validation already cached?
+					$key = $country.$vat;
+					$ret['vatnumber'] = null;
+					if(array_key_exists('vat', $this->_cache)) {
+						if(array_key_exists($key, $this->_cache['vat'])) {
+							$ret['vatnumber'] = $this->_cache['vat'][$key];
+						}
+					}				
 					
-					if(!array_key_exists('vat', $this->_cache)) {
-						$this->_cache['vat'] = array();
+					if(is_null($ret['vatnumber']))
+					{
+						$res = @file_get_contents($url);
+						if($res === false) {
+							$ch = curl_init($url);
+							url_setopt($ch, CURLOPT_HEADER, 0);
+							url_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+							$res = @curl_exec($ch);
+						}
+		
+						if($res !== false) {
+							$res = @json_decode($res);
+						}
+						
+						$ret['vatnumber'] = $res === true;
+						
+						if(!array_key_exists('vat', $this->_cache)) {
+							$this->_cache['vat'] = array();
+						}
+						$this->_cache['vat'][$key] = $ret['vatnumber'];
+						$encodedCacheData = json_encode($this->_cache);
+						KRequest::set('session.akeebasubs.subscribe.validation.cache.data',$encodedCacheData);
 					}
-					$this->_cache['vat'][$key] = $ret['vatnumber'];
-					$encodedCacheData = json_encode($this->_cache);
-					KRequest::set('session.akeebasubs.subscribe.validation.cache.data',$encodedCacheData);
+					$ret['novatrequired'] = false;
+				} else {
+					$ret['novatrequired'] = true;
 				}
 			}
 		}
@@ -589,7 +616,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		}
 		if(!$found) return false;
-		
+
 		// Step #3. Create a user record if required and send out the email with user information
 		// ----------------------------------------------------------------------
 		$user = JFactory::getUser();
@@ -662,8 +689,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		if(!count($list)) {
 			$id = 0;
 		} else {
-			$list->rewind();
-			$id = $list->current()->id;
+			$list->getIterator()->rewind();
+			$id = $list->getIterator()->current()->id;
 		}
 		$data = array(
 			'id'			=> $id,

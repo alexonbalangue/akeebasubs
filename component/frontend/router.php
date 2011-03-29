@@ -106,10 +106,10 @@ function AkeebasubsParseRoute($segments)
 			if($vars['view'] == 'subscription') {
 				$vars['id'] = array_shift($segments);
 			} else {
-				$vars['slug'] = array_shift($segments);	
+				$vars['slug'] = array_shift($segments);
 			}
 		}
 	}
-	
+
 	return $vars;
 }

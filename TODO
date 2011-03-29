@@ -1,6 +1,15 @@
 To-do:
+- Taxrules: wrong label in the To Level header
+- Arrows in sort headers in the backend (CSS)
+- Show no VAT error for countries with dual taxrules having a non-zero VAT
+- Nooku Framework installer bundled with the extension (step 2 & 3 in a special J!-only view):
+	1. Nooku -> JPA archive during build
+	2. Extract to site root on install
+	3. Install plugin (db entry)
 - MODULE site/akeebasubs : Display a list of active / all subscriptions (HMVC)
 - MODULE site/akslevels : Display a customisable list of subscription levels (HMVC)
+- PLUGIN contents/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
+- Documentation!
 
 Future ideas:
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
@@ -26,7 +35,7 @@ Future ideas:
 - Payment: Moneris http://www.moneris.com/en/MerchantServices/MerchantDirect.aspx
 - Payment: PSIGate http://www.psigate.com/pages/techsupport.asp
 - Payment: Charge.com
-- Invoicing, manual (issue or import invoice) or auto, ability to import Greek tax devices' b.txt files
+- Invoicing, manual (issue or import invoice) or auto, ability to import Greek tax device's b.txt files
 - Affiliates. Links an affiliate to a coupon code and calculates the total commissions per term (e.g. per month)
 - Resellers. A triangular sale: Reseller charges the user and uses our API to get a voucher (coupon) code. The user uses the coupon code on our site to subscribe. The reseller gets charged when the coupon is used.
 - Linked subscriptions. User B "inherits" the subscriptions of User A. Every change in User A's subscription status is replicated to User B. One-to-many relationship to easen the transition.
