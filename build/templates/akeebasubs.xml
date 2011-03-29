@@ -60,7 +60,6 @@
 			<filename>akeebasubs.php</filename>
 			<filename>config.json</filename>
 			<filename>dispatcher.php</filename>
-			<filename>gChart.php</filename>
 			<filename>index.html</filename>
 			<folder>commands</folder>
 			<folder>controllers</folder>

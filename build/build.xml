@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="UniteGui" description="Akeeba Subscriptions component based on Nooku FW" default="svn" >
+<project name="AkeebaSubs" description="Akeeba Subscriptions component based on Nooku FW" default="svn" >
 	<property file="./build.properties" />
 	<!-- Default properties, set only if not already assigned in the build.properties file -->
 	<property name="dirs.root" value="../" />
@@ -8,6 +8,7 @@
 	<property name="dirs.plugins" value="../plugins" />
 	<property name="dirs.installers" value="../installers" />
 	<property name="dirs.release" value="../release" />
+	<property name="dirs.koowa" value="../koowa/code" />
 	<property name="version" value="svn" />
 
 	<taskdef name="zipme" classname="phingext.ZipmeTask" />
@@ -93,6 +94,30 @@
 		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
+			</fileset>
+		</zipme>
+		
+		<zipme basedir="${dirs.koowa}" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+			<fileset dir="${dirs.koowa}">
+				<include name="**"/>
+				<exclude name="site/**" />
+				<exclude name="plugins/system/**" />
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.koowa}/site" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+			<fileset dir="${dirs.koowa}/site">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.koowa}/plugins/system" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+			<fileset dir="${dirs.koowa}/plugins/system">
+				<include name="koowa.php"/>
+			</fileset>
+		</zipme>
+		<copy file="./templates/koowa.xml" tofile="${dirs.release}/koowa.xml" overwrite="true" />
+		<zipme basedir="${dirs.release}" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+			<fileset dir="${dirs.release}">
+				<include name="koowa.xml"/>
 			</fileset>
 		</zipme>
 	</target>

@@ -1,6 +1,6 @@
 To-do:
 - Nooku Framework installer bundled with the extension (step 2 & 3 in a special J!-only view):
-	1. Nooku -> JPA archive during build
+	1. Nooku -> ZIP archive during build
 	2. Extract to site root on install
 	3. Install plugin (db entry)
 - MODULE site/akeebasubs : Display a list of active / all subscriptions (HMVC)

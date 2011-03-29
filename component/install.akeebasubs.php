@@ -41,6 +41,7 @@ $installation_queue = array(
 			'asrestricted'			=> 1
 		),
 		'system' => array(
+			'koowa'					=> 1,
 			'asexpirationcontrol'	=> 1,
 			'asexpirationnotify'	=> 1
 		)
@@ -54,6 +55,9 @@ if( version_compare( JVERSION, '1.6.0', 'ge' ) && !defined('_AKEEBA_HACK') ) {
 	global $akeeba_installation_has_run;
 	if($akeeba_installation_has_run) return;
 }
+
+jimport('joomla.filesystem.folder');
+jimport('joomla.filesystem.file');
 
 // Setup the sub-extensions installer
 jimport('joomla.installer.installer');
@@ -115,6 +119,49 @@ if(count($installation_queue['plugins'])) {
 	}
 }
 
+// Install the Koowa library and associated system files (let's hope it works!)
+$koowaInstalled = JFolder::copy("$src/koowa", JPATH_ROOT, null, true);
+
+// Change MySQL extension to mysqli if required
+$config =& JFactory::getConfig();
+$driver = $config->getValue('config.dbtype', 'mysql');
+if($driver != 'mysqli') {
+	$config->setValue('config.dbtype', 'mysqli');
+	$buffer = $config->toString('PHP', 'config', array('class' => 'JConfig'));
+	// On some occasions, Joomla! 1.6 ignores the configuration and produces "class c". Let's fix this!
+	$buffer = str_replace('class c {','class JConfig {',$buffer);
+	// Try to write out the configuration.php
+	$file = JPATH_ROOT.DS.'configuration.php';
+	// Hack me: Try changing the permissions, working around an age-old Joomla! bug
+	@chmod($file, 0755);
+	
+	// Try using the FTP layer
+	jimport('joomla.client.helper');
+	$FTPOptions = JClientHelper::getCredentials('ftp');
+	if ($FTPOptions['enabled'] == 1) {
+		// Connect the FTP client
+		jimport('joomla.client.ftp');
+		$ftp = & JFTP::getInstance($FTPOptions['host'], $FTPOptions['port'], null, $FTPOptions['user'], $FTPOptions['pass']);
+
+		// Translate path for the FTP account and use FTP write buffer to file
+		$file = JPath::clean(str_replace(JPATH_ROOT, $FTPOptions['root'], $file), '/');
+		$ret = $ftp->write($file, $buffer);
+	} else {
+		$ret = false;
+	}
+	
+	// Try using direct file writes
+	if(!$ret) {
+		$ret = @file_put_contents($file, $buffer);
+	}
+	
+	// Try using JFile - All hell might break loose...
+	if(!$ret) {
+		jimport('joomla.filesystem.file');
+		$ret = JFile::write($file, $buffer);
+	}
+}
+
 // Load the translation strings (Joomla! 1.5 and 1.6 compatible)
 if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
 	global $j15;
@@ -158,13 +205,6 @@ if(!function_exists('pisprint'))
 }
 ?>
 
-<?php if(!defined('KOOWA')): ?>
-<div style="background-color: #900; color: #fff !important; font-size: 11pt; padding: 1em; margin: 0.5em; ">
-	<h1 style="color: white;"><?php pitext('COM_AKEEBASUBS_NONOOKU_HEAD'); ?></h1>
-	<p><?php pitext('COM_AKEEBASUBS_NONOOKU_TEXT'); ?></p>
-</div>
-<?php endif;?>
-
 <h1><?php pitext('COM_AKEEBASUBS_PIHEADER'); ?></h1>
 <?php $rows = 0;?>
 <img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions" align="left" />
@@ -190,6 +230,12 @@ if(!function_exists('pisprint'))
 				<strong><?php pitext('COM_AKEEBASUBS_PICOMPONENT'); ?></strong>
 			</td>
 			<td><strong style="color: green"><?php pitext('COM_AKEEBASUBS_PIINSTALLED');?></strong></td>
+		</tr>
+		<tr class="row1">
+			<td class="key" colspan="2">
+				<strong><?php pitext('COM_AKEEBASUBS_PIKOOWA'); ?></strong>
+			</td>
+			<td><strong style="color: <?php echo ($koowaInstalled) ? 'green' : 'red' ?>"><?php pitext($koowaInstalled ? 'COM_AKEEBASUBS_PIINSTALLED' : 'COM_AKEEBASUBS_PINOTINSTALLED');?></strong></td>
 		</tr>
 		<?php if (count($status->modules)) : ?>
 		<tr>
