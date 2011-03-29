@@ -21,7 +21,7 @@
 				<?= @helper('grid.sort', array('column' => 'from_id', 'title' => 'COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID')); ?>
 			</th>
 			<th>
-				<?= @helper('grid.sort', array('column' => 'to_id', 'title' => 'COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID')); ?>
+				<?= @helper('grid.sort', array('column' => 'to_id', 'title' => 'COM_AKEEBASUBS_UPGRADES_FIELD_TO_ID')); ?>
 			</th>
 			<th>
 				<?= @helper('grid.sort', array('column' => 'min_presence', 'title' => 'COM_AKEEBASUBS_UPGRADES_FIELD_MIN_PRESENCE')); ?>

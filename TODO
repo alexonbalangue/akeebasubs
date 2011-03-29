@@ -1,5 +1,4 @@
 To-do:
-- Taxrules: wrong label in the To Level header
 - Arrows in sort headers in the backend (CSS)
 - Show no VAT error for countries with dual taxrules having a non-zero VAT
 - Nooku Framework installer bundled with the extension (step 2 & 3 in a special J!-only view):
