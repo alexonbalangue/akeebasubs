@@ -111,7 +111,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		if($this->_state->refresh == 1) {
 			$query->select(array('tbl.akeebasubs_subscription_id', 'tbl.user_id'));
 		} elseif($this->_state->groupbydate == 1) {
-			$query->select(array('DATE(publish_up) AS date','SUM(net_amount) AS net','COUNT(akeebasubs_subscription_id) AS subs'));
+			$query->select(array('DATE(created_on) AS date','SUM(net_amount) AS net','COUNT(akeebasubs_subscription_id) AS subs'));
 		} else {
 			$query->select(array(
 				'tbl.*',
@@ -144,7 +144,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		if($this->_state->refresh == 1) {
 			$query->group(array('tbl.user_id'));
 		} elseif($this->_state->groupbydate == 1) {
-			$query->group(array('DATE(tbl.publish_up)'));
+			$query->group(array('DATE(tbl.created_on)'));
 		}
 	}
 
@@ -155,78 +155,82 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		if($state->refresh == 1) {
 			return;
 		}
-
-		if(is_numeric($state->enabled)) {
-			$query->where('tbl.enabled','=', $state->enabled);
-		}
-
-		if($state->title) {
-			$search = '%'.$state->title.'%';
-			$query->where('tbl.title', 'LIKE', $search);
-		}
 		
-		if($state->search)
-		{
-			$search = '%'.$state->search.'%';
-			$query
-				->where('CONCAT(IF(u.name IS NULL,"",u.name),IF(u.username IS NULL,"",u.username),IF(u.email IS NULL, "", u.email),IF(a.businessname IS NULL, "", a.businessname), IF(a.vatnumber IS NULL,"",a.vatnumber))', 'LIKE',  $search);
-		}
-		
-		if(is_numeric($state->level)) {
-			$query->where('tbl.akeebasubs_level_id','=',$state->level);
-		}
-		
-		if(is_numeric($state->user_id)) {
-			$query->where('tbl.user_id','=',$state->user_id);
-		}
-		
-		if($state->paystate) {
-			$states = explode(',', $state->paystate);
-			$query->where('tbl.state','IN',$states);
-		}
-		
-		if(is_numeric($state->contact_flag)) {
-			$query->where('tbl.contact_flag', '=', $state->contact_flag);
-		}
-		
-		// Filter the dates
 		jimport('joomla.utilities.date');
-		$from = trim($state->publish_up);
-		if(empty($from)) {
-			$from = '';
-		} else {
-			$jFrom = new JDate($from);
-			$from = $jFrom->toUnix();
-			if($from == 0) {
+		
+		if(!$state->groupbydate)
+		{
+			if(is_numeric($state->enabled)) {
+				$query->where('tbl.enabled','=', $state->enabled);
+			}
+	
+			if($state->title) {
+				$search = '%'.$state->title.'%';
+				$query->where('tbl.title', 'LIKE', $search);
+			}
+			
+			if($state->search)
+			{
+				$search = '%'.$state->search.'%';
+				$query
+					->where('CONCAT(IF(u.name IS NULL,"",u.name),IF(u.username IS NULL,"",u.username),IF(u.email IS NULL, "", u.email),IF(a.businessname IS NULL, "", a.businessname), IF(a.vatnumber IS NULL,"",a.vatnumber))', 'LIKE',  $search);
+			}
+			
+			if(is_numeric($state->level)) {
+				$query->where('tbl.akeebasubs_level_id','=',$state->level);
+			}
+			
+			if(is_numeric($state->user_id)) {
+				$query->where('tbl.user_id','=',$state->user_id);
+			}
+			
+			if($state->paystate) {
+				$states = explode(',', $state->paystate);
+				$query->where('tbl.state','IN',$states);
+			}
+			
+			if(is_numeric($state->contact_flag)) {
+				$query->where('tbl.contact_flag', '=', $state->contact_flag);
+			}
+			
+			// Filter the dates
+			$from = trim($state->publish_up);
+			if(empty($from)) {
 				$from = '';
 			} else {
-				$from = $jFrom->toMySQL();
+				$jFrom = new JDate($from);
+				$from = $jFrom->toUnix();
+				if($from == 0) {
+					$from = '';
+				} else {
+					$from = $jFrom->toMySQL();
+				}
 			}
-		}
-		
-		$to = trim($state->publish_down);
-		if(empty($to)) {
-			$to = '';
-		} else {
-			$jTo = new JDate($to);
-			$to = $jTo->toUnix();
-			if($to == 0) {
+			
+			$to = trim($state->publish_down);
+			if(empty($to)) {
 				$to = '';
 			} else {
-				$to = $jTo->toMySQL();
+				$jTo = new JDate($to);
+				$to = $jTo->toUnix();
+				if($to == 0) {
+					$to = '';
+				} else {
+					$to = $jTo->toMySQL();
+				}
 			}
-		}
-		
-		if(!empty($from) && !empty($to)) {
-			// Filter from-to dates
-			$query->where('tbl.publish_up','>=',$from);
-			$query->where('tbl.publish_up','<=',$to);
-		} elseif(!empty($from) && empty($to)) {
-			// Filter after date
-			$query->where('tbl.publish_up','>=',$from);
-		} elseif(empty($from) && !empty($to)) {
-			// Filter up to a date
-			$query->where('tbl.publish_down','<=',$to);
+			
+			if(!empty($from) && !empty($to)) {
+				// Filter from-to dates
+				$query->where('tbl.publish_up','>=',$from);
+				$query->where('tbl.publish_up','<=',$to);
+			} elseif(!empty($from) && empty($to)) {
+				// Filter after date
+				$query->where('tbl.publish_up','>=',$from);
+			} elseif(empty($from) && !empty($to)) {
+				// Filter up to a date
+				$query->where('tbl.publish_down','<=',$to);
+			}
 		}
 		
 		// "Since" queries
