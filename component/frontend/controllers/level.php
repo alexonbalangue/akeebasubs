@@ -31,7 +31,15 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 
 	public function _beforeRead(KCommandContext $context)
 	{
-		$view = $this->getView(); 
+		$view = $this->getView();
+
+		// Fetch the subscription slug from page parameters
+		$params	= KFactory::get('lib.koowa.application')->getPageParameters();
+		$slug	= $params->get('slug','');
+		if(!empty($slug)) {
+			$this->getModel()->slug($slug);
+		}
+
 		// Get the user model and load the user data
 		$view->assign('userparams',
 			KFactory::get('site::com.akeebasubs.model.users')
