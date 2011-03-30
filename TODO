@@ -1,28 +1,30 @@
 To-do:
-- Nooku Framework installer bundled with the extension (step 2 & 3 in a special J!-only view):
-	1. Nooku -> ZIP archive during build
-	2. Extract to site root on install
-	3. Install plugin (db entry)
-- MODULE site/akeebasubs : Display a list of active / all subscriptions (HMVC)
-- MODULE site/akslevels : Display a customisable list of subscription levels (HMVC)
-- PLUGIN contents/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
+- Signup: Show a message when there are validation errors after the user submits the form
+- XML files for front-end views
+- MODULE site/akeebasubs : Display a list of active / all subscriptions
+- MODULE site/akslevels : Display a customisable list of subscription levels (HMVC - f/e levels view with ID filtering using the model's state)
+- Allow the Levels view to not display the subscriptions list (page parameters)
+- PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
 - Documentation!
 
 Future ideas:
+- Customizable emails
+- email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
 - Payment: PayPal Pro
 - Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
-- Payment: Eurobank (Greece)
-- Payment: PayPal recurring subscriptions
 - Add/remove to Joomla! Groups
+- Add/remove to K2 groups
+- Add/remove to DOCman 1.5.x groups
 - Add/remove to SOBI2
 - Add/remove to SOBIPro
-- Add/remove to K2 groups
 - Add/remove to JCE groups
 - Add/remove to Agora
 - Add/remove to Kunena
 - Add/remove to Jomres
 - Add/remove to Mailchimp
+- Payment: Eurobank (Greece)
+- Payment: PayPal recurring subscriptions
 - Payment: WorldPay
 - Payment: 2checkout
 - Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
@@ -35,5 +37,5 @@ Future ideas:
 - Invoicing, manual (issue or import invoice) or auto, ability to import Greek tax device's b.txt files
 - Affiliates. Links an affiliate to a coupon code and calculates the total commissions per term (e.g. per month)
 - Resellers. A triangular sale: Reseller charges the user and uses our API to get a voucher (coupon) code. The user uses the coupon code on our site to subscribe. The reseller gets charged when the coupon is used.
-- Linked subscriptions. User B "inherits" the subscriptions of User A. Every change in User A's subscription status is replicated to User B. One-to-many relationship to easen the transition.
+- Linked subscriptions. User B "inherits" the subscriptions of User A. Every change in User A's subscription status is replicated to User B. One-to-many relationship to ease the transition.
 - Front-end: Allow user to alter his account information

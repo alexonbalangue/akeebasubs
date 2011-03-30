@@ -56,6 +56,49 @@ if( version_compare( JVERSION, '1.6.0', 'ge' ) && !defined('_AKEEBA_HACK') ) {
 	if($akeeba_installation_has_run) return;
 }
 
+// Basic server requirements check
+if(!function_exists('com_install'))
+{
+	function com_install()
+	{
+		static $installable;
+		
+		if(isset($installable)) return $installable;
+		
+		$db = JFactory::getDBO();
+		//Run check on the minimum required server specs. Will roll back install if any check fails
+		foreach(array(
+			class_exists('mysqli') => "Your server doesn't support MySQLi.",
+			version_compare(phpversion(), '5.2', '>=') => "Your PHP version is older than 5.2.",
+			version_compare($db->getVersion(), '5.0.41', '>=') => "Your MySQL version is older than 5.0.41."
+		) as $succeed => $fail) {
+			if(!$succeed) {
+				JError::raiseWarning(0, $fail);
+				return $installable = false;
+			}
+		}
+		
+		if (extension_loaded('suhosin'))
+		{
+			//Attempt setting the whitelist value
+			@ini_set('suhosin.executor.include.whitelist', 'tmpl://, file://');
+		
+			//Checking if the whitelist is ok
+			if(!@ini_get('suhosin.executor.include.whitelist') || strpos(@ini_get('suhosin.executor.include.whitelist'), 'tmpl://') === false)
+			{
+				JError::raiseWarning(0, 'The install failed because your server has Suhosin loaded, but it\'s not configured correctly. Please follow <a href="https://nooku.assembla.com/wiki/show/nooku-framework/Known_Issues" target="_blank">this tutorial</a> before you reinstall.');
+				return $installable = false;
+			}
+		}
+		
+		return $installable = true;
+	}
+}
+
+if(!com_install()) {
+	return false;
+}
+
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 
@@ -73,6 +116,17 @@ if( version_compare( JVERSION, '1.6.0', 'ge' ) ) {
 	$src = $parent->getParent()->getPath('source');
 } else {
 	$src = $this->parent->getPath('source');
+}
+
+// Install the Koowa library and associated system files first
+if(is_dir($src/koowa)) {
+	$koowaInstalled = JFolder::copy("$src/koowa", JPATH_ROOT, null, true);
+	if(!$koowaInstalled) {
+		JError:raiseWarning(0,'Could not install the Nooku Framework. Please consult our documentation in order to manually install it before attempting to install Akeeba Subscriptions again.');
+		return;
+	}
+} else {
+	$koowaInstalled = null;
 }
 
 // Modules installation
@@ -118,9 +172,6 @@ if(count($installation_queue['plugins'])) {
 		}
 	}
 }
-
-// Install the Koowa library and associated system files (let's hope it works!)
-$koowaInstalled = JFolder::copy("$src/koowa", JPATH_ROOT, null, true);
 
 // Change MySQL extension to mysqli if required
 $config =& JFactory::getConfig();
@@ -176,6 +227,7 @@ if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
 	$j15 = false;
 }
 
+// Define the Akeeba installation translation functions, compatible with both Joomla! 1.5 and 1.6
 if(!function_exists('pitext'))
 {
 	function pitext($key)
@@ -231,12 +283,14 @@ if(!function_exists('pisprint'))
 			</td>
 			<td><strong style="color: green"><?php pitext('COM_AKEEBASUBS_PIINSTALLED');?></strong></td>
 		</tr>
+		<?php if(!is_null($koowaInstalled)): ?>
 		<tr class="row1">
 			<td class="key" colspan="2">
 				<strong><?php pitext('COM_AKEEBASUBS_PIKOOWA'); ?></strong>
 			</td>
 			<td><strong style="color: <?php echo ($koowaInstalled) ? 'green' : 'red' ?>"><?php pitext($koowaInstalled ? 'COM_AKEEBASUBS_PIINSTALLED' : 'COM_AKEEBASUBS_PINOTINSTALLED');?></strong></td>
 		</tr>
+		<?php endif; ?>
 		<?php if (count($status->modules)) : ?>
 		<tr>
 			<th><?php pitext('COM_AKEEBASUBS_PIMODULE'); ?></th>

@@ -40,6 +40,7 @@ $installation_queue = array(
 		'content' => array(
 			'asrestricted'			=> 1
 		),
+		// Note: Do NOT include plg_koowa; it may be required by another extension!
 		'system' => array(
 			'asexpirationcontrol'	=> 1,
 			'asexpirationnotify'	=> 1
