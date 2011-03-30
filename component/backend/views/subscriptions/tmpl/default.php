@@ -89,7 +89,7 @@
 			<td align="left">
 				<span class="editlinktip hasTip" title="#<?=(int)$subscription->id?>::<?= @text('COM_AKEEBASUBS_SUBSCRIPTION_EDIT_TOOLTIP')?>">
 					<a href="<?= @route('view=subscription&id='.$subscription->id); ?>" class="title">
-						<?=sprintf('%05u', (int)$subscription->id)?>
+						<strong><?=sprintf('%05u', (int)$subscription->id)?></strong>
 	    			</a>
     			</span>
 			</td>
@@ -104,7 +104,7 @@
 			<td>
 				<span class="editlinktip hasTip" title="<?= @escape($subscription->username) ?>::<?= @text('COM_AKEEBASUBS_SUBSCRIPTION_USER_EDIT_TOOLTIP')?>">
 					<img src="http://www.gravatar.com/avatar/<?=$gravatarHash?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
-					<a href="<?= @route('view=user&id='.$subscription->user_id); ?>" class="title">	
+					<a href="index.php?option=com_users&view=user&task=edit&cid[]=<?=$subscription->user_id?>" class="title">	
 						<strong><?=@escape($subscription->username)?></strong>
 						<span class="small">[<?=$subscription->user_id?>]</span>
 						<br/>
