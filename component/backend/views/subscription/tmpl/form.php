@@ -23,7 +23,7 @@
 		<input type="hidden" name="user_id" id="userid" value="<?=$subscription->user_id?>" />
 		<input type="text" name="xxx_userid" id="userid_visible" value="<?=$subscription->username?>" disabled="disabled" />
 		<button onclick="$('userselect').fireEvent('click'); return false;">Select</button>
-		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&view=jusers&tmpl=component" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
+		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&view=jusers&limit=10&tmpl=component&search=" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 		<br/>
 
 		<label for="enabled" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_ENABLED')?></label>

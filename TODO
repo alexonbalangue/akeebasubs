@@ -1,5 +1,5 @@
 To-do:
-- MODULE site/akeebasubs : Display a list of active / all subscriptions
+- Backend users view
 - MODULE site/akslevels : Display a customisable list of subscription levels (HMVC - f/e levels view with ID filtering using the model's state)
 - Allow the Levels view to not display the subscriptions list (page parameters)
 - PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level

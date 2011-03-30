@@ -25,6 +25,9 @@ defined('_JEXEC') or die('');
 // Akeeba Component Installation Configuration
 $installation_queue = array(
 	'modules' => array(
+		'site' => array(
+			'aksubslist' => array('left', 0)
+		)
 	// modules => { (folder) => { (module) => { (position), (published) } }* }*
 	),
 	// plugins => { (folder) => { (element) => (published) }* }*

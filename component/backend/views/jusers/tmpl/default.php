@@ -3,9 +3,12 @@
 
 <?= @helper('behavior.tooltip');?>
 
+<!--
 <script src="media://lib_koowa/js/koowa.js" />
 <style src="media://com_akeebasubs/css/backend.css" />
+-->
 
+<form action="<?= @route() ?>&tmpl=component" method="get" class="adminform" name="adminForm">
 <table class="adminlist"  style="clear: both;">
 	<thead>
 		<tr>
@@ -63,3 +66,4 @@
 	<?php endif; ?>
 	</tbody>
 </table>
+</form>
