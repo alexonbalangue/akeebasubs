@@ -22,7 +22,7 @@
 // no direct access
 defined('_JEXEC') or die('');
 
-class ModAksubslistHtml extends ModDefaultHtml
+class ModAkslevelsHtml extends ModDefaultHtml
 {
 	public function display()
 	{
@@ -34,14 +34,26 @@ class ModAksubslistHtml extends ModDefaultHtml
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
+
+		// TODO : Put this in a shared file and load with JLoader
+		KFactory::map('site::com.akeebasubs.model.levels',			'admin::com.akeebasubs.model.levels');
+		KFactory::map('site::com.akeebasubs.model.configs',			'admin::com.akeebasubs.model.configs');
+
+		// Otherwise, the stylesheet is not loaded :(
+		KFactory::get('lib.koowa.document')->addStylesheet(JURI::base().'media/com_akeebasubs/css/frontend.css');
 		
-		if(KFactory::get('lib.koowa.user')->guest) {
-			$subs = '<span class="akeebasubs-subscriptions-itemized-nosubs">'.JText::_('COM_AKEEBASUBS_LEVELS_ITEMIZED_NOSUBS').'</span>';
-		} else {
-			$subs = KFactory::tmp('site::com.akeebasubs.controller.subscriptions')
-				->layout('itemized')
-				->display();
+		$controller = KFactory::tmp('site::com.akeebasubs.controller.level');
+
+		$ids = $this->params->get('ids');
+		if(!empty($ids)) {
+			$controller
+				->id($ids)
+				->view('levels')
+				->limit(0);
 		}
-		return	'<div id="mod-aksubslist-'.$this->module->id.'" class="mod-aksubslist">'.$subs.'</div>';
+
+		// TODO: Set the id() filter
+		return $controller
+				->display();
 	}
 }

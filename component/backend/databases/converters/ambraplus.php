@@ -237,7 +237,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 	
 	public function canConvert()
 	{
-		//if(!JComponentHelper::getComponent( 'com_ambrasubs', true )->enabled) return false;
+		if(!JComponentHelper::getComponent( 'com_ambrasubs', true )->enabled) return false;
 
 		return true;
 	}
