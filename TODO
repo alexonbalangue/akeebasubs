@@ -1,5 +1,4 @@
 To-do:
-- Signup: Show a message when there are validation errors after the user submits the form
 - XML files for front-end views
 - MODULE site/akeebasubs : Display a list of active / all subscriptions
 - MODULE site/akslevels : Display a customisable list of subscription levels (HMVC - f/e levels view with ID filtering using the model's state)

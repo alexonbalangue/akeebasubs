@@ -27,7 +27,8 @@
 	<?=@template('default_login')?>
 <?endif?>
 
-<form action="<?=@route('view=subscribe&slug='.KRequest::get('get.slug','slug'))?>" method="post" >
+<form action="<?=@route('view=subscribe&slug='.KRequest::get('get.slug','slug'))?>" method="post"
+	id="signupForm" >
 	<input type="hidden" name="_token" value="<?=JUtility::getToken()?>" />
 <?if(KFactory::get('lib.joomla.user')->guest):?>
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></h3>
@@ -156,14 +157,25 @@
 <script type="text/javascript">
 var akeebasubs_validate_url = "<?=JURI::base().'index.php'?>";
 var akeebasubs_level_id = <?=$level->id?>;
+var akeebasubs_valid_form = false;
 
 (function($) {
 	$(document).ready(function(){
+		$('#signupForm').submit(onSignupFormSubmit);
 		validatePassword();
 		validateName();
 		validateEmail();
 		validateAddress();
-		validateBusiness();		
+		validateBusiness();
 	});
 })(akeeba.jQuery);
+
+function onSignupFormSubmit()
+{
+	if(akeebasubs_valid_form == false) {
+		alert('<?=@text('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL')?>');
+	}
+	
+	return akeebasubs_valid_form;
+}
 </script>

@@ -114,9 +114,11 @@ function validatePassword()
 		
 		if(password == '') {
 			$('#password_invalid').css('display','inline-block');
+			akeebasubs_valid_form = false;
 		} else {
 			if(password2 != password) {
 				$('#password2_invalid').css('display','inline-block');
+				akeebasubs_valid_form = false;
 			}
 		}
 	})(akeeba.jQuery);
@@ -133,6 +135,7 @@ function validateName()
 		var name = $('#name').val();
 		if(name == '') {
 			$('#name_empty').css('display','inline-block');
+			akeebasubs_valid_form = false;
 			return;
 		}
 	})(akeeba.jQuery);
@@ -191,9 +194,11 @@ function validateEmail()
 		var email = $('#email').val();
 		if(email == '') {
 			$('#email_empty').css('display','inline-block');
+			akeebasubs_valid_form = false;
 			return;
 		} else if(!echeck(email)) {
 			$('#email_invalid').css('display','inline-block');
+			akeebasubs_valid_form = false;
 			return;
 		} else {
 			validateForm();
@@ -265,6 +270,7 @@ function validateAddress()
 		}
 		
 		if(hasErrors) {
+			akeebasubs_valid_form = false;
 			return;
 		}
 		
@@ -283,6 +289,7 @@ function validateBusiness()
 			$('#businessfields').show();
 		} else {
 			$('#businessfields').hide();
+			return;
 		}
 		
 		// Do I have to show VAT fields?
@@ -329,11 +336,15 @@ function validateBusiness()
 function applyValidation(response, callback)
 {
 	(function($) {
+		akeebasubs_valid_form = true;
 		if($('#username_valid')) {
 			if(response.username) {
 				$('#username_valid').css('display','inline-block');
 				$('#username_invalid').css('display','none');
 			} else {
+				if( $('#username').attr('disabled') != 'disabled' ) {
+					akeebasubs_valid_form = false;
+				}
 				$('#username_valid').css('display','none');
 				$('#username_invalid').css('display','inline-block');
 			}
@@ -342,53 +353,68 @@ function applyValidation(response, callback)
 		if(response.name) {
 			$('#name_empty').css('display','none');
 		} else {
+			akeebasubs_valid_form = false;
 			$('#name_empty').css('display','inline-block');
 		}
 		
 		if(response.email) {
 			$('#email_invalid').css('display','none');
 		} else {
+			akeebasubs_valid_form = false;
 			$('#email_invalid').css('display','inline-block');
 		}
 		
 		if(response.address1) {
 			$('#address1_empty').css('display','none');
 		} else {
+			akeebasubs_valid_form = false;
 			$('#address1_empty').css('display','inline-block');
 		}
 		
 		if(response.country) {
 			$('#country_empty').css('display','none');
 		} else {
+			akeebasubs_valid_form = false;
 			$('#country_empty').css('display','inline-block');
 		}
 		
 		if(response.state) {
 			$('#state_empty').css('display','none');
 		} else {
+			if($('#state_empty').css('display') != 'none') {
+				akeebasubs_valid_form = false;
+			}
 			$('#state_empty').css('display','inline-block');
 		}
 			
 		if(response.city) {
 			$('#city_empty').css('display','none');
 		} else {
+			akeebasubs_valid_form = false;
 			$('#city_empty').css('display','inline-block');
 		}
 		
 		if(response.zip) {
 			$('#zip_empty').css('display','none');
 		} else {
+			akeebasubs_valid_form = false;
 			$('#zip_empty').css('display','inline-block');
 		}
 
 		if(response.businessname) {
 			$('#businessname_empty').css('display','none');
 		} else {
+			if($('#isbusiness1').is(':checked')) {
+				akeebasubs_valid_form = false;
+			}
 			$('#businessname_empty').css('display','inline-block');
 		}
 		
 		if(response.occupation) {
 			$('#occupation_empty').css('display','none');
+			if($('#isbusiness1').is(':checked')) {
+				akeebasubs_valid_form = false;
+			}
 		} else {
 			$('#occupation_empty').css('display','inline-block');
 		}
@@ -404,7 +430,7 @@ function applyValidation(response, callback)
 		if(response.novatrequired) {
 			$('#vat-status-invalid').css('display','none');
 			$('#vat-status-valid').css('display','none');
-		}
+		}		
 	})(akeeba.jQuery);
 }
 
