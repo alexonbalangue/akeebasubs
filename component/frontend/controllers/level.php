@@ -34,7 +34,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		$view = $this->getView();
 
 		// Fetch the subscription slug from page parameters
-		$params	= KFactory::get('lib.koowa.application')->getPageParameters();
+		$params	= KFactory::get('lib.joomla.application')->getPageParameters();
 		$slug	= $params->get('slug','');
 		if(!empty($slug)) {
 			$this->getModel()->slug($slug);

@@ -39,7 +39,7 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 		echo json_encode($response);
 		
 		// Return
-		KFactory::get('lib.koowa.application')->close();
+		KFactory::get('lib.joomla.application')->close();
 	}
 	
 	public function _denyAccess()

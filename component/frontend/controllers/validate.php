@@ -30,7 +30,7 @@ class ComAkeebasubsControllerValidate extends ComAkeebasubsControllerDefault
 			->getValidation();
 		echo json_encode($data);
 		
-		KFactory::get('lib.koowa.application')->close();
+		KFactory::get('lib.joomla.application')->close();
 	}
 	
 	public function _denyAccess()

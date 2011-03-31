@@ -13,7 +13,7 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 	public function _actionBrowse(KCommandContext $context)
 	{
 		if(KRequest::get('get.groupbydate','int') == 1) {
-			if(KFactory::get('lib.koowa.user')->guest) {
+			if(KFactory::get('lib.joomla.user')->guest) {
 				return false;
 			} else {
 				$list = $this->getModel()
@@ -22,7 +22,7 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 					->getSalesList();
 				header('Content-type: application/json');
 				echo json_encode($list);
-				KFactory::get('lib.koowa.application')->close();
+				KFactory::get('lib.joomla.application')->close();
 			}
 		} else {
 			return parent::_actionBrowse($context);

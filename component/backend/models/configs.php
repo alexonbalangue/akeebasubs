@@ -112,7 +112,7 @@ class ComAkeebasubsModelConfigs extends KModelAbstract
 			// Skip inexistent configuration keys
 			if(!array_key_exists($key, $map)) continue;
 			// Data validation
-			$temp[$key] = KFactory::tmp('lib.koowa.filter.'.$map[$key])->sanitize($value);
+			$temp[$key] = KFactory::tmp('lib.joomla.filter.'.$map[$key])->sanitize($value);
 		}
 		$data = $temp;
 		
