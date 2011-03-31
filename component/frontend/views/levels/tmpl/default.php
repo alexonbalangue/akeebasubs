@@ -15,7 +15,7 @@
 		<p class="level-title">
 			<span class="level-price">
 				<span class="level-price-currency"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
-				<span class="level-price-integer"><?=floor($level->price)?></span><span class="level-price-separator">.</span><span class="level-price-decimal"><?=sprintf('%02u', $level->price - floor($level->price))?></span>
+				<span class="level-price-integer"><?=floor($level->price)?></span><span class="level-price-separator">.</span><span class="level-price-decimal"><?=sprintf('%02u', 100*($level->price - floor($level->price)))?></span>
 			</span>
 			<span class="level-title-text">
 				<a href="<?=@route('view=level&slug='.$level->slug)?>">

@@ -124,6 +124,203 @@ table.asfelist tfoot td { text-align: center; }
 }
 
 /*
+ * Subscription list page ("awesome" layout)
+ */
+.akeebasubs-awesome .columns-1 div.akeebasubs-awesome-column { width: 100% !important; }
+.akeebasubs-awesome .columns-2 div.akeebasubs-awesome-column { width: 50% !important; }
+.akeebasubs-awesome .columns-3 div.akeebasubs-awesome-column { width: 33.3% !important; }
+.akeebasubs-awesome .columns-4 div.akeebasubs-awesome-column { width: 25% !important; }
+.akeebasubs-awesome .columns-5 div.akeebasubs-awesome-column { width: 20% !important; }
+.akeebasubs-awesome .columns-6 div.akeebasubs-awesome-column { width: 16.6% !important; }
+.akeebasubs-awesome .columns-7 div.akeebasubs-awesome-column { width: 14.2% !important; }
+.akeebasubs-awesome .columns-8 div.akeebasubs-awesome-column { width: 12.5% !important; }
+.akeebasubs-awesome .columns-9 div.akeebasubs-awesome-column { width: 11.1% !important; }
+.akeebasubs-awesome .columns-10 div.akeebasubs-awesome-column { width: 10% !important; }
+
+div.akeebasubs-awesome-column {
+	display: block;
+	float:  left;
+	margin-bottom: 30px;
+}
+
+div.akeebasubs-awesome-column:hover {
+	-moz-box-shadow: 0px 0px 10px black;
+	-webkit-box-shadow: 0px 0px 20px black;
+	box-shadow: 0px 0px 10px black;
+}
+
+.akeebasubs-awesome {
+	margin-bottom: 15px;
+	background: #FAFAFA;
+	color: #333;
+	margin-bottom: 15px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;	
+}
+
+.akeebasubs-awesome .columns {
+	border: 1px solid #DDD;
+	margin: -1px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;		
+}
+
+.column-first {
+	border-right: 2px solid #DDD;
+	-webkit-border-top-left-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	border-top-left-radius: 6px 6px;
+	border-bottom-left-radius: 6px 6px;
+}
+
+.column-first .akeebasubs-awesome-header {
+	-webkit-border-top-left-radius: 6px;
+	-moz-border-radius-topleft: 6px;
+	border-top-left-radius: 6px 6px;
+}
+
+.column-middle {
+	border-right: 2px solid #DDD;
+}
+
+.column-last {
+	-webkit-border-top-right-radius: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-moz-border-radius-topright: 6px;
+	-moz-border-radius-bottomright: 6px;
+	border-top-right-radius: 6px 6px;
+	border-bottom-right-radius: 6px 6px;
+}
+
+.column-last .akeebasubs-awesome-header {
+	-webkit-border-top-right-radius: 6px;
+	-moz-border-radius-topright: 6px;
+	border-top-right-radius: 6px 6px;
+}
+
+.akeebasubs-awesome-header {
+	background-color: #29262C;
+	padding: 0.5em 0;
+	background-image: -webkit-gradient(
+	    linear,
+	    left top,
+	    left bottom,
+	    color-stop(0.1, #777),
+	    color-stop(0.8, #29262C)
+	) !important;
+	background-image: -moz-linear-gradient(
+	    center top,
+	    #7D7D7D 10%,
+	    #29262C 80%
+	) !important;
+}
+
+div.akeebasubs-awesome-column:hover div.akeebasubs-awesome-header {
+	background-color: #292699;
+	background-image: -webkit-gradient(
+	    linear,
+	    left top,
+	    left bottom,
+	    color-stop(0.1, #779),
+	    color-stop(0.8, #292699)
+	) !important;
+	background-image: -moz-linear-gradient(
+	    center top,
+	    #7D7D7D 10%,
+	    #292699 80%
+	) !important;
+}
+
+.akeebasubs-awesome-level {
+	margin-bottom: 0.5em;
+	border-top: 1px solid #222;
+	border-bottom: 1px solid #606060;
+	background: #333;
+	text-align: center;
+}
+
+div.akeebasubs-awesome-column:hover .akeebasubs-awesome-level {
+	background: #339;
+}
+
+a.akeebasubs-awesome-level-link {
+	font-weight: bold;
+	color: #eee !important;
+	text-shadow: black 1px 1px 1px;
+}
+
+.akeebasubs-awesome-price {
+	color: white;
+	font-size: 280%;
+	font-style: italic;
+	font-weight: bold;
+	text-align: center;
+	padding: 0.2em 0;
+	text-shadow: #333 1px 1px 1px;
+}
+
+.akeebasubs-awesome-price-currency:after {
+	content: " ";
+}
+
+.akeebasubs-awesome-price-separator,
+.akeebasubs-awesome-price-decimal {
+	color: #eee;
+	font-size: 50%;
+}
+
+.akeebasubs-awesome-image img {
+	display: block;
+	max-width: 80%;
+	margin: 0.3em auto;
+	border-radius: 15px;
+}
+
+.akeebasubs-awesome-description {
+	min-height: 250px;
+	padding: 3px;
+}
+
+.akeebasubs-awesome-footer {
+	padding-bottom: 15px;
+}
+
+.akeebasubs-awesome-subscribe {
+	text-align: center;
+}
+
+input.akeebasubs-awesome-subscribe-button {
+	display: block;
+	width: 80%;
+	margin: 0 auto;
+	padding: 3px 2px 4px;
+	color: white;
+	font-weight: bold;
+	-webkit-text-shadow: black 1px 1px 1px;
+	-moz-text-shadow: black 1px 1px 1px;
+	text-shadow: black 1px 1px 1px;
+	border: thin solid black;
+	background-color: #333;
+	cursor: pointer;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+input.akeebasubs-awesome-subscribe-button:hover {
+	background-color: #444;
+	-mox-box-shadow: 0px 0px 4px black;
+	-webkit-box-shadow: 0px 0px 4px black;
+	box-shadow: 0px 0px 4px black;
+}
+
+/*
  * Subscription page
  */
  
@@ -228,7 +425,11 @@ table.asfelist tfoot td { text-align: center; }
 }
 
 #akeebasubs input.main {
-	width: 40%;
+	width: 30%;
+}
+
+#akeebasubs select {
+	width: 30% !important;
 }
 
 #akeebasubs input.vat {

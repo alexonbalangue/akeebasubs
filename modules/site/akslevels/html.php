@@ -42,7 +42,13 @@ class ModAkslevelsHtml extends ModDefaultHtml
 		// Otherwise, the stylesheet is not loaded :(
 		KFactory::get('lib.joomla.document')->addStylesheet(JURI::base().'media/com_akeebasubs/css/frontend.css');
 		
-		$controller = KFactory::tmp('site::com.akeebasubs.controller.level');
+		$controller = KFactory::tmp('site::com.akeebasubs.controller.level' );
+		
+		// Since Koowa runs KFactory::get() you can't override the layout if the HMVC view is
+		// displayed inside the same view (e.g. a levels module inside the levels view). Therefore,
+		// we have to manually load the correct layout and force it to the controller...
+		$view = KFactory::tmp('site::com.akeebasubs.view.levels.default' );
+		$controller->setView($view);
 
 		$ids = $this->params->get('ids');
 		if(!empty($ids)) {
@@ -52,7 +58,6 @@ class ModAkslevelsHtml extends ModDefaultHtml
 				->limit(0);
 		}
 
-		// TODO: Set the id() filter
 		return $controller
 				->display();
 	}
