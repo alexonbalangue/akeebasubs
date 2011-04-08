@@ -1,8 +1,5 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 
-<? if(!defined('JPATH_IMAGES')) {
-	define('JPATH_IMAGES', JPATH_ROOT.'/images');
-}
 ?>
 
 <?= @helper('behavior.tooltip'); ?>
