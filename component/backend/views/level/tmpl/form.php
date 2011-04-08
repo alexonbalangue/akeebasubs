@@ -1,5 +1,10 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 
+<? if(!defined('JPATH_IMAGES')) {
+	define('JPATH_IMAGES', JPATH_ROOT.'/images');
+}
+?>
+
 <?= @helper('behavior.tooltip'); ?>
 <!--
 <script src="media://lib_koowa/js/koowa.js" />
@@ -17,8 +22,7 @@
 		<br/>
 		
 		<label for="image_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.images', array('name' => 'image') ) ?>
-		<img src="<?= JURI::base() ?>../images/stories/<?= $level->image;?>" id="image-preview" />
+		<?=@helper('image.listbox', array('name' => 'image','directory' => JPATH_IMAGES.'/stories', 'filetypes' => array('swf', 'gif', 'jpg', 'png', 'bmp'), 'deselect' => false) ) ?>
 		<br />					
 
 		<label for="duration_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>
