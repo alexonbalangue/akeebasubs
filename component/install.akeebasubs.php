@@ -122,10 +122,10 @@ if( version_compare( JVERSION, '1.6.0', 'ge' ) ) {
 }
 
 // Install the Koowa library and associated system files first
-if(is_dir($src/koowa)) {
+if(is_dir($src.'/koowa')) {
 	$koowaInstalled = JFolder::copy("$src/koowa", JPATH_ROOT, null, true);
 	if(!$koowaInstalled) {
-		JError:raiseWarning(0,'Could not install the Nooku Framework. Please consult our documentation in order to manually install it before attempting to install Akeeba Subscriptions again.');
+		JError::raiseWarning(0,'Could not install the Nooku Framework. Please consult our documentation in order to manually install it before attempting to install Akeeba Subscriptions again.');
 		return;
 	}
 } else {
@@ -147,7 +147,7 @@ if(count($installation_queue['modules'])) {
 			$sql = "UPDATE #__modules SET position=".$db->Quote($modulePosition);
 			if($modulePublished) $sql .= ', published=1';
 			$sql .= ' WHERE `module`='.$db->Quote('mod_'.$module);
-			$db->setQuery($query);
+			$db->setQuery($sql);
 			$db->query();
 		}
 	}

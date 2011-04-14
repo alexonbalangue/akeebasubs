@@ -32,7 +32,7 @@ class ComAkeebasubsDatabaseConvertersAmbrasubs extends ComAkeebasubsDatabaseConv
 					'name' => 'ambrasubs_types',
 					'identity_column' => 'id'
 				),
-				'query'	=> KFactory::tmp('lib.joomla.database.query')
+				'query'	=> KFactory::tmp('lib.koowa.database.query')
 					->select(array(
 						'id',
 						'title',
@@ -52,7 +52,7 @@ class ComAkeebasubsDatabaseConvertersAmbrasubs extends ComAkeebasubsDatabaseConv
 					'name' => 'ambrasubs_users2types',
 					'identity_column' => 'u2tid'
 				),
-				'query'	=> KFactory::tmp('lib.joomla.database.query')
+				'query'	=> KFactory::tmp('lib.koowa.database.query')
 					->select(array(
 						'tbl.u2tid',
 						'tbl.userid AS user_id',
@@ -90,7 +90,7 @@ class ComAkeebasubsDatabaseConvertersAmbrasubs extends ComAkeebasubsDatabaseConv
 				if($articleid > 0) {
 					$article = KFactory::tmp('admin::com.default.database.table.content', array(
 						'name'=>'content','identity_column'=>'id'
-					))->select(KFactory::tmp('lib.joomla.database.query')
+					))->select(KFactory::tmp('lib.koowa.database.query')
 						->select(array('introtext','fulltext'))
 						->where('id','=',$articleid), KDatabase::FETCH_ROW)
 					->getItem();
