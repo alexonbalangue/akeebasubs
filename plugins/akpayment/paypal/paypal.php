@@ -66,8 +66,8 @@ class plgAkpaymentPaypal extends JPlugin
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->getMerchantID(),
 			'postback'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal')),
-			'success'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order')),
-			'cancel'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel')),
+			'success'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order')),
+			'cancel'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=cancel')),
 			'currency'		=> strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName

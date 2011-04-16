@@ -123,7 +123,7 @@ ENDFORM;
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order')); 
+		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order')); 
 		$app = JFactory::getApplication();
 		$app->redirect($url);
 		

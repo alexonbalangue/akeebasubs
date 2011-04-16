@@ -15,7 +15,9 @@
 	<files folder="frontend">
 		<filename>akeebasubs.php</filename>
 		<filename>dispatcher.php</filename>
+		<filename>router.php</filename>
 		<filename>index.html</filename>
+		<folder>commands</folder>
 		<folder>controllers</folder>
 		<folder>models</folder>
 		<folder>templates</folder>

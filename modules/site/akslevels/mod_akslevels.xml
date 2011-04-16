@@ -13,6 +13,7 @@
 	<files>
 		<file module="mod_akslevels">mod_akslevels.php</file>
 		<file>html.php</file>
+		<folder>elements</folder>
 	</files>
 
 	<params addpath="/modules/mod_akslevels/elements">

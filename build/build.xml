@@ -39,7 +39,7 @@
 	</target>
 
 	<target name="svn" description="Makes only packages, not the documentation"
-		depends="new-release,setup-properties,component-package">
+		depends="new-release,setup-properties,component-package,component-package-noframework">
 	</target>
 
 	<target name="new-release" description="Create the release directory afresh">
@@ -118,6 +118,23 @@
 		<zipme basedir="${dirs.release}" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset dir="${dirs.release}">
 				<include name="koowa.xml"/>
+			</fileset>
+		</zipme>
+	</target>
+	
+	<target name="component-package-noframework" description="Component package build without Nooku"
+		depends="new-release,setup-properties,component-package">
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+			<fileset refid="component" />
+		</zipme>
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+			<fileset dir="${dirs.modules}">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+			<fileset dir="${dirs.plugins}">
+				<include name="**"/>
 			</fileset>
 		</zipme>
 	</target>

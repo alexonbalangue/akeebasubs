@@ -412,11 +412,11 @@ function applyValidation(response, callback)
 		
 		if(response.occupation) {
 			$('#occupation_empty').css('display','none');
+		} else {
+			$('#occupation_empty').css('display','inline-block');
 			if($('#isbusiness1').is(':checked')) {
 				akeebasubs_valid_form = false;
 			}
-		} else {
-			$('#occupation_empty').css('display','inline-block');
 		}
 		
 		if(response.vatnumber && ($('#vatfields').css('display') != 'none')) {

@@ -3,7 +3,7 @@
 <form action="index.php" method="post">
 	<input type="hidden" name="option" value="com_user" />
 	<input type="hidden" name="task" value="login" />
-	<input type="hidden" name="return" value="<?=base64_encode(str_replace('&amp;','&',@route('view=level&slug='.KRequest::get('get.slug','slug',''))))?>" />
+	<input type="hidden" name="return" value="<?=base64_encode(str_replace('&amp;','&',@route('view=level&layout=default&slug='.KRequest::get('get.slug','slug',''))))?>" />
 	<input type="hidden" name="remember" value="1" />
 	<input type="hidden" name="<?php echo JUtility::getToken();?>" value="1" />
 	<fieldset>

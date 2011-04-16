@@ -145,8 +145,14 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$ret = (object)array('username' => false);
 		$username = $this->_state->username;
 		if(empty($username)) return $ret;
+		$myUser = JFactory::getUser();
 		$user = JFactory::getUser($username);
-		$ret->username = !is_object($user);
+		
+		if($myUser->guest) {
+			$ret->username = !is_object($user);
+		} else {
+			$ret->username = ($user->username == $myUser->username);
+		}
 		return $ret;
 	}
 	
@@ -821,7 +827,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order')) );
+			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug='.$slug.'&layout=order')) );
 			return false;
 		}
 		

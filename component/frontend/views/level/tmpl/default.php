@@ -27,7 +27,7 @@
 	<?=@template('default_login')?>
 <?endif?>
 
-<form action="<?=@route('view=subscribe&slug='.KRequest::get('get.slug','slug'))?>" method="post"
+<form action="<?=@route('view=subscribe&layout=default&slug='.KRequest::get('get.slug','slug'))?>" method="post"
 	id="signupForm" >
 	<input type="hidden" name="_token" value="<?=JUtility::getToken()?>" />
 <?if(KFactory::get('lib.joomla.user')->guest):?>

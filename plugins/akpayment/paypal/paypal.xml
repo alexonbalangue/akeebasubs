@@ -12,6 +12,7 @@
 	<description>PLG_AKPAYMENT_PAYPAL_DESCRIPTION</description>
 	<files>
 		<filename plugin="paypal">paypal.php</filename>
+		<folder>paypal</folder>
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_akpayment_paypal.ini</language>
