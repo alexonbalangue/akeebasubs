@@ -261,6 +261,13 @@ function validateAddress()
 		} else {
 			$('#state_empty').css('display','none');
 		}
+		
+		if(city == '') {
+			$('#city_empty').css('display','inline-block');
+			hasErrors = true;
+		} else {
+			$('#city_empty').css('display','none');
+		}
 
 		if(zip == '') {
 			$('#zip_empty').css('display','inline-block');
@@ -289,6 +296,13 @@ function validateBusiness()
 			$('#businessfields').show();
 		} else {
 			$('#businessfields').hide();
+			// If it's not a business validation, chain an address validation
+			if(akeebasubs_blocked_gui) {
+				akeebasubs_run_validation_after_unblock = true;
+				return;
+			} else {
+				validateAddress();
+			}
 			return;
 		}
 		
@@ -459,19 +473,14 @@ function applyPrice(response)
 		}
 		$('#name').blur(validateName);
 		$('#email').blur(validateEmail);
-		$('select[name$="country"]').change(validateAddress);
 		$('select[name$="country"]').change(validateBusiness);
-		$('select[name$="state"]').change(validateAddress);
 		$('select[name$="state"]').change(validateBusiness);
 		$('#address1').blur(validateAddress);
-		$('#city').blur(validateAddress);
 		$('#city').blur(validateBusiness);
-		$('#zip').blur(validateAddress);
 		$('#zip').blur(validateBusiness);
 		$('#businessname').blur(validateBusiness);
 		$('#isbusiness0').click(validateBusiness);
 		$('#isbusiness1').click(validateBusiness);
-		$('#businessname').blur(validateBusiness);
 		$('#occupation').blur(validateBusiness);
 		$('#vatnumber').blur(validateBusiness);
 		if($('#coupon')) {
