@@ -486,6 +486,13 @@ function applyPrice(response)
 		if($('#coupon')) {
 			$('#coupon').blur(validateBusiness);
 		}
+		
+		// Workaround for RocketTheme's fancy option hider
+		var rokkedLabel = $('label[for="isbusiness1"]');
+		if(rokkedLabel) {
+			rokkedLabel.removeClass('rokradios');
+			$('#isbusiness0').attr('style','');
+		}
 	});
 })(akeeba.jQuery);
 

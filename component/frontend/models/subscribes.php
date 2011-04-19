@@ -115,7 +115,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	{
 		$response = new stdClass();
 		
-		if($this->_state->slug) {
+		if($this->_state->slug && empty($this->_state->id)) {
 			$this->_state->id = KFactory::tmp('admin::com.akeebasubs.model.levels')
 				->slug($this->_state->slug)
 				->getItem()

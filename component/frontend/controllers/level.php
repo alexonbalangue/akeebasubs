@@ -51,6 +51,13 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 			KFactory::get('site::com.akeebasubs.model.subscribes')
 				->getData()
 		);
+		// Get the validation results
+		$vModel = KFactory::get('site::com.akeebasubs.model.subscribes');
+		$vModel->getState()->setData($view->cache);
+		$vModel->slug($slug);
+		$view->assign('validation',
+				$vModel->getValidation()
+		);
 	}
 	
 	public function _denyAccess()
