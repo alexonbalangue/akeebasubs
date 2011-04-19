@@ -647,7 +647,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				$newUsertype = 'Registered';
 			}
 			$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
-			$params['sendEmail'] = 1;
+			$params['sendEmail'] = 0;
 			
 			// We always block the user, so that only a successful payment or
 			// clicking on the email link activates his account. This is to
