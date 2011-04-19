@@ -141,7 +141,7 @@ if(count($installation_queue['modules'])) {
 			if(!is_dir($path)) continue;
 			$installer = new JInstaller;
 			$result = $installer->install($path);
-			$status->modules[] = array('name'=>'mod_'.$module,'client'=>$folder, 'result'=>$result);
+			$status->modules[] = array('name'=>'mod_'.$module, 'client'=>$folder, 'result'=>$result);
 			// Modify where it's published and its published state
 			list($modulePosition, $modulePublished) = $modulePreferences;
 			$sql = "UPDATE #__modules SET position=".$db->Quote($modulePosition);
@@ -303,7 +303,7 @@ if(!function_exists('pisprint'))
 		<?php foreach ($status->modules as $module) : ?>
 		<tr class="row<?php echo (++ $rows % 2); ?>">
 			<td class="key"><?php echo $module['name']; ?></td>
-			<td class="key"><?php pitext('COM_AKEEBASUBS_PICLIENT_').strtoupper($module['client']); ?></td>
+			<td class="key"><?php pitext('COM_AKEEBASUBS_PICLIENT_').strtoupper( empty($module['client']) ? 'site' : $module['client'] ); ?></td>
 			<td>
 				<span style="color: <?php echo ($module['result'])?'green':'red'?>; font-weight: bold;">
 					<?php ($module['result'])?pitext('COM_AKEEBASUBS_PIINSTALLED'):pitext('COM_AKEEBASUBS_PINOTINSTALLED'); ?>
