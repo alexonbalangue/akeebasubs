@@ -104,8 +104,8 @@
 			<label for="vatnumber" class="main" id="vatlabel"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER')?></label>
 			<span id="vatcountry"></span>
 			<input type="text" name="vatnumber" id="vatnumber" value="<?=@escape( !empty($userparams->vatnumber) ? $userparams->vatnumber : $cache['vatnumber'] )?>" class="vat" />
-			<span id="vat-status-invalid" class="invalid" <?if($validation->validation->vatnumber || $validation->novatrequired):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_VAT_INVALID')?><span class="akstriangle akstriangle-red"></span></span>
-			<span id="vat-status-valid" class="valid" <?if(!$validation->validation->vatnumber || $validation->novatrequired):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_VAT_VALID')?><span class="akstriangle akstriangle-green"></span></span>
+			<span id="vat-status-invalid" class="invalid" style="display:none"><?=@text('COM_AKEEBASUBS_LEVEL_VAT_INVALID')?><span class="akstriangle akstriangle-red"></span></span>
+			<span id="vat-status-valid" class="valid" style="display:none"><?=@text('COM_AKEEBASUBS_LEVEL_VAT_VALID')?><span class="akstriangle akstriangle-green"></span></span>
 		</div>
 	</div>
 	<br/>

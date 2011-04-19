@@ -347,6 +347,11 @@ function validateBusiness()
 	})(akeeba.jQuery);
 }
 
+function validateIsNotBusiness(e) {
+	validateBusiness();
+	validateForm();
+}
+
 function applyValidation(response, callback)
 {
 	(function($) {
@@ -479,7 +484,7 @@ function applyPrice(response)
 		$('#city').blur(validateBusiness);
 		$('#zip').blur(validateBusiness);
 		$('#businessname').blur(validateBusiness);
-		$('#isbusiness0').click(validateBusiness);
+		$('#isbusiness0').click(validateIsNotBusiness);
 		$('#isbusiness1').click(validateBusiness);
 		$('#occupation').blur(validateBusiness);
 		$('#vatnumber').blur(validateBusiness);
