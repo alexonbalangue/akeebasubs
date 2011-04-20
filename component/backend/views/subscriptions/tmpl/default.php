@@ -49,7 +49,7 @@
 				<input type="checkbox" name="toggle" value="" onclick="akeebasubs_checkall();" />
 			</td>
 			<td></td>
-			<td><?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('name' => 'level', 'attribs' => array('onchange' => 'this.form.submit();')) ) ?></td>
+			<td><?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('selected' => $state->level, 'name' => 'level', 'attribs' => array('onchange' => 'this.form.submit();')) ) ?></td>
 			<td>
 				<?= @text('Filter:'); ?> <?= @template('admin::com.default.view.list.search_form'); ?>
 			</td>
