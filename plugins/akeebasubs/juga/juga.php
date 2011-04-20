@@ -116,15 +116,19 @@ class plgAkeebasubsJuga extends JPlugin
 		
 		// Add to JUGA
 		if(!empty($addGroups)) {
+			/*
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
 			$mNow = $jNow->toMySQL();
+			*/
 			
-			$sql = 'REPLACE INTO `#__juga_u2g` (`user_id`,`group_id`,`created_datetime`) VALUES ';
+			$sql = 'REPLACE INTO `#__juga_u2g` (`user_id`,`group_id`) VALUES ';
 			
 			$values = array();
 			foreach($addGroups as $group) {
-				$values[] = '('.$db->Quote($user_id).', '.$db->Quote($group).', '.$db->Quote($mNow).')';
+				// This line is for a newer version of JUGA... dammit!
+				//$values[] = '('.$db->Quote($user_id).', '.$db->Quote($group).', '.$db->Quote($mNow).')';
+				$values[] = '('.$db->Quote($user_id).', '.$db->Quote($group).')';
 			}
 			
 			$sql .= implode(', ', $values);
@@ -222,6 +226,11 @@ class plgAkeebasubsJuga extends JPlugin
 		if(empty($rawData)) return array();
 		
 		$ret = array();
+		
+		// Just in case something funky happened...
+		$rawData = str_replace("\\n", "\n", $rawData);
+		$rawData = str_replace("\r", "\n", $rawData);
+		$rawData = str_replace("\n\n", "\n", $rawData);
 		
 		$lines = explode("\n", $rawData);
 		
