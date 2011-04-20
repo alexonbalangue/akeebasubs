@@ -6,6 +6,7 @@
 
 var european_union_countries = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'];
 var akeebasubs_business_state = '';
+var akeebasubs_isbusiness = false;
 var akeebasubs_blocked_gui = false;
 var akeebasubs_run_validation_after_unblock = false;
 var akeebasubs_cached_response = false;
@@ -340,7 +341,10 @@ function validateBusiness()
 		}
 		hash += '|';
 		
-		if(akeebasubs_business_state == hash) return;
+		if(akeebasubs_business_state == hash) {
+			if(akeebasubs_isbusiness) return;
+			akeebasubs_isbusiness = true;
+		}
 		
 		akeebasubs_business_state = hash;
 
@@ -355,7 +359,7 @@ function validateIsNotBusiness(e) {
 		akeebasubs_cached_response.occupation = true;
 		akeebasubs_cached_response.novatrequired = true;
 		applyValidation(akeebasubs_cached_response);
-		validateForm();
+		akeebasubs_isbusiness = false;
 	})(akeeba.jQuery);
 }
 
