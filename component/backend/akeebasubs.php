@@ -11,6 +11,8 @@ if(!defined('KOOWA')) {
     return;
 }
 
+include_once JPATH_COMPONENT_ADMINISTRATOR.DS.'version.php';
+
 // Magic: merge the default translation with the current translation
 $jlang =& JFactory::getLanguage();
 $jlang->load('com_akeebasubs', JPATH_SITE, 'en-GB', true);

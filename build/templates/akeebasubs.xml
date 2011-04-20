@@ -63,6 +63,7 @@
 			<filename>config.json</filename>
 			<filename>dispatcher.php</filename>
 			<filename>index.html</filename>
+			<filename>version.php</filename>
 			<folder>commands</folder>
 			<folder>controllers</folder>
 			<folder>databases</folder>

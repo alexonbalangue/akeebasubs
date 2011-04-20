@@ -83,6 +83,15 @@
 			</filterchain>
 		</copy>
 		
+		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
+			<filterchain id="standard-tokens">
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
 		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset refid="component" />
 		</zipme>
