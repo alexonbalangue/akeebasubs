@@ -193,6 +193,32 @@ defined('KOOWA') or die('Restricted access');?>
 				</td>
 			</tr>
 			<tr class="row1">
+				<td width="50%"><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_YESTERDAY')?></td>
+				<td align="right" width="25%">
+					<?
+					$date = new DateTime();
+					$date->setDate(gmdate('Y'), gmdate('m'), gmdate('d'));
+					$date->modify("-1 day");
+					$yesterday = $date->format("Y-m-d");
+					?>
+					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+						->publish_up( $yesterday )
+						->publish_down( gmdate('Y-m-d') )
+						->getTotal()
+					?>
+				</td>
+				<td align="right" width="25%">
+					<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+					<?= sprintf('%.02f',
+						KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+							->publish_up( $yesterday )
+							->publish_down( gmdate('Y-m-d') )
+							->moneysum(1)
+							->getTotal()
+					)?>
+				</td>
+			</tr>
+			<tr class="row0">
 				<td width="50%"><strong><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_TODAY')?></strong></td>
 				<td align="right" width="25%">
 					<strong>
