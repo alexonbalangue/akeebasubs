@@ -5,8 +5,8 @@
 <?= @helper('behavior.modal'); ?>
 
 <!--  --
-<script src="media://lib_koowa/js/koowa.js" />
-<style src="media://com_akeebasubs/css/backend.css" />
+<script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <!--  -->
 
 <form action="<?= @route('id='.$subscription->id) ?>" method="post" class="adminform" name="adminForm">

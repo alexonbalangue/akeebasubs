@@ -1,8 +1,8 @@
 <?php defined('KOOWA') or die(); ?>
 
 <!--
-<style src="media://lib_koowa/css/koowa.css" />
-<style src="media://com_akeebasubs/css/frontend.css" />
+<style src="media://lib_koowa/css/koowa.css?<?=AKEEBASUBS_VERSIONHASH?>" />
+<style src="media://com_akeebasubs/css/frontend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 -->
 
 <div id="akeebasubs">

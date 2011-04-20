@@ -1,7 +1,7 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 
-<script src="media://lib_koowa/js/koowa.js" />
-<style src="media://com_akeebasubs/css/backend.css" />
+<script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <?= @helper('behavior.tooltip'); ?>
 
 <form action="<?= @route() ?>" method="get" class="adminform" name="adminForm">

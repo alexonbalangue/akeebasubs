@@ -12,16 +12,16 @@ defined('KOOWA') or die('Restricted access');?>
 
 <?= @helper('behavior.tooltip'); ?>
 <!--
-<style src="media://com_akeebasubs/css/backend.css" />
-<style src="media://com_akeebasubs/css/jquery.jqplot.min.css" />
-<script src="media://com_akeebasubs/js/backend.js" />
-<script src="media://com_akeebasubs/js/excanvas.min.js" />
-<script src="media://com_akeebasubs/js/jquery.js" />
-<script src="media://com_akeebasubs/js/jquery.jqplot.min.js" />
-<script src="media://com_akeebasubs/js/jqplot.highlighter.min.js" />
-<script src="media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js" />
-<script src="media://com_akeebasubs/js/jqplot.barRenderer.min.js" />
-<script src="media://com_akeebasubs/js/jqplot.hermite.js" />
+<style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
+<style src="media://com_akeebasubs/css/jquery.jqplot.min.css?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/backend.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/excanvas.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/jquery.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/jquery.jqplot.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/jqplot.highlighter.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/jqplot.barRenderer.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/jqplot.hermite.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 -->
 
 <div id="cpanel"  style="width:51%;float:left;">

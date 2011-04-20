@@ -1,8 +1,8 @@
 <?php defined('KOOWA') or die(); ?>
 
-<script src="media://lib_koowa/js/koowa.js" />
-<style src="media://lib_koowa/css/koowa.css" />
-<style src="media://com_akeebasubs/css/frontend.css" />
+<script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<style src="media://lib_koowa/css/koowa.css?<?=AKEEBASUBS_VERSIONHASH?>" />
+<style src="media://com_akeebasubs/css/frontend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
