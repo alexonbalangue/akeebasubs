@@ -208,7 +208,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			}
 			
 			$to = trim($state->publish_down);
-			if(empty($to)) {
+			if(empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00')) {
 				$to = '';
 			} else {
 				$jTo = new JDate($to);
@@ -235,7 +235,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		
 		// "Since" queries
 		$since = trim($state->since);
-		if(empty($since)) {
+		if(empty($since) || ($since == '0000-00-00') || ($since == '0000-00-00 00:00:00')) {
 			$since = '';
 		} else {
 			$jFrom = new JDate($since);
@@ -264,7 +264,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		}
 		
 		$to = trim($state->expires_to);
-		if(empty($to)) {
+		if(empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00')) {
 			$to = '';
 		} else {
 			$jTo = new JDate($to);
