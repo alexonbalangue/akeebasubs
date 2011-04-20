@@ -8,6 +8,7 @@ var european_union_countries = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 
 var akeebasubs_business_state = '';
 var akeebasubs_blocked_gui = false;
 var akeebasubs_run_validation_after_unblock = false;
+var akeebasubs_cached_response = false;
 
 function blockInterface()
 {
@@ -348,12 +349,20 @@ function validateBusiness()
 }
 
 function validateIsNotBusiness(e) {
-	validateBusiness();
-	validateForm();
+	(function($) {
+		$('#businessfields').hide();
+		akeebasubs_cached_response.businessname = true;
+		akeebasubs_cached_response.occupation = true;
+		akeebasubs_cached_response.novatrequired = true;
+		applyValidation(akeebasubs_cached_response);
+		validateForm();
+	})(akeeba.jQuery);
 }
 
 function applyValidation(response, callback)
 {
+	akeebasubs_cached_response = response;
+
 	(function($) {
 		akeebasubs_valid_form = true;
 		if($('#username_valid')) {
