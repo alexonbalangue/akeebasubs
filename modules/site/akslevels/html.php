@@ -47,7 +47,8 @@ class ModAkslevelsHtml extends ModDefaultHtml
 		// Since Koowa runs KFactory::get() you can't override the layout if the HMVC view is
 		// displayed inside the same view (e.g. a levels module inside the levels view). Therefore,
 		// we have to manually load the correct layout and force it to the controller...
-		$view = KFactory::tmp('site::com.akeebasubs.view.levels.default' );
+		$layout = $this->params->get('layout','awesome');
+		$view = KFactory::tmp('site::com.akeebasubs.view.levels.'.$layout );
 		$controller->setView($view);
 
 		$ids = $this->params->get('ids');
@@ -55,6 +56,7 @@ class ModAkslevelsHtml extends ModDefaultHtml
 			$controller
 				->id($ids)
 				->view('levels')
+				->layout($layout)
 				->limit(0);
 		}
 

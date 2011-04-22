@@ -38,7 +38,12 @@ class ModAksubslistHtml extends ModDefaultHtml
 		if(KFactory::get('lib.joomla.user')->guest) {
 			$subs = '<span class="akeebasubs-subscriptions-itemized-nosubs">'.JText::_('COM_AKEEBASUBS_LEVELS_ITEMIZED_NOSUBS').'</span>';
 		} else {
-			$subs = KFactory::tmp('site::com.akeebasubs.controller.subscriptions')
+			$controller = KFactory::tmp('site::com.akeebasubs.controller.subscriptions');
+			$model = KFactory::tmp('site::com.akeebasubs.model.subscriptions');
+			$view = KFactory::tmp('site::com.akeebasubs.view.subscriptions.itemized');
+			$controller->setModel($model);
+			$controller->setView($view);
+			$subs = $controller
 				->layout('itemized')
 				->display();
 		}

@@ -8,6 +8,9 @@
 
 defined('_JEXEC') or die('Restricted Access');
 
+/*
+ * This trick allows us to extend the correct class, based on whether it's Joomla! 1.5 or 1.6
+ */
 if(!class_exists('ASElementBase')) {
         if(version_compare(JVERSION,'1.6.0','ge')) {
                 class ASElementBase extends JFormField {
@@ -18,6 +21,9 @@ if(!class_exists('ASElementBase')) {
         }
 }
 
+/**
+ * Our main element class, creating a multi-select list out of an SQL statement
+ */
 class ASElementSQL2 extends ASElementBase
 {
 	/**
@@ -38,6 +44,9 @@ class ASElementSQL2 extends ASElementBase
 	}
 }
 
+/*
+ * Part two of our trick; we define the proper element name, depending on whether it's Joomla! 1.5 or 1.6
+ */
 if(version_compare(JVERSION,'1.6.0','ge')) {
         class JFormFieldSQL2 extends ASElementSQL2 {}
 } else {

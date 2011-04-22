@@ -9,20 +9,37 @@
 	<authorEmail>nicholas@akeebabackup.com</authorEmail>
 	<authorUrl>www.akeebabackup.com</authorUrl>
 	<version>1.0</version>
-	<description>Displays an itemized list of the user's subscriptions</description>
+	<description>MOD_AKSUBSLIST_DESCRIPTION</description>
 	<files>
 		<file module="mod_aksubslist">mod_aksubslist.php</file>
 		<file>html.php</file>
 	</files>
+	<languages folder="translation">
+		<language tag="en-GB">en-GB.mod_aksubslist.ini</language>
+		<language tag="en-GB">en-GB.mod_aksubslist.sys.ini</language>
+	</languages>
 
 	<params>
-		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		<param name="moduleclass_sfx" type="text" default="" label="MOD_AKSUBSLIST_SUFFIX_LABEL" description="MOD_AKSUBSLIST_SUFFIX_DESC" />
 	</params>
 	<params group="advanced">
-		<param name="cache" type="list" default="1" label="Caching" description="Select whether to cache the content of this module">
-			<option value="1">Use global</option>
-			<option value="0">No caching</option>
+		<param name="cache" type="list" default="1" label="MOD_AKSUBSLIST_CACHING_LABEL" description="MOD_AKSUBSLIST_CACHING_DESC">
+			<option value="1">MOD_AKSUBSLIST_CACHING_OPT_GLOBAL</option>
+			<option value="0">MOD_AKSUBSLIST_CACHING_OPT_NONE</option>
 		</param>
-		<param name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
+		<param name="cache_time" type="text" default="900" label="MOD_AKSUBSLIST_CACHETIME_LABEL" description="MOD_AKSUBSLIST_CACHETIME_DESC" />
 	</params>
+	
+	<config>
+		<fields name="params">
+			<param name="moduleclass_sfx" type="text" default="" label="MOD_AKSUBSLIST_SUFFIX_LABEL" description="MOD_AKSUBSLIST_SUFFIX_DESC" />
+		</fields>
+		<fields name="advanced">
+			<param name="cache" type="list" default="1" label="MOD_AKSUBSLIST_CACHING_LABEL" description="MOD_AKSUBSLIST_CACHING_DESC">
+				<option value="1">MOD_AKSUBSLIST_CACHING_OPT_GLOBAL</option>
+				<option value="0">MOD_AKSUBSLIST_CACHING_OPT_NONE</option>
+			</param>
+			<param name="cache_time" type="text" default="900" label="MOD_AKSUBSLIST_CACHETIME_LABEL" description="MOD_AKSUBSLIST_CACHETIME_DESC" />
+		</fields>
+	</config>
 </install>

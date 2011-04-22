@@ -18,7 +18,7 @@
 				<span class="level-price-integer"><?=floor($level->price)?></span><span class="level-price-separator">.</span><span class="level-price-decimal"><?=sprintf('%02u', 100*($level->price - floor($level->price)))?></span>
 			</span>
 			<span class="level-title-text">
-				<a href="<?=@route('view=level&slug='.$level->slug)?>">
+				<a href="<?=@route('view=level&slug='.$level->slug.'&format=html&layout=default')?>">
 					<?=@escape($level->title)?>
 				</a>
 			</span>
@@ -34,7 +34,7 @@
 			</div>
 			<div class="level-clear"></div>
 			<div class="level-subscribe">
-				<form action="<?=@route('view=level&slug='.$level->slug)?>" method="get">
+				<form action="<?=@route('view=level&slug='.$level->slug.'&format=html&layout=default')?>" method="get">
 					<input type="submit" value="<?=@text('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>" />
 				</form>
 			</div>

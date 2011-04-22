@@ -9,30 +9,60 @@
 	<authorEmail>nicholas@akeebabackup.com</authorEmail>
 	<authorUrl>www.akeebabackup.com</authorUrl>
 	<version>1.0</version>
-	<description>Displays a list of specific subscription levels</description>
+	<description>MOD_AKSLEVELS_DESCRIPTION</description>
 	<files>
 		<file module="mod_akslevels">mod_akslevels.php</file>
 		<file>html.php</file>
 		<folder>elements</folder>
 	</files>
+	<languages folder="translation">
+		<language tag="en-GB">en-GB.mod_akslevels.ini</language>
+		<language tag="en-GB">en-GB.mod_akslevels.sys.ini</language>
+	</languages>
 
 	<params addpath="/modules/mod_akslevels/elements">
-		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		<param name="moduleclass_sfx" type="text" default="" label="MOD_AKSLEVELS_SUFFIX_LABEL" description="MOD_AKSLEVELS_SUFFIX_DESC" />
 		<param name="ids" type="sql2" default=""
 			label="MOD_AKSLEVELS_LEVELS_TITLE"
 			description="MOD_AKSLEVELS_LEVELS_DESC"
 			query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`"
 			key_field="akeebasubs_level_id"
 			value_field="title" />
+		<param name="layout" type="list" default="awesome" label="MOD_AKSLEVELS_LAYOUT_LABEL" description="MOD_AKSLEVELS_LAYOUT_DESC">
+			<option value="default">MOD_AKSLEVELS_LAYOUT_OPT_DEFAULT</option>
+			<option value="awesome">MOD_AKSLEVELS_LAYOUT_OPT_AWESOME</option>
+		</param>
 	</params>
 	<params group="advanced">
-		<param name="cache" type="list" default="1" label="Caching" description="Select whether to cache the content of this module">
-			<option value="1">Use global</option>
-			<option value="0">No caching</option>
+		<param name="cache" type="list" default="1" label="MOD_AKSLEVELS_CACHING_LABEL" description="MOD_AKSLEVELS_CACHING_DESC">
+			<option value="1">MOD_AKSLEVELS_CACHING_OPT_GLOBAL</option>
+			<option value="0">MOD_AKSLEVELS_CACHING_OPT_NONE</option>
 		</param>
-		<param name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
+		<param name="cache_time" type="text" default="900" label="MOD_AKSLEVELS_CACHETIME_LABEL" description="MOD_AKSLEVELS_CACHETIME_DESC" />
 	</params>
 	
 	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="moduleclass_sfx" type="text" default="" label="MOD_AKSLEVELS_SUFFIX_LABEL" description="MOD_AKSLEVELS_SUFFIX_DESC" />
+				<field name="ids" type="sql2" default=""
+					label="MOD_AKSLEVELS_LEVELS_TITLE"
+					description="MOD_AKSLEVELS_LEVELS_DESC"
+					query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`"
+					key_field="akeebasubs_level_id"
+					value_field="title" />
+				<field name="layout" type="list" default="awesome" label="MOD_AKSLEVELS_LAYOUT_LABEL" description="MOD_AKSLEVELS_LAYOUT_DESC">
+					<option value="default">MOD_AKSLEVELS_LAYOUT_OPT_DEFAULT</option>
+					<option value="awesome">MOD_AKSLEVELS_LAYOUT_OPT_AWESOME</option>
+				</field>
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="cache" type="list" default="1" label="MOD_AKSLEVELS_CACHING_LABEL" description="MOD_AKSLEVELS_CACHING_DESC">
+					<option value="1">MOD_AKSLEVELS_CACHING_OPT_GLOBAL</option>
+					<option value="0">MOD_AKSLEVELS_CACHING_OPT_NONE</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="MOD_AKSLEVELS_CACHETIME_LABEL" description="MOD_AKSLEVELS_CACHETIME_DESC" />
+			</fieldset>
+		</fields>
 	</config>
 </install>

@@ -19,7 +19,7 @@
 			<div class="column-<?=$i == 1 ? 'first' : ($i == $max ? 'last' : 'middle')?>">
 				<div class="akeebasubs-awesome-header">
 					<div class="akeebasubs-awesome-level">
-						<a href="<?=@route('view=level&layout=default&slug='.$level->slug)?>" class="akeebasubs-awesome-level-link">
+						<a href="<?=@route('view=level&layout=default&format=html&slug='.$level->slug)?>" class="akeebasubs-awesome-level-link">
 							<?=@escape($level->title)?>
 						</a>
 					</div>
@@ -37,7 +37,7 @@
 				</div>
 				<div class="akeebasubs-awesome-footer">
 					<td class="akeebasubs-awesome-subscribe">
-						<form action="<?=@route('view=level&layout=default&slug='.$level->slug)?>" method="get">
+						<form action="<?=@route('view=level&layout=default&format=html&slug='.$level->slug)?>" method="get">
 							<input class="akeebasubs-awesome-subscribe-button" type="submit" value="<?=@text('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>" />
 						</form>
 					</td>
