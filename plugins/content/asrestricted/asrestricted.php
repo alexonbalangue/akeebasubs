@@ -74,9 +74,8 @@ class plgContentAsrestricted extends JPlugin
 			$jNow = new JDate();
 			$list = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 				->user_id($user->id)
-				->enabled(1)
 				->expires_from($jNow->toMySQL())
-				->publish_down($jNow->toMySQL())
+				//->publish_down($jNow->toMySQL())
 				->getList();
 			
 			if(count($list)) foreach($list as $sub) {
@@ -138,7 +137,7 @@ class plgContentAsrestricted extends JPlugin
 				}
 			}
 		}
-		
+
 		return $ret;
 	}
 
