@@ -29,7 +29,7 @@
 				</div>
 				<div class="akeebasubs-awesome-body">
 					<div class="akeebasubs-awesome-image">
-						<img src="<?=JURI::base().'images/stories/'.@escape($level->image)?>" />
+						<img src="<?=JURI::base().(version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/').@escape($level->image)?>" />
 					</div>
 					<div class="akeebasubs-awesome-description">
 						<?=$level->description?>

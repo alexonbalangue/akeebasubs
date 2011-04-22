@@ -12,12 +12,13 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 	public function __construct(KConfig $config)
 	{
 		$config->views = array(
-			'dashboard' 		=> JText::_('COM_AKEEBASUBS_DASHBOARD'),
-			'levels' 			=> JText::_('COM_AKEEBASUBS_LEVELS_TITLE'),
-			'subscriptions'		=> JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE'),
-			'coupons'			=> JText::_('COM_AKEEBASUBS_COUPONS_TITLE'),
-			'upgrades'			=> JText::_('COM_AKEEBASUBS_UPGRADES_TITLE'),
-			'taxrules'			=> JText::_('COM_AKEEBASUBS_TAXRULES_TITLE'),
+			'dashboard' 		=> 'COM_AKEEBASUBS_DASHBOARD',
+			'levels' 			=> 'COM_AKEEBASUBS_LEVELS_TITLE',
+			'subscriptions'		=> 'COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE',
+			'coupons'			=> 'COM_AKEEBASUBS_COUPONS_TITLE',
+			'upgrades'			=> 'COM_AKEEBASUBS_UPGRADES_TITLE',
+			'taxrules'			=> 'COM_AKEEBASUBS_TAXRULES_TITLE',
+			'config'			=> 'COM_AKEEBASUBS_CONFIG_TITLE'
         );
 		
 		parent::__construct($config);
@@ -25,6 +26,11 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 	
 	public function display()
 	{
+		// Joomla! 1.6 is screwed up. Fixing!
+		if(version_compare(JVERSION, '1.6.0', 'ge')) {
+			JHTML::_('behavior.mootools');
+		}
+	
 		$name = $this->getName();
 		
 		//Apend enable and disbale button for all the list views

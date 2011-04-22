@@ -49,4 +49,37 @@ class ComAkeebasubsCommandAuthorize extends ComDefaultCommandAuthorize
 	    
 	    return parent::execute($name, $context);
 	}
+	
+    public function _controllerBeforeAdd(KCommandContext $context)
+    {
+        if (version_compare(JVERSION,'1.6.0','ge')) {
+            $result = KFactory::get('lib.joomla.user')->authorise('core.create');
+        } else {
+            $result = KFactory::get('lib.joomla.user')->get('gid') > 18;
+        }
+          
+        return $result;
+    }
+    
+    public function _controllerBeforeEdit(KCommandContext $context)
+    {
+        if (version_compare(JVERSION,'1.6.0','ge')) {
+            $result = KFactory::get('lib.joomla.user')->authorise('core.edit');
+        } else {
+            $result = KFactory::get('lib.joomla.user')->get('gid') > 19;
+        }
+              
+        return $result;
+    }
+    
+    public function _controllerBeforeDelete(KCommandContext $context)
+    {
+        if (version_compare(JVERSION,'1.6.0','ge')) {
+            $result = KFactory::get('lib.joomla.user')->authorise('core.delete');
+        } else {
+            $result = KFactory::get('lib.joomla.user')->get('gid') > 20;
+        }
+            
+        return $result;
+    }
 }

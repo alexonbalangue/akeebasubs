@@ -1,7 +1,5 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 
-?>
-
 <?= @helper('behavior.tooltip'); ?>
 <!--
 <script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />
@@ -19,7 +17,7 @@
 		<br/>
 		
 		<label for="image_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
-		<?=@helper('image.listbox', array('name' => 'image','directory' => JPATH_IMAGES.'/stories', 'filetypes' => array('swf', 'gif', 'jpg', 'png', 'bmp'), 'deselect' => false) ) ?>
+		<?=@helper('image.listbox', array('name' => 'image','directory' => JPATH_IMAGES.(version_compare(JVERSION, '1.6.0', 'ge') ? '/' : '/stories'), 'filetypes' => array('swf', 'gif', 'jpg', 'png', 'bmp'), 'deselect' => false) ) ?>
 		<br />					
 
 		<label for="duration_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>

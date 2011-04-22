@@ -146,10 +146,15 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$username = $this->_state->username;
 		if(empty($username)) return $ret;
 		$myUser = JFactory::getUser();
-		$user = JFactory::getUser($username);
+		// That line throws a stupid error message that I can not suppress (dammit, Joomla!, you're so bloody stupid!)
+		//$user = JFactory::getUser($username);
+		$user = (object)KFactory::tmp('admin::com.akeebasubs.model.jusers')
+			->username($username)
+			->getItem()
+			->getData();
 		
 		if($myUser->guest) {
-			$ret->username = !is_object($user);
+			$ret->username = empty($user->username);
 		} else {
 			$ret->username = ($user->username == $myUser->username);
 		}
@@ -646,7 +651,13 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			if (!$newUsertype) {
 				$newUsertype = 'Registered';
 			}
-			$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
+			
+			if(version_compare(JVERSION, '1.6.0', 'ge')) {
+				$params['groups'] = array(2);
+			} else {
+				$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
+			}
+			
 			$params['sendEmail'] = 0;
 			
 			// We always block the user, so that only a successful payment or

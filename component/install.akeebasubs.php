@@ -26,7 +26,8 @@ defined('_JEXEC') or die('');
 $installation_queue = array(
 	'modules' => array(
 		'site' => array(
-			'aksubslist' => array('left', 0)
+			'aksubslist' => array('left', 0),
+			'akslevels' => array('left', 0)
 		)
 	// modules => { (folder) => { (module) => { (position), (published) } }* }*
 	),
@@ -137,6 +138,7 @@ if(count($installation_queue['modules'])) {
 	foreach($installation_queue['modules'] as $folder => $modules) {
 		if(count($modules)) foreach($modules as $module => $modulePreferences) {
 			// Install the module
+			if(empty($folder)) $folder = 'site';
 			$path = "$src/modules/$folder/$module";
 			if(!is_dir($path)) continue;
 			$installer = new JInstaller;

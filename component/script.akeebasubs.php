@@ -1,8 +1,8 @@
 <?php
 
-class Com_AdmintoolsInstallerScript {
+class Com_AkeebasubsInstallerScript {
 	function postflight($type, $parent) {
 		define('_AKEEBA_HACK', 1);
-		require_once('install.admintools.php');
+		require_once('install.akeebasubs.php');
 	}
 }

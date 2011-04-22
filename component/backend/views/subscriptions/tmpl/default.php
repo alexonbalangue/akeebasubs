@@ -95,7 +95,7 @@
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?= @escape($subscription->title); ?>::<?= @text('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL_EDIT_TOOLTIP')?>">
-					<img src="<?= JURI::base(); ?>../images/stories/<?= $subscription->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?= JURI::base(); ?><?= version_compare(JVERSION,'1.6.0','ge') ? '../images/' :'../images/stories/' ?><?= $subscription->image;?>" width="32" height="32" class="sublevelpic" />
 					<a href="<?= @route('view=level&id='.$subscription->akeebasubs_level_id); ?>" class="subslevel">
     					<?=@escape($subscription->title)?>
     				</a>

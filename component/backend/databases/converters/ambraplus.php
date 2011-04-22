@@ -111,6 +111,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 		// Post-proc the subscription levels, merging the Joomla! articles to the ordertext and
 		// canceltext fields. Also take care of the image field.
 		if(isset($this->data['levels'])) {
+			$defaultImagePath = version_compare(JVERSION, '1.6.0', 'ge') ? 'images/' : 'images/stories';
 			foreach($this->data['levels'] as $id => $level) {
 				$articleText = '<p></p>';
 				$articleid = (int)($level['articleid']);
@@ -130,8 +131,8 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 				
 				$img = $level['img'];
 				$img = ltrim($img,'/');
-				if(substr($img,0,15) == 'images/stories/') {
-					$this->data['levels'][$id]['img'] = substr($img,15);
+				if(substr($img,0,strlen($defaultImagePath)) == $defaultImagePath) {
+					$this->data['levels'][$id]['img'] = substr($img,strlen($defaultImagePath));
 				}
 			}
 		}

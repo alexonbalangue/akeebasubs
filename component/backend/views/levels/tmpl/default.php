@@ -1,7 +1,9 @@
 <? defined('KOOWA') or die('Restricted access'); ?>
 
+<!--
 <script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
+-->
 <?= @helper('behavior.tooltip'); ?>
 
 <form action="<?= @route() ?>" method="get" class="adminform" name="adminForm">
@@ -60,7 +62,7 @@
 			</td>
 			<td align="left">
 				<span class="editlinktip hasTip" title="<?= @text('edit level tooltip')?> <?= @escape($level->title); ?>::<?= @escape(substr(strip_tags($level->description), 0, 300)).'...'; ?>">
-					<img src="<?= JURI::base(); ?>../images/stories/<?= $level->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?= JURI::base(); ?><?= version_compare(JVERSION,'1.6.0','ge') ? '../images/' :'../images/stories/' ?><?= $level->image;?>" width="32" height="32" class="sublevelpic" />
 					<a href="<?= @route('view=level&id='.$level->id); ?>" class="subslevel">
     					<strong><?= @escape($level->title) ?></strong>
     				</a>

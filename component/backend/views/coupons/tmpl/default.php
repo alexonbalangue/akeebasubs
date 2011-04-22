@@ -108,10 +108,10 @@
 				<?= @helper('grid.order', array('row' => $coupon)); ?>
 			</td>
 			<td>
-				<?= @helper('date.format', array('date' => $coupon->publish_up)) ?>
+				<?= @helper('date.format', array('date' => $coupon->publish_up, 'format' => '%Y-%m-%d %H:%M')) ?>
 			</td>
 			<td>
-				<?= @helper('date.format', array('date' => $coupon->publish_down)) ?>
+				<?= @helper('date.format', array('date' => $coupon->publish_down, 'format' => '%Y-%m-%d %H:%M')) ?>
 			</td>
 			<td align="center">
 				<?= @helper('grid.enable', array('row' => $coupon)) ?>

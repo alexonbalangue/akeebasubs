@@ -29,11 +29,11 @@
 	</tr>
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP')?></td>
-		<td class="subscription-info"><?=@helper('date.format', array('date'=>$subscription->publish_up))?></td>
+		<td class="subscription-info"><?=@helper('date.format', array('date'=>$subscription->publish_up, 'format' => '%Y-%m-%d %H:%M'))?></td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN')?></td>
-		<td class="subscription-info"><?=@helper('date.format', array('date'=>$subscription->publish_down))?></td>
+		<td class="subscription-info"><?=@helper('date.format', array('date'=>$subscription->publish_down, 'format' => '%Y-%m-%d %H:%M'))?></td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED')?></td>
@@ -52,13 +52,13 @@
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_AMOUNT_PAID')?></td>
 		<td class="subscription-info">
-			<?=sprintf('%2.02f',$subscription->gross)?>
+			<?=sprintf('%2.02f',$subscription->gross_amount)?>
 			<?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_SUBSCRIBED_ON')?></td>
-		<td class="subscription-info"><?=@helper('date.format', array('date'=>$subscription->created_on))?></td>
+		<td class="subscription-info"><?=@helper('date.format', array('date'=>$subscription->created_on, 'format' => '%Y-%m-%d %H:%M'))?></td>
 	</tr>
 </table>
 

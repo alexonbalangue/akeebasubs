@@ -27,7 +27,7 @@
 			<div class="level-description">
 				<div class="level-description-inner">
 					<?if(!empty($level->image)):?>
-					<img class="level-image" src="<?=JURI::base().'images/stories/'.@escape($level->image)?>" />
+					<img class="level-image" src="<?=JURI::base().(version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/').@escape($level->image)?>" />
 					<?endif;?>
 					<?=$level->description?>
 				</div>

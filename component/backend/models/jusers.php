@@ -15,7 +15,8 @@ class ComAkeebasubsModelJusers extends KModelTable
 
 		$this->_state
 			->insert('block'	, 'int')
-			->insert('email'	, 'email');
+			->insert('email'	, 'email')
+			->insert('username' , 'string', null, true);
 	}
 
 	protected function _buildQueryWhere(KDatabaseQuery $query)
@@ -28,6 +29,10 @@ class ComAkeebasubsModelJusers extends KModelTable
 		
 		if($state->email) {
 			$query->where('tbl.email','=', $state->email);
+		}
+		
+		if($state->username) {
+			$query->where('tbl.username','=', $state->username);
 		}
 		
 		if($state->search)
