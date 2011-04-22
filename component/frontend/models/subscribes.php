@@ -598,6 +598,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			if($key == 'vatnumber') continue;
 			// A wrong coupon code is not a fatal error
 			if($key == 'coupon') continue;
+			// This is a dummy key which must be ignored
+			if($key == 'novatrequired') continue;
 			
 			$isValid = $isValid && $validData;
 			if(!$isValid) {
