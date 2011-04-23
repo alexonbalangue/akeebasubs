@@ -15,5 +15,6 @@
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_akeebasubs_subscriptionemails.ini</language>
+		<language tag="en-GB">en-GB.plg_akeebasubs_subscriptionemails.sys.ini</language>
 	</languages>
 </install>

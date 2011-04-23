@@ -1,7 +1,14 @@
-To-do:
-- Documentation!
+================================================================================
+To-do / bug fixes:
+================================================================================
+----------------------------------------
+			Back-end
+----------------------------------------
++ User details list and form views (users and user views)
 
+================================================================================
 Future ideas:
+================================================================================
 - Customizable emails
 - email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
