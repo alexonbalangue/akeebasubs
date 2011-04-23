@@ -1,0 +1,3050 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book version="5.0" xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:m="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>Akeeba Subscriptions User's Guide</title>
+
+    <author>
+      <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
+
+      <affiliation>
+        <orgname>AkeebaBackup.com</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>April 2011</pubdate>
+
+    <revhistory>
+      <revision>
+        <revnumber>1.0.b1</revnumber>
+
+        <date>April 2011</date>
+
+        <author>
+          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
+        </author>
+      </revision>
+    </revhistory>
+
+    <legalnotice>
+      <para>Permission is granted to copy, distribute and/or modify this
+      document under the terms of the GNU Free Documentation License, Version
+      1.3 or any later version published by the Free Software Foundation; with
+      no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A
+      copy of the license is included in the appendix entitled "The GNU Free
+      Documentation License".</para>
+    </legalnotice>
+
+    <abstract>
+      <para>This book covers the use of the Akeeba Subscriptions component and
+      its bundled modules and plugins for selling and managing subscriptions
+      on your <trademark>Joomla!</trademark>-powered web sites.</para>
+    </abstract>
+  </info>
+
+  <chapter xml:id="intro-and-installation">
+    <title>Introduction and installation</title>
+
+    <section xml:id="introduction">
+      <title>Introducing Akeeba Subscriptions</title>
+
+      <bridgehead>At a glance</bridgehead>
+
+      <para>Akeeba Subscriptions is a subscriptions management component for
+      <trademark>Joomla!</trademark> 1.5/1.6 and compatible distributions,
+      such as Nooku Server and Molajo. It is built using the Nooku Framework
+      and the best practices for rapid web application development which
+      ensure stability and security. It is licensed under the GNU General
+      Public License (GPL) version 3 or –at your option– any later version
+      published by the Free Software Foundation. It licensing scheme means
+      that you are free (and, in fact, more than welcome) to install it on as
+      many sites as you want, whenever you want and use it for as long as you
+      want, no strings attached. There are no secret per-domain licensing fees
+      and you can use it to sell one or several millions of subscriptions
+      without any hidden costs. We love Freedom of choice as much as you
+      do!</para>
+
+      <bridgehead>The killer features</bridgehead>
+
+      <para>Its feature list is nothing sort of amazing, either. Out of the
+      box, Akeeba Subscriptions supports these features:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Streamlined administrator interface which can even present you
+          an interactive sales graph and sales report as soon as you launch
+          the component</para>
+        </listitem>
+
+        <listitem>
+          <para>Rich subscription levels (subscription packages) editor which
+          allows you to choose different images for each of your subscriptions
+          and even a different order confirmation and order cancellation text
+          to show to your users.</para>
+        </listitem>
+
+        <listitem>
+          <para>The easiest subscription management interface you've seen on a
+          component. It will even show you your users' faces, powered by
+          Gravatar.</para>
+        </listitem>
+
+        <listitem>
+          <para>Users can upgrade or expand (renew) their subscriptions.
+          Renewing a subscription will create a new subscription which becomes
+          valid the very second their old one expires. Users do not lose any
+          of their subscription time when renewing, unlike most other
+          subscription systems out there.</para>
+        </listitem>
+
+        <listitem>
+          <para>Full support for delayed payments, e.g. when using e-checks
+          with PayPal.</para>
+        </listitem>
+
+        <listitem>
+          <para>Discount coupon codes which allow you to set an absolute money
+          value or percentage discount for all or a specific subscription
+          level and user, have publish up/publish down dates or a usage limit
+          (e.g. the coupon code is valid only for the first 100 people to use
+          it) – or a combination of any and all of the above!</para>
+        </listitem>
+
+        <listitem>
+          <para>Automatic discounts for upgrading or renewing subscriptions
+          based on the subscription level and days of presence in the
+          subscription package. This allows you to easily create rules like:
+          30% discount if you renew up to 30 days before the end of your
+          subscription, 15% discount if you renew within the last 30 days, no
+          discount otherwise.</para>
+        </listitem>
+
+        <listitem>
+          <para>Full support for complex tax calculations based on country,
+          state and ZIP code. It fully integrates with the European Union's
+          VIES system so that you can charge no VAT tax for intra-EU B2B
+          transactions.</para>
+        </listitem>
+
+        <listitem>
+          <para>The subscription form can work with or without Javascript.
+          With Javascript it becomes a fully fledged, auto-validating
+          subscription form. Without Javascript it works as a standard web
+          form, accessible to users who do not wish / can not use Javascript
+          on their browser.</para>
+        </listitem>
+
+        <listitem>
+          <para>Integration with JUGA: intelligently add/remove a user from
+          JUGA groups based on his active subscriptions.</para>
+        </listitem>
+
+        <listitem>
+          <para>Content restriction: a content plugin to show parts of your
+          content only to registered subscribers, without the need of any
+          external tool.</para>
+        </listitem>
+
+        <listitem>
+          <para>Payment methods: PayPal (for personal, verified and business
+          accounts) is supported out of the box</para>
+        </listitem>
+
+        <listitem>
+          <para>Send emails to subscribers upon subscription, when their
+          subscription/payment status changes and when their subscription is
+          about to expire</para>
+        </listitem>
+
+        <listitem>
+          <para>All the attention to details that makes a component worthy of
+          carrying the Akeeba label!</para>
+        </listitem>
+      </itemizedlist>
+
+      <bridgehead>Support policy</bridgehead>
+
+      <para>Please note that the software is provided free of charge, but
+      support is not. You need to have an AKEEBADELUXE or SUPPORT subscription
+      on AkeebaBackup.com to seek support regarding setting up, using and
+      customizing Akeeba Subscriptions. If you have found a bug and wish to
+      report it, however, you can do so even without an active
+      AkeebaBackup.com subscription.</para>
+    </section>
+
+    <section xml:id="requirements">
+      <title>Requirements and compatibility</title>
+
+      <para>Akeeba Subscriptions requires the following server-side
+      configuration:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>PHP 5.2.6 or later. Running it on earlier versions will either
+          be problematic or it won't work at all.</para>
+        </listitem>
+
+        <listitem>
+          <para>MySQL 5.0 or later. Earlier database server versions will not
+          be supported.</para>
+        </listitem>
+
+        <listitem>
+          <para>Your server must support the mysqli driver and your site must
+          use it. If not, Akeeba Subscriptions will try to switch your site to
+          mysqli upon installation.</para>
+        </listitem>
+
+        <listitem>
+          <para>If you are using the Suhosin patch for PHP, please <link
+          xlink:href="http://nooku.assembla.com/wiki/show/nooku-framework/Known_Issues">read
+          this tutorial</link> to avoid any potential conflicts. Support will
+          not be provided if you are affected by this Suhosin issue.</para>
+        </listitem>
+
+        <listitem>
+          <para>Joomla! 1.5.14 or later (fully supported) or Joomla! 1.6.0 or
+          later (partial support for now). We know that some things in the
+          back-end do not work properly (they look ugly or have other visual
+          artifacts) with Joomla! 1.6. Fixing them would break Joomla! 1.5
+          compatibility, so please don't report them as bugs – we are just not
+          going to fix them yet.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <guilabel>System - mooTools Upgrade</guilabel> system
+          plugin MUST be enabled on Joomla! 1.5 sites.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Akeeba Subscriptions is compatible with other Nooku-based software
+      which is using at least Nooku Framework 0.7 Alpha 2, such as Ninjaboard
+      1.0.7 and later. It will not work properly together with components
+      using earlier versions of the framework, such as Joomlashack's
+      LifeStream. If you're in doubt, please try installing Akeeba
+      Subscriptions on a copy of your site and test its behaviour.</para>
+    </section>
+
+    <section xml:id="installation-instructions">
+      <title>Installation</title>
+
+      <section xml:id="installation">
+        <title>Installation</title>
+
+        <para>There are two available installation packages. The one with
+        -noframework in its name contains only the component, modules and
+        plugins of Akeeba Subscriptions. The one without -noframework contains
+        everything plus a copy of the Nooku Framework. If you don't have any
+        other Nooku-based software on your site, please install the regular
+        package. If you have another Nooku-based software on your site, such
+        as Ninjaboard 1.0.7 or later, please try installing the -noframework
+        package first and, if that doesn't work properly, take a backup of
+        your site and try installing the regular package.</para>
+
+        <para>Installing the package is the same as with any other Joomla!
+        component. Go to your site's back-end, Extensions, Install/Uninstall
+        (Joomla! 1.5) or Extensions, Manage (Joomla! 1.6) and click on Browse.
+        Locate the ZIP package and click on Upload and Install. If the
+        installation fails, please refer to the installation troubleshooting
+        section of this guide.</para>
+
+        <important>
+          <para>On Joomla! 1.5 sites you MUST publish the <guilabel>System -
+          mooTools Upgrade</guilabel> system plugin for Akeeba Subscriptions
+          to work properly. If you don't, the interface will appear broken and
+          you will not be able to use the component. If you file a support
+          request regarding that, we'll just reply with
+          "<acronym>RTFM</acronym>" (RTFM is the acronym for Read The Fine
+          Manual).</para>
+        </important>
+      </section>
+
+      <section xml:id="installation-troubleshooting">
+        <title>Installation troubleshooting</title>
+
+        <bridgehead>Joomla! 1.6 is logging you out during
+        installation</bridgehead>
+
+        <para>The first thing you might observe is that <emphasis
+        role="bold">Joomla! 1.6 is logging you out when trying to
+        install</emphasis> Akeeba Subscriptions. This is due to a bug in
+        Joomla! 1.6. Please <link
+        xlink:href="http://docs.joomla.org/Why_does_the_administrator_logoff_all_of_the_sudden">follow
+        these instructions</link> to fix the database table that causes this
+        issue. After doing that you will have to log in again to your site.
+        You will see that everything is missing from the back-end interface.
+        Don't panic! That's part of the Joomla! bug. Just log out using the
+        link on the top-right of your page, then log back in. Everything is
+        back to normal and you can retry the installation.</para>
+
+        <bridgehead>Joomla! 1.6 says "can't build admin menu" and
+        fails</bridgehead>
+
+        <para>On some other occasions, especially when trying to install or
+        update the component after an installation error, Joomla! will
+        complain that it <emphasis role="bold">can not build admin
+        menus</emphasis>. This is due to another Joomla! 1.6 bug <link
+        xlink:href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&amp;tracker_item_id=25663">we
+        have sent a patch for</link> to the Joomla! development team.
+        Meanwhile, you will have to run a few SQL statements against your
+        database with a database editor such as phpMyAdmin:</para>
+
+        <programlisting>DELETE FROM jos_assets WHERE `name` = 'com_akeebasubs';
+DELETE FROM jos_menu WHERE `menutype` = 'main' AND `alias` = 'com_akeebasubs';
+DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeebasubs';</programlisting>
+
+        <para>Remember to change <replaceable>jos_</replaceable> with your
+        database tables' name prefix if you changed it during installation!
+        It's easy to find out what it is. Take a look at the database and
+        you'll see that all of your tables begin with the same few letters.
+        That's your prefix. After running those SQL statements you can proceed
+        with the reinstallation of the component.</para>
+
+        <bridgehead>Version check</bridgehead>
+
+        <para>Check your Joomla! version. Joomla! 1.5.0 through 1.5.10 can not
+        install Akeeba Subscriptions. This is a limitation of these extremely
+        outdated releases. If you have such a site, upgrade it. Joomla! 1.5.11
+        through 1.5.14 may or may not be able to install Akeeba Subscriptions.
+        Again, these are limitations of those outdated Joomla! releases on
+        certain hosts. The only workaround is to upgrade your Joomla!
+        installation.</para>
+
+        <para>If you have Joomla! 1.6 make sure that you are using Joomla!
+        1.6.0 (the "stable" release, not the RC or any of the betas). Mind
+        you, we have only tested the installation with Joomla! 1.6.2 and later
+        releases.</para>
+
+        <bridgehead>Checking your temporary directory</bridgehead>
+
+        <para>First, we will have to make sure that you are using a valid
+        temporary directory. Many sites are configured to use the system-wide
+        (/tmp) directory or an invalid directory, causing installation
+        problems. In order to change your site's temporary directory setting
+        you have to follow this procedure, depending on your Joomla!
+        version.</para>
+
+        <bridgehead renderas="sect4">Joomla! 1.5</bridgehead>
+
+        <orderedlist>
+          <listitem>
+            <para>Go to your site's administrator back-end and click
+            <guimenu>Help</guimenu>, <guimenuitem>System Info</guimenuitem>
+            from the top menu.</para>
+          </listitem>
+
+          <listitem>
+            <para>Click on the <guilabel>Directory permissions</guilabel>
+            link</para>
+          </listitem>
+
+          <listitem>
+            <para>Scroll down the page and find the first <guilabel>Cache
+            Directory</guilabel> line. It is the fourth from the bottom of the
+            page.</para>
+          </listitem>
+
+          <listitem>
+            <para>Next to the <guilabel>Cache directory</guilabel> label you
+            can see a path, e.g.
+            <filename>/home/myuser/public_html/cache</filename></para>
+          </listitem>
+
+          <listitem>
+            <para>Replace the <filename>cache</filename> word with
+            <filename>tmp</filename> in that path, i.e.
+            <filename>/home/myuser/public_html/tmp</filename> and note down
+            this path. This is your new temp path.</para>
+          </listitem>
+
+          <listitem>
+            <para>Go to <guimenu>Site</guimenu>, <guimenuitem>Global
+            Configuration</guimenuitem> menu item from the top menu.</para>
+          </listitem>
+
+          <listitem>
+            <para>Click on the <guilabel>Server</guilabel> link</para>
+          </listitem>
+
+          <listitem>
+            <para>Find the "Path to Temp-folder" and replace its contents with
+            the new temp path from step #5.</para>
+          </listitem>
+
+          <listitem>
+            <para>Save your Global Configuration</para>
+          </listitem>
+        </orderedlist>
+
+        <bridgehead renderas="sect4">Joomla! 1.6</bridgehead>
+
+        <orderedlist>
+          <listitem>
+            <para>Create a file named mynewtmp.php with the following
+            contents:</para>
+
+            <programlisting>&lt;?php echo dirname(__FILE__).'/tmp';</programlisting>
+          </listitem>
+
+          <listitem>
+            <para>Upload the file to your site and access it as
+            http://www.example.com/mynewtmp.php where www.example.com is the
+            domain name to your site.</para>
+          </listitem>
+
+          <listitem>
+            <para>Write down what you see on the screen. That's your new
+            temporary directory path.</para>
+          </listitem>
+
+          <listitem>
+            <para>Remove the mynewtmp.php file from your site.</para>
+          </listitem>
+
+          <listitem>
+            <para>Go to your site's administrator back-end and click on
+            <guimenu>Site</guimenu>, <guimenuitem>Global
+            Configuration</guimenuitem> menu item from the top menu.</para>
+          </listitem>
+
+          <listitem>
+            <para>Click on the <guilabel>Server</guilabel> link</para>
+          </listitem>
+
+          <listitem>
+            <para>Find the "Path to Temp-folder" and replace its contents with
+            the new temp path from step #3.</para>
+          </listitem>
+
+          <listitem>
+            <para>Save your Global Configuration</para>
+          </listitem>
+        </orderedlist>
+
+        <bridgehead>Enable FTP</bridgehead>
+
+        <para>On most shared hosts which do not run suPHP (if you didn't
+        understand anything, most likely the following <emphasis>is applicable
+        to you too</emphasis>) you have to enable Joomla!'s FTP layer.
+        Otherwise Joomla! won't be able to write the files to its directories
+        and installation will fail.</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Go to <guimenu>Site</guimenu>, <guimenuitem>Global
+            Configuration</guimenuitem> menu item from the top menu.</para>
+          </listitem>
+
+          <listitem>
+            <para>Click on the <guilabel>Server</guilabel> tab</para>
+          </listitem>
+
+          <listitem>
+            <para>Set <guilabel>Enable FTP</guilabel> to Yes</para>
+          </listitem>
+
+          <listitem>
+            <para>In the <guilabel>FTP Host</guilabel> try using
+            <option>127.0.0.1</option> or <option>localhost</option> or the
+            FTP hostname assigned by your host</para>
+          </listitem>
+
+          <listitem>
+            <para>In the <guilabel>FTP Username</guilabel> and <guilabel>FTP
+            Password</guilabel> fields provide the FTP username and password
+            assigned by your host</para>
+          </listitem>
+
+          <listitem>
+            <para>In the <guilabel>FTP Root</guilabel> you have to type in the
+            FTP path to your site's root. Here is the easy way to find it
+            using <link
+            xlink:href="http://filezilla-project.org/download.php">FileZilla</link>:</para>
+
+            <para>Connect to your site using FileZilla. Navigate inside the
+            folder Joomla! is installed in. Usually it's a directory named
+            <filename>public_html</filename>, <filename>htdocs</filename>,
+            <filename>www</filename> or something similar. If unsure don't ask
+            us, ask your host. Now, on the right-hand pane you will find the
+            FTP path. Most likely it will look something like
+            <filename>/public_html</filename>. Copy this and paste it into the
+            FTP Root text box in your Joomla!'s Global Configuration
+            page.</para>
+          </listitem>
+
+          <listitem>
+            <para>Save your Global Configuration. If you got everything
+            correctly, you should see a message that your configuration was
+            saved. If you see an error message please seek assistance on the
+            <link xlink:href="http://forum.joomla.org">Joomla!
+            Forum</link>.</para>
+          </listitem>
+        </orderedlist>
+
+        <bridgehead>Manual installation</bridgehead>
+
+        <para>Sometimes <trademark>Joomla!</trademark> is unable to properly
+        extract ZIP archives due to technical limitations on your server. In
+        this case, you can follow a manual installation procedure.</para>
+
+        <para>First, you have to extract the installation ZIP file in a
+        subdirectory named <filename>akeeba</filename> on your local PC. Then,
+        upload the entire subdirectory inside your site's temporary directory.
+        At this point, there should be a subdirectory named
+        <filename>akeeba</filename> inside your site's temporary directory
+        which contains all of the ZIP package's files.</para>
+
+        <para>If you are unsure where your site's temporary directory is
+        located, you can look it up by going to the <guimenuitem>Global
+        Configuration</guimenuitem>, click on the <guilabel>Server</guilabel>
+        tab and take a look at the <guilabel>Path to Temp-folder</guilabel>
+        setting. The default setting is the <filename>tmp</filename> directory
+        under your site's root. Rarely, especially on automated installations
+        using Fantastico, this might have been assigned the system-wide
+        <filename>/tmp</filename> directory. In this case, please consult your
+        host for instructions on how to upload files inside this directory, or
+        read the instructions above about changing your
+        <trademark>Joomla!</trademark> temporary directory back to the default
+        location and making it writable.</para>
+
+        <para>Assuming that you are past this uploading step, click on the
+        <guimenu>Extensions</guimenu>,
+        <guimenuitem>Install/Uninstall</guimenuitem> (Joomla! 1.5) or
+        <guimenu>Extensions</guimenu>, <guimenuitem>Manage</guimenuitem>
+        (Joomla! 1.6 users) link on the top menu. In this page, locate the
+        <guibutton>Install Directory</guibutton> edit box in the
+        <guilabel>Install from Directory</guilabel> area. It is already filled
+        in with the absolute path to your temporary directory, for example
+        <filename>/var/www/joomla/tmp</filename>. Please append
+        <filename>/akeeba</filename> to it. As per our example, it should look
+        something like <filename>/var/www/joomla/tmp/akeeba</filename>. Then,
+        click on the <guibutton>Install</guibutton> button.</para>
+
+        <bridgehead>Still problems?</bridgehead>
+
+        <para>If you still can't install Akeeba Subscriptions and you are
+        receiving messages regarding unwritable directories, inability to move
+        files or other similar file system related error messages, please do
+        not ask us for support. These errors stem from your site set up and
+        can best be resolved by asking for help in the <link
+        xlink:href="http://forum.joomla.org">official
+        <trademark>Joomla!</trademark> forums</link>. We can only support
+        software we develop ourselves. Joomla!'s extension installer is
+        certainly not developed by us and –believe us– we have tried to
+        improve it and submitted some still pending patches to the Joomla!
+        project. Therefore we regret that we have to say that, but we can't
+        help you. Thank you for your understanding.</para>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter xml:id="setup-and-usage">
+    <title>Initial set-up and usage</title>
+
+    <section xml:id="how-subscriptions-work">
+      <title>How subscriptions work</title>
+
+      <para>Before you begin setting up Akeeba Subscriptions, you should be
+      aware of the way subscriptions work under the hood. The most basic
+      concept is the subscription level (referred to simply as Level from now
+      on). This is what you are selling to your customers. Your customers buy
+      a subscription to a Level. The composite piece of information containing
+      the Level, payment information and expiration time is called a
+      Subscription.</para>
+
+      <para>When a user enters the subscription page, Akeeba Subscriptions
+      first fetches the price associated with the Level your user wants to
+      buy. It will then try to understand if there is an applicable discount.
+      First, it will look into Upgrade definitions and produce a list of
+      upgrade rules applicable for the user and the Level he wishes to buy. If
+      there are multiple applicable upgrade rules, the one giving the maximum
+      discount is elected. Next up, it takes a look at the coupon code, is
+      supplied. If it is an active coupon and your user can use it to get a
+      discount, the coupon's discount is calculated. In the case where there
+      are two discounts, both an upgrade discount and a coupon discount, the
+      highest one is elected. The level price minus the discount is called the
+      Net Price.</para>
+
+      <para>Right up, Akeeba Subscriptions will try to determine the
+      applicable tax by going through all the tax rules. It will go through
+      the tax rules and keep the one which is the closest match to the
+      country, zip code, city and VIES registration status. If no match is
+      found, Akeeba Subscriptions will select the tax rate defined in the very
+      first tax rule you have defined. This is called the Tax Amount. The sum
+      of the Net Price and Tax Amount is the Gross Amount and that's what the
+      user will have to pay.</para>
+
+      <para>When the user hits the Subscribe button, Akeeba Subscriptions will
+      first check if this is a new or existing user. If it is a new user, it
+      will create a new –but inactive– user account based on the information
+      the user has supplied. A new, inactive subscription will be created for
+      your user and he's redirected to the payment gateway. Exception: if you
+      have an 100% or more discount (which means that the user shall pay
+      nothing) he's not redirected to the payment gateway. Instead, he's
+      redirected to the Subscription Confirmation page and his subscription
+      becomes instantly active.</para>
+
+      <para>Once the user finishes the payment, he's redirected to the
+      Subscription Confirmation page. If he changes his mind and cancels the
+      payment, he will be takes to the Subscription Cancellation page. The
+      text on each page is determined by the relevant fields in the Level
+      configuration.</para>
+
+      <para>At the same time, your payment processor will send a post-back to
+      your site, notifying Akeeba Subscriptions about the payment status. If
+      the payment is marked as complete, the subscription is activated. Its
+      start and expiration date are calculated based on the exact date and
+      time that the payment post-back was received and the Level's configured
+      length. If the associated user account was marked as blocked (inactive),
+      it is activated. If any integrations are set up, they will run. For
+      example, you may be adding users to JUGA groups upon a successful
+      subscription.</para>
+
+      <para>Based on the above, you need to configure the following –in the
+      order shown– for Akeeba Subscriptions to work:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Configuration Options - well, that's just the currency you're
+          selling in!</para>
+        </listitem>
+
+        <listitem>
+          <para>Subscription Levels - the subscription products you are
+          selling, i.e. your inventory</para>
+        </listitem>
+
+        <listitem>
+          <para>Tax Rules - determine if the user has to be charged taxes over
+          the subscription amount and how much that will be</para>
+        </listitem>
+
+        <listitem>
+          <para>Upgrade rules - (optional) discounts based on what other
+          products the user has bought and how long he's been a subscriber to
+          them</para>
+        </listitem>
+
+        <listitem>
+          <para>Coupons - (optional) discount codes used for promotions</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Alternatively, you can import Subscription Levels and Coupons from
+      other subscription systems instead of manually defining them.</para>
+
+      <para>The sections below will tell you how to go through each of these
+      steps.</para>
+    </section>
+
+    <section xml:id="configuration">
+      <title>Configuration options</title>
+
+      <para>Click on <guilabel>Configuration</guilabel> in the toolbar links
+      area. The available options are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Currency code</term>
+
+          <listitem>
+            <para>The <link xlink:href="http://www.xe.com/iso4217.php">three
+            letter ISO 4217 currency code</link>. Common values are EUR
+            (Euro), USD (United States Dollar), GBP (Great Britain Pound), CAD
+            (Canada Dollar), AUD (Australia Dollar), JPY (Japan Yen), CNY
+            (China Yuan) and MXN (Mexico, Pesos). This is used on virtually
+            all of the payment processors to notify them about the currency
+            you're selling your goods in. Please remember that all of your
+            payment processors must support the selected currency. Some
+            payment processors only accept a subset of currencies, most
+            usually only one of USD, GBP and EUR.</para>
+
+            <para>Default: EUR (Euro)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Currency Symbol</term>
+
+          <listitem>
+            <para>The currency symbol to be shown to your web visitors, e.g. €
+            for Euro, £ for British Pound, $ for US/Australia/Canada Dollar or
+            ¥ for Japan Yen. This is free form text used to prefix the prices.
+            If your currency has no special symbol you can use text to
+            describe it, or leave blank to completely omit the currency symbol
+            display throughout the components.</para>
+
+            <para>Default: € (Euro symbol)</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="subscription-levels">
+      <title>Subscription Levels</title>
+
+      <para>You can access this feature by clicking on <guilabel>Subscription
+      Levels</guilabel> in the toolbar links area.</para>
+
+      <para>Creating or editing a Subscription Level, you have these
+      options:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Title</term>
+
+          <listitem>
+            <para>How the subscription will be presented to your users. We
+            strongly suggest using all-capital letters and no spaces for
+            easier administration, albeit you can really use anything you
+            like.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Image</term>
+
+          <listitem>
+            <para>Select a picture to represent your subscription. The image
+            must be located in your site's images/stories (Joomla! 1.5) or
+            images (Joomla! 1.6) directory.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Subscription Length (days)</term>
+
+          <listitem>
+            <para>How many days a subscription in this level lasts. Common
+            values are 30 (one month), 180 (half a year) and 365 (one
+            year).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Price</term>
+
+          <listitem>
+            <para>The price of a subscription in this level. If you need to
+            enter a decimal value, use a dot as the decimal separator. For
+            example, 12.30 is valid, whereas 12,30 is INVALID and will be
+            interpreted as 1230. Do NOT use a thousands separator. For example
+            1000 is valid, whereas 1,000 is INVALID.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Slug</term>
+
+          <listitem>
+            <para>The alias, used to construct the URL. Use only lowercase
+            Latin characters without diacretics and accents, dashes and
+            underscores. For example <option>uber-sub</option> is valid,
+            whereas <option>über SUB</option> is INVALID.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Published</term>
+
+          <listitem>
+            <para>Should it be shown to your users?</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Short Description</term>
+
+          <listitem>
+            <para>A description of the subscription to show to your users.
+            Keep it short (ca. 30 words or less) or it will overflow the
+            boundaries of the subscription presentation areas in the
+            front-end.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Message to show after successful sign-up</term>
+
+          <listitem>
+            <para>The text in this area will be presented to the users after
+            they successfully complete their payment. Use it to thank them for
+            giving you their money and show them important information about
+            their subscription, e.g. links to your support method, download
+            links etc.</para>
+
+            <warning>
+              <para>Do not include any sensitive information (such as "secret"
+              download links) as the content of this page can be directly
+              accessed by a knowledgeable user by manipulating the URL. If you
+              want to include such information, please use the Restricted
+              Content plugin bundled with Akeeba Subscriptions to make sure
+              that the information will only be shown to users holding a valid
+              subscription.</para>
+            </warning>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Message to show after sign-up cancellation</term>
+
+          <listitem>
+            <para>The text in this area will be presented to the users after
+            they cancel their payment (if your payment gateway supports this
+            feature). This is your last attempt to changing your user's mind
+            or have them give you feedback on the reasons they decided to not
+            move forward with their subscription. Use it wisely and do not
+            insult your users, please :)</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="tax-rules">
+      <title>Tax Rules</title>
+
+      <para>You can access this feature by clicking on <guilabel>Tax
+      Rules</guilabel> in the toolbar links area.</para>
+
+      <para>Out of the box, Akeeba Subscriptions is set up to not apply any
+      VAT or other tax at all. However, this is not what most users would
+      like. Below we are providing the most common setups based on your
+      business type. Our lawyers told us that we have to say this to you:
+      Please note that we are not lawyers or tax technicians. As a result, our
+      advice is based on our personal experience, may be flawed and in no way
+      should be considered a legal or financial advice. Should you chose to
+      use it you do so at your own risk. We strongly advise you to ask a
+      qualified tax technician, lawyer or other relevant professional
+      qualified by law to give you advice regarding tax laws. That said,
+      here's the most common tax setups:</para>
+
+      <bridgehead>Extra-EU businesses, e.g. US based</bridgehead>
+
+      <para>Tax Rules determine if the user should be charged a tax amount on
+      top of the regular price of the subscription level. If you do not wish
+      to charge any taxes (e.g. you have already included any applicable taxes
+      in your subscription price), you will still have to create a default
+      rule with 0 tax charges. In order to do so, click on the New button,
+      select the "- Select -" option in the Country drop-down and set the tax
+      rate to 0, then click on Save. Now you have created a catch-all rule
+      with 0% tax. Likewise, if you want to charge all users a flat tax rate,
+      say 18%, do the same thing, but set the tax rate to your desired
+      percentage, in our case 18 (note: without the % sign!) and click on
+      Save.</para>
+
+      <bridgehead>Intra-EU businesses with a VIES registered VAT number, or
+      extra-EU businesses with an EU VAT number</bridgehead>
+
+      <para>If you are a business based in the European Union with a
+      VIES-registered VAT number you have to create a total of 30 rules to
+      conform to the overcomplicated EU tax regulations. First, create a
+      default rule with 0% tax as noted above. Then do the same thing, but set
+      the <guilabel>VIES Reg</guilabel> option to Yes and the tax rate to 0%.
+      Now create new tax rules for each one of these countries, <guilabel>VIES
+      Reg</guilabel> set to No and tax rate set to your local VAT tax rate
+      (e.g. 23% for Greece): United Kingdom, Austria, Belgium, Bulgaria,
+      Cyprus, Czech Republic, Germany, Greece, Denmark, Estonia, Spain,
+      Finland, France, Hungary, Ireland, Italy, Lithuania, Luxembourg, Latvia,
+      Malta, Netherlands, Poland, Portugal, Romania, Sweden, Slovenia,
+      Slovakia. For the country of your business (e.g. Greece for a
+      Greece-based business) create on more rule with <guilabel>VIES
+      Reg</guilabel> set to Yes and the tax rate set to your local VAT tax
+      rate (e.g. 23% for Greece). This way, the following happens:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>If the customer is extra-EU he will be charged no VAT</para>
+        </listitem>
+
+        <listitem>
+          <para>If the customer is an intra-EU business, he will be charged no
+          VAT (he's liable to VAT on his local tax authorities, not your
+          country's tax authorities)</para>
+        </listitem>
+
+        <listitem>
+          <para>If the customer is intra-EU, but not a business with a
+          VIES-registered VAT number, he's paying VAT.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the customer is coming from your own country, you are
+          charging him with VAT no matter what.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Do note that the same setup is required if you are an extra-EU
+      business –e.g. US-based– with an EU VAT ID (it's in the format
+      EU012345678). In this case, you have no EU country of residence, so you
+      can skip the last tax rule mentioned above.</para>
+
+      <bridgehead>Intra-EU businesses without a VIES-registered VAT
+      number</bridgehead>
+
+      <para>Please ask your lawyer whether it's legal for you to sell
+      subscriptions to residents of a country other than yours. There is a gap
+      in the EU directives regarding that case, therefore we can't provide you
+      with even semi-accurate tax setup information within any stretch of
+      imagination.</para>
+
+      <bridgehead>Tax Rule options</bridgehead>
+
+      <para>Each tax rule has the following options:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Country</term>
+
+          <listitem>
+            <para>Which country this tax rule is applicable in. If empty (the
+            "- Select -" pseudo-option of the country list) it applies to all
+            countries.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>State</term>
+
+          <listitem>
+            <para>Which state this tax rule is applicable in. Note: only US
+            and Canada states and provinces can be selected. If left empty
+            (the N/A option) it applies to all states.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>City</term>
+
+          <listitem>
+            <para>Which city this tax rule is applicable in. Do note that the
+            spelling of the city must match, but it's case insensitive. This
+            means that <option>new york</option>, <option>NEW YORK</option>
+            and <option>New York</option> are equivalent. Leave blank to match
+            all cities.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>VIES Reg</term>
+
+          <listitem>
+            <para>If set to Yes, the tax rule matches only those clients with
+            a valid, VIES registered EU VAT number. If you don't know what
+            VIES registration is, <link
+            xlink:href="http://ec.europa.eu/taxation_customs/taxation/vat/traders/vat_number/index_en.htm">read
+            this</link>. You can verify if a VAT number of an EU resident or
+            EU registered business is also VIES registered through EU's <link
+            xlink:href="http://ec.europa.eu/taxation_customs/vies/">official
+            web application on Europa.eu</link>.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Tax Rate</term>
+
+          <listitem>
+            <para>The tax rate percentage. If you need to enter decimal
+            digits, use a dot not a comma. For example, <option>17.5</option>
+            is valid, <option>17,5</option> is INVALID. Do NOT type the
+            percentage sign. For example, <option>23</option> is valid,
+            <option>23%</option> is INVALID. The percentage is always implied,
+            that's why it's printed after the field's contents.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Enabled</term>
+
+          <listitem>
+            <para>If set to Yes, the VAT Rule will be applied, otherwise it
+            will be ignored (as if it weren't set at all)</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="upgrade-rules">
+      <title>Upgrade Rules</title>
+
+      <para>You can access this feature by clicking on
+      <guilabel>Upgrades</guilabel> in the toolbar links area.</para>
+
+      <para>This feature allows you to create automatically applied discount
+      rules to reward your loyal customers by giving them a discount. If you
+      are not sure this is what you want to do, I strongly suggest reading
+      Seth Godin's "<link
+      xlink:href="http://sethgodin.typepad.com/seths_blog/2011/02/how-should-you-treat-your-best-customers.html">How
+      should you treat your best customers?</link>" and view <link
+      xlink:href="http://www.attorneymarketing.com/2010/04/25/seth-godin-explains-how-to-build-a-tribe-of-loyal-clients/">this
+      video of his</link> where he explains his ideas on small businesses even
+      more clearly.</para>
+
+      <para>Each Upgrade rule has the following options:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Title</term>
+
+          <listitem>
+            <para>Just a title to remind you of what this upgrade rule
+            does</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Published</term>
+
+          <listitem>
+            <para>If set to No, it won't be taken into account during a new
+            subscription's price calculation</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>From level</term>
+
+          <listitem>
+            <para>The subscription level for which the user must already have
+            a valid subscription in order for the upgrade rule to take
+            effect</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>To Level</term>
+
+          <listitem>
+            <para>The subscription level which the user is currently trying to
+            subscribe to and onto which the discount will be applied</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Min. Presence</term>
+
+          <listitem>
+            <para>The minimum number of days the user has to have a valid
+            subscription to From Level for this rule to be applied</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Max. Presence</term>
+
+          <listitem>
+            <para>The maximum number of days the user has to have a valid
+            subscription to From Level for this rule to be applied</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Discount Type</term>
+
+          <listitem>
+            <para>If it's Value, the Value field contains currency, e.g. if
+            you're using Euros and type a value of 20 then 20 Euros will be
+            subtracted from the price. If its Percent, then the Value field
+            contains a percentage, e.g. if you type a value of 20 then a 20%
+            discount will be applied to the price.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Value</term>
+
+          <listitem>
+            <para>See above.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>Practical examples of upgrade rules:</para>
+
+      <para>You want to give a 30% discount to users with a SUB1 annual
+      subscription if they renew up to 30 days before their subscription
+      expiration. Both levels set to SUB1, min presence is set to 0, max
+      presence is set to 335 (one year is 365 days, minus 30 days, equals 335
+      days), discount type Percent, value 30.</para>
+
+      <para>You want to give a 15% discount to users with a SUB1 annual
+      subscription if they renew during the last 30 days of their
+      subscription. Both levels set to SUB1, min presence is set to 335 (one
+      year is 365 days, minus 30 days, equals 335 days), max presence set to
+      365 (one full year) discount type Percent, value 15.</para>
+
+      <para>You want to give a 10 Euro discount to users with a SUB1 annual
+      subscription who are now buying a SUB2 subscription. From Level set to
+      SUB1, To Level set to SUB2, min presence set to 0, max presence set to
+      365 (one year), discount set to Value, value set to 10.</para>
+
+      <para>You want users buying both SUB1 and SUB2 to have a 10 Euro
+      discount. First, create a rule like in the previous example. Then create
+      another rule with From Level set to SUB2, To Level set to SUB1, min
+      presence set to 0, max presence set to 365, discount set to Value, value
+      set to 10. This way, whichever subscription they buy first, they'll get
+      the discount when they buy the other subscription as well.</para>
+
+      <para>You want to give a complimentary (free) SUB3 subscription to users
+      who have already bought SUB1 and SUB2: you can't do that with Upgrade
+      Rules, as you can not combine multiple subscriptions in a single rule.
+      Instead, use a coupon code with 100% discount and show this coupon code
+      only to subscribers who have already bought a SUB1 and SUB2 subscription
+      using the Restricted Content plugin bundled with Akeeba
+      Subscriptions.</para>
+    </section>
+
+    <section xml:id="coupons">
+      <title>Coupons</title>
+
+      <para>You can access this feature by clicking on
+      <guilabel>Coupons</guilabel> in the toolbar links area.</para>
+
+      <para>This feature allows you to create discount coupon codes. When a
+      user enters a valid coupon code during registration, it's subtracted
+      from the price of his subscription. You can let coupons work on specific
+      subscriptions, specific users, for a predefined time period or even for
+      a predefined number of times before becoming inactive. You can even
+      create 100% discount coupons for giveaways or other similar promotional
+      reasons.</para>
+
+      <para>Each coupon supports the following fields:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Title</term>
+
+          <listitem>
+            <para>A descriptive title for your coupon. It is only displayed to
+            you, it is not displayed to your users.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Coupon code</term>
+
+          <listitem>
+            <para>The coupon code which the user has to enter in order to
+            receive the discount. Very important: coupon codes are case
+            insensitive, therefore it's best to type them in all capital
+            letters. Moreover, we suggest using only capital Latin letters
+            without accents or diacretics and numbers, so that all users can
+            type them in using their keyboard.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Discount type</term>
+
+          <listitem>
+            <para>You can either specify Percent (give an X% discount over the
+            price) or Value (deducts X from the price). It works in
+            conjunction with the Value field below. For example, if you are
+            using Euros as your currency, you set Value here and type in a
+            value of 10, the coupon gives 10 Euro discount.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Discount value</term>
+
+          <listitem>
+            <para>See above</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Published</term>
+
+          <listitem>
+            <para>Set to Yes for the coupon to become active</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Hits</term>
+
+          <listitem>
+            <para>This is the number of times this coupon has been
+            used.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Valid from</term>
+
+          <listitem>
+            <para>When the coupon will become active (note: the date is
+            expressed in the GMT/UTC timezone). Leave blank or set to
+            0000-00-00 00:00:00 to make the coupon active right now. Note: a
+            published coupon will not be taken into account before its Valid
+            From date.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Valid to</term>
+
+          <listitem>
+            <para>When the coupon will become inactive (note: the date is
+            expressed in the GMT/UTC timezone). Leave blank or set to
+            0000-00-00 00:00:00 to let Akeeba Subscriptions ignore this field
+            and let the coupon active until you manually unpublish it. Note: a
+            published coupon will not be taken into account after its Valid To
+            date.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Limit to a specific user</term>
+
+          <listitem>
+            <para>Click on <guibutton>Select</guibutton> to pick a user for
+            which the coupon will be active. For all other users the coupon
+            will have no effect. Leave blank to let all users –even new ones–
+            to use the coupon.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Subscription Levels</term>
+
+          <listitem>
+            <para>Choose the subscription levels which the coupon code can be
+            applied to. Leave it blank (or make sure that only the <option>-
+            Select -</option> pseudo-option is selected) to let Akeeba
+            Subscriptions apply the coupon to all current and future
+            subscription levels you are offering on your site.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Hits limit</term>
+
+          <listitem>
+            <para>If it is greater than zero, the coupon can be used up to
+            this number of times before it becomes inactive. In other words,
+            when the Hits counter becomes equal to Hits Limit, the coupon can
+            no longer be used by anyone. Leave it blank to not apply any such
+            limit.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="subscriptions-management">
+      <title>Subscriptions management</title>
+
+      <para>You can access this feature by clicking on
+      <guilabel>Subscriptions</guilabel> in the toolbar links area.</para>
+
+      <para>This is a standard Joomla! administrator page which needs no
+      explanation.</para>
+
+      <para>The icons on the left hand side of the user information are
+      Gravatars. If the user has linked a Gravatar to their email address, it
+      is displayed next to their name, otherwise a default avatar (head-shaped
+      cut out) is displayed.</para>
+
+      <para>In order to edit a subscription, click on the leftmost column (the
+      numeric ID) of the subscription record. Clicking on the other links will
+      edit the respective item, i.e. clicking on the subscription level will
+      open the subscription level editor.</para>
+
+      <para>You can use the <guibutton>Run Integrations</guibutton> button any
+      time in order to have Akeeba Subscriptions re-process all integrations
+      with third party components. This is useful when you suspect an
+      integration has gone wrong, you changed the options in an integration
+      plugin or you just imported a large number of subscriptions.</para>
+
+      <para>Using the CSV button allows you to export the current view into a
+      CSV file for further processing in a spreadsheet application such as
+      Microsoft Office Excel, Apple Numbers or OpenOffice.org Calc. Do note
+      that the full set of raw data is dumped to the CSV file.</para>
+    </section>
+
+    <section xml:id="frotn-end-items">
+      <title>Front-end items</title>
+
+      <para>There are four types of front-end menu items you can
+      create:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Subscribe • Specific Level</term>
+
+          <listitem>
+            <para>Allows you to create a menu link to the subscription page of
+            a specific Subscription Level</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Subscription Levels • Awesome Layout</term>
+
+          <listitem>
+            <para>Presents a list of all available subscription levels in a
+            comparison table, using CSS3 styling. It's the most eye-catching
+            presentation layout and it's best to use only if you have a small
+            number of subscription levels (4 to 5)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Subscription Levels • All Levels</term>
+
+          <listitem>
+            <para>Presents a list of all available subscription levels as a
+            two column list of boxes. It is a relatively dull presentation
+            mode, but is suitable for a very large number of subscription
+            levels (over 6)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>My subscriptions • All of my subscriptions</term>
+
+          <listitem>
+            <para>Think of it as a kind of "My Account" page. It shows the
+            user all of his subscriptions and allows him to review the
+            information on each one of them, as well as renew them.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>The subscription page defines two module positions where you can
+      publish modules to further expand the information presented on the page.
+      Publishing modules in the <option>akeebasubscriptionsheader</option>
+      position will make them appear at the very top of the page, right above
+      the Steps bar. That's a good place to publish information about SSL
+      security or banners about your latest special offers. Publishing modules
+      in the <option>akeebasubscriptionsfooter</option> position will make
+      them appear right after the end of the subscription form. This is a good
+      place to put a custom HTML module with links to your terms of service,
+      business contact information, etc.</para>
+    </section>
+
+    <section xml:id="importing-from-other-components">
+      <title>Importing from other components</title>
+
+      <para>Most likely you are already using a subscriptions system and
+      wouldn't like to have to manually import all of your subscriptions to
+      Akeeba Subscriptions. That's why we are offering an automated import
+      feature. You can access it from Akeeba Subscription's dashboard page, by
+      clicking on the Operations tab, and then on
+      <guibutton>Import</guibutton>.</para>
+
+      <para>The options are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>AMBRA.Subscriptions</term>
+
+          <listitem>
+            <para>Imports subscription levels and subscriptions from
+            Dioscouri's AMBRA Subscriptions (a.k.a. AMBRA.subs)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>AMBRA.Subscriptions with PayPal with VAT plugin</term>
+
+          <listitem>
+            <para>If you are using AMBRA.subs with my modified "PayPal with
+            VAT" payment plugin and the customizations for integrating coupons
+            into AMBRA.subs, you can click on this option. It will import
+            subscription levels, subscriptions and any coupon codes defined.
+            Moreover, it will also import the extra data stored per user, e.g.
+            their address and VAT number.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <warning>
+        <para>Importing from other components will DELETE AND REPLACE ANY AND
+        ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING BACK.
+        Do NOT use this option after you have been using Akeeba Subscriptions
+        and have new subscribers on your site.</para>
+      </warning>
+
+      <para>Please remember to review your Subscription Levels after import.
+      Most notably, the text of the subscription completion and subscription
+      cancellation pages will be missing from all subscription levels.</para>
+    </section>
+  </chapter>
+
+  <chapter xml:id="plugins">
+    <title>Payment methods, integrations and plugins</title>
+
+    <para>Akeeba Subscriptions is designed to be a modular system, powered by
+    standard Joomla! plugins. Using plugins you can add payment methods as
+    well as integration with third party software. Moreover, core
+    functionality of Akeeba Subscriptions (like sending out emails upon
+    subscription or email reminders for subscription expiration) is take care
+    of by plugins. This documentation chapter will guide you through the
+    details of each plugin.</para>
+
+    <section xml:id="payment-plugins">
+      <title>Payment methods</title>
+
+      <para>All payment methods are standard Joomla! plugins, belonging to the
+      <option>akpayment</option> group. If you want to enable a payment
+      method, just publish the relevant plugin.</para>
+
+      <section xml:id="payment-paypal">
+        <title>Paypal</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Paypal</guilabel></para>
+
+        <para>This payment method integrates the standard PayPal Website
+        Payments service, available without any setup fee to all verified
+        PayPal clients. In other words, that's the standard way to use PayPal
+        as your payment processor. The options you have in this plugin
+        are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PayPal" or type in a custom name to
+              show to your customer's, e.g. "PayPal, bank account or Credit
+              Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>Your PayPal email address or your secure merchant ID (if
+              PayPal has assigned you with one)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secure POST</term>
+
+            <listitem>
+              <para>If enabled, the verification postback to PayPal will be
+              over an SSL connection. In order for this to work, your host
+              needs to support SSL connections using cURL to PayPal's IP
+              address block.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, transactions are processed by PayPal
+              Sandbox, i.e. PayPal's testing mode. This is designed for
+              integration tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU NOT
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox merchant</term>
+
+            <listitem>
+              <para>The dummy merchant email used with PayPal's
+              Sandbox.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>PayPal Callback Text</term>
+
+            <listitem>
+              <para>(optional) Normally, when the user completes the payment,
+              PayPal shows him a button with the default label "Return to
+              Merchant". If you type in something in here, it will be shown on
+              that button instead of the default label. For example, you can
+              type in something like "Return to Example.com"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Custom Header Image</term>
+
+            <listitem>
+              <para>(optional) The URL to an image to be shown on PayPal's
+              checkout page header. It'd better be hosted on an HTTPS URL,
+              otherwise your customers will get a warning about insecure
+              content on their browser.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Header Background Color</term>
+
+            <listitem>
+              <para>The hex code of PayPal checkout page's header background
+              color. For example, white is FFFFFF (note: there is no # sign in
+              front of the hex color code!)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Header Border Color</term>
+
+            <listitem>
+              <para>The hex code of PayPal checkout page's header border
+              color. For example, light gray is CCCCCC (note: there is no #
+              sign in front of the hex color code!)</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="payment-none">
+        <title>None</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - None</guilabel></para>
+
+        <para>This is a dummy payment plugin which immediately activates a
+        subscription without payment.</para>
+
+        <warning>
+          <para>DO NOT USE THIS ON PRODUCTION SITES. IT IS MEANT FOR TESTING
+          PURPOSES ONLY. ENABLING IT ON A PRODUCTION SITE ALLOWS ANYONE,
+          INCLUDING UNREGISTERED USERS, TO SUBSCRIBE TO ANY SUBSCRIPTION THEY
+          WANT <emphasis role="bold">WITHOUT PAYING ANYTHING AT
+          ALL</emphasis>. You have been strongly warned.</para>
+        </warning>
+      </section>
+    </section>
+
+    <section xml:id="plugins-integration">
+      <title>Integration with third party software</title>
+
+      <para>One of the most important aspects about subscription systems is
+      their ability to integrate with third party software. A subscription all
+      by itself means pretty much nothing. It's just a "flag". The added value
+      is when this subscription allows the user holding it to actually do
+      something on the site. At this point in time, there are only a handful
+      of integrations. If you are interested in more integrations let us know
+      and we'll add them to our implementation to-do list.</para>
+
+      <para>All integrations with third party applications are standard
+      Joomla! plugins, published in the <option>akeebasubs</option>
+      group.</para>
+
+      <section xml:id="integration-juga">
+        <title>JUGA Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - JUGA Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        JUGA groups based on their subscription status. Please note that this
+        is a smart integration; instead of adding users when a subscription
+        goes active and removing them when a subscription goes inactive,
+        Akeeba Subscriptions plugins take a look at all of the user's active
+        and inactive subscriptions and decide which groups the user should be
+        added to or removed from. The idea is this:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>All groups to be added to, based on active subscriptions of
+            the user, are assembled to the ADD list.</para>
+          </listitem>
+
+          <listitem>
+            <para>All groups to be removed from, based on inactive
+            subscriptions of the user, are assembled to the REMOVE
+            list.</para>
+          </listitem>
+
+          <listitem>
+            <para>If a JUGA group appears in both the ADD and REMOVE list, it
+            is deleted from the REMOVE list. In other words "add" trumps
+            "delete". In order to understand this further, here's the deal. If
+            one subscription with access to a JUGA group expires, but another
+            subscription granting access to the very same group is still
+            active, the user's access to this group must remain active.</para>
+          </listitem>
+        </orderedlist>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to JUGA groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to JUGA
+              groups. When a user has an active subscription to the specified
+              level, he'll be added to the JUA group mentioned on the right
+              hand of the equal sign. Each assignment is done like
+              this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the JUGA groups
+              you want to add a user to when he subscribes. If you want to
+              assign multiple subscription levels to multiple groups, you have
+              to do something like that (separate multiple lines with a single
+              press of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              JUGA groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from JUGA groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the JUGA groups to remove a
+              user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        JUGA groups", when a subscription to the LEVEL1 level expires, the
+        user will still belong to JUGA's Group 3, as it's not removed from his
+        account; only Group 1 and Group 2 are removed. Likewise, if the user
+        has an expired LEVEL1 subscription and an active LEVEL2 subscription
+        he'll now belong to Group 2 and Group 3: Group 3 because it's not
+        removed when his subscription expires and Group 2 because his active
+        LEVEL2 subscription suggests that he should be granted Group 2 access
+        despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
+    </section>
+
+    <section xml:id="plugins-other">
+      <title>Other plugins</title>
+
+      <para>Akeeba Subscriptions comes with more standard Joomla! plugins
+      which accomplish a variety of tasks, from email communications to
+      content filtering.</para>
+
+      <section xml:id="plugin-asexpirationcontrol">
+        <title>Subscription expiration control</title>
+
+        <para>Displayed in the Plugins Manager as: <emphasis
+        role="bold">System - Akeeba Subscriptions Expiration
+        Control</emphasis></para>
+
+        <para>Akeeba Subscriptions will automatically expire your users'
+        subscriptions when they visit a page with an Akeeba Subscriptions
+        module on your site after their subscription expiration date. However,
+        if you want subscription expiration to be performed automatically, you
+        need to publish this plugin. It will fire once per day, expiring
+        subscriptions past their expiration date. We strongly recommend
+        publishing this plugin at all times.</para>
+      </section>
+
+      <section xml:id="plugin-subscriptionemails">
+        <title>Subscription emails</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Emails</guilabel></para>
+
+        <para>When this plugin is published, an email will be sent out to the
+        user when any of these events takes place:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A new subscription is created</para>
+          </listitem>
+
+          <listitem>
+            <para>The payment status changes, e.g. the user completes the
+            payment, or a delayed payment is marked as completed or
+            cancelled.</para>
+          </listitem>
+
+          <listitem>
+            <para>A subscription expires and becomes inactive</para>
+          </listitem>
+        </itemizedlist>
+
+        <note>
+          <para>This plugin uses Joomla!'s mail system. You have to ensure
+          that your site can send out emails (e.g. use the Mass Mail feature
+          to send a test email to Super Administrators) before activating this
+          plugin.</para>
+        </note>
+
+        <para>We strongly recommend publishing this plugin at all
+        times.</para>
+      </section>
+
+      <section xml:id="plugin-asexpirationnotify">
+        <title>Subscription expiration notification</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>System - Akeeba
+        Subscriptions Expiration Notification</guilabel></para>
+
+        <para>This plugin will notify a user 30 and 15 days before his
+        subscription's expiration. These time limits are non-configurable in
+        this release.</para>
+
+        <note>
+          <para>This plugin uses Joomla!'s mail system. You have to ensure
+          that your site can send out emails (e.g. use the Mass Mail feature
+          to send a test email to Super Administrators) before activating this
+          plugin.</para>
+        </note>
+
+        <para>We strongly recommend publishing this plugin at all
+        times.</para>
+      </section>
+
+      <section xml:id="plugin-asrestricted">
+        <title>Content restriction</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Content - Akeeba
+        Subscriptions Restricted</guilabel></para>
+
+        <para>This content plugin allows you to show parts of your content
+        only to specific subscribers. This is a very powerful feature that
+        allows you to alter the displayed content based on the user's
+        subscription status.</para>
+
+        <note>
+          <para>It can not "hide" entire articles, e.g. not show them at all
+          to non-subscribers. At best, only the title will be shown. If you
+          want to completely hide articles and block unsubscribed user access
+          to entire categories or sections you will have to use an ACL
+          solution, like Dioscouri's JUGA, NoixACL or similar.</para>
+        </note>
+
+        <para>Its syntax is:</para>
+
+        <programlisting>{akeebasubs <replaceable>expression</replaceable>}Your content{/akeebasubs}</programlisting>
+
+        <para>This means that "Your content" will only be displayed to users
+        whose subscriptions satisfy the <replaceable>expression</replaceable>.
+        In the simplest form, expression is just the name of a subscription
+        level, e.g.</para>
+
+        <programlisting>{akeebasubs LEVEL1}Your content{/akeebasubs}</programlisting>
+
+        <para>If you want to present the content to someone who holds an
+        active subscription to both LEVEL1 and LEVEL2, you can use the
+        <option>&amp;&amp;</option> (logic and) operator:</para>
+
+        <programlisting>{akeebasubs LEVEL1 <option>&amp;&amp;</option> LEVEL2}Your content{/akeebasubs}</programlisting>
+
+        <para>Likewise, you can use the || (logic or) operator to present the
+        content to anyone who has a subscription to any of LEVEL3 or LEVEL4
+        levels:</para>
+
+        <programlisting>{akeebasubs LEVEL3 <option>||</option> LEVEL4}Your content{/akeebasubs}</programlisting>
+
+        <para>Important note: The logical OR consists of two "pipe" symbols.
+        These are not the same as capital I! On a Mac's keyboard, the pipe
+        symbol is present next to the ENTER key, accessible by pressing
+        SHIFT-\. On most Windows/Linux machines, this key is usually somewhere
+        near the ENTER key and is most likely accessible by pressing SHIFT-\
+        as well.</para>
+
+        <para>You can also negate the logic. For example, you can present the
+        content to anyone having a subscription to neither LEVEL1 nor LEVEL3
+        by using the ! (logical not) operator:</para>
+
+        <programlisting>{akeebasubs !LEVEL1 &amp;&amp; !LEVEL3}Your content{/akeebasubs}</programlisting>
+
+        <para>If you specify multiple operators, the precedence is NOT, AND,
+        OR. This means that the exclamation mark is processed first, the
+        ampersands second and the bars last. Example:</para>
+
+        <programlisting>{akeebasubs !LEVEL1 || LEVEL2 &amp;&amp; !LEVEL3}Your content{/akeebasubs}</programlisting>
+
+        <para>This means that the content will be presented to users who do
+        not have a subscription to LEVEL1. Also, if they do have a LEVEL1
+        subscription and they are also LEVEL2 (but not LEVEL3) subscribers the
+        content will also be shown to them.</para>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter xml:id="modules">
+    <title>Akeeba Subscriptions' modules</title>
+
+    <para>Akeeba Subscriptions comes with a variety of modules to display
+    customized lists of subscription levels or a list of a user's
+    subscriptions. Make sure you visit your Module Manager page and have a
+    look at them. You can create interesting effects, like a customized and
+    categorized subscriptions list page, out of those modules.</para>
+
+    <para>– THIS DOCUMENTATION SECTION IS UNDER CONSTRUCTION –</para>
+  </chapter>
+
+  <appendix xml:id="gpl">
+    <title><acronym>GNU</acronym> General Public License version 3</title>
+
+    <para>Version 3, 29 June 2007</para>
+
+    <para>Copyright © 2007 Free Software Foundation, Inc. <link
+    xlink:href="http://fsf.org/">http://fsf.org/</link></para>
+
+    <para>Everyone is permitted to copy and distribute verbatim copies of this
+    license document, but changing it is not allowed.</para>
+
+    <bridgehead renderas="sect1" xml:id="Preamble">Preamble</bridgehead>
+
+    <para>The <acronym>GNU</acronym> General Public License is a free,
+    copyleft license for software and other kinds of works.</para>
+
+    <para>The licenses for most software and other practical works are
+    designed to take away your freedom to share and change the works. By
+    contrast, the <acronym>GNU</acronym> General Public License is intended to
+    guarantee your freedom to share and change all versions of a program—to
+    make sure it remains free software for all its users. We, the Free
+    Software Foundation, use the <acronym>GNU</acronym> General Public License
+    for most of our software; it applies also to any other work released this
+    way by its authors. You can apply it to your programs, too.</para>
+
+    <para>When we speak of free software, we are referring to freedom, not
+    price. Our General Public Licenses are designed to make sure that you have
+    the freedom to distribute copies of free software (and charge for them if
+    you wish), that you receive source code or can get it if you want it, that
+    you can change the software or use pieces of it in new free programs, and
+    that you know you can do these things.</para>
+
+    <para>To protect your rights, we need to prevent others from denying you
+    these rights or asking you to surrender the rights. Therefore, you have
+    certain responsibilities if you distribute copies of the software, or if
+    you modify it: responsibilities to respect the freedom of others.</para>
+
+    <para>For example, if you distribute copies of such a program, whether
+    gratis or for a fee, you must pass on to the recipients the same freedoms
+    that you received. You must make sure that they, too, receive or can get
+    the source code. And you must show them these terms so they know their
+    rights.</para>
+
+    <para>Developers that use the <acronym>GNU</acronym>
+    <acronym>GPL</acronym> protect your rights with two steps: (1) assert
+    copyright on the software, and (2) offer you this License giving you legal
+    permission to copy, distribute and/or modify it.</para>
+
+    <para>For the developers' and authors' protection, the
+    <acronym>GPL</acronym> clearly explains that there is no warranty for this
+    free software. For both users' and authors' sake, the
+    <acronym>GPL</acronym> requires that modified versions be marked as
+    changed, so that their problems will not be attributed erroneously to
+    authors of previous versions.</para>
+
+    <para>Some devices are designed to deny users access to install or run
+    modified versions of the software inside them, although the manufacturer
+    can do so. This is fundamentally incompatible with the aim of protecting
+    users' freedom to change the software. The systematic pattern of such
+    abuse occurs in the area of products for individuals to use, which is
+    precisely where it is most unacceptable. Therefore, we have designed this
+    version of the <acronym>GPL</acronym> to prohibit the practice for those
+    products. If such problems arise substantially in other domains, we stand
+    ready to extend this provision to those domains in future versions of the
+    <acronym>GPL</acronym>, as needed to protect the freedom of users.</para>
+
+    <para>Finally, every program is threatened constantly by software patents.
+    States should not allow patents to restrict development and use of
+    software on general-purpose computers, but in those that do, we wish to
+    avoid the special danger that patents applied to a free program could make
+    it effectively proprietary. To prevent this, the <acronym>GPL</acronym>
+    assures that patents cannot be used to render the program non-free.</para>
+
+    <para>The precise terms and conditions for copying, distribution and
+    modification follow.</para>
+
+    <bridgehead>TERMS AND CONDITIONS</bridgehead>
+
+    <bridgehead renderas="sect1" xml:id="Definitions">0.
+    Definitions.</bridgehead>
+
+    <para>“This License” refers to version 3 of the <acronym>GNU</acronym>
+    General Public License.</para>
+
+    <para>“Copyright” also means copyright-like laws that apply to other kinds
+    of works, such as semiconductor masks.</para>
+
+    <para>“The Program” refers to any copyrightable work licensed under this
+    License. Each licensee is addressed as “you”. “Licensees” and “recipients”
+    may be individuals or organizations.</para>
+
+    <para>To “modify” a work means to copy from or adapt all or part of the
+    work in a fashion requiring copyright permission, other than the making of
+    an exact copy. The resulting work is called a “modified version” of the
+    earlier work or a work “based on” the earlier work.</para>
+
+    <para>A “covered work” means either the unmodified Program or a work based
+    on the Program.</para>
+
+    <para>To “propagate” a work means to do anything with it that, without
+    permission, would make you directly or secondarily liable for infringement
+    under applicable copyright law, except executing it on a computer or
+    modifying a private copy. Propagation includes copying, distribution (with
+    or without modification), making available to the public, and in some
+    countries other activities as well.</para>
+
+    <para>To “convey” a work means any kind of propagation that enables other
+    parties to make or receive copies. Mere interaction with a user through a
+    computer network, with no transfer of a copy, is not conveying.</para>
+
+    <para>An interactive user interface displays “Appropriate Legal Notices”
+    to the extent that it includes a convenient and prominently visible
+    feature that (1) displays an appropriate copyright notice, and (2) tells
+    the user that there is no warranty for the work (except to the extent that
+    warranties are provided), that licensees may convey the work under this
+    License, and how to view a copy of this License. If the interface presents
+    a list of user commands or options, such as a menu, a prominent item in
+    the list meets this criterion.</para>
+
+    <bridgehead renderas="sect1" xml:id="SourceCode">1. Source
+    Code.</bridgehead>
+
+    <para>The “source code” for a work means the preferred form of the work
+    for making modifications to it. “Object code” means any non-source form of
+    a work.</para>
+
+    <para>A “Standard Interface” means an interface that either is an official
+    standard defined by a recognized standards body, or, in the case of
+    interfaces specified for a particular programming language, one that is
+    widely used among developers working in that language.</para>
+
+    <para>The “System Libraries” of an executable work include anything, other
+    than the work as a whole, that (a) is included in the normal form of
+    packaging a Major Component, but which is not part of that Major
+    Component, and (b) serves only to enable use of the work with that Major
+    Component, or to implement a Standard Interface for which an
+    implementation is available to the public in source code form. A “Major
+    Component”, in this context, means a major essential component (kernel,
+    window system, and so on) of the specific operating system (if any) on
+    which the executable work runs, or a compiler used to produce the work, or
+    an object code interpreter used to run it.</para>
+
+    <para>The “Corresponding Source” for a work in object code form means all
+    the source code needed to generate, install, and (for an executable work)
+    run the object code and to modify the work, including scripts to control
+    those activities. However, it does not include the work's System
+    Libraries, or general-purpose tools or generally available free programs
+    which are used unmodified in performing those activities but which are not
+    part of the work. For example, Corresponding Source includes interface
+    definition files associated with source files for the work, and the source
+    code for shared libraries and dynamically linked subprograms that the work
+    is specifically designed to require, such as by intimate data
+    communication or control flow between those subprograms and other parts of
+    the work.</para>
+
+    <para>The Corresponding Source need not include anything that users can
+    regenerate automatically from other parts of the Corresponding
+    Source.</para>
+
+    <para>The Corresponding Source for a work in source code form is that same
+    work.</para>
+
+    <bridgehead renderas="sect1" xml:id="BasicPermissions">2. Basic
+    Permissions.</bridgehead>
+
+    <para>All rights granted under this License are granted for the term of
+    copyright on the Program, and are irrevocable provided the stated
+    conditions are met. This License explicitly affirms your unlimited
+    permission to run the unmodified Program. The output from running a
+    covered work is covered by this License only if the output, given its
+    content, constitutes a covered work. This License acknowledges your rights
+    of fair use or other equivalent, as provided by copyright law.</para>
+
+    <para>You may make, run and propagate covered works that you do not
+    convey, without conditions so long as your license otherwise remains in
+    force. You may convey covered works to others for the sole purpose of
+    having them make modifications exclusively for you, or provide you with
+    facilities for running those works, provided that you comply with the
+    terms of this License in conveying all material for which you do not
+    control copyright. Those thus making or running the covered works for you
+    must do so exclusively on your behalf, under your direction and control,
+    on terms that prohibit them from making any copies of your copyrighted
+    material outside their relationship with you.</para>
+
+    <para>Conveying under any other circumstances is permitted solely under
+    the conditions stated below. Sublicensing is not allowed; section 10 makes
+    it unnecessary.</para>
+
+    <bridgehead renderas="sect1" xml:id="Protecting">3. Protecting Users'
+    Legal Rights From Anti-Circumvention Law.</bridgehead>
+
+    <para>No covered work shall be deemed part of an effective technological
+    measure under any applicable law fulfilling obligations under article 11
+    of the WIPO copyright treaty adopted on 20 December 1996, or similar laws
+    prohibiting or restricting circumvention of such measures.</para>
+
+    <para>When you convey a covered work, you waive any legal power to forbid
+    circumvention of technological measures to the extent such circumvention
+    is effected by exercising rights under this License with respect to the
+    covered work, and you disclaim any intention to limit operation or
+    modification of the work as a means of enforcing, against the work's
+    users, your or third parties' legal rights to forbid circumvention of
+    technological measures.</para>
+
+    <bridgehead renderas="sect1" xml:id="ConveyingVerbatim">4. Conveying
+    Verbatim Copies.</bridgehead>
+
+    <para>You may convey verbatim copies of the Program's source code as you
+    receive it, in any medium, provided that you conspicuously and
+    appropriately publish on each copy an appropriate copyright notice; keep
+    intact all notices stating that this License and any non-permissive terms
+    added in accord with section 7 apply to the code; keep intact all notices
+    of the absence of any warranty; and give all recipients a copy of this
+    License along with the Program.</para>
+
+    <para>You may charge any price or no price for each copy that you convey,
+    and you may offer support or warranty protection for a fee.</para>
+
+    <bridgehead renderas="sect1" xml:id="ConveyingModified">5. Conveying
+    Modified Source Versions.</bridgehead>
+
+    <para>You may convey a work based on the Program, or the modifications to
+    produce it from the Program, in the form of source code under the terms of
+    section 4, provided that you also meet all of these conditions:</para>
+
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>The work must carry prominent notices stating that you modified
+        it, and giving a relevant date.</para>
+      </listitem>
+
+      <listitem>
+        <para>The work must carry prominent notices stating that it is
+        released under this License and any conditions added under section 7.
+        This requirement modifies the requirement in section 4 to “keep intact
+        all notices”.</para>
+      </listitem>
+
+      <listitem>
+        <para>You must license the entire work, as a whole, under this License
+        to anyone who comes into possession of a copy. This License will
+        therefore apply, along with any applicable section 7 additional terms,
+        to the whole of the work, and all its parts, regardless of how they
+        are packaged. This License gives no permission to license the work in
+        any other way, but it does not invalidate such permission if you have
+        separately received it.</para>
+      </listitem>
+
+      <listitem>
+        <para>If the work has interactive user interfaces, each must display
+        Appropriate Legal Notices; however, if the Program has interactive
+        interfaces that do not display Appropriate Legal Notices, your work
+        need not make them do so.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>A compilation of a covered work with other separate and independent
+    works, which are not by their nature extensions of the covered work, and
+    which are not combined with it such as to form a larger program, in or on
+    a volume of a storage or distribution medium, is called an “aggregate” if
+    the compilation and its resulting copyright are not used to limit the
+    access or legal rights of the compilation's users beyond what the
+    individual works permit. Inclusion of a covered work in an aggregate does
+    not cause this License to apply to the other parts of the
+    aggregate.</para>
+
+    <bridgehead renderas="sect1" xml:id="ConveyingNonSource">6. Conveying
+    Non-Source Forms.</bridgehead>
+
+    <para>You may convey a covered work in object code form under the terms of
+    sections 4 and 5, provided that you also convey the machine-readable
+    Corresponding Source under the terms of this License, in one of these
+    ways:</para>
+
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>Convey the object code in, or embodied in, a physical product
+        (including a physical distribution medium), accompanied by the
+        Corresponding Source fixed on a durable physical medium customarily
+        used for software interchange.</para>
+      </listitem>
+
+      <listitem>
+        <para>Convey the object code in, or embodied in, a physical product
+        (including a physical distribution medium), accompanied by a written
+        offer, valid for at least three years and valid for as long as you
+        offer spare parts or customer support for that product model, to give
+        anyone who possesses the object code either (1) a copy of the
+        Corresponding Source for all the software in the product that is
+        covered by this License, on a durable physical medium customarily used
+        for software interchange, for a price no more than your reasonable
+        cost of physically performing this conveying of source, or (2) access
+        to copy the Corresponding Source from a network server at no
+        charge.</para>
+      </listitem>
+
+      <listitem>
+        <para>Convey individual copies of the object code with a copy of the
+        written offer to provide the Corresponding Source. This alternative is
+        allowed only occasionally and noncommercially, and only if you
+        received the object code with such an offer, in accord with subsection
+        6b.</para>
+      </listitem>
+
+      <listitem>
+        <para>Convey the object code by offering access from a designated
+        place (gratis or for a charge), and offer equivalent access to the
+        Corresponding Source in the same way through the same place at no
+        further charge. You need not require recipients to copy the
+        Corresponding Source along with the object code. If the place to copy
+        the object code is a network server, the Corresponding Source may be
+        on a different server (operated by you or a third party) that supports
+        equivalent copying facilities, provided you maintain clear directions
+        next to the object code saying where to find the Corresponding Source.
+        Regardless of what server hosts the Corresponding Source, you remain
+        obligated to ensure that it is available for as long as needed to
+        satisfy these requirements.</para>
+      </listitem>
+
+      <listitem>
+        <para>Convey the object code using peer-to-peer transmission, provided
+        you inform other peers where the object code and Corresponding Source
+        of the work are being offered to the general public at no charge under
+        subsection 6d.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>A separable portion of the object code, whose source code is
+    excluded from the Corresponding Source as a System Library, need not be
+    included in conveying the object code work.</para>
+
+    <para>A “User Product” is either (1) a “consumer product”, which means any
+    tangible personal property which is normally used for personal, family, or
+    household purposes, or (2) anything designed or sold for incorporation
+    into a dwelling. In determining whether a product is a consumer product,
+    doubtful cases shall be resolved in favor of coverage. For a particular
+    product received by a particular user, “normally used” refers to a typical
+    or common use of that class of product, regardless of the status of the
+    particular user or of the way in which the particular user actually uses,
+    or expects or is expected to use, the product. A product is a consumer
+    product regardless of whether the product has substantial commercial,
+    industrial or non-consumer uses, unless such uses represent the only
+    significant mode of use of the product.</para>
+
+    <para>“Installation Information” for a User Product means any methods,
+    procedures, authorization keys, or other information required to install
+    and execute modified versions of a covered work in that User Product from
+    a modified version of its Corresponding Source. The information must
+    suffice to ensure that the continued functioning of the modified object
+    code is in no case prevented or interfered with solely because
+    modification has been made.</para>
+
+    <para>If you convey an object code work under this section in, or with, or
+    specifically for use in, a User Product, and the conveying occurs as part
+    of a transaction in which the right of possession and use of the User
+    Product is transferred to the recipient in perpetuity or for a fixed term
+    (regardless of how the transaction is characterized), the Corresponding
+    Source conveyed under this section must be accompanied by the Installation
+    Information. But this requirement does not apply if neither you nor any
+    third party retains the ability to install modified object code on the
+    User Product (for example, the work has been installed in
+    <acronym>ROM</acronym>).</para>
+
+    <para>The requirement to provide Installation Information does not include
+    a requirement to continue to provide support service, warranty, or updates
+    for a work that has been modified or installed by the recipient, or for
+    the User Product in which it has been modified or installed. Access to a
+    network may be denied when the modification itself materially and
+    adversely affects the operation of the network or violates the rules and
+    protocols for communication across the network.</para>
+
+    <para>Corresponding Source conveyed, and Installation Information
+    provided, in accord with this section must be in a format that is publicly
+    documented (and with an implementation available to the public in source
+    code form), and must require no special password or key for unpacking,
+    reading or copying.</para>
+
+    <bridgehead renderas="sect1" xml:id="AdditionalTerms">7. Additional
+    Terms.</bridgehead>
+
+    <para>“Additional permissions” are terms that supplement the terms of this
+    License by making exceptions from one or more of its conditions.
+    Additional permissions that are applicable to the entire Program shall be
+    treated as though they were included in this License, to the extent that
+    they are valid under applicable law. If additional permissions apply only
+    to part of the Program, that part may be used separately under those
+    permissions, but the entire Program remains governed by this License
+    without regard to the additional permissions.</para>
+
+    <para>When you convey a copy of a covered work, you may at your option
+    remove any additional permissions from that copy, or from any part of it.
+    (Additional permissions may be written to require their own removal in
+    certain cases when you modify the work.) You may place additional
+    permissions on material, added by you to a covered work, for which you
+    have or can give appropriate copyright permission.</para>
+
+    <para>Notwithstanding any other provision of this License, for material
+    you add to a covered work, you may (if authorized by the copyright holders
+    of that material) supplement the terms of this License with terms:</para>
+
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>Disclaiming warranty or limiting liability differently from the
+        terms of sections 15 and 16 of this License; or</para>
+      </listitem>
+
+      <listitem>
+        <para>Requiring preservation of specified reasonable legal notices or
+        author attributions in that material or in the Appropriate Legal
+        Notices displayed by works containing it; or</para>
+      </listitem>
+
+      <listitem>
+        <para>Prohibiting misrepresentation of the origin of that material, or
+        requiring that modified versions of such material be marked in
+        reasonable ways as different from the original version; or</para>
+      </listitem>
+
+      <listitem>
+        <para>Limiting the use for publicity purposes of names of licensors or
+        authors of the material; or</para>
+      </listitem>
+
+      <listitem>
+        <para>Declining to grant rights under trademark law for use of some
+        trade names, trademarks, or service marks; or</para>
+      </listitem>
+
+      <listitem>
+        <para>Requiring indemnification of licensors and authors of that
+        material by anyone who conveys the material (or modified versions of
+        it) with contractual assumptions of liability to the recipient, for
+        any liability that these contractual assumptions directly impose on
+        those licensors and authors.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>All other non-permissive additional terms are considered “further
+    restrictions” within the meaning of section 10. If the Program as you
+    received it, or any part of it, contains a notice stating that it is
+    governed by this License along with a term that is a further restriction,
+    you may remove that term. If a license document contains a further
+    restriction but permits relicensing or conveying under this License, you
+    may add to a covered work material governed by the terms of that license
+    document, provided that the further restriction does not survive such
+    relicensing or conveying.</para>
+
+    <para>If you add terms to a covered work in accord with this section, you
+    must place, in the relevant source files, a statement of the additional
+    terms that apply to those files, or a notice indicating where to find the
+    applicable terms.</para>
+
+    <para>Additional terms, permissive or non-permissive, may be stated in the
+    form of a separately written license, or stated as exceptions; the above
+    requirements apply either way.</para>
+
+    <bridgehead renderas="sect1" xml:id="Termination">8.
+    Termination.</bridgehead>
+
+    <para>You may not propagate or modify a covered work except as expressly
+    provided under this License. Any attempt otherwise to propagate or modify
+    it is void, and will automatically terminate your rights under this
+    License (including any patent licenses granted under the third paragraph
+    of section 11).</para>
+
+    <para>However, if you cease all violation of this License, then your
+    license from a particular copyright holder is reinstated (a)
+    provisionally, unless and until the copyright holder explicitly and
+    finally terminates your license, and (b) permanently, if the copyright
+    holder fails to notify you of the violation by some reasonable means prior
+    to 60 days after the cessation.</para>
+
+    <para>Moreover, your license from a particular copyright holder is
+    reinstated permanently if the copyright holder notifies you of the
+    violation by some reasonable means, this is the first time you have
+    received notice of violation of this License (for any work) from that
+    copyright holder, and you cure the violation prior to 30 days after your
+    receipt of the notice.</para>
+
+    <para>Termination of your rights under this section does not terminate the
+    licenses of parties who have received copies or rights from you under this
+    License. If your rights have been terminated and not permanently
+    reinstated, you do not qualify to receive new licenses for the same
+    material under section 10.</para>
+
+    <bridgehead renderas="sect1" xml:id="AcceptanceNotRequired">9. Acceptance
+    Not Required for Having Copies.</bridgehead>
+
+    <para>You are not required to accept this License in order to receive or
+    run a copy of the Program. Ancillary propagation of a covered work
+    occurring solely as a consequence of using peer-to-peer transmission to
+    receive a copy likewise does not require acceptance. However, nothing
+    other than this License grants you permission to propagate or modify any
+    covered work. These actions infringe copyright if you do not accept this
+    License. Therefore, by modifying or propagating a covered work, you
+    indicate your acceptance of this License to do so.</para>
+
+    <bridgehead renderas="sect1" xml:id="AutomaticDownstream">10. Automatic
+    Licensing of Downstream Recipients.</bridgehead>
+
+    <para>Each time you convey a covered work, the recipient automatically
+    receives a license from the original licensors, to run, modify and
+    propagate that work, subject to this License. You are not responsible for
+    enforcing compliance by third parties with this License.</para>
+
+    <para>An “entity transaction” is a transaction transferring control of an
+    organization, or substantially all assets of one, or subdividing an
+    organization, or merging organizations. If propagation of a covered work
+    results from an entity transaction, each party to that transaction who
+    receives a copy of the work also receives whatever licenses to the work
+    the party's predecessor in interest had or could give under the previous
+    paragraph, plus a right to possession of the Corresponding Source of the
+    work from the predecessor in interest, if the predecessor has it or can
+    get it with reasonable efforts.</para>
+
+    <para>You may not impose any further restrictions on the exercise of the
+    rights granted or affirmed under this License. For example, you may not
+    impose a license fee, royalty, or other charge for exercise of rights
+    granted under this License, and you may not initiate litigation (including
+    a cross-claim or counterclaim in a lawsuit) alleging that any patent claim
+    is infringed by making, using, selling, offering for sale, or importing
+    the Program or any portion of it.</para>
+
+    <bridgehead renderas="sect1" xml:id="Patents">11. Patents.</bridgehead>
+
+    <para>A “contributor” is a copyright holder who authorizes use under this
+    License of the Program or a work on which the Program is based. The work
+    thus licensed is called the contributor's “contributor version”.</para>
+
+    <para>A contributor's “essential patent claims” are all patent claims
+    owned or controlled by the contributor, whether already acquired or
+    hereafter acquired, that would be infringed by some manner, permitted by
+    this License, of making, using, or selling its contributor version, but do
+    not include claims that would be infringed only as a consequence of
+    further modification of the contributor version. For purposes of this
+    definition, “control” includes the right to grant patent sublicenses in a
+    manner consistent with the requirements of this License.</para>
+
+    <para>Each contributor grants you a non-exclusive, worldwide, royalty-free
+    patent license under the contributor's essential patent claims, to make,
+    use, sell, offer for sale, import and otherwise run, modify and propagate
+    the contents of its contributor version.</para>
+
+    <para>In the following three paragraphs, a “patent license” is any express
+    agreement or commitment, however denominated, not to enforce a patent
+    (such as an express permission to practice a patent or covenant not to sue
+    for patent infringement). To “grant” such a patent license to a party
+    means to make such an agreement or commitment not to enforce a patent
+    against the party.</para>
+
+    <para>If you convey a covered work, knowingly relying on a patent license,
+    and the Corresponding Source of the work is not available for anyone to
+    copy, free of charge and under the terms of this License, through a
+    publicly available network server or other readily accessible means, then
+    you must either (1) cause the Corresponding Source to be so available, or
+    (2) arrange to deprive yourself of the benefit of the patent license for
+    this particular work, or (3) arrange, in a manner consistent with the
+    requirements of this License, to extend the patent license to downstream
+    recipients. “Knowingly relying” means you have actual knowledge that, but
+    for the patent license, your conveying the covered work in a country, or
+    your recipient's use of the covered work in a country, would infringe one
+    or more identifiable patents in that country that you have reason to
+    believe are valid.</para>
+
+    <para>If, pursuant to or in connection with a single transaction or
+    arrangement, you convey, or propagate by procuring conveyance of, a
+    covered work, and grant a patent license to some of the parties receiving
+    the covered work authorizing them to use, propagate, modify or convey a
+    specific copy of the covered work, then the patent license you grant is
+    automatically extended to all recipients of the covered work and works
+    based on it.</para>
+
+    <para>A patent license is “discriminatory” if it does not include within
+    the scope of its coverage, prohibits the exercise of, or is conditioned on
+    the non-exercise of one or more of the rights that are specifically
+    granted under this License. You may not convey a covered work if you are a
+    party to an arrangement with a third party that is in the business of
+    distributing software, under which you make payment to the third party
+    based on the extent of your activity of conveying the work, and under
+    which the third party grants, to any of the parties who would receive the
+    covered work from you, a discriminatory patent license (a) in connection
+    with copies of the covered work conveyed by you (or copies made from those
+    copies), or (b) primarily for and in connection with specific products or
+    compilations that contain the covered work, unless you entered into that
+    arrangement, or that patent license was granted, prior to 28 March
+    2007.</para>
+
+    <para>Nothing in this License shall be construed as excluding or limiting
+    any implied license or other defenses to infringement that may otherwise
+    be available to you under applicable patent law.</para>
+
+    <bridgehead renderas="sect1" xml:id="NoSurrender">12. No Surrender of
+    Others' Freedom.</bridgehead>
+
+    <para>If conditions are imposed on you (whether by court order, agreement
+    or otherwise) that contradict the conditions of this License, they do not
+    excuse you from the conditions of this License. If you cannot convey a
+    covered work so as to satisfy simultaneously your obligations under this
+    License and any other pertinent obligations, then as a consequence you may
+    not convey it at all. For example, if you agree to terms that obligate you
+    to collect a royalty for further conveying from those to whom you convey
+    the Program, the only way you could satisfy both those terms and this
+    License would be to refrain entirely from conveying the Program.</para>
+
+    <bridgehead renderas="sect1" xml:id="UsedWithAGPL">13. Use with the
+    <acronym>GNU</acronym> Affero General Public License.</bridgehead>
+
+    <para>Notwithstanding any other provision of this License, you have
+    permission to link or combine any covered work with a work licensed under
+    version 3 of the <acronym>GNU</acronym> Affero General Public License into
+    a single combined work, and to convey the resulting work. The terms of
+    this License will continue to apply to the part which is the covered work,
+    but the special requirements of the <acronym>GNU</acronym> Affero General
+    Public License, section 13, concerning interaction through a network will
+    apply to the combination as such.</para>
+
+    <bridgehead renderas="sect1" xml:id="RevisedVersions">14. Revised Versions
+    of this License.</bridgehead>
+
+    <para>The Free Software Foundation may publish revised and/or new versions
+    of the <acronym>GNU</acronym> General Public License from time to time.
+    Such new versions will be similar in spirit to the present version, but
+    may differ in detail to address new problems or concerns.</para>
+
+    <para>Each version is given a distinguishing version number. If the
+    Program specifies that a certain numbered version of the
+    <acronym>GNU</acronym> General Public License “or any later version”
+    applies to it, you have the option of following the terms and conditions
+    either of that numbered version or of any later version published by the
+    Free Software Foundation. If the Program does not specify a version number
+    of the <acronym>GNU</acronym> General Public License, you may choose any
+    version ever published by the Free Software Foundation.</para>
+
+    <para>If the Program specifies that a proxy can decide which future
+    versions of the <acronym>GNU</acronym> General Public License can be used,
+    that proxy's public statement of acceptance of a version permanently
+    authorizes you to choose that version for the Program.</para>
+
+    <para>Later license versions may give you additional or different
+    permissions. However, no additional obligations are imposed on any author
+    or copyright holder as a result of your choosing to follow a later
+    version.</para>
+
+    <bridgehead renderas="sect1" xml:id="WarrantyDisclaimer">15. Disclaimer of
+    Warranty.</bridgehead>
+
+    <para>THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+    APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+    HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY
+    OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+    PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+    IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+    ALL NECESSARY SERVICING, REPAIR OR CORRECTION.</para>
+
+    <bridgehead renderas="sect1" xml:id="LiabilityLimitation">16. Limitation
+    of Liability.</bridgehead>
+
+    <para>IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN
+    WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR
+    CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+    INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES
+    ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT
+    LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES
+    SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE
+    WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</para>
+
+    <bridgehead renderas="sect1" xml:id="InterpretationSecs1516">17.
+    Interpretation of Sections 15 and 16.</bridgehead>
+
+    <para>If the disclaimer of warranty and limitation of liability provided
+    above cannot be given local legal effect according to their terms,
+    reviewing courts shall apply local law that most closely approximates an
+    absolute waiver of all civil liability in connection with the Program,
+    unless a warranty or assumption of liability accompanies a copy of the
+    Program in return for a fee.</para>
+
+    <bridgehead>END OF TERMS AND CONDITIONS</bridgehead>
+
+    <bridgehead renderas="sect1" xml:id="HowToApply">How to Apply These Terms
+    to Your New Programs</bridgehead>
+
+    <para>If you develop a new program, and you want it to be of the greatest
+    possible use to the public, the best way to achieve this is to make it
+    free software which everyone can redistribute and change under these
+    terms.</para>
+
+    <para>To do so, attach the following notices to the program. It is safest
+    to attach them to the start of each source file to most effectively state
+    the exclusion of warranty; and each file should have at least the
+    “copyright” line and a pointer to where the full notice is found.</para>
+
+    <screen>
+  <replaceable>one line to give the program's name and a brief idea of what it does.</replaceable>
+  Copyright (C) <replaceable>year</replaceable> <replaceable>name of author</replaceable>
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the <acronym>GNU</acronym> General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  <acronym>GNU</acronym> General Public License for more details.
+  
+  You should have received a copy of the <acronym>GNU</acronym> General Public License
+  along with this program.  If not, see <link
+        xlink:href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</link>.
+    </screen>
+
+    <para>Also add information on how to contact you by electronic and paper
+    mail.</para>
+
+    <para>If the program does terminal interaction, make it output a short
+    notice like this when it starts in an interactive mode:</para>
+
+    <screen>
+  <replaceable>program</replaceable> Copyright (C) <replaceable>year</replaceable> <replaceable>name of author</replaceable>
+  This program comes with ABSOLUTELY NO WARRANTY; for details type '<literal>show w</literal>'.
+  This is free software, and you are welcome to redistribute it
+  under certain conditions; type '<literal>show c</literal>' for details.
+    </screen>
+
+    <para>The hypothetical commands '<literal>show w</literal>' and
+    '<literal>show c</literal>' should show the appropriate parts of the
+    General Public License. Of course, your program's commands might be
+    different; for a GUI interface, you would use an “about box”.</para>
+
+    <para>You should also get your employer (if you work as a programmer) or
+    school, if any, to sign a “copyright disclaimer” for the program, if
+    necessary. For more information on this, and how to apply and follow the
+    <acronym>GNU</acronym> <acronym>GPL</acronym>, see <link
+    xlink:href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</link>.</para>
+
+    <para>The <acronym>GNU</acronym> General Public License does not permit
+    incorporating your program into proprietary programs. If your program is a
+    subroutine library, you may consider it more useful to permit linking
+    proprietary applications with the library. If this is what you want to do,
+    use the <acronym>GNU</acronym> Lesser General Public License instead of
+    this License. But first, please read <link
+    xlink:href="http://www.gnu.org/philosophy/why-not-lgpl.html">http://www.gnu.org/philosophy/why-not-lgpl.html</link>.</para>
+  </appendix>
+
+  <appendix xml:id="fdl">
+    <title>GNU Free Documentation License</title>
+
+    <simpara>Version 1.3, 3 November 2008</simpara>
+
+    <simpara>Copyright © 2000, 2001, 2002, 2007, 2008 <link
+    xlink:href="http://www.fsf.org/">Free Software Foundation,
+    Inc.</link></simpara>
+
+    <simpara>Everyone is permitted to copy and distribute verbatim copies of
+    this license document, but changing it is not allowed.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section0">0. PREAMBLE</bridgehead>
+
+    <simpara>The purpose of this License is to make a manual, textbook, or
+    other functional and useful document “free” in the sense of freedom: to
+    assure everyone the effective freedom to copy and redistribute it, with or
+    without modifying it, either commercially or noncommercially. Secondarily,
+    this License preserves for the author and publisher a way to get credit
+    for their work, while not being considered responsible for modifications
+    made by others.</simpara>
+
+    <simpara>This License is a kind of “copyleft”, which means that derivative
+    works of the document must themselves be free in the same sense. It
+    complements the GNU General Public License, which is a copyleft license
+    designed for free software.</simpara>
+
+    <simpara>We have designed this License in order to use it for manuals for
+    free software, because free software needs free documentation: a free
+    program should come with manuals providing the same freedoms that the
+    software does. But this License is not limited to software manuals; it can
+    be used for any textual work, regardless of subject matter or whether it
+    is published as a printed book. We recommend this License principally for
+    works whose purpose is instruction or reference.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section1">1. APPLICABILITY AND
+    DEFINITIONS</bridgehead>
+
+    <simpara>This License applies to any manual or other work, in any medium,
+    that contains a notice placed by the copyright holder saying it can be
+    distributed under the terms of this License. Such a notice grants a
+    world-wide, royalty-free license, unlimited in duration, to use that work
+    under the conditions stated herein. The “Document”, below, refers to any
+    such manual or work. Any member of the public is a licensee, and is
+    addressed as “you”. You accept the license if you copy, modify or
+    distribute the work in a way requiring permission under copyright
+    law.</simpara>
+
+    <simpara>A “Modified Version” of the Document means any work containing
+    the Document or a portion of it, either copied verbatim, or with
+    modifications and/or translated into another language.</simpara>
+
+    <simpara>A “Secondary Section” is a named appendix or a front-matter
+    section of the Document that deals exclusively with the relationship of
+    the publishers or authors of the Document to the Document’s overall
+    subject (or to related matters) and contains nothing that could fall
+    directly within that overall subject. (Thus, if the Document is in part a
+    textbook of mathematics, a Secondary Section may not explain any
+    mathematics.) The relationship could be a matter of historical connection
+    with the subject or with related matters, or of legal, commercial,
+    philosophical, ethical or political position regarding them.</simpara>
+
+    <simpara>The “Invariant Sections” are certain Secondary Sections whose
+    titles are designated, as being those of Invariant Sections, in the notice
+    that says that the Document is released under this License. If a section
+    does not fit the above definition of Secondary then it is not allowed to
+    be designated as Invariant. The Document may contain zero Invariant
+    Sections. If the Document does not identify any Invariant Sections then
+    there are none.</simpara>
+
+    <simpara>The “Cover Texts” are certain short passages of text that are
+    listed, as Front-Cover Texts or Back-Cover Texts, in the notice that says
+    that the Document is released under this License. A Front-Cover Text may
+    be at most 5 words, and a Back-Cover Text may be at most 25
+    words.</simpara>
+
+    <simpara>A “Transparent” copy of the Document means a machine-readable
+    copy, represented in a format whose specification is available to the
+    general public, that is suitable for revising the document
+    straightforwardly with generic text editors or (for images composed of
+    pixels) generic paint programs or (for drawings) some widely available
+    drawing editor, and that is suitable for input to text formatters or for
+    automatic translation to a variety of formats suitable for input to text
+    formatters. A copy made in an otherwise Transparent file format whose
+    markup, or absence of markup, has been arranged to thwart or discourage
+    subsequent modification by readers is not Transparent. An image format is
+    not Transparent if used for any substantial amount of text. A copy that is
+    not “Transparent” is called “Opaque”.</simpara>
+
+    <simpara>Examples of suitable formats for Transparent copies include plain
+    ASCII without markup, Texinfo input format, LaTeX input format, SGML or
+    XML using a publicly available DTD, and standard-conforming simple HTML,
+    PostScript or PDF designed for human modification. Examples of transparent
+    image formats include PNG, XCF and JPG. Opaque formats include proprietary
+    formats that can be read and edited only by proprietary word processors,
+    SGML or XML for which the DTD and/or processing tools are not generally
+    available, and the machine-generated HTML, PostScript or PDF produced by
+    some word processors for output purposes only.</simpara>
+
+    <simpara>The “Title Page” means, for a printed book, the title page
+    itself, plus such following pages as are needed to hold, legibly, the
+    material this License requires to appear in the title page. For works in
+    formats which do not have any title page as such, “Title Page” means the
+    text near the most prominent appearance of the work’s title, preceding the
+    beginning of the body of the text.</simpara>
+
+    <simpara>The “publisher” means any person or entity that distributes
+    copies of the Document to the public.</simpara>
+
+    <simpara>A section “Entitled XYZ” means a named subunit of the Document
+    whose title either is precisely XYZ or contains XYZ in parentheses
+    following text that translates XYZ in another language. (Here XYZ stands
+    for a specific section name mentioned below, such as “Acknowledgements”,
+    “Dedications”, “Endorsements”, or “History”.) To “Preserve the Title” of
+    such a section when you modify the Document means that it remains a
+    section “Entitled XYZ” according to this definition.</simpara>
+
+    <simpara>The Document may include Warranty Disclaimers next to the notice
+    which states that this License applies to the Document. These Warranty
+    Disclaimers are considered to be included by reference in this License,
+    but only as regards disclaiming warranties: any other implication that
+    these Warranty Disclaimers may have is void and has no effect on the
+    meaning of this License.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section2">2. VERBATIM
+    COPYING</bridgehead>
+
+    <simpara>You may copy and distribute the Document in any medium, either
+    commercially or noncommercially, provided that this License, the copyright
+    notices, and the license notice saying this License applies to the
+    Document are reproduced in all copies, and that you add no other
+    conditions whatsoever to those of this License. You may not use technical
+    measures to obstruct or control the reading or further copying of the
+    copies you make or distribute. However, you may accept compensation in
+    exchange for copies. If you distribute a large enough number of copies you
+    must also follow the conditions in section 3.</simpara>
+
+    <simpara>You may also lend copies, under the same conditions stated above,
+    and you may publicly display copies.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section3">3. COPYING IN
+    QUANTITY</bridgehead>
+
+    <simpara>If you publish printed copies (or copies in media that commonly
+    have printed covers) of the Document, numbering more than 100, and the
+    Document’s license notice requires Cover Texts, you must enclose the
+    copies in covers that carry, clearly and legibly, all these Cover Texts:
+    Front-Cover Texts on the front cover, and Back-Cover Texts on the back
+    cover. Both covers must also clearly and legibly identify you as the
+    publisher of these copies. The front cover must present the full title
+    with all words of the title equally prominent and visible. You may add
+    other material on the covers in addition. Copying with changes limited to
+    the covers, as long as they preserve the title of the Document and satisfy
+    these conditions, can be treated as verbatim copying in other
+    respects.</simpara>
+
+    <simpara>If the required texts for either cover are too voluminous to fit
+    legibly, you should put the first ones listed (as many as fit reasonably)
+    on the actual cover, and continue the rest onto adjacent pages.</simpara>
+
+    <simpara>If you publish or distribute Opaque copies of the Document
+    numbering more than 100, you must either include a machine-readable
+    Transparent copy along with each Opaque copy, or state in or with each
+    Opaque copy a computer-network location from which the general
+    network-using public has access to download using public-standard network
+    protocols a complete Transparent copy of the Document, free of added
+    material. If you use the latter option, you must take reasonably prudent
+    steps, when you begin distribution of Opaque copies in quantity, to ensure
+    that this Transparent copy will remain thus accessible at the stated
+    location until at least one year after the last time you distribute an
+    Opaque copy (directly or through your agents or retailers) of that edition
+    to the public.</simpara>
+
+    <simpara>It is requested, but not required, that you contact the authors
+    of the Document well before redistributing any large number of copies, to
+    give them a chance to provide you with an updated version of the
+    Document.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section4">4.
+    MODIFICATIONS</bridgehead>
+
+    <simpara>You may copy and distribute a Modified Version of the Document
+    under the conditions of sections 2 and 3 above, provided that you release
+    the Modified Version under precisely this License, with the Modified
+    Version filling the role of the Document, thus licensing distribution and
+    modification of the Modified Version to whoever possesses a copy of it. In
+    addition, you must do these things in the Modified Version:</simpara>
+
+    <orderedlist numeration="upperalpha">
+      <listitem>
+        <simpara>Use in the Title Page (and on the covers, if any) a title
+        distinct from that of the Document, and from those of previous
+        versions (which should, if there were any, be listed in the History
+        section of the Document). You may use the same title as a previous
+        version if the original publisher of that version gives
+        permission.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>List on the Title Page, as authors, one or more persons or
+        entities responsible for authorship of the modifications in the
+        Modified Version, together with at least five of the principal authors
+        of the Document (all of its principal authors, if it has fewer than
+        five), unless they release you from this requirement.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>State on the Title page the name of the publisher of the
+        Modified Version, as the publisher.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Preserve all the copyright notices of the Document.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Add an appropriate copyright notice for your modifications
+        adjacent to the other copyright notices.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Include, immediately after the copyright notices, a license
+        notice giving the public permission to use the Modified Version under
+        the terms of this License, in the form shown in the Addendum
+        below.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Preserve in that license notice the full lists of Invariant
+        Sections and required Cover Texts given in the Document’s license
+        notice.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Include an unaltered copy of this License.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Preserve the section Entitled “History”, Preserve its Title,
+        and add to it an item stating at least the title, year, new authors,
+        and publisher of the Modified Version as given on the Title Page. If
+        there is no section Entitled “History” in the Document, create one
+        stating the title, year, authors, and publisher of the Document as
+        given on its Title Page, then add an item describing the Modified
+        Version as stated in the previous sentence.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Preserve the network location, if any, given in the Document
+        for public access to a Transparent copy of the Document, and likewise
+        the network locations given in the Document for previous versions it
+        was based on. These may be placed in the “History” section. You may
+        omit a network location for a work that was published at least four
+        years before the Document itself, or if the original publisher of the
+        version it refers to gives permission.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>For any section Entitled “Acknowledgements” or “Dedications”,
+        Preserve the Title of the section, and preserve in the section all the
+        substance and tone of each of the contributor acknowledgements and/or
+        dedications given therein.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Preserve all the Invariant Sections of the Document,
+        unaltered in their text and in their titles. Section numbers or the
+        equivalent are not considered part of the section titles.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Delete any section Entitled “Endorsements”. Such a section
+        may not be included in the Modified Version.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Do not retitle any existing section to be Entitled
+        “Endorsements” or to conflict in title with any Invariant
+        Section.</simpara>
+      </listitem>
+
+      <listitem>
+        <simpara>Preserve any Warranty Disclaimers.</simpara>
+      </listitem>
+    </orderedlist>
+
+    <simpara>If the Modified Version includes new front-matter sections or
+    appendices that qualify as Secondary Sections and contain no material
+    copied from the Document, you may at your option designate some or all of
+    these sections as invariant. To do this, add their titles to the list of
+    Invariant Sections in the Modified Version’s license notice. These titles
+    must be distinct from any other section titles.</simpara>
+
+    <simpara>You may add a section Entitled “Endorsements”, provided it
+    contains nothing but endorsements of your Modified Version by various
+    parties — for example, statements of peer review or that the text has been
+    approved by an organization as the authoritative definition of a
+    standard.</simpara>
+
+    <simpara>You may add a passage of up to five words as a Front-Cover Text,
+    and a passage of up to 25 words as a Back-Cover Text, to the end of the
+    list of Cover Texts in the Modified Version. Only one passage of
+    Front-Cover Text and one of Back-Cover Text may be added by (or through
+    arrangements made by) any one entity. If the Document already includes a
+    cover text for the same cover, previously added by you or by arrangement
+    made by the same entity you are acting on behalf of, you may not add
+    another; but you may replace the old one, on explicit permission from the
+    previous publisher that added the old one.</simpara>
+
+    <simpara>The author(s) and publisher(s) of the Document do not by this
+    License give permission to use their names for publicity for or to assert
+    or imply endorsement of any Modified Version.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section5">5. COMBINING
+    DOCUMENTS</bridgehead>
+
+    <simpara>You may combine the Document with other documents released under
+    this License, under the terms defined in section 4 above for modified
+    versions, provided that you include in the combination all of the
+    Invariant Sections of all of the original documents, unmodified, and list
+    them all as Invariant Sections of your combined work in its license
+    notice, and that you preserve all their Warranty Disclaimers.</simpara>
+
+    <simpara>The combined work need only contain one copy of this License, and
+    multiple identical Invariant Sections may be replaced with a single copy.
+    If there are multiple Invariant Sections with the same name but different
+    contents, make the title of each such section unique by adding at the end
+    of it, in parentheses, the name of the original author or publisher of
+    that section if known, or else a unique number. Make the same adjustment
+    to the section titles in the list of Invariant Sections in the license
+    notice of the combined work.</simpara>
+
+    <simpara>In the combination, you must combine any sections Entitled
+    “History” in the various original documents, forming one section Entitled
+    “History”; likewise combine any sections Entitled “Acknowledgements”, and
+    any sections Entitled “Dedications”. You must delete all sections Entitled
+    “Endorsements”.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section6">6. COLLECTIONS OF
+    DOCUMENTS</bridgehead>
+
+    <simpara>You may make a collection consisting of the Document and other
+    documents released under this License, and replace the individual copies
+    of this License in the various documents with a single copy that is
+    included in the collection, provided that you follow the rules of this
+    License for verbatim copying of each of the documents in all other
+    respects.</simpara>
+
+    <simpara>You may extract a single document from such a collection, and
+    distribute it individually under this License, provided you insert a copy
+    of this License into the extracted document, and follow this License in
+    all other respects regarding verbatim copying of that document.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section7">7. AGGREGATION WITH
+    INDEPENDENT WORKS</bridgehead>
+
+    <simpara>A compilation of the Document or its derivatives with other
+    separate and independent documents or works, in or on a volume of a
+    storage or distribution medium, is called an “aggregate” if the copyright
+    resulting from the compilation is not used to limit the legal rights of
+    the compilation’s users beyond what the individual works permit. When the
+    Document is included in an aggregate, this License does not apply to the
+    other works in the aggregate which are not themselves derivative works of
+    the Document.</simpara>
+
+    <simpara>If the Cover Text requirement of section 3 is applicable to these
+    copies of the Document, then if the Document is less than one half of the
+    entire aggregate, the Document’s Cover Texts may be placed on covers that
+    bracket the Document within the aggregate, or the electronic equivalent of
+    covers if the Document is in electronic form. Otherwise they must appear
+    on printed covers that bracket the whole aggregate.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section8">8. TRANSLATION</bridgehead>
+
+    <simpara>Translation is considered a kind of modification, so you may
+    distribute translations of the Document under the terms of section 4.
+    Replacing Invariant Sections with translations requires special permission
+    from their copyright holders, but you may include translations of some or
+    all Invariant Sections in addition to the original versions of these
+    Invariant Sections. You may include a translation of this License, and all
+    the license notices in the Document, and any Warranty Disclaimers,
+    provided that you also include the original English version of this
+    License and the original versions of those notices and disclaimers. In
+    case of a disagreement between the translation and the original version of
+    this License or a notice or disclaimer, the original version will
+    prevail.</simpara>
+
+    <simpara>If a section in the Document is Entitled “Acknowledgements”,
+    “Dedications”, or “History”, the requirement (section 4) to Preserve its
+    Title (section 1) will typically require changing the actual
+    title.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section9">9. TERMINATION</bridgehead>
+
+    <simpara>You may not copy, modify, sublicense, or distribute the Document
+    except as expressly provided under this License. Any attempt otherwise to
+    copy, modify, sublicense, or distribute it is void, and will automatically
+    terminate your rights under this License.</simpara>
+
+    <simpara>However, if you cease all violation of this License, then your
+    license from a particular copyright holder is reinstated (a)
+    provisionally, unless and until the copyright holder explicitly and
+    finally terminates your license, and (b) permanently, if the copyright
+    holder fails to notify you of the violation by some reasonable means prior
+    to 60 days after the cessation.</simpara>
+
+    <simpara>Moreover, your license from a particular copyright holder is
+    reinstated permanently if the copyright holder notifies you of the
+    violation by some reasonable means, this is the first time you have
+    received notice of violation of this License (for any work) from that
+    copyright holder, and you cure the violation prior to 30 days after your
+    receipt of the notice.</simpara>
+
+    <simpara>Termination of your rights under this section does not terminate
+    the licenses of parties who have received copies or rights from you under
+    this License. If your rights have been terminated and not permanently
+    reinstated, receipt of a copy of some or all of the same material does not
+    give you any rights to use it.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section10">10. FUTURE REVISIONS OF
+    THIS LICENSE</bridgehead>
+
+    <simpara>The Free Software Foundation may publish new, revised versions of
+    the GNU Free Documentation License from time to time. Such new versions
+    will be similar in spirit to the present version, but may differ in detail
+    to address new problems or concerns. See <link
+    xlink:href="http://www.gnu.org/copyleft/">Copyleft</link>.</simpara>
+
+    <simpara>Each version of the License is given a distinguishing version
+    number. If the Document specifies that a particular numbered version of
+    this License “or any later version” applies to it, you have the option of
+    following the terms and conditions either of that specified version or of
+    any later version that has been published (not as a draft) by the Free
+    Software Foundation. If the Document does not specify a version number of
+    this License, you may choose any version ever published (not as a draft)
+    by the Free Software Foundation. If the Document specifies that a proxy
+    can decide which future versions of this License can be used, that proxy’s
+    public statement of acceptance of a version permanently authorizes you to
+    choose that version for the Document.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="section11">11.
+    RELICENSING</bridgehead>
+
+    <simpara>“Massive Multiauthor Collaboration Site” (or “MMC Site”) means
+    any World Wide Web server that publishes copyrightable works and also
+    provides prominent facilities for anybody to edit those works. A public
+    wiki that anybody can edit is an example of such a server. A “Massive
+    Multiauthor Collaboration” (or “MMC”) contained in the site means any set
+    of copyrightable works thus published on the MMC site.</simpara>
+
+    <simpara>“CC-BY-SA” means the Creative Commons Attribution-Share Alike 3.0
+    license published by Creative Commons Corporation, a not-for-profit
+    corporation with a principal place of business in San Francisco,
+    California, as well as future copyleft versions of that license published
+    by that same organization.</simpara>
+
+    <simpara>“Incorporate” means to publish or republish a Document, in whole
+    or in part, as part of another Document.</simpara>
+
+    <simpara>An MMC is “eligible for relicensing” if it is licensed under this
+    License, and if all works that were first published under this License
+    somewhere other than this MMC, and subsequently incorporated in whole or
+    in part into the MMC, (1) had no cover texts or invariant sections, and
+    (2) were thus incorporated prior to November 1, 2008.</simpara>
+
+    <simpara>The operator of an MMC Site may republish an MMC contained in the
+    site under CC-BY-SA on the same site at any time before August 1, 2009,
+    provided the MMC is eligible for relicensing.</simpara>
+
+    <bridgehead renderas="sect2" xml:id="addendum">ADDENDUM: How to use this
+    License for your documents</bridgehead>
+
+    <simpara>To use this License in a document you have written, include a
+    copy of the License in the document and put the following copyright and
+    license notices just after the title page:</simpara>
+
+    <screen>Copyright © YEAR YOUR NAME
+  
+  Permission is granted to copy, distribute and/or modify this document under the
+  terms of the GNU Free Documentation License, Version 1.3 or any later version
+  published by the Free Software Foundation; with no Invariant Sections, no
+  Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in
+  the section entitled “GNU Free Documentation License”.</screen>
+
+    <simpara>If you have Invariant Sections, Front-Cover Texts and Back-Cover
+    Texts, replace the “with… Texts.” line with this:</simpara>
+
+    <screen>with the Invariant Sections being LIST THEIR TITLES, with the Front-Cover Texts
+  being LIST, and with the Back-Cover Texts being LIST.</screen>
+
+    <simpara>If you have Invariant Sections without Cover Texts, or some other
+    combination of the three, merge those two alternatives to suit the
+    situation.</simpara>
+
+    <simpara>If your document contains nontrivial examples of program code, we
+    recommend releasing these examples in parallel under your choice of free
+    software license, such as the GNU General Public License, to permit their
+    use in free software.</simpara>
+  </appendix>
+</book>
