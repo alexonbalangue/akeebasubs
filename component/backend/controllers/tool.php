@@ -23,6 +23,7 @@ class ComAkeebasubsControllerTool extends ComAkeebasubsControllerDefault
 		
 		$cache = JPATH_ROOT.'/cache/com_'.$this->getIdentifier()->package . '/maintenance.import.txt';
 		
+		jimport('joomla.filesystem.file');
 		if(JFile::exists($cache))
 		{
 			JFile::delete($cache);
