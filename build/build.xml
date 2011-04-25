@@ -47,7 +47,7 @@
 	</target>
 
 	<target name="svn" description="Makes only packages, not the documentation"
-		depends="new-release,setup-properties,component-package,component-package-noframework">
+		depends="new-release,setup-properties,component-packages">
 	</target>
 
 	<target name="new-release" description="Create the release directory afresh">
@@ -78,12 +78,14 @@
 	====================================================================================================
 	-->
 	
-	<target name="component-package" description="Component package build"
+	<target name="component-packages" depends="component-package-core-full,component-package-core-nofw,component-package-pro-nofw,component-package-pro-full" />
+	
+	<target name="component-package-core-full" description="Akeeba Subscriptions Core, full"
 		depends="new-release,setup-properties">
 			
 		<!-- Create the package -->
 		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
-			<filterchain id="standard-tokens">
+			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
@@ -92,7 +94,61 @@
 		</copy>
 		
 		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
-			<filterchain id="standard-tokens">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="PRO" value="0" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
+			<fileset refid="component" />
+		</zipme>
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
+			<fileset dir="${dirs.modules}">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
+			<fileset dir="${dirs.plugins}">
+				<include name="**"/>
+				<exclude name="akeebasubs/juga**" />
+				<exclude name="akeebasubs/ninjaboard**" />
+			</fileset>
+		</zipme>
+		
+		<zipme basedir="${dirs.koowa}" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
+			<fileset dir="${dirs.koowa}">
+				<include name="**"/>
+				<exclude name="site/**" />
+				<exclude name="plugins/system/**" />
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.koowa}/site" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
+			<fileset dir="${dirs.koowa}/site">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.koowa}/plugins/system" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
+			<fileset dir="${dirs.koowa}/plugins/system">
+				<include name="koowa.php"/>
+			</fileset>
+		</zipme>
+		<copy file="./templates/koowa.xml" tofile="${dirs.release}/koowa.xml" overwrite="true" />
+		<zipme basedir="${dirs.release}" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
+			<fileset dir="${dirs.release}">
+				<include name="koowa.xml"/>
+			</fileset>
+		</zipme>
+	</target>
+	
+	<target name="component-package-core-nofw" description="Akeeba Subscriptions Core, without Nooku"
+		depends="new-release,setup-properties">
+		
+		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
+			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
@@ -100,56 +156,126 @@
 			</filterchain>
 		</copy>
 		
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="PRO" value="0" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-core-${version}-no_framework.zip" includeemptydirs="true">
 			<fileset refid="component" />
 		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-core-${version}-no_framework.zip" includeemptydirs="true">
 			<fileset dir="${dirs.modules}">
 				<include name="**"/>
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-core-${version}-no_framework.zip" includeemptydirs="true">
+			<fileset dir="${dirs.plugins}">
+				<include name="**"/>
+				<exclude name="akeebasubs/juga**" />
+				<exclude name="akeebasubs/ninjaboard**" />
+			</fileset>
+		</zipme>
+	</target>
+	
+	<target name="component-package-pro-full" description="Akeeba Subscriptions Professional, full"
+		depends="new-release,setup-properties">
+			
+		<!-- Create the package -->
+		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="PRO" value="1" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-pro-${version}-full.zip" includeemptydirs="true">
+			<fileset refid="component" />
+		</zipme>
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-pro-${version}-full.zip" includeemptydirs="true">
+			<fileset dir="${dirs.modules}">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-pro-${version}-full.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
 			</fileset>
 		</zipme>
 		
-		<zipme basedir="${dirs.koowa}" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.koowa}" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-pro-${version}-full.zip" includeemptydirs="true">
 			<fileset dir="${dirs.koowa}">
 				<include name="**"/>
 				<exclude name="site/**" />
 				<exclude name="plugins/system/**" />
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.koowa}/site" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.koowa}/site" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-pro-${version}-full.zip" includeemptydirs="true">
 			<fileset dir="${dirs.koowa}/site">
 				<include name="**"/>
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.koowa}/plugins/system" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.koowa}/plugins/system" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-pro-${version}-full.zip" includeemptydirs="true">
 			<fileset dir="${dirs.koowa}/plugins/system">
 				<include name="koowa.php"/>
 			</fileset>
 		</zipme>
 		<copy file="./templates/koowa.xml" tofile="${dirs.release}/koowa.xml" overwrite="true" />
-		<zipme basedir="${dirs.release}" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.release}" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-pro-${version}-full.zip" includeemptydirs="true">
 			<fileset dir="${dirs.release}">
 				<include name="koowa.xml"/>
 			</fileset>
 		</zipme>
 	</target>
 	
-	<target name="component-package-noframework" description="Component package build without Nooku"
-		depends="new-release,setup-properties,component-package">
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+	<target name="component-package-pro-nofw" description="Akeeba Subscriptions Professional, without Nooku"
+		depends="new-release,setup-properties">
+		
+		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="PRO" value="1" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-pro-${version}-no_framework.zip" includeemptydirs="true">
 			<fileset refid="component" />
 		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-pro-${version}-no_framework.zip" includeemptydirs="true">
 			<fileset dir="${dirs.modules}">
 				<include name="**"/>
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-pro-${version}-no_framework.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
 			</fileset>
