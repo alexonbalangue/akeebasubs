@@ -9,13 +9,6 @@ To-do / bug fixes:
 ----------------------------------------
 Integrations
 ----------------------------------------
-- Add/remove to DOCman 1.5.x groups
-#__docman_groups {
-	groups_id					456
-	groups_name					Blah
-	groups_members				123,123,123
-}
-
 - Add/remove to Joomla! Groups (1.6 only)
 #__usergroups {
 	id							456
@@ -39,6 +32,14 @@ Integrations
 	userName					John Q. Public
 	description					Text not null
 }
+
+- Add/remove to DOCman 1.5.x groups
+#__docman_groups {
+	groups_id					456
+	groups_name					Blah
+	groups_members				123,123,123
+}
+
 
 - Add/remove to VM shopper groups
 - Add/remove to Tienda groups
