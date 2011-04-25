@@ -19,5 +19,7 @@
 	<languages>
 		<language tag="en-GB">en-GB.plg_system_asexpirationnotify.ini</language>
 		<language tag="en-GB">en-GB.plg_system_asexpirationnotify.sys.ini</language>
+		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.ini</language>
+		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.sys.ini</language>
 	</languages>
 </install>

@@ -17,6 +17,8 @@
 	<languages folder="translation">
 		<language tag="en-GB">en-GB.mod_aksubslist.ini</language>
 		<language tag="en-GB">en-GB.mod_aksubslist.sys.ini</language>
+		<language tag="da-DK">da-DK.mod_aksubslist.ini</language>
+		<language tag="da-DK">da-DK.mod_aksubslist.sys.ini</language>
 	</languages>
 
 	<params>

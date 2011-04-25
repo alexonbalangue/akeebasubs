@@ -18,6 +18,8 @@
 	<languages folder="translation">
 		<language tag="en-GB">en-GB.mod_akslevels.ini</language>
 		<language tag="en-GB">en-GB.mod_akslevels.sys.ini</language>
+		<language tag="da-DK">da-DK.mod_akslevels.ini</language>
+		<language tag="da-DK">da-DK.mod_akslevels.sys.ini</language>		
 	</languages>
 
 	<params addpath="/modules/mod_akslevels/elements">
