@@ -116,6 +116,7 @@
 				<include name="**"/>
 				<exclude name="akeebasubs/juga**" />
 				<exclude name="akeebasubs/ninjaboard**" />
+				<exclude name="akeebasubs/k2**" />
 			</fileset>
 		</zipme>
 		
@@ -179,6 +180,7 @@
 				<include name="**"/>
 				<exclude name="akeebasubs/juga**" />
 				<exclude name="akeebasubs/ninjaboard**" />
+				<exclude name="akeebasubs/k2**" />
 			</fileset>
 		</zipme>
 	</target>
