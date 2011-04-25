@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="AkeebaSubs" description="Akeeba Subscriptions component based on Nooku FW" default="svn" >
+<project name="AkeebaSubscriptions" description="Akeeba Subscriptions component based on Nooku FW" default="svn" >
 	<property file="./build.properties" />
 	<!-- Default properties, set only if not already assigned in the build.properties file -->
 	<property name="dirs.root" value="../" />
@@ -333,7 +333,22 @@
 				<include name="CHANGELOG"/>
 			</fileset>			
 			<fileset dir="${dirs.release}">
-				<include name="com_akeebasubs-*.zip"/>
+				<include name="com_akeebasubs-core-*.zip"/>
+			</fileset>			
+		</ftpdeploy>
+		<ftpdeploy
+			host="${ftp.host}"
+			port="${ftp.port}"
+			username="${ftp.username}"
+			password="${ftp.password}"
+			dir="${ftp.dir}/akeebasubspro/${svn.lastrevision}"
+			mode="${ftp.mode}"
+			level="debug">
+			<fileset dir="${dirs.root}">
+				<include name="CHANGELOG"/>
+			</fileset>			
+			<fileset dir="${dirs.release}">
+				<include name="com_akeebasubs-pro-*.zip"/>
 			</fileset>			
 		</ftpdeploy>
 	</target>
