@@ -27,6 +27,8 @@
 	<!-- Front end translation files -->
 	<languages folder="translations/frontend">
 		<language tag="en-GB">en-GB.com_akeebasubs.ini</language>
+		<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
+		<language tag="sv-SE">sv-SE.com_akeebasubs.ini</language>
 	</languages>
 
 	<!-- SQL query files to execute on installation -->
@@ -80,6 +82,10 @@
 		<languages folder="translations/backend">
 			<language tag="en-GB">en-GB.com_akeebasubs.ini</language>
 			<language tag="en-GB">en-GB.com_akeebasubs.menu.ini</language>
+			<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
+			<language tag="el-GR">el-GR.com_akeebasubs.menu.ini</language>
+			<language tag="sv-SE">sv-SE.com_akeebasubs.ini</language>
+			<language tag="sv-SE">sv-SE.com_akeebasubs.menu.ini</language>
 		</languages>
 
 	</administration>

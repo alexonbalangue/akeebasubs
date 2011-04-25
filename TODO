@@ -6,21 +6,33 @@ To-do / bug fixes:
 ----------------------------------------
 + User details list and form views (users and user views)
 
+----------------------------------------
+Integrations
+----------------------------------------
+- Add/remove to NinjaBoard groups
+- Add/remove to DOCman 1.5.x groups
+- Add/remove to Joomla! Groups (1.6 only)
+- Add/remove to K2 groups
+- Add/remove to VM shopper groups
+- Add/remove to Tienda groups
+- Add/remove to Agora groups
+- JomSocial integration
+- Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
+- Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
+
+
 ================================================================================
 Future ideas:
 ================================================================================
+
 - Customizable emails
 - email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
 - Payment: PayPal Pro
 - Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
-- Add/remove to Joomla! Groups
-- Add/remove to K2 groups
-- Add/remove to DOCman 1.5.x groups
 - Add/remove to SOBI2
 - Add/remove to SOBIPro
 - Add/remove to JCE groups
-- Add/remove to Agora
 - Add/remove to Kunena
 - Add/remove to Jomres
 - Add/remove to Mailchimp
@@ -28,8 +40,6 @@ Future ideas:
 - Payment: PayPal recurring subscriptions
 - Payment: WorldPay
 - Payment: 2checkout
-- Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
-- Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
 - Payment: Avangate http://www.avangate.com/ecommerce/
 - Payment: Liberty Reserve http://www.libertyreserve.com/en/help/xmlapiguide
 - Payment: Moneris http://www.moneris.com/en/MerchantServices/MerchantDirect.aspx
