@@ -29,6 +29,7 @@
 		<language tag="en-GB">en-GB.com_akeebasubs.ini</language>
 		<language tag="da-DK">da-DK.com_akeebasubs.ini</language>
 		<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
+		<language tag="fr-FR">fr-FR.com_akeebasubs.ini</language>
 		<language tag="sv-SE">sv-SE.com_akeebasubs.ini</language>
 	</languages>
 
@@ -83,6 +84,8 @@
 		<languages folder="translations/backend">
 			<language tag="en-GB">en-GB.com_akeebasubs.ini</language>
 			<language tag="en-GB">en-GB.com_akeebasubs.menu.ini</language>
+			<language tag="fr-FR">fr-FR.com_akeebasubs.ini</language>
+			<language tag="fr-FR">fr-FR.com_akeebasubs.menu.ini</language>
 			<language tag="da-DK">da-DK.com_akeebasubs.ini</language>
 			<language tag="da-DK">da-DK.com_akeebasubs.menu.ini</language>
 			<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
