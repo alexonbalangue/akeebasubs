@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class plgAkeebasubsNinjaboard extends JPlugin
+class plgAkeebasubsJoomla extends JPlugin
 {
 	/** @var array Levels to Groups to Add mapping */
 	private $addGroups = array();
@@ -114,7 +114,7 @@ class plgAkeebasubsNinjaboard extends JPlugin
 		// Get DB connection
 		$db = JFactory::getDBO();
 		
-		// Add to NinjaBoard
+		// Add to Joomla! 1.6 groups
 		if(!empty($addGroups)) {
 			/*
 			jimport('joomla.utilities.date');
@@ -122,7 +122,7 @@ class plgAkeebasubsNinjaboard extends JPlugin
 			$mNow = $jNow->toMySQL();
 			*/
 			
-			$sql = 'REPLACE INTO `#__ninjaboard_user_group_maps` (`joomla_user_id`,`ninjaboard_user_group_id`) VALUES ';
+			$sql = 'REPLACE INTO `#__user_usergroup_map` (`user_id`,`group_id`) VALUES ';
 			
 			$values = array();
 			foreach($addGroups as $group) {
@@ -135,9 +135,9 @@ class plgAkeebasubsNinjaboard extends JPlugin
 			$db->query();
 		}
 		
-		// Remove from NinjaBoard
+		// Remove from Joomla! 1.6 groups
 		if(!empty($removeGroups)) {
-			$protoSQL = 'DELETE FROM `#__ninjaboard_user_group_maps` WHERE `joomla_user_id` = ' . $db->Quote($user_id) . ' AND `ninjaboard_user_group_id` = ';
+			$protoSQL = 'DELETE FROM `#__user_usergroup_map` WHERE `user_id` = ' . $db->Quote($user_id) . ' AND `group_id` = ';
 			foreach($removeGroups as $group) {
 				$sql = $protoSQL . $db->Quote($group);
 				$db->setQuery($sql);
@@ -184,7 +184,7 @@ class plgAkeebasubsNinjaboard extends JPlugin
 		}
 	}
 	
-	private function NBGroupToId($title)
+	private function JGroupToId($title)
 	{
 		static $groups = null;
 		
@@ -194,7 +194,7 @@ class plgAkeebasubsNinjaboard extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `title`, `ninjaboard_user_group_id` AS `id` FROM #__ninjaboard_user_groups';
+			$sql = 'SELECT `title`, `id` FROM #__usergroups';
 			$db->setQuery($sql);
 			$res = $db->loadObjectList();
 			
@@ -247,7 +247,7 @@ class plgAkeebasubsNinjaboard extends JPlugin
 			$levelId = $this->ASLevelToId($level);
 			$groupIds = array();
 			foreach($groups as $groupTitle) {
-				$groupIds[] = $this->NBGroupToId($groupTitle);
+				$groupIds[] = $this->JGroupToId($groupTitle);
 			}
 			
 			$ret[$levelId] = $groupIds;

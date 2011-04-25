@@ -36,6 +36,7 @@ $installation_queue = array(
 		'akeebasubs' => array(
 			'juga'					=> 0,
 			'ninjaboard'			=> 0,
+			'joomla'				=> 0,
 			'subscriptionemails'	=> 1
 		),
 		'akpayment' => array(
