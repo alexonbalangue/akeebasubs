@@ -22,4 +22,15 @@ $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 
-echo KFactory::get('admin::com.akeebasubs.dispatcher')->dispatch();
+// I hate myself for doing this... but using map() didn't work for me!
+$view = JRequest::getCmd('view','');
+if(empty($view) || ($view == 'akeebasubs')) {
+	$_GET['view'] = 'dashboard';
+}
+
+if(!class_exists('ComDefaultControllerView', true)) {
+	class ComDefaultControllerView extends ComDefaultControllerPage {}
+}
+
+echo KFactory::get('admin::com.akeebasubs.dispatcher')
+	->dispatch();
