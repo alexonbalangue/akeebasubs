@@ -22,6 +22,11 @@ class ComAkeebasubsModelJusers extends KModelTable
 	protected function _buildQueryWhere(KDatabaseQuery $query)
 	{
 		$state = $this->_state;
+		
+		if(empty($state->limit) || ($state->limit > 100)) {
+			$query->limit(10);
+			$this->_state->limit = 10;
+		}
 
 		if(is_numeric($state->block)) {
 			$query->where('tbl.block','=', $state->block);

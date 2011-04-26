@@ -4,8 +4,12 @@ To-do / bug fixes:
 ----------------------------------------
 			Back-end
 ----------------------------------------
-# Picking a user doesn't work
 + User details list and form views (users and user views)
++ HTML invoices
++ Import of Greek a/b files
++ Auto-generate or manually generate invoices
++ Email invoices to clients on generation
++ Invoices report (Intrastat, VAT, free-form filter) & CSV export
 
 ----------------------------------------
 			Front-end
@@ -16,37 +20,21 @@ To-do / bug fixes:
 + Option to show/hide the steps bar
 + Option to disable business registrations
 + Option to disable collection of address information
++ Clients can download their invoices anytime
 
 ----------------------------------------
 Integrations
 ----------------------------------------
-- Add/remove to Tienda groups
-#__tienda_groups {
-	group_id			456
-	group_name			Blah
-}
-#__tienda_usergroupxref {
-	group_id			456
-	user_id				123
-}
-
+- Payment: Off-line
+- Add/remove to Agora groups
+- Add/remove to Kunena groups
+- Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
+- Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
 - Community Builder integration
 	o Automatically authorize paying customers
 	o Create new CB users, if they don't already exist
 	o Overwrite built-in and custom fields with {USERNAME}, {EMAIL}, {NAME}, {ADDRESS1}, {ADDRESS2}, {COUNTRY}, {STATE}, {CITY}, {BUSINESSSTATUS}, {BUSINESSNAME}, {OCCUPATION}, {VATNUMBER}, {VIESVALIDATION}, {LEVEL}, {EXPIRATION}, {DETAILSURL}, {SUMMARYURL} or custom data
-
-- Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
-- Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
-
 - JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
-- Add/remove to Agora groups
-- Add/remove to Kunena groups
-- HTML invoices
-- Import of Greek a/b
-- Auto-generate or manually generate invoices
-- Email invoices to clients
-- Clients can download their invoices anytime
-- Invoices report (Intrastat, VAT, free-form filter) & CSV export
 
 ================================================================================
 Future ideas:

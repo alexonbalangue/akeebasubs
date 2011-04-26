@@ -7,5 +7,8 @@ Akeeba Subscriptions 1.0.b2 (current trunk)
 + JCE integration (Professional edition)
 + VirtueMart integration - add subscribers to shopper groups (Professional edition)
 + Tienda integration - add subscribers to groups
+
 ~ Moving JUGA integration to the Professional release
+
 # Fatal error: Class 'JFile' not found when clicking on Operations, Import (thanks Roland!)
+# Picking a user doesn't work on sites with several hundreds users
