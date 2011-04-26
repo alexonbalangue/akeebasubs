@@ -31,13 +31,14 @@ $installation_queue = array(
 	'plugins' => array(
 		'akeebasubs' => array(
 			'docman'				=> 0,
-			'joomla'				=> 0,
 			'jce'					=> 0,
+			'joomla'				=> 0,
 			'juga'					=> 0,
 			'k2'					=> 0,
 			'ninjaboard'			=> 0,
-			'vm'					=> 0,
-			'subscriptionemails'	=> 1
+			'subscriptionemails'	=> 1,
+			'tienda'				=> 0,
+			'vm'					=> 0
 		),
 		'akpayment' => array(
 			'none'					=> 0,

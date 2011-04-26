@@ -20,18 +20,6 @@ To-do / bug fixes:
 ----------------------------------------
 Integrations
 ----------------------------------------
-- Add/remove to VM shopper groups
-#__vm_shopper_group {
-	shopper_group_id	456
-	vendor_id			789
-	shopper_group_name	Blah
-}
-#__vm_shopper_vendor_xref {
-	user_id				123
-	shopper_group_id	456
-	vendor_id			789
-}
-
 - Add/remove to Tienda groups
 #__tienda_groups {
 	group_id			456
