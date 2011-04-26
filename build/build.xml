@@ -114,10 +114,12 @@
 		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-core-${version}-full.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
-				<exclude name="akeebasubs/juga**" />
-				<exclude name="akeebasubs/ninjaboard**" />
-				<exclude name="akeebasubs/k2**" />
+				<exclude name="akeebasubs/docman**" />
 				<exclude name="akeebasubs/jce**" />
+				<exclude name="akeebasubs/juga**" />
+				<exclude name="akeebasubs/k2**" />
+				<exclude name="akeebasubs/ninjaboard**" />
+				<exclude name="akeebasubs/vm**" />
 			</fileset>
 		</zipme>
 		
@@ -179,10 +181,12 @@
 		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-core-${version}-no_framework.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
-				<exclude name="akeebasubs/juga**" />
-				<exclude name="akeebasubs/ninjaboard**" />
-				<exclude name="akeebasubs/k2**" />
+				<exclude name="akeebasubs/docman**" />
 				<exclude name="akeebasubs/jce**" />
+				<exclude name="akeebasubs/juga**" />
+				<exclude name="akeebasubs/k2**" />
+				<exclude name="akeebasubs/ninjaboard**" />
+				<exclude name="akeebasubs/vm**" />
 			</fileset>
 		</zipme>
 	</target>

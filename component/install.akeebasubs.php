@@ -40,6 +40,7 @@ $installation_queue = array(
 			'juga'					=> 0,
 			'k2'					=> 0,
 			'ninjaboard'			=> 0,
+			'vm'					=> 0,
 			'subscriptionemails'	=> 1
 		),
 		'akpayment' => array(

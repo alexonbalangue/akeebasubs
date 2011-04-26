@@ -20,41 +20,59 @@ To-do / bug fixes:
 ----------------------------------------
 Integrations
 ----------------------------------------
-- Add/remove to JCE groups
-#__jce_groups {
-	id			456
-	name		Blah
-	users		123,123,123
+- Add/remove to VM shopper groups
+#__vm_shopper_group {
+	shopper_group_id	456
+	vendor_id			789
+	shopper_group_name	Blah
+}
+#__vm_shopper_vendor_xref {
+	user_id				123
+	shopper_group_id	456
+	vendor_id			789
 }
 
-- Add/remove to Kunena
-- Add/remove to SOBI2
-- Add/remove to SOBIPro
-- Add/remove to VM shopper groups
-- Community Builder integration
 - Add/remove to Tienda groups
+#__tienda_groups {
+	group_id			456
+	group_name			Blah
+}
+#__tienda_usergroupxref {
+	group_id			456
+	user_id				123
+}
+
+- Community Builder integration
+	o Automatically authorize paying customers
+	o Create new CB users, if they don't already exist
+	o Overwrite built-in and custom fields with {USERNAME}, {EMAIL}, {NAME}, {ADDRESS1}, {ADDRESS2}, {COUNTRY}, {STATE}, {CITY}, {BUSINESSSTATUS}, {BUSINESSNAME}, {OCCUPATION}, {VATNUMBER}, {VIESVALIDATION}, {LEVEL}, {EXPIRATION}, {DETAILSURL}, {SUMMARYURL} or custom data
+
 - Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
 - Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
 
 - JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
-- Add/remove to RedShop groups
 - Add/remove to Agora groups
-
+- Add/remove to Kunena groups
+- HTML invoices
+- Import of Greek a/b
+- Auto-generate or manually generate invoices
+- Email invoices to clients
+- Clients can download their invoices anytime
+- Invoices report (Intrastat, VAT, free-form filter) & CSV export
 
 ================================================================================
 Future ideas:
 ================================================================================
-
 - Customizable emails
 - email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
 - Payment: PayPal Pro
 - Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
+- Add/remove to RokDownloads
 - Add/remove to Jomres
 - Add/remove to Mailchimp
 - Add/remove subscriptions based on VM purchases
 - Add/remove subscriptions based on Tienda purchases
-- Add/remove subscriptions based on Redshop purchases
 - Payment: Eurobank (Greece)
 - Payment: PayPal recurring subscriptions
 - Payment: Amazon payments
@@ -71,3 +89,11 @@ Future ideas:
 - Resellers. A triangular sale: Reseller charges the user and uses our API to get a voucher (coupon) code. The user uses the coupon code on our site to subscribe. The reseller gets charged when the coupon is used.
 - Linked subscriptions. User B "inherits" the subscriptions of User A. Every change in User A's subscription status is replicated to User B. One-to-many relationship to ease the transition.
 - Front-end: Allow user to alter his account information
+
+================================================================================
+On ice (probably never going to happen)
+================================================================================
+- Add/remove to RedShop groups (it's supposed to be free, but asks me to pay 29 Euros?! Bye.)
+- Add/remove subscriptions based on Redshop purchases (it's supposed to be free, but asks me to pay 29 Euros?! Bye.)
+- Add/remove to SOBI2 (component handles its own payments; you can't do otherwise)
+- Add/remove to SOBIPro (component handles its own payments; its group system is convoluted that makes the integration very prone to breaking badly)
