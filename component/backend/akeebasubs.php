@@ -22,15 +22,21 @@ $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 
+// Hacks to be compatible with multiple versions of Koowa without breaking badly
+if(!class_exists('ComDefaultControllerView', true)) {
+	class ComDefaultControllerView extends ComDefaultControllerPage {}
+}
+
+if(!class_exists('ComDefaultCommandAuthorize', true)) {
+	class ComDefaultCommandAuthorize extends ComDefaultControllerCommandAuthorize {}
+}
+
 // I hate myself for doing this... but using map() didn't work for me!
 $view = JRequest::getCmd('view','');
 if(empty($view) || ($view == 'akeebasubs')) {
 	$_GET['view'] = 'dashboard';
 }
 
-if(!class_exists('ComDefaultControllerView', true)) {
-	class ComDefaultControllerView extends ComDefaultControllerPage {}
-}
-
+// And finally, clean code :p
 echo KFactory::get('admin::com.akeebasubs.dispatcher')
 	->dispatch();

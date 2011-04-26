@@ -6,6 +6,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('KOOWA') or die();
+
 class ComAkeebasubsCommandAuthorize extends ComDefaultCommandAuthorize
 {
 	public function _controllerBeforeAdd(KCommandContext $context)
