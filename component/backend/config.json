@@ -15,5 +15,16 @@
 				"default"	: "€"
 			}
 		}
+	},
+	"frontend"		: {
+		"title"			: "COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE",
+		"options"		: {
+			"stepsbar" : {
+				"title"		: "COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR",
+				"type"		: "boolean",
+				"filter"	: "int",
+				"default"	: "1"
+			}
+		}
 	}
 }

@@ -12,7 +12,7 @@
 
 <?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader'))?>
 
-<?=@template('steps',array('step' => 'subscribe'))?>
+<?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->stepsbar ? @template('steps',array('step' => 'subscribe')) : ''?>
 
 <?=@template('default_level', array('level' => $level))?>
 

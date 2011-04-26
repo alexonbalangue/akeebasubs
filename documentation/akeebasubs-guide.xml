@@ -656,6 +656,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <para>Click on <guilabel>Configuration</guilabel> in the toolbar links
       area. The available options are:</para>
 
+      <para><guilabel>Currency Options</guilabel></para>
+
       <variablelist>
         <varlistentry>
           <term>Currency code</term>
@@ -688,6 +690,21 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             display throughout the components.</para>
 
             <para>Default: € (Euro symbol)</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para><guilabel>Front-end display</guilabel></para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Show steps bar</term>
+
+          <listitem>
+            <para>Should we render the steps bar (1-2-3) on the top of the
+            page?</para>
+
+            <para>Default: Yes</para>
           </listitem>
         </varlistentry>
       </variablelist>

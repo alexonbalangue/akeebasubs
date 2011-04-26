@@ -6,6 +6,6 @@
 <style src="media://com_akeebasubs/css/frontend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
  -->
 
-<?=@template('site::com.akeebasubs.view.level.steps',array('step' => 'payment'))?>
+<?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->stepsbar ? @template('steps',array('step' => 'payment')) : ''?>
 
 <?=$form?>
