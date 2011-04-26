@@ -7,7 +7,7 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerConfig extends ComDefaultControllerDefault 
+class ComAkeebasubsControllerConfig extends ComAkeebasubsControllerDefault 
 {
 	function _actionRead(KCommandContext $context)
 	{
