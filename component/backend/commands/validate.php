@@ -31,6 +31,11 @@ class ComAkeebasubsCommandValidate extends KCommand
         {
             // The model supports validation. Run it.
             $data = $context->data;
+            
+            if(!property_exists($data, 'id')) {
+            	$data->id = KRequest::get('get.id','int',null);
+            }
+            
             $validationErrors = $model->validate($data);
 
             if(!empty($validationErrors))

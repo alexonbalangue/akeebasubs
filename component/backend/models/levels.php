@@ -57,7 +57,7 @@ class ComAkeebasubsModelLevels extends KModelTable
 		if(!empty($existingItems)) {
 			$count = 0;
 			foreach($existingItems as $item) {
-				if($item->id != $this->getItem()->id) $count++;
+				if($item->id != $data->id) $count++;
 			}
 			if($count) {
 				$ret[] = JText::_('COM_AKEEBASUBS_LEVEL_ERR_SLUGUNIQUE');
