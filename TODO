@@ -4,39 +4,41 @@ To-do / bug fixes:
 ----------------------------------------
 			Back-end
 ----------------------------------------
+# Picking a user doesn't work
 + User details list and form views (users and user views)
+
+----------------------------------------
+			Front-end
+----------------------------------------
+# The automatic discount is not visible when you first load the page.
+	We have to run the validation code when the page loads and use the pricing information
+	from the validation results.
++ Option to show/hide the steps bar
++ Option to disable business registrations
++ Option to disable collection of address information
 
 ----------------------------------------
 Integrations
 ----------------------------------------
-- Add/remove to K2 groups
-#__k2_user_groups {
-	id							456
-	name						Blah
-}
-#__k2_users {
-	id							999
-	userID						123
-	group						456
-	*** IF RECORD DOESN'T EXIST, CREATE THESE FIELDS ***
-	userName					John Q. Public
-	description					Text not null
+- Add/remove to JCE groups
+#__jce_groups {
+	id			456
+	name		Blah
+	users		123,123,123
 }
 
-- Add/remove to DOCman 1.5.x groups
-#__docman_groups {
-	groups_id					456
-	groups_name					Blah
-	groups_members				123,123,123
-}
-
-
+- Add/remove to Kunena
+- Add/remove to SOBI2
+- Add/remove to SOBIPro
 - Add/remove to VM shopper groups
+- Community Builder integration
 - Add/remove to Tienda groups
-- Add/remove to Agora groups
-- JomSocial integration
 - Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
 - Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
+
+- JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
+- Add/remove to RedShop groups
+- Add/remove to Agora groups
 
 
 ================================================================================
@@ -48,14 +50,14 @@ Future ideas:
 - Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
 - Payment: PayPal Pro
 - Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
-- Add/remove to SOBI2
-- Add/remove to SOBIPro
-- Add/remove to JCE groups
-- Add/remove to Kunena
 - Add/remove to Jomres
 - Add/remove to Mailchimp
+- Add/remove subscriptions based on VM purchases
+- Add/remove subscriptions based on Tienda purchases
+- Add/remove subscriptions based on Redshop purchases
 - Payment: Eurobank (Greece)
 - Payment: PayPal recurring subscriptions
+- Payment: Amazon payments
 - Payment: WorldPay
 - Payment: 2checkout
 - Payment: Avangate http://www.avangate.com/ecommerce/

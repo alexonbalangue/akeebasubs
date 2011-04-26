@@ -34,9 +34,12 @@ $installation_queue = array(
 	// plugins => { (folder) => { (element) => (published) }* }*
 	'plugins' => array(
 		'akeebasubs' => array(
-			'juga'					=> 0,
-			'ninjaboard'			=> 0,
+			'docman'				=> 0,
 			'joomla'				=> 0,
+			'jce'					=> 0,
+			'juga'					=> 0,
+			'k2'					=> 0,
+			'ninjaboard'			=> 0,
 			'subscriptionemails'	=> 1
 		),
 		'akpayment' => array(
