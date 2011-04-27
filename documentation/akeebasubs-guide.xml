@@ -198,8 +198,10 @@
         </listitem>
 
         <listitem>
-          <para>MySQL 5.0 or later. Earlier database server versions will not
-          be supported.</para>
+          <para>MySQL 5.0.41 or later. Earlier database server versions will
+          not be supported. Do note that earlier releases of MySQL are
+          obsolete and not supported any more by Oracle (the company who
+          controls the development of MySQL).</para>
         </listitem>
 
         <listitem>

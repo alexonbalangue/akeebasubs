@@ -5,6 +5,8 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+defined('_JEXEC') or die();
+
 function AkeebasubsBuildRoute(&$query)
 {
 	$segments = array();

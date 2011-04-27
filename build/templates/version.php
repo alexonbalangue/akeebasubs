@@ -1,4 +1,6 @@
 <?php
+defined('KOOWA') or die();
+
 define('AKEEBASUBS_VERSION', '##VERSION##');
 define('AKEEBASUBS_DATE', '##DATE##');
 define('AKEEBASUBS_PRO', '##PRO##');
