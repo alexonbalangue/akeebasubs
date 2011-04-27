@@ -20,6 +20,14 @@ class ComAkeebasubsDatabaseTableLevels extends KDatabaseTableAbstract
 		// Uncomment this if I add a view to handle this...
 		// $config->name = 'akeebasubs_view_levels';
 		$config->base = 'akeebasubs_levels';
+		
+		$config->append(array(
+		    'filters'    => array(
+		         'description' => array('html'),
+		         'ordertext' => array('html'),
+		         'canceltext' => array('html')
+		     )
+		));
   
 		parent::__construct($config);
     }

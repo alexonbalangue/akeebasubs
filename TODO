@@ -4,7 +4,7 @@ To-do / bug fixes:
 ----------------------------------------
 			Back-end
 ----------------------------------------
-# Subscription levels do not save on systems with a broken HTML Tidy extension
+
 + HTML invoices
 + Import of Greek a/b files
 + Auto-generate or manually generate invoices
