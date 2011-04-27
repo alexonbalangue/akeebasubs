@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - Off-line</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>April 2011</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_OFFLINE_DESCRIPTION</description>
+	<files>
+		<filename plugin="offline">offline.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_akpayment_offline.ini</language>
+		<language tag="en-GB">en-GB.plg_akpayment_offline.sys.ini</language>
+	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_OFFLINE_TITLE_LABEL" description="PLG_AKPAYMENT_OFFLINE_TITLE_DESC"/>
+		<param type="spacer" />
+		<param name="instructions" type="textarea" rows="20" cols="50" default="<p>Dear Sir/Madam,<br/>In order to complete your payment, please deposit {AMOUNT}€ to our bank account:</p><p><b>IBAN</b>: XX00.000000.00000000.00000000<br/><b>BIC</b>: XXXXXXXX</p><p>Please reference subscription code {SUBSCRIPTION} in your payment. Make sure that any bank charges are paid by you in full and not deducted from the transferred amount. If you're using e-Banking to transfer the funds, please select the "OUR" bank expenses option.</p><p>Thank you in advance,<br/>The management</p>" label="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_LABEL" description="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_DESC" />
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_OFFLINE_TITLE_LABEL" description="PLG_AKPAYMENT_OFFLINE_TITLE_DESC"/>
+				<field type="spacer" />
+				<field name="instructions" type="textarea" rows="20" cols="50" default="<p>Dear Sir/Madam,<br/>In order to complete your payment, please deposit {AMOUNT}€ to our bank account:</p><p><b>IBAN</b>: XX00.000000.00000000.00000000<br/><b>BIC</b>: XXXXXXXX</p><p>Please reference subscription code {SUBSCRIPTION} in your payment. Make sure that any bank charges are paid by you in full and not deducted from the transferred amount. If you're using e-Banking to transfer the funds, please select the "OUR" bank expenses option.</p><p>Thank you in advance,<br/>The management</p>" label="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_LABEL" description="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+</install>

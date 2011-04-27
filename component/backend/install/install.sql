@@ -3,11 +3,11 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`title` varchar(255) NOT NULL,
 	`slug` varchar(255) NOT NULL,
 	`image` varchar(25) NOT NULL,
-	`description` text COMMENT '@Filter("html, tidy")',
+	`description` text,
 	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
 	`price` FLOAT NOT NULL,
-	`ordertext` text COMMENT '@Filter("html, tidy")',
-	`canceltext` text COMMENT '@Filter("html, tidy")',
+	`ordertext` text,
+	`canceltext` text,
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`uuid` char(36) NOT NULL,
   PRIMARY KEY ( `akeebasubs_level_id` ),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`akeebasubs_subscription_id` bigint(20) unsigned NOT NULL auto_increment,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY ( `akeebasubs_subscription_id` )
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_taxrules` (
 	`akeebasubs_taxrule_id` bigint(20) unsigned NOT NULL auto_increment,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_taxrules` (
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY ( `akeebasubs_taxrule_id` )
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`akeebasubs_coupon_id` bigint(20) unsigned NOT NULL auto_increment,
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`hits` BIGINT(20) unsigned NOT NULL default 0,
 	PRIMARY KEY ( `akeebasubs_coupon_id` ),
 	UNIQUE KEY `coupon` (`coupon`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_upgrades` (
 	`akeebasubs_upgrade_id` bigint(20) unsigned NOT NULL auto_increment,
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_upgrades` (
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 	`hits` BIGINT(20) unsigned NOT NULL default '0',
 	PRIMARY KEY ( `akeebasubs_upgrade_id` )
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_users` (
 	`akeebasubs_user_id` bigint(20) unsigned NOT NULL auto_increment,
@@ -132,10 +132,28 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_users` (
 	`notes` TEXT,	
 	PRIMARY KEY ( `akeebasubs_user_id` ),
 	UNIQUE KEY `joomlauser` (`user_id`)
-)  ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_configurations` (
 	`akeebasubs_configuration_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`params` TEXT COMMENT '@Filter("json")',
 	PRIMARY KEY (`akeebasubs_configuration_id`)
-)  ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
+	`akeebasubs_subscription_id` BIGINT(20) UNSIGNED NOT NULL,
+	`invoice_no` BIGINT(20) unsigned NOT NULL,
+	`invoice_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`html` LONGTEXT,
+	`atxt` LONGTEXT,
+	`btxt` LONGTEXT,
+	
+	`enabled` tinyint(1) NOT NULL DEFAULT '1',
+	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
+	`created_by` int(11) NOT NULL DEFAULT 0,
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` int(11) NOT NULL DEFAULT 0,
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` int(11) NOT NULL DEFAULT 0,
+	PRIMARY KEY (`akeebasubs_subscription_id`)
+) DEFAULT CHARSET=utf8;
