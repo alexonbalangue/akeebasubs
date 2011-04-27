@@ -4,7 +4,7 @@ To-do / bug fixes:
 ----------------------------------------
 			Back-end
 ----------------------------------------
-+ User details list and form views (users and user views)
+# Subscription levels do not save on systems with a broken HTML Tidy extension
 + HTML invoices
 + Import of Greek a/b files
 + Auto-generate or manually generate invoices
@@ -30,11 +30,13 @@ Integrations
 - Add/remove to Kunena groups
 - Payment: Authorize.net AIM http://developer.authorize.net/api/aim/
 - Payment: Authorize.net SIM http://developer.authorize.net/api/sim/
+- Payment: DIBS
 - Community Builder integration
 	o Automatically authorize paying customers
 	o Create new CB users, if they don't already exist
 	o Overwrite built-in and custom fields with {USERNAME}, {EMAIL}, {NAME}, {ADDRESS1}, {ADDRESS2}, {COUNTRY}, {STATE}, {CITY}, {BUSINESSSTATUS}, {BUSINESSNAME}, {OCCUPATION}, {VATNUMBER}, {VIESVALIDATION}, {LEVEL}, {EXPIRATION}, {DETAILSURL}, {SUMMARYURL} or custom data
 - JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
+	(like CB)
 
 ================================================================================
 Future ideas:
@@ -67,7 +69,6 @@ Future ideas:
 ================================================================================
 On ice (probably never going to happen)
 ================================================================================
-- Add/remove to RedShop groups (it's supposed to be free, but asks me to pay 29 Euros?! Bye.)
-- Add/remove subscriptions based on Redshop purchases (it's supposed to be free, but asks me to pay 29 Euros?! Bye.)
-- Add/remove to SOBI2 (component handles its own payments; you can't do otherwise)
-- Add/remove to SOBIPro (component handles its own payments; its group system is convoluted that makes the integration very prone to breaking badly)
+- Add/remove to RedShop groups (it's supposed to be free, but asks me to pay 29 Euros?! )
+- Add/remove to SOBI2 (component handles its own payments; you can't do otherwise; need to ask Radek)
+- Add/remove to SOBIPro (component handles its own payments; you can't do otherwise; need to ask Radek)

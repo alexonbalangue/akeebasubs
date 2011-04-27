@@ -22,6 +22,7 @@
 .akeebasubs-clear { clear:both; }
 label.title, input.title { font-weight: bold; font-size: larger; }
 label.main { display: inline-block; width: 45%; background: #e0e0e0; border-bottom: 1px solid gray; padding: 2px; margin-bottom: 2px }
+input.longer { width: 40% }
 
 #levels-basic, #subscriptions-basic { display: block; float: left; width: 45%; margin: 0 10px 1em 0; }
 #image-preview { display: block; width: 64px; height: 64px; border: thin solid gray; margin: 2px 2px 2px 48%; }

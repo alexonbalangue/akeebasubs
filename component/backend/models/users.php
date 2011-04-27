@@ -16,12 +16,34 @@ class ComAkeebasubsModelUsers extends KModelTable
 		$this->_state
 			->insert('ordering'	, 'int')
 			->insert('enabled'	, 'int')
+			->insert('username'	, 'string')
+			->insert('name'		, 'string')
+			->insert('email'	, 'string')
+			->insert('businessname', 'string')
+			->insert('vatnumber', 'string')
 			// The user_id column is part of a unique index, causing invalid SQL to be output
 			// when only searching by user_id. Bummer. I fscked up the data modelling on that
 			// table :(
 			->remove('user_id')
 			->insert('user_id'	, 'int', null, false)
 			;
+	}
+	
+	protected function _buildQueryJoins(KDatabaseQuery $query)
+	{
+		if($this->_state->groupbydate == 1) return;
+		$query
+			->join('INNER', 'users AS u', 'u.id = tbl.user_id');
+	}
+	
+	protected function _buildQueryColumns(KDatabaseQuery $query)
+	{
+		$query->select(array(
+			'tbl.*',
+			'u.name',
+			'u.username',
+			'u.email'
+		));
 	}
 
 	protected function _buildQueryWhere(KDatabaseQuery $query)
@@ -40,17 +62,37 @@ class ComAkeebasubsModelUsers extends KModelTable
 			$query->where('tbl.user_id','=',$state->user_id);
 		}
 		
+		if($state->username) {
+			$query->where('u.username', 'LIKE',  '%'.$state->username.'%');
+		}
+		
+		if($state->name) {
+			$query->where('u.name', 'LIKE',  '%'.$state->name.'%');
+		}
+		
+		if($state->email) {
+			$query->where('u.email', 'LIKE',  '%'.$state->email.'%');
+		}
+		
+		if($state->businessname) {
+			$query->where('tbl.businessname', 'LIKE',  '%'.$state->businessname.'%');
+		}
+		
+		if($state->vatnumber) {
+			$query->where('tbl.vatnumber', 'LIKE',  '%'.$state->vatnumber.'%');
+		}
+		
 		if($state->search)
 		{
 			$search = '%'.$state->search.'%';
-			$query->where('businessname', 'LIKE',  $search, 'OR');
-			$query->where('occupation', 'LIKE',  $search, 'OR');
-			$query->where('vatnumber', 'LIKE',  $search, 'OR');
-			$query->where('address1', 'LIKE',  $search, 'OR');
-			$query->where('address2', 'LIKE',  $search, 'OR');
-			$query->where('city', 'LIKE',  $search, 'OR');
-			$query->where('state', 'LIKE',  $search, 'OR');
-			$query->where('zip', 'LIKE',  $search, 'OR');
+			$query->where('tbl.businessname', 'LIKE',  $search, 'OR');
+			$query->where('tbl.occupation', 'LIKE',  $search, 'OR');
+			$query->where('tbl.vatnumber', 'LIKE',  $search, 'OR');
+			$query->where('tbl.address1', 'LIKE',  $search, 'OR');
+			$query->where('tbl.address2', 'LIKE',  $search, 'OR');
+			$query->where('tbl.city', 'LIKE',  $search, 'OR');
+			$query->where('tbl.state', 'LIKE',  $search, 'OR');
+			$query->where('tbl.zip', 'LIKE',  $search, 'OR');
 		}
 		
 		parent::_buildQueryWhere($query);

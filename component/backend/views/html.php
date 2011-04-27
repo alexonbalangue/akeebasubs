@@ -18,6 +18,7 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 			'coupons'			=> 'COM_AKEEBASUBS_COUPONS_TITLE',
 			'upgrades'			=> 'COM_AKEEBASUBS_UPGRADES_TITLE',
 			'taxrules'			=> 'COM_AKEEBASUBS_TAXRULES_TITLE',
+			'users'				=> 'COM_AKEEBASUBS_USERS_TITLE',
 			'config'			=> 'COM_AKEEBASUBS_CONFIG_TITLE'
         );
 		
