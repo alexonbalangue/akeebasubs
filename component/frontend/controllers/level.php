@@ -52,6 +52,9 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 				->getData()
 		);
 		// Get the validation results
+		if(empty($slug)) {
+			$slug = KRequest::get('get.slug','cmd',0);
+		}
 		$vModel = KFactory::get('site::com.akeebasubs.model.subscribes');
 		$vModel->getState()->setData($view->cache);
 		$vModel->slug($slug);
