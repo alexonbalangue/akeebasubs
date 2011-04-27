@@ -116,7 +116,6 @@
 				<include name="**"/>
 				<exclude name="akeebasubs/docman**" />
 				<exclude name="akeebasubs/jce**" />
-				<exclude name="akeebasubs/juga**" />
 				<exclude name="akeebasubs/k2**" />
 				<exclude name="akeebasubs/ninjaboard**" />
 				<exclude name="akeebasubs/vm**" />
@@ -184,7 +183,6 @@
 				<include name="**"/>
 				<exclude name="akeebasubs/docman**" />
 				<exclude name="akeebasubs/jce**" />
-				<exclude name="akeebasubs/juga**" />
 				<exclude name="akeebasubs/k2**" />
 				<exclude name="akeebasubs/ninjaboard**" />
 				<exclude name="akeebasubs/vm**" />

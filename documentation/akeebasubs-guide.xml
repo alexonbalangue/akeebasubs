@@ -143,13 +143,17 @@
         <listitem>
           <para>Integration with Joomla! 1.6 user group mapping (Core and
           Professional editions): add/remove a user to/from Joomla! 1.6 user
-          groups, based on his subscriptions</para>
+          groups, based on his subscriptions.</para>
+        </listitem>
+
+        <listitem>
+          <para>Integration with JUGA (Core and Professional editions).</para>
         </listitem>
 
         <listitem>
           <para>Integration with third party components (Professional
-          edition): K2, DOCman, JCE, JUGA, NinjaBoard. More to follow in the
-          near future!</para>
+          edition): K2, DOCman, JCE, NinjaBoard, VirtueMart, Tienda. More to
+          follow in the near future!</para>
         </listitem>
 
         <listitem>
@@ -178,11 +182,14 @@
       <bridgehead>Support policy</bridgehead>
 
       <para>Please note that the software is provided free of charge, but
-      support is not. You need to have an AKEEBADELUXE or SUPPORT subscription
-      on AkeebaBackup.com to seek support regarding setting up, using and
+      support is not. You need to have an AKEEBASUBS subscription on
+      AkeebaBackup.com to seek support regarding setting up, using and
       customizing Akeeba Subscriptions. If you have found a bug and wish to
       report it, however, you can do so even without an active
       AkeebaBackup.com subscription.</para>
+
+      <para>If you are an existing AkeebaBackup.com subscriber you can get an
+      AKEEBASUBS subscription at 50% off while we're still in beta!</para>
     </section>
 
     <section xml:id="requirements">
@@ -1549,6 +1556,27 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           ALL</emphasis>. You have been strongly warned.</para>
         </warning>
       </section>
+
+      <section xml:id="payment-offline">
+        <title>Off-line</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Off-line</guilabel></para>
+
+        <para>This is a payment plugin which lets your users complete their
+        payment off-line, e.g. through bank (wire) transfer, money check,
+        Western Union or any other means of payment that you allow. It works
+        very simply: it just presents your user with a customizable
+        instructions message. In that message you can use the variables
+        <replaceable>{SUBSCRIPTION}</replaceable> to display the subscription
+        ID and <replaceable>{AMOUNT}</replaceable> to display the amount due.
+        Please use all caps for these variables and include the curly
+        braces.</para>
+
+        <para>Once the user effects the payment, simply go to your
+        Subscriptions view, enable his subscriptions and set the payment
+        status to "Completed". That's all!</para>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
@@ -1568,11 +1596,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
       <section xml:id="integration-juga">
         <title>JUGA Integration</title>
-
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - JUGA Integration</guilabel></para>
