@@ -15,3 +15,4 @@ Akeeba Subscriptions 1.0.b2 (current trunk)
 # Picking a user doesn't work on sites with several hundreds users
 # Subscription levels do not save on systems with a broken HTML Tidy extension
 # The price is zero and automatic discount is not applied when you first load the subscription page.
+# Subscription page saying there are errors if you never click to the business registration fields

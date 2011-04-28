@@ -511,6 +511,12 @@ function applyPrice(response)
 			rokkedLabel.removeClass('rokradios');
 			$('#isbusiness0').attr('style','');
 		}
+		
+		if($('#isbusiness1').is(':checked')) {
+			$('#isbusiness1').click();
+		} else {
+			$('#isbusiness0').click();
+		}
 	});
 })(akeeba.jQuery);
 
