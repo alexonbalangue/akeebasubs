@@ -43,7 +43,7 @@
 		<param name="cache_time" type="text" default="900" label="MOD_AKSLEVELS_CACHETIME_LABEL" description="MOD_AKSLEVELS_CACHETIME_DESC" />
 	</params>
 	
-	<config>
+	<config addfieldpath="/modules/mod_akslevels/elements">
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="moduleclass_sfx" type="text" default="" label="MOD_AKSLEVELS_SUFFIX_LABEL" description="MOD_AKSLEVELS_SUFFIX_DESC" />

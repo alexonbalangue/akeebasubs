@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - Community Builder Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>April 2011</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_CB_DESCRIPTION</description>
+	<files>
+		<filename plugin="cb">cb.php</filename>
+		<folder>cb</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_akeebasubs_cb.ini</language>
+		<language tag="en-GB">en-GB.plg_akeebasubs_cb.sys.ini</language>
+	</languages>
+	<params addpath="/plugins/akeebasubs/cb">
+		<param name="adduser" type="radio" default="1" label="PLG_AKEEBASUBS_CB_ADDUSER_TITLE" description="PLG_AKEEBASUBS_CB_ADDUSER_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
+		<param name="autoauthids" type="sql2" default="" label="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_TITLE" description="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_DESC" query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`" key_field="akeebasubs_level_id" value_field="title"/>
+		<param name="autodeauthids" type="sql2" default="" label="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_TITLE" description="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_DESC" query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`" key_field="akeebasubs_level_id" value_field="title"/>
+	</params>
+	
+	<config addfieldpath="/plugins/akeebasubs/cb/cb">
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="adduser" type="radio" default="1" label="PLG_AKEEBASUBS_CB_ADDUSER_TITLE" description="PLG_AKEEBASUBS_CB_ADDUSER_DESC">
+				  <option value="0">No</option>
+				  <option value="1">Yes</option>
+				</field>
+				<field name="autoauthids" type="sql2" default=""
+					label="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_TITLE"
+					description="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_DESC"
+					query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`"
+					key_field="akeebasubs_level_id"
+					value_field="title" />
+				<field name="autodeauthids" type="sql2" default="" label="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_TITLE" description="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_DESC" query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`" key_field="akeebasubs_level_id" value_field="title"/>
+			</fieldset>
+		</fields>
+	</config>
+</install>
