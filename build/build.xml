@@ -119,6 +119,7 @@
 				<exclude name="akeebasubs/k2**" />
 				<exclude name="akeebasubs/ninjaboard**" />
 				<exclude name="akeebasubs/vm**" />
+				<exclude name="akeebasubs/cb**" />
 				<exclude name="akeebasubs/tienda**" />
 			</fileset>
 		</zipme>
@@ -186,6 +187,7 @@
 				<exclude name="akeebasubs/k2**" />
 				<exclude name="akeebasubs/ninjaboard**" />
 				<exclude name="akeebasubs/vm**" />
+				<exclude name="akeebasubs/cb**" />
 				<exclude name="akeebasubs/tienda**" />
 			</fileset>
 		</zipme>
