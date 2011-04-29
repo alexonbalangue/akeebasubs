@@ -257,13 +257,6 @@ function validateAddress()
 			$('#stateField').css('display','none');
 		}
 	
-		if(state == '') {
-			$('#state_empty').css('display','inline-block');
-			hasErrors = true;
-		} else {
-			$('#state_empty').css('display','none');
-		}
-		
 		if(city == '') {
 			$('#city_empty').css('display','inline-block');
 			hasErrors = true;
