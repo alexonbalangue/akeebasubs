@@ -6,34 +6,28 @@ To-do / bug fixes:
 Future ideas:
 ================================================================================
 + PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
-+ Customizable emails (in the plugin, using a popup editor)
++ Payment: WorldPay
 + Add/remove to Agora groups
-+ Invoices
-	o HTML invoices
-	o Import of Greek a/b files
-	o Auto-generate or manually generate invoices
-	o Email invoices to clients on generation
-	o Clients can download their invoices through the subscription list page
-+ Invoices report (Intrastat, VAT, free-form filter) & CSV export
-+ Option to disable business registrations
-+ Option to disable collection of address information
 + JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
 	(like CB)
-+ Payment: DIBS
++ Create invoices with ccInvoices
++ Customizable emails (in the plugin, using a popup editor)
 + Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
++ Payment: 2checkout
++ Payment: PayPal Pro
 + Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
-+ Add/remove to Mailchimp
++ Option to disable business registrations
++ Option to disable collection of address information
++ Payment: DIBS
 
++ Add/remove to Mailchimp
 - email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
-- Payment: PayPal Pro
 - Add/remove to Jomres
 - Add/remove subscriptions based on VM purchases
 - Add/remove subscriptions based on Tienda purchases
 - Payment: Eurobank (Greece)
 - Payment: PayPal recurring subscriptions
 - Payment: Amazon payments
-- Payment: WorldPay
-- Payment: 2checkout
 - Payment: Avangate http://www.avangate.com/ecommerce/
 - Payment: Liberty Reserve http://www.libertyreserve.com/en/help/xmlapiguide
 - Payment: Moneris http://www.moneris.com/en/MerchantServices/MerchantDirect.aspx

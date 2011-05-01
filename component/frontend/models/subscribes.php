@@ -464,7 +464,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$jFrom = new JDate($subscription->publish_up);
 			$uFrom = $jFrom->toUnix();
 			$presence = $uNow - $uFrom;
-			$subs[$subscription->id] = $presence;
+			$subs[$subscription->akeebasubs_level_id] = $presence;
 		}
 		
 		// Get the current subscription level's net worth
