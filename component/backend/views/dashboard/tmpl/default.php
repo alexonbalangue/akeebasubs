@@ -62,6 +62,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up((gmdate('Y')-1).'-01-01 00:00:00')
 						->publish_down((gmdate('Y')-1).'-12-31 23:59:59')
+						->paystate('C')
 						->getTotal()
 					?>
 				</td>
@@ -72,6 +73,7 @@ defined('KOOWA') or die('Restricted access');?>
 							->publish_up((gmdate('Y')-1).'-01-01')
 							->publish_down((gmdate('Y')-1).'-12-31 23:59:59')
 							->moneysum(1)
+							->paystate('C')
 							->getTotal()
 					)?>
 				</td>
@@ -82,6 +84,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up(gmdate('Y').'-01-01')
 						->publish_down(gmdate('Y').'-12-31 23:59:59')
+						->paystate('C')
 						->getTotal()
 					?>
 				</td>
@@ -92,6 +95,7 @@ defined('KOOWA') or die('Restricted access');?>
 							->publish_up(gmdate('Y').'-01-01')
 							->publish_down(gmdate('Y').'-12-31 23:59:59')
 							->moneysum(1)
+							->paystate('C')
 							->getTotal()
 					)?>
 				</td>
@@ -123,6 +127,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up($y.'-'.$m.'-01')
 						->publish_down($y.'-'.$m.'-'.$lmday.' 23:59:59')
+						->paystate('C')
 						->getTotal()
 					?>
 				</td>
@@ -133,6 +138,7 @@ defined('KOOWA') or die('Restricted access');?>
 							->publish_up($y.'-'.$m.'-01')
 							->publish_down($y.'-'.$m.'-'.$lmday.' 23:59:59')
 							->moneysum(1)
+							->paystate('C')
 							->getTotal()
 					)?>
 				</td>
@@ -158,6 +164,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
 						->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+						->paystate('C')
 						->getTotal()
 					?>
 				</td>
@@ -168,6 +175,7 @@ defined('KOOWA') or die('Restricted access');?>
 							->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
 							->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 							->moneysum(1)
+							->paystate('C')
 							->getTotal()
 					)?>
 				</td>
@@ -178,6 +186,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up( gmdate('Y-m-d', time()-7*24*3600) )
 						->publish_down( gmdate('Y-m-d') )
+						->paystate('C')
 						->getTotal()
 					?>
 				</td>
@@ -188,6 +197,7 @@ defined('KOOWA') or die('Restricted access');?>
 							->publish_up( gmdate('Y-m-d', time()-7*24*3600) )
 							->publish_down( gmdate('Y-m-d') )
 							->moneysum(1)
+							->paystate('C')
 							->getTotal()
 					)?>
 				</td>
@@ -204,6 +214,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up( $yesterday )
 						->publish_down( gmdate('Y-m-d') )
+						->paystate('C')
 						->getTotal()
 					?>
 				</td>
@@ -214,6 +225,7 @@ defined('KOOWA') or die('Restricted access');?>
 							->publish_up( $yesterday )
 							->publish_down( gmdate('Y-m-d') )
 							->moneysum(1)
+							->paystate('C')
 							->getTotal()
 					)?>
 				</td>
@@ -224,6 +236,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<strong>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up( gmdate('Y-m-d') )
+						->paystate('C')
 						->getTotal()
 					?>
 					</strong>
@@ -234,6 +247,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= sprintf('%.02f',
 						KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 							->publish_up( gmdate('Y-m-d') )
+							->paystate('C')
 							->moneysum(1)
 							->getTotal()
 					)?>
@@ -256,7 +270,7 @@ defined('KOOWA') or die('Restricted access');?>
 <script type="text/javascript">
 (function($) {
 	$(document).ready(function(){
-		var url = "<?=str_replace('&amp;','&',@route('view=subscriptions&since='.$xday.'&enabled=1&groupbydate=1&format=json'))?>";
+		var url = "<?=str_replace('&amp;','&',@route('view=subscriptions&since='.$xday.'&enabled=1&groupbydate=1&paystate=C&format=json'))?>";
 		$.jqplot.config.enablePlugins = true;
 		$.getJSON(url, function(data){
 			var salesPoints = [];

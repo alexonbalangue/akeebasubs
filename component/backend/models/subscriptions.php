@@ -158,6 +158,11 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		
 		jimport('joomla.utilities.date');
 		
+		if($state->paystate) {
+			$states = explode(',', $state->paystate);
+			$query->where('tbl.state','IN',$states);
+		}
+		
 		if(!$state->groupbydate)
 		{
 			if(is_numeric($state->enabled)) {
@@ -182,11 +187,6 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			
 			if(is_numeric($state->user_id)) {
 				$query->where('tbl.user_id','=',$state->user_id);
-			}
-			
-			if($state->paystate) {
-				$states = explode(',', $state->paystate);
-				$query->where('tbl.state','IN',$states);
 			}
 			
 			if(is_numeric($state->contact_flag)) {
