@@ -1,3 +1,5 @@
 Akeeba Subscriptions 1.0.b3 (current trunk)
+================================================================================
 
 # The XML manifest file of the off-line payment plugin didn't allow installation on Joomla! 1.6.3
+# If you don't click on the non-business registration, it always asks says you're not filling in the form correctly

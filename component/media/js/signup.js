@@ -10,6 +10,7 @@ var akeebasubs_isbusiness = false;
 var akeebasubs_blocked_gui = false;
 var akeebasubs_run_validation_after_unblock = false;
 var akeebasubs_cached_response = false;
+var akeebasubs_valid_form = true;
 
 function blockInterface()
 {
@@ -122,7 +123,7 @@ function validatePassword()
 				$('#password2_invalid').css('display','inline-block');
 				akeebasubs_valid_form = false;
 			}
-		}
+		}		
 	})(akeeba.jQuery);
 }
 
@@ -296,7 +297,8 @@ function validateBusiness()
 				akeebasubs_run_validation_after_unblock = true;
 				return;
 			} else {
-				validateAddress();
+				akeebasubs_valid_form = true;
+				validateForm();
 			}
 			return;
 		}
