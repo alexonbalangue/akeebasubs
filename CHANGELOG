@@ -1,22 +1,3 @@
-Akeeba Subscriptions 1.0.b2 (current trunk)
+Akeeba Subscriptions 1.0.b3 (current trunk)
 
-+ NinjaBoard integration (Professional edition)
-+ K2 integration (Professional edition)
-+ Joomla! 1.6 User Groups integration
-+ DOCman integration (Professional edition)
-+ JCE integration (Professional edition)
-+ VirtueMart integration (Professional edition) - add subscribers to shopper groups (Professional edition)
-+ Tienda integration (Professional edition) - add subscribers to groups
-+ Community Builder integration (Professional edition)
-+ Showing the steps bar is now an option
-+ User details list and form views (users and user views)
-+ Payment: Off-line
-
-# Fatal error: Class 'JFile' not found when clicking on Operations, Import (thanks Roland!)
-# Picking a user doesn't work on sites with several hundreds users
-# Subscription levels do not save on systems with a broken HTML Tidy extension
-# The price is zero and automatic discount is not applied when you first load the subscription page.
-# Subscription page saying there are errors if you never click to the business registration fields
-# Subscription page saying there are errors for non-business subscribers outside USA and Canada
-# Upgrade rules not working properly
-# Sales statistics in the dashboard included not complete, pending and cancelled transactions
+# The XML manifest file of the off-line payment plugin didn't allow installation on Joomla! 1.6.3
