@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE install SYSTEM "http://www.joomla.org/xml/dtd/1.5/module-install.dtd">
-<install type="module" version="1.5.0" method="upgrade">
+<install type="module" version="1.5.0" method="upgrade" client="site">
 	<name>Akeeba Subscriptions - List subscription levels</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<creationDate>March 2011</creationDate>
