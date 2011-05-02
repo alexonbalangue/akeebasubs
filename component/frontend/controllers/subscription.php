@@ -31,7 +31,8 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 			// Show login page
 			$juri = JURI::getInstance();
 			$myURI = base64_encode($juri->toString());
-			JFactory::getApplication()->redirect(JURI::base().'index.php?option=com_user&view=login&return='.$myURI);
+			$com = version_compare(JVERSION, '1.6.0', 'ge') ? 'users' : 'user';
+			JFactory::getApplication()->redirect(JURI::base().'index.php?option=com_'.$com.'&view=login&return='.$myURI);
 			return;
 		}
 		
