@@ -25,7 +25,13 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 	{
 		// Do we have a user?
 		if(KFactory::get('lib.joomla.user')->guest) {
-			JError::raiseError('403',JText::_('ACCESS DENIED'));
+			// Obsolete behaviour: show unauthorized error message
+			// JError::raiseError('403',JText::_('ACCESS DENIED'));
+
+			// Show login page
+			$juri = JURI::getInstance();
+			$myURI = base64_encode($juri->toString());
+			JFactory::getApplication()->redirect(JURI::base().'index.php?option=com_user&view=login&return='.$myURI);
 			return;
 		}
 		
