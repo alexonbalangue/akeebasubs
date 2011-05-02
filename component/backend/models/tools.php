@@ -27,7 +27,7 @@ class ComAkeebasubsModelTools extends KModelTable
 		parent::__construct($config);
 
 		//Get a list over the default converters shipping with Akeeba Subscriptions
-		$exclude	= array('abstract.php', 'exception.php', 'interface.php');
+		$exclude	= array('abstract.php', 'exception.php', 'interface.php', 'index.html');
 		$converters = JFolder::files(JPATH_COMPONENT_ADMINISTRATOR.'/databases/converters/', '.', false, false, $exclude);
 		foreach($converters as $name)
 		{
