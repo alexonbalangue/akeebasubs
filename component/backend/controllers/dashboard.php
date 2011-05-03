@@ -7,7 +7,7 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerDashboard extends ComDefaultControllerView
+class ComAkeebasubsControllerDashboard extends ComDefaultControllerPage
 {
 	public function __construct(KConfig $config)
 	{
