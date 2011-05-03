@@ -3,14 +3,119 @@ To-do / bug fixes:
 ================================================================================
 
 ================================================================================
+WorldPay Hosted Payment Page integration
+================================================================================
+
+FOR TESTING, USE THIS URL: https://secure-test.wp3.rbsworldpay.com/wcc/purchase
+Ref: http://www.rbsworldpay.com/support/kb/bg/testandgolive/tgl.html
+
+<form action="https://secure.wp3.rbsworldpay.com/wcc/purchase" method=POST>
+	<!-- A mandatory parameter. Put your Installation ID inside the quotes after value= -->
+	<input type=hidden name="instId" value="Your installation ID ">
+	
+	<!-- A mandatory parameter. Put your own reference identifier for the item purchased inside the quotes after value= -->
+	<input type=hidden name="cartId" value="Your reference ID for the product ">
+	
+	<!-- A mandatory parameter. Put the total cost of the item inside the quotes after value= -->
+	<input type=hidden name="amount" value="The cost of the product ">
+	
+	<!-- A mandatory parameter. Put the code for the purchase currency inside the quotes after value= -->
+	<input type=hidden name="currency" value="currency code e.g. GBP, USD ">
+	
+	<!-- An optional parameter. Put your description of the item inside the quotes after value= -->
+	<input type=hidden name="desc" value=" what you are selling ">
+	
+	<!-- Shopper information (optional) -->
+	<input type=hidden name="name" value="J. Bloggs">
+	<input type=hidden name="address" value="4 Any St, Somewhere">
+	<input type=hidden name="postcode" value="AB10 5AB">
+	<input type=hidden name="country" value="GB">
+	<input type=hidden name="tel" value="0123456789">
+	<input type=hidden name="email" value="demo@uk.worldpay.com">	
+	
+	<!-- Callback URL -->
+	<input type="hidden" name="MC_callback" value="http://www.myserver.com/mycallbackscript.cgi">
+	
+	<!-- Required for TEST MODE. Set to 0 for live -->
+	<input type=hidden name="testMode" value="100">
+	
+	<!-- Custom variables (myVariable can be anything) -->
+	<input type="hidden" name="MC_myVariable" value="abcdef123456">
+</form>
+
+
+
+
+To change the payment response URL to accept the dynamic url variable:
+
+Log in to the Merchant Interface
+
+Select Installations from the left hand navigation
+
+Choose an installation and select the Integration Setup button for either the TEST or PRODUCTION environment
+
+Check the Enable Payment Response checkbox
+
+Enter the WPDISPLAY ITEM tag which includes the dynamic url variable into the Payment Response URL input field:
+<wpdisplay item=MC_callback>
+
+Select the Save Changes button
+
+
+
+http://www.rbsworldpay.com/support/kb/bg/paymentresponse/payment_response.html
+
+The Payment Message is a collection of parameters and related values detailing a shopper’s authorised or cancelled transaction. The Payment Message is sent to a server-side script located on your server using the POST request method and via HTTP(s).
+
+Below is an example of what the body of Payment Message looks like for an authorised transaction:
+
+instId=38290&email=demo%40uk.rbsworldpay.com&transTime=999178402000&country=GB&rawAuthCode=A&amount=14.99
+&installation=38290&tel=0123+456789012&address=Test+Road%0D%0ATest+Town%0D%0ATest+City&MC_log=2379
+&rawAuthMessage=authorised+(testMode+always+Yes&authAmount=23.11&amountString=%26%23163%3B14.99&cardType=Visa
+&AVS=0001&cost=14.99&currency=GBP&testMode=100&authAmountString=EUR23.11&fax=01234+5678901&lang=en
+&transStatus=Y&compName=Company+Name&authCurrency=EUR&postcode=AB1+2CD&authCost=23.11&desc=Test+Item
+&countryMatch=S&cartId=Test+Item&transId=12227758&M_var1=fred&authMode=E&countryString=United+Kingdom &name=john+smith
+
+
+Parameter descriptions for the HTTP(s) Payment Message
+The table below details all of the possible parameters that are posted to you in the body of the Payment Message:
+
+instId
+The ID for the installation
+
+cartId
+Your own reference number for the order.
+
+amount
+A decimal number giving the cost of the purchase in terms of the major currency unit e.g. 12.56 would mean 12 pounds and 56 pence if the currency were GBP (Pounds Sterling).
+
+currency
+3 letter ISO code for the currency of this payment.
+
+authMode
+Specifies the authorisation mode used. The values are "A" for a full auth, or "E" for a pre-auth.
+
+testMode
+An integer greater than 0 (zero) specifying that this is a test payment. Specify the test result you want by entering REFUSED, AUTHORISED, ERROR or CAPTURED in the name parameter.
+
+transId
+The  ID for the transaction
+
+transStatus
+Result of the transaction - "Y" for a successful payment authorisation, "C" for a cancelled payment
+
+callbackPW
+The Payment Response password set in the Merchant  Interface. (may be missing if not set!)
+
+================================================================================
 Future ideas:
 ================================================================================
 + PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
 + Payment: WorldPay
-+ Add/remove to Agora groups
 + JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
 	(like CB)
 + Create invoices with ccInvoices
+
 + Customizable emails (in the plugin, using a popup editor)
 + Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
 + Payment: 2checkout
@@ -20,11 +125,10 @@ Future ideas:
 + Option to disable collection of address information
 + Payment: DIBS
 
++ Add/remove to Agora groups
 + Add/remove to Mailchimp
 - email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
 - Add/remove to Jomres
-- Add/remove subscriptions based on VM purchases
-- Add/remove subscriptions based on Tienda purchases
 - Payment: Eurobank (Greece)
 - Payment: PayPal recurring subscriptions
 - Payment: Amazon payments
