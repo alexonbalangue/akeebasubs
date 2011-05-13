@@ -63,6 +63,22 @@ Select the Save Changes button
 
 
 
+To add a Payment Response Password:
+
+Log in to the Merchant Interface
+
+Select Installations from the left hand navigation
+
+Choose an installation and select the Integration Setup button for either the TEST or PRODUCTION environment
+
+Enter a password into the Payment Response Password input field
+
+Select the Save Changes button
+
+The password is then included in the Payment Message using the parameter name, callbackPW
+
+
+
 http://www.rbsworldpay.com/support/kb/bg/paymentresponse/payment_response.html
 
 The Payment Message is a collection of parameters and related values detailing a shopper’s authorised or cancelled transaction. The Payment Message is sent to a server-side script located on your server using the POST request method and via HTTP(s).
@@ -75,6 +91,43 @@ instId=38290&email=demo%40uk.rbsworldpay.com&transTime=999178402000&country=GB&r
 &AVS=0001&cost=14.99&currency=GBP&testMode=100&authAmountString=EUR23.11&fax=01234+5678901&lang=en
 &transStatus=Y&compName=Company+Name&authCurrency=EUR&postcode=AB1+2CD&authCost=23.11&desc=Test+Item
 &countryMatch=S&cartId=Test+Item&transId=12227758&M_var1=fred&authMode=E&countryString=United+Kingdom &name=john+smith
+
+instId=38290
+email=demo@uk.rbsworldpay.com
+transTime=999178402000
+country=GB
+rawAuthCode=A
+amount=14.99
+installation=38290
+tel=0123 456789012
+address=Test Road
+        Test Town
+        Test City
+MC_log=2379
+rawAuthMessage=authorised (testMode always Yes
+authAmount=23.11
+amountString=%26%23163%3B14.99
+cardType=Visa
+AVS=0001
+cost=14.99
+currency=GBP
+testMode=100
+authAmountString=EUR23.11
+fax=01234 5678901
+lang=en
+transStatus=Y
+compName=Company Name
+authCurrency=EUR
+postcode=AB1 2CD
+authCost=23.11
+desc=Test Item
+countryMatch=S
+cartId=Test Item
+transId=12227758
+M_var1=fred
+authMode=E
+countryString=United Kingdom
+name=john smith
 
 
 Parameter descriptions for the HTTP(s) Payment Message

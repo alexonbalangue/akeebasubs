@@ -1,9 +1,12 @@
 Akeeba Subscriptions 1.0.b3 (current trunk)
 ================================================================================
 
++ WorldPay payment
 # The XML manifest file of the off-line payment plugin didn't allow installation on Joomla! 1.6.3
 # If you don't click on the non-business registration, it always asks says you're not filling in the form correctly
 # Instead of throwing a 403 when a guest user accesses the "My Subscriptions" page, show him a login box
 # Warnings thrown from Joomla! extension installer when installing the package on Joomla! 1.6, due to missing attribute in the XML manifest files of the modules
 # Error 500 "Cannot create object from identifier : admin::com.akeebasubs.database.converters.index.html" thrown by Import page
 # Javascript error in front-end subscription view if mooTools wasn't already loaded
+# Renewing a subscription doesn't make expiration notification emails stop being sent
+# PayPal: Incoming notifications for pending transactions were not accpeted because the had the same transaction ID as the original (pending/on hold) payment notification

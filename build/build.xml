@@ -121,6 +121,7 @@
 				<exclude name="akeebasubs/vm**" />
 				<exclude name="akeebasubs/cb**" />
 				<exclude name="akeebasubs/tienda**" />
+                                <exclude name="akpayment/worldpay**" />
 			</fileset>
 		</zipme>
 		
@@ -189,6 +190,7 @@
 				<exclude name="akeebasubs/vm**" />
 				<exclude name="akeebasubs/cb**" />
 				<exclude name="akeebasubs/tienda**" />
+                                <exclude name="akpayment/worldpay**" />
 			</fileset>
 		</zipme>
 	</target>
