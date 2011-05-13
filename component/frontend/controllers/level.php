@@ -31,6 +31,9 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 
 	public function _beforeRead(KCommandContext $context)
 	{
+		// Make sure Joomla! loads mooTools
+		JHTML::_('behavior.mootools');
+	
 		$view = $this->getView();
 
 		// Fetch the subscription slug from page parameters
