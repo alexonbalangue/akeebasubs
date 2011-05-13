@@ -22,9 +22,11 @@ defined('KOOWA') or die('');
 <? if(!empty($tools)): ?>
 <? foreach($tools as $key => $tool): ?>
 <? if($tool->canConvert()): ?>
-	<button onclick="doStartConvertSubscriptions('<?=$tool->getName()?>')">
-		<?=@text('COM_AKEEBASUBS_TOOLS_IMPORT_FROM_'.$tool->getName());?>
-	</button>
+	<p>
+		<button onclick="doStartConvertSubscriptions('<?=$tool->getName()?>')">
+			<?=@text('COM_AKEEBASUBS_TOOLS_IMPORT_FROM_'.$tool->getName());?>
+		</button>
+	</p>
 <? endif; ?>
 <? endforeach; ?>
 <? else: ?>
