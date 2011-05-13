@@ -762,6 +762,11 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				if($expiryDate > $startDate) {
 					$startDate = $expiryDate + 1;
 				}
+				// Also mark the old subscription as "communicated". We don't want
+				// to spam our users with subscription renewal notices after they
+				// have effectively renewed!
+				$row->contact_flag = 2;
+				$row->save();
 			}
 		}
 		

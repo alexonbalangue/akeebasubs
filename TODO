@@ -110,15 +110,17 @@ The Payment Response password set in the Merchant  Interface. (may be missing if
 ================================================================================
 Future ideas:
 ================================================================================
-+ PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
 + Payment: WorldPay
++ Payment: 2checkout
++ PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
 + JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
 	(like CB)
 + Create invoices with ccInvoices
++ Add/remove to SOBIPro (Radek told me it's possible with groups')
+
 
 + Customizable emails (in the plugin, using a popup editor)
 + Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
-+ Payment: 2checkout
 + Payment: PayPal Pro
 + Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
 + Option to disable business registrations
@@ -145,7 +147,6 @@ Future ideas:
 On hold (I have to look into them more closely)
 ================================================================================
 - Add/remove to SOBI2 (component handles its own payments; you can't do otherwise; need to ask Radek)
-- Add/remove to SOBIPro (component handles its own payments; you can't do otherwise; need to ask Radek)
 
 ================================================================================
 On ice (never going to happen)

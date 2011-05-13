@@ -86,7 +86,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 				$renewals = KFactory::get('site::com.akeebasubs.model.subscriptions')
 					->enabled(1)
 					->user_id($sub->user_id)
-					->level($sub->level)
+					->level($sub->akeebasubs_level_id)
 					->publish_up($sub->publish_down)
 					->getList();
 				if(count($renewals)) {
@@ -167,6 +167,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 	 */
 	private function doIHaveToRun()
 	{
+		return true;
+		
 		$params = $this->getComponentParameters();
 		$lastRunUnix = $params->get('plg_akeebasubs_asexpirationnotify_timestamp',0);
 		$dateInfo = getdate($lastRunUnix);
