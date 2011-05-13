@@ -1557,6 +1557,126 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </warning>
       </section>
 
+      <section xml:id="payment-worldpay">
+        <title>WorldPay</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - WorldPay</guilabel></para>
+
+        <note>
+          <para>This feature is only available in the Professional
+          edition</para>
+        </note>
+
+        <para>This payment method integrates the WorldPay Hosted Payment Page
+        payments service, available with all entry-level offerings of
+        WorldPay.</para>
+
+        <important>
+          <para>WorldPay's Hosted Payment Page mode does not allow your
+          visitors to come back to your site. Therefore, they will not see
+          your custom payment success and cancellation messages. You will
+          instead have to use custom HTML pages uploaded to WorldPay's
+          servers.</para>
+        </important>
+
+        <warning>
+          <para>You need to perform some setup before using this method (the
+          following steps are taken verbatim from WorldPay's Test and Go Live
+          documentation):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Log in to the WorldPay Merchant Interface</para>
+            </listitem>
+
+            <listitem>
+              <para>Select Installations from the left hand navigation</para>
+            </listitem>
+
+            <listitem>
+              <para>Choose an installation and select the Integration Setup
+              button for either the TEST or PRODUCTION environment</para>
+            </listitem>
+
+            <listitem>
+              <para>Check the Enable Payment Response checkbox</para>
+            </listitem>
+
+            <listitem>
+              <para>Enter the WPDISPLAY ITEM tag which includes the dynamic
+              url variable into the Payment Response URL input field:</para>
+
+              <para>&lt;wpdisplay item=MC_callback&gt;</para>
+            </listitem>
+
+            <listitem>
+              <para>Enter a password into the Payment Response Password input
+              field; this is your Callback Password and you will have to copy
+              it to the plugin's setup parameters</para>
+            </listitem>
+
+            <listitem>
+              <para>Select the Save Changes button</para>
+            </listitem>
+          </itemizedlist>
+        </warning>
+
+        <para>Please make sure that you have completed all of the steps above
+        and have configured all the parameters BEFORE enabling this plugin. Do
+        not ask for support if you haven't done that yet.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "WorldPay" or type in a custom name to
+              show to your customer's, e.g. "Visa, MasterCard or American
+              Express cards"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Installation ID</term>
+
+            <listitem>
+              <para>Your WorldPay installation ID, as communicated to you by
+              WorldPay.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Callback Password</term>
+
+            <listitem>
+              <para>The callback password you have specified in your WorldPay
+              account, used to verify that the payment notification come,
+              indeed, from WorldPay and avoid fraudulent requests</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Test mode</term>
+
+            <listitem>
+              <para>When enabled, transactions are processed by WorldPay's
+              test server, i.e. WorldPay's testing mode. This is designed for
+              integration tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU NOT
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis> This option should be used only in
+              the integration testing phase during your initial setup. During
+              this phase, visitors can use one of the dummy card numbers to
+              buy subscriptions without money changing hands. When you're
+              ready to go live with your site, disable this feature.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
       <section xml:id="payment-offline">
         <title>Off-line</title>
 
