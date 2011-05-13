@@ -137,8 +137,10 @@ class plgAkpaymentPaypal extends JPlugin
 		// Check that txn_id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $data['txn_id']) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
+				if($subscription->state == 'C') {
+					$isValid = false;
+					$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
+				}
 			}
 		}
 		
