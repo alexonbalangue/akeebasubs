@@ -253,11 +253,11 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$body = JText::_($body_key);
 		
 		if($firstContact) {
-			if(!empty($this->params->get('s1subject',''))) $subject = $this->params->get('s1subject','');
-			if(!empty($this->params->get('s1body',''))) $body = $this->params->get('s1body','');
+			if($this->params->get('s1subject','')) $subject = $this->params->get('s1subject','');
+			if($this->params->get('s1body','')) $body = $this->params->get('s1body','');
 		} else {
-			if(!empty($this->params->get('s2subject',''))) $subject = $this->params->get('s2subject','');
-			if(!empty($this->params->get('s2body',''))) $body = $this->params->get('s2body','');
+			if($this->params->get('s2subject','')) $subject = $this->params->get('s2subject','');
+			if($this->params->get('s2body','')) $body = $this->params->get('s2body','');
 		}
 		
 		foreach($substitution_vars as $key => $value) {
