@@ -24,6 +24,12 @@
 				"type"		: "boolean",
 				"filter"	: "int",
 				"default"	: "1"
+			},
+			"personalinfo" : {
+				"title"		: "COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO",
+				"type"		: "boolean",
+				"filter"	: "int",
+				"default"	: "1"
 			}
 		}
 	}

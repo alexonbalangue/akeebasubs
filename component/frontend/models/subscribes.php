@@ -594,6 +594,9 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$isValid = true;
 		foreach($validation->validation as $key => $validData)
 		{
+			if(!KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo) {
+				if(!in_array($key, array('username','email','name'))) continue;
+			}
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if($key == 'vatnumber') continue;
 			// A wrong coupon code is not a fatal error

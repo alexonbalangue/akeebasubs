@@ -25,7 +25,7 @@ class ComAkeebasubsSimpleformElementBoolean extends ComAkeebasubsSimpleformEleme
 		$element = '<select name="'.$key.'" id="'.$id.'">';
 		$element .= '<option value="0" '.($this->_value == 0 ? 'selected = "selected" ' : '').'>'.JText::_('No').'</option>';
 		$element .= '<option value="1" '.($this->_value != 0 ? 'selected = "selected" ' : '').'>'.JText::_('Yes').'</option>';
-		$element .= '</select>';
+		$element .= '</select><br/>';
 		
 		return $label.$element;
 	}

@@ -3,184 +3,194 @@ To-do / bug fixes:
 ================================================================================
 
 ================================================================================
-WorldPay Hosted Payment Page integration
+2Checkout Hosted Payments Integration
 ================================================================================
 
-FOR TESTING, USE THIS URL: https://secure-test.wp3.rbsworldpay.com/wcc/purchase
-Ref: http://www.rbsworldpay.com/support/kb/bg/testandgolive/tgl.html
+Standard Purchase Routine (Credit Card, PayPal Express Checkout and PIN Debit)
+	https://www.2checkout.com/checkout/purchase
+Single Page Checkout (only Credit Card: VISA, MasterCard, American Express, Discover/Novus, Diners Club and JCB)
+	https://www.2checkout.com/checkout/spurchase
 
-<form action="https://secure.wp3.rbsworldpay.com/wcc/purchase" method=POST>
-	<!-- A mandatory parameter. Put your Installation ID inside the quotes after value= -->
-	<input type=hidden name="instId" value="Your installation ID ">
-	
-	<!-- A mandatory parameter. Put your own reference identifier for the item purchased inside the quotes after value= -->
-	<input type=hidden name="cartId" value="Your reference ID for the product ">
-	
-	<!-- A mandatory parameter. Put the total cost of the item inside the quotes after value= -->
-	<input type=hidden name="amount" value="The cost of the product ">
-	
-	<!-- A mandatory parameter. Put the code for the purchase currency inside the quotes after value= -->
-	<input type=hidden name="currency" value="currency code e.g. GBP, USD ">
-	
-	<!-- An optional parameter. Put your description of the item inside the quotes after value= -->
-	<input type=hidden name="desc" value=" what you are selling ">
-	
-	<!-- Shopper information (optional) -->
-	<input type=hidden name="name" value="J. Bloggs">
-	<input type=hidden name="address" value="4 Any St, Somewhere">
-	<input type=hidden name="postcode" value="AB10 5AB">
-	<input type=hidden name="country" value="GB">
-	<input type=hidden name="tel" value="0123456789">
-	<input type=hidden name="email" value="demo@uk.worldpay.com">	
-	
-	<!-- Callback URL -->
-	<input type="hidden" name="MC_callback" value="http://www.myserver.com/mycallbackscript.cgi">
-	
-	<!-- Required for TEST MODE. Set to 0 for live -->
-	<input type=hidden name="testMode" value="100">
-	
-	<!-- Custom variables (myVariable can be anything) -->
-	<input type="hidden" name="MC_myVariable" value="abcdef123456">
-</form>
+Required Parameters:
+--------------------------------------------------------------------------------
 
+sid
+	Your 2Checkout account number. 
+total
+	The total amount to be billed, in decimal form, without a currency symbol or comma. (8
+	characters, decimal, 2 characters: Example: 99999999.99) 
+cart_order_id
+	A unique order ID from your program. (128 characters max)
 
+Product Identification Parameters:
+--------------------------------------------------------------------------------
 
+id_type
+	Due to changes in the Product Identification parameters this parameter should be passed in once
+	during the purchase and will need to have its value set to 1. 
+c_prod
+	The ID of the product that is being purchased. The quantity of product being purchased can be
+	passed with this parameter by placing a comma after the ID and then the quantity in numeric
+	format. 
+c_name
+	The value of this parameter should contain the name of the product to be created. (128 characters
+	max) 
+c_description
+	The value of this parameter should contain a short description of the product to be sold. (255
+	characters max) 
+c_price
+	The price of your product. Please note that in order to prevent a discrepancy between the total
+	parameter and the sum of the product identification c_price parameters which may confuse the
+	customer, the product price will not be displayed on the purchase page. (8 characters, decimal, 2
+	characters: Example: 99999999.99) 
 
-To change the payment response URL to accept the dynamic url variable:
+Additional Parameters:
+--------------------------------------------------------------------------------
 
-Log in to the Merchant Interface
+demo
+	Y to enable demo mode, do not pass this in for live sales. 
+fixed
+	Y to remove the Continue Shopping button and lock the quantity fields. 
+lang
+	Chinese – zh, Danish – da, Dutch – nl, French – fr, German – gr, Greek – el, Italian – it,
+	Japanese – jp, Norwegian – no, Portuguese – pt, Slovenian – sl, Spanish – es_ib, Spanish –
+	es_la, Swedish – sv, defaults to English if this is absent, but en may be used for English as
+	well.
+return_url
+	Used to control where the Continue Shopping button will send the customer when clicked. (255
+	characters max) 
+merchant_order_id
+	Specify your order number with this parameter. It will also be included in the confirmation emails
+	to yourself and the customer. (50 characters max) 
+pay_method
+	CC for Credit Card, AL for Acculynk PIN-debit, PPI for PayPal. This will set the default
+	selection on the payment method step during the checkout process. 
+skip_landing
+	If set to 1 it will skip the order review page of the purchase routine. 
+x_receipt_link_url
+	Used to specify an approved URL on-the-fly, but is limited to the same domain that is used for
+	your 2Checkout account, otherwise it will fail. This parameter will over-ride any URL set on the
+	Site Management page. 
+coupon
+	Specify a 2Checkout created coupon code. If applicable, the coupon will be automatically
+	applied to the sale.
 
-Select Installations from the left hand navigation
+To populate the billing information page you may pass in:
+--------------------------------------------------------------------------------
 
-Choose an installation and select the Integration Setup button for either the TEST or PRODUCTION environment
-
-Check the Enable Payment Response checkbox
-
-Enter the WPDISPLAY ITEM tag which includes the dynamic url variable into the Payment Response URL input field:
-<wpdisplay item=MC_callback>
-
-Select the Save Changes button
-
-
-
-To add a Payment Response Password:
-
-Log in to the Merchant Interface
-
-Select Installations from the left hand navigation
-
-Choose an installation and select the Integration Setup button for either the TEST or PRODUCTION environment
-
-Enter a password into the Payment Response Password input field
-
-Select the Save Changes button
-
-The password is then included in the Payment Message using the parameter name, callbackPW
-
-
-
-http://www.rbsworldpay.com/support/kb/bg/paymentresponse/payment_response.html
-
-The Payment Message is a collection of parameters and related values detailing a shopper’s authorised or cancelled transaction. The Payment Message is sent to a server-side script located on your server using the POST request method and via HTTP(s).
-
-Below is an example of what the body of Payment Message looks like for an authorised transaction:
-
-instId=38290&email=demo%40uk.rbsworldpay.com&transTime=999178402000&country=GB&rawAuthCode=A&amount=14.99
-&installation=38290&tel=0123+456789012&address=Test+Road%0D%0ATest+Town%0D%0ATest+City&MC_log=2379
-&rawAuthMessage=authorised+(testMode+always+Yes&authAmount=23.11&amountString=%26%23163%3B14.99&cardType=Visa
-&AVS=0001&cost=14.99&currency=GBP&testMode=100&authAmountString=EUR23.11&fax=01234+5678901&lang=en
-&transStatus=Y&compName=Company+Name&authCurrency=EUR&postcode=AB1+2CD&authCost=23.11&desc=Test+Item
-&countryMatch=S&cartId=Test+Item&transId=12227758&M_var1=fred&authMode=E&countryString=United+Kingdom &name=john+smith
-
-instId=38290
-email=demo@uk.rbsworldpay.com
-transTime=999178402000
-country=GB
-rawAuthCode=A
-amount=14.99
-installation=38290
-tel=0123 456789012
-address=Test Road
-        Test Town
-        Test City
-MC_log=2379
-rawAuthMessage=authorised (testMode always Yes
-authAmount=23.11
-amountString=%26%23163%3B14.99
-cardType=Visa
-AVS=0001
-cost=14.99
-currency=GBP
-testMode=100
-authAmountString=EUR23.11
-fax=01234 5678901
-lang=en
-transStatus=Y
-compName=Company Name
-authCurrency=EUR
-postcode=AB1 2CD
-authCost=23.11
-desc=Test Item
-countryMatch=S
-cartId=Test Item
-transId=12227758
-M_var1=fred
-authMode=E
-countryString=United Kingdom
-name=john smith
+card_holder_name
+	Card holder’s name. (128 characters max) The card holder’s name can also be populated using
+	the first_name, middle_initial, and last_name parameters. IMPORTANT: If you
+	use these three parameters, the data will be combined into and returned as
+	card_holder_name to your Approved URL script. 
+street_address
+	Card holder’s street address. (64 characters max) 
+street_address2
+	The second line for the street address, typically suburb or apartment number information. (64
+	characters max) 
+city
+	Card holder’s city. (64 characters max) 
+state
+	Card holder’s state. (64 characters max) 
+zip
+	Card holder’s zip or postal code. (16 characters max) 
+country
+	Card holder’s country. (64 characters max) 
+email
+	Card holder’s email address. (64 characters max) 
+phone
+	Card holder’s phone number. (16 characters max) 
+phone_extension
+	Card holder’s phone extension. (9 characters max) 
 
 
-Parameter descriptions for the HTTP(s) Payment Message
-The table below details all of the possible parameters that are posted to you in the body of the Payment Message:
-
-instId
-The ID for the installation
-
-cartId
-Your own reference number for the order.
-
-amount
-A decimal number giving the cost of the purchase in terms of the major currency unit e.g. 12.56 would mean 12 pounds and 56 pence if the currency were GBP (Pounds Sterling).
-
-currency
-3 letter ISO code for the currency of this payment.
-
-authMode
-Specifies the authorisation mode used. The values are "A" for a full auth, or "E" for a pre-auth.
-
-testMode
-An integer greater than 0 (zero) specifying that this is a test payment. Specify the test result you want by entering REFUSED, AUTHORISED, ERROR or CAPTURED in the name parameter.
-
-transId
-The  ID for the transaction
-
-transStatus
-Result of the transaction - "Y" for a successful payment authorisation, "C" for a cancelled payment
-
-callbackPW
-The Payment Response password set in the Merchant  Interface. (may be missing if not set!)
+Parameters Returned on a Successful Sale
+card_holder_name
+	Provides the customer's name. 
+cart_id
+	The cart ID your cart assigned to the order. 
+cart_order_id
+	A unique order ID from your program that is normally used to identify an incomplete sale in your
+	database so that it can be marked as paid. 
+city
+	Provides the customer’s city. 
+country
+	Provides the customer’s country. 
+credit_card_processed
+	This parameter will always be passed back as Y. 
+demo
+	Defines if an order was live, or if the order was a demo order. If the order was a demo, the MD5
+	hash will fail. 
+email
+	Provides the email address the customer provided when placing the order. 
+fixed
+	This parameter will only be passed back if it was passed into the purchase routine. 
+ip_country
+	Provides the customer's IP location. Useful if you perform your own additional fraud review. 
+key
+	An MD5 hash used to confirm the validity of a sale. It is calculated based on a combination of
+	your secret word, seller identification number, the order number, and the sale total. 
+lang
+	Advises the language the customer was able to view the Order Details page in. Can be used to
+	track what language your customers speak or read. Can be helpful to track which pages or
+	purchase buttons customers are using if you have multiple languages on your site. 
+merchant_order_id
+	The order ID you assigned to the order. This parameter will only be passed back if it was passed
+	into the purchase routine. 
+order_number
+	The 2Checkout order number associated with the order. 
+pay_method
+	Provides merchant with the customer’s payment method. CC for Credit Card, AL for Acculynk
+	PIN-debit, PPI for PayPal. 
+phone
+	Provides the phone number the customer provided when placing the order.
+ship_name
+	Provides the ship to name for the order. 
+ship_street_address
+	Provides ship to address. 
+ship_street_address2
+	Provides more detailed shipping address if more information is provided by the customer. 
+ship_city
+	Provides ship to city. 
+ship_state
+	Provides ship to state. 
+ship_zip
+	Provides ship to zip or postal code. 
+ship_country
+	Provides ship to country. 
+sid
+	The seller identification number. This can be useful if your return script might be in use for
+	multiple 2Checkout accounts. The sid parameter is also used to form the returned MD5 hash
+	key to confirm the validity of a sale. 
+state
+	Provides the state the customer gave when placing the order. Can be used for a customer data
+	base. 
+street_address
+	Provides the customer’s street address. 
+street_address2
+	Provides more detailed address if more information is provided by the customer. 
+total
+	The amount the customer was billed on the order.
+zip
+	Provides the customer’s zip or postal code. 
 
 ================================================================================
 Future ideas:
 ================================================================================
-+ Payment: WorldPay
-+ Payment: 2checkout
++ Customizable emails (in the plugin, using a popup editor)
 + PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
++ Payment: 2checkout
 + JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
 	(like CB)
 + Create invoices with ccInvoices
-+ Add/remove to SOBIPro (Radek told me it's possible with groups')
++ Add/remove to SOBIPro (Radek told me it's possible with groups)
++ Add/remove to Agora groups
 
-
-+ Customizable emails (in the plugin, using a popup editor)
 + Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
 + Payment: PayPal Pro
 + Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
-+ Option to disable business registrations
-+ Option to disable collection of address information
 + Payment: DIBS
 
-+ Add/remove to Agora groups
 + Add/remove to Mailchimp
 - email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
 - Add/remove to Jomres

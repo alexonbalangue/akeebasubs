@@ -60,6 +60,7 @@
 	<label for="email" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL')?></label>
 	<input type="text" name="email" id="email" value="<?=@escape( !empty($userparams->email) ? $userparams->email : $cache['email'] )?>" class="main" />
 	<span id="email_invalid" class="invalid" <?if($validation->validation->email):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_EMAIL')?><span class="akstriangle akstriangle-red"></span></span>
+	<?if(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo):?>
 	<br/>
 	<label for="address1" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS1')?></label>
 	<input type="text" name="address1" id="address1" value="<?=@escape(!empty($userparams->address1) ? $userparams->address1 : $cache['address1'])?>" class="main" />
@@ -109,6 +110,7 @@
 		</div>
 	</div>
 	<br/>
+	<?endif;?>
 	
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
 	<label for="coupon" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?></label>
@@ -159,6 +161,7 @@
 var akeebasubs_validate_url = "<?=JURI::base().'index.php'?>";
 var akeebasubs_level_id = <?=$level->id?>;
 var akeebasubs_valid_form = false;
+var akeebasubs_personalinfo = <?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo?'true':'false'?>;
 
 (function($) {
 	$(document).ready(function(){
@@ -166,8 +169,10 @@ var akeebasubs_valid_form = false;
 		validatePassword();
 		validateName();
 		validateEmail();
+		<?if(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo):?>
 		validateAddress();
 		validateBusiness();
+		<?endif;?>
 	});
 })(akeeba.jQuery);
 
