@@ -177,7 +177,6 @@ zip
 ================================================================================
 Future ideas:
 ================================================================================
-+ Customizable emails (in the plugin, using a popup editor)
 + PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
 + Payment: 2checkout
 + JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)

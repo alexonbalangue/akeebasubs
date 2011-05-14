@@ -22,4 +22,20 @@
 		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.ini</language>
 		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.sys.ini</language>
 	</languages>
+	<params addpath="/plugins/system/asexpirationnotify">
+		<param type="header" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_LABEL" description="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_DESC" />
+		<param type="text" name="s1subject" size="80" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_DESC" default="Your subscription on {SITENAME} will expire soon" />
+		<param type="textarea" name="s1body" cols="50" rows="10" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_DESC" default="Hello {NAME},&#10;&#10;We are contacting you to inform you that your subscription on {SITENAME} with the following details will be expiring soon:&#10;&#10;Username: {USERNAME}&#10;Subscription type: {LEVEL}&#10;Subscription status: {ENABLED}&#10;Payment status: {STATE}&#10;Valid from: {FROM}&#10;Valid to: {TO}&#10;&#10;You can login any time on our site to review your subscriptions and renew your expiring one. Please click or, if it is not clickable, copy and paste the following URL to your browser:&#10;{URL}&#10;&#10;Best regards,&#10;{SITENAME}" />
+		
+		<param type="header" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S2_LABEL" description="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S2_DESC" />
+		<param type="text" name="s2subject" size="80" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_DESC" default="Your subscription on {SITENAME} is about to expire" />
+		<param type="textarea" name="s2body" cols="50" rows="10" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_DESC" default="Hello {NAME},&#10;&#10;We are contacting you to inform you that your subscription on {SITENAME} with the following details will be expiring very soon:&#10;&#10;Username: {USERNAME}&#10;Subscription type: {LEVEL}&#10;Subscription status: {ENABLED}&#10;Payment status: {STATE}&#10;Valid from: {FROM}&#10;Valid to: {TO}&#10;&#10;You can login any time on our site to review your subscriptions and renew your expiring one. Renewing your subscription is very easy! Just click or, if it is not clickable, copy and paste the following URL to your browser to view the subscriptions overview page and click on the Renew link:&#10;{URL}&#10;&#10;Best regards,&#10;{SITENAME}" />
+	</params>
+	<config addfieldpath="/plugins/system/asexpirationnotify/asexpirationnotify">
+		<fields name="params">
+			<fieldset name="basic">
+			
+			</fieldset>
+		</fields>
+	</config>
 </install>

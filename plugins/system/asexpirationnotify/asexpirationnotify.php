@@ -236,19 +236,34 @@ class plgSystemAsexpirationnotify extends JPlugin
 			$body_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_SECOND';
 		}
 		
-		$subject = JText::sprintf($subject_key, $sitename);
-		$body = JText::sprintf($body_key,
-			$user->name,
-			$sitename,
-			$user->username,
-			$level->title,
-			$row->enabled ? JText::_('Enabled') : JText::_('Disabled'),
-			JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			$jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			$jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
-			$url,
-			$sitename
+		$substitution_vars = array(
+			'name'				=> $user->name,
+			'username'			=> $user->username,
+			'email'				=> $user->email,
+			'sitename'			=> $sitename,
+			'level'				=> $level->title,
+			'enabled'			=> $row->enabled ? JText::_('Enabled') : JText::_('Disabled'),
+			'state'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
+			'from'				=> $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'to'				=> $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'url'				=> $url
 		);
+		
+		$subject = JText::_($subject_key);
+		$body = JText::_($body_key);
+		
+		if($firstContact) {
+			if(!empty($this->params->get('s1subject',''))) $subject = $this->params->get('s1subject','');
+			if(!empty($this->params->get('s1body',''))) $body = $this->params->get('s1body','');
+		} else {
+			if(!empty($this->params->get('s2subject',''))) $subject = $this->params->get('s2subject','');
+			if(!empty($this->params->get('s2body',''))) $body = $this->params->get('s2body','');
+		}
+		
+		foreach($substitution_vars as $key => $value) {
+			$subject = str_ireplace('{'.$key.'}', $value, $subject);
+			$body = str_ireplace('{'.$key.'}', $value, $body);
+		}
 		
 		// DEBUG ---
 		/* *
