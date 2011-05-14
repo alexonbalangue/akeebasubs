@@ -38,6 +38,11 @@ class ASElementHeader extends ASElementBase
 	{
 		return '<hr/>';
 	}
+	
+	function getInput()
+	{
+		return '';
+	}
 }
 
 /*
