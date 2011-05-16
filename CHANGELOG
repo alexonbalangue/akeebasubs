@@ -14,3 +14,4 @@ Akeeba Subscriptions 1.0.b3 (current trunk)
 # PayPal: Incoming notifications for pending transactions were not accepted because the had the same transaction ID as the original (pending/on hold) payment notification
 # Awesome layout wasn't an option in Joomla! 1.6 due to changes in layout handling (gee, thank you Joomla! for going backwards!)
 # The "Select All" checkbox doesn't work in any view except the Subscriptions view
+# Ordering would not work under Joomla! 1.6
