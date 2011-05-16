@@ -12,3 +12,4 @@ Akeeba Subscriptions 1.0.b3 (current trunk)
 # Javascript error in front-end subscription view if mooTools wasn't already loaded
 # Renewing a subscription doesn't make expiration notification emails stop being sent
 # PayPal: Incoming notifications for pending transactions were not accepted because the had the same transaction ID as the original (pending/on hold) payment notification
+# Awesome layout wasn't an option in Joomla! 1.6 due to changes in layout handling (gee, thank you Joomla! for going backwards!)
