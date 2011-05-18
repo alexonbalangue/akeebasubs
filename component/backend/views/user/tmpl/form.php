@@ -35,6 +35,10 @@
 	<input type="text" name="city" id="city" class="longer" value="<?=@escape($user->city)?>" />
 	<br/>
 	
+	<label for="zip" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_ZIP')?></label>
+	<input type="text" name="zip" id="zip" value="<?=@escape($user->zip)?>" />
+	<br/>
+	
 	<label for="state" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_STATE')?></label>
 	<?=@helper('admin::com.akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => ( $user->state ) ))?>
 	<br/>

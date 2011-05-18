@@ -16,3 +16,4 @@ Akeeba Subscriptions 1.0.b3 (current trunk)
 # The "Select All" checkbox doesn't work in any view except the Subscriptions view
 # Ordering would not work under Joomla! 1.6
 # Users view: there were no filters in the view
+# Users editor: there is no way to edit the ZIP field
