@@ -261,7 +261,57 @@ defined('KOOWA') or die('Restricted access');?>
 					</strong>
 				</td>
 			</tr>
-			
+			<tr class="row1">
+				<?
+					switch(gmdate('m')) {
+						case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+							$lmday = 31; break;
+						case 4: case 6: case 9: case 11:
+							$lmday = 30; break;
+						case 2:
+							$y = gmdate('Y');
+							if( !($y % 4) && ($y % 400) ) {
+								$lmday = 29;
+							} else {
+								$lmday = 28;
+							}
+					}
+					$daysin = gmdate('d');
+					$numsubs = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+						->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
+						->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+						->paystate('C')
+						->getTotal();
+					$summoney = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+						->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
+						->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+						->moneysum(1)
+						->paystate('C')
+						->getTotal();
+				?>
+				<td width="50%"><strong><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_AVERAGETHISMONTH')?></strong></td>
+				<td align="right" width="25%">
+					<strong><?=sprintf('%01.1f', $numsubs/$daysin)?><strong>
+				</td>
+				<td align="right" width="25%">
+					<strong>
+					<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+					<?=sprintf('%01.2f', $summoney/$daysin)?>
+					</strong>
+				</td>
+			</tr>
+			<tr class="row0">
+				<td width="50%"><strong><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_PROJECTION')?></strong></td>
+				<td align="right" width="25%">
+					<em><?=sprintf('%01u', $lmday * ($numsubs/$daysin))?></em>
+				</td>
+				<td align="right" width="25%">
+					<em>
+					<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+					<?=sprintf('%01.2f', $lmday * ($summoney/$daysin))?>
+					</em>
+				</td>
+			</tr>
 			</tbody>
 		</table>
 	<?= @helper('tabs.endPanel') ?>
