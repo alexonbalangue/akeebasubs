@@ -210,10 +210,11 @@ defined('KOOWA') or die('Restricted access');?>
 					$date->setDate(gmdate('Y'), gmdate('m'), gmdate('d'));
 					$date->modify("-1 day");
 					$yesterday = $date->format("Y-m-d");
+					$date->modify("+1 day")
 					?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 						->publish_up( $yesterday )
-						->publish_down( gmdate('Y-m-d') )
+						->publish_down( $date->format("Y-m-d") )
 						->paystate('C')
 						->getTotal()
 					?>
@@ -223,7 +224,7 @@ defined('KOOWA') or die('Restricted access');?>
 					<?= sprintf('%.02f',
 						KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 							->publish_up( $yesterday )
-							->publish_down( gmdate('Y-m-d') )
+							->publish_down( $date->format("Y-m-d") )
 							->moneysum(1)
 							->paystate('C')
 							->getTotal()
@@ -234,8 +235,13 @@ defined('KOOWA') or die('Restricted access');?>
 				<td width="50%"><strong><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_TODAY')?></strong></td>
 				<td align="right" width="25%">
 					<strong>
+					<?php
+						$expiry = clone $date;
+						$expiry->modify('+1 day');
+					?>
 					<?= KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
-						->publish_up( gmdate('Y-m-d') )
+						->publish_up( $date->format("Y-m-d") )
+						->publish_down( $expiry->format("Y-m-d") )
 						->paystate('C')
 						->getTotal()
 					?>
@@ -246,7 +252,8 @@ defined('KOOWA') or die('Restricted access');?>
 					<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
 					<?= sprintf('%.02f',
 						KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
-							->publish_up( gmdate('Y-m-d') )
+							->publish_up( $date->format("Y-m-d") )
+							->publish_down( $expiry->format("Y-m-d") )
 							->paystate('C')
 							->moneysum(1)
 							->getTotal()
