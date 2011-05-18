@@ -22,7 +22,7 @@
 // no direct access
 defined('_JEXEC') or die('');
 
-class ModAksubslistHtml extends ModDefaultHtml
+class ModAksubslistHtml extends ModDefaultView
 {
 	public function display()
 	{
