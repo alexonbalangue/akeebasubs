@@ -32,6 +32,35 @@
 				<?= @helper('grid.sort', array('column' => 'vatnumber', 'title' => 'COM_AKEEBASUBS_USERS_FIELD_VATNUMBER')); ?>
 			</th>
 		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td>
+				<input name="username" id="username" value="<?= $state->username;?>" />
+				<button onclick="this.form.submit();"><?= @text('Go')?></button>
+				<button onclick="document.getElementById('username').value='';this.form.submit();"><?= @text('Reset'); ?></button>
+			</td>
+			<td>
+				<input name="name" id="name" value="<?= $state->name;?>" />
+				<button onclick="this.form.submit();"><?= @text('Go')?></button>
+				<button onclick="document.getElementById('name').value='';this.form.submit();"><?= @text('Reset'); ?></button>
+			</td>
+			<td>
+				<input name="email" id="email" value="<?= $state->email;?>" />
+				<button onclick="this.form.submit();"><?= @text('Go')?></button>
+				<button onclick="document.getElementById('email').value='';this.form.submit();"><?= @text('Reset'); ?></button>
+			</td>
+			<td>
+				<input name="businessname" id="businessname" value="<?= $state->businessname;?>" />
+				<button onclick="this.form.submit();"><?= @text('Go')?></button>
+				<button onclick="document.getElementById('businessname').value='';this.form.submit();"><?= @text('Reset'); ?></button>
+			</td>
+			<td>
+				<input name="vatnumber" id="vatnumber" value="<?= $state->vatnumber;?>" />
+				<button onclick="this.form.submit();"><?= @text('Go')?></button>
+				<button onclick="document.getElementById('vatnumber').value='';this.form.submit();"><?= @text('Reset'); ?></button>
+			</td>
+		</tr>
 	</thead>
 	<tfoot>
 		<tr>
