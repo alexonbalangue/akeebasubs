@@ -9,7 +9,7 @@
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <!--  -->
 
-<form action="<?= @route('id='.$subscription->id) ?>" method="post" class="adminform" name="adminForm">
+<form action="<?= @route('id='.$subscription->id) ?>" method="post" class="-koowa-form">
 <input type="hidden" name="_visual" value="1" />
 
 	<fieldset id="subscriptions-basic">

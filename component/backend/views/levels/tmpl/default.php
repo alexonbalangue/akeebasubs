@@ -11,7 +11,7 @@
 -->
 <?= @helper('behavior.tooltip'); ?>
 
-<form action="<?= @route() ?>" method="get" class="adminform" name="adminForm">
+<form action="<?= @route() ?>" method="get" class="-koowa-grid">
 
 <table class="adminlist">
 	<thead>
@@ -40,7 +40,7 @@
 				<input type="checkbox" name="toggle" value="" onclick="akeebasubs_checkall();" />
 			</td>
 			<td>
-				<?= @text('Filter:'); ?> <?= @template('admin::com.default.view.list.search_form'); ?>
+				<?= @text('Filter:'); ?> <?= @helper('grid.search'); ?>
 			</td>
 			<td></td>
 			<td></td>

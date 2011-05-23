@@ -8,7 +8,7 @@
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 -->
 
-<form action="<?= @route() ?>&tmpl=component" method="get" class="adminform" name="adminForm">
+<form action="<?= @route() ?>&tmpl=component" method="get" class="-koowa-grid">
 <table class="adminlist"  style="clear: both;">
 	<thead>
 		<tr>
@@ -28,7 +28,7 @@
 			<td></td>
 			<td></td>
 			<td colspan="3">
-				<?= @text('Filter:'); ?> <?= @template('admin::com.default.view.list.search_form'); ?>
+				<?= @text('Filter:'); ?> <?= @helper('grid.search'); ?>
 			</td>
 		</tr>
 	</thead>

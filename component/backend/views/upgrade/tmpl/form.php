@@ -5,7 +5,7 @@
 <style src="media://lib_koowa/css/koowa.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 -->
-<form action="<?= @route('id='.$upgrade->id) ?>" method="post" class="adminform" name="adminForm">
+<form action="<?= @route('id='.$upgrade->id) ?>" method="post" class="-koowa-form">
 	<input type="hidden" name="_visual" value="1" />
 
 	<fieldset id="upgrade-basic">

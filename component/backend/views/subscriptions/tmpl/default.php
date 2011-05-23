@@ -12,7 +12,7 @@
 
 <?= @helper('behavior.tooltip'); ?>
 
-<form action="<?= @route() ?>" method="get" class="adminform" name="adminForm">
+<form action="<?= @route() ?>" method="get" class="-koowa-grid">
 <table class="adminlist">
 	<thead>
 		<tr>
@@ -51,7 +51,7 @@
 			<td></td>
 			<td><?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('selected' => $state->level, 'name' => 'level', 'attribs' => array('onchange' => 'this.form.submit();')) ) ?></td>
 			<td>
-				<?= @text('Filter:'); ?> <?= @template('admin::com.default.view.list.search_form'); ?>
+				<?= @text('Filter:'); ?> <?= @helper('grid.search'); ?>
 			</td>
 			<td></td>
 			<td></td>
