@@ -8,7 +8,7 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsToolbarButtonSubrefresh extends KToolbarButtonAbstract
+class ComAkeebasubsToolbarButtonSubrefresh extends KToolbarButtonGet
 {
 	protected function _initialize(KConfig $config)
 	{
@@ -17,10 +17,13 @@ class ComAkeebasubsToolbarButtonSubrefresh extends KToolbarButtonAbstract
 			'id'		=> 'subrefresh',
 			'icon'		=> 'icon-32-subrefresh'
 		));
+		
+		parent::_initialize($config);
 	}
 
 	public function getLink()
 	{
-		return 'javascript:akeebasubs_refresh_integrations();';
+		// For some odd reason this doesn't get even called. What the...?! :@
+		return 'akeebasubs_refresh_integrations();';
 	}
 }
