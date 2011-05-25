@@ -35,7 +35,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		JHTML::_('behavior.mootools');
 	
 		$view = $this->getView();
-
+		
 		// Fetch the subscription slug from page parameters
 		$params	= KFactory::get('lib.joomla.application')->getPageParameters();
 		$slug	= $params->get('slug','');
