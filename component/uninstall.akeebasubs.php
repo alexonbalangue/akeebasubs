@@ -43,7 +43,9 @@ $installation_queue = array(
 		'akpayment' => array(
 			'none'					=> 0,
 			'paypal'				=> 1,
-			'offline'				=> 0
+			'offline'				=> 0,
+			'worldpay'				=> 0,
+			'ccavenue'				=> 0
 		),
 		'content' => array(
 			'asrestricted'			=> 1

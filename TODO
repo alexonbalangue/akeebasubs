@@ -1,6 +1,10 @@
 ================================================================================
 To-do / bug fixes:
 ================================================================================
+~ Name is required to consist of at least two words (e.g. you can't provide only your first or last name)
+~ Label from "Name" changed to "Name and Surname"
++ ccAvenue integration
++ Payment: 2checkout
 
 ================================================================================
 2Checkout Hosted Payments Integration
@@ -178,7 +182,6 @@ zip
 Future ideas:
 ================================================================================
 + PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
-+ Payment: 2checkout
 + JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
 	(like CB)
 + Create invoices with ccInvoices

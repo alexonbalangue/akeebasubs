@@ -1,7 +1,8 @@
 Akeeba Subscriptions 1.0.b3 (current trunk)
 ================================================================================
 
-+ WorldPay payment
++ ccAvenue payment gateway
++ WorldPay payment gateway
 + Option to disable business registrations and collection of address information
 + Customizable expiration notification emails (in the plugin)
 + Average day of the month and monthly projection statistics in Dashboard's "Statistics" pane
@@ -18,4 +19,4 @@ Akeeba Subscriptions 1.0.b3 (current trunk)
 # Ordering would not work under Joomla! 1.6
 # Users view: there were no filters in the view
 # Users editor: there is no way to edit the ZIP field
-# Yesterday and today sums in the "Statistics" pane of the dashboard were innacurate
+# Yesterday and today sums in the "Statistics" pane of the dashboard were inaccurate
