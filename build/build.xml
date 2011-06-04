@@ -122,7 +122,6 @@
 				<exclude name="akeebasubs/cb**" />
 				<exclude name="akeebasubs/tienda**" />
 				<exclude name="akpayment/worldpay**" />
-				<exclude name="akpayment/ccavenue**" />
 			</fileset>
 		</zipme>
 		
@@ -192,7 +191,6 @@
 				<exclude name="akeebasubs/cb**" />
 				<exclude name="akeebasubs/tienda**" />
 				<exclude name="akpayment/worldpay**" />
-				<exclude name="akpayment/ccavenue**" />
 			</fileset>
 		</zipme>
 	</target>
