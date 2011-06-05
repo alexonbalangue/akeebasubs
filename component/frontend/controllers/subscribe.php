@@ -53,6 +53,16 @@ class ComAkeebasubsControllerSubscribe extends KControllerDefault
 		}
 	}
 	
+	/**
+	 * On some servers, even though _actionPost is supposed to call either _actionAdd or _actionEdit,
+	 * neither is called. Instead we either get a 405 Method not allowed or a "Subscribe view not found".
+	 * It doesn't make any sense, but forcibly calling _actionEdit() on POST solves this issue. ARGH!!!
+	 */
+	protected function _actionPost(KCommandContext $context)
+	{
+		return $this->_actionEdit($context);
+	}
+	
 	public function unlockData(KCommandContext $context)
 	{
 		// Intentionally do nothing; the default behaviour is to unlock a row,
