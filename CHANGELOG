@@ -23,3 +23,4 @@ Akeeba Subscriptions 1.0.b3 (current trunk)
 # Yesterday and today sums in the "Statistics" pane of the dashboard were inaccurate
 # "405 Method Not Allowed" and "Subscribe view not found" errors on some servers when trying to subscribe
 # Saved user data (e.g. address, country, VAT, ...) were not being remembered during his next purchase attempt
+# Sometimes, when a payment processor POSTs back, the user is not shown the message
