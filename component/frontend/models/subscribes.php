@@ -183,6 +183,13 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		$ret['rawDataForDebug'] = $this->_state->getData();
 		
+		// Name validation; must contain AT LEAST two parts (name/surname)
+		// separated by a space
+		if(!empty($this->_state->name)) {
+			$nameParts = explode(" ", $this->_state->name);
+			if(count($nameParts) < 2) $ret['name'] = false;
+		}
+		
 		// Email validation
 		if(!empty($this->_state->email)) {
 			$list = KFactory::tmp('admin::com.akeebasubs.model.jusers')

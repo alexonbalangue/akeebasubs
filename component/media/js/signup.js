@@ -140,7 +140,15 @@ function validateName()
 	(function($) {
 		$('#name_empty').css('display','none');
 		var name = $('#name').val();
+		var invalidName = false;
 		if(name == '') {
+			invalidName = true;
+		} else {
+			var nameParts = name.split(' ');
+			if(nameParts.length < 2) invalidName = true;
+		}
+		
+		if(invalidName) {
 			$('#name_empty').css('display','inline-block');
 			akeebasubs_valid_form = false;
 			return;
