@@ -171,7 +171,7 @@ var akeebasubs_token = "<?=JUtility::getToken();?>";
 
 (function($) {
 	$(document).ready(function(){
-		$('#toolbar-subscriptions-subrefresh').click(akeebasubs_refresh_integrations);
+		$('#toolbar-subrefresh').click(akeebasubs_refresh_integrations);
 	});
 })(akeeba.jQuery);
 </script>

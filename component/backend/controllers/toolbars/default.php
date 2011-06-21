@@ -42,4 +42,10 @@ class ComAkeebasubsControllerToolbarDefault extends ComDefaultControllerToolbarD
 		));
 		parent::_initialize($config);
 	}
+	
+	public function setTitle($title)
+	{
+		$this->_title = $title;
+	    return $this;
+	}
 }
