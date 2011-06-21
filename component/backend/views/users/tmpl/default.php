@@ -34,7 +34,9 @@
 		</tr>
 		<tr>
 			<td></td>
-			<td></td>
+			<td>
+				<?=@helper('grid.checkall');?>
+			</td>
 			<td>
 				<input name="username" id="username" value="<?= $state->username;?>" />
 				<button onclick="this.form.submit();"><?= @text('Go')?></button>

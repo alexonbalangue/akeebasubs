@@ -50,7 +50,7 @@
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" name="toggle" value="" onclick="akeebasubs_checkall();" />
+				<?=@helper('grid.checkall');?>
 			</td>
 			<td>
 				<?= @text('Filter:'); ?> <?= @helper('grid.search'); ?>

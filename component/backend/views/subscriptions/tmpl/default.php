@@ -46,7 +46,7 @@
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" name="toggle" value="" onclick="akeebasubs_checkall();" />
+				<?=@helper('grid.checkall');?>
 			</td>
 			<td></td>
 			<td><?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('selected' => $state->level, 'name' => 'level', 'attribs' => array('onchange' => 'this.form.submit();')) ) ?></td>
