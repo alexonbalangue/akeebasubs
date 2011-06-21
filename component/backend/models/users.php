@@ -126,14 +126,17 @@ class ComAkeebasubsModelUsers extends KModelTable
 
 		$nativeData = array_merge($nativeData, $userRow->getData());
 		
-		$rows = KFactory::tmp('admin::com.akeebasubs.model.users')->user_id($this->_state->user_id)->getList();
-		if($rows instanceof KDatabaseRowsetInterface) {
-			$plainData = $rows->getData();
-			$row = array_shift($plainData);
-			unset($plainData);
-			$myData = array_merge($nativeData, $row);
-		} else {
-			$myData = $nativeData;
+		$myData = $nativeData;
+		if($this->_state->user_id > 0) {
+			$rows = KFactory::tmp('admin::com.akeebasubs.model.users')->user_id($this->_state->user_id)->getList();
+			if($rows instanceof KDatabaseRowsetInterface) {
+				$plainData = $rows->getData();
+				$row = array_shift($plainData);
+				unset($plainData);
+				if($row['user_id'] == $this->_state->user_id) {
+					$myData = array_merge($nativeData, $row);
+				}
+			}
 		}
 		
 		return (object)$myData;

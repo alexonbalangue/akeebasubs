@@ -61,5 +61,4 @@ class ComAkeebasubsToolbarDefault extends ComDefaultToolbarDefault
 
 		return $html;
 	}
-
 }

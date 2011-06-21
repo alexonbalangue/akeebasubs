@@ -9,6 +9,10 @@ defined('KOOWA') or die('');
 
 class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 {
+	public function getToolbar() {
+		return '';
+	}
+	
 	public function __construct(KConfig $config)
 	{
 		$config->views = array(
@@ -23,27 +27,5 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
         );
 		
 		parent::__construct($config);
-	}
-	
-	public function display()
-	{
-		// Joomla! 1.6 is screwed up. Fixing!
-		if(version_compare(JVERSION, '1.6.0', 'ge')) {
-			JHTML::_('behavior.mootools');
-		}
-	
-		$name = $this->getName();
-		
-		//Apend enable and disbale button for all the list views
-		if(!in_array($name, array('dashboard','tools')) && KInflector::isPlural($name) && KRequest::type() != 'AJAX')
-		{
-			KFactory::get('admin::com.akeebasubs.toolbar.'.$name)
-				//->append('divider')	
-				->append('enable')
-				->append('disable')
-				->append('csv');	
-		}
-					
-		return parent::display();
 	}
 }
