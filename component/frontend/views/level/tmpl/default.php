@@ -165,7 +165,8 @@ var akeebasubs_personalinfo = <?=KFactory::get('site::com.akeebasubs.model.confi
 
 (function($) {
 	$(document).ready(function(){
-		$('#signupForm').submit(onSignupFormSubmit);
+		// Commented out until we can resolve some strange validation errors for some users
+		//$('#signupForm').submit(onSignupFormSubmit);
 		validatePassword();
 		validateName();
 		validateEmail();

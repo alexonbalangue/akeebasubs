@@ -1,8 +1,6 @@
 ================================================================================
 To-do / bug fixes:
 ================================================================================
-~ Name is required to consist of at least two words (e.g. you can't provide only your first or last name)
-~ Label from "Name" changed to "Name and Surname"
 + Payment: 2checkout
 + SQL plugin, running a set of SQL commands, allowing for arbitrary integrations
 
