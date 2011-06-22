@@ -5,10 +5,10 @@
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/jquery.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/backend.js?<?=AKEEBASUBS_VERSIONHASH?>" />
-<?if(version_compare(JVERSION, '1.6.0')):?>
 <script src="media://com_akeebasubs/js/j16compat.js?<?=AKEEBASUBS_VERSIONHASH?>" />
-<?endif;?>
 -->
+<?= @helper('behavior.mootools'); ?>
+<?= @helper('behavior.validator'); ?>
 <?= @helper('behavior.tooltip'); ?>
 
 <form action="<?= @route() ?>" method="get" class="-koowa-grid">

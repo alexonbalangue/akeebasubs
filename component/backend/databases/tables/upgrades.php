@@ -17,7 +17,6 @@ class ComAkeebasubsDatabaseTableUpgrades extends KDatabaseTableAbstract
 {
 	public function __construct(KConfig $config)
 	{
-		//$config->name = 'akeebasubs_view_subscriptions';
 		$config->base = 'akeebasubs_upgrades';
   
 		parent::__construct($config);

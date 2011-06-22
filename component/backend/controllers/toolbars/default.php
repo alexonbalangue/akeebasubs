@@ -21,7 +21,7 @@ class ComAkeebasubsControllerToolbarDefault extends ComDefaultControllerToolbarD
 		
 		if(in_array($name, array('dashboard','tools')) || KInflector::isPlural($name) && (KRequest::type() != 'AJAX'))
 		{
-			if(!in_array($name, array('dashboard','tools')) && KInflector::isPlural($name) && (KRequest::type() != 'AJAX'))
+			if(!in_array($name, array('dashboard','tools','users')) && KInflector::isPlural($name) && (KRequest::type() != 'AJAX'))
 			{
 				$this
 					->addEnable()
