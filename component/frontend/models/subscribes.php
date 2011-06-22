@@ -91,7 +91,6 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				'zip'			=> '',
 				'isbusiness'	=> '',
 				'businessname'	=> '',
-				'occupation'	=> '',
 				'vatnumber'		=> '',
 				'coupon'		=> ''
 			);
@@ -176,7 +175,6 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'city'			=> !empty($this->_state->city),
 			'zip'			=> !empty($this->_state->zip),
 			'businessname'	=> !empty($this->_state->businessname),
-			'occupation'	=> !empty($this->_state->occupation),
 			'vatnumber'		=> !empty($this->_state->vatnumber),
 			'coupon'		=> !empty($this->_state->coupon)
 		);
@@ -222,7 +220,6 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// 4. Business validation
 		if(!$this->_state->isbusiness) {
 			$ret['businessname'] = true;
-			$ret['occupation'] = true;
 			$ret['vatnumber'] = false;
 		} else {
 			// Do I have to check the VAT number?
@@ -608,6 +605,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			if($key == 'vatnumber') continue;
 			// A wrong coupon code is not a fatal error
 			if($key == 'coupon') continue;
+			// A missing business occupation is not a fatal error either
+			if($key == 'occupation') continue;
 			// This is a dummy key which must be ignored
 			if($key == 'novatrequired') continue;
 			

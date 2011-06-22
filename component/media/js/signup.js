@@ -383,7 +383,6 @@ function validateIsNotBusiness(e) {
 	(function($) {
 		$('#businessfields').hide();
 		akeebasubs_cached_response.businessname = true;
-		akeebasubs_cached_response.occupation = true;
 		akeebasubs_cached_response.novatrequired = true;
 		applyValidation(akeebasubs_cached_response);
 		akeebasubs_isbusiness = false;
@@ -470,15 +469,6 @@ function applyValidation(response, callback)
 				$('#businessname_empty').css('display','inline-block');
 			}
 			
-			if(response.occupation) {
-				$('#occupation_empty').css('display','none');
-			} else {
-				$('#occupation_empty').css('display','inline-block');
-				if($('#isbusiness1').is(':checked')) {
-					akeebasubs_valid_form = false;
-				}
-			}
-			
 			if(response.vatnumber && ($('#vatfields').css('display') != 'none')) {
 				$('#vat-status-invalid').css('display','none');
 				$('#vat-status-valid').css('display','inline-block');
@@ -529,7 +519,6 @@ function applyPrice(response)
 			$('#businessname').blur(validateBusiness);
 			$('#isbusiness0').click(validateIsNotBusiness);
 			$('#isbusiness1').click(validateBusiness);
-			$('#occupation').blur(validateBusiness);
 			$('#vatnumber').blur(validateBusiness);
 		}
 		if($('#coupon')) {

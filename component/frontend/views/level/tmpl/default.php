@@ -99,7 +99,6 @@
 		<br/>
 		<label for="occupation" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION')?></label>
 		<input type="text" name="occupation" id="occupation" value="<?=@escape( !empty($userparams->occupation) ? $userparams->occupation : $cache['occupation'] )?>" class="main" />
-		<span id="occupation_empty" class="invalid" <?if($validation->validation->occupation):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 		<br/>
 		<div id="vatfields">
 			<label for="vatnumber" class="main" id="vatlabel"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER')?></label>
