@@ -9,25 +9,12 @@ defined('KOOWA') or die('');
 
 class ComAkeebasubsControllerDashboard extends ComDefaultControllerResource
 {
-	public function __construct(KConfig $config)
-	{
-		parent::__construct($config);
-
-		$this->registerCallback('before.read' , array($this, 'akeebasubsNoBlock'));
-	}
-	
     protected function _initialize(KConfig $config) 
     {
         $config->append(array(
-            'request' => array('layout' => 'default'),
+            'request' => array('layout' => 'default')
         ));
 
         parent::_initialize($config);
     }
-
-    public function akeebasubsNoBlock(KCommandContext $context) 
-    {
-        KRequest::set('get.hidemainmenu', 0);
-        return $this;
-    }    
 }
