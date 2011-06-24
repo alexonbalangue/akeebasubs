@@ -14,6 +14,13 @@ class ComAkeebasubsControllerDefault extends ComDefaultControllerDefault
 		parent::__construct($config);
 
 		$command = KFactory::get('admin::com.akeebasubs.command.validate');
-		$this->getCommandChain()->enqueue($command);		
+		$this->getCommandChain()->enqueue($command);
 	}
+	
+	public function _initialize(KConfig $config) {
+		$config->append(array(
+			'behaviors' => array('discoverable','executable','commandable','editable')
+		));
+		parent::_initialize($config);
+	}	
 }
