@@ -29,7 +29,7 @@ class ComAkeebasubsDatabaseBehaviorSubrefresh extends KDatabaseBehaviorAbstract
 
 	public function subscriptionRefresh()
 	{
-		$user_id = $this->mixer->user_id;
+		$user_id = $this->user_id;
 
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKUserRefresh', array($user_id));
