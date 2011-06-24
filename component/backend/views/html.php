@@ -9,9 +9,6 @@ defined('KOOWA') or die('');
 
 class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 {
-	public function getToolbar() {
-		return '';
-	}
 	
 	public function __construct(KConfig $config)
 	{
@@ -25,6 +22,11 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 			'users'				=> 'COM_AKEEBASUBS_USERS_TITLE',
 			'config'			=> 'COM_AKEEBASUBS_CONFIG_TITLE'
         );
+		$config->append(array(
+			'behaviors'  =>  array(
+				'admin::com.default.controller.behavior.commandable',
+				'admin::com.default.controller.behavior.executable'
+		)));
 		
 		parent::__construct($config);
 	}

@@ -10,6 +10,7 @@
 <?= @helper('behavior.mootools'); ?>
 <?= @helper('behavior.validator'); ?>
 <?= @helper('behavior.tooltip'); ?>
+<? @toolbar(); ?>
 
 <form action="<?= @route() ?>" method="get" class="-koowa-grid">
 

@@ -5,6 +5,8 @@
 <style src="media://lib_koowa/css/koowa.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 -->
+<? @toolbar(); ?>
+
 <form action="<?= @route('id='.$upgrade->id) ?>" method="post" class="-koowa-form">
 	<input type="hidden" name="_visual" value="1" />
 

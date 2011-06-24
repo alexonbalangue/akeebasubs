@@ -7,6 +7,7 @@
 -->
 
 <?= @helper('behavior.tooltip'); ?>
+<? @toolbar(); ?>
 
 <form action="<?= @route() ?>" method="get" class="-koowa-grid">
 <table class="adminlist">
