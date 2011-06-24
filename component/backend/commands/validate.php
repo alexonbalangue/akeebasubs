@@ -34,6 +34,14 @@ class ComAkeebasubsCommandValidate extends KCommand
             
             if(!property_exists($data, 'id')) {
             	$data->id = KRequest::get('get.id','int',null);
+				if($data->id instanceof KConfig) {
+					$rawdata = $data->id->toArray();
+					if(!empty($rawdata)) {
+						$data->id = array_shift($rawdata);
+					} else {
+						$data->id = 0;
+					}
+				}
             }
             
             $validationErrors = $model->validate($data);
@@ -61,7 +69,9 @@ class ComAkeebasubsCommandValidate extends KCommand
                 return false;
             } else {
             	// Push back the (changed) data and nullify the data cache
+				/*
             	$context->data = $data;
+				*/
 				KRequest::set('session.'.$identifier.'.errors', null);
 			}
         }
