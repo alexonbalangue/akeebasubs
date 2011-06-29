@@ -39,10 +39,6 @@ class ModAksubslistHtml extends ModDefaultView
 			$subs = '<span class="akeebasubs-subscriptions-itemized-nosubs">'.JText::_('COM_AKEEBASUBS_LEVELS_ITEMIZED_NOSUBS').'</span>';
 		} else {
 			$controller = KFactory::tmp('site::com.akeebasubs.controller.subscriptions');
-			$model = KFactory::tmp('site::com.akeebasubs.model.subscriptions');
-			$view = KFactory::tmp('site::com.akeebasubs.view.subscriptions.itemized');
-			$controller->setModel($model);
-			$controller->setView($view);
 			$subs = $controller
 				->layout('itemized')
 				->display();
