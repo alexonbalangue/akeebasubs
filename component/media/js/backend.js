@@ -67,7 +67,10 @@ function akeebasubs_ri_step()
 				}
 				$('#asriPercent').text(parseInt(percentage + ' '));
 				
-				if(akeebasubs_ri_done == akeebasubs_ri_total) $('#asriSpinner').hide();
+				if(akeebasubs_ri_done == akeebasubs_ri_total) {
+					$('#asriSpinner').hide();
+					window.location.reload();
+				}
 				
 				if( (msg.processed == 0) || (akeebasubs_ri_done == akeebasubs_ri_total) ) {
 					$.unblockUI();
