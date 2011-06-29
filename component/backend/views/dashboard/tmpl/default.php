@@ -9,7 +9,6 @@
  */
 
 defined('KOOWA') or die('Restricted access');?>
-<? @toolbar(); ?>
 <?= @helper('behavior.tooltip'); ?>
 <!--
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />

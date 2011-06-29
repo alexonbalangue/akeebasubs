@@ -11,7 +11,6 @@
 <script src="media://com_akeebasubs/js/j16compat.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <?endif;?>
 -->
-<? @toolbar(); ?>
 
 <?= @helper('behavior.tooltip'); ?>
 

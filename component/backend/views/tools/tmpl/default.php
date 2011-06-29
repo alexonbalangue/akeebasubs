@@ -7,7 +7,6 @@
 
 defined('KOOWA') or die('');
 ?>
-<? @toolbar(); ?>
 <!--
 <script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <style src="media://lib_koowa/css/koowa.css?<?=AKEEBASUBS_VERSIONHASH?>" />

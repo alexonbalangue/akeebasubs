@@ -12,9 +12,19 @@ class ComAkeebasubsControllerDashboard extends ComDefaultControllerResource
     protected function _initialize(KConfig $config) 
     {
         $config->append(array(
-            'request' => array('layout' => 'default')
+            'request'	=> array('layout' => 'default'),
         ));
 
         parent::_initialize($config);
     }
+	
+	/**
+	 * I am sure this is a stupid way to do it, but I digress.
+	 * 
+	 * @return bool
+	 */
+	public function isEditable()
+	{
+		return false;
+	}
 }
