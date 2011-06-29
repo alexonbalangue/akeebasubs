@@ -82,3 +82,14 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 .submitable {
 	cursor: pointer;
 }
+
+div.toolbar td.button a.toolbar {
+	color: black;
+	font-weight: bold;
+}
+
+div.toolbar td.button a.disabled {
+	color: #a99;
+	font-style: italic;
+	cursor: wait;
+}

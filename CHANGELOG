@@ -8,6 +8,7 @@ Akeeba Subscriptions 1.0.b3 (current trunk)
 + Average day of the month and monthly projection statistics in Dashboard's "Statistics" pane
 + Plugin to remove (irreversibly delete!) users when their subscription expires
 ~ The name field now *requires* both the name and surname to be provided
+~ The toolbar buttons in the back-end now indicate if they can be clicked or not
 # The XML manifest file of the off-line payment plugin didn't allow installation on Joomla! 1.6.3
 # If you don't click on the non-business registration, it always asks says you're not filling in the form correctly
 # Instead of throwing a 403 when a guest user accesses the "My Subscriptions" page, show him a login box
