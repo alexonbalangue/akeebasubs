@@ -7,6 +7,7 @@ Akeeba Subscriptions 1.0.b3 (current trunk)
 + Customizable expiration notification emails (in the plugin)
 + Average day of the month and monthly projection statistics in Dashboard's "Statistics" pane
 + Plugin to remove (irreversibly delete!) users when their subscription expires
++ 2checkout payment plugin
 ~ The name field now *requires* both the name and surname to be provided
 ~ The toolbar buttons in the back-end now indicate if they can be clicked or not
 ~ Reload subscriptions page after running integrations

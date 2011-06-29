@@ -1,180 +1,9 @@
 ================================================================================
 To-do / bug fixes:
 ================================================================================
-+ Payment: 2checkout
 + SQL plugin, running a set of SQL commands, allowing for arbitrary integrations
-
-================================================================================
-2Checkout Hosted Payments Integration
-================================================================================
-
-Standard Purchase Routine (Credit Card, PayPal Express Checkout and PIN Debit)
-	https://www.2checkout.com/checkout/purchase
-Single Page Checkout (only Credit Card: VISA, MasterCard, American Express, Discover/Novus, Diners Club and JCB)
-	https://www.2checkout.com/checkout/spurchase
-
-Required Parameters:
---------------------------------------------------------------------------------
-
-sid
-	Your 2Checkout account number. 
-total
-	The total amount to be billed, in decimal form, without a currency symbol or comma. (8
-	characters, decimal, 2 characters: Example: 99999999.99) 
-cart_order_id
-	A unique order ID from your program. (128 characters max)
-
-Product Identification Parameters:
---------------------------------------------------------------------------------
-
-id_type
-	Due to changes in the Product Identification parameters this parameter should be passed in once
-	during the purchase and will need to have its value set to 1. 
-c_prod
-	The ID of the product that is being purchased. The quantity of product being purchased can be
-	passed with this parameter by placing a comma after the ID and then the quantity in numeric
-	format. 
-c_name
-	The value of this parameter should contain the name of the product to be created. (128 characters
-	max) 
-c_description
-	The value of this parameter should contain a short description of the product to be sold. (255
-	characters max) 
-c_price
-	The price of your product. Please note that in order to prevent a discrepancy between the total
-	parameter and the sum of the product identification c_price parameters which may confuse the
-	customer, the product price will not be displayed on the purchase page. (8 characters, decimal, 2
-	characters: Example: 99999999.99) 
-
-Additional Parameters:
---------------------------------------------------------------------------------
-
-demo
-	Y to enable demo mode, do not pass this in for live sales. 
-fixed
-	Y to remove the Continue Shopping button and lock the quantity fields. 
-lang
-	Chinese – zh, Danish – da, Dutch – nl, French – fr, German – gr, Greek – el, Italian – it,
-	Japanese – jp, Norwegian – no, Portuguese – pt, Slovenian – sl, Spanish – es_ib, Spanish –
-	es_la, Swedish – sv, defaults to English if this is absent, but en may be used for English as
-	well.
-return_url
-	Used to control where the Continue Shopping button will send the customer when clicked. (255
-	characters max) 
-merchant_order_id
-	Specify your order number with this parameter. It will also be included in the confirmation emails
-	to yourself and the customer. (50 characters max) 
-pay_method
-	CC for Credit Card, AL for Acculynk PIN-debit, PPI for PayPal. This will set the default
-	selection on the payment method step during the checkout process. 
-skip_landing
-	If set to 1 it will skip the order review page of the purchase routine. 
-x_receipt_link_url
-	Used to specify an approved URL on-the-fly, but is limited to the same domain that is used for
-	your 2Checkout account, otherwise it will fail. This parameter will over-ride any URL set on the
-	Site Management page. 
-coupon
-	Specify a 2Checkout created coupon code. If applicable, the coupon will be automatically
-	applied to the sale.
-
-To populate the billing information page you may pass in:
---------------------------------------------------------------------------------
-
-card_holder_name
-	Card holder’s name. (128 characters max) The card holder’s name can also be populated using
-	the first_name, middle_initial, and last_name parameters. IMPORTANT: If you
-	use these three parameters, the data will be combined into and returned as
-	card_holder_name to your Approved URL script. 
-street_address
-	Card holder’s street address. (64 characters max) 
-street_address2
-	The second line for the street address, typically suburb or apartment number information. (64
-	characters max) 
-city
-	Card holder’s city. (64 characters max) 
-state
-	Card holder’s state. (64 characters max) 
-zip
-	Card holder’s zip or postal code. (16 characters max) 
-country
-	Card holder’s country. (64 characters max) 
-email
-	Card holder’s email address. (64 characters max) 
-phone
-	Card holder’s phone number. (16 characters max) 
-phone_extension
-	Card holder’s phone extension. (9 characters max) 
-
-
-Parameters Returned on a Successful Sale
-card_holder_name
-	Provides the customer's name. 
-cart_id
-	The cart ID your cart assigned to the order. 
-cart_order_id
-	A unique order ID from your program that is normally used to identify an incomplete sale in your
-	database so that it can be marked as paid. 
-city
-	Provides the customer’s city. 
-country
-	Provides the customer’s country. 
-credit_card_processed
-	This parameter will always be passed back as Y. 
-demo
-	Defines if an order was live, or if the order was a demo order. If the order was a demo, the MD5
-	hash will fail. 
-email
-	Provides the email address the customer provided when placing the order. 
-fixed
-	This parameter will only be passed back if it was passed into the purchase routine. 
-ip_country
-	Provides the customer's IP location. Useful if you perform your own additional fraud review. 
-key
-	An MD5 hash used to confirm the validity of a sale. It is calculated based on a combination of
-	your secret word, seller identification number, the order number, and the sale total. 
-lang
-	Advises the language the customer was able to view the Order Details page in. Can be used to
-	track what language your customers speak or read. Can be helpful to track which pages or
-	purchase buttons customers are using if you have multiple languages on your site. 
-merchant_order_id
-	The order ID you assigned to the order. This parameter will only be passed back if it was passed
-	into the purchase routine. 
-order_number
-	The 2Checkout order number associated with the order. 
-pay_method
-	Provides merchant with the customer’s payment method. CC for Credit Card, AL for Acculynk
-	PIN-debit, PPI for PayPal. 
-phone
-	Provides the phone number the customer provided when placing the order.
-ship_name
-	Provides the ship to name for the order. 
-ship_street_address
-	Provides ship to address. 
-ship_street_address2
-	Provides more detailed shipping address if more information is provided by the customer. 
-ship_city
-	Provides ship to city. 
-ship_state
-	Provides ship to state. 
-ship_zip
-	Provides ship to zip or postal code. 
-ship_country
-	Provides ship to country. 
-sid
-	The seller identification number. This can be useful if your return script might be in use for
-	multiple 2Checkout accounts. The sid parameter is also used to form the returned MD5 hash
-	key to confirm the validity of a sale. 
-state
-	Provides the state the customer gave when placing the order. Can be used for a customer data
-	base. 
-street_address
-	Provides the customer’s street address. 
-street_address2
-	Provides more detailed address if more information is provided by the customer. 
-total
-	The amount the customer was billed on the order.
-zip
-	Provides the customer’s zip or postal code. 
++ Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
++ Add/remove to SOBIPro (Radek told me it's possible with groups)
 
 ================================================================================
 Future ideas:
@@ -183,12 +12,10 @@ Future ideas:
 + JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
 	(like CB)
 + Create invoices with ccInvoices
-+ Add/remove to SOBIPro (Radek told me it's possible with groups)
 + Add/remove to Agora groups
 
 + Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
 + Payment: PayPal Pro
-+ Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
 + Payment: DIBS
 
 + Add/remove to Mailchimp
@@ -209,7 +36,7 @@ Future ideas:
 ================================================================================
 On hold (I have to look into them more closely)
 ================================================================================
-- Add/remove to SOBI2 (component handles its own payments; you can't do otherwise; need to ask Radek)
++ Add/remove to SOBI2 (component handles its own payments; you can't do otherwise; need to ask Radek)
 
 ================================================================================
 On ice (never going to happen)
