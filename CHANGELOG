@@ -36,3 +36,4 @@ Akeeba Subscriptions 1.0.RC1 (current trunk)
 # Joomla! 1.6 doesn't run the installation SQL file on update; workaround applied
 # Menu item parameters do not display in Joomla! 1.6
 # When a subscription is renewed, when the old subscription expires it MUST NOT send out an expiration email (or change the wording in the email)
+# Parameters of the "Akeeba Subscriptions - List of active subscriptions" module not displaying on Joomla! 1.6 and later
