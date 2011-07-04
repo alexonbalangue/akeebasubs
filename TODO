@@ -1,17 +1,15 @@
 ================================================================================
 To-do / bug fixes:
 ================================================================================
++ PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
 + SQL plugin, running a set of SQL commands, allowing for arbitrary integrations
 + Payment: Google Checkout http://code.google.com/intl/el-GR/apis/checkout/
 + Add/remove to SOBIPro (Radek told me it's possible with groups)
++ Create invoices with ccInvoices
 
 ================================================================================
 Future ideas:
 ================================================================================
-+ PLUGIN content/aksubscribe {aksubscribe SLUG|ID} => URL to subscription page of that level
-+ JomSocial integration (add to JS users/groups, update custom JS fields regarding subscription info)
-	(like CB)
-+ Create invoices with ccInvoices
 + Add/remove to Agora groups
 
 + Payment: Moneybookers http://www.moneybookers.com/app/help.pl?s=m_shoppingcart
@@ -19,6 +17,7 @@ Future ideas:
 + Payment: DIBS
 
 + Add/remove to Mailchimp
++ Add/remove to RedShop groups
 - email class with multiple back-ends (PHP mail function, SMTP, sendmail, Amazon SES)
 - Add/remove to Jomres
 - Payment: Eurobank (Greece)
@@ -37,11 +36,10 @@ Future ideas:
 On hold (I have to look into them more closely)
 ================================================================================
 + Add/remove to SOBI2 (component handles its own payments; you can't do otherwise; need to ask Radek)
++ Add/remove to Kunena groups (Kunena conflicts with the Nooku Framework - have to wait for 2.0)
 
 ================================================================================
 On ice (never going to happen)
 ================================================================================
 - RokDownloads (it doesn't have a group system; please use JUGA)
-- Add/remove to RedShop groups (I can't seem to be able to download the component)
 - Payment: Authorize.net DirectPost <-- Their bloody license FORBIDS US to disseminate their API library to practically all EU countries. Including support for Authorize.NET makes distribution of our software illegal, so it's Not Going To Happen In This Lifetime. :(
-+ Add/remove to Kunena groups (Kunena conflicts with the Nooku Framework)
