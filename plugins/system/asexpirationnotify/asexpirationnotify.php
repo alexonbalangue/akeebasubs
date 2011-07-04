@@ -92,7 +92,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 				if(count($renewals)) {
 					// The user has already renewed. Don't send him an email; just update the row
 					$sub->setData(array(
-						'contact_flag'	=> 2
+						'contact_flag'	=> 3
 					))->save();
 					
 					// Timeout check -- Only if we did make a modification!

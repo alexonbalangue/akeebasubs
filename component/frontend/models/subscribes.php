@@ -772,9 +772,9 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 					$startDate = $expiryDate + 1;
 				}
 				// Also mark the old subscription as "communicated". We don't want
-				// to spam our users with subscription renewal notices after they
-				// have effectively renewed!
-				$row->contact_flag = 2;
+				// to spam our users with subscription renewal notices or expiration
+				// notification after they have effectively renewed!
+				$row->contact_flag = 3;
 				$row->save();
 			}
 		}

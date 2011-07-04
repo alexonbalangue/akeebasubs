@@ -42,6 +42,12 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 */
 	public function onAKSubscriptionChange(KDatabaseRowDefault $row)
 	{
+		// If the subscription is disabled and contact_flag is 3, do not send out
+		// an expiration notification. The flag is set to 3 only when a user has
+		// already renewed his subscription.
+		if(!$row->enabled && ($row->contact_flag == 3)) return;
+		
+		// In all other cases, send out an email
 		$this->sendEmail($row, false);
 	}
 	
