@@ -51,6 +51,7 @@ $installation_queue = array(
 			'2checkout'				=> 0,
 		),
 		'content' => array(
+			'aslink'				=> 1,
 			'asrestricted'			=> 1
 		),
 		// Note: Do NOT include plg_koowa; it may be required by another extension!

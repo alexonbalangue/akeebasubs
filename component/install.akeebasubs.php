@@ -55,6 +55,7 @@ $installation_queue = array(
 			'2checkout'				=> 0
 		),
 		'content' => array(
+			'aslink'				=> 1,
 			'asrestricted'			=> 1
 		),
 		'system' => array(
