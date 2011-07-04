@@ -72,8 +72,28 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'contact_id'	=> $contact_id
 			);
 			$db->insertObject('#__ccinvoices_invoices', $invoice, 'id');
+			$id = $db->insertid();
 			
-			// @todo Try to send the invoice
+			// Try to send the invoice
+			if(!class_exists('ccInvoicesControllerInvoices')) {
+				jimport('joomla.filesystem.file');
+				$path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS.'controllers'.DS.'invoices.php';
+				if(JFile::exists($path)) {
+					require_once $path;
+				} else {
+					return;
+				}
+			}
+			
+			$jlang =& JFactory::getLanguage();
+			// Front-end translation
+			$jlang->load('com_ccinvoices', JPATH_SITE, 'en-GB', true);
+			$jlang->load('com_ccinvoices', JPATH_SITE, $jlang->getDefault(), true);
+			$jlang->load('com_ccinvoices', JPATH_SITE, null, true);
+
+			$controller = new ccInvoicesControllerInvoices;
+			$file_path = $this->createInvoice($id);
+			$controller->sendEmail(0,1,0,$file_path,$id);
 		}
 	}
 	
@@ -163,4 +183,58 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		return $id;
 	}
 
+	private function createInvoice($id)
+	{
+		$db = JFactory::getDBO();
+		$sql = "SELECT * FROM #__ccinvoices_configuration WHERE id = 1  LIMIT 1";
+		$db->setQuery($sql);
+		$config = $db->loadObject();
+        require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS."assets".DS."tcpdf".DS.'tcpdf.php');
+        require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS."assets".DS."tcpdf".DS."config".DS."lang".DS.'eng.php');
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('David');
+        $pdf->SetTitle('Invoice');
+        $pdf->SetSubject('Invoice');
+        $pdf->SetKeywords('Invoice');
+        // set default header data
+        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+        // set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        // set default monospaced font
+        //$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        //set margins
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        //set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->SetFont('times', '', 8);
+        $pdf->AddPage();
+		require_once JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS.'models'.DS.'invoices.php';
+        $model = new ccInvoicesModelInvoices;
+		$template=$model->gettemplatelayout($id);
+        $v=$pdf->writeHTML($template, true, false, false, false, '');
+		$query	= "SELECT *  FROM #__ccinvoices_configuration where id = 1 LIMIT 1";
+		$db->setQuery($query);
+		$conf = $db->loadObject();
+		$query	= "SELECT *  FROM #__ccinvoices_invoices where id = ".$id." LIMIT 1";
+		$db->setQuery($query);
+		$invRow = $db->loadObject();
+		if($conf->invoice_format != "")
+		{
+		$file_name = $model->getInvoiceNumberFormat($invRow->number).".pdf";
+		}else
+		{
+			$file_name = $invRow->number.".pdf";
+		}
+        $file_path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS.'assets'.DS.$file_name;
+        $pdf->Output($file_path, 'F');
+		return $file_path;
+	}
 }
