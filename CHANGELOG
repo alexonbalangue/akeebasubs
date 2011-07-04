@@ -10,6 +10,7 @@ Akeeba Subscriptions 1.0.RC1 (current trunk)
 + 2checkout payment plugin
 + Integartion with Joomla! XI JomSocial User Profile Types
 + JomSocial integration (add/remove to JomSocial groups)
++ aslink plugin to produce URLs to subscription pages easily
 ~ The name field now *requires* both the name and surname to be provided
 ~ The toolbar buttons in the back-end now indicate if they can be clicked or not
 ~ Reload subscriptions page after running integrations
