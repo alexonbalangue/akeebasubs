@@ -16,11 +16,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 	public function onAKSubscriptionChange(KDatabaseRowDefault $row)
 	{
 		// Only handle not expired subscriptions
-		if( ($row->state == "C") && ($row->enabled == 1) ) {
+		if( ($row->state == "C") && $row->enabled ) {
 			$db = JFactory::getDBO();
 		
 			// Get or create ccInvoices contact for user
-			$contact_id = $this->getContactID($row->user_id)
+			$contact_id = $this->getContactID($row->user_id);
 			
 			// @todo Load the existing invoices of the user
 			$sql = 'SELECT * FROM `#__ccinvoices_invoices` WHERE `contact_id` = '.$contact_id;
@@ -40,7 +40,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				if($sub_id == $row->id) return;
 			}
 			
-			// @todo Create new invoice
+			// Create new invoice
 			$db->setQuery('SELECT max(`number`) FROM `#__ccinvoices_invoices`');
 			$max1 = $db->loadResult();
 			$db->setQuery('SELECT max(`custom_invoice_number`) FROM `#__ccinvoices_invoices`');
@@ -71,7 +71,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'note'			=> "<p>Subscription ID: {$row->id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",
 				'contact_id'	=> $contact_id
 			);
-			$db->insertObject('', $invoice, 'id');
+			$db->insertObject('#__ccinvoices_invoices', $invoice, 'id');
 			
 			// @todo Try to send the invoice
 		}
@@ -108,12 +108,18 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		
 		// Load user data
 		$juser = KFactory::tmp('admin::com.akeebasubs.model.jusers')
-			->id($user_id)
+			->id($userid)
 			->getItem();
 			
-		$kuser = KFactory::tmp('admin::com.akeebasubs.model.users')
-			->user_id($user_id)
-			->getItem();
+		$list = KFactory::tmp('site::com.akeebasubs.model.users')
+			->user_id($userid)
+			->getList();
+		if(!count($list)) {
+			$kuser = KFactory::tmp('site::com.akeebasubs.model.users')->getItem();
+		} else {
+			$list->getIterator()->rewind();
+			$kuser = $list->getIterator()->current();
+		}
 		
 		// get the next contact number
 		$db->setQuery('SELECT max(contact_number) FROM `#__ccinvoices_contacts`');
@@ -130,7 +136,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		// Create contact
 		$name = $juser->name;
 		$contact = $name;
-		$address = $kuser->address."\n".
+		$address = $kuser->address1."\n".
 			(empty($kuser->address2) ? '' : $kuser->address2."\n").
 			$kuser->zip." ".$kuser->city."\n".
 			(empty($state) ? '' : "$state\n") .
@@ -148,6 +154,12 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		$db->query();
 		
 		$id = $db->insertid();
+		
+		$sql = 'REPLACE INTO `#__ccinvoices_users` (`user_id`,`contact_id`) VALUES ('.
+			$userid.', '.$id.')';
+		$db->setQuery($sql);
+		$db->query();
+		
 		return $id;
 	}
 
