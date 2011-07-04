@@ -34,3 +34,4 @@ Akeeba Subscriptions 1.0.RC1 (current trunk)
 # Sometimes, when a payment processor POSTs back, the user is not shown the message
 # If an existing, non-subscriber user tried to subscribe his user information would be blank and he could not submit the subscription form
 # Joomla! 1.6 doesn't run the installation SQL file on update; workaround applied
+# Menu item parameters do not display in Joomla! 1.6

@@ -1,6 +1,8 @@
 ================================================================================
 To-do / bug fixes:
 ================================================================================
+# When a subscription is renewed, the old one MUST NOT send out expiration notification emails
+# When a subscription is renewed, when the old subscription expires it MUST NOT send out an expiration email (or change the wording in the email)
 + Create invoices with ccInvoices
 + Add/remove to SOBIPro (Radek told me it's possible with groups)
 
