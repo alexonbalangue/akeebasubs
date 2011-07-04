@@ -56,7 +56,7 @@
       <bridgehead>At a glance</bridgehead>
 
       <para>Akeeba Subscriptions is a subscriptions management component for
-      <trademark>Joomla!</trademark> 1.5/1.6 and compatible distributions,
+      <trademark>Joomla!</trademark> 1.5/1.6/1.7 and compatible distributions,
       such as Nooku Server and Molajo. It is built using the Nooku Framework
       and the best practices for rapid web application development which
       ensure stability and security. It is licensed under the <link
@@ -141,19 +141,15 @@
         </listitem>
 
         <listitem>
-          <para>Integration with Joomla! 1.6 user group mapping (Core and
-          Professional editions): add/remove a user to/from Joomla! 1.6 user
-          groups, based on his subscriptions.</para>
+          <para>Integration with Joomla! 1.6/1.7 and later user group
+          mapping</para>
         </listitem>
 
         <listitem>
-          <para>Integration with JUGA (Core and Professional editions).</para>
-        </listitem>
-
-        <listitem>
-          <para>Integration with third party components (Professional
-          edition): K2, DOCman, JCE, NinjaBoard, VirtueMart, Tienda. More to
-          follow in the near future!</para>
+          <para>Integration with third party components: JUGA, K2, DOCman,
+          JCE, NinjaBoard, VirtueMart, Tiendam JomSocial, Community Builder,
+          ccInvoices and much more! Check out our documentation for more
+          information.</para>
         </listitem>
 
         <listitem>
@@ -164,7 +160,10 @@
 
         <listitem>
           <para>Payment methods: PayPal (for personal, verified and business
-          accounts) is supported out of the box</para>
+          accounts) is supported out of the box. Other payment methods
+          (ccAvenue, WorldPay, 2Checkout and more) are being added
+          continuously. Check out our documentation for more
+          information.</para>
         </listitem>
 
         <listitem>
@@ -182,14 +181,11 @@
       <bridgehead>Support policy</bridgehead>
 
       <para>Please note that the software is provided free of charge, but
-      support is not. You need to have an AKEEBASUBS subscription on
+      support is not. You need to have an AKEEBADELUXE subscription on
       AkeebaBackup.com to seek support regarding setting up, using and
       customizing Akeeba Subscriptions. If you have found a bug and wish to
       report it, however, you can do so even without an active
       AkeebaBackup.com subscription.</para>
-
-      <para>If you are an existing AkeebaBackup.com subscriber you can get an
-      AKEEBASUBS subscription at 50% off while we're still in beta!</para>
     </section>
 
     <section xml:id="requirements">
@@ -1563,11 +1559,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - WorldPay</guilabel></para>
 
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
-
         <para>This payment method integrates the WorldPay Hosted Payment Page
         payments service, available with all entry-level offerings of
         WorldPay.</para>
@@ -1697,6 +1688,135 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         Subscriptions view, enable his subscriptions and set the payment
         status to "Completed". That's all!</para>
       </section>
+
+      <section xml:id="payment-2checkout">
+        <title>2Checkout Standard Purchase Routine</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - 2Checkout Standard Purchase
+        Routine</guilabel></para>
+
+        <para>This payment method integrates the 2Checkout Standard Purchase
+        Routine payments service (commonly simply referred to as 2checkout or
+        2CO).</para>
+
+        <important>
+          <para>Akeeba Subscriptions can not pass the currency to 2Checkout.
+          You MUST make sure that the currency configured in 2Checkout and the
+          currency displayed in your site match to avoid nasty
+          surprises.</para>
+        </important>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "2Checkout" or type in a custom name to
+              show to your customer's, e.g. "Visa, MasterCard or American
+              Express cards"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Seller ID</term>
+
+            <listitem>
+              <para>Your 2Checkout seller numeric ID, as communicated to you
+              by 2Checkout.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secret word</term>
+
+            <listitem>
+              <para>The secret word you have specified in your 2Checkout
+              account, used to verify that the payment notification come,
+              indeed, from 2Checkout and avoid fraudulent requests. It is case
+              sensitive, i.e. ABC, abc and Abc are three different secret
+              words.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Demo mode</term>
+
+            <listitem>
+              <para>When enabled, transactions are processed by 2Checkout's as
+              test payments. This is designed for integration tests, BEFORE
+              going live with your site. <emphasis role="bold">NEVER, EVER, NO
+              MATTER WHAT YOU DO, SHOULD YOU NOT ENABLE THIS ON PRODUCTION
+              SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR
+              CUSTOMERS.</emphasis> This option should be used only in the
+              integration testing phase during your initial setup. When you're
+              ready to go live with your site, disable this feature.</para>
+
+              <warning>
+                <para>NONE of the Demo payments will be accepted by the
+                plugin! Demo payments deliberately carry an invalid signature
+                and will be marked as "Cancelled" in Akeeba Subscriptions. The
+                log file will mention them as fraud attempts. This is
+                deliberate and should not be considered a bug.</para>
+              </warning>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="payment-ccavenue">
+        <title>ccAvenue</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - ccAvenue</guilabel></para>
+
+        <para>This payment method integrates the ccAvenue payments service,
+        the leading payment processor in India. It can be used for
+        transactions in Indian Rupees or US Dollars.</para>
+
+        <important>
+          <para>Akeeba Subscriptions can not pass the currency to ccAvenue.
+          You MUST make sure that the currency configured in ccAvenue and the
+          currency displayed in your site match to avoid nasty
+          surprises.</para>
+        </important>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "ccAvenue" or type in a custom name to
+              show to your customer's, e.g. "Visa, MasterCard or American
+              Express cards"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>Your ccAvenue Merchant ID, as communicated to you by
+              ccAvenue.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Working Key</term>
+
+            <listitem>
+              <para>The password you have specified in your ccAvenue account,
+              used to verify that the payment notification come, indeed, from
+              ccAvenue and avoid fraudulent requests. It is case sensitive,
+              i.e. ABC, abc and Abc are three different secret words.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
@@ -1713,6 +1833,445 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <para>All integrations with third party applications are standard
       Joomla! plugins, published in the <option>akeebasubs</option>
       group.</para>
+
+      <section xml:id="integration-cb">
+        <title>Community Builder integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Community Builder Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        Community Builder groups based on their subscription status. Moreover,
+        it allows you to automatically authorize subscribers and deauthorize
+        them when their subscriptions expires, essentially controlling their
+        access to your Community Builder community based on their subscription
+        status.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin in this documentation; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide if
+        the user should be added to or removed from Community Builder groups
+        or authorized/deauthorized.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to CB groups</term>
+
+            <listitem>
+              <para>When enabled, new subscribers are automatically added as
+              Community Builder users (a default profile is created for them
+              that they can later fill in)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Automatic authorization</term>
+
+            <listitem>
+              <para>Select the subscription levels will be automatically
+              authorized. When a user has an active subscription to one of
+              these levels, he will be marked as an authorized user who has
+              read the terms of use in Community Builder, essentially allowing
+              her to have access to the Community Builder community on your
+              site.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Automatic deauthorization</term>
+
+            <listitem>
+              <para>Select the subscription levels will be automatically
+              deauthorized. When a user no longer has an active subscription
+              to any of these levels, he will be marked as an unauthorized
+              user who has not read the terms of use in Community Builder,
+              essentially not allowing her to have access to the Community
+              Builder community on your site any more.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-ccinvoices">
+        <title>ccInvoices integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - ccInvoices Integration</guilabel></para>
+
+        <para>This integration allows you to automatically issue and send
+        (paid) invoices to your customers once they complete a successful
+        registration. When this plugin is enabled, the following will take
+        place when a user signs up and his payment is successful:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If he doesn't exist as a ccInvoice contact, a new contact
+            will be created for the user.</para>
+          </listitem>
+
+          <listitem>
+            <para>A new paid invoice is generated with the item description
+            reading "Subscription to <replaceable>level title</replaceable>"
+            where "level title" is the title of the subscription level the
+            user subscribed to.</para>
+          </listitem>
+
+          <listitem>
+            <para>A PDF of the invoice, based on the default template, is
+            generated and emailed to the user</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Please note that the default email text in ccInvoices prompts
+        the receiver to pay the invoice by the due date. You may want to
+        change the wording, as the invoices generated from subscriptions are
+        already paid for. You don't want to confuse your customers!</para>
+
+        <para>The plugin has no parameters. If you would like to customise its
+        behaviour, please use our forum to post a feature request, describing
+        what you have in mind.</para>
+      </section>
+
+      <section xml:id="integration-docman">
+        <title>DOCman Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - DOCman Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        DOCman groups based on their subscription status. This allows you to
+        control downloads/uploads to your DOCman downloads based on a user's
+        subscription status and can form the basis of a commercial file
+        distribution system.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin in this documentation; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to DOCman groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to DOCman
+              groups. When a user has an active subscription to the specified
+              level, he'll be added to the DOCman group mentioned on the right
+              hand of the equal sign. Each assignment is done like
+              this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the DOCman groups
+              you want to add a user to when he subscribes. If you want to
+              assign multiple subscription levels to multiple groups, you have
+              to do something like that (separate multiple lines with a single
+              press of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              DOCman groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from DOCman groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the DOCman groups to remove
+              a user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        DOCman groups", when a subscription to the LEVEL1 level expires, the
+        user will still belong to DOCman Group 3, as it's not removed from his
+        account; only Group 1 and Group 2 are removed. Likewise, if the user
+        has an expired LEVEL1 subscription and an active LEVEL2 subscription
+        he'll now belong to Group 2 and Group 3: Group 3 because it's not
+        removed when his subscription expires and Group 2 because his active
+        LEVEL2 subscription suggests that he should be granted Group 2 access
+        despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
+
+      <section xml:id="integration-jce">
+        <title>JCE Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - JCE Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        JCE (Joomla! Content Editor) groups based on their subscription
+        status. This allows you to control the editing permissions of
+        individual users based on their subscription status.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin earlier in this documentation; instead of
+        adding users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to JCE groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to JCE
+              groups. When a user has an active subscription to the specified
+              level, he'll be added to the JCE group mentioned on the right
+              hand of the equal sign. Each assignment is done like
+              this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the JCE groups you
+              want to add a user to when he subscribes. If you want to assign
+              multiple subscription levels to multiple groups, you have to do
+              something like that (separate multiple lines with a single press
+              of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              JCE groups instead of their titles. However, we consider working
+              with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from JCE groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the JCE groups to remove a
+              user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        JCE groups", when a subscription to the LEVEL1 level expires, the user
+        will still belong to JCE Group 3, as it's not removed from his
+        account; only Group 1 and Group 2 are removed. Likewise, if the user
+        has an expired LEVEL1 subscription and an active LEVEL2 subscription
+        he'll now belong to Group 2 and Group 3: Group 3 because it's not
+        removed when his subscription expires and Group 2 because his active
+        LEVEL2 subscription suggests that he should be granted Group 2 access
+        despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
+
+      <section xml:id="integration-jomsocial">
+        <title>JomSocial integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - JomSocial Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        JomSocial groups based on their subscription status. This allows you
+        to control access to your JomSocial groups based on a user's
+        subscription status.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin in this documentation; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to JomSocial groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              JomSocial groups. When a user has an active subscription to the
+              specified level, he'll be added to the JomSocial group mentioned
+              on the right hand of the equal sign. Each assignment is done
+              like this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the JomSocial
+              groups you want to add a user to when he subscribes. If you want
+              to assign multiple subscription levels to multiple groups, you
+              have to do something like that (separate multiple lines with a
+              single press of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              JomSocial groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from JomSocial groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the JomSocial groups to
+              remove a user from when his subscription to the specified level
+              is no longer active. Do note that you can specify a different
+              set of groups to remove the user from than the ones you are
+              adding him to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        JomSocial groups", when a subscription to the LEVEL1 level expires,
+        the user will still belong to JomSocial Group 3, as it's not removed
+        from his account; only Group 1 and Group 2 are removed. Likewise, if
+        the user has an expired LEVEL1 subscription and an active LEVEL2
+        subscription he'll now belong to Group 2 and Group 3: Group 3 because
+        it's not removed when his subscription expires and Group 2 because his
+        active LEVEL2 subscription suggests that he should be granted Group 2
+        access despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
+
+      <section xml:id="integration-joomla">
+        <title>Joomla! 1.6 User Groups Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Joomla! 1.6 Usergroups Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        Joomla! 1.6 groups based on their subscription status. This allows you
+        to fully utilize Joomla! 1.6's built-in ACL capabilities on compatible
+        extensions.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin earlier in this documentation; instead of
+        adding users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Joomla! 1.6 groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              NinjaBoard groups. When a user has an active subscription to the
+              specified level, he'll be added to the NinjaBoard group
+              mentioned on the right hand of the equal sign. Each assignment
+              is done like this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the NinjaBoard
+              groups you want to add a user to when he subscribes. If you want
+              to assign multiple subscription levels to multiple groups, you
+              have to do something like that (separate multiple lines with a
+              single press of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              NinjaBoard groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Joomla! 1.6 groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the NinjaBoard groups to
+              remove a user from when his subscription to the specified level
+              is no longer active. Do note that you can specify a different
+              set of groups to remove the user from than the ones you are
+              adding him to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        NinjaBoard groups", when a subscription to the LEVEL1 level expires,
+        the user will still belong to Joomla!'s Group 3, as it's not removed
+        from his account; only Group 1 and Group 2 are removed. Likewise, if
+        the user has an expired LEVEL1 subscription and an active LEVEL2
+        subscription he'll now belong to Group 2 and Group 3: Group 3 because
+        it's not removed when his subscription expires and Group 2 because his
+        active LEVEL2 subscription suggests that he should be granted Group 2
+        access despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
 
       <section xml:id="integration-juga">
         <title>JUGA Integration</title>
@@ -1816,13 +2375,165 @@ LEVEL3=Group 1</programlisting>
         before going live.</para>
       </section>
 
+      <section xml:id="integration-jxjomsocial">
+        <title>JoomlaXI JomSocial User Profile Types integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - JoomlaXI JomSocial User Profile Types
+        Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        JomSocial user types based on their subscription status. This allows
+        you to control access to your JomSocial groups based on a user's
+        subscription status. This integration requires that both JomSocial by
+        Azrul and JomSocial User Profile Types by JoomlaXI be installed on
+        your site.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin in this documentation; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to JoomlaXI JomSocial User Profile Types</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              JoomlaXI JomSocial User Profile Types. When a user has an active
+              subscription to the specified level, he'll be added to the
+              JoomlaXI JomSocial User Profile Type mentioned on the right hand
+              of the equal sign. Each assignment is done like this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the JoomlaXI
+              JomSocial User Profile Types you want to add a user to when he
+              subscribes. If you want to assign multiple subscription levels
+              to multiple groups, you have to do something like that (separate
+              multiple lines with a single press of the ENTER key on your
+              keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              JoomlaXI JomSocial User Profile Types instead of their titles.
+              However, we consider working with numeric IDs very
+              counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from JoomlaXI JomSocial User Profile Types</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the JoomlaXI JomSocial User
+              Profile Types to remove a user from when his subscription to the
+              specified level is no longer active. Do note that you can
+              specify a different set of groups to remove the user from than
+              the ones you are adding him to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        JoomlaXI JomSocial User Profile Types", when a subscription to the
+        LEVEL1 level expires, the user will still belong to JoomlaXI JomSocial
+        User Profile Types Group 3, as it's not removed from his account; only
+        Group 1 and Group 2 are removed. Likewise, if the user has an expired
+        LEVEL1 subscription and an active LEVEL2 subscription he'll now belong
+        to Group 2 and Group 3: Group 3 because it's not removed when his
+        subscription expires and Group 2 because his active LEVEL2
+        subscription suggests that he should be granted Group 2 access despite
+        his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
+
+      <section xml:id="integration-k2">
+        <title>K2 Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - K2 Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        K2 1.6 groups based on their subscription status. This allows you to
+        fully utilize K2's limited ACL capabilities (basically, just control
+        front-end editing).</para>
+
+        <warning>
+          <para>K2 only allows a user to belong to one and only one group.
+          This means that only the latest subscription's K2 group will be
+          applied to your user if he holds several subscriptions.</para>
+        </warning>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to K2 groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              NinjaBoard groups. When a user has an active subscription to the
+              specified level, he'll be added to the NinjaBoard group
+              mentioned on the right hand of the equal sign. Each assignment
+              is done like this:</para>
+
+              <programlisting>LEVEL1=Group 1</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1 is the names of the K2 group you want to add a user to
+              when he subscribes. If you want to assign multiple subscription
+              levels to multiple groups, you have to do something like that
+              (separate multiple lines with a single press of the ENTER key on
+              your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1
+LEVEL2=Group 2
+LEVEL3=Group 3</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              K2 groups instead of their titles. However, we consider working
+              with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from K2 groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the K2 groups to remove a
+              user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1
+LEVEL2=Group 2
+LEVEL3=Group 3</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
       <section xml:id="integration-ninjaboard">
         <title>NinjaBoard Integration</title>
-
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - NinjaBoard Integration</guilabel></para>
@@ -1907,438 +2618,8 @@ LEVEL3=Group 1</programlisting>
         before going live.</para>
       </section>
 
-      <section xml:id="integration-joomla">
-        <title>Joomla! 1.6 User Groups Integration</title>
-
-        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - Joomla! 1.6 Usergroups Integration</guilabel></para>
-
-        <para>This integration plugin allows you to add and remove users from
-        Joomla! 1.6 groups based on their subscription status. This allows you
-        to fully utilize Joomla! 1.6's built-in ACL capabilities on compatible
-        extensions.</para>
-
-        <para>Please note that this is a smart integration, exactly as
-        described in the JUGA plugin earlier in this documentation; instead of
-        adding users when a subscription goes active and removing them when a
-        subscription goes inactive, Akeeba Subscriptions plugins take a look
-        at all of the user's active and inactive subscriptions and decide
-        which groups the user should be added to or removed from.</para>
-
-        <para>The plugin has these options:</para>
-
-        <variablelist>
-          <varlistentry>
-            <term>Add to Joomla! 1.6 groups</term>
-
-            <listitem>
-              <para>This is a list for assigning subscription levels to
-              NinjaBoard groups. When a user has an active subscription to the
-              specified level, he'll be added to the NinjaBoard group
-              mentioned on the right hand of the equal sign. Each assignment
-              is done like this:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1, Group 2 and Group 3 are the names of the NinjaBoard
-              groups you want to add a user to when he subscribes. If you want
-              to assign multiple subscription levels to multiple groups, you
-              have to do something like that (separate multiple lines with a
-              single press of the ENTER key on your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              NinjaBoard groups instead of their titles. However, we consider
-              working with numeric IDs very counter-intuitive.</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>Remove from Joomla! 1.6 groups</term>
-
-            <listitem>
-              <para>Likewise, this is the list of the NinjaBoard groups to
-              remove a user from when his subscription to the specified level
-              is no longer active. Do note that you can specify a different
-              set of groups to remove the user from than the ones you are
-              adding him to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-
-        <para>In this example, together with the rules displayed in "Add to
-        NinjaBoard groups", when a subscription to the LEVEL1 level expires,
-        the user will still belong to Joomla!'s Group 3, as it's not removed
-        from his account; only Group 1 and Group 2 are removed. Likewise, if
-        the user has an expired LEVEL1 subscription and an active LEVEL2
-        subscription he'll now belong to Group 2 and Group 3: Group 3 because
-        it's not removed when his subscription expires and Group 2 because his
-        active LEVEL2 subscription suggests that he should be granted Group 2
-        access despite his expired LEVEL1 subscription.</para>
-
-        <para>If you find this hard to understand, join the club. ACLs are not
-        meant to be easy to setup or understand. It's a power feature and, as
-        such, poses a great difficulty to even the most seasoned web site
-        integrators. Take your time and experiment on a dev copy of your site
-        before going live.</para>
-      </section>
-
-      <section xml:id="integration-k2">
-        <title>K2 Integration</title>
-
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
-
-        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - K2 Integration</guilabel></para>
-
-        <para>This integration plugin allows you to add and remove users from
-        K2 1.6 groups based on their subscription status. This allows you to
-        fully utilize K2's limited ACL capabilities (basically, just control
-        front-end editing).</para>
-
-        <warning>
-          <para>K2 only allows a user to belong to one and only one group.
-          This means that only the latest subscription's K2 group will be
-          applied to your user if he holds several subscriptions.</para>
-        </warning>
-
-        <para>The plugin has these options:</para>
-
-        <variablelist>
-          <varlistentry>
-            <term>Add to K2 groups</term>
-
-            <listitem>
-              <para>This is a list for assigning subscription levels to
-              NinjaBoard groups. When a user has an active subscription to the
-              specified level, he'll be added to the NinjaBoard group
-              mentioned on the right hand of the equal sign. Each assignment
-              is done like this:</para>
-
-              <programlisting>LEVEL1=Group 1</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1 is the names of the K2 group you want to add a user to
-              when he subscribes. If you want to assign multiple subscription
-              levels to multiple groups, you have to do something like that
-              (separate multiple lines with a single press of the ENTER key on
-              your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1
-LEVEL2=Group 2
-LEVEL3=Group 3</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              K2 groups instead of their titles. However, we consider working
-              with numeric IDs very counter-intuitive.</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>Remove from K2 groups</term>
-
-            <listitem>
-              <para>Likewise, this is the list of the K2 groups to remove a
-              user from when his subscription to the specified level is no
-              longer active. Do note that you can specify a different set of
-              groups to remove the user from than the ones you are adding him
-              to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1
-LEVEL2=Group 2
-LEVEL3=Group 3</programlisting>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-      </section>
-
-      <section xml:id="integration-docman">
-        <title>DOCman Integration</title>
-
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
-
-        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - DOCman Integration</guilabel></para>
-
-        <para>This integration plugin allows you to add and remove users from
-        DOCman groups based on their subscription status. This allows you to
-        control downloads/uploads to your DOCman downloads based on a user's
-        subscription status and can form the basis of a commercial file
-        distribution system.</para>
-
-        <para>Please note that this is a smart integration, exactly as
-        described in the JUGA plugin earlier in this documentation; instead of
-        adding users when a subscription goes active and removing them when a
-        subscription goes inactive, Akeeba Subscriptions plugins take a look
-        at all of the user's active and inactive subscriptions and decide
-        which groups the user should be added to or removed from.</para>
-
-        <para>The plugin has these options:</para>
-
-        <variablelist>
-          <varlistentry>
-            <term>Add to DOCman groups</term>
-
-            <listitem>
-              <para>This is a list for assigning subscription levels to DOCman
-              groups. When a user has an active subscription to the specified
-              level, he'll be added to the DOCman group mentioned on the right
-              hand of the equal sign. Each assignment is done like
-              this:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1, Group 2 and Group 3 are the names of the DOCman groups
-              you want to add a user to when he subscribes. If you want to
-              assign multiple subscription levels to multiple groups, you have
-              to do something like that (separate multiple lines with a single
-              press of the ENTER key on your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              DOCman groups instead of their titles. However, we consider
-              working with numeric IDs very counter-intuitive.</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>Remove from DOCman groups</term>
-
-            <listitem>
-              <para>Likewise, this is the list of the DOCman groups to remove
-              a user from when his subscription to the specified level is no
-              longer active. Do note that you can specify a different set of
-              groups to remove the user from than the ones you are adding him
-              to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-
-        <para>In this example, together with the rules displayed in "Add to
-        DOCman groups", when a subscription to the LEVEL1 level expires, the
-        user will still belong to DOCman Group 3, as it's not removed from his
-        account; only Group 1 and Group 2 are removed. Likewise, if the user
-        has an expired LEVEL1 subscription and an active LEVEL2 subscription
-        he'll now belong to Group 2 and Group 3: Group 3 because it's not
-        removed when his subscription expires and Group 2 because his active
-        LEVEL2 subscription suggests that he should be granted Group 2 access
-        despite his expired LEVEL1 subscription.</para>
-
-        <para>If you find this hard to understand, join the club. ACLs are not
-        meant to be easy to setup or understand. It's a power feature and, as
-        such, poses a great difficulty to even the most seasoned web site
-        integrators. Take your time and experiment on a dev copy of your site
-        before going live.</para>
-      </section>
-
-      <section xml:id="integration-jce">
-        <title>JCE Integration</title>
-
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
-
-        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - JCE Integration</guilabel></para>
-
-        <para>This integration plugin allows you to add and remove users from
-        JCE (Joomla! Content Editor) groups based on their subscription
-        status. This allows you to control the editing permissions of
-        individual users based on their subscription status.</para>
-
-        <para>Please note that this is a smart integration, exactly as
-        described in the JUGA plugin earlier in this documentation; instead of
-        adding users when a subscription goes active and removing them when a
-        subscription goes inactive, Akeeba Subscriptions plugins take a look
-        at all of the user's active and inactive subscriptions and decide
-        which groups the user should be added to or removed from.</para>
-
-        <para>The plugin has these options:</para>
-
-        <variablelist>
-          <varlistentry>
-            <term>Add to JCE groups</term>
-
-            <listitem>
-              <para>This is a list for assigning subscription levels to JCE
-              groups. When a user has an active subscription to the specified
-              level, he'll be added to the JCE group mentioned on the right
-              hand of the equal sign. Each assignment is done like
-              this:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1, Group 2 and Group 3 are the names of the JCE groups you
-              want to add a user to when he subscribes. If you want to assign
-              multiple subscription levels to multiple groups, you have to do
-              something like that (separate multiple lines with a single press
-              of the ENTER key on your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              JCE groups instead of their titles. However, we consider working
-              with numeric IDs very counter-intuitive.</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>Remove from JCE groups</term>
-
-            <listitem>
-              <para>Likewise, this is the list of the JCE groups to remove a
-              user from when his subscription to the specified level is no
-              longer active. Do note that you can specify a different set of
-              groups to remove the user from than the ones you are adding him
-              to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-
-        <para>In this example, together with the rules displayed in "Add to
-        JCE groups", when a subscription to the LEVEL1 level expires, the user
-        will still belong to JCE Group 3, as it's not removed from his
-        account; only Group 1 and Group 2 are removed. Likewise, if the user
-        has an expired LEVEL1 subscription and an active LEVEL2 subscription
-        he'll now belong to Group 2 and Group 3: Group 3 because it's not
-        removed when his subscription expires and Group 2 because his active
-        LEVEL2 subscription suggests that he should be granted Group 2 access
-        despite his expired LEVEL1 subscription.</para>
-
-        <para>If you find this hard to understand, join the club. ACLs are not
-        meant to be easy to setup or understand. It's a power feature and, as
-        such, poses a great difficulty to even the most seasoned web site
-        integrators. Take your time and experiment on a dev copy of your site
-        before going live.</para>
-      </section>
-
-      <section xml:id="integration-vm">
-        <title>VirtueMart Integration</title>
-
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
-
-        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - VirtueMart Integration</guilabel></para>
-
-        <para>This integration plugin allows you to add and remove users from
-        VirtueMart shopper groups based on their subscription status. This
-        allows you to set special discounts to subscribers (e.g. a discount
-        club) or other VirtueMart tricks which are based on the shopper groups
-        a user belongs to.</para>
-
-        <para>Please note that this is a smart integration, exactly as
-        described in the JUGA plugin earlier in this documentation; instead of
-        adding users when a subscription goes active and removing them when a
-        subscription goes inactive, Akeeba Subscriptions plugins take a look
-        at all of the user's active and inactive subscriptions and decide
-        which groups the user should be added to or removed from.</para>
-
-        <para>The plugin has these options:</para>
-
-        <variablelist>
-          <varlistentry>
-            <term>Add to VirtueMart groups</term>
-
-            <listitem>
-              <para>This is a list for assigning subscription levels to
-              VirtueMart groups. When a user has an active subscription to the
-              specified level, he'll be added to the VirtueMart group
-              mentioned on the right hand of the equal sign. Each assignment
-              is done like this:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1, Group 2 and Group 3 are the names of the VirtueMart
-              groups you want to add a user to when he subscribes. If you want
-              to assign multiple subscription levels to multiple groups, you
-              have to do something like that (separate multiple lines with a
-              single press of the ENTER key on your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              VirtueMart groups instead of their titles. However, we consider
-              working with numeric IDs very counter-intuitive.</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>Remove from VirtueMart groups</term>
-
-            <listitem>
-              <para>Likewise, this is the list of the VirtueMart groups to
-              remove a user from when his subscription to the specified level
-              is no longer active. Do note that you can specify a different
-              set of groups to remove the user from than the ones you are
-              adding him to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-
-        <para>In this example, together with the rules displayed in "Add to
-        VirtueMart groups", when a subscription to the LEVEL1 level expires,
-        the user will still belong to VirtueMart Group 3, as it's not removed
-        from his account; only Group 1 and Group 2 are removed. Likewise, if
-        the user has an expired LEVEL1 subscription and an active LEVEL2
-        subscription he'll now belong to Group 2 and Group 3: Group 3 because
-        it's not removed when his subscription expires and Group 2 because his
-        active LEVEL2 subscription suggests that he should be granted Group 2
-        access despite his expired LEVEL1 subscription.</para>
-
-        <para>If you find this hard to understand, join the club. ACLs are not
-        meant to be easy to setup or understand. It's a power feature and, as
-        such, poses a great difficulty to even the most seasoned web site
-        integrators. Take your time and experiment on a dev copy of your site
-        before going live.</para>
-      </section>
-
       <section xml:id="integration-tienda">
         <title>Tienda Integration</title>
-
-        <note>
-          <para>This feature is only available in the Professional
-          edition</para>
-        </note>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - Tienda Integration</guilabel></para>
@@ -2414,6 +2695,118 @@ LEVEL3=Group 1</programlisting>
         removed when his subscription expires and Group 2 because his active
         LEVEL2 subscription suggests that he should be granted Group 2 access
         despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
+
+      <section xml:id="integration-userdelete">
+        <title>Delete users on subscription expiration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Delete users with expired
+        subscriptions</guilabel></para>
+
+        <para>When this plugin is enabled, when all of the subscriptions of a
+        user expire, his Joomla! user record will be permanently deleted from
+        the site. This is equivalent to using Manage Users in the back-end to
+        delete a user. We consider this plugin to be suitable for a tiny
+        minority of sites which want to allow access to their content only to
+        registered users but wish to receive payment to register users.</para>
+
+        <warning>
+          <para><emphasis role="bold">DELETING USERS IS AN IRREVERSIBLE
+          PROCESS! ONCE A USER IS DELETED, ALL INFORMATION ASSOCIATED WITH HIM
+          (INCLUDING SUBSCRIPTIONS INFORMATION) IS GONE. FOREVER. YOU WILL NOT
+          BE ABLE TO RETRIEVE THEM EVER AGAIN.</emphasis></para>
+
+          <para>This is how this feature is supposed to work. When every
+          information pertaining to a user with an expired subscription
+          vanishes to thin air do not complain that it is unacceptable or a
+          bug; it's not; it's how this is designed to work.</para>
+        </warning>
+      </section>
+
+      <section xml:id="integration-vm">
+        <title>VirtueMart Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - VirtueMart Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        VirtueMart shopper groups based on their subscription status. This
+        allows you to set special discounts to subscribers (e.g. a discount
+        club) or other VirtueMart tricks which are based on the shopper groups
+        a user belongs to.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin earlier in this documentation; instead of
+        adding users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to VirtueMart groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              VirtueMart groups. When a user has an active subscription to the
+              specified level, he'll be added to the VirtueMart group
+              mentioned on the right hand of the equal sign. Each assignment
+              is done like this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the VirtueMart
+              groups you want to add a user to when he subscribes. If you want
+              to assign multiple subscription levels to multiple groups, you
+              have to do something like that (separate multiple lines with a
+              single press of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              VirtueMart groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from VirtueMart groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the VirtueMart groups to
+              remove a user from when his subscription to the specified level
+              is no longer active. Do note that you can specify a different
+              set of groups to remove the user from than the ones you are
+              adding him to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        VirtueMart groups", when a subscription to the LEVEL1 level expires,
+        the user will still belong to VirtueMart Group 3, as it's not removed
+        from his account; only Group 1 and Group 2 are removed. Likewise, if
+        the user has an expired LEVEL1 subscription and an active LEVEL2
+        subscription he'll now belong to Group 2 and Group 3: Group 3 because
+        it's not removed when his subscription expires and Group 2 because his
+        active LEVEL2 subscription suggests that he should be granted Group 2
+        access despite his expired LEVEL1 subscription.</para>
 
         <para>If you find this hard to understand, join the club. ACLs are not
         meant to be easy to setup or understand. It's a power feature and, as
@@ -2586,6 +2979,55 @@ LEVEL3=Group 1</programlisting>
     look at them. You can create interesting effects, like a customized and
     categorized subscriptions list page, out of those modules.</para>
 
-    <para>– THIS DOCUMENTATION SECTION IS UNDER CONSTRUCTION –</para>
+    <section xml:id="modules-list-of-active-subs">
+      <title>List of active subscriptions</title>
+
+      <para>Displayed in the Modules Manager as: <guilabel>Akeeba
+      Subscriptions - List of active subscriptions</guilabel></para>
+
+      <para>This is extremely simple plugin will merely list the current
+      user's active subscriptions as an unordered list. It is meant as an
+      example of how you can create custom modules for Akeeba
+      Subscriptions.</para>
+    </section>
+
+    <section xml:id="modules-list-sub-levels">
+      <title>List subscription levels</title>
+
+      <para>Displayed in the Modules Manager as: <guilabel>Akeeba
+      Subscriptions - List subscription levels</guilabel></para>
+
+      <para>This extremely powerful module allows you to present a list of all
+      or specific subscription levels, using either layout, in any module
+      position on your site. Combined with Joomla!'s { loadposition } plugin
+      you can use this module to assemble the perfect presentation page of
+      your subscriptions, grouped any way you please.</para>
+
+      <para>The module has only two options:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Subscription Levels</term>
+
+          <listitem>
+            <para>Choose which subscription level(s) to display in the module.
+            This is a multiple-selection list. You can use CTRL-click
+            (Windows, Linux) or CMD-click (Mac OS X) to select multiple items
+            on the list.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Layout</term>
+
+          <listitem>
+            <para>Choose which layout you want to use to display your
+            subscription levels to the users. You can choose between the
+            Default or the Awesome layout, the same layouts you can choose in
+            menu items.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
   </chapter>
 </book>
