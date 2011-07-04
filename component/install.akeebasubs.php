@@ -66,6 +66,35 @@ $installation_queue = array(
 	)
 );
 
+// Define files and directories to remove (they will screw up the component
+// due to Nooku Framework changes)
+$removeFiles = array(
+	'administrator/components/com_akeebasubs/akeebasubs.xml',
+	'administrator/components/com_akeebasubs/commands/authorize.php',
+	'administrator/components/com_akeebasubs/commands/hotfix.php',
+	'administrator/components/com_akeebasubs/install.akeebasubs.php',
+	'administrator/components/com_akeebasubs/uninstall.akeebasubs.php',
+	'administrator/components/com_akeebasubs/views/config/html.php',
+	'administrator/components/com_akeebasubs/views/coupon/html.php',
+	'administrator/components/com_akeebasubs/views/coupons/html.php',
+	'administrator/components/com_akeebasubs/views/level/html.php',
+	'administrator/components/com_akeebasubs/views/levels/html.php',
+	'administrator/components/com_akeebasubs/views/subscription/html.php',
+	'administrator/components/com_akeebasubs/views/subscriptions/html.php',
+	'administrator/components/com_akeebasubs/views/taxrule/html.php',
+	'administrator/components/com_akeebasubs/views/taxrules/html.php',
+	'administrator/components/com_akeebasubs/views/tools/html.php',
+	'administrator/components/com_akeebasubs/views/upgrade/html.php',
+	'administrator/components/com_akeebasubs/views/upgrades/html.php',
+	'administrator/components/com_akeebasubs/views/user/html.php',
+	'administrator/components/com_akeebasubs/views/users/html.php'
+);
+$removeFolders = array(
+	'administrator/components/com_akeebasubs/controllers/commands',
+	'administrator/components/com_akeebasubs/toolbars',
+	'components/com_akeebasubs/commands'
+);
+
 // Joomla! 1.6 Beta 13+ hack
 if( version_compare( JVERSION, '1.6.0', 'ge' ) && !defined('_AKEEBA_HACK') ) {
 	return;
@@ -145,6 +174,16 @@ if(is_dir($src.'/koowa')) {
 	}
 } else {
 	$koowaInstalled = null;
+}
+
+// Remove unused files and folders (or the component will explode!)
+foreach($removeFiles as $removedFile) {
+	$removePath = JPATH_SITE.DS.$removedFile;
+	if(JFile::exists($removePath)) JFile::delete($removePath);
+}
+foreach($removeFolders as $removedFolder) {
+	$removePath = JPATH_SITE.DS.$removedFolder;
+	if(JFolder::exists($removePath)) JFolder::delete(JPATH_SITE.DS.$removedFolder);
 }
 
 // Modules installation
