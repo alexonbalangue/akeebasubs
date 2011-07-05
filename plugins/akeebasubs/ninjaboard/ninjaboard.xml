@@ -16,6 +16,8 @@
 	<languages>
 		<language tag="en-GB">en-GB.plg_akeebasubs_ninjaboard.ini</language>
 		<language tag="en-GB">en-GB.plg_akeebasubs_ninjaboard.sys.ini</language>
+		<language tag="da-DK">da-DK.plg_akeebasubs_ninjaboard.ini</language>
+		<language tag="da-DK">da-DK.plg_akeebasubs_ninjaboard.sys.ini</language>
 	</languages>
 	<params>
 		<param name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_NINJABOARD_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_NINJABOARD_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />
