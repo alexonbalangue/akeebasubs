@@ -18,6 +18,19 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	{
 		parent::__construct($subject, $config);
 		
+		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)
+		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set')) {
+			if(function_exists('error_reporting')) {
+				$oldLevel = error_reporting(0);
+			}
+			$serverTimezone = @date_default_timezone_get();
+			if(empty($serverTimezone) || !is_string($serverTimezone)) $serverTimezone = 'UTC';
+			if(function_exists('error_reporting')) {
+				error_reporting($oldLevel);
+			}
+			@date_default_timezone_set( $serverTimezone);
+		}
+		
 		// Load the language files		
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);

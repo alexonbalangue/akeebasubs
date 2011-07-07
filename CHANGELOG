@@ -1,6 +1,9 @@
-Akeeba Subscriptions 1.0.RC1 (current trunk)
+Akeeba Subscriptions 1.0 Stable (current trunk)
 ================================================================================
+# Warnings thrown on PHP 5.3 servers where the default timezone in not set
 
+Akeeba Subscriptions 1.0.b3
+================================================================================
 + ccAvenue payment gateway
 + WorldPay payment gateway
 + Option to disable business registrations and collection of address information
