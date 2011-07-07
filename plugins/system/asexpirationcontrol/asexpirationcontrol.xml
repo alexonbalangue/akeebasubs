@@ -15,5 +15,9 @@
 	</description>
 	<files>
 		<filename plugin="asexpirationcontrol">asexpirationcontrol.php</filename>
+		<!-- Of course index.html files ARE NOT required and HAVE NOTHING TO DO
+		   with security. But JED requires them because they never bothered to
+		   stop and think. Ignorance is bliss. -->
+		<filename>index.html</filename>
 	</files>
 </install>

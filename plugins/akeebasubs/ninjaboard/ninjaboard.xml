@@ -12,6 +12,10 @@
 	<description>PLG_AKEEBASUBS_NINJABOARD_DESCRIPTION</description>
 	<files>
 		<filename plugin="ninjaboard">ninjaboard.php</filename>
+		<!-- Of course index.html files ARE NOT required and HAVE NOTHING TO DO
+		   with security. But JED requires them because they never bothered to
+		   stop and think. Ignorance is bliss. -->
+		<filename>index.html</filename>
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_akeebasubs_ninjaboard.ini</language>
