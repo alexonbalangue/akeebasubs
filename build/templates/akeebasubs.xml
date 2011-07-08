@@ -67,6 +67,7 @@
 			<filename>dispatcher.php</filename>
 			<filename>index.html</filename>
 			<filename>version.php</filename>
+			
 			<folder>commands</folder>
 			<folder>controllers</folder>
 			<folder>databases</folder>
@@ -96,7 +97,8 @@
 	
 	<!-- Installation / uninstallation PHP scripts -->
 	<installfile>install.akeebasubs.php</installfile>
-	<uninstallfile>uninstall.akeebasubs.php</uninstallfile>
+	<!-- For some stupid reason, Joomla! DID NOT use the file when it was named uninstall.akeebasubs.php. Go figure! Stupid, stupid CMS...-->
+	<uninstallfile>suicide.php</uninstallfile>
 	<scriptfile>script.akeebasubs.php</scriptfile>
 	
 </install>

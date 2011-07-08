@@ -48,14 +48,14 @@ $installation_queue = array(
 			'offline'				=> 0,
 			'worldpay'				=> 0,
 			'ccavenue'				=> 0,
-			'2checkout'				=> 0,
+			'2checkout'				=> 0
 		),
 		'content' => array(
 			'aslink'				=> 1,
 			'asrestricted'			=> 1
 		),
-		// Note: Do NOT include plg_koowa; it may be required by another extension!
 		'system' => array(
+			'koowa'					=> 1,
 			'asexpirationcontrol'	=> 1,
 			'asexpirationnotify'	=> 1
 		)
@@ -68,15 +68,7 @@ $db = & JFactory::getDBO();
 $status = new JObject();
 $status->modules = array();
 $status->plugins = array();
-if( version_compare( JVERSION, '1.6.0', 'ge' ) ) {
-	if(!isset($parent))
-	{
-		$parent = $this->parent;
-	}
-	$src = $parent->getParent()->getPath('source');
-} else {
-	$src = $this->parent->getPath('source');
-}
+$src = $this->parent->getPath('source');
 
 // Modules uninstallation
 if(count($installation_queue['modules'])) {

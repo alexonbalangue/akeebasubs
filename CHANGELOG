@@ -1,6 +1,7 @@
 Akeeba Subscriptions 1.0 Stable (current trunk)
 ================================================================================
 # Warnings thrown on PHP 5.3 servers where the default timezone in not set
+# Uninstalling the component would break the site as the plugins were not uninstalled because Joomla! always failed to copy and use the uninstallation file.
 
 Akeeba Subscriptions 1.0.b3
 ================================================================================
