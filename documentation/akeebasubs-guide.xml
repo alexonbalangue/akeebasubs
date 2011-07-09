@@ -1449,6 +1449,15 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       them appear right after the end of the subscription form. This is a good
       place to put a custom HTML module with links to your terms of service,
       business contact information, etc.</para>
+
+      <para>Additionally, the page which lists the subscriptions defines
+      another two module positions where you can publish modules to further
+      expand the information presented on the page. Publishing modules in the
+      <option>akeebasubscriptionslistheader</option> position will make them
+      appear at the very top of the page, right above the list of subscription
+      levels. Publishing modules in the
+      <option>akeebasubscriptionslistfooter</option> position will make them
+      appear right after the end of the subscription levels list.</para>
     </section>
 
     <section xml:id="importing-from-other-components">
