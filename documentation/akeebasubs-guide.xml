@@ -250,6 +250,10 @@
         low quality hosts. If your site breaks, having a backup will ensure
         that you can restore it to its last known working state very
         easily.</para>
+
+        <para>If you do not have a backup of your site, please follow the
+        <link linkend="uninstallation">uninstallation
+        instructions</link>.</para>
       </important>
 
       <warning>
@@ -646,6 +650,74 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         project. Therefore we regret that we have to say that, but we can't
         help you. Thank you for your understanding.</para>
       </section>
+    </section>
+
+    <section xml:id="uninstallation">
+      <title>Uninstallation</title>
+
+      <para>You can uninstall the component just like any other Joomla!
+      component. If you can not uninstall the component (your site crashed,
+      can't access your site's administrator page or similar), please follow
+      the instructions in the next paragraph first. They will allow you to
+      regain access to your site's back-end and then you can uninstall Akeeba
+      Subscriptions.</para>
+
+      <para>After the uninstallation, Akeeba Subscriptions leaves behind the
+      Nooku Framework installation. This is done deliberately, as there might
+      be other software depending on that software as well. If you want to
+      remove it, please follow these steps:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Go to Extensions, Plugins Manager and unpublish the
+          <guilabel>System - Koowa</guilabel> plugin ("Koowa" is the code name
+          of Nooku Framework).</para>
+        </listitem>
+
+        <listitem>
+          <para>Uninstall the System - Koowa plugin.</para>
+        </listitem>
+
+        <listitem>
+          <para>Using your favourite FTP software, please make sure that the
+          following files/folders no longer exist (if they exist, delete
+          them):</para>
+
+          <programlisting>plugins/system/koowa.php
+plugins/system/koowa.xml
+plugins/system/koowa</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>Remove the following directories from your site:</para>
+
+          <programlisting>administrator/components/com_default
+administrator/modules/mod_default
+libraries/koowa
+media/com_default
+media/lib_koowa
+plugins/koowa
+components/com_default
+modules/mod_default</programlisting>
+        </listitem>
+
+        <listitem>
+          <para>If your site was using the mysql instead of the mysqli driver
+          before Akeeba Subscriptions installation, or if you have no idea
+          what that means, please edit your site's
+          <filename>configuration.php</filename> file, find the line
+          reading:</para>
+
+          <programlisting>var $dbtype = 'mysqli';</programlisting>
+
+          <para>and change it to:</para>
+
+          <programlisting>var $dbtype = 'mysql';</programlisting>
+
+          <para>then, save the <filename>configuration.php</filename>
+          file.</para>
+        </listitem>
+      </orderedlist>
     </section>
   </chapter>
 
