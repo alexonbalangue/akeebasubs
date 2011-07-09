@@ -239,8 +239,101 @@
       which is using at least Nooku Framework 0.7 Alpha 2, such as Ninjaboard
       1.0.7 and later. It will not work properly together with components
       using earlier versions of the framework, such as Joomlashack's
-      LifeStream. If you're in doubt, please try installing Akeeba
-      Subscriptions on a copy of your site and test its behaviour.</para>
+      LifeStream. If you're in doubt, <emphasis role="bold">please try
+      installing Akeeba Subscriptions on a copy of your site and test its
+      behaviour</emphasis>.</para>
+
+      <important>
+        <para>Always have a tested backup of your site stored on your local
+        computer BEFORE installing Akeeba Subscriptions. Akeeba Subscriptions
+        is based on a cutting edge PHP framework which doesn't play well with
+        low quality hosts. If your site breaks, having a backup will ensure
+        that you can restore it to its last known working state very
+        easily.</para>
+      </important>
+
+      <warning>
+        <para>There were some reports (mainly in the form of negative reviews
+        in the Joomla! Extensions Directory) that Akeeba Subscriptions broke
+        some sites. Do note that it is not actually Akeeba Subscriptions that
+        broke the site, but a combination of incompatibilities between very
+        low quality hosts and Nooku Framework, the modern PHP framework our
+        software is based on.</para>
+
+        <para>Let me reiterate. Some ver poor quality servers <emphasis
+        role="bold">ARE NOT COMPATIBLE</emphasis> with Nooku Framework. In
+        this case, you may experience your site not loading any more. When
+        this happens, please remove the file
+        <filename>plugins/system/koowa.php</filename> (Joomla! 1.5) or
+        <filename>plugins/system/koowa/koowa.php</filename> (Joomla! 1.6 or
+        later). Moreover, edit your <filename>configuration.php</filename>
+        file and find the line starting with</para>
+
+        <programlisting>var $dbtype = 'mysqli';</programlisting>
+
+        <para>and change it to read</para>
+
+        <programlisting>var $dbtype = 'mysql';</programlisting>
+
+        <para>Please note that these issues are known incompatibilities of the
+        Nooku Framework with very low quality hosts. The real problem is with
+        your host and usually is one of the following:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Use of an obsolete PHP version. PHP 5.2.17 or earlier are
+            end of line and not supported by the PHP project. If your host is
+            using one of those versions, be aware that they are using
+            outdated, vulnerable software which can be used to exploit your
+            site. Ask your host to update their outdated software.</para>
+          </listitem>
+
+          <listitem>
+            <para>Some servers use a very old version of IonCube loaders
+            containing a bug which interferes with Nooku Framework. Note:
+            neither Nooku Framework nor Akeeba Subscriptions use encrypted
+            code. However, the old versions of IonCube loaders (from early
+            2011 or earlier) have a bug which doesn't allow NF to load
+            properly and can bring your site down. Ask your host to update
+            their outdated software.</para>
+          </listitem>
+
+          <listitem>
+            <para>Some servers use the Suhosin PHP patch. Depending on the
+            configuration of Suhosin, it is possible that it doesn't allow the
+            virtual <filename>tmpl://</filename> stream wrapper to be
+            registered. This will not allow Akeeba Subscriptions to run, as
+            Nooku Framework relies on that behaviour to load. Ask your host to
+            update their broken software configuration.</para>
+          </listitem>
+
+          <listitem>
+            <para>If your host is using MySQL 5.0.40 or earlier, they are
+            using an outdated, vulnerable version of MySQL which is known to
+            not work properly with Nooku Framework. Ask your host to update
+            their outdated software.</para>
+          </listitem>
+
+          <listitem>
+            <para>Some hosts do not allow the use of the PHP mysqli driver.
+            Please note that mysqli (with an i at the end) is the new version
+            of the PHP MySQL driver. The old driver (mysql - without a
+            trailing i) is considered buggy and obsolete, is no longer
+            maintained and will be removed from future versions of PHP. If
+            your server doesn't allow the use of the modern, maintained
+            driver, please ask your host to update their outdated
+            software.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>As you understand, all incompatibilities you may run into are
+        the result of a host using outdated, vulnerable software or having
+        egregious misconfigurations on their servers. Would you trust such a
+        host with your revenue-generating website? If you do, please do not
+        use Akeeba Subscriptions. I do not intend to support broken servers.
+        If you are going to make money from your site, you'd better spend
+        money on it. As simple as that.</para>
+      </warning>
     </section>
 
     <section xml:id="installation-instructions">
