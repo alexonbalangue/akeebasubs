@@ -29,7 +29,7 @@
 					<?if(!empty($level->image)):?>
 					<img class="level-image" src="<?=JURI::base().(version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/').@escape($level->image)?>" />
 					<?endif;?>
-					<?=$level->description?>
+					<?=JHTML::_('content.prepare', $level->description);?>
 				</div>
 			</div>
 			<div class="level-clear"></div>

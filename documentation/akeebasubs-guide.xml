@@ -243,6 +243,15 @@
       installing Akeeba Subscriptions on a copy of your site and test its
       behaviour</emphasis>.</para>
 
+      <warning>
+        <para>Akeeba Subscriptions is not compatible with Kunena 1.6 and
+        earlier releases. Kunena is using a class name which conflicts with
+        Nooku Framework. This is a known issue, outside of my control. I have
+        notified Kunena developers and they told me that Kunena 2.0 properly
+        fixes this issue. If you have Kunena 1.6 or earlier installed on your
+        site DO NOT USE AKEEBA SUBSCRIPTIONS or your site WILL break.</para>
+      </warning>
+
       <important>
         <para>Always have a tested backup of your site stored on your local
         computer BEFORE installing Akeeba Subscriptions. Akeeba Subscriptions

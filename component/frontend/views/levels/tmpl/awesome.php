@@ -32,7 +32,7 @@
 						<img src="<?=JURI::base().(version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/').@escape($level->image)?>" />
 					</div>
 					<div class="akeebasubs-awesome-description">
-						<?=$level->description?>
+						<?=JHTML::_('content.prepare', $level->description);?>
 					</div>
 				</div>
 				<div class="akeebasubs-awesome-footer">
