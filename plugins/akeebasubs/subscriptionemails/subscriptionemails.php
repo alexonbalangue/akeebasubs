@@ -33,7 +33,9 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 */
 	public function onAKSubscriptionCreate(KDatabaseRowDefault $row)
 	{
-		$this->sendEmail($row, true);
+		// Only send out an email if the subscription is enabled. Otherwise, the
+		// user may get confused as to why he received the email.
+		if($row->enabled) $this->sendEmail($row, true);
 	}
 	
 	/**

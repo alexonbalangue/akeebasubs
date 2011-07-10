@@ -8,6 +8,7 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 # The "Off-line" payment plugin would not have its title translated in the new subscription page
 # If the name provided in aslink plugin is not valid, you get a PHP Notice; thanks akeebafan
 # aslink doesn't produce correct URL if Joomla installed in subfolder (subfolder is "doubled" in path); thanks akeebafan
+# An email was sent out when a not yet paid, disabled subscription was created, which is superfluous and could confuse customers.
 
 Akeeba Subscriptions 1.0.b3
 ================================================================================
