@@ -68,7 +68,13 @@ class plgContentAslink extends JPlugin
 		
 		$slug = self::getId($match[1], true);
 		if(!empty($slug)) {
-			$ret = rtrim(JURI::base(),'/').JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.$slug);
+			$root = rtrim(JURI::base(),'/');
+			$subpath = JURI::base(true);
+			if(!empty($subpath) && ($subpath != '/')) {
+				$root = substr($root, 0, -1 * strlen($subpath));
+			}
+			//@ob_clean(); header('Content-type: text/plain'); var_dump(JURI::base(),JURI::base(true));die();
+			$ret = rtrim($root,'/').JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.$slug);
 		}
 		
 		return $ret;

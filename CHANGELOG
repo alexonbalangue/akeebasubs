@@ -3,7 +3,8 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 # Warnings thrown on PHP 5.3 servers where the default timezone in not set
 # Uninstalling the component would break the site as the plugins were not uninstalled because Joomla! always failed to copy and use the uninstallation file.
 # The "Off-line" payment plugin would not have its title translated in the new subscription page
-# If the name provided in aslink plugin is not valid, you get a PHP Notice
+# If the name provided in aslink plugin is not valid, you get a PHP Notice; thanks akeebafan
+# aslink doesn't produce correct URL if Joomla installed in subfolder (subfolder is "doubled" in path); thanks akeebafan
 
 Akeeba Subscriptions 1.0.b3
 ================================================================================
