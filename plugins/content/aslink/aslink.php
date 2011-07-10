@@ -54,6 +54,7 @@ class plgContentAslink extends JPlugin
 					}
 				}
 			}
+			if($id == 0) return -1;
 			return $slug ? $slugs[$id] : (int)$title;
 		} else {
 			// No match!
