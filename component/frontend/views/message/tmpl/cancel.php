@@ -8,7 +8,7 @@
 	<?= @escape(@text('COM_AKEEBASUBS_MESSAGE_SORRY')) ?>
 </h1>
 
-<?=$message->canceltext?>
+<?=JHTML::_('content.prepare', $message->canceltext)?>
 
 <div class="akeebasubs-goback">
 	<p><a href="<?=JURI::base()?>"><?=@text('back')?></a></p>

@@ -10,7 +10,7 @@
 	<?= @escape(@text('COM_AKEEBASUBS_MESSAGE_THANKYOU')) ?>
 </h1>
 
-<?=$message->ordertext?>
+<?=JHTML::_('content.prepare', $message->ordertext)?>
 
 <div class="akeebasubs-goback">
 	<p><a href="<?=JURI::base()?>"><?=@text('back')?></a></p>

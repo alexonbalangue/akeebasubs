@@ -991,6 +991,9 @@ modules/mod_default</programlisting>
             Keep it short (ca. 30 words or less) or it will overflow the
             boundaries of the subscription presentation areas in the
             front-end.</para>
+
+            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
+            codes (like our own aslink plugin) in the description.</para>
           </listitem>
         </varlistentry>
 
@@ -1013,6 +1016,9 @@ modules/mod_default</programlisting>
               that the information will only be shown to users holding a valid
               subscription.</para>
             </warning>
+
+            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
+            codes (like our own aslink plugin) in the message.</para>
           </listitem>
         </varlistentry>
 
@@ -1026,6 +1032,9 @@ modules/mod_default</programlisting>
             or have them give you feedback on the reasons they decided to not
             move forward with their subscription. Use it wisely and do not
             insult your users, please :)</para>
+
+            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
+            codes (like our own aslink plugin) in the message.</para>
           </listitem>
         </varlistentry>
       </variablelist>
