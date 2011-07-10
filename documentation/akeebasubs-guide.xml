@@ -29,6 +29,16 @@
           <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
         </author>
       </revision>
+
+      <revision>
+        <revnumber>1.0.b4</revnumber>
+
+        <date>July 2011</date>
+
+        <author>
+          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
+        </author>
+      </revision>
     </revhistory>
 
     <legalnotice>
@@ -171,28 +181,23 @@
           subscription/payment status changes and when their subscription is
           about to expire</para>
         </listitem>
-
-        <listitem>
-          <para>All the attention to details that makes a component worthy of
-          carrying the Akeeba label!</para>
-        </listitem>
       </itemizedlist>
 
       <bridgehead>Support policy</bridgehead>
 
       <para>Please note that the software is provided free of charge, but
-      support is not. You need to have an AKEEBADELUXE subscription on
-      AkeebaBackup.com to seek support regarding setting up, using and
-      customizing Akeeba Subscriptions. If you have found a bug and wish to
-      report it, however, you can do so even without an active
-      AkeebaBackup.com subscription.</para>
+      support is not. You need to have an AKEEBADELUXE, SUPPORT or
+      FORUMSUPPORT subscription on AkeebaBackup.com to seek support regarding
+      setting up, using and customizing Akeeba Subscriptions.</para>
     </section>
 
     <section xml:id="requirements">
       <title>Requirements and compatibility</title>
 
-      <para>Akeeba Subscriptions requires the following server-side
-      configuration:</para>
+      <para>Akeeba Subscriptions 1.0.b4 and later will attempt to detect if
+      your server meets the minimum requirements. If it does not, it will
+      refuse to install. In any case, Akeeba Subscriptions requires the
+      following server-side configuration:</para>
 
       <itemizedlist>
         <listitem>
@@ -209,8 +214,7 @@
 
         <listitem>
           <para>Your server must support the mysqli driver and your site must
-          use it. If not, Akeeba Subscriptions will try to switch your site to
-          mysqli upon installation.</para>
+          use it before installing the component.</para>
         </listitem>
 
         <listitem>
@@ -233,24 +237,33 @@
           <para>The <guilabel>System - mooTools Upgrade</guilabel> system
           plugin MUST be enabled on Joomla! 1.5 sites.</para>
         </listitem>
+
+        <listitem>
+          <para>Akeeba Subscriptions is not compatible with Kunena 1.6 and
+          earlier releases. Kunena is using a class name which conflicts with
+          Nooku Framework. This is a known issue, outside of my control. I
+          have notified Kunena developers and they told me that Kunena 2.0
+          properly fixes this issue. If you have Kunena 1.6 or earlier
+          installed on your site DO NOT USE AKEEBA SUBSCRIPTIONS or your site
+          WILL break.</para>
+        </listitem>
+
+        <listitem>
+          <para>IonCube Loaders 4.0.6 and earlier have a bug which prevents
+          Nooku Framework from working at all and cause a blank page or
+          Internal Server Error 500 upon accessing your site. Please upgrade
+          to IonCube Loaders 4.0.7 or later. NOTE: Neither Nooku Framework nor
+          Akeeba Subscriptions use encrypted code. However, IonCube loaders
+          prevent you from using the extension.</para>
+        </listitem>
       </itemizedlist>
 
       <para>Akeeba Subscriptions is compatible with other Nooku-based software
-      which is using at least Nooku Framework 0.7 Alpha 2, such as Ninjaboard
-      1.0.7 and later. It will not work properly together with components
-      using earlier versions of the framework, such as Joomlashack's
-      LifeStream. If you're in doubt, <emphasis role="bold">please try
+      which is using at least Nooku Framework 0.7 Alpha 3. It will not work
+      properly together with components using earlier versions of the
+      framework. If you're in doubt, <emphasis role="bold">please try
       installing Akeeba Subscriptions on a copy of your site and test its
       behaviour</emphasis>.</para>
-
-      <warning>
-        <para>Akeeba Subscriptions is not compatible with Kunena 1.6 and
-        earlier releases. Kunena is using a class name which conflicts with
-        Nooku Framework. This is a known issue, outside of my control. I have
-        notified Kunena developers and they told me that Kunena 2.0 properly
-        fixes this issue. If you have Kunena 1.6 or earlier installed on your
-        site DO NOT USE AKEEBA SUBSCRIPTIONS or your site WILL break.</para>
-      </warning>
 
       <important>
         <para>Always have a tested backup of your site stored on your local
@@ -266,11 +279,10 @@
       </important>
 
       <warning>
-        <para>There were some reports (mainly in the form of negative reviews
-        in the Joomla! Extensions Directory) that Akeeba Subscriptions broke
-        some sites. Do note that it is not actually Akeeba Subscriptions that
-        broke the site, but a combination of incompatibilities between very
-        low quality hosts and Nooku Framework, the modern PHP framework our
+        <para>There were some reports that Akeeba Subscriptions broke some
+        sites. Do note that it is not actually Akeeba Subscriptions that broke
+        the site, but a combination of incompatibilities between badly
+        configured servers and Nooku Framework, the modern PHP framework our
         software is based on.</para>
 
         <para>Let me reiterate. Some ver poor quality servers <emphasis
@@ -342,10 +354,9 @@
         <para>As you understand, all incompatibilities you may run into are
         the result of a host using outdated, vulnerable software or having
         egregious misconfigurations on their servers. Would you trust such a
-        host with your revenue-generating website? If you do, please do not
-        use Akeeba Subscriptions. I do not intend to support broken servers.
-        If you are going to make money from your site, you'd better spend
-        money on it. As simple as that.</para>
+        host with your revenue-generating website? If you are going to make
+        money from your site, you'd better spend money on hosting it on a
+        proper server. As simple as that.</para>
       </warning>
     </section>
 

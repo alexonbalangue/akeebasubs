@@ -103,51 +103,96 @@ if( version_compare( JVERSION, '1.6.0', 'ge' ) && !defined('_AKEEBA_HACK') ) {
 	if($akeeba_installation_has_run) return;
 }
 
-// Basic server requirements check
-if(!function_exists('com_install'))
-{
-	function com_install()
-	{
-		static $installable;
-		
-		if(isset($installable)) return $installable;
-		
-		$db = JFactory::getDBO();
-		//Run check on the minimum required server specs. Will roll back install if any check fails
-		foreach(array(
-			class_exists('mysqli') => "Your server doesn't support MySQLi.",
-			version_compare(phpversion(), '5.2', '>=') => "Your PHP version is older than 5.2.",
-			version_compare($db->getVersion(), '5.0.41', '>=') => "Your MySQL version is older than 5.0.41."
-		) as $succeed => $fail) {
-			if(!$succeed) {
-				JError::raiseWarning(0, $fail);
-				return $installable = false;
-			}
-		}
-		
-		if (extension_loaded('suhosin'))
-		{
-			//Attempt setting the whitelist value
-			@ini_set('suhosin.executor.include.whitelist', 'tmpl://, file://');
-		
-			//Checking if the whitelist is ok
-			if(!@ini_get('suhosin.executor.include.whitelist') || strpos(@ini_get('suhosin.executor.include.whitelist'), 'tmpl://') === false)
-			{
-				JError::raiseWarning(0, 'The install failed because your server has Suhosin loaded, but it\'s not configured correctly. Please follow <a href="https://nooku.assembla.com/wiki/show/nooku-framework/Known_Issues" target="_blank">this tutorial</a> before you reinstall.');
-				return $installable = false;
-			}
-		}
-		
-		return $installable = true;
+$db = JFactory::getDBO();
+
+// ========== Pre-installation checks (because people DO NOT read the fine manual) ==========
+
+// Do we have a Nooku Framework conflict?
+if(class_exists('Koowa')) {
+	if(Koowa::getVersion() != '0.7.0-alpha-3') {
+		JError::raiseWarning(0, "You have some software installed based on a different version of Nooku Framework than Akeeba Subscriptions. We are not proceeding with the installation, as it would break your site.");
+		return false;
 	}
 }
 
-if(!com_install()) {
+// Do you have at least Joomla! 1.5.14?
+if(!version_compare(JVERSION, '1.5.14', 'ge')) {
+	JError::raiseWarning(0, "The Joomla! version you are using is old, buggy, vulnerable and doesn't support Akeeba Subscriptions. Please upgrade your site then retry installing this component.");
 	return false;
 }
 
+// Does the server support MySQLi?
+if(!class_exists('mysqli')) {
+	JError::raiseWarning(0, "Your server doesn't support MySQLi. Akeeba Subsciptions requires it to work at all. Please ask your host to enable the MySQLi extension on their server.");
+	return false;
+}
+
+// Is MySQLi enabled?
+$conf =& JFactory::getConfig();
+if(!stristr(get_class($db),'MySQLi')) {
+	JError::raiseWarning(0, "Your site is not usingn the MySQLi driver. Please go to Global Configuration, Server tab and set the Database Type to mysqli before installing this extension.");
+}
+
+// Does the server has PHP 5.2.7 or later?
+if(!version_compare(phpversion(), '5.2.7', 'ge')) {
+	JError::raiseWarning(0, "Your PHP version is older than 5.2.7");
+	return false;
+}
+
+// Do we have the minimum required version of MySQL?
+if(!version_compare($db->getVersion(), '5.0.41', 'ge')) {
+	JError::raiseWarning(0, "Your MySQL version is older than 5.0.41");
+	return false;
+}
+
+// Check if Suhosin can be configured
+if (extension_loaded('suhosin'))
+{
+	//Attempt setting the whitelist value
+	@ini_set('suhosin.executor.include.whitelist', 'tmpl://, file://');
+
+	//Checking if the whitelist is ok
+	if(!@ini_get('suhosin.executor.include.whitelist') || strpos(@ini_get('suhosin.executor.include.whitelist'), 'tmpl://') === false)
+	{
+		JError::raiseWarning(0, 'The install failed because your server has Suhosin loaded, but it\'s not configured correctly. Please follow <a href="https://nooku.assembla.com/wiki/show/nooku-framework/Known_Issues" target="_blank">this tutorial</a> before you reinstall.');
+		return false;
+	}
+}
+
+// Check for a Kunena installation
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
+if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_kunena')) {
+	JError::raiseWarning(0, "Your site has Kunena installed. Kunena is not compatible with Nooku Framework, the PHP framework used by Akeeba Subscriptions. The installation was cancelled, as it would result in your site being broken");
+	return false;
+}
+
+// Check for broken IonCube loaders
+if(function_exists('ioncube_loader_version')) {
+	if(!function_exists('ioncube_loader_iversion')) {
+		JError::raiseWarning(0, "You have a VERY old version of IonCube Loaders which is known to cause problems with Nooku Framework, the PHP framework used by Akeeba Subscriptions. Note: Neither Nooku Framework, not Akeeba Subscriptions, contains encrypted code. However, IonCube Loaders do prevent our unencrypted code from loading. Please go to <a href=\"http://www.ioncube.com/loaders.php\">the IonCube Loaders download page</a> to download and install the latest version of IonCube Loaders on your site before retrying to install this extension.");
+		return false;
+	}
+	
+	// Require at least version 4.0.7
+	$iclVersion = ioncube_loader_iversion();
+	if($iclVersion < 40070) {
+		JError::raiseWarning(0, "You have an old version of IonCube Loaders (4.0.6 or earlier) which is known to cause problems with Nooku Framework, the PHP framework used by Akeeba Subscriptions. Note: Neither Nooku Framework, not Akeeba Subscriptions, contains encrypted code. However, IonCube Loaders do prevent our unencrypted code from loading. Please go to <a href=\"http://www.ioncube.com/loaders.php\">the IonCube Loaders download page</a> to download and install the latest version of IonCube Loaders on your site before retrying to install this extension.");
+		return false;
+	}
+}
+
+// Do we have the mooTools upgrade plugin?
+if(!version_compare(JVERSION,'1.6.0','ge')) {
+	$db->setQuery('SELECT `published` FROM #__plugins WHERE `element` = '.$db->Quote('mtupgrade').' AND `folder` = '.$db->Quote('system'));
+	$mtuEnabled = $db->loadResult();
+	if(!$mtuEnabled) {
+		JError::raiseWarning(0, "Please enable the mooTools Upgrade plugin before installing the component. Go to Extensions, Plugin Manager, find the &quot;System - Mootools Upgrade&quot; plugin and publish it. Then, retry installing the component.");
+		return false;
+	}
+}
+
+// ========== Proceed with installation ==========
 
 // Setup the sub-extensions installer
 jimport('joomla.installer.installer');
@@ -228,46 +273,6 @@ if(count($installation_queue['plugins'])) {
 				$db->query();
 			}
 		}
-	}
-}
-
-// Change MySQL extension to mysqli if required
-$config =& JFactory::getConfig();
-$driver = $config->getValue('config.dbtype', 'mysql');
-if($driver != 'mysqli') {
-	$config->setValue('config.dbtype', 'mysqli');
-	$buffer = $config->toString('PHP', 'config', array('class' => 'JConfig'));
-	// On some occasions, Joomla! 1.6 ignores the configuration and produces "class c". Let's fix this!
-	$buffer = str_replace('class c {','class JConfig {',$buffer);
-	// Try to write out the configuration.php
-	$file = JPATH_ROOT.DS.'configuration.php';
-	// Hack me: Try changing the permissions, working around an age-old Joomla! bug
-	@chmod($file, 0755);
-	
-	// Try using the FTP layer
-	jimport('joomla.client.helper');
-	$FTPOptions = JClientHelper::getCredentials('ftp');
-	if ($FTPOptions['enabled'] == 1) {
-		// Connect the FTP client
-		jimport('joomla.client.ftp');
-		$ftp = & JFTP::getInstance($FTPOptions['host'], $FTPOptions['port'], null, $FTPOptions['user'], $FTPOptions['pass']);
-
-		// Translate path for the FTP account and use FTP write buffer to file
-		$file = JPath::clean(str_replace(JPATH_ROOT, $FTPOptions['root'], $file), '/');
-		$ret = $ftp->write($file, $buffer);
-	} else {
-		$ret = false;
-	}
-	
-	// Try using direct file writes
-	if(!$ret) {
-		$ret = @file_put_contents($file, $buffer);
-	}
-	
-	// Try using JFile - All hell might break loose...
-	if(!$ret) {
-		jimport('joomla.filesystem.file');
-		$ret = JFile::write($file, $buffer);
 	}
 }
 

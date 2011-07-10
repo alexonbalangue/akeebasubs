@@ -3,6 +3,7 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 + aslink also allows a slug to be passed (instead of id or name). Use case: rename level without changing SEF link. (thanks akeebafan)
 + You can now use content plugins in the Subscription Level descriptions; thanks akeebafan for this idea!
 + You can now use content plugins in the subscription level's order and cancellation messages
++ More stringent pre-installation tests to make sure that if your server is not compatible with Akeeba Subscriptions the component won't be installed, no matter what!
 # Warnings thrown on PHP 5.3 servers where the default timezone in not set
 # Uninstalling the component would break the site as the plugins were not uninstalled because Joomla! always failed to copy and use the uninstallation file.
 # The "Off-line" payment plugin would not have its title translated in the new subscription page
