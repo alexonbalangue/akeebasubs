@@ -23,6 +23,7 @@ class plgContentAslink extends JPlugin
 	{
 		static $levels = null;
 		static $slugs = null;
+		static $upperSlugs = null;
 		
 		// Don't process invalid titles
 		if(empty($title)) return -1;
@@ -36,6 +37,7 @@ class plgContentAslink extends JPlugin
 				$thisTitle = strtoupper($level->title);
 				$levels[$thisTitle] = $level->id;
 				$slugs[$thisTitle] = $level->slug;
+				$upperSlugs[strtoupper($level->slug)] = $level->slug;
 			}
 		}
 		
@@ -43,19 +45,34 @@ class plgContentAslink extends JPlugin
 		if(array_key_exists($title, $levels)) {
 			// Mapping found
 			return $slug ? $slugs[$title] : $levels[$title];
-		} elseif( (int)$title == $title ) {
-			// Numeric ID passed
+		} elseif(array_key_exists($title, $upperSlugs)) {
+			$mySlug = $upperSlugs[$title];
 			if($slug) {
-				$id = 0;
-				foreach($levels as $lt => $lid) {
-					if($lid == $title) {
-						$id = $lid;
-						break;
+				return $mySlug;
+			} else {
+				foreach($slugs as $t => $s) {
+					if($s = $mySlug) {
+						return $levels[$t];
 					}
 				}
+				return -1;
 			}
-			if($id == 0) return -1;
-			return $slug ? $slugs[$id] : (int)$title;
+		} elseif( (int)$title == $title ) {
+			$id = (int)$title;
+			$title = '';
+			// Find the title from the ID
+			foreach($levels as $t => $lid) {
+				if($lid == $id) {
+					$title = $t;
+					break;
+				}
+			}
+			
+			if(empty($title)) {
+				return $slug ? '' : -1;
+			} else {
+				return $slug ? $slugs[$title] : $levels[$title];
+			}
 		} else {
 			// No match!
 			return $slug ? '' : -1;

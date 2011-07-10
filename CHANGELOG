@@ -1,5 +1,6 @@
 Akeeba Subscriptions 1.0 Stable (current trunk)
 ================================================================================
++ aslink also allows a slug to be passed (instead of id or name). Use case: rename level without changing SEF link. (thanks akeebafan)
 # Warnings thrown on PHP 5.3 servers where the default timezone in not set
 # Uninstalling the component would break the site as the plugins were not uninstalled because Joomla! always failed to copy and use the uninstallation file.
 # The "Off-line" payment plugin would not have its title translated in the new subscription page
