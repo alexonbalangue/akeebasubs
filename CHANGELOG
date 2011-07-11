@@ -1,5 +1,9 @@
 Akeeba Subscriptions 1.0 Stable (current trunk)
 ================================================================================
+# "Content - Akeeba Subscriptions Restricted" would not work under Joomla! 1.6
+
+Akeeba Subscriptions 1.0.b4
+================================================================================
 + aslink also allows a slug to be passed (instead of id or name). Use case: rename level without changing SEF link. (thanks akeebafan)
 + You can now use content plugins in the Subscription Level descriptions; thanks akeebafan for this idea!
 + You can now use content plugins in the subscription level's order and cancellation messages

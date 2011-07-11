@@ -140,7 +140,6 @@ class plgContentAsrestricted extends JPlugin
 
 		return $ret;
 	}
-
 	
 	public function onPrepareContent( &$article, &$params, $limitstart )
 	{
@@ -156,5 +155,31 @@ class plgContentAsrestricted extends JPlugin
 		$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
 		
 		$article->text = preg_replace_callback( $regex, array('self', 'process'), $article->text );
+	}
+	
+	public function onContentPrepare($context, &$row, &$params, $page = 0)
+	{
+		if(!defined('KOOWA')) return;
+		
+		if(is_object($row)) {
+			// Check whether the plugin should process or not
+			if ( JString::strpos( $row->text, 'akeebasubs' ) === false )
+			{
+				return true;
+			}
+			
+			// Search for this tag in the content
+			$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
+			
+			$row->text = preg_replace_callback( $regex, array('self', 'process'), $row->text );
+		} else {
+			if ( JString::strpos( $row, 'akeebasubs' ) === false ) {
+				return true;
+			}
+			$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
+			$row = preg_replace_callback( $regex, array('self', 'process'), $row );
+		}
+		
+		return true;
 	}
 }
