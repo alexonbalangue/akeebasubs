@@ -222,7 +222,7 @@
 			port="${ftp.port}"
 			username="${ftp.username}"
 			password="${ftp.password}"
-			dir="${ftp.dir}/aksubspro/${svn.lastrevision}"
+			dir="${ftp.dir}/akeebasubs/${svn.lastrevision}"
 			mode="${ftp.mode}"
 			level="debug">
 			<fileset dir="${dirs.root}">
