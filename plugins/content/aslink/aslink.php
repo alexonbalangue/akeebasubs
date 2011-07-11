@@ -112,4 +112,9 @@ class plgContentAslink extends JPlugin
 		
 		$article->text = preg_replace_callback( $regex, array('self', 'process'), $article->text );
 	}
+	
+	public function onContentPrepare($context, &$article, &$params, $limitstart = 0)
+	{
+		return $this->onPrepareContent($article, $params, $limitstart);
+	}
 }
