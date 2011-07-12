@@ -217,8 +217,15 @@ if(is_dir($src.'/koowa')) {
 		JError::raiseWarning(0,'Could not install the Nooku Framework. Please consult our documentation in order to manually install it before attempting to install Akeeba Subscriptions again.');
 		return;
 	}
+	// Remove the index.html files from the site root and the administrator directory
+	JFile::delete(JPATH_ROOT.DS.'index.html');
+	JFile::delete(JPATH_ADMINISTRATOR.DS.'index.html');
 } else {
 	$koowaInstalled = null;
+	if(!class_exists('Koowa')) {
+		JError::raiseWarning(0, "Your site does nor have the Nooku Framework installed. Please download and install the full package, not the -noframework package, of Akeeba Susbcriptions. Thank you!");
+		return false;
+	}
 }
 
 // Remove unused files and folders (or the component will explode!)
