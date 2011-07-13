@@ -31,6 +31,8 @@ class plgContentAslink extends JPlugin
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
+			$slugs = array();
+			$upperSlugs = array();
 			$list = KFactory::tmp('admin::com.akeebasubs.model.levels')
 				->getList();
 			if(count($list)) foreach($list as $level) {
