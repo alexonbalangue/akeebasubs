@@ -74,7 +74,7 @@ class plgAkeebasubsTienda extends JPlugin
 				if(!array_key_exists($level, $this->addGroups)) continue;
 				$groups = $this->addGroups[$level];
 				foreach($groups as $group) {
-					if(!in_array($group, $addGroups)) {
+					if(!in_array($group, $addGroups) && ($group > 0)) {
 						$addGroups[] = $group;
 					}
 				}
@@ -85,7 +85,7 @@ class plgAkeebasubsTienda extends JPlugin
 				$groups = $this->removeGroups[$level];
 				
 				foreach($groups as $group) {
-					if(!in_array($group, $removeGroups)) {
+					if(!in_array($group, $removeGroups) && ($group > 0)) {
 						$removeGroups[] = $group;
 					}
 				}
