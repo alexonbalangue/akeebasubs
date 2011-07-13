@@ -92,3 +92,11 @@
 </table>
 
 </form>
+
+<script type="text/javascript">
+window.addEvent('domready', function() {
+	$$('.-koowa-grid').addEvent('before.delete', function(){ 
+		return confirm('<?=@text('COM_AKEEBASUBS_LEVELS_JS_DELETECONFIRMATION', true)?>');
+	});
+});
+</script>
