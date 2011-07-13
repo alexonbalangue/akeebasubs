@@ -54,10 +54,17 @@ class plgAkpayment2checkout extends JPlugin
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
+		
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		
 		$data = (object)array(
 			'url'			=> 'https://www.2checkout.com/checkout/purchase',
 			'sid'			=> $this->params->get('sid',''),
-			'x_receipt_link_url'	=> rtrim(JURI::base(),'/').'/index.php?option=com_akeebasubs&view=callback&paymentmethod=2checkout',
+			'x_receipt_link_url'	=> $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=2checkout')),
 			'params'		=> $this->params,
 			'name'			=> $user->name,
 			'email'			=> $user->email
@@ -140,17 +147,23 @@ class plgAkpayment2checkout extends JPlugin
 				->getItem()
 				->slug;
 
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		
 		// Check the payment_status
 		switch($data['credit_card_processed'])
 		{
 			case 'Y':
 				$newStatus = 'C';
-				$returnURL = rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order'));
+				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order'));
 				break;
 
 			default:
 				$newStatus = 'X';
-				$returnURL = rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel'));
+				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel'));
 				break;
 		}
 

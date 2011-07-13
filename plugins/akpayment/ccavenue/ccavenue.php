@@ -58,9 +58,15 @@ class plgAkpaymentCcavenue extends JPlugin
 			$lastName = '';
 		}
 		
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		
 		$merchant = $this->params->get('merchant','');
 		$WorkingKey = $this->params->get('workingkey','');
-		$redirectURL = rtrim(JURI::base(),'/').'/index.php?option=com_akeebasubs&view=callback&paymentmethod=ccavenue';
+		$redirectURL = $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=ccavenue'));
 		$checksum = $this->getCheckSum($merchant, $subscription->net_amount, $subscription->id,
 			$redirectURL, $WorkingKey);
 		
@@ -151,22 +157,29 @@ class plgAkpaymentCcavenue extends JPlugin
 				->slug;
 
 		// Check the payment_status
+		
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		
 		switch($data['AuthDesc'])
 		{
 			case 'Y':
 				$newStatus = 'C';
-				$returnURL = rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order'));
+				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order'));
 				break;
 			
 			case 'B':
 				$newStatus = 'P';
-				$returnURL = rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order'));
+				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order'));
 				break;
 			
 			case 'N':
 			default:
 				$newStatus = 'X';
-				$returnURL = rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=cancel'));
+				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=cancel'));
 				break;
 		}
 

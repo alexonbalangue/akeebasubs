@@ -6,6 +6,7 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 # "Content - Akeeba Subscriptions Link" would throw a notice under Joomla! 1.5
 # Rogue index.html copied to site's root could make the site look as if it's throwing a blank page
 # The -noframework package would allow you to install the component even when Nooku Framework was not already installed
+# Payment plugins would produce wrong callback/redirection URLs if the site is in a subdirectory
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================
