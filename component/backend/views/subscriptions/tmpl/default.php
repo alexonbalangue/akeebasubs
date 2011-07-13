@@ -174,4 +174,11 @@ var akeebasubs_token = "<?=JUtility::getToken();?>";
 		$('#toolbar-subrefresh').click(akeebasubs_refresh_integrations);
 	});
 })(akeeba.jQuery);
+
+window.addEvent('domready', function() {
+	$$('.-koowa-grid').addEvent('before.delete', function(){ 
+		return confirm('<?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_JS_DELETECONFIRMATION', true)?>');
+	});
+});
+
 </script>

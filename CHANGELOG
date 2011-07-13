@@ -1,5 +1,6 @@
 Akeeba Subscriptions 1.0 Stable (current trunk)
 ================================================================================
++ Confirmation before deleting a subscription (thank you Akeebafan!)
 # "Content - Akeeba Subscriptions Restricted" would not work under Joomla! 1.6
 # "Content - Akeeba Subscriptions Link" would not work under Joomla! 1.6
 # "Content - Akeeba Subscriptions Restricted" would throw a notice under Joomla! 1.5
