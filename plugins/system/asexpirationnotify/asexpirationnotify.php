@@ -239,7 +239,13 @@ class plgSystemAsexpirationnotify extends JPlugin
 		// Get the "my subscriptions" URL
 		$baseURL = JURI::base();
 		$baseURL = str_replace('/administrator', '', $baseURL);
-		$url = str_replace('&amp;','&', $baseURL.JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+		$subpathURL = JURI::base(true);
+		$subpathURL = str_replace('/administrator', '', $subpathURL);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$baseURL = substr($baseURL, 0, -1 * strlen($subpathURL));
+		}
+		
+		$url = $baseURL.str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
 		
 		if($firstContact) {
 			$subject_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_FIRST';
