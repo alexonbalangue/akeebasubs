@@ -68,7 +68,6 @@
 			<filename>index.html</filename>
 			<filename>version.php</filename>
 			
-			<folder>commands</folder>
 			<folder>controllers</folder>
 			<folder>databases</folder>
 			<folder>install</folder>
