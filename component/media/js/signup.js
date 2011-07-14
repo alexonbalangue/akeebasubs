@@ -144,6 +144,7 @@ function validateName()
 		if(name == '') {
 			invalidName = true;
 		} else {
+			name = ltrim(rtrim(name, " "), " ");
 			var nameParts = name.split(' ');
 			if(nameParts.length < 2) invalidName = true;
 		}
