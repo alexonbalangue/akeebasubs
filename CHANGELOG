@@ -18,6 +18,7 @@ Akeeba Subscriptions 1.0.b5 Stable (current trunk)
 # Users could get away without typing a surname if they added two spaces after their first name.
 # If the user created a subscription level without a slug, an error would be thrown instead of automatically creating a slug from the title
 # On pages with validation errors you wouldn't get the entered values back on the page when it reloaded.
+# Internal Server Error thrown if you try to create a subscription with a from/to date which doesn't have a time part (e.g. 2012-07-14 instead of 2012-07-14 00:00:00)
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================

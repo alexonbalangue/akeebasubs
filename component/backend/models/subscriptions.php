@@ -309,8 +309,10 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			$ret[] = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_UP');
 		} else {
 			$test = new KDate(new KConfig(array('date'=>$data->publish_up)));
-			if($test->format('%Y-%m-%d %H:%i%s') == '0000-00-00') {
+			if($test->format('%Y-%m-%d %H:%M:%S') == '0000-00-00 00:00:00') {
 				$ret[] = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_UP');
+			} else {
+				$data->publish_up = $test->format('%Y-%m-%d %H:%M:%S');
 			}
 		}
 
@@ -318,8 +320,10 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			$ret[] = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN');
 		} else {
 			$test = new KDate(new KConfig(array('date'=>$data->publish_down)));
-			if($test->format('%Y-%m-%d %H:%i%s') == '0000-00-00') {
+			if($test->format('%Y-%m-%d %H:%M:%S') == '0000-00-00') {
 				$ret[] = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN');
+			}  else {
+				$data->publish_down = $test->format('%Y-%m-%d %H:%M:%S');
 			}
 		}
 		
