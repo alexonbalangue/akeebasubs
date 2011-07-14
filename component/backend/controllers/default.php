@@ -22,5 +22,16 @@ class ComAkeebasubsControllerDefault extends ComDefaultControllerDefault
 			'behaviors' => array('discoverable','executable','commandable','editable')
 		));
 		parent::_initialize($config);
-	}	
+	}
+	
+	public function _actionDelete(KCommandContext $context) {
+		parent::_actionDelete($context);
+		
+		$error = $context->getError();
+		if($error->getCode() == 500) {
+			$message = $error->getMessage();
+			JFactory::getApplication()->enqueueMessage($message, 'error');
+			$context->setError(null);
+		}
+	}
 }
