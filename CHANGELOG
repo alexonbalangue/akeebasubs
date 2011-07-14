@@ -15,6 +15,7 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 # Supplying a misspelled group name in integration plugins could create invalid entries referencing inexistent group #0 in the 3PD components' user-group mapping tables
 # Regression: User wouldn't see the "Thank you" page after completing a payment
 # URLs in subscription notification and expiration emails would contain the path doubled
+# Users could get away without typing a surname if they added two spaces after their first name.
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================

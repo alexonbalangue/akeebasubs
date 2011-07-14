@@ -184,7 +184,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// Name validation; must contain AT LEAST two parts (name/surname)
 		// separated by a space
 		if(!empty($this->_state->name)) {
-			$nameParts = explode(" ", $this->_state->name);
+			$name = trim($this->_state->name);
+			$nameParts = explode(" ", $name);
 			if(count($nameParts) < 2) $ret['name'] = false;
 		}
 		
