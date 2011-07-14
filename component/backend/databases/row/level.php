@@ -8,7 +8,7 @@
 defined('KOOWA') or die('');
 
 
-class ComAkeebasubsDatabaseRowLevel extends KDatabaseRowAbstract
+class ComAkeebasubsDatabaseRowLevel extends KDatabaseRowTable
 {
 	public function delete()
 	{
