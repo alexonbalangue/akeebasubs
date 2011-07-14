@@ -167,8 +167,8 @@ if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_kunena')) {
 	return false;
 }
 
-// Check for broken IonCube loaders
-if(function_exists('ioncube_loader_version')) {
+// Check for broken IonCube loaders on PHP 5.3 or later
+if(function_exists('ioncube_loader_version') && version_compare(phpversion(), '5.3.0', 'ge') ) {
 	if(!function_exists('ioncube_loader_iversion')) {
 		JError::raiseWarning(0, "You have a VERY old version of IonCube Loaders which is known to cause problems with Nooku Framework, the PHP framework used by Akeeba Subscriptions. Note: Neither Nooku Framework, not Akeeba Subscriptions, contains encrypted code. However, IonCube Loaders do prevent our unencrypted code from loading. Please go to <a href=\"http://www.ioncube.com/loaders.php\">the IonCube Loaders download page</a> to download and install the latest version of IonCube Loaders on your site before retrying to install this extension.");
 		return false;
