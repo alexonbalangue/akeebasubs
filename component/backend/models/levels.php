@@ -55,8 +55,7 @@ class ComAkeebasubsModelLevels extends KModelTable
 		}
 		
 		if(empty($data->slug)) {
-			$data->slug = KFactory::get('lib.koowa.filter.slug')
-				->execute('sanitize', new KCommandContext(array('data'=>$data->title)));
+			$data->slug = KFilter::factory('slug')->sanitize($data->title);
 		}
 		
 		$existingItems = KFactory::tmp('admin::com.akeebasubs.model.level')->slug($data->slug)->getList();

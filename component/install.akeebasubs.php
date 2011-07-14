@@ -70,8 +70,6 @@ $installation_queue = array(
 // due to Nooku Framework changes)
 $removeFiles = array(
 	'administrator/components/com_akeebasubs/akeebasubs.xml',
-	'administrator/components/com_akeebasubs/commands/authorize.php',
-	'administrator/components/com_akeebasubs/commands/hotfix.php',
 	'administrator/components/com_akeebasubs/install.akeebasubs.php',
 	'administrator/components/com_akeebasubs/uninstall.akeebasubs.php',
 	'administrator/components/com_akeebasubs/views/config/html.php',
@@ -90,6 +88,7 @@ $removeFiles = array(
 	'administrator/components/com_akeebasubs/views/users/html.php'
 );
 $removeFolders = array(
+	'administrator/components/com_akeebasubs/commands',
 	'administrator/components/com_akeebasubs/controllers/commands',
 	'administrator/components/com_akeebasubs/toolbars',
 	'components/com_akeebasubs/commands'

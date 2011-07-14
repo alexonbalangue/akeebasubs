@@ -9,17 +9,9 @@ defined('KOOWA') or die('');
 
 class ComAkeebasubsControllerDefault extends ComDefaultControllerDefault 
 {
-	public function __construct(KConfig $config)
-	{
-		parent::__construct($config);
-
-		$command = KFactory::get('admin::com.akeebasubs.command.validate');
-		$this->getCommandChain()->enqueue($command);
-	}
-	
 	public function _initialize(KConfig $config) {
 		$config->append(array(
-			'behaviors' => array('discoverable','executable','commandable','editable')
+			'behaviors' => array('discoverable','executable','commandable','editable','validatable')
 		));
 		parent::_initialize($config);
 	}
