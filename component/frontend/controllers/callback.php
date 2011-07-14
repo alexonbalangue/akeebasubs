@@ -32,7 +32,7 @@ class ComAkeebasubsControllerCallback extends KControllerAbstract
 	{
 		$this->_doAkeebasubsCallback();
 	}
-
+	
 	private function _doAkeebasubsCallback()
 	{
 		$result = KFactory::get('site::com.akeebasubs.model.subscribes')->runCallback();
