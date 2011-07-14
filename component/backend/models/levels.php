@@ -15,7 +15,8 @@ class ComAkeebasubsModelLevels extends KModelTable
 
 		$this->_state
 			->insert('ordering'	, 'int')
-			->insert('enabled'	, 'int');
+			->insert('enabled'	, 'int')
+			->insert('slug'		, 'slug');
 	}
 
 	protected function _buildQueryWhere(KDatabaseQuery $query)
@@ -28,6 +29,10 @@ class ComAkeebasubsModelLevels extends KModelTable
 		
 		if(is_numeric($state->enabled)) {
 			$query->where('tbl.enabled','=', $state->enabled);
+		}
+		
+		if($state->slug) {
+			$query->where('tbl.slug', '=', $state->slug);
 		}
 		
 		if($state->search)
@@ -50,7 +55,8 @@ class ComAkeebasubsModelLevels extends KModelTable
 		}
 		
 		if(empty($data->slug)) {
-			$ret[] = JText::_('COM_AKEEBASUBS_LEVEL_ERR_SLUG');
+			$data->slug = KFactory::get('lib.koowa.filter.slug')
+				->execute('sanitize', new KCommandContext(array('data'=>$data->title)));
 		}
 		
 		$existingItems = KFactory::tmp('admin::com.akeebasubs.model.level')->slug($data->slug)->getList();

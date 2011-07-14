@@ -69,9 +69,7 @@ class ComAkeebasubsCommandValidate extends KCommand
                 return false;
             } else {
             	// Push back the (changed) data and nullify the data cache
-				/*
             	$context->data = $data;
-				*/
 				KRequest::set('session.'.$identifier.'.errors', null);
 			}
         }

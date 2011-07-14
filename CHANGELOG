@@ -1,4 +1,4 @@
-Akeeba Subscriptions 1.0 Stable (current trunk)
+Akeeba Subscriptions 1.0.b5 Stable (current trunk)
 ================================================================================
 + Confirmation before deleting a subscription (thank you Akeebafan!)
 + Confirmation before deleting a subscription level (thank you Akeebafan!)
@@ -16,6 +16,7 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 # Regression: User wouldn't see the "Thank you" page after completing a payment
 # URLs in subscription notification and expiration emails would contain the path doubled
 # Users could get away without typing a surname if they added two spaces after their first name.
+# If the user created a subscription level without a slug, an error would be thrown instead of automatically creating a slug from the title
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================
