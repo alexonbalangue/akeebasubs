@@ -3,6 +3,7 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 + Confirmation before deleting a subscription (thank you Akeebafan!)
 + Confirmation before deleting a subscription level (thank you Akeebafan!)
 + Won't allow deleting a subscription level anymore when there are subscriptions referencing it
+~ Changed the name validation text to reflect that two words are required
 # "Content - Akeeba Subscriptions Restricted" would not work under Joomla! 1.6
 # "Content - Akeeba Subscriptions Link" would not work under Joomla! 1.6
 # "Content - Akeeba Subscriptions Restricted" would throw a notice under Joomla! 1.5

@@ -55,7 +55,7 @@
 <?endif?>
 	<label for="name" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_NAME')?></label>
 	<input type="text" name="name" id="name" value="<?=@escape(!empty($userparams->name) ? $userparams->name : $cache['name'])?>" class="main" />
-	<span id="name_empty" class="invalid" <?if($validation->validation->name):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
+	<span id="name_empty" class="invalid" <?if($validation->validation->name):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_NAME_INVALID')?><span class="akstriangle akstriangle-red"></span></span>
 	<br/>
 	<label for="email" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL')?></label>
 	<input type="text" name="email" id="email" value="<?=@escape( !empty($userparams->email) ? $userparams->email : $cache['email'] )?>" class="main" />
