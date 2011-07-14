@@ -11,6 +11,7 @@ Akeeba Subscriptions 1.0 Stable (current trunk)
 # Payment plugins would produce wrong callback/redirection URLs if the site is in a subdirectory
 # Warning thrown by aslink plugin when all subscription levels are removed
 # Supplying a misspelled group name in integration plugins could create invalid entries referencing inexistent group #0 in the 3PD components' user-group mapping tables
+# Regression: User wouldn't see the "Thank you" page after completing a payment
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================

@@ -7,7 +7,7 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsControllerMessage extends KControllerDefault
+class ComAkeebasubsControllerMessage extends ComAkeebasubsControllerDefault
 {
 
 	public function __construct(KConfig $config)
@@ -26,12 +26,24 @@ class ComAkeebasubsControllerMessage extends KControllerDefault
 		$slug = KRequest::get('get.slug','slug','');
 		$action = !empty($slug) ? 'slug='.$slug : 'id='.$id;
 		$layout = KRequest::get('get.layout','cmd','order');
-		if($id > 0) {
+		if( ($id > 0) || !empty($slug) ) {
 			$this->setRedirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&'.$action.'&layout='.$layout)) );
 			return false;
 		}
 		
 		return false;
+	}
+	
+	public function _actionPost(KCommandContext $context)
+	{
+		$id = KRequest::get('get.id','int','-1');
+		$slug = KRequest::get('get.slug','slug','');
+		$action = !empty($slug) ? 'slug='.$slug : 'id='.$id;
+		$layout = KRequest::get('get.layout','cmd','order');
+		if( ($id > 0) || !empty($slug) ) {
+			$this->setRedirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&'.$action.'&layout='.$layout)) );
+			return false;
+		}
 	}
 	
 	public function _denyAccess()
