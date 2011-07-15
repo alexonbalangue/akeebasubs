@@ -22,7 +22,7 @@
 		<label for="userid_visible" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 		<input type="hidden" name="user_id" id="userid" value="<?=$subscription->user_id?>" />
 		<input type="text" name="xxx_userid" id="userid_visible" value="<?=$subscription->username?>" disabled="disabled" />
-		<button onclick="$('userselect').fireEvent('click'); return false;">Select</button>
+		<button onclick="return false;" class="modal">Select</button>
 		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&view=jusers&limit=10&tmpl=component&search=" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 		<br/>
 
@@ -85,4 +85,13 @@ function jSelectUser(id, username)
 	document.getElementById('userid_visible').value = username;
 	document.getElementById('sbox-window').close();	
 }
+
+window.addEvent("domready", function() {
+	$$("button.modal").each(function(el) {
+		el.addEvent("click", function(e) {
+			new Event(e).stop();
+			SqueezeBox.fromElement($('userselect'));
+		});
+	});
+});
 </script>
