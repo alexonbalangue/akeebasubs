@@ -11,7 +11,7 @@ defined('KOOWA') or die('');
 <script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <style src="media://lib_koowa/css/koowa.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <style src="media://com_akeebasubs/css/backend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
-<script src="media://com_akeebasubs/js/jquery.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/akeebajq.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/blockui.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/backend.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 -->

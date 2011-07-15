@@ -1,6 +1,6 @@
 <?php defined('KOOWA') or die(); ?>
 <!--
-<script src="media://com_akeebasubs/js/jquery.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/akeebajq.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/blockui.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/signup.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://lib_koowa/js/koowa.js?<?=AKEEBASUBS_VERSIONHASH?>" />

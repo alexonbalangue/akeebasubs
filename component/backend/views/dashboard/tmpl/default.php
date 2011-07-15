@@ -15,7 +15,7 @@ defined('KOOWA') or die('Restricted access');?>
 <style src="media://com_akeebasubs/css/jquery.jqplot.min.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/backend.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/excanvas.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
-<script src="media://com_akeebasubs/js/jquery.js?<?=AKEEBASUBS_VERSIONHASH?>" />
+<script src="media://com_akeebasubs/js/akeebajq.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/jquery.jqplot.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/jqplot.highlighter.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />
 <script src="media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js?<?=AKEEBASUBS_VERSIONHASH?>" />

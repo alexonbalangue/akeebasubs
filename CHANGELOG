@@ -20,6 +20,7 @@ Akeeba Subscriptions 1.0.b5 (current trunk)
 # On pages with validation errors you wouldn't get the entered values back on the page when it reloaded.
 # Internal Server Error thrown if you try to create a subscription with a from/to date which doesn't have a time part (e.g. 2012-07-14 instead of 2012-07-14 00:00:00)
 # Picking a user in the back-end Subscriptions, Coupon and User editors doesn't work under FF5
+# Some morons have actually written plugins which remove any script references to "jquery.js", loading their own version of jQuery, completely screwing up the registration page. These sorry excuses of developers should be tarred, feathered and stringed! Worked around by renaming our jQuery file.
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================
