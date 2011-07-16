@@ -20,10 +20,12 @@ class ComAkeebasubsControllerDefault extends ComDefaultControllerDefault
 		parent::_actionDelete($context);
 		
 		$error = $context->getError();
-		if($error->getCode() == 500) {
-			$message = $error->getMessage();
-			JFactory::getApplication()->enqueueMessage($message, 'error');
-			$context->setError(null);
+		if( $error instanceof KException ) {
+			if($error->getCode() == 500) {
+				$message = $error->getMessage();
+				JFactory::getApplication()->enqueueMessage($message, 'error');
+				$context->setError(null);
+			}
 		}
 	}
 }
