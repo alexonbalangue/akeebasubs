@@ -34,25 +34,28 @@ $installation_queue = array(
 	// plugins => { (folder) => { (element) => (published) }* }*
 	'plugins' => array(
 		'akeebasubs' => array(
+			'cb'					=> 0,
+			'ccinvoices'			=> 0,
 			'docman'				=> 0,
 			'jce'					=> 0,
-			'joomla'				=> 0,
 			'jomsocial'				=> 0,
+			'joomla'				=> 0,
 			'juga'					=> 0,
 			'jxjomsocial'			=> 0,
 			'k2'					=> 0,
 			'ninjaboard'			=> 0,
 			'subscriptionemails'	=> 1,
 			'tienda'				=> 0,
+			'userdelete'			=> 0,
 			'vm'					=> 0
 		),
 		'akpayment' => array(
-			'none'					=> 0,
-			'paypal'				=> 1,
-			'offline'				=> 0,
-			'worldpay'				=> 0,
+			'2checkout'				=> 0,
 			'ccavenue'				=> 0,
-			'2checkout'				=> 0
+			'none'					=> 0,
+			'offline'				=> 0,
+			'paypal'				=> 1,
+			'worldpay'				=> 0
 		),
 		'content' => array(
 			'aslink'				=> 1,

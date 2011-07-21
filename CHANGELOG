@@ -23,6 +23,7 @@ Akeeba Subscriptions 1.0.b5 (current trunk)
 # Some morons have actually written plugins which remove any script references to "jquery.js", loading their own version of jQuery, completely screwing up the registration page. These sorry excuses of developers should be tarred, feathered and stringed! Worked around by renaming our jQuery file.
 # The "Back to the frontpage" link in the order/cancellation message pages had a rather misleading title (just "Back")
 # The PayPal image wouldn't load before the redirection. Changed the Javscript auto-submit code to use onLoad instead of DOM ready event to work around that. Big THANK YOU to akeebafan for this patch!
+# Some plugins were not being installed
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================
