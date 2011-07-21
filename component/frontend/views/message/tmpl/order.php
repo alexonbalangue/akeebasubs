@@ -13,5 +13,5 @@
 <?=JHTML::_('content.prepare', $message->ordertext)?>
 
 <div class="akeebasubs-goback">
-	<p><a href="<?=JURI::base()?>"><?=@text('back')?></a></p>
+	<p><a href="<?=JURI::base()?>"><?=@text('COM_AKEEBASUBS_MESSAGE_BACK')?></a></p>
 </div>
