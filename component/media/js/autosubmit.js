@@ -1,5 +1,5 @@
 (function($) {
-	$(document).ready(function(){
+	$(window).load(function(){
 		if($('#paymentForm')) {
 			$('#paymentForm').submit();
 		}
