@@ -27,7 +27,9 @@
 		<br/>
 
 		<label for="enabled" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_ENABLED')?></label>
-		<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $subscription->enabled)); ?>
+		<span style="float: left">
+			<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $subscription->enabled)); ?>
+		</span>
 		<br/>
 
 		<label for="publish_up" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_UP')?></label>

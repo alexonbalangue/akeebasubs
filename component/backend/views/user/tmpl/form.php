@@ -55,7 +55,9 @@
 	<legend><?=@text('COM_AKEEBASUBS_USER_BASIC_BUSINESS')?></legend>
 
 	<label for="isbusiness" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_ISBUSINESS')?></label>
-	<?= @helper('select.booleanlist', array('name' => 'isbusiness', 'selected' => $user->isbusiness)); ?>
+	<span style="float:left">
+		<?= @helper('select.booleanlist', array('name' => 'isbusiness', 'selected' => $user->isbusiness)); ?>
+	</span>
 	<br/>
 	
 	<label for="businessname" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_BUSINESSNAME')?></label>
@@ -71,7 +73,9 @@
 	<br/>
 	
 	<label for="viesregistered" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_VIESREGISTERED')?></label>
-	<?= @helper('select.booleanlist', array('name' => 'viesregistered', 'selected' => $user->viesregistered)); ?>
+	<span style="float:left">
+		<?= @helper('select.booleanlist', array('name' => 'viesregistered', 'selected' => $user->viesregistered)); ?>
+	</span>
 	<br/>
 	
 </fieldset>

@@ -31,7 +31,9 @@
 	<br/>
 
 	<label for="enabled" class="main" class="mainlabel"><?= @text('Published'); ?></label>
-	<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $coupon->enabled)); ?>
+	<span style="float: left">
+		<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $coupon->enabled)); ?>
+	</span>
 	<br/>
 
 	<label for="hits_field" class="main"><?= @text('hits'); ?></label>
