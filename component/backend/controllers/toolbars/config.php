@@ -22,9 +22,14 @@ class ComAkeebasubsControllerToolbarConfig extends ComAkeebasubsControllerToolba
 	public function _initialize(KConfig $config)
 	{
 		$config->append(array(
-			'title'		=> JText::_('COM_AKEEBASUBS_CONFIG_TITLE'),
 			'icon'		=> 'akeebasubs'
 		));
 		parent::_initialize($config);
+	}
+	
+	public function setTitle($title)
+	{
+		$this->_title = JText::_('COM_AKEEBASUBS_CONFIG_TITLE');
+	    return $this;
 	}
 }
