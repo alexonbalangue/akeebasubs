@@ -27,6 +27,7 @@ Akeeba Subscriptions 1.0.b5 (current trunk)
 # Some plugins were not being installed
 # Menubar (right below the toolbar) doesn't render properly on Joomla! 1.6/1.7
 # Pressing Apply on the Configuration page redirected you to the Dashboard page
+# Sometimes pressing Save or Apply would redirect you to a another page of the component that you had meanwhile opened in another tab or window. Eek!
 
 Akeeba Subscriptions 1.0.b4
 ================================================================================
