@@ -140,16 +140,6 @@ class plgAkpaymentPaypal extends JPlugin
 			$isValid = $data['txn_type'] == 'web_accept';
 			if(!$isValid) $data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
 		}
-
-		// Check that txn_id has not been previously processed
-		if($isValid && !is_null($subscription)) {
-			if($subscription->processor_key == $data['txn_id']) {
-				if($subscription->state == 'C') {
-					$isValid = false;
-					$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
-				}
-			}
-		}
 		
 		// Check that mc_gross is correct
 		$isPartialRefund = false;
@@ -166,6 +156,16 @@ class plgAkpaymentPaypal extends JPlugin
 				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+		}
+		
+		// Check that txn_id has not been previously processed
+		if($isValid && !is_null($subscription) && !$isPartialRefund) {
+			if($subscription->processor_key == $data['txn_id']) {
+				if($subscription->state == 'C') {
+					$isValid = false;
+					$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
+				}
+			}
 		}
 		
 		// Check that mc_currency is correct
