@@ -22,7 +22,9 @@
 // no direct access
 defined('_JEXEC') or die('');
 
+// =============================================================================
 // Akeeba Component Installation Configuration
+// =============================================================================
 $installation_queue = array(
 	'modules' => array(
 		'site' => array(
@@ -107,7 +109,9 @@ if( version_compare( JVERSION, '1.6.0', 'ge' ) && !defined('_AKEEBA_HACK') ) {
 
 $db = JFactory::getDBO();
 
-// ========== Pre-installation checks (because people DO NOT read the fine manual) ==========
+// =============================================================================
+// Pre-installation checks
+// =============================================================================
 
 // Do we have a Nooku Framework conflict?
 if(class_exists('Koowa')) {
@@ -194,7 +198,127 @@ if(!version_compare(JVERSION,'1.6.0','ge')) {
 	}
 }
 
-// ========== Proceed with installation ==========
+// =============================================================================
+// Database update
+// =============================================================================
+
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`notify1`'))
+{
+	if($db->hasUTF()) {
+		$charset = 'DEFAULT CHARSET=utf8';
+	} else {
+		$charset = '';
+	}
+
+	$sql = <<<ENDSQL
+DROP TABLE IF EXISTS `#__akeebasubs_levels_bak`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels_bak` (
+	`akeebasubs_level_id` bigint(20) unsigned NOT NULL auto_increment,
+	`title` varchar(255) NOT NULL,
+	`slug` varchar(255) NOT NULL,
+	`image` varchar(25) NOT NULL,
+	`description` text,
+	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
+	`price` FLOAT NOT NULL,
+	`ordertext` text,
+	`canceltext` text,
+	
+	`enabled` tinyint(1) NOT NULL DEFAULT '1',
+	`ordering` bigint(20) unsigned NOT NULL,
+	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
+	`created_by` int(11) NOT NULL DEFAULT 0,
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` int(11) NOT NULL DEFAULT 0,
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` int(11) NOT NULL DEFAULT 0,
+	`notify1` int(10) unsigned NOT NULL DEFAULT '30',
+	`notify2` int(10) unsigned NOT NULL DEFAULT '15',
+  PRIMARY KEY ( `akeebasubs_level_id` ),
+  UNIQUE KEY `slug` (`slug`)
+) $charset;
+
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+INSERT IGNORE INTO `#__akeebasubs_levels_bak`
+	(`akeebasubs_level_id`,`title`,`slug`,`image`,`description`,`duration`,`price`,
+	`ordertext`,`canceltext`,`enabled`,`ordering`,`created_on`,`created_by`,
+	`modified_on`,`modified_by`,`locked_on`,`locked_by`,`notify1`,`notify2`)
+SELECT
+	`akeebasubs_level_id`,`title`,`slug`,`image`,`description`,`duration`,`price`,
+	`ordertext`,`canceltext`,`enabled`,`ordering`,`created_on`,`created_by`,
+	`modified_on`,`modified_by`,`locked_on`,`locked_by`,
+	30 as `notify1`, 15 as `notify2`
+FROM
+  `#__akeebasubs_levels`;
+
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+DROP TABLE IF EXISTS `#__akeebasubs_levels`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
+	`akeebasubs_level_id` bigint(20) unsigned NOT NULL auto_increment,
+	`title` varchar(255) NOT NULL,
+	`slug` varchar(255) NOT NULL,
+	`image` varchar(25) NOT NULL,
+	`description` text,
+	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
+	`price` FLOAT NOT NULL,
+	`ordertext` text,
+	`canceltext` text,
+	
+	`enabled` tinyint(1) NOT NULL DEFAULT '1',
+	`ordering` bigint(20) unsigned NOT NULL,
+	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
+	`created_by` int(11) NOT NULL DEFAULT 0,
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` int(11) NOT NULL DEFAULT 0,
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` int(11) NOT NULL DEFAULT 0,
+	`notify1` int(10) unsigned NOT NULL DEFAULT '30',
+	`notify2` int(10) unsigned NOT NULL DEFAULT '15',
+  PRIMARY KEY ( `akeebasubs_level_id` ),
+  UNIQUE KEY `slug` (`slug`)
+) $charset;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+INSERT IGNORE INTO `#__akeebasubs_levels` SELECT * FROM `#__akeebasubs_levels_bak`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+
+	$sql = <<<ENDSQL
+DROP TABLE IF EXISTS `#__akeebasubs_levels_bak`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+
+}
+
+// =============================================================================
+// Sub-extension installation
+// =============================================================================
 
 // Setup the sub-extensions installer
 jimport('joomla.installer.installer');

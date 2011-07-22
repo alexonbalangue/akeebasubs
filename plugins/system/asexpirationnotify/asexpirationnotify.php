@@ -58,102 +58,131 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
 		
+		// Start the clock!
 		$clockStart = microtime(true);
 		
-		// Get the subscriptions expiring within the next 30 days for users which we have not
-		// contacted yet.
-		$jFrom = new JDate($now + 1 * 24 * 3600);
-		$jTo = new JDate($now + 30 * 24 * 3600);
-		
-		$subs1 = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
-			->contact_flag(0)
+		// Get and loop all subscription levels
+		$levels = KFactory::tmp('admin::com.akeebasubs.model.levels')
 			->enabled(1)
-			->expires_from($jFrom->toMySQL())
-			->expires_to($jTo->toMySQL())
 			->getList();
-
-		// Get the subscriptions expiring within the next 15 days for users which we
-		// have contacted only once
-		$jFrom = new JDate($now + 1 * 24 * 3600);
-		$jTo = new JDate($now + 15 * 24 * 3600);
 		
-		$subs2 = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
-			->contact_flag(1)
-			->enabled(1)
-			->expires_from($jFrom->toMySQL())
-			->expires_to($jTo->toMySQL())
-			->getList();
-		// If there are no subscriptions, bail out
-		if( (count($subs1) + count($subs2)) == 0 ) {
-			$this->setLastRunTimestamp();
-			return;
-		}
-		
-		// Check is some of those subscriptions have been renewed. If so, set their contactFlag to 2
-		$realSubs = array();
-		foreach(array($subs1, $subs2) as $subs)
+		foreach($levels as $level)
 		{
-			foreach($subs as $sub) {
-				
-				// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
-				$renewals = KFactory::get('site::com.akeebasubs.model.subscriptions')
+			// Load the notification thresholds and make sure they are sorted correctly!
+			$notify1 = $level->notify1;
+			$notify2 = $level->notify2;
+			
+			if($notify2 > $notify1) {
+				$tmp = $notify2;
+				$notify2 = $notify1;
+				$notify1 = $tmp;
+			}
+			
+			// Make sure we are asked to notify users, at all!
+			if( ($notify1 <= 0) && ($notify2 <= 0) ) {
+				continue;
+			}
+			
+			// Get the subscriptions expiring within the next $notify1 days for
+			// users which we have not contacted yet.
+			$jFrom = new JDate($now + 1);
+			$jTo = new JDate($now + $notify1 * 24 * 3600);
+
+			$subs1 = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+				->contact_flag(0)
+				->level($level->id)
+				->enabled(1)
+				->expires_from($jFrom->toMySQL())
+				->expires_to($jTo->toMySQL())
+				->getList();
+
+			// Get the subscriptions expiring within the next $notify2 days for
+			// users which we have contacted only once
+			$subs2 = array();
+			
+			if($notify2 > 0) {
+				$jFrom = new JDate($now + 1);
+				$jTo = new JDate($now + $notify2 * 24 * 3600);
+
+				$subs2 = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+					->contact_flag(1)
+					->level($level->id)
 					->enabled(1)
-					->user_id($sub->user_id)
-					->level($sub->akeebasubs_level_id)
-					->publish_up($sub->publish_down)
+					->expires_from($jFrom->toMySQL())
+					->expires_to($jTo->toMySQL())
 					->getList();
-				if(count($renewals)) {
-					// The user has already renewed. Don't send him an email; just update the row
-					$sub->setData(array(
-						'contact_flag'	=> 3
-					))->save();
-					
-					// Timeout check -- Only if we did make a modification!
-					$clockNow = microtime(true);
-					$elapsed = $clockNow - $clockStart;
-					if($elapsed > 2) return;
-				} else {
-					// No renewals found. Let's nag our user.
-					$realSubs[] = $sub;
+			}
+				
+			// If there are no subscriptions, bail out
+			if( (count($subs1) + count($subs2)) == 0 ) {
+				continue;
+			}
+			
+			// Check is some of those subscriptions have been renewed. If so, set their contactFlag to 2
+			$realSubs = array();
+			foreach(array($subs1, $subs2) as $subs)
+			{
+				foreach($subs as $sub) {
+
+					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
+					$renewals = KFactory::get('site::com.akeebasubs.model.subscriptions')
+						->enabled(1)
+						->user_id($sub->user_id)
+						->level($sub->akeebasubs_level_id)
+						->publish_up($sub->publish_down)
+						->getList();
+					if(count($renewals)) {
+						// The user has already renewed. Don't send him an email; just update the row
+						$sub->setData(array(
+							'contact_flag'	=> 3
+						))->save();
+
+						// Timeout check -- Only if we did make a modification!
+						$clockNow = microtime(true);
+						$elapsed = $clockNow - $clockStart;
+						if($elapsed > 2) return;
+					} else {
+						// No renewals found. Let's nag our user.
+						$realSubs[] = $sub;
+					}
 				}
 			}
-		}
-				
-		// If there are no subscriptions, bail out
-		if(empty($realSubs)) {
-			$this->setLastRunTimestamp();
-			return;
-		}
-		
-		// Loop through subscriptions and send out emails, checking for timeout
-		$jNow = new JDate();
-		$mNow = $jNow->toMySQL();
-		foreach($realSubs as $sub) {
-			// Is it the first or the second contact?
-			if($sub->contact_flag == 0) {
-				// First contact (30 days before end of subscription)
-				$data = array(
-					'contact_flag'		=> 1,
-					'first_contact'		=> $mNow
-				);
-				$this->sendEmail($sub, true);
-			} else {
-				// Second and final contact (15 days before end of subscription)
-				$data = array(
-					'contact_flag'		=> 2,
-					'second_contact'	=> $mNow
-				);
-				$this->sendEmail($sub, false);
-			}
-			$sub->setData($data)->save();
 			
-			// Timeout check -- Only if we sent at least one email!
-			$clockNow = microtime(true);
-			$elapsed = $clockNow - $clockStart;
-			if($elapsed > 2) return;
+			// If there are no subscriptions, bail out
+			if(empty($realSubs)) {
+				continue;
+			}
+			
+			// Loop through subscriptions and send out emails, checking for timeout
+			$jNow = new JDate();
+			$mNow = $jNow->toMySQL();
+			foreach($realSubs as $sub) {
+				// Is it the first or the second contact?
+				if($sub->contact_flag == 0) {
+					// First contact
+					$data = array(
+						'contact_flag'		=> 1,
+						'first_contact'		=> $mNow
+					);
+					$this->sendEmail($sub, true);
+				} else {
+					// Second and final contact
+					$data = array(
+						'contact_flag'		=> 2,
+						'second_contact'	=> $mNow
+					);
+					$this->sendEmail($sub, false);
+				}
+				$sub->setData($data)->save();
+
+				// Timeout check -- Only if we sent at least one email!
+				$clockNow = microtime(true);
+				$elapsed = $clockNow - $clockStart;
+				if($elapsed > 2) return;
+			}
 		}
-		
-		// Update the last run info and quit
+
+		// Finally, update the last run info and call it a day
 		$this->setLastRunTimestamp();
 	}
 	
@@ -166,11 +195,16 @@ class plgSystemAsexpirationnotify extends JPlugin
 	{
 		jimport('joomla.html.parameter');
 		$component =& JComponentHelper::getComponent( 'com_akeebasubs' );
-		if(!empty($component->params)) {
-			$cparams = new JParameter($component->params);
+		
+		if(!($component->params instanceof JRegistry)) {
+			if(!empty($component->params)) {
+				$cparams = new JParameter($component->params);
+			} else {
+				$cparams = new JParameter('');
+			}
 		} else {
-			$cparams = new JParameter('');
-		}
+			$cparams = $component->params;
+		}		
 		return $cparams;
 	}
 	
@@ -201,14 +235,15 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$params->set('plg_akeebasubs_asexpirationnotify_timestamp', $lastRun);
 		
 		$db =& JFactory::getDBO();
-		$data = $params->toString();
 		
 		if(version_compare(JVERSION, '1.6.0', 'ge')) {
 			// Joomla! 1.6
+			$data = $params->toString('JSON');
 			$sql = 'UPDATE `#__extensions` SET `params` = '.$db->Quote($data).' WHERE '.
 				"`element` = 'com_akeebasubs' AND `type` = 'component'";
 		} else {
 			// Joomla! 1.5
+			$data = $params->toString('INI');
 			$sql = 'UPDATE `#__components` SET `params` = '.$db->Quote($data).' WHERE '.
 				"`option` = 'com_akeebasubs' AND `parent` = 0 AND `menuid` = 0";
 		}

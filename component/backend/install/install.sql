@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`modified_by` int(11) NOT NULL DEFAULT 0,
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` int(11) NOT NULL DEFAULT 0,
-	`uuid` char(36) NOT NULL,
+	`notify1` int(10) unsigned NOT NULL DEFAULT '30',
+	`notify2` int(10) unsigned NOT NULL DEFAULT '15',
   PRIMARY KEY ( `akeebasubs_level_id` ),
   UNIQUE KEY `slug` (`slug`)
 ) DEFAULT CHARSET=utf8;

@@ -22,7 +22,7 @@
 		<input id="slug_field" type="text" name="slug" class="slug" value="<?= $level->slug; ?>" /><br />
 		
 		<label for="enabled" class="main" class="mainlabel"><?= @text('Published'); ?></label>
-		<span style="float: left">
+		<span>
 			<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $level->enabled)); ?>
 		</span>
 		<br/>
@@ -36,11 +36,18 @@
 		<br/>
 
 		<label for="price_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
-		<span style="float: left">
+		<span>
 			<input type="text" size="15" id="price_field" name="price" value="<?= $level->price ?>" style="float: none" />
 			<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
 		</span>
 		<br/>
+		
+		<label for="notify1_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY1'); ?></label>
+		<input type="text" size="6" id="notify1_field" name="notify1" value="<?= (int)$level->notify1 ?>" />
+		<br/>
+		
+		<label for="notify2_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY2'); ?></label>
+		<input type="text" size="6" id="notify2_field" name="notify2" value="<?= (int)$level->notify2 ?>" />
 	</fieldset>
 	
 	<fieldset>
