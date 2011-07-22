@@ -16,7 +16,6 @@
 		<filename>akeebasubs.php</filename>
 		<filename>dispatcher.php</filename>
 		<filename>router.php</filename>
-		<filename>index.html</filename>
 		<folder>controllers</folder>
 		<folder>models</folder>
 		<folder>templates</folder>
@@ -50,7 +49,6 @@
 	
 	<!-- Media files -->
 	<media destination="com_akeebasubs" folder="media">
-		<filename>index.html</filename>
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
@@ -65,7 +63,6 @@
 			<filename>akeebasubs.php</filename>
 			<filename>config.json</filename>
 			<filename>dispatcher.php</filename>
-			<filename>index.html</filename>
 			<filename>version.php</filename>
 			
 			<folder>controllers</folder>

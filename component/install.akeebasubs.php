@@ -220,8 +220,9 @@ if(is_dir($src.'/koowa')) {
 		return;
 	}
 	// Remove the index.html files from the site root and the administrator directory
-	JFile::delete(JPATH_ROOT.DS.'index.html');
-	JFile::delete(JPATH_ADMINISTRATOR.DS.'index.html');
+	foreach( array(JPATH_ROOT.DS.'index.html',JPATH_ADMINISTRATOR.DS.'index.html') as $fileToRemove ) {
+		if(JFile::exists($fileToRemove)) JFile::delete($fileToRemove);
+	}
 } else {
 	$koowaInstalled = null;
 	if(!class_exists('Koowa')) {

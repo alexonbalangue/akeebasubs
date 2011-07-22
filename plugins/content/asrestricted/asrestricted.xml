@@ -12,10 +12,6 @@
 	<description>PLG_CONTENT_ASRESTRICTED_DESCRIPTION</description>
 	<files>
 		<filename plugin="asrestricted">asrestricted.php</filename>
-		<!-- Of course index.html files ARE NOT required and HAVE NOTHING TO DO
-		   with security. But JED requires them because they never bothered to
-		   stop and think. Ignorance is bliss. -->
-		<filename>index.html</filename>
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_content_asrestricted.ini</language>

@@ -12,10 +12,6 @@
 	<description>PLG_AKEEBASUBS_VM_DESCRIPTION</description>
 	<files>
 		<filename plugin="vm">vm.php</filename>
-		<!-- Of course index.html files ARE NOT required and HAVE NOTHING TO DO
-		   with security. But JED requires them because they never bothered to
-		   stop and think. Ignorance is bliss. -->
-		<filename>index.html</filename>
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_akeebasubs_vm.ini</language>
