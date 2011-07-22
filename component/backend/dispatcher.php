@@ -35,6 +35,11 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 		
+		// Joomla! 1.7? Force load mooTools!
+		if(version_compare(JVERSION, '1.7.0', 'ge')) {
+			JHTML::_('behavior.framework');
+		}
+		
 		// I hate myself for doing this... but using map() didn't work for me!
 		$view = JRequest::getCmd('view','');
 		if(empty($view) || ($view == 'akeebasubs')) {

@@ -35,6 +35,11 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
     	$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
     	$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
     	
+    	// Joomla! 1.7? Force load mooTools!
+    	if(version_compare(JVERSION, '1.7.0', 'ge')) {
+    		JHTML::_('behavior.framework');
+    	}
+    	
     	// We like code reuse, so we map some of the frontend models to the backend models
     	KFactory::map('site::com.default.controllers.behaviors.executable',	'admin::com.default.controllers.behaviors.executable');
     	KFactory::map('site::com.akeebasubs.model.subscriptions',	'admin::com.akeebasubs.model.subscriptions');
