@@ -28,11 +28,14 @@ class ComAkeebasubsControllerConfig extends ComAkeebasubsControllerDefault
 		$model	= $this->getModel();
 		$model->saveConfig(KConfig::toData($context->data));
 
-		// I don't know why this doesn't work!
-		//$this->setRedirect('index.php?option=com_akeebasubs&view=dashboard');
+		$action = KRequest::get('post.action', 'cmd');
 		
 		$app = JFactory::getApplication();
-		$app->redirect('index.php?option=com_akeebasubs&view=dashboard');
+		if($action == 'save') {
+			$app->redirect('index.php?option=com_akeebasubs&view=dashboard');
+		} else {
+			$app->redirect('index.php?option=com_akeebasubs&view=config');
+		}
 	}
 	
 	function _actionCancel(KCommandContext $context)
