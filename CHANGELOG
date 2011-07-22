@@ -4,6 +4,7 @@ Akeeba Subscriptions 1.0.b5 (current trunk)
 + Confirmation before deleting a subscription level (thank you Akeebafan!)
 + Won't allow deleting a subscription level anymore when there are subscriptions referencing it
 ~ Changed the name validation text to reflect that two words are required
+~ Removed all index.html files. If you believe this is "insecure", please read http://www.dionysopoulos.me/blog/the-files-of-wrath and get a grip over what "security" means ;)
 # "Content - Akeeba Subscriptions Restricted" would not work under Joomla! 1.6
 # "Content - Akeeba Subscriptions Link" would not work under Joomla! 1.6
 # "Content - Akeeba Subscriptions Restricted" would throw a notice under Joomla! 1.5
