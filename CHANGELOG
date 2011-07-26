@@ -1,9 +1,13 @@
-Akeeba Subscriptions 1.0.0 (current trunk)
+Akeeba Subscriptions 1.0.1 (current trunk)
+================================================================================
+# Missing files from the asexpirationnotify plugin
+
+Akeeba Subscriptions 1.0.0
 ================================================================================
 + Added per-level expiration notification options
 # Missing DROPs from the uninstallation SQL file
 
-Akeeba Subscriptions 1.0.rc1 (current trunk)
+Akeeba Subscriptions 1.0.rc1
 ================================================================================
 + Confirmation before deleting a subscription (thank you Akeebafan!)
 + Confirmation before deleting a subscription level (thank you Akeebafan!)

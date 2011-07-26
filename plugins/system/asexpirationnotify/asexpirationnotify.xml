@@ -15,6 +15,7 @@
 	</description>
 	<files>
 		<filename plugin="asexpirationnotify">asexpirationnotify.php</filename>
+		<folder>asepirationnotify</folder>
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_system_asexpirationnotify.ini</language>
