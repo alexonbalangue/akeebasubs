@@ -10,12 +10,15 @@
 	<creationDate>2011-03-04</creationDate>
 	<version>1.0</version>
 	<description>
-		Emails the users 15 days and 1 day before their subscription expires. It tries
-		to trigger itself around midnight (server time) if there's adequate traffic.
+		Emails the users before their subscription expires, based on the
+		preferences set in each subscription level (default: 30 and 15 days
+		before the subscription expiration). It tries to trigger itself around
+		midnight (server time) if there's adequate traffic, otherwise as soon as
+		there is traffic anytime after midnight.
 	</description>
 	<files>
 		<filename plugin="asexpirationnotify">asexpirationnotify.php</filename>
-		<folder>asepirationnotify</folder>
+		<folder>asexpirationnotify</folder>
 	</files>
 	<languages>
 		<language tag="en-GB">en-GB.plg_system_asexpirationnotify.ini</language>
