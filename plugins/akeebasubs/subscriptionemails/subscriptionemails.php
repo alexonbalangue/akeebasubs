@@ -83,10 +83,12 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$baseURL = str_replace('/administrator', '', $baseURL);
 		$subpathURL = JURI::base(true);
 		$subpathURL = str_replace('/administrator', '', $subpathURL);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$baseURL = substr($baseURL, 0, -1 * strlen($subpathURL));
-		}
-		$url = $baseURL.str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+		
+		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+		$url = ltrim($url, '/');
+		$subpathURL = ltrim($url, '/');
+		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+2);
+		$url = $baseURL.$url;
 		
 		if($new) {
 			$subject_key = 'PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_NEWHEADER';

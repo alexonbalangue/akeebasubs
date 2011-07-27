@@ -3,6 +3,7 @@ Akeeba Subscriptions 1.0.1 (current trunk)
 # Missing files from the asexpirationnotify plugin
 # Allow toggling Gravatar off
 # Gravatar should use HTTPS when the site's back-end is displayed through an HTTPS connection
+# Wrong URLs in emails when the site is hosted in a subdirectory
 
 Akeeba Subscriptions 1.0.0
 ================================================================================

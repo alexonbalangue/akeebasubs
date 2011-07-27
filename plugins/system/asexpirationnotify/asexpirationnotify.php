@@ -87,7 +87,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			// users which we have not contacted yet.
 			$jFrom = new JDate($now + 1);
 			$jTo = new JDate($now + $notify1 * 24 * 3600);
-
+			
 			$subs1 = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
 				->contact_flag(0)
 				->level($level->id)
@@ -276,11 +276,12 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$baseURL = str_replace('/administrator', '', $baseURL);
 		$subpathURL = JURI::base(true);
 		$subpathURL = str_replace('/administrator', '', $subpathURL);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$baseURL = substr($baseURL, 0, -1 * strlen($subpathURL));
-		}
 		
-		$url = $baseURL.str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+		$url = ltrim($url, '/');
+		$subpathURL = ltrim($url, '/');
+		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+2);
+		$url = $baseURL.$url;
 		
 		if($firstContact) {
 			$subject_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_FIRST';
@@ -320,9 +321,9 @@ class plgSystemAsexpirationnotify extends JPlugin
 		}
 		
 		// DEBUG ---
-		/* *
+		/**
 		echo "<p><strong>From</strong>: ".$config->getvalue('config.fromname')." &lt;".$config->getvalue('config.mailfrom')."&gt;<br/><strong>To: </strong>".$user->email."</p><hr/><p>$subject</p><hr/><p>".nl2br($body)."</p>"; die();
-		/* */
+		/**/
 		// -- DEBUG
 		
 		// Send the email
