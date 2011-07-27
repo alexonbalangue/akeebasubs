@@ -16,6 +16,17 @@
 			}
 		}
 	},
+	"backend"		: {
+		"title"			: "COM_AKEEBASUBS_CONFIG_BACKEND_TITLE",
+		"options"		: {
+			"gravatar" : {
+				"title"		: "COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR",
+				"type"		: "boolean",
+				"filter"	: "int",
+				"default"	: "1"
+			}
+		}
+	},
 	"frontend"		: {
 		"title"			: "COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE",
 		"options"		: {

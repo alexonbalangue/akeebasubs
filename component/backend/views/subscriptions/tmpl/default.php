@@ -103,7 +103,13 @@
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?= @escape($subscription->username) ?>::<?= @text('COM_AKEEBASUBS_SUBSCRIPTION_USER_EDIT_TOOLTIP')?>">
-					<img src="http://www.gravatar.com/avatar/<?=$gravatarHash?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
+					<? if(KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->gravatar):?>
+						<? if(KRequest::protocol() == 'http'): ?>
+							<img src="http://www.gravatar.com/avatar/<?=md5(strtolower($subscription->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
+						<? else: ?>
+							<img src="https://secure.gravatar.com/avatar/<?=md5(strtolower($subscription->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
+						<? endif; ?>
+					<? endif; ?>
 					<a href="index.php?option=com_users&view=user&task=edit&cid[]=<?=$subscription->user_id?>" class="title">	
 						<strong><?=@escape($subscription->username)?></strong>
 						<span class="small">[<?=$subscription->user_id?>]</span>
