@@ -37,6 +37,7 @@ $installation_queue = array(
 	'plugins' => array(
 		'akeebasubs' => array(
 			'cb'					=> 0,
+			'communityacl'			=> 0,
 			'ccinvoices'			=> 0,
 			'docman'				=> 0,
 			'jce'					=> 0,
@@ -326,15 +327,7 @@ $db = & JFactory::getDBO();
 $status = new JObject();
 $status->modules = array();
 $status->plugins = array();
-if( version_compare( JVERSION, '1.6.0', 'ge' ) ) {
-	if(!isset($parent))
-	{
-		$parent = $this->parent;
-	}
-	$src = $parent->getParent()->getPath('source');
-} else {
-	$src = $this->parent->getPath('source');
-}
+$src = $this->parent->getPath('source');
 
 // Install the Koowa library and associated system files first
 if(is_dir($src.'/koowa')) {

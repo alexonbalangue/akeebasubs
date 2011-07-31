@@ -35,6 +35,7 @@ $installation_queue = array(
 	'plugins' => array(
 		'akeebasubs' => array(
 			'cb'					=> 0,
+			'communityacl'			=> 0,
 			'ccinvoices'			=> 0,
 			'docman'				=> 0,
 			'jce'					=> 0,
