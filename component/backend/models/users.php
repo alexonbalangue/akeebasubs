@@ -104,7 +104,7 @@ class ComAkeebasubsModelUsers extends KModelTable
 		$userRow = KFactory::tmp('admin::com.akeebasubs.model.jusers')->id($this->_state->user_id)->getItem();
 		$params = new JParameter($userRow->params);
 		$businessname = $params->get('business_name','');
-		$nativeData_all = array(
+		$nativeData = array(
 			'isbusiness' => empty($businessname) ? 0 : 1,
 			'businessname' => $params->get('business_name',''),
 			'occupation' => $params->get('occupation',''),
@@ -119,11 +119,6 @@ class ComAkeebasubsModelUsers extends KModelTable
 			'country' => $params->get('country',''),
 		);
 		
-		$nativeData = array();
-		foreach($nativeData_all as $key => $value) {
-			if(!empty($value)) $nativeData[$key] = $value;
-		}
-
 		$nativeData = array_merge($nativeData, $userRow->getData());
 		$myData = $nativeData;
 				

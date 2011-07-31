@@ -1,10 +1,12 @@
 Akeeba Subscriptions 1.0.1 (current trunk)
 ================================================================================
++ Community ACL integration
 # Missing files from the asexpirationnotify plugin
 # Allow toggling Gravatar off
 # Gravatar should use HTTPS when the site's back-end is displayed through an HTTPS connection
 # Wrong URLs in emails when the site is hosted in a subdirectory
 # Improved installation and uninstallation under Joomla! 1.6/1.7, working around Joomla! bugs which would prevent installation/uninstallation in some cases
+# Notice thrown in the occupation field when a new user tries to subscribe
 
 Akeeba Subscriptions 1.0.0
 ================================================================================

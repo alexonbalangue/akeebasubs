@@ -92,7 +92,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				'isbusiness'	=> '',
 				'businessname'	=> '',
 				'vatnumber'		=> '',
-				'coupon'		=> ''
+				'coupon'		=> '',
+				'occupation'	=> ''
 			);
 		}
 		$rawDataCache = $this->_cache['state'];
