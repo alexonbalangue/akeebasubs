@@ -69,6 +69,13 @@ $installation_queue = array(
 	)
 );
 
+if( version_compare( JVERSION, '1.6.0', 'ge' ) && !defined('_AKEEBA_HACK') ) {
+	return;
+} else {
+	global $akeeba_installation_has_run;
+	if($akeeba_installation_has_run) return;
+}
+
 // Setup the sub-extensions installer
 jimport('joomla.installer.installer');
 $db = & JFactory::getDBO();
@@ -158,6 +165,8 @@ if(!function_exists('pisprint'))
 		echo $string;
 	}
 }
+
+$akeeba_installation_has_run = true;
 ?>
 
 <?php $rows = 0;?>

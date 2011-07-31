@@ -4,6 +4,7 @@ Akeeba Subscriptions 1.0.1 (current trunk)
 # Allow toggling Gravatar off
 # Gravatar should use HTTPS when the site's back-end is displayed through an HTTPS connection
 # Wrong URLs in emails when the site is hosted in a subdirectory
+# Improved installation and uninstallation under Joomla! 1.6/1.7, working around Joomla! bugs which would prevent installation/uninstallation in some cases
 
 Akeeba Subscriptions 1.0.0
 ================================================================================
