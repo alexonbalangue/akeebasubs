@@ -278,86 +278,83 @@
         instructions</link>.</para>
       </important>
 
-      <warning>
-        <para>There were some reports that Akeeba Subscriptions broke some
-        sites. Do note that it is not actually Akeeba Subscriptions that broke
-        the site, but a combination of incompatibilities between badly
-        configured servers and Nooku Framework, the modern PHP framework our
-        software is based on.</para>
+      <important>
+        <para>If you installed Akeeba Subscriptions 1.0.b4 or earlier on your
+        site and your site displays a blank page, please remove the
+        <filename>index.html</filename> files from your site's root and your
+        site's administrator directories.</para>
+      </important>
 
-        <para>Let me reiterate. Some ver poor quality servers <emphasis
-        role="bold">ARE NOT COMPATIBLE</emphasis> with Nooku Framework. In
-        this case, you may experience your site not loading any more. When
-        this happens, please remove the file
-        <filename>plugins/system/koowa.php</filename> (Joomla! 1.5) or
-        <filename>plugins/system/koowa/koowa.php</filename> (Joomla! 1.6 or
-        later). Moreover, edit your <filename>configuration.php</filename>
-        file and find the line starting with</para>
+      <para>Some very poor quality servers <emphasis role="bold">ARE NOT
+      COMPATIBLE</emphasis> with Nooku Framework. In this case, you may
+      experience your site not loading any more. When this happens, please
+      remove the file <filename>plugins/system/koowa.php</filename> (Joomla!
+      1.5) or <filename>plugins/system/koowa/koowa.php</filename> (Joomla! 1.6
+      or later). Moreover, edit your <filename>configuration.php</filename>
+      file and find the line starting with</para>
 
-        <programlisting>var $dbtype = 'mysqli';</programlisting>
+      <programlisting>var $dbtype = 'mysqli';</programlisting>
 
-        <para>and change it to read</para>
+      <para>and change it to read</para>
 
-        <programlisting>var $dbtype = 'mysql';</programlisting>
+      <programlisting>var $dbtype = 'mysql';</programlisting>
 
-        <para>Please note that these issues are known incompatibilities of the
-        Nooku Framework with very low quality hosts. The real problem is with
-        your host and usually is one of the following:</para>
+      <para>Please note that these issues are known incompatibilities of the
+      Nooku Framework with very low quality hosts. The real problem is with
+      your host and usually is one of the following:</para>
 
-        <itemizedlist>
-          <listitem>
-            <para>Use of an obsolete PHP version. PHP 5.2.17 or earlier are
-            end of line and not supported by the PHP project. If your host is
-            using one of those versions, be aware that they are using
-            outdated, vulnerable software which can be used to exploit your
-            site. Ask your host to update their outdated software.</para>
-          </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>Use of an obsolete PHP version. PHP 5.2.17 or earlier are end
+          of line and not supported by the PHP project. If your host is using
+          one of those versions, be aware that they are using outdated,
+          vulnerable software which can be used to exploit your site. Ask your
+          host to update their outdated software.</para>
+        </listitem>
 
-          <listitem>
-            <para>Some servers use a very old version of IonCube loaders
-            containing a bug which interferes with Nooku Framework. Note:
-            neither Nooku Framework nor Akeeba Subscriptions use encrypted
-            code. However, the old versions of IonCube loaders (from early
-            2011 or earlier) have a bug which doesn't allow NF to load
-            properly and can bring your site down. Ask your host to update
-            their outdated software.</para>
-          </listitem>
+        <listitem>
+          <para>Some servers use a very old version of IonCube loaders
+          containing a bug which interferes with Nooku Framework. Note:
+          neither Nooku Framework nor Akeeba Subscriptions use encrypted code.
+          However, the old versions of IonCube loaders (from early 2011 or
+          earlier) have a bug which doesn't allow NF to load properly and can
+          bring your site down. Ask your host to update their outdated
+          software.</para>
+        </listitem>
 
-          <listitem>
-            <para>Some servers use the Suhosin PHP patch. Depending on the
-            configuration of Suhosin, it is possible that it doesn't allow the
-            virtual <filename>tmpl://</filename> stream wrapper to be
-            registered. This will not allow Akeeba Subscriptions to run, as
-            Nooku Framework relies on that behaviour to load. Ask your host to
-            update their broken software configuration.</para>
-          </listitem>
+        <listitem>
+          <para>Some servers use the Suhosin PHP patch. Depending on the
+          configuration of Suhosin, it is possible that it doesn't allow the
+          virtual <filename>tmpl://</filename> stream wrapper to be
+          registered. This will not allow Akeeba Subscriptions to run, as
+          Nooku Framework relies on that behaviour to load. Ask your host to
+          update their broken software configuration.</para>
+        </listitem>
 
-          <listitem>
-            <para>If your host is using MySQL 5.0.40 or earlier, they are
-            using an outdated, vulnerable version of MySQL which is known to
-            not work properly with Nooku Framework. Ask your host to update
-            their outdated software.</para>
-          </listitem>
+        <listitem>
+          <para>If your host is using MySQL 5.0.40 or earlier, they are using
+          an outdated, vulnerable version of MySQL which is known to not work
+          properly with Nooku Framework. Ask your host to update their
+          outdated software.</para>
+        </listitem>
 
-          <listitem>
-            <para>Some hosts do not allow the use of the PHP mysqli driver.
-            Please note that mysqli (with an i at the end) is the new version
-            of the PHP MySQL driver. The old driver (mysql - without a
-            trailing i) is considered buggy and obsolete, is no longer
-            maintained and will be removed from future versions of PHP. If
-            your server doesn't allow the use of the modern, maintained
-            driver, please ask your host to update their outdated
-            software.</para>
-          </listitem>
-        </itemizedlist>
+        <listitem>
+          <para>Some hosts do not allow the use of the PHP mysqli driver.
+          Please note that mysqli (with an i at the end) is the new version of
+          the PHP MySQL driver. The old driver (mysql - without a trailing i)
+          is considered buggy and obsolete, is no longer maintained and will
+          be removed from future versions of PHP. If your server doesn't allow
+          the use of the modern, maintained driver, please ask your host to
+          update their outdated software.</para>
+        </listitem>
+      </itemizedlist>
 
-        <para>As you understand, all incompatibilities you may run into are
-        the result of a host using outdated, vulnerable software or having
-        egregious misconfigurations on their servers. Would you trust such a
-        host with your revenue-generating website? If you are going to make
-        money from your site, you'd better spend money on hosting it on a
-        proper server. As simple as that.</para>
-      </warning>
+      <para>As you understand, all incompatibilities you may run into are the
+      result of a host using outdated, vulnerable software or having egregious
+      misconfigurations on their servers. Would you trust such a host with
+      your revenue-generating website? If you are going to make money from
+      your site, you'd better spend money on hosting it on a proper server. As
+      simple as that.</para>
     </section>
 
     <section xml:id="installation-instructions">
@@ -397,7 +394,7 @@
       <section xml:id="installation-troubleshooting">
         <title>Installation troubleshooting</title>
 
-        <bridgehead>Joomla! 1.6 is logging you out during
+        <bridgehead>Joomla! 1.6/1.7 is logging you out during
         installation</bridgehead>
 
         <para>The first thing you might observe is that <emphasis
@@ -412,8 +409,13 @@
         link on the top-right of your page, then log back in. Everything is
         back to normal and you can retry the installation.</para>
 
-        <bridgehead>Joomla! 1.6 says "can't build admin menu" and
+        <bridgehead>Joomla! 1.6/1.7 says "can't build admin menu" and
         fails</bridgehead>
+
+        <note>
+          <para>This problem should have gone away since Akeeba Subscriptions
+          1.0.1 and later releases</para>
+        </note>
 
         <para>On some other occasions, especially when trying to install or
         update the component after an installation error, Joomla! will
@@ -511,7 +513,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </orderedlist>
 
-        <bridgehead renderas="sect4">Joomla! 1.6</bridgehead>
+        <bridgehead renderas="sect4">Joomla! 1.6/1.7</bridgehead>
 
         <orderedlist>
           <listitem>
@@ -884,6 +886,22 @@ modules/mod_default</programlisting>
         </varlistentry>
       </variablelist>
 
+      <para><guilabel>Back-end display</guilabel></para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Show Gravatar images in Subscriptions page</term>
+
+          <listitem>
+            <para>When enabled, Gravatar images are shown next to each user in
+            the Subscriptions page. If disabled, there will be no avatar
+            images displayed.</para>
+
+            <para>Default: Yes</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
       <para><guilabel>Front-end display</guilabel></para>
 
       <variablelist>
@@ -991,6 +1009,30 @@ modules/mod_default</programlisting>
 
           <listitem>
             <para>Should it be shown to your users?</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>First expiration notification (days)</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions will send a notification email to users
+            whose subscription is expiring soon. It can send up to two emails.
+            This parameter tells Akeeba Subscriptions how many days before the
+            subscriptions expiration the first email will be sent. Set to 0 to
+            not send out a notification email.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Second expiration notification (days)</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions will send a notification email to users
+            whose subscription is expiring soon. It can send up to two emails.
+            This parameter tells Akeeba Subscriptions how many days before the
+            subscriptions expiration the second email will be sent. Set to 0
+            to not send out a notification email.</para>
           </listitem>
         </varlistentry>
 
@@ -2161,6 +2203,126 @@ modules/mod_default</programlisting>
         what you have in mind.</para>
       </section>
 
+      <section xml:id="integration-communityacl">
+        <title>Community ACL integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Community ACL Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        Community ACL Groups, Roles and Functions based on their subscription
+        status.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin in this documentation; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>Before we begin taking a look at the plugin options, please note
+        that Community ACL defines Groups, Roles and Functions. To make things
+        more complicated, a Role can belong to a Group or not and a Function
+        can belong to a Rule or not. Are you confused yet? Tell me about it...
+        Unfortunately, we have to follow the same inconvenient structure for
+        the plugin parameters. Each entry which can be assigned or removed
+        from the user's record can therefore consist of a Group, a Group and a
+        Role or Group, Role and Function. For example: </para>
+
+        <para><programlisting>My Group</programlisting>defines an entry which
+        only mentions a Group. The Role assigned to the user will be the first
+        Role which belongs to My Group or, if no roles are specifically
+        defined for My Group, the first Role which does not belong to any
+        group (usually the default "Subscriber" role created by Community ACL
+        during installation). The function assigned to the user will be the
+        first function which belongs to the selected Role or, if none is
+        defined, the first function which does not belong to any role.</para>
+
+        <programlisting>My Group|My Role</programlisting>
+
+        <para>defines an entry which only mentions a Group and a Role. If
+        there is a role named My Role belonging to My Group it will be used.
+        Otherwise, we'll try to find a role named My Role which doesn't belong
+        to any group whatsoever. If this fails, the Role assigned to the user
+        will be the first Role which belongs to My Group or, if no roles are
+        specifically defined for My Group, the first Role which does not
+        belong to any group (usually the default "Subscriber" role created by
+        Community ACL during installation). The function assigned to the user
+        will be the first function which belongs to the selected Role or, if
+        none is defined, the first function which does not belong to any
+        role.</para>
+
+        <para><programlisting>My Group|My Role|My Function</programlisting></para>
+
+        <para>defines an entry which mentions a Group, a Role and a Function.
+        If there is a role named My Role belonging to My Group it will be
+        used. Otherwise, we'll try to find a role named My Role which doesn't
+        belong to any group whatsoever. If this fails, the Role assigned to
+        the user will be the first Role which belongs to My Group or, if no
+        roles are specifically defined for My Group, the first Role which does
+        not belong to any group (usually the default "Subscriber" role created
+        by Community ACL during installation). The function assigned to the
+        user will be the one named My Function, belonging to the selected
+        Role. If it does not exist, we'll try to find a function named My
+        Function which does not belong to a role. If there is none, we'll use
+        the first function which belongs to the selected Role or, if none is
+        defined, the first function which does not belong to any role.</para>
+
+        <tip>
+          <para>It's impossible to understand any of the above. It's
+          impossible to setup ACLs with the complexity introduced by Groups,
+          Roles and Functions. Take my advice and only use Groups in both
+          Community ACL and this plugin and just forget about Roles and
+          Functions if you value your sanity.</para>
+        </tip>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Community ACL groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              Community ACL groups. When a user has an active subscription to
+              the specified level, he'll be added to the Community ACL
+              group/role/function mentioned on the right hand of the equal
+              sign. Each assignment is done like this:</para>
+
+              <programlisting>LEVEL1=entry1,entry2,entry3</programlisting>
+
+              <para>Where entry1, entry2 and entry3 is a Group/Role/Function
+              entry as described above.</para>
+
+              <para>If you want to assign multiple subscription levels to
+              multiple entries, you have to do something like that (separate
+              multiple lines with a single press of the ENTER key on your
+              keyboard):</para>
+
+              <programlisting>LEVEL1=entry1,entry2,entry3
+LEVEL2=entry2
+LEVEL3=entry4,entry1</programlisting>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Community ACL groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the Community ACL groups to
+              remove a user from when his subscription to the specified level
+              is no longer active. Do note that you can specify a different
+              set of groups to remove the user from than the ones you are
+              adding him to. For example:</para>
+
+              <programlisting>LEVEL1=entry1,entry2
+LEVEL2=entry2
+LEVEL3=entry1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
       <section xml:id="integration-docman">
         <title>DOCman Integration</title>
 
@@ -3106,9 +3268,9 @@ LEVEL3=Group 1</programlisting>
         <para>Displayed in the Plugins Manager as: <guilabel>System - Akeeba
         Subscriptions Expiration Notification</guilabel></para>
 
-        <para>This plugin will notify a user 30 and 15 days before his
-        subscription's expiration. These time limits are non-configurable in
-        this release.</para>
+        <para>This plugin will notify a user before his subscription's
+        expiration, based on the notification settings of each subscription
+        level. </para>
 
         <note>
           <para>This plugin uses Joomla!'s mail system. You have to ensure
@@ -3119,6 +3281,85 @@ LEVEL3=Group 1</programlisting>
 
         <para>We strongly recommend publishing this plugin at all
         times.</para>
+
+        <para>Since Akeeba Subscriptions 1.0.2 you can customise the emails
+        sent to the users. All email fields understand the following
+        parameters:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>{NAME}</term>
+
+            <listitem>
+              <para>The name of the user (e.g. John Doe)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{SITENAME}</term>
+
+            <listitem>
+              <para>The name of your site, as configured in the Global
+              Configuration</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{USERNAME}</term>
+
+            <listitem>
+              <para>The user's username</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{LEVEL}</term>
+
+            <listitem>
+              <para>The title of the subscription level</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{ENABLED}</term>
+
+            <listitem>
+              <para>The subscriptions status (enabled / disabled)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{STATE}</term>
+
+            <listitem>
+              <para>Payment status (new, cancelled, pending, complete)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{FROM}</term>
+
+            <listitem>
+              <para>The date when the subscription becomes active</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{TO}</term>
+
+            <listitem>
+              <para>The date when the subscription becomes inactive</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{URL}</term>
+
+            <listitem>
+              <para>Subscription renewal URL</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
 
       <section xml:id="plugin-asrestricted">
