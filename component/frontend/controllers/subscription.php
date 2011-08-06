@@ -61,6 +61,7 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 		// subscription information, the ID will be 0. In that case, BUSTED! Of course, the same thing
 		// happens if he tries to access a non-existent subscription ID.
 		$this->getModel()->getState()->user_id = KFactory::get('lib.joomla.user')->id;
+		$this->getModel()->getState()->paystate = 'C,P';
 		if($this->getModel()->getItem()->id == 0) {
 			JError::raiseError('403',JText::_('ACCESS DENIED'));
 			return;
