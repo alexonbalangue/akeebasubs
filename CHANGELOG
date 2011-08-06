@@ -10,6 +10,7 @@ Akeeba Subscriptions 1.0.0
 # Improved installation and uninstallation under Joomla! 1.6/1.7, working around Joomla! bugs which would prevent installation/uninstallation in some cases
 # Notice thrown in the occupation field when a new user tries to subscribe
 # Missing DROPs from the uninstallation SQL file
+# Installation warning about IonCube 4.0.6 or earlier was displayed even on sites with IonCube 4.0.7 and later installed
 
 Akeeba Subscriptions 1.0.rc1
 ================================================================================
