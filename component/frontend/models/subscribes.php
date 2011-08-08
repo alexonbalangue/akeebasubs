@@ -915,12 +915,18 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	 */
 	private function _sendMail(&$user, $password)
 	{
-		$password = preg_replace('/[\x00-\x1F\x7F]/', '', $password); //Disallow control chars in the email
-		
+		$config = JFactory::getConfig();
 		$mainframe = JFactory::getApplication();
 		
+		$password = preg_replace('/[\x00-\x1F\x7F]/', '', $password); //Disallow control chars in the email
+		
 		$lang = JFactory::getLanguage();
-		$lang->load('com_user',JPATH_SITE);
+		if(version_compare(JVERSION, '1.6', 'ge')) {
+			$lang->load('com_users',JPATH_SITE);
+		} else {
+			$lang->load('com_user',JPATH_SITE);
+		}
+		
 
 		$db		=& JFactory::getDBO();
 
@@ -929,46 +935,62 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$username 	= $user->get('username');
 
 		$usersConfig 	= &JComponentHelper::getParams( 'com_users' );
-		$sitename 		= $mainframe->getCfg( 'sitename' );
+		$sitename 		= $config->get( 'sitename' );
 		$useractivation = $usersConfig->get( 'useractivation' );
-		$mailfrom 		= $mainframe->getCfg( 'mailfrom' );
-		$fromname 		= $mainframe->getCfg( 'fromname' );
+		$mailfrom 		= $config->get( 'mailfrom' );
+		$fromname 		= $config->get( 'fromname' );
 		$siteURL		= JURI::base();
 
-		$subject 	= sprintf ( JText::_( 'Account details for' ), $name, $sitename);
-		$subject 	= html_entity_decode($subject, ENT_QUOTES);
+		if(version_compare(JVERSION, '1.6', 'ge')) {
+			$subject	= JText::sprintf(
+				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
+				$name,
+				$sitename
+			);
 
-		$message = sprintf ( JText::_( 'SEND_MSG_ACTIVATE' ), $name, $sitename, $siteURL."index.php?option=com_user&task=activate&activation=".$user->get('activation'), $siteURL, $username, $password);
+			$message = JText::sprintf(
+				'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY',
+				$name,
+				$sitename,
+				$siteURL.'index.php?option=com_users&task=registration.activate&token='.$user->get('activation'),
+				$siteURL,
+				$username,
+				$password
+			);
+		} else {
+			$subject 	= sprintf ( JText::_( 'Account details for' ), $name, $sitename);
+			$subject 	= html_entity_decode($subject, ENT_QUOTES);
 
+			$message = sprintf ( JText::_( 'SEND_MSG_ACTIVATE' ), $name, $sitename, $siteURL."index.php?option=com_user&task=activate&activation=".$user->get('activation'), $siteURL, $username, $password);
+		}
 		$message = html_entity_decode($message, ENT_QUOTES);
 
-		//get all super administrator
-		$query = 'SELECT name, email, sendEmail' .
-				' FROM #__users' .
-				' WHERE LOWER( usertype ) = "super administrator"';
-		$db->setQuery( $query );
-		$rows = $db->loadObjectList();
-
 		// Send email to user
-		if ( ! $mailfrom  || ! $fromname ) {
-			$fromname = $rows[0]->name;
-			$mailfrom = $rows[0]->email;
-		}
-
 		JUtility::sendMail($mailfrom, $fromname, $email, $subject, $message);
 
-		// Send notification to all administrators
-		$subject2 = sprintf ( JText::_( 'Account details for' ), $name, $sitename);
-		$subject2 = html_entity_decode($subject2, ENT_QUOTES);
+		// Only in Joomla! 1.5, send notification to super administrators. In
+		// 1.6, they will get emailed when the user is activated.
+		if(!version_compare(JVERSION,'1.6','ge')) {
+			//get all super administrator
+			$query = 'SELECT name, email, sendEmail' .
+					' FROM #__users' .
+					' WHERE LOWER( usertype ) = "super administrator"';
+			$db->setQuery( $query );
+			$rows = $db->loadObjectList();
 
-		// get superadministrators id
-		foreach ( $rows as $row )
-		{
-			if ($row->sendEmail)
+			// Send notification to all administrators
+			$subject2 = sprintf ( JText::_( 'Account details for' ), $name, $sitename);
+			$subject2 = html_entity_decode($subject2, ENT_QUOTES);
+			
+			// get superadministrators id
+			foreach ( $rows as $row )
 			{
-				$message2 = sprintf ( JText::_( 'SEND_MSG_ADMIN' ), $row->name, $sitename, $name, $email, $username);
-				$message2 = html_entity_decode($message2, ENT_QUOTES);
-				JUtility::sendMail($mailfrom, $fromname, $row->email, $subject2, $message2);
+				if ($row->sendEmail)
+				{
+					$message2 = sprintf ( JText::_( 'SEND_MSG_ADMIN' ), $row->name, $sitename, $name, $email, $username);
+					$message2 = html_entity_decode($message2, ENT_QUOTES);
+					JUtility::sendMail($mailfrom, $fromname, $row->email, $subject2, $message2);
+				}
 			}
 		}
 	}
