@@ -941,6 +941,21 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$fromname 		= $config->get( 'fromname' );
 		$siteURL		= JURI::base();
 
+		$subjectTemplate = KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->regemailheader;
+		$bodyTemplate = KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->regemailbody;
+		if(!empty($subjectTemplate) || !empty($bodyTemplate)) {
+			$replace = array(
+				'[USERNAME]'	=> $username,
+				'[PASSWORD]'	=> $password,
+				'[SITENAME]'	=> $sitename,
+				'[URL]'			=> version_compare(JVERSION, '1.6', 'ge') ? $siteURL.'index.php?option=com_users&task=registration.activate&token='.$user->get('activation') : $siteURL."index.php?option=com_user&task=activate&activation=".$user->get('activation')
+			);
+			foreach($replace as $k => $v) {
+				$subjectTemplate = str_replace($k, $v, $subjectTemplate);
+				$bodyTemplate = str_replace($k, $v, $bodyTemplate);
+			}
+		}
+		
 		if(version_compare(JVERSION, '1.6', 'ge')) {
 			$subject	= JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
@@ -963,6 +978,10 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 
 			$message = sprintf ( JText::_( 'SEND_MSG_ACTIVATE' ), $name, $sitename, $siteURL."index.php?option=com_user&task=activate&activation=".$user->get('activation'), $siteURL, $username, $password);
 		}
+		
+		if(!empty($subjectTemplate)) $subject = $subjectTemplate;
+		if(!empty($bodyTemplate)) $message = $bodyTemplate;
+		
 		$message = html_entity_decode($message, ENT_QUOTES);
 
 		// Send email to user

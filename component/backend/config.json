@@ -41,6 +41,21 @@
 				"type"		: "boolean",
 				"filter"	: "int",
 				"default"	: "1"
+			},
+			"regemailheader" : {
+				"title"		: "COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER",
+				"type"		: "text",
+				"filter"	: "string",
+				"default"	: "Your new user account at [SITENAME]",
+				"attributes" : {
+					"size"	: 85
+				}
+			},
+			"regemailbody" : {
+				"title"		: "COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILBODY",
+				"type"		: "textarea",
+				"filter"	: "string",
+				"default"	: "Hello [USERNAME],\n\nWe would like to notify you that a new user account has been\ncreated for you on [SITENAME] with the following details:\n\nUsername: [USERNAME]\nPassword: [PASSWORD]\n\nThis user account will remain blocked until your subscription payment is completed and validated.\n\nShould you need to access your account sooner than that - for\nexample, you did not complete the payment and would like to\nsubscribeusing the same username and/or email address -\nplease click on the following activation link to enable your user'naccount so that you are able to login in the designated\narea of the subscription form using the username and password\nprinted in this email.\n\n[URL]\n\nIf the URL above is not clickable, please copy and paste it to your browser.\n\nBest regards,\n[SITENAME]"
 			}
 		}
 	}

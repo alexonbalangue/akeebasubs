@@ -60,6 +60,8 @@ abstract class ComAkeebasubsSimpleformElementAbstract
        		$this->_attributes = array();
        	} elseif(is_array($options->attributes)) {
        		$this->_attributes = $options->attributes;
+		} elseif($options->attributes instanceof KConfig) {
+			$this->_attributes = $options->attributes->toArray();
        	} else {
        		$this->_attributes = json_decode(json_encode($options->attributes), true);
        	}       	
