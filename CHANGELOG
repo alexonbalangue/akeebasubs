@@ -13,6 +13,7 @@ Akeeba Subscriptions 1.0.0
 # Missing DROPs from the uninstallation SQL file
 # Installation warning about IonCube 4.0.6 or earlier was displayed even on sites with IonCube 4.0.7 and later installed
 # User account activation emails not sent out in Joomla! 1.6+
+# "Run integrations" broken again and fixed once more...
 
 Akeeba Subscriptions 1.0.rc1
 ================================================================================

@@ -29,11 +29,32 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 		// Run the plugin events on the list
 		$this->getModel()->set('forceoffset', KRequest::get('post.forceoffset','int') );
 		$this->getModel()->set('forcelimit', KRequest::get('post.forcelimit','int') );
+		
+		// I don't know why the hell behaviours stopped working properly in Nooku
+		// Framework 0.7.b3, but I ain't gonna lose another day with 'em. Fuck it.
+		// Plain old code FTW!
+		
+		/**
 		$list = $this->getModel()->refresh(1)->getList()->subscriptionRefresh();
-
 		$response = array(
 			'total'	=> $this->getModel()->getTotal(),
 			'processed'	=> count($this->getModel()->getList())
+		);
+		/**/
+		
+		$list = $this->getModel()->refresh(1)->getList();
+		if(count($list)) {
+			jimport('joomla.plugin.helper');
+			JPluginHelper::importPlugin('akeebasubs');
+			foreach($list as $item) {
+				$user_id = $item->user_id;
+				$app = JFactory::getApplication();
+				$jResponse = $app->triggerEvent('onAKUserRefresh', array($user_id));
+			}
+		}
+		$response = array(
+			'total'	=> $this->getModel()->getTotal(),
+			'processed'	=> count($list)
 		);
 		
 		echo json_encode($response);
