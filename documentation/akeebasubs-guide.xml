@@ -39,6 +39,16 @@
           <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
         </author>
       </revision>
+	  
+	  <revision>
+        <revnumber>1.0.0</revnumber>
+
+        <date>August 2011</date>
+
+        <author>
+          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
+        </author>
+      </revision>
     </revhistory>
 
     <legalnotice>
@@ -414,7 +424,7 @@
 
         <note>
           <para>This problem should have gone away since Akeeba Subscriptions
-          1.0.1 and later releases</para>
+          1.0.0 (Stable) and later releases</para>
         </note>
 
         <para>On some other occasions, especially when trying to install or
@@ -3282,7 +3292,7 @@ LEVEL3=Group 1</programlisting>
         <para>We strongly recommend publishing this plugin at all
         times.</para>
 
-        <para>Since Akeeba Subscriptions 1.0.2 you can customise the emails
+        <para>Since Akeeba Subscriptions 1.0.0 you can customise the emails
         sent to the users. All email fields understand the following
         parameters:</para>
 
