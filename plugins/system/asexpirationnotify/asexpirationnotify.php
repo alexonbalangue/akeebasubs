@@ -299,8 +299,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 			'level'				=> $level->title,
 			'enabled'			=> $row->enabled ? JText::_('Enabled') : JText::_('Disabled'),
 			'state'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'from'				=> $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			'to'				=> $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'from'				=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'to'				=> version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
 			'url'				=> $url
 		);
 		

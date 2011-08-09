@@ -106,8 +106,8 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 			$level->title,
 			$row->enabled ? JText::_('Enabled') : JText::_('Disabled'),
 			JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			$jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			$jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
+			version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
 			$url,
 			$sitename
 		);
