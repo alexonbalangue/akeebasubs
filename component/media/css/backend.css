@@ -19,7 +19,7 @@
 
 .icon-32-subrefresh { background: transparent url(../images/subrefresh.png); }
 
-.-koowa-form input, .-koowa-form select, .-koowa-form textarea, .-koowa-form label {
+.-koowa-form input, .-koowa-form select, .-koowa-form textarea, .-koowa-form label, .-koowa-form button {
 	float: none !important; 
 }
 
