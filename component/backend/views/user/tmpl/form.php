@@ -17,7 +17,7 @@
 	<label for="userid_visible" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_USERNAME')?></label>
 	<input type="hidden" name="user_id" id="userid" value="<?=$user->user_id?>" />
 	<input type="text" name="xxx_userid" id="userid_visible" value="<?=JFactory::getUser(empty($user->user_id) ? 0 : $user->user_id)->username?>" disabled="disabled" />
-	<button onclick="return false;">Select</button>
+	<button onclick="return false;" class="modal"><?=@text('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
 	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&view=jusers&tmpl=component" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 	<br/>
 	
@@ -55,9 +55,7 @@
 	<legend><?=@text('COM_AKEEBASUBS_USER_BASIC_BUSINESS')?></legend>
 
 	<label for="isbusiness" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_ISBUSINESS')?></label>
-	<span style="float:left">
-		<?= @helper('select.booleanlist', array('name' => 'isbusiness', 'selected' => $user->isbusiness)); ?>
-	</span>
+	<?= @helper('select.booleanlist', array('name' => 'isbusiness', 'selected' => $user->isbusiness)); ?>
 	<br/>
 	
 	<label for="businessname" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_BUSINESSNAME')?></label>
@@ -73,9 +71,7 @@
 	<br/>
 	
 	<label for="viesregistered" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_VIESREGISTERED')?></label>
-	<span style="float:left">
-		<?= @helper('select.booleanlist', array('name' => 'viesregistered', 'selected' => $user->viesregistered)); ?>
-	</span>
+	<?= @helper('select.booleanlist', array('name' => 'viesregistered', 'selected' => $user->viesregistered)); ?>
 	<br/>
 	
 </fieldset>
@@ -89,7 +85,11 @@ function jSelectUser(id, username)
 {
 	document.getElementById('userid').value = id;
 	document.getElementById('userid_visible').value = username;
-	document.getElementById('sbox-window').close();	
+	try {
+		document.getElementById('sbox-window').close();	
+	} catch(err) {
+		SqueezeBox.close();
+	}
 }
 
 window.addEvent("domready", function() {
