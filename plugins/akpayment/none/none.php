@@ -116,14 +116,6 @@ ENDFORM;
 		);
 		$subscription->setData($updates)->save();
 		
-		// Also update the user, enabling him
-		KFactory::tmp('admin::com.akeebasubs.model.jusers')
-			->id($subscription->user_id)
-			->getItem()
-			->setData(array(
-				'block'		=> 0
-			))->save();
-		
 		// This plugin is a tricky one; it will redirect you to the thank you page
 		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)

@@ -213,14 +213,6 @@ class plgAkpaymentCcavenue extends JPlugin
 			$updates['publish_up'] = $jStart->toMySQL();
 			$updates['publish_down'] = $jEnd->toMySQL();
 			$updates['enabled'] = 1;
-			
-			// Also update the user, enabling him
-			KFactory::tmp('admin::com.akeebasubs.model.jusers')
-				->id($subscription->user_id)
-				->getItem()
-				->setData(array(
-					'block'		=> 0
-				))->save();
 		}
 		$subscription->setData($updates)->save();
 		
