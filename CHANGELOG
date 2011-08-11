@@ -17,6 +17,7 @@ Akeeba Subscriptions 1.0.0
 # User account activation emails not sent out in Joomla! 1.6+
 # "Run integrations" broken again and fixed once more...
 # Dates in subscription update and expiration notification emails appear as "l, d F Y H:i" on Joomla! 1.6/1.7
+# Subscription editor: Javascript error after selecting a user in Joomla! 1.7
 
 Akeeba Subscriptions 1.0.rc1
 ================================================================================

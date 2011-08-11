@@ -85,7 +85,11 @@ function jSelectUser(id, username)
 {
 	document.getElementById('userid').value = id;
 	document.getElementById('userid_visible').value = username;
-	document.getElementById('sbox-window').close();	
+	try {
+		document.getElementById('sbox-window').close();	
+	} catch(err) {
+		SqueezeBox.close();
+	}
 }
 
 window.addEvent("domready", function() {
