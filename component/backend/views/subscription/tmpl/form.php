@@ -22,7 +22,7 @@
 		<label for="userid_visible" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 		<input type="hidden" name="user_id" id="userid" value="<?=$subscription->user_id?>" />
 		<input type="text" name="xxx_userid" id="userid_visible" value="<?=$subscription->username?>" disabled="disabled" />
-		<button onclick="return false;" class="modal">Select</button>
+		<button onclick="return false;" class="modal"><?=@text('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
 		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&view=jusers&limit=10&tmpl=component&search=" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 		<br/>
 

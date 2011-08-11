@@ -19,6 +19,7 @@ Akeeba Subscriptions 1.0.0
 # Dates in subscription update and expiration notification emails appear as "l, d F Y H:i" on Joomla! 1.6/1.7
 # Subscription editor: Javascript error after selecting a user in Joomla! 1.7
 # Back-end fields floating all over the place due to the styling enforced by Joomla! 1.7's BlueStork template
+# Untranslated "Select" button when selecting a user
 
 Akeeba Subscriptions 1.0.rc1
 ================================================================================
