@@ -77,7 +77,19 @@
 			$email = trim($subscription->email);
 			$email = strtolower($email);
 			$gravatarHash = md5($email);
-			$rowClass = ($subscription->enabled) ? '' : 'expired'
+			$rowClass = ($subscription->enabled) ? '' : 'expired';
+				
+			$users = KFactory::tmp('admin::com.akeebasubs.model.users')
+				->user_id($subscription->user_id)
+				->getList();
+			if(empty($users)) {
+				$user_id = 0;
+			} else {
+				foreach($users as $user) {
+					$user_id = $user->id;
+					break;
+				}
+			}
 		?>
 		<tr class="row<?=$m?> <?=$rowClass?>">
 			<td align="center">
@@ -110,7 +122,7 @@
 							<img src="https://secure.gravatar.com/avatar/<?=md5(strtolower($subscription->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
 						<? endif; ?>
 					<? endif; ?>
-					<a href="index.php?option=com_users&view=user&task=edit&cid[]=<?=$subscription->user_id?>" class="title">	
+							<a href="<?=@route('view=user&id='.$user_id)?>" class="title">	
 						<strong><?=@escape($subscription->username)?></strong>
 						<span class="small">[<?=$subscription->user_id?>]</span>
 						<br/>

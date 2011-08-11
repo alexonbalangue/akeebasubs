@@ -107,3 +107,13 @@ div.toolbar td.button a.disabled {
 	font-style: italic;
 	cursor: wait;
 }
+
+.akstriangle {
+	display: inline-block !important;
+	width: 0px;
+	height: 0px;
+	margin: 0 -3px 0 0;
+	padding: 0;
+	border: 4px solid black;
+	border-color: transparent transparent transparent #025A8D;
+}

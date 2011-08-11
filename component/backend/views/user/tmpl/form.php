@@ -14,13 +14,24 @@
 <fieldset id="coupons-basic" style="width: 48%; float: left;">
 	<legend><?=@text('COM_AKEEBASUBS_USER_BASIC_TITLE')?></legend>
 
+<? if(version_compare(JVERSION, '1.6', 'ge')) {
+		$userEditorLink = 'index.php?option=com_users&task=user.edit&id=';
+	} else {
+		$userEditorLink = 'index.php?option=com_users&view=user&task=edit&cid[]=';
+	} ?>
+	<? if($user->user_id): ?>
+	<a href="<?=$userEditorLink.$user->user_id?>">
+		<span class="akstriangle"></span><span class="akstriangle"></span><span class="akstriangle"></span>
+		<?=@text('COM_AKEEBASUBS_USER_EDITTHISINJUSERMANAGER')?>
+	</a>
+	<? endif; ?>
+	<br/>
+	
 	<label for="userid_visible" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_USERNAME')?></label>
 	<input type="hidden" name="user_id" id="userid" value="<?=$user->user_id?>" />
 	<input type="text" name="xxx_userid" id="userid_visible" value="<?=JFactory::getUser(empty($user->user_id) ? 0 : $user->user_id)->username?>" disabled="disabled" />
 	<button onclick="return false;" class="modal"><?=@text('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
 	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&view=jusers&tmpl=component" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-	<br/>
-	
 	<br/>
 	
 	<label for="address1" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_ADDRESS1')?></label>
