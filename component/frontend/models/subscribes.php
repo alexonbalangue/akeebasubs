@@ -268,8 +268,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 						$res = @file_get_contents($url);
 						if($res === false) {
 							$ch = curl_init($url);
-							url_setopt($ch, CURLOPT_HEADER, 0);
-							url_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+							curl_setopt($ch, CURLOPT_HEADER, 0);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 							$res = @curl_exec($ch);
 						}
 		
