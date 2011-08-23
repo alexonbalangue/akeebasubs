@@ -16,6 +16,8 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
+		if(!defined('KOOWA')) return;
+		
 		parent::__construct($subject, $config);
 		
 		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)

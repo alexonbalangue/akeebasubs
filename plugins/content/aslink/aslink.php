@@ -117,6 +117,8 @@ class plgContentAslink extends JPlugin
 	
 	public function onContentPrepare($context, &$article, &$params, $limitstart = 0)
 	{
+		if(!defined('KOOWA')) return;
+		
 		return $this->onPrepareContent($article, $params, $limitstart);
 	}
 }
