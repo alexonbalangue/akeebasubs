@@ -117,6 +117,7 @@ class ComAkeebasubsModelUsers extends KModelTable
 			'state' => $params->get('state',''),
 			'zip' => $params->get('zip',''),
 			'country' => $params->get('country',''),
+			'params' => array()
 		);
 		
 		$nativeData = array_merge($nativeData, $userRow->getData());
@@ -133,6 +134,10 @@ class ComAkeebasubsModelUsers extends KModelTable
 					unset($plainData);
 					if($row['user_id'] == $this->_state->user_id) {
 						$myData = array_merge($nativeData, $row);
+						if(is_string($myData['params'])) {
+							$myData['params'] = json_decode($myData['params']);
+							if(is_null($myData['params'])) $myData['params'] = array();
+						}
 					}
 				}
 			}

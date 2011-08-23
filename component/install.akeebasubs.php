@@ -50,6 +50,7 @@ $installation_queue = array(
 			'jxjomsocial'			=> 0,
 			'k2'					=> 0,
 			'ninjaboard'			=> 0,
+			'samplefields'			=> 0,
 			'subscriptionemails'	=> 1,
 			'tienda'				=> 0,
 			'userdelete'			=> 0,

@@ -64,6 +64,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			->insert('occupation'		, 'string')
 			->insert('vatnumber'		, 'cmd')
 			->insert('coupon'			, 'string')
+			->insert('custom'			, 'raw')
 			
 			->insert('opt'				, 'cmd')
 			;
@@ -93,7 +94,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				'businessname'	=> '',
 				'vatnumber'		=> '',
 				'coupon'		=> '',
-				'occupation'	=> ''
+				'occupation'	=> '',
+				'custom'		=> array()
 			);
 		}
 		$rawDataCache = $this->_cache['state'];
@@ -132,6 +134,26 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				$response->validation = $this->_validateState();
 				$response->validation->username = $this->_validateUsername()->username;
 				$response->price = $this->_validatePrice();
+				
+				// Get the results from the custom validation
+				$response->custom_validation = array();
+				$response->custom_valid = true;
+				jimport('joomla.plugin.helper');
+				JPluginHelper::importPlugin('akeebasubs');
+				$app = JFactory::getApplication();
+				$jResponse = $app->triggerEvent('onValidate', array($this->_state));
+				if(is_array($jResponse) && !empty($jResponse)) {
+					foreach($jResponse as $pluginResponse) {
+						if(!is_array($pluginResponse)) continue;
+						if(!array_key_exists('valid', $pluginResponse)) continue;
+						if(!array_key_exists('custom_validation', $pluginResponse)) continue;
+						$response->custom_valid = $response->custom_valid && $pluginResponse['valid'];
+						$response->custom_validation = array_merge($response->custom_validation, $pluginResponse['custom_validation']);
+						if(array_key_exists('data', $pluginResponse)) {
+							$this->_state = $pluginResponse['data'];
+						}
+					}
+				}
 				break;
 		}
 		return $response;
@@ -597,6 +619,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// ----------------------------------------------------------------------
 		$validation = $this->getValidation();
 		
+		// Iterate the core validation rules
 		$isValid = true;
 		foreach($validation->validation as $key => $validData)
 		{
@@ -625,6 +648,9 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				break;
 			}
 		}
+		// Make sure custom fields also validate
+		$isValid = $isValid && $validation->custom_valid;
+		
 		if(!$isValid) return false;
 
 		// Step #2. Check that the payment plugin exists or return false
@@ -736,7 +762,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'city'			=> $this->_state->city,
 			'state'			=> $this->_state->state,
 			'zip'			=> $this->_state->zip,
-			'country'		=> $this->_state->country
+			'country'		=> $this->_state->country,
+			'params'		=> json_encode($this->_state->custom)
 		);
 		KFactory::tmp('site::com.akeebasubs.model.users')
 			->id($id)
@@ -814,6 +841,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'first_contact'			=> '0000-00-00 00:00:00',
 			'second_contact'		=> '0000-00-00 00:00:00'
 		);
+				
 		$subscription = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
 			->id(0)
 			->getItem();

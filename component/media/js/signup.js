@@ -12,6 +12,8 @@ var akeebasubs_run_validation_after_unblock = false;
 var akeebasubs_cached_response = false;
 var akeebasubs_valid_form = true;
 var akeebasubs_personalinfo = true;
+var akeebasubs_validation_fetch_queue = [];
+var akeebasubs_validation_queue = [];
 
 function blockInterface()
 {
@@ -67,7 +69,8 @@ function validateForm(callback_function)
 				'businessname':	$('#businessname').val(),
 				'occupation':	$('#occupation').val(),
 				'vatnumber'	:	$('#vatnumber').val(),
-				'coupon'	:	$('#coupon').val()
+				'coupon'	:	$('#coupon').val(),
+				'custom'	:	{}
 			};
 		} else {
 			var data = {
@@ -76,7 +79,8 @@ function validateForm(callback_function)
 				'username'	:	$('#username').val(),
 				'name'		:	$('#name').val(),
 				'email'		:	$('#email').val(),
-				'coupon'	:	$('#coupon').val()
+				'coupon'	:	$('#coupon').val(),
+				'custom'	:	{}
 			};
 		}
 		
@@ -84,6 +88,15 @@ function validateForm(callback_function)
 			data.password = $('#password').val();
 			data.password2 = $('#password2').val();
 		}
+		
+		// Fetch the custom fields
+		$.each(akeebasubs_validation_fetch_queue, function(index, function_name){
+			var result = function_name();
+			if( (result !== null) && (typeof result == 'object') ) {
+				// Merge the result with the data object
+				$.extend(data.custom, result);
+			}
+		});
 		
 		blockInterface();
 		
@@ -93,7 +106,11 @@ function validateForm(callback_function)
 			data: data,
 			dataType: 'json',
 			success: function(msg, textStatus, xhr) {
-				if(msg.validation) applyValidation(msg.validation, callback_function);
+				if(msg.validation) {
+					msg.validation.custom_validation = msg.custom_validation;
+					msg.validation.custom_valid = msg.custom_valid;
+					applyValidation(msg.validation, callback_function);
+				}
 				if(msg.price) applyPrice(msg.price);
 				enableInterface();
 			},
@@ -482,7 +499,13 @@ function applyValidation(response, callback)
 				$('#vat-status-invalid').css('display','none');
 				$('#vat-status-valid').css('display','none');
 			}
-		}	
+		}
+		
+		// Finally, apply the custom validation
+		$.each(akeebasubs_validation_queue, function(index, function_name){
+			var isValid = function_name(response);
+			akeebasubs_valid_form = akeebasubs_valid_form & isValid;
+		});
 	})(akeeba.jQuery);
 }
 
@@ -501,6 +524,25 @@ function applyPrice(response)
 		}
 	})(akeeba.jQuery);
 }
+
+/**
+ * Adds a function to the validation fetch queue
+ */
+function addToValidationFetchQueue(myfunction)
+{
+	if(typeof myfunction != 'function') return false;
+	akeebasubs_validation_fetch_queue.push(myfunction);
+}
+
+/**
+ * Adds a function to the validation queue
+ */
+function addToValidationQueue(myfunction)
+{
+	if(typeof myfunction != 'function') return false;
+	akeebasubs_validation_queue.push(myfunction);
+}
+
 
 (function($) {
 	$(document).ready(function(){
@@ -525,6 +567,10 @@ function applyPrice(response)
 		if($('#coupon')) {
 			$('#coupon').blur(validateBusiness);
 		}
+		// Attach onBlur events to custom fields
+		$('#signupForm *[name]').filter(function(index){
+			return $(this).attr('name').substr(0, 7) == 'custom[';
+		}).blur(validateForm);
 		
 		// Workaround for RocketTheme's fancy option hider
 		var rokkedLabel = $('label[for="isbusiness1"]');
