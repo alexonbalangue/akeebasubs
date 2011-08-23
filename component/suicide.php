@@ -25,6 +25,9 @@ defined('_JEXEC') or die('');
 // Akeeba Component Uninstallation Configuration
 $installation_queue = array(
 	'modules' => array(
+		'admin' => array(
+			'akeebasubs' => array('cpanel', 1)
+		),
 		'site' => array(
 			'aksubslist' => array('left', 0),
 			'akslevels' => array('left', 0)
