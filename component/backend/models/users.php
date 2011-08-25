@@ -141,6 +141,19 @@ class ComAkeebasubsModelUsers extends KModelTable
 					}
 				}
 			}
+			
+			// Finally, merge data coming from the plugins. Note that the
+			// plugins only run when a new subscription is in progress, not
+			// every time the user data loads.
+			jimport('joomla.plugin.helper');
+			JPluginHelper::importPlugin('akeebasubs');
+			$app = JFactory::getApplication();
+			$jResponse = $app->triggerEvent('onAKUserGetData', array((object)$myData));
+			if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $pResponse) {
+				if(!is_array($pResponse)) continue;
+				if(empty($pResponse)) continue;
+				$myData = array_merge($myData, $pResponse);
+			}
 		}
 		
 		return (object)$myData;
