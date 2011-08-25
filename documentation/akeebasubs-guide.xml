@@ -39,8 +39,8 @@
           <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
         </author>
       </revision>
-	  
-	  <revision>
+
+      <revision>
         <revnumber>1.0.0</revnumber>
 
         <date>August 2011</date>
@@ -2094,6 +2094,137 @@ modules/mod_default</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section>
+        <title>eWay</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - eWay</guilabel></para>
+
+        <para>This payment method integrates the eWay payments service. It can
+        work with all three local payment services offered by eWay (Australia,
+        New Zealand and UK/Europe).</para>
+
+        <important>
+          <para>Each local eWay payment service supports different currencies.
+          The Australian service only supports AUD, the New Zealand service
+          only supports NZD and the UK service only supports GBP and EUR - as
+          far as I can see. You have to make sure you have signed up to the
+          correct payment service and set up the currency in Akeeba
+          Subscriptions accordingly.</para>
+        </important>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "eWay" or type in a custom name to show
+              to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>eWay Site</term>
+
+            <listitem>
+              <para>Select which local eWay site you are signed up with.
+              IMPORTANT! If this selection is incorrect, you will get an error
+              when you try to subscribe.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>eWay Customer ID</term>
+
+            <listitem>
+              <para>Enter your numeric eWay Customer ID. Use 87654321 for
+              testing.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>eWay Username</term>
+
+            <listitem>
+              <para>Enter your eWay username. Use TestAccount for
+              testing.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Company logo URL</term>
+
+            <listitem>
+              <para>Optional. The URL of your logo image. It can be hosted on
+              your website but MUST use https. This is the top image block of
+              the payment web page and it is restricted to 960x65 pixels. A
+              default secure image will be used if you leave this field
+              empty.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Page banner URL</term>
+
+            <listitem>
+              <para>Optional. The URL of the payment page's banner. It can be
+              hosted on your website but MUST use https. This is the second
+              image block of the payment web page and it is restricted to
+              960x65 pixels. A default secure image will be used if you leave
+              this field empty.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>This automatically translates headings and button text to
+              the desired language. The default is English.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Company name</term>
+
+            <listitem>
+              <para>Optional. This will be displayed as the company is
+              purchasing from. Including this is highly recommended.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Page title</term>
+
+            <listitem>
+              <para>Optional. This value is used to populate the browser's
+              title bar at the top of the screen.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Page description</term>
+
+            <listitem>
+              <para>Optional. Used as a greeting message to the customer and
+              is displayed above the customer's order details.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Page footer</term>
+
+            <listitem>
+              <para>Optional. The page footer text can be customised and
+              populated below the customer's order details. Useful for contact
+              information.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
@@ -2237,7 +2368,7 @@ modules/mod_default</programlisting>
         Unfortunately, we have to follow the same inconvenient structure for
         the plugin parameters. Each entry which can be assigned or removed
         from the user's record can therefore consist of a Group, a Group and a
-        Role or Group, Role and Function. For example: </para>
+        Role or Group, Role and Function. For example:</para>
 
         <para><programlisting>My Group</programlisting>defines an entry which
         only mentions a Group. The Role assigned to the user will be the first
@@ -3134,7 +3265,7 @@ LEVEL3=Group 1</programlisting>
         Subscriptions - VirtueMart Integration</guilabel></para>
 
         <para>This integration plugin allows you to add and remove users from
-        VirtueMart shopper groups based on their subscription status. This
+        VirtueMart 1.x shopper groups based on their subscription status. This
         allows you to set special discounts to subscribers (e.g. a discount
         club) or other VirtueMart tricks which are based on the shopper groups
         a user belongs to.</para>
@@ -3211,6 +3342,22 @@ LEVEL3=Group 1</programlisting>
         integrators. Take your time and experiment on a dev copy of your site
         before going live.</para>
       </section>
+
+      <section>
+        <title>Sample Fields</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Sample Fields</guilabel></para>
+
+        <para>Since Akeeba Subscriptions 1.0.0 it is possible to have custom
+        fields in the subscription page by means of plugins. These fields are
+        stored as JSON inside each user's <database>params</database> field in
+        the <database>#__akeebasubs_users</database> table. Developers can
+        easily create plugins to add as many fields as they want. The "Sample
+        Fields" plugin is a demonstration of this feature which also acts as a
+        self-documenting tutorial for developers. It adds two custom fields
+        (Gender and Age Group).</para>
+      </section>
     </section>
 
     <section xml:id="plugins-other">
@@ -3280,7 +3427,7 @@ LEVEL3=Group 1</programlisting>
 
         <para>This plugin will notify a user before his subscription's
         expiration, based on the notification settings of each subscription
-        level. </para>
+        level.</para>
 
         <note>
           <para>This plugin uses Joomla!'s mail system. You have to ensure
