@@ -39,6 +39,7 @@ $installation_queue = array(
 	// plugins => { (folder) => { (element) => (published) }* }*
 	'plugins' => array(
 		'akeebasubs' => array(
+			'autocity'				=> 0,
 			'cb'					=> 0,
 			'communityacl'			=> 0,
 			'ccinvoices'			=> 0,
@@ -59,6 +60,7 @@ $installation_queue = array(
 		'akpayment' => array(
 			'2checkout'				=> 0,
 			'ccavenue'				=> 0,
+			'eway'					=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
 			'paypal'				=> 1,
