@@ -3343,7 +3343,7 @@ LEVEL3=Group 1</programlisting>
         before going live.</para>
       </section>
 
-      <section>
+      <section xml:id="integration-samplefields">
         <title>Sample Fields</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
@@ -3357,6 +3357,31 @@ LEVEL3=Group 1</programlisting>
         Fields" plugin is a demonstration of this feature which also acts as a
         self-documenting tutorial for developers. It adds two custom fields
         (Gender and Age Group).</para>
+      </section>
+
+      <section xml:id="integration-autocity">
+        <title>Automatic Country and City fill</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Automatic Country and City fill</guilabel></para>
+
+        <para>Since Akeeba Subscriptions 1.0.0 it is possible to have plugins
+        which can override user information (e.g. name, address) and can also
+        be notified when user's information is being saved. This allows for
+        very advanced integrations. One possibility is to automatically fetch
+        such information from external services and component, e.g. using a
+        geolocation service or fetching user information from Community
+        Builder, JomSocial, etc. The other possibility is to provide a
+        "reverse integration", e.g. update Community Builder or JomSocial
+        fields based on the information the user entered in the subscription
+        page, essentially making the user believe that all of his information
+        is managed in a single place.</para>
+
+        <para>This particular plugin acts as a demonstration of this plugin
+        system. It will query the user's IP address against the free
+        hostip.info service and populate the country and city fields, unless
+        the user has overriden them, i.e. he has bought another subscription
+        in the past.</para>
       </section>
     </section>
 
@@ -3711,6 +3736,464 @@ LEVEL3=Group 1</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
+    </section>
+  </chapter>
+
+  <chapter xml:id="devinfo">
+    <title>Developers' information</title>
+
+    <para>Akeeba Subscriptions was designed to be very extensible right from
+    its inception. Everything can be accomplished using plugins which can be
+    installed through the familiar Joomla! extensions installer.</para>
+
+    <para>The plugins can belong to one of two groups:</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>akeebasubs</term>
+
+        <listitem>
+          <para>This is the plugin group where all integrations live. Plugins
+          in this group can implement a plethora of methods which allows them
+          to be notified when a subscription's status changes, when the user
+          information is read/written and much more.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>akpayment</term>
+
+        <listitem>
+          <para>This plugin group is used by Akeeba Subscriptions payment
+          plugins. Plugins in this group implement special methods which
+          allows them to be notified of the user's intention to pay for a
+          subscription, as well as process the payment notification by the
+          payment processor and, in turn, let the component know.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <para>The rest of this chapter documents the various plugin events in each
+    group. References to existing plugins are made so that you can understand
+    how things really work.</para>
+
+    <section xml:id="dev-akeebasubs">
+      <title>The "akeebasubs" plugin events</title>
+
+      <section xml:id="dev-onAKSubscriptionCreate">
+        <title>onAKSubscriptionCreate</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKSubscriptionCreate(KDatabaseRowDefault
+        $row)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        whenever a subscription is created.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/subscriptionemails.php</para>
+
+        <para>The <code>$row</code> variable contains a KDatabaseRowDefault
+        descendant which gives you access to all of the information in the
+        subscription record (#__akeebasubs_subscriptions table's fields).
+        Please note that the akeebasubs_subscription_id column must be
+        accessed as id. Accessing this information is done as object property
+        access, e.g. <code>$row-&gt;akeebasubs_level_id</code> to get the
+        subscription level ID.</para>
+
+        <para>You can not change the information in $row or pass data back to
+        the component in any way. In fact, this event is called immediately
+        after all information has been written to the database.</para>
+      </section>
+
+      <section xml:id="dev-onAKSubscriptionChange">
+        <title>onAKSubscriptionChange</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKSubscriptionChange(KDatabaseRowDefault
+        $row)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        whenever a subscription is modified. In fact, it only gets called when
+        the enabled, state, publish_up or publish_down columns are modified.
+        Modification in other columns does not trigger this event.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/subscriptionemails.php</para>
+
+        <para>The <code>$row</code> variable contains a KDatabaseRowDefault
+        descendant which gives you access to all of the information in the
+        subscription record (#__akeebasubs_subscriptions table's fields).
+        Please note that the akeebasubs_subscription_id column must be
+        accessed as id. Accessing this information is done as object property
+        access, e.g. <code>$row-&gt;akeebasubs_level_id</code> to get the
+        subscription level ID.</para>
+
+        <para>You can not change the information in $row or pass data back to
+        the component in any way. In fact, this event is called immediately
+        after all information has been written to the database.</para>
+      </section>
+
+      <section xml:id="dev-onAKUserRefresh">
+        <title>onAKUserRefresh</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKUserRefresh($user_id)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        when the user clicks on the "Refresh Integrations" button in the
+        back-end of the Akeeba Subscriptions component. It is called once per
+        each subscriber. The $user_id variable contains the numeric Joomla!
+        user ID of the subscriber.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/juga.php</para>
+
+        <para>You might consider it odd that the event is called per user
+        instead of per subscription. However, the integrations in Akeeba
+        Subscriptions are "smart". This means that instead of triggering
+        functionality based on the enabled status of an individual
+        subscription they work based on the enabled status of all
+        subscriptions. This allows you to have rules like "if the user has
+        SUB1 and SUB2, do this" or "if the user has SUB1 and had a SUB2 but it
+        has now expired, do that". Looking at the sample plugin's code you can
+        understand how the iteration of the user's subscriptions is made and
+        how a plugin can determine which subscription levels the user belongs
+        to.</para>
+      </section>
+
+      <section xml:id="dev-onSubscriptionFormRender">
+        <title>onSubscriptionFormRender</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onSubscriptionFormRender($userparams, $cache)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        when the subscription form (front-end, view=level) is displayed. It
+        returns an array of extra fields which will be rendered in the form,
+        right below the email field and before the address fields.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/samplefields.php</para>
+
+        <para>The input of this event's method is two variables:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>$userparams</term>
+
+            <listitem>
+              <para>This is a copy of the user's record, as stored in the
+              #__akeebasubs_users table, in object format. You can access the
+              data in the user record as, for example,
+              <code>$userparams-&gt;address1</code> in order to get the
+              Address 1 field's contents.</para>
+
+              <para>The most important -for you- part of this object is
+              <code>$userparams-&gt;params</code> which stores all the extra
+              fields' values. For example, if you have defined a field named
+              foobar, you can get its stored value as
+              <code>$userparams-&gt;params-&gt;foobar</code>.</para>
+
+              <important>
+                <para>This object contains the data stored in the database.
+                When the user modified this data in the interface and submits
+                the form (but the form is invalid) the information in this
+                object IS NOT UPDATED. In this case, use the
+                <code>$cache</code> variable.</para>
+              </important>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>$cache</term>
+
+            <listitem>
+              <para>When the user submits the subscription forms but it is
+              invalid (errors don't allow it to pass the validation), Akeeba
+              Subscriptions stores the user's modified data in the $cache
+              array. The information in this array may be different than the
+              information in $userparams array.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Getting the values for your custom fields</bridgehead>
+
+        <para>To cut a long story short, if you have a field named foobar,
+        here is how to get its value:</para>
+
+        <programlisting>if(array_key_exists('<replaceable>foobar</replaceable>', $cache['custom'])) {
+  $current = $cache['custom']['<replaceable>foobar</replaceable>'];
+} else {
+  $current = property_exists($userparams-&gt;params, '<replaceable>foobar</replaceable>') ? $userparams-&gt;params-&gt;<replaceable>foobar</replaceable> : <replaceable>'default value'</replaceable>;
+}</programlisting>
+
+        <bridgehead>Returning custom field definitions</bridgehead>
+
+        <para>The return of this event is an array which consists of one or
+        more hash (key/value pair) arrays. Each of the hash arrays defines
+        exactly one extra field and has the following keys:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>id</term>
+
+            <listitem>
+              <para>String. Required. The field's HTML id.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>label</term>
+
+            <listitem>
+              <para>String. Required. The label which appears to the left of
+              the field.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>elementHTML</term>
+
+            <listitem>
+              <para>String. Required. The HTML of your field.</para>
+
+              <important>
+                <para>The name value of your field <emphasis
+                role="bold">must</emphasis> be
+                <code>custom[<replaceable>id</replaceable>]</code>, where
+                <replaceable>id</replaceable> is the HTML id you defined in
+                the id key above. Also, the HTML id <emphasis
+                role="bold">must</emphasis> be defined and <emphasis
+                role="bold">must</emphasis> be equal to the HTML id you
+                defined in the id key above. If you don't do that, your extra
+                field might never be saved.</para>
+              </important>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>invalidLabel</term>
+
+            <listitem>
+              <para>String. Optional. This is the label which appears in green
+              on the right of the field when the field is valid. The HTML
+              element containing this string is named id_valid, where
+              <replaceable>id</replaceable> is the HTML id you defined in the
+              id key above.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>validLabel</term>
+
+            <listitem>
+              <para>String. Optional. This is the label which appears in red
+              on the right of the field when the field is invalid. The HTML
+              element containing this string is named id_invalid, where
+              <replaceable>id</replaceable> is the HTML id you defined in the
+              id key above.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>isValid</term>
+
+            <listitem>
+              <para>Boolean. Optional. If you defined the invalidLabel and/or
+              validLabel fields, pass a boolean here indicating if the field
+              is currently valid so that the correct label is shown when the
+              page loads.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Javascript validation</bridgehead>
+
+        <para>Akeeba Subscriptions does not make any attempt to validate the
+        custom fields and update the display status of the valid/invalid
+        labels. It is your responsibility. In this event, you can call
+        <code>JFactory::getDocument()-&gt;addScriptDeclaration($scriptData)</code>
+        where $scriptData is the Javscript validation code.</para>
+
+        <para>In order to make it easier for you, Akeeba Subscriptions offers
+        an architecture similar to an observer pattern in the Javscript code.
+        You can have Javascript functions called when Akeeba Subscriptions'
+        Javascript code is fetching the contents of the fields before sending
+        a data validation request through AJAX and another function which is
+        called when the validation results are being processed. You can add
+        the former to the stack using addToValidationFetchQueue() and the
+        latter using addToValidationQueue().</para>
+
+        <para>Please look at the very well documented sample plugin for more
+        information regarding all of the above.</para>
+      </section>
+
+      <section xml:id="dev-onValidate">
+        <title>onValidate</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onValidate($data)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        when Akeeba Subscriptions is validating the subscription form.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/samplefields.php</para>
+
+        <para>The $data parameter is an object with all the data keys. You are
+        interested in <code>$data-&gt;custom</code> which contains the values
+        of the custom fields. You can get the value of a custom field named
+        "foobar" using <code>$data-&gt;custom['data']</code>.</para>
+
+        <para>The return value is a hash array with the following keys:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>custom_validation</term>
+
+            <listitem>
+              <para>A hash array of booleans, showing the validation status of
+              each field.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>isValid</term>
+
+            <listitem>
+              <para>Set to false if any of the validation errors above means
+              that the entire subscription form should be deemed invalid,
+              otherwise set it to true to not cause the entire form to become
+              invalid. The latter is useful when you have an optional field
+              whose validation status doesn't play a role in the user's
+              ability to complete the subscription transaction.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="dev-onAKUserGetData">
+        <title>onAKUserGetData</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKUserGetData($userData)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
+        when Akeeba Subscriptions is fetching the user data the first time in
+        the current session that the user is visiting the Subscription
+        (view=level) page</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/autocity.php</para>
+
+        <para>This method is called whenever a user starts a new subscription
+        and Akeeba Subscriptions wants to fetch user data. You can use it to
+        fetch user information from additional sources and return them in an
+        array. The values in the array will replace the values stored in the
+        user's profile.</para>
+
+        <para>The $userData variable contains an object with already fetched
+        user information from the #__akeebasubs_users table.</para>
+
+        <para>Returns a key/value array with user information
+        overrides.</para>
+      </section>
+
+      <section xml:id="dev-onAKUserSaveData">
+        <title>onAKUserSaveData</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKUserSaveData($row)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
+        when Akeeba Subscriptions is saving user's data to the
+        database.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/autocity.php</para>
+
+        <para>This method is called whenever Akeeba Subscriptions is updating
+        the user record with new information, either during sign-up or when
+        you manually update this information in the back-end.</para>
+
+        <para>The $row variable contains a KRowDatabaseDefault object with the
+        information to be stored in the #__akeebasubs_users table.</para>
+      </section>
+    </section>
+
+    <section xml:id="dev-akpayment">
+      <title>The "akpayment" plugin events</title>
+
+      <section>
+        <title>onAKPaymentGetIdentity</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKPaymentGetIdentity()</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: Returns the internal
+        name and the human readable description of this payment plugin.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akpayment/paypal.php</para>
+
+        <para>Returns a hash array:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>name</term>
+
+            <listitem>
+              <para>The internal payment processor plugin name. If you have
+              plg_akpayment_foobar then this must be foobar.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>title</term>
+
+            <listitem>
+              <para>The name of the payment processor as will appear on the
+              subscription page, e.g. "Foobar Payments", "Credit Card",
+              etc.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section>
+        <title>onAKPaymentNew</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKPaymentNew($paymentmethod, $user, $level,
+        $subscription)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This method is called
+        whenever the user asks for a payment to be made for his new
+        subscription.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akpayment/paypal.php</para>
+
+        <para>TODO</para>
+      </section>
+
+      <section>
+        <title>onAKPaymentCallback</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onAKPaymentCallback($paymentmethod, $data)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This method is called
+        whenever the payment processor posts back to Akeeba Subscriptions to
+        notify us of a payment having been processed.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akpayment/paypal.php</para>
+
+        <para>TODO</para>
+      </section>
     </section>
   </chapter>
 </book>
