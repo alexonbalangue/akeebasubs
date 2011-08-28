@@ -174,8 +174,44 @@ if (extension_loaded('suhosin'))
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_kunena')) {
-	JError::raiseWarning(0, "Your site has Kunena installed. Kunena is not compatible with Nooku Framework, the PHP framework used by Akeeba Subscriptions. The installation was cancelled, as it would result in your site being broken");
-	return false;
+	$broken = false;
+	
+	$path = JPATH_ADMINISTRATOR.'/components/com_kunena';
+	jimport('joomla.filesystem.file');
+	if(JFile::exists("$path/kunena.xml")) {
+		$filename = "$path/kunena.xml";
+	} elseif(JFile::exists("$path/kunena.j16.xml")) {
+		$filename = "$path/kunena.j16.xml";
+	} else {
+		$broken = true;
+	}
+	
+	if(!$broken) {
+		$xml = & JFactory::getXMLParser('Simple');
+		if (!$xml->loadFile($filename)) {
+			$broken = true;
+		}
+	}
+	
+	if(!$broken) {
+		if ( ($xml->document->name() != 'install') && ($xml->document->name() != 'extension') ) {
+			$broken = true;
+		}
+	}
+	
+	if(!$broken) {
+		$element = & $xml->document->version[0];
+		if($element) {
+			$broken = !version_compare($version, '1.7', 'ge');
+		} else {
+			$broken = true;
+		}
+	}
+	
+	if($broken) {
+		JError::raiseWarning(0, "Your site has Kunena 1.6 or earlier installed. This version of Kunena is not compatible with Nooku Framework, the PHP framework used by Akeeba Subscriptions. Please upgrade to Kunena 1.7 or later. The installation was cancelled, as it would result in your site being broken.");
+		return false;
+	}
 }
 
 // Check for broken IonCube loaders on PHP 5.3 or later
