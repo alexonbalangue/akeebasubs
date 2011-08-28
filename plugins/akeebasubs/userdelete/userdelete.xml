@@ -18,5 +18,7 @@
 		<language tag="en-GB">en-GB.plg_akeebasubs_userdelete.sys.ini</language>
 		<language tag="da-DK">da-DK.plg_akeebasubs_userdelete.ini</language>
 		<language tag="da-DK">da-DK.plg_akeebasubs_userdelete.sys.ini</language>
+		<language tag="el-GR">el-GR.plg_akeebasubs_userdelete.ini</language>
+		<language tag="el-GR">el-GR.plg_akeebasubs_userdelete.sys.ini</language>
 	</languages>
 </install>

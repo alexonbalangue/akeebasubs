@@ -17,6 +17,8 @@
 	<languages>
 		<language tag="en-GB">en-GB.plg_akpayment_eway.ini</language>
 		<language tag="en-GB">en-GB.plg_akpayment_eway.sys.ini</language>
+		<language tag="el-GR">el-GR.plg_akpayment_eway.ini</language>
+		<language tag="el-GR">el-GR.plg_akpayment_eway.sys.ini</language>
 	</languages>
 	<params>
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_TITLE_LABEL" description="PLG_AKPAYMENT_EWAY_TITLE_DESC"/>

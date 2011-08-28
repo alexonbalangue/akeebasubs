@@ -16,5 +16,7 @@
 	<languages>
 		<language tag="en-GB">en-GB.plg_akeebasubs_autocity.ini</language>
 		<language tag="en-GB">en-GB.plg_akeebasubs_autocity.sys.ini</language>
+		<language tag="el-GR">el-GR.plg_akeebasubs_autocity.ini</language>
+		<language tag="el-GR">el-GR.plg_akeebasubs_autocity.sys.ini</language>
 	</languages>
 </install>
