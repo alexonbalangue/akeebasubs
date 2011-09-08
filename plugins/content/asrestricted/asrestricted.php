@@ -62,13 +62,14 @@ class plgContentAsrestricted extends JPlugin
 		static $subscriptions = null;
 				
 		// Don't process empty or invalid IDs
-		if(empty($id) || ($id <= 0)) return false;
+		$id = trim($id);
+		if(empty($id) || (($id <= 0) && ($id != '*'))) return false;
 		
 		// Don't process for guests
 		$user = JFactory::getUser();
-		if($user->guest) return false;
-		
-		if(is_null($subscriptions)) {
+		if($user->guest) {
+			$subscriptions = array();
+		} elseif(is_null($subscriptions)) {
 			$subscriptions = array();
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
@@ -85,7 +86,11 @@ class plgContentAsrestricted extends JPlugin
 			}
 		}
 		
-		return in_array($id, $subscriptions);
+		if($id == '*') {
+			return !empty($subscriptions);
+		} else {
+			return in_array($id, $subscriptions);
+		}
 	}
 	
 	/**
@@ -131,7 +136,8 @@ class plgContentAsrestricted extends JPlugin
 						$item = substr($item,1);
 						$item = trim($item);
 					}
-					$id = self::getId($item);
+					$id = trim($item);
+					if($id != '*') $id = self::getId($id);
 					$result = self::isTrue($id);
 					$ret = $ret && ($negate ? !$result : $result);
 				}
