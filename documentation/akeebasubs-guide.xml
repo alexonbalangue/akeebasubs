@@ -43,7 +43,7 @@
       <revision>
         <revnumber>1.0.0</revnumber>
 
-        <date>August 2011</date>
+        <date>September 2011</date>
 
         <author>
           <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
@@ -3622,6 +3622,24 @@ LEVEL3=Group 1</programlisting>
         not have a subscription to LEVEL1. Also, if they do have a LEVEL1
         subscription and they are also LEVEL2 (but not LEVEL3) subscribers the
         content will also be shown to them.</para>
+
+        <tip>
+          <para>Since Akeeba Subscriptions 1.0 Stable you can also use a
+          pseudo-level marked by a single star (*) which matches all active
+          subscriptions. For example, to show something to all subscribers
+          use:</para>
+
+          <programlisting>{ akeebasubs * }Content to show to all subscribers{ /akeebasubs }</programlisting>
+
+          <para>Additionally, you can use the "not" modifier (exclamation
+          mark) to show content only to non-subscribers:</para>
+
+          <programlisting>{ akeebasubs !* }Content to show to non-subscribers{ /akeebasubs }</programlisting>
+
+          <para>You can use this trick to easily show different messages to
+          subscribers and non-subscribers, no matter if you have decided on
+          the final list or naming of your subscription levels.</para>
+        </tip>
       </section>
 
       <section>
