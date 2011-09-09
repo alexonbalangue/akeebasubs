@@ -60,6 +60,7 @@
 	<label for="email" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL')?></label>
 	<input type="text" name="email" id="email" value="<?=@escape( !empty($userparams->email) ? $userparams->email : $cache['email'] )?>" class="main" />
 	<span id="email_invalid" class="invalid" <?if($validation->validation->email):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_EMAIL')?><span class="akstriangle akstriangle-red"></span></span>
+	<br/>
 	<?
 	jimport('joomla.plugin.helper');
 	JPluginHelper::importPlugin('akeebasubs');
@@ -71,10 +72,10 @@
 	<?=$field['elementHTML']?>
 	<?if(array_key_exists('validLabel', $field)):?><span id="<?=$field['id']?>_valid" class="valid" style="<?if(!$field['isValid']):?>display:none<?else:?>display:inline-block<?endif?>"><?=$field['validLabel']?><span class="akstriangle akstriangle-green"></span></span><?endif;?>
 	<?if(array_key_exists('invalidLabel', $field)):?><span id="<?=$field['id']?>_invalid" class="invalid" style="<?if($field['isValid']):?>display:none<?else:?>display:inline-block<?endif?>"><?=$field['invalidLabel']?><span class="akstriangle akstriangle-red"></span></span><?endif;?>
+	<br/>
 	<?endforeach; endforeach;?>
 	
 	<?if(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->personalinfo):?>
-	<br/>
 	<label for="address1" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS1')?></label>
 	<input type="text" name="address1" id="address1" value="<?=@escape(!empty($userparams->address1) ? $userparams->address1 : $cache['address1'])?>" class="main" />
 	<span id="address1_empty" class="invalid" <?if($validation->validation->address1):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
