@@ -27,8 +27,8 @@ if(!defined('KOOWA')) {
 	return;
 }
 
-echo KFactory::get('site::mod.aksubslist.html', array(
-	'params'  => $params,
-	'module'  => $module,
-	'attribs' => $attribs
-))->display();
+echo KFactory::get('mod://site/aksubslist.html')
+	->params($params)
+	->module($module)
+	->attribs($attribs)
+	->display();

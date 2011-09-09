@@ -26,9 +26,8 @@ defined('_JEXEC') or die('');
 if(!defined('KOOWA')) {
 	return;
 }
-
-echo KFactory::get('site::mod.akslevels.html', array(
-	'params'  => $params,
-	'module'  => $module,
-	'attribs' => $attribs
-))->display();
+echo KFactory::get('mod://site/akslevels.html')
+	->module($module)
+	->params($params)
+	->attribs($attribs)
+	->display();

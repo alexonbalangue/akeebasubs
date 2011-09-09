@@ -5,7 +5,7 @@
  * @license 	GNU General Public License version 3 or later
  */
 
-class ModAkeebasubsView extends ModDefaultView
+class ModAkeebasubsView extends ModDefaultHtml
 {       
 	public function display()
 	{
