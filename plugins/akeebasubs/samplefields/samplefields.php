@@ -139,7 +139,7 @@ ENDJS;
 		
 		$custom = $data->custom;
 		
-		if(!in_array('agegroup',$custom)) $custom['agegroup'] = 0;
+		if(!array_key_exists('agegroup',$custom)) $custom['agegroup'] = 0;
 		
 		$response['custom_validation']['agegroup'] = $custom['agegroup'] != 0;
 		$response['valid'] = $response['custom_validation']['agegroup']; 
