@@ -28,6 +28,7 @@ Akeeba Subscriptions 1.0.0
 # Back-end fields floating all over the place due to the styling enforced by Joomla! 1.7's BlueStork template
 # Untranslated "Select" button when selecting a user
 # "url_setopt is not defined" fatal error when subscribing under some rare conditions
+# Integrated login form in subscription page not working when using SEF URLs without Apache's mod_rewrite
 
 Akeeba Subscriptions 1.0.rc1
 ================================================================================
