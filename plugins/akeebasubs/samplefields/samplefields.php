@@ -137,7 +137,11 @@ ENDJS;
 			'custom_validation'	=> array()
 		);
 		
-		$response['custom_validation']['agegroup'] = $data->custom['agegroup'] != 0;
+		$custom = $data->custom;
+		
+		if(!in_array('agegroup',$custom)) $custom['agegroup'] = 0;
+		
+		$response['custom_validation']['agegroup'] = $custom['agegroup'] != 0;
 		$response['valid'] = $response['custom_validation']['agegroup']; 
 		
 		return $response;
