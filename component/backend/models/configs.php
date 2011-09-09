@@ -60,6 +60,7 @@ class ComAkeebasubsModelConfigs extends KModelAbstract
 		$params = $params->toArray();
 		
 		$config = array_key_exists('params',$params) ? $params['params'] : '';
+		$config = str_replace("\n", "", $config);
 		if(!empty($config)) {
 			$config = @json_decode($config, true);
 		} else {

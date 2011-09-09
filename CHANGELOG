@@ -29,6 +29,7 @@ Akeeba Subscriptions 1.0.0
 # Untranslated "Select" button when selecting a user
 # "url_setopt is not defined" fatal error when subscribing under some rare conditions
 # Integrated login form in subscription page not working when using SEF URLs without Apache's mod_rewrite
+# Sometimes the configuration got reset due to newlines in the user registration email body
 
 Akeeba Subscriptions 1.0.rc1
 ================================================================================
