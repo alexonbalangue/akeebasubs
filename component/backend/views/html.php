@@ -15,8 +15,8 @@ class ComAkeebasubsViewHtml extends ComDefaultViewHtml
 		/*
 		$config->append(array(
 			'behaviors'  =>  array(
-				'admin::com.default.controller.behavior.commandable',
-				'admin::com.default.controller.behavior.executable'
+				'com://admin/default.controller.behavior.commandable',
+				'com://admin/default.controller.behavior.executable'
 		)));
 		*/
 		

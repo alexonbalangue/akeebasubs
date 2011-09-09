@@ -117,8 +117,8 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 			'deselect'	=> true
 		));
 		
-		$identifier = 'admin::com.akeebasubs.model.levels';
-		$list = KFactory::tmp($identifier)
+		$identifier = 'com://admin/akeebasubs.model.levels';
+		$list = KFactory::get($identifier)
 			->sort('ordering')
 			->direction('ASC')
 			->limit(0)
@@ -279,7 +279,7 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
  		
  		$options = array();
  		
- 		$plugins = KFactory::get('site::com.akeebasubs.model.subscribes')
+ 		$plugins = KFactory::get('com://site/akeebasubs.model.subscribes')
 					->getPaymentPlugins();
  		
 		foreach($plugins as $plugin) {
@@ -361,7 +361,7 @@ class ComAkeebasubsTemplateHelperListbox extends ComDefaultTemplateHelperListbox
 		));
 		
 		if(empty($levels)) {
-			$levelsList = KFactory::tmp('admin::com.akeebasubs.model.levels')->getList();
+			$levelsList = KFactory::get('com://admin/akeebasubs.model.levels')->getList();
 			if(!empty($levelsList)) foreach($levelsList as $level) {
 				$levels[$level->id] = $level->title;
 			}

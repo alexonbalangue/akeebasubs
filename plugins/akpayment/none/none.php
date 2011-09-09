@@ -78,7 +78,7 @@ ENDFORM;
 		
 		// Enable the subscription
 		$id = (int)$data['subscription'];
-		$subscription = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
+		$subscription = KFactory::get('com://site/akeebasubs.model.subscriptions')
 			->id($id)
 			->getItem();
 		
@@ -117,7 +117,7 @@ ENDFORM;
 		$subscription->setData($updates)->save();
 		
 		// This plugin is a tricky one; it will redirect you to the thank you page
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;

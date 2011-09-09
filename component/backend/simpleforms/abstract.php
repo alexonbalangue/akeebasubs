@@ -105,7 +105,7 @@ abstract class ComAkeebasubsSimpleformAbstract
 				// Render elements
 				foreach($sectionData->options as $key => $opt)
 				{
-					$html .= KFactory::tmp('admin::com.akeebasubs.simpleform.element.'.$opt->type, array(
+					$html .= KFactory::get('com://admin/akeebasubs.simpleform.element.'.$opt->type, array(
 						'name'			=> $key,
 						'label'			=> $opt->title,
 						'value'			=> $this->_data->$key,

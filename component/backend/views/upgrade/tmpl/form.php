@@ -26,11 +26,11 @@
 		<legend><?=@text('COM_AKEEBASUBS_UPGRADE_DISCOUNT_TITLE')?></legend>
 		
 		<label for="from_id_field" class="main"><?= @text('COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID'); ?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.levels',array('name' => 'from_id', 'selected' => $upgrade->from_id, 'deselect' => true))?>
+		<?=@helper('com://admin/akeebasubs.template.helper.listbox.levels',array('name' => 'from_id', 'selected' => $upgrade->from_id, 'deselect' => true))?>
 		<br/>
 		
 		<label for="to_id_field" class="main"><?= @text('COM_AKEEBASUBS_UPGRADES_FIELD_TO_ID'); ?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.levels',array('name' => 'to_id', 'selected' => $upgrade->to_id, 'deselect' => true))?>
+		<?=@helper('com://admin/akeebasubs.template.helper.listbox.levels',array('name' => 'to_id', 'selected' => $upgrade->to_id, 'deselect' => true))?>
 		<br/>
 		
 		<label for="min_presence_field" class="main"><?= @text('COM_AKEEBASUBS_UPGRADES_FIELD_MIN_PRESENCE'); ?></label>
@@ -42,7 +42,7 @@
 		<br/>
 
 		<label for="type_field" class="main"><?= @text('COM_AKEEBASUBS_UPGRADES_FIELD_TYPE'); ?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.coupontypes',array('name' => 'type', 'selected' => $upgrade->type, 'deselect' => true))?>
+		<?=@helper('com://admin/akeebasubs.template.helper.listbox.coupontypes',array('name' => 'type', 'selected' => $upgrade->type, 'deselect' => true))?>
 		<br/>
 		
 		<label for="value_field" class="main"><?= @text('COM_AKEEBASUBS_UPGRADES_FIELD_VALUE'); ?></label>

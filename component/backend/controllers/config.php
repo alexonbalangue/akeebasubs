@@ -12,7 +12,7 @@ class ComAkeebasubsControllerConfig extends ComAkeebasubsControllerDefault
 	function _actionRead(KCommandContext $context)
 	{
 		$model	= $this->getModel();
-		$html	= KFactory::tmp('admin::com.akeebasubs.simpleform.default')
+		$html	= KFactory::get('com://admin/akeebasubs.simpleform.default')
 					->setData($model->getConfig())
 					->setDefinitions($model->getDefinitions())
 					->renderHtml();

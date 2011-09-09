@@ -16,7 +16,7 @@
 		<legend><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_LBL_SUB')?></legend>
 		
 		<label for="levelid" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL')?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('name' => 'akeebasubs_level_id', 'selected' => $subscription->akeebasubs_level_id) ) ?>
+		<?=@helper('com://admin/akeebasubs.template.helper.listbox.levels', array('name' => 'akeebasubs_level_id', 'selected' => $subscription->akeebasubs_level_id) ) ?>
 		<br/>
 		
 		<label for="userid_visible" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
@@ -56,7 +56,7 @@
 		<br/>
 
 		<label for="state" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_STATE')?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.paystates', array('name' => 'state', 'selected' => $subscription->state) ) ?>
+		<?=@helper('com://admin/akeebasubs.template.helper.listbox.paystates', array('name' => 'state', 'selected' => $subscription->state) ) ?>
 		<br/>
 		
 		<label for="net_amount" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_NET_AMOUNT')?></label>

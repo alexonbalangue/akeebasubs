@@ -9,7 +9,7 @@ class ModAkeebasubsView extends ModDefaultView
 {       
 	public function display()
 	{
-		$this->subscriptions = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+		$this->subscriptions = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 								->sort('akeebasubs_subscription_id')
 								->direction('desc')
 								->limit(10)

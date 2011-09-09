@@ -103,7 +103,7 @@ class ComAkeebasubsModelCoupons extends KModelTable
 			} else {
 				$subscriptions = array();
 				foreach($subs as $id) {
-					$subObject = KFactory::tmp('admin::com.akeebasubs.model.levels')->id($id)->getItem();
+					$subObject = KFactory::get('com://admin/akeebasubs.model.levels')->id($id)->getItem();
 					$id = null;
 					if(is_object($subObject)) {
 						if($subObject->id > 0) {

@@ -90,7 +90,7 @@
 				<? if($coupon->type == 'value'): ?>
 				<span class="akeebasubs-coupon-discount-value">
 				<?= sprintf('%2.2f', (float)$coupon->value) ?>
-				<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				</span>
 				<? else: ?>
 				<span class="akeebasubs-coupon-discount-percent">

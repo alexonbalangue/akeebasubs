@@ -39,7 +39,7 @@ class ComAkeebasubsDatabaseBehaviorUserunblockable extends KDatabaseBehaviorAbst
 				// Is this a paid subscription?
 				if($row->state != 'C') continue;
 				// Cool! Let's unblock the user
-				KFactory::tmp('admin::com.akeebasubs.model.jusers')
+				KFactory::get('com://admin/akeebasubs.model.jusers')
 					->id($row->user_id)
 					->getItem()
 					->setData(array(

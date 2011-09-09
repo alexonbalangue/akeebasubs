@@ -48,7 +48,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$invoice_number = max($max1, $max2);
 			$invoice_number++;
 			
-			$subname = KFactory::tmp('admin::com.akeebasubs.model.levels')
+			$subname = KFactory::get('com://admin/akeebasubs.model.levels')
 					->id($row->akeebasubs_level_id)
 					->getItem()
 					->title;
@@ -127,15 +127,15 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		$db = JFactory::getDBO();
 		
 		// Load user data
-		$juser = KFactory::tmp('admin::com.akeebasubs.model.jusers')
+		$juser = KFactory::get('com://admin/akeebasubs.model.jusers')
 			->id($userid)
 			->getItem();
 			
-		$list = KFactory::tmp('site::com.akeebasubs.model.users')
+		$list = KFactory::get('com://site/akeebasubs.model.users')
 			->user_id($userid)
 			->getList();
 		if(!count($list)) {
-			$kuser = KFactory::tmp('site::com.akeebasubs.model.users')->getItem();
+			$kuser = KFactory::get('com://site/akeebasubs.model.users')->getItem();
 		} else {
 			$list->getIterator()->rewind();
 			$kuser = $list->getIterator()->current();
@@ -148,7 +148,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		$contact_number++;
 		
 		// get country/state names
-		$dummy = KFactory::get('admin::com.akeebasubs.template.helper.listbox');
+		$dummy = KFactory::get('com://admin/akeebasubs.template.helper.listbox');
 		$country = ComAkeebasubsTemplateHelperListbox::$countries[$kuser->country];
 		$state = ComAkeebasubsTemplateHelperListbox::$states[$kuser->state];
 		if($state == 'N/A') $state = '';

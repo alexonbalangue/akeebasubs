@@ -39,7 +39,7 @@ defined('KOOWA') or die('Restricted access'); ?>
 			$m = 1 - $m;
 			$rowClass = ($subscription->enabled) ? '' : 'expired';
 				
-			$users = KFactory::tmp('admin::com.akeebasubs.model.users')
+			$users = KFactory::get('com://admin/akeebasubs.model.users')
 				->user_id($subscription->user_id)
 				->getList();
 			if(empty($users)) {
@@ -68,10 +68,10 @@ defined('KOOWA') or die('Restricted access'); ?>
 				</a>
 	        </td>
 	        <td>
-				<?= sprintf('%2.2f', (float)$subscription->net_amount) ?> <?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?= sprintf('%2.2f', (float)$subscription->net_amount) ?> <?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 	        </td>
 	        <td>
-				<?=@helper('admin::com.akeebasubs.template.helper.date.format', array('date' => $subscription->created_on, 'format' => '%Y-%m-%d %H:%M' )) ?>
+				<?=@helper('com://admin/akeebasubs.template.helper.date.format', array('date' => $subscription->created_on, 'format' => '%Y-%m-%d %H:%M' )) ?>
 	        </td>
 		</tr>
 		<?php endforeach; ?>

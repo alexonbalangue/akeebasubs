@@ -89,10 +89,10 @@
 				</a>
 			</td>
 			<td>
-				<?=@helper('admin::com.akeebasubs.template.helper.listbox.formatLevel',array('id'=>$upgrade->from_id))?>
+				<?=@helper('com://admin/akeebasubs.template.helper.listbox.formatLevel',array('id'=>$upgrade->from_id))?>
 			</td>
 			<td>
-				<?=@helper('admin::com.akeebasubs.template.helper.listbox.formatLevel',array('id'=>$upgrade->to_id))?>
+				<?=@helper('com://admin/akeebasubs.template.helper.listbox.formatLevel',array('id'=>$upgrade->to_id))?>
 			</td>
 			<td>
 				<?=(int)$upgrade->min_presence?>
@@ -104,7 +104,7 @@
 				<? if($upgrade->type == 'value'): ?>
 				<span class="akeebasubs-coupon-discount-value">
 				<?= sprintf('%2.2f', (float)$upgrade->value) ?>
-				<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				</span>
 				<? else: ?>
 				<span class="akeebasubs-coupon-discount-percent">

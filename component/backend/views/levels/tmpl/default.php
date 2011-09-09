@@ -78,7 +78,7 @@
 			</td>
 			<td align="right">
 				<?= sprintf('%02.02f', (float)$level->price) ?>
-				<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 			</td>
 			<td align="center">
 				<?= @helper('grid.order', array('row' => $level)); ?>

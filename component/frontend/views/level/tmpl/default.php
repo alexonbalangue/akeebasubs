@@ -10,9 +10,9 @@
 
 <div id="akeebasubs">
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader'))?>
+<?=@helper('com://site/akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsheader'))?>
 
-<?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->stepsbar ? @template('steps',array('step' => 'subscribe')) : ''?>
+<?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->stepsbar ? @template('steps',array('step' => 'subscribe')) : ''?>
 
 <?=@template('default_level', array('level' => $level))?>
 
@@ -23,14 +23,14 @@
 <hr/>
 </noscript>
 
-<?if(KFactory::get('lib.joomla.user')->guest):?>
+<?if(KFactory::get('joomla:user')->guest):?>
 	<?=@template('default_login')?>
 <?endif?>
 
 <form action="<?=@route('view=subscribe&layout=default&slug='.KRequest::get('get.slug','slug'))?>" method="post"
 	id="signupForm" >
 	<input type="hidden" name="_token" value="<?=JUtility::getToken()?>" />
-<?if(KFactory::get('lib.joomla.user')->guest):?>
+<?if(KFactory::get('joomla:user')->guest):?>
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></h3>
 	
 	<label for="username" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME')?></label>
@@ -73,7 +73,7 @@
 	<?if(array_key_exists('invalidLabel', $field)):?><span id="<?=$field['id']?>_invalid" class="invalid" style="<?if($field['isValid']):?>display:none<?else:?>display:inline-block<?endif?>"><?=$field['invalidLabel']?><span class="akstriangle akstriangle-red"></span></span><?endif;?>
 	<?endforeach; endforeach;?>
 	
-	<?if(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo):?>
+	<?if(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->personalinfo):?>
 	<br/>
 	<label for="address1" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS1')?></label>
 	<input type="text" name="address1" id="address1" value="<?=@escape(!empty($userparams->address1) ? $userparams->address1 : $cache['address1'])?>" class="main" />
@@ -83,12 +83,12 @@
 	<input type="text" name="address2" id="address2" value="<?=@escape(!empty($userparams->address2) ? $userparams->address2 : $cache['address2'])?>" class="main" />
 	<br/>
 	<label for="country" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => ( !empty($userparams->country) && ($userparams->country != 'XX') ? $userparams->country : $cache['country'] ) ))?>
+	<?=@helper('com://admin/akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => ( !empty($userparams->country) && ($userparams->country != 'XX') ? $userparams->country : $cache['country'] ) ))?>
 	<span id="country_empty" class="invalid" <?if($validation->validation->country):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 	<br/>
 	<div id="stateField">
 		<label for="state" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_STATE')?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => ( !empty($userparams->state) ? $userparams->state : $cache['state'] ) ))?>
+		<?=@helper('com://admin/akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => ( !empty($userparams->state) ? $userparams->state : $cache['state'] ) ))?>
 		<span id="state_empty" class="invalid" <?if($validation->validation->state):?>style="display:none"<?else:?>style="display:inline-block"<?endif?>><?=@text('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 		<br/>
 	</div>
@@ -131,7 +131,7 @@
 	
 	<div id="paymentmethod-container">
 		<label for="paymentmethod" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
-		<?=@helper('admin::com.akeebasubs.template.helper.listbox.paymentmethods')?>
+		<?=@helper('com://admin/akeebasubs.template.helper.listbox.paymentmethods')?>
 		<br/>
 	</div>
 	<label for="subscribenow" class="main">&nbsp;</label>
@@ -148,24 +148,24 @@
 	
 	<label class="main"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_NET')?></label>
 	<span id="akeebasubs-sum-net" class="currency"><?=$validation->price->net?></span>
-	<span class="currency-symbol"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol"><?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	<br/>
 	<label class="main"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')?></label>
 	<span id="akeebasubs-sum-discount" class="currency"><?=$validation->price->discount?></span>
-	<span class="currency-symbol"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol"><?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	<br/>
 	<label class="main"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_VAT')?></label>
 	<span id="akeebasubs-sum-vat" class="currency"><?=$validation->price->tax?></span>
-	<span class="currency-symbol"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol"><?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	<br/>
 	<label class="main  total"><?=@text('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')?></label>
 	<span id="akeebasubs-sum-total" class="currency total"><?=$validation->price->gross?></span>
-	<span class="currency-symbol total"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+	<span class="currency-symbol total"><?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 	
 	
 </form>
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsfooter'))?>
+<?=@helper('com://site/akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionsfooter'))?>
 
 </div>
 
@@ -173,7 +173,7 @@
 var akeebasubs_validate_url = "<?=JURI::base().'index.php'?>";
 var akeebasubs_level_id = <?=$level->id?>;
 var akeebasubs_valid_form = false;
-var akeebasubs_personalinfo = <?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo?'true':'false'?>;
+var akeebasubs_personalinfo = <?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->personalinfo?'true':'false'?>;
 
 (function($) {
 	$(document).ready(function(){
@@ -182,7 +182,7 @@ var akeebasubs_personalinfo = <?=KFactory::get('site::com.akeebasubs.model.confi
 		validatePassword();
 		validateName();
 		validateEmail();
-		<?if(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo):?>
+		<?if(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->personalinfo):?>
 		validateAddress();
 		validateBusiness();
 		<?endif;?>

@@ -12,7 +12,7 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 	public function __construct(KConfig $config)
 	{
 		$config->append(array(
-			'model'		=> KFactory::get('admin::com.akeebasubs.model.subscriptions')
+			'model'		=> KFactory::get('com://admin/akeebasubs.model.subscriptions')
 		));
 		
 		parent::__construct($config);
@@ -60,7 +60,7 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 		echo json_encode($response);
 		
 		// Return
-		KFactory::get('lib.joomla.application')->close();
+		KFactory::get('joomla:application')->close();
 	}
 	
 	public function _denyAccess()

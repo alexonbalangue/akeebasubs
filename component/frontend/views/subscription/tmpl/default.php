@@ -17,14 +17,14 @@
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_USER')?></td>
 		<td class="subscription-info">
-			<strong><?=KFactory::get('lib.joomla.user', array($subscription->user_id))->username?></strong>
-			(<em><?=KFactory::get('lib.joomla.user', array($subscription->user_id))->name?></em>)
+			<strong><?=KFactory::get('joomla:user', array($subscription->user_id))->username?></strong>
+			(<em><?=KFactory::get('joomla:user', array($subscription->user_id))->name?></em>)
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?></td>
 		<td class="subscription-info">
-			<?=KFactory::tmp('site::com.akeebasubs.model.levels')->id($subscription->akeebasubs_level_id)->getItem()->title?>
+			<?=KFactory::get('com://site/akeebasubs.model.levels')->id($subscription->akeebasubs_level_id)->getItem()->title?>
 		</td>
 	</tr>
 	<tr>
@@ -53,7 +53,7 @@
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_AMOUNT_PAID')?></td>
 		<td class="subscription-info">
 			<?=sprintf('%2.02f',$subscription->gross_amount)?>
-			<?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+			<?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 		</td>
 	</tr>
 	<tr>

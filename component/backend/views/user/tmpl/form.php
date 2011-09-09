@@ -51,11 +51,11 @@
 	<br/>
 	
 	<label for="state" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_STATE')?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => ( $user->state ) ))?>
+	<?=@helper('com://admin/akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => ( $user->state ) ))?>
 	<br/>
 	
 	<label for="state" class="main"><?=@text('COM_AKEEBASUBS_USERS_FIELD_COUNTRY')?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => ( $user->country ) ))?>
+	<?=@helper('com://admin/akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => ( $user->country ) ))?>
 	<br/>
 
 <!-- hits -->

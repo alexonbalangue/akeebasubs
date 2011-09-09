@@ -47,12 +47,12 @@ class ComAkeebasubsControllerTool extends ComAkeebasubsControllerDefault
 
 		if($converter->splittable && !isset($request->offset))
 		{
-			KFactory::get('lib.joomla.application')->close();
+			KFactory::get('joomla:application')->close();
 			return;
 		}
 
 		if(isset($request->print_r)) echo '<pre>', print_r($converter, true), '</pre>';
-		KFactory::get('lib.joomla.application')->close();
+		KFactory::get('joomla:application')->close();
 	}
 	
 	protected function _actionBrowse(KCommandContext $context)

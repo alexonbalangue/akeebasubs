@@ -64,7 +64,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$clockStart = microtime(true);
 		
 		// Get and loop all subscription levels
-		$levels = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$levels = KFactory::get('com://admin/akeebasubs.model.levels')
 			->enabled(1)
 			->getList();
 		
@@ -90,7 +90,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			$jFrom = new JDate($now + 1);
 			$jTo = new JDate($now + $notify1 * 24 * 3600);
 			
-			$subs1 = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+			$subs1 = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 				->contact_flag(0)
 				->level($level->id)
 				->enabled(1)
@@ -106,7 +106,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 				$jFrom = new JDate($now + 1);
 				$jTo = new JDate($now + $notify2 * 24 * 3600);
 
-				$subs2 = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+				$subs2 = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 					->contact_flag(1)
 					->level($level->id)
 					->enabled(1)
@@ -127,7 +127,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 				foreach($subs as $sub) {
 
 					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
-					$renewals = KFactory::get('site::com.akeebasubs.model.subscriptions')
+					$renewals = KFactory::get('com://site/akeebasubs.model.subscriptions')
 						->enabled(1)
 						->user_id($sub->user_id)
 						->level($sub->akeebasubs_level_id)
@@ -261,10 +261,10 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$sitename = $config->getValue('config.sitename');
 	
 		// Get the user object
-		$user = KFactory::get('lib.joomla.user')->getInstance($row->user_id);
+		$user = KFactory::get('joomla:user')->getInstance($row->user_id);
 		
 		// Get the level
-		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
+		$level = KFactory::get('com://site/akeebasubs.model.levels')
 			->id($row->akeebasubs_level_id)
 			->getItem();
 			

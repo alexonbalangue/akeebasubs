@@ -48,14 +48,14 @@ abstract class ComAkeebasubsDatabaseConvertersAbstract extends KObject implement
 	 */
 	public function convert()
 	{
-		$dbprefix = KFactory::get('lib.joomla.config')->getValue('dbprefix');
-		$identifier = new KIdentifier('admin::com.akeebasubs.database.table.default');
+		$dbprefix = KFactory::get('joomla:config')->getValue('dbprefix');
+		$identifier = new KIdentifier('com://admin/akeebasubs.database.table.default');
 
 		foreach($this->data as $this->name => $rows)
 		{
 			$identifier->name = $this->name;
 			$table = KFactory::get($identifier);
-			$table = KFactory::get('admin::com.akeebasubs.database.table.'.$this->name);
+			$table = KFactory::get('com://admin/akeebasubs.database.table.'.$this->name);
 			
 			$offset = KRequest::get('post.offset', 'int', -999);
 			if($offset == -999) $offset = KRequest::get('get.offset', 'int', 0);
@@ -143,9 +143,9 @@ abstract class ComAkeebasubsDatabaseConvertersAbstract extends KObject implement
 			if($offset === false)
 			{
 				if(!isset($this->data[$name]) || $this->data[$name] == array()) {
-					$this->data[$name] = (int)KFactory::get('admin::com.default.database.table.'.$name.$table['options']['name'], $table['options'])->count(clone $query);
+					$this->data[$name] = (int)KFactory::get('com://admin/default.database.table.'.$name.$table['options']['name'], $table['options'])->count(clone $query);
 				} else {
-					$this->data[$name] += (int)KFactory::get('admin::com.default.database.table.'.$name.$table['options']['name'], $table['options'])->count(clone $query);
+					$this->data[$name] += (int)KFactory::get('com://admin/default.database.table.'.$name.$table['options']['name'], $table['options'])->count(clone $query);
 				}
 
 				continue;
@@ -156,11 +156,11 @@ abstract class ComAkeebasubsDatabaseConvertersAbstract extends KObject implement
 			}
 			
 			if(!isset($this->data[$name]) || $this->data[$name] == array()) {
-				$this->data[$name] = KFactory::get('admin::com.default.database.table.'.$table['options']['name'], $table['options'])
+				$this->data[$name] = KFactory::get('com://admin/default.database.table.'.$table['options']['name'], $table['options'])
 										->select($query, KDatabase::FETCH_ROWSET)
 										->getData();
 			} else {
-				$rows = KFactory::get('admin::com.default.database.table.'.$name.$table['options']['name'], $table['options'])
+				$rows = KFactory::get('com://admin/default.database.table.'.$name.$table['options']['name'], $table['options'])
 							->select($query, KDatabase::FETCH_ROWSET)
 							->getData();
 
@@ -189,11 +189,11 @@ abstract class ComAkeebasubsDatabaseConvertersAbstract extends KObject implement
 					$query = clone $table['query'];
 
 					if($this->data[$name] == array() || is_numeric($this->data[$name])) {
-						$this->data[$name] = KFactory::get('admin::com.default.database.table.'.$name.$table['options']['name'], $table['options'])
+						$this->data[$name] = KFactory::get('com://admin/default.database.table.'.$name.$table['options']['name'], $table['options'])
 												->select($query, KDatabase::FETCH_ROWSET)
 												->getData();
 					} else {
-						$rows = KFactory::get('admin::com.default.database.table.'.$name.$table['options']['name'], $table['options'])
+						$rows = KFactory::get('com://admin/default.database.table.'.$name.$table['options']['name'], $table['options'])
 									->select($query, KDatabase::FETCH_ROWSET)
 									->getData();
 		

@@ -12,7 +12,7 @@ class ComAkeebasubsControllerValidate extends ComAkeebasubsControllerDefault
 	public function __construct(KConfig $config)
 	{
 		$config->append(array(
-			'model'		=> KFactory::get('site::com.akeebasubs.model.subscribes')
+			'model'		=> KFactory::get('com://site/akeebasubs.model.subscribes')
 		));
 		
 		parent::__construct($config);
@@ -30,7 +30,7 @@ class ComAkeebasubsControllerValidate extends ComAkeebasubsControllerDefault
 			->getValidation();
 		echo json_encode($data);
 		
-		KFactory::get('lib.joomla.application')->close();
+		KFactory::get('joomla:application')->close();
 	}
 	
 	public function _denyAccess()

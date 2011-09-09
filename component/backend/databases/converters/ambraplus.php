@@ -32,7 +32,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 					'name' => 'ambrasubs_types',
 					'identity_column' => 'id'
 				),
-				'query'	=> KFactory::tmp('lib.koowa.database.query')
+				'query'	=> KFactory::get('koowa:database.query')
 					->select(array(
 						'id',
 						'title',
@@ -52,7 +52,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 					'name' => 'ambrasubs_users2types',
 					'identity_column' => 'u2tid'
 				),
-				'query'	=> KFactory::tmp('lib.koowa.database.query')
+				'query'	=> KFactory::get('koowa:database.query')
 					->select(array(
 						'tbl.u2tid',
 						'tbl.userid AS user_id',
@@ -81,7 +81,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 					'name' => 'users',
 					'identity_column' => 'id'
 				),
-				'query' => KFactory::tmp('lib.koowa.database.query')
+				'query' => KFactory::get('koowa:database.query')
 					->select(array(
 						'tbl.id',
 						'tbl.params AS rawparams'
@@ -95,7 +95,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 					'name'	=> 'ambrasubs_coupons',
 					'identity_column' => 'id'
 				),
-				'query' => KFactory::tmp('lib.koowa.database.query')
+				'query' => KFactory::get('koowa:database.query')
 					->select(array(
 						'tbl.*'
 					))
@@ -116,9 +116,9 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 				$articleText = '<p></p>';
 				$articleid = (int)($level['articleid']);
 				if($articleid > 0) {
-					$article = KFactory::tmp('admin::com.default.database.table.content', array(
+					$article = KFactory::get('com://admin/default.database.table.content', array(
 						'name'=>'content','identity_column'=>'id'
-					))->select(KFactory::tmp('lib.koowa.database.query')
+					))->select(KFactory::get('koowa:database.query')
 						->select(array('introtext','fulltext'))
 						->where('id','=',$articleid), KDatabase::FETCH_ROW)
 					->getItem();
@@ -222,7 +222,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 					'hitslimit'		=> null,
 					'ordering'		=> 0,
 					'created_on'	=> $jNow->toMySQL(),
-					'created_by'	=> KFactory::get('lib.joomla.user')->id,
+					'created_by'	=> KFactory::get('joomla:user')->id,
 					'modified_on'	=> '0000-00-00 00:00:00',
 					'modified_by'	=> 0,
 					'locked_on'		=> '0000-00-00 00:00:00',

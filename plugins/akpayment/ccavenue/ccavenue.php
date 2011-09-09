@@ -70,7 +70,7 @@ class plgAkpaymentCcavenue extends JPlugin
 		$checksum = $this->getCheckSum($merchant, $subscription->net_amount, $subscription->id,
 			$redirectURL, $WorkingKey);
 		
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -78,13 +78,13 @@ class plgAkpaymentCcavenue extends JPlugin
 			'url'			=> 'https://www.ccavenue.com/shopzone/cc_details.jsp',
 			'merchant'		=> $merchant,
 			'postback'		=> $redirectURL,
-			'currency'		=> strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency),
+			'currency'		=> strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName,
 			'checksum'		=> $checksum
 		);
 		
-		$kuser = KFactory::tmp('admin::com.akeebasubs.model.users')
+		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
 			->user_id($user->id)
 			->getItem();
 
@@ -114,7 +114,7 @@ class plgAkpaymentCcavenue extends JPlugin
 			$id = array_key_exists('Order_Id', $data) ? (int)$data['Order_Id'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 					->id($id)
 					->getItem();
 				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
@@ -151,7 +151,7 @@ class plgAkpaymentCcavenue extends JPlugin
 		if(!$isValid) die('Hacking attempt; payment processing refused');
 		
 		// Load the subscription level and get its slug
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;

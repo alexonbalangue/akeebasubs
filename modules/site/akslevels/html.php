@@ -36,15 +36,15 @@ class ModAkslevelsHtml extends ModDefaultView
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 
 		// TODO : Put this in a shared file and load with JLoader
-		KFactory::map('site::com.akeebasubs.model.levels',			'admin::com.akeebasubs.model.levels');
-		KFactory::map('site::com.akeebasubs.model.configs',			'admin::com.akeebasubs.model.configs');
+		KFactory::map('com://site/akeebasubs.model.levels',			'com://admin/akeebasubs.model.levels');
+		KFactory::map('com://site/akeebasubs.model.configs',			'com://admin/akeebasubs.model.configs');
 
 		// Otherwise, the stylesheet is not loaded :(
-		KFactory::get('lib.joomla.document')->addStylesheet(JURI::base().'media/com_akeebasubs/css/frontend.css');
+		KFactory::get('joomla:document')->addStylesheet(JURI::base().'media/com_akeebasubs/css/frontend.css');
 		
 		$layout = $this->params->get('layout','awesome');
 
-		$controller = KFactory::tmp('site::com.akeebasubs.controller.levels' );
+		$controller = KFactory::get('com://site/akeebasubs.controller.levels' );
 
 		$ids = $this->params->get('ids');
 		if(!empty($ids)) {

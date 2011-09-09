@@ -50,7 +50,7 @@ class plgAkpayment2checkout extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -70,7 +70,7 @@ class plgAkpayment2checkout extends JPlugin
 			'email'			=> $user->email
 		);
 		
-		$kuser = KFactory::tmp('admin::com.akeebasubs.model.users')
+		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
 			->user_id($user->id)
 			->getItem();
 
@@ -97,7 +97,7 @@ class plgAkpayment2checkout extends JPlugin
 			$id = array_key_exists('cart_order_id', $data) ? (int)$data['cart_order_id'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 					->id($id)
 					->getItem();
 				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
@@ -142,7 +142,7 @@ class plgAkpayment2checkout extends JPlugin
 		if(!$isValid) return false;
 		
 		// Load the subscription level and get its slug
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;

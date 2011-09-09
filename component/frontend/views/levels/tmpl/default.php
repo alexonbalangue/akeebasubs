@@ -8,13 +8,13 @@
 
 <div id="akeebasubs" class="levels">
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistheader'))?>
+<?=@helper('com://site/akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistheader'))?>
 
 <?if(!empty($levels)) foreach($levels as $level):?>
 	<div class="level">
 		<p class="level-title">
 			<span class="level-price">
-				<span class="level-price-currency"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
+				<span class="level-price-currency"><?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currencysymbol?></span>
 				<span class="level-price-integer"><?=floor($level->price)?></span><span class="level-price-separator">.</span><span class="level-price-decimal"><?=sprintf('%02u', 100*($level->price - floor($level->price)))?></span>
 			</span>
 			<span class="level-title-text">
@@ -43,5 +43,5 @@
 <?endforeach;?>
 <div class="level-clear"></div>	
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistfooter'))?>
+<?=@helper('com://site/akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistfooter'))?>
 </div>

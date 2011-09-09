@@ -131,13 +131,13 @@ class plgAkpaymentEway extends JPlugin
 		}
 		
 		// Get the level's slug
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		
 		// Fetch our extended user information
-		$kuser = KFactory::tmp('admin::com.akeebasubs.model.users')
+		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
 			->user_id($user->id)
 			->getItem();
 		
@@ -162,7 +162,7 @@ class plgAkpaymentEway extends JPlugin
 		$eWayURL->setVar('CustomerID', $this->params->get('customerid',''));
 		$eWayURL->setVar('UserName', $this->params->get('username',''));
 		$eWayURL->setVar('Amount', sprintf('%0.2f',$subscription->gross_amount));
-		$eWayURL->setVar('Currency', strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency));
+		$eWayURL->setVar('Currency', strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency));
 		$eWayURL->setVar('ReturnURL', JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal');
 		$eWayURL->setVar('CancelURL', $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel')));
 		if($this->params->get('companylogo','')) $eWayURL->setVar('CompanyLogo', $this->params->get('companylogo',''));
@@ -277,7 +277,7 @@ class plgAkpaymentEway extends JPlugin
 			$id = $merchantreference;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 					->id($id)
 					->getItem();
 				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
@@ -306,7 +306,7 @@ class plgAkpaymentEway extends JPlugin
 		if(!$isValid) die('Hacking attempt; payment processing refused');
 		
 		// Load the subscription level and get its slug
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;

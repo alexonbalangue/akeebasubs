@@ -27,7 +27,7 @@ if(!defined('KOOWA')) {
 	return;
 }
 
-echo KFactory::tmp('site::mod.akslevels.html', array(
+echo KFactory::get('site::mod.akslevels.html', array(
 	'params'  => $params,
 	'module'  => $module,
 	'attribs' => $attribs

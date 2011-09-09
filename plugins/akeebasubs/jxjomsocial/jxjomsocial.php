@@ -56,7 +56,7 @@ class plgAkeebasubsJxjomsocial extends JPlugin
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
 	
 		// Get all of the user's subscriptions
-		$subscriptions = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+		$subscriptions = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 			->user_id($user_id)
 			->getList();
 			
@@ -157,7 +157,7 @@ class plgAkeebasubsJxjomsocial extends JPlugin
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
-			$list = KFactory::tmp('admin::com.akeebasubs.model.levels')
+			$list = KFactory::get('com://admin/akeebasubs.model.levels')
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);

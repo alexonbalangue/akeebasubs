@@ -49,7 +49,7 @@
 				<?=@helper('grid.checkall');?>
 			</td>
 			<td></td>
-			<td><?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('selected' => $state->level, 'name' => 'level', 'attribs' => array('onchange' => 'this.form.submit();')) ) ?></td>
+			<td><?=@helper('com://admin/akeebasubs.template.helper.listbox.levels', array('selected' => $state->level, 'name' => 'level', 'attribs' => array('onchange' => 'this.form.submit();')) ) ?></td>
 			<td>
 				<?= @text('Filter:'); ?> <?= @helper('grid.search'); ?>
 			</td>
@@ -79,7 +79,7 @@
 			$gravatarHash = md5($email);
 			$rowClass = ($subscription->enabled) ? '' : 'expired';
 				
-			$users = KFactory::tmp('admin::com.akeebasubs.model.users')
+			$users = KFactory::get('com://admin/akeebasubs.model.users')
 				->user_id($subscription->user_id)
 				->getList();
 			if(empty($users)) {
@@ -115,7 +115,7 @@
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?= @escape($subscription->username) ?>::<?= @text('COM_AKEEBASUBS_SUBSCRIPTION_USER_EDIT_TOOLTIP')?>">
-					<? if(KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->gravatar):?>
+					<? if(KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->gravatar):?>
 						<? if(KRequest::protocol() == 'http'): ?>
 							<img src="http://www.gravatar.com/avatar/<?=md5(strtolower($subscription->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
 						<? else: ?>
@@ -145,14 +145,14 @@
 			<td class="akeebasubs-subscription-amount">
 				<?php if($subscription->net_amount > 0): ?>
 				<span class="akeebasubs-subscription-netamount">
-				<?= sprintf('%2.2f', (float)$subscription->net_amount) ?> <?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?= sprintf('%2.2f', (float)$subscription->net_amount) ?> <?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				</span>
 				<span class="akeebasubs-subscription-taxamount">
-				<?= sprintf('%2.2f', (float)$subscription->tax_amount) ?> <?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?= sprintf('%2.2f', (float)$subscription->tax_amount) ?> <?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				</span>
 				<?php endif; ?>
 				<span class="akeebasubs-subscription-grossamount">
-				<?= sprintf('%2.2f', (float)$subscription->gross_amount) ?> <?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?= sprintf('%2.2f', (float)$subscription->gross_amount) ?> <?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				</span>
 			</td>
 			<td>

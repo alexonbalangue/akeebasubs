@@ -56,7 +56,7 @@ class plgAkeebasubsCb extends JPlugin
 		if($this->autoAddUser) $this->addCBUser($user_id);
 		
 		// Get all of the user's subscriptions
-		$subscriptions = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+		$subscriptions = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 			->user_id($user_id)
 			->getList();
 	

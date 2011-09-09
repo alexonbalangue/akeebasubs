@@ -8,7 +8,7 @@
 
 <div id="akeebasubs" class="levels awesome">
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistheader'))?>
+<?=@helper('com://site/akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistheader'))?>
 
 <? $max = count($levels); ?>
 
@@ -24,7 +24,7 @@
 						</a>
 					</div>
 					<div class="akeebasubs-awesome-price">
-						<span class="akeebasubs-awesome-price-currency"><?=KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currencysymbol?></span><span class="akeebasubs-awesome-price-integer"><?=floor($level->price)?></span><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?=sprintf('%02u', 100*($level->price - floor($level->price)))?></span>
+						<span class="akeebasubs-awesome-price-currency"><?=KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currencysymbol?></span><span class="akeebasubs-awesome-price-integer"><?=floor($level->price)?></span><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?=sprintf('%02u', 100*($level->price - floor($level->price)))?></span>
 					</div>
 				</div>
 				<div class="akeebasubs-awesome-body">
@@ -49,5 +49,5 @@
 	</div>
 </div>
 
-<?=@helper('site::com.akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistfooter'))?>
+<?=@helper('com://site/akeebasubs.template.helper.modules.loadposition', array('position' => 'akeebasubscriptionslistfooter'))?>
 </div>

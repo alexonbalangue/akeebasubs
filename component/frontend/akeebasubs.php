@@ -12,4 +12,4 @@ if(!defined('KOOWA')) {
     return;
 }
 
-echo KFactory::get('site::com.akeebasubs.dispatcher')->dispatch();
+echo KFactory::get('com://site/akeebasubs.dispatcher')->dispatch();

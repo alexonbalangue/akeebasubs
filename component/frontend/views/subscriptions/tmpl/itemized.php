@@ -4,7 +4,7 @@
 <?if(count($subscriptions)) foreach($subscriptions as $subscription){
 	if(array_key_exists($subscription->akeebasubs_level_id, $subs)) continue;
 	if($subscription->enabled) {
-		$title = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$title = KFactory::get('com://admin/akeebasubs.model.levels')
 			->id($subscription->akeebasubs_level_id)
 			->getItem()
 			->title;

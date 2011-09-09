@@ -33,7 +33,7 @@ class plgContentAslink extends JPlugin
 			$levels = array();
 			$slugs = array();
 			$upperSlugs = array();
-			$list = KFactory::tmp('admin::com.akeebasubs.model.levels')
+			$list = KFactory::get('com://admin/akeebasubs.model.levels')
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);

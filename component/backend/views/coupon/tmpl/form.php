@@ -23,7 +23,7 @@
 	<br/>
 
 	<label for="type_field" class="main"><?= @text('COM_AKEEBASUBS_COUPON_FIELD_TYPE'); ?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.coupontypes', array('name' => 'type', 'selected' => $coupon->type, 'deselect' => false) ) ?>
+	<?=@helper('com://admin/akeebasubs.template.helper.listbox.coupontypes', array('name' => 'type', 'selected' => $coupon->type, 'deselect' => false) ) ?>
 	<br />					
 
 	<label for="value_field" class="main"><?= @text('COM_AKEEBASUBS_COUPON_FIELD_VALUE'); ?></label>
@@ -63,7 +63,7 @@
 	<br/>
 
 	<label for="subscriptions_field" class="main"><?= @text('COM_AKEEBASUBS_COUPON_FIELD_SUBSCRIPTIONS'); ?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.levels', array('name' => 'subscriptions[]', 'selected' => empty($coupon->subscriptions) ? '-1' : explode(',',$coupon->subscriptions), 'deselect' => true, 'attribs' => array('multiple' => 'multiple', 'size' => 3) ) ) ?>
+	<?=@helper('com://admin/akeebasubs.template.helper.listbox.levels', array('name' => 'subscriptions[]', 'selected' => empty($coupon->subscriptions) ? '-1' : explode(',',$coupon->subscriptions), 'deselect' => true, 'attribs' => array('multiple' => 'multiple', 'size' => 3) ) ) ?>
 	<br />
 	
 	<label for="hitslimit_field" class="main"><?= @text('COM_AKEEBASUBS_COUPON_FIELD_HITSLIMIT'); ?></label>

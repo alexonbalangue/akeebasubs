@@ -38,7 +38,7 @@
 		<label for="price_field" class="main"><?= @text('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
 		<span>
 			<input type="text" size="15" id="price_field" name="price" value="<?= $level->price ?>" style="float: none" />
-			<?=KFactory::get('admin::com.akeebasubs.model.configs')->getConfig()->currencysymbol?>
+			<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 		</span>
 		<br/>
 		

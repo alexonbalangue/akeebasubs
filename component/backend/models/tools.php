@@ -32,7 +32,7 @@ class ComAkeebasubsModelTools extends KModelTable
 		foreach($converters as $name)
 		{
 			$name		= str_replace('.php', '', $name);
-			$converter	= KFactory::get('admin::com.akeebasubs.database.converters.'.$name);
+			$converter	= KFactory::get('com://admin/akeebasubs.database.converters.'.$name);
 			if($converter->canConvert()) $this->_list[$name] = $converter;
 		}
 

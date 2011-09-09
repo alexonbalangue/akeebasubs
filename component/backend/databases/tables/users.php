@@ -18,7 +18,7 @@ class ComAkeebasubsDatabaseTableUsers extends KDatabaseTableAbstract
 	protected function _initialize(KConfig $config)
 	{
 		$config->behaviors = array(
-			'admin::com.akeebasubs.database.behavior.usernotifiable'
+			'com://admin/akeebasubs.database.behavior.usernotifiable'
 		);
 		parent::_initialize($config);
 	}

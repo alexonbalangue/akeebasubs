@@ -118,7 +118,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$response = new stdClass();
 		
 		if($this->_state->slug && empty($this->_state->id)) {
-			$this->_state->id = KFactory::tmp('admin::com.akeebasubs.model.levels')
+			$this->_state->id = KFactory::get('com://admin/akeebasubs.model.levels')
 				->slug($this->_state->slug)
 				->getItem()
 				->id;
@@ -170,7 +170,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$myUser = JFactory::getUser();
 		// That line throws a stupid error message that I can not suppress (dammit, Joomla!, you're so bloody stupid!)
 		//$user = JFactory::getUser($username);
-		$user = (object)KFactory::tmp('admin::com.akeebasubs.model.jusers')
+		$user = (object)KFactory::get('com://admin/akeebasubs.model.jusers')
 			->username($username)
 			->getItem()
 			->getData();
@@ -214,13 +214,13 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		// Email validation
 		if(!empty($this->_state->email)) {
-			$list = KFactory::tmp('admin::com.akeebasubs.model.jusers')
+			$list = KFactory::get('com://admin/akeebasubs.model.jusers')
 				->email($this->_state->email)
 				->getList();
 			$validEmail = true;
 			foreach($list as $item) {
 				if($item->email == $this->_state->email) {
-					if($item->id != KFactory::get('lib.joomla.user')->id) $validEmail = false;
+					if($item->id != KFactory::get('joomla:user')->id) $validEmail = false;
 					break;
 				}
 			}
@@ -229,13 +229,13 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		// 2. Country validation
 		if($ret['country']) {
-			$dummy = KFactory::get('admin::com.akeebasubs.template.helper.listbox');
+			$dummy = KFactory::get('com://admin/akeebasubs.template.helper.listbox');
 			$ret['country'] = array_key_exists($this->_state->country, ComAkeebasubsTemplateHelperListbox::$countries);
 		}
 		
 		// 3. State validation
 		if(in_array($this->_state->country,array('US','CA'))) {
-			$dummy = KFactory::get('admin::com.akeebasubs.template.helper.listbox');
+			$dummy = KFactory::get('com://admin/akeebasubs.template.helper.listbox');
 			$ret['state'] = array_key_exists($this->_state->state, ComAkeebasubsTemplateHelperListbox::$states);
 		} else {
 			$ret['state'] = true;
@@ -251,7 +251,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 				// If the country has two rules with VIES enabled/disabled and a non-zero VAT,
 				// we will skip VIES validation. We'll also skip validation if there are no
 				// rules for this country (the default tax rate will be applied)
-				$taxrules = KFactory::tmp('site::com.akeebasubs.model.taxrules')
+				$taxrules = KFactory::get('com://site/akeebasubs.model.taxrules')
 					->enabled(1)
 					->country($this->_state->country)
 					->sort('ordering')
@@ -328,7 +328,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	private function _validatePrice()
 	{
 		// Get the default price value
-		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
+		$level = KFactory::get('com://site/akeebasubs.model.levels')
 			->id($this->_state->id)
 			->getItem();
 		$netPrice = (float)$level->price;
@@ -339,7 +339,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		$couponDiscount = 0;
 		if($validCoupon) {
-			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
+			$coupon = KFactory::get('com://site/akeebasubs.model.coupons')
 				->coupon(strtoupper($this->_state->coupon))
 				->getItem();
 				
@@ -413,7 +413,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$couponCode = $this->_state->coupon;
 			$valid = false;
 			
-			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
+			$coupon = KFactory::get('com://site/akeebasubs.model.coupons')
 				->coupon(strtoupper($this->_state->coupon))
 				->getItem();
 				
@@ -465,11 +465,11 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	{
 		// Check that we do have a user (if there's no logged in user, we have no subscription information,
 		// ergo upgrades are not applicable!)
-		$user_id = KFactory::get('lib.joomla.user')->id;
+		$user_id = KFactory::get('joomla:user')->id;
 		if(empty($user_id)) return 0;
 		
 		// Get applicable auto-rules
-		$autoRules = KFactory::tmp('admin::com.akeebasubs.model.upgrades')
+		$autoRules = KFactory::get('com://admin/akeebasubs.model.upgrades')
 			->to_id($this->_state->id)
 			->enabled(1)
 			->getList();
@@ -477,7 +477,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		if(empty($autoRules)) return 0;
 		
 		// Get the user's list of subscriptions
-		$subscriptions = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
+		$subscriptions = KFactory::get('com://site/akeebasubs.model.subscriptions')
 			->user_id($user_id)
 			->enabled(1)
 			->getList();
@@ -496,7 +496,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		}
 		
 		// Get the current subscription level's net worth
-		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
+		$level = KFactory::get('com://site/akeebasubs.model.levels')
 			->id($this->_state->id)
 			->getItem();
 		$net = (float)$level->price;
@@ -535,7 +535,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$isVIES = $validation->vatnumber && in_array($this->_state->country, $this->european_states);
 		
 		// Load the tax rules
-		$taxrules = KFactory::tmp('site::com.akeebasubs.model.taxrules')
+		$taxrules = KFactory::get('com://site/akeebasubs.model.taxrules')
 			->enabled(1)
 			->sort('ordering')
 			->direction('ASC')
@@ -623,7 +623,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$isValid = true;
 		foreach($validation->validation as $key => $validData)
 		{
-			if(!KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->personalinfo) {
+			if(!KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->personalinfo) {
 				if(!in_array($key, array('username','email','name'))) continue;
 			}
 			// An invalid (not VIES registered) VAT number is not a fatal error
@@ -638,7 +638,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$isValid = $isValid && $validData;
 			if(!$isValid) {
 				if($key == 'username') {
-					$user = KFactory::get('lib.joomla.user');
+					$user = KFactory::get('joomla:user');
 					if($user->username == $this->_state->username) {
 						$isValid = true;
 					} else {
@@ -721,7 +721,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			}
 		} else {
 			// Update existing user's details
-			$userRecord = KFactory::get('admin::com.akeebasubs.model.jusers')
+			$userRecord = KFactory::get('com://admin/akeebasubs.model.jusers')
 				->id($user->id)
 				->getItem();
 			if( ($userRecord->name != $this->_state->name) || ($userRecord->email != $this->_state->email) ) {
@@ -738,7 +738,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// Step #4. Create or add user extra fields
 		// ----------------------------------------------------------------------
 		// Find an existing record
-		$list = KFactory::tmp('site::com.akeebasubs.model.users')
+		$list = KFactory::get('com://site/akeebasubs.model.users')
 			->user_id($user->id)
 			->getList();
 		
@@ -765,7 +765,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'country'		=> $this->_state->country,
 			'params'		=> json_encode($this->_state->custom)
 		);
-		KFactory::tmp('site::com.akeebasubs.model.users')
+		KFactory::get('com://site/akeebasubs.model.users')
 			->id($id)
 			->getItem()
 			->setData($data)
@@ -773,7 +773,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------
-		$subscriptions = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
+		$subscriptions = KFactory::get('com://site/akeebasubs.model.subscriptions')
 			->user_id($user->id)
 			->level($this->_state->id)
 			->enabled(1)
@@ -810,7 +810,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		
 		// Step #6. Create a new subscription record
 		// ----------------------------------------------------------------------
-		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
+		$level = KFactory::get('com://site/akeebasubs.model.levels')
 			->id($this->_state->id)
 			->getItem();
 		$duration = (int)$level->duration * 3600 * 24;
@@ -842,7 +842,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			'second_contact'		=> '0000-00-00 00:00:00'
 		);
 				
-		$subscription = KFactory::tmp('site::com.akeebasubs.model.subscriptions')
+		$subscription = KFactory::get('com://site/akeebasubs.model.subscriptions')
 			->id(0)
 			->getItem();
 		$subscription->setData($data)->save();
@@ -851,7 +851,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		// Step #7. Hit the coupon code, if a coupon is indeed used
 		// ----------------------------------------------------------------------
 		if($validation->price->usecoupon) {
-			$coupon = KFactory::tmp('site::com.akeebasubs.model.coupons')
+			$coupon = KFactory::get('com://site/akeebasubs.model.coupons')
 				->coupon(strtoupper($this->_state->coupon))
 				->getItem();
 			$coupon->hits++;
@@ -880,7 +880,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		} else {
 			// Zero charges; just redirect
 			$app = JFactory::getApplication();
-			$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+			$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -969,8 +969,8 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 		$fromname 		= $config->get( 'fromname' );
 		$siteURL		= JURI::base();
 
-		$subjectTemplate = KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->regemailheader;
-		$bodyTemplate = KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->regemailbody;
+		$subjectTemplate = KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->regemailheader;
+		$bodyTemplate = KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->regemailbody;
 		if(!empty($subjectTemplate) || !empty($bodyTemplate)) {
 			$replace = array(
 				'[USERNAME]'	=> $username,

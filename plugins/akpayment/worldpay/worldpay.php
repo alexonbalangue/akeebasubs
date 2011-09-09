@@ -58,7 +58,7 @@ class plgAkpaymentWorldpay extends JPlugin
 			$lastName = '';
 		}
 		
-		$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -76,12 +76,12 @@ class plgAkpaymentWorldpay extends JPlugin
 			'postback'		=> $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=worldpay')),
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order')),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=cancel')),
-			'currency'		=> strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency),
+			'currency'		=> strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName
 		);
 		
-		$kuser = KFactory::tmp('admin::com.akeebasubs.model.users')
+		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
 			->user_id($user->id)
 			->getItem();
 
@@ -108,7 +108,7 @@ class plgAkpaymentWorldpay extends JPlugin
 			$id = array_key_exists('cartId', $data) ? (int)$data['cartId'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 					->id($id)
 					->getItem();
 				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
@@ -157,7 +157,7 @@ class plgAkpaymentWorldpay extends JPlugin
 		// Check that currency is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_currency = strtoupper($data['currency']);
-			$currency = strtoupper(KFactory::get('site::com.akeebasubs.model.configs')->getConfig()->currency);
+			$currency = strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency);
 			if($mc_currency != $currency) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Invalid currency; expected $currency, got $mc_currency";

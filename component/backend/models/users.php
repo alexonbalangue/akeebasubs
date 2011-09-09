@@ -101,7 +101,7 @@ class ComAkeebasubsModelUsers extends KModelTable
 	public function getMergedData()
 	{
 		// Get a legacy data set from the user parameters
-		$userRow = KFactory::tmp('admin::com.akeebasubs.model.jusers')->id($this->_state->user_id)->getItem();
+		$userRow = KFactory::get('com://admin/akeebasubs.model.jusers')->id($this->_state->user_id)->getItem();
 		$params = new JParameter($userRow->params);
 		$businessname = $params->get('business_name','');
 		$nativeData = array(
@@ -124,7 +124,7 @@ class ComAkeebasubsModelUsers extends KModelTable
 		$myData = $nativeData;
 				
 		if($this->_state->user_id > 0) {
-			$rows = KFactory::tmp('admin::com.akeebasubs.model.users')
+			$rows = KFactory::get('com://admin/akeebasubs.model.users')
 				->user_id($this->_state->user_id)
 				->getList();
 			if($rows instanceof KDatabaseRowsetInterface) {

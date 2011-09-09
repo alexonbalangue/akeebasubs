@@ -12,5 +12,5 @@ if(!defined('KOOWA')) {
     return;
 }
 
-echo KFactory::get('admin::com.akeebasubs.dispatcher')
+echo KFactory::get('com://admin/akeebasubs.dispatcher')
 	->dispatch();

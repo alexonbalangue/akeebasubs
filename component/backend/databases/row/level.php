@@ -17,7 +17,7 @@ class ComAkeebasubsDatabaseRowLevel extends KDatabaseRowTable
 		if($this->isConnected())
 		{
 			// Do we have subscriptions on that level?
-			$subs = KFactory::get('admin::com.akeebasubs.model.subscriptions')
+			$subs = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 				->level($this->id)
 				->getTotal();
 

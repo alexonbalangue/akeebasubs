@@ -66,10 +66,10 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$sitename = $config->getValue('config.sitename');
 	
 		// Get the user object
-		$user = KFactory::get('lib.joomla.user')->getInstance($row->user_id);
+		$user = KFactory::get('joomla:user')->getInstance($row->user_id);
 		
 		// Get the level
-		$level = KFactory::tmp('site::com.akeebasubs.model.levels')
+		$level = KFactory::get('com://site/akeebasubs.model.levels')
 			->id($row->akeebasubs_level_id)
 			->getItem();
 			

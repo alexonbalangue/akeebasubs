@@ -37,7 +37,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		$view = $this->getView();
 		
 		// Fetch the subscription slug from page parameters
-		$params	= KFactory::get('lib.joomla.application')->getPageParameters();
+		$params	= KFactory::get('joomla:application')->getPageParameters();
 		$slug	= $params->get('slug','');
 		if(!empty($slug)) {
 			$this->getModel()->slug($slug);
@@ -45,20 +45,20 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 
 		// Get the user model and load the user data
 		$view->assign('userparams',
-			KFactory::get('site::com.akeebasubs.model.users')
-				->user_id(KFactory::get('lib.joomla.user')->id)
+			KFactory::get('com://site/akeebasubs.model.users')
+				->user_id(KFactory::get('joomla:user')->id)
 				->getMergedData()
 		);
 		// Load any cached user supplied information
 		$view->assign('cache',
-			KFactory::get('site::com.akeebasubs.model.subscribes')
+			KFactory::get('com://site/akeebasubs.model.subscribes')
 				->getData()
 		);
 		// Get the validation results
 		if(empty($slug)) {
 			$slug = KRequest::get('get.slug','cmd',0);
 		}
-		$vModel = KFactory::get('site::com.akeebasubs.model.subscribes');
+		$vModel = KFactory::get('com://site/akeebasubs.model.subscribes');
 		$vModel->getState()->setData($view->cache);
 		$vModel->slug($slug);
 		$view->assign('validation',

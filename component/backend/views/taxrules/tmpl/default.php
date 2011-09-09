@@ -48,10 +48,10 @@
 				<?=@helper('grid.checkall');?>
 			</td>
 			<td>
-				<?=@helper('admin::com.akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => @$state->country, 'attribs' => array('onchange' => 'this.form.submit();', 'style' => 'width: 120px')) ) ?>
+				<?=@helper('com://admin/akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => @$state->country, 'attribs' => array('onchange' => 'this.form.submit();', 'style' => 'width: 120px')) ) ?>
 			</td>
 			<td>
-				<?=@helper('admin::com.akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => @$state->state, 'attribs' => array('onchange' => 'this.form.submit();', 'style' => 'width: 120px')) ) ?>
+				<?=@helper('com://admin/akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => @$state->state, 'attribs' => array('onchange' => 'this.form.submit();', 'style' => 'width: 120px')) ) ?>
 			</td>
 			<td>
 				<?= @text('Filter:'); ?> <?= @helper('grid.search'); ?>
@@ -90,13 +90,13 @@
 			</td>
 			<td>
 				<a href="<?= @route('view=taxrule&id='.$taxrule->id); ?>">
-					<?=@helper('admin::com.akeebasubs.template.helper.listbox.formatCountry', array('country' => $taxrule->country) ) ?>
+					<?=@helper('com://admin/akeebasubs.template.helper.listbox.formatCountry', array('country' => $taxrule->country) ) ?>
 					<?=$taxrule->country ? ' ('.@escape($taxrule->country).')' : ''?>
 				</a>
 			</td>
 			<td>
 				<a href="<?= @route('view=taxrule&id='.$taxrule->id); ?>">
-					<?=@helper('admin::com.akeebasubs.template.helper.listbox.formatState', array('state' => $taxrule->state) ) ?>
+					<?=@helper('com://admin/akeebasubs.template.helper.listbox.formatState', array('state' => $taxrule->state) ) ?>
 					<?=$taxrule->state ? ' ('.@escape($taxrule->state).')' : ''?>
 				</a>
 			</td>

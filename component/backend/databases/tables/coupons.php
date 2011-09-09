@@ -18,8 +18,8 @@ class ComAkeebasubsDatabaseTableCoupons extends KDatabaseTableAbstract
 	protected function _initialize(KConfig $config)
     {
     	$config->behaviors = array('lockable', 'creatable', 'modifiable', 'orderable', 'hittable'
-			,'admin::com.akeebasubs.database.behavior.hitlimitable'
-			,'admin::com.akeebasubs.database.behavior.expirable'
+			,'com://admin/akeebasubs.database.behavior.hitlimitable'
+			,'com://admin/akeebasubs.database.behavior.expirable'
     		);
 		parent::_initialize($config);
     }

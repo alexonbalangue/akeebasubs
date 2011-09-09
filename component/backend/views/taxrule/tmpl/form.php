@@ -10,11 +10,11 @@
 <input type="hidden" name="_visual" value="1" />
 
 	<label for="country" class="main"><?= @text('COM_AKEEBASUBS_TAXRULES_COUNTRY'); ?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => $taxrule->country) ) ?>
+	<?=@helper('com://admin/akeebasubs.template.helper.listbox.countries', array('name' => 'country', 'selected' => $taxrule->country) ) ?>
 	<br/>
 	
 	<label for="state" class="main"><?= @text('COM_AKEEBASUBS_TAXRULES_STATE'); ?></label>
-	<?=@helper('admin::com.akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => $taxrule->state) ) ?>
+	<?=@helper('com://admin/akeebasubs.template.helper.listbox.states', array('name' => 'state', 'selected' => $taxrule->state) ) ?>
 	<br/>
 
 	<label for="city" class="main"><?= @text('COM_AKEEBASUBS_TAXRULES_CITY'); ?></label>

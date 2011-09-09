@@ -91,7 +91,7 @@
 
 	            	<?if(($subscription->state == 'C')):?>
 	            	&bull;
-	            	<?$slug = KFactory::tmp('admin::com.akeebasubs.model.levels')
+	            	<?$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 						->id($subscription->akeebasubs_level_id)
 						->getItem()
 						->slug;?>

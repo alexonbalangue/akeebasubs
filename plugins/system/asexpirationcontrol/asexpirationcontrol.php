@@ -60,7 +60,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$now = $jNow->toUnix();
 		
 		// Load a list of subscriptions which have to expire -- Nooku does the rest magically!
-		$subs = KFactory::tmp('admin::com.akeebasubs.model.subscriptions')
+		$subs = KFactory::get('com://admin/akeebasubs.model.subscriptions')
 			->enabled(1)
 			->expires_to($jNow->toMySQL())
 			->getList();
