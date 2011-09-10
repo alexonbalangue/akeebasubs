@@ -12,6 +12,7 @@ Akeeba Subscriptions 1.0.0
 + Added * pseudo-level to Content - Akeeba Subscriptions Restricted to filter by any active subscription, no matter which level it is
 + Live Update support
 + #30 Joom!Fish support & auto-install Joom!Fish Content Element XML file for subscription levels
++ #5 SQL plugin, running a set of SQL commands, allowing for arbitrary integrations
 # Users would not be unblocked when enabling an off-line payment
 # Users would not be unblocked when using an 100% discount coupon code
 # Users could see subscriptions which were not paid or whose payment was cancelled by manipulating the URL

@@ -30,10 +30,6 @@ class ComAkeebasubsControllerSubrefresh extends ComAkeebasubsControllerDefault
 		$this->getModel()->set('forceoffset', KRequest::get('post.forceoffset','int') );
 		$this->getModel()->set('forcelimit', KRequest::get('post.forcelimit','int') );
 		
-		// I don't know why the hell behaviours stopped working properly in Nooku
-		// Framework 0.7.b3, but I ain't gonna lose another day with 'em. Fuck it.
-		// Plain old code FTW!
-		
 		/**
 		$list = $this->getModel()->refresh(1)->getList()->subscriptionRefresh();
 		$response = array(

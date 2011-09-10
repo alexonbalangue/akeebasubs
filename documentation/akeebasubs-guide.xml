@@ -3383,6 +3383,37 @@ LEVEL3=Group 1</programlisting>
         the user has overriden them, i.e. he has bought another subscription
         in the past.</para>
       </section>
+
+      <section>
+        <title>Custom SQL scripts</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Custom SQL scripts</guilabel></para>
+
+        <para>This plugin can run arbitrary SQL commands when a subscription
+        becomes active or inactive. Please note that this plugin is very
+        naive. For starters, it will run the SQL commands once for every
+        active and inactive subscriptions it encounters. If you have two
+        disabled subscriptions and five enabled subscriptions on a specific
+        level it will run the deactivation SQL twice and the activation SQL
+        five times. Moreover, the plugin fires: when a new subscription is
+        created; when the subscription status changes for any reason (payment
+        status changes, manual disable/enable, automatic enable/disable due to
+        Valid From/To dates being reached) and when you click on the Run
+        Integration button.</para>
+
+        <para>In the plugin's parameters you can define the SQL commands to
+        run. In all cases, you can do something like this:</para>
+
+        <programlisting>LEVEL1=INSERT INTO #__foobar (`user_id`,`something`) VALUES( '<replaceable>[USERID]</replaceable>', 'myvalue' );</programlisting>
+
+        <para>The leftmost part is the subscription level for which the SQL
+        command will run. The rightmost part is the list of SQL commands,
+        separated by semicolons. The <replaceable>[USERID]</replaceable>
+        variable will be replaced with the user's numeric ID for the user
+        whose subscription Akeeba Subscriptions is currently
+        processing.</para>
+      </section>
     </section>
 
     <section xml:id="plugins-other">
