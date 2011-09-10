@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<joomfish type="contentelement">
+  <name>Akeebasubs Levels</name>
+  <author>Nicholas K. Dionysopoulos</author>
+  <version>1.0.0</version>
+  <description>Definition for Akeeba Subscriptions' subscription levels table</description>
+  <copyright>2011 AkeebaBackup.com</copyright>
+  <reference type="akeebasubs_levels">
+  	<table name="akeebasubs_levels">
+  		<field type="referenceid" name="akeebasubs_level_id" translate="0">ID</field>
+  		<field type="titletext" name="title"  length="50" maxlength="250" translate="1">Title</field>
+  		<field type="text" name="slug"  length="50" maxlength="250" translate="0">Slug</field>
+  		<field type="text" name="image"  length="50" maxlength="250" translate="1">Image</field>
+  		<field type="htmltext" name="description" translate="1">Description</field>
+  		<field type="htmltext" name="ordertext" translate="1">Order completion message</field>
+  		<field type="htmltext" name="canceltext" translate="1">Order cancellation message</field>
+  		<field type="created_date" name="created_on" translate="0">Created</field>
+  		<field type="modified_date" name="modified_on" translate="0">Modified</field>
+  		<field type="checked_out_by" name="locked_by" translate="0">Check out by</field>
+  		<field type="checked_out_date" name="locked_on" translate="0">Check out date</field>
+  	</table>
+  </reference>
+</joomfish>

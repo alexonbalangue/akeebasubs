@@ -10,6 +10,8 @@ Akeeba Subscriptions 1.0.0
 + eWay payment processor
 + #28 Allow plugins to sync data with the Akeeba Subscriptions subscriber profile
 + Added * pseudo-level to Content - Akeeba Subscriptions Restricted to filter by any active subscription, no matter which level it is
++ Live Update support
++ #30 Joom!Fish support & auto-install Joom!Fish Content Element XML file for subscription levels
 # Users would not be unblocked when enabling an off-line payment
 # Users would not be unblocked when using an 100% discount coupon code
 # Users could see subscriptions which were not paid or whose payment was cancelled by manipulating the URL

@@ -390,6 +390,14 @@ if(is_dir($src.'/koowa')) {
 	}
 }
 
+// Install the Joom!Fish content XML file
+if(is_dir($src.'/plugins/joomfish')) {
+	if(JFile::exists(JPATH_SITE .DS. 'components' .DS. 'com_joomfish' .DS. 'helpers' .DS. 'defines.php')) {
+		$result = JFile::copy($src.'/plugins/joomfish/akeebasubs_levels.xml', JPATH_ADMINISTRATOR.'/components/com_joomfish/contentelements');
+		$status->plugins[] = array('name'=>'akeebasubs_levels.xml','group'=>'joomfish', 'result'=>$result);
+	}
+}
+
 // Remove unused files and folders (or the component will explode!)
 foreach($removeFiles as $removedFile) {
 	$removePath = JPATH_SITE.DS.$removedFile;
