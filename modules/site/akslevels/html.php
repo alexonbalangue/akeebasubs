@@ -40,7 +40,7 @@ class ModAkslevelsHtml extends ModDefaultHtml
 		KFactory::map('com://site/akeebasubs.model.configs',			'com://admin/akeebasubs.model.configs');
 
 		// Otherwise, the stylesheet is not loaded :(
-		KFactory::get('joomla:document')->addStylesheet(JURI::base().'media/com_akeebasubs/css/frontend.css');
+		JFactory::getDocument()->addStylesheet(JURI::base().'media/com_akeebasubs/css/frontend.css');
 		
 		$layout = $this->params->get('layout','awesome');
 

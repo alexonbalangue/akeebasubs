@@ -37,7 +37,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		$view = $this->getView();
 		
 		// Fetch the subscription slug from page parameters
-		$params	= KFactory::get('joomla:application')->getPageParameters();
+		$params	= JFactory::getApplication()->getPageParameters();
 		$slug	= $params->get('slug','');
 		if(!empty($slug)) {
 			$this->getModel()->slug($slug);
@@ -46,7 +46,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		// Get the user model and load the user data
 		$view->assign('userparams',
 			KFactory::get('com://site/akeebasubs.model.users')
-				->user_id(KFactory::get('joomla:user')->id)
+				->user_id(JFactory::getUser()->id)
 				->getMergedData()
 		);
 		// Load any cached user supplied information

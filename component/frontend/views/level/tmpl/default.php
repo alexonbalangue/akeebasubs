@@ -23,14 +23,14 @@
 <hr/>
 </noscript>
 
-<?if(KFactory::get('joomla:user')->guest):?>
+<?if(JFactory::getUser()->guest):?>
 	<?=@template('default_login')?>
 <?endif?>
 
 <form action="<?=@route('view=subscribe&layout=default&slug='.KRequest::get('get.slug','slug'))?>" method="post"
 	id="signupForm" >
 	<input type="hidden" name="_token" value="<?=JUtility::getToken()?>" />
-<?if(KFactory::get('joomla:user')->guest):?>
+<?if(JFactory::getUser()->guest):?>
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></h3>
 	
 	<label for="username" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME')?></label>

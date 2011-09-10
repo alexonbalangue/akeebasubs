@@ -48,7 +48,7 @@ abstract class ComAkeebasubsDatabaseConvertersAbstract extends KObject implement
 	 */
 	public function convert()
 	{
-		$dbprefix = KFactory::get('joomla:config')->getValue('dbprefix');
+		$dbprefix = JFactory::getConfig()->getValue('dbprefix');
 		$identifier = new KIdentifier('com://admin/akeebasubs.database.table.default');
 
 		foreach($this->data as $this->name => $rows)

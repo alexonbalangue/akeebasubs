@@ -222,7 +222,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 					'hitslimit'		=> null,
 					'ordering'		=> 0,
 					'created_on'	=> $jNow->toMySQL(),
-					'created_by'	=> KFactory::get('joomla:user')->id,
+					'created_by'	=> JFactory::getUser()->id,
 					'modified_on'	=> '0000-00-00 00:00:00',
 					'modified_by'	=> 0,
 					'locked_on'		=> '0000-00-00 00:00:00',

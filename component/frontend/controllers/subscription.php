@@ -24,7 +24,7 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 	public function _beforeBrowse(KCommandContext $context)
 	{
 		// Do we have a user?
-		if(KFactory::get('joomla:user')->guest) {
+		if(JFactory::getUser()->guest) {
 			// Obsolete behaviour: show unauthorized error message
 			// JError::raiseError('403',JText::_('ACCESS DENIED'));
 
@@ -36,13 +36,13 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 			return;
 		}
 		
-		if(KRequest::get('get.allUsers','int',0) && (KFactory::get('joomla:user')->gid >= 23)) {
+		if(KRequest::get('get.allUsers','int',0) && (JFactory::getUser()->gid >= 23)) {
 			$this->getModel()->getState()->user_id = null;
 		} else {
-			$this->getModel()->getState()->user_id = KFactory::get('joomla:user')->id;
+			$this->getModel()->getState()->user_id = JFactory::getUser()->id;
 		}
 
-		if(KRequest::get('get.allStates','int',0) && (KFactory::get('joomla:user')->gid >= 23)) {
+		if(KRequest::get('get.allStates','int',0) && (JFactory::getUser()->gid >= 23)) {
 			$this->getModel()->getState()->paystate = null;
 		} else {
 			$this->getModel()->getState()->paystate = 'C,P';
@@ -52,7 +52,7 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 	public function _beforeRead(KCommandContext $context)
 	{
 		// Do we have a user?
-		if(KFactory::get('joomla:user')->guest) {
+		if(JFactory::getUser()->guest) {
 			JError::raiseError('403',JText::_('ACCESS DENIED'));
 			return;
 		}
@@ -60,7 +60,7 @@ class ComAkeebasubsControllerSubscription extends ComAkeebasubsControllerDefault
 		// Simple trick: filter rows by the current user's ID. If he tries to access someone else's
 		// subscription information, the ID will be 0. In that case, BUSTED! Of course, the same thing
 		// happens if he tries to access a non-existent subscription ID.
-		$this->getModel()->getState()->user_id = KFactory::get('joomla:user')->id;
+		$this->getModel()->getState()->user_id = JFactory::getUser()->id;
 		$this->getModel()->getState()->paystate = 'C,P';
 		if($this->getModel()->getItem()->id == 0) {
 			JError::raiseError('403',JText::_('ACCESS DENIED'));

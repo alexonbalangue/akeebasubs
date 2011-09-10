@@ -50,7 +50,7 @@ class ComAkeebasubsDatabaseRowLevel extends KDatabaseRowTable
 		parent::setData($data, $modified);
 		if(!$modified) {
 			if($this->id) {
-				if(KFactory::get('joomla:config')->getValue('config.multilingual_support') == 1) {
+				if(JFactory::getConfig()->getValue('config.multilingual_support') == 1) {
 					if(!array_key_exists($this->id, $jfCache)) {
 						$db = JFactory::getDBO();
 						$sql = 'SELECT * FROM '.$db->nameQuote('#__akeebasubs_levels').' WHERE '.

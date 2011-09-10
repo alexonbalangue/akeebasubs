@@ -220,7 +220,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$validEmail = true;
 			foreach($list as $item) {
 				if($item->email == $this->_state->email) {
-					if($item->id != KFactory::get('joomla:user')->id) $validEmail = false;
+					if($item->id != JFactory::getUser()->id) $validEmail = false;
 					break;
 				}
 			}
@@ -465,7 +465,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 	{
 		// Check that we do have a user (if there's no logged in user, we have no subscription information,
 		// ergo upgrades are not applicable!)
-		$user_id = KFactory::get('joomla:user')->id;
+		$user_id = JFactory::getUser()->id;
 		if(empty($user_id)) return 0;
 		
 		// Get applicable auto-rules
@@ -638,7 +638,7 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			$isValid = $isValid && $validData;
 			if(!$isValid) {
 				if($key == 'username') {
-					$user = KFactory::get('joomla:user');
+					$user = JFactory::getUser();
 					if($user->username == $this->_state->username) {
 						$isValid = true;
 					} else {

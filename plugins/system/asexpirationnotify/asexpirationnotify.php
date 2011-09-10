@@ -261,7 +261,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$sitename = $config->getValue('config.sitename');
 	
 		// Get the user object
-		$user = KFactory::get('joomla:user')->getInstance($row->user_id);
+		$user = JFactory::getUser($row->user_id);
 		
 		// Get the level
 		$level = KFactory::get('com://site/akeebasubs.model.levels')

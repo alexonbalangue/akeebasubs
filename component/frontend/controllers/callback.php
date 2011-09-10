@@ -37,7 +37,7 @@ class ComAkeebasubsControllerCallback extends KControllerAbstract
 	{
 		$result = KFactory::get('com://site/akeebasubs.model.subscribes')->runCallback();
 		echo $result ? 'OK' : 'FAILED';
-		KFactory::get('joomla:application')->close();
+		JFactory::getApplication()->close();
 	}
 
 	public function _denyAccess()

@@ -17,8 +17,8 @@
 	<tr>
 		<td class="subscription-label"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_USER')?></td>
 		<td class="subscription-info">
-			<strong><?=KFactory::get('joomla:user', array($subscription->user_id))->username?></strong>
-			(<em><?=KFactory::get('joomla:user', array($subscription->user_id))->name?></em>)
+			<strong><?=JFactory::getUser($subscription->user_id)->username?></strong>
+			(<em><?=JFactory::getUser($subscription->user_id)->name?></em>)
 		</td>
 	</tr>
 	<tr>
