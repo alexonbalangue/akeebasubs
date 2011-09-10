@@ -49,3 +49,5 @@ defined('KOOWA') or die('Restricted access');?>
 		</a>
 	</div>
 </div>
+
+<?php echo LiveUpdate::getIcon(); ?>
