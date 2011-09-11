@@ -18,6 +18,11 @@ class plgSystemAsexpirationnotify extends JPlugin
 	{
 		if(!defined('KOOWA')) return;
 		
+		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
+			if(!is_object($config['params'])) {
+				$config['params'] = new JParameter($config['params']);
+			}
+		}
 		parent::__construct($subject, $config);
 		
 		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)
