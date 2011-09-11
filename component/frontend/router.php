@@ -17,7 +17,11 @@ function AkeebasubsBuildRoute(&$query)
 	// We need to find out if the menu item link has a view param
 	if(array_key_exists('Itemid', $query)) {
 		$menu = JSite::getMenu()->getItem($query['Itemid']);
-		parse_str(str_replace('index.php?',  '',$menu->link), $menuquery); // remove "index.php?" and parse
+		if(!is_object($menu)) {
+			$menuquery = array();
+		} else {
+			parse_str(str_replace('index.php?',  '',$menu->link), $menuquery); // remove "index.php?" and parse
+		}
 	} else {
 		$menuquery = array();
 	}
