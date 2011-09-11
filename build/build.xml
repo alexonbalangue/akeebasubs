@@ -124,11 +124,6 @@
 				<exclude name="plugins/system/**" />
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.koowa}/site" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
-			<fileset dir="${dirs.koowa}/site">
-				<include name="**"/>
-			</fileset>
-		</zipme>
 		<zipme basedir="${dirs.koowa}/plugins/system" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
 			<fileset dir="${dirs.koowa}/plugins/system">
 				<include name="koowa.php"/>
