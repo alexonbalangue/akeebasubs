@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<install type="module" version="1.5.0" client="administrator">
+<install type="module" version="1.5.0" client="administrator" method="upgrade">
 	<name>Latest Akeeba Subscriptions Module</name>
 	<author>Sander Potjer</author>
 	<creationDate>August 2011</creationDate>
