@@ -15,6 +15,7 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		
 		$this->registerCallback('before.browse', array($this, '_beforeBrowse'));
 		$this->registerCallback('before.read', array($this, '_beforeRead'));
+		$this->registerCallback('after.read', array($this, '_afterRead'));
 		
 		$this->registerCallback('before.edit', array($this, '_denyAccess'));
 		$this->registerCallback('before.add', array($this, '_denyAccess'));
@@ -64,6 +65,13 @@ class ComAkeebasubsControllerLevel extends ComAkeebasubsControllerDefault
 		$view->assign('validation',
 				$vModel->getValidation()
 		);
+	}
+	
+	public function _afterRead(KCommandContext $context)
+	{
+		if($context->caller->getModel()->getItem()->enabled == 0) {
+			JError::raiseError('403',JText::_('ACCESS DENIED'));
+		}
 	}
 	
 	public function _denyAccess()
