@@ -14,7 +14,7 @@ class LiveUpdateConfig extends LiveUpdateAbstractConfig
 {
 	var $_extensionName			= 'com_akeebasubs';
 	var $_versionStrategy		= 'different';
-	var $_updateURL				= 'http://cdn.akeebabackup.com/updates/akeebasubs.ini';
+	var $_updateURL				= 'http://nocdn.akeebabackup.com/updates/akeebasubs.ini';
 	var $_requiresAuthorization = false;
 	/**
 	var $_storageAdapter		= 'component';
