@@ -103,6 +103,8 @@ $removeFolders = array(
 	'administrator/components/com_akeebasubs/commands',
 	'administrator/components/com_akeebasubs/controllers/commands',
 	'administrator/components/com_akeebasubs/toolbars',
+	'administrator/components/com_akeebasubs/databases/behavior',
+	'administrator/components/com_akeebasubs/databases/row',
 	'components/com_akeebasubs/commands'
 );
 
