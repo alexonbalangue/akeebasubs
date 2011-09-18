@@ -102,7 +102,11 @@ class ComAkeebasubsModelUsers extends KModelTable
 	{
 		// Get a legacy data set from the user parameters
 		$userRow = KFactory::get('com://admin/akeebasubs.model.jusers')->id($this->_state->user_id)->getItem();
-		$params = new JParameter($userRow->params);
+		if(!($userRow->params instanceof JRegistry)) {
+			$params = new JParameter($userRow->params);
+		} else {
+			$params = $userRow->params;
+		}
 		$businessname = $params->get('business_name','');
 		$nativeData = array(
 			'isbusiness' => empty($businessname) ? 0 : 1,

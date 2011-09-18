@@ -56,7 +56,11 @@ class ComAkeebasubsModelConfigs extends KModelAbstract
 	public function getConfig()
 	{
 		$component =& JComponentHelper::getComponent( 'com_akeebasubs' );
-		$params = new JParameter($component->params);
+		if(!($component->params instanceof JRegistry)) {
+			$params = new JParameter($component->params);
+		} else {
+			$params = $component->params;
+		}
 		$params = $params->toArray();
 		
 		$config = array_key_exists('params',$params) ? $params['params'] : '';
@@ -118,7 +122,11 @@ class ComAkeebasubsModelConfigs extends KModelAbstract
 		$data = $temp;
 		
 		$component =& JComponentHelper::getComponent( 'com_akeebasubs' );
-		$params = new JParameter($component->params);
+		if(!($component->params instanceof JRegistry)) {
+			$params = new JParameter($component->params);
+		} else {
+			$params = $component->params;
+		}
 		$cparams = $params->toArray();
 		
 		$config = array_key_exists('params', $params) ? $cparams['params'] : '';
