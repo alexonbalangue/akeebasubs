@@ -375,6 +375,18 @@ $src = $this->parent->getPath('source');
 
 // Install the Koowa library and associated system files first
 if(is_dir($src.'/koowa')) {
+	// @todo Remove the old version of the Nooku Framework
+	JFolder::delete(JPATH_ROOT.'/libraries/koowa');
+	JFolder::delete(JPATH_ROOT.'/administrator/components/com_default');
+	JFolder::delete(JPATH_ROOT.'/administrator/modules/mod_default');
+	JFolder::delete(JPATH_ROOT.'/components/com_default');
+	JFolder::delete(JPATH_ROOT.'/media/com_default');
+	JFolder::delete(JPATH_ROOT.'/media/lib_koowa');
+	JFolder::delete(JPATH_ROOT.'/modules/mod_default');
+	if(JFolder::exists(JPATH_ROOT.'/plugins/koowa/default')) JFolder::delete(JPATH_ROOT.'/plugins/koowa/default');
+	if(JFolder::exists(JPATH_ROOT.'/plugins/system/koowa')) JFolder::delete(JPATH_ROOT.'/plugins/system/koowa');
+	
+	// Install the new version of the Nooku Framework
 	$koowaInstalled = JFolder::copy("$src/koowa", JPATH_ROOT, null, true);
 	if(!$koowaInstalled) {
 		JError::raiseWarning(0,'Could not install the Nooku Framework. Please consult our documentation in order to manually install it before attempting to install Akeeba Subscriptions again.');
@@ -383,6 +395,11 @@ if(is_dir($src.'/koowa')) {
 	// Remove the index.html files from the site root and the administrator directory
 	foreach( array(JPATH_ROOT.DS.'index.html',JPATH_ADMINISTRATOR.DS.'index.html') as $fileToRemove ) {
 		if(JFile::exists($fileToRemove)) JFile::delete($fileToRemove);
+	}
+	// On Joomla! 1.6+, move plugins/koowa/default.php to plugins/koowa/default/default.php
+	if(version_compare(JVERSION, '1.6.0', 'ge')) {
+		JFolder::create(JPATH_ROOT.'/plugins/koowa/default');
+		JFile::move(JPATH_ROOT.'/plugins/koowa/default.php', JPATH_ROOT.'/plugins/koowa/default/default.php');
 	}
 } else {
 	$koowaInstalled = null;
