@@ -7,7 +7,7 @@
 
 defined('KOOWA') or die('');
 
-interface ComAkeebasubsDatabaseConvertersInterface
+interface ComAkeebasubsDatabasesConvertersInterface
 {
 	/**
 	 * Execute the convertion

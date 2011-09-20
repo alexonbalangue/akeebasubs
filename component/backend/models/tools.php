@@ -17,6 +17,8 @@ defined('KOOWA') or die('');
  */
 class ComAkeebasubsModelTools extends KModelTable
 {
+	protected $list = array();
+	
 	/**
 	 * Constructor
 	 *
@@ -32,15 +34,17 @@ class ComAkeebasubsModelTools extends KModelTable
 		foreach($converters as $name)
 		{
 			$name		= str_replace('.php', '', $name);
-			$converter	= KFactory::get('com://admin/akeebasubs.database.converters.'.$name);
-			if($converter->canConvert()) $this->_list[$name] = $converter;
+			$converter	= KFactory::get('com://admin/akeebasubs.databases.converters.'.$name);
+			if($converter->canConvert()) $this->list[$name] = $converter;
 		}
 
-		$this->_total = count($this->_list);
+		$this->_total = count($this->list);
 
 		$this->_state
 					->insert('import', 'cmd', 'demo')
 					->insert('limit', 'int');
+					
+		$this->areYouKiddingMe = 'Yes, it is crazy';
 	}
 	
 	/**
@@ -52,7 +56,7 @@ class ComAkeebasubsModelTools extends KModelTable
 	 */
 	public function addConverter($name, $converter)
 	{
-		$this->_list[$name] = $converter;
+		$this->list[$name] = $converter;
 		
 		return $this;
 	}
@@ -65,9 +69,9 @@ class ComAkeebasubsModelTools extends KModelTable
 	public function getList()
 	{
 		//Sort list by key
-		if(!empty($this->_list)) ksort($this->_list);
+		if(!empty($this->list)) ksort($this->list);
 	
-		return $this->_list;
+		return $this->list;
 	}
 
 	/**
@@ -77,8 +81,8 @@ class ComAkeebasubsModelTools extends KModelTable
 	 */
 	public function getItem()
 	{
-		if(!isset($this->_list[$this->_state->import])) return false;
+		if(!isset($this->list[$this->_state->import])) return false;
 	
-		return $this->_list[$this->_state->import];
+		return $this->list[$this->_state->import];
 	}
 }

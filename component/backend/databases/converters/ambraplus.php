@@ -14,7 +14,7 @@ defined('KOOWA') or die('');
  *
  * @author Nicholas K. Dionysopoulos
  */
-class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConvertersAbstract
+class ComAkeebasubsDatabasesConvertersAmbraplus extends ComAkeebasubsDatabasesConvertersAbstract
 {
 	/**
 	 * This converter is able to run in steps
@@ -120,8 +120,7 @@ class ComAkeebasubsDatabaseConvertersAmbraplus extends ComAkeebasubsDatabaseConv
 						'name'=>'content','identity_column'=>'id'
 					))->select(KFactory::get('koowa:database.query')
 						->select(array('introtext','fulltext'))
-						->where('id','=',$articleid), KDatabase::FETCH_ROW)
-					->getItem();
+						->where('id','=',$articleid), KDatabase::FETCH_ROW);
 					if($article instanceof KDatabaseRowInterface) {
 						$articleText = $article->introtext . "\n" . $article->fulltext;
 					}

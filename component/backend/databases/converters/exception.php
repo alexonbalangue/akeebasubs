@@ -7,4 +7,4 @@
 
 defined('KOOWA') or die('');
 
-class ComAkeebasubsDatabaseConverterException extends KException {}
+class ComAkeebasubsDatabasesConverterException extends KException {}

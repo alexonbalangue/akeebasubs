@@ -7,7 +7,7 @@
 
 defined('KOOWA') or die('');
 
-abstract class ComAkeebasubsDatabaseConvertersAbstract extends KObject implements ComAkeebasubsDatabaseConvertersInterface, KObjectIdentifiable
+abstract class ComAkeebasubsDatabasesConvertersAbstract extends KObject implements ComAkeebasubsDatabasesConvertersInterface, KObjectIdentifiable
 {
 	/**
 	 * The current data
@@ -49,7 +49,7 @@ abstract class ComAkeebasubsDatabaseConvertersAbstract extends KObject implement
 	public function convert()
 	{
 		$dbprefix = JFactory::getConfig()->getValue('dbprefix');
-		$identifier = new KIdentifier('com://admin/akeebasubs.database.table.default');
+		$identifier = KIdentifier::identify('com://admin/akeebasubs.database.table.default');
 
 		foreach($this->data as $this->name => $rows)
 		{
