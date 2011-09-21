@@ -41,14 +41,14 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
     	}
     	
     	// We like code reuse, so we map some of the frontend models to the backend models
-    	KFactory::map('com://site/default.controllers.behaviors.executable',	'com://admin/default.controllers.behaviors.executable');
-    	KFactory::map('com://site/akeebasubs.model.subscriptions',	'com://admin/akeebasubs.model.subscriptions');
-    	KFactory::map('com://site/akeebasubs.model.levels',			'com://admin/akeebasubs.model.levels');
-    	KFactory::map('com://site/akeebasubs.model.configs',			'com://admin/akeebasubs.model.configs');
-    	KFactory::map('com://site/akeebasubs.model.jusers',			'com://admin/akeebasubs.model.jusers');
-    	KFactory::map('com://site/akeebasubs.model.taxrules',		'com://admin/akeebasubs.model.taxrules');
-    	KFactory::map('com://site/akeebasubs.model.users',			'com://admin/akeebasubs.model.users');
-    	KFactory::map('com://site/akeebasubs.model.messages',		'com://site/akeebasubs.model.levels');
+    	KIdentifier::map('com://site/default.controllers.behaviors.executable',	'com://admin/default.controllers.behaviors.executable');
+    	KIdentifier::map('com://site/akeebasubs.model.subscriptions',	'com://admin/akeebasubs.model.subscriptions');
+    	KIdentifier::map('com://site/akeebasubs.model.levels',			'com://admin/akeebasubs.model.levels');
+    	KIdentifier::map('com://site/akeebasubs.model.configs',			'com://admin/akeebasubs.model.configs');
+    	KIdentifier::map('com://site/akeebasubs.model.jusers',			'com://admin/akeebasubs.model.jusers');
+    	KIdentifier::map('com://site/akeebasubs.model.taxrules',		'com://admin/akeebasubs.model.taxrules');
+    	KIdentifier::map('com://site/akeebasubs.model.users',			'com://admin/akeebasubs.model.users');
+    	KIdentifier::map('com://site/akeebasubs.model.messages',		'com://site/akeebasubs.model.levels');
     	
     	// I hate myself for doing this... but using map() didn't work for me!
     	$view = JRequest::getCmd('view','');

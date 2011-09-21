@@ -36,8 +36,8 @@ class ModAkslevelsHtml extends ModDefaultHtml
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 
 		// TODO : Put this in a shared file and load with JLoader
-		KFactory::map('com://site/akeebasubs.model.levels',			'com://admin/akeebasubs.model.levels');
-		KFactory::map('com://site/akeebasubs.model.configs',			'com://admin/akeebasubs.model.configs');
+		KIdentifier::map('com://site/akeebasubs.model.levels',			'com://admin/akeebasubs.model.levels');
+		KIdentifier::map('com://site/akeebasubs.model.configs',			'com://admin/akeebasubs.model.configs');
 
 		// Otherwise, the stylesheet is not loaded :(
 		JFactory::getDocument()->addStylesheet(JURI::base().'media/com_akeebasubs/css/frontend.css');
