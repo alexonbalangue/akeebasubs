@@ -69,7 +69,7 @@ abstract class ComAkeebasubsDatabasesConvertersAbstract extends KObject implemen
 				//Get the data and apply the column mappings
 				$data = $table->mapColumns($data);
 				
-				$table->getDatabase()->insert($table->getBase(), KConfig::toData($data));
+				$table->getDatabase()->insert($table->getBase(), KConfig::unbox($data));
 			}
 		}
 

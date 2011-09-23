@@ -26,7 +26,7 @@ class ComAkeebasubsControllerConfig extends ComAkeebasubsControllerDefault
 	function _actionAdd(KCommandContext $context)
 	{
 		$model	= $this->getModel();
-		$model->saveConfig(KConfig::toData($context->data));
+		$model->saveConfig(KConfig::unbox($context->data));
 
 		$action = KRequest::get('post.action', 'cmd');
 		
