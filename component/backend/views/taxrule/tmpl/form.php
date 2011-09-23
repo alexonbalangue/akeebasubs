@@ -22,9 +22,7 @@
 	<br/>
 
 	<label for="vies" class="main" class="main"><?= @text('COM_AKEEBASUBS_TAXRULES_VIES'); ?></label>
-	<span style="float:left">
-		<?= @helper('select.booleanlist', array('name' => 'vies', 'selected' => $taxrule->vies)); ?>
-	</span>
+	<?= @helper('select.booleanlist', array('name' => 'vies', 'selected' => $taxrule->vies)); ?>
 	<br/>
 
 	<label for="taxrate" class="main"><?= @text('COM_AKEEBASUBS_TAXRULES_TAXRATE'); ?></label>
@@ -32,8 +30,6 @@
 	<br/>
 
 	<label for="enabled" class="main" class="main"><?= @text('enabled'); ?></label>
-	<span style="float:left">
-		<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $taxrule->enabled)); ?>
-	</span>
+	<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $taxrule->enabled)); ?>
 
 </form>
