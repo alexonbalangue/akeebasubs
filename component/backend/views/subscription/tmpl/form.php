@@ -27,17 +27,19 @@
 		<br/>
 
 		<label for="enabled" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_ENABLED')?></label>
-		<span style="float: left">
-			<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $subscription->enabled)); ?>
-		</span>
+		<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $subscription->enabled)); ?>
 		<br/>
 
 		<label for="publish_up" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_UP')?></label>
+		<span class="akeebasubs-nofloat-input">
 		<?php echo JHTML::_('calendar', $subscription->publish_up, 'publish_up', 'publish_up'); ?>
+		</span>
 		<br/>
 
 		<label for="publish_down" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_DOWN')?></label>
+		<span class="akeebasubs-nofloat-input">
 		<?php echo JHTML::_('calendar', $subscription->publish_down, 'publish_down', 'publish_down'); ?>
+		</span>
 		<br/>
 		
 		<label for="notes" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_NOTES')?></label><br/>
@@ -72,7 +74,9 @@
 		<br/>
 		
 		<label for="created_on" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON')?></label>
+		<span class="akeebasubs-nofloat-input">
 		<?php echo JHTML::_('calendar', $subscription->created_on, 'created_on', 'created_on'); ?>
+		</span>
 		<br/>
 		
 		<label for="params" class="main"><?=@text('COM_AKEEBASUBS_SUBSCRIPTION_PARAMS')?></label><br/>
