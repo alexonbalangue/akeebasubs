@@ -4,8 +4,6 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-@CHARSET "UTF-8";
-
 .icon-48-akeebasubs {
 	background: transparent url(../images/akeebasubs-48.png) no-repeat !important;
 }
@@ -116,4 +114,14 @@ div.toolbar td.button a.disabled {
 	padding: 0;
 	border: 4px solid black;
 	border-color: transparent transparent transparent #025A8D;
+}
+
+.akeebasubs-nofloat-input input {
+	float: none;
+}
+
+.akeebasubs-nofloat-input img.calendar {
+	float: none;
+	padding: 0;
+	margin: 0 0 -4px 3px;
 }

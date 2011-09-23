@@ -31,7 +31,7 @@
 	<br/>
 
 	<label for="enabled" class="main" class="mainlabel"><?= @text('Published'); ?></label>
-	<span style="float: left">
+	<span>
 		<?= @helper('select.booleanlist', array('name' => 'enabled', 'selected' => $coupon->enabled)); ?>
 	</span>
 	<br/>
@@ -48,11 +48,15 @@
 	<legend><?=@text('COM_AKEEBASUBS_COUPON_FINETUNING_TITLE')?></legend>
 	
 	<label for="publish_up" class="main"><?=@text('COM_AKEEBASUBS_COUPON_PUBLISH_UP')?></label>
-	<?php echo JHTML::_('calendar', $coupon->publish_up, 'publish_up', 'publish_up'); ?>
+	<span class="akeebasubs-nofloat-input">
+		<?php echo JHTML::_('calendar', $coupon->publish_up, 'publish_up', 'publish_up'); ?>
+	</span>
 	<br/>
 
 	<label for="publish_down" class="main"><?=@text('COM_AKEEBASUBS_COUPON_PUBLISH_DOWN')?></label>
-	<?php echo JHTML::_('calendar', $coupon->publish_down, 'publish_down', 'publish_down'); ?>
+	<span class="akeebasubs-nofloat-input">
+		<?php echo JHTML::_('calendar', $coupon->publish_down, 'publish_down', 'publish_down'); ?>
+	</span>
 	<br/>
 	
 	<label for="userid_visible" class="main"><?=@text('COM_AKEEBASUBS_COUPON_FIELD_USER')?></label>
