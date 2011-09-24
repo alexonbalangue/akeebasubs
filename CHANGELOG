@@ -1,3 +1,4 @@
+<?php die(); ?>
 Akeeba Subscriptions 1.0.0
 ================================================================================
 + Community ACL integration
