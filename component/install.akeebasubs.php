@@ -206,7 +206,8 @@ if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_kunena')) {
 	if(!$broken) {
 		$element = & $xml->document->version[0];
 		if($element) {
-			$broken = !version_compare($version, '1.7', 'ge');
+            $version = $element->data();
+			$broken = !version_compare($version, '1.7.0', 'ge');
 		} else {
 			$broken = true;
 		}
