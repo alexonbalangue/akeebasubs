@@ -213,7 +213,7 @@ class plgAkpaymentEway extends JPlugin
 		   
 		if($responsemode=="True") {
 			@ob_start();
-			include dirname(__FILE__).DS.'eway'.DS.'form.php';
+			include dirname(__FILE__).'/eway/form.php';
 			$html = @ob_get_clean();
 			return $html;
 		}
@@ -402,7 +402,7 @@ class plgAkpaymentEway extends JPlugin
 			JFile::write($logFile, $dummy);
 		} else {
 			if(@filesize($logFile) > 1048756) {
-				$altLog = $logpath.DS.'akpayment_eway_ipn-1.php';
+				$altLog = $logpath.'/akpayment_eway_ipn-1.php';
 				if(JFile::exists($altLog)) {
 					JFile::delete($altLog);
 				}

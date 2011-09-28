@@ -91,7 +91,7 @@ class plgAkpaymentWorldpay extends JPlugin
 			->getItem();
 
 		@ob_start();
-		include dirname(__FILE__).DS.'worldpay'.DS.'form.php';
+		include dirname(__FILE__).'/worldpay/form.php';
 		$html = @ob_get_clean();
 		
 		return $html;
@@ -263,7 +263,7 @@ class plgAkpaymentWorldpay extends JPlugin
 			JFile::write($logFile, $dummy);
 		} else {
 			if(@filesize($logFile) > 1048756) {
-				$altLog = $logpath.DS.'akpayment_worldpay_ipn-1.php';
+				$altLog = $logpath.'/akpayment_worldpay_ipn-1.php';
 				if(JFile::exists($altLog)) {
 					JFile::delete($altLog);
 				}

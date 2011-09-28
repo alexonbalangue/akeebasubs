@@ -77,7 +77,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			// Try to send the invoice
 			if(!class_exists('ccInvoicesControllerInvoices')) {
 				jimport('joomla.filesystem.file');
-				$path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS.'controllers'.DS.'invoices.php';
+				$path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/controllers/invoices.php';
 				if(JFile::exists($path)) {
 					require_once $path;
 				} else {
@@ -189,8 +189,8 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		$sql = "SELECT * FROM #__ccinvoices_configuration WHERE id = 1  LIMIT 1";
 		$db->setQuery($sql);
 		$config = $db->loadObject();
-        require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS."assets".DS."tcpdf".DS.'tcpdf.php');
-        require_once(JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS."assets".DS."tcpdf".DS."config".DS."lang".DS.'eng.php');
+        require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/tcpdf.php');
+        require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/config/lang/eng.php');
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('David');
@@ -216,7 +216,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->SetFont('times', '', 8);
         $pdf->AddPage();
-		require_once JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS.'models'.DS.'invoices.php';
+		require_once JPATH_ADMINISTRATOR.'/components/com_ccinvoices/models/invoices.php';
         $model = new ccInvoicesModelInvoices;
 		$template=$model->gettemplatelayout($id);
         $v=$pdf->writeHTML($template, true, false, false, false, '');
@@ -233,7 +233,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		{
 			$file_name = $invRow->number.".pdf";
 		}
-        $file_path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_ccinvoices'.DS.'assets'.DS.$file_name;
+        $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/'.$file_name;
         $pdf->Output($file_path, 'F');
 		return $file_path;
 	}

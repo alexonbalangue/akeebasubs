@@ -137,7 +137,7 @@ if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
 	// Joomla! 1.5 will have to load the translation strings
 	$j15 = true;
 	$jlang =& JFactory::getLanguage();
-	$path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_akeebasubs';
+	$path = JPATH_ADMINISTRATOR.'/components/com_akeebasubs';
 	$jlang->load('com_akeebasubs.sys', $path, 'en-GB', true);
 	$jlang->load('com_akeebasubs.sys', $path, $jlang->getDefault(), true);
 	$jlang->load('com_akeebasubs.sys', $path, null, true);

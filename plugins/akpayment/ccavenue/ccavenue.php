@@ -89,7 +89,7 @@ class plgAkpaymentCcavenue extends JPlugin
 			->getItem();
 
 		@ob_start();
-		include dirname(__FILE__).DS.'ccavenue'.DS.'form.php';
+		include dirname(__FILE__).'/ccavenue/form.php';
 		$html = @ob_get_clean();
 		
 		return $html;
@@ -250,7 +250,7 @@ class plgAkpaymentCcavenue extends JPlugin
 			JFile::write($logFile, $dummy);
 		} else {
 			if(@filesize($logFile) > 1048756) {
-				$altLog = $logpath.DS.'akpayment_ccavenue_ipn-1.php';
+				$altLog = $logpath.'/akpayment_ccavenue_ipn-1.php';
 				if(JFile::exists($altLog)) {
 					JFile::delete($altLog);
 				}

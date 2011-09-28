@@ -11,7 +11,7 @@ class ComAkeebasubsDispatcher extends ComDefaultDispatcher
 {
     protected function _initialize(KConfig $config)
     {
-		include_once JPATH_COMPONENT_ADMINISTRATOR.DS.'version.php';
+		include_once JPATH_COMPONENT_ADMINISTRATOR.'/version.php';
 		
 		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)
 		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set')) {

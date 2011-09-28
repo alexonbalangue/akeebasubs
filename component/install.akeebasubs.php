@@ -394,7 +394,7 @@ if(is_dir($src.'/koowa')) {
 		return;
 	}
 	// Remove the index.html files from the site root and the administrator directory
-	foreach( array(JPATH_ROOT.DS.'index.html',JPATH_ADMINISTRATOR.DS.'index.html') as $fileToRemove ) {
+	foreach( array(JPATH_ROOT.'/index.html',JPATH_ADMINISTRATOR.'/index.html') as $fileToRemove ) {
 		if(JFile::exists($fileToRemove)) JFile::delete($fileToRemove);
 	}
 	// On Joomla! 1.6+, move plugins/koowa/default.php to plugins/koowa/default/default.php
@@ -412,7 +412,7 @@ if(is_dir($src.'/koowa')) {
 
 // Install the Joom!Fish content XML file
 if(is_dir($src.'/plugins/joomfish')) {
-	if(JFile::exists(JPATH_SITE .DS. 'components' .DS. 'com_joomfish' .DS. 'helpers' .DS. 'defines.php')) {
+	if(JFile::exists(JPATH_SITE . '/components/com_joomfish/helpers/defines.php')) {
 		$result = JFile::copy($src.'/plugins/joomfish/akeebasubs_levels.xml', JPATH_ADMINISTRATOR.'/components/com_joomfish/contentelements/akeebasubs_levels.xml');
 		$status->plugins[] = array('name'=>'akeebasubs_levels.xml','group'=>'joomfish', 'result'=>$result);
 	}
@@ -420,12 +420,12 @@ if(is_dir($src.'/plugins/joomfish')) {
 
 // Remove unused files and folders (or the component will explode!)
 foreach($removeFiles as $removedFile) {
-	$removePath = JPATH_SITE.DS.$removedFile;
+	$removePath = JPATH_SITE.'/'.$removedFile;
 	if(JFile::exists($removePath)) JFile::delete($removePath);
 }
 foreach($removeFolders as $removedFolder) {
-	$removePath = JPATH_SITE.DS.$removedFolder;
-	if(JFolder::exists($removePath)) JFolder::delete(JPATH_SITE.DS.$removedFolder);
+	$removePath = JPATH_SITE.'/'.$removedFolder;
+	if(JFolder::exists($removePath)) JFolder::delete(JPATH_SITE.'/'.$removedFolder);
 }
 
 // Modules installation
@@ -479,7 +479,7 @@ if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
 	// Joomla! 1.5 will have to load the translation strings
 	$j15 = true;
 	$jlang =& JFactory::getLanguage();
-	$path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_akeebasubs';
+	$path = JPATH_ADMINISTRATOR.'/components/com_akeebasubs';
 	$jlang->load('com_akeebasubs.sys', $path, 'en-GB', true);
 	$jlang->load('com_akeebasubs.sys', $path, $jlang->getDefault(), true);
 	$jlang->load('com_akeebasubs.sys', $path, null, true);
