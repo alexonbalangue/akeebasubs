@@ -28,7 +28,11 @@ class plgAkeebasubsSamplefields extends JPlugin
 		if(array_key_exists('agegroup', $cache['custom'])) {
 			$current = $cache['custom']['agegroup'];
 		} else {
-			$current = property_exists($userparams->params, 'agegroup') ? $userparams->params->agegroup : 0;
+			if(!is_object($userparams->params)) {
+				$current = '';
+			} else {
+				$current = property_exists($userparams->params, 'agegroup') ? $userparams->params->agegroup : 0;
+			}
 		}
 		// Setup the combobox parameters
 		$helper = KFactory::get('com://admin/akeebasubs.template.helper.listbox');
@@ -63,7 +67,11 @@ class plgAkeebasubsSamplefields extends JPlugin
 		if(array_key_exists('gender', $cache['custom'])) {
 			$current = $cache['custom']['gender'];
 		} else {
-			$current = property_exists($userparams->params, 'gender') ? $userparams->params->gender : 0;
+			if(!is_object($userparams->params)) {
+				$current = 0;
+			} else {
+				$current = property_exists($userparams->params, 'gender') ? $userparams->params->gender : 0;
+			}
 		}
 		// Setup the combobox parameters
 		$helper = KFactory::get('com://admin/akeebasubs.template.helper.listbox');
