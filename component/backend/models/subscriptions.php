@@ -22,6 +22,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			->insert('user_id'			, 'int')
 			->insert('paystate'			, 'string')
 			->insert('since'			, 'date')
+			->insert('until'			, 'date')
 			->insert('contact_flag'		, 'int')
 			->insert('expires_from'		, 'date')
 			->insert('expires_to'		, 'date')
@@ -246,6 +247,21 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 				$since = $jFrom->toMySQL();
 			}
 			$query->where('tbl.created_on','>=',$since);
+		}
+		
+		// "Until" queries
+		$until = trim($state->until);
+		if(empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00')) {
+			$until = '';
+		} else {
+			$jFrom = new JDate($until);
+			$until = $jFrom->toUnix();
+			if($until == 0) {
+				$until = '';
+			} else {
+				$until = $jFrom->toMySQL();
+			}
+			$query->where('tbl.created_on','<=',$until);
 		}
 		
 		// Expiration control queries

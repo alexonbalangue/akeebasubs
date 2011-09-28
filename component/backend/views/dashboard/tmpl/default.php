@@ -49,8 +49,8 @@ defined('KOOWA') or die('Restricted access');?>
 			<td width="50%"><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_LASTYEAR')?></td>
 			<td align="right" width="25%">
 				<?= KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up((gmdate('Y')-1).'-01-01 00:00:00')
-					->publish_down((gmdate('Y')-1).'-12-31 23:59:59')
+					->since((gmdate('Y')-1).'-01-01 00:00:00')
+					->until((gmdate('Y')-1).'-12-31 23:59:59')
 					->paystate('C')
 					->getTotal()
 				?>
@@ -59,8 +59,8 @@ defined('KOOWA') or die('Restricted access');?>
 				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				<?= sprintf('%.02f',
 					KFactory::get('com://admin/akeebasubs.model.subscriptions')
-						->publish_up((gmdate('Y')-1).'-01-01')
-						->publish_down((gmdate('Y')-1).'-12-31 23:59:59')
+						->since((gmdate('Y')-1).'-01-01')
+						->until((gmdate('Y')-1).'-12-31 23:59:59')
 						->moneysum(1)
 						->paystate('C')
 						->getTotal()
@@ -71,8 +71,8 @@ defined('KOOWA') or die('Restricted access');?>
 			<td><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_THISYEAR')?></td>
 			<td align="right">
 				<?= KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up(gmdate('Y').'-01-01')
-					->publish_down(gmdate('Y').'-12-31 23:59:59')
+					->since(gmdate('Y').'-01-01')
+					->until(gmdate('Y').'-12-31 23:59:59')
 					->paystate('C')
 					->getTotal()
 				?>
@@ -81,8 +81,8 @@ defined('KOOWA') or die('Restricted access');?>
 				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				<?= sprintf('%.02f',
 					KFactory::get('com://admin/akeebasubs.model.subscriptions')
-						->publish_up(gmdate('Y').'-01-01')
-						->publish_down(gmdate('Y').'-12-31 23:59:59')
+						->since(gmdate('Y').'-01-01')
+						->until(gmdate('Y').'-12-31 23:59:59')
 						->moneysum(1)
 						->paystate('C')
 						->getTotal()
@@ -114,8 +114,8 @@ defined('KOOWA') or die('Restricted access');?>
 					}
 				?>
 				<?= KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up($y.'-'.$m.'-01')
-					->publish_down($y.'-'.$m.'-'.$lmday.' 23:59:59')
+					->since($y.'-'.$m.'-01')
+					->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 					->paystate('C')
 					->getTotal()
 				?>
@@ -124,8 +124,8 @@ defined('KOOWA') or die('Restricted access');?>
 				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				<?= sprintf('%.02f',
 					KFactory::get('com://admin/akeebasubs.model.subscriptions')
-						->publish_up($y.'-'.$m.'-01')
-						->publish_down($y.'-'.$m.'-'.$lmday.' 23:59:59')
+						->since($y.'-'.$m.'-01')
+						->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 						->moneysum(1)
 						->paystate('C')
 						->getTotal()
@@ -151,8 +151,8 @@ defined('KOOWA') or die('Restricted access');?>
 					}
 				?>
 				<?= KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
-					->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+					->since(gmdate('Y').'-'.gmdate('m').'-01')
+					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 					->paystate('C')
 					->getTotal()
 				?>
@@ -161,8 +161,8 @@ defined('KOOWA') or die('Restricted access');?>
 				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				<?= sprintf('%.02f',
 					KFactory::get('com://admin/akeebasubs.model.subscriptions')
-						->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
-						->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+						->since(gmdate('Y').'-'.gmdate('m').'-01')
+						->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 						->moneysum(1)
 						->paystate('C')
 						->getTotal()
@@ -173,8 +173,8 @@ defined('KOOWA') or die('Restricted access');?>
 			<td width="50%"><?=@text('COM_AKEEBASUBS_DASHBOARD_STATS_LAST7DAYS')?></td>
 			<td align="right" width="25%">
 				<?= KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up( gmdate('Y-m-d', time()-7*24*3600) )
-					->publish_down( gmdate('Y-m-d') )
+					->since( gmdate('Y-m-d', time()-7*24*3600) )
+					->until( gmdate('Y-m-d') )
 					->paystate('C')
 					->getTotal()
 				?>
@@ -183,8 +183,8 @@ defined('KOOWA') or die('Restricted access');?>
 				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				<?= sprintf('%.02f',
 					KFactory::get('com://admin/akeebasubs.model.subscriptions')
-						->publish_up( gmdate('Y-m-d', time()-7*24*3600) )
-						->publish_down( gmdate('Y-m-d') )
+						->since( gmdate('Y-m-d', time()-7*24*3600) )
+						->until( gmdate('Y-m-d') )
 						->moneysum(1)
 						->paystate('C')
 						->getTotal()
@@ -202,8 +202,8 @@ defined('KOOWA') or die('Restricted access');?>
 				$date->modify("+1 day")
 				?>
 				<?= KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up( $yesterday )
-					->publish_down( $date->format("Y-m-d") )
+					->since( $yesterday )
+					->until( $date->format("Y-m-d") )
 					->paystate('C')
 					->getTotal()
 				?>
@@ -212,8 +212,8 @@ defined('KOOWA') or die('Restricted access');?>
 				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				<?= sprintf('%.02f',
 					KFactory::get('com://admin/akeebasubs.model.subscriptions')
-						->publish_up( $yesterday )
-						->publish_down( $date->format("Y-m-d") )
+						->since( $yesterday )
+						->until( $date->format("Y-m-d") )
 						->moneysum(1)
 						->paystate('C')
 						->getTotal()
@@ -229,8 +229,8 @@ defined('KOOWA') or die('Restricted access');?>
 					$expiry->modify('+1 day');
 				?>
 				<?= KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up( $date->format("Y-m-d") )
-					->publish_down( $expiry->format("Y-m-d") )
+					->since( $date->format("Y-m-d") )
+					->until( $expiry->format("Y-m-d") )
 					->paystate('C')
 					->getTotal()
 				?>
@@ -241,8 +241,8 @@ defined('KOOWA') or die('Restricted access');?>
 				<?=KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
 				<?= sprintf('%.02f',
 					KFactory::get('com://admin/akeebasubs.model.subscriptions')
-						->publish_up( $date->format("Y-m-d") )
-						->publish_down( $expiry->format("Y-m-d") )
+						->since( $date->format("Y-m-d") )
+						->until( $expiry->format("Y-m-d") )
 						->paystate('C')
 						->moneysum(1)
 						->getTotal()
@@ -267,13 +267,13 @@ defined('KOOWA') or die('Restricted access');?>
 				}
 				$daysin = gmdate('d');
 				$numsubs = KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
-					->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+					->since(gmdate('Y').'-'.gmdate('m').'-01')
+					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 					->paystate('C')
 					->getTotal();
 				$summoney = KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->publish_up(gmdate('Y').'-'.gmdate('m').'-01')
-					->publish_down(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+					->since(gmdate('Y').'-'.gmdate('m').'-01')
+					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 					->moneysum(1)
 					->paystate('C')
 					->getTotal();

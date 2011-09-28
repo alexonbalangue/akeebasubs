@@ -38,6 +38,7 @@ Akeeba Subscriptions 1.0.0
 # You could subscribe to unpublished subscription levels by entering the URL to it in your browser
 # Notices thrown in registration view
 # Unknown constant AKEEBASUBS_VERSIONHASH in mod_akslevels module
+# Backend statistics were wrong, as they were using the from/to date of the subscription, not the created_on date
 
 Akeeba Subscriptions 1.0.rc1
 ================================================================================
