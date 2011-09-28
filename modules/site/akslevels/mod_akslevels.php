@@ -26,6 +26,9 @@ defined('_JEXEC') or die('');
 if(!defined('KOOWA')) {
 	return;
 }
+
+include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
+
 echo KFactory::get('mod://site/akslevels.html')
 	->module($module)
 	->params($params)
