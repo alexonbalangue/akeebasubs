@@ -105,7 +105,7 @@
 	<h3 class="subs"><?=@text('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS')?></h3>
 	
 	<label for="isbusiness" class="main">* <?=@text('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')?></label>
-	<?=@helper('select.booleanlist', array('name' => 'isbusiness', 'selected' => ( !empty($userparams->isbusiness) ? $userparams->isbusiness : $cache['isbusiness'] ) , 'deselect' => true ))?>
+	<?=@helper('select.booleanlist', array('name' => 'isbusiness', 'selected' => ( !empty($userparams->isbusiness) ? $userparams->isbusiness : (@array_key_exists('isbusiness',$cache) ? $cache['isbusiness'] : 0) ) , 'deselect' => true ))?>
 	<div id="businessfields">
 		<label for="businessname" class="main"><?=@text('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME')?></label>
 		<input type="text" name="businessname" id="businessname" value="<?=@escape( !empty($userparams->businessname) ? $userparams->businessname : $cache['businessname'] )?>" class="main" />
