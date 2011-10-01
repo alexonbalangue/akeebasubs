@@ -2743,26 +2743,26 @@ LEVEL3=Group 1</programlisting>
 
             <listitem>
               <para>This is a list for assigning subscription levels to
-              NinjaBoard groups. When a user has an active subscription to the
-              specified level, he'll be added to the NinjaBoard group
-              mentioned on the right hand of the equal sign. Each assignment
-              is done like this:</para>
+              Joomla! groups. When a user has an active subscription to the
+              specified level, he'll be added to the Joomla! group mentioned
+              on the right hand of the equal sign. Each assignment is done
+              like this:</para>
 
               <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
 
               <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1, Group 2 and Group 3 are the names of the NinjaBoard
-              groups you want to add a user to when he subscribes. If you want
-              to assign multiple subscription levels to multiple groups, you
-              have to do something like that (separate multiple lines with a
-              single press of the ENTER key on your keyboard):</para>
+              Group 1, Group 2 and Group 3 are the names of the Joomla! groups
+              you want to add a user to when he subscribes. If you want to
+              assign multiple subscription levels to multiple groups, you have
+              to do something like that (separate multiple lines with a single
+              press of the ENTER key on your keyboard):</para>
 
               <programlisting>LEVEL1=Group 1,Group 2,Group 3
 LEVEL2=Group 2
 LEVEL3=Group 4,Group 1</programlisting>
 
               <para>You can also use the numeric IDs of subscription levels or
-              NinjaBoard groups instead of their titles. However, we consider
+              Joomla! groups instead of their titles. However, we consider
               working with numeric IDs very counter-intuitive.</para>
             </listitem>
           </varlistentry>
@@ -2771,11 +2771,11 @@ LEVEL3=Group 4,Group 1</programlisting>
             <term>Remove from Joomla! 1.6 groups</term>
 
             <listitem>
-              <para>Likewise, this is the list of the NinjaBoard groups to
-              remove a user from when his subscription to the specified level
-              is no longer active. Do note that you can specify a different
-              set of groups to remove the user from than the ones you are
-              adding him to. For example:</para>
+              <para>Likewise, this is the list of the Joomla! groups to remove
+              a user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
 
               <programlisting>LEVEL1=Group 1,Group 2
 LEVEL2=Group 2
@@ -2785,10 +2785,10 @@ LEVEL3=Group 1</programlisting>
         </variablelist>
 
         <para>In this example, together with the rules displayed in "Add to
-        NinjaBoard groups", when a subscription to the LEVEL1 level expires,
-        the user will still belong to Joomla!'s Group 3, as it's not removed
-        from his account; only Group 1 and Group 2 are removed. Likewise, if
-        the user has an expired LEVEL1 subscription and an active LEVEL2
+        Joomla! groups", when a subscription to the LEVEL1 level expires, the
+        user will still belong to Joomla!'s Group 3, as it's not removed from
+        his account; only Group 1 and Group 2 are removed. Likewise, if the
+        user has an expired LEVEL1 subscription and an active LEVEL2
         subscription he'll now belong to Group 2 and Group 3: Group 3 because
         it's not removed when his subscription expires and Group 2 because his
         active LEVEL2 subscription suggests that he should be granted Group 2
@@ -3341,6 +3341,75 @@ LEVEL3=Group 1</programlisting>
         such, poses a great difficulty to even the most seasoned web site
         integrators. Take your time and experiment on a dev copy of your site
         before going live.</para>
+      </section>
+
+      <section xml:id="integration-redshop">
+        <title>RedShop Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - RedShop Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        RedShop shopper groups based on their subscription status. This allows
+        you to set special discounts to subscribers (e.g. a discount club) or
+        other RedShop tricks which are based on the shopper groups a user
+        belongs to.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin earlier in this documentation; instead of
+        adding users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <important>
+          <para>RedShop allows a user to belong to exactly one shopper
+          group.</para>
+        </important>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to RedShop groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              RedShop groups. When a user has an active subscription to the
+              specified level, he'll be added to the RedShop group mentioned
+              on the right hand of the equal sign. Each assignment is done
+              like this:</para>
+
+              <programlisting>LEVEL1=Group 1
+LEVEL2=Group 2
+LEVEL3=Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1 is the name of the RedShop group you want to add a user
+              to when he subscribes.</para>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              RedShop groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from RedShop groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the RedShop groups to remove
+              a user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
 
       <section xml:id="integration-samplefields">
