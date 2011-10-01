@@ -39,6 +39,9 @@
 			<th width="120px">
 				<?= @helper('grid.sort', array('column' => 'publish_down', 'title' => 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN')) ?>
 			</th>
+			<th width="120px">
+				<?= @helper('grid.sort', array('column' => 'created_on', 'title' => 'COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON')) ?>
+			</th>
 			<th width="100px">
 				<?= @helper('grid.sort', array('column' => 'enabled')); ?>
 			</th>			
@@ -57,6 +60,7 @@
 			<td></td>
 			<td><?php echo JHTML::_('calendar', @$state->publish_up, 'publish_up', 'publish_up', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
 			<td><?php echo JHTML::_('calendar', @$state->publish_down, 'publish_down', 'publish_down', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
+			<td><?php echo JHTML::_('calendar', @$state->since, 'since', 'since', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
 			<td><?= @helper('listbox.enabled', array('attribs'=>array('onchange'=>'this.form.submit();'))) ?></td>
 		</tr>
 		
@@ -161,6 +165,9 @@
 			</td>
 			<td>
 				<?= @helper('date.format', array('date' => $subscription->publish_down, 'format' => '%Y-%m-%d %H:%M' )) ?>
+			</td>
+			<td>
+				<?= @helper('date.format', array('date' => $subscription->created_on, 'format' => '%Y-%m-%d %H:%M' )) ?>
 			</td>
 			<td align="center">
 				<?= @helper('grid.enable', array('row' => $subscription)) ?>
