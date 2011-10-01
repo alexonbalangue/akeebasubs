@@ -21,6 +21,7 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 			->insert('publish_down'		, 'date')
 			->insert('user_id'			, 'int')
 			->insert('paystate'			, 'string')
+			->insert('paykey'			, 'string')
 			->insert('since'			, 'date')
 			->insert('until'			, 'date')
 			->insert('contact_flag'		, 'int')
@@ -162,6 +163,10 @@ class ComAkeebasubsModelSubscriptions extends KModelTable
 		if($state->paystate) {
 			$states = explode(',', $state->paystate);
 			$query->where('tbl.state','IN',$states);
+		}
+		
+		if($state->paykey) {
+			$query->where('tbl.processor_key','LIKE','%'.$state->paykey.'%');
 		}
 		
 		if(!$state->groupbydate)

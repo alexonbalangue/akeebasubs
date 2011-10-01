@@ -57,8 +57,8 @@
 				<?= @text('Filter:'); ?> <?= @helper('grid.search'); ?>
 			</td>
 			<td>
-				<?=@helper('com://admin/akeebasubs.template.helper.listbox.paystates', array('attribs'=>array('onchange'=>'this.form.submit();'), 'name' => 'paystate', 'selected' => $state->paystate, 'deselect' => true) ) ?>
-				<!-- TODO Search payment ID -->
+				<?=@helper('com://admin/akeebasubs.template.helper.listbox.paystates', array('attribs'=>array('onchange'=>'this.form.submit();'), 'name' => 'paystate', 'selected' => $state->paystate, 'deselect' => true) ) ?><br/>
+				<?=@helper('grid.paykey', array('search' => $state->paykey)); ?>
 			</td>
 			<td></td>
 			<td><?php echo JHTML::_('calendar', @$state->publish_up, 'publish_up', 'publish_up', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
