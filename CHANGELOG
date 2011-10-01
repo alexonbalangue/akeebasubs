@@ -15,6 +15,7 @@ Akeeba Subscriptions 1.0.0
 + #30 Joom!Fish support & auto-install Joom!Fish Content Element XML file for subscription levels
 + #5 SQL plugin, running a set of SQL commands, allowing for arbitrary integrations
 + Show the subscription creation date in the Subscriptions view
++ You can now filter subscriptions by payment state
 ~ Removing all references to DS; using / as a directory separator instead
 # Users would not be unblocked when enabling an off-line payment
 # Users would not be unblocked when using an 100% discount coupon code
