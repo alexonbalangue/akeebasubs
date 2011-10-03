@@ -42,6 +42,9 @@ class FOFController extends JController
 	
 	/** @var array The input variables array for this MVC triad; you can override it in the configuration */
 	protected $input = array();
+	
+	/** @var bool Set to true to enable CSRF protection on selected tasks */
+	protected $csrfProtection = true;
 
 	/**
 	 *
@@ -137,8 +140,29 @@ class FOFController extends JController
 		} else {
 			$this->_name = $this->bareComponent;
 		}
+		
+		// Set the CSRF protection
+		if(array_key_exists('csrf_protection', $config)) {
+			$this->csrfProtection = $config['csrf_protection'];
+		}
 	}
 
+	public function execute($task) {
+		$method_name = 'onBefore'.ucfirst($task);
+		if(method_exists($this, $method_name)) {
+			$result = $this->$method_name();
+			if(!$result) return false;
+		}
+		
+		parent::execute($task);
+		
+		$method_name = 'onAfter'.ucfirst($task);
+		if(method_exists($this, $method_name)) {
+			$result = $this->$method_name();
+			if(!$result) return false;
+		}
+	}
+	
 	public function display($cachable = false)
 	{
 		$document =& JFactory::getDocument();
@@ -162,6 +186,27 @@ class FOFController extends JController
 		} else {
 			$view->display();
 		}
+	}
+	
+	public function read($cachable = false)
+	{
+		// Load the model
+		$model = $this->getThisModel();
+		$model->setIDsFromRequest();
+
+		if(!$status) {
+			// Redirect on error
+			$url = 'index.php?option='.$this->component.'&view='.$this->view;
+			$this->setRedirect($url, $model->getError(), 'error');
+			$this->redirect();
+			return;
+		}
+
+		// Set the layout to item, if it's not set in the URL
+		if(is_null($this->layout)) $this->layout = 'item';
+
+		// Display
+		$this->display($cachable);
 	}
 	
 	public function add($cachable = false)
@@ -202,8 +247,10 @@ class FOFController extends JController
 	public function apply()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$model = $this->getThisModel();
@@ -220,8 +267,10 @@ class FOFController extends JController
 	public function save()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$this->applySave();
@@ -236,8 +285,10 @@ class FOFController extends JController
 	public function savenew()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$this->applySave();
@@ -264,8 +315,10 @@ class FOFController extends JController
 	public function accesspublic()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$this->setaccess(0);
@@ -274,8 +327,10 @@ class FOFController extends JController
 	public function accessregistered()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$this->setaccess(1);
@@ -284,8 +339,10 @@ class FOFController extends JController
 	public function accessspecial()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$this->setaccess(2);
@@ -294,8 +351,10 @@ class FOFController extends JController
 	public function publish()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$this->setstate(1);
@@ -304,8 +363,10 @@ class FOFController extends JController
 	public function unpublish()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$this->setstate(0);
@@ -314,8 +375,10 @@ class FOFController extends JController
 	public function saveorder()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$model = $this->getThisModel();
@@ -353,8 +416,10 @@ class FOFController extends JController
 	public function orderdown()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$model = $this->getThisModel();
@@ -377,8 +442,10 @@ class FOFController extends JController
 	public function orderup()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$model = $this->getThisModel();
@@ -401,8 +468,10 @@ class FOFController extends JController
 	public function remove()
 	{
 		// CSRF prevention
-		if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
-			JError::raiseError('403', JText::_('Request Forbidden'));
+		if($this->csrfProtection) {
+			if(!FOFInput::getVar(JUtility::getToken(), false, $this->input)) {
+				JError::raiseError('403', JText::_('Request Forbidden'));
+			}
 		}
 		
 		$model = $this->getThisModel();
@@ -477,11 +546,6 @@ class FOFController extends JController
 		}
 		$this->redirect();
 		return;
-	}
-	
-	protected function onBeforeApplySave(&$data)
-	{
-		return $data;
 	}
 
 	protected final function applySave()
@@ -659,5 +723,10 @@ class FOFController extends JController
 
 		$result = new $viewClass($config);
 		return $result;
+	}
+	
+	protected function onBeforeApplySave(&$data)
+	{
+		return $data;
 	}
 }
