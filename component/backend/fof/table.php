@@ -70,13 +70,13 @@ class FOFTable extends JTable
 			}
 		}
 		
-		$tbl_common = str_replace('com_', '', $config['option']).'_'
-			. strtolower($type);
+		$tbl_common = str_replace('com_', '', $config['option']).'_';
 		if(!array_key_exists('tbl', $config)) {
-			$config['tbl'] = '#__'.$tbl_common;
+			$config['tbl'] = '#__'.$tbl_common.strtolower(FOFInflector::pluralize($type));
 		}
 		if(!array_key_exists('tbl_key', $config)) {
-			$config['tbl_key'] = $tbl_common.'_id';
+			$keyName = FOFInflector::singularize($type);
+			$config['tbl_key'] = $tbl_common.$keyName.'_id';
 		}
 		if(!array_key_exists('db', $config)) {
 			$config['db'] = JFactory::getDBO();

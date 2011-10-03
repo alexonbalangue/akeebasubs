@@ -594,7 +594,7 @@ class FOFController extends JController
 
 		if(empty($modelName)) {
 			$prefix = ucfirst($this->bareComponent).'Model';
-			$modelName = ucfirst($this->view);
+			$modelName = ucfirst(FOFInflector::pluralize($this->view));
 		}
 
 		return $this->getModel($modelName, $prefix, array_merge(array(

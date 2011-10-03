@@ -94,6 +94,7 @@ class FOFModel extends JModel
 			$this->table = $config['table'];
 		} else {
 			$name = $this->getName();
+			$name = FOFInflector::singularize($name);
 			$this->table = str_replace('Model', '', $name);
 		}
 		
