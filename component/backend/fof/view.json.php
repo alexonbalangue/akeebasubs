@@ -27,6 +27,9 @@ class FOFViewJson extends FOFViewHtml
 
 		$items = $model->getItemList();
 		$this->assignRef( 'items',		$items );
+		
+		$document = JFactory::getDocument();
+		$document->setMimeEncoding('application/json');
 
 		JError::setErrorHandling(E_ALL,'ignore');
 		$result = $this->loadTemplate($tpl);
