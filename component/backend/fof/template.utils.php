@@ -23,7 +23,7 @@ class FOFTemplateUtils
 		JFactory::getDocument()->addScript($url);
 	}
 	
-	private static function parsePath($path)
+	public static function parsePath($path)
 	{
 		$protoAndPath = explode('://', $path, 2);
 		if(count($protoAndPath) < 2) {
@@ -52,5 +52,18 @@ class FOFTemplateUtils
 		$url .= $path;
 		
 		return $url;
+	}
+	
+	public static function loadPosition($position, $style = -2)
+	{
+		$document	= &JFactory::getDocument();
+		$renderer	= $document->loadRenderer('module');
+		$params		= array('style'=>$style);
+		
+		$contents = '';
+		foreach (JModuleHelper::getModules($position) as $mod)  {
+			$contents .= $renderer->render($mod, $params);
+		}
+		return $contents;
 	}
 }
