@@ -1,5 +1,5 @@
 <?php
-defined('KOOWA') or die();
+defined('_JEXEC') or die();
 
 define('AKEEBASUBS_VERSION', '##VERSION##');
 define('AKEEBASUBS_DATE', '##DATE##');
