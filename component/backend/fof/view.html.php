@@ -63,30 +63,20 @@ class FOFViewHtml extends JView
 		// Call the relevant method
 		$method_name = 'on'.ucfirst($task);
 		if(method_exists($this, $method_name)) {
-			$this->$method_name();
+			$this->$method_name($tpl);
 		} else {
 			$this->onDisplay();
 		}
-
-		// Add the CSS/JS definitions
-		$doc = JFactory::getDocument();
-		if($doc->getType() == 'html') {
-			require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/includes.php';
-			ArsHelperIncludes::includeMedia();
-		}
-		
-		JHTML::_('behavior.mootools');
 
 		// Show the view
 		parent::display($tpl);
 	}
 
-	protected function onDisplay()
+	protected function onDisplay($tpl = null)
 	{
 		// Load the model
 		$model = $this->getModel();
 
-		// @todo Refactor the bitch
 		// ...ordering
 		$this->lists->set('order',		$model->getState('filter_order', 'id', 'cmd'));
 		$this->lists->set('order_Dir',	$model->getState('filter_order_Dir', 'DESC', 'cmd'));
@@ -101,7 +91,7 @@ class FOFViewHtml extends JView
 		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_DASHBOARD').' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
 	}
 
-	protected function onAdd()
+	protected function onAdd($tpl = null)
 	{
 		$model = $this->getModel();
 		
@@ -121,9 +111,21 @@ class FOFViewHtml extends JView
 		JToolBarHelper::cancel();
 	}
 
-	protected function onEdit()
+	protected function onEdit($tpl = null)
 	{
 		// An editor is an editor, no matter if the record is new or old :p
 		$this->onAdd();
+	}
+	
+	protected function onRead($tpl = null)
+	{
+		$model = $this->getModel();
+		
+		$this->assignRef( 'item',		$model->getItem() );	
+		// Set toolbar title
+		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input)).'_READ';
+		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_DASHBOARD').' &ndash; <small>'.JText::_($subtitle_key).'</small>','ars');
+
+		JToolBarHelper::cancel();
 	}
 }
