@@ -62,7 +62,15 @@ class FOFController extends JController
 			
 			$className = ucfirst($config['option']).'Controller'.ucfirst($config['view']);
 			if (!class_exists( $className )) {
+				$app = JFactory::getApplication();
+				if($app->isSite()) {
+					$basePath = JPATH_SITE;
+				} else {
+					$basePath = JPATH_ADMINISTRATOR;
+				}
+				
 				$searchPaths = array(
+					$basePath.'/components/'.$config['option'].'/controllers',
 					JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/controllers'
 				);
 				if(array_key_exists('searchpath', $config)) {
@@ -556,6 +564,11 @@ class FOFController extends JController
 		);
 	}
 	
+	protected function createModel($name, $prefix = '', $config = array())
+	{
+		return $this->_createModel($name, $prefix, $config);
+	}
+	
 	/**
 	 * Method to load and return a model object.
 	 *
@@ -576,6 +589,75 @@ class FOFController extends JController
 		$classPrefix = preg_replace( '/[^A-Z0-9_]/i', '', $prefix );
 
 		$result =& FOFModel::getInstance($modelName, $classPrefix, $config);
+		return $result;
+	}
+	
+	protected function createView($name, $prefix = '', $type = '', $config = array())
+	{
+		return $this->_createView($name, $prefix, $type, $config);
+	}
+	
+	function &_createView( $name, $prefix = '', $type = '', $config = array() )
+	{
+		$result = null;
+
+		// Clean the view name
+		$viewName	 = preg_replace( '/[^A-Z0-9_]/i', '', $name );
+		$classPrefix = preg_replace( '/[^A-Z0-9_]/i', '', $prefix );
+		$viewType	 = preg_replace( '/[^A-Z0-9_]/i', '', $type );
+
+		// Build the view class name
+		$viewClass = $classPrefix . $viewName;
+
+		if ( !class_exists( $viewClass ) )
+		{
+			jimport( 'joomla.filesystem.path' );
+			$thisPath = version_compare(JVERSION, '1.6.0', 'ge') ? $this->path : $this->_path;
+			$path = JPath::find(
+				$thisPath['view'],
+				$this->_createFileName( 'view', array( 'name' => $viewName, 'type' => $viewType) )
+			);
+			if ($path) {
+				require_once $path;
+			}
+			
+			if(!class_exists($viewClass)) {
+				$viewClass = 'FOFView'.ucfirst($type);
+				
+				if(array_key_exists('input', $config)) {
+					$option = FOFInput::getCmd('option','com_foobar',$config['input']);
+					$view = FOFInput::getCmd('view','cpanel',$config['input']);
+				} else {
+					$option = JRequest::getCmd('option','com_foobar');
+					$view = JRequest::getCmd('view','cpanel');
+				}
+				if(!array_key_exists('option', $config)) $config['option'] = $option;
+				if(!array_key_exists('view', $config)) $config['view'] = $view;
+				
+				$app = JFactory::getApplication();
+				if($app->isSite()) {
+					$basePath = JPATH_SITE;
+				} else {
+					$basePath = JPATH_ADMINISTRATOR;
+				}
+				
+				if(!array_key_exists('template_path', $config)) {
+					$config['template_path'] = array(
+						$basePath.'/components/'.$config['option'].'/views/'.$config['view'].'/tmpl',
+						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.$config['view']
+					);
+				}
+				
+				if(!array_key_exists('helper_path', $config)) {
+					$config['helper_path'] = array(
+						$basePath.'/components/'.$config['option'].'/helpers',
+						JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/helpers'
+					);
+				}
+			}
+		}
+
+		$result = new $viewClass($config);
 		return $result;
 	}
 }

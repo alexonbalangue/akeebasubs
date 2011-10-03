@@ -39,7 +39,15 @@ class FOFTable extends JTable
 		
 		if(!array_key_exists($tableClass, $instances)) {
 			if (!class_exists( $tableClass )) {
+				$app = JFactory::getApplication();
+				if($app->isSite()) {
+					$basePath = JPATH_SITE;
+				} else {
+					$basePath = JPATH_ADMINISTRATOR;
+				}
+				
 				$searchPaths = array(
+					$basePath.'/components/'.$config['option'].'/tables',
 					JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/tables'
 				);
 				if(array_key_exists('tablepath', $config)) {
