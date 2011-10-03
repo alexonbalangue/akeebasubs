@@ -372,7 +372,7 @@ class FOFTable extends JTable
 			{ // internal field
 				continue;
 			}
-			$csv[] = '"'.str_replace('"', '\"', $v).'"';
+			$csv[] = '"'.str_replace('"', '""', $v).'"';
 		}
 		$csv = implode($separator, $csv);
 
