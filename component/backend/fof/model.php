@@ -533,7 +533,7 @@ class FOFModel extends JModel
 
 	public final function getHash()
 	{
-		return FOFRequest::getCmd('option', 'com_foobar', $this->input).'.'.str_replace('Model', '', $this->getName()).'.';
+		return FOFInput::getCmd('option', 'com_foobar', $this->input).'.'.str_replace('Model', '', $this->getName()).'.';
 	}
 
 	/**
