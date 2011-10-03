@@ -623,7 +623,28 @@ class FOFModel extends JModel
 	 */
 	public function buildQuery($overrideLimits = false)
 	{
-		return '';
+		$table = $this->getTable();
+		$tableName = $table->getTableName();
+		$tableKey = $table->getKeyName();
+		$db = $this->getDBO();
+		
+		$sql = 'SELECT * FROM '.$db->nameQuote($tableName);
+		
+		$where = array();
+		$fields	= $db->getTableFields($tableName, false);
+		foreach($fields as $fieldname => $fielddef) {
+			$filterName = ($fieldname == $tableKey) ? 'id' : $fieldname;
+			$filterState = $this->getState($filterName, null);
+			if(!empty($filterState)) {
+				$where[] = '('.$db->nameQuote($fieldname).'='.$db->Quote($filterState).')';
+			}
+		}
+		
+		if(!empty($where)) {
+			$sql .= ' WHERE '.implode(' AND ', $where);
+		}
+		
+		return $sql;
 	}
 
 	/**
