@@ -22,6 +22,84 @@ require_once(dirname(__FILE__).'/input.php');
  */
 class FOFTable extends JTable
 {
+	
+	public function &getInstance($type = null, $prefix = 'JTable', $config = array())
+	{
+		static $instances = array();
+		
+		if(!array_key_exists('option', $config)) $config['option'] = JRequest::getCmd('option','com_foobar');
+		if(!array_key_exists('view', $config)) $config['view'] = JRequest::getCmd('view','cpanel');
+		if(is_null($type)) {
+			if($prefix == 'JTable') $prefix = 'Table';
+			$type = $config['view'];
+		}
+		
+		$type = preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
+		$tableClass = $prefix.ucfirst($type);
+		
+		if(!array_key_exists($tableClass, $instances)) {
+			if (!class_exists( $tableClass )) {
+				$searchPaths = array(
+					JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/tables'
+				);
+				if(array_key_exists('tablepath', $config)) {
+					array_unshift($searchPaths, $config['tablepath']);
+				}
+				
+				jimport('joomla.filesystem.path');
+				$path = JPath::find(
+					$searchPaths,
+					strtolower($type).'.php'
+				);
+				
+				if ($path) {
+					require_once $path;
+				}
+			}
+			
+			if (!class_exists( $tableClass )) {
+				$tableClass = 'FOFTable';
+			}
+		}
+		
+		$tbl_common = str_replace('com_', '', $config['option']).'_'
+			. strtolower($type);
+		if(!array_key_exists('tbl', $config)) {
+			$config['tbl'] = '#__'.$tbl_common;
+		}
+		if(!array_key_exists('tbl_key', $config)) {
+			$config['tbl_key'] = $tbl_common.'_id';
+		}
+		if(!array_key_exists('db', $config)) {
+			$config['db'] = JFactory::getDBO();
+		}
+
+		$instance = new $tableClass($config['tbl'],$config['tbl_key'],$config['db']);
+			
+		$instances[$tableClass] = $instance;
+		
+		return $instances[$tableClass];
+	}
+	
+	function __construct( $table, $key, &$db )
+	{
+		parent::__construct($table, $key, $db);
+		
+		// Auto fetch the whole lot of field defs
+		if(!version_compare('JVERSION', '1.6.0', 'ge')) {
+			// Initialise the table properties.
+			if ($fields = $this->j15getFields()) {
+				foreach ($fields as $name => $v)
+				{
+					// Add the field if it is not already present.
+					if (!property_exists($this, $name)) {
+						$this->$name = null;
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Generic check for whether dependancies exist for this object in the db schema
 	 */
@@ -315,6 +393,29 @@ class FOFTable extends JTable
 		$csv = implode($separator, $csv);
 
 		return $csv;
+	}
+	
+	/**
+	 * Get the columns from database table.
+	 *
+	 * @return  mixed  An array of the field names, or false if an error occurs.
+	 */
+	public function j15getFields()
+	{
+		static $cache = null;
+
+		if ($cache === null) {
+			// Lookup the fields for this table only once.
+			$name	= $this->_tbl;
+			$fields	= $this->_db->getTableFields($name, false);
+
+			if (!isset($fields[$name])) {
+				return false;
+			}
+			$cache = $fields[$name];
+		}
+
+		return $cache;
 	}
 	
 	protected function onBeforeBind(&$from)

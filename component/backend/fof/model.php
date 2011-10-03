@@ -20,7 +20,7 @@ require_once(dirname(__FILE__).'/input.php');
  * MVC framework with features making maintaining complex software much easier,
  * without tedious repetitive copying of the same code over and over again.
  */
-abstract class FOFModel extends JModel
+class FOFModel extends JModel
 {
 	protected $table = null;
 	protected $otable = null;
@@ -35,12 +35,44 @@ abstract class FOFModel extends JModel
 	
 	protected $input = array();
 
+	function &getInstance( $type, $prefix = '', $config = array() )
+	{
+		$type		= preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
+		$modelClass	= $prefix.ucfirst($type);
+		$result		= false;
+
+		if (!class_exists( $modelClass ))
+		{
+			jimport('joomla.filesystem.path');
+			$path = JPath::find(
+				JModel::addIncludePath(),
+				JModel::_createFileName( 'model', array( 'name' => $type))
+			);
+			if ($path)
+			{
+				require_once $path;
+			}
+		}
+
+		if (!class_exists( $modelClass )) {
+			$config_extras = array(
+				'name'	=> $type
+			);
+			$config = array_merge($config_extras, $config);
+			$modelClass = 'FOFModel';
+		}
+		
+		$result = new $modelClass($config);
+		
+		return $result;
+	}
+	
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
 
 		// Get the input
-		$input = JRequest::get('default', 3);
+		$this->input = JRequest::get('default', 3);
 		if(array_key_exists('input', $config)) {
 			$this->input = array_merge($this->input, $config['input']);
 		}
@@ -49,7 +81,8 @@ abstract class FOFModel extends JModel
 		$component = FOFInput::getCmd('option','com_foobar',$this->input);
 		if(array_key_exists('option', $config)) $component = $config['option'];
 		FOFInput::setVar('option', $component, $this->input);
-		$name = str_replace('com_', '', strtolower($this->component));
+		$name = str_replace('com_', '', strtolower($component));
+		if(array_key_exists('name', $config)) $name = $config['name'];
 		if(version_compare(JVERSION, '1.6.0', 'ge')) {
 			$this->name = $name;
 		} else {
@@ -65,6 +98,7 @@ abstract class FOFModel extends JModel
 		}
 		
 		// Get and store the pagination request variables
+		$app = JFactory::getApplication();
 		$limit = $this->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'));
 		$limitstart = $this->getUserStateFromRequest(JRequest::getCmd('option','com_ars').$this->getName().'limitstart','limitstart',0);
 		$this->setState('limit',$limit);
@@ -550,6 +584,32 @@ abstract class FOFModel extends JModel
 	}
 	
 	/**
+	 * Method to load and return a model object.
+	 *
+	 * @access	private
+	 * @param	string	The name of the view
+	 * @param   string  The class prefix. Optional.
+	 * @return	mixed	Model object or boolean false if failed
+	 * @since	1.5
+	 */
+	function &_createTable( $name, $prefix = 'Table', $config = array())
+	{
+		$result = null;
+
+		// Clean the model name
+		$name	= preg_replace( '/[^A-Z0-9_]/i', '', $name );
+		$prefix = preg_replace( '/[^A-Z0-9_]/i', '', $prefix );
+
+		//Make sure we are returning a DBO object
+		if (!array_key_exists('dbo', $config))  {
+			$config['dbo'] =& $this->getDBO();;
+		}
+
+		$instance =& FOFTable::getInstance($name, $prefix, $config );
+		return $instance;
+	}
+	
+	/**
 	 * Creates the WHERE part of the reorder query
 	 * @return type 
 	 */
@@ -561,7 +621,10 @@ abstract class FOFModel extends JModel
 	/**
 	 * Builds the SELECT query
 	 */
-	abstract public function buildQuery($overrideLimits = false);
+	public function buildQuery($overrideLimits = false)
+	{
+		return '';
+	}
 
 	/**
 	 * Builds the count query used in getTotal()

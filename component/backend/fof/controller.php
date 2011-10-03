@@ -43,6 +43,54 @@ class FOFController extends JController
 	/** @var array The input variables array for this MVC triad; you can override it in the configuration */
 	protected $input = array();
 
+	/**
+	 *
+	 * @staticvar array $instances
+	 * @param type $option
+	 * @param type $view
+	 * @param type $config
+	 * @return FOFController
+	 */
+	public function &getInstance($option = null, $view = null, $config = array())
+	{
+		static $instances = array();
+		
+		$hash = $option.$view;
+		if(!array_key_exists($hash, $instances)) {
+			$config['option'] = !is_null($option) ? $option : JRequest::getCmd('option','com_foobar');
+			$config['view'] = !is_null($view) ? $view : JRequest::getCmd('view','cpanel');
+			
+			$className = ucfirst($config['option']).'Controller'.ucfirst($config['view']);
+			if (!class_exists( $className )) {
+				$searchPaths = array(
+					JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/controllers'
+				);
+				if(array_key_exists('searchpath', $config)) {
+					array_unshift($searchPaths, $config['searchpath']);
+				}
+				
+				jimport('joomla.filesystem.path');
+				$path = JPath::find(
+					$searchPaths,
+					strtolower($config['view']).'.php'
+				);
+				
+				if ($path) {
+					require_once $path;
+				}
+			}
+			
+			if (!class_exists( $className )) {
+				$className = 'FOFController';
+			}
+			$instance = new $className($config);
+			
+			$instances[$hash] = $instance;
+		}
+		
+		return $instances[$hash];
+	}
+	
 	public function __construct($config = array())
 	{
 		parent::__construct();
@@ -465,7 +513,7 @@ class FOFController extends JController
 
 	/**
 	 * Returns the default model associated with the current view
-	 * @return AdmintoolsModelBase The global instance of the model (singleton)
+	 * @return FOFModel The global instance of the model (singleton)
 	 */
 	public final function getThisModel($config = array())
 	{
@@ -485,7 +533,7 @@ class FOFController extends JController
 
 	/**
 	 * Returns current view object
-	 * @return JView The global instance of the view object (singleton)
+	 * @return FOFView The global instance of the view object (singleton)
 	 */
 	public final function getThisView($config = array())
 	{
@@ -506,5 +554,28 @@ class FOFController extends JController
 				'base_path'	=>$basePath
 			), $config)
 		);
+	}
+	
+	/**
+	 * Method to load and return a model object.
+	 *
+	 * @access	private
+	 * @param	string  The name of the model.
+	 * @param	string	Optional model prefix.
+	 * @param	array	Configuration array for the model. Optional.
+	 * @return	mixed	Model object on success; otherwise null
+	 * failure.
+	 * @since	1.5
+	 */
+	function &_createModel( $name, $prefix = '', $config = array())
+	{
+		$result = null;
+
+		// Clean the model name
+		$modelName	 = preg_replace( '/[^A-Z0-9_]/i', '', $name );
+		$classPrefix = preg_replace( '/[^A-Z0-9_]/i', '', $prefix );
+
+		$result =& FOFModel::getInstance($modelName, $classPrefix, $config);
+		return $result;
 	}
 }

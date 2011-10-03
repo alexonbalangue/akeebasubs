@@ -86,6 +86,11 @@ class FOFInput
 		return (string) self::getVar($name, $default, $input, 'string', $mask);
 	}
 	
+	public static function getInt($name, $default = '', $input = array())
+	{
+		return self::getVar($name, $default, $input, 'int');
+	}
+	
 	public static function getUint($name, $default = '', $input = array())
 	{
 		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
