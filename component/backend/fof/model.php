@@ -35,7 +35,7 @@ class FOFModel extends JModel
 	
 	protected $input = array();
 
-	function &getInstance( $type, $prefix = '', $config = array() )
+	public function &getInstance( $type, $prefix = '', $config = array() )
 	{
 		$type		= preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
 		$modelClass	= $prefix.ucfirst($type);
@@ -204,6 +204,8 @@ class FOFModel extends JModel
 		$this->pagination = null;
 		$this->total = 0;
 		$this->otable = null;
+		
+		return $this;
 	}
 
 	/**
@@ -656,6 +658,20 @@ class FOFModel extends JModel
 	public function buildCountQuery()
 	{
 		return false;
+	}
+	
+	public function __get($name) {
+		return $this->getState($name);
+	}
+	
+	public function __set($name, $value) {
+		return $this->setState($name, $value);
+	}
+	
+	public function __call($name, $arguments) {
+		$arg1 = array_shift($arguments);
+		$this->setState($name, $arg1);
+		return $this;
 	}
 	
 	/**
