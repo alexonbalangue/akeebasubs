@@ -61,7 +61,7 @@ class FOFViewCsv extends FOFViewHtml
 				foreach($keys as $k => $v) {
 					$csv[] = '"' . str_replace('"', '""', $k) . '"';
 				}
-				echo implode(",", $csv) . "\n";
+				echo implode(",", $csv) . "\r\n";
 			}
 			
 			foreach($items as $item) {
@@ -70,7 +70,7 @@ class FOFViewCsv extends FOFViewHtml
 				foreach($item as $k => $v) {
 					$csv[] = '"' . str_replace('"', '""', $v) . '"';
 				}
-				echo implode(",", $csv) . "\n";
+				echo implode(",", $csv) . "\r\n";
 			}
 			return;
 		}
