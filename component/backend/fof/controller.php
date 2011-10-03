@@ -51,7 +51,7 @@ class FOFController extends JController
 	 * @param type $config
 	 * @return FOFController
 	 */
-	public function &getInstance($option = null, $view = null, $config = array())
+	public static function &getInstance($option = null, $view = null, $config = array())
 	{
 		static $instances = array();
 		
