@@ -631,8 +631,9 @@ class FOFModel extends JModel
 		$sql = 'SELECT * FROM '.$db->nameQuote($tableName);
 		
 		$where = array();
-		$fields	= $db->getTableFields($tableName, false);
-		foreach($fields as $fieldname => $fielddef) {
+		$fieldsArray = $db->getTableFields($tableName, true);
+		$fields = array_shift($fieldsArray);
+		foreach($fields as $fieldname => $fieldtype) {
 			$filterName = ($fieldname == $tableKey) ? 'id' : $fieldname;
 			$filterState = $this->getState($filterName, null);
 			if(!empty($filterState)) {
