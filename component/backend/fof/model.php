@@ -487,11 +487,13 @@ class FOFModel extends JModel
 		{
 			$query = $this->buildCountQuery();
 			if($query === false) {
-				$query = $this->buildQuery(false);
-				$query = "SELECT COUNT(*) FROM ($query) AS a";
+				$sql = $this->buildQuery(false);
+				$query = FOFQueryAbstract::getNew($this->_db)
+						->select('COUNT(*)')
+						->from("($sql) AS a");
 			}
 
-			$this->_db->setQuery( $query );
+			$this->_db->setQuery( (string)$query );
 			$this->_db->query();
 			
 			$this->total = $this->_db->loadResult();
@@ -631,7 +633,9 @@ class FOFModel extends JModel
 		$tableKey = $table->getKeyName();
 		$db = $this->getDBO();
 		
-		$sql = 'SELECT * FROM '.$db->nameQuote($tableName);
+		$query = FOFQueryAbstract::getNew()
+			->select('*')
+			->from($db->nameQuote($tableName));
 		
 		$where = array();
 		$fieldsArray = $db->getTableFields($tableName, true);
@@ -640,15 +644,11 @@ class FOFModel extends JModel
 			$filterName = ($fieldname == $tableKey) ? 'id' : $fieldname;
 			$filterState = $this->getState($filterName, null);
 			if(!empty($filterState)) {
-				$where[] = '('.$db->nameQuote($fieldname).'='.$db->Quote($filterState).')';
+				$query->where('('.$db->nameQuote($fieldname).'='.$db->Quote($filterState).')');
 			}
 		}
 		
-		if(!empty($where)) {
-			$sql .= ' WHERE '.implode(' AND ', $where);
-		}
-		
-		return $sql;
+		return (string)$query;
 	}
 
 	/**

@@ -120,21 +120,25 @@ class FOFTable extends JTable
 
 		if (is_array( $joins ))
 		{
-			$select = "`master`.$k";
-			$join = "";
+			$db = $this->_db;
+			$query = FOFQueryAbstract::getNew($this->_db)
+				->select($db->nameQuote('master').'.'.$db->nameQuote($k))
+				->from($db->nameQuote($this->_tbl).' AS '.$db->nameQuote('master'));
 			foreach( $joins as $table )
 			{
-				$select .= ', COUNT(DISTINCT `'.$table['name'].'`.'.$table['idfield'].') AS '.$table['idalias'];
-				$join .= ' LEFT JOIN '.$table['name'].' ON '.$table['joinfield'].' = `master`.'.$k;
+				$query->select(array(
+					'COUNT(DISTINCT '.$db->nameQuote($table['name']).'.'.$db->nameQuote($table['idfield']).') AS '.$db->nameQuote($table['idalias'])
+				));
+				$query->join('LEFT', 
+						$db->nameQuote($table['name']).' ON '.$db->nameQuote($table['joinfield']).' = '.
+						$db->nameQuote('master').'.'.$db->nameQuote($k)
+						);
 			}
 
-			$query = 'SELECT '. $select
-			. ' FROM '. $this->_tbl.' AS `master` '
-			. $join
-			. ' WHERE `master`.'. $k .' = '. $this->_db->Quote($this->$k)
-			. ' GROUP BY `master`.'. $k
-			;
-			$this->_db->setQuery( $query );
+			$query->where($db->nameQuote('master').'.'.$db->nameQuote($k).' = '.$db->quote($this->$k));
+			$query->group($db->nameQuote('master').'.'.$db->nameQuote($k));
+			
+			$this->_db->setQuery( (string)$query );
 
 			if (!$obj = $this->_db->loadObject())
 			{
@@ -226,11 +230,15 @@ class FOFTable extends JTable
 
 		$date =& JFactory::getDate();
 		$time = $date->toMysql();
-
-		$query = 'UPDATE '.$this->_db->nameQuote( $this->_tbl ) .
-			' SET locked_by = '.(int)$who.', locked_on = '.$this->_db->Quote($time) .
-			' WHERE '.$this->_tbl_key.' = '. $this->_db->Quote($this->$k);
-		$this->_db->setQuery( $query );
+		
+		$query = FOFQueryAbstract::getNew($this->_db)
+				->update($this->_db->nameQuote( $this->_tbl ))
+				->set(array(
+					$this->_db->nameQuote('locked_by').' = '.(int)$who,
+					$this->_db->nameQuote('locked_on').' = '.$this->_db->quote($time)
+				))
+				->where($this->_db->nameQuote($this->_tbl_key).' = '. $this->_db->quote($this->$k));
+		$this->_db->setQuery( (string)$query );
 
 		$this->checked_out = $who;
 		$this->checked_out_time = $time;
@@ -257,10 +265,14 @@ class FOFTable extends JTable
 			return false;
 		}
 
-		$query = 'UPDATE '.$this->_db->nameQuote( $this->_tbl ).
-				' SET locked_by = 0, locked_on = '.$this->_db->Quote($this->_db->getNullDate()) .
-				' WHERE '.$this->_tbl_key.' = '. $this->_db->Quote($this->$k);
-		$this->_db->setQuery( $query );
+		$query = FOFQueryAbstract::getNew($this->_db)
+				->update($this->_db->nameQuote( $this->_tbl ))
+				->set(array(
+					$this->_db->nameQuote('locked_by').' = 0',
+					$this->_db->nameQuote('locked_on').' = '.$this->_db->quote($this->_db->getNullDate())
+				))
+				->where($this->_db->nameQuote($this->_tbl_key).' = '. $this->_db->quote($this->$k));
+		$this->_db->setQuery( (string)$query );
 
 		$this->checked_out = 0;
 		$this->checked_out_time = '';
@@ -301,21 +313,24 @@ class FOFTable extends JTable
 		}
 		
 		if(!$this->onBeforePublish($cid, $publish)) return false;
-
-		$cids = $k . '=' . implode( ' OR ' . $k . '=', $cid );
-
-		$query = 'UPDATE '. $this->_tbl
-		. ' SET enabled = ' . (int) $publish
-		. ' WHERE ('.$cids.')'
-		;
+		
+		$query = FOFQueryAbstract::getNew($this->_db)
+				->update($this->_db->nameQuote($this->_tbl))
+				->set($this->_db->nameQuote('enabled').' = '.(int) $publish);
+		foreach($cid as $id) {
+			$query->where($this->_db->nameQuote($k).' = '.$id,'OR');
+		}
 
 		$checkin = in_array( 'locked_by', array_keys($this->getProperties()) );
 		if ($checkin)
 		{
-			$query .= ' AND (locked_by = 0 OR locked_by = '.(int) $user_id.')';
+			$query->where(
+				' AND ('.$this->_db->nameQuote('locked_by').
+				' = 0 OR '.$this->_db->nameQuote('locked_by').' = '.(int) $user_id.')'
+			);
 		}
 
-		$this->_db->setQuery( $query );
+		$this->_db->setQuery( (string)$query );
 		if (!$this->_db->query())
 		{
 			$this->setError($this->_db->getErrorMsg());
