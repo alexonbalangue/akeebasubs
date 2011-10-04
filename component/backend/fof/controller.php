@@ -54,7 +54,7 @@ class FOFController extends JController
 	 * @param type $config
 	 * @return FOFController
 	 */
-	public static function &getInstance($option = null, $view = null, $config = array())
+	public static function &getAnInstance($option = null, $view = null, $config = array())
 	{
 		static $instances = array();
 		
@@ -652,7 +652,7 @@ class FOFController extends JController
 		$modelName	 = preg_replace( '/[^A-Z0-9_]/i', '', $name );
 		$classPrefix = preg_replace( '/[^A-Z0-9_]/i', '', $prefix );
 
-		$result =& FOFModel::getInstance($modelName, $classPrefix, $config);
+		$result =& FOFModel::getAnInstance($modelName, $classPrefix, $config);
 		return $result;
 	}
 	
@@ -676,10 +676,15 @@ class FOFController extends JController
 		if ( !class_exists( $viewClass ) )
 		{
 			jimport( 'joomla.filesystem.path' );
-			$thisPath = version_compare(JVERSION, '1.6.0', 'ge') ? $this->path : $this->_path;
+			$thisPath = version_compare(JVERSION, '1.6.0', 'ge') ? $this->paths : $this->_path;
+			if(version_compare(JVERSION, '1.6.0', 'ge')) {
+				$viewPath = $this->createFileName( 'view', array( 'name' => $viewName, 'type' => $viewType) );
+			} else {
+				$viewPath = $this->_createFileName( 'view', array( 'name' => $viewName, 'type' => $viewType) );
+			}
 			$path = JPath::find(
 				$thisPath['view'],
-				$this->_createFileName( 'view', array( 'name' => $viewName, 'type' => $viewType) )
+				$viewPath
 			);
 			if ($path) {
 				require_once $path;

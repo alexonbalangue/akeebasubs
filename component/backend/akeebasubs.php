@@ -48,6 +48,6 @@ $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 // Get and execute the controller
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/fof/include.php';
 $view = JRequest::getCmd('view','cpanel');
-$controller = FOFController::getInstance('com_akeebasubs', $view);
+$controller = FOFController::getAnInstance('com_akeebasubs', $view);
 $controller->execute(JRequest::getCmd('task','display'));
 $controller->redirect();

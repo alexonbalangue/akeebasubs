@@ -35,7 +35,7 @@ class FOFModel extends JModel
 	
 	protected $input = array();
 
-	public function &getInstance( $type, $prefix = '', $config = array() )
+	public static function &getAnInstance( $type, $prefix = '', $config = array() )
 	{
 		$type		= preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
 		$modelClass	= $prefix.ucfirst($type);
@@ -608,7 +608,7 @@ class FOFModel extends JModel
 			$config['dbo'] =& $this->getDBO();;
 		}
 
-		$instance =& FOFTable::getInstance($name, $prefix, $config );
+		$instance =& FOFTable::getAnInstance($name, $prefix, $config );
 		return $instance;
 	}
 	

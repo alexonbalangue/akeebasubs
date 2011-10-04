@@ -23,7 +23,7 @@ require_once(dirname(__FILE__).'/input.php');
 class FOFTable extends JTable
 {
 	
-	public function &getInstance($type = null, $prefix = 'JTable', $config = array())
+	public static function &getAnInstance($type = null, $prefix = 'JTable', $config = array())
 	{
 		static $instances = array();
 		
