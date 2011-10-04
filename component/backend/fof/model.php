@@ -93,7 +93,13 @@ class FOFModel extends JModel
 		if(array_key_exists('table',$config)) {
 			$this->table = $config['table'];
 		} else {
-			$view = FOFInput::getCmd('view','cpanel',$this->input);
+			$className = get_class($this);
+			if($className == 'FOFModel') {
+				$view = FOFInput::getCmd('view','cpanel',$this->input);
+			} else {
+				$eliminatePart = ucfirst($name).'Model';
+				$view = strtolower(str_replace($eliminatePart, '', $className));
+			}
 			$this->table = FOFInflector::singularize($view);
 		}
 		
