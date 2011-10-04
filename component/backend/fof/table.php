@@ -35,7 +35,7 @@ class FOFTable extends JTable
 		}
 		
 		$type = preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
-		$tableClass = $prefix.ucfirst($type);
+		$tableClass = ucfirst(str_replace('com_', '', $config['option'])).$prefix.ucfirst($type);
 		
 		if(!array_key_exists($tableClass, $instances)) {
 			if (!class_exists( $tableClass )) {
