@@ -150,7 +150,7 @@ class FOFDispatcher extends JObject
 		// Get and execute the controller
 		$option = FOFInput::getCmd('option','com_foobar',$this->input);
 		$view = FOFInput::getCmd('view',$this->defaultView, $this->input);
-		$task = FOFInput::getCmd('task','display',$this->input);
+		$task = FOFInput::getCmd('task','browse',$this->input);
 		$controller = FOFController::getAnInstance($option, $view);
 		$controller->execute($task);
 

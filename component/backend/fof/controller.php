@@ -47,11 +47,13 @@ class FOFController extends JController
 	protected $csrfProtection = true;
 
 	/**
-	 *
-	 * @staticvar array $instances
-	 * @param type $option
-	 * @param type $view
-	 * @param type $config
+	 * Gets a static (Singleton) instance of a controller class. It loads the
+	 * relevant controller file from the component's directory or, if it doesn't
+	 * exist, creates a new controller object out of thin air.
+	 * 
+	 * @param string $option Component name, e.g. com_foobar
+	 * @param string $view The view name, also used for the controller name
+	 * @param array $config Configuration parameters
 	 * @return FOFController
 	 */
 	public static function &getAnInstance($option = null, $view = null, $config = array())
@@ -63,7 +65,8 @@ class FOFController extends JController
 			$config['option'] = !is_null($option) ? $option : JRequest::getCmd('option','com_foobar');
 			$config['view'] = !is_null($view) ? $view : JRequest::getCmd('view','cpanel');
 			
-			$className = ucfirst($config['option']).'Controller'.ucfirst($config['view']);
+			$classType = FOFInflector::pluralize($config['view']);
+			$className = ucfirst(str_replace('com_', '', $config['option'])).'Controller'.ucfirst($classType);
 			if (!class_exists( $className )) {
 				$app = JFactory::getApplication();
 				if($app->isSite()) {
@@ -83,7 +86,7 @@ class FOFController extends JController
 				jimport('joomla.filesystem.path');
 				$path = JPath::find(
 					$searchPaths,
-					strtolower($config['view']).'.php'
+					strtolower(FOFInflector::pluralize($config['view'])).'.php'
 				);
 				
 				if ($path) {
@@ -102,6 +105,11 @@ class FOFController extends JController
 		return $instances[$hash];
 	}
 	
+	/**
+	 * Public constructor of the Controller class
+	 * 
+	 * @param array $config Optional configuration parameters
+	 */
 	public function __construct($config = array())
 	{
 		parent::__construct();
@@ -147,11 +155,33 @@ class FOFController extends JController
 		}
 	}
 
+	/**
+	 * Executes a given controller task. The onBefore<task> and onAfter<task>
+	 * methods are called automatically if they exist.
+	 * 
+	 * @param string $task
+	 * @return null|bool False on execution failure
+	 */
 	public function execute($task) {
 		$method_name = 'onBefore'.ucfirst($task);
 		if(method_exists($this, $method_name)) {
 			$result = $this->$method_name();
 			if(!$result) return false;
+		}
+		
+		// Do not allow the display task to be directly called
+		$task = strtolower($task);
+		if (isset($this->taskMap[$task])) {
+			$doTask = $this->taskMap[$task];
+		}
+		elseif (isset($this->taskMap['__default'])) {
+			$doTask = $this->taskMap['__default'];
+		}
+		else {
+			$doTask = null;
+		}
+		if($doTask == 'display') {
+			JError::raiseError(400, 'Bad Request');
 		}
 		
 		parent::execute($task);
@@ -163,6 +193,15 @@ class FOFController extends JController
 		}
 	}
 	
+	/**
+	 * Default task. Assigns a model to the view and asks the view to render
+	 * itself.
+	 * 
+	 * YOU MUST NOT USETHIS TASK DIRECTLY IN A URL. It is supposed to be
+	 * used ONLY inside your code. In the URL, use task=browse instead.
+	 * 
+	 * @param bool $cachable Is this view cacheable?
+	 */
 	public function display($cachable = false)
 	{
 		$document =& JFactory::getDocument();
@@ -188,6 +227,23 @@ class FOFController extends JController
 		}
 	}
 	
+	/**
+	 * Implements a default browse task, i.e. read a bunch of records and send
+	 * them to the browser.
+	 * 
+	 * @param bool $cachable Is this view cacheable?
+	 */
+	public function browse($cachable = false)
+	{
+		$this->display($cachable);
+	}
+	
+	/**
+	 * Single record read. The id set in the request is passed to the model and
+	 * then the item layout is used to render the result.
+	 * 
+	 * @param bool $cachable Is this view cacheable?
+	 */
 	public function read($cachable = false)
 	{
 		// Load the model
@@ -209,6 +265,11 @@ class FOFController extends JController
 		$this->display($cachable);
 	}
 	
+	/**
+	 * Single record add. The form layout is used to present a blank page.
+	 * 
+	 * @param bool $cachable Is this view cacheable?
+	 */
 	public function add($cachable = false)
 	{
 		// Load and reset the model
@@ -222,6 +283,12 @@ class FOFController extends JController
 		$this->display($cachable);
 	}
 
+	/**
+	 * Single record edit. The ID set in the request is passed to the model,
+	 * then the form layout is used to edit the result.
+	 * 
+	 * @param bool $cachable Is this view cacheable?
+	 */
 	public function edit($cachable = false)
 	{
 		// Load the model
@@ -244,6 +311,9 @@ class FOFController extends JController
 		$this->display($cachable);
 	}
 
+	/**
+	 * Save the incoming data and then return to the Edit task
+	 */
 	public function apply()
 	{
 		// CSRF prevention
@@ -264,6 +334,9 @@ class FOFController extends JController
 		$this->redirect();
 	}
 
+	/**
+	 * Save the incoming data and then return to the Browse task
+	 */
 	public function save()
 	{
 		// CSRF prevention
@@ -282,6 +355,9 @@ class FOFController extends JController
 		$this->redirect();
 	}
 
+	/**
+	 * Save the incoming data and then return to the Add task
+	 */
 	public function savenew()
 	{
 		// CSRF prevention
@@ -300,6 +376,9 @@ class FOFController extends JController
 		$this->redirect();
 	}
 
+	/**
+	 * Cancel the edit, check in the record and return to the Browse task
+	 */
 	public function cancel()
 	{
 		$model = $this->getThisModel();

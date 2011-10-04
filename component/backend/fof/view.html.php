@@ -58,7 +58,7 @@ class FOFViewHtml extends JView
 	{
 		// Get the task set in the model
 		$model = $this->getModel();
-		$task = $model->getState('task','display');
+		$task = $model->getState('task','browse');
 
 		// Call the relevant method
 		$method_name = 'on'.ucfirst($task);
