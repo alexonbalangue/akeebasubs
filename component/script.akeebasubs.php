@@ -31,7 +31,6 @@ class Com_AkeebasubsInstallerScript extends ComAkeebaStandardInstallationLibrary
 				try {
 					$db->query();
 				} catch(Exception $e) {
-					die('Fuck me');
 				}
 			}
 		}

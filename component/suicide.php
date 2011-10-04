@@ -20,7 +20,7 @@
  */
 
 // no direct access
-defined('_JEXEC') or die('');
+defined('_JEXEC') or die();
 
 // Akeeba Component Uninstallation Configuration
 $installation_queue = array(
