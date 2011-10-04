@@ -317,19 +317,21 @@ class FOFTable extends JTable
 		$query = FOFQueryAbstract::getNew($this->_db)
 				->update($this->_db->nameQuote($this->_tbl))
 				->set($this->_db->nameQuote('enabled').' = '.(int) $publish);
-		foreach($cid as $id) {
-			$query->where($this->_db->nameQuote($k).' = '.$id,'OR');
-		}
 
 		$checkin = in_array( 'locked_by', array_keys($this->getProperties()) );
 		if ($checkin)
 		{
 			$query->where(
-				' AND ('.$this->_db->nameQuote('locked_by').
-				' = 0 OR '.$this->_db->nameQuote('locked_by').' = '.(int) $user_id.')'
+				' ('.$this->_db->nameQuote('locked_by').
+				' = 0 OR '.$this->_db->nameQuote('locked_by').' = '.(int) $user_id.')',
+				'AND'
 			);
 		}
-
+		
+		$cids = $this->_db->nameQuote($k).' = ' .
+				implode(' OR '.$this->_db->nameQuote($k).' = ',$cid);
+		$query->where('('.$cids.')');
+		
 		$this->_db->setQuery( (string)$query );
 		if (!$this->_db->query())
 		{
