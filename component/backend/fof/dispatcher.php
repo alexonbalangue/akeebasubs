@@ -150,7 +150,10 @@ class FOFDispatcher extends JObject
 		// Get and execute the controller
 		$option = FOFInput::getCmd('option','com_foobar',$this->input);
 		$view = FOFInput::getCmd('view',$this->defaultView, $this->input);
-		$task = FOFInput::getCmd('task','browse',$this->input);
+		$task = FOFInput::getCmd('task','',$this->input);
+		if(empty($task)) {
+			$task = $this->getTask($view);
+		}
 		$controller = FOFController::getAnInstance($option, $view);
 		$controller->execute($task);
 
@@ -159,6 +162,47 @@ class FOFDispatcher extends JObject
 		}
 		
 		$controller->redirect();
+	}
+	
+	protected function getTask($view)
+	{
+		// get a default task based on plural/singular view
+		$task = FOFInflector::isPlural($view) ? 'browse' : 'edit';
+		
+		// Get a potential ID, we might need it later
+		$id = FOFInput::getVar('id', null, $this->input);
+		if($id == 0) {
+			$ids = FOFInput::getArray('ids',array(),$this->input);
+			if(!empty($ids)) {
+				$id = array_shift($ids);
+			}
+		}
+		
+		// Check the request method
+		$requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
+		switch($requestMethod) {
+			case 'POST':
+			case 'PUT':
+				if($id != 0) $task = 'save';
+				break;
+				
+			case 'DELETE':
+				if($id != 0) $task = 'delete';
+				break;
+			
+			case 'GET':
+			default:
+				// If it's an edit without an ID or ID=0, it's really an add
+				if(($task == 'edit') && ($id === 0)) {
+					$task = 'add';
+				// If it's an edit in the frontend, it's really a read
+				} elseif(($task == 'edit') && JFactory::getApplication()->isSite()) {
+					$task = 'read';
+				}
+				break;
+		}
+		
+		return $task;
 	}
 	
 	public function onBeforeDispatch()
