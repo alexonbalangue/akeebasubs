@@ -322,7 +322,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 <script type="text/javascript">
 (function($) {
 	$(document).ready(function(){
-		var url = "index.php?option=com_akeebasubs&view=subscriptions&since=<?php echo $xday?>&enabled=1&groupbydate=1&paystate=C&format=json";
+		var url = "index.php?option=com_akeebasubs&view=subscriptions&since=<?php echo $xday?>&enabled=1&groupbydate=1&paystate=C&savestate=0&format=json";
 		$.jqplot.config.enablePlugins = true;
 		$.getJSON(url, function(data){
 			var salesPoints = [];
