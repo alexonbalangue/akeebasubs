@@ -6,7 +6,7 @@
  */
 
 // Protect from unauthorized access
-defined('_JEXEC') or die('Restricted Access');
+defined('_JEXEC') or die();
 
 // Include the component versioning
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/version.php';
