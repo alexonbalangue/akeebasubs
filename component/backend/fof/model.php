@@ -245,6 +245,14 @@ class FOFModel extends JModel
 	}
 
 	/**
+	 * Alias for getItemList
+	 */
+	public final function &getList($overrideLimits = false)
+	{
+		return $this->getItemList($overrideLimits);
+	}
+	
+	/**
 	 * Returns a list of items
 	 * @param bool $overrideLimits When true, the limits (pagination) will be ignored
 	 * @return array
