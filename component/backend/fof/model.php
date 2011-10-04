@@ -93,9 +93,8 @@ class FOFModel extends JModel
 		if(array_key_exists('table',$config)) {
 			$this->table = $config['table'];
 		} else {
-			$name = $this->getName();
-			$name = FOFInflector::singularize($name);
-			$this->table = str_replace('Model', '', $name);
+			$view = FOFInput::getCmd('view','cpanel',$this->input);
+			$this->table = FOFInflector::singularize($view);
 		}
 		
 		// Get and store the pagination request variables
@@ -255,9 +254,9 @@ class FOFModel extends JModel
 
 			$query = $this->buildQuery($overrideLimits);
 			if(!$overrideLimits)
-				$this->list = $this->_getList($query, $limitstart, $limit);
+				$this->list = $this->_getList((string)$query, $limitstart, $limit);
 			else
-				$this->list = $this->_getList($query);
+				$this->list = $this->_getList((string)$query);
 		}
 
 		return $this->list;
@@ -487,7 +486,7 @@ class FOFModel extends JModel
 		{
 			$query = $this->buildCountQuery();
 			if($query === false) {
-				$sql = $this->buildQuery(false);
+				$sql = (string)$this->buildQuery(false);
 				$query = FOFQueryAbstract::getNew($this->_db)
 						->select('COUNT(*)')
 						->from("($sql) AS a");
@@ -514,12 +513,22 @@ class FOFModel extends JModel
 		if(empty($key)) {
 			return parent::getState();
 		}
+		
+		// Get the savestate status
+		$savestate = parent::getState('savestate');
+		if(is_null($savestate)) {
+			$savestate = FOFInput::getBool('savestate',false,$this->input);
+		}
 
 		$value = parent::getState($key);
 		if(is_null($value))
 		{
 			// Try to fetch it from the request or session
-			$value = $this->getUserStateFromRequest($this->getHash().$key,$key,null);
+			if($savestate) {
+				$value = $this->getUserStateFromRequest($this->getHash().$key,$key,null);
+			} else {
+				$value = FOFInput::getVar($key, null, $this->input);
+			}
 
 			if(is_null($value))	return $default;
 		}
@@ -648,7 +657,7 @@ class FOFModel extends JModel
 			}
 		}
 		
-		return (string)$query;
+		return $query;
 	}
 
 	/**
