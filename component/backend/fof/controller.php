@@ -742,6 +742,7 @@ class FOFController extends JController
 	
 	function &_createView( $name, $prefix = '', $type = '', $config = array() )
 	{
+		$name = FOFInflector::pluralize($name);
 		$result = null;
 
 		// Clean the view name
