@@ -41,8 +41,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			<td width="50%"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_LASTYEAR')?></td>
 			<td align="right" width="25%">
 			<?php
-				echo FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since((gmdate('Y')-1).'-01-01 00:00:00')
 					->until((gmdate('Y')-1).'-12-31 23:59:59')
 					->paystate('C')
@@ -52,8 +51,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			<td align="right" width="25%">
 			<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
 			<?= sprintf('%.02f',
-				FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since((gmdate('Y')-1).'-01-01')
 					->until((gmdate('Y')-1).'-12-31 23:59:59')
 					->moneysum(1)
@@ -65,8 +63,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 		<tr class="row1">
 			<td><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_THISYEAR')?></td>
 			<td align="right">
-				<?php echo FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-01-01')
 					->until(gmdate('Y').'-12-31 23:59:59')
 					->paystate('C')
@@ -76,8 +73,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			<td align="right">
 				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
 				<?= sprintf('%.02f',
-					FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-						->reset()
+					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-01-01')
 						->until(gmdate('Y').'-12-31 23:59:59')
 						->moneysum(1)
@@ -110,8 +106,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 							}
 					}
 				?>
-				<?php echo FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since($y.'-'.$m.'-01')
 					->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 					->paystate('C')
@@ -121,8 +116,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			<td align="right">
 				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
 				<?= sprintf('%.02f',
-					FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-						->reset()
+					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since($y.'-'.$m.'-01')
 						->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 						->moneysum(1)
@@ -149,8 +143,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 							}
 					}
 				?>
-				<?php echo FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-'.gmdate('m').'-01')
 					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 					->paystate('C')
@@ -160,8 +153,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			<td align="right">
 				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
 				<?= sprintf('%.02f',
-					FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-						->reset()
+					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-'.gmdate('m').'-01')
 						->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 						->moneysum(1)
@@ -173,8 +165,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 		<tr class="row0">
 			<td width="50%"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_LAST7DAYS')?></td>
 			<td align="right" width="25%">
-				<?php echo FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since( gmdate('Y-m-d', time()-7*24*3600) )
 					->until( gmdate('Y-m-d') )
 					->paystate('C')
@@ -184,8 +175,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			<td align="right" width="25%">
 				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
 				<?= sprintf('%.02f',
-					FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-						->reset()
+					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( gmdate('Y-m-d', time()-7*24*3600) )
 						->until( gmdate('Y-m-d') )
 						->moneysum(1)
@@ -204,8 +194,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 				$yesterday = $date->format("Y-m-d");
 				$date->modify("+1 day")
 				?>
-				<?php echo FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since( $yesterday )
 					->until( $date->format("Y-m-d") )
 					->paystate('C')
@@ -215,8 +204,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			<td align="right" width="25%">
 				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
 				<?= sprintf('%.02f',
-					FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-						->reset()
+					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $yesterday )
 						->until( $date->format("Y-m-d") )
 						->moneysum(1)
@@ -233,8 +221,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 					$expiry = clone $date;
 					$expiry->modify('+1 day');
 				?>
-				<?php echo FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since( $date->format("Y-m-d") )
 					->until( $expiry->format("Y-m-d") )
 					->paystate('C')
@@ -246,8 +233,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 				<strong>
 				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
 				<?= sprintf('%.02f',
-					FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-						->reset()
+					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $date->format("Y-m-d") )
 						->until( $expiry->format("Y-m-d") )
 						->paystate('C')
@@ -273,14 +259,12 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 						}
 				}
 				$daysin = gmdate('d');
-				$numsubs = FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				$numsubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-'.gmdate('m').'-01')
 					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 					->paystate('C')
 					->getTotal();
-				$summoney = FOFModel::getAnInstance('Subscriptions','AkeebasubsModel')
-					->reset()
+				$summoney = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-'.gmdate('m').'-01')
 					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 					->moneysum(1)
