@@ -18,9 +18,8 @@ class AkeebasubsTableLevel extends FOFTable
 		}
 		
 		if(empty($this->slug)) {
-			require_once JPATH_COMPONENT.'/administrator/components/com_akeebasubs/helpers/filter.php';
+			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/filter.php';
 			$this->slug = AkeebasubsHelperFilter::toSlug($this->title);
-			$result = false;
 		}
 		
 		$existingItems = FOFModel::getAnInstance('Levels','AkeebasubsModel')
