@@ -22,9 +22,9 @@ class AkeebasubsTableLevel extends FOFTable
 			$this->slug = AkeebasubsHelperFilter::toSlug($this->title);
 		}
 		
-		$existingItems = FOFModel::getAnInstance('Levels','AkeebasubsModel')
+		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->slug($this->slug)
-			->getList();
+			->getList(true);
 		
 		if(!empty($existingItems)) {
 			$count = 0;
