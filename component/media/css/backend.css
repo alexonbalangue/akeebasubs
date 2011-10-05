@@ -95,17 +95,6 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 	cursor: pointer;
 }
 
-div.toolbar td.button a.toolbar {
-	color: black;
-	font-weight: bold;
-}
-
-div.toolbar td.button a.disabled {
-	color: #a99;
-	font-style: italic;
-	cursor: wait;
-}
-
 .akstriangle {
 	display: inline-block !important;
 	width: 0px;
@@ -124,4 +113,13 @@ div.toolbar td.button a.disabled {
 	float: none;
 	padding: 0;
 	margin: 0 0 -4px 3px;
+}
+
+.level-image-preview {
+	max-width: 150px;
+	max-height: 64px;
+	margin: 3px 0 2px 47%;
+	border: thin solid black;
+	border-radius: 6px;
+	box-shadow: #999 1px 1px 3px;
 }

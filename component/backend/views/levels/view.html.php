@@ -34,4 +34,8 @@ class AkeebasubsViewLevels extends FOFViewHtml
 		
 		$this->onDisplay($tpl);
 	}
+	
+	public function onEdit($tpl = null) {
+		parent::onEdit($tpl);
+	}
 }
