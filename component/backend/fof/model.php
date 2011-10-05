@@ -11,8 +11,6 @@ defined('_JEXEC') or die();
 
 jimport('joomla.application.component.controller');
 
-require_once(dirname(__FILE__).'/input.php');
-
 /**
  * FrameworkOnFramework model class
  * 
@@ -65,6 +63,17 @@ class FOFModel extends JModel
 		$result = new $modelClass($config);
 		
 		return $result;
+	}
+	
+	public static function &getTmpInstance( $type, $prefix = '', $config = array() )
+	{
+		$ret = self::getAnInstance($type, $prefix, $config)
+			->getClone()
+			->clearState()
+			->clearInput()
+			->reset()
+			->savestate(0);
+		return $ret;
 	}
 	
 	public function __construct($config = array())
@@ -212,6 +221,24 @@ class FOFModel extends JModel
 		
 		return $this;
 	}
+	
+	public function clearState()
+	{
+		if(version_compare(JVERSION, '1.6.0', 'ge')) {
+			$this->state = new JObject();
+		} else {
+			$this->_state = new JObject();
+		}
+		
+		return $this;
+	}
+	
+	public function clearInput()
+	{
+		$this->input = array();
+		
+		return $this;
+	}
 
 	/**
 	 * Returns a single item. It uses the id set with setId, or the first ID in
@@ -234,7 +261,13 @@ class FOFModel extends JModel
 				$data = @unserialize($serialized);
 				if($data !== false)
 				{
-					$this->record->bind($data);
+					$k = $table->getKeyName();
+					if(!array_key_exists($k, $data)) $data[$k] = null;
+					if($data[$k] != $this->id) {
+						$session->set($this->getHash().'savedata', null);
+					} else {
+						$this->record->bind($data);
+					}
 				}
 			}
 
@@ -260,17 +293,14 @@ class FOFModel extends JModel
 	public final function &getItemList($overrideLimits = false)
 	{
 		if(empty($this->list)) {
-			$table = $this->getTable($this->table);
-			$source = $table->getTableName();
-
-			$limitstart = $this->getState('limitstart');
-			$limit = $this->getState('limit');
-
 			$query = $this->buildQuery($overrideLimits);
-			if(!$overrideLimits)
+			if(!$overrideLimits) {
+				$limitstart = $this->getState('limitstart');
+				$limit = $this->getState('limit');
 				$this->list = $this->_getList((string)$query, $limitstart, $limit);
-			else
+			} else {
 				$this->list = $this->_getList((string)$query);
+			}
 		}
 
 		return $this->list;
@@ -300,10 +330,13 @@ class FOFModel extends JModel
 		}
 
 		if(!$table->save($data)) {
-			$this->setError($table->getError());
+			foreach($table->getErrors() as $error) if(!empty($error)) $this->setError($error);
+			JFactory::getSession()->set($this->getHash().'savedata', serialize($table->getProperties(true)) );
 			return false;
 		} else {
 			$this->id = $table->$key;
+			// Remove the session data
+			JFactory::getSession()->set($this->getHash().'savedata', null);
 		}
 		
 		$this->onAfterSave($table);
@@ -681,6 +714,12 @@ class FOFModel extends JModel
 	public function buildCountQuery()
 	{
 		return false;
+	}
+	
+	public function &getClone()
+	{
+		$clone = clone($this);
+		return $clone;
 	}
 	
 	public function __get($name) {
