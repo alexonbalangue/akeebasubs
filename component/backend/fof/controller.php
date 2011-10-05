@@ -766,6 +766,20 @@ class FOFController extends JController
 				$thisPath['view'],
 				$viewPath
 			);
+			if(!$path) {
+				if(version_compare(JVERSION, '1.6.0', 'ge')) {
+					$viewPath = $this->createFileName( 'view', array( 'name' => FOFInflector::singularize($viewName), 'type' => $viewType) );
+				} else {
+					$viewPath = $this->_createFileName( 'view', array( 'name' => FOFInflector::singularize($viewName), 'type' => $viewType) );
+				}
+				$path = JPath::find(
+					$thisPath['view'],
+					$viewPath
+				);
+				if($path) {
+					$viewClass = $classPrefix . FOFInflector::singularize($viewName);
+				}
+			}
 			if ($path) {
 				require_once $path;
 			}
@@ -793,7 +807,9 @@ class FOFController extends JController
 				if(!array_key_exists('template_path', $config)) {
 					$config['template_path'] = array(
 						$basePath.'/components/'.$config['option'].'/views/'.$config['view'].'/tmpl',
-						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.$config['view']
+						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.$config['view'],
+						$basePath.'/components/'.$config['option'].'/views/'.FOFInflector::singularize($config['view']).'/tmpl',
+						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.FOFInflector::singularize($config['view']),
 					);
 				}
 				
