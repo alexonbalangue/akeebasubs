@@ -20,9 +20,9 @@ jimport("joomla.environment.request");
  */
 class FOFInput
 {
-	public static function getVar($name, $default = null, $input = array(), $type = 'none', $mask = 0)
+	public static function getVar($name, $default = null, $input = null, $type = 'none', $mask = 0)
 	{
-		if(empty($input)) {
+		if(is_null($input)) {
 			$var = JRequest::getVar($name, $default, 'default', $type, $mask);
 		} elseif(is_string($input)) {
 			$var = JRequest::getVar($name, $default, $input, $type, $mask);
