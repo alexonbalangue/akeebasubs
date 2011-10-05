@@ -149,6 +149,7 @@ class FOFModel extends JModel
 		// Get the ID or list of IDs from the request or the configuration
 		$cid = FOFInput::getVar('cid', null, $this->input, 'array');
 		$id = FOFInput::getInt('id', 0, $this->input);
+		$kid = FOFInput::getInt($this->getTable($this->table)->getKeyName(), 0, $this->input);
 
 		if(is_array($cid) && !empty($cid))
 		{
@@ -156,7 +157,11 @@ class FOFModel extends JModel
 		}
 		else
 		{
-			$this->setId($id);
+			if(empty($id)) {
+				$this->setId($kid);
+			} else {
+				$this->setId($id);
+			}
 		}
 	}
 
