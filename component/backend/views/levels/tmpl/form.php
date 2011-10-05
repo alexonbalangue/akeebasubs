@@ -18,6 +18,12 @@ JHtml::_('behavior.tooltip');
 $editor =& JFactory::getEditor();
 ?>
 <form action="index.php" method="post" name="adminForm">
+	<input type="hidden" name="option" value="com_akeebasubs" />
+	<input type="hidden" name="view" value="level" />
+	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="akeebasubs_level_id" value="<?php echo $this->item->akeebasubs_level_id ?>" />
+	<input type="hidden" name="<?php echo JUtility::getToken();?>" value="1" />
+	
 	<fieldset id="levels-basic">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BASIC_TITLE'); ?></legend>
 		
@@ -45,7 +51,7 @@ $editor =& JFactory::getEditor();
 		<label for="image_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
 		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/images'.(version_compare(JVERSION, '1.6.0', 'ge') ? '/' : '/stories/'), 'swf|gif|jpg|png|bmp'); ?>
 		<br />
-		<img align="left" class="level-image-preview" src="../images<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? '/' : '/stories/'?><?php echo $this->item->image?>" name="imagelib" />
+		<img class="level-image-preview" src="../images<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? '/' : '/stories/'?><?php echo $this->item->image?>" name="imagelib" />
 		<br />					
 
 		<label for="duration_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>
