@@ -50,4 +50,25 @@ class AkeebasubsTableLevel extends FOFTable
 		
 		return $result;
 	}
+	
+	function delete( $oid=null )
+	{
+		$joins = array(
+			array(
+				'label'		=> 'subscriptions',			// Used to construct the error text
+				'name'		=> '#__akeebasubs_subscriptions', // Foreign table
+				'idfield'	=> 'akeebasubs_level_id',	// Field name on this table
+				'joinfield'	=> 'akeebasubs_level_id',	// Foreign table field
+				'idalias'	=> 'subscription_id',		// Used in the query
+			)
+		);
+		if($this->canDelete($oid, $joins))
+		{
+			return parent::delete($oid);
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
