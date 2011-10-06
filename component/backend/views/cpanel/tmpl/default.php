@@ -49,7 +49,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			?>
 			</td>
 			<td align="right" width="25%">
-			<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 			<?= sprintf('%.02f',
 				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since((gmdate('Y')-1).'-01-01')
@@ -71,7 +71,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 				?>
 			</td>
 			<td align="right">
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?= sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-01-01')
@@ -114,7 +114,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 				?>
 			</td>
 			<td align="right">
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?= sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since($y.'-'.$m.'-01')
@@ -151,7 +151,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 				?>
 			</td>
 			<td align="right">
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?= sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-'.gmdate('m').'-01')
@@ -173,7 +173,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 				?>
 			</td>
 			<td align="right" width="25%">
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?= sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( gmdate('Y-m-d', time()-7*24*3600) )
@@ -202,7 +202,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 				?>
 			</td>
 			<td align="right" width="25%">
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?= sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $yesterday )
@@ -231,7 +231,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			</td>
 			<td align="right" width="25%">
 				<strong>
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?= sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $date->format("Y-m-d") )
@@ -277,7 +277,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			</td>
 			<td align="right" width="25%">
 				<strong>
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?=sprintf('%01.2f', $summoney/$daysin)?>
 				</strong>
 			</td>
@@ -289,7 +289,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUB
 			</td>
 			<td align="right" width="25%">
 				<em>
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 				<?=sprintf('%01.2f', $lmday * ($summoney/$daysin))?>
 				</em>
 			</td>

@@ -13,6 +13,9 @@ class AkeebasubsDispatcher extends FOFDispatcher
 	public function onBeforeDispatch() {
 		$result = parent::onBeforeDispatch();
 		
+		// Load helpers
+		require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/cparams.php';
+		
 		// Handle Live Update requests
 		require_once JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate/liveupdate.php';
 		if($result && (FOFInput::getCmd('view','',$this->input) == 'liveupdate')) {

@@ -114,7 +114,7 @@ JHtml::_('behavior.tooltip');
 			</td>
 			<td align="right">
 				<?php echo sprintf('%02.02f', (float)$item->price) ?>
-				<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
 			</td>
 			<td class="order" align="center">
 				<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>
