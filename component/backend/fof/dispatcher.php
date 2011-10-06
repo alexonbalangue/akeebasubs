@@ -38,8 +38,16 @@ class FOFDispatcher extends JObject
 		
 		$hash = $option.$view;
 		if(!array_key_exists($hash, $instances)) {
-			$config['option'] = !is_null($option) ? $option : JRequest::getCmd('option','com_foobar');
-			$config['view'] = !is_null($view) ? $view : JRequest::getCmd('view','cpanel');
+			if(array_key_exists('input', $config)) {
+				$input = $config['input'];
+			} else {
+				$input = JRequest::get('default', 3);
+			}
+			$config['option'] = !is_null($option) ? $option : FOFInput::getCmd('option','com_foobar',$input);
+			$config['view'] = !is_null($view) ? $view : FOFInput::getCmd('view','cpanel',$input);
+			$input['option'] = $config['option'];
+			$input['view'] = $config['view'];
+			$config['input'] = $input;
 			
 			$className = ucfirst(str_replace('com_', '', $config['option'])).'Dispatcher';
 			if (!class_exists( $className )) {
@@ -155,7 +163,9 @@ class FOFDispatcher extends JObject
 		if(empty($task)) {
 			$task = $this->getTask($view);
 		}
-		$controller = FOFController::getAnInstance($option, $view);
+		
+		$config = array('input'=>$this->input);
+		$controller = FOFController::getAnInstance($option, $view, $config);
 		$controller->execute($task);
 
 		if(!$this->onAfterDispatch()) {
