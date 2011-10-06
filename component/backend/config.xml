@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<params>
+		<param type="text"
+			name="currency"
+			default="EUR"
+			label="COM_AKEEBASUBS_CONFIG_CURRENCY_CODE"
+			description="COM_AKEEBASUBS_CONFIG_CURRENCY_CODE_DESC"
+		/>
+		<param type="text"
+			name="currencysymbol"
+			default="€"
+			label="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL"
+			description="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL_DESC"
+		/>
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		
+		<param name="gravatar" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR"
+			description="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		
+		<param name="stepsbar" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="personalinfo" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="regemailheader" type="text"
+			default="Your new user account at [SITENAME]"
+			size="60"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER_DESC"
+		/>
+		<param name="regemailheader" type="textarea"
+			cols="60" rows="10"
+			default="Hello [USERNAME],\nWe would like to notify you that a new user account has been\ncreated for you on [SITENAME] with the following details:\n\nUsername: [USERNAME]\nPassword: [PASSWORD]\n\nThis user account will remain blocked until your subscription payment is completed and validated.\n\nShould you need to access your account sooner than that - for\nexample, you did not complete the payment and would like to\nsubscribe using the same username and/or email address -\nplease click on the following activation link to enable your user\naccount so that you are able to login in the designated\narea of the subscription form using the username and password\nprinted in this email.\n\n[URL]\n\nIf the URL above is not clickable, please copy and paste it to your browser.\n\nBest regards,\n[SITENAME]"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILBODY"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILBODY_DESC"
+		/>
+	</params>
+	
+	<fieldset name="currency" label="COM_AKEEBASUBS_CONFIG_CURRENCY_TITLE">
+		<field type="text"
+			name="currency"
+			default="EUR"
+			label="COM_AKEEBASUBS_CONFIG_CURRENCY_CODE"
+			description="COM_AKEEBASUBS_CONFIG_CURRENCY_CODE_DESC"
+		/>
+		<field type="text"
+			name="currencysymbol"
+			default="€"
+			label="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL"
+			description="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL_DESC"
+		/>
+	</fieldset>
+	
+	<fieldset name="backend" label="COM_AKEEBASUBS_CONFIG_BACKEND_TITLE">
+		<field name="gravatar" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR"
+			description="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+	</fieldset>
+	
+	<fieldset name="frontend" label="COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE">
+		<field name="stepsbar" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="personalinfo" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="regemailheader" type="text"
+			default="Your new user account at [SITENAME]"
+			size="60"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER_DESC"
+		/>
+		<field name="regemailheader" type="textarea"
+			cols="60" rows="10"
+			default="Hello [USERNAME],\nWe would like to notify you that a new user account has been\ncreated for you on [SITENAME] with the following details:\n\nUsername: [USERNAME]\nPassword: [PASSWORD]\n\nThis user account will remain blocked until your subscription payment is completed and validated.\n\nShould you need to access your account sooner than that - for\nexample, you did not complete the payment and would like to\nsubscribe using the same username and/or email address -\nplease click on the following activation link to enable your user\naccount so that you are able to login in the designated\narea of the subscription form using the username and password\nprinted in this email.\n\n[URL]\n\nIf the URL above is not clickable, please copy and paste it to your browser.\n\nBest regards,\n[SITENAME]"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILBODY"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILBODY_DESC"
+		/>
+	</fieldset>
+	
+	<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC"
+		>
+
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			class="inputbox"
+			filter="rules"
+			component="com_akeebasubs"
+			section="component" />
+	</fieldset>	
+</config>
