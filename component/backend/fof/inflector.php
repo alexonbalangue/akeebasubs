@@ -1,7 +1,14 @@
 <?php
 /**
+ *  @package FrameworkOnFramework
+ *  @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
+ *  @license GNU General Public License version 3, or later
+ */
+
+/**
  * The FOFInflector is a direct copy of Koowa's KInflector class, which
- * is also licensed under the GPL v3.
+ * is also licensed under the GPL v3. In its turn, it's an adaptation of the
+ * Akelos PHP Inflector which is a PHP port from a Ruby on Rails project.
  */
 
 /**
