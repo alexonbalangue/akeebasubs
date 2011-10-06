@@ -27,9 +27,10 @@ class FOFViewHtml extends JView
 		parent::__construct($config);
 		
 		// Get the input
-		$this->input = JRequest::get('default', 3);
 		if(array_key_exists('input', $config)) {
-			$this->input = array_merge($this->input, $config['input']);
+			$this->input = $config['input'];
+		} else {
+			$this->input = JRequest::get('default', 3);
 		}
 		
 		$this->lists = new JObject();

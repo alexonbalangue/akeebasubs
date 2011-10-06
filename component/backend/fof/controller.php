@@ -123,9 +123,10 @@ class FOFController extends JController
 		$this->config = $config;
 
 		// Get the input for this MVC triad
-		$this->input = JRequest::get('default', 3);
 		if(array_key_exists('input', $config)) {
-			$this->input = array_merge($this->input, $config['input']);
+			$this->input = $config['input'];
+		} else {
+			$this->input = JRequest::get('default', 3);
 		}
 
 		// Get the default values for the component and view names
