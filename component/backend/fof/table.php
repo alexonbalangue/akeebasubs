@@ -123,14 +123,18 @@ class FOFTable extends JTable
 			$query = FOFQueryAbstract::getNew($this->_db)
 				->select($db->nameQuote('master').'.'.$db->nameQuote($k))
 				->from($db->nameQuote($this->_tbl).' AS '.$db->nameQuote('master'));
+			$tableNo = 0;
 			foreach( $joins as $table )
 			{
+				$tableNo++;
 				$query->select(array(
-					'COUNT(DISTINCT '.$db->nameQuote($table['name']).'.'.$db->nameQuote($table['idfield']).') AS '.$db->nameQuote($table['idalias'])
+					'COUNT(DISTINCT '.$db->nameQuote('t'.$tableNo).'.'.$db->nameQuote($table['idfield']).') AS '.$db->nameQuote($table['idalias'])
 				));
 				$query->join('LEFT', 
-						$db->nameQuote($table['name']).' ON '.$db->nameQuote($table['joinfield']).' = '.
-						$db->nameQuote('master').'.'.$db->nameQuote($k)
+						$db->nameQuote($table['name']).
+						' AS '.$db->nameQuote('t'.$tableNo).
+						' ON '.$db->nameQuote('t'.$tableNo).'.'.$db->nameQuote($table['joinfield']).
+						' = '.$db->nameQuote('master').'.'.$db->nameQuote($k)
 						);
 			}
 
@@ -148,7 +152,7 @@ class FOFTable extends JTable
 			$i = 0;
 			foreach( $joins as $table )
 			{
-				$k = $table['idfield'] . $i;
+				$k = $table['idfield'];
 				if ($obj->$k)
 				{
 					$msg[] = JText::_( $table['label'] );
@@ -158,7 +162,14 @@ class FOFTable extends JTable
 
 			if (count( $msg ))
 			{
-				$this->setError("noDeleteRecord" . ": " . implode( ', ', $msg ));
+				$option = FOFInput::getCmd('option','com_foobar',$this->input);
+				$comName = str_replace('com_','',$option);
+				$tview = str_replace('#__'.$comName.'_', '', $this->_tbl);
+				$prefix = $option.'_'.$tview.'_NODELETE_';
+				
+				foreach($msg as $key) {
+					$this->setError(JText::_($prefix.$key));
+				}
 				return false;
 			}
 			else
