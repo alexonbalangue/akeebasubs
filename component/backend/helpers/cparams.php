@@ -1,8 +1,8 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @package AkeebaSubs
+ * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
+ * @license GNU General Public License version 3, or later
  */
 
 class AkeebasubsHelperCparams
