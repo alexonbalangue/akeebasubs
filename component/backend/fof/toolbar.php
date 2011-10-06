@@ -154,6 +154,7 @@ class FOFToolbar
 	public function onCpanelsBrowse()
 	{
 		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)), str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
+		JToolBarHelper::preferences(FOFInput::getCmd('option','com_foobar',$this->input), 550, 875);
 		$this->renderSubmenu();
 	}
 	
