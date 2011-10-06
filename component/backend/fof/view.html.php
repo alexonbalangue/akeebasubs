@@ -25,6 +25,8 @@ class FOFViewHtml extends JView
 	function  __construct($config = array()) {
 		parent::__construct($config);
 		
+		$this->config = $config;
+		
 		// Get the input
 		if(array_key_exists('input', $config)) {
 			$this->input = $config['input'];
@@ -67,6 +69,10 @@ class FOFViewHtml extends JView
 		} else {
 			$this->onDisplay();
 		}
+		
+		$toolbar = FOFToolbar::getAnInstance(FOFInput::getCmd('option','com_foobar',$this->input), $this->config);
+		$toolbar->perms = $this->perms;
+		$toolbar->renderToolbar(FOFInput::getCmd('view','cpanel',$this->input), $task);
 
 		// Show the view
 		parent::display($tpl);
@@ -74,6 +80,9 @@ class FOFViewHtml extends JView
 
 	protected function onDisplay($tpl = null)
 	{
+		$view = FOFInput::getCmd('view','cpanel',$this->input);
+		if(in_array($view,array('cpanel','cpanels'))) return;
+		
 		// Load the model
 		$model = $this->getModel();
 
@@ -85,30 +94,12 @@ class FOFViewHtml extends JView
 		$this->assign   ( 'items',		$model->getItemList() );
 		$this->assignRef( 'pagination',	$model->getPagination());
 		$this->assignRef( 'lists',		$this->lists);
-
-		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input));
-		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_DASHBOARD').' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
 	}
 
 	protected function onAdd($tpl = null)
 	{
 		$model = $this->getModel();
-		
 		$this->assignRef( 'item',		$model->getItem() );	
-		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input)).'_EDIT';
-		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_DASHBOARD').' &ndash; <small>'.JText::_($subtitle_key).'</small>','ars');
-
-		JToolBarHelper::apply();
-		JToolBarHelper::save();
-		if(version_compare(JVERSION,'1.6.0','ge')) {
-			JToolBarHelper::custom('savenew', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		} else {
-			$sanTitle = 'Save & New';
-			JToolBar::getInstance('toolbar')->appendButton( 'Standard', 'save', $sanTitle, 'savenew', false, false );
-		}
-		JToolBarHelper::cancel();
 	}
 
 	protected function onEdit($tpl = null)
@@ -119,13 +110,7 @@ class FOFViewHtml extends JView
 	
 	protected function onRead($tpl = null)
 	{
-		$model = $this->getModel();
-		
-		$this->assignRef( 'item',		$model->getItem() );	
-		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input)).'_READ';
-		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_DASHBOARD').' &ndash; <small>'.JText::_($subtitle_key).'</small>','ars');
-
-		JToolBarHelper::cancel();
+		// All I need is to read the record
+		$this->onAdd();
 	}
 }
