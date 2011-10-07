@@ -27,6 +27,16 @@ class AkeebasubsControllerSubscriptions extends FOFController
 				JFactory::getApplication()->close();
 			}
 		}
+
+		// Limit what a front-end user can do
+		if(JFactory::getApplication()->isSite()) {
+			if(JFactory::getUser()->guest) {
+				return false;
+			} else {
+				FOFInput::setVar('user_id',JFactory::getUser()->id,$this->input);
+			}
+		}
+		
 		return parent::browse($cachable);
 	}
 }
