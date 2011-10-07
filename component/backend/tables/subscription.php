@@ -9,6 +9,13 @@ defined('_JEXEC') or die();
 
 class AkeebasubsTableSubscription extends FOFTable
 {
+	/** @var object Caches the row data on load for future reference */
+	private $selfCache = null;
+	
+	/**
+	 * Validates the subscription row
+	 * @return boolean True if the row validates
+	 */
 	public function check() {
 		$result = true;
 		
@@ -66,5 +73,81 @@ class AkeebasubsTableSubscription extends FOFTable
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * Automatically run some actions after a subscription row is saved
+	 */
+	protected function onAfterStore()
+	{
+		// Unblock users when their payment is Complete
+		$this->userUnblock();
+		
+		return true;
+	}
+	
+	/**
+	 * Automatically unblock a user whose subscription is paid (status = C) and
+	 * enabled, if he's not already enabled.
+	 */
+	private function userUnblock()
+	{
+		// Make sure the payment is complete
+		if($this->state != 'C') return;
+		
+		// Make sure the subscription is enabled
+		if(!$this->enabled) return;
+		
+		// Paid and enabled subscription; enable the user if he's not already enabled
+		$user = JFactory::getUser($this->user_id);
+		if($user->block) {
+			$user->block = 0;
+			$user->save();
+		}
+	}
+	
+	/**
+	 * Caches the loaded data so that we can check them for modifications upon
+	 * saving the row.
+	 */
+	public function onAfterLoad(&$result) {
+		$this->selfCache = $result;
+	}
+	
+	/**
+	 * Resets the cache when the table is reset
+	 * @return bool
+	 */
+	public function onAfterReset() {
+		$this->selfCache = null;
+		return true;
+	}
+	
+	protected function onAfterStore()
+	{
+		// Load the "akeebasubs" plugins
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		
+		if(is_null($this->selfCache) || !is_object($this->selfCache)) {
+			$modified = true;
+		} else {
+			foreach($this->selfCache as $key => $value) {
+				if($this->$key != $value) {
+					$modified = true;
+					break;
+				}
+			}
+		}
+		
+		if($modified) {
+			// Fire plugins (onAKSubscriptionChange) passing ourselves as a parameter
+			$jResponse = $app->triggerEvent('onAKSubscriptionChange', array($this));
+		}
+		
+		$this->selfCache = clone $this;
+		
+		return true;
 	}
 }
