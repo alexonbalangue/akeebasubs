@@ -83,6 +83,9 @@ class AkeebasubsTableSubscription extends FOFTable
 		// Unblock users when their payment is Complete
 		$this->userUnblock();
 		
+		// Run the plugins on subscription modification
+		$this->subNotifiable();
+		
 		return true;
 	}
 	
@@ -123,7 +126,12 @@ class AkeebasubsTableSubscription extends FOFTable
 		return true;
 	}
 	
-	protected function onAfterStore()
+	/**
+	 * Notifies the plugins if a subscription has changed
+	 * 
+	 * @return bool
+	 */
+	private function subNotifiable()
 	{
 		// Load the "akeebasubs" plugins
 		jimport('joomla.plugin.helper');
