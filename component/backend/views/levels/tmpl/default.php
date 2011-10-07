@@ -15,12 +15,14 @@ if(version_compare(JVERSION, '1.6.0','ge')) {
 }
 JHtml::_('behavior.tooltip');
 
+$this->loadHelper('select');
+
 ?>
 
 <form action="index.php" method="post" name="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="levels" />
-<input type="hidden" id="task" name="task" value="com_akeebasubs" />
+<input type="hidden" id="task" name="task" value="browse" />
 <input type="hidden" name="hidemainmenu" id="hidemainmenu" value="0" />
 <input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 <input type="hidden" name="filter_order" id="filter_order" value="<?php echo $this->lists->order ?>" />
@@ -62,7 +64,7 @@ JHtml::_('behavior.tooltip');
 			</td>
 			<td>
 				<input type="text" name="search" id="search"
-					value="<?php echo $this->escape($this->lists->fltSearch);?>"
+					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
 					<?php echo JText::_('Go'); ?>
@@ -74,7 +76,9 @@ JHtml::_('behavior.tooltip');
 			<td></td>
 			<td></td>
 			<td></td>
-			<td></td>
+			<td>
+				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();')) ?>
+			</td>
 		</tr>
 	</thead>
 	<tfoot>
