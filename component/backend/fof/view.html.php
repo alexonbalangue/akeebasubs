@@ -79,6 +79,13 @@ class FOFViewHtml extends JView
 		// Show the view
 		parent::display($tpl);
 	}
+	
+	protected function onBrowse($tpl = null)
+	{
+		// When in interactive browsing mode, save the state to the session
+		$this->getModel()->savestate(1);
+		$this->onDisplay($tpl);
+	}
 
 	protected function onDisplay($tpl = null)
 	{
