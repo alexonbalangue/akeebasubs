@@ -70,9 +70,11 @@ class FOFViewHtml extends JView
 			$this->onDisplay();
 		}
 		
-		$toolbar = FOFToolbar::getAnInstance(FOFInput::getCmd('option','com_foobar',$this->input), $this->config);
-		$toolbar->perms = $this->perms;
-		$toolbar->renderToolbar(FOFInput::getCmd('view','cpanel',$this->input), $task);
+		if(JFactory::getApplication()->isAdmin()) {
+			$toolbar = FOFToolbar::getAnInstance(FOFInput::getCmd('option','com_foobar',$this->input), $this->config);
+			$toolbar->perms = $this->perms;
+			$toolbar->renderToolbar(FOFInput::getCmd('view','cpanel',$this->input), $task);
+		}
 
 		// Show the view
 		parent::display($tpl);
