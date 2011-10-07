@@ -108,6 +108,26 @@ class FOFTable extends JTable
 	}
 	
 	/**
+	 * Method to reset class properties to the defaults set in the class
+	 * definition. It will ignore the primary key as well as any private class
+	 * properties.
+	 */
+	public function reset()
+	{
+		if(!$this->onBeforeReset()) return false;
+		// Get the default values for the class from the table.
+		$fields = version_compare(JVERSION, '1.6.0', 'ge') ? $this->getFields() : $this->j15getFields();
+		foreach ($fields as $k => $v)
+		{
+			// If the property is not the primary key or private, reset it.
+			if ($k != $this->_tbl_key && (strpos($k, '_') !== 0)) {
+				$this->$k = $v->Default;
+			}
+		}
+		if(!$this->onAfterReset()) return false;
+	}
+	
+	/**
 	 * Generic check for whether dependancies exist for this object in the db schema
 	 */
 	public function canDelete( $oid=null, $joins=null )
@@ -513,6 +533,16 @@ class FOFTable extends JTable
 	}
 	
 	protected function onBeforePublish(&$cid, $publish)
+	{
+		return true;
+	}
+	
+	protected function onAfterReset()
+	{
+		return true;
+	}
+	
+	protected function onBeforeReset()
 	{
 		return true;
 	}
