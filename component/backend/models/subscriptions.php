@@ -399,6 +399,8 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		foreach($resultArray as $index => &$row) {
 			$triggered = false;
 			
+			if(!property_exists($row, 'publish_down')) return;
+			
 			if($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00')) {
 				$jDown = new JDate($row->publish_down);
 				if( ($uNow >= $jDown->toUnix()) && $row->enabled ) {
