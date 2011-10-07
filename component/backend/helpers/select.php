@@ -163,4 +163,32 @@ class AkeebasubsHelperSelect
 		
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
+	
+	public static function subscriptionlevels($selected = null, $id = 'akeebasubs_level_id', $attribs = array())
+	{
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$items = $model->limit(0)->limitstart(0)->getItemList();
+		
+		$options = array();
+
+		if(count($items)) foreach($items as $item)
+		{
+			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id, $item->title);
+		}
+
+	   array_unshift($options, JHTML::_('select.option',0,'- '.JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL').' -'));
+
+		return self::genericlist($options, $id, $attribs, $selected, $id);
+	}
+	
+	public static function paystates($selected = null, $id = 'state', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE').' -');
+
+		$types = array('N','P','C','X');
+		foreach($types as $type) $options[] = JHTML::_('select.option',$type,JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$type));
+
+		return self::genericlist($options, $id, $attribs, $selected, $id);
+	}
 }
