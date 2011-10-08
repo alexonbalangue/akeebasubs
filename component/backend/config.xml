@@ -21,6 +21,12 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>
 		</param>
+		<param name="imagedir" type="text"
+			default="images/stories"
+			size="60"
+			label="COM_AKEEBASUBS_CONFIG_BACKEND_IMAGEDIR"
+			description="COM_AKEEBASUBS_CONFIG_BACKEND_IMAGEDIR_DESC"
+		/>
 		<param name="@spacer" type="spacer" default="" label="" description="" />
 		
 		<param name="stepsbar" type="radio" default="1"
@@ -71,6 +77,12 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>
 		</field>
+		<field name="imagedir" type="text"
+			default="images"
+			size="60"
+			label="COM_AKEEBASUBS_CONFIG_BACKEND_IMAGEDIR"
+			description="COM_AKEEBASUBS_CONFIG_BACKEND_IMAGEDIR_DESC"
+		/>
 	</fieldset>
 	
 	<fieldset name="frontend" label="COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE">

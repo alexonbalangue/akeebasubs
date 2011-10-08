@@ -16,6 +16,8 @@ if(version_compare(JVERSION, '1.6.0','ge')) {
 JHtml::_('behavior.tooltip');
 
 $editor =& JFactory::getEditor();
+
+$this->loadHelper('cparams');
 ?>
 <form action="index.php" method="post" name="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
@@ -49,9 +51,9 @@ $editor =& JFactory::getEditor();
 		<br/>
 		
 		<label for="image_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
-		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/images'.(version_compare(JVERSION, '1.6.0', 'ge') ? '/' : '/stories/'), 'swf|gif|jpg|png|bmp'); ?>
+		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/'), 'swf|gif|jpg|png|bmp'); ?>
 		<br />
-		<img class="level-image-preview" src="../images<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? '/' : '/stories/'?><?php echo $this->item->image?>" name="imagelib" />
+		<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
 		<br />					
 
 		<label for="duration_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>
@@ -61,7 +63,7 @@ $editor =& JFactory::getEditor();
 		<label for="price_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
 		<span>
 			<input type="text" size="15" id="price_field" name="price" value="<?php echo  $this->item->price ?>" style="float: none" />
-			<?php // echo KFactory::get('com://admin/akeebasubs.model.configs')->getConfig()->currencysymbol?>
+			<?php AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 		</span>
 		<br/>
 		

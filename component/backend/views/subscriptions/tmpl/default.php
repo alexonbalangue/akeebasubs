@@ -149,7 +149,7 @@ $this->loadHelper('format');
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?php echo $this->escape($subscription->title); ?>::<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL_EDIT_TOOLTIP')?>">
-					<img src="<?php echo JURI::base(); ?><?php echo version_compare(JVERSION,'1.6.0','ge') ? '../images/' :'../images/stories/' ?><?php echo $subscription->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?php echo JURI::base(); ?><?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $subscription->image;?>" width="32" height="32" class="sublevelpic" />
 					<a href="index.php?option=com_akeebasubs&id=<?php echo $subscription->akeebasubs_level_id ?>" class="subslevel">
     					<?php echo $this->escape($subscription->title)?>
     				</a>

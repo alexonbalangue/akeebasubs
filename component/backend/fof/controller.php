@@ -807,8 +807,10 @@ class FOFController extends JController
 					$config['template_path'] = array(
 						$basePath.'/components/'.$config['option'].'/views/'.$config['view'].'/tmpl',
 						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.$config['view'],
+						$basePath.'/components/'.$config['option'].'/views/'.FOFInflector::pluralize($config['view']).'/tmpl',
+						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.FOFInflector::pluralize($config['view']),
 						$basePath.'/components/'.$config['option'].'/views/'.FOFInflector::singularize($config['view']).'/tmpl',
-						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.FOFInflector::singularize($config['view']),
+						JPATH_BASE.'/templates/'.JFactory::getApplication()->getTemplate().'/html/'.$config['option'].'/'.FOFInflector::singularize($config['view'])
 					);
 				}
 				

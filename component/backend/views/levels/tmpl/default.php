@@ -16,6 +16,7 @@ if(version_compare(JVERSION, '1.6.0','ge')) {
 JHtml::_('behavior.tooltip');
 
 $this->loadHelper('select');
+$this->loadHelper('cparams');
 
 ?>
 
@@ -107,7 +108,7 @@ $this->loadHelper('select');
 			</td>
 			<td align="left">
 				<span class="editlinktip hasTip" title="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_EDITLEVEL_TOOLTIP')?> <?php echo $this->escape($item->title); ?>::<?php echo $this->escape(substr(strip_tags($item->description), 0, 300)).'...'; ?>">
-					<img src="<?= JURI::base(); ?><?= version_compare(JVERSION,'1.6.0','ge') ? '../images/' :'../images/stories/' ?><?php echo $item->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?= JURI::base(); ?>../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $item->image;?>" width="32" height="32" class="sublevelpic" />
 					<a href="index.php?option=com_akeebasubs&view=level&id=<?php echo $item->akeebasubs_level_id ?>" class="subslevel">
 						<strong><?php echo $this->escape($item->title) ?></strong>
 					</a>
