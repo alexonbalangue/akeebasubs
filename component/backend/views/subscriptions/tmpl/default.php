@@ -15,8 +15,10 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/blockui.js?'.AKEEBASUBS_VERSI
 
 JHTML::_('behavior.tooltip');
 
+$this->loadHelper('cparams');
 $this->loadHelper('select');
 $this->loadHelper('format');
+
 ?>
 <form action="index.php" method="post" name="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />

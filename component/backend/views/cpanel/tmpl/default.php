@@ -19,6 +19,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.j
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUBS_VERSIONHASH);
 
+$this->loadHelper('cparams');
 ?>
 <div id="cpanel"  style="width:51%;float:left;">
 	<h2><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_SALES')?></h2>

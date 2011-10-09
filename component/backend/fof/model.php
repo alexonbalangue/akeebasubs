@@ -40,9 +40,38 @@ class FOFModel extends JModel
 
 		if (!class_exists( $modelClass ))
 		{
+			// Guess the component name and include path
+			preg_match('/(.*)Model$/', $prefix, $m);
+			$component = 'com_'.strtolower($m[1]);
+
+			if(array_key_exists('input', $config)) {
+				$component = FOFInput::getCmd('option',$component,$config['input']);
+			}
+			$config['option'] = $component;
+			$include_paths = JModel::addIncludePath();
+			if(JFactory::getApplication()->isAdmin()) {
+				$extra_paths = array(
+					JPATH_ADMINISTRATOR.'/components/'.$component.'/models',
+					JPATH_SITE.'/components/'.$component.'/models'
+				);
+			} else {
+				$extra_paths = array(
+					JPATH_SITE.'/components/'.$component.'/models',
+					JPATH_ADMINISTRATOR.'/components/'.$component.'/models'
+				);
+			}
+			$include_paths = array_merge($extra_paths,$include_paths);
+			
+			$needsAView = true;
+			if(array_key_exists('view', $config)) {
+				if(!emtpy($config['view'])) $needsAView = false;
+			}
+			if($needsAView) $config['view'] = strtolower($type);
+			
+			// Try to load the model file
 			jimport('joomla.filesystem.path');
 			$path = JPath::find(
-				JModel::addIncludePath(),
+				$include_paths,
 				JModel::_createFileName( 'model', array( 'name' => $type))
 			);
 			if ($path)
@@ -52,10 +81,6 @@ class FOFModel extends JModel
 		}
 
 		if (!class_exists( $modelClass )) {
-			$config_extras = array(
-				'name'	=> $type
-			);
-			$config = array_merge($config_extras, $config);
 			$modelClass = 'FOFModel';
 		}
 		
@@ -104,7 +129,12 @@ class FOFModel extends JModel
 		} else {
 			$className = get_class($this);
 			if($className == 'FOFModel') {
-				$view = FOFInput::getCmd('view','cpanel',$this->input);
+				if(array_key_exists('view', $config)) {
+					$view = $config['view'];
+				}
+				if(empty($view)) {
+					$view = FOFInput::getCmd('view','cpanel',$this->input);
+				}
 			} else {
 				$eliminatePart = ucfirst($name).'Model';
 				$view = strtolower(str_replace($eliminatePart, '', $className));
@@ -647,6 +677,42 @@ class FOFModel extends JModel
 		$this->onProcessList($result);
 		
 		return $result;
+	}
+	
+	/**
+	 * Method to get a table object, load it if necessary.
+	 *
+	 * @param   string   $name     The table name. Optional.
+	 * @param   string   $prefix   The class prefix. Optional.
+	 * @param   array    $options  Configuration array for model. Optional.
+	 *
+	 * @return  JTable  A JTable object
+	 * @since   11.1
+	 */
+	public function getTable($name = '', $prefix = null, $options = array())
+	{
+		if (empty($name)) {
+			$name = $this->table;
+			if(empty($name)) {
+				$name = FOFInflector::singularize($this->getName());
+			}
+		}
+		
+		if(empty($prefix)) {
+			$prefix = ucfirst($this->getName()).'Table';
+		}
+		
+		if(empty($options)) {
+			$options = array('input'=>$this->input);
+		}
+
+		if ($table = $this->_createTable($name, $prefix, $options)) {
+			return $table;
+		}
+
+		JError::raiseError(0, JText::sprintf('JLIB_APPLICATION_ERROR_TABLE_NAME_NOT_SUPPORTED', $name));
+
+		return null;
 	}
 	
 	/**

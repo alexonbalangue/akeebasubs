@@ -26,7 +26,18 @@ class FOFTable extends JTable
 	{
 		static $instances = array();
 		
-		if(!array_key_exists('option', $config)) $config['option'] = JRequest::getCmd('option','com_foobar');
+		// Guess the component name
+		if(!in_array($prefix,array('Table','JTable'))) {
+			preg_match('/(.*)Table$/', $prefix, $m);
+			$option = 'com_'.strtolower($m[1]);
+			if(array_key_exists('input', $config)) {
+				$option = FOFInput::getCmd('option',$option,$config['input']);
+				FOFInput::setVar('option',$option,$config['input']);
+			}
+		}		
+		if(array_key_exists('option', $config)) $option = $config['option'];
+		$config['option'] = $option;
+		
 		if(!array_key_exists('view', $config)) $config['view'] = JRequest::getCmd('view','cpanel');
 		if(is_null($type)) {
 			if($prefix == 'JTable') $prefix = 'Table';
@@ -34,7 +45,7 @@ class FOFTable extends JTable
 		}
 		
 		$type = preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
-		$tableClass = ucfirst(str_replace('com_', '', $config['option'])).$prefix.ucfirst($type);
+		$tableClass = $prefix.ucfirst($type);
 		
 		if(!array_key_exists($tableClass, $instances)) {
 			if (!class_exists( $tableClass )) {

@@ -697,7 +697,7 @@ class FOFController extends JController
 			$document =& JFactory::getDocument();
 			$viewType	= $document->getType();
 		}
-
+		
 		$basePath = ($this->jversion == '15') ? $this->_basePath : $this->basePath;
 		return $this->getView( $viewName, $viewType, $prefix, array_merge(array(
 				'input'		=> $this->input,
@@ -748,6 +748,28 @@ class FOFController extends JController
 		$viewName	 = preg_replace( '/[^A-Z0-9_]/i', '', $name );
 		$classPrefix = preg_replace( '/[^A-Z0-9_]/i', '', $prefix );
 		$viewType	 = preg_replace( '/[^A-Z0-9_]/i', '', $type );
+		
+		// Guess the component name and view
+		preg_match('/(.*)View$/', $prefix, $m);
+		$component = 'com_'.strtolower($m[1]);
+		if(array_key_exists('input', $config)) {
+			$component = FOFInput::getCmd('option',$component,$config['input']);
+		}
+		if(array_key_exists('option', $config)) if($config['option']) $component = $config['option'];
+		$config['option'] = $component;
+		
+		$view = strtolower($viewName);
+		if(array_key_exists('input', $config)) {
+			$view = FOFInput::getCmd('view',$view,$config['input']);
+		}
+		if(array_key_exists('view', $config)) if($config['view']) $view = $config['view'];
+		
+		$config['view'] = $view;
+		
+		if(array_key_exists('input', $config)) {
+			FOFInput::setVar('option', $config['option'], $config['input']);
+			FOFInput::setVar('view', $config['view'], $config['input']);
+		}
 
 		// Build the view class name
 		$viewClass = $classPrefix . $viewName;
@@ -756,6 +778,20 @@ class FOFController extends JController
 		{
 			jimport( 'joomla.filesystem.path' );
 			$thisPath = version_compare(JVERSION, '1.6.0', 'ge') ? $this->paths : $this->_path;
+			if(JFactory::getApplication()->isSite()) {
+				$thisPath['view'] = array_merge(array(
+					JPATH_SITE.'/components/'.$config['option'].'/views',
+					JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/views'
+				),$thisPath['view']);
+			} else {
+				$thisPath['view'] = array_merge(array(
+					JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/views',
+					JPATH_SITE.'/components/'.$config['option'].'/views'
+				),$thisPath['view']);
+				$thisPath['view'][] = JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/views';
+				$thisPath['view'][] = JPATH_SITE.'/components/'.$config['option'].'/views';
+			}
+			
 			if(version_compare(JVERSION, '1.6.0', 'ge')) {
 				$viewPath = $this->createFileName( 'view', array( 'name' => $viewName, 'type' => $viewType) );
 			} else {
@@ -771,6 +807,7 @@ class FOFController extends JController
 				} else {
 					$viewPath = $this->_createFileName( 'view', array( 'name' => FOFInflector::singularize($viewName), 'type' => $viewType) );
 				}
+
 				$path = JPath::find(
 					$thisPath['view'],
 					$viewPath
@@ -785,16 +822,6 @@ class FOFController extends JController
 			
 			if(!class_exists($viewClass)) {
 				$viewClass = 'FOFView'.ucfirst($type);
-				
-				if(array_key_exists('input', $config)) {
-					$option = FOFInput::getCmd('option','com_foobar',$config['input']);
-					$view = FOFInput::getCmd('view','cpanel',$config['input']);
-				} else {
-					$option = JRequest::getCmd('option','com_foobar');
-					$view = JRequest::getCmd('view','cpanel');
-				}
-				if(!array_key_exists('option', $config)) $config['option'] = $option;
-				if(!array_key_exists('view', $config)) $config['view'] = $view;
 				
 				$app = JFactory::getApplication();
 				if($app->isSite()) {
