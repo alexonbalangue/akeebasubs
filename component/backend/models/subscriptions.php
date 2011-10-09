@@ -391,11 +391,13 @@ class AkeebasubsModelSubscriptions extends FOFModel
 	public function onProcessList(&$resultArray) {
 		// Implement the subscription automatic expiration
 		if(empty($resultArray)) return;
+		
+		if($this->getState('skipOnProcessList',0)) return;
 
 		jimport('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
-		
+
 		$table = $this->getTable($this->table);
 		$k = $table->getKeyName();
 		
