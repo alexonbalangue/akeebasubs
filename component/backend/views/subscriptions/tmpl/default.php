@@ -171,7 +171,7 @@ $this->loadHelper('format');
 					<span class="small">[<?php echo $subscription->user_id?>]</span>
 					<br/>
 					<?php echo $this->escape($subscription->name)?>
-					<? if(!empty($subscription->business_name)):?>
+					<?php if(!empty($subscription->business_name)):?>
 					<br/>
 					<?php echo $this->escape($subscription->business_name)?>
 					&bull;
