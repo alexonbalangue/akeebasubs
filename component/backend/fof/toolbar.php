@@ -191,9 +191,12 @@ class FOFToolbar
 	 */
 	public function onRead()
 	{
+		$option = FOFInput::getCmd('option','com_foobar',$this->input);
+		$componentName = str_replace('com_', '', $option);
+		
 		// Set toolbar title
 		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input)).'_READ';
-		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>','ars');
+		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', $componentName);
 
 		// Set toolbar icons
 		JToolBarHelper::back();
@@ -202,9 +205,12 @@ class FOFToolbar
 	
 	public function onAdd()
 	{
+		$option = FOFInput::getCmd('option','com_foobar',$this->input);
+		$componentName = str_replace('com_', '', $option);
+		
 		// Set toolbar title
 		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input)).'_EDIT';
-		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>','ars');
+		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>',$componentName);
 		
 		// Set toolbar icons
 		JToolBarHelper::apply();
