@@ -284,6 +284,9 @@ class FOFToolbar
 		
 		if(!empty($allFolders)) foreach($allFolders as $folder) {
 			$view = $folder;
+			// Do we have a 'skip.xml' file in there?
+			$files = JFolder::files($searchPath.'/'.$view,'^skip\.xml$');
+			if(!empty($files)) continue;
 			if($view != 'cpanel') $view = FOFInflector::pluralize($view);
 			if(!in_array($view, $views)) $views[] = $view;
 		}

@@ -35,9 +35,13 @@ $this->loadHelper('format');
 		
 		<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 		<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
-		<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo JFactory::getUser($this->item->user_id)->username ?>" disabled="disabled" />
+		<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
 		<button onclick="return false;" class="modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
-		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&view=jusers&limit=10&tmpl=component&search=" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
+		<?php if(version_compare(JVERSION, '1.6.0', 'ge')): ?>
+		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
+		<?php else: ?>
+		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&amp;view=jusers&amp;tmpl=component" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
+		<?php endif; ?>
 		<div class="akeebasubs-clear"></div>
 
 		<label for="enabled" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ENABLED')?></label>
@@ -103,7 +107,7 @@ $this->loadHelper('format');
 </form>
 
 <script type="text/javascript">
-function jSelectUser(id, username)
+function jSelectUser_userid(id, username)
 {
 	document.getElementById('userid').value = id;
 	document.getElementById('userid_visible').value = username;
@@ -118,7 +122,9 @@ window.addEvent("domready", function() {
 	$$("button.modal").each(function(el) {
 		el.addEvent("click", function(e) {
 			new Event(e).stop();
-			SqueezeBox.fromElement($('userselect'));
+			SqueezeBox.fromElement($('userselect'), {
+				parse: 'rel'
+			});
 		});
 	});
 });
