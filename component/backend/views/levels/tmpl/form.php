@@ -31,12 +31,13 @@ $this->loadHelper('cparams');
 		
 		<label for="title_field" class="main title"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_TITLE'); ?></label>
 		<input type="text" size="20" id="title_field" name="title" class="title" value="<?php echo $this->escape($this->item->title) ?>" />
-		<br/>
+		<div class="akeebasubs-clear"></div>
 		
 		<span class="hasTip" title="<?php echo JText::_( 'COM_AKEEBASUBS_LEVEL_FIELD_SLUG_TIP' );?>::<?php echo JText::_( 'Slug Tip' ); ?>">
 		<label for="slug_field" class="main" class="mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SLUG'); ?></label>					
 		</span>
-		<input id="slug_field" type="text" name="slug" class="slug" value="<?php echo  $this->item->slug; ?>" /><br />
+		<input id="slug_field" type="text" name="slug" class="slug" value="<?php echo  $this->item->slug; ?>" />
+		<div class="akeebasubs-clear"></div>
 		
 		<label for="enabled" class="main" class="mainlabel">
 			<?php if(version_compare(JVERSION,'1.6.0','ge')): ?>
@@ -49,19 +50,15 @@ $this->loadHelper('cparams');
 			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 		</span>
 		<div class="akeebasubs-clear"></div>
-		<br/>
 		
 		<label for="image_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
 		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/').'/', 'swf|gif|jpg|png|bmp'); ?>
 		<div class="akeebasubs-clear"></div>
-		<br />
 		<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
 		<div class="akeebasubs-clear"></div>
-		<br />					
 
 		<label for="duration_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>
 		<input type="text" size="6" id="duration_field" name="duration" value="<?php echo (int)$this->item->duration ?>" />
-		<br/>
 		<div class="akeebasubs-clear"></div>
 
 		<label for="price_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
@@ -69,14 +66,15 @@ $this->loadHelper('cparams');
 			<input type="text" size="15" id="price_field" name="price" value="<?php echo  $this->item->price ?>" style="float: none" />
 			<?php AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 		</span>
-		<br/>
+		<div class="akeebasubs-clear"></div>
 		
 		<label for="notify1_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY1'); ?></label>
 		<input type="text" size="6" id="notify1_field" name="notify1" value="<?php echo  (int)$this->item->notify1 ?>" />
-		<br/>
+		<div class="akeebasubs-clear"></div>
 		
 		<label for="notify2_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY2'); ?></label>
 		<input type="text" size="6" id="notify2_field" name="notify2" value="<?php echo  (int)$this->item->notify2 ?>" />
+		<div class="akeebasubs-clear"></div>
 	</fieldset>
 	
 	<fieldset>

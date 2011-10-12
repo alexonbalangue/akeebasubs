@@ -17,15 +17,18 @@
 
 .icon-32-subrefresh { background: transparent url(../images/subrefresh.png); }
 
-.-koowa-form input, .-koowa-form select, .-koowa-form textarea, .-koowa-form label, .-koowa-form button {
-	float: none !important; 
-}
+fieldset label { float: left; }
 
-#enabled0, #enabled1, .-koowa-form label[for=enabled0], .-koowa-form label[for=enabled1],
+#enabled0, #enabled1, label[for=enabled0], label[for=enabled1],
 #isbusiness0, #isbusiness1, label[for=isbusiness0], label[for=isbusiness1],
-#viesregistered0, #viesregistered1, label[for=viesregistered0], label[for=viesregistered1] {
+#viesregistered0, #viesregistered1, label[for=viesregistered0], label[for=viesregistered1]
+{
 	float: none;
 	display: inline-block;
+}
+
+span.akeebasubs-booleangroup {
+	float: left;
 }
 
 .akeebasubs-clear { clear:both; }
