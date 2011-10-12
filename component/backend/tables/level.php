@@ -25,7 +25,7 @@ class AkeebasubsTableLevel extends FOFTable
 		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->slug($this->slug)
 			->getList(true);
-		
+
 		if(!empty($existingItems)) {
 			$count = 0;
 			$k = $this->getKeyName();

@@ -12,8 +12,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 {
 	private function getFilterValues()
 	{
-		$enabled = $this->getState('enabled',null,'cmd');
-		if($enabled !== '') $enabled = (int)$enabled;
+		$enabled = $this->getState('enabled','','cmd');
 		
 		return (object)array(
 			'search'		=> $this->getState('search',null,'string'),

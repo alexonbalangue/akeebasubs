@@ -22,7 +22,7 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->nameQuote('ordering').' = '.(int)$ordering);
 		}
 		
-		$enabled = $this->getState('enabled',null,'cmd');
+		$enabled = $this->getState('enabled','','cmd');
 		if($enabled !== '') $enabled = (int)$enabled;
 		if(is_numeric($enabled)) {
 			$query->where($db->nameQuote('enabled').' = '.(int)$enabled);
