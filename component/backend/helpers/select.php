@@ -191,4 +191,40 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
+
+	/**
+	 * Drop down list of payment states
+	 */
+	public static function coupontypes($name = 'type', $selected = 'value', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','value',JText::_('COM_AKEEBASUBS_COUPON_TYPE_VALUE'));
+		$options[] = JHTML::_('select.option','percent',JText::_('COM_AKEEBASUBS_COUPON_TYPE_PERCENT'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
+	/**
+	 * Shows a listbox with defined subscription levels
+	 */
+	public function levels($name = 'level', $selected = '', $attribs = array())
+	{
+		$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->sort('ordering')
+			->direction('ASC')
+			->limit(0)
+			->offset(0)
+			->getList();
+		
+		$options   = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		
+		foreach($list as $item) {
+			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id,$item->title);
+		}
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+
 }
