@@ -45,20 +45,24 @@ $this->loadHelper('cparams');
 			<?php echo JText::_('PUBLISHED'); ?>
 			<?php endif; ?>
 		</label>
-		<span>
+		<span class="akeebasubs-booleangroup">
 			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 		</span>
+		<div class="akeebasubs-clear"></div>
 		<br/>
 		
 		<label for="image_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
-		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/'), 'swf|gif|jpg|png|bmp'); ?>
+		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/').'/', 'swf|gif|jpg|png|bmp'); ?>
+		<div class="akeebasubs-clear"></div>
 		<br />
 		<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
+		<div class="akeebasubs-clear"></div>
 		<br />					
 
 		<label for="duration_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>
 		<input type="text" size="6" id="duration_field" name="duration" value="<?php echo (int)$this->item->duration ?>" />
 		<br/>
+		<div class="akeebasubs-clear"></div>
 
 		<label for="price_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
 		<span>
@@ -84,12 +88,12 @@ $this->loadHelper('cparams');
 		
 	<fieldset class="akeebasubs-float-left">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ORDERTEXT') ?></legend>
-		<?php echo $editor->display( 'ordertext',  $this->item->ordertext, '100%', '391', '50', '20', false ) ; ?>
+		<?php echo $editor->display( 'ordertext',  $this->item->ordertext, '97%', '391', '50', '20', false ) ; ?>
 	</fieldset>
 
 	<fieldset class="akeebasubs-float-left">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CANCELTEXT') ?></legend>
-		<?php echo $editor->display( 'canceltext',  $this->item->canceltext, '100%', '391', '50', '20', false ) ; ?>
+		<?php echo $editor->display( 'canceltext',  $this->item->canceltext, '97%', '391', '50', '20', false ) ; ?>
 	</fieldset>
 
 </form>
