@@ -495,6 +495,21 @@ class FOFTable extends JTable
 	
 	protected function onBeforeStore($updateNulls)
 	{
+		// Do we have a "Created" set of fields?
+		if(property_exists($this, 'created_on') && property_exists($this, 'created_by') && $updateNulls) {
+			if(empty($this->created_by) || ($this->created_on == '0000-00-00 00:00:00') || empty($this->create_on)) {
+				$this->created_by = JFactory::getUser()->id;
+				jimport('joomla.utilities.date');
+				$date = new JDate();
+				$this->created_on = $date->toMySQL();
+			} elseif(property_exists($this, 'modified_on') && property_exists($this, 'modified_by')) {
+				$this->modified_by = JFactory::getUser()->id;
+				jimport('joomla.utilities.date');
+				$date = new JDate();
+				$this->modified_on = $date->toMySQL();
+			}
+		}
+		
 		return true;
 	}
 	
