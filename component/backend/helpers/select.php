@@ -85,6 +85,24 @@ class AkeebasubsHelperSelect
 		'VU' =>'Vanuatu', 'WF' =>'Wallis and Futuna', 'WS' =>'Samoa', 'YE' =>'Yemen',
 		'YT' =>'Mayotte', 'ZA' =>'South Africa', 'ZM' =>'Zambia', 'ZW' =>'Zimbabwe'
 	);
+	
+	public static $states = array(
+		'' => 'N/A', 'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas',
+		'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DE' => 'Delaware',
+		'DC' => 'District of Columbia', 'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii',
+		'ID' => 'Idaho', 'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas',
+		'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine', 'MD' => 'Maryland', 'MA' => 'Massachusetts',
+		'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi', 'MO' => 'Missouri', 'MT' => 'Montana',
+		'NE' => 'Nebraska', 'NV' => 'Nevada', 'NH' => 'New Hampshire', 'NJ' => 'New Jersey',
+		'NM' => 'New Mexico', 'NY' => 'New York', 'NC' => 'North Carolina', 'ND' => 'North Dakota',
+		'OH' => 'Ohio', 'OK' => 'Oklahoma', 'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'RI' => 'Rhode Island',
+		'SC' => 'South Carolina', 'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah',
+		'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia', 'WI' => 'Wisconsin',
+		'WY' => 'Wyoming', 'AB' => 'Alberta', 'BC' => 'British Columbia',
+		'MB' => 'Manitoba', 'NB' => 'New Brunswick', 'NL' => 'Newfoundland and Labrador',
+		'NT' => 'Northwest Territories', 'NS' => 'Nova Scotia', 'NU' => 'Nunavut', 'ON' => 'Ontario',
+		'PE' => 'Prince Edward Island', 'QC' => 'Quebec', 'SK' => 'Saskatchewan', 'YT' => 'Yukon'
+	);
 
 	public static function decodeCountry($cCode)
 	{
@@ -133,6 +151,18 @@ class AkeebasubsHelperSelect
 			JHTML::_('select.option','','---'),
 		);
 		foreach(self::$countries as $code => $name)
+		{
+			$options[] = JHTML::_('select.option', $code, $name );
+		}
+		return self::genericlist($options, $id, $attribs, $selected, $id);
+	}
+	
+	public static function states($selected = null, $id = 'state', $attribs = array())
+	{
+		$options = array(
+			JHTML::_('select.option','','---'),
+		);
+		foreach(self::$states as $code => $name)
 		{
 			$options[] = JHTML::_('select.option', $code, $name );
 		}
@@ -208,7 +238,7 @@ class AkeebasubsHelperSelect
 	/**
 	 * Shows a listbox with defined subscription levels
 	 */
-	public function levels($name = 'level', $selected = '', $attribs = array())
+	public static function levels($name = 'level', $selected = '', $attribs = array())
 	{
 		$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->sort('ordering')
@@ -226,5 +256,46 @@ class AkeebasubsHelperSelect
 		
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-
+	
+	public static function formatCountry($country = '')
+	{
+ 		if(array_key_exists($country, self::$countries)) {
+ 			$name = self::$countries[$country];
+ 		} else {
+ 			$name = '&mdash;';
+ 		}
+ 		
+ 		return $name; 
+	}
+	
+	public static function formatState($state)
+	{
+ 		if(array_key_exists($state, self::$states)) {
+ 			$name = self::$states[$state];
+ 		} else {
+ 			$name = '&mdash;';
+ 		}
+ 		
+ 		return $name; 
+	}
+	
+	public static function formatLevel($id)
+	{
+		static $levels;
+		
+		if(empty($levels)) {
+			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->sort('ordering')
+				->direction('ASC')
+				->limit(0)
+				->offset(0)
+				->getList();
+		}
+		
+		if(array_key_exists($id, $levels)) {
+			return $levels[$id]->title;
+		} else {
+			return '&mdash;&mdash;&mdash;';
+		}
+	}
 }

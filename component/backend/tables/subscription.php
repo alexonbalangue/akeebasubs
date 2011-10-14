@@ -86,7 +86,7 @@ class AkeebasubsTableSubscription extends FOFTable
 		// Run the plugins on subscription modification
 		$this->subNotifiable();
 		
-		return true;
+		return parent::onAfterStore();
 	}
 	
 	/**
@@ -115,6 +115,7 @@ class AkeebasubsTableSubscription extends FOFTable
 	 */
 	public function onAfterLoad(&$result) {
 		$this->selfCache = $result;
+		return parent::onAfterLoad($result);
 	}
 	
 	/**
@@ -123,7 +124,7 @@ class AkeebasubsTableSubscription extends FOFTable
 	 */
 	public function onAfterReset() {
 		$this->selfCache = null;
-		return true;
+		return parent::onAfterReset();
 	}
 	
 	/**
