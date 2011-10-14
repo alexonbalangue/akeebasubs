@@ -102,7 +102,7 @@ $this->loadHelper('format');
 	</tfoot>
 	<tbody>
 		<?php if($count = count($this->items)): ?>
-		<?php $i = 0; $m = 0; ?>
+		<?php $i = -1; $m = 0; ?>
 		<?php foreach ($this->items as $coupon) : ?>
 		<?php
 			$i++; $m = 1-$m;

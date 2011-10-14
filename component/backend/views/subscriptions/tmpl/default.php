@@ -23,7 +23,7 @@ $this->loadHelper('format');
 <form action="index.php" method="post" name="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="subscriptions" />
-<input type="hidden" id="task" name="task" value="com_akeebasubs" />
+<input type="hidden" id="task" name="task" value="browse" />
 <input type="hidden" name="hidemainmenu" id="hidemainmenu" value="0" />
 <input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 <input type="hidden" name="filter_order" id="filter_order" value="<?php echo $this->lists->order ?>" />
@@ -116,7 +116,7 @@ $this->loadHelper('format');
 	</tfoot>
 	<tbody>
 		<?php if(count($this->items)): ?>
-		<?php $m = 1; $i = 0; ?>
+		<?php $m = 1; $i = -1; ?>
 		<?php foreach($this->items as $subscription):?>
 		<?php
 			$m = 1 - $m;

@@ -71,7 +71,7 @@ $this->loadHelper('cparams');
 	</tfoot>
 	<tbody>
 	<?php if(count($this->items)): ?>
-	<?php $m = 1; $i = 0; ?>
+	<?php $m = 1; $i = -1; ?>
 	<?php foreach($this->items as $juser) :?>
 	<?php 
 		$m = 1 - $m;

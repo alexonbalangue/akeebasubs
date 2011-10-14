@@ -91,7 +91,7 @@ $this->loadHelper('cparams');
 	</tfoot>
 	<tbody>
 		<?php if($count = count($this->items)): ?>
-		<?php $i = 0; $m = 0; ?>
+		<?php $i = -1; $m = 0; ?>
 		<?php foreach ($this->items as $item) : ?>
 		<?php
 			$i++; $m = 1-$m;
@@ -133,6 +133,11 @@ $this->loadHelper('cparams');
 		</tr>
 		<?php endforeach ?>
 		<?php else: ?>
+		<tr>
+			<td colspan="20">
+				<?php echo  JText::_('COM_AKEEBASUBS_COMMON_NORECORDS') ?>
+			</td>
+		</tr>
 		<?php endif; ?>
 	</tbody>
 </table>
