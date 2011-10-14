@@ -40,6 +40,10 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->nameQuote('description').' LIKE '.$db->quote($search));
 		}
 		
+		$order = $this->getState('filter_order', 'akeebasubs_level_id', 'cmd');
+		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
+		$query->order($order.' '.$dir);
+		
 		return $query;
 	}
 }

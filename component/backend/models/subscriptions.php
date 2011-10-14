@@ -131,6 +131,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$db->nameQuote('a').'.'.$db->nameQuote('params').' AS '.$db->nameQuote('userparams'),
 				$db->nameQuote('a').'.'.$db->nameQuote('notes').' AS '.$db->nameQuote('usernotes'),
 			));
+			
+			$order = $this->getState('filter_order', 'akeebasubs_subscription_id', 'cmd');
+			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
+			$query->order($order.' '.$dir);
 		}
 	}
 	

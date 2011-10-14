@@ -30,6 +30,10 @@ class AkeebasubsModelJusers extends FOFModel
 			);
 		}
 		
+		$order = $this->getState('filter_order', 'id', 'cmd');
+		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
+		$query->order($order.' '.$dir);
+		
 		return $query;
 	}
 }
