@@ -20,4 +20,23 @@ class AkeebasubsHelperFormat
 		
 		return $jDate->toFormat($format);
 	}
+	
+	public static function formatLevel($id)
+	{
+		static $levels;
+		
+		if(empty($levels)) {
+			$levelsList = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->getItemList();
+			if(!empty($levelsList)) foreach($levelsList as $level) {
+				$levels[$level->akeebasubs_level_id] = $level->title;
+			}
+		}
+		
+		if(array_key_exists($id, $levels)) {
+			return $levels[$id];
+		} else {
+			return '&mdash;&mdash;&mdash;';
+		}
+	}
 }
