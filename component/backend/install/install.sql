@@ -41,6 +41,13 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
 	`params` TEXT,
 
+	`akeebasubs_coupon_id` BIGINT(20) NULL,
+	`akeebasubs_upgrade_id` BIGINT(20) NULL,
+	`akeebasubs_affiliate_id` BIGINT(20) NULL,
+	`akeebasubs_invoice_id` BIGINT(20) NULL,
+	`prediscount_amount` FLOAT NULL,
+	`discount_amount` FLOAT NOT NULL DEFAULT '0',
+
 	`contact_flag` tinyint(1) NOT NULL DEFAULT '0',
 	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

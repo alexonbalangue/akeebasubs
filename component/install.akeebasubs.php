@@ -81,34 +81,13 @@ $installation_queue = array(
 	)
 );
 
-// Define files and directories to remove (they will screw up the component
-// due to Nooku Framework changes)
+// Define files and directories to remove
 $removeFiles = array(
 	'administrator/components/com_akeebasubs/akeebasubs.xml',
 	'administrator/components/com_akeebasubs/install.akeebasubs.php',
 	'administrator/components/com_akeebasubs/uninstall.akeebasubs.php',
-	'administrator/components/com_akeebasubs/views/config/html.php',
-	'administrator/components/com_akeebasubs/views/coupon/html.php',
-	'administrator/components/com_akeebasubs/views/coupons/html.php',
-	'administrator/components/com_akeebasubs/views/level/html.php',
-	'administrator/components/com_akeebasubs/views/levels/html.php',
-	'administrator/components/com_akeebasubs/views/subscription/html.php',
-	'administrator/components/com_akeebasubs/views/subscriptions/html.php',
-	'administrator/components/com_akeebasubs/views/taxrule/html.php',
-	'administrator/components/com_akeebasubs/views/taxrules/html.php',
-	'administrator/components/com_akeebasubs/views/tools/html.php',
-	'administrator/components/com_akeebasubs/views/upgrade/html.php',
-	'administrator/components/com_akeebasubs/views/upgrades/html.php',
-	'administrator/components/com_akeebasubs/views/user/html.php',
-	'administrator/components/com_akeebasubs/views/users/html.php'
 );
 $removeFolders = array(
-	'administrator/components/com_akeebasubs/commands',
-	'administrator/components/com_akeebasubs/controllers/commands',
-	'administrator/components/com_akeebasubs/toolbars',
-	'administrator/components/com_akeebasubs/databases/behavior',
-	'administrator/components/com_akeebasubs/databases/row',
-	'components/com_akeebasubs/commands'
 );
 
 // Joomla! 1.6 Beta 13+ hack
@@ -125,30 +104,10 @@ $db = JFactory::getDBO();
 // Pre-installation checks
 // =============================================================================
 
-// Do we have a Nooku Framework conflict?
-if(class_exists('Koowa')) {
-	if(Koowa::getVersion() != '0.7.0-alpha-3') {
-		JError::raiseWarning(0, "You have some software installed based on a different version of Nooku Framework than Akeeba Subscriptions. We are not proceeding with the installation, as it would break your site.");
-		return false;
-	}
-}
-
 // Do you have at least Joomla! 1.5.14?
 if(!version_compare(JVERSION, '1.5.14', 'ge')) {
 	JError::raiseWarning(0, "The Joomla! version you are using is old, buggy, vulnerable and doesn't support Akeeba Subscriptions. Please upgrade your site then retry installing this component.");
 	return false;
-}
-
-// Does the server support MySQLi?
-if(!class_exists('mysqli')) {
-	JError::raiseWarning(0, "Your server doesn't support MySQLi. Akeeba Subsciptions requires it to work at all. Please ask your host to enable the MySQLi extension on their server.");
-	return false;
-}
-
-// Is MySQLi enabled?
-$conf =& JFactory::getConfig();
-if(!stristr(get_class($db),'MySQLi')) {
-	JError::raiseWarning(0, "Your site is not usingn the MySQLi driver. Please go to Global Configuration, Server tab and set the Database Type to mysqli before installing this extension.");
 }
 
 // Does the server has PHP 5.2.7 or later?
@@ -159,98 +118,14 @@ if(!version_compare(phpversion(), '5.2.7', 'ge')) {
 
 // Do we have the minimum required version of MySQL?
 if(!version_compare($db->getVersion(), '5.0.41', 'ge')) {
-	JError::raiseWarning(0, "Your MySQL version is older than 5.0.41");
+	JError::raiseWarning(0, "Your MySQL version is older than 5.0.41. Akeeba Subscriptions can't work on such an old database server.");
 	return false;
-}
-
-// Check if Suhosin can be configured
-if (extension_loaded('suhosin'))
-{
-	//Attempt setting the whitelist value
-	@ini_set('suhosin.executor.include.whitelist', 'tmpl://, file://');
-
-	//Checking if the whitelist is ok
-	if(!@ini_get('suhosin.executor.include.whitelist') || strpos(@ini_get('suhosin.executor.include.whitelist'), 'tmpl://') === false)
-	{
-		JError::raiseWarning(0, 'The install failed because your server has Suhosin loaded, but it\'s not configured correctly. Please follow <a href="https://nooku.assembla.com/wiki/show/nooku-framework/Known_Issues" target="_blank">this tutorial</a> before you reinstall.');
-		return false;
-	}
-}
-
-// Check for a Kunena installation
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
-if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_kunena')) {
-	$broken = false;
-	
-	$path = JPATH_ADMINISTRATOR.'/components/com_kunena';
-	jimport('joomla.filesystem.file');
-	if(JFile::exists("$path/kunena.xml")) {
-		$filename = "$path/kunena.xml";
-	} elseif(JFile::exists("$path/kunena.j16.xml")) {
-		$filename = "$path/kunena.j16.xml";
-	} else {
-		$broken = true;
-	}
-	
-	if(!$broken) {
-		$xml = & JFactory::getXMLParser('Simple');
-		if (!$xml->loadFile($filename)) {
-			$broken = true;
-		}
-	}
-	
-	if(!$broken) {
-		if ( ($xml->document->name() != 'install') && ($xml->document->name() != 'extension') ) {
-			$broken = true;
-		}
-	}
-	
-	if(!$broken) {
-		$element = & $xml->document->version[0];
-		if($element) {
-            $version = $element->data();
-			$broken = !version_compare($version, '1.7.0', 'ge');
-		} else {
-			$broken = true;
-		}
-	}
-	
-	if($broken) {
-		JError::raiseWarning(0, "Your site has Kunena 1.6 or earlier installed. This version of Kunena is not compatible with Nooku Framework, the PHP framework used by Akeeba Subscriptions. Please upgrade to Kunena 1.7 or later. The installation was cancelled, as it would result in your site being broken.");
-		return false;
-	}
-}
-
-// Check for broken IonCube loaders on PHP 5.3 or later
-if(function_exists('ioncube_loader_version') && version_compare(phpversion(), '5.3.0', 'ge') ) {
-	if(!function_exists('ioncube_loader_iversion')) {
-		JError::raiseWarning(0, "You have a VERY old version of IonCube Loaders which is known to cause problems with Nooku Framework, the PHP framework used by Akeeba Subscriptions. Note: Neither Nooku Framework, not Akeeba Subscriptions, contains encrypted code. However, IonCube Loaders do prevent our unencrypted code from loading. Please go to <a href=\"http://www.ioncube.com/loaders.php\">the IonCube Loaders download page</a> to download and install the latest version of IonCube Loaders on your site before retrying to install this extension.");
-		return false;
-	}
-	
-	// Require at least version 4.0.7
-	$iclVersion = ioncube_loader_iversion();
-	if($iclVersion < 40007) {
-		JError::raiseWarning(0, "You have an old version of IonCube Loaders (4.0.6 or earlier) which is known to cause problems with Nooku Framework, the PHP framework used by Akeeba Subscriptions. Note: Neither Nooku Framework, not Akeeba Subscriptions, contains encrypted code. However, IonCube Loaders do prevent our unencrypted code from loading. Please go to <a href=\"http://www.ioncube.com/loaders.php\">the IonCube Loaders download page</a> to download and install the latest version of IonCube Loaders on your site before retrying to install this extension.");
-		return false;
-	}
-}
-
-// Do we have the mooTools upgrade plugin?
-if(!version_compare(JVERSION,'1.6.0','ge')) {
-	$db->setQuery('SELECT `published` FROM #__plugins WHERE `element` = '.$db->Quote('mtupgrade').' AND `folder` = '.$db->Quote('system'));
-	$mtuEnabled = $db->loadResult();
-	if(!$mtuEnabled) {
-		JError::raiseWarning(0, "Please enable the mooTools Upgrade plugin before installing the component. Go to Extensions, Plugin Manager, find the &quot;System - Mootools Upgrade&quot; plugin and publish it. Then, retry installing the component.");
-		return false;
-	}
 }
 
 // =============================================================================
 // Database update
 // =============================================================================
-
+// Upgrade the levels table
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
 $db->setQuery($sql);
 $ctableAssoc = $db->loadResultArray(1);
@@ -359,6 +234,131 @@ ENDSQL;
 
 	$sql = <<<ENDSQL
 DROP TABLE IF EXISTS `#__akeebasubs_levels_bak`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+
+}
+
+// Upgrade the subscriptions table
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_subscriptions`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`akeebasubs_coupon_id`'))
+{
+	if($db->hasUTF()) {
+		$charset = 'DEFAULT CHARSET=utf8';
+	} else {
+		$charset = '';
+	}
+
+	$sql = <<<ENDSQL
+DROP TABLE IF EXISTS `#__akeebasubs_subscriptions_bak`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
+	`akeebasubs_subscription_id` bigint(20) unsigned NOT NULL auto_increment,
+	`user_id` bigint(20) unsigned NOT NULL,
+	`akeebasubs_level_id` bigint(20) unsigned NOT NULL,
+	`publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`notes` TEXT,
+	`enabled` tinyint(1) NOT NULL DEFAULT '1',
+	
+	`processor` varchar(255) NOT NULL,
+	`processor_key` varchar(255) NOT NULL,
+	`state` ENUM('N','P','C','X') not null default 'X',
+	`net_amount` FLOAT NOT NULL,
+	`tax_amount` FLOAT NOT NULL,
+	`gross_amount` FLOAT NOT NULL,
+	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
+	`params` TEXT,
+
+	`akeebasubs_coupon_id` BIGINT(20) NULL,
+	`akeebasubs_upgrade_id` BIGINT(20) NULL,
+	`akeebasubs_affiliate_id` BIGINT(20) NULL,
+	`akeebasubs_invoice_id` BIGINT(20) NULL,
+	`prediscount_amount` FLOAT NULL,
+	`discount_amount` FLOAT NOT NULL DEFAULT '0',
+
+	`contact_flag` tinyint(1) NOT NULL DEFAULT '0',
+	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	PRIMARY KEY ( `akeebasubs_subscription_id` )
+) $charset;
+
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+INSERT IGNORE INTO `#__akeebasubs_subscriptions_bak`
+	(`akeebasubs_subscription_id`,`user_id`,`akeebasubs_level_id`,`publish_up`,
+	`publish_down`,`notes`,`enabled`,
+	`processor`,`processor_key`,`state`,`net_amount`,`tax_amount`,`gross_amount`,
+	`created_on`,`params`,`contact_flag`,`first_contact`,`second_contact`)
+SELECT
+	*
+FROM
+  `#__akeebasubs_subscriptions`;
+
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+DROP TABLE IF EXISTS `#__akeebasubs_subscriptions`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
+	`akeebasubs_subscription_id` bigint(20) unsigned NOT NULL auto_increment,
+	`user_id` bigint(20) unsigned NOT NULL,
+	`akeebasubs_level_id` bigint(20) unsigned NOT NULL,
+	`publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`notes` TEXT,
+	`enabled` tinyint(1) NOT NULL DEFAULT '1',
+	
+	`processor` varchar(255) NOT NULL,
+	`processor_key` varchar(255) NOT NULL,
+	`state` ENUM('N','P','C','X') not null default 'X',
+	`net_amount` FLOAT NOT NULL,
+	`tax_amount` FLOAT NOT NULL,
+	`gross_amount` FLOAT NOT NULL,
+	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
+	`params` TEXT,
+
+	`akeebasubs_coupon_id` BIGINT(20) NULL,
+	`akeebasubs_upgrade_id` BIGINT(20) NULL,
+	`akeebasubs_affiliate_id` BIGINT(20) NULL,
+	`akeebasubs_invoice_id` BIGINT(20) NULL,
+	`prediscount_amount` FLOAT NULL,
+	`discount_amount` FLOAT NOT NULL DEFAULT '0',
+
+	`contact_flag` tinyint(1) NOT NULL DEFAULT '0',
+	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	PRIMARY KEY ( `akeebasubs_subscription_id` )
+) $charset;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+	
+	$sql = <<<ENDSQL
+INSERT IGNORE INTO `#__akeebasubs_subscriptions` SELECT * FROM `#__akeebasubs_subscriptions_bak`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+
+	$sql = <<<ENDSQL
+DROP TABLE IF EXISTS `#__akeebasubs_subscriptions_bak`;
 ENDSQL;
 	$db->setQuery($sql);
 	$status = $db->query();
