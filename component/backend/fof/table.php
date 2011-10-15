@@ -171,7 +171,6 @@ class FOFTable extends JTable
 
 			$query->where($db->nameQuote('master').'.'.$db->nameQuote($k).' = '.$db->quote($this->$k));
 			$query->group($db->nameQuote('master').'.'.$db->nameQuote($k));
-			
 			$this->_db->setQuery( (string)$query );
 
 			if (!$obj = $this->_db->loadObject())
@@ -183,8 +182,8 @@ class FOFTable extends JTable
 			$i = 0;
 			foreach( $joins as $table )
 			{
-				$k = $table['idfield'];
-				if ($obj->$k)
+				$k = $table['idalias'];
+				if ($obj->$k > 0)
 				{
 					$msg[] = JText::_( $table['label'] );
 				}
