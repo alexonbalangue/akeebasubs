@@ -200,6 +200,14 @@ class plgAkpayment2checkout extends JPlugin
 		}
 		$subscription->setData($updates)->save();
 		
+		// Run the onAKAfterPaymentCallback events
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
+			$subscription
+		));
+		
 		// Finally, redirect the user
 		$app = JFactory::getApplication();
 		$app->redirect($returnURL);

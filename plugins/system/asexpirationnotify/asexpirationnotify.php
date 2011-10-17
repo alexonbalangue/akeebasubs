@@ -285,8 +285,9 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$subpathURL = str_replace('/administrator', '', $subpathURL);
 		
 		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+		if(substr($url,0,14) == '/administrator') $url = substr($url,14);
 		$url = ltrim($url, '/');
-		$subpathURL = ltrim($url, '/');
+		$subpathURL = ltrim($subpathURL, '/');
 		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+2);
 		$url = $baseURL.$url;
 		

@@ -3,7 +3,7 @@
  *  @package	akeebasubs
  *  @copyright	Copyright (c)2010-2011 Nicholas K. Dionysopoulos / AkeebaBackup.com
  *  @license	GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
- *  @version 	$Id$
+ *  @version 	$Id: suicide.php 436 2011-10-16 14:01:28Z nikosdion $
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ $installation_queue = array(
 			'jxjomsocial'			=> 0,
 			'k2'					=> 0,
 			'ninjaboard'			=> 0,
+			'osiaffiliate'			=> 0,
 			'redshop'				=> 0,
 			'samplefields'			=> 0,
 			'sql'					=> 0,

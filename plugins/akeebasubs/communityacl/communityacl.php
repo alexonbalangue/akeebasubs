@@ -356,7 +356,7 @@ class plgAkeebasubsCommunityacl extends JPlugin
 	private function hashInArray($hash, $array)
 	{
 		foreach($array as $item) {
-			if($item->hash = $hash) return true;
+			if($item->hash == $hash) return true;
 		}
 		return false;
 	}

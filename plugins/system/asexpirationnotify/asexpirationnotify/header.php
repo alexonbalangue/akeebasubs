@@ -3,7 +3,7 @@
  * @package AkeebaReleaseSystem
  * @copyright Copyright (c)2010 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
- * @version $Id$
+ * @version $Id: header.php 218 2011-06-02 10:45:00Z nikosdion $
  */
 
 defined('_JEXEC') or die('Restricted Access');

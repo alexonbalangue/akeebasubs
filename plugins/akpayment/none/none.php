@@ -121,6 +121,14 @@ ENDFORM;
 		);
 		$subscription->setData($updates)->save();
 		
+		// Run the onAKAfterPaymentCallback events
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
+			$subscription
+		));
+		
 		// This plugin is a tricky one; it will redirect you to the thank you page
 		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 				->id($subscription->akeebasubs_level_id)

@@ -4,6 +4,13 @@
 <style src="media://lib_koowa/css/koowa.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 <style src="media://com_akeebasubs/css/frontend.css?<?=AKEEBASUBS_VERSIONHASH?>" />
 
+<?php
+$activeLevels = KFactory::get('com://admin/akeebasubs.model.levels')
+	->enabled(1)
+	->getList()
+	->getData();
+?>
+
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
 	<form action="<?= @route() ?>" method="get" class="adminform" name="adminForm">
@@ -89,7 +96,7 @@
 						<?=@text('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_VIEW')?>
 					</a>
 
-	            	<?if(($subscription->state == 'C')):?>
+	            	<?if(($subscription->state == 'C') && (array_key_exists($subscription->akeebasubs_level_id, $activeLevels))):?>
 	            	&bull;
 	            	<?$slug = KFactory::get('com://admin/akeebasubs.model.levels')
 						->id($subscription->akeebasubs_level_id)

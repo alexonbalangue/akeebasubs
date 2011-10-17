@@ -299,6 +299,14 @@ class plgAkpaymentSkrill extends JPlugin
 		}
 		$subscription->setData($updates)->save();
 		
+		// Run the onAKAfterPaymentCallback events
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
+			$subscription
+		));
+		
 		return true;
 	}
 	

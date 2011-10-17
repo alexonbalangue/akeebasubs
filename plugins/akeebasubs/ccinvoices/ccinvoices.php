@@ -15,6 +15,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 	 */
 	public function onAKSubscriptionChange(KDatabaseRowDefault $row)
 	{
+		// Load the language
+		$lang = JFactory::getLanguage();
+		$lang->load('plg_akeebasubs_ccinvoices', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$lang->load('plg_akeebasubs_ccinvoices', JPATH_ADMINISTRATOR, null, true);
+
 		// Only handle not expired subscriptions
 		if( ($row->state == "C") && $row->enabled ) {
 			$db = JFactory::getDBO();
@@ -40,6 +45,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				if($sub_id == $row->id) return;
 			}
 			
+			// Load the ccInvoices configuration
+			$sql = 'SELECT * FROM `#__ccinvoices_configuration` LIMIT 0,1';
+			$db->setQuery($sql);
+			$ccConfig = $db->loadObject();
+			
 			// Create new invoice
 			$db->setQuery('SELECT max(`number`) FROM `#__ccinvoices_invoices`');
 			$max1 = $db->loadResult();
@@ -48,10 +58,15 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$invoice_number = max($max1, $max2);
 			$invoice_number++;
 			
+			if($invoice_number < $ccConfig->invoice_start) $invoice_number = $ccConfig->invoice_start;
+			
 			$subname = KFactory::get('com://admin/akeebasubs.model.levels')
 					->id($row->akeebasubs_level_id)
 					->getItem()
 					->title;
+			
+			$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
+			if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
 			
 			$invoice = (object)array(
 				'number'		=> $invoice_number,
@@ -65,7 +80,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'totaltax'		=> $row->tax_amount,
 				'total'			=> $row->gross_amount,
 				'quantity'		=> 1,
-				'pname'			=> $subname.' subscription',
+				'pname'			=> $subname.$suffix,
 				'price'			=> $row->net_amount,
 				'tax'			=> sprintf('%.2f', 100*($row->tax_amount/$row->net_amount)),
 				'note'			=> "<p>Subscription ID: {$row->id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",

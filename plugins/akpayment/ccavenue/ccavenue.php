@@ -216,6 +216,14 @@ class plgAkpaymentCcavenue extends JPlugin
 		}
 		$subscription->setData($updates)->save();
 		
+		// Run the onAKAfterPaymentCallback events
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
+			$subscription
+		));
+		
 		$app = JFactory::getApplication();
 		$app->redirect($returnURL);
 		

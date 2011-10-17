@@ -682,18 +682,20 @@ class ComAkeebasubsModelSubscribes extends KModelAbstract
 			
 			$acl =& JFactory::getACL();
 			
+			$user = JFactory::getUser(0);
+
 			jimport('joomla.application.component.helper');
 			$usersConfig = &JComponentHelper::getParams( 'com_users' );
-			$user = JFactory::getUser(0);
-			
 			$newUsertype = $usersConfig->get( 'new_usertype' );
-			if (!$newUsertype) {
-				$newUsertype = 'Registered';
-			}
 			
 			if(version_compare(JVERSION, '1.6.0', 'ge')) {
-				$params['groups'] = array(2);
+				// get the New User Group from com_users' settings
+				if(empty($newUsertype)) $newUsertype = 2;
+				$params['groups'] = array($newUsertype);
 			} else {
+				if (!$newUsertype) {
+					$newUsertype = 'Registered';
+				}
 				$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
 			}
 			
