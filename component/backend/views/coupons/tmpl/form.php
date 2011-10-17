@@ -121,7 +121,7 @@ $this->loadHelper('params');
 <script type="text/javascript">
 function jSelectUser_userid(id, username)
 {
-	document.getElementById('user').value = id;
+	document.getElementById('userid').value = id;
 	document.getElementById('userid_visible').value = username;
 	try {
 		document.getElementById('sbox-window').close();	
