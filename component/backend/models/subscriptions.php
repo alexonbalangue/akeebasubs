@@ -133,6 +133,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			));
 			
 			$order = $this->getState('filter_order', 'akeebasubs_subscription_id', 'cmd');
+			if($order == 'id') $order = 'akeebasubs_subscription_id';
 			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 			$query->order($order.' '.$dir);
 		}
@@ -215,14 +216,14 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				);
 			}
 			
-			if(is_numeric($state->level)) {
+			if(is_numeric($state->level) && ($state->level > 0)) {
 				$query->where(
 					$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
 						$db->quote($state->level)
 				);
 			}
 			
-			if(is_numeric($state->user_id)) {
+			if(is_numeric($state->user_id) && ($state->user_id > 0)) {
 				$query->where(
 					$db->nameQuote('tbl').'.'.$db->nameQuote('user_id').' = '.
 						$db->quote($state->user_id)

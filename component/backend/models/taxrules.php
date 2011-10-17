@@ -56,6 +56,7 @@ class AkeebasubsModelTaxrules extends FOFModel
 		}
 		
 		$order = $this->getState('filter_order', 'akeebasubs_taxrule_id', 'cmd');
+		if($order == 'id') $order = 'akeebasubs_taxrule_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 		$query->order($order.' '.$dir);
 		

@@ -41,9 +41,10 @@ class AkeebasubsModelCoupons extends FOFModel
 		}
 		
 		$order = $this->getState('filter_order', 'akeebasubs_coupon_id', 'cmd');
+		if($order == 'id') $order = 'akeebasubs_coupon_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 		$query->order($order.' '.$dir);
-		
+
 		return $query;
 	}
 }

@@ -17,7 +17,6 @@ class AkeebasubsModelUsers extends FOFModel
 			'ordering'		=> $this->getState('ordering','','int'),
 			'user_id'		=> $this->getState('user_id','','int'),
 			'groupbydate'	=> $this->getState('groupbydate','','int'),
-			'ordering'		=> $this->getState('user_id','','int'),
 			'search'		=> $this->getState('search',null,'string'),
 			'username'		=> $this->getState('username',null,'string'),
 			'name'			=> $this->getState('name',null,'string'),
@@ -184,6 +183,7 @@ class AkeebasubsModelUsers extends FOFModel
 		$this->_buildQueryWhere($query);
 		
 		$order = $this->getState('filter_order', 'akeebasubs_user_id', 'cmd');
+		if($order == 'id') $order = 'akeebasubs_user_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 		$query->order($order.' '.$dir);
 		

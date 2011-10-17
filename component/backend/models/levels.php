@@ -41,6 +41,7 @@ class AkeebasubsModelLevels extends FOFModel
 		}
 		
 		$order = $this->getState('filter_order', 'akeebasubs_level_id', 'cmd');
+		if($order == 'id') $order = 'akeebasubs_level_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 		$query->order($order.' '.$dir);
 		
