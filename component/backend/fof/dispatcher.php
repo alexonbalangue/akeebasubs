@@ -103,6 +103,7 @@ class FOFDispatcher extends JObject
 		// Get the default values for the component and view names
 		$this->component = FOFInput::getCmd('option','com_foobar',$this->input);
 		$this->view = FOFInput::getCmd('view','cpanel',$this->input);
+		$this->layout = FOFInput::getCmd('layout',null,$this->input);
 		
 		// Overrides from the config
 		if(array_key_exists('option', $config)) $this->component = $config['option'];
@@ -110,6 +111,8 @@ class FOFDispatcher extends JObject
 		if(array_key_exists('layout', $config)) $this->layout = $config['layout'];
 		
 		FOFInput::setVar('option', $this->component, $this->input);
+		FOFInput::setVar('view', $this->view, $this->input);
+		FOFInput::setVar('layout', $this->layout, $this->input);
 	}
 	
 	public function dispatch()

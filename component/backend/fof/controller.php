@@ -141,6 +141,7 @@ class FOFController extends JController
 		// Get the default values for the component and view names
 		$this->component = FOFInput::getCmd('option','com_foobar',$this->input);
 		$this->view = FOFInput::getCmd('view','cpanel',$this->input);
+		$this->layout = FOFInput::getCmd('layout',null,$this->input);
 		
 		// Overrides from the config
 		if(array_key_exists('option', $config)) $this->component = $config['option'];
