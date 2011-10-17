@@ -707,18 +707,23 @@ class FOFController extends JController
 	 */
 	public final function getThisModel($config = array())
 	{
+		static $object = null;
 		static $prefix = null;
 		static $modelName = null;
 
-		if(empty($modelName)) {
-			$prefix = ucfirst($this->bareComponent).'Model';
-			$modelName = ucfirst(FOFInflector::pluralize($this->view));
-		}
+		if(!is_object($object)) {
+			if(empty($modelName)) {
+				$prefix = ucfirst($this->bareComponent).'Model';
+				$modelName = ucfirst(FOFInflector::pluralize($this->view));
+			}
 
-		return $this->getModel($modelName, $prefix, array_merge(array(
-				'input'	=> $this->input
-			), $config
-		));
+			$object = $this->getModel($modelName, $prefix, array_merge(array(
+					'input'	=> $this->input
+				), $config
+			));
+		}
+		
+		return $object;
 	}
 
 	/**
@@ -727,23 +732,28 @@ class FOFController extends JController
 	 */
 	public final function getThisView($config = array())
 	{
+		static $object = null;
 		static $prefix = null;
 		static $viewName = null;
 		static $viewType = null;
 
-		if(empty($viewName)) {
-			$prefix = ucfirst($this->bareComponent).'View';
-			$viewName = ucfirst($this->view);
-			$document =& JFactory::getDocument();
-			$viewType	= $document->getType();
+		if(!is_object($object)) {
+			if(empty($viewName)) {
+				$prefix = ucfirst($this->bareComponent).'View';
+				$viewName = ucfirst($this->view);
+				$document =& JFactory::getDocument();
+				$viewType	= $document->getType();
+			}
+
+			$basePath = ($this->jversion == '15') ? $this->_basePath : $this->basePath;
+			$object = $this->getView( $viewName, $viewType, $prefix, array_merge(array(
+					'input'		=> $this->input,
+					'base_path'	=>$basePath
+				), $config)
+			);
 		}
 		
-		$basePath = ($this->jversion == '15') ? $this->_basePath : $this->basePath;
-		return $this->getView( $viewName, $viewType, $prefix, array_merge(array(
-				'input'		=> $this->input,
-				'base_path'	=>$basePath
-			), $config)
-		);
+		return $object;
 	}
 	
 	protected function createModel($name, $prefix = '', $config = array())
