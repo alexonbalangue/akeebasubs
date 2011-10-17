@@ -107,6 +107,7 @@ class FOFViewHtml extends JView
 
 	protected function onAdd($tpl = null)
 	{
+		JRequest::setVar('hidemainmenu', true);
 		$model = $this->getModel();
 		$this->assignRef( 'item',		$model->getItem() );	
 	}
