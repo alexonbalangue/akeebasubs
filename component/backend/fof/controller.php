@@ -44,6 +44,16 @@ class FOFController extends JController
 	
 	/** @var bool Set to true to enable CSRF protection on selected tasks */
 	protected $csrfProtection = true;
+	
+	/** @var array ACL permissions to group mapping for Joomla! 1.5; please note that we follow Joomla! 1.6's ACL naming conventions for uniformity in here. */
+	protected $aclMapJoomla15 = array(
+		'core.admin'		=> 'Super Administrator',
+		'core.manage'		=> 'Administrator',
+		'core.create'		=> 'Author',
+		'core.delete'		=> 'Manager',
+		'core.edit'			=> 'Editor',
+		'core.edit.state'	=> 'Publisher'
+	);
 
 	/**
 	 * Gets a static (Singleton) instance of a controller class. It loads the
@@ -152,6 +162,36 @@ class FOFController extends JController
 		// Set the CSRF protection
 		if(array_key_exists('csrf_protection', $config)) {
 			$this->csrfProtection = $config['csrf_protection'];
+		}
+		
+		if( !version_compare( JVERSION, '1.6.0', 'ge' ) ) {
+			// Joomla! 1.5 ACL mapping
+			$acl =& JFactory::getACL();
+			foreach($this->aclMapJoomla15 as $area => $mingroup) {
+				$mingroup = strtolower($mingroup);
+				$groups = array();
+				switch($mingroup) {
+					case 'registered':
+						$groups[] = 'registered';
+					case 'author':
+						$groups[] = 'author';
+					case 'editor':
+						$groups[] = 'editor';
+					case 'publisher':
+						$groups[] = 'publisher';
+					case 'manager':
+						$groups[] = 'manager';
+					case 'administrator':
+						$groups[] = 'administrator';
+					case 'super administrator':
+						$groups[] = 'super administrator';
+						break;
+				}
+				if(empty($groups)) continue;
+				foreach($groups as $group) {
+					$acl->addACL($this->component, $area, 'users', $group );
+				}
+			}
 		}
 	}
 
@@ -854,8 +894,188 @@ class FOFController extends JController
 		return $result;
 	}
 	
+	/**
+	 * Checks if the current user has enough privileges for the requested ACL
+	 * area.
+	 * 
+	 * @param string $area The ACL area, e.g. core.manage.
+	 */
+	protected function checkACL($area)
+	{
+		if(version_compare(JVERSION, '1.6.0', 'ge')) {
+			return JFactory::getUser()->authorise($area, $this->component);
+		} else {
+			$user = JFactory::getUser();
+			return $user->authorize($this->component, $area);
+		}
+	}
+	
 	protected function onBeforeApplySave(&$data)
 	{
 		return $data;
+	}
+	
+	/**
+	 * ACL check before changing the access level; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeAccesspublic()
+	{
+		return $this->checkACL('core.edit.state');
+	}
+	
+	/**
+	 * ACL check before changing the access level; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeAccessregistered()
+	{
+		return $this->checkACL('core.edit.state');
+	}
+	
+	/**
+	 * ACL check before changing the access level; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeAccessspecial()
+	{
+		return $this->checkACL('core.edit.state');
+	}
+	
+	/**
+	 * ACL check before adding a new record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeAdd()
+	{
+		return $this->checkACL('core.create');
+	}
+	
+	/**
+	 * ACL check before saving a new/modified record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeApply()
+	{
+		return $this->checkACL('core.edit');
+	}
+	
+	/**
+	 * ACL check before allowing someone to browse
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeBrowse()
+	{
+		if(JFactory::getApplication()->isAdmin()) {
+			return $this->checkACL('core.manage');
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * ACL check before cancelling an edit
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeCancel()
+	{
+		return $this->checkACL('core.edit');
+	}
+	
+	/**
+	 * ACL check before editing a record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeEdit()
+	{
+		return $this->checkACL('core.edit');
+	}
+	
+	/**
+	 * ACL check before changing the ordering of a record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeOrderdown()
+	{
+		return $this->checkACL('core.edit.state');
+	}
+	
+	/**
+	 * ACL check before changing the ordering of a record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeOrderup()
+	{
+		return $this->checkACL('core.edit.state');
+	}
+
+	/**
+	 * ACL check before changing the publish status of a record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforePublish()
+	{
+		return $this->checkACL('core.edit.state');
+	}
+	
+	/**
+	 * ACL check before removing a record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeRemove()
+	{
+		return $this->checkACL('core.delete');
+	}
+	
+	/**
+	 * ACL check before saving a new/modified record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeSave()
+	{
+		return $this->checkACL('core.edit');
+	}
+	
+	/**
+	 * ACL check before saving a new/modified record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeSavenew()
+	{
+		return $this->checkACL('core.edit');
+	}
+		
+	/**
+	 * ACL check before changing the ordering of a record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeSaveorder()
+	{
+		return $this->checkACL('core.edit.state');
+	}
+	
+	/**
+	 * ACL check before changing the publish status of a record; override to customise
+	 * 
+	 * @return bool
+	 */
+	protected function onBeforeUnpublish()
+	{
+		return $this->checkACL('core.edit.state');
 	}
 }

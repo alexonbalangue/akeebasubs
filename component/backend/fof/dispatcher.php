@@ -152,7 +152,11 @@ class FOFDispatcher extends JObject
 		$jlang->load('com_akeebasubs', $paths[1], null, true);
 
 		if(!$this->onBeforeDispatch()) {
-			return false;
+			if(version_compare(JVERSION, '1.6.0', 'ge')) {
+				return JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+			} else {
+				return JError::raiseError(403, JText::_('ALERTNOTAUTH'));
+			}
 		}
 		
 		// Get and execute the controller
@@ -165,10 +169,21 @@ class FOFDispatcher extends JObject
 		
 		$config = array('input'=>$this->input);
 		$controller = FOFController::getAnInstance($option, $view, $config);
-		$controller->execute($task);
+		$status = $controller->execute($task);
+		if($status === false) {
+			if(version_compare(JVERSION, '1.6.0', 'ge')) {
+				return JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+			} else {
+				return JError::raiseError(403, JText::_('ALERTNOTAUTH'));
+			}
+		}
 
 		if(!$this->onAfterDispatch()) {
-			return false;
+			if(version_compare(JVERSION, '1.6.0', 'ge')) {
+				return JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+			} else {
+				return JError::raiseError(403, JText::_('ALERTNOTAUTH'));
+			}
 		}
 		
 		$controller->redirect();
@@ -187,7 +202,7 @@ class FOFDispatcher extends JObject
 				$id = array_shift($ids);
 			}
 		}
-		
+
 		// Check the request method
 		$requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 		switch($requestMethod) {
@@ -211,7 +226,7 @@ class FOFDispatcher extends JObject
 				}
 				break;
 		}
-		
+
 		return $task;
 	}
 	
