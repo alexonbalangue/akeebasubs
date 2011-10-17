@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - OmniStart Affilate integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2011-09-11</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_OSIAFFILIATE_DESCRIPTION</description>
+	<files>
+		<filename plugin="osiaffiliate">osiaffiliate.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_akeebasubs_osiaffiliate.ini</language>
+		<language tag="en-GB">en-GB.plg_akeebasubs_osiaffiliate.sys.ini</language>
+	</languages>
+	<params>
+		<param name="subdirectory" type="text" size="40" default="" label="PLG_AKEEBASUBS_OSIAFFILIATE_SUBDIRECTORY_TITLE" description="PLG_AKEEBASUBS_OSIAFFILIATE_SUBDIRECTORY_DESCRIPTION"/>
+	</params>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="subdirectory" type="text" size="40" default="" label="PLG_AKEEBASUBS_OSIAFFILIATE_SUBDIRECTORY_TITLE" description="PLG_AKEEBASUBS_OSIAFFILIATE_SUBDIRECTORY_DESCRIPTION"/>
+			</fieldset>
+		</fields>
+	</config>
+</install>
