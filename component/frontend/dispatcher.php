@@ -10,11 +10,22 @@ defined('_JEXEC') or die();
 
 class AkeebasubsDispatcher extends FOFDispatcher
 {
+	private $allowedViews = array(
+		'level','levels','message','subscribe','subscription','subscriptions'
+	);
+	
 	public function onBeforeDispatch() {
-		$result = parent::onBeforeDispatch();
-		
-		// Load helpers
-		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		if($result = parent::onBeforeDispatch()) {
+			// Load helpers
+			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+
+			$view = FOFInput::getCmd('view','',$this->input);
+			if(empty($view) || ($view == 'cpanel')) {
+				$view = 'levels';
+				FOFInput::setVar('view','levels');
+			}
+			if(!in_array($view, $this->allowedViews)) $result = false;
+		}
 		
 		return $result;
 	}
