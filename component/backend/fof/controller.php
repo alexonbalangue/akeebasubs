@@ -45,6 +45,12 @@ class FOFController extends JController
 	/** @var bool Set to true to enable CSRF protection on selected tasks */
 	protected $csrfProtection = true;
 	
+	/** @var string Overrides the name of the view's default model */
+	protected $modelName = null;
+	
+	/** @var string Overrides the name of the view's default view */
+	protected $viewName = null;
+	
 	/** @var array ACL permissions to group mapping for Joomla! 1.5; please note that we follow Joomla! 1.6's ACL naming conventions for uniformity in here. */
 	protected $aclMapJoomla15 = array(
 		'core.admin'		=> 'Super Administrator',
@@ -165,6 +171,11 @@ class FOFController extends JController
 			$this->csrfProtection = $config['csrf_protection'];
 		}
 		
+		// Set any model/view name overrides
+		if(array_key_exists('viewName', $config)) $this->setThisViewName($config['viewName']);
+		if(array_key_exists('modelName', $config)) $this->setThisModelName($config['modelName']);
+		
+		// Set the ACL preferences
 		if( !version_compare( JVERSION, '1.6.0', 'ge' ) ) {
 			// Joomla! 1.5 ACL mapping
 			$acl =& JFactory::getACL();
@@ -289,15 +300,7 @@ class FOFController extends JController
 	{
 		// Load the model
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
-
-		if(!$status) {
-			// Redirect on error
-			$url = 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
-			$this->setRedirect($url, $model->getError(), 'error');
-			$this->redirect();
-			return;
-		}
+		if(!$model->getId()) $model->setIDsFromRequest();
 
 		// Set the layout to item, if it's not set in the URL
 		if(is_null($this->layout)) $this->layout = 'item';
@@ -334,7 +337,7 @@ class FOFController extends JController
 	{
 		// Load the model
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 		$status = $model->checkout();
 
 		if(!$status) {
@@ -423,7 +426,7 @@ class FOFController extends JController
 	public function cancel()
 	{
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 		$model->checkin();
 		
 		// Remove any saved data
@@ -505,7 +508,7 @@ class FOFController extends JController
 		}
 		
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 
 		$ids = $model->getIds();
 		$orders = FOFInput::getArray('order', array(), $this->input);
@@ -546,7 +549,7 @@ class FOFController extends JController
 		}
 		
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 
 		$status = $model->move(1);
 		// redirect
@@ -572,7 +575,7 @@ class FOFController extends JController
 		}
 		
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 
 		$status = $model->move(-1);
 		// redirect
@@ -598,7 +601,7 @@ class FOFController extends JController
 		}
 		
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 		$status = $model->delete();
 
 		// redirect
@@ -618,7 +621,7 @@ class FOFController extends JController
 	protected final function setstate($state = 0)
 	{
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 
 		$status = $model->publish($state);
 
@@ -639,7 +642,7 @@ class FOFController extends JController
 	protected final function setaccess($level = 0)
 	{
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 		$id = $model->getId();
 
 		$item = $model->getItem();
@@ -675,7 +678,7 @@ class FOFController extends JController
 	{
 		// Load the model
 		$model = $this->getThisModel();
-		$model->setIDsFromRequest();
+		if(!$model->getId()) $model->setIDsFromRequest();
 		$id = $model->getId();
 
 		$data = $this->input;
@@ -714,8 +717,14 @@ class FOFController extends JController
 
 		if(!is_object($object)) {
 			if(empty($modelName)) {
-				$prefix = ucfirst($this->bareComponent).'Model';
-				$modelName = ucfirst(FOFInflector::pluralize($this->view));
+				if(!empty($this->modelName)) {
+					$parts = FOFInflector::explode($this->modelName);
+					$modelName = ucfirst(array_pop($parts));
+					$prefix = FOFInflector::implode($parts);
+				} else {
+					$prefix = ucfirst($this->bareComponent).'Model';
+					$modelName = ucfirst(FOFInflector::pluralize($this->view));
+				}
 			}
 
 			$object = $this->getModel($modelName, $prefix, array_merge(array(
@@ -740,11 +749,18 @@ class FOFController extends JController
 
 		if(!is_object($object)) {
 			if(empty($viewName)) {
-				$prefix = ucfirst($this->bareComponent).'View';
-				$viewName = ucfirst($this->view);
-				$document =& JFactory::getDocument();
-				$viewType	= $document->getType();
+				if(!empty($this->viewName)) {
+					$parts = FOFInflector::explode($this->viewName);
+					$viewName = ucfirst(array_pop($parts));
+					$prefix = FOFInflector::implode($parts);
+				} else {
+					$prefix = ucfirst($this->bareComponent).'View';
+					$viewName = ucfirst($this->view);
+				}
 			}
+			
+			$document =& JFactory::getDocument();
+			$viewType	= $document->getType();
 
 			$basePath = ($this->jversion == '15') ? $this->_basePath : $this->basePath;
 			$object = $this->getView( $viewName, $viewType, $prefix, array_merge(array(
@@ -903,6 +919,16 @@ class FOFController extends JController
 
 		$result = new $viewClass($config);
 		return $result;
+	}
+	
+	public function setThisViewName($viewName)
+	{
+		$this->viewName = $viewName;
+	}
+	
+	public function setThisModelName($modelName)
+	{
+		$this->modelName = $modelName;
 	}
 	
 	/**
