@@ -235,8 +235,7 @@ var akeebasubs_token = "<?php echo JUtility::getToken();?>";
 
 (function($) {
 	$(document).ready(function(){
-		// TODO!
-		//$('#toolbar-subrefresh').click(akeebasubs_refresh_integrations);
+		$('#toolbar-subrefresh').click(akeebasubs_refresh_integrations);
 	});
 })(akeeba.jQuery);
 

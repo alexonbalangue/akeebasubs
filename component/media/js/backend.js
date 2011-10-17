@@ -45,11 +45,11 @@ function akeebasubs_ri_step()
 {
 	(function($) {
 		$.ajax({
-			type: 'POST',
+			type: 'GET',
 			url: 'index.php?option=com_akeebasubs&view=subrefreshes',
 			data: {
-				'action'			: 'process',
-				'format'			: 'json',
+				'task'				: 'process',
+				'format'			: 'raw',
 				'forceoffset'		: akeebasubs_ri_offset,
 				'forcelimit'		: 250,
 				'refresh'			: 1,
@@ -69,7 +69,7 @@ function akeebasubs_ri_step()
 				
 				if(akeebasubs_ri_done == akeebasubs_ri_total) {
 					$('#asriSpinner').hide();
-					window.location.reload();
+					//window.location.reload();
 				}
 				
 				if( (msg.processed == 0) || (akeebasubs_ri_done == akeebasubs_ri_total) ) {
