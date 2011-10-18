@@ -25,6 +25,8 @@
 		<language tag="en-GB">en-GB.plg_system_asexpirationnotify.sys.ini</language>
 		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.ini</language>
 		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.sys.ini</language>
+		<language tag="de-DE">de-DE.plg_system_asexpirationnotify.ini</language>
+		<language tag="de-DE">de-DE.plg_system_asexpirationnotify.sys.ini</language>
 	</languages>
 	<params addpath="/plugins/system/asexpirationnotify">
 		<param type="header" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_LABEL" description="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_DESC" />
