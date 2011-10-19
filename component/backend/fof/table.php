@@ -34,7 +34,8 @@ class FOFTable extends JTable
 				$option = FOFInput::getCmd('option',$option,$config['input']);
 				FOFInput::setVar('option',$option,$config['input']);
 			}
-		}		
+		}
+
 		if(array_key_exists('option', $config)) $option = $config['option'];
 		$config['option'] = $option;
 		
@@ -434,6 +435,25 @@ class FOFTable extends JTable
 		$csv = implode($separator, $csv);
 
 		return $csv;
+	}
+	
+	/**
+	 * Exports the table in array format
+	 */
+	function getData()
+	{
+		$ret = array();
+
+		foreach (get_object_vars( $this ) as $k => $v)
+		{
+			if( ($k[0] == '_') || ($k[0] == '*'))
+			{ // internal field
+				continue;
+			}
+			$ret[$k] = $v;
+		}
+
+		return $ret;
 	}
 	
 	/**
