@@ -5,6 +5,8 @@
  *  @license GNU General Public License version 3, or later
  */
 
+defined('_JEXEC') or die();
+
 class AkeebasubsControllerMessages extends FOFController
 {
 	public function __construct($config = array()) {
