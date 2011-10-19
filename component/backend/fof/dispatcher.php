@@ -169,6 +169,8 @@ class FOFDispatcher extends JObject
 		if(empty($task)) {
 			$task = $this->getTask($view);
 		}
+		FOFInput::setVar('view',$view,$this->input);
+		FOFInput::setVar('task',$task,$this->input);
 		
 		$config = array('input'=>$this->input);
 		$controller = FOFController::getAnInstance($option, $view, $config);
@@ -221,7 +223,7 @@ class FOFDispatcher extends JObject
 			case 'GET':
 			default:
 				// If it's an edit without an ID or ID=0, it's really an add
-				if(($task == 'edit') && ($id === 0)) {
+				if(($task == 'edit') && ($id == 0)) {
 					$task = 'add';
 				// If it's an edit in the frontend, it's really a read
 				} elseif(($task == 'edit') && JFactory::getApplication()->isSite()) {

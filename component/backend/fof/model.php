@@ -318,7 +318,7 @@ class FOFModel extends JModel
 	 * 
 	 * @param int|null $id Force a primary key ID to the model
 	 * 
-	 * @return JTable A copy of the item's JTable array
+	 * @return FOFTable A copy of the item's JTable array
 	 */
 	public final function &getItem($id = null)
 	{
