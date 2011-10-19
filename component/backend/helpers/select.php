@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 class AkeebasubsHelperSelect
 {
-	private static $countries = array(
+	public static $countries = array(
 		'' => '----',
 		'AD' =>'Andorra', 'AE' =>'United Arab Emirates', 'AF' =>'Afghanistan',
 		'AG' =>'Antigua and Barbuda', 'AI' =>'Anguilla', 'AL' =>'Albania',
