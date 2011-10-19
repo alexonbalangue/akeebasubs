@@ -87,6 +87,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$rawDataGet = JRequest::get('GET', 2);
 		$rawData = array_merge($rawDataCache, $rawDataGet, $rawDataPost);
 		if(!empty($rawData)) foreach($rawData as $k => $v) {
+			if(substr($k,0,1) == chr(0)) continue; // Don't ask...
 			$this->setState($k, $v);
 		}
 		
@@ -455,13 +456,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 				return $valid;
 			}
 		}
-	
+
 		$valid = $validIfNotExists;		
 		if($state->coupon) {
 			$couponCode = $state->coupon;
 			$valid = false;
 			
-			$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModels')
+			$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
 				->coupon(strtoupper($state->coupon))
 				->getItemList();
 			$coupon = empty($coupons) ? null : array_pop($coupons);
@@ -664,7 +665,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$bestTaxRule->match = $match;
 				$bestTaxRule->fuzzy = $fuzzy;
 				$bestTaxRule->taxrate = $rule->taxrate;
-				$bestTaxRule->id = $rule->id;
+				$bestTaxRule->id = $rule->akeebasubs_taxrule_id;
 			}
 		}
 		return $bestTaxRule;

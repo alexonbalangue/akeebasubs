@@ -7,27 +7,25 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerValidates extends FOFController
+class AkeebasubsControllerCallbacks extends FOFController
 {
-	public function __construct($config = array())
-	{
+	public function __construct($config = array()) {
 		parent::__construct($config);
+		
 		$this->setThisModelName('AkeebasubsModelSubscribes');
 		$this->csrfProtection = false;
 	}
 	
+
 	public function execute($task) {
-		FOFInput::setVar('task','read',$this->input);
 		$task = 'read';
+		FOFInput::setVar('task','read',$this->input);
 		parent::execute($task);
 	}
 	
 	public function read($cachable = false) {
-		$data = $this->getThisModel()
-			->action('validate')
-			->getValidation();
-		echo json_encode($data);
-		
+		$result = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel')->runCallback();
+		echo $result ? 'OK' : 'FAILED';
 		JFactory::getApplication()->close();
 	}
 }

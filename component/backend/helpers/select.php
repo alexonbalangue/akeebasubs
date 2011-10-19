@@ -307,6 +307,7 @@ class AkeebasubsHelperSelect
  		$plugins = FOFModel::getTmpInstance('Subscribes','AkeebasubsModel')
 			->getPaymentPlugins();
  		
+		$options = array();
 		foreach($plugins as $plugin) {
 			$options[] = JHTML::_('select.option',$plugin->name,$plugin->title);
  		}
