@@ -194,7 +194,7 @@ class AkeebasubsModelUsers extends FOFModel
 	{
 		$state = $this->getFilterValues();
 		// Get a legacy data set from the user parameters
-		$userRow = FOFTable::getAnInstance('Jusers','AkeebasubsTable');
+		$userRow = FOFTable::getAnInstance('Juser','AkeebasubsTable');
 		$userRow->load($state->user_id);
 		if(!($userRow->params instanceof JRegistry)) {
 			$params = new JParameter($userRow->params);
