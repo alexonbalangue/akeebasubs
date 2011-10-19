@@ -52,9 +52,9 @@ $this->loadHelper('format');
 				</div>
 				<div class="akeebasubs-awesome-footer">
 					<td class="akeebasubs-awesome-subscribe">
-						<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&format=html&slug='.$level->slug)?>" method="get">
-							<input class="akeebasubs-awesome-subscribe-button" type="submit" value="<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>" />
-						</form>
+						<button onclick="window.location='<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
+							<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
+						</button>
 					</td>
 				</div>
 			</div>

@@ -49,9 +49,9 @@ $this->loadHelper('format');
 			</div>
 			<div class="level-clear"></div>
 			<div class="level-subscribe">
-				<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>" method="get">
-					<input type="submit" value="<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>" />
-				</form>
+				<button onclick="window.location='<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
+					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
+				</button>
 			</div>
 		</div>
 	</div>
