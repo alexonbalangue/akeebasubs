@@ -298,4 +298,19 @@ class AkeebasubsHelperSelect
 			return '&mdash;&mdash;&mdash;';
 		}
 	}
+	
+	/**
+ 	 * Drop down list of payment methods (active payment plugins)
+ 	 */
+ 	public static function paymentmethods($name = 'paymentmethod', $selected = '', $attribs = array())
+ 	{	
+ 		$plugins = FOFModel::getTmpInstance('Subscribes','AkeebasubsModel')
+			->getPaymentPlugins();
+ 		
+		foreach($plugins as $plugin) {
+			$options[] = JHTML::_('select.option',$plugin->name,$plugin->title);
+ 		}
+ 		
+ 		return self::genericlist($options, $name, $attribs, $selected, $name);
+ 	}
 }
