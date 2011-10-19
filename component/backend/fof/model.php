@@ -32,6 +32,15 @@ class FOFModel extends JModel
 	
 	protected $input = array();
 
+	/**
+	 * Returns a new model object. Unless overriden by the $config array, it will
+	 * try to automatically populate its state from the request variables.
+	 * 
+	 * @param string $type
+	 * @param string $prefix
+	 * @param array $config
+	 * @return FOFModel
+	 */
 	public static function &getAnInstance( $type, $prefix = '', $config = array() )
 	{
 		$type		= preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
@@ -89,6 +98,14 @@ class FOFModel extends JModel
 		return $result;
 	}
 	
+	/**
+	 * Returns a new instance of a model, with the state reset to defaults
+	 * 
+	 * @param string $type
+	 * @param string $prefix
+	 * @param array $config
+	 * @return FOFModel
+	 */
 	public static function &getTmpInstance( $type, $prefix = '', $config = array() )
 	{
 		$ret = self::getAnInstance($type, $prefix, $config)
@@ -100,6 +117,11 @@ class FOFModel extends JModel
 		return $ret;
 	}
 	
+	/**
+	 * Public class constructor
+	 * 
+	 * @param type $config 
+	 */
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
@@ -198,12 +220,15 @@ class FOFModel extends JModel
 	/**
 	 * Sets the ID and resets internal data
 	 * @param int $id The ID to use
+	 * 
+	 * @return FOFModel
 	 */
 	public final function setId($id=0)
 	{
 		$this->reset();
 		$this->id = (int)$id;
 		$this->id_list = array($this->id);
+		return $this;
 	}
 
 	/**
@@ -217,6 +242,8 @@ class FOFModel extends JModel
 
 	/**
 	 * Sets a list of IDs for batch operations from an array and resets the model
+	 * 
+	 * @return FOFModel
 	 */
 	public final function setIds($idlist)
 	{
@@ -230,6 +257,7 @@ class FOFModel extends JModel
 			}
 			$this->id = $this->id_list[0];
 		}
+		return $this;
 	}
 
 	/**
@@ -243,6 +271,8 @@ class FOFModel extends JModel
 
 	/**
 	 * Resets the model, like it was freshly loaded
+	 * 
+	 * @return FOFModel
 	 */
 	public function reset()
 	{
@@ -257,6 +287,13 @@ class FOFModel extends JModel
 		return $this;
 	}
 	
+	/**
+	 * Clears the model state, but doesn't touch the internal lists of records,
+	 * record tables or record id variables. To clear these values, please use
+	 * reset().
+	 * 
+	 * @return FOFModel 
+	 */
 	public function clearState()
 	{
 		if(version_compare(JVERSION, '1.6.0', 'ge')) {
@@ -278,10 +315,18 @@ class FOFModel extends JModel
 	/**
 	 * Returns a single item. It uses the id set with setId, or the first ID in
 	 * the list of IDs for batch operations
+	 * 
+	 * @param int|null $id Force a primary key ID to the model
+	 * 
 	 * @return JTable A copy of the item's JTable array
 	 */
-	public final function &getItem()
+	public final function &getItem($id = null)
 	{
+		if(!is_null($id)) {
+			$this->record = null;
+			$this->setId($id);
+		}
+		
 		if(empty($this->record))
 		{
 			$table = $this->getTable($this->table);
@@ -314,6 +359,7 @@ class FOFModel extends JModel
 
 	/**
 	 * Alias for getItemList
+	 * @return array
 	 */
 	public final function &getList($overrideLimits = false)
 	{
@@ -340,7 +386,7 @@ class FOFModel extends JModel
 
 		return $this->list;
 	}
-
+	
 	/**
 	 * Binds the data to the model and tries to save it
 	 * @param array|object $data The source data array or object
@@ -787,20 +833,42 @@ class FOFModel extends JModel
 		return false;
 	}
 	
+	/**
+	 * Clones the model object and returns the clone
+	 * @return FOFModel
+	 */
 	public function &getClone()
 	{
 		$clone = clone($this);
 		return $clone;
 	}
 	
+	/**
+	 * Magic getter; allows to use the name of model state keys as properties
+	 * @param string $name
+	 * @return mixed
+	 */
 	public function __get($name) {
 		return $this->getState($name);
 	}
 	
+	/**
+	 * Magic setter; allows to use the name of model state keys as properties
+	 * @param string $name
+	 * @return mixed
+	 */
 	public function __set($name, $value) {
 		return $this->setState($name, $value);
 	}
 	
+	/**
+	 * Magic caller; allows to use the name of model state keys as methods to
+	 * set their values.
+	 * 
+	 * @param string $name
+	 * @param mixed $arguments
+	 * @return FOFModel 
+	 */
 	public function __call($name, $arguments) {
 		$arg1 = array_shift($arguments);
 		$this->setState($name, $arg1);
@@ -851,6 +919,11 @@ class FOFModel extends JModel
 	{
 	}
 	
+	/**
+	 * This method runs before the record with key value of $id is deleted from $table
+	 * 
+	 * @param JTable $table 
+	 */
 	protected function onBeforeDelete(&$id, &$table)
 	{
 		return true;
