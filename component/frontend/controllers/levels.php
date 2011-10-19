@@ -5,6 +5,8 @@
  *  @license GNU General Public License version 3, or later
  */
 
+defined('_JEXEC') or die();
+
 class AkeebasubsControllerLevels extends FOFController
 {
 	public function onBeforeBrowse() {
