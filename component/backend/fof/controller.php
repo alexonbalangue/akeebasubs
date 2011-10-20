@@ -839,7 +839,7 @@ class FOFController extends JController
 		}
 
 		// Build the view class name
-		$viewClass = $classPrefix . $viewName;
+		$viewClass = $classPrefix . ucfirst($view);
 
 		if ( !class_exists( $viewClass ) )
 		{
