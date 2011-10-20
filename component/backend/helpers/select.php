@@ -147,9 +147,7 @@ class AkeebasubsHelperSelect
 
 	public static function countries($selected = null, $id = 'country', $attribs = array())
 	{
-		$options = array(
-			JHTML::_('select.option','','---'),
-		);
+		$options = array();
 		foreach(self::$countries as $code => $name)
 		{
 			$options[] = JHTML::_('select.option', $code, $name );

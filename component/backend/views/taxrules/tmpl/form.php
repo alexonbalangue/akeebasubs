@@ -43,7 +43,13 @@ $this->loadHelper('select');
 	<input type="text" name="taxrate" id="taxrate" value="<?php echo$this->item->taxrate?>" /> <strong>%</strong>
 	<div class="akeebasubs-clear"></div>
 
-	<label for="enabled" class="main" class="main"><?php echo JText::_('enabled'); ?></label>
+	<label for="enabled" class="main" class="main">
+		<?php if(version_compare(JVERSION,'1.6.0','ge')): ?>
+		<?php echo JText::_('JPUBLISHED'); ?>
+		<?php else: ?>
+		<?php echo JText::_('PUBLISHED'); ?>
+		<?php endif; ?>
+	</label>
 	<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 
 </form>

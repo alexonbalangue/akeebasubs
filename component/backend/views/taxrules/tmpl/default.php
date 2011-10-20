@@ -120,19 +120,19 @@ $this->loadHelper('format');
 				<?php echo JHTML::_('grid.id', $i, $taxrule->akeebasubs_taxrule_id, $checkedOut); ?>
 			</td>
 			<td>
-				<a href="index.php&option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
+				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
 					<?php echo AkeebasubsHelperSelect::formatCountry($taxrule->country) ?>
 					<?php echo $taxrule->country ? ' ('.$this->escape($taxrule->country).')' : ''?>
 				</a>
 			</td>
 			<td>
-				<a href="index.php&option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
+				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
 					<?php echo AkeebasubsHelperSelect::formatState($taxrule->state) ?>
 					<?php echo $taxrule->state ? ' ('.$this->escape($taxrule->state).')' : ''?>
 				</a>
 			</td>
 			<td>
-				<a href="index.php&option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
+				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
 					<?php echo $taxrule->city ? $this->escape($taxrule->city) : '&mdash;'?>
 				</a>
 			</td>
@@ -144,7 +144,7 @@ $this->loadHelper('format');
 				<?php endif; ?>
 			</td>
 			<td>
-				<a href="index.php&option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
+				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
 					<?php echo sprintf('%02.2f', (int)$taxrule->taxrate)?> %
 				</a>
 			</td>

@@ -740,8 +740,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 			}
 		}
-		// @todo DEBUG LINE - REMOVE ME:
-		if(empty($state->paymentmethod)) $found = true;
 		if(!$found) return false;
 
 		// Step #3. Create a user record if required and send out the email with user information

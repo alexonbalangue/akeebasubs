@@ -69,7 +69,7 @@ $this->loadHelper('params');
 	<div class="akeebasubs-clear"></div>
 
 	<label for="hits_field" class="main">
-		<?php echo  JText::_('hits'); ?>
+		<?php echo  JText::_('COM_AKEEBASUBS_COMMON_HITS'); ?>
 	</label>
 	<input type="text" size="5" id="hits_field" name="hits" value="<?php echo  $this->escape($this->item->hits) ?>" />
 	<div class="akeebasubs-clear"></div>
