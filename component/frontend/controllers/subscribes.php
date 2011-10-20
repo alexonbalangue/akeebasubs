@@ -16,20 +16,13 @@ class AkeebasubsControllerSubscribes extends FOFController
 	}
 	
 	public function execute($task) {
-		switch($task) {
-			case 'save':
-			case 'savenew':
-				$task = 'save';
-				
-			default:
-				$task = 'add';
-		}
+		$task = 'add';
 		
 		FOFInput::setVar('task',$task,$this->input);
 		parent::execute($task);
 	}
 	
-	public function save() {
+	public function add() {
 		$result = $this->getThisModel()->createNewSubscription();
 		if($result) {
 			$view = $this->getThisView();

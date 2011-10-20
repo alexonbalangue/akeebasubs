@@ -12,7 +12,7 @@ class AkeebasubsViewSubscribe extends FOFViewHtml
 {
 	protected function onAdd($tpl = null)
 	{
-		$model = $this->getThisModel();
+		$model = $this->getModel();
 		$this->assign('form', $model->getForm());
 	}
 }
