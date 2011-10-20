@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 class AkeebasubsDispatcher extends FOFDispatcher
 {
 	private $allowedViews = array(
-		'levels','messages','subscribes','subscriptions','validates'
+		'levels','messages','subscribes','subscriptions','validates','callbacks'
 	);
 	
 	public function __construct($config = array()) {

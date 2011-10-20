@@ -12,6 +12,8 @@ class AkeebasubsTableSubscription extends FOFTable
 	/** @var object Caches the row data on load for future reference */
 	private $selfCache = null;
 	
+	public $_dontCheckPaymentID = false;
+	
 	/**
 	 * Validates the subscription row
 	 * @return boolean True if the row validates
@@ -62,7 +64,7 @@ class AkeebasubsTableSubscription extends FOFTable
 			$result = false;
 		}
 		
-		if(empty($this->processor_key)) {
+		if(empty($this->processor_key) && !$this->_dontCheckPaymentID) {
 			$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PROCESSOR_KEY'));
 			$result = false;
 		}

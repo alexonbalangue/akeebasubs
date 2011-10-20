@@ -738,7 +738,7 @@ class FOFController extends JController
 
 	/**
 	 * Returns current view object
-	 * @return FOFView The global instance of the view object (singleton)
+	 * @return JView The global instance of the view object (singleton)
 	 */
 	public final function getThisView($config = array())
 	{

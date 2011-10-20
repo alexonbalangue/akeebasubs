@@ -68,7 +68,7 @@ class plgAkpaymentNone extends JPlugin
 <h3>$t1</h3>
 <p>$t2</p>
 <form action="$uri" method="POST" id="paymentForm">
-	<input type="hidden" name="subscription" value="{$subscription->id}" />
+	<input type="hidden" name="subscription" value="{$subscription->akeebasubs_subscription_id}" />
 	<input type="submit" value="Complete subscription" />
 </form>
 ENDFORM;
@@ -83,13 +83,13 @@ ENDFORM;
 		
 		// Enable the subscription
 		$id = (int)$data['subscription'];
-		$subscription = KFactory::get('com://site/akeebasubs.model.subscriptions')
-			->id($id)
+		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			->setId($id)
 			->getItem();
 		
-		if(empty($subscription)) return false;
+		if(empty($subscription->akeebasubs_subscription_id)) return false;
 		
-		if($subscription->id != $id) return false;
+		if($subscription->akeebasubs_subscription_id != $id) return false;
 		
 		// Fix the starting date if the payment was accepted after the subscription's start date. This
 		// works around the case where someone pays by e-Check on January 1st and the check is cleared
@@ -112,14 +112,14 @@ ENDFORM;
 		
 		$id = (int)$data['subscription'];
 		$updates = array(
-			'id'				=> $id,
+			'akeebasubs_subscription_id' => $id,
 			'processor_key'		=> md5(microtime(false)),
 			'state'				=> 'C',
 			'enabled'			=> 1,
 			'publish_up'		=> $jStart->toMySQL(),
 			'publish_down'		=> $jEnd->toMySQL()
 		);
-		$subscription->setData($updates)->save();
+		$subscription->save($updates);
 		
 		// Run the onAKAfterPaymentCallback events
 		jimport('joomla.plugin.helper');
@@ -130,8 +130,8 @@ ENDFORM;
 		));
 		
 		// This plugin is a tricky one; it will redirect you to the thank you page
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order')); 

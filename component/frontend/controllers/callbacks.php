@@ -28,4 +28,9 @@ class AkeebasubsControllerCallbacks extends FOFController
 		echo $result ? 'OK' : 'FAILED';
 		JFactory::getApplication()->close();
 	}
+	
+	public function onBeforeRead()
+	{
+		return true;
+	}
 }

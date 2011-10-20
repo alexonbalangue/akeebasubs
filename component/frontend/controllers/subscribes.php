@@ -27,9 +27,11 @@ class AkeebasubsControllerSubscribes extends FOFController
 		if($result) {
 			$view = $this->getThisView();
 			$view->setLayout('form');
+			$view->assign('form', $this->getThisModel()->getForm());
+			$view->setModel($this->getThisModel(),true);
 			$view->display();
 		} else {
-			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.$this->getThisModel()->getItem()->slug));
+			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.$this->getThisModel()->slug));
 			$msg = JText::_('COM_AKEEBASUBS_LEVEL_ERR_VALIDATIONOVERALL');
 			$this->setRedirect($url, $msg, 'error');
 			return false;
@@ -41,7 +43,7 @@ class AkeebasubsControllerSubscribes extends FOFController
 	 * 
 	 * @return bool
 	 */
-	public function onBeforeSave() {
+	public function onBeforeAdd() {
 		return true;
 	}
 }

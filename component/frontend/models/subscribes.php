@@ -448,6 +448,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		static $couponid = null;
 		
 		$state = $this->getStateVariables();
+		$this->_coupon_id = null;
 	
 		if($state->coupon) {
 			if($state->coupon == $couponCode) {
@@ -468,7 +469,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				
 			if(is_object($coupon)) {
 				$valid = false;
-				if($coupon->enabled) {
+				if($coupon->enabled && (strtoupper($coupon->coupon) == strtoupper($couponCode)) ) {
 					// Check validity period
 					jimport('joomla.utilities.date');
 					$jFrom = new JDate($coupon->publish_up);
@@ -817,12 +818,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$list = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getItemList();
-		
+
 		if(!count($list)) {
 			$id = 0;
 		} else {
 			$thisUser = array_pop($list);
-			$id = $thisUser->id;
+			$id = $thisUser->akeebasubs_user_id;
 		}
 		$data = array(
 			'akeebasubs_user_id' => $id,
@@ -929,7 +930,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->setId(0)
 			->getItem();
-		$subscription->save($data);
+		$subscription->_dontCheckPaymentID = true;
+		$result = $subscription->save($data);
 		$this->_item = $subscription;
 
 		// Step #7. Hit the coupon code, if a coupon is indeed used
