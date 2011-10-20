@@ -18,6 +18,8 @@ class plgAkpayment2checkout extends JPlugin
 	{
 		parent::__construct($subject, $config);
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		
 		// Load the language files
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('plg_akpayment_2checkout', JPATH_ADMINISTRATOR, 'en-GB', true);
@@ -50,8 +52,8 @@ class plgAkpayment2checkout extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		
@@ -70,9 +72,9 @@ class plgAkpayment2checkout extends JPlugin
 			'email'			=> $user->email
 		);
 		
-		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
-			->getItem();
+			->getFirstItem();
 
 		@ob_start();
 		include dirname(__FILE__).'/2checkout/form.php';
@@ -97,10 +99,10 @@ class plgAkpayment2checkout extends JPlugin
 			$id = array_key_exists('cart_order_id', $data) ? (int)$data['cart_order_id'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->id($id)
+				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->setId($id)
 					->getItem();
-				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
+				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
 					$subscription = null;
 					$isValid = false;
 				}
@@ -142,8 +144,8 @@ class plgAkpayment2checkout extends JPlugin
 		if(!$isValid) return false;
 		
 		// Load the subscription level and get its slug
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 

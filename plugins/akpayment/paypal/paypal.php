@@ -23,6 +23,8 @@ class plgAkpaymentPaypal extends JPlugin
 		}
 		parent::__construct($subject, $config);
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		
 		// Load the language files
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('plg_akpayment_paypal', JPATH_ADMINISTRATOR, 'en-GB', true);
@@ -63,8 +65,8 @@ class plgAkpaymentPaypal extends JPlugin
 			$lastName = '';
 		}
 		
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		
@@ -81,15 +83,15 @@ class plgAkpaymentPaypal extends JPlugin
 			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal',
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order')),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel')),
-			'currency'		=> strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency),
+			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName
 		);
 		
-		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
-			->getItem();
-
+			->getFirstItem();
+		
 		@ob_start();
 		include dirname(__FILE__).'/paypal/form.php';
 		$html = @ob_get_clean();
@@ -113,10 +115,10 @@ class plgAkpaymentPaypal extends JPlugin
 			$id = array_key_exists('custom', $data) ? (int)$data['custom'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->id($id)
+				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->setId($id)
 					->getItem();
-				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
+				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
 					$subscription = null;
 					$isValid = false;
 				}
@@ -176,7 +178,7 @@ class plgAkpaymentPaypal extends JPlugin
 		// Check that mc_currency is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_currency = strtoupper($data['mc_currency']);
-			$currency = strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency);
+			$currency = strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'));
 			if($mc_currency != $currency) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Invalid currency; expected $currency, got $mc_currency";

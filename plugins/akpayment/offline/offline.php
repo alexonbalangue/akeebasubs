@@ -69,7 +69,7 @@ The management</p>
 ENDTEMPLATE;
 		}
 		$html = str_replace('{AMOUNT}', sprintf('%01.02f', $subscription->gross_amount), $html);
-		$html = str_replace('{SUBSCRIPTION}', sprintf('%06u', $subscription->id), $html);
+		$html = str_replace('{SUBSCRIPTION}', sprintf('%06u', $subscription->akeebasubs_subscription_id), $html);
 		$html = '<div>'.$html.'</div>';
 
 		return $html;

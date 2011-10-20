@@ -18,6 +18,8 @@ class plgAkpaymentCcavenue extends JPlugin
 	{
 		parent::__construct($subject, $config);
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		
 		// Load the language files
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('plg_akpayment_ccavenue', JPATH_ADMINISTRATOR, 'en-GB', true);
@@ -67,26 +69,26 @@ class plgAkpaymentCcavenue extends JPlugin
 		$merchant = $this->params->get('merchant','');
 		$WorkingKey = $this->params->get('workingkey','');
 		$redirectURL = $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=ccavenue'));
-		$checksum = $this->getCheckSum($merchant, $subscription->net_amount, $subscription->id,
+		$checksum = $this->getCheckSum($merchant, $subscription->net_amount, $subscription->akeebasubs_subscription_id,
 			$redirectURL, $WorkingKey);
 		
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		$data = (object)array(
 			'url'			=> 'https://www.ccavenue.com/shopzone/cc_details.jsp',
 			'merchant'		=> $merchant,
 			'postback'		=> $redirectURL,
-			'currency'		=> strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency),
+			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName,
 			'checksum'		=> $checksum
 		);
 		
-		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
-			->getItem();
+			->getFirstItem();
 
 		@ob_start();
 		include dirname(__FILE__).'/ccavenue/form.php';
@@ -114,10 +116,10 @@ class plgAkpaymentCcavenue extends JPlugin
 			$id = array_key_exists('Order_Id', $data) ? (int)$data['Order_Id'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->id($id)
+				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->setId($id)
 					->getItem();
-				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
+				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
 					$subscription = null;
 					$isValid = false;
 				}
@@ -151,8 +153,8 @@ class plgAkpaymentCcavenue extends JPlugin
 		if(!$isValid) die('Hacking attempt; payment processing refused');
 		
 		// Load the subscription level and get its slug
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 

@@ -388,6 +388,29 @@ class FOFModel extends JModel
 	}
 	
 	/**
+	 * A cross-breed between getItem and getItemList. It runs the complete query,
+	 * like getItemList does. However, instead of returning an array of ad-hoc
+	 * pbjects, it binds the data from the first item fetched on the list to an
+	 * instance of the table object and returns that table object instead.
+	 * 
+	 * @param bool $overrideLimits
+	 * @return FOFTable 
+	 */
+	public final function &getFirstItem($overrideLimits = false)
+	{
+		$table = $this->getTable($this->table);
+		
+		$list = $this->getItemList($overrideLimits);
+		if(!empty($list)) {
+			$firstItem = array_shift($list);
+			$table->bind($firstItem);
+		}
+		unset($list);
+		
+		return $table;
+	}
+	
+	/**
 	 * Binds the data to the model and tries to save it
 	 * @param array|object $data The source data array or object
 	 * @return bool True on success
