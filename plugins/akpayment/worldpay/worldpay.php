@@ -23,6 +23,8 @@ class plgAkpaymentWorldpay extends JPlugin
 		}
 		parent::__construct($subject, $config);
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		
 		// Load the language files
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('plg_akpayment_worldpay', JPATH_ADMINISTRATOR, 'en-GB', true);
@@ -63,8 +65,8 @@ class plgAkpaymentWorldpay extends JPlugin
 			$lastName = '';
 		}
 		
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		
@@ -81,14 +83,14 @@ class plgAkpaymentWorldpay extends JPlugin
 			'postback'		=> $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=worldpay')),
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order')),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=cancel')),
-			'currency'		=> strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency),
+			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName
 		);
 		
-		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
-			->getItem();
+			->getFirstItem();
 
 		@ob_start();
 		include dirname(__FILE__).'/worldpay/form.php';
@@ -113,10 +115,10 @@ class plgAkpaymentWorldpay extends JPlugin
 			$id = array_key_exists('cartId', $data) ? (int)$data['cartId'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->id($id)
+				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->setId($id)
 					->getItem();
-				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
+				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
 					$subscription = null;
 					$isValid = false;
 				}
@@ -162,7 +164,7 @@ class plgAkpaymentWorldpay extends JPlugin
 		// Check that currency is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_currency = strtoupper($data['currency']);
-			$currency = strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency);
+			$currency = strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'));
 			if($mc_currency != $currency) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Invalid currency; expected $currency, got $mc_currency";
@@ -194,7 +196,7 @@ class plgAkpaymentWorldpay extends JPlugin
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-			'id'				=> $id,
+			'akeebasubs_subscription_id'				=> $id,
 			'processor_key'		=> $data['transId'],
 			'state'				=> $newStatus,
 			'enabled'			=> 0

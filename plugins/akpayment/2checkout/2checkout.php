@@ -171,7 +171,7 @@ class plgAkpayment2checkout extends JPlugin
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-			'id'				=> $id,
+			'akeebasubs_subscription_id'				=> $id,
 			'processor_key'		=> $data['order_number'],
 			'state'				=> $newStatus,
 			'enabled'			=> 0

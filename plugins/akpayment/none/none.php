@@ -23,6 +23,8 @@ class plgAkpaymentNone extends JPlugin
 		}
 		parent::__construct($subject, $config);
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		
 		// Load the language files
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('plg_akpayment_none', JPATH_ADMINISTRATOR, 'en-GB', true);

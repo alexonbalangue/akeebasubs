@@ -86,6 +86,8 @@ class plgAkpaymentEway extends JPlugin
 		}
 		parent::__construct($subject, $config);
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		
 		// Load the language files
 		$jlang =& JFactory::getLanguage();
 		$jlang->load('plg_akpayment_eway', JPATH_ADMINISTRATOR, 'en-GB', true);
@@ -136,15 +138,15 @@ class plgAkpaymentEway extends JPlugin
 		}
 		
 		// Get the level's slug
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		
 		// Fetch our extended user information
-		$kuser = KFactory::get('com://admin/akeebasubs.model.users')
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
-			->getItem();
+			->getFirstItem();
 		
 		// Construct the transaction key request URL
 		jimport('joomla.environment.uri');
@@ -167,7 +169,7 @@ class plgAkpaymentEway extends JPlugin
 		$eWayURL->setVar('CustomerID', $this->params->get('customerid',''));
 		$eWayURL->setVar('UserName', $this->params->get('username',''));
 		$eWayURL->setVar('Amount', sprintf('%0.2f',$subscription->gross_amount));
-		$eWayURL->setVar('Currency', strtoupper(KFactory::get('com://site/akeebasubs.model.configs')->getConfig()->currency));
+		$eWayURL->setVar('Currency', strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')));
 		$eWayURL->setVar('ReturnURL', JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal');
 		$eWayURL->setVar('CancelURL', $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel')));
 		if($this->params->get('companylogo','')) $eWayURL->setVar('CompanyLogo', $this->params->get('companylogo',''));
@@ -184,7 +186,7 @@ class plgAkpaymentEway extends JPlugin
 		$eWayURL->setVar('CustomerCountry', $kuser->country);
 		$eWayURL->setVar('CustomerEmail', $user->email);
 		$eWayURL->setVar('InvoiceDescription', $level->title . ' - [ ' . $user->username . ' ]');
-		$eWayURL->setVar('MerchantReference', $subscription->id);
+		$eWayURL->setVar('MerchantReference', $subscription->akeebasubs_subscription_id);
 		if($this->params->get('pagetitle','')) $eWayURL->setVar('PageTitle', $this->params->get('pagetitle',''));
 		if($this->params->get('pagedescription','')) $eWayURL->setVar('PageDescription', $this->params->get('pagedescription',''));
 		if($this->params->get('pagefooter','')) $eWayURL->setVar('PageFooter', $this->params->get('pagefooter',''));
@@ -282,10 +284,10 @@ class plgAkpaymentEway extends JPlugin
 			$id = $merchantreference;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = KFactory::get('com://admin/akeebasubs.model.subscriptions')
-					->id($id)
+				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->setId($id)
 					->getItem();
-				if( ($subscription->id <= 0) || ($subscription->id != $id) ) {
+				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
 					$subscription = null;
 					$isValid = false;
 				}
@@ -311,8 +313,8 @@ class plgAkpaymentEway extends JPlugin
 		if(!$isValid) die('Hacking attempt; payment processing refused');
 		
 		// Load the subscription level and get its slug
-		$slug = KFactory::get('com://admin/akeebasubs.model.levels')
-				->id($subscription->akeebasubs_level_id)
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		
@@ -336,7 +338,7 @@ class plgAkpaymentEway extends JPlugin
 		
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-			'id'				=> $id,
+			'akeebasubs_subscription_id'				=> $id,
 			'processor_key'		=> $trxnnumber,
 			'state'				=> $newStatus,
 			'enabled'			=> 0

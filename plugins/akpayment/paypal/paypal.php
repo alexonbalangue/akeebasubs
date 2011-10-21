@@ -225,7 +225,7 @@ class plgAkpaymentPaypal extends JPlugin
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-			'id'				=> $id,
+			'akeebasubs_subscription_id'				=> $id,
 			'processor_key'		=> $data['txn_id'],
 			'state'				=> $newStatus,
 			'enabled'			=> 0
