@@ -149,10 +149,10 @@ class FOFDispatcher extends JObject
 			$paths = array(JPATH_ADMINISTRATOR, JPATH_ROOT);
 		}
 		$jlang =& JFactory::getLanguage();
-		$jlang->load('com_akeebasubs', $paths[0], 'en-GB', true);
-		$jlang->load('com_akeebasubs', $paths[0], null, true);
-		$jlang->load('com_akeebasubs', $paths[1], 'en-GB', true);
-		$jlang->load('com_akeebasubs', $paths[1], null, true);
+		$jlang->load($this->component, $paths[0], 'en-GB', true);
+		$jlang->load($this->component, $paths[0], null, true);
+		$jlang->load($this->component, $paths[1], 'en-GB', true);
+		$jlang->load($this->component, $paths[1], null, true);
 
 		if(!$this->onBeforeDispatch()) {
 			if(version_compare(JVERSION, '1.6.0', 'ge')) {
