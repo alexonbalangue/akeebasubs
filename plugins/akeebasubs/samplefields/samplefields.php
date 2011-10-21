@@ -35,27 +35,22 @@ class plgAkeebasubsSamplefields extends JPlugin
 			}
 		}
 		// Setup the combobox parameters
-		$helper = KFactory::get('com://admin/akeebasubs.template.helper.listbox');
-		$config = new KConfig(array(
-			'name'		=> 'custom[agegroup]',
-			'attribs'	=> array('id' => 'agegroup'),
-			'deselect'	=> true,
-			'selected'  => $current,
-			'options'	=> array(
-				$helper->option(array('text' => JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_AGEGROUP_SELECT'), 'value' => '0')),
-				$helper->option(array('text' => '0-17', 'value' => '1')),
-				$helper->option(array('text' => '18-24', 'value' => '2')),
-				$helper->option(array('text' => '25-34', 'value' => '3')),
-				$helper->option(array('text' => '35-44', 'value' => '4')),
-				$helper->option(array('text' => '45-54', 'value' => '5')),
-				$helper->option(array('text' => '55+', 'value' => '6'))
-			)
-		));
+		$options = array(
+			JHTML::_('select.option',  0, JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_AGEGROUP_SELECT') ),
+			JHTML::_('select.option',  1, '0-17' ),
+			JHTML::_('select.option',  2, '18-24' ),
+			JHTML::_('select.option',  3, '25-34' ),
+			JHTML::_('select.option',  4, '35-44' ),
+			JHTML::_('select.option',  5, '45-54' ),
+			JHTML::_('select.option',  6, '55+' )
+		);
+		$html = JHTML::_('select.genericlist', $options, 'custom[agegroup]', array(), 'value', 'text', $current, 'agegroup');
+
 		// Setup the field
 		$field = array(
 			'id'			=> 'agegroup',
 			'label'			=> '* '.JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_AGEGROUP_LABEL'),
-			'elementHTML'	=> $helper->optionlist($config),
+			'elementHTML'	=> $html,
 			'invalidLabel'	=> JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED'),
 			'isValid'		=> $current != 0
 		);
@@ -74,22 +69,17 @@ class plgAkeebasubsSamplefields extends JPlugin
 			}
 		}
 		// Setup the combobox parameters
-		$helper = KFactory::get('com://admin/akeebasubs.template.helper.listbox');
-		$config = new KConfig(array(
-			'name'		=> 'custom[gender]',
-			'attribs'	=> array('id' => 'gender'),
-			'selected'  => $current,
-			'options'	=> array(
-				$helper->option(array('text' => JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_GENDER_SELECT'), 'value' => '0')),
-				$helper->option(array('text' => JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_GENDER_MALE'), 'value' => '1')),
-				$helper->option(array('text' => JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_GENDER_FEMALE'), 'value' => '2'))
-			)
-		));
+		$options = array(
+			JHTML::_('select.option',  0, JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_GENDER_SELECT') ),
+			JHTML::_('select.option',  1, JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_GENDER_MALE') ),
+			JHTML::_('select.option',  2, JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_GENDER_FEMALE') ),
+		);
+		$html = JHTML::_('select.genericlist', $options, 'custom[gender]', array(), 'value', 'text', $current, 'gender');
 		// Setup the field
 		$field = array(
 			'id'			=> 'gender',
 			'label'			=> JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_GENDER_LABEL'),
-			'elementHTML'	=> $helper->optionlist($config)
+			'elementHTML'	=> $html
 		);
 		// Add the field to the return output
 		$fields[] = $field;
