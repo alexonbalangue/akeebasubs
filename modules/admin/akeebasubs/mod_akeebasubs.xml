@@ -11,7 +11,6 @@
 	<description>Control Panel module to display latest subscriptions for Akeeba Subscriptions.</description>
 	<files>
 		<filename module="mod_akeebasubs">mod_akeebasubs.php</filename>
-		<filename>view.php</filename>
 		<folder>tmpl</folder>
 	</files>
 	<params>
