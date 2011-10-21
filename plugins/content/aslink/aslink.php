@@ -33,11 +33,11 @@ class plgContentAslink extends JPlugin
 			$levels = array();
 			$slugs = array();
 			$upperSlugs = array();
-			$list = KFactory::get('com://admin/akeebasubs.model.levels')
+			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);
-				$levels[$thisTitle] = $level->id;
+				$levels[$thisTitle] = $level->akeebasubs_level_id;
 				$slugs[$thisTitle] = $level->slug;
 				$upperSlugs[strtoupper($level->slug)] = $level->slug;
 			}
@@ -101,8 +101,6 @@ class plgContentAslink extends JPlugin
 	
 	public function onPrepareContent( &$article, &$params, $limitstart = 0 )
 	{
-		if(!defined('KOOWA')) return;
-		
 		// Check whether the plugin should process or not
 		if ( JString::strpos( $article->text, 'aslink' ) === false )
 		{
@@ -117,8 +115,6 @@ class plgContentAslink extends JPlugin
 	
 	public function onContentPrepare($context, &$article, &$params, $limitstart = 0)
 	{
-		if(!defined('KOOWA')) return;
-		
 		return $this->onPrepareContent($article, $params, $limitstart);
 	}
 }
