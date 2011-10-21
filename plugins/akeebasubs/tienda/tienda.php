@@ -36,7 +36,7 @@ class plgAkeebasubsTienda extends JPlugin
 	 * Called when a new subscription is created, either manually or through
 	 * the front-end interface
 	 */
-	public function onAKSubscriptionCreate(KDatabaseRowDefault $row)
+	public function onAKSubscriptionCreate($row)
 	{
 		$this->onAKUserRefresh($row->user_id);
 	}
@@ -45,7 +45,7 @@ class plgAkeebasubsTienda extends JPlugin
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
 	 */
-	public function onAKSubscriptionChange(KDatabaseRowDefault $row)
+	public function onAKSubscriptionChange($row)
 	{
 		$this->onAKUserRefresh($row->user_id);
 	}
@@ -61,7 +61,7 @@ class plgAkeebasubsTienda extends JPlugin
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
 	
 		// Get all of the user's subscriptions
-		$subscriptions = KFactory::get('com://admin/akeebasubs.model.subscriptions')
+		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 			
@@ -168,11 +168,11 @@ class plgAkeebasubsTienda extends JPlugin
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
-			$list = KFactory::get('com://admin/akeebasubs.model.levels')
+			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);
-				$levels[$thisTitle] = $level->id;
+				$levels[$thisTitle] = $level->akeebasubs_level_id;
 			}
 		}
 		
