@@ -36,7 +36,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 * Called when a new subscription is created, either manually or through
 	 * the front-end interface
 	 */
-	public function onAKSubscriptionCreate(KDatabaseRowDefault $row)
+	public function onAKSubscriptionCreate($row)
 	{
 		// Only send out an email if the subscription is enabled. Otherwise, the
 		// user may get confused as to why he received the email.
@@ -47,7 +47,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
 	 */
-	public function onAKSubscriptionChange(KDatabaseRowDefault $row)
+	public function onAKSubscriptionChange($row)
 	{
 		// If the subscription is disabled and contact_flag is 3, do not send out
 		// an expiration notification. The flag is set to 3 only when a user has
@@ -61,10 +61,10 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	/**
 	 * Sends out the email to the owner of the subscription.
 	 * 
-	 * @param $row KDatabaseRowDefault The subscription row object
+	 * @param $row The subscription row object
 	 * @param $new bool True if it's a new subscription, false if it's an existing subscription being modified
 	 */
-	private function sendEmail(KDatabaseRowDefault $row, $new = true)
+	private function sendEmail($row, $new = true)
 	{
 		// Get the site name
 		$config = JFactory::getConfig();
@@ -74,8 +74,8 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$user = JFactory::getUser($row->user_id);
 		
 		// Get the level
-		$level = KFactory::get('com://site/akeebasubs.model.levels')
-			->id($row->akeebasubs_level_id)
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->setId($row->akeebasubs_level_id)
 			->getItem();
 			
 		// Get the from/to dates
