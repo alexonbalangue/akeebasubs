@@ -29,11 +29,11 @@ class plgContentAsrestricted extends JPlugin
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
-			$list = KFactory::get('com://admin/akeebasubs.model.levels')
+			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);
-				$levels[$thisTitle] = $level->id;
+				$levels[$thisTitle] = $level->akeebasubs_level_id;
 			}
 		}
 		
@@ -73,7 +73,7 @@ class plgContentAsrestricted extends JPlugin
 			$subscriptions = array();
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
-			$list = KFactory::get('com://admin/akeebasubs.model.subscriptions')
+			$list = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->expires_from($jNow->toMySQL())
 				//->publish_down($jNow->toMySQL())
