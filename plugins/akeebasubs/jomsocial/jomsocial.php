@@ -166,7 +166,7 @@ class plgAkeebasubsJomsocial extends JPlugin
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);
-				$levels[$thisTitle] = $level->id;
+				$levels[$thisTitle] = $level->akeebasubs_level_id;
 			}
 		}
 		

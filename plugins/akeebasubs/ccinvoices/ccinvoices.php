@@ -42,7 +42,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				$parts = explode(' ', $partial);
 				$sub_id = $parts[0];
 				// If there is an invoice for the current subscription, bail out
-				if($sub_id == $row->id) return;
+				if($sub_id == $row->akeebasubs_subscription_id) return;
 			}
 			
 			// Load the ccInvoices configuration
@@ -83,7 +83,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'pname'			=> $subname.$suffix,
 				'price'			=> $row->net_amount,
 				'tax'			=> sprintf('%.2f', 100*($row->tax_amount/$row->net_amount)),
-				'note'			=> "<p>Subscription ID: {$row->id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",
+				'note'			=> "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",
 				'contact_id'	=> $contact_id
 			);
 			$db->insertObject('#__ccinvoices_invoices', $invoice, 'id');
