@@ -113,6 +113,8 @@ class FOFModel extends JModel
 			->clearState()
 			->clearInput()
 			->reset()
+			->limitstart(0)
+			->limit(0)
 			->savestate(0);
 		return $ret;
 	}
