@@ -614,8 +614,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Load the tax rules
 		$taxrules = FOFModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
 			->enabled(1)
-			->sort('ordering')
-			->direction('ASC')
+			->filter_order('ordering')
+			->filter_order_Dir('ASC')
 			->limit(0)
 			->limitstart(0)
 			->getItemList();

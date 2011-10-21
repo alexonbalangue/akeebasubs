@@ -239,8 +239,8 @@ class AkeebasubsHelperSelect
 	public static function levels($name = 'level', $selected = '', $attribs = array())
 	{
 		$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-			->sort('ordering')
-			->direction('ASC')
+			->filter_order('ordering')
+			->filter_order_Dir('ASC')
 			->limit(0)
 			->offset(0)
 			->getList();
@@ -283,8 +283,8 @@ class AkeebasubsHelperSelect
 		
 		if(empty($levels)) {
 			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->sort('ordering')
-				->direction('ASC')
+				->filter_order('ordering')
+				->filter_order_Dir('ASC')
 				->limit(0)
 				->offset(0)
 				->getList();
