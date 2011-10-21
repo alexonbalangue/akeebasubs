@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+
 class plgSystemAsexpirationnotify extends JPlugin
 {
 	/**
@@ -16,8 +18,6 @@ class plgSystemAsexpirationnotify extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!defined('KOOWA')) return;
-		
 		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
 			if(!is_object($config['params'])) {
 				$config['params'] = new JParameter($config['params']);
@@ -55,8 +55,6 @@ class plgSystemAsexpirationnotify extends JPlugin
 	 */
 	public function onAfterInitialise()
 	{
-		if(!defined('KOOWA')) return;
-		
 		// Check if we need to run
 		if(!$this->doIHaveToRun()) return;
 	
@@ -69,7 +67,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$clockStart = microtime(true);
 		
 		// Get and loop all subscription levels
-		$levels = KFactory::get('com://admin/akeebasubs.model.levels')
+		$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->enabled(1)
 			->getList();
 		
@@ -95,9 +93,9 @@ class plgSystemAsexpirationnotify extends JPlugin
 			$jFrom = new JDate($now + 1);
 			$jTo = new JDate($now + $notify1 * 24 * 3600);
 			
-			$subs1 = KFactory::get('com://admin/akeebasubs.model.subscriptions')
+			$subs1 = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->contact_flag(0)
-				->level($level->id)
+				->level($level->akeebasubs_level_id)
 				->enabled(1)
 				->expires_from($jFrom->toMySQL())
 				->expires_to($jTo->toMySQL())
@@ -111,9 +109,9 @@ class plgSystemAsexpirationnotify extends JPlugin
 				$jFrom = new JDate($now + 1);
 				$jTo = new JDate($now + $notify2 * 24 * 3600);
 
-				$subs2 = KFactory::get('com://admin/akeebasubs.model.subscriptions')
+				$subs2 = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->contact_flag(1)
-					->level($level->id)
+					->level($level->akeebasubs_level_id)
 					->enabled(1)
 					->expires_from($jFrom->toMySQL())
 					->expires_to($jTo->toMySQL())
@@ -132,7 +130,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 				foreach($subs as $sub) {
 
 					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
-					$renewals = KFactory::get('com://site/akeebasubs.model.subscriptions')
+					$renewals = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->enabled(1)
 						->user_id($sub->user_id)
 						->level($sub->akeebasubs_level_id)
@@ -269,8 +267,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$user = JFactory::getUser($row->user_id);
 		
 		// Get the level
-		$level = KFactory::get('com://site/akeebasubs.model.levels')
-			->id($row->akeebasubs_level_id)
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->setId($row->akeebasubs_level_id)
 			->getItem();
 			
 		// Get the from/to dates

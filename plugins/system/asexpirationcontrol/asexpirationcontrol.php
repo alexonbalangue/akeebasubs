@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+
 class plgSystemAsexpirationcontrol extends JPlugin
 {
 	/**
@@ -16,8 +18,6 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!defined('KOOWA')) return;
-		
 		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
 			if(!is_object($config['params'])) {
 				$config['params'] = new JParameter($config['params']);
@@ -54,8 +54,6 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	public function onAfterInitialise()
 	{
-		if(!defined('KOOWA')) return;
-		
 		// Check if we need to run
 		if(!$this->doIHaveToRun()) return;
 	
@@ -65,7 +63,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$now = $jNow->toUnix();
 		
 		// Load a list of subscriptions which have to expire -- Nooku does the rest magically!
-		$subs = KFactory::get('com://admin/akeebasubs.model.subscriptions')
+		$subs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->enabled(1)
 			->expires_to($jNow->toMySQL())
 			->getList();
