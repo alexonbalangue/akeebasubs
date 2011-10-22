@@ -8,4 +8,5 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-require_once(dirname(__FILE__).'/order.php');
+echo $this->loadAnyTemplate('order');
+//require_once(dirname(__FILE__).'/order.php');

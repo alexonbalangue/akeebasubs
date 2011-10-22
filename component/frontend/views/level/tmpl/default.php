@@ -23,7 +23,7 @@ $this->loadHelper('modules');
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsheader')?>
 
 <?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
-<?php $step = 'subscribe'; require_once dirname(__FILE__).'/../../level/tmpl/steps.php'; ?>
+<?php echo $this->loadAnyTemplate('level/steps',array('step'=>'subscribe')); ?>
 <?php endif; ?>
 
 <?php echo $this->loadTemplate('level') ?>

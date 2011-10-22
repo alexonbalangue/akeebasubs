@@ -17,7 +17,7 @@ $this->loadHelper('format');
 ?>
 
 <?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
-<?php $step = 'payment'; require_once dirname(__FILE__).'/../../level/tmpl/steps.php'; ?>
+<?php echo $this->loadAnyTemplate('level/steps',array('step'=>'payment')); ?>
 <?php endif; ?>
 
 <?php echo $this->form ?>
