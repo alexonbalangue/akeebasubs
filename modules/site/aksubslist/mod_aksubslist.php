@@ -22,13 +22,27 @@
 // no direct access
 defined('_JEXEC') or die('');
 
-// Make sure Koowa is running
-if(!defined('KOOWA')) {
-	return;
-}
+include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 
-echo KFactory::get('mod://site/aksubslist.html')
-	->params($params)
-	->module($module)
-	->attribs($attribs)
-	->display();
+?>
+<div id="mod-aksubslist-<?php echo $this->module->id?>" class="mod-aksubslist">
+<?php if(JFactory::getUser()->guest): ?>
+	<span class="akeebasubs-subscriptions-itemized-nosubs">
+		<?php echo JText::_('COM_AKEEBASUBS_LEVELS_ITEMIZED_NOSUBS')?>
+	</span>
+<?php else: ?>
+<?php FOFDispatcher::getAnInstance('com_akeebasubs', 'subscriptions', array(
+	'option'	=> 'com_akeebasubs',
+	'view'		=> 'subscriptions',
+	'layout'	=> 'itemized',
+	'input'		=> array(
+		'limit'		=> 0,
+		'limitstart'=> 0
+	)
+))->dispatch();
+?>
+<?php endif; ?>
+</div>
