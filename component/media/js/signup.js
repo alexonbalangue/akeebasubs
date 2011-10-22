@@ -14,6 +14,7 @@ var akeebasubs_valid_form = true;
 var akeebasubs_personalinfo = true;
 var akeebasubs_validation_fetch_queue = [];
 var akeebasubs_validation_queue = [];
+var akeebasubs_level_id = 0;
 
 function blockInterface()
 {
@@ -69,7 +70,7 @@ function validateForm(callback_function)
 				'businessname':	$('#businessname').val(),
 				'occupation':	$('#occupation').val(),
 				'vatnumber'	:	$('#vatnumber').val(),
-				'coupon'	:	$('#coupon').val(),
+				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
 				'custom'	:	{}
 			};
 		} else {
@@ -79,7 +80,7 @@ function validateForm(callback_function)
 				'username'	:	$('#username').val(),
 				'name'		:	$('#name').val(),
 				'email'		:	$('#email').val(),
-				'coupon'	:	$('#coupon').val(),
+				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
 				'custom'	:	{}
 			};
 		}
@@ -372,11 +373,11 @@ function validateBusiness()
 				businessname: $('#businessname').val(),
 				occupation: $('#occupation').val(),
 				vatnumber: vatnumber,
-				coupon: $('#coupon').val()
+				coupon: ($("#coupon").length > 0) ? $('#coupon').val() : ''
 			};
 		} else {
 			var data = {
-				coupon: $('#coupon').val()
+				coupon: ($("#coupon").length > 0) ? $('#coupon').val() : ''
 			};
 		}
 		
@@ -512,15 +513,17 @@ function applyValidation(response, callback)
 function applyPrice(response)
 {
 	(function($) {
-		$('#akeebasubs-sum-net').text(response.net);
-		$('#akeebasubs-sum-discount').text(response.discount);
-		$('#akeebasubs-sum-vat').text(response.tax);
-		$('#akeebasubs-sum-total').text(response.gross);
-		
-		if(response.gross <= 0) {
-			$('#paymentmethod-container').css('display','none');
-		} else {
-			$('#paymentmethod-container').css('display','inline');
+		if($('#akeebasubs-sum-net').length > 0) {
+			$('#akeebasubs-sum-net').text(response.net);
+			$('#akeebasubs-sum-discount').text(response.discount);
+			$('#akeebasubs-sum-vat').text(response.tax);
+			$('#akeebasubs-sum-total').text(response.gross);
+
+			if(response.gross <= 0) {
+				$('#paymentmethod-container').css('display','none');
+			} else {
+				$('#paymentmethod-container').css('display','inline');
+			}
 		}
 	})(akeeba.jQuery);
 }
@@ -564,7 +567,7 @@ function addToValidationQueue(myfunction)
 			$('#isbusiness1').click(validateBusiness);
 			$('#vatnumber').blur(validateBusiness);
 		}
-		if($('#coupon')) {
+		if($('#coupon').length > 0) {
 			$('#coupon').blur(validateBusiness);
 		}
 		// Attach onBlur events to custom fields
