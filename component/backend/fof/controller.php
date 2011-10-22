@@ -166,6 +166,16 @@ class FOFController extends JController
 			$this->_name = $this->bareComponent;
 		}
 		
+		// Set the _basePath / basePath variable
+		$basePath = JFactory::getApplication()->isAdmin() ? JPATH_ADMINISTRATOR : JPATH_BASE;
+		$basePath .= '/components/'.$this->component;
+		if(array_key_exists('base_path', $config)) $basePath = $options['base_path'];
+		if(version_compare(JVERSION, '1.6.0', 'ge')) {
+			$this->basePath = $basePath;
+		} else {
+			$this->_basePath = $basePath;
+		}
+		
 		// Set the CSRF protection
 		if(array_key_exists('csrf_protection', $config)) {
 			$this->csrfProtection = $config['csrf_protection'];
@@ -858,7 +868,7 @@ class FOFController extends JController
 				$thisPath['view'][] = JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/views';
 				$thisPath['view'][] = JPATH_SITE.'/components/'.$config['option'].'/views';
 			}
-			
+
 			if(version_compare(JVERSION, '1.6.0', 'ge')) {
 				$viewPath = $this->createFileName( 'view', array( 'name' => $viewName, 'type' => $viewType) );
 			} else {
