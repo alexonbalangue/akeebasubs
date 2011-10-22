@@ -40,6 +40,34 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->nameQuote('description').' LIKE '.$db->quote($search));
 		}
 		
+		// Filter by IDs
+		$ids = $this->getState('id',null);
+		if(is_array($ids)) {
+			$temp = '';
+			foreach($ids as $id) {
+				$id = (int)$id;
+				if($id > 0) $temp .= $id.',';
+			}
+			if(empty($temp)) $temp = ' ';
+			$ids = substr($temp,0,-1);
+		} elseif(is_string($ids) && (strpos($ids,',') !== false)) {
+			$ids = explode(',', $ids);
+			$temp = '';
+			foreach($ids as $id) {
+				$id = (int)$id;
+				if($id > 0) $temp .= $id.',';
+			}
+			if(empty($temp)) $temp = ' ';
+			$ids = substr($temp,0,-1);
+		} elseif(is_numeric($ids) || is_string($ids)) {
+			$ids = (int)$ids;
+		} else {
+			$ids = '';
+		}
+		if($ids) {
+			$query->where($db->nameQuote('akeebasubs_level_id').' IN ('.$ids.')');
+		}
+		
 		$order = $this->getState('filter_order', 'akeebasubs_level_id', 'cmd');
 		if($order == 'id') $order = 'akeebasubs_level_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');

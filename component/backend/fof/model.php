@@ -46,7 +46,7 @@ class FOFModel extends JModel
 		$type		= preg_replace('/[^A-Z0-9_\.-]/i', '', $type);
 		$modelClass	= $prefix.ucfirst($type);
 		$result		= false;
-
+		
 		if (!class_exists( $modelClass ))
 		{
 			// Guess the component name and include path

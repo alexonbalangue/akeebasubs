@@ -11,12 +11,15 @@ class AkeebasubsControllerLevels extends FOFController
 {
 	public function onBeforeBrowse() {
 		if(parent::onBeforeBrowse()) {
-			$this->getThisModel()
-				->clearState()
-				->clearInput()
-				->savestate(0)
-				->limit(0)
-				->limitstart(0);
+			$noClear = FOFInput::getBool('no_clear',false, $this->input);
+			if(!$noClear) {
+				$this->getThisModel()
+					->clearState()
+					->clearInput()
+					->savestate(0)
+					->limit(0)
+					->limitstart(0);
+			}
 			return true;
 		} else {
 			return false;

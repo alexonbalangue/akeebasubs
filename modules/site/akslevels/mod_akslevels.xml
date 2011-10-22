@@ -12,7 +12,6 @@
 	<description>MOD_AKSLEVELS_DESCRIPTION</description>
 	<files>
 		<file module="mod_akslevels">mod_akslevels.php</file>
-		<file>html.php</file>
 		<folder>elements</folder>
 	</files>
 	<languages folder="translation">

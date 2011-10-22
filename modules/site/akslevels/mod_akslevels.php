@@ -22,15 +22,24 @@
 // no direct access
 defined('_JEXEC') or die('');
 
-// Make sure Koowa is running
-if(!defined('KOOWA')) {
-	return;
-}
-
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 
-echo KFactory::get('mod://site/akslevels.html')
-	->module($module)
-	->params($params)
-	->attribs($attribs)
-	->display();
+$layout = $params->get('layout','awesome');
+$ids = $params->get('ids',array());
+
+$config = array(
+	'option'	=> 'com_akeebasubs',
+	'view'		=> 'levels',
+	'layout'	=> $layout,
+	'input'		=> array(
+		'limit'		=> 0,
+		'limitstart'=> 0,
+		'no_clear'	=> true
+	)
+);
+if(!empty($ids)) $config['input']['id'] = $ids;
+
+FOFDispatcher::getAnInstance('com_akeebasubs', 'levels', $config)->dispatch();
