@@ -37,56 +37,61 @@ class FOFDispatcher extends JObject
 		
 		$hash = $option.$view;
 		if(!array_key_exists($hash, $instances)) {
-			if(array_key_exists('input', $config)) {
-				$input = $config['input'];
-			} else {
-				$input = JRequest::get('default', 3);
-			}
-			$config['option'] = !is_null($option) ? $option : FOFInput::getCmd('option','com_foobar',$input);
-			$config['view'] = !is_null($view) ? $view : FOFInput::getCmd('view','cpanel',$input);
-			$input['option'] = $config['option'];
-			$input['view'] = $config['view'];
-			$config['input'] = $input;
-			
-			$className = ucfirst(str_replace('com_', '', $config['option'])).'Dispatcher';
-			if (!class_exists( $className )) {
-				$app = JFactory::getApplication();
-				if($app->isSite()) {
-					$basePath = JPATH_SITE;
-				} else {
-					$basePath = JPATH_ADMINISTRATOR;
-				}
-				
-				$searchPaths = array(
-					$basePath.'/components/'.$config['option'],
-					$basePath.'/components/'.$config['option'].'/dispatchers',
-					JPATH_ADMINISTRATOR.'/components/'.$config['option'],
-					JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/dispatchers'
-				);
-				if(array_key_exists('searchpath', $config)) {
-					array_unshift($searchPaths, $config['searchpath']);
-				}
-				
-				jimport('joomla.filesystem.path');
-				$path = JPath::find(
-					$searchPaths,
-					'dispatcher.php'
-				);
-				
-				if ($path) {
-					require_once $path;
-				}
-			}
-			
-			if (!class_exists( $className )) {
-				$className = 'FOFDispatcher';
-			}
-			$instance = new $className($config);
-			
-			$instances[$hash] = $instance;
+			$instances[$hash] = self::getTmpInstance($option, $view, $config);
 		}
 		
 		return $instances[$hash];
+	}
+	
+	public static function &getTmpInstance($option = null, $view = null, $config = array())
+	{
+		if(array_key_exists('input', $config)) {
+			$input = $config['input'];
+		} else {
+			$input = JRequest::get('default', 3);
+		}
+		$config['option'] = !is_null($option) ? $option : FOFInput::getCmd('option','com_foobar',$input);
+		$config['view'] = !is_null($view) ? $view : FOFInput::getCmd('view','cpanel',$input);
+		$input['option'] = $config['option'];
+		$input['view'] = $config['view'];
+		$config['input'] = $input;
+
+		$className = ucfirst(str_replace('com_', '', $config['option'])).'Dispatcher';
+		if (!class_exists( $className )) {
+			$app = JFactory::getApplication();
+			if($app->isSite()) {
+				$basePath = JPATH_SITE;
+			} else {
+				$basePath = JPATH_ADMINISTRATOR;
+			}
+
+			$searchPaths = array(
+				$basePath.'/components/'.$config['option'],
+				$basePath.'/components/'.$config['option'].'/dispatchers',
+				JPATH_ADMINISTRATOR.'/components/'.$config['option'],
+				JPATH_ADMINISTRATOR.'/components/'.$config['option'].'/dispatchers'
+			);
+			if(array_key_exists('searchpath', $config)) {
+				array_unshift($searchPaths, $config['searchpath']);
+			}
+
+			jimport('joomla.filesystem.path');
+			$path = JPath::find(
+				$searchPaths,
+				'dispatcher.php'
+			);
+
+			if ($path) {
+				require_once $path;
+			}
+		}
+
+		if (!class_exists( $className )) {
+			$className = 'FOFDispatcher';
+		}
+		$instance = new $className($config);
+
+		return $instance;
 	}
 	
 	public function __construct($config = array()) {
@@ -173,7 +178,7 @@ class FOFDispatcher extends JObject
 		FOFInput::setVar('task',$task,$this->input);
 		
 		$config = array('input'=>$this->input);
-		$controller = FOFController::getAnInstance($option, $view, $config);
+		$controller = FOFController::getTmpInstance($option, $view, $config);
 		$status = $controller->execute($task);
 		if($status === false) {
 			if(version_compare(JVERSION, '1.6.0', 'ge')) {
