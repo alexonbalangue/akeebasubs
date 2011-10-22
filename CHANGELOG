@@ -1,4 +1,5 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.0
 ================================================================================
-! Writing everything from scratch to work as a native Joomla! component.
+! Completely rewritten to no longer use the Nooku Framework
++ #35 Change coupon hit counter to take into account only paid subscriptions using that coupon code

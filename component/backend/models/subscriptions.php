@@ -31,7 +31,8 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'expires_to'	=> $this->getState('expires_to',null,'string'),
 			'refresh'		=> $this->getState('refresh',null,'int'),
 			'groupbydate'	=> $this->getState('groupbydate',null,'int'),
-			'moneysum'		=> $this->getState('moneysum',null,'int')
+			'moneysum'		=> $this->getState('moneysum',null,'int'),
+			'coupon_id'		=> $this->getState('couponid',null,'int')
 		);
 	}
 	
@@ -220,6 +221,13 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$query->where(
 					$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
 						$db->quote($state->level)
+				);
+			}
+			
+			if(is_numeric($state->coupon_id) && ($state->coupon_id > 0)) {
+				$query->where(
+					$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' = '.
+						$db->quote($state->coupon_id)
 				);
 			}
 			

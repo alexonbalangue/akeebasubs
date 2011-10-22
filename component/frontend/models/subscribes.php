@@ -492,8 +492,20 @@ class AkeebasubsModelSubscribes extends FOFModel
 					
 					// Check hits limit
 					if($valid && $coupon->hitslimit) {
+						// Get the real coupon hits
+						$hits = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							->coupon_id($coupon->akeebasubs_coupon_id)
+							->paystate('C')
+							->limit(0)
+							->limistart(0)
+							->getTotal();
 						if($coupon->hitslimit >= 0) {
-							$valid = $coupon->hits < $coupon->hitslimit;
+							$valid = $hits < $coupon->hitslimit;
+							if(($coupon->hits != $hits) || ($hits >= $coupon->hitslimit)) {
+								$coupon->hits = $hits;
+								$coupon->enabled = $hits < $coupon->hitslimit;
+								$coupon->save();
+							}
 						}
 					}
 				} else {
