@@ -28,19 +28,20 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php'
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 
 ?>
-<div id="mod-aksubslist-<?php echo $this->module->id?>" class="mod-aksubslist">
+<div id="mod-aksubslist-<?php echo $module->id?>" class="mod-aksubslist">
 <?php if(JFactory::getUser()->guest): ?>
 	<span class="akeebasubs-subscriptions-itemized-nosubs">
 		<?php echo JText::_('COM_AKEEBASUBS_LEVELS_ITEMIZED_NOSUBS')?>
 	</span>
 <?php else: ?>
 <?php FOFDispatcher::getAnInstance('com_akeebasubs', 'subscriptions', array(
-	'option'	=> 'com_akeebasubs',
-	'view'		=> 'subscriptions',
-	'layout'	=> 'itemized',
 	'input'		=> array(
+		'option'	=> 'com_akeebasubs',
+		'view'		=> 'subscriptions',
+		'layout'	=> 'itemized',
 		'limit'		=> 0,
-		'limitstart'=> 0
+		'limitstart'=> 0,
+		'user_id'	=> JFactory::getUser()->id
 	)
 ))->dispatch();
 ?>

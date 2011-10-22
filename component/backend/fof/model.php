@@ -73,7 +73,7 @@ class FOFModel extends JModel
 			
 			$needsAView = true;
 			if(array_key_exists('view', $config)) {
-				if(!emtpy($config['view'])) $needsAView = false;
+				if(!empty($config['view'])) $needsAView = false;
 			}
 			if($needsAView) $config['view'] = strtolower($type);
 			
@@ -313,7 +313,7 @@ class FOFModel extends JModel
 		
 		return $this;
 	}
-
+	
 	/**
 	 * Returns a single item. It uses the id set with setId, or the first ID in
 	 * the list of IDs for batch operations

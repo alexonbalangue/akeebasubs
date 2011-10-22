@@ -171,7 +171,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			$states = array();
 			foreach($states_temp as $s) {
 				$s = strtoupper($s);
-				if(!in_array($s, array('C','P','N','X'))) return;
+				if(!in_array($s, array('C','P','N','X'))) continue;
 				$states[] = $db->quote($s);
 			}
 			if(!empty($states)) {
