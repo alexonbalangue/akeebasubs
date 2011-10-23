@@ -99,7 +99,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 	
 	private function getStateVariables()
 	{
+		$session = JFactory::getSession();
+		$firstRun = $session->get('firstrun', true, 'com_akeebasubs');
+		if($firstRun) {
+			$session->set('firstrun', false, 'com_akeebasubs');
+		}
+		
 		return (object)array(
+			'firstrun'			=> $firstRun,
 			'slug'				=> $this->getState('slug','','string'),
 			'id'				=> $this->getState('id',0,'int'),
 			'paymentmethod'		=> $this->getState('paymentmethod','none','cmd'),
@@ -754,6 +761,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 		}
 		if(!$found) return false;
+		
+		// Reset the session flag, so that future registrations will merge the
+		// data from the database
+		JFactory::getSession()->set('firstrun', true, 'com_akeebasubs');
 
 		// Step #3. Create a user record if required and send out the email with user information
 		// ----------------------------------------------------------------------

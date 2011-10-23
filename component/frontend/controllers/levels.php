@@ -57,16 +57,25 @@ class AkeebasubsControllerLevels extends FOFController
 		$view = $this->getThisView();
 		
 		// Get the user model and load the user data
-		$view->assign('userparams',
-			FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$userparams = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id(JFactory::getUser()->id)
-				->getMergedData()
-		);
+				->getMergedData();
+		$view->assign('userparams', $userparams);
 		
 		// Load any cached user supplied information
 		$vModel = FOFModel::getAnInstance('Subscribes','AkeebasubsModel')
 			->slug($slug);
-		$view->assign('cache', (array)($vModel->getData()));
+		$cache = (array)($vModel->getData());
+		if($cache['firstrun']) {
+			foreach($cache as $k => $v) {
+				if(empty($v)) {
+					if(property_exists($userparams, $k)) {
+						$cache[$k] = $userparams->$k;
+					}
+				}
+			}
+		}
+		$view->assign('cache', (array)$cache);
 		$view->assign('validation', $vModel->getValidation());
 		
 		return true;
