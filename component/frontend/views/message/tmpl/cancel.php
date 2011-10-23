@@ -13,6 +13,10 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_V
 $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
+$this->loadHelper('mesage');
+
+// Translate message
+$message = AkeebasubsHelperMessage::processLanguage($this->item->canceltext);
 
 ?>
 
@@ -24,7 +28,7 @@ $this->loadHelper('format');
 	<?= $this->escape(JText::_('COM_AKEEBASUBS_MESSAGE_SORRY')) ?>
 </h1>
 
-<?php echo JHTML::_('content.prepare', $this->item->canceltext)?>
+<?php echo JHTML::_('content.prepare', $message)?>
 
 <div class="akeebasubs-goback">
 	<p><a href="<?php echo JURI::base()?>"><?php echo JText::_('COM_AKEEBASUBS_MESSAGE_BACK')?></a></p>

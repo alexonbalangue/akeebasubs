@@ -6,7 +6,7 @@
  */
 
 defined('_JEXEC') or die();
-
+$this->loadHelper('message');
 ?>
 
 <div id="akeebasubs-subscribe-level">
@@ -20,7 +20,7 @@ defined('_JEXEC') or die();
 			<?php if(!empty($this->item->image)):?>
 			<img class="level-image" src="<?php echo JURI::base().(version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/').$this->escape($this->item->image)?>" />
 			<?php endif;?>
-			<?php echo JHTML::_('content.prepare', $this->item->description);?>
+			<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description));?>
 		</div>
 	</div>
 	<div class="level-clear"></div>	

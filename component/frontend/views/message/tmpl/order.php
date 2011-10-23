@@ -13,7 +13,10 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_V
 $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
+$this->loadHelper('mesage');
 
+// Translate message
+$message = AkeebasubsHelperMessage::processLanguage($this->item->ordertext);
 ?>
 
 <?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
@@ -24,7 +27,7 @@ $this->loadHelper('format');
 	<?php echo $this->escape(JText::_('COM_AKEEBASUBS_MESSAGE_THANKYOU')) ?>
 </h1>
 
-<?php echo JHTML::_('content.prepare', $this->item->ordertext) ?>
+<?php echo JHTML::_('content.prepare', $message) ?>
 
 <div class="akeebasubs-goback">
 	<p><a href="<?php echo JURI::base()?>"><?php echo JText::_('COM_AKEEBASUBS_MESSAGE_BACK')?></a></p>

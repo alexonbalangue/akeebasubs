@@ -12,6 +12,7 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_V
 $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
+$this->loadHelper('message');
 
 ?>
 
@@ -44,7 +45,7 @@ $this->loadHelper('format');
 					<?if(!empty($level->image)):?>
 					<img class="level-image" src="<?php echo JURI::base()?><?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $level->image?>" />
 					<?endif;?>
-					<?php echo JHTML::_('content.prepare', $level->description);?>
+					<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description));?>
 				</div>
 			</div>
 			<div class="level-clear"></div>
