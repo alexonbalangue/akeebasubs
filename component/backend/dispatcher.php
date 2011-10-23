@@ -10,16 +10,14 @@ defined('_JEXEC') or die();
 
 class AkeebasubsDispatcher extends FOFDispatcher
 {
-	public function onBeforeDispatch() {
-		$result = parent::onBeforeDispatch();
-		
+	public function dispatch() {
 		// Handle Live Update requests
 		require_once JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate/liveupdate.php';
-		if($result && (FOFInput::getCmd('view','',$this->input) == 'liveupdate')) {
+		if((FOFInput::getCmd('view','',$this->input) == 'liveupdate')) {
 			LiveUpdate::handleRequest();
-			return false;
+			return;
 		}
 		
-		return $result;
+		parent::dispatch();
 	}
 }
