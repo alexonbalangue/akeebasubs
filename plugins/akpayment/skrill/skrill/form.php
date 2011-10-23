@@ -12,7 +12,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<?php if($recipient_description = $this->params->get('company','')): ?>
 	<input type="hidden" name="recipient_description" value="<?php echo htmlentities($recipient_description) ?>" />
 	<?php endif; ?>
-	<input type="hidden" name="transaction_id" value="<?php echo htmlentities($subscription->id) ?>" />
+	<input type="hidden" name="transaction_id" value="<?php echo htmlentities($subscription->akeebasubs_subscription_id) ?>" />
 	
 	<input type="hidden" name="return_url" value="<?php echo $data->success ?>" />
 	<input type="hidden" name="cancel_url" value="<?php echo $data->cancel ?>" />
@@ -45,7 +45,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<?php endif; ?>
 	
 	<input type="hidden" name="detail1_description" value="<?php echo htmlentities(JText::_('PLG_AKPAYMENT_SKRILL_LBL_SUBSCRIPTIONLEVEL'))?>" />
-	<input type="hidden" name="detail1_text" value="<?php echo htmlentities($level->id) ?> - <?php echo htmlentities($level->title)?>" />
+	<input type="hidden" name="detail1_text" value="<?php echo htmlentities($level->akeebasubs_level_id) ?> - <?php echo htmlentities($level->title)?>" />
 	<input type="hidden" name="detail2_description" value="<?php echo htmlentities(JText::_('PLG_AKPAYMENT_SKRILL_LBL_USERNAME'))?>" />
 	<input type="hidden" name="detail2_text" value="<?php echo htmlentities($user->username) ?>" />
 

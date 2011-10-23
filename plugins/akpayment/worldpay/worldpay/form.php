@@ -10,10 +10,10 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 <form action="<?php echo htmlentities($data->url) ?>"  method="post" id="paymentForm">
 	<input type="hidden" name="cmd" value="_xclick" />
 	<input type="hidden" name="instId" value="<?php echo htmlentities($data->instid) ?>" />
-	<input type="hidden" name="cartId" value="<?php echo htmlentities($subscription->id) ?>" />
+	<input type="hidden" name="cartId" value="<?php echo htmlentities($subscription->akeebasubs_subscription_id) ?>" />
 	<input type="hidden" name="amount" value="<?php echo htmlentities($subscription->gross_amount) ?>" />
 	<input type="hidden" name="currency_code" value="<?php echo htmlentities($data->currency) ?>" />
-	<input type="hidden" name="desc" value="<?php echo htmlentities($level->id) ?> - <?php echo htmlentities($level->title . ' - [ ' . $user->username . ' ]') ?>" />
+	<input type="hidden" name="desc" value="<?php echo htmlentities($level->akeebasubs_level_id) ?> - <?php echo htmlentities($level->title . ' - [ ' . $user->username . ' ]') ?>" />
 	
 	<input type="hidden" name="name" value="<?php echo htmlentities($data->firstname) ?> <?php echo htmlentities($data->lastname) ?>" />
 	<input type="hidden" name="address1" value="<?php echo $kuser->address." ".$kuser->address2.", ".$kuser->city.", ".$kuser->state ?>" />

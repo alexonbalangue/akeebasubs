@@ -13,9 +13,9 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="return" value="<?php echo $data->success ?>" />
 	<input type="hidden" name="cancel_return" value="<?php echo $data->cancel ?>" />
 	<input type="hidden" name="notify_url" value="<?php echo $data->postback ?>" />
-	<input type="hidden" name="custom" value="<?php echo htmlentities($subscription->id) ?>" />
+	<input type="hidden" name="custom" value="<?php echo htmlentities($subscription->akeebasubs_subscription_id) ?>" />
 
-	<input type="hidden" name="item_number" value="<?php echo htmlentities($level->id) ?>" />
+	<input type="hidden" name="item_number" value="<?php echo htmlentities($level->akeebasubs_level_id) ?>" />
 	<input type="hidden" name="item_name" value="<?php echo htmlentities($level->title . ' - [ ' . $user->username . ' ]') ?>" />
 	<input type="hidden" name="amount" value="<?php echo htmlentities($subscription->net_amount) ?>" />
 	<input type="hidden" name="tax" value="<?php echo htmlentities($subscription->tax_amount) ?>" />
@@ -25,7 +25,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="last_name" value="<?php echo htmlentities($data->lastname) ?>" />
 
 	<input type="hidden" name="address_override" value="0">
-	<input type="hidden" name="address1" value="<?php echo $kuser->address ?>">
+	<input type="hidden" name="address1" value="<?php echo $kuser->address1 ?>">
 	<input type="hidden" name="address2" value="<?php echo $kuser->address2 ?>">
 	<input type="hidden" name="city" value="<?php echo $kuser->city ?>">
 	<input type="hidden" name="state" value="<?php echo $kuser->state ?>">

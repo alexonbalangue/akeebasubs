@@ -10,10 +10,10 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 <form action="<?php echo htmlentities($data->url) ?>"  method="post" id="paymentForm">
 	<input type="hidden" name="sid" value="<?php echo htmlentities($data->sid)?>" />
 	<input type="hidden" name="total" value="<?php echo htmlentities($subscription->gross_amount) ?>" />
-	<input type="hidden" name="cart_order_id" value="<?php echo htmlentities($subscription->id) ?>" />
+	<input type="hidden" name="cart_order_id" value="<?php echo htmlentities($subscription->akeebasubs_subscription_id) ?>" />
 	
 	<input type="hidden" name="id_type" value="1" />
-	<input type="hidden" name="c_prod" value="<?php echo htmlentities($level->id) ?>" />
+	<input type="hidden" name="c_prod" value="<?php echo htmlentities($level->akeebasubs_level_id) ?>" />
 	<input type="hidden" name="c_name" value="<?php echo htmlentities($level->title) ?>" />
 	<input type="hidden" name="c_description" value="<?php echo htmlentities($level->title . ' - [ ' . $user->username . ' ]') ?>" />
 	<input type="hidden" name="c_price" value="<?php echo htmlentities($subscription->net_amount) ?>" />
