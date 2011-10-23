@@ -76,19 +76,19 @@
       <bridgehead>At a glance</bridgehead>
 
       <para>Akeeba Subscriptions is a subscriptions management component for
-      <trademark>Joomla!</trademark> 1.5/1.6/1.7 and compatible distributions,
-      such as Nooku Server and Molajo. It is built using the Nooku Framework
-      and the best practices for rapid web application development which
-      ensure stability and security. It is licensed under the <link
-      xlink:href="http://www.gnu.org/licenses/gpl.html">GNU General Public
-      License (GPL) version 3</link> or –at your option– any later version
-      published by the Free Software Foundation. It licensing scheme means
-      that you are free (and, in fact, more than welcome) to install it on as
-      many sites as you want, whenever you want and use it for as long as you
-      want, no strings attached. There are no secret per-domain licensing fees
-      and you can use it to sell one or several millions of subscriptions
-      without any hidden costs. We love Freedom of choice as much as you
-      do!</para>
+      <trademark>Joomla!</trademark> 1.5/1.6/1.7 and compatible distributions.
+      It is built using our renowned Framework on Framework architecture which
+      extends the standard Joomla! API, ensuring greater stability and
+      compatibility across different Joomla! releases. It is licensed under
+      the <link xlink:href="http://www.gnu.org/licenses/gpl.html">GNU General
+      Public License (GPL) version 3</link> or –at your option– any later
+      version published by the Free Software Foundation. It licensing scheme
+      means that you are free (and, in fact, more than welcome) to install it
+      on as many sites as you want, whenever you want and use it for as long
+      as you want, no strings attached. There are no secret per-domain
+      licensing fees and you can use it to sell one or several millions of
+      subscriptions without any hidden costs. We love Freedom of choice as
+      much as you do!</para>
 
       <bridgehead>The killer features</bridgehead>
 
@@ -211,7 +211,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>PHP 5.2.6 or later. Running it on earlier versions will either
+          <para>PHP 5.2.7 or later. Running it on earlier versions will either
           be problematic or it won't work at all.</para>
         </listitem>
 
@@ -223,48 +223,8 @@
         </listitem>
 
         <listitem>
-          <para>Your server must support the mysqli driver and your site must
-          use it before installing the component.</para>
-        </listitem>
-
-        <listitem>
-          <para>If you are using the Suhosin patch for PHP, please <link
-          xlink:href="http://nooku.assembla.com/wiki/show/nooku-framework/Known_Issues">read
-          this tutorial</link> to avoid any potential conflicts. Support will
-          not be provided if you are affected by this Suhosin issue.</para>
-        </listitem>
-
-        <listitem>
           <para>Joomla! 1.5.14 or later (fully supported) or Joomla! 1.6.0 or
-          later (partial support for now). We know that some things in the
-          back-end do not work properly (they look ugly or have other visual
-          artifacts) with Joomla! 1.6. Fixing them would break Joomla! 1.5
-          compatibility, so please don't report them as bugs – we are just not
-          going to fix them yet.</para>
-        </listitem>
-
-        <listitem>
-          <para>The <guilabel>System - mooTools Upgrade</guilabel> system
-          plugin MUST be enabled on Joomla! 1.5 sites.</para>
-        </listitem>
-
-        <listitem>
-          <para>Akeeba Subscriptions is not compatible with Kunena 1.6 and
-          earlier releases. Kunena is using a class name which conflicts with
-          Nooku Framework. This is a known issue, outside of my control. I
-          have notified Kunena developers and they told me that Kunena 2.0
-          properly fixes this issue. If you have Kunena 1.6 or earlier
-          installed on your site DO NOT USE AKEEBA SUBSCRIPTIONS or your site
-          WILL break.</para>
-        </listitem>
-
-        <listitem>
-          <para>IonCube Loaders 4.0.6 and earlier have a bug which prevents
-          Nooku Framework from working at all and cause a blank page or
-          Internal Server Error 500 upon accessing your site. Please upgrade
-          to IonCube Loaders 4.0.7 or later. NOTE: Neither Nooku Framework nor
-          Akeeba Subscriptions use encrypted code. However, IonCube loaders
-          prevent you from using the extension.</para>
+          later.</para>
         </listitem>
       </itemizedlist>
 
@@ -276,95 +236,11 @@
       behaviour</emphasis>.</para>
 
       <important>
-        <para>Always have a tested backup of your site stored on your local
-        computer BEFORE installing Akeeba Subscriptions. Akeeba Subscriptions
-        is based on a cutting edge PHP framework which doesn't play well with
-        low quality hosts. If your site breaks, having a backup will ensure
-        that you can restore it to its last known working state very
-        easily.</para>
-
-        <para>If you do not have a backup of your site, please follow the
-        <link linkend="uninstallation">uninstallation
-        instructions</link>.</para>
-      </important>
-
-      <important>
         <para>If you installed Akeeba Subscriptions 1.0.b4 or earlier on your
         site and your site displays a blank page, please remove the
         <filename>index.html</filename> files from your site's root and your
         site's administrator directories.</para>
       </important>
-
-      <para>Some very poor quality servers <emphasis role="bold">ARE NOT
-      COMPATIBLE</emphasis> with Nooku Framework. In this case, you may
-      experience your site not loading any more. When this happens, please
-      remove the file <filename>plugins/system/koowa.php</filename> (Joomla!
-      1.5) or <filename>plugins/system/koowa/koowa.php</filename> (Joomla! 1.6
-      or later). Moreover, edit your <filename>configuration.php</filename>
-      file and find the line starting with</para>
-
-      <programlisting>var $dbtype = 'mysqli';</programlisting>
-
-      <para>and change it to read</para>
-
-      <programlisting>var $dbtype = 'mysql';</programlisting>
-
-      <para>Please note that these issues are known incompatibilities of the
-      Nooku Framework with very low quality hosts. The real problem is with
-      your host and usually is one of the following:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Use of an obsolete PHP version. PHP 5.2.17 or earlier are end
-          of line and not supported by the PHP project. If your host is using
-          one of those versions, be aware that they are using outdated,
-          vulnerable software which can be used to exploit your site. Ask your
-          host to update their outdated software.</para>
-        </listitem>
-
-        <listitem>
-          <para>Some servers use a very old version of IonCube loaders
-          containing a bug which interferes with Nooku Framework. Note:
-          neither Nooku Framework nor Akeeba Subscriptions use encrypted code.
-          However, the old versions of IonCube loaders (from early 2011 or
-          earlier) have a bug which doesn't allow NF to load properly and can
-          bring your site down. Ask your host to update their outdated
-          software.</para>
-        </listitem>
-
-        <listitem>
-          <para>Some servers use the Suhosin PHP patch. Depending on the
-          configuration of Suhosin, it is possible that it doesn't allow the
-          virtual <filename>tmpl://</filename> stream wrapper to be
-          registered. This will not allow Akeeba Subscriptions to run, as
-          Nooku Framework relies on that behaviour to load. Ask your host to
-          update their broken software configuration.</para>
-        </listitem>
-
-        <listitem>
-          <para>If your host is using MySQL 5.0.40 or earlier, they are using
-          an outdated, vulnerable version of MySQL which is known to not work
-          properly with Nooku Framework. Ask your host to update their
-          outdated software.</para>
-        </listitem>
-
-        <listitem>
-          <para>Some hosts do not allow the use of the PHP mysqli driver.
-          Please note that mysqli (with an i at the end) is the new version of
-          the PHP MySQL driver. The old driver (mysql - without a trailing i)
-          is considered buggy and obsolete, is no longer maintained and will
-          be removed from future versions of PHP. If your server doesn't allow
-          the use of the modern, maintained driver, please ask your host to
-          update their outdated software.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>As you understand, all incompatibilities you may run into are the
-      result of a host using outdated, vulnerable software or having egregious
-      misconfigurations on their servers. Would you trust such a host with
-      your revenue-generating website? If you are going to make money from
-      your site, you'd better spend money on hosting it on a proper server. As
-      simple as that.</para>
     </section>
 
     <section xml:id="installation-instructions">
@@ -373,32 +249,12 @@
       <section xml:id="installation">
         <title>Installation</title>
 
-        <para>There are two available installation packages. The one with
-        -noframework in its name contains only the component, modules and
-        plugins of Akeeba Subscriptions. The one with -nooku contains
-        everything plus a copy of the Nooku Framework. If you don't have any
-        other Nooku-based software on your site, please install the regular
-        package. If you have another Nooku-based software on your site, such
-        as Ninjaboard 1.0.7 or later, please try installing the -noframework
-        package first and, if that doesn't work properly, take a backup of
-        your site and try installing the regular package.</para>
-
         <para>Installing the package is the same as with any other Joomla!
         component. Go to your site's back-end, Extensions, Install/Uninstall
         (Joomla! 1.5) or Extensions, Manage (Joomla! 1.6) and click on Browse.
         Locate the ZIP package and click on Upload and Install. If the
         installation fails, please refer to the installation troubleshooting
         section of this guide.</para>
-
-        <important>
-          <para>On Joomla! 1.5 sites you MUST publish the <guilabel>System -
-          mooTools Upgrade</guilabel> system plugin for Akeeba Subscriptions
-          to work properly. If you don't, the interface will appear broken and
-          you will not be able to use the component. If you file a support
-          request regarding that, we'll just reply with
-          "<acronym>RTFM</acronym>" (RTFM is the acronym for Read The Fine
-          Manual).</para>
-        </important>
       </section>
 
       <section xml:id="installation-troubleshooting">
@@ -460,7 +316,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>If you have Joomla! 1.6 make sure that you are using Joomla!
         1.6.0 (the "stable" release, not the RC or any of the betas). Mind
         you, we have only tested the installation with Joomla! 1.6.2 and later
-        releases.</para>
+        releases. Akeeba Subscriptions works perfectly on Joomla! 1.7
+        sites.</para>
 
         <bridgehead>Checking your temporary directory</bridgehead>
 
@@ -688,68 +545,10 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <title>Uninstallation</title>
 
       <para>You can uninstall the component just like any other Joomla!
-      component. If you can not uninstall the component (your site crashed,
-      can't access your site's administrator page or similar), please follow
-      the instructions in the next paragraph first. They will allow you to
-      regain access to your site's back-end and then you can uninstall Akeeba
-      Subscriptions.</para>
-
-      <para>After the uninstallation, Akeeba Subscriptions leaves behind the
-      Nooku Framework installation. This is done deliberately, as there might
-      be other software depending on that software as well. If you want to
-      remove it, please follow these steps:</para>
-
-      <orderedlist>
-        <listitem>
-          <para>Go to Extensions, Plugins Manager and unpublish the
-          <guilabel>System - Koowa</guilabel> plugin ("Koowa" is the code name
-          of Nooku Framework).</para>
-        </listitem>
-
-        <listitem>
-          <para>Uninstall the System - Koowa plugin.</para>
-        </listitem>
-
-        <listitem>
-          <para>Using your favourite FTP software, please make sure that the
-          following files/folders no longer exist (if they exist, delete
-          them):</para>
-
-          <programlisting>plugins/system/koowa.php
-plugins/system/koowa.xml
-plugins/system/koowa</programlisting>
-        </listitem>
-
-        <listitem>
-          <para>Remove the following directories from your site:</para>
-
-          <programlisting>administrator/components/com_default
-administrator/modules/mod_default
-libraries/koowa
-media/com_default
-media/lib_koowa
-plugins/koowa
-components/com_default
-modules/mod_default</programlisting>
-        </listitem>
-
-        <listitem>
-          <para>If your site was using the mysql instead of the mysqli driver
-          before Akeeba Subscriptions installation, or if you have no idea
-          what that means, please edit your site's
-          <filename>configuration.php</filename> file, find the line
-          reading:</para>
-
-          <programlisting>var $dbtype = 'mysqli';</programlisting>
-
-          <para>and change it to:</para>
-
-          <programlisting>var $dbtype = 'mysql';</programlisting>
-
-          <para>then, save the <filename>configuration.php</filename>
-          file.</para>
-        </listitem>
-      </orderedlist>
+      component. In your site's back-end, just go to Extensions,
+      Install/Uninstall, click on Uninstall, select Akeeba Subscriptions and
+      click on Uninstall. This will completely remove Akeeba Subscriptions
+      including all subscriber information!</para>
     </section>
   </chapter>
 
@@ -855,8 +654,9 @@ modules/mod_default</programlisting>
     <section xml:id="configuration">
       <title>Configuration options</title>
 
-      <para>Click on <guilabel>Configuration</guilabel> in the toolbar links
-      area. The available options are:</para>
+      <para>Click on <guibutton>Parameters</guibutton> (Joomla! 1.5) or
+      <guibutton>Options</guibutton> (Joomla! 1.6, 1.7 and later) in the
+      toolbar links area. The available options are:</para>
 
       <para><guilabel>Currency Options</guilabel></para>
 
@@ -1101,6 +901,33 @@ modules/mod_default</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
+
+      <bridgehead>Multi-lingual support</bridgehead>
+
+      <para>Akeeba Subscriptions 2.0 and later are able support multi-lingual
+      sites without the need of a third-party extension. This is done by using
+      language code "merge tags" in the three last fields outlined above:
+      short description, message to show after successful sign-up and message
+      to show after sign-up cancellation. The merge tags in the text look like
+      this:</para>
+
+      <programlisting>[IFLANG en-GB]This is the English description[/IFLANG]
+[IFLANF fr-FR]Ceci est la description française[/IFLANG]
+[IFLANG de-DE]Diese ist die deutsche Beschreibung[/IFLANG]
+[IFLANG el-GR]Αυτή είναι η Ελληνική περιγραφή[/IFLANG]</programlisting>
+
+      <para>Essentially, you have to wrap your per-language text in
+      <code>[IFLANG <replaceable>languageCode</replaceable>]</code> and
+      <code>[/IFLANG]</code> merge tags. The languageCode you must use is the
+      five letter language code used by Joomla!'s translation packages. For
+      example, the English language is en-GB (British English), en-AU
+      (Australian English) or en-US (Unites States English), German is de-DE
+      (Germany) or de-AT (Austria) and so forth. If you're unsure, please go
+      to your site's back-end, Language Manager and take a look at the
+      language code in there.</para>
+
+      <para>Please note that you can not use the same language code
+      twice.</para>
     </section>
 
     <section xml:id="tax-rules">
