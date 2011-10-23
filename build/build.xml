@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="AkeebaSubscriptions" description="Akeeba Subscriptions component based on Nooku FW" default="svn" >
+<project name="AkeebaSubscriptions" description="Akeeba Subscriptions component based on Nooku FW" default="git" >
 	<property file="./build.properties" />
 	<!-- Default properties, set only if not already assigned in the build.properties file -->
 	<property name="dirs.root" value="../" />
@@ -7,7 +7,6 @@
 	<property name="dirs.modules" value="../modules" />
 	<property name="dirs.plugins" value="../plugins" />
 	<property name="dirs.documentation" value="../documentation" />
-	<property name="dirs.koowa" value="../koowa/code" />
 
 	<property name="dirs.release" value="../release" />
 
@@ -16,10 +15,10 @@
 	<property name="dirs.bin.fop" value="${dirs.bin}/fop" />
 	<property name="dirs.bin.dbxsl" value="${dirs.bin}/dbxsl" />
 
-	<property name="version" value="svn" />
+	<property name="version" value="git" />
 
 	<taskdef name="zipme" classname="phingext.ZipmeTask" />
-	<taskdef name="svnversion" classname="phingext.SvnVersionTask" />
+	<taskdef name="gitversion" classname="phingext.GitVersionTask" />
 	<taskdef name="docexport" classname="phingext.DocexportTask" />
 
 	<!--
@@ -43,10 +42,10 @@
 	-->
 	
 	<target name="all" description="Makes everything"
-		depends="svn,documentation">
+		depends="git,documentation">
 	</target>
 
-	<target name="svn" description="Makes only packages, not the documentation"
+	<target name="git" description="Makes only packages, not the documentation"
 		depends="new-release,setup-properties,component-packages">
 	</target>
 
@@ -64,10 +63,10 @@
 
 		<!-- Initialize the version if it's not set -->
 		<if>
-			<equals arg1="${version}" arg2="svn" />
+			<equals arg1="${version}" arg2="git" />
 			<then>
-				<svnversion workingcopy="${dirs.root}" propertyname="svn.lastrevision" />
-				<property name="version" value="svn${svn.lastrevision}" override="true" />
+				<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
+				<property name="version" value="rev${git.lastrevision}" override="true" />
 			</then>
 		</if>
 	</target>
@@ -78,66 +77,9 @@
 	====================================================================================================
 	-->
 	
-	<target name="component-packages" depends="component-package-full,component-package-nofw" />
+	<target name="component-packages" depends="component-package" />
 	
-	<target name="component-package-full" description="Akeeba Subscriptions, full"
-		depends="new-release,setup-properties">
-			
-		<!-- Create the package -->
-		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-		
-		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="1" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-		
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
-			<fileset refid="component" />
-		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
-			<fileset dir="${dirs.modules}">
-				<include name="**"/>
-			</fileset>
-		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
-			<fileset dir="${dirs.plugins}">
-				<include name="**"/>
-			</fileset>
-		</zipme>
-		
-		<zipme basedir="${dirs.koowa}" prefix="koowa" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
-			<fileset dir="${dirs.koowa}">
-				<include name="**"/>
-				<exclude name="site/**" />
-				<exclude name="plugins/system/**" />
-			</fileset>
-		</zipme>
-		<zipme basedir="${dirs.koowa}/plugins/system" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
-			<fileset dir="${dirs.koowa}/plugins/system">
-				<include name="koowa.php"/>
-			</fileset>
-		</zipme>
-		<copy file="./templates/koowa.xml" tofile="${dirs.release}/koowa.xml" overwrite="true" />
-		<zipme basedir="${dirs.release}" prefix="plugins/system/koowa" destfile="${dirs.release}/com_akeebasubs-${version}-full.zip" includeemptydirs="true">
-			<fileset dir="${dirs.release}">
-				<include name="koowa.xml"/>
-			</fileset>
-		</zipme>
-	</target>
-	
-	<target name="component-package-nofw" description="Akeeba Subscriptions Professional, without Nooku"
+	<target name="component-package" description="Akeeba Subscriptions Professional"
 		depends="new-release,setup-properties">
 		
 		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
@@ -159,15 +101,15 @@
 			</filterchain>
 		</copy>
 		
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset refid="component" />
 		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset dir="${dirs.modules}">
 				<include name="**"/>
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-no_framework.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
 			</fileset>
@@ -209,15 +151,15 @@
 	====================================================================================================
 	-->
 	
-	<target name="ftpdeploy" depends="svn">
-		<svnversion workingcopy="${dirs.root}" propertyname="svn.lastrevision" />
+	<target name="ftpdeploy" depends="git">
+		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
 		<echo>Uploading release</echo>
 		<ftpdeploy
 			host="${ftp.host}"
 			port="${ftp.port}"
 			username="${ftp.username}"
 			password="${ftp.password}"
-			dir="${ftp.dir}/akeebasubs/${svn.lastrevision}"
+			dir="${ftp.dir}/akeebasubs/${git.lastrevision}"
 			mode="${ftp.mode}"
 			level="debug">
 			<fileset dir="${dirs.root}">

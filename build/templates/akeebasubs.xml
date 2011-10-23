@@ -17,8 +17,8 @@
 		<filename>dispatcher.php</filename>
 		<filename>router.php</filename>
 		<folder>controllers</folder>
+		<folder>helpers</folder>
 		<folder>models</folder>
-		<folder>templates</folder>
 		<folder>views</folder>
 	</files>
 
@@ -62,19 +62,21 @@
 		<menu view="cpanel" img="../media/com_akeebasubs/images/akeebasubs-16.png">COM_AKEEBASUBS</menu>
 		<!-- Back-end files -->
 		<files folder="backend">
+			<filename>access.xml</filename>
 			<filename>akeebasubs.php</filename>
-			<filename>config.json</filename>
+			<filename>config.xml</filename>
 			<filename>dispatcher.php</filename>
+			<filename>toolbar.php</filename>
 			<filename>version.php</filename>
 			
 			<folder>controllers</folder>
-			<folder>databases</folder>
+			<folder>fof</folder>
+			<folder>helpers</folder>
 			<folder>install</folder>
 			<folder>language</folder>
 			<folder>liveupdate</folder>
 			<folder>models</folder>
-			<folder>simpleforms</folder>
-			<folder>templates</folder>
+			<folder>tables</folder>
 			<folder>views</folder>
 		</files>
 
