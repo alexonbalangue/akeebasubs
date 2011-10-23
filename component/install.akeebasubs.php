@@ -26,6 +26,7 @@ defined('_JEXEC') or die();
 // Akeeba Component Installation Configuration
 // =============================================================================
 $installation_queue = array(
+	// modules => { (folder) => { (module) => { (position), (published) } }* }*
 	'modules' => array(
 		'admin' => array(
 			'akeebasubs' => array('cpanel', 1)
@@ -35,7 +36,6 @@ $installation_queue = array(
 			'aksubslist' => array('left', 0),
 			'akslevels' => array('left', 0)
 		)
-	// modules => { (folder) => { (module) => { (position), (published) } }* }*
 	),
 	// plugins => { (folder) => { (element) => (published) }* }*
 	'plugins' => array(
@@ -75,20 +75,61 @@ $installation_queue = array(
 			'asrestricted'			=> 1
 		),
 		'system' => array(
-			'koowa'					=> 1,
 			'asexpirationcontrol'	=> 1,
 			'asexpirationnotify'	=> 1
 		)
 	)
 );
 
-// Define files and directories to remove
+// Define files and directories to remove - these are leftovers from Akeeba Subscriptions 1.0.x
 $removeFiles = array(
 	'administrator/components/com_akeebasubs/akeebasubs.xml',
 	'administrator/components/com_akeebasubs/install.akeebasubs.php',
 	'administrator/components/com_akeebasubs/uninstall.akeebasubs.php',
+	'administrator/components/com_akeebasubs/config.json',
+	'administrator/components/com_akeebasubs/controllers/config.php',
+	'administrator/components/com_akeebasubs/controllers/dashboard.php',
+	'administrator/components/com_akeebasubs/controllers/default.php',
+	'administrator/components/com_akeebasubs/controllers/subrefresh.php',
+	'administrator/components/com_akeebasubs/controllers/subscription.php',
+	'administrator/components/com_akeebasubs/controllers/tool.php',
+	'administrator/components/com_akeebasubs/models/configs.php',
+	'administrator/components/com_akeebasubs/models/tools.php',
+	'administrator/components/com_akeebasubs/views/html.php',
+	'components/com_akeebasubs/controllers/callback.php',
+	'components/com_akeebasubs/controllers/config.php',
+	'components/com_akeebasubs/controllers/default.php',
+	'components/com_akeebasubs/controllers/juser.php',
+	'components/com_akeebasubs/controllers/level.php',
+	'components/com_akeebasubs/controllers/message.php',
+	'components/com_akeebasubs/controllers/subscribe.php',
+	'components/com_akeebasubs/controllers/subscription.php',
+	'components/com_akeebasubs/controllers/taxrule.php',
+	'components/com_akeebasubs/controllers/user.php',
+	'components/com_akeebasubs/controllers/validate.php',
+	'components/com_akeebasubs/views/level/html.php',
+	'components/com_akeebasubs/views/subscribe/html.php',
 );
 $removeFolders = array(
+	'administrator/components/com_akeebasubs/commands',
+	'administrator/components/com_akeebasubs/controllers/behaviours',
+	'administrator/components/com_akeebasubs/controllers/toolbars',
+	'administrator/components/com_akeebasubs/databases',
+	'administrator/components/com_akeebasubs/simpleforms',
+	'administrator/components/com_akeebasubs/templates',
+	'administrator/components/com_akeebasubs/toolbars',
+	'administrator/components/com_akeebasubs/toolbars-xxx',
+	'administrator/components/com_akeebasubs/views/config',
+	'administrator/components/com_akeebasubs/views/coupon',
+	'administrator/components/com_akeebasubs/views/dashboard',
+	'administrator/components/com_akeebasubs/views/level',
+	'administrator/components/com_akeebasubs/views/subscription',
+	'administrator/components/com_akeebasubs/views/taxrule',
+	'administrator/components/com_akeebasubs/views/tools',
+	'administrator/components/com_akeebasubs/views/upgrade',
+	'administrator/components/com_akeebasubs/views/user',
+	'components/com_akeebasubs/templates',
+	'components/com_akeebasubs/controllers/behaviors',
 );
 
 // Joomla! 1.6 Beta 13+ hack
@@ -378,42 +419,6 @@ $status->modules = array();
 $status->plugins = array();
 $src = $this->parent->getPath('source');
 
-// Install the Koowa library and associated system files first
-if(is_dir($src.'/koowa')) {
-	// @todo Remove the old version of the Nooku Framework
-	JFolder::delete(JPATH_ROOT.'/libraries/koowa');
-	JFolder::delete(JPATH_ROOT.'/administrator/components/com_default');
-	JFolder::delete(JPATH_ROOT.'/administrator/modules/mod_default');
-	JFolder::delete(JPATH_ROOT.'/components/com_default');
-	JFolder::delete(JPATH_ROOT.'/media/com_default');
-	JFolder::delete(JPATH_ROOT.'/media/lib_koowa');
-	JFolder::delete(JPATH_ROOT.'/modules/mod_default');
-	if(JFolder::exists(JPATH_ROOT.'/plugins/koowa/default')) JFolder::delete(JPATH_ROOT.'/plugins/koowa/default');
-	if(JFolder::exists(JPATH_ROOT.'/plugins/system/koowa')) JFolder::delete(JPATH_ROOT.'/plugins/system/koowa');
-	
-	// Install the new version of the Nooku Framework
-	$koowaInstalled = JFolder::copy("$src/koowa", JPATH_ROOT, null, true);
-	if(!$koowaInstalled) {
-		JError::raiseWarning(0,'Could not install the Nooku Framework. Please consult our documentation in order to manually install it before attempting to install Akeeba Subscriptions again.');
-		return;
-	}
-	// Remove the index.html files from the site root and the administrator directory
-	foreach( array(JPATH_ROOT.'/index.html',JPATH_ADMINISTRATOR.'/index.html') as $fileToRemove ) {
-		if(JFile::exists($fileToRemove)) JFile::delete($fileToRemove);
-	}
-	// On Joomla! 1.6+, move plugins/koowa/default.php to plugins/koowa/default/default.php
-	if(version_compare(JVERSION, '1.6.0', 'ge')) {
-		JFolder::create(JPATH_ROOT.'/plugins/koowa/default');
-		JFile::move(JPATH_ROOT.'/plugins/koowa/default.php', JPATH_ROOT.'/plugins/koowa/default/default.php');
-	}
-} else {
-	$koowaInstalled = null;
-	if(!class_exists('Koowa')) {
-		JError::raiseWarning(0, "Your site does nor have the Nooku Framework installed. Please download and install the full package, not the -noframework package, of Akeeba Susbcriptions. Thank you!");
-		return false;
-	}
-}
-
 // Install the Joom!Fish content XML file
 if(is_dir($src.'/plugins/joomfish')) {
 	if(JFile::exists(JPATH_SITE . '/components/com_joomfish/helpers/defines.php')) {
@@ -547,14 +552,6 @@ if(!function_exists('pisprint'))
 			</td>
 			<td><strong style="color: green"><?php pitext('COM_AKEEBASUBS_PIINSTALLED');?></strong></td>
 		</tr>
-		<?php if(!is_null($koowaInstalled)): ?>
-		<tr class="row1">
-			<td class="key" colspan="2">
-				<strong><?php pitext('COM_AKEEBASUBS_PIKOOWA'); ?></strong>
-			</td>
-			<td><strong style="color: <?php echo ($koowaInstalled) ? 'green' : 'red' ?>"><?php pitext($koowaInstalled ? 'COM_AKEEBASUBS_PIINSTALLED' : 'COM_AKEEBASUBS_PINOTINSTALLED');?></strong></td>
-		</tr>
-		<?php endif; ?>
 		<?php if (count($status->modules)) : ?>
 		<tr>
 			<th><?php pitext('COM_AKEEBASUBS_PIMODULE'); ?></th>
