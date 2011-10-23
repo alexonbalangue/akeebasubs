@@ -3,3 +3,4 @@ Akeeba Subscriptions 2.0
 ================================================================================
 ! Completely rewritten to no longer use the Nooku Framework
 + #35 Change coupon hit counter to take into account only paid subscriptions using that coupon code
++ Subscription expiration module
