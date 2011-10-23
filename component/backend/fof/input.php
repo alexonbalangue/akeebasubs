@@ -31,7 +31,7 @@ class FOFInput
 
 			// Handle magic quotes compatability
 			if (get_magic_quotes_gpc() && ($var != $default)) {
-				$var = JRequest::_stripSlashesRecursive( $var );
+				$var = self::_stripSlashesRecursive( $var );
 			}
 		}
 		elseif ($default !== null) {
@@ -138,5 +138,11 @@ class FOFInput
 	public static function getUsername($name, $default = '', $input = array())
 	{
 		return self::getVar($name, $default, $input, 'username');
-	}	
+	}
+	
+	protected static function _stripSlashesRecursive($value)
+	{
+		$value = is_array($value) ? array_map(array('FOFInput', '_stripSlashesRecursive'), $value) : stripslashes($value);
+		return $value;
+	}
 }
