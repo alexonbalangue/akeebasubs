@@ -209,7 +209,7 @@ class FOFToolbar
 		$componentName = str_replace('com_', '', $option);
 		
 		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input)).'_EDIT';
+		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInflector::pluralize(FOFInput::getCmd('view','cpanel',$this->input))).'_EDIT';
 		JToolBarHelper::title(JText::_(FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>',$componentName);
 		
 		// Set toolbar icons
