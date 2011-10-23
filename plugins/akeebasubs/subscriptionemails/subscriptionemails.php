@@ -32,16 +32,11 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 	}
 
-	/**
-	 * Called when a new subscription is created, either manually or through
-	 * the front-end interface
+	/*
+	 * !!! WARNING !!!
+	 * 
+	 * onAKSubscriptionCreate($row) is no longer called
 	 */
-	public function onAKSubscriptionCreate($row)
-	{
-		// Only send out an email if the subscription is enabled. Otherwise, the
-		// user may get confused as to why he received the email.
-		if($row->enabled) $this->sendEmail($row, true);
-	}
 	
 	/**
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
@@ -49,6 +44,11 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 */
 	public function onAKSubscriptionChange($row)
 	{
+		// If the subscription is disabled and the payment status is "N" (not
+		// yet paid), it's a new subscription. Don't email the user so as not to
+		// confuse him.
+		if(!$row->enabled && ($row->state = 'N')) return;
+		
 		// If the subscription is disabled and contact_flag is 3, do not send out
 		// an expiration notification. The flag is set to 3 only when a user has
 		// already renewed his subscription.
