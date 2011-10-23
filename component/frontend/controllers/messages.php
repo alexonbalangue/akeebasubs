@@ -42,6 +42,12 @@ class AkeebasubsControllerMessages extends FOFController
 			}
 		}
 		
+		$subid = FOFInput::getInt('subid',0,$this->input);
+		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			->setId($subid)
+			->getItem();
+		$this->getThisView()->assign('subscription',$subscription);
+		
 		return true;
 	}
 }

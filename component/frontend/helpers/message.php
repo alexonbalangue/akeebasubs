@@ -14,18 +14,12 @@ class AkeebasubsHelperMessage
 {
 	/**
 	 * Pre-processes the message text in $text, replacing merge tags with those
-	 * fetched based on subscription ID $subid
+	 * fetched based on subscription $sub
 	 * @param string $text The message to process
-	 * @param int $subid A subscription ID
+	 * @param AkeebasubsTableSubscritpion $sub A subscription object
 	 */
-	public static function processSubscriptionTags($text, $subid)
+	public static function processSubscriptionTags($text, $sub)
 	{
-		// Get the subscription object
-		$sub = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->setId($subid)
-			->getItem();
-		if($sub->akeebasubs_subscription_id != $subid) return $sub;
-		
 		// Get the user object for this subscription
 		$user = JFactory::getUser($sub->user_id);
 		
@@ -35,30 +29,32 @@ class AkeebasubsHelperMessage
 			->getFirstItem();
 		
 		// Merge the user objects
-		$userdata = array_merge((array)$user, (array)$kuser);
+		$userdata = array_merge((array)$user, (array)($kuser->getData()));
 		
 		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
-		foreach((array)$sub as $k => $v) {
+		foreach((array)($sub->getData()) as $k => $v) {
 			if(substr($k,0,1) == '_') continue;
 			if($k == 'akeebasubs_subscription_id') $k = 'id';
 			$tag = '[SUB:'.strtoupper($k).']';
-			str_replace($tag, $v, $text);
+			$text = str_replace($tag, $v, $text);
 		}
 		
 		// Create and replace merge tags for user data. Format [USER:KEYNAME]
 		foreach($userdata as $k => $v) {
+			if(is_object($v) || is_array($v)) continue;
 			if(substr($k,0,1) == '_') continue;
 			if($k == 'akeebasubs_subscription_id') $k = 'id';
 			$tag = '[USER:'.strtoupper($k).']';
-			str_replace($tag, $v, $text);
+			$text = str_replace($tag, $v, $text);
 		}
 		
 		// Create and replace merge tags for custom fields data. Format [CUSTOM:KEYNAME]
-		if(array_key_exists('custom', $userdata)) {
-			if(!empty($userdata['custom'])) foreach($userdata['custom'] as $k => $v) {
+		if(array_key_exists('params', $userdata)) {
+			$custom = json_decode($userdata['params']);
+			if(!empty($custom)) foreach($custom as $k => $v) {
 				if(substr($k,0,1) == '_') continue;
 				$tag = '[CUSTOM:'.strtoupper($k).']';
-				str_replace($tag, $v, $text);
+				$text = str_replace($tag, $v, $text);
 			}
 		}
 		

@@ -17,7 +17,8 @@ $this->loadHelper('message');
 
 // Translate message
 $message = AkeebasubsHelperMessage::processLanguage($this->item->canceltext);
-
+// Parse merge tags
+$message = AkeebasubsHelperMessage::processSubscriptionTags($message, $this->subscription);
 ?>
 
 <?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
