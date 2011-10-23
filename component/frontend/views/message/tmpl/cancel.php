@@ -13,7 +13,7 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_V
 $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
-$this->loadHelper('mesage');
+$this->loadHelper('message');
 
 // Translate message
 $message = AkeebasubsHelperMessage::processLanguage($this->item->canceltext);
