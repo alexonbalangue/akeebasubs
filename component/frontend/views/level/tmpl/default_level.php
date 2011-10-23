@@ -20,7 +20,7 @@ $this->loadHelper('message');
 			<?php if(!empty($this->item->image)):?>
 			<img class="level-image" src="<?php echo JURI::base().(version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/').$this->escape($this->item->image)?>" />
 			<?php endif;?>
-			<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description));?>
+			<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($this->item->description));?>
 		</div>
 	</div>
 	<div class="level-clear"></div>	
