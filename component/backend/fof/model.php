@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-jimport('joomla.application.component.controller');
+jimport('joomla.application.component.model');
 
 /**
  * FrameworkOnFramework model class
