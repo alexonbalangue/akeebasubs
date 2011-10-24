@@ -24,7 +24,9 @@ class AkeebasubsControllerCallbacks extends FOFController
 	}
 	
 	public function read($cachable = false) {
-		$result = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel')->runCallback();
+		$result = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel')
+			->paymentmethod(FOFInput::getCmd('paymentmethod','none',$this->input))
+			->runCallback();
 		echo $result ? 'OK' : 'FAILED';
 		JFactory::getApplication()->close();
 	}
