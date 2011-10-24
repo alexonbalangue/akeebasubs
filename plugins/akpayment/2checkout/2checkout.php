@@ -200,7 +200,7 @@ class plgAkpayment2checkout extends JPlugin
 			$updates['publish_down'] = $jEnd->toMySQL();
 			$updates['enabled'] = 1;
 		}
-		$subscription->setData($updates)->save();
+		$subscription->save($updates);
 		
 		// Run the onAKAfterPaymentCallback events
 		jimport('joomla.plugin.helper');

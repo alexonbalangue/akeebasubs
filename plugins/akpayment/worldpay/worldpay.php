@@ -226,7 +226,7 @@ class plgAkpaymentWorldpay extends JPlugin
 			$updates['enabled'] = 1;
 			
 		}
-		$subscription->setData($updates)->save();
+		$subscription->save($updates);
 		
 		// Run the onAKAfterPaymentCallback events
 		jimport('joomla.plugin.helper');
