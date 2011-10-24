@@ -167,244 +167,40 @@ if(!version_compare($db->getVersion(), '5.0.41', 'ge')) {
 // =============================================================================
 // Database update
 // =============================================================================
-// Upgrade the levels table
+// Upgrade the levels table (1.0.0)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
 $db->setQuery($sql);
 $ctableAssoc = $db->loadResultArray(1);
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`notify1`'))
 {
-	if($db->hasUTF()) {
-		$charset = 'DEFAULT CHARSET=utf8';
-	} else {
-		$charset = '';
-	}
-
 	$sql = <<<ENDSQL
-DROP TABLE IF EXISTS `#__akeebasubs_levels_bak`;
+ALTER TABLE `#__akeebasubs_level`
+ADD COLUMN `notify1` int(10) unsigned NOT NULL DEFAULT '30',
+ADD COLUMN `notify2` int(10) unsigned NOT NULL DEFAULT '15';
 ENDSQL;
 	$db->setQuery($sql);
 	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels_bak` (
-	`akeebasubs_level_id` bigint(20) unsigned NOT NULL auto_increment,
-	`title` varchar(255) NOT NULL,
-	`slug` varchar(255) NOT NULL,
-	`image` varchar(25) NOT NULL,
-	`description` text,
-	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
-	`price` FLOAT NOT NULL,
-	`ordertext` text,
-	`canceltext` text,
-	
-	`enabled` tinyint(1) NOT NULL DEFAULT '1',
-	`ordering` bigint(20) unsigned NOT NULL,
-	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
-	`created_by` int(11) NOT NULL DEFAULT 0,
-	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`modified_by` int(11) NOT NULL DEFAULT 0,
-	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`locked_by` int(11) NOT NULL DEFAULT 0,
-	`notify1` int(10) unsigned NOT NULL DEFAULT '30',
-	`notify2` int(10) unsigned NOT NULL DEFAULT '15',
-  PRIMARY KEY ( `akeebasubs_level_id` ),
-  UNIQUE KEY `slug` (`slug`)
-) $charset;
-
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-INSERT IGNORE INTO `#__akeebasubs_levels_bak`
-	(`akeebasubs_level_id`,`title`,`slug`,`image`,`description`,`duration`,`price`,
-	`ordertext`,`canceltext`,`enabled`,`ordering`,`created_on`,`created_by`,
-	`modified_on`,`modified_by`,`locked_on`,`locked_by`,`notify1`,`notify2`)
-SELECT
-	`akeebasubs_level_id`,`title`,`slug`,`image`,`description`,`duration`,`price`,
-	`ordertext`,`canceltext`,`enabled`,`ordering`,`created_on`,`created_by`,
-	`modified_on`,`modified_by`,`locked_on`,`locked_by`,
-	30 as `notify1`, 15 as `notify2`
-FROM
-  `#__akeebasubs_levels`;
-
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-DROP TABLE IF EXISTS `#__akeebasubs_levels`;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
-	`akeebasubs_level_id` bigint(20) unsigned NOT NULL auto_increment,
-	`title` varchar(255) NOT NULL,
-	`slug` varchar(255) NOT NULL,
-	`image` varchar(25) NOT NULL,
-	`description` text,
-	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
-	`price` FLOAT NOT NULL,
-	`ordertext` text,
-	`canceltext` text,
-	
-	`enabled` tinyint(1) NOT NULL DEFAULT '1',
-	`ordering` bigint(20) unsigned NOT NULL,
-	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
-	`created_by` int(11) NOT NULL DEFAULT 0,
-	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`modified_by` int(11) NOT NULL DEFAULT 0,
-	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`locked_by` int(11) NOT NULL DEFAULT 0,
-	`notify1` int(10) unsigned NOT NULL DEFAULT '30',
-	`notify2` int(10) unsigned NOT NULL DEFAULT '15',
-  PRIMARY KEY ( `akeebasubs_level_id` ),
-  UNIQUE KEY `slug` (`slug`)
-) $charset;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-INSERT IGNORE INTO `#__akeebasubs_levels` SELECT * FROM `#__akeebasubs_levels_bak`;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-
-	$sql = <<<ENDSQL
-DROP TABLE IF EXISTS `#__akeebasubs_levels_bak`;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-
 }
 
-// Upgrade the subscriptions table
+// Upgrade the subscriptions table (2.0.a1)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_subscriptions`';
 $db->setQuery($sql);
 $ctableAssoc = $db->loadResultArray(1);
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`akeebasubs_coupon_id`'))
 {
-	if($db->hasUTF()) {
-		$charset = 'DEFAULT CHARSET=utf8';
-	} else {
-		$charset = '';
-	}
-
 	$sql = <<<ENDSQL
-DROP TABLE IF EXISTS `#__akeebasubs_subscriptions_bak`;
+ALTER TABLE `#__akeebasubs_subscriptions`
+ADD COLUMN `discount_amount` FLOAT NOT NULL DEFAULT '0' AFTER `params`,
+ADD COLUMN `prediscount_amount` FLOAT NULL AFTER `params`,
+ADD COLUMN `akeebasubs_invoice_id` BIGINT(20) NULL AFTER `params`,
+ADD COLUMN `akeebasubs_affiliate_id` BIGINT(20) NULL AFTER `params`,
+ADD COLUMN `akeebasubs_upgrade_id` BIGINT(20) NULL AFTER `params`,
+ADD COLUMN `akeebasubs_coupon_id` BIGINT(20) NULL AFTER `params`;
 ENDSQL;
 	$db->setQuery($sql);
 	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
-	`akeebasubs_subscription_id` bigint(20) unsigned NOT NULL auto_increment,
-	`user_id` bigint(20) unsigned NOT NULL,
-	`akeebasubs_level_id` bigint(20) unsigned NOT NULL,
-	`publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`notes` TEXT,
-	`enabled` tinyint(1) NOT NULL DEFAULT '1',
-	
-	`processor` varchar(255) NOT NULL,
-	`processor_key` varchar(255) NOT NULL,
-	`state` ENUM('N','P','C','X') not null default 'X',
-	`net_amount` FLOAT NOT NULL,
-	`tax_amount` FLOAT NOT NULL,
-	`gross_amount` FLOAT NOT NULL,
-	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
-	`params` TEXT,
-
-	`akeebasubs_coupon_id` BIGINT(20) NULL,
-	`akeebasubs_upgrade_id` BIGINT(20) NULL,
-	`akeebasubs_affiliate_id` BIGINT(20) NULL,
-	`akeebasubs_invoice_id` BIGINT(20) NULL,
-	`prediscount_amount` FLOAT NULL,
-	`discount_amount` FLOAT NOT NULL DEFAULT '0',
-
-	`contact_flag` tinyint(1) NOT NULL DEFAULT '0',
-	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	PRIMARY KEY ( `akeebasubs_subscription_id` )
-) $charset;
-
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-INSERT IGNORE INTO `#__akeebasubs_subscriptions_bak`
-	(`akeebasubs_subscription_id`,`user_id`,`akeebasubs_level_id`,`publish_up`,
-	`publish_down`,`notes`,`enabled`,
-	`processor`,`processor_key`,`state`,`net_amount`,`tax_amount`,`gross_amount`,
-	`created_on`,`params`,`contact_flag`,`first_contact`,`second_contact`)
-SELECT
-	*
-FROM
-  `#__akeebasubs_subscriptions`;
-
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-DROP TABLE IF EXISTS `#__akeebasubs_subscriptions`;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
-	`akeebasubs_subscription_id` bigint(20) unsigned NOT NULL auto_increment,
-	`user_id` bigint(20) unsigned NOT NULL,
-	`akeebasubs_level_id` bigint(20) unsigned NOT NULL,
-	`publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`notes` TEXT,
-	`enabled` tinyint(1) NOT NULL DEFAULT '1',
-	
-	`processor` varchar(255) NOT NULL,
-	`processor_key` varchar(255) NOT NULL,
-	`state` ENUM('N','P','C','X') not null default 'X',
-	`net_amount` FLOAT NOT NULL,
-	`tax_amount` FLOAT NOT NULL,
-	`gross_amount` FLOAT NOT NULL,
-	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
-	`params` TEXT,
-
-	`akeebasubs_coupon_id` BIGINT(20) NULL,
-	`akeebasubs_upgrade_id` BIGINT(20) NULL,
-	`akeebasubs_affiliate_id` BIGINT(20) NULL,
-	`akeebasubs_invoice_id` BIGINT(20) NULL,
-	`prediscount_amount` FLOAT NULL,
-	`discount_amount` FLOAT NOT NULL DEFAULT '0',
-
-	`contact_flag` tinyint(1) NOT NULL DEFAULT '0',
-	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	PRIMARY KEY ( `akeebasubs_subscription_id` )
-) $charset;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-	
-	$sql = <<<ENDSQL
-INSERT IGNORE INTO `#__akeebasubs_subscriptions` SELECT * FROM `#__akeebasubs_subscriptions_bak`;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-
-	$sql = <<<ENDSQL
-DROP TABLE IF EXISTS `#__akeebasubs_subscriptions_bak`;
-ENDSQL;
-	$db->setQuery($sql);
-	$status = $db->query();
-
 }
 
 // =============================================================================
