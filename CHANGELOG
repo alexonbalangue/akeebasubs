@@ -9,6 +9,7 @@ Akeeba Subscriptions 2.0.a2
 # Sometimes the front-end level view would try to erroneously use the "awesome" layout instead of the "default"
 # Instances of \n in the registration email text were not converted to newlines
 # config.xml typo caused the email body to be used as the email header
+# Unpublished subscription levels would show up in the front-end
 
 Akeeba Subscriptions 2.0.a1
 ================================================================================
