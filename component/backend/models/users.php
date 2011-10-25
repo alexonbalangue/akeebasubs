@@ -183,7 +183,7 @@ class AkeebasubsModelUsers extends FOFModel
 		$this->_buildQueryWhere($query);
 		
 		$order = $this->getState('filter_order', 'akeebasubs_user_id', 'cmd');
-		if($order == 'id') $order = 'akeebasubs_user_id';
+		if(!in_array($order, array_keys($this->getTable()->getData()))) $order = 'akeebasubs_user_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 		$query->order($order.' '.$dir);
 		

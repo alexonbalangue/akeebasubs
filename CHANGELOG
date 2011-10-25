@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.0.a2
 # Front-end levels view: the ordering set in the back-end was not being honoured
 # Could not save subscription limits on coupons
 # Only the first coupon would be considered during payment
+# If you order a view by a field which doesn't exist in the next view, the next view shows no records
 
 Akeeba Subscriptions 2.0.a1
 ================================================================================
