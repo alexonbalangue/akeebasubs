@@ -6,6 +6,7 @@ Akeeba Subscriptions 2.0.a2
 # Only the first coupon would be considered during payment
 # If you order a view by a field which doesn't exist in the next view, the next view shows no records
 # If FOF is not present for any reason, the system and content plugins will crash your site
+# Sometimes the front-end level view would try to erroneously use the "awesome" layout instead of the "default"
 
 Akeeba Subscriptions 2.0.a1
 ================================================================================

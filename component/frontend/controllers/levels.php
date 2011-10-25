@@ -43,15 +43,14 @@ class AkeebasubsControllerLevels extends FOFController
 			FOFInput::setVar('slug', $slug, $this->input);
 			$slug = $pageslug;
 		}
-		
+
 		$this->getThisModel()->setIDsFromRequest();
 		$id = $this->getThisModel()->getId();
 		if(!$id && $slug) {
-			$records = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$item = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($slug)
-				->getItemList();
-			if(!empty($records)) {
-				$item = array_pop($records);
+				->getFirstItem();
+			if(!empty($item->akeebasubs_level_id)) {
 				$this->getThisModel()->setId($item->akeebasubs_level_id);
 			}
 		}
@@ -79,6 +78,9 @@ class AkeebasubsControllerLevels extends FOFController
 		}
 		$view->assign('cache', (array)$cache);
 		$view->assign('validation', $vModel->getValidation());
+		
+		// If we accidentally have the awesome layout set, please reset to default
+		if($this->layout == 'awesome') $this->layout = 'default';
 		
 		return true;
 	}
