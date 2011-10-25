@@ -28,6 +28,11 @@ class AkeebasubsModelCoupons extends FOFModel
 			$query->where($db->nameQuote('enabled').' = '.(int)$enabled);
 		}
 		
+		$coupon = $this->getState('coupon','','cmd');
+		if(!empty($coupon)) {
+			$query->where($db->nameQuote('coupon').' LIKE '.$db->quote($coupon));
+		}
+		
 		$search = $this->getState('search',null);
 		if($search)
 		{
