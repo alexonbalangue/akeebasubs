@@ -12,7 +12,13 @@ defined('_JEXEC') or die();
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
 
 // Include FOF
-require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+if(!defined('FOF_INCLUDED')): ?>
+<h1>Akeeba Subscriptions</h1>
+<h2>Incomplete installation detected</h2>
+<p>Please visit your site's back-end and click on Components, Akeeba Subscriptions
+for further information.</p>
+<?php endif;
 
 // Dispatch
 FOFDispatcher::getAnInstance('com_akeebasubs')->dispatch();
