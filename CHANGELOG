@@ -7,6 +7,8 @@ Akeeba Subscriptions 2.0.a2
 # If you order a view by a field which doesn't exist in the next view, the next view shows no records
 # If FOF is not present for any reason, the system and content plugins will crash your site
 # Sometimes the front-end level view would try to erroneously use the "awesome" layout instead of the "default"
+# Instances of \n in the registration email text were not converted to newlines
+# config.xml typo caused the email body to be used as the email header
 
 Akeeba Subscriptions 2.0.a1
 ================================================================================

@@ -47,7 +47,7 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER_DESC"
 		/>
-		<param name="regemailheader" type="textarea"
+		<param name="regemailbody" type="textarea"
 			cols="60" rows="10"
 			default="Hello [USERNAME],\nWe would like to notify you that a new user account has been\ncreated for you on [SITENAME] with the following details:\n\nUsername: [USERNAME]\nPassword: [PASSWORD]\n\nThis user account will remain blocked until your subscription payment is completed and validated.\n\nShould you need to access your account sooner than that - for\nexample, you did not complete the payment and would like to\nsubscribe using the same username and/or email address -\nplease click on the following activation link to enable your user\naccount so that you are able to login in the designated\narea of the subscription form using the username and password\nprinted in this email.\n\n[URL]\n\nIf the URL above is not clickable, please copy and paste it to your browser.\n\nBest regards,\n[SITENAME]"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILBODY"
@@ -104,7 +104,7 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILHEADER_DESC"
 		/>
-		<field name="regemailheader" type="textarea"
+		<field name="regemailbody" type="textarea"
 			cols="60" rows="10"
 			default="Hello [USERNAME],\nWe would like to notify you that a new user account has been\ncreated for you on [SITENAME] with the following details:\n\nUsername: [USERNAME]\nPassword: [PASSWORD]\n\nThis user account will remain blocked until your subscription payment is completed and validated.\n\nShould you need to access your account sooner than that - for\nexample, you did not complete the payment and would like to\nsubscribe using the same username and/or email address -\nplease click on the following activation link to enable your user\naccount so that you are able to login in the designated\narea of the subscription form using the username and password\nprinted in this email.\n\n[URL]\n\nIf the URL above is not clickable, please copy and paste it to your browser.\n\nBest regards,\n[SITENAME]"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REGEMAILBODY"
