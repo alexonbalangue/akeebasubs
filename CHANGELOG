@@ -10,6 +10,7 @@ Akeeba Subscriptions 2.0.a2
 # Instances of \n in the registration email text were not converted to newlines
 # config.xml typo caused the email body to be used as the email header
 # Unpublished subscription levels would show up in the front-end
+# Renew link would not be shown for all published levels and not hidden for all unpublished levels in the My Subscriptions view
 
 Akeeba Subscriptions 2.0.a1
 ================================================================================

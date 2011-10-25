@@ -13,9 +13,13 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 
-$activeLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+$rawActiveLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 	->enabled(1)
 	->getList();
+$activeLevels = array();
+if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
+	$activeLevels[] = $l->akeebasubs_level_id;
+}
 ?>
 
 <div id="akeebasubs" class="subscriptions">
@@ -104,7 +108,7 @@ $activeLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 						<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_VIEW')?>
 					</a>
 
-	            	<?php if(($subscription->state == 'C') && (array_key_exists($subscription->akeebasubs_level_id, $activeLevels))):?>
+	            	<?php if(($subscription->state == 'C') && (in_array($subscription->akeebasubs_level_id, $activeLevels))):?>
 	            	&bull;
 	            	<?php $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 						->setId($subscription->akeebasubs_level_id)
