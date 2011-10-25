@@ -1,5 +1,9 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.0
+Akeeba Subscriptions 2.0.a2
+================================================================================
+# Front-end levels view: the ordering set in the back-end was not being honoured
+
+Akeeba Subscriptions 2.0.a1
 ================================================================================
 ! Completely rewritten to no longer use the Nooku Framework
 + #35 Change coupon hit counter to take into account only paid subscriptions using that coupon code

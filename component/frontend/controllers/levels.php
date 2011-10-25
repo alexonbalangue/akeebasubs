@@ -18,7 +18,9 @@ class AkeebasubsControllerLevels extends FOFController
 					->clearInput()
 					->savestate(0)
 					->limit(0)
-					->limitstart(0);
+					->limitstart(0)
+					->filter_order('ordering')
+					->filter_order_Dir('ASC');
 			}
 			return true;
 		} else {
