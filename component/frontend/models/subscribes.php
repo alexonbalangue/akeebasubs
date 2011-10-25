@@ -1094,6 +1094,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$subjectTemplate = str_replace($k, $v, $subjectTemplate);
 				$bodyTemplate = str_replace($k, $v, $bodyTemplate);
 			}
+			$subjectTemplate = str_replace("\\n", "\n", $subjectTemplate);
+			$bodyTemplate = str_replace("\\n", "\n", $bodyTemplate);
 		}
 		
 		if(version_compare(JVERSION, '1.6', 'ge')) {
