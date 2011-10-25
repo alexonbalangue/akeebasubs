@@ -63,12 +63,13 @@ class AkeebasubsTableCoupon extends FOFTable
 			} else {
 				$subscriptions = array();
 				foreach($subs as $id) {
-					$subObject = FOFTable::getAnInstance('Coupon','AkeebasubsTable');
-					$subObject->load($id);
+					$subObject = FOFModel::getAnInstance('Levels','AkeebasubsModel')
+						->setId($id)
+						->getItem();
 					$id = null;
 					if(is_object($subObject)) {
-						if($subObject->akeebasubs_coupon_id > 0) {
-							$id = $subObject->akeebasubs_coupon_id;
+						if($subObject->akeebasubs_level_id > 0) {
+							$id = $subObject->akeebasubs_level_id;
 						}
 					}
 					if(!is_null($id)) $subscriptions[] = $id;
