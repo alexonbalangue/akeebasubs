@@ -819,7 +819,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				if($id1 == $id2) {
 					// Username and email match with the blocked user; reuse that
 					// user, please.
-					$user = $user1;
+					$user = JFactory::getUser($user1->id);
 				} else {
 					// Remove the last subscription for $user2 (it will be an unpaid one)
 					$submodel = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel');
@@ -833,12 +833,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 					
 					// Remove $user2 and set $user to $user1 so that it gets updated
 					$user2->delete($id2);
-					$user = $user1;
+					$user = JFactory::getUser($user1->id);
 				}
 			}
 		}
 		
-		if($user->id == 0) {
+		if(is_null($user->id) || ($user->id == 0)) {
 			// New user
 			$params = array(
 				'name'			=> $state->name,
@@ -881,9 +881,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// Remove unpaid subscriptions on the same level for this user
 			$unpaidSubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
-				->paystate('N','X');
+				->paystate('N','X')
+				->getItemList();
 			if(!empty($unpaidSubs)) foreach($unpaidSubs as $unpaidSub) {
-				$table = $unpaidSubs->getTable();
+				$table = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')->getTable();
 				$table->delete($unpaidSub->akeebasubs_subscription_id);
 			}
 			
@@ -891,23 +892,23 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$userRecord = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
 				->setId($user->id)
 				->getItem();
-			if( ($userRecord->name != $state->name) || ($userRecord->email != $state->email) ) {
-				$updates = array(
-					'name'			=> $state->name,
-					'email'			=> $state->email
-				);
-				if(!empty($state->password) && ($state->password = $state->password2)) {
-					$updates['password'] = $state->password;
-					$updates['password2'] = $state->password2;
-				}
-				if(!empty($state->username)) {
-					$updates['username'] = $state->username;
-				}
-				$userIsSaved = $userRecord->save($updates);
-			} else {
-				$userIsSaved = true;
+			
+			$updates = array(
+				'name'			=> $state->name,
+				'email'			=> $state->email
+			);
+			if(!empty($state->password) && ($state->password = $state->password2)) {
+				jimport('joomla.user.helper');
+				$salt = JUserHelper::genRandomPassword(32);
+				$pass = JUserHelper::getCryptedPassword($state->password, $salt);
+				$updates['password'] = $pass.':'.$salt;
 			}
+			if(!empty($state->username)) {
+				$updates['username'] = $state->username;
+			}
+			$userIsSaved = $userRecord->save($updates);			
 		}
+		
 		if(!$userIsSaved) {
 			JError::raiseWarning('', JText::_( $user->getError())); // ...raise a Warning
 			return false;
@@ -1029,8 +1030,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		);
 				
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->setId(0)
-			->getItem();
+			->getTable();
 		$subscription->_dontCheckPaymentID = true;
 		$result = $subscription->save($data);
 		$this->_item = $subscription;
