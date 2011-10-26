@@ -419,7 +419,7 @@ function applyValidation(response, callback)
 				$('#username_valid').css('display','inline-block');
 				$('#username_invalid').css('display','none');
 			} else {
-				if( $('#username').attr('disabled') != 'disabled' ) {
+				if( !$('#username').attr('disabled') || $('#username').attr('disabled') != 'disabled' ) {
 					akeebasubs_valid_form = false;
 				}
 				$('#username_valid').css('display','none');
