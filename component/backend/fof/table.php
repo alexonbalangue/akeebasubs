@@ -79,42 +79,54 @@ class FOFTable extends JTable
 			if (!class_exists( $tableClass )) {
 				$tableClass = 'FOFTable';
 			}
-		}
-		
-		$tbl_common = str_replace('com_', '', $config['option']).'_';
-		if(!array_key_exists('tbl', $config)) {
-			$config['tbl'] = '#__'.$tbl_common.strtolower(FOFInflector::pluralize($type));
-		}
-		if(!array_key_exists('tbl_key', $config)) {
-			$keyName = FOFInflector::singularize($type);
-			$config['tbl_key'] = $tbl_common.$keyName.'_id';
-		}
-		if(!array_key_exists('db', $config)) {
-			$config['db'] = JFactory::getDBO();
-		}
-
-		$instance = new $tableClass($config['tbl'],$config['tbl_key'],$config['db']);
 			
-		$instances[$tableClass] = $instance;
+			$tbl_common = str_replace('com_', '', $config['option']).'_';
+			if(!array_key_exists('tbl', $config)) {
+				$config['tbl'] = '#__'.$tbl_common.strtolower(FOFInflector::pluralize($type));
+			}
+			if(!array_key_exists('tbl_key', $config)) {
+				$keyName = FOFInflector::singularize($type);
+				$config['tbl_key'] = $tbl_common.$keyName.'_id';
+			}
+			if(!array_key_exists('db', $config)) {
+				$config['db'] = JFactory::getDBO();
+			}
+
+			$instance = new $tableClass($config['tbl'],$config['tbl_key'],$config['db']);
+
+			$instances[$tableClass] = $instance;
+		}
 		
 		return $instances[$tableClass];
 	}
 	
 	function __construct( $table, $key, &$db )
 	{
-		parent::__construct($table, $key, $db);
+		$this->_tbl		= $table;
+		$this->_tbl_key	= $key;
+		$this->_db		= &$db;
 		
-		// Auto fetch the whole lot of field defs
-		if(!version_compare('JVERSION', '1.6.0', 'ge')) {
-			// Initialise the table properties.
-			if ($fields = $this->j15getFields()) {
-				foreach ($fields as $name => $v)
-				{
-					// Add the field if it is not already present.
-					if (!property_exists($this, $name)) {
-						$this->$name = null;
-					}
+		// Initialise the table properties.
+		if ($fields = $this->getTableFields()) {
+			foreach ($fields as $name => $v)
+			{
+				// Add the field if it is not already present.
+				if (!property_exists($this, $name)) {
+					$this->$name = null;
 				}
+			}
+		}
+		
+		if(version_compare(JVERSION, '1.6.0', 'ge')) {
+			// If we are tracking assets, make sure an access field exists and initially set the default.
+			if (property_exists($this, 'asset_id')) {
+				jimport('joomla.access.rules');
+				$this->_trackAssets = true;
+			}
+
+			// If the acess property exists, set the default.
+			if (property_exists($this, 'access')) {
+				$this->access = (int) JFactory::getConfig()->get('access');
 			}
 		}
 	}
@@ -128,7 +140,7 @@ class FOFTable extends JTable
 	{
 		if(!$this->onBeforeReset()) return false;
 		// Get the default values for the class from the table.
-		$fields = version_compare(JVERSION, '1.6.0', 'ge') ? $this->getFields() : $this->j15getFields();
+		$fields = $this->getTableFields();
 		foreach ($fields as $k => $v)
 		{
 			// If the property is not the primary key or private, reset it.
@@ -485,11 +497,11 @@ class FOFTable extends JTable
 	 *
 	 * @return  mixed  An array of the field names, or false if an error occurs.
 	 */
-	public function j15getFields()
+	public function getTableFields()
 	{
-		static $cache = null;
+		static $cache = array();
 
-		if ($cache === null) {
+		if(!array_key_exists($this->_tbl, $cache)) {
 			// Lookup the fields for this table only once.
 			$name	= $this->_tbl;
 			$fields	= $this->_db->getTableFields($name, false);
@@ -497,10 +509,10 @@ class FOFTable extends JTable
 			if (!isset($fields[$name])) {
 				return false;
 			}
-			$cache = $fields[$name];
+			$cache[$this->_tbl] = $fields[$name];
 		}
 
-		return $cache;
+		return $cache[$this->_tbl];
 	}
 	
 	protected function onBeforeBind(&$from)
