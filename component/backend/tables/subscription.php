@@ -106,8 +106,12 @@ class AkeebasubsTableSubscription extends FOFTable
 		// Paid and enabled subscription; enable the user if he's not already enabled
 		$user = JFactory::getUser($this->user_id);
 		if($user->block) {
-			$user->block = 0;
-			$user->save();
+			$updates = array(
+				'block'			=> 0,
+				'activation'	=> ''
+			);
+			$user->bind($updates);
+			$user->save($updates);
 		}
 	}
 	
@@ -160,5 +164,5 @@ class AkeebasubsTableSubscription extends FOFTable
 		$this->selfCache = clone $this;
 		
 		return true;
-	}
+	}	
 }
