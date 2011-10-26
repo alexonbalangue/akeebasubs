@@ -875,8 +875,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$params['block'] = 1;
 			$params['activation'] = JUtility::getHash( JUserHelper::genRandomPassword() );
 			
-			$userIsSaved = true;
-			$userIsSaved = $user->save($params);
+			$userIsSaved = false;
+			$user->bind($params);
+			$userIsSaved = $user->save();
 		} else {
 			// Remove unpaid subscriptions on the same level for this user
 			$unpaidSubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -1030,8 +1031,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		);
 				
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->setId(0)
-			->getItem();
+			->getTable();
 		$subscription->reset();
 		$subscription->akeebasubs_subscription_id = 0;
 		$subscription->_dontCheckPaymentID = true;
