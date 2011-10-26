@@ -1030,7 +1030,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 		);
 				
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->getTable();
+			->setId(0)
+			->getItem();
+		$subscription->reset();
+		$subscription->akeebasubs_subscription_id = 0;
 		$subscription->_dontCheckPaymentID = true;
 		$result = $subscription->save($data);
 		$this->_item = $subscription;
