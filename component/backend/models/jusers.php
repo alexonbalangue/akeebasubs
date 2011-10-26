@@ -32,6 +32,11 @@ class AkeebasubsModelJusers extends FOFModel
 			$query->where($db->nameQuote('email').' = '.$db->quote($email));
 		}
 		
+		$block = $this->getState('block',null,'int');
+		if(!is_null($block)) {
+			$query->where($db->nameQuote('block').' = '.$db->quote($block));
+		}
+		
 		$search = $this->getState('search',null);
 		if($search)
 		{

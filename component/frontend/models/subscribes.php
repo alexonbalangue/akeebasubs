@@ -201,16 +201,28 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$myUser = JFactory::getUser();
 		$list = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
 			->username($username)
-			->getItemList();
-		if(empty($list)) {
-			$user = new stdClass();
-			$user->username = '';
-		} else {
-			$user = array_pop($list);
-		}
+			->getFirstItem();
 		
 		if($myUser->guest) {
-			$ret->username = empty($user->username);
+			if(empty($user->username)) {
+				$ret->username = true;
+			} else {
+				// If it's a blocked user, we should allow reusing the username;
+				// this would be a user who tried to subscribe, closed the payment
+				// window and came back to re-register. However, if the validation
+				// field is non-empty, this is a manually blocked user and should
+				// not be allowed to subscribe again.
+				if($user->block) {
+					if(!empty($user->activation)) {
+						$ret->username = true;
+					} else {
+						$ret->username = false;
+					}
+				} else {
+					$ret->username = false;
+				}
+			}
+			
 		} else {
 			$ret->username = ($user->username == $myUser->username);
 		}
@@ -256,11 +268,30 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$validEmail = true;
 			foreach($list as $item) {
 				if($item->email == $state->email) {
-					if($item->id != JFactory::getUser()->id) $validEmail = false;
-					break;
+					if($item->id != JFactory::getUser()->id) {
+						if(!$item->block) {
+							// Email belongs to a non-blocked user; this is not allowed.
+							$validEmail = false;
+							break;
+						} else {
+							// Email belongs to a blocked user. Allow reusing it,
+							// if the user is not activated yet. The idea is that
+							// a newly created user is blocked and has the activation
+							// field filled in. This is a user who failed to complete
+							// his subscription. If the validation field is empty, it
+							// is a user blocked by the administrator who should not
+							// be able to subscribe again!
+							if(empty($item->activation)) {
+								$validEmail = false;
+								break;
+							}
+						}
+					}
 				}
 			}
 			$ret['email'] = $validEmail;
+		} else {
+			$ret['email'] = false;
 		}
 		
 		// 2. Country validation
@@ -766,9 +797,47 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// data from the database
 		JFactory::getSession()->set('firstrun', true, 'com_akeebasubs');
 
-		// Step #3. Create a user record if required and send out the email with user information
+		// Step #3. Create or update a user record
 		// ----------------------------------------------------------------------
 		$user = JFactory::getUser();
+		
+		if($user->id == 0) {
+			// Check for an existing, blocked, unactivated user with the same
+			// username or email address.
+			$user1 = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
+				->username($state->username)
+				->block(1)
+				->getFirstItem();
+			$user2 = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
+				->email($state->email)
+				->block(1)
+				->getFirstItem();
+			$id1 = $user1->id;
+			$id2 = $user2->id;
+			// Do we have a match?
+			if($id1 || $id2) {
+				if($id1 == $id2) {
+					// Username and email match with the blocked user; reuse that
+					// user, please.
+					$user = $user1;
+				} else {
+					// Remove the last subscription for $user2 (it will be an unpaid one)
+					$submodel = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel');
+					$substodelete = $submodel
+						->user_id($id2)
+						->getList();
+					if(!empty($substodelete)) foreach($substodelete as $subtodelete) {
+						$subtable = $submodel->getTable();
+						$subtable->delete($subtodelete->akeebasubs_subscription_id);
+					}
+					
+					// Remove $user2 and set $user to $user1 so that it gets updated
+					$user2->delete($id2);
+					$user = $user1;
+				}
+			}
+		}
+		
 		if($user->id == 0) {
 			// New user
 			$params = array(
@@ -807,33 +876,42 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$params['activation'] = JUtility::getHash( JUserHelper::genRandomPassword() );
 			
 			$userIsSaved = true;
-			if (!$user->bind( $params )) {
-				JError::raiseWarning('', JText::_( $user->getError())); // ...raise a Warning
-    			$userIsSaved = false;
-			} elseif (!$user->save()) { // if the user is NOT saved...
-			    JError::raiseWarning('', JText::_( $user->getError())); // ...raise a Warning
-			    $userIsSaved = false;
+			$userIsSaved = $user->save($params);
+		} else {
+			// Remove unpaid subscriptions on the same level for this user
+			$unpaidSubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				->user_id($user->id)
+				->paystate('N','X');
+			if(!empty($unpaidSubs)) foreach($unpaidSubs as $unpaidSub) {
+				$table = $unpaidSubs->getTable();
+				$table->delete($unpaidSub->akeebasubs_subscription_id);
 			}
 			
-			if($userIsSaved) {
-				// Send out user registration email
-				$this->_sendMail($user, $state->password);
-			}
-		} else {
 			// Update existing user's details
 			$userRecord = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
 				->setId($user->id)
 				->getItem();
 			if( ($userRecord->name != $state->name) || ($userRecord->email != $state->email) ) {
-				$userIsSaved = $userRecord->setData(array(
+				$updates = array(
 					'name'			=> $state->name,
 					'email'			=> $state->email
-				))->save();
+				);
+				if(!empty($state->password) && ($state->password = $state->password2)) {
+					$updates['password'] = $state->password;
+					$updates['password2'] = $state->password2;
+				}
+				if(!empty($state->username)) {
+					$updates['username'] = $state->username;
+				}
+				$userIsSaved = $userRecord->save($updates);
 			} else {
 				$userIsSaved = true;
 			}
 		}
-		if(!$userIsSaved) return false;
+		if(!$userIsSaved) {
+			JError::raiseWarning('', JText::_( $user->getError())); // ...raise a Warning
+			return false;
+		}
 		
 		// Step #4. Create or add user extra fields
 		// ----------------------------------------------------------------------
@@ -1045,115 +1123,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 	public function getData()
 	{
 		return $this->getStateVariables();
-	}
-	
-	/**
-	 * Sends out an email to a specific user about his new user account
-	 * and CC's the Super Administrators
-	 */
-	private function _sendMail(&$user, $password)
-	{
-		$config = JFactory::getConfig();
-		$mainframe = JFactory::getApplication();
-		
-		$password = preg_replace('/[\x00-\x1F\x7F]/', '', $password); //Disallow control chars in the email
-		
-		$lang = JFactory::getLanguage();
-		if(version_compare(JVERSION, '1.6', 'ge')) {
-			$lang->load('com_users',JPATH_SITE);
-		} else {
-			$lang->load('com_user',JPATH_SITE);
-		}
-		
-
-		$db		=& JFactory::getDBO();
-
-		$name 		= $user->get('name');
-		$email 		= $user->get('email');
-		$username 	= $user->get('username');
-
-		$usersConfig 	= &JComponentHelper::getParams( 'com_users' );
-		$sitename 		= $config->get( 'sitename' );
-		$useractivation = $usersConfig->get( 'useractivation' );
-		$mailfrom 		= $config->get( 'mailfrom' );
-		$fromname 		= $config->get( 'fromname' );
-		$siteURL		= JURI::base();
-
-		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-		
-		$subjectTemplate = AkeebasubsHelperCparams::getParam('regemailheader','');
-		$bodyTemplate = AkeebasubsHelperCparams::getParam('regemailbody','');
-		if(!empty($subjectTemplate) || !empty($bodyTemplate)) {
-			$replace = array(
-				'[USERNAME]'	=> $username,
-				'[PASSWORD]'	=> $password,
-				'[SITENAME]'	=> $sitename,
-				'[URL]'			=> version_compare(JVERSION, '1.6', 'ge') ? $siteURL.'index.php?option=com_users&task=registration.activate&token='.$user->get('activation') : $siteURL."index.php?option=com_user&task=activate&activation=".$user->get('activation')
-			);
-			foreach($replace as $k => $v) {
-				$subjectTemplate = str_replace($k, $v, $subjectTemplate);
-				$bodyTemplate = str_replace($k, $v, $bodyTemplate);
-			}
-			$subjectTemplate = str_replace("\\n", "\n", $subjectTemplate);
-			$bodyTemplate = str_replace("\\n", "\n", $bodyTemplate);
-		}
-		
-		if(version_compare(JVERSION, '1.6', 'ge')) {
-			$subject	= JText::sprintf(
-				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
-				$name,
-				$sitename
-			);
-
-			$message = JText::sprintf(
-				'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY',
-				$name,
-				$sitename,
-				$siteURL.'index.php?option=com_users&task=registration.activate&token='.$user->get('activation'),
-				$siteURL,
-				$username,
-				$password
-			);
-		} else {
-			$subject 	= sprintf ( JText::_( 'Account details for' ), $name, $sitename);
-			$subject 	= html_entity_decode($subject, ENT_QUOTES);
-
-			$message = sprintf ( JText::_( 'SEND_MSG_ACTIVATE' ), $name, $sitename, $siteURL."index.php?option=com_user&task=activate&activation=".$user->get('activation'), $siteURL, $username, $password);
-		}
-		
-		if(!empty($subjectTemplate)) $subject = $subjectTemplate;
-		if(!empty($bodyTemplate)) $message = $bodyTemplate;
-		
-		$message = html_entity_decode($message, ENT_QUOTES);
-
-		// Send email to user
-		JUtility::sendMail($mailfrom, $fromname, $email, $subject, $message);
-
-		// Only in Joomla! 1.5, send notification to super administrators. In
-		// 1.6, they will get emailed when the user is activated.
-		if(!version_compare(JVERSION,'1.6','ge')) {
-			//get all super administrator
-			$query = 'SELECT name, email, sendEmail' .
-					' FROM #__users' .
-					' WHERE LOWER( usertype ) = "super administrator"';
-			$db->setQuery( $query );
-			$rows = $db->loadObjectList();
-
-			// Send notification to all administrators
-			$subject2 = sprintf ( JText::_( 'Account details for' ), $name, $sitename);
-			$subject2 = html_entity_decode($subject2, ENT_QUOTES);
-			
-			// get superadministrators id
-			foreach ( $rows as $row )
-			{
-				if ($row->sendEmail)
-				{
-					$message2 = sprintf ( JText::_( 'SEND_MSG_ADMIN' ), $row->name, $sitename, $name, $email, $username);
-					$message2 = html_entity_decode($message2, ENT_QUOTES);
-					JUtility::sendMail($mailfrom, $fromname, $row->email, $subject2, $message2);
-				}
-			}
-		}
 	}
 	
 	/**
