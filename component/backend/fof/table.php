@@ -21,6 +21,11 @@ require_once(dirname(__FILE__).'/input.php');
  */
 class FOFTable extends JTable
 {
+	public static function getInstance($type, $prefix = 'JTable', $config = array())
+	{
+		JError::raiseWarning(0, 'FOFTable::getInstance() is deprecated; please use getAnInstance() instead.');
+		parent::getInstance($type, $prefix, $config);
+	}
 	
 	public static function &getAnInstance($type = null, $prefix = 'JTable', $config = array())
 	{
@@ -82,11 +87,11 @@ class FOFTable extends JTable
 			
 			$tbl_common = str_replace('com_', '', $config['option']).'_';
 			if(!array_key_exists('tbl', $config)) {
-				$config['tbl'] = '#__'.$tbl_common.strtolower(FOFInflector::pluralize($type));
+				$config['tbl'] = strtolower('#__'.$tbl_common.strtolower(FOFInflector::pluralize($type)));
 			}
 			if(!array_key_exists('tbl_key', $config)) {
 				$keyName = FOFInflector::singularize($type);
-				$config['tbl_key'] = $tbl_common.$keyName.'_id';
+				$config['tbl_key'] = strtolower($tbl_common.$keyName.'_id');
 			}
 			if(!array_key_exists('db', $config)) {
 				$config['db'] = JFactory::getDBO();

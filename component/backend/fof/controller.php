@@ -61,6 +61,12 @@ class FOFController extends JController
 		'core.edit.state'	=> 'Publisher'
 	);
 
+	
+	public static function getInstance($prefix, $config = array()) {
+		JError::raiseWarning(0, 'FOFController::getInstance() is deprecated; please use getAnInstance() or getTmpInstance() instead.');
+		parent::getInstance($prefix, $config);
+	}
+	
 	/**
 	 * Gets a static (Singleton) instance of a controller class. It loads the
 	 * relevant controller file from the component's directory or, if it doesn't
