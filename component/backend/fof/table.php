@@ -32,13 +32,14 @@ class FOFTable extends JTable
 		static $instances = array();
 		
 		// Guess the component name
+		if(array_key_exists('input', $config)) {
+			$option = FOFInput::getCmd('option','',$config['input']);
+			FOFInput::setVar('option',$option,$config['input']);
+		}
+		
 		if(!in_array($prefix,array('Table','JTable'))) {
 			preg_match('/(.*)Table$/', $prefix, $m);
 			$option = 'com_'.strtolower($m[1]);
-			if(array_key_exists('input', $config)) {
-				$option = FOFInput::getCmd('option',$option,$config['input']);
-				FOFInput::setVar('option',$option,$config['input']);
-			}
 		}
 
 		if(array_key_exists('option', $config)) $option = $config['option'];
