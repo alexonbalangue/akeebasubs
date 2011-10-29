@@ -106,6 +106,9 @@ $this->loadHelper('cparams');
 								$lmday = 28;
 							}
 					}
+					if($y < 2011) $y = 2011;
+					if($m < 1) $m = 1;
+					if($d < 1) $d = 1;
 				?>
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since($y.'-'.$m.'-01')
@@ -143,6 +146,7 @@ $this->loadHelper('cparams');
 								$lmday = 28;
 							}
 					}
+					if($lmday < 1) $lmday = 28;
 				?>
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-'.gmdate('m').'-01')
@@ -259,6 +263,8 @@ $this->loadHelper('cparams');
 							$lmday = 28;
 						}
 				}
+				if($lmday < 1) $lmday = 28;
+				if($y < 2011) $y = 2011;
 				$daysin = gmdate('d');
 				$numsubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-'.gmdate('m').'-01')
