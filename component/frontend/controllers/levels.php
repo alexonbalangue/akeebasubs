@@ -10,10 +10,19 @@ defined('_JEXEC') or die();
 class AkeebasubsControllerLevels extends FOFController
 {
 	public function onBeforeBrowse() {
+		$params	= JFactory::getApplication()->getPageParameters();
+		$ids	= $params->get('ids','');
+		if(is_array($ids) && !empty($ids)) {
+			$ids = implode(',',$ids);
+			if($ids === '0') $ids = '';
+		} else {
+			$ids = '';
+		}
+		
 		if(parent::onBeforeBrowse()) {
 			$noClear = FOFInput::getBool('no_clear',false, $this->input);
 			if(!$noClear) {
-				$this->getThisModel()
+				$model = $this->getThisModel()
 					->clearState()
 					->clearInput()
 					->savestate(0)
@@ -22,6 +31,9 @@ class AkeebasubsControllerLevels extends FOFController
 					->enabled(1)
 					->filter_order('ordering')
 					->filter_order_Dir('ASC');
+				if(!empty($ids)) {
+					$model->id($ids);
+				}
 			}
 			return true;
 		} else {
