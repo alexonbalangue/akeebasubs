@@ -41,6 +41,12 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>
 		</param>
+		<param name="allowlogin" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>				
+		</param>
 	</params>
 	
 	<fieldset name="currency" label="COM_AKEEBASUBS_CONFIG_CURRENCY_TITLE">
@@ -62,8 +68,8 @@
 		<field name="gravatar" type="radio" default="1"
 			label="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR"
 			description="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR_DESC">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
 		</field>
 		<field name="imagedir" type="text"
 			default="images"
@@ -77,14 +83,20 @@
 		<field name="stepsbar" type="radio" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR_DESC">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
 		</field>
 		<field name="personalinfo" type="radio" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_DESC">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
+		<field name="allowlogin" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>				
 		</field>
 	</fieldset>
 	

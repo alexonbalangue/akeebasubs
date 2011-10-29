@@ -35,7 +35,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 <hr/>
 </noscript>
 
-<?php if(JFactory::getUser()->guest && AkeebasubsHelperCparams::getParam('showloginonsubscribe',1)):?>
+<?php if(JFactory::getUser()->guest && AkeebasubsHelperCparams::getParam('allowlogin',1)):?>
 	<?php echo $this->loadTemplate('login') ?>
 <?php endif?>
 
