@@ -120,7 +120,7 @@ class AkeebasubsTableSubscription extends FOFTable
 	 * saving the row.
 	 */
 	public function onAfterLoad(&$result) {
-		$this->selfCache = $result;
+		$this->selfCache = $result ? clone $this : null;
 		return parent::onAfterLoad($result);
 	}
 	
@@ -148,13 +148,13 @@ class AkeebasubsTableSubscription extends FOFTable
 		$info = array(
 			'status'	=>	'unmodified',
 			'previous'	=> empty($this->selfCache) ? null : $this->selfCache,
-			'current'	=> $this,
+			'current'	=> clone $this,
 			'modified'	=> null
 		);
 		
 		if(is_null($this->selfCache) || !is_object($this->selfCache)) {
 			$info['status'] = 'new';
-			$info['modified'] = $this;
+			$info['modified'] = clone $this;
 		} else {
 			$modified = array();
 			foreach($this->selfCache as $key => $value) {
