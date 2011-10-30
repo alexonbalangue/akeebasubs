@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 class AkeebasubsTableSubscription extends FOFTable
 {
 	/** @var object Caches the row data on load for future reference */
-	private $selfCache = null;
+	private $_selfCache = null;
 	
 	public $_dontCheckPaymentID = false;
 	
@@ -120,7 +120,7 @@ class AkeebasubsTableSubscription extends FOFTable
 	 * saving the row.
 	 */
 	public function onAfterLoad(&$result) {
-		$this->selfCache = $result ? clone $this : null;
+		$this->_selfCache = $result ? clone $this : null;
 		return parent::onAfterLoad($result);
 	}
 	
@@ -129,7 +129,7 @@ class AkeebasubsTableSubscription extends FOFTable
 	 * @return bool
 	 */
 	public function onAfterReset() {
-		$this->selfCache = null;
+		$this->_selfCache = null;
 		return parent::onAfterReset();
 	}
 	
@@ -147,17 +147,18 @@ class AkeebasubsTableSubscription extends FOFTable
 		
 		$info = array(
 			'status'	=>	'unmodified',
-			'previous'	=> empty($this->selfCache) ? null : $this->selfCache,
+			'previous'	=> empty($this->_selfCache) ? null : $this->_selfCache,
 			'current'	=> clone $this,
 			'modified'	=> null
 		);
 		
-		if(is_null($this->selfCache) || !is_object($this->selfCache)) {
+		if(is_null($this->_selfCache) || !is_object($this->_selfCache)) {
 			$info['status'] = 'new';
 			$info['modified'] = clone $this;
 		} else {
 			$modified = array();
-			foreach($this->selfCache as $key => $value) {
+			foreach($this->_selfCache as $key => $value) {
+				if(substr($key,0,1) == '_') continue;
 				if($this->$key != $value) {
 					$info['status'] = 'modified';
 					$modified[$key] = $value;
@@ -171,7 +172,7 @@ class AkeebasubsTableSubscription extends FOFTable
 			$jResponse = $app->triggerEvent('onAKSubscriptionChange', array($this, $info));
 		}
 		
-		$this->selfCache = clone $this;
+		$this->_selfCache = clone $this;
 		
 		return true;
 	}	

@@ -5,6 +5,8 @@ Akeeba Subscriptions 2.0.a2
 + Allow not displaying the login box on the subscription page
 + Select which subscription levels you want displayed in the subscription levels front-end view
 + The site's current language setting is saved as the new user's default language
++ Each user now receives susbcription emails in his preferred language
++ Specialised and customisable emails for each possible subscription status change, instead of the generic, impossible to understand one
 ~ Removal of the user activation email.
 # Front-end levels view: the ordering set in the back-end was not being honoured
 # Could not save subscription limits on coupons
