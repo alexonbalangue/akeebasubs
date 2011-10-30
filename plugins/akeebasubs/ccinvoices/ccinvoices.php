@@ -13,8 +13,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
 	 */
-	public function onAKSubscriptionChange($row)
+	public function onAKSubscriptionChange($row, $info)
 	{
+		if(is_null($info['modified']) || empty($info['modified'])) return;
+		if(!array_key_exists('enabled', (array)$info['modified'])) return;
+		
 		// Load the language
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_akeebasubs_ccinvoices', JPATH_ADMINISTRATOR, 'en-GB', true);

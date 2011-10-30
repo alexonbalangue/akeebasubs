@@ -31,23 +31,17 @@ class plgAkeebasubsJuga extends JPlugin
 		$strRemoveGroups = $this->params->get('removegroups','');
 		$this->removeGroups = $this->parseGroups($strRemoveGroups);
 	}
-	
-	/**
-	 * Called when a new subscription is created, either manually or through
-	 * the front-end interface
-	 */
-	public function onAKSubscriptionCreate($row)
-	{
-		$this->onAKUserRefresh($row->user_id);
-	}
-	
+
 	/**
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
 	 */
-	public function onAKSubscriptionChange($row)
+	public function onAKSubscriptionChange($row, $info)
 	{
-		$this->onAKUserRefresh($row->user_id);
+		if(is_null($info['modified']) || empty($info['modified'])) return;
+		if(array_key_exists('enabled', (array)$info['modified'])) {
+			$this->onAKUserRefresh($row->user_id);
+		}
 	}
 	
 	/**

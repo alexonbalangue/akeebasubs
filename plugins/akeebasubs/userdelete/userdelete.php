@@ -15,6 +15,9 @@ class plgAkeebasubsUserdelete extends JPlugin
 	 */
 	public function onAKSubscriptionChange($row)
 	{
+		if(is_null($info['modified']) || empty($info['modified'])) return;
+		if(!array_key_exists('enabled', (array)$info['modified'])) return;
+		
 		// Only handle expired subscriptions
 		if( (($row->state == "C") || ($row->state == "X")) && ($row->enabled == 0) ) {
 			$this->onAKUserRefresh($row->user_id);

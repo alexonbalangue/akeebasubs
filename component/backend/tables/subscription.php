@@ -145,20 +145,30 @@ class AkeebasubsTableSubscription extends FOFTable
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		
+		$info = array(
+			'status'	=>	'unmodified',
+			'previous'	=> empty($this->selfCache) ? null : $this->selfCache,
+			'current'	=> $this,
+			'modified'	=> null
+		);
+		
 		if(is_null($this->selfCache) || !is_object($this->selfCache)) {
-			$modified = true;
+			$info['status'] = 'new';
+			$info['modified'] = $this;
 		} else {
+			$modified = array();
 			foreach($this->selfCache as $key => $value) {
 				if($this->$key != $value) {
-					$modified = true;
-					break;
+					$info['status'] = 'modified';
+					$modified[$key] = $value;
 				}
 			}
+			$info['modified'] = (object)$modified;
 		}
 		
-		if($modified) {
+		if($info['status'] != 'unmodified') {
 			// Fire plugins (onAKSubscriptionChange) passing ourselves as a parameter
-			$jResponse = $app->triggerEvent('onAKSubscriptionChange', array($this));
+			$jResponse = $app->triggerEvent('onAKSubscriptionChange', array($this, $info));
 		}
 		
 		$this->selfCache = clone $this;
