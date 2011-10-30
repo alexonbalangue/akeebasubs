@@ -868,6 +868,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 			
 			$params['sendEmail'] = 0;
 			
+			// Set the user's default language to whatever the site's current language is
+			$params['params'] = array(
+				'language'	=> JFactory::getConfig()->getValue('config.language')
+			);
+			
 			// We always block the user, so that only a successful payment or
 			// clicking on the email link activates his account. This is to
 			// prevent spam registrations when the subscription form is abused.
