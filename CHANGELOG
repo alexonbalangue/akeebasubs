@@ -19,6 +19,7 @@ Akeeba Subscriptions 2.0.a2
 # Unpublished subscription levels would show up in the front-end
 # Renew link would not be shown for all published levels and not hidden for all unpublished levels in the My Subscriptions view
 # JavaScript validation could break on some browsers when a user is already logged in (thanks Daniele!)
+# Automatic publish/unpublish of subscriptions should only happen on paid (payment state = C) subscriptions!
 
 Akeeba Subscriptions 2.0.a1
 ================================================================================
