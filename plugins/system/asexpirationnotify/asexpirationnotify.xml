@@ -7,8 +7,8 @@
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2011 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU General Public License version 3, or later</license>
-	<creationDate>2011-03-04</creationDate>
-	<version>1.0</version>
+	<creationDate>2011-10-31</creationDate>
+	<version>1.1</version>
 	<description>
 		Emails the users before their subscription expires, based on the
 		preferences set in each subscription level (default: 30 and 15 days
@@ -28,26 +28,4 @@
 		<language tag="de-DE">de-DE.plg_system_asexpirationnotify.ini</language>
 		<language tag="de-DE">de-DE.plg_system_asexpirationnotify.sys.ini</language>
 	</languages>
-	<params addpath="/plugins/system/asexpirationnotify">
-		<param type="header" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_LABEL" description="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_DESC" />
-		<param type="text" name="s1subject" size="80" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_DESC" default="" />
-		<param type="textarea" name="s1body" cols="50" rows="10" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_DESC" default="" />
-		
-		<param type="header" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S2_LABEL" description="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S2_DESC" />
-		<param type="text" name="s2subject" size="80" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_DESC" default="" />
-		<param type="textarea" name="s2body" cols="50" rows="10" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_DESC" default="" />
-	</params>
-	<config addfieldpath="/plugins/system/asexpirationnotify/asexpirationnotify">
-		<fields name="params">
-			<fieldset name="basic">
-				<field type="header" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_LABEL" description="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S1_DESC" />
-				<field type="text" name="s1subject" size="80" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_DESC" default="" />
-				<field type="textarea" name="s1body" cols="50" rows="10" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_DESC" default="" />
-				
-				<field type="header" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S2_LABEL" description="PLG_SYSTEM_ASEXPIRATIONNOTIFY_S2_DESC" />
-				<field type="text" name="s2subject" size="80" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_DESC" default="" />
-				<field type="textarea" name="s2body" cols="50" rows="10" label="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_LABEL" desciption="PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_DESC" default="" />
-			</fieldset>
-		</fields>
-	</config>
 </install>

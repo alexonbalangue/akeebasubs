@@ -38,16 +38,6 @@ class plgSystemAsexpirationnotify extends JPlugin
 			}
 			@date_default_timezone_set( $serverTimezone);
 		}
-		
-		// Load the language files
-		$jlang =& JFactory::getLanguage();
-		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true);
-		
-		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 	}
 
 	/**
@@ -258,7 +248,13 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$db->query();
 	}
 	
-	private function sendEmail(KDatabaseRowAbstract $row, $firstContact)
+	/**
+	 * Sends a notification email to the user
+	 * 
+	 * @param AkeebasubsTableSubscription $row The subscription row
+	 * @param bool $firstContact  Is this the first time we contact the user?
+	 */
+	private function sendEmail($row, $firstContact)
 	{
 		// Get the site name
 		$config = JFactory::getConfig();
@@ -266,6 +262,26 @@ class plgSystemAsexpirationnotify extends JPlugin
 	
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
+		
+		// Load the language files
+		// Load the language files and their overrides
+		$jlang =& JFactory::getLanguage();
+		// -- English (default fallback)
+		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, 'en-GB', true);
+		// -- Default site language
+		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		// -- Current site language
+		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true);
+		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, null, true);
+		// -- User's preferred language
+		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
+		$userlang = $uparams->getValue('language','');
+		if(!empty($userlang)) {
+			$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $userlang, true);
+			$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, $userlang, true);
+		}
 		
 		// Get the level
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
@@ -304,7 +320,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			'email'				=> $user->email,
 			'sitename'			=> $sitename,
 			'level'				=> $level->title,
-			'enabled'			=> $row->enabled ? JText::_('Enabled') : JText::_('Disabled'),
+			'enabled'			=> $row->enabled ? JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_ENABLED') : JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_DISABLED'),
 			'state'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
 			'from'				=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
 			'to'				=> version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
@@ -314,17 +330,9 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$subject = JText::_($subject_key);
 		$body = JText::_($body_key);
 		
-		if($firstContact) {
-			if($this->params->get('s1subject','')) $subject = $this->params->get('s1subject','');
-			if($this->params->get('s1body','')) $body = $this->params->get('s1body','');
-		} else {
-			if($this->params->get('s2subject','')) $subject = $this->params->get('s2subject','');
-			if($this->params->get('s2body','')) $body = $this->params->get('s2body','');
-		}
-		
 		foreach($substitution_vars as $key => $value) {
-			$subject = str_ireplace('{'.$key.'}', $value, $subject);
-			$body = str_ireplace('{'.$key.'}', $value, $body);
+			$subject = str_ireplace('['.strtoupper($key).']', $value, $subject);
+			$body = str_ireplace('['.strtoupper($key).']', $value, $body);
 		}
 		
 		// DEBUG ---
