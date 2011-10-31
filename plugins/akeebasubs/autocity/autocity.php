@@ -79,7 +79,7 @@ class plgAkeebasubsAutocity extends JPlugin
 	 * developer interested in creating, for example, a "bridge" with a social
 	 * component like Community Builder or JomSocial.
 	 * 
-	 * @param KDatabaseRow $row The user data
+	 * @param AkeebasubsTableUser $row The user data
 	 */
 	public function onAKUserSaveData($row)
 	{

@@ -49,8 +49,8 @@ class plgAkpaymentOffline extends JPlugin
 	 * 
 	 * @param string $paymentmethod
 	 * @param JUser $user
-	 * @param KDatabaseRow $level
-	 * @param KDatabaseRow $subscription
+	 * @param AkeebasubsTableLevel $level
+	 * @param AkeebasubsTableSubscription $subscription
 	 * @return string
 	 */
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
