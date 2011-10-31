@@ -49,6 +49,16 @@
           <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
         </author>
       </revision>
+
+      <revision>
+        <revnumber>2.0.a2</revnumber>
+
+        <date>October 2011</date>
+
+        <author>
+          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
+        </author>
+      </revision>
     </revhistory>
 
     <legalnotice>
@@ -228,12 +238,9 @@
         </listitem>
       </itemizedlist>
 
-      <para>Akeeba Subscriptions is compatible with other Nooku-based software
-      which is using at least Nooku Framework 0.7 Alpha 3. It will not work
-      properly together with components using earlier versions of the
-      framework. If you're in doubt, <emphasis role="bold">please try
-      installing Akeeba Subscriptions on a copy of your site and test its
-      behaviour</emphasis>.</para>
+      <para>Since version 2.0.a1, Akeeba Subscriptions no longer uses the
+      Nooku Framework which extends its compatibility with more server
+      environments and third-party software.</para>
 
       <important>
         <para>If you installed Akeeba Subscriptions 1.0.b4 or earlier on your
@@ -539,16 +546,89 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         project. Therefore we regret that we have to say that, but we can't
         help you. Thank you for your understanding.</para>
       </section>
+
+      <section xml:id="updating">
+        <title>Updating to the latest release</title>
+
+        <para>Akeeba Subscriptions can be updated with three different
+        methods: installing the new version on top of the old one, using the
+        integrated Live Update system or through Joomla! 1.6 and later's
+        extensions update feature.</para>
+
+        <bridgehead>Updating directly</bridgehead>
+
+        <para>This is the failsafe approach, but the least convenient.
+        Download the latest Akeeba Subscriptions release from <link
+        xlink:href="https://www.AkeebaBackup.com/latest">https://www.AkeebaBackup.com/latest</link>
+        and save the ZIP file to your hard disk. Log in to your site's
+        backend, click on <guimenu>Extensions</guimenu>, then
+        <guimenuitem>Install/Uninstall</guimenuitem> (Joomla! 1.5) or
+        <guimenuitem>Extensions Manager</guimenuitem> (Joomla! 1.6 and later).
+        Use the <guibutton>Browse...</guibutton> button to locate the ZIP file
+        you downloaded, then click on <guibutton>Upload and
+        Install</guibutton>. All Joomla! versions since 1.5.5 are smart enough
+        to understand that you're doing an upgrade instead of installation and
+        adjust the process accordingly.</para>
+
+        <important>
+          <para>Do NOT uninstall Akeeba Subscriptions before updating it!
+          Uninstalling will remove all of your data, including all subscriber
+          information!</para>
+        </important>
+
+        <bridgehead>Using Live Update</bridgehead>
+
+        <para>Since Akeeba Subscriptions 1.0.0 we have integrated our Live
+        Update system inside Akeeba Subscriptions. Log in to your site's
+        backend and go to <guimenu>Components</guimenu>, <guimenuitem>Akeeba
+        Subscriptions</guimenuitem>. Look towards the bottom of the page.
+        There should be an icon which reads "Update found" when there is a new
+        version available. Click on it and then click on "Update now". The new
+        version will be downloaded and installed automatically for you. In
+        case this doesn't work, or if "Live Update not supported" is displayed
+        below the icon, please make sure that your host's firewall allows
+        TCP/IP communications over port 80 and 443 to
+        <uri>akeebabackup.com</uri> and <uri>s3.amazonaws.com</uri>. If your
+        host requests IP addresses instead of domain names, please ask them to
+        trace them from the server as they are multicast hostnames, which
+        means that they resolve to a different IP depending on where in the
+        world you are.</para>
+
+        <bridgehead>Using Joomla! 1.6 and later's extension
+        update</bridgehead>
+
+        <para>Since Joomla! 1.6, the Joomla! Extensions Manager allows
+        directly updating your extensions. Just log in to the backend of your
+        site and go to <guimenu>Extensions</guimenu>, <guimenuitem>Extension
+        Manager</guimenuitem>. Click on the <guilabel>Update</guilabel> link
+        below the toolbar. Then click on the <guibutton>Find
+        Updates</guibutton> button. If there is a new Akeeba Subscriptions
+        release it will appear in the list below. Tick the box on the left of
+        the row and then click on the <guibutton>Update</guibutton> button. If
+        your site is compatible with this Joomla! feature, you will see the
+        new version being installed automatically for you.</para>
+
+        <bridgehead>Something not working right after the update?</bridgehead>
+
+        <para>Sometimes Joomla! "forgets" to copy all updated files. This is
+        something that we have seen many times on Joomla! 1.5 sites. In this
+        case, simply follow the instructions in the Updating Directly section
+        above. This will force Joomla! to retry updating the component,
+        copying the missing files and everything will work again.</para>
+      </section>
     </section>
 
     <section xml:id="uninstallation">
       <title>Uninstallation</title>
 
       <para>You can uninstall the component just like any other Joomla!
-      component. In your site's back-end, just go to Extensions,
-      Install/Uninstall, click on Uninstall, select Akeeba Subscriptions and
-      click on Uninstall. This will completely remove Akeeba Subscriptions
-      including all subscriber information!</para>
+      component. In your site's back-end, just go to
+      <guimenu>Extensions</guimenu>,
+      <guimenuitem>Install/Uninstall</guimenuitem> (Joomla! 1.5) or
+      <guimenuitem>Extensions Manager</guimenuitem> (Joomla! 1.6 or later),
+      click on <guilabel>Uninstall</guilabel>, select Akeeba Subscriptions and
+      click on <guibutton>Uninstall</guibutton>. This will completely remove
+      Akeeba Subscriptions including all subscriber information.</para>
     </section>
   </chapter>
 
@@ -710,6 +790,18 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <para>Default: Yes</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Images directory</term>
+
+          <listitem>
+            <para>The directory, relative to your site's root, where the
+            subscription level images will be stored.</para>
+
+            <para>Default: images (Joomla! 1.6+) or images/stories (Joomla!
+            1.5)</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Front-end display</guilabel></para>
@@ -745,6 +837,82 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             default (first) tax rate will be applied instead.</para>
 
             <para>Default: Yes</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Show login box</term>
+
+          <listitem>
+            <para>When enabled, if the user is not logged in yet when he tries
+            to subscribe, a login box will be displayed on top of the
+            subscriptions page, allowing her to login to the site. If
+            disabled, this login box will not be disabled. Many people have
+            reported that the login feature is confusing and redundant, as
+            there is usually a login button or module for the same function,
+            hence this option.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para><guilabel>Permissions</guilabel> (Joomla! 1.6 or later
+      only)</para>
+
+      <para>This is the standard Joomla! 1.6 or later ACL permissions widget.
+      The meaning of the different ACL settings is as follows:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Configure</term>
+
+          <listitem>
+            <para>Allows the user to access the Options page of the component
+            (the very page you are on right now)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Access Component</term>
+
+          <listitem>
+            <para>Allows backend access to the component. Frontend access IS
+            NOT affected by this setting!</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Create</term>
+
+          <listitem>
+            <para>Allows the creation of new records on any backend page (e.g.
+            Subscription Levels, Subscriptions, Users, Tax Rules, Coupons and
+            so on)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Delete</term>
+
+          <listitem>
+            <para>Allows the deletion of records on any backend page</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Edit</term>
+
+          <listitem>
+            <para>Allows the user to edit any record on any backend
+            page</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Edit State</term>
+
+          <listitem>
+            <para>Allows the user to publish/unpublish records on any backend
+            page</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -1390,6 +1558,17 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       CSV file for further processing in a spreadsheet application such as
       Microsoft Office Excel, Apple Numbers or OpenOffice.org Calc. Do note
       that the full set of raw data is dumped to the CSV file.</para>
+
+      <important>
+        <para>Clicking on the Published column apparently has no effect. This
+        is not a bug; it's the expected behaviour. The publish status of each
+        subscriptions is defined by the payment state and the valid from/ to
+        dates. If the payment state is marked as "Completed" then the
+        subscription is forced to be active within the time period defined by
+        the valid from / to columns. If you want to disable a paid
+        subscription, set its payment state to cancelled and unpublish
+        it.</para>
+      </important>
     </section>
 
     <section xml:id="frotn-end-items">
@@ -1464,6 +1643,12 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
     <section xml:id="importing-from-other-components">
       <title>Importing from other components</title>
+
+      <note>
+        <para>This feature is temporarily removed from Akeeba Subscriptions
+        2.0.a1 and 2.0.a2. We plan on including it again in 2.0.b1 and
+        later.</para>
+      </note>
 
       <para>Most likely you are already using a subscriptions system and
       wouldn't like to have to manually import all of your subscriptions to
@@ -3342,23 +3527,34 @@ LEVEL3=Group 1</programlisting>
         Subscriptions - Emails</guilabel></para>
 
         <para>When this plugin is published, an email will be sent out to the
-        user when any of these events takes place:</para>
+        user when any change in the status of the subscription has taken
+        place. For a complete list of the events on which an email is sent you
+        can take a look at the language file, e.g.
+        <filename>administrator/language/en-GB/en-GB.plg_akeebasubs_subscriptionemails.ini</filename>.
+        Please note that if you are running a multilingual site, the site's
+        active language at the time the subscription was registered is saved
+        as the user's default language. As long as translation files for that
+        language exist for our email plugin, then all emails the user receives
+        will be in that language (the user's default language).</para>
 
-        <itemizedlist>
-          <listitem>
-            <para>A new subscription is created</para>
-          </listitem>
+        <para>If you want to customise the email messages, you can easily do
+        so! First, you will need to find your language's language code. In
+        order to do that, just take a look at administrator/language. You will
+        see a lot of directories in there. en-GB is the English (United
+        Kingdom) language and, depending on which laguages you have installed
+        on your site, you will see more directories e.g. es-ES for Spanish
+        (Spain), de-DE for German (Germany), el-GR for Greek (Greece) and so
+        on. Note that down. Whenever you see xx-XX below, replace it with your
+        own language's language code.</para>
 
-          <listitem>
-            <para>The payment status changes, e.g. the user completes the
-            payment, or a delayed payment is marked as completed or
-            cancelled.</para>
-          </listitem>
-
-          <listitem>
-            <para>A subscription expires and becomes inactive</para>
-          </listitem>
-        </itemizedlist>
+        <para>Go inside the <filename>administrator/language/xx-XX</filename>
+        directory. Find the
+        <filename>xx-XX.plg_akeebasubs_subscriptionemails.ini</filename> file
+        and copy it to
+        <filename>xx-XX.plg_akeebasubs_subscriptionemails.override.ini</filename>
+        Now, edit any of the subscription email texts. The Emails plugin will
+        use your override file instead of the default when sending out
+        emails!</para>
 
         <note>
           <para>This plugin uses Joomla!'s mail system. You have to ensure
@@ -3391,84 +3587,24 @@ LEVEL3=Group 1</programlisting>
         <para>We strongly recommend publishing this plugin at all
         times.</para>
 
-        <para>Since Akeeba Subscriptions 1.0.0 you can customise the emails
-        sent to the users. All email fields understand the following
-        parameters:</para>
+        <para>If you want to customise the email messages, you can easily do
+        so! First, you will need to find your language's language code. In
+        order to do that, just take a look at administrator/language. You will
+        see a lot of directories in there. en-GB is the English (United
+        Kingdom) language and, depending on which laguages you have installed
+        on your site, you will see more directories e.g. es-ES for Spanish
+        (Spain), de-DE for German (Germany), el-GR for Greek (Greece) and so
+        on. Note that down. Whenever you see xx-XX below, replace it with your
+        own language's language code.</para>
 
-        <variablelist>
-          <varlistentry>
-            <term>{NAME}</term>
-
-            <listitem>
-              <para>The name of the user (e.g. John Doe)</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{SITENAME}</term>
-
-            <listitem>
-              <para>The name of your site, as configured in the Global
-              Configuration</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{USERNAME}</term>
-
-            <listitem>
-              <para>The user's username</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{LEVEL}</term>
-
-            <listitem>
-              <para>The title of the subscription level</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{ENABLED}</term>
-
-            <listitem>
-              <para>The subscriptions status (enabled / disabled)</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{STATE}</term>
-
-            <listitem>
-              <para>Payment status (new, cancelled, pending, complete)</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{FROM}</term>
-
-            <listitem>
-              <para>The date when the subscription becomes active</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{TO}</term>
-
-            <listitem>
-              <para>The date when the subscription becomes inactive</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>{URL}</term>
-
-            <listitem>
-              <para>Subscription renewal URL</para>
-            </listitem>
-          </varlistentry>
-        </variablelist>
+        <para>Go inside the <filename>administrator/language/xx-XX</filename>
+        directory. Find the
+        <filename>xx-XX.plg_system_asexpirationnotify.ini</filename> file and
+        copy it to
+        <filename>xx-XX.plg_system_asexpirationnotify.override.ini</filename>
+        Now, edit any of the subscription email texts. The Emails plugin will
+        use your override file instead of the default when sending out
+        emails!</para>
       </section>
 
       <section xml:id="plugin-asrestricted">
@@ -3725,54 +3861,26 @@ LEVEL3=Group 1</programlisting>
     <section xml:id="dev-akeebasubs">
       <title>The "akeebasubs" plugin events</title>
 
-      <section xml:id="dev-onAKSubscriptionCreate">
-        <title>onAKSubscriptionCreate</title>
-
-        <para><emphasis role="bold">Prototype</emphasis>: <code>public
-        function onAKSubscriptionCreate(KDatabaseRowDefault
-        $row)</code></para>
-
-        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
-        whenever a subscription is created.</para>
-
-        <para><emphasis role="bold">Sample plugin</emphasis>:
-        plugins/akeebasubs/subscriptionemails.php</para>
-
-        <para>The <code>$row</code> variable contains a KDatabaseRowDefault
-        descendant which gives you access to all of the information in the
-        subscription record (#__akeebasubs_subscriptions table's fields).
-        Please note that the akeebasubs_subscription_id column must be
-        accessed as id. Accessing this information is done as object property
-        access, e.g. <code>$row-&gt;akeebasubs_level_id</code> to get the
-        subscription level ID.</para>
-
-        <para>You can not change the information in $row or pass data back to
-        the component in any way. In fact, this event is called immediately
-        after all information has been written to the database.</para>
-      </section>
-
       <section xml:id="dev-onAKSubscriptionChange">
         <title>onAKSubscriptionChange</title>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
-        function onAKSubscriptionChange(KDatabaseRowDefault
-        $row)</code></para>
+        function onAKSubscriptionChange($row, $info)</code></para>
 
         <para><emphasis role="bold">Synopsis</emphasis>: This event is called
-        whenever a subscription is modified. In fact, it only gets called when
-        the enabled, state, publish_up or publish_down columns are modified.
-        Modification in other columns does not trigger this event.</para>
+        whenever a subscription is created or modified.</para>
 
         <para><emphasis role="bold">Sample plugin</emphasis>:
         plugins/akeebasubs/subscriptionemails.php</para>
 
-        <para>The <code>$row</code> variable contains a KDatabaseRowDefault
-        descendant which gives you access to all of the information in the
-        subscription record (#__akeebasubs_subscriptions table's fields).
-        Please note that the akeebasubs_subscription_id column must be
-        accessed as id. Accessing this information is done as object property
-        access, e.g. <code>$row-&gt;akeebasubs_level_id</code> to get the
-        subscription level ID.</para>
+        <para>The <code>$row</code> variable contains a JTable descendant
+        which gives you access to all of the information in the subscription
+        record (#__akeebasubs_subscriptions table's fields). The
+        <code>$info</code> variable contains a hash array with useful
+        information, including a copy of table before and after the
+        modification, the modified rows and the kind of modification (new for
+        new record or modified for a modified existing record) that took
+        place.</para>
 
         <para>You can not change the information in $row or pass data back to
         the component in any way. In fact, this event is called immediately
