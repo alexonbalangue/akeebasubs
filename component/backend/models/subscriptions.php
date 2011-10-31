@@ -403,7 +403,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 	public function onProcessList(&$resultArray) {
 		// Implement the subscription automatic expiration
 		if(empty($resultArray)) return;
-		
+
 		if($this->getState('skipOnProcessList',0)) return;
 
 		jimport('joomla.utilities.date');
@@ -416,14 +416,19 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		foreach($resultArray as $index => &$row) {
 			$triggered = false;
 			
-			if(!property_exists($row, 'publish_down')) return;
+			if(!property_exists($row, 'publish_down')) continue;
+			if(!property_exists($row, 'publish_up')) continue;
 			
-			if($row->paystate != 'C') return;
+			if($row->state != 'C') continue;
 			
 			if($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00')) {
 				$jDown = new JDate($row->publish_down);
+				$jUp = new JDate($row->publish_up);
 				if( ($uNow >= $jDown->toUnix()) && $row->enabled ) {
 					$row->enabled = 0;
+					$triggered = true;
+				} elseif(($uNow >= $jUp->toUnix()) && !$row->enabled) {
+					$row->enabled = 1;
 					$triggered = true;
 				}
 			}

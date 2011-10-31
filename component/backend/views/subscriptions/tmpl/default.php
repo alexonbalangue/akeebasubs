@@ -119,6 +119,7 @@ $this->loadHelper('format');
 		<?php $m = 1; $i = -1; ?>
 		<?php foreach($this->items as $subscription):?>
 		<?php
+			$i++;
 			$m = 1 - $m;
 			$email = trim($subscription->email);
 			$email = strtolower($email);
