@@ -52,4 +52,43 @@ class AkeebasubsModelCoupons extends FOFModel
 
 		return $query;
 	}
+	
+	public function onProcessList(&$resultArray) {
+		// Implement the coupon automatic expiration
+		if(empty($resultArray)) return;
+		
+		if($this->getState('skipOnProcessList',0)) return;
+		
+		jimport('joomla.utilities.date');
+		$jNow = new JDate();
+		$uNow = $jNow->toUnix();
+
+		$table = $this->getTable($this->table);
+		$k = $table->getKeyName();
+		
+		foreach($resultArray as $index => &$row) {
+			$triggered = false;
+			
+			if(!property_exists($row, 'publish_down')) continue;
+			if(!property_exists($row, 'publish_up')) continue;
+			
+			if($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00')) {
+				$jDown = new JDate($row->publish_down);
+				$jUp = new JDate($row->publish_up);
+				if( ($uNow >= $jDown->toUnix()) && $row->enabled ) {
+					$row->enabled = 0;
+					$triggered = true;
+				} elseif(($uNow >= $jUp->toUnix()) && !$row->enabled && ($uNow < $jDown->toUnix())) {
+					$row->enabled = 1;
+					$triggered = true;
+				}
+			}
+			
+			if($triggered) {
+				$table->reset();
+				$table->load($row->$k);
+				$table->save($row);
+			}
+		}
+	}
 }
