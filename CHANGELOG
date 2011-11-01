@@ -1,4 +1,10 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.0.a3
+================================================================================
+# Wouldn't work on Joomla! 1.5
+# Language filtering not working on Joomla! 1.5
+
+
 Akeeba Subscriptions 2.0.a2
 ================================================================================
 + A new user can retry registering with the same username and password as long as his previous subscription attempt is still marked as unpaid or cancelled.

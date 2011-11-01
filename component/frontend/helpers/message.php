@@ -81,7 +81,16 @@ class AkeebasubsHelperMessage
 			if($enableTranslation) {
 				$lang = JFactory::getLanguage()->getTag();
 			} else {
-				$lang = JFactory::getUser()->language;
+				$user = JFactory::getUser();
+				if(property_exists($user, 'language')) {
+					$lang = $user->language;
+				} else {
+					$params = $user->params;
+					if(!is_object($params)) {
+						$params = new JParameter($params);
+					}
+					$lang = $params->getValue('language','');
+				}
 				if(empty($lang)) {
 					$lang = JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 				}
