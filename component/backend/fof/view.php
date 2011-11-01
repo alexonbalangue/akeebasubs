@@ -96,7 +96,9 @@ class FOFView extends JView
 	public function loadAnyTemplate($path = '', $forceParams = array())
 	{
 		$template = JFactory::getApplication()->getTemplate();
-		$layoutTemplate = $this->getLayoutTemplate();
+		if(version_compare(JVERSION, '1.6.0', 'ge')) {
+			$layoutTemplate = $this->getLayoutTemplate();
+		}
 		
 		// Parse the path
 		$templateParts = $this->_parseTemplatePath($path);
