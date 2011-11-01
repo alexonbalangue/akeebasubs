@@ -32,12 +32,6 @@ class FOFModel extends JModel
 	
 	protected $input = array();
 
-	
-	public static function getInstance($type, $prefix = '', $config = array()) {
-		JError::raiseWarning(0, 'FOFModel::getInstance() is deprecated; please use getAnInstance() or getTmpInstance() instead.');
-		parent::getInstance($type, $prefix, $config);
-	}
-	
 	/**
 	 * Returns a new model object. Unless overriden by the $config array, it will
 	 * try to automatically populate its state from the request variables.

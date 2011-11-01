@@ -21,12 +21,6 @@ require_once(dirname(__FILE__).'/input.php');
  */
 class FOFTable extends JTable
 {
-	public static function getInstance($type, $prefix = 'JTable', $config = array())
-	{
-		JError::raiseWarning(0, 'FOFTable::getInstance() is deprecated; please use getAnInstance() instead.');
-		parent::getInstance($type, $prefix, $config);
-	}
-	
 	public static function &getAnInstance($type = null, $prefix = 'JTable', $config = array())
 	{
 		static $instances = array();
