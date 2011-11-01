@@ -48,7 +48,7 @@ $this->loadHelper('params');
 			<?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_TYPE'); ?>
 	</label>
 	<?php echo AkeebasubsHelperSelect::coupontypes('type',$this->item->type) ?>
-	<br />					
+	<div class="akeebasubs-clear"></div>
 
 	<label for="value_field" class="main">
 			<?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_VALUE'); ?>
