@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 // This stupid crap is required due to some stupid Joomla! naming conflicts. Bleh...
 if(!class_exists('JTableUser')) {
-	require_once (version_compare(JVERSION, '1.6.0', 'ge') ? JPATH_LIBRARIES : JPATH_BASE.'/libraries').'/joomla/database/table/user.php';
+	require_once (version_compare(JVERSION, '1.6.0', 'ge') ? JPATH_LIBRARIES : JPATH_ROOT.'/libraries').'/joomla/database/table/user.php';
 }
 
 class AkeebasubsTableUser extends FOFTable
