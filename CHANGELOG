@@ -8,6 +8,8 @@ Akeeba Subscriptions 2.0.a3
 # Typo in FOFController
 # Notice thrown in back-end Control Panel page (typo)
 # Layout error in coupon editor view
+# Subscriptions would be automatically activated after they were made inactive due to expiration
+# Coupons with publish from/to dates would not automatically publish/unpublish
 
 Akeeba Subscriptions 2.0.a2
 ================================================================================

@@ -427,7 +427,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				if( ($uNow >= $jDown->toUnix()) && $row->enabled ) {
 					$row->enabled = 0;
 					$triggered = true;
-				} elseif(($uNow >= $jUp->toUnix()) && !$row->enabled) {
+				} elseif(($uNow >= $jUp->toUnix()) && !$row->enabled && ($uNow < $jDown->toUnix())) {
 					$row->enabled = 1;
 					$triggered = true;
 				}
