@@ -6,6 +6,7 @@ Akeeba Subscriptions 2.0.a3
 # Crash on Joomla! 1.5 when subscribing
 # AkeebasubsTableUser would not work on Joomla! 1.5
 # Typo in FOFController
+# Notice thrown in back-end Control Panel page (typo)
 
 Akeeba Subscriptions 2.0.a2
 ================================================================================

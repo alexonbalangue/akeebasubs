@@ -108,7 +108,7 @@ $this->loadHelper('cparams');
 					}
 					if($y < 2011) $y = 2011;
 					if($m < 1) $m = 1;
-					if($d < 1) $d = 1;
+					if($lmday < 1) $lmday = 1;
 				?>
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since($y.'-'.$m.'-01')
