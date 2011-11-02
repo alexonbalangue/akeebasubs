@@ -26,7 +26,7 @@ $message = AkeebasubsHelperMessage::processSubscriptionTags($message, $this->sub
 <?php endif; ?>
 
 <h1 class="componentheading">
-	<?= $this->escape(JText::_('COM_AKEEBASUBS_MESSAGE_SORRY')) ?>
+	<?php echo $this->escape(JText::_('COM_AKEEBASUBS_MESSAGE_SORRY')) ?>
 </h1>
 
 <?php echo JHTML::_('content.prepare', $message)?>

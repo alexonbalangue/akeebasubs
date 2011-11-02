@@ -51,7 +51,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right" width="25%">
 			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-			<?= sprintf('%.02f',
+			<?php echo  sprintf('%.02f',
 				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since((gmdate('Y')-1).'-01-01')
 					->until((gmdate('Y')-1).'-12-31 23:59:59')
@@ -73,7 +73,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right">
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?= sprintf('%.02f',
+				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-01-01')
 						->until(gmdate('Y').'-12-31 23:59:59')
@@ -86,7 +86,7 @@ $this->loadHelper('cparams');
 		<tr class="row0">
 			<td><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_LASTMONTH')?></td>
 			<td align="right">
-				<?
+				<?php
 					$y = gmdate('Y');
 					$m = gmdate('m');
 					if($m == 1) {
@@ -119,7 +119,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right">
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?= sprintf('%.02f',
+				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since($y.'-'.$m.'-01')
 						->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
@@ -132,7 +132,7 @@ $this->loadHelper('cparams');
 		<tr class="row1">
 			<td><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_THISMONTH')?></td>
 			<td align="right">
-				<?
+				<?php
 					switch(gmdate('m')) {
 						case 1: case 3: case 5: case 7: case 8: case 10: case 12:
 							$lmday = 31; break;
@@ -157,7 +157,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right">
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?= sprintf('%.02f',
+				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-'.gmdate('m').'-01')
 						->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
@@ -179,7 +179,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right" width="25%">
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?= sprintf('%.02f',
+				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( gmdate('Y-m-d', time()-7*24*3600) )
 						->until( gmdate('Y-m-d') )
@@ -192,7 +192,7 @@ $this->loadHelper('cparams');
 		<tr class="row1">
 			<td width="50%"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_YESTERDAY')?></td>
 			<td align="right" width="25%">
-				<?
+				<?php
 				$date = new DateTime();
 				$date->setDate(gmdate('Y'), gmdate('m'), gmdate('d'));
 				$date->modify("-1 day");
@@ -208,7 +208,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right" width="25%">
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?= sprintf('%.02f',
+				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $yesterday )
 						->until( $date->format("Y-m-d") )
@@ -237,7 +237,7 @@ $this->loadHelper('cparams');
 			<td align="right" width="25%">
 				<strong>
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?= sprintf('%.02f',
+				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $date->format("Y-m-d") )
 						->until( $expiry->format("Y-m-d") )
@@ -249,7 +249,7 @@ $this->loadHelper('cparams');
 			</td>
 		</tr>
 		<tr class="row1">
-			<?
+			<?php
 				switch(gmdate('m')) {
 					case 1: case 3: case 5: case 7: case 8: case 10: case 12:
 						$lmday = 31; break;
@@ -280,24 +280,24 @@ $this->loadHelper('cparams');
 			?>
 			<td width="50%"><strong><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_AVERAGETHISMONTH')?></strong></td>
 			<td align="right" width="25%">
-				<strong><?=sprintf('%01.1f', $numsubs/$daysin)?><strong>
+				<strong><?php echo sprintf('%01.1f', $numsubs/$daysin)?><strong>
 			</td>
 			<td align="right" width="25%">
 				<strong>
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?=sprintf('%01.2f', $summoney/$daysin)?>
+				<?php echo sprintf('%01.2f', $summoney/$daysin)?>
 				</strong>
 			</td>
 		</tr>
 		<tr class="row0">
 			<td width="50%"><strong><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_PROJECTION')?></strong></td>
 			<td align="right" width="25%">
-				<em><?=sprintf('%01u', $lmday * ($numsubs/$daysin))?></em>
+				<em><?php echo sprintf('%01u', $lmday * ($numsubs/$daysin))?></em>
 			</td>
 			<td align="right" width="25%">
 				<em>
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
-				<?=sprintf('%01.2f', $lmday * ($summoney/$daysin))?>
+				<?php echo sprintf('%01.2f', $lmday * ($summoney/$daysin))?>
 				</em>
 			</td>
 		</tr>
