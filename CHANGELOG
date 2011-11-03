@@ -3,6 +3,9 @@ Akeeba Subscriptions 2.0.b1
 ================================================================================
 # FOF: Get a new model instance for the second time failed was causing warning messages and malfunctions
 # Short PHP open tags
+# mod_aksubslist: would not list all subscriptions
+# mod_aksubslist: would list paid but not yet activated subscriptions as expired
+# mod_aksubslist: would list not yet paid subscriptions as expired
 
 Akeeba Subscriptions 2.0.a3
 ================================================================================

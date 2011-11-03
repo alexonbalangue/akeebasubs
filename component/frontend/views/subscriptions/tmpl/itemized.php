@@ -13,18 +13,26 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 
-?>
+$subs = array();
+$expired = array();
+jimport('joomla.utilities.date');
+$jNow = new JDate();
 
-<?php $subs = array(); $expired = array(); ?>
-<?php if(count($this->items)) foreach($this->items as $subscription){
+if(count($this->items)) foreach($this->items as $subscription){
 	if(array_key_exists($subscription->akeebasubs_level_id, $subs)) continue;
 	if($subscription->enabled) {
-		$title = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($subscription->akeebasubs_level_id)
-			->getItem()
-			->title;
-		$subs[$subscription->akeebasubs_level_id] = $title;
-	} elseif(!$subscription->enabled) {
+			->getItem();
+		if(is_object($level)) {
+			if($level->akeebasubs_level_id = $subscription->akeebasubs_level_id) {
+				$subs[$subscription->akeebasubs_level_id] = $level->title;
+			}
+		}
+	} else {
+		$jUp = new JDate($subscription->publish_up);
+		if($jUp->toUnix() > $jNow->toUnix()) continue;
+		// Is it expired or just not activated yet?
 		$expired[] = $subscription->akeebasubs_level_id;
 	}
 }?>

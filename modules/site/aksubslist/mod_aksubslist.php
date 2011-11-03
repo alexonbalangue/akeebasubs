@@ -28,6 +28,12 @@ if(!defined('FOF_INCLUDED')) return;
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 
+$lang = JFactory::getLanguage();
+$lang->load('mod_aksubslist',JPATH_SITE,'en-GB',true);
+$lang->load('mod_aksubslist',JPATH_SITE,null,true);
+$lang->load('com_akeebasubs',JPATH_SITE,'en-GB',true);
+$lang->load('com_akeebasubs',JPATH_SITE,null,true);
+
 ?>
 <div id="mod-aksubslist-<?php echo $module->id?>" class="mod-aksubslist">
 <?php if(JFactory::getUser()->guest): ?>
@@ -42,6 +48,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php
 		'layout'	=> 'itemized',
 		'limit'		=> 0,
 		'limitstart'=> 0,
+		'paystate'	=> 'C',
 		'user_id'	=> JFactory::getUser()->id
 	)
 ))->dispatch();
