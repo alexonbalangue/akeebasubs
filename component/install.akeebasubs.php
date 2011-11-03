@@ -241,16 +241,22 @@ if(count($installation_queue['modules'])) {
 			if(empty($folder)) $folder = 'site';
 			$path = "$src/modules/$folder/$module";
 			if(!is_dir($path)) continue;
+			// Was the module alrady installed?
+			$sql = 'SELECT COUNT(*) FROM #__modules WHERE `module`='.$db->Quote('mod_'.$module);
+			$db->setQuery($sql);
+			$count = $db->getResult();
 			$installer = new JInstaller;
 			$result = $installer->install($path);
 			$status->modules[] = array('name'=>'mod_'.$module, 'client'=>$folder, 'result'=>$result);
 			// Modify where it's published and its published state
-			list($modulePosition, $modulePublished) = $modulePreferences;
-			$sql = "UPDATE #__modules SET position=".$db->Quote($modulePosition);
-			if($modulePublished) $sql .= ', published=1';
-			$sql .= ' WHERE `module`='.$db->Quote('mod_'.$module);
-			$db->setQuery($sql);
-			$db->query();
+			if(!$count) {
+				list($modulePosition, $modulePublished) = $modulePreferences;
+				$sql = "UPDATE #__modules SET position=".$db->Quote($modulePosition);
+				if($modulePublished) $sql .= ', published=1';
+				$sql .= ' WHERE `module`='.$db->Quote('mod_'.$module);
+				$db->setQuery($sql);
+				$db->query();
+			}
 		}
 	}
 }
@@ -261,11 +267,21 @@ if(count($installation_queue['plugins'])) {
 		if(count($plugins)) foreach($plugins as $plugin => $published) {
 			$path = "$src/plugins/$folder/$plugin";
 			if(!is_dir($path)) continue;
+			
+			// Was the plugin already installed?
+			if( version_compare( JVERSION, '1.6.0', 'ge' ) ) {
+				$query = "SELECT COUNT(*) FROM  #__extensions WHERE element=".$db->Quote($plugin)." AND folder=".$db->Quote($folder);
+			} else {
+				$query = "SELECT COUNT(*) FROM  #__plugins WHERE element=".$db->Quote($plugin)." AND folder=".$db->Quote($folder);
+			}
+			$db->setQuery($query);
+			$count = $db->getResult();
+			
 			$installer = new JInstaller;
 			$result = $installer->install($path);
 			$status->plugins[] = array('name'=>'plg_'.$plugin,'group'=>$folder, 'result'=>$result);
 			
-			if($published) {
+			if($published && !$count) {
 				if( version_compare( JVERSION, '1.6.0', 'ge' ) ) {
 					$query = "UPDATE #__extensions SET enabled=1 WHERE element=".$db->Quote($plugin)." AND folder=".$db->Quote($folder);
 				} else {
