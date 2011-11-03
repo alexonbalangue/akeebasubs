@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.0.b1
 # mod_aksubslist: would list paid but not yet activated subscriptions as expired
 # mod_aksubslist: would list not yet paid subscriptions as expired
 # Upgrading Akeeba Subscritpions would reset the module positions and republish the PayPal plugin
+# Coupon ID not being saved in the database table
 
 Akeeba Subscriptions 2.0.a3
 ================================================================================

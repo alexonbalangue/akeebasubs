@@ -412,11 +412,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		$couponDiscount = 0;
 		if($validCoupon) {
-			$list = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+			$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
 				->coupon(strtoupper($state->coupon))
-				->getItemList();
-			$coupon = array_pop($list);
-				
+				->getFirstItem();
+			
+			$this->_coupon_id = $coupon->akeebasubs_coupon_id;
+			
 			switch($coupon->type) {
 				case 'value':
 					$couponDiscount = (float)$coupon->value;
@@ -458,9 +459,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		
 		$discount = $useCoupon ? $couponDiscount : $autoDiscount;
-		
+		$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
+		$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
+
 		// Get the applicable tax rule
-		$taxRule = $this->_getTaxRule();
+		$taxRule = $this->_getTaxRule();		
 		
 		return (object)array(
 			'net'		=> sprintf('%1.02f',$netPrice),
@@ -470,8 +473,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'gross'		=> sprintf('%1.02f',($netPrice - $discount) + 0.01 * $taxRule->taxrate * ($netPrice - $discount)),
 			'usecoupon'	=> $useCoupon ? 1 : 0,
 			'useauto'	=> $useAuto ? 1 : 0,
-			'couponid'	=> is_null($this->_coupon_id) ? 0 : $this->_coupon_id,
-			'upgradeid'	=> is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id
+			'couponid'	=> $couponid,
+			'upgradeid'	=> $upgradeid
 		);
 	}
 	
@@ -627,8 +630,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		foreach($autoRules as $rule) {
 			if(!array_key_exists($rule->from_id, $subs)) continue;
-			if($subs[$rule->from_id] < $rule->min_presence*86400) continue;
-			if($subs[$rule->from_id] > $rule->max_presence*86400) continue;
+			if($subs[$rule->from_id] < ($rule->min_presence*86400)) continue;
+			if($subs[$rule->from_id] > ($rule->max_presence*86400)) continue;
 			
 			switch($rule->type) {
 				case 'value':
