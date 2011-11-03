@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.0.b1
 ================================================================================
+# FOF: Get a new model instance for the second time failed was causing warning messages and malfunctions
 # Short PHP open tags
 
 Akeeba Subscriptions 2.0.a3

@@ -47,16 +47,23 @@ class FOFModel extends JModel
 		$modelClass	= $prefix.ucfirst($type);
 		$result		= false;
 		
+		// Guess the component name and include path
+		preg_match('/(.*)Model$/', $prefix, $m);
+		$component = 'com_'.strtolower($m[1]);
+
+		if(array_key_exists('input', $config)) {
+			$component = FOFInput::getCmd('option',$component,$config['input']);
+		}
+		$config['option'] = $component;
+
+		$needsAView = true;
+		if(array_key_exists('view', $config)) {
+			if(!empty($config['view'])) $needsAView = false;
+		}
+		if($needsAView) $config['view'] = strtolower($type);
+
 		if (!class_exists( $modelClass ))
 		{
-			// Guess the component name and include path
-			preg_match('/(.*)Model$/', $prefix, $m);
-			$component = 'com_'.strtolower($m[1]);
-
-			if(array_key_exists('input', $config)) {
-				$component = FOFInput::getCmd('option',$component,$config['input']);
-			}
-			$config['option'] = $component;
 			$include_paths = JModel::addIncludePath();
 			if(JFactory::getApplication()->isAdmin()) {
 				$extra_paths = array(
@@ -71,12 +78,6 @@ class FOFModel extends JModel
 			}
 			$include_paths = array_merge($extra_paths,$include_paths);
 			
-			$needsAView = true;
-			if(array_key_exists('view', $config)) {
-				if(!empty($config['view'])) $needsAView = false;
-			}
-			if($needsAView) $config['view'] = strtolower($type);
-			
 			// Try to load the model file
 			jimport('joomla.filesystem.path');
 			$path = JPath::find(
@@ -88,11 +89,11 @@ class FOFModel extends JModel
 				require_once $path;
 			}
 		}
-
+		
 		if (!class_exists( $modelClass )) {
 			$modelClass = 'FOFModel';
 		}
-		
+
 		$result = new $modelClass($config);
 		
 		return $result;
