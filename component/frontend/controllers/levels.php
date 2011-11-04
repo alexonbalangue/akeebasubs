@@ -52,9 +52,10 @@ class AkeebasubsControllerLevels extends FOFController
 		$params	= JFactory::getApplication()->getPageParameters();
 		$pageslug	= $params->get('slug','');
 		$slug = FOFInput::getString('slug',null,$this->input);
-		if(empty($slug) && empty($pageslug)) {
-			FOFInput::setVar('slug', $slug, $this->input);
+		
+		if($pageslug) {
 			$slug = $pageslug;
+			FOFInput::setVar('slug', $slug, $this->input);
 		}
 
 		$this->getThisModel()->setIDsFromRequest();
