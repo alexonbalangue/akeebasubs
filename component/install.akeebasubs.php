@@ -244,7 +244,7 @@ if(count($installation_queue['modules'])) {
 			// Was the module alrady installed?
 			$sql = 'SELECT COUNT(*) FROM #__modules WHERE `module`='.$db->Quote('mod_'.$module);
 			$db->setQuery($sql);
-			$count = $db->getResult();
+			$count = $db->loadResult();
 			$installer = new JInstaller;
 			$result = $installer->install($path);
 			$status->modules[] = array('name'=>'mod_'.$module, 'client'=>$folder, 'result'=>$result);
@@ -275,7 +275,7 @@ if(count($installation_queue['plugins'])) {
 				$query = "SELECT COUNT(*) FROM  #__plugins WHERE element=".$db->Quote($plugin)." AND folder=".$db->Quote($folder);
 			}
 			$db->setQuery($query);
-			$count = $db->getResult();
+			$count = $db->loadResult();
 			
 			$installer = new JInstaller;
 			$result = $installer->install($path);
