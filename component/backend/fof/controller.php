@@ -296,7 +296,7 @@ class FOFController extends JController
 		// Display the view
 		if(version_compare(JVERSION, '1.6.0', 'ge')) {
 			$conf = JFactory::getConfig();
-			if ($cachable && $viewType != 'feed' && $conf->get('caching') >= 1) {
+			if (JFactory::getApplication()->isSite() && $cachable && $viewType != 'feed' && $conf->get('caching') >= 1) {
 				$option	= FOFInput::getCmd('option','com_foobar',$this->input);
 				$cache	= JFactory::getCache($option, 'view');
 
@@ -322,7 +322,7 @@ class FOFController extends JController
 				$view->display();
 			}
 		} else {
-			if ($cachable && $viewType != 'feed') {
+			if (JFactory::getApplication()->isSite() && $cachable && $viewType != 'feed') {
 				$cache =& JFactory::getCache($this->component, 'view');
 				$cache->get($view, 'display');
 			} else {
