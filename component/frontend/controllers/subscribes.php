@@ -13,6 +13,8 @@ class AkeebasubsControllerSubscribes extends FOFController
 		parent::__construct($config);
 		
 		$this->csrfProtection = false;
+		
+		$this->cacheableTasks = array();
 	}
 	
 	public function execute($task) {

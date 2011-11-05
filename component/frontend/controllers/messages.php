@@ -14,6 +14,8 @@ class AkeebasubsControllerMessages extends FOFController
 		
 		$this->setThisModelName('AkeebasubsModelLevels');
 		$this->csrfProtection = false;
+		
+		$this->cacheableTasks = array();
 	}
 	
 	public function execute($task) {

@@ -14,6 +14,8 @@ class AkeebasubsControllerValidates extends FOFController
 		parent::__construct($config);
 		$this->setThisModelName('AkeebasubsModelSubscribes');
 		$this->csrfProtection = false;
+		
+		$this->cacheableTasks = array();
 	}
 	
 	public function execute($task) {

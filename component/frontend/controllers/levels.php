@@ -9,6 +9,12 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerLevels extends FOFController
 {
+	public function __construct($config = array()) {
+		parent::__construct($config);
+		
+		$this->cacheableTasks = array('browse');
+	}
+	
 	public function onBeforeBrowse() {
 		$params	= JFactory::getApplication()->getPageParameters();
 		$ids	= $params->get('ids','');

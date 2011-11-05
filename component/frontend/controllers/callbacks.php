@@ -9,11 +9,14 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerCallbacks extends FOFController
 {
+	
 	public function __construct($config = array()) {
 		parent::__construct($config);
 		
 		$this->setThisModelName('AkeebasubsModelSubscribes');
 		$this->csrfProtection = false;
+		
+		$this->cacheableTasks = array();
 	}
 	
 
