@@ -51,6 +51,9 @@ class FOFController extends JController
 	/** @var string Overrides the name of the view's default view */
 	protected $viewName = null;
 	
+	/** @var array The tasks for which caching should be enabled by default */
+	protected $cacheableTasks = array('browse','read');
+	
 	/** @var array ACL permissions to group mapping for Joomla! 1.5; please note that we follow Joomla! 1.6's ACL naming conventions for uniformity in here. */
 	protected $aclMapJoomla15 = array(
 		'core.admin'		=> 'Super Administrator',
@@ -220,6 +223,11 @@ class FOFController extends JController
 				}
 			}
 		}
+		
+		// Caching
+		if(array_key_exists('cacheableTasks', $config)) {
+			if(is_array($config['cacheableTasks'])) $this->cacheableTasks = $config['cacheableTasks'];
+		}
 	}
 
 	/**
@@ -269,7 +277,7 @@ class FOFController extends JController
 	 * 
 	 * @param bool $cachable Is this view cacheable?
 	 */
-	public function display($cachable = false)
+	public function display($cachable = false, $urlparams = false)
 	{
 		$document =& JFactory::getDocument();
 		$viewType	= $document->getType();
@@ -286,12 +294,43 @@ class FOFController extends JController
 		$view->setLayout(is_null($this->layout) ? 'default' : $this->layout);
 
 		// Display the view
-		if ($cachable && $viewType != 'feed') {
-			$cache =& JFactory::getCache($this->component, 'view');
-			$cache->get($view, 'display');
+		if(version_compare(JVERSION, '1.6.0', 'ge')) {
+			$conf = JFactory::getConfig();
+			if ($cachable && $viewType != 'feed' && $conf->get('caching') >= 1) {
+				$option	= FOFInput::getCmd('option','com_foobar',$this->input);
+				$cache	= JFactory::getCache($option, 'view');
+
+				if (is_array($urlparams)) {
+					$app = JFactory::getApplication();
+
+					$registeredurlparams = $app->get('registeredurlparams');
+
+					if (empty($registeredurlparams)) {
+						$registeredurlparams = new stdClass;
+					}
+
+					foreach ($urlparams AS $key => $value)
+					{
+						// Add your safe url parameters with variable type as value {@see JFilterInput::clean()}.
+						$registeredurlparams->$key = $value;
+					}
+
+					$app->set('registeredurlparams', $registeredurlparams);
+				}
+				$cache->get($view, 'display');
+			} else {
+				$view->display();
+			}
 		} else {
-			$view->display();
+			if ($cachable && $viewType != 'feed') {
+				$cache =& JFactory::getCache($this->component, 'view');
+				$cache->get($view, 'display');
+			} else {
+				$view->display();
+			}
 		}
+		
+		
 	}
 	
 	/**
@@ -300,9 +339,9 @@ class FOFController extends JController
 	 * 
 	 * @param bool $cachable Is this view cacheable?
 	 */
-	public function browse($cachable = false)
+	public function browse()
 	{
-		$this->display($cachable);
+		$this->display(in_array('browse', $this->cacheableTasks));
 	}
 	
 	/**
@@ -311,7 +350,7 @@ class FOFController extends JController
 	 * 
 	 * @param bool $cachable Is this view cacheable?
 	 */
-	public function read($cachable = false)
+	public function read()
 	{
 		// Load the model
 		$model = $this->getThisModel();
@@ -321,7 +360,7 @@ class FOFController extends JController
 		if(is_null($this->layout)) $this->layout = 'item';
 
 		// Display
-		$this->display($cachable);
+		$this->display(in_array('read', $this->cacheableTasks));
 	}
 	
 	/**
@@ -329,7 +368,7 @@ class FOFController extends JController
 	 * 
 	 * @param bool $cachable Is this view cacheable?
 	 */
-	public function add($cachable = false)
+	public function add()
 	{
 		// Load and reset the model
 		$model = $this->getThisModel();
@@ -339,7 +378,7 @@ class FOFController extends JController
 		if(is_null($this->layout)) $this->layout = 'form';
 
 		// Display
-		$this->display($cachable);
+		$this->display(in_array('add', $this->cacheableTasks));
 	}
 
 	/**
@@ -348,7 +387,7 @@ class FOFController extends JController
 	 * 
 	 * @param bool $cachable Is this view cacheable?
 	 */
-	public function edit($cachable = false)
+	public function edit()
 	{
 		// Load the model
 		$model = $this->getThisModel();
@@ -367,7 +406,7 @@ class FOFController extends JController
 		if(is_null($this->layout)) $this->layout = 'form';
 
 		// Display
-		$this->display($cachable);
+		$this->display(in_array('edit', $this->cacheableTasks));
 	}
 
 	/**
