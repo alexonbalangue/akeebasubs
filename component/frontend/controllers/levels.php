@@ -16,6 +16,13 @@ class AkeebasubsControllerLevels extends FOFController
 	}
 	
 	public function onBeforeBrowse() {
+		// Do we have an affiliate code?
+		$affid = FOFInput::getInt('affid',0,$this->input);
+		if($affid) {
+			$session = JFactory::getSession();
+			$session->set('affid', $affid, 'com_akeebasubs');
+		}
+		
 		$params	= JFactory::getApplication()->getPageParameters();
 		$ids	= $params->get('ids','');
 		if(is_array($ids) && !empty($ids)) {
@@ -54,6 +61,13 @@ class AkeebasubsControllerLevels extends FOFController
 	 */
 	public function onBeforeRead()
 	{
+		// Do we have an affiliate code?
+		$affid = FOFInput::getInt('affid',0,$this->input);
+		if($affid) {
+			$session = JFactory::getSession();
+			$session->set('affid', $affid, 'com_akeebasubs');
+		}
+		
 		// Fetch the subscription slug from page parameters
 		$params	= JFactory::getApplication()->getPageParameters();
 		$pageslug	= $params->get('slug','');

@@ -1013,6 +1013,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$jEndDate = new JDate($endDate);
 		$mEndDate = $jEndDate->toMySQL();
 		
+		$session = JFactory::getSession();
+		$affid = $session->get('affid', 0, 'com_akeebasubs');
+		
 		$data = array(
 			'akeebasubs_subscription_id' => null,
 			'user_id'				=> $user->id,
@@ -1035,7 +1038,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'prediscount_amount'	=> $validation->price->net,
 			'discount_amount'		=> $validation->price->discount,
 			'first_contact'			=> '0000-00-00 00:00:00',
-			'second_contact'		=> '0000-00-00 00:00:00'
+			'second_contact'		=> '0000-00-00 00:00:00',
+			'akeebasubs_affiliate_id' => $affid
 		);
 				
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
