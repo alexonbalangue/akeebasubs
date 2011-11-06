@@ -6,3 +6,5 @@ DROP TABLE IF EXISTS `#__akeebasubs_upgrades`;
 DROP TABLE IF EXISTS `#__akeebasubs_users`;
 DROP TABLE IF EXISTS `#__akeebasubs_coonfigurations`;
 DROP TABLE IF EXISTS `#__akeebasubs_invoices`;
+DROP TABLE IF EXISTS `#__akeebasubs_invoices`;
+DROP TABLE IF EXISTS `#__akeebasubs_affpayments`;

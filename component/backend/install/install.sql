@@ -165,3 +165,19 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`akeebasubs_subscription_id`)
 ) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_affiliates` (
+  `akeebasubs_affiliate_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `comission` float NOT NULL DEFAULT '30',
+  PRIMARY KEY (`akeebasubs_affiliate_id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_affpayments` (
+  `akeebasubs_affpayment_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `akeebasubs_affiliate_id` bigint(20) NOT NULL,
+  `amount` float NOT NULL DEFAULT '0',
+  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`akeebasubs_affpayment_id`)
+) DEFAULT CHARSET=utf8;
