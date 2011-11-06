@@ -82,7 +82,9 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	{
 		jimport('joomla.html.parameter');
 		$component =& JComponentHelper::getComponent( 'com_akeebasubs' );
-		if(!empty($component->params)) {
+		if($component->params instanceof JRegistry) {
+			$cparams = $component->params;
+		} elseif(!empty($component->params)) {
 			$cparams = new JParameter($component->params);
 		} else {
 			$cparams = new JParameter('');

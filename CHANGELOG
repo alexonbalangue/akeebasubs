@@ -9,6 +9,8 @@ Akeeba Subscriptions 2.0.b1
 # Upgrading Akeeba Subscritpions would reset the module positions and republish the PayPal plugin
 # Coupon ID not being saved in the database table
 # Menu links to subscription levels did not work on Joomla! 1.7
+# The "Akeeba Subscriptions Expiration Control" plugin would run on each pageload
+# The "Akeeba Subscriptions Expiration Notification" plugin would run on each pageload
 
 Akeeba Subscriptions 2.0.a3
 ================================================================================

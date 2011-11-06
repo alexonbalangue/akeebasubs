@@ -192,15 +192,13 @@ class plgSystemAsexpirationnotify extends JPlugin
 		jimport('joomla.html.parameter');
 		$component =& JComponentHelper::getComponent( 'com_akeebasubs' );
 		
-		if(!($component->params instanceof JRegistry)) {
-			if(!empty($component->params)) {
-				$cparams = new JParameter($component->params);
-			} else {
-				$cparams = new JParameter('');
-			}
-		} else {
+		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;
-		}		
+		} elseif(!empty($component->params)) {
+			$cparams = new JParameter($component->params);
+		} else {
+			$cparams = new JParameter('');
+		}
 		return $cparams;
 	}
 	
@@ -210,8 +208,6 @@ class plgSystemAsexpirationnotify extends JPlugin
 	 */
 	private function doIHaveToRun()
 	{
-		return true;
-		
 		$params = $this->getComponentParameters();
 		$lastRunUnix = $params->get('plg_akeebasubs_asexpirationnotify_timestamp',0);
 		$dateInfo = getdate($lastRunUnix);
