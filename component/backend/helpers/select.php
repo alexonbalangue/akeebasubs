@@ -312,4 +312,21 @@ class AkeebasubsHelperSelect
  		
  		return self::genericlist($options, $name, $attribs, $selected, $name);
  	}
+	
+	public static function affiliates($selected = null, $id = 'akeebasubs_affiliate_id', $attribs = array())
+	{
+		$model = FOFModel::getTmpInstance('Affiliates','AkeebasubsModel');
+		$items = $model->limit(0)->limitstart(0)->getItemList();
+		
+		$options = array();
+
+		if(count($items)) foreach($items as $item)
+		{
+			$options[] = JHTML::_('select.option',$item->akeebasubs_affiliate_id, $item->username);
+		}
+
+		array_unshift($options, JHTML::_('select.option',0,'- '.JText::_('COM_AKEEBASUBS_COMMON_AFFILIATE').' -'));
+
+		return self::genericlist($options, $id, $attribs, $selected, $id);
+	}
 }
