@@ -61,22 +61,22 @@ class AkeebasubsModelAffiliates extends FOFModel
 		// Filter by User ID
 		$user_id = $this->getState('user_id',null,'int');
 		if(is_numeric($user_id) && ($user_id > 0)) {
-			$query->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
+			$query->where($db->nameQuote('a').'.'.$db->nameQuote('user_id').' = '.$db->quote($user_id));
 		}
 		
 		// Filter by Enabled status
 		$enabled = $this->getState('enabled',null,'int');
 		if(is_numeric($enabled)) {
-			$query->where($db->nameQuote('enabled').' = '.$db->quote($enabled));
+			$query->where($db->nameQuote('a').'.'.$db->nameQuote('enabled').' = '.$db->quote($enabled));
 		}
 		
 		// Search for username, fullname and/or email
 		$search = $this->getState('search',null,'string');
 		if(!empty($search)) {
 			$search = '%'.$search.'%';
-			$q1 = '('.$db->nameQuote('username').' LIKE '.$db->quote($search).')';
-			$q2 = '('.$db->nameQuote('name').' LIKE '.$db->quote($search).')';
-			$q3 = '('.$db->nameQuote('email').' LIKE '.$db->quote($search).')';
+			$q1 = '('.$db->nameQuote('u').'.'.$db->nameQuote('username').' LIKE '.$db->quote($search).')';
+			$q2 = '('.$db->nameQuote('u').'.'.$db->nameQuote('name').' LIKE '.$db->quote($search).')';
+			$q3 = '('.$db->nameQuote('u').'.'.$db->nameQuote('email').' LIKE '.$db->quote($search).')';
 			$query->where("($q1 OR $q2 OR $q3)");
 		}
 		
