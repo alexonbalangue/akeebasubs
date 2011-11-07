@@ -1013,8 +1013,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$jEndDate = new JDate($endDate);
 		$mEndDate = $jEndDate->toMySQL();
 		
+		// Get the affiliate ID and make sure it exists and that it's enabled
 		$session = JFactory::getSession();
 		$affid = $session->get('affid', 0, 'com_akeebasubs');
+		if($affid > 0) {
+			$affiliate = FOFModel::getTmpInstance('Affiliates','AkeebasubsModel')
+				->setId($affid)
+				->getItem();
+			if($affiliate->akeebasubs_affiliate_id == $affid) {
+				if(!$affiliate->enabled) $affid = 0;
+			} else {
+				$affid = 0;
+			}
+		}
 		
 		$data = array(
 			'akeebasubs_subscription_id' => null,

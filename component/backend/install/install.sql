@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_configurations` (
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
-	`akeebasubs_subscription_id` BIGINT(20) UNSIGNED NOT NULL,
+	`akeebasubs_invoice_id` BIGINT(20) UNSIGNED NOT NULL,
 	`invoice_no` BIGINT(20) unsigned NOT NULL,
 	`invoice_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`html` LONGTEXT,
@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_affiliates` (
   `akeebasubs_affiliate_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
   `comission` float NOT NULL DEFAULT '30',
+  `enabled` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`akeebasubs_affiliate_id`)
 ) DEFAULT CHARSET=utf8;
 
