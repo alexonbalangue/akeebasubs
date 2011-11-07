@@ -1027,6 +1027,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 		}
 		
+		$aff_comission = 0;
+		if($affid > 0) {
+			$aff_comission = $validation->price->net * $affiliate->comission / 100;
+		}
+		
 		$data = array(
 			'akeebasubs_subscription_id' => null,
 			'user_id'				=> $user->id,
@@ -1050,7 +1055,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'discount_amount'		=> $validation->price->discount,
 			'first_contact'			=> '0000-00-00 00:00:00',
 			'second_contact'		=> '0000-00-00 00:00:00',
-			'akeebasubs_affiliate_id' => $affid
+			'akeebasubs_affiliate_id' => $affid,
+			'affiliate_comission'	=> $aff_comission
 		);
 				
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')

@@ -203,6 +203,21 @@ ENDSQL;
 	$status = $db->query();
 }
 
+// Upgrade the subscriptions table (2.0.a2)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_subscriptions`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`affiliate_comission`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_subscriptions`
+ADD COLUMN `affiliate_comission` FLOAT NOT NULL DEFAULT '0' AFTER `akeebasubs_affiliate_id`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
 // =============================================================================
 // Sub-extension installation
 // =============================================================================

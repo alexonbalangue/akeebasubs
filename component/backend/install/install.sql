@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`akeebasubs_coupon_id` BIGINT(20) NULL,
 	`akeebasubs_upgrade_id` BIGINT(20) NULL,
 	`akeebasubs_affiliate_id` BIGINT(20) NULL,
+	`affiliate_comission` FLOAT NOT NULL DEFAULT 0,
 	`akeebasubs_invoice_id` BIGINT(20) NULL,
 	`prediscount_amount` FLOAT NULL,
 	`discount_amount` FLOAT NOT NULL DEFAULT '0',
@@ -149,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_configurations` (
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
-	`akeebasubs_invoice_id` BIGINT(20) UNSIGNED NOT NULL,
+	`akeebasubs_subscription_id` BIGINT(20) UNSIGNED NOT NULL,
 	`invoice_no` BIGINT(20) unsigned NOT NULL,
 	`invoice_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`html` LONGTEXT,
