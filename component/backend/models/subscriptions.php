@@ -83,7 +83,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			->join('INNER', $db->nameQuote('#__akeebasubs_levels').' AS '.$db->nameQuote('l').' ON '.
 					$db->nameQuote('l').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
 					$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id'))
-			->join('INNER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON '.
+			->join('LEFT OUTER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON '.
 					$db->nameQuote('u').'.'.$db->nameQuote('id').' = '.
 					$db->nameQuote('tbl').'.'.$db->nameQuote('user_id'))
 			->join('LEFT OUTER', $db->nameQuote('#__akeebasubs_users').' AS '.$db->nameQuote('a').' ON '.
