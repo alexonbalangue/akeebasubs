@@ -14,6 +14,7 @@ Akeeba Subscriptions 2.0.b1
 # The "Akeeba Subscriptions Expiration Notification" plugin would run on each pageload
 # "Go" and "Reset" button labels in back-end filters were not translated in Joomla! 1.6+
 # Invalid use of setData in plugins
+# The Expiration Notification plugin would crash the site
 
 Akeeba Subscriptions 2.0.a3
 ================================================================================

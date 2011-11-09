@@ -48,7 +48,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 	{
 		// Check if we need to run
 		if(!$this->doIHaveToRun()) return;
-	
+		
 		// Get today's date
 		jimport('joomla.utilities.date');
 		$jNow = new JDate();
@@ -129,9 +129,12 @@ class plgSystemAsexpirationnotify extends JPlugin
 						->getList();
 					if(count($renewals)) {
 						// The user has already renewed. Don't send him an email; just update the row
-						$sub->save(array(
-							'contact_flag'	=> 3
-						));
+						FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							->setId($sub->akeebasubs_subscription_id)
+							->getItem()
+							->save(array(
+								'contact_flag'	=> 3
+							));
 
 						// Timeout check -- Only if we did make a modification!
 						$clockNow = microtime(true);
@@ -169,8 +172,10 @@ class plgSystemAsexpirationnotify extends JPlugin
 					);
 					$this->sendEmail($sub, false);
 				}
-				$sub->save($data);
-
+				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->setId($sub->akeebasubs_subscription_id)
+					->getItem()
+					->save($data);
 				// Timeout check -- Only if we sent at least one email!
 				$clockNow = microtime(true);
 				$elapsed = $clockNow - $clockStart;
