@@ -47,8 +47,9 @@ fieldset.akeebasubs-float-left {
 .gravatar { margin-right: 3px; }
 
 .akeebasubs-subscription-netamount { display: block; color: #693; }
-.akeebasubs-subscription-taxamount { display: block; color: #963; font-style: italic; border-bottom: thin solid #999; }
-.akeebasubs-subscription-grossamount { display: block; font-weight: bold; color: #333; font-size: larger; }
+.akeebasubs-subscription-discountamount { display: block; color: #f33; }
+.akeebasubs-subscription-taxamount { display: block; color: #963; font-style: italic; }
+.akeebasubs-subscription-grossamount { display: block; font-weight: bold; color: #333; font-size: larger; border-top: thin solid #999; }
 .akeebasubs-subscription-amount { text-align: right; width: 60px; }
 
 .akeebasubs-payment { display: block; position: relative; float: left: margin: 0px auto; padding: 0; width: 30px; height: 30px; background-image: url('../images/dollaricons.png'); background-repeat: no-repeat; }
@@ -125,4 +126,43 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 	border: thin solid black;
 	border-radius: 6px;
 	box-shadow: #999 1px 1px 3px;
+}
+
+.akeebasubs-susbcription-publishup {
+	text-align: left;
+}
+
+.akeebasubs-susbcription-publishdown {
+	text-align: right;
+	color: red;
+}
+
+.discount-icon {
+	display: block;
+	float: left;
+	margin-right: 5px;
+	width: 16px;
+	height: 16px;
+	background: transparent url(../images/couponicons.png) 0 0 no-repeat;	
+}
+
+.akeebasubs-subscription-discount-upgrade .discount-icon {
+	background-position: -16px 0px;
+}
+
+.akeebasubs-subscription-discount-coupon {
+	font-weight: bold;
+	color: #693;
+}
+
+.akeebasubs-subscription-discount-upgrade {
+	font-weight: bold;
+	color: #963;
+}
+
+.akeebasubs-subscription-discount-none {
+	font-weight: normal;
+	font-style: italic;
+	font-size: xx-small;
+	color: #ccc;
 }

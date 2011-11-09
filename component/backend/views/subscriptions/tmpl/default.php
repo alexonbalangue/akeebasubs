@@ -19,6 +19,26 @@ $this->loadHelper('cparams');
 $this->loadHelper('select');
 $this->loadHelper('format');
 
+$couponsRaw = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+	->limit(0)
+	->limitstart(0)
+	->getList();
+$coupons = array();
+foreach($couponsRaw as $coupon) {
+	$coupons[$coupon->akeebasubs_coupon_id] = $coupon->coupon;
+}
+unset($couponsRaw);
+
+$upgradesRaw = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+	->limit(0)
+	->limitstart(0)
+	->getList();
+$upgrades = array();
+foreach($upgradesRaw as $upgrade) {
+	$upgrades[$upgrade->akeebasubs_upgrade_id] = $upgrade->title;
+}
+unset($upgradesRaw);
+
 ?>
 <form action="index.php" method="post" name="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
@@ -47,12 +67,13 @@ $this->loadHelper('format');
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_STATE', 'state', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
 			<th width="60px">
+				<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT') ?>
+			</th>
+			<th width="60px">
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_AMOUNT', 'gross_amount', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
 			<th width="120px">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP', 'publish_up', $this->lists->order_Dir, $this->lists->order) ?>
-			</th>
-			<th width="120px">
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP', 'publish_up', $this->lists->order_Dir, $this->lists->order) ?><br/>
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN', 'publish_down', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
 			<th width="120px">
@@ -85,22 +106,33 @@ $this->loadHelper('format');
 					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
 				</button>
 			</td>
-			<td>
+			<td  colspan="2">
 				<?php echo AkeebasubsHelperSelect::paystates($this->getModel()->getState('paystate',''), 'paystate', array('onchange'=>'this.form.submit();')) ?>
 				
 				<input type="text" name="paykey" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('paykey',''));?>"
-					class="text_area" onchange="document.adminForm.submit();" />
+					class="text_area" onchange="document.adminForm.submit();"
+					title="COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY" />
+				<!--
 				<button onclick="this.form.submit();">
 					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
 				</button>
 				<button onclick="document.adminForm.paykey.value='';this.form.submit();">
 					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
 				</button>
+				-->
+				
+				<?php echo AkeebasubsHelperSelect::discountmodes('filter_discountmode', $this->getModel()->getState('filter_discountmode','') , array('onchange'=>'this.form.submit();')) ?>
+				<input type="text" name="filter_discountcode" id="paykey"
+					value="<?php echo $this->escape($this->getModel()->getState('filter_discountcode',''));?>"
+					class="text_area" onchange="document.adminForm.submit();"
+					title="COM_AKEEBASUBS_SUBSCRIPTION_DISCOUNTCODE" />
 			</td>
 			<td></td>
-			<td><?php echo JHTML::_('calendar', $this->getModel()->getState('publish_up',''), 'publish_up', 'publish_up', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
-			<td><?php echo JHTML::_('calendar', $this->getModel()->getState('publish_down',''), 'publish_down', 'publish_down', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
+			<td>
+				<?php echo JHTML::_('calendar', $this->getModel()->getState('publish_up',''), 'publish_up', 'publish_up', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?>
+				<br/><?php echo JHTML::_('calendar', $this->getModel()->getState('publish_down',''), 'publish_down', 'publish_down', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?>
+			</td>
 			<td><?php echo JHTML::_('calendar', $this->getModel()->getState('since',''), 'since', 'since', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
 			<td>
 				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();')) ?>
@@ -187,11 +219,39 @@ $this->loadHelper('format');
 				<span class="akeebasubs-payment akeebasubs-payment-<?php echo strtolower($subscription->state) ?> hasTip"
 					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>::<?php echo $subscription->processor?> &bull; <?php echo $subscription->processor_key?>"></span>
 			</td>
+			<td>
+				<?php if($subscription->akeebasubs_coupon_id > 0):?>
+				<span class="akeebasubs-subscription-discount-coupon" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_COUPON') ?>">
+					<span class="discount-icon"></span>
+					<?php echo $this->escape($coupons[$subscription->akeebasubs_coupon_id]) ?>
+				</span>
+				<?php elseif($subscription->akeebasubs_upgrade_id > 0):?>
+				<span class="akeebasubs-subscription-discount-upgrade" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_UPGRADE') ?>">
+					<span class="discount-icon"></span>
+					<?php echo $this->escape($upgrades[$subscription->akeebasubs_upgrade_id]) ?>
+				</span>
+				<?php else: ?>
+				<span class="akeebasubs-subscription-discount-none">
+					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_NONE') ?>
+				</span>
+				<?php endif; ?>
+			</td>
+
 			<td class="akeebasubs-subscription-amount">
 				<?php if($subscription->net_amount > 0): ?>
+
+				<?php if($subscription->discount_amount > 0): ?>
+				<span class="akeebasubs-subscription-netamount">
+				<?php echo sprintf('%2.2f', (float)$subscription->prediscount_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				</span>
+				<span class="akeebasubs-subscription-discountamount">
+				- <?php echo sprintf('%2.2f', (float)$subscription->discount_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				</span>
+				<?php else: ?>
 				<span class="akeebasubs-subscription-netamount">
 				<?php echo sprintf('%2.2f', (float)$subscription->net_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 				</span>
+				<?php endif; ?>
 				<span class="akeebasubs-subscription-taxamount">
 				<?php echo sprintf('%2.2f', (float)$subscription->tax_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 				</span>
@@ -201,10 +261,12 @@ $this->loadHelper('format');
 				</span>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperFormat::date($subscription->publish_up, '%Y-%m-%d %H:%M') ?>
-			</td>
-			<td>
-				<?php echo AkeebasubsHelperFormat::date($subscription->publish_down, '%Y-%m-%d %H:%M') ?>
+				<div class="akeebasubs-susbcription-publishup">
+					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up, '%Y-%m-%d %H:%M') ?>
+				</div>
+				<div class="akeebasubs-susbcription-publishdown">
+					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down, '%Y-%m-%d %H:%M') ?>
+				</div>
 			</td>
 			<td>
 				<?php echo AkeebasubsHelperFormat::date($subscription->created_on, '%Y-%m-%d %H:%M') ?>

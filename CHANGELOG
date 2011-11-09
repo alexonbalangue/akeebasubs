@@ -3,6 +3,7 @@ Akeeba Subscriptions 2.0.b1
 ================================================================================
 + #15 Basic Affiliates management built-in. NOTE: This is supposed to be *basic* stuff only!
 + VirtueMart 2 integration plugin
++ #34 Subscriptions filtering by coupon and/or upgrade rule
 # FOF: Get a new model instance for the second time failed was causing warning messages and malfunctions
 # Short PHP open tags
 # mod_aksubslist: would not list all subscriptions

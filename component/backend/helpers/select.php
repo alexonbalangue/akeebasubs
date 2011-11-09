@@ -329,4 +329,18 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
+	
+	/**
+	 * Drop down list of payment states
+	 */
+	public static function discountmodes($name = 'discountmode', $selected = '', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT').' -');
+		$options[] = JHTML::_('select.option','none',JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_NONE'));
+		$options[] = JHTML::_('select.option','coupon',JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_COUPON'));
+		$options[] = JHTML::_('select.option','upgrade',JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_UPGRADE'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 }

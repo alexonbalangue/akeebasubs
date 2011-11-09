@@ -32,7 +32,9 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'refresh'		=> $this->getState('refresh',null,'int'),
 			'groupbydate'	=> $this->getState('groupbydate',null,'int'),
 			'moneysum'		=> $this->getState('moneysum',null,'int'),
-			'coupon_id'		=> $this->getState('couponid',null,'int')
+			'coupon_id'		=> $this->getState('couponid',null,'int'),
+			'filter_discountmode' => $this->getState('filter_discountmode',null,'cmd'),
+			'filter_discountcode' => $this->getState('filter_discountcode',null,'cmd')
 		);
 	}
 	
@@ -294,6 +296,105 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$db->nameQuote('tbl').'.'.$db->nameQuote('publish_down').' <= '.
 						$db->quote($to)
 				);
+			}
+			
+			// Dicsount mode and code search
+			$coupon_ids = array();
+			$upgrade_ids = array();
+			
+			switch($state->filter_discountmode) {
+				case 'none':
+					$query->where(
+						'('.
+						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' = '.
+						$db->quote(0).')'
+						.' AND '.
+						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' = '.
+						$db->quote(0).')'
+						.')'
+					);
+					break;
+				
+				case 'coupon':
+					$query->where(
+						'('.
+						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' > '.
+						$db->quote(0).')'
+						.' AND '.
+						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' = '.
+						$db->quote(0).')'
+						.')'
+					);
+					if($state->filter_discountcode) {
+						$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+							->search($state->filter_discountcode)
+							->getList();
+						if(!empty($coupons)) foreach($coupons as $coupon) {
+							$coupon_ids[] = $coupon->akeebasubs_coupon_id;
+						}
+						unset($coupons);
+					}
+					break;
+				
+				case 'upgrade':
+					$query->where(
+						'('.
+						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' = '.
+						$db->quote(0).')'
+						.' AND '.
+						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' > '.
+						$db->quote(0).')'
+						.')'
+					);
+					if($state->filter_discountcode) {
+						$upgrades = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+							->search($state->filter_discountcode)
+							->getList();
+						if(!empty($upgrades)) foreach($upgrades as $upgrade) {
+							$upgrade_ids[] = $upgrade->akeebasubs_upgrade_id;
+						}
+						unset($upgrades);
+					}
+					break;
+				
+				default:
+					if($state->filter_discountcode) {
+						$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+							->search($state->filter_discountcode)
+							->getList();
+						if(!empty($coupons)) foreach($coupons as $coupon) {
+							$coupon_ids[] = $coupon->akeebasubs_coupon_id;
+						}
+						unset($coupons);
+					}
+					if($state->filter_discountcode) {
+						$upgrades = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+							->search($state->filter_discountcode)
+							->getList();
+						if(!empty($upgrades)) foreach($upgrades as $upgrade) {
+							$upgrade_ids[] = $upgrade->akeebasubs_upgrade_id;
+						}
+						unset($upgrades);
+					}
+					break;
+			}
+			
+			if(!empty($coupon_ids) && !empty($upgrade_ids)) {
+				$query->where(
+					'('.	
+					'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' IN ('.
+						$db->quote(implode(',', $coupon_ids)).'))'
+					.' OR '.
+					'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' IN ('.
+						$db->quote(implode(',', $upgrade_ids)).'))'
+					.')'
+				);
+			} elseif(!empty($coupon_ids)) {
+				$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' IN ('.
+					$db->quote(implode(',', $coupon_ids)).')');
+			} elseif(!empty($upgrade_ids)) {
+				$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' IN ('.
+					$db->quote(implode(',', $upgrade_ids)).')');
 			}
 		}
 		
