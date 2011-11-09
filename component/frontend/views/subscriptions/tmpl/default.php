@@ -69,7 +69,6 @@ if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
 				$m = 1 - $m;
 				$email = trim($subscription->email);
 				$email = strtolower($email);
-				$gravatarHash = md5($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired'
 			?>
 			<tr class="row<?php echo$m?> <?php echo$rowClass?>">

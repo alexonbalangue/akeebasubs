@@ -22,7 +22,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'publish_up'	=> $this->getState('publish_up',null,'string'),
 			'publish_down'	=> $this->getState('publish_down',null,'string'),
 			'user_id'		=> $this->getState('user_id',null,'int'),
-			'paystate'		=> $this->getState('paystate',null,'cmd'),
+			'paystate'		=> $this->getState('paystate',null,'string'),
 			'paykey'		=> $this->getState('paykey',null,'string'),
 			'since'			=> $this->getState('since',null,'string'),
 			'until'			=> $this->getState('until',null,'string'),
