@@ -1096,6 +1096,287 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
       <para>Please note that you can not use the same language code
       twice.</para>
+
+      <bridgehead>Customising the messages to show on successful sign-up and
+      cancellation</bridgehead>
+
+      <para>Since Akeeba Subscriptions 2.0.a3, you can personalise the
+      messages which are shown after a successful sign-up or cancellation of
+      the subscription process. This is done using "merge codes". The merge
+      codes are explained below. Please note that you can use them in
+      conjunction with Joomla! content plugins as well. In fact, using the
+      merge codes you are open to a world of possibilities, even integrating
+      an external affiliate system –like OSI Affiliates– on your site. </para>
+
+      <para>The available merge codes are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>[SUB:ID]</term>
+
+          <listitem>
+            <para>The numeric, unique Subscription ID</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:USER_ID]</term>
+
+          <listitem>
+            <para>The numeric Joomla! user ID of the subscriber</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:AKEEBASUBS_LEVEL_ID]</term>
+
+          <listitem>
+            <para>The numeric ID of the subscription level</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:PUBLISH_UP]</term>
+
+          <listitem>
+            <para>The exact date and time the subscription will be activated
+            in YYYY-MM-DD hh:mm:ss format, e.g. 2011-12-31 13:10:50.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:PUBLISH_DOWN]</term>
+
+          <listitem>
+            <para>The exact date and time the subscription will be deactivated
+            in YYYY-MM-DD hh:mm:ss format, e.g. 2012-12-31 13:10:49.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:ENABLED]</term>
+
+          <listitem>
+            <para>This returns 1 if the subscription is enabled (e.g. the
+            payment processor already notified us that the transaction is
+            valid and it's not a renewal for a future date) or 0 if it's not
+            enabled yet.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:PROCESSOR]</term>
+
+          <listitem>
+            <para>The name of the payment processor plugin, e.g. "paypal" for
+            the PayPal payment plugin</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:PROCESSOR_KEY]</term>
+
+          <listitem>
+            <para>The unique transaction ID assigned by the payment processor.
+            IMPORTANT! This may NOT be available if the payment processor has
+            not contacted your site with the result of the transaction before
+            redirecting the user back to your site.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:STATE]</term>
+
+          <listitem>
+            <para>The payment state. C means completed, P is pending, X is
+            cancelled, N means it hasn't been processed yet. IMPORTANT! This
+            may NOT be available if the payment processor has not contacted
+            your site with the result of the transaction before redirecting
+            the user back to your site.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:NET_AMOUNT]</term>
+
+          <listitem>
+            <para>The amount the user paid, before taxes.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:TAX_AMOUNT]</term>
+
+          <listitem>
+            <para>The amount of taxes that the user paid.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:GROSS_AMOUNT]</term>
+
+          <listitem>
+            <para>The total amount the user paid, including taxes.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:CREATED_ON]</term>
+
+          <listitem>
+            <para>The exact date and time the user pressed the Subscribe Now
+            button in YYYY-MM-DD hh:mm:ss format.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:AKEEBASUBS_COUPON_ID]</term>
+
+          <listitem>
+            <para>The numeric ID of the coupon used during the subscription,
+            or 0 if no coupon was used</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:AKEEBASUBS_UPGRADE_ID]</term>
+
+          <listitem>
+            <para>The numeric ID of the upgrade rule automatically applied to
+            the subscription, or 0 if no upgrade rule was used</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:AKEEBASUBS_AFFILIATE_ID]</term>
+
+          <listitem>
+            <para>The numeric ID of the affiliate who referred this
+            subscription, or 0 if no affiliate was used</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:PREDISCOUNT_AMOUNT]</term>
+
+          <listitem>
+            <para>The price of the subscription, before any coupon or upgrade
+            rule discount was applied</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[SUB:DISCOUNT_AMOUNT]</term>
+
+          <listitem>
+            <para>The exact discount amount (coupon, upgrade rule) applied to
+            the subscription</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:ISBUSINESS]</term>
+
+          <listitem>
+            <para>1 if the user chose to perform a business registration, 0
+            otherwise</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:BUSINESSNAME]</term>
+
+          <listitem>
+            <para>The business name</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:OCCUPATION]</term>
+
+          <listitem>
+            <para>The business occupation specified</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:VATNUMBER]</term>
+
+          <listitem>
+            <para>The VAT registration number</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:VIESREGISTERED]</term>
+
+          <listitem>
+            <para>1 if the VAT number is VIES-registered</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:ADDRESS1]</term>
+
+          <listitem>
+            <para>The address field (part 1)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:ADDRESS2]</term>
+
+          <listitem>
+            <para>The address field (part 2)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:CITY]</term>
+
+          <listitem>
+            <para>City</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:STATE]</term>
+
+          <listitem>
+            <para>State (two letter code); only exists for Canada and
+            USA</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:ZIP]</term>
+
+          <listitem>
+            <para>ZIP/Postal Code</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[USER:COUNTRY]</term>
+
+          <listitem>
+            <para>Two-letter ISO code of the selected country, e.g. DE for
+            Germany, FR for France, US for USA, CA for Canada and so on</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>[CUSTOM:<replaceable>yourFieldName</replaceable>]</term>
+
+          <listitem>
+            <para>Where <replaceable>yourFieldName</replaceable> is the name
+            of a custom field in all uppercase letters. Custom fields can be
+            defined in plugins. If you have created any custom field plugins,
+            you know what this is. If you don't know what this is, you most
+            likely don't need it!</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
     </section>
 
     <section xml:id="tax-rules">
@@ -1569,6 +1850,56 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         subscription, set its payment state to cancelled and unpublish
         it.</para>
       </important>
+    </section>
+
+    <section xml:id="affiliates">
+      <title>Affiliates management</title>
+
+      <para>Since Akeeba Subscriptions 2.0.b1 there is a very basic affiliate
+      management system. It is extremely (even stupidly!) simple by design. If
+      you want something more complex, you can easily integrate Akeeba
+      Subscriptions with a web-based affiliate management system, like OSI
+      Affiliates.</para>
+
+      <para>The concept of affiliates in Akeeba Subscriptions is based on some
+      simple rules:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>You manually create affiliates in the back-end of the
+          component</para>
+        </listitem>
+
+        <listitem>
+          <para>Each affiliate is linked to a Joomla! user account and is
+          assigned a commission percentage</para>
+        </listitem>
+
+        <listitem>
+          <para>When you pay your affiliate, you manually create an affiliate
+          payment record to let Akeeba Subscriptions know how much you paid
+          him and when</para>
+        </listitem>
+
+        <listitem>
+          <para>Each subscription with a payment status of C (Completed)
+          counts towards the amount owed to the affiliate</para>
+        </listitem>
+
+        <listitem>
+          <para>Each affiliate payment deducts from the amount owed to the
+          affiliate</para>
+        </listitem>
+
+        <listitem>
+          <para>There is no "affiliate report" page of any kind</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It's an extremely simple system, suitable for small sites with a
+      handful of trusted affiliates. If you're interested in integrating a
+      much more powerful third party affiliate system, please contact our
+      support.</para>
     </section>
 
     <section xml:id="frotn-end-items">
@@ -3276,6 +3607,11 @@ LEVEL3=Group 1</programlisting>
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - VirtueMart Integration</guilabel></para>
 
+        <important>
+          <para>This plugin only works with VirtueMart 1.x. It will NOT work
+          with VirtueMart 2.x.</para>
+        </important>
+
         <para>This integration plugin allows you to add and remove users from
         VirtueMart 1.x shopper groups based on their subscription status. This
         allows you to set special discounts to subscribers (e.g. a discount
@@ -3326,6 +3662,96 @@ LEVEL3=Group 4,Group 1</programlisting>
 
             <listitem>
               <para>Likewise, this is the list of the VirtueMart groups to
+              remove a user from when his subscription to the specified level
+              is no longer active. Do note that you can specify a different
+              set of groups to remove the user from than the ones you are
+              adding him to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        VirtueMart groups", when a subscription to the LEVEL1 level expires,
+        the user will still belong to VirtueMart Group 3, as it's not removed
+        from his account; only Group 1 and Group 2 are removed. Likewise, if
+        the user has an expired LEVEL1 subscription and an active LEVEL2
+        subscription he'll now belong to Group 2 and Group 3: Group 3 because
+        it's not removed when his subscription expires and Group 2 because his
+        active LEVEL2 subscription suggests that he should be granted Group 2
+        access despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
+
+      <section xml:id="integration-vm2">
+        <title>VirtueMart 2 Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - VirtueMart 2 Integration</guilabel></para>
+
+        <important>
+          <para>This plugin only works with VirtueMart 2.x. It will NOT work
+          with VirtueMart 1.x.</para>
+        </important>
+
+        <para>This integration plugin allows you to add and remove users from
+        VirtueMart 2.0 shopper groups based on their subscription status. This
+        allows you to set special discounts to subscribers (e.g. a discount
+        club) or other VirtueMart tricks which are based on the shopper groups
+        a user belongs to.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin earlier in this documentation; instead of
+        adding users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to VirtueMart groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              VirtueMart 2.x groups. When a user has an active subscription to
+              the specified level, he'll be added to the VirtueMart 2.x group
+              mentioned on the right hand of the equal sign. Each assignment
+              is done like this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the VirtueMart 2.x
+              groups you want to add a user to when he subscribes. If you want
+              to assign multiple subscription levels to multiple groups, you
+              have to do something like that (separate multiple lines with a
+              single press of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              VirtueMart groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from VirtueMart groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the VirtueMart 2.x groups to
               remove a user from when his subscription to the specified level
               is no longer active. Do note that you can specify a different
               set of groups to remove the user from than the ones you are
@@ -4228,8 +4654,6 @@ LEVEL3=Group 1</programlisting>
 
         <para><emphasis role="bold">Sample plugin</emphasis>:
         plugins/akpayment/paypal.php</para>
-
-        <para>TODO</para>
       </section>
 
       <section>
@@ -4244,8 +4668,6 @@ LEVEL3=Group 1</programlisting>
 
         <para><emphasis role="bold">Sample plugin</emphasis>:
         plugins/akpayment/paypal.php</para>
-
-        <para>TODO</para>
       </section>
     </section>
   </chapter>
