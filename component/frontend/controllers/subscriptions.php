@@ -43,6 +43,12 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			$this->getThisModel()->paystate('C,P');
 		}
 		
+		// Let me cheat. If the request doesn't specify how many records to show, show them all!
+		if(!JRequest::getInt('limit',0) && !JRequest::getInt('limitstart',0)) {
+			$this->getThisModel()->limit(0);
+			$this->getThisModel()->limitstart(0);
+		}
+		
 		return true;
 	}
 	
