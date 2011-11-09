@@ -58,7 +58,8 @@ $installation_queue = array(
 			'subscriptionemails'	=> 1,
 			'tienda'				=> 0,
 			'userdelete'			=> 0,
-			'vm'					=> 0
+			'vm'					=> 0,
+			'vm2'					=> 0
 		),
 		'akpayment' => array(
 			'2checkout'				=> 0,
