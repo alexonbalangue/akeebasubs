@@ -9,6 +9,12 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerSubscriptions extends FOFController
 {
+	public function __construct($config = array()) {
+		parent::__construct($config);
+		
+		$this->cacheableTasks = array('read');
+	}
+	
 	public function execute($task) {
 		$allowedTasks = array('browse', 'read');
 		if(in_array($task,array('edit','add'))) $task = 'read';
