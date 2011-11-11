@@ -24,7 +24,7 @@ $this->loadHelper('message');
 
 <div class="akeebasubs-awesome">
 	<div class="columns columns-<?php echo $max?>">
-		<?$i = 0; foreach($this->items as $level): $i++?>
+		<?php $i = 0; foreach($this->items as $level): $i++?>
 		<?php
 			$formatedPrice = sprintf('%1.02f',$level->price);
 			$dotpos = strpos($formatedPrice, '.');
