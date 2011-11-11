@@ -51,7 +51,7 @@ if(JFactory::getUser()->guest) {
 
 	$expires = 0;
 	foreach($list as $s) {
-		$ed = new JDate($s['publish_down']);
+		$ed = new JDate($s->publish_down);
 		$ex = $ed->toUnix();
 		if($ex > $expires) $expires = $ex;
 	}
