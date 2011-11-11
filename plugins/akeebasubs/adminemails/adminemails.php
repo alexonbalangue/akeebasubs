@@ -1,14 +1,17 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2011 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @subpackage	plugins.akeebasubs.adminemails
+ * @copyright	Copyright (c)2011 ZOOlanders.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
 
-class plgAkeebasubsSubscriptionemails extends JPlugin
+class plgAkeebasubsAdminemails extends JPlugin
 {
+	protected $emails = array();
+
 	/**
 	 * Public constructor. Overridden to load the language strings.
 	 */
@@ -20,6 +23,11 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 			}
 		}
 		parent::__construct($subject, $config);
+
+		$this->emails = array();
+		if(!empty($this->emails)) {
+			$this->emails = explode(',', $this->params->get('emails', ''));
+		}
 	}
 
 	/**
@@ -28,6 +36,9 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 */
 	public function onAKSubscriptionChange($row, $info)
 	{
+		// No point running if there are no emails defined, right?
+		if(empty($this->emails)) return;
+		
 		// No payment has been made yet; do not contact the user
 		if($row->state == 'N') return;
 		
@@ -97,20 +108,20 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		// Load the language files and their overrides
 		$jlang =& JFactory::getLanguage();
 		// -- English (default fallback)
-		$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_akeebasubs_subscriptionemails.override', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, 'en-GB', true);
 		// -- Default site language
-		$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_akeebasubs_subscriptionemails.override', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		// -- Current site language
-		$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, null, true);
-		$jlang->load('plg_akeebasubs_subscriptionemails.override', JPATH_ADMINISTRATOR, null, true);
+		$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, null, true);
+		$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
 		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
-			$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, $userlang, true);
-			$jlang->load('plg_akeebasubs_subscriptionemails.override', JPATH_ADMINISTRATOR, $userlang, true);
+			$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, $userlang, true);
+			$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, $userlang, true);
 		}
 		
 		// Get the user's name
@@ -174,13 +185,14 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		echo "<p><strong>From</strong>: ".$config->getvalue('config.fromname')." &lt;".$config->getvalue('config.mailfrom')."&gt;<br/><strong>To: </strong>".$user->email."</p><hr/><p>$subject</p><hr/><p>".nl2br($body)."</p>"; die();
 		/* */
 		// -- DEBUG
-		
+
+
 		// Send the email
 		$mailer = JFactory::getMailer();
 		$mailer->setSender(array( $config->getvalue('config.mailfrom'), $config->getvalue('config.fromname') ));
-		$mailer->addRecipient($user->email);
+		$mailer->addRecipient($this->emails);
 		$mailer->setSubject($subject);
 		$mailer->setBody($body);
-		$mailer->Send();	
+		$mailer->Send();
 	}
 }
