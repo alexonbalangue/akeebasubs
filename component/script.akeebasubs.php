@@ -147,7 +147,7 @@ class ComAkeebaStandardInstallationLibrary {
 			->from('#__menu')
 			->where($db->nameQuote('type').' = '.$db->Quote('component'))
 			->where($db->nameQuote('menutype').' = '.$db->Quote('main'))
-			->where($db->nameQuote('link').' LIKE '.$db->Quote('index.php?option='.$this->_akeeba_extension.'%'));
+			->where($db->nameQuote('link').' LIKE '.$db->Quote('index.php?option='.$this->_akeeba_extension));
 		$db->setQuery($query);
 		$ids = $db->loadResultArray();
 		if(!empty($ids)) foreach($ids as $id) {
@@ -214,9 +214,20 @@ class ComAkeebaStandardInstallationLibrary {
 			->from('#__menu')
 			->where($db->nameQuote('type').' = '.$db->Quote('component'))
 			->where($db->nameQuote('menutype').' = '.$db->Quote('main'))
-			->where($db->nameQuote('link').' LIKE '.$db->Quote('index.php?option='.$this->_akeeba_extension.'%'));
+			->where($db->nameQuote('link').' LIKE '.$db->Quote('index.php?option='.$this->_akeeba_extension));
 		$db->setQuery($query);
-		$ids = $db->loadResultArray();
+		$ids1 = $db->loadResultArray();
+		if(empty($ids1)) $ids1 = array();
+		$query = $db->getQuery(true);
+		$query->select('id')
+			->from('#__menu')
+			->where($db->nameQuote('type').' = '.$db->Quote('component'))
+			->where($db->nameQuote('menutype').' = '.$db->Quote('main'))
+			->where($db->nameQuote('link').' LIKE '.$db->Quote('index.php?option='.$this->_akeeba_extension.'&%'));
+		$db->setQuery($query);
+		$ids2 = $db->loadResultArray();
+		if(empty($ids2)) $ids2 = array();
+		$ids = array_merge($ids1, $ids2);
 		if(!empty($ids)) foreach($ids as $id) {
 			$query = $db->getQuery(true);
 			$query->delete('#__menu')
