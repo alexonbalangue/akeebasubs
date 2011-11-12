@@ -39,6 +39,7 @@ defined('_JEXEC') or die();
 	</div>
 </div>
 
+<!--
 <div style="float:left;">
 	<div class="icon">
 		<a href="index.php?option=com_akeebasubs&view=tools">
@@ -48,5 +49,6 @@ defined('_JEXEC') or die();
 		</a>
 	</div>
 </div>
+-->
 
 <?php echo LiveUpdate::getIcon(); ?>
