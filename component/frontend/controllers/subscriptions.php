@@ -60,6 +60,10 @@ class AkeebasubsControllerSubscriptions extends FOFController
 	
 	public function onBeforeRead()
 	{
+		// Force the item layout
+		$this->layout = 'default';
+		$this->getThisView()->setLayout('default');
+		
 		// Do we have a user?
 		if(JFactory::getUser()->guest) {
 			// Show login page
