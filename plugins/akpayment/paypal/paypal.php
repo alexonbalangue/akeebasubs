@@ -230,6 +230,7 @@ class plgAkpaymentPaypal extends JPlugin
 			'state'				=> $newStatus,
 			'enabled'			=> 0
 		);
+		jimport('joomla.utilities.date');
 		if($newStatus == 'C') {
 			// Fix the starting date if the payment was accepted after the subscription's start date. This
 			// works around the case where someone pays by e-Check on January 1st and the check is cleared

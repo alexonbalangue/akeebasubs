@@ -23,6 +23,7 @@ Akeeba Subscriptions 2.0.b1
 # PHP short tag in levels/awesome.php
 # mod_aksexpires was broken
 # Countries weren't alphabetically sorted in country selection drop-down
+# Using JDate would produce a fatal error on some sites unless jimport('joomla.utilities.date') was explicitly run beforehand
 
 Akeeba Subscriptions 2.0.a3
 ================================================================================

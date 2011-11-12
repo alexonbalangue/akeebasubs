@@ -97,6 +97,7 @@ ENDFORM;
 		// works around the case where someone pays by e-Check on January 1st and the check is cleared
 		// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
 		// the user would have paid us and we'd never given him a subscription!
+		jimport('joomla.utilities.date');
 		$jNow = new JDate();
 		$jStart = new JDate($subscription->publish_up);
 		$jEnd = new JDate($subscription->publish_down);
