@@ -22,6 +22,7 @@ Akeeba Subscriptions 2.0.b1
 # The "My Subscriptions" page data would be cached and shared between subscribers
 # PHP short tag in levels/awesome.php
 # mod_aksexpires was broken
+# Countries weren't alphabetically sorted in country selection drop-down
 
 Akeeba Subscriptions 2.0.a3
 ================================================================================

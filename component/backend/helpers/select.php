@@ -148,7 +148,9 @@ class AkeebasubsHelperSelect
 	public static function countries($selected = null, $id = 'country', $attribs = array())
 	{
 		$options = array();
-		foreach(self::$countries as $code => $name)
+		$countries = self::$countries;
+		asort($countries);
+		foreach($countries as $code => $name)
 		{
 			$options[] = JHTML::_('select.option', $code, $name );
 		}
