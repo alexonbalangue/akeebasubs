@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.0.b1
 + VirtueMart 2 integration plugin
 + #34 Subscriptions filtering by coupon and/or upgrade rule
 + Admin email plugin (thanks ZOOlanders.com!)
+~ Added a Back button in the front-end subscription page
 # FOF: Get a new model instance for the second time failed was causing warning messages and malfunctions
 # Short PHP open tags
 # mod_aksubslist: would not list all subscriptions

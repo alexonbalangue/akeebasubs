@@ -67,7 +67,7 @@ $this->loadHelper('format');
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_AMOUNT_PAID')?></td>
 		<td class="subscription-info">
 			<?php echo sprintf('%2.02f',$this->item->gross_amount)?>
-			<?php echo sprintf('%2.2f', (float)$this->item->net_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 		</td>
 	</tr>
 	<tr>
@@ -77,5 +77,9 @@ $this->loadHelper('format');
 		</td>
 	</tr>
 </table>
+	
+<div class="akeebasubs-goback">
+	<p><a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions')?>"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></a></p>
+</div>
 
 </div>
