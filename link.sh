@@ -19,3 +19,9 @@ ln `pwd`/../liveupdate/code/liveupdate.php component/backend/liveupdate/liveupda
 #
 rm plugins/system/oneclickaction
 ln -s `pwd`/../liveupdate/plugins/system/oneclickaction plugins/system/oneclickaction
+
+#
+# Link with Framework-on-Framework
+#
+rm component/backend/fof
+ln -s `pwd`/../fof/fof component/backend/fof
