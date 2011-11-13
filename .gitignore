@@ -9,3 +9,9 @@
 /documentation/akeebasubs-guide.xml~
 /TODO
 /component/backend/version.php
+component/backend/liveupdate/assets
+component/backend/liveupdate/classes
+component/backend/liveupdate/language
+component/backend/liveupdate/LICENSE.txt
+component/backend/liveupdate/liveupdate.php
+plugins/system/oneclickaction
