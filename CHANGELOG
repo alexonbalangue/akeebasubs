@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.0.b2
+================================================================================
+# Trying to use a coupon with a hit limit would cause a fatal error
+
 Akeeba Subscriptions 2.0.b1
 ================================================================================
 + #15 Basic Affiliates management built-in. NOTE: This is supposed to be *basic* stuff only!

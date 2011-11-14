@@ -503,10 +503,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$couponCode = $state->coupon;
 			$valid = false;
 			
-			$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+			$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
 				->coupon(strtoupper($state->coupon))
-				->getItemList();
-			$coupon = empty($coupons) ? null : array_pop($coupons);
+				->getFirstItem();
+			if(empty($coupon->akeebasubs_coupon_id)) $coupon = null;
 				
 			if(is_object($coupon)) {
 				$valid = false;
