@@ -2,6 +2,7 @@
 Akeeba Subscriptions 2.0.b2
 ================================================================================
 # Trying to use a coupon with a hit limit would cause a fatal error
+# The asrestricted plugin was looking for the KOOWA constant but we no longer depend on it
 
 Akeeba Subscriptions 2.0.b1
 ================================================================================

@@ -152,8 +152,6 @@ class plgContentAsrestricted extends JPlugin
 	
 	public function onPrepareContent( &$article, &$params, $limitstart = 0 )
 	{
-		if(!defined('KOOWA')) return;
-		
 		// Check whether the plugin should process or not
 		if ( JString::strpos( $article->text, 'akeebasubs' ) === false )
 		{
@@ -168,8 +166,6 @@ class plgContentAsrestricted extends JPlugin
 	
 	public function onContentPrepare($context, &$row, &$params, $page = 0)
 	{
-		if(!defined('KOOWA')) return;
-		
 		if(is_object($row)) {
 			// Check whether the plugin should process or not
 			if ( JString::strpos( $row->text, 'akeebasubs' ) === false )
