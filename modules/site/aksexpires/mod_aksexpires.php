@@ -38,14 +38,17 @@ $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 
 if(JFactory::getUser()->guest) {
-	return;
+	echo '&nbsp;';
 } else {
 	$list = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 		->user_id(JFactory::getUser()->id)
 		->enabled(1)
 		->getList();
 
-	if(empty($list)) return;
+	if(empty($list)) {
+		echo "&nbsp;";
+		return;
+	}
 
 	jimport('joomla.utilities.date');
 
@@ -57,5 +60,5 @@ if(JFactory::getUser()->guest) {
 	}
 
 	$ed = new JDate($expires);
-	return JText::_('MOD_AKSEXPIRES_EXPIRESON').' '.$ed->toFormat('%d/%m/%Y');
+	echo JText::sprintf('MOD_AKSEXPIRES_EXPIRESON', $ed->toFormat('%d/%m/%Y'));
 }
