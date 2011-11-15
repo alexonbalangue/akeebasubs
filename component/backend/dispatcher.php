@@ -10,6 +10,22 @@ defined('_JEXEC') or die();
 
 class AkeebasubsDispatcher extends FOFDispatcher
 {
+	public function onBeforeDispatch() {
+		$result = parent::onBeforeDispatch();
+		
+		if($result) {
+			// Merge the language overrides
+			$paths = array(JPATH_ROOT, JPATH_ADMINISTRATOR);
+			$jlang =& JFactory::getLanguage();
+			$jlang->load($this->component.'.override', $paths[0], 'en-GB', true);
+			$jlang->load($this->component.'.override', $paths[0], null, true);
+			$jlang->load($this->component.'.override', $paths[1], 'en-GB', true);
+			$jlang->load($this->component.'.override', $paths[1], null, true);
+		}
+		
+		return $result;
+	}
+	
 	public function dispatch() {
 		// Handle Live Update requests
 		require_once JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate/liveupdate.php';

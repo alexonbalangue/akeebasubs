@@ -22,13 +22,24 @@ class AkeebasubsDispatcher extends FOFDispatcher
 	
 	public function onBeforeDispatch() {
 		if($result = parent::onBeforeDispatch()) {
+			// Merge the language overrides
+			$paths = array(JPATH_ADMINISTRATOR, JPATH_ROOT);
+			$jlang =& JFactory::getLanguage();
+			$jlang->load($this->component.'.override', $paths[0], 'en-GB', true);
+			$jlang->load($this->component.'.override', $paths[0], null, true);
+			$jlang->load($this->component.'.override', $paths[1], 'en-GB', true);
+			$jlang->load($this->component.'.override', $paths[1], null, true);
+			
 			// Load helpers
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 
+			// Default to the "levels" view
 			$view = FOFInput::getCmd('view',$this->defaultView, $this->input);
 			if(empty($view) || ($view == 'cpanel')) {
 				$view = 'levels';
 			}
+			
+			// Set the view, if it's allowed
 			FOFInput::setVar('view',$view,$this->input);
 			if(!in_array(FOFInflector::pluralize($view), $this->allowedViews)) $result = false;
 		}
