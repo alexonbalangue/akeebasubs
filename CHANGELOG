@@ -3,6 +3,7 @@ Akeeba Subscriptions 2.0.b2
 ================================================================================
 + Allow overriding the media (CSS, JS) files
 + Allow language overrides for the component, even in Joomla! 1.5
+~ Updated bundled JavaScript library to jQuery 1.7
 # Trying to use a coupon with a hit limit would cause a fatal error
 # The asrestricted plugin was looking for the KOOWA constant but we no longer depend on it
 # The mod_aksexpires module didn't work, at all
