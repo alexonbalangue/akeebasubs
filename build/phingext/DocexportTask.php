@@ -154,7 +154,7 @@ class DocexportTask extends matchingTask
 			throw new BuildException('Sorry, I couldn\'t create a temporary directory.');
 			exit;
 		}
-
+		
 		$this->log("Processing {$this->title}");
 
 		// Call DocBook XML parsing
@@ -265,6 +265,7 @@ class DocexportTask extends matchingTask
 		$this->log("Adding processed HTML to the archive");
 		foreach( $ordTable as $filename => $order )
 		{
+			echo "ADDING $filename [$id]\n";
 			$id = $files[$filename];
 			$myfile = $tempdir.DS.'file'.$id.'.dat';
 			$archiver->addFile($myfile, 'file'.$id.'.dat');
@@ -344,6 +345,7 @@ class DocexportTask extends matchingTask
 
 		if(basename($filename) == 'index.html')
 		{
+			$this->log("Processing index.html");
 			$error_reporting = error_reporting(E_ERROR);
 			$domdoc = new DOMDocument();
 			$success = $domdoc->loadXML($filedata);
@@ -369,7 +371,16 @@ class DocexportTask extends matchingTask
 				// Only precess if this page is not already found
 				if(!array_key_exists($href, $ordTable) && ($href != ''))
 				{
-					if(substr($href, 0, 7) != 'mailto:')
+					$addMe = true;
+					if(substr($href, 0, 7) == 'mailto:') $addMe = false;
+					if(substr($href, 0, 7) == 'http://') $addMe = false;
+					if(substr($href, 0, 8) == 'https://') $addMe = false;
+					if(substr($href, 0, 6) == 'ftp://') $addMe = false;
+					if(substr($href, 0, 7) == 'ftps://') $addMe = false;
+					if(substr($href, 0, 7) == 'sftp://') $addMe = false;
+					if(substr($href, 0, 6) == 'ssh://') $addMe = false;
+					if(substr($href, 0, 6) == 'ssl://') $addMe = false;
+					if($addMe)
 					{
 						$order++;
 						$ordTable[$href] = $order;
