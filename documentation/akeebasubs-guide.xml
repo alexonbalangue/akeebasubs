@@ -1106,7 +1106,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       codes are explained below. Please note that you can use them in
       conjunction with Joomla! content plugins as well. In fact, using the
       merge codes you are open to a world of possibilities, even integrating
-      an external affiliate system –like OSI Affiliates– on your site. </para>
+      an external affiliate system –like OSI Affiliates– on your site.</para>
 
       <para>The available merge codes are:</para>
 
@@ -3360,11 +3360,11 @@ LEVEL3=Group 1</programlisting>
             <term>Add to K2 groups</term>
 
             <listitem>
-              <para>This is a list for assigning subscription levels to
-              NinjaBoard groups. When a user has an active subscription to the
-              specified level, he'll be added to the NinjaBoard group
-              mentioned on the right hand of the equal sign. Each assignment
-              is done like this:</para>
+              <para>This is a list for assigning subscription levels to K2
+              groups. When a user has an active subscription to the specified
+              level, he'll be added to the K2 group mentioned on the right
+              hand of the equal sign. Each assignment is done like
+              this:</para>
 
               <programlisting>LEVEL1=Group 1</programlisting>
 
