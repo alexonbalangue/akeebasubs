@@ -47,7 +47,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				->select('COUNT(*)')
 				->from($db->nameQuote('#__akeebasubs_subscriptions').' AS '.$db->nameQuote('tbl'));
 
-			$this->_buildQueryFrom($query);
+			//$this->_buildQueryFrom($query);
 			$this->_buildQueryJoins($query);
 			$this->_buildQueryWhere($query);
 			$this->_buildQueryGroup($query);
@@ -63,7 +63,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				->select('SUM('.$db->nameQuote('net_amount').') AS '.$db->nameQuote('x'))
 				->from($db->nameQuote('#__akeebasubs_subscriptions').' AS '.$db->nameQuote('tbl'));
 			
-			$this->_buildQueryFrom($query);
+			//$this->_buildQueryFrom($query);
 			$this->_buildQueryJoins($query);
 			$this->_buildQueryWhere($query);
 			$this->_buildQueryGroup($query);
