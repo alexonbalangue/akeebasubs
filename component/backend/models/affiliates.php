@@ -53,8 +53,8 @@ class AkeebasubsModelAffiliates extends FOFModel
 				$db->nameQuote('u').'.'.$db->nameQuote('email')
 			))
 			->from($db->nameQuote('#__akeebasubs_affiliates').' AS '.$db->nameQuote('a'))
-			->join('INNER', "($subquery1)".' AS '.$db->nameQuote('tna').' USING ('.$db->nameQuote('akeebasubs_affiliate_id').')')
-			->join('INNER', "($subquery2)".' AS '.$db->nameQuote('p').' USING ('.$db->nameQuote('akeebasubs_affiliate_id').')')
+			->join('LEFT OUTER', "($subquery1)".' AS '.$db->nameQuote('tna').' USING ('.$db->nameQuote('akeebasubs_affiliate_id').')')
+			->join('LEFT OUTER', "($subquery2)".' AS '.$db->nameQuote('p').' USING ('.$db->nameQuote('akeebasubs_affiliate_id').')')
 			->join('INNER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON ('.$db->nameQuote('u').'.'.$db->nameQuote('id').'='.$db->nameQuote('a').'.'.$db->nameQuote('user_id').')')
 		;
 		
@@ -65,7 +65,7 @@ class AkeebasubsModelAffiliates extends FOFModel
 		}
 		
 		// Filter by Enabled status
-		$enabled = $this->getState('enabled',null,'int');
+		$enabled = $this->getState('enabled',null,'cmd');
 		if(is_numeric($enabled)) {
 			$query->where($db->nameQuote('a').'.'.$db->nameQuote('enabled').' = '.$db->quote($enabled));
 		}
