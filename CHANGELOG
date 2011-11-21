@@ -2,6 +2,7 @@
 Akeeba Subscriptions 2.0.RC1
 ================================================================================
 # Affiliates wouldn't show on the list before they had at least one subscription linked to them
+~ No error message about invalid username will be printed if the user hasn't supplied a username yet
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
