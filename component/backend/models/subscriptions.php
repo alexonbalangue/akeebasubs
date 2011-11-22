@@ -32,7 +32,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'refresh'		=> $this->getState('refresh',null,'int'),
 			'groupbydate'	=> $this->getState('groupbydate',null,'int'),
 			'moneysum'		=> $this->getState('moneysum',null,'int'),
-			'coupon_id'		=> $this->getState('couponid',null,'int'),
+			'coupon_id'		=> $this->getState('coupon_id',null,'int'),
 			'filter_discountmode' => $this->getState('filter_discountmode',null,'cmd'),
 			'filter_discountcode' => $this->getState('filter_discountcode',null,'cmd')
 		);

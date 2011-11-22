@@ -538,14 +538,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 							->coupon_id($coupon->akeebasubs_coupon_id)
 							->paystate('C')
 							->limit(0)
-							->limistart(0)
+							->limitstart(0)
 							->getTotal();
 						if($coupon->hitslimit >= 0) {
 							$valid = $hits < $coupon->hitslimit;
 							if(($coupon->hits != $hits) || ($hits >= $coupon->hitslimit)) {
 								$coupon->hits = $hits;
 								$coupon->enabled = $hits < $coupon->hitslimit;
-								$coupon->save();
+								$coupon->store();
 							}
 						}
 					}
