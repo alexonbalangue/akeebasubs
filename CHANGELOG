@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.0.b3
 # Affiliates wouldn't show on the list before they had at least one subscription linked to them
 # Coupon codes with hit limits wouldn't work
 # Selecting a user for a coupon code wouldn't work in Joomla! 1.7
+# Logging a user from the subscription form woudn't work in Joomla! 1.7 if you are using Joomla's multilingual feature
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
