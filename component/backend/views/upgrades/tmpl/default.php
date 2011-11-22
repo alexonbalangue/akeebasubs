@@ -51,9 +51,6 @@ $this->loadHelper('format');
 				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_MAX_PRESENCE', 'max_presence', $this->lists->order_Dir, $this->lists->order); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_TYPE', 'type', $this->lists->order_Dir, $this->lists->order); ?>
-			</th>
-			<th>
 				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_VALUE', 'value', $this->lists->order_Dir, $this->lists->order); ?>
 			</th>
 			<th width="8%">
@@ -84,7 +81,6 @@ $this->loadHelper('format');
 					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
 				</button>
 			</td>
-			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
@@ -135,7 +131,7 @@ $this->loadHelper('format');
 			<td>
 				<?php echo(int)$upgrade->max_presence?>
 			</td>
-			<td align="center" colspan="2">
+			<td align="center">
 				<?php if($upgrade->type == 'value'): ?>
 				<span class="akeebasubs-coupon-discount-value">
 				<?php echo sprintf('%2.2f', (float)$upgrade->value) ?>

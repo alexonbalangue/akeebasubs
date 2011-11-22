@@ -8,6 +8,7 @@ Akeeba Subscriptions 2.0.b3
 # Logging a user from the subscription form woudn't work in Joomla! 1.7 if you are using Joomla's multilingual feature
 # Merge tags would not be parsed in the Thank You page if the payable amount was 0 for any reason (e.g. using a 100% discount coupon)
 # The VAT rate calculated by the ccInvoices plugin could be off by a few hundredth of percent
+# Layout not aligned in Upgrades view
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
