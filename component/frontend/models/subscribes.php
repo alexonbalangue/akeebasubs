@@ -1102,7 +1102,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug='.$slug.'&layout=order')) );
+			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)) );
 			return false;
 		}
 		
