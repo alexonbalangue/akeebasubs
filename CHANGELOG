@@ -1,9 +1,10 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.0.RC1
+Akeeba Subscriptions 2.0.b3
 ================================================================================
 ~ No error message about invalid username will be printed if the user hasn't supplied a username yet
 # Affiliates wouldn't show on the list before they had at least one subscription linked to them
 # Coupon codes with hit limits wouldn't work
+# Selecting a user for a coupon code wouldn't work in Joomla! 1.7
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================

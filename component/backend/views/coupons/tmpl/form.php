@@ -133,7 +133,9 @@ window.addEvent("domready", function() {
 	$$("button.modal").each(function(el) {
 		el.addEvent("click", function(e) {
 			new Event(e).stop();
-			SqueezeBox.fromElement($('userselect'));
+			SqueezeBox.fromElement($('userselect'), {
+				parse: 'rel'
+			});
 		});
 	});
 });
