@@ -1046,6 +1046,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'net_amount'			=> $validation->price->net - $validation->price->discount,
 			'tax_amount'			=> $validation->price->tax,
 			'gross_amount'			=> $validation->price->gross,
+			'tax_percent'			=> $validation->price->taxrate,
 			'created_on'			=> $mNow,
 			'params'				=> '',
 			'akeebasubs_coupon_id'	=> $validation->price->couponid,

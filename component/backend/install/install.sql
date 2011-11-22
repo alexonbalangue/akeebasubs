@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`net_amount` FLOAT NOT NULL,
 	`tax_amount` FLOAT NOT NULL,
 	`gross_amount` FLOAT NOT NULL,
+	`tax_percent` FLOAT DEFAULT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
 	`params` TEXT,
 

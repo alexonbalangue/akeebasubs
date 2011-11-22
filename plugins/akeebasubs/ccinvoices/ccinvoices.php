@@ -71,6 +71,12 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
 			if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
 			
+			if($row->tax_percent > 0) {
+				$taxrate = $row->tax_percent;
+			} else {
+				$taxrate = 100*($row->tax_amount/$row->net_amount);
+			}
+			
 			$invoice = (object)array(
 				'number'		=> $invoice_number,
 				'invoice_date'	=> $row->created_on,
@@ -85,7 +91,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'quantity'		=> 1,
 				'pname'			=> $subname.$suffix,
 				'price'			=> $row->net_amount,
-				'tax'			=> sprintf('%.2f', 100*($row->tax_amount/$row->net_amount)),
+				'tax'			=> sprintf('%.2f', $taxrate),
 				'note'			=> "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",
 				'contact_id'	=> $contact_id
 			);

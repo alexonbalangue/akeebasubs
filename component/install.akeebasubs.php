@@ -220,6 +220,21 @@ ENDSQL;
 	$status = $db->query();
 }
 
+// Upgrade the subscriptions table (2.0.b3)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_subscriptions`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`tax_percent`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_subscriptions`
+ADD COLUMN `tax_percent` FLOAT DEFAULT NULL AFTER `gross_amount`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
 // =============================================================================
 // Sub-extension installation
 // =============================================================================
