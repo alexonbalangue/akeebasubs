@@ -9,6 +9,7 @@ Akeeba Subscriptions 2.0.b3
 # Merge tags would not be parsed in the Thank You page if the payable amount was 0 for any reason (e.g. using a 100% discount coupon)
 # The VAT rate calculated by the ccInvoices plugin could be off by a few hundredth of percent
 # Layout not aligned in Upgrades view
+# Filters wouldn't work in users view
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================

@@ -89,83 +89,85 @@ class AkeebasubsModelUsers extends FOFModel
 		
 		if($state->username) {
 			$query->where($db->nameQuote('u').'.'.$db->nameQuote('username').
-				' LIKE ', $db->quote('%'.$state->username.'%'));
+				' LIKE '.$db->quote('%'.$state->username.'%'));
 		}
 		
 		if($state->name) {
 			$query->where($db->nameQuote('u').'.'.$db->nameQuote('name').
-				' LIKE ', $db->quote('%'.$state->name.'%'));
+				' LIKE '.$db->quote('%'.$state->name.'%'));
 		}
 		
 		if($state->email) {
 			$query->where($db->nameQuote('u').'.'.$db->nameQuote('email').
-				' LIKE ', $db->quote('%'.$state->email.'%'));
+				' LIKE '.$db->quote('%'.$state->email.'%'));
 		}
 		
 		if($state->businessname) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('businessname').
-				' LIKE ', $db->quote('%'.$state->businessname.'%'));
+				' LIKE '.$db->quote('%'.$state->businessname.'%'));
 		}
 		
 		if($state->occupation) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('occupation').
-				' LIKE ', $db->quote('%'.$state->occupation.'%'));
+				' LIKE '.$db->quote('%'.$state->occupation.'%'));
 		}
 		
 		if($state->vatnumber) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('vatnumber').
-				' LIKE ', $db->quote('%'.$state->vatnumber.'%'));
+				' LIKE '.$db->quote('%'.$state->vatnumber.'%'));
 		}
 		
 		if($state->address1) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('address1').
-				' LIKE ', $db->quote('%'.$state->address1.'%'));
+				' LIKE '.$db->quote('%'.$state->address1.'%'));
 		}
 		
 		if($state->address2) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('address2').
-				' LIKE ', $db->quote('%'.$state->address2.'%'));
+				' LIKE '.$db->quote('%'.$state->address2.'%'));
 		}
 		
 		if($state->city) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('city').
-				' LIKE ', $db->quote('%'.$state->city.'%'));
+				' LIKE '.$db->quote('%'.$state->city.'%'));
 		}
 		
 		if($state->state) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('state').
-				' LIKE ', $db->quote('%'.$state->state.'%'));
+				' LIKE '.$db->quote('%'.$state->state.'%'));
 		}
 		
 		if($state->zip) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('zip').
-				' LIKE ', $db->quote('%'.$state->zip.'%'));
+				' LIKE '.$db->quote('%'.$state->zip.'%'));
 		}
 		
 		if($state->country) {
 			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('country').
-				' = ', $db->quote($state->country));
+				' = '.$db->quote($state->country));
 		}
 		
 		if($state->search) {
 			$search = '%'.$state->search.'%';
 			$query->where(
+				'('.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('businessname').
-				' LIKE ', $db->quote($search).') OR '.
+				' LIKE '.$db->quote($search).') OR '.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('occupation').
-				' LIKE ', $db->quote($search).') OR '.
+				' LIKE '.$db->quote($search).') OR '.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('vatnumber').
-				' LIKE ', $db->quote($search).') OR '.
+				' LIKE '.$db->quote($search).') OR '.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('address1').
-				' LIKE ', $db->quote($search).') OR '.
+				' LIKE '.$db->quote($search).') OR '.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('address2').
-				' LIKE ', $db->quote($search).') OR '.
+				' LIKE '.$db->quote($search).') OR '.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('city').
-				' LIKE ', $db->quote($search).') OR '.
+				' LIKE '.$db->quote($search).') OR '.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('state').
-				' LIKE ', $db->quote($search).') OR '.
+				' LIKE '.$db->quote($search).') OR '.
 				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('zip').
-				' LIKE ', $db->quote($search).')'
+				' LIKE '.$db->quote($search).')'
+				.')'
 			);
 		}
 	}
