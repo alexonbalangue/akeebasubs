@@ -115,6 +115,8 @@ class AkeebasubsControllerLevels extends FOFController
 		
 		// If we accidentally have the awesome layout set, please reset to default
 		if($this->layout == 'awesome') $this->layout = 'default';
+		if($this->layout == 'item') $this->layout = 'default';
+		if(empty($this->layout)) $this->layout = 'default';
 		
 		return true;
 	}

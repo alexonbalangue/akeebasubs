@@ -10,6 +10,7 @@ Akeeba Subscriptions 2.0.b3
 # The VAT rate calculated by the ccInvoices plugin could be off by a few hundredth of percent
 # Layout not aligned in Upgrades view
 # Filters wouldn't work in users view
+# Trying to renew a subscription could sometimes lead to an error message
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
