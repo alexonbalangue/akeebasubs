@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.0.b3
 ================================================================================
++ CSV export for Subscriptions
 ~ No error message about invalid username will be printed if the user hasn't supplied a username yet
 # Affiliates wouldn't show on the list before they had at least one subscription linked to them
 # Coupon codes with hit limits wouldn't work

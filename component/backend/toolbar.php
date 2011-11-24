@@ -12,11 +12,25 @@ class AkeebasubsToolbar extends FOFToolbar
 {
 	public function onSubscriptionsBrowse()
 	{
+		// Normal buttons
 		$this->onBrowse();
 		
-		JToolBarHelper::divider();
-		
 		$bar = JToolBar::getInstance('toolbar');
+		
+		// Add "Subscription Refresh"Run Integrations"
+		JToolBarHelper::divider();
 		$bar->appendButton('Link', 'subrefresh', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:return false;');
+		
+		// Add "Export to CSV"
+		$link = JURI::getInstance();
+		$query = $link->getQuery(true);
+		$query['format'] = 'csv';
+		$query['option'] = 'com_akeebasubs';
+		$query['view'] = 'subscriptions';
+		$query['task'] = 'browse';
+		$link->setQuery($query);
+		
+		JToolBarHelper::divider();
+		$bar->appendButton('Link', 'export', JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
 	}
 }
