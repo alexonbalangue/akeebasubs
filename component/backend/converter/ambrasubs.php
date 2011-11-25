@@ -11,7 +11,7 @@ defined('_JEXEC') or die('');
  * AMBRA.Subscriptions to Akeeba Subscriptions converter
  * @author Nicholas K. Dionysopoulos
  */
-abstract class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
+class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 {
 	/**
 	 * This converter is able to run in steps
