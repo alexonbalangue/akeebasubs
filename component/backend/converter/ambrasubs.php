@@ -141,11 +141,15 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 	
 	public function canConvert()
 	{
-		// Can I find com_ambrasubs?
-		if(!JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_ambrasubs')) return false;
-		// Is it enabled?
-		if(!JComponentHelper::getComponent( 'com_ambrasubs', true )->enabled) return false;
-		// Check!!
+		// Can I find the tables I need?
+		$db = JFactory::getDbo();
+		$tables = $db->getTableList();
+		
+		$prefix = $db->getPrefix();
+		
+		if(!in_array($prefix.'ambrasubs_types',$tables)) return false;
+		if(!in_array($prefix.'ambrasubs_users2types',$tables)) return false;
+		
 		return true;
 	}
 }
