@@ -91,16 +91,15 @@ function doConvertSubscriptions(converter)
 {
 	(function($){
 		var myData = {
-			'limit'				: 100,
-			'action'			: 'import',
-			'_token'			: akeebasubs_token
+			'climit'			: 100,
+			'task'				: 'import'
 		};
 		if(akeebasubs_ri_offset >= 0) {
-			myData.offset = akeebasubs_ri_offset;
+			myData.coffset = akeebasubs_ri_offset;
 		}
 		$.ajax({
 			type: 'POST',
-			url: 'index.php?option=com_akeebasubs&view=tool&import='+converter,
+			url: 'index.php?option=com_akeebasubs&view=tool&import='+converter+'&format=raw',
 			data: myData,
 			dataType: 'json',
 			success: function(msg, textStatus, xhr) {
