@@ -44,7 +44,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	 * 
 	 * @var string|null
 	 */
-	private $convertername = null;
+	protected $convertername = null;
 	
 	/**
 	 * A hash array of input variables, used by FOFInput
@@ -132,11 +132,13 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 			// Make sure we will only be using valid column names
 			$validColumns = array();
 			$allFields = $db->getTableFields($tableName, false);
-			foreach($allFields as $fn => $fv) {
+			foreach($allFields[$tableName] as $fn => $fv) {
 				$validColumns[] = $fn;
 			}
 			
 			// Loop through all data columns for this table
+			$q = null;
+			$runningSum = 0;
 			foreach($rows as $row)
 			{
 				// Get a list of columns to insert to this table and pre-load it
@@ -150,15 +152,31 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 					}
 					$query->columns($columns);
 				}
-					
-				$q = clone $query;
+				
+				if(is_null($q)) {
+					$q = clone $query;
+					$runningSum = 0;
+				}
 				$values = array();
 				foreach($row as $column => $v) {
 					if(!in_array($column, $validColumns)) continue;
 					$values[] = $db->quote($v);
 				}
-				$q->values($values);
+				$values = implode(',',$values);
+				$runningSum += strlen($values);
+				$q->values(implode(',',$values));
 				
+				// Only run a query every 256Kb of data (makes import pimpin' fast!)
+				if($runningSum > 262144) {
+					$db->setQuery($q);
+					$db->query();
+					$q = null;
+				}
+			}
+			
+			if(!is_null($q)) {
+				// Leftover data not commited to db. What are you waiting for,
+				// commit them alright!
 				$db->setQuery($q);
 				$db->query();
 			}
@@ -175,8 +193,8 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	{
 		$db = JFactory::getDbo();
 		
-		$offset = FOFInput::getInt('coffset', -999);
-		$limit = FOFInput::getInt('climit', -999);
+		$offset = FOFInput::getInt('coffset', -999, $this->input);
+		$limit = FOFInput::getInt('climit', -999, $this->input);
 		
 		if($offset == -999) $offset = false;
 		if($limit == -999) $limit = 200;
@@ -186,15 +204,17 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 		{
 			$name = $table['name'];
 			$query = clone $table['query'];
+			$query->from($db->nameQuote($table['foreign']).' AS '.$db->nameQuote('tbl'));
 
 			if($offset === false)
 			{
 				// When the offset is false, just fetch the number of rows
 				$query
-					->select('COUNT(*)')
-					->from($db->nameQuote($table['foreign']).' AS '.$db->nameQuote('tbl'));
+					->clear('select')
+					->select('COUNT(*)');
 				$db->setQuery($query);
 				$count = $db->loadResult();
+				$this->_truncateTable('#__akeebasubs_'.$name);
 				
 				if(!isset($this->data[$name]) || $this->data[$name] == array()) {
 					$this->data[$name] = $count;

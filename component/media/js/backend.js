@@ -91,7 +91,7 @@ function doConvertSubscriptions(converter)
 {
 	(function($){
 		var myData = {
-			'climit'			: 100,
+			'climit'			: 300,
 			'task'				: 'import'
 		};
 		if(akeebasubs_ri_offset >= 0) {
@@ -99,7 +99,7 @@ function doConvertSubscriptions(converter)
 		}
 		$.ajax({
 			type: 'POST',
-			url: 'index.php?option=com_akeebasubs&view=tool&import='+converter+'&format=raw',
+			url: 'index.php?option=com_akeebasubs&view=tool&converter='+converter+'&format=raw',
 			data: myData,
 			dataType: 'json',
 			success: function(msg, textStatus, xhr) {

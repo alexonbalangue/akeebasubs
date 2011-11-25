@@ -20,6 +20,11 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 	 */
 	public $splittable = true;
 	
+	public function __construct($properties = null) {
+		parent::__construct($properties);
+		$this->convertername = 'ambrasubs';
+	}
+	
 	public function convert()
 	{
 		$db = JFactory::getDbo();
@@ -28,10 +33,11 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 			array(
 				'name'		=>	'levels',
 				'foreign'	=>	'#__ambrasubs_types',
-				'foreignkey'=>	'id',
+				'foreignkey'=>	'akeebasubs_level_id',
 				'query'		=> FOFQueryAbstract::getNew($db)
 					->select(array(
 						$db->nameQuote('id'),
+						$db->nameQuote('id').' AS '.$db->nameQuote('akeebasubs_level_id'),
 						$db->nameQuote('title'),
 						'LOWER('.$db->nameQuote('title').') AS '.$db->nameQuote('slug'),
 						$db->nameQuote('description'),
@@ -46,18 +52,18 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 			array(
 				'name'		=>	'subscriptions',
 				'foreign'	=>	'#__ambrasubs_users2types',
-				'foreignkey'=>	'id',
+				'foreignkey'=>	'akeebasubs_subscription_id',
 				'query'		=> FOFQueryAbstract::getNew($db)
 					->select(array(
-						$db->nameQuote('tbl').'.'.$db->nameQuote('u2tid'),
+						$db->nameQuote('tbl').'.'.$db->nameQuote('u2tid').' AS '.$db->nameQuote('akeebasubs_subscription_id'),
 						$db->nameQuote('tbl').'.'.$db->nameQuote('userid').' AS '.$db->nameQuote('user_id'),
-						$db->nameQuote('tbl').'.'.'typeid AS akeebasubs_level_id',
+						$db->nameQuote('tbl').'.'.$db->nameQuote('typeid').' AS '.$db->nameQuote('akeebasubs_level_id'),
 						$db->nameQuote('p').'.'.$db->nameQuote('created_datetime').' AS '.$db->nameQuote('publish_up'),
 						'IF('.$db->nameQuote('tbl').'.'.$db->nameQuote('expires_datetime').' > '.$db->quote('2038-01-01').', '.$db->quote('NADA').', '.$db->nameQuote('tbl').'.'.$db->nameQuote('expires_datetime').') AS '.$db->nameQuote('publish_down'),
 						$db->nameQuote('tbl').'.'.$db->nameQuote('notes').' AS '.$db->nameQuote('notes'),
 						$db->nameQuote('tbl').'.'.$db->nameQuote('status').' AS '.$db->nameQuote('enabled'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_type').' IS NULL, '.$db->quote('none').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_type').' AS '.$db->nameQuote('processor'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_id').' IS NULL, '.$db->quote('Import').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_id').' AS '.$db->nameQuote('processor_key'),
+						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_type').' IS NULL, '.$db->quote('none').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_type').') AS '.$db->nameQuote('processor'),
+						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_id').' IS NULL, '.$db->quote('Import').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_id').') AS '.$db->nameQuote('processor_key'),
 						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_status').' = '.$db->quote('1').', '.$db->quote('C').', IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_status').' IS NULL, '.$db->quote('C').', '.$db->quote('X').')) AS '.$db->nameQuote('state'),
 						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_amount').'IS NULL, '.$db->quote('0').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_amount').') AS '.$db->nameQuote('net_amount'),
 						$db->quote('0').' AS '.$db->nameQuote('tax_amount'),
@@ -71,7 +77,7 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 					->join('LEFT',
 							$db->nameQuote('#__ambrasubs_payments').' AS '.$db->nameQuote('p').' ON('.
 							$db->nameQuote('p').'.'.$db->nameQuote('id').' = '.
-							$db->nameQuote('tbl').'.'.$db->nameQuote('paymentid')
+							$db->nameQuote('tbl').'.'.$db->nameQuote('paymentid').')'
 					)
 			)
 		);
