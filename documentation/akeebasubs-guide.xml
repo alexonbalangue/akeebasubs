@@ -1829,27 +1829,182 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       edit the respective item, i.e. clicking on the subscription level will
       open the subscription level editor.</para>
 
+      <para>The available columns (and the respective filters on each column)
+      are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>ID</term>
+
+          <listitem>
+            <para>The subscription ID. Clicking on an ID will open the
+            subscription for editing.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Level</term>
+
+          <listitem>
+            <para>The subscription level of this particular subscriptions.
+            Click on a subscription level to open the subscription level's
+            editor page. You can use the dropdown to filter the view by a
+            particular subscription.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>User</term>
+
+          <listitem>
+            <para>Displays the user information of this subscription. Typing
+            in the search box will search for whatever you typed in the
+            username, full name and email address of the user. Partial matches
+            will also be returned, e.g. searching for "car" will also match
+            "Carlos", "Descartes" and, of course, "Car".</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment / Discount</term>
+
+          <listitem>
+            <para>The payment column can be a dollar icon (successful
+            payment), dollar icon with an exclamation mark (the payment is
+            being processed), dollar icon with a star (the user was taken to
+            the payment processor but we don't have any news if the payment
+            worked) or a dollar icon in a red circle (payment was cancelled,
+            reversed or failed).</para>
+
+            <para>The discount column will tell you if a discount was used and
+            what type of discount. A dollar card followed by green bold text
+            means that a coupon was used; the green text is the coupon's code.
+            A magician's hat followed by brown text indicates that an Upgrade
+            Rule was used; the brown text is the title of the upgrade rule
+            used.</para>
+
+            <para>You have four available filters:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The State dropdown allows you to filter by payment
+                state, e.g. Completed will only show the subscriptions which
+                are paid for</para>
+              </listitem>
+
+              <listitem>
+                <para>The first text box allows you to filter by the Payment
+                Processor Key of each subscription. This is useful when you
+                have, for example, they Transaction # of a PayPal payment and
+                you want to find the subscription it refers to; just paste it
+                to this box and press ENTER on your keyboard!</para>
+              </listitem>
+
+              <listitem>
+                <para>The Discount dropdown allows you to filter by the
+                discount type which was used on that subscription</para>
+              </listitem>
+
+              <listitem>
+                <para>The second textbox allows you to filter by coupon code
+                or upgrade rule title.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Amount</term>
+
+          <listitem>
+            <para>Displays the breakdown of the amount paid by the user. The
+            first line displays the net value, before any discount or taxes
+            and is displayed in green letters if and only if the subscription
+            cost money (it's not a zero-priced subscription). The second line
+            is the discount amount and appears in red letters and a negative
+            sign prefix if and only if there was a discount applied to the
+            subscription. The third line is the tax amount and appears in
+            brown, italic letters if and only if a tax amount (as determined
+            by a tax rule) was applied. Finally, the bigger, black, bold
+            letters indicate the amount paid by the user.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Valid From / Valid To</term>
+
+          <listitem>
+            <para>Shows the validity period of a subscription. The Valid From
+            date is displayed left aligned in black type. The Valid To date is
+            displayed right aligned in red type.</para>
+
+            <para>You have two date pickers you can use to filter your
+            subscriptions. The first one is the From and the second one is the
+            To picker. You can have the following combinations:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Date entered in From, nothing in To. Shows subscriptions
+                with a Valid From date AFTER the one you entered.</para>
+              </listitem>
+
+              <listitem>
+                <para>Date entered in To, nothing in From. Shows subscriptions
+                with a Valid To date BEFORE the one you entered.</para>
+              </listitem>
+
+              <listitem>
+                <para>Date entered in From and To. Shows subscriptions with a
+                Valid From date BETWEEN the two entered dates. The Valid To
+                date can be anything. This is a bit unintuitive!</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Created On</term>
+
+          <listitem>
+            <para>When the subscription was created. Entering a date in the
+            date picker allows you to filter the display showing subscriptions
+            which were created AFTER the entered date.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Published</term>
+
+          <listitem>
+            <para>Is the subscription active?</para>
+
+            <important>
+              <para>Clicking on the Published column apparently has no effect.
+              This is not a bug; it's the expected behaviour. The publish
+              status of each subscriptions is defined by the payment state and
+              the valid from/ to dates. If the payment state is marked as
+              "Completed" then the subscription is forced to be active within
+              the time period defined by the valid from / to columns. If you
+              want to disable a paid subscription, set its payment state to
+              cancelled and unpublish it.</para>
+            </important>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
       <para>You can use the <guibutton>Run Integrations</guibutton> button any
       time in order to have Akeeba Subscriptions re-process all integrations
       with third party components. This is useful when you suspect an
       integration has gone wrong, you changed the options in an integration
       plugin or you just imported a large number of subscriptions.</para>
 
-      <para>Using the CSV button allows you to export the current view into a
-      CSV file for further processing in a spreadsheet application such as
-      Microsoft Office Excel, Apple Numbers or OpenOffice.org Calc. Do note
-      that the full set of raw data is dumped to the CSV file.</para>
-
-      <important>
-        <para>Clicking on the Published column apparently has no effect. This
-        is not a bug; it's the expected behaviour. The publish status of each
-        subscriptions is defined by the payment state and the valid from/ to
-        dates. If the payment state is marked as "Completed" then the
-        subscription is forced to be active within the time period defined by
-        the valid from / to columns. If you want to disable a paid
-        subscription, set its payment state to cancelled and unpublish
-        it.</para>
-      </important>
+      <para>Using the <guibutton>Export to CSV</guibutton> button allows you
+      to export the current view into a CSV file for further processing in a
+      spreadsheet application such as Microsoft Office Excel, Apple Numbers or
+      OpenOffice.org Calc. Do note that the full set of raw data is dumped to
+      the CSV file. What we mean is that the filters are applied, but instead
+      of exporting just one page of data (what is displayed on your screen) it
+      will export all pages of data.</para>
     </section>
 
     <section xml:id="affiliates">
