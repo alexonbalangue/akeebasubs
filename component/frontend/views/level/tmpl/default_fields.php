@@ -15,6 +15,8 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/autosubmit.js?'.AKEEBASUBS_VE
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
+
+JHTML::_('behaviour.mootools');
 ?>
 <?php if(JFactory::getUser()->guest):?>
 <h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></h3>

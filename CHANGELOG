@@ -12,6 +12,7 @@ Akeeba Subscriptions 2.0.b3
 # Layout not aligned in Upgrades view
 # Filters wouldn't work in users view
 # Trying to renew a subscription could sometimes lead to an error message
+# Javascript error on the subscription page under some circumstances
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
