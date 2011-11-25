@@ -61,6 +61,14 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	public $result = array();
 	
 	/**
+	 * Enable Debug Mode; this will cause DB errors on INSERT to halt the import.
+	 * Used only when debugging new import classes.
+	 * 
+	 * @var bool
+	 */
+	public $debug = false;
+	
+	/**
 	 * Public constructor. Makes sure that the name of the converter is set at
 	 * all times.
 	 * 
@@ -164,13 +172,21 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				}
 				$values = implode(',',$values);
 				$runningSum += strlen($values);
-				$q->values(implode(',',$values));
+				$q->values($values);
 				
 				// Only run a query every 256Kb of data (makes import pimpin' fast!)
 				if($runningSum > 262144) {
 					$db->setQuery($q);
-					$db->query();
+					$status = $db->query();
 					$q = null;
+					
+					// DEBUG
+					if(!$status && $this->debug) {
+						echo "<h1>INSERT error</h1>";
+						echo "<p>".$db->getErrorMsg()."</p>";
+						echo "<pre>".$db->getQuery()."</pre>";
+						die();
+					}
 				}
 			}
 			
@@ -178,7 +194,14 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				// Leftover data not commited to db. What are you waiting for,
 				// commit them alright!
 				$db->setQuery($q);
-				$db->query();
+				$status = $db->query();
+				// DEBUG
+				if(!$status && $this->debug) {
+					echo "<h1>INSERT error</h1>";
+					echo "<p>".$db->getErrorMsg()."</p>";
+					echo "<pre>".$db->getQuery()."</pre>";
+					die();
+				}
 			}
 		}
 
