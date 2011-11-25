@@ -7,6 +7,14 @@
 
 defined('_JEXEC') or die('');
 
+/**
+ * Converter abstract code for Akeeba Subscriptions
+ * 
+ * Very losely based on NinjaBoard importer. Thank you, Stian, for your awesome code!
+ *
+ * @author Nicholas K. Dionysopoulos
+ */
+
 abstract class AkeebasubsConverterAbstract extends JObject implements AkeebasubsConverterInterface
 {
 	/**
@@ -44,6 +52,13 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	 * @var array
 	 */
 	private $input = null;
+	
+	/**
+	 * The result to send back to the browser (remember to JSON-encode it!)
+	 * 
+	 * @var array
+	 */
+	public $result = array();
 	
 	/**
 	 * Public constructor. Makes sure that the name of the converter is set at
@@ -177,7 +192,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				// When the offset is false, just fetch the number of rows
 				$query
 					->select('COUNT(*)')
-					->from($table['foreign']);
+					->from($db->nameQuote($table['foreign']).' AS '.$db->nameQuote('tbl'));
 				$db->setQuery($query);
 				$count = $db->loadResult();
 				
@@ -192,9 +207,9 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				$db->setQuery($query, $offset, $limit);
 			}
 			if(!isset($this->data[$name]) || $this->data[$name] == array()) {
-				$this->data[$name] = $db->loadAssocList();
+				$this->data[$name] = $db->loadAssocList($table['foreignkey']);
 			} else {
-				$rows = $db->loadAssocList();
+				$rows = $db->loadAssocList($table['foreignkey']);
 				foreach($rows as $row)
 				{
 					$this->data[$name][] = $row;
@@ -216,13 +231,13 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 					$name = $table['name'];
 					$query = clone $table['query'];
 					
-					$query->from($db->nameQuote($table['foreign']));
+					$query->from($db->nameQuote($table['foreign']).' AS '.$db->nameQuote('tbl'));
 					$db->setQuery($query, $offset, $limit);
 
 					if($this->data[$name] == array() || is_numeric($this->data[$name])) {
-						$this->data[$name] = $db->loadAssocList();
+						$this->data[$name] = $db->loadAssocList($table['foreignkey']);
 					} else {
-						$rows = $db->loadAssocList();
+						$rows = $db->loadAssocList($table['foreignkey']);
 		
 						foreach($rows as $row)
 						{
