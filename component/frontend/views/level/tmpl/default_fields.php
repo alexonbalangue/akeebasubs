@@ -18,6 +18,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php'
 
 JHTML::_('behavior.mootools');
 ?>
+
 <?php if(JFactory::getUser()->guest):?>
 <h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></h3>
 
@@ -67,28 +68,28 @@ if(is_array($customFields) && !empty($customFields)) foreach($customFields as $f
 
 <?php if(AkeebasubsHelperCparams::getParam('personalinfo',1)):?>
 <label for="address1" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS1')?></label>
-<input type="text" name="address1" id="address1" value="<?php echo $this->escape(!empty($userparams->address1) ? $userparams->address1 : $this->cache['address1'])?>" class="main" />
+<input type="text" name="address1" id="address1" value="<?php echo $this->escape(!empty($this->userparams->address1) ? $this->userparams->address1 : $this->cache['address1'])?>" class="main" />
 <span id="address1_empty" class="invalid" <?php if($this->validation->validation->address1):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 <br/>
 <label for="address2" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS2')?></label>
-<input type="text" name="address2" id="address2" value="<?php echo $this->escape(!empty($userparams->address2) ? $userparams->address2 : $this->cache['address2'])?>" class="main" />
+<input type="text" name="address2" id="address2" value="<?php echo $this->escape(!empty($this->userparams->address2) ? $this->userparams->address2 : $this->cache['address2'])?>" class="main" />
 <br/>
 <label for="country" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?></label>
-<?php echo AkeebasubsHelperSelect::countries(!empty($userparams->country) && ($userparams->country != 'XX') ? $userparams->country : $this->cache['country'], 'country', array('id'=>'country')) ?>
+<?php echo AkeebasubsHelperSelect::countries(!empty($this->userparams->country) && ($this->userparams->country != 'XX') ? $this->userparams->country : $this->cache['country'], 'country', array('id'=>'country')) ?>
 <span id="country_empty" class="invalid" <?php if($this->validation->validation->country):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 <br/>
 <div id="stateField">
 	<label for="state" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE')?></label>
-	<?php echo AkeebasubsHelperSelect::states(!empty($userparams->state) ? $userparams->state : $this->cache['state'], 'state', array('id'=>'state')) ?>
+	<?php echo AkeebasubsHelperSelect::states(!empty($this->userparams->state) ? $this->userparams->state : $this->cache['state'], 'state', array('id'=>'state')) ?>
 	<span id="state_empty" class="invalid" <?php if($this->validation->validation->state):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 	<br/>
 </div>
 <label for="city" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CITY')?></label>
-<input type="text" name="city" id="city" value="<?php echo $this->escape( !empty($userparams->city) ? $userparams->city : $this->cache['city'] )?>" class="main" />
+<input type="text" name="city" id="city" value="<?php echo $this->escape( !empty($this->userparams->city) ? $this->userparams->city : $this->cache['city'] )?>" class="main" />
 <span id="city_empty" class="invalid" <?php if($this->validation->validation->city):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 <br/>
 <label for="zip" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ZIP')?></label>
-<input type="text" name="zip" id="zip" value="<?php echo $this->escape( !empty($userparams->zip) ? $userparams->zip : $this->cache['zip'] )?>" class="main" />
+<input type="text" name="zip" id="zip" value="<?php echo $this->escape( !empty($this->userparams->zip) ? $this->userparams->zip : $this->cache['zip'] )?>" class="main" />
 <span id="zip_empty" class="invalid" <?php if($this->validation->validation->zip):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 <br/>
 
@@ -96,19 +97,19 @@ if(is_array($customFields) && !empty($customFields)) foreach($customFields as $f
 
 <label for="isbusiness" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')?></label>
 
-<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), !empty($userparams->isbusiness) ? $userparams->isbusiness : (@array_key_exists('isbusiness',$this->cache) ? $this->cache['isbusiness'] : 0)); ?>
+<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness : (@array_key_exists('isbusiness',$this->cache) ? $this->cache['isbusiness'] : 0)); ?>
 <div id="businessfields">
 	<label for="businessname" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME')?></label>
-	<input type="text" name="businessname" id="businessname" value="<?php echo $this->escape( !empty($userparams->businessname) ? $userparams->businessname : $this->cache['businessname'] )?>" class="main" />
+	<input type="text" name="businessname" id="businessname" value="<?php echo $this->escape( !empty($this->userparams->businessname) ? $this->userparams->businessname : $this->cache['businessname'] )?>" class="main" />
 	<span id="businessname_empty" class="invalid" <?php if($this->validation->validation->businessname):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 	<br/>
 	<label for="occupation" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION')?></label>
-	<input type="text" name="occupation" id="occupation" value="<?php echo $this->escape( !empty($userparams->occupation) ? $userparams->occupation : $this->cache['occupation'] )?>" class="main" />
+	<input type="text" name="occupation" id="occupation" value="<?php echo $this->escape( !empty($this->userparams->occupation) ? $this->userparams->occupation : $this->cache['occupation'] )?>" class="main" />
 	<br/>
 	<div id="vatfields">
 		<label for="vatnumber" class="main" id="vatlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER')?></label>
 		<span id="vatcountry"></span>
-		<input type="text" name="vatnumber" id="vatnumber" value="<?php echo $this->escape( !empty($userparams->vatnumber) ? $userparams->vatnumber : $this->cache['vatnumber'] )?>" class="vat" />
+		<input type="text" name="vatnumber" id="vatnumber" value="<?php echo $this->escape( !empty($this->userparams->vatnumber) ? $this->userparams->vatnumber : $this->cache['vatnumber'] )?>" class="vat" />
 		<span id="vat-status-invalid" class="invalid" style="display:none"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_INVALID')?><span class="akstriangle akstriangle-red"></span></span>
 		<span id="vat-status-valid" class="valid" style="display:none"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_VALID')?><span class="akstriangle akstriangle-green"></span></span>
 	</div>

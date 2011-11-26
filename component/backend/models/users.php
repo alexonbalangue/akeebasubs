@@ -220,15 +220,17 @@ class AkeebasubsModelUsers extends FOFModel
 			'params' => array()
 		);
 		
-		$nativeData = array_merge($nativeData, $userRow->getData());
+		$userData = $userRow->getData();		
 		$myData = $nativeData;
+		foreach(array('name','username','email') as $key) $myData[$key] = $userData[$key];
+		unset($userData);
 				
 		if($state->user_id > 0) {
 			$row = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id($state->user_id)
 				->getFirstItem();
 			if($row->user_id == $state->user_id) {
-				$myData = array_merge($nativeData, $row->getData());
+				$myData = array_merge($myData, $row->getData());
 				if(is_string($myData['params'])) {
 					$myData['params'] = json_decode($myData['params']);
 					if(is_null($myData['params'])) $myData['params'] = array();

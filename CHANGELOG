@@ -13,6 +13,7 @@ Akeeba Subscriptions 2.0.b3
 # Filters wouldn't work in users view
 # Trying to renew a subscription could sometimes lead to an error message
 # Javascript error on the subscription page under some circumstances
+# The user details were now "remembered" when renewing / buying a new subscription with the same user account
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
