@@ -28,10 +28,12 @@ class AkeebasubsDispatcher extends FOFDispatcher
 	
 	public function dispatch() {
 		// Handle Live Update requests
-		require_once JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate/liveupdate.php';
-		if((FOFInput::getCmd('view','',$this->input) == 'liveupdate')) {
-			LiveUpdate::handleRequest();
-			return;
+		if(!class_exists('LiveUpdate')) {
+			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/liveupdate/liveupdate.php';
+			if((FOFInput::getCmd('view','',$this->input) == 'liveupdate')) {
+				LiveUpdate::handleRequest();
+				return;
+			}
 		}
 		
 		parent::dispatch();
