@@ -14,6 +14,7 @@ Akeeba Subscriptions 2.0.b3
 # Trying to renew a subscription could sometimes lead to an error message
 # Javascript error on the subscription page under some circumstances
 # The user details were now "remembered" when renewing / buying a new subscription with the same user account
+# The "Subscribe Now" needed to be clicked twice due to the way Javascript validation was being called
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================

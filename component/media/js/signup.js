@@ -15,12 +15,23 @@ var akeebasubs_personalinfo = true;
 var akeebasubs_validation_fetch_queue = [];
 var akeebasubs_validation_queue = [];
 var akeebasubs_level_id = 0;
+var akeebasubs_submit_after_validation = false;
+
+function cacheSubmitAction(e)
+{
+	(function($) {
+		e.preventDefault();
+		akeebasubs_submit_after_validation = true;
+		$('#subscribenow').attr('disabled','disabled');
+	})(akeeba.jQuery);
+}
 
 function blockInterface()
 {
 	(function($) {
+		$('#subscribenow').click(cacheSubmitAction);
 		$('#ui-disable-spinner').css('display','inline-block');
-		$('#subscribenow').attr('disabled','disabled');
+		//$('#subscribenow').attr('disabled','disabled');
 		akeebasubs_blocked_gui = true;
 	})(akeeba.jQuery);
 }
@@ -28,12 +39,17 @@ function blockInterface()
 function enableInterface()
 {
 	(function($) {
+		$('#subscribenow').unbind('click');
 		$('#ui-disable-spinner').css('display','none');
 		$('#subscribenow').removeAttr('disabled');
 		akeebasubs_blocked_gui = false;
 		if(akeebasubs_run_validation_after_unblock) {
 			akeebasubs_run_validation_after_unblock = false;
 			validateBusiness();
+		} else {
+			if(akeebasubs_submit_after_validation) {
+				$('#subscribenow').click();
+			}
 		}
 	})(akeeba.jQuery);
 }
@@ -272,7 +288,7 @@ function validateAddress()
 					if(european_union_countries[key] == country) {
 						$('#vatfields').css('display','block');
 						var ccode = country;
-						if(ccode == 'GR') { ccode = 'EL'; }
+						if(ccode == 'GR') {ccode = 'EL';}
 						$('#vatcountry').text(ccode);
 					}
 				}
@@ -354,7 +370,7 @@ function validateBusiness()
 			if(european_union_countries[key] == country) {
 				$('#vatfields').css('display','block');
 				var ccode = country;
-				if(ccode == 'GR') { ccode = 'EL'; }
+				if(ccode == 'GR') {ccode = 'EL';}
 				$('#vatcountry').text(ccode);
 			}
 		}
