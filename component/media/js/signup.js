@@ -48,7 +48,8 @@ function enableInterface()
 			validateBusiness();
 		} else {
 			if(akeebasubs_submit_after_validation) {
-				$('#subscribenow').click();
+				akeebasubs_submit_after_validation = false;
+				setTimeout("(function($) {$('#subscribenow').click()})(akeeba.jQuery);", 100);
 			}
 		}
 	})(akeeba.jQuery);
