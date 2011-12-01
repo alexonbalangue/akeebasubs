@@ -289,6 +289,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 					}
 				}
 			}
+			
+			// Double check that it's a valid email
+			if($validEmail) $validEmail = $this->validEmail($state->email);
+			
 			$ret['email'] = $validEmail;
 		} else {
 			$ret['email'] = false;
@@ -1221,5 +1225,73 @@ class AkeebasubsModelSubscribes extends FOFModel
 	    $format = $hex ? '%08s%04s%04x%04x%012s' : '%08s-%04s-%04x-%04x-%012s';
 	    
 	    return sprintf ( $format, $time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node );
+	}
+	
+	private function validEmail($email)
+	{
+		$isValid = true;
+		$atIndex = strrpos($email, "@");
+		if (is_bool($atIndex) && !$atIndex) {
+			$isValid = false;
+		} else {
+			$domain = substr($email, $atIndex+1);
+			$local = substr($email, 0, $atIndex);
+			$localLen = strlen($local);
+			$domainLen = strlen($domain);
+			if ($localLen < 1 || $localLen > 64) {
+				// local part length exceeded
+				$isValid = false;
+			} else if ($domainLen < 1 || $domainLen > 255) {
+				// domain part length exceeded
+				$isValid = false;
+			} else if ($local[0] == '.' || $local[$localLen-1] == '.') {
+				// local part starts or ends with '.'
+				$isValid = false;
+			} else if (preg_match('/\\.\\./', $local)) {
+				// local part has two consecutive dots
+				$isValid = false;
+			} else if (!preg_match('/^[A-Za-z0-9\\-\\.]+$/', $domain)) {
+				// character not valid in domain part
+				$isValid = false;
+			} else if (preg_match('/\\.\\./', $domain)) {
+				// domain part has two consecutive dots
+				$isValid = false;
+			} else if
+				(!preg_match('/^(\\\\.|[A-Za-z0-9!#%&`_=\\/$\'*+?^{}|~.-])+$/',
+				str_replace("\\\\","",$local))) {
+				// character not valid in local part unless 
+				// local part is quoted
+				if (!preg_match('/^"(\\\\"|[^"])+"$/',
+				str_replace("\\\\","",$local))) {
+					$isValid = false;
+				}
+			}
+			
+			// Check the domain name
+			if($isValid && !$this->is_valid_domain_name($domain)) {
+				return false;
+			}
+			
+			// Uncomment below to have PHP run a proper DNS check (risky on shared hosts!)
+			/**
+			if ($isValid && !(checkdnsrr($domain,"MX") || checkdnsrr($domain,"A"))) {
+				// domain not found in DNS
+				$isValid = false;
+			}
+			/**/
+		}
+		return $isValid;
+	}
+	
+	function is_valid_domain_name($domain_name)
+	{
+		$pieces = explode(".",$domain_name);
+		foreach($pieces as $piece) {
+			if (!preg_match('/^[a-z\d][a-z\d-]{0,62}$/i', $piece)
+				|| preg_match('/-$/', $piece) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
