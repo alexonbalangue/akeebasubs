@@ -17,6 +17,7 @@ Akeeba Subscriptions 2.0.b3
 # The user details were now "remembered" when renewing / buying a new subscription with the same user account
 # The "Subscribe Now" needed to be clicked twice due to the way Javascript validation was being called
 # You could use an invalid email address during subscription
+# Fatal errors from missing JParameter class when using Joomla! 1.5 and you had user data stored using my old AMBRA VAT modification
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================

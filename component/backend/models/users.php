@@ -199,6 +199,7 @@ class AkeebasubsModelUsers extends FOFModel
 		$userRow = FOFTable::getAnInstance('Juser','AkeebasubsTable');
 		$userRow->load($state->user_id);
 		if(!($userRow->params instanceof JRegistry)) {
+			jimport('joomla.html.parameter');
 			$params = new JParameter($userRow->params);
 		} else {
 			$params = $userRow->params;
