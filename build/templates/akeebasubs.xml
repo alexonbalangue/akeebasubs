@@ -16,7 +16,9 @@
 		<filename>akeebasubs.php</filename>
 		<filename>dispatcher.php</filename>
 		<filename>router.php</filename>
+		
 		<folder>controllers</folder>
+		<folder>elements</folder>
 		<folder>helpers</folder>
 		<folder>models</folder>
 		<folder>views</folder>
@@ -70,6 +72,7 @@
 			<filename>version.php</filename>
 			
 			<folder>controllers</folder>
+			<folder>converter</folder>
 			<folder>fof</folder>
 			<folder>helpers</folder>
 			<folder>install</folder>
