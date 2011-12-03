@@ -147,7 +147,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 			// Loop through all data columns for this table
 			$q = null;
 			$runningSum = 0;
-			foreach($rows as $row)
+			if(is_array($rows)) foreach($rows as $row)
 			{
 				// Get a list of columns to insert to this table and pre-load it
 				// to the query prototype
@@ -253,7 +253,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				$this->data[$name] = $db->loadAssocList($table['foreignkey']);
 			} else {
 				$rows = $db->loadAssocList($table['foreignkey']);
-				foreach($rows as $row)
+				if(!empty($rows)) foreach($rows as $row)
 				{
 					$this->data[$name][] = $row;
 				}
@@ -282,7 +282,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 					} else {
 						$rows = $db->loadAssocList($table['foreignkey']);
 		
-						foreach($rows as $row)
+						if(!empty($rows)) foreach($rows as $row)
 						{
 							$this->data[$name][] = $row;
 						}

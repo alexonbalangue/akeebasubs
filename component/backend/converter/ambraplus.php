@@ -121,7 +121,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 		// Post-processing
 		if(isset($this->data['levels'])) {
 			$defaultImagePath = version_compare(JVERSION, '1.6.0', 'ge') ? 'images/' : 'images/stories';
-			foreach($this->data['levels'] as $id => $level) {
+			if(!empty($this->data['levels'])) foreach($this->data['levels'] as $id => $level) {
 				$articleText = '<p></p>';
 				$articleid = (int)($level['articleid']);
 				if($articleid > 0) {
@@ -153,7 +153,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
 			$tsNow = $jNow->toUnix();
-			foreach($this->data['subscriptions'] as $id => $subscription) {
+			if(!empty($this->data['subscriptions'])) foreach($this->data['subscriptions'] as $id => $subscription) {
 				// Fixes subscriptions without an attached payment
 				if(empty($subscription['publish_up'])) {
 					$this->data['subscriptions'][$id]['publish_up'] = '2010-01-01 00:00:00';
@@ -179,7 +179,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 			$allUsers = $this->data['users'];
 			$this->data['users'] = array();
 			
-			foreach($allUsers as $id => $rawuser) {
+			if(!empty($allUsers)) foreach($allUsers as $id => $rawuser) {
 				if(empty($rawuser['rawparams'])) continue;
 				$user = $this->parse_ini_file_php($rawuser['rawparams']);
 				$data = array('isbusiness' => 0, 'businessname' => '', 'occupation' => '',
