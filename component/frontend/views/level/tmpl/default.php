@@ -22,7 +22,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsheader')?>
 
-<?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
+<?php if(AkeebasubsHelperCparams::getParam('stepsbar',1) && ($this->validation->price->net > 0.01)):?>
 <?php echo $this->loadAnyTemplate('level/steps',array('step'=>'subscribe')); ?>
 <?php endif; ?>
 
@@ -54,9 +54,9 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	<input id="subscribenow" type="submit" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>" />
 	<img id="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />
 
+	<?php if($this->validation->price->net < 0.01): ?><div style="display:none"><?php endif ?>
 	<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')?></h3>
 
-	<?php if($this->validation->price->net < 0.01): ?><div style="display:none"><?php endif ?>
 	<noscript>
 		<p>
 			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NOSCRIPT')?>

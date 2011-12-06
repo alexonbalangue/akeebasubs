@@ -21,7 +21,7 @@ $message = AkeebasubsHelperMessage::processLanguage($this->item->ordertext);
 $message = AkeebasubsHelperMessage::processSubscriptionTags($message, $this->subscription);
 ?>
 
-<?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
+<?php if(AkeebasubsHelperCparams::getParam('stepsbar',1) && ($this->subscription->prediscount_amount > 0.01)):?>
 <?php echo $this->loadAnyTemplate('level/steps',array('step'=>'done')); ?>
 <?php endif; ?>
 
