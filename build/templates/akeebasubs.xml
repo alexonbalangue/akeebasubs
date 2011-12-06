@@ -30,6 +30,7 @@
 		<language tag="da-DK">da-DK.com_akeebasubs.ini</language>
 		<language tag="de-DE">de-DE.com_akeebasubs.ini</language>
 		<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
+		<language tag="es-ES">es-ES.com_akeebasubs.ini</language>
 		<language tag="fr-FR">fr-FR.com_akeebasubs.ini</language>
 		<language tag="nl-NL">nl-NL.com_akeebasubs.ini</language>
 		<language tag="sv-SE">sv-SE.com_akeebasubs.ini</language>
@@ -93,6 +94,8 @@
 			<language tag="da-DK">da-DK.com_akeebasubs.menu.ini</language>
 			<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
 			<language tag="el-GR">el-GR.com_akeebasubs.menu.ini</language>
+			<language tag="es-ES">es-ES.com_akeebasubs.ini</language>
+			<language tag="es-ES">es-ES.com_akeebasubs.menu.ini</language>
 			<language tag="nl-NL">nl-NL.com_akeebasubs.ini</language>
 			<language tag="nl-NL">nl-NL.com_akeebasubs.menu.ini</language>
 			<language tag="sv-SE">sv-SE.com_akeebasubs.ini</language>

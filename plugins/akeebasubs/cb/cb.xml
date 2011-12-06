@@ -23,6 +23,8 @@
 		<language tag="de-DE">de-DE.plg_akeebasubs_cb.sys.ini</language>
 		<language tag="el-GR">el-GR.plg_akeebasubs_cb.ini</language>
 		<language tag="el-GR">el-GR.plg_akeebasubs_cb.sys.ini</language>
+		<language tag="es-ES">es-ES.plg_akeebasubs_cb.ini</language>
+		<language tag="es-ES">es-ES.plg_akeebasubs_cb.sys.ini</language>
 	</languages>
 	<params addpath="/plugins/akeebasubs/cb">
 		<param name="adduser" type="radio" default="1" label="PLG_AKEEBASUBS_CB_ADDUSER_TITLE" description="PLG_AKEEBASUBS_CB_ADDUSER_DESC">
