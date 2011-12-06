@@ -45,7 +45,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	
 	<?php echo $this->loadTemplate('fields'); ?>
 	
-	<div id="paymentmethod-container">
+	<div id="paymentmethod-container" <?php echo ($this->validation->price->gross < 0.01) ? 'style="display: none;"' : '' ?>>
 		<label for="paymentmethod" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
 		<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod')) ?>
 		<br/>
@@ -56,6 +56,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 
 	<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')?></h3>
 
+	<?php if($this->validation->price->net < 0.01): ?><div style="display:none"><?php endif ?>
 	<noscript>
 		<p>
 			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NOSCRIPT')?>
@@ -77,7 +78,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	<label class="main  total"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')?></label>
 	<span id="akeebasubs-sum-total" class="currency total"><?php echo $this->validation->price->gross?></span>
 	<span class="currency-symbol total"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	
+	<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
 </form>
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsfooter')?>

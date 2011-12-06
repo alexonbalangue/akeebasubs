@@ -3,6 +3,7 @@ Akeeba Subscriptions 2.0.b3
 ================================================================================
 + CSV export for Subscriptions
 + You can now copy levels (one by one copy only)
+~ If the subscription level costs 0.00, the payment options and summary will be hidden
 ~ No error message about invalid username will be printed if the user hasn't supplied a username yet
 # Affiliates wouldn't show on the list before they had at least one subscription linked to them
 # Coupon codes with hit limits wouldn't work
