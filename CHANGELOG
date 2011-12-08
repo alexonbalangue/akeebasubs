@@ -1,11 +1,17 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.0.b3
+Akeeba Subscriptions 2.0.b2
 ================================================================================
++ Allow overriding the media (CSS, JS) files
++ Allow language overrides for the component, even in Joomla! 1.5
 + CSV export for Subscriptions
 + You can now copy levels (one by one copy only)
+~ Updated bundled JavaScript library to jQuery 1.7
 ~ No error message about invalid username will be printed if the user hasn't supplied a username yet
 ~ If the subscription level costs 0.00, the payment options and summary will be hidden
 ~ If the subscription level costs 0.00, do not show the steps bar (the Sign up, Pay, Start Using bar) so as not to confuse the users
+# Trying to use a coupon with a hit limit would cause a fatal error
+# The asrestricted plugin was looking for the KOOWA constant but we no longer depend on it
+# The mod_aksexpires module didn't work, at all
 # Affiliates wouldn't show on the list before they had at least one subscription linked to them
 # Coupon codes with hit limits wouldn't work
 # Selecting a user for a coupon code wouldn't work in Joomla! 1.7
@@ -20,15 +26,6 @@ Akeeba Subscriptions 2.0.b3
 # The "Subscribe Now" needed to be clicked twice due to the way Javascript validation was being called
 # You could use an invalid email address during subscription
 # Fatal errors from missing JParameter class when using Joomla! 1.5 and you had user data stored using my old AMBRA VAT modification
-
-Akeeba Subscriptions 2.0.b2
-================================================================================
-+ Allow overriding the media (CSS, JS) files
-+ Allow language overrides for the component, even in Joomla! 1.5
-~ Updated bundled JavaScript library to jQuery 1.7
-# Trying to use a coupon with a hit limit would cause a fatal error
-# The asrestricted plugin was looking for the KOOWA constant but we no longer depend on it
-# The mod_aksexpires module didn't work, at all
 
 Akeeba Subscriptions 2.0.b1
 ================================================================================
