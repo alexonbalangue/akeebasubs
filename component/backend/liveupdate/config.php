@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
 class LiveUpdateConfig extends LiveUpdateAbstractConfig
 {
 	var $_extensionName			= 'com_akeebasubs';
+	var $_extensionTitle		= 'Akeeba Subscriptions';
 	var $_versionStrategy		= 'different';
 	var $_updateURL				= 'http://nocdn.akeebabackup.com/updates/akeebasubs.ini';
 	var $_requiresAuthorization = false;

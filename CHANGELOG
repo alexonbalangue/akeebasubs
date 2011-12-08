@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.0.RC1
+================================================================================
+# The title of the component in Live Update showed as the generic "Foobar Component for Joomla!"
+
 Akeeba Subscriptions 2.0.b2
 ================================================================================
 + Allow overriding the media (CSS, JS) files
