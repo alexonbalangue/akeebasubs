@@ -17,7 +17,7 @@
       </affiliation>
     </author>
 
-    <pubdate>April 2011</pubdate>
+    <pubdate>December 2011</pubdate>
 
     <revhistory>
       <revision>
@@ -54,6 +54,16 @@
         <revnumber>2.0.a2</revnumber>
 
         <date>October 2011</date>
+
+        <author>
+          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
+        </author>
+      </revision>
+
+      <revision>
+        <revnumber>2.0.b2</revnumber>
+
+        <date>December 2011</date>
 
         <author>
           <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
