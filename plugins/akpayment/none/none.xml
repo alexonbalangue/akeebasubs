@@ -22,5 +22,7 @@
 		<language tag="de-DE">de-DE.plg_akpayment_none.sys.ini</language>
 		<language tag="el-GR">el-GR.plg_akpayment_none.ini</language>
 		<language tag="el-GR">el-GR.plg_akpayment_none.sys.ini</language>
+		<language tag="es-ES">es-ES.plg_akpayment_none.ini</language>
+		<language tag="es-ES">es-ES.plg_akpayment_none.sys.ini</language>
 	</languages>
 </install>
