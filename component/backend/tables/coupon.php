@@ -63,7 +63,7 @@ class AkeebasubsTableCoupon extends FOFTable
 			} else {
 				$subscriptions = array();
 				foreach($subs as $id) {
-					$subObject = FOFModel::getAnInstance('Levels','AkeebasubsModel')
+					$subObject = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 						->setId($id)
 						->getItem();
 					$id = null;

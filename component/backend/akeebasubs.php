@@ -46,4 +46,4 @@ if(!defined('FOF_INCLUDED')) {?>
 <?php return; }
 
 // Dispatch
-FOFDispatcher::getAnInstance('com_akeebasubs')->dispatch();
+FOFDispatcher::getTmpInstance('com_akeebasubs')->dispatch();

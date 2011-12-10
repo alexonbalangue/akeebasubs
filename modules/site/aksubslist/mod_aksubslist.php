@@ -41,7 +41,7 @@ $lang->load('com_akeebasubs',JPATH_SITE,null,true);
 		<?php echo JText::_('COM_AKEEBASUBS_LEVELS_ITEMIZED_NOSUBS')?>
 	</span>
 <?php else: ?>
-<?php FOFDispatcher::getAnInstance('com_akeebasubs', 'subscriptions', array(
+<?php FOFDispatcher::getTmpInstance('com_akeebasubs', 'subscriptions', array(
 	'input'		=> array(
 		'option'	=> 'com_akeebasubs',
 		'view'		=> 'subscriptions',
@@ -49,7 +49,8 @@ $lang->load('com_akeebasubs',JPATH_SITE,null,true);
 		'limit'		=> 0,
 		'limitstart'=> 0,
 		'paystate'	=> 'C',
-		'user_id'	=> JFactory::getUser()->id
+		'user_id'	=> JFactory::getUser()->id,
+		'task'		=> 'browse'
 	)
 ))->dispatch();
 ?>

@@ -21,4 +21,4 @@ for further information.</p>
 <?php endif;
 
 // Dispatch
-FOFDispatcher::getAnInstance('com_akeebasubs')->dispatch();
+FOFDispatcher::getTmpInstance('com_akeebasubs')->dispatch();

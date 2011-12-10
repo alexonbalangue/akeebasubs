@@ -38,9 +38,10 @@ $config = array(
 	'input'		=> array(
 		'limit'		=> 0,
 		'limitstart'=> 0,
-		'no_clear'	=> true
+		'no_clear'	=> true,
+		'task'		=> 'browse'
 	)
 );
 if(!empty($ids)) $config['input']['id'] = $ids;
 
-FOFDispatcher::getAnInstance('com_akeebasubs', 'levels', $config)->dispatch();
+FOFDispatcher::getTmpInstance('com_akeebasubs', 'levels', $config)->dispatch();
