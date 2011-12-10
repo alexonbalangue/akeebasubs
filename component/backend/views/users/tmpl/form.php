@@ -108,6 +108,37 @@ $this->loadHelper('format');
 
 <div class="akeebasubs-clear"></div>
 
+<fieldset id="coupons-basic" style="width: 48%; float: left;">
+	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_NOTES_TITLE')?></legend>
+
+	<textarea rows="10" cols="40" id="notes" name="notes"><?php echo $this->item->notes ?></textarea>
+
+</fieldset>
+
+<fieldset id="coupons-basic" style="width: 48%; float: left;">
+	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_CUSTOMPARAMS_TITLE')?></legend>
+
+	<?php
+	jimport('joomla.plugin.helper');
+	JPluginHelper::importPlugin('akeebasubs');
+	$app = JFactory::getApplication();
+	$params = @json_decode($this->item->params);
+	if(empty($params)) $params = new stdClass();
+	$userparams = (object)array('params' => $params);
+	$jResponse = $app->triggerEvent('onSubscriptionFormRender', array($userparams, array('custom'=>array())));
+	if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
+	if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):?>
+	
+	<label for="<?php echo $field['id']?>" class="main"><?php echo $field['label']?></label>
+	<?php echo $field['elementHTML']?>
+	<div class="akeebasubs-clear"></div>
+	
+	<?php endforeach; endforeach;?>
+
+</fieldset>
+
+<div class="akeebasubs-clear"></div>
+
 </form>
 
 <script type="text/javascript">
