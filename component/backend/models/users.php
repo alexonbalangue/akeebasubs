@@ -254,4 +254,15 @@ class AkeebasubsModelUsers extends FOFModel
 
 		return (object)$myData;
 	}
+	
+	protected function onBeforeSave(&$data, &$table)
+	{
+		if(array_key_exists('custom', $data)) {
+			$params = json_encode($data['custom']);
+			unset($data['custom']);
+			$data['params'] = $params;
+		}
+		
+		return true;
+	}
 }
