@@ -6,6 +6,7 @@ Akeeba Subscriptions 2.0.RC1
 # The title of the component in Live Update showed as the generic "Foobar Component for Joomla!"
 # Missing translation in the menu view
 # Publishing one of the front-end modules on an Akeeba Subscriptions page would cause inability to submit any form (e.g. the subscription form)
+# The j16compat.js file is not needed and causes a JS error
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================

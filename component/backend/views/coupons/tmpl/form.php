@@ -10,9 +10,6 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/akeebajq.js?'.AKEEBASUBS_VERSIONHASH);
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSIONHASH);
-if(version_compare(JVERSION, '1.6.0','ge')) {
-	FOFTemplateUtils::addJS('media://com_akeebasubs/js/j16compat.js?'.AKEEBASUBS_VERSIONHASH);
-}
 
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.mootools');
