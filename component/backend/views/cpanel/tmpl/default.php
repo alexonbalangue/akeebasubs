@@ -325,6 +325,7 @@ $this->loadHelper('cparams');
 			if(salesPoints.length == 0) {
 				$('#akthrobber').hide();
 				$('#aksaleschart-nodata').show();
+				return;
 			}
 			plot1 = $.jqplot('aksaleschart', [subsPoints, salesPoints], {
 				show: true,

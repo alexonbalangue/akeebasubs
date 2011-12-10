@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.0.RC1
 # Missing translation in the menu view
 # Publishing one of the front-end modules on an Akeeba Subscriptions page would cause inability to submit any form (e.g. the subscription form)
 # The j16compat.js file is not needed and causes a JS error
+# JS error thrown in the control panel page if no subscriptions exist
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
