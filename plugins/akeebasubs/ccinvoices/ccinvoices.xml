@@ -24,5 +24,7 @@
 		<language tag="el-GR">el-GR.plg_akeebasubs_ccinvoices.sys.ini</language>
 		<language tag="es-ES">es-ES.plg_akeebasubs_ccinvoices.ini</language>
 		<language tag="es-ES">es-ES.plg_akeebasubs_ccinvoices.sys.ini</language>
+		<language tag="pl-PL">pl-PL.plg_akeebasubs_ccinvoices.ini</language>
+		<language tag="pl-PL">pl-PL.plg_akeebasubs_ccinvoices.sys.ini</language>
 	</languages>
 </install>

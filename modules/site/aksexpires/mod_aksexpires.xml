@@ -20,6 +20,8 @@
 		<language tag="el-GR">el-GR.mod_aksexpires.sys.ini</language>
 		<language tag="es-ES">es-ES.mod_aksexpires.ini</language>
 		<language tag="es-ES">es-ES.mod_aksexpires.sys.ini</language>
+		<language tag="pl-PL">pl-PL.mod_aksexpires.ini</language>
+		<language tag="pl-PL">pl-PL.mod_aksexpires.sys.ini</language>
 	</languages>
 
 	<params>
