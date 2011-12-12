@@ -74,9 +74,9 @@ if(is_array($customFields) && !empty($customFields)) foreach($customFields as $f
 <label for="address2" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS2')?></label>
 <input type="text" name="address2" id="address2" value="<?php echo $this->escape(!empty($this->userparams->address2) ? $this->userparams->address2 : $this->cache['address2'])?>" class="main" />
 <br/>
-<label for="country" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?></label>
-<?php echo AkeebasubsHelperSelect::countries(!empty($this->userparams->country) && ($this->userparams->country != 'XX') ? $this->userparams->country : $this->cache['country'], 'country', array('id'=>'country')) ?>
-<span id="country_empty" class="invalid" <?php if($this->validation->validation->country):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
+<label for="city" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CITY')?></label>
+<input type="text" name="city" id="city" value="<?php echo $this->escape( !empty($this->userparams->city) ? $this->userparams->city : $this->cache['city'] )?>" class="main" />
+<span id="city_empty" class="invalid" <?php if($this->validation->validation->city):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 <br/>
 <div id="stateField">
 	<label for="state" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE')?></label>
@@ -84,13 +84,13 @@ if(is_array($customFields) && !empty($customFields)) foreach($customFields as $f
 	<span id="state_empty" class="invalid" <?php if($this->validation->validation->state):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 	<br/>
 </div>
-<label for="city" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CITY')?></label>
-<input type="text" name="city" id="city" value="<?php echo $this->escape( !empty($this->userparams->city) ? $this->userparams->city : $this->cache['city'] )?>" class="main" />
-<span id="city_empty" class="invalid" <?php if($this->validation->validation->city):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
-<br/>
 <label for="zip" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ZIP')?></label>
 <input type="text" name="zip" id="zip" value="<?php echo $this->escape( !empty($this->userparams->zip) ? $this->userparams->zip : $this->cache['zip'] )?>" class="main" />
 <span id="zip_empty" class="invalid" <?php if($this->validation->validation->zip):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
+<br/>
+<label for="country" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?></label>
+<?php echo AkeebasubsHelperSelect::countries(!empty($this->userparams->country) && ($this->userparams->country != 'XX') ? $this->userparams->country : $this->cache['country'], 'country', array('id'=>'country')) ?>
+<span id="country_empty" class="invalid" <?php if($this->validation->validation->country):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?><span class="akstriangle akstriangle-red"></span></span>
 <br/>
 
 <h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS')?></h3>

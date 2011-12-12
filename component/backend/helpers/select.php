@@ -87,21 +87,33 @@ class AkeebasubsHelperSelect
 	);
 	
 	public static $states = array(
-		'' => 'N/A', 'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas',
-		'CA' => 'California', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'DE' => 'Delaware',
-		'DC' => 'District of Columbia', 'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii',
-		'ID' => 'Idaho', 'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas',
-		'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine', 'MD' => 'Maryland', 'MA' => 'Massachusetts',
-		'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi', 'MO' => 'Missouri', 'MT' => 'Montana',
-		'NE' => 'Nebraska', 'NV' => 'Nevada', 'NH' => 'New Hampshire', 'NJ' => 'New Jersey',
-		'NM' => 'New Mexico', 'NY' => 'New York', 'NC' => 'North Carolina', 'ND' => 'North Dakota',
-		'OH' => 'Ohio', 'OK' => 'Oklahoma', 'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'RI' => 'Rhode Island',
-		'SC' => 'South Carolina', 'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah',
-		'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia', 'WI' => 'Wisconsin',
-		'WY' => 'Wyoming', 'AB' => 'Alberta', 'BC' => 'British Columbia',
-		'MB' => 'Manitoba', 'NB' => 'New Brunswick', 'NL' => 'Newfoundland and Labrador',
-		'NT' => 'Northwest Territories', 'NS' => 'Nova Scotia', 'NU' => 'Nunavut', 'ON' => 'Ontario',
-		'PE' => 'Prince Edward Island', 'QC' => 'Quebec', 'SK' => 'Saskatchewan', 'YT' => 'Yukon'
+		'N/A' => array('' => 'N/A'),
+		'USA' => array(
+			'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona',
+			'AR' => 'Arkansas',	'CA' => 'California', 'CO' => 'Colorado',
+			'CT' => 'Connecticut', 'DE' => 'Delaware', 'DC' => 'District of Columbia',
+			'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawaii',	'ID' => 'Idaho',
+			'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas',
+			'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine', 'MD' => 'Maryland', 'MA' => 'Massachusetts',
+			'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi', 'MO' => 'Missouri', 'MT' => 'Montana',
+			'NE' => 'Nebraska', 'NV' => 'Nevada', 'NH' => 'New Hampshire', 'NJ' => 'New Jersey',
+			'NM' => 'New Mexico', 'NY' => 'New York', 'NC' => 'North Carolina', 'ND' => 'North Dakota',
+			'OH' => 'Ohio', 'OK' => 'Oklahoma', 'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'RI' => 'Rhode Island',
+			'SC' => 'South Carolina', 'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah',
+			'VT' => 'Vermont', 'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia', 'WI' => 'Wisconsin',
+			'WY' => 'Wyoming'
+			),
+		'Canada' => array(
+			'AB' => 'Alberta', 'BC' => 'British Columbia',
+			'MB' => 'Manitoba', 'NB' => 'New Brunswick', 'NL' => 'Newfoundland and Labrador',
+			'NT' => 'Northwest Territories', 'NS' => 'Nova Scotia', 'NU' => 'Nunavut', 'ON' => 'Ontario',
+			'PE' => 'Prince Edward Island', 'QC' => 'Quebec', 'SK' => 'Saskatchewan', 'YT' => 'Yukon'
+			),
+		'Australia'	=> array(
+			'ACT' => 'Australian Capital Territory', 'JBT' => 'Jervis Bay Terittory', 'NSW' => 'New South Wales',
+			'AU-NT' => 'Northern Terittory', 'QLD' => 'Queensland', 'AU-SA' => 'South Australia',
+			'TAS' => 'Tasmania', 'VIC' => 'Victoria', 'AU-WA' => 'Western Australia'
+		)
 	);
 
 	public static function decodeCountry($cCode)
@@ -159,13 +171,15 @@ class AkeebasubsHelperSelect
 	
 	public static function states($selected = null, $id = 'state', $attribs = array())
 	{
-		$options = array(
-			JHTML::_('select.option','','---'),
-		);
-		foreach(self::$states as $code => $name)
-		{
-			$options[] = JHTML::_('select.option', $code, $name );
+		$options = array();
+		foreach(self::$states as $country => $states) {
+			$options[] = JHTMLSelect::option('<OPTGROUP>', $country);
+			foreach($states as $code => $name) {
+				$options[] = JHTML::_('select.option', $code, $name );
+			}
+			$options[] = JHTMLSelect::option('</OPTGROUP>');
 		}
+
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
 
@@ -270,12 +284,12 @@ class AkeebasubsHelperSelect
 	
 	public static function formatState($state)
 	{
- 		if(array_key_exists($state, self::$states)) {
- 			$name = self::$states[$state];
- 		} else {
- 			$name = '&mdash;';
- 		}
- 		
+		$name = '&mdash;';
+		
+		foreach(self::$states as $country => $states) {
+			if(array_key_exists($state, $states)) $name = $states[$state];
+		}
+		
  		return $name; 
 	}
 	

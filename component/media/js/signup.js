@@ -296,6 +296,7 @@ function validateAddress()
 			}
 		}
 		
+		/*
 		if( (country == 'US') || (country == 'CA') ) {
 			$('#stateField').css('display','block');
 			if(state == '') {
@@ -307,6 +308,7 @@ function validateAddress()
 		} else {
 			$('#stateField').css('display','none');
 		}
+		*/
 	
 		if(city == '') {
 			$('#city_empty').css('display','inline-block');

@@ -307,7 +307,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// 3. State validation
 		if(in_array($state->country,array('US','CA'))) {
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
-			$ret['state'] = array_key_exists($state->state, AkeebasubsHelperSelect::$states);
+			$ret['state'] = false;
+			foreach(AkeebasubsHelperSelect::$states as $country => $states) {
+				if(array_key_exists($state->state, $states)) $ret['state'] = true;
+			}
 		} else {
 			$ret['state'] = true;
 		}
