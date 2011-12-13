@@ -12,16 +12,23 @@ class AkeebasubsTableLevel extends FOFTable
 	public function check() {
 		$result = true;
 		
+		// Require a title
 		if(empty($this->title)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_TITLE'));
 			$result = false;
 		}
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/filter.php';
+		
+		// Auto-fetch a slug
 		if(empty($this->slug)) {
-			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/filter.php';
 			$this->slug = AkeebasubsHelperFilter::toSlug($this->title);
 		}
 		
+		// Make sure nobody adds crap characters to the slug
+		$this->slug = AkeebasubsHelperFilter::toSlug($this->slug);
+		
+		// Look for a similar slug
 		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->slug($this->slug)
 			->getList(true);
@@ -38,11 +45,13 @@ class AkeebasubsTableLevel extends FOFTable
 			}
 		}
 		
+		// Do we have an image?
 		if(empty($this->image)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_IMAGE'));
 			$result = false;
 		}
 		
+		// Is the duration less than a day?
 		if($this->duration < 1) {
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_LENGTH'));
 			$result = false;

@@ -9,6 +9,7 @@ Akeeba Subscriptions 2.0.RC1
 # The j16compat.js file is not needed and causes a JS error
 # JS error thrown in the control panel page if no subscriptions exist
 # The State field in the subscription page would show up in a very confusing place
+# Invalid characters were allowed in the Subscription Levels' slugs
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
