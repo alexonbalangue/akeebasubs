@@ -112,8 +112,8 @@
 
       <bridgehead>The killer features</bridgehead>
 
-      <para>Its feature list is nothing sort of amazing, either. Out of the
-      box, Akeeba Subscriptions supports these features:</para>
+      <para>Its feature list is nothing short of amazing. Out of the box,
+      Akeeba Subscriptions supports these features:</para>
 
       <itemizedlist>
         <listitem>
@@ -176,8 +176,8 @@
           <para>The subscription form can work with or without Javascript.
           With Javascript it becomes a fully fledged, auto-validating
           subscription form. Without Javascript it works as a standard web
-          form, accessible to users who do not wish / can not use Javascript
-          on their browser.</para>
+          form, accessible to users who do not wish / cannot use Javascript on
+          their browser.</para>
         </listitem>
 
         <listitem>
@@ -187,7 +187,7 @@
 
         <listitem>
           <para>Integration with third party components: JUGA, K2, DOCman,
-          JCE, NinjaBoard, VirtueMart, Tiendam JomSocial, Community Builder,
+          JCE, NinjaBoard, VirtueMart, Tienda, JomSocial, Community Builder,
           ccInvoices and much more! Check out our documentation for more
           information.</para>
         </listitem>
@@ -225,9 +225,10 @@
       <title>Requirements and compatibility</title>
 
       <para>Akeeba Subscriptions 1.0.b4 and later will attempt to detect if
-      your server meets the minimum requirements. If it does not, it will
-      refuse to install. In any case, Akeeba Subscriptions requires the
-      following server-side configuration:</para>
+      your server meets the minimum requirements. If it does not, it will only
+      do a partial installation (no plugins and modules will be installed) and
+      you will be presented with an error message. In any case, Akeeba
+      Subscriptions requires the following server-side configuration:</para>
 
       <itemizedlist>
         <listitem>
@@ -302,7 +303,7 @@
 
         <para>On some other occasions, especially when trying to install or
         update the component after an installation error, Joomla! will
-        complain that it <emphasis role="bold">can not build admin
+        complain that it <emphasis role="bold">cannot build admin
         menus</emphasis>. This is due to another Joomla! 1.6 bug <link
         xlink:href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&amp;tracker_item_id=25663">we
         have sent a patch for</link> to the Joomla! development team.
@@ -322,7 +323,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <bridgehead>Version check</bridgehead>
 
-        <para>Check your Joomla! version. Joomla! 1.5.0 through 1.5.10 can not
+        <para>Check your Joomla! version. Joomla! 1.5.0 through 1.5.10 cannot
         install Akeeba Subscriptions. This is a limitation of these extremely
         outdated releases. If you have such a site, upgrade it. Joomla! 1.5.11
         through 1.5.14 may or may not be able to install Akeeba Subscriptions.
@@ -562,8 +563,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Akeeba Subscriptions can be updated with three different
         methods: installing the new version on top of the old one, using the
-        integrated Live Update system or through Joomla! 1.6 and later's
-        extensions update feature.</para>
+        integrated Live Update system or or using the extensions update
+        feature in Joomla! 1.6 and later.</para>
 
         <bridgehead>Updating directly</bridgehead>
 
@@ -986,7 +987,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
           <listitem>
             <para>The alias, used to construct the URL. Use only lowercase
-            Latin characters without diacretics and accents, dashes and
+            Latin characters without diacritics and accents, dashes and
             underscores. For example <option>uber-sub</option> is valid,
             whereas <option>über SUB</option> is INVALID.</para>
           </listitem>
@@ -1104,7 +1105,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       to your site's back-end, Language Manager and take a look at the
       language code in there.</para>
 
-      <para>Please note that you can not use the same language code
+      <para>Please note that you cannot use the same language code
       twice.</para>
 
       <bridgehead>Customising the messages to show on successful sign-up and
@@ -1431,11 +1432,11 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       the <guilabel>VIES Reg</guilabel> option to Yes and the tax rate to 0%.
       Now create new tax rules for each one of these countries, <guilabel>VIES
       Reg</guilabel> set to No and tax rate set to your local VAT tax rate
-      (e.g. 23% for Greece): United Kingdom, Austria, Belgium, Bulgaria,
-      Cyprus, Czech Republic, Germany, Greece, Denmark, Estonia, Spain,
-      Finland, France, Hungary, Ireland, Italy, Lithuania, Luxembourg, Latvia,
-      Malta, Netherlands, Poland, Portugal, Romania, Sweden, Slovenia,
-      Slovakia. For the country of your business (e.g. Greece for a
+      (e.g. 23% for Greece): Austria, Belgium, Bulgaria, Cyprus, Czech
+      Republic, Germany, Greece, Denmark, Estonia, Finland, France, Hungary,
+      Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands,
+      Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, United
+      Kingdom. For the country of your business (e.g. Greece for a
       Greece-based business) create on more rule with <guilabel>VIES
       Reg</guilabel> set to Yes and the tax rate set to your local VAT tax
       rate (e.g. 23% for Greece). This way, the following happens:</para>
@@ -1457,8 +1458,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </listitem>
 
         <listitem>
-          <para>If the customer is coming from your own country, you are
-          charging him with VAT no matter what.</para>
+          <para>If the customer is from your own country, you are charging him
+          with VAT no matter what.</para>
         </listitem>
       </itemizedlist>
 
@@ -1675,7 +1676,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
       <para>You want to give a complimentary (free) SUB3 subscription to users
       who have already bought SUB1 and SUB2: you can't do that with Upgrade
-      Rules, as you can not combine multiple subscriptions in a single rule.
+      Rules, as you cannot combine multiple subscriptions in a single rule.
       Instead, use a coupon code with 100% discount and show this coupon code
       only to subscribers who have already bought a SUB1 and SUB2 subscription
       using the Restricted Content plugin bundled with Akeeba
@@ -2486,7 +2487,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         2CO).</para>
 
         <important>
-          <para>Akeeba Subscriptions can not pass the currency to 2Checkout.
+          <para>Akeeba Subscriptions cannot pass the currency to 2Checkout.
           You MUST make sure that the currency configured in 2Checkout and the
           currency displayed in your site match to avoid nasty
           surprises.</para>
@@ -2562,8 +2563,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         transactions in Indian Rupees or US Dollars.</para>
 
         <important>
-          <para>Akeeba Subscriptions can not pass the currency to ccAvenue.
-          You MUST make sure that the currency configured in ccAvenue and the
+          <para>Akeeba Subscriptions cannot pass the currency to ccAvenue. You
+          MUST make sure that the currency configured in ccAvenue and the
           currency displayed in your site match to avoid nasty
           surprises.</para>
         </important>
@@ -4052,7 +4053,7 @@ LEVEL3=Group 1</programlisting>
         <para>This particular plugin acts as a demonstration of this plugin
         system. It will query the user's IP address against the free
         hostip.info service and populate the country and city fields, unless
-        the user has overriden them, i.e. he has bought another subscription
+        the user has overridden them, i.e. he has bought another subscription
         in the past.</para>
       </section>
 
@@ -4132,7 +4133,7 @@ LEVEL3=Group 1</programlisting>
         so! First, you will need to find your language's language code. In
         order to do that, just take a look at administrator/language. You will
         see a lot of directories in there. en-GB is the English (United
-        Kingdom) language and, depending on which laguages you have installed
+        Kingdom) language and, depending on which languages you have installed
         on your site, you will see more directories e.g. es-ES for Spanish
         (Spain), de-DE for German (Germany), el-GR for Greek (Greece) and so
         on. Note that down. Whenever you see xx-XX below, replace it with your
@@ -4210,11 +4211,11 @@ LEVEL3=Group 1</programlisting>
         subscription status.</para>
 
         <note>
-          <para>It can not "hide" entire articles, e.g. not show them at all
-          to non-subscribers. At best, only the title will be shown. If you
-          want to completely hide articles and block unsubscribed user access
-          to entire categories or sections in Joomla! 1.5 you will have to use
-          an ACL solution, like Dioscouri's JUGA, NoixACL or similar.</para>
+          <para>It cannot "hide" entire articles, e.g. not show them at all to
+          non-subscribers. At best, only the title will be shown. If you want
+          to completely hide articles and block unsubscribed user access to
+          entire categories or sections in Joomla! 1.5 you will have to use an
+          ACL solution, like Dioscouri's JUGA, NoixACL or similar.</para>
 
           <para>If you have Joomla! 1.6 or later you can use the bundled
           Joomla! 1.6 User Group integration plugin to automatically assign
@@ -4473,7 +4474,7 @@ LEVEL3=Group 1</programlisting>
         new record or modified for a modified existing record) that took
         place.</para>
 
-        <para>You can not change the information in $row or pass data back to
+        <para>You cannot change the information in $row or pass data back to
         the component in any way. In fact, this event is called immediately
         after all information has been written to the database.</para>
       </section>
