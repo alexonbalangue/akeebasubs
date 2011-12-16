@@ -64,6 +64,7 @@ $installation_queue = array(
 			'2checkout'				=> 0,
 			'ccavenue'				=> 0,
 			'eway'					=> 0,
+			'moip'					=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
 			'paypal'				=> 1,

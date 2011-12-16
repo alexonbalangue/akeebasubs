@@ -2601,7 +2601,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </variablelist>
       </section>
 
-      <section>
+      <section xml:id="payment-eway">
         <title>eWay</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
@@ -2732,7 +2732,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </variablelist>
       </section>
 
-      <section>
+      <section xml:id="payment-upay">
         <title>uPay</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
@@ -2796,6 +2796,68 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <guilabel>Error Link URL</guilabel>. These URLs have nothing to do
         with Akeeba Subscriptions. You can use, for example, a link to an
         article for each one of them.</para>
+      </section>
+
+      <section xml:id="payment-moip">
+        <title>MoIP</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - MoIP</guilabel></para>
+
+        <para>This payment method integrates the MoIP payments service
+        (https://www.moip.com.br), a popular Brazilian payment
+        processor.</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Identification</term>
+
+            <listitem>
+              <para>Your identification with MoIP. This is your email,
+              verified cellphone number or login (username) corresponding to
+              your MoIP account.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the testing server. No money will change hands. This is supposed
+              to be used ONLY for testing the integration with MoIP before
+              launching your site. Please consult MoIP for further
+              instructions on using their Sandbox – you have to create special
+              Sandbox users to use it!</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>You will have to setup an instant payment notification URL in
+        your MoIP back-end before Akeeba Subscriptions can handle transactions
+        processed by MoIP. In order to do this, go to <guimenu>Meus
+        Dados</guimenu>, <guisubmenu>Preferências</guisubmenu>,
+        <guimenuitem>Notificação das Transações</guimenuitem> and find the
+        <guilabel>Receber notificação instantânea de venda</guilabel> option.
+        In there, enter a URL like this:</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=postback&amp;paymentmethod=upay</uri></para>
+
+        <para>where www.example.com must be replaced with the domain name of
+        your site.</para>
+
+        <important>
+          <para>The developers of Akeeba Subscriptions do not speak
+          Portuguese. The above instructions and the Portuguese labels of
+          MoIP's interface were kindly provided by MoIP's staff. If you want
+          to seek support with us, please place your request in English.
+          Otherwise we will have to use Google Translate and we might be lost
+          in translation. Thanks!</para>
+        </important>
       </section>
     </section>
 

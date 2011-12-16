@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.0.RC1
 + #40 You can now view and edit custom user fields in the back-end user editor view
 + You can now view and edit per-user notes in the back-end user editor view
 + #43 uPay payment gateway integration
++ #42 MoIP payment gateway integration
 # The title of the component in Live Update showed as the generic "Foobar Component for Joomla!"
 # Missing translation in the menu view
 # Publishing one of the front-end modules on an Akeeba Subscriptions page would cause inability to submit any form (e.g. the subscription form)
