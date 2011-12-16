@@ -19,7 +19,6 @@
 
 	<taskdef name="zipme" classname="phingext.ZipmeTask" />
 	<taskdef name="gitversion" classname="phingext.GitVersionTask" />
-	<taskdef name="docexport" classname="phingext.DocexportTask" />
 
 	<!--
 	====================================================================================================
@@ -123,28 +122,14 @@
 	-->
 	
 	<target name="documentation" description="The documentation"
-		depends="doc-j-pdf,doc-j-import">
+		depends="doc-j-pdf">
 	</target>
 	
 	<target name="doc-j-pdf" description="Documentation for Joomla! in PDF format">
 		<exec command="xsltproc --nonet --xinclude --novalid --stringparam img.src.path ${dirs.documentation}/ --stringparam body.start.indent 0 --stringparam variablelist.term.break.after 1 --stringparam variablelist.term.separator &quot;&quot; --stringparam variablelist.max.termlength 12 --stringparam section.autolabel 1 --stringparam toc.section.depth 5 --output ${dirs.release}/akeebasubs-guide.fo ${dirs.bin.dbxsl}/fo/docbook.xsl ${dirs.documentation}/akeebasubs-guide.xml" dir="${project.basedir}" />
 		<exec command="fop -fo ${dirs.release}/akeebasubs-guide.fo -pdf ${dirs.release}/akeebasubs-guide.pdf" logoutput="true" />
 		<delete file="${dirs.release}/akeebasubs-guide.fo" quiet="yes" />
-	</target>
-	
-	<target name="doc-j-import" description="Documentation for Joomla! in DocImport format">
-		<docexport
-			version="${version}"
-			outdir="${dirs.release}"
-			xslstyleroot="${dirs.bin.dbxsl}"
-			title="Akeeba Subscriptions User's Guide"
-			docbookfile="${dirs.documentation}/akeebasubs-guide.xml"
-			imagedir="images"
-			docbookimages="images"
-			package="akeebasubs-guide"
-		/>
-	</target>
-	
+	</target>	
 	<!--
 	====================================================================================================
 	Tasks - Project management
