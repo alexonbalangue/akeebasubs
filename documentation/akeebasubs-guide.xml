@@ -2845,7 +2845,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <guilabel>Receber notificação instantânea de venda</guilabel> option.
         In there, enter a URL like this:</para>
 
-        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=postback&amp;paymentmethod=upay</uri></para>
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=postback&amp;paymentmethod=moip</uri></para>
 
         <para>where www.example.com must be replaced with the domain name of
         your site.</para>
