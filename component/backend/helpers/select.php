@@ -173,11 +173,11 @@ class AkeebasubsHelperSelect
 	{
 		$options = array();
 		foreach(self::$states as $country => $states) {
-			$options[] = JHTMLSelect::option('<OPTGROUP>', $country);
+			$options[] = JHTML::_('select.option', '<OPTGROUP>', $country);
 			foreach($states as $code => $name) {
 				$options[] = JHTML::_('select.option', $code, $name );
 			}
-			$options[] = JHTMLSelect::option('</OPTGROUP>');
+			$options[] = JHTML::_('select.option', '</OPTGROUP>');
 		}
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
