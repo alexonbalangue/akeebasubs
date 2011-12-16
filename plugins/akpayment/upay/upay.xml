@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - uPay</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2011-12-15</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_UPAY_DESCRIPTION</description>
+	<files>
+		<filename plugin="upay">upay.php</filename>
+		<folder>upay</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_akpayment_upay.ini</language>
+		<language tag="en-GB">en-GB.plg_akpayment_upay.sys.ini</language>
+	</languages>
+	<params>
+		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_UPAY_MERCHANT_LABEL" description="PLG_AKPAYMENT_UPAY_MERCHANT_DESC"/>
+		<param type="spacer" />
+		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_UPAY_SANDBOX_LABEL" description="PLG_AKPAYMENT_UPAY_SANDBOX_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_UPAY_MERCHANT_LABEL" description="PLG_AKPAYMENT_UPAY_MERCHANT_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_UPAY_SANDBOX_LABEL" description="PLG_AKPAYMENT_UPAY_SANDBOX_DESC">
+				  <option value="0">No</option>
+				  <option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</install>

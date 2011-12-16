@@ -2141,18 +2141,26 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
     <section xml:id="importing-from-other-components">
       <title>Importing from other components</title>
 
-      <note>
-        <para>This feature is temporarily removed from Akeeba Subscriptions
-        2.0.a1 and 2.0.a2. We plan on including it again in 2.0.b1 and
-        later.</para>
-      </note>
-
       <para>Most likely you are already using a subscriptions system and
       wouldn't like to have to manually import all of your subscriptions to
       Akeeba Subscriptions. That's why we are offering an automated import
       feature. You can access it from Akeeba Subscription's dashboard page, by
       clicking on the Operations tab, and then on
       <guibutton>Import</guibutton>.</para>
+
+      <warning>
+        <para>Importing from other components will DELETE AND REPLACE ANY AND
+        ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING BACK.
+        Do NOT use this option after you have been using Akeeba Subscriptions
+        and have new subscribers on your site.</para>
+      </warning>
+
+      <important>
+        <para>Please remember to review your Subscription Levels after import.
+        Most notably, the text of the subscription completion and subscription
+        cancellation pages will be missing from all subscription
+        levels.</para>
+      </important>
 
       <para>The options are:</para>
 
@@ -2179,17 +2187,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </varlistentry>
       </variablelist>
-
-      <warning>
-        <para>Importing from other components will DELETE AND REPLACE ANY AND
-        ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING BACK.
-        Do NOT use this option after you have been using Akeeba Subscriptions
-        and have new subscribers on your site.</para>
-      </warning>
-
-      <para>Please remember to review your Subscription Levels after import.
-      Most notably, the text of the subscription completion and subscription
-      cancellation pages will be missing from all subscription levels.</para>
     </section>
   </chapter>
 
@@ -2733,6 +2730,72 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+      </section>
+
+      <section>
+        <title>uPay</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - uPay</guilabel></para>
+
+        <para>This payment method integrates the uPay payments service
+        (https://www.upay.co.uk), a popular payment processor in universities
+        and colleges.</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Site ID</term>
+
+            <listitem>
+              <para>The unique, numeric Site ID given to you by uPay</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Test Mode</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the testing server. No money will change hands. This is supposed
+              to be used ONLY for testing the integration with uPay before
+              launching your site. As per uPay's documentation, the valid CC
+              numbers for testing are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>Visa: 4222222222222 and 4111111111111111</para>
+                </listitem>
+
+                <listitem>
+                  <para>MasterCard: 5454545454545454</para>
+                </listitem>
+
+                <listitem>
+                  <para>Discover: 6011666666666666</para>
+                </listitem>
+              </itemizedlist>
+
+              <para>You can use any expiry date in the future.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>uPay requires you to give them a <guilabel>Posting
+        URL</guilabel> before they give you your account's credentials. You
+        have to give them the following URL:
+        <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=postback&amp;paymentmethod=upay</uri>
+        where www.example.com must be replaced with the domain name of your
+        site.</para>
+
+        <para>uPay will also ask you for a <guilabel>Success Link
+        URL</guilabel>, a <guilabel>Cancel Link URL</guilabel> and an
+        <guilabel>Error Link URL</guilabel>. These URLs have nothing to do
+        with Akeeba Subscriptions. You can use, for example, a link to an
+        article for each one of them.</para>
       </section>
     </section>
 

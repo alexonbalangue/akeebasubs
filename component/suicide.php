@@ -68,6 +68,7 @@ $installation_queue = array(
 			'offline'				=> 0,
 			'paypal'				=> 1,
 			'skrill'				=> 0,
+			'upay'					=> 0,
 			'worldpay'				=> 0
 		),
 		'content' => array(
