@@ -24,10 +24,7 @@ class plgAkeebasubsAdminemails extends JPlugin
 		}
 		parent::__construct($subject, $config);
 
-		$this->emails = array();
-		if(!empty($this->emails)) {
-			$this->emails = explode(',', $this->params->get('emails', ''));
-		}
+		$this->emails = explode(',', $this->params->get('emails', ''));
 	}
 
 	/**
@@ -169,8 +166,8 @@ class plgAkeebasubsAdminemails extends JPlugin
 			'[MYSUBSURL]'	=> $url
 		);
 		
-		$subject = JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_HEAD_'.strtoupper($type));
-		$body = JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_BODY_'.strtoupper($type));
+		$subject = JText::_('PLG_AKEEBASUBS_ADMINEMAILS_HEAD_'.strtoupper($type));
+		$body = JText::_('PLG_AKEEBASUBS_ADMINEMAILS_BODY_'.strtoupper($type));
 		
 		foreach($replacements as $key => $value) {
 			$subject = str_replace($key, $value, $subject);
