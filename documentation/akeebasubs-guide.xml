@@ -1354,8 +1354,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           <term>[USER:STATE]</term>
 
           <listitem>
-            <para>State (two letter code); only exists for Canada and
-            USA</para>
+            <para>State (two letter code); only exists for Australia, Canada
+            and USA</para>
           </listitem>
         </varlistentry>
 
@@ -4282,6 +4282,52 @@ LEVEL3=Group 1</programlisting>
 
         <para>We strongly recommend publishing this plugin at all
         times.</para>
+      </section>
+
+      <section xml:id="plugin-adminemails">
+        <title>Administrator emails</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Administrator Emails</guilabel></para>
+
+        <para>When this plugin is published, an email will be sent out to the
+        administrator (you can define the email address of the administrator)
+        when any change in the status of a subscription has taken place. For a
+        complete list of the events on which an email is sent you can take a
+        look at the language file, e.g.
+        <filename>administrator/language/en-GB/en-GB.plg_akeebasubs_subscriptionemails.ini</filename>.
+        Please note that if you are running a multilingual site, the site's
+        active language at the time the subscription was registered is saved
+        as the user's default language. As long as translation files for that
+        language exist for our email plugin, then the emails the
+        administrators will receive will be in that language (the default
+        language of the user whose subscription has been modified).</para>
+
+        <para>If you want to customise the email messages, you can easily do
+        so! First, you will need to find your language's language code. In
+        order to do that, just take a look at administrator/language. You will
+        see a lot of directories in there. en-GB is the English (United
+        Kingdom) language and, depending on which languages you have installed
+        on your site, you will see more directories e.g. es-ES for Spanish
+        (Spain), de-DE for German (Germany), el-GR for Greek (Greece) and so
+        on. Note that down. Whenever you see xx-XX below, replace it with your
+        own language's language code.</para>
+
+        <para>Go inside the <filename>administrator/language/xx-XX</filename>
+        directory. Find the
+        <filename>xx-XX.plg_akeebasubs_adminemails.ini</filename> file and
+        copy it to
+        <filename>xx-XX.plg_akeebasubs_adminemails.override.ini</filename>
+        Now, edit any of the subscription email texts. The Emails plugin will
+        use your override file instead of the default when sending out
+        emails!</para>
+
+        <note>
+          <para>This plugin uses Joomla!'s mail system. You have to ensure
+          that your site can send out emails (e.g. use the Mass Mail feature
+          to send a test email to Super Administrators) before activating this
+          plugin.</para>
+        </note>
       </section>
 
       <section xml:id="plugin-asexpirationnotify">

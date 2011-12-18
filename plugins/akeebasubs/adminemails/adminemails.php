@@ -174,6 +174,11 @@ class plgAkeebasubsAdminemails extends JPlugin
 			$body = str_replace($key, $value, $body);
 		}
 		
+		// Process merge tags
+		require_once JPATH_SITE.'/components/com_akeebasubs/helpers/message.php';
+		$subject = AkeebasubsHelperMessage::processSubscriptionTags($subject, $row);
+		$body = AkeebasubsHelperMessage::processSubscriptionTags($body, $row);
+		
 		// If the subject or the body is empty, skip the email
 		if(empty($subject) || empty($body)) return;
 		
