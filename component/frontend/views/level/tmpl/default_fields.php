@@ -117,43 +117,12 @@ if(is_array($customFields) && !empty($customFields)) foreach($customFields as $f
 <br/>
 <?php endif;?>
 
-<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
-<label for="coupon" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?></label>
-<input type="text" name="coupon" id="coupon" value="<?php echo $this->escape($this->cache['coupon'])?>" class="vat" />
-<br/>
-
 <?php
 $aks_validate_url = JURI::base().'index.php';
 $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
-$aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL');
 $script = <<<ENDSCRIPT
 var akeebasubs_validate_url = "$aks_validate_url";
 var akeebasubs_valid_form = false;
 var akeebasubs_personalinfo = $aks_personal_info;
-
-window.addEvent('domready', function() {
-	(function(\$) {
-		\$(document).ready(function(){
-			// Commented out until we can resolve some strange validation errors for some users
-			//\$('#signupForm').submit(onSignupFormSubmit);
-			validatePassword();
-			validateName();
-			validateEmail();
-			if($aks_personal_info) {
-				validateAddress();
-				validateBusiness();
-			}
-		});
-	})(akeeba.jQuery);
-});
-
-function onSignupFormSubmit()
-{
-	if(akeebasubs_valid_form == false) {
-		alert('$aks_msg_error_overall');
-	}
-	
-	return akeebasubs_valid_form;
-}
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);

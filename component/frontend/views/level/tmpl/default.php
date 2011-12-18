@@ -45,15 +45,6 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	
 	<?php echo $this->loadTemplate('fields'); ?>
 	
-	<div id="paymentmethod-container" <?php echo ($this->validation->price->gross < 0.01) ? 'style="display: none;"' : '' ?>>
-		<label for="paymentmethod" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
-		<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod')) ?>
-		<br/>
-	</div>
-	<label for="subscribenow" class="main">&nbsp;</label>
-	<input id="subscribenow" type="submit" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>" />
-	<img id="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />
-
 	<?php if($this->validation->price->net < 0.01): ?><div style="display:none"><?php endif ?>
 	<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')?></h3>
 
@@ -79,8 +70,55 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	<span id="akeebasubs-sum-total" class="currency total"><?php echo $this->validation->price->gross?></span>
 	<span class="currency-symbol total"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
 	<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
+	
+	<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
+	<?php if($this->validation->price->net > 0): ?>
+	<label for="coupon" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?></label>
+	<input type="text" name="coupon" id="coupon" value="<?php echo $this->escape($this->cache['coupon'])?>" class="vat" />
+	<?php endif; ?>
+	<br/>
+	<div id="paymentmethod-container" <?php echo ($this->validation->price->gross < 0.01) ? 'style="display: none;"' : '' ?>>
+		<label for="paymentmethod" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
+		<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod')) ?>
+		<br/>
+	</div>
+	<label for="subscribenow" class="main">&nbsp;</label>
+	<button id="subscribenow" type="submit"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?></button>
+	<img id="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />	
 </form>
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsfooter')?>
 
 </div>
+
+<?php
+$aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
+$aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL');
+$script = <<<ENDSCRIPT
+
+window.addEvent('domready', function() {
+	(function(\$) {
+		\$(document).ready(function(){
+			// Commented out until we can resolve some strange validation errors for some users
+			// \$('#signupForm').submit(onSignupFormSubmit);
+			validatePassword();
+			validateName();
+			validateEmail();
+			if($aks_personal_info) {
+				validateAddress();
+				validateBusiness();
+			}
+		});
+	})(akeeba.jQuery);
+});
+
+function onSignupFormSubmit()
+{
+	if(akeebasubs_valid_form == false) {
+		alert('$aks_msg_error_overall');
+	}
+	
+	return akeebasubs_valid_form;
+}
+ENDSCRIPT;
+JFactory::getDocument()->addScriptDeclaration($script);
