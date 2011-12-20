@@ -144,17 +144,20 @@ class plgAkpaymentMoip extends JPlugin
 		// Check the payment_status
 		switch($data['status_pagamento'])
 		{
-			case 1: // Authorized (not credited yet)
 			case 3: // Billet printed but not yet paid
 			case 6: // Being analyzed (possible fraud)
 				$newStatus = 'P';
 				break;
 			
+			case 1: // Authorized
 			case 4: // Completed
 				$newStatus = 'C';
 				break;
 			
-			case 2: // Abandoned
+			case 2: // Abandoned or in progress
+				$newStatus = 'X';
+				break;
+
 			case 5: // Cancelled by client, bank, MOIP or receiver
 			case 7: // Refunded
 			default:
