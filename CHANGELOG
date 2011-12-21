@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.0.RC1
 + You can now view and edit per-user notes in the back-end user editor view
 + #43 uPay payment gateway integration
 + #42 MoIP payment gateway integration
++ Allow third party software to fetch the subscriptions list remotely (sending the Super Administrator username/password in the request)
 ~ The button in the subscription page is not a button element instead of a submit input element
 ~ Full support for all subscription merge tags in the subscription and administrator email plugins
 # The title of the component in Live Update showed as the generic "Foobar Component for Joomla!"
