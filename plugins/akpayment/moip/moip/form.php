@@ -9,7 +9,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 <p align="center">
 <form action="<?php echo htmlentities($data->url) ?>"  method="post" id="paymentForm">
 	<input type="hidden" name="id_carteira" value="<?php echo htmlentities($data->merchant) ?>" />
-	<input type="hidden" name="id_transacao" value="<?php echo htmlentities($level->akeebasubs_subscription_id) ?>" />
+	<input type="hidden" name="id_transacao" value="<?php echo htmlentities($subscription->akeebasubs_subscription_id) ?>" />
 	<input type="hidden" name="nome" value="<?php echo htmlentities($level->title) ?>" />
 	<input type="hidden" name="descricao" value="<?php echo htmlentities($level->title . ' - [ ' . $user->username . ' ]') ?>" />
 	<input type="hidden" name="url_retorno" value="<?php echo $data->success ?>" />
