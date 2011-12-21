@@ -2787,7 +2787,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>uPay requires you to give them a <guilabel>Posting
         URL</guilabel> before they give you your account's credentials. You
         have to give them the following URL:
-        <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=postback&amp;paymentmethod=upay</uri>
+        <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=upay</uri>
         where www.example.com must be replaced with the domain name of your
         site.</para>
 
@@ -2845,7 +2845,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <guilabel>Receber notificação instantânea de venda</guilabel> option.
         In there, enter a URL like this:</para>
 
-        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=postback&amp;paymentmethod=moip</uri></para>
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=moip</uri></para>
 
         <para>where www.example.com must be replaced with the domain name of
         your site.</para>
