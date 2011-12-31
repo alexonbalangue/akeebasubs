@@ -304,8 +304,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 		if(substr($url,0,14) == '/administrator') $url = substr($url,14);
 		$url = ltrim($url, '/');
 		$subpathURL = ltrim($subpathURL, '/');
-		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+2);
-		$url = $baseURL.$url;
+		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+1);
+		$url = rtrim($baseURL,'/').'/'.ltrim($url,'/');
 		
 		if($firstContact) {
 			$subject_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_FIRST';
