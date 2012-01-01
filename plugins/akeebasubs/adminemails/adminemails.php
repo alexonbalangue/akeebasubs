@@ -2,7 +2,7 @@
 /**
  * @package		akeebasubs
  * @subpackage	plugins.akeebasubs.adminemails
- * @copyright	Copyright (c)2011 ZOOlanders.com
+ * @copyright	Copyright (c)2011-2012 ZOOlanders.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -159,7 +159,7 @@ class plgAkeebasubsAdminemails extends JPlugin
 			'[USERNAME]'	=> $user->username,
 			'[USEREMAIL]'	=> $user->email,
 			'[LEVEL]'		=> $level->title,
-			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
+			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_AFFEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
 			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
 			'[PUBLISH_UP]'	=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
 			'[PUBLISH_DOWN]' => version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
