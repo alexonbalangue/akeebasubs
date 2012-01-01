@@ -39,6 +39,7 @@ $installation_queue = array(
 	'plugins' => array(
 		'akeebasubs' => array(
 			'adminemails'			=> 0,
+			'affemails'				=> 0,
 			'autocity'				=> 0,
 			'cb'					=> 0,
 			'communityacl'			=> 0,
