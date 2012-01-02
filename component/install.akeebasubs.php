@@ -159,7 +159,9 @@ if(!version_compare(JVERSION, '1.5.14', 'ge')) {
 
 // Does the server has PHP 5.2.7 or later?
 if(!version_compare(phpversion(), '5.2.7', 'ge')) {
-	JError::raiseWarning(0, "Your PHP version is older than 5.2.7");
+	JError::raiseWarning(0, "Your PHP version is older than 5.2.7. Akeeba Subscriptions may not work properly!");
+} elseif(!version_compare(phpversion(), '5.2.6', 'ge')) {
+	JError::raiseWarning(0, "Your PHP version is older than 5.2.6. Akeeba Subscriptions <u>WILL NOT</u> work. The installation is aborted.");
 	return false;
 }
 
