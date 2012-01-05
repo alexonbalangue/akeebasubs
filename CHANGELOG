@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.0
+================================================================================
+# Language strings containing quotes could cause the Subscribe Now button to fail
+
 Akeeba Subscriptions 2.0.RC1
 ================================================================================
 + #40 You can now view and edit custom user fields in the back-end user editor view

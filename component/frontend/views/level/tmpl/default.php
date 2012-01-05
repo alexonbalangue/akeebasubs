@@ -93,7 +93,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 
 <?php
 $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
-$aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL');
+$aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<ENDSCRIPT
 
 window.addEvent('domready', function() {
