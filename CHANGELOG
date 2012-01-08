@@ -2,6 +2,7 @@
 Akeeba Subscriptions 2.0
 ================================================================================
 # Language strings containing quotes could cause the Subscribe Now button to fail
+# MOIP payment plugin: all transactions would be reported as failed
 
 Akeeba Subscriptions 2.0.RC1
 ================================================================================

@@ -154,8 +154,11 @@ class plgAkpaymentMoip extends JPlugin
 				$newStatus = 'C';
 				break;
 			
+			// Apparently MOIP's instructions translation is a piece of bullshit.
+			// They always send status #2 when the user pays and has to be
+			// ignored...
 			case 2: // Abandoned or in progress
-				$newStatus = 'X';
+				$newStatus = 'N'; // We have to do no further processing
 				break;
 
 			case 5: // Cancelled by client, bank, MOIP or receiver
