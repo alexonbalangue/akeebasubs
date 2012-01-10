@@ -23,3 +23,5 @@ component/backend/fof
 component/language/en-GB
 translations/plugins/system/oneclickaction
 
+modules/site/*/language/en-GB
+plugins/*/*/language/en-GB
