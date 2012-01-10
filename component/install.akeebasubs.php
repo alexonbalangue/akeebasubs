@@ -378,6 +378,9 @@ if(!function_exists('pisprint'))
 
 <h1><?php pitext('COM_AKEEBASUBS_PIHEADER'); ?></h1>
 <?php $rows = 0;?>
+<div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
+	You can download translation files <a href="http://akeeba-cdn.s3-website-eu-west-1.amazonaws.com/language/akeebasubs/">directly from our CDN page</a>.
+</div>
 <img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions" align="left" />
 <h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;<?php pitext('COM_AKEEBASUBS_WELCOME'); ?></h2>
 <span><?php pitext('COM_AKEEBASUBS_PISUBHEADER'); ?></span>

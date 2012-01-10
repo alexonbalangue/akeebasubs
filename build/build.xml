@@ -135,8 +135,11 @@
 	Tasks - Project management
 	====================================================================================================
 	-->
+	<target name="lang" description="Generate and upload language files">
+		<exec command="php ./buildlang.php" dir="buildlang" passthru="true" />
+	</target>
 	
-	<target name="ftpdeploy" depends="git">
+	<target name="ftpdeploy" depends="git,lang">
 		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
 		<echo>Uploading release</echo>
 		<ftpdeploy
