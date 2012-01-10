@@ -25,16 +25,8 @@
 	</files>
 
 	<!-- Front end translation files -->
-	<languages folder="translations/frontend">
-		<language tag="en-GB">en-GB.com_akeebasubs.ini</language>
-		<language tag="da-DK">da-DK.com_akeebasubs.ini</language>
-		<language tag="de-DE">de-DE.com_akeebasubs.ini</language>
-		<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
-		<language tag="es-ES">es-ES.com_akeebasubs.ini</language>
-		<language tag="fr-FR">fr-FR.com_akeebasubs.ini</language>
-		<language tag="nl-NL">nl-NL.com_akeebasubs.ini</language>
-		<language tag="pl-PL">pl-PL.com_akeebasubs.ini</language>
-		<language tag="sv-SE">sv-SE.com_akeebasubs.ini</language>
+	<languages folder="language/frontend">
+		<language tag="en-GB">en-GB/en-GB.com_akeebasubs.ini</language>
 	</languages>
 
 	<!-- SQL query files to execute on installation -->
@@ -78,7 +70,6 @@
 			<folder>fof</folder>
 			<folder>helpers</folder>
 			<folder>install</folder>
-			<folder>language</folder>
 			<folder>liveupdate</folder>
 			<folder>models</folder>
 			<folder>tables</folder>
@@ -86,21 +77,10 @@
 		</files>
 
 		<!-- Back-end translation files -->
-		<languages folder="translations/backend">
-			<language tag="en-GB">en-GB.com_akeebasubs.ini</language>
-			<language tag="en-GB">en-GB.com_akeebasubs.menu.ini</language>
-			<language tag="fr-FR">fr-FR.com_akeebasubs.ini</language>
-			<language tag="fr-FR">fr-FR.com_akeebasubs.menu.ini</language>
-			<language tag="da-DK">da-DK.com_akeebasubs.ini</language>
-			<language tag="da-DK">da-DK.com_akeebasubs.menu.ini</language>
-			<language tag="el-GR">el-GR.com_akeebasubs.ini</language>
-			<language tag="el-GR">el-GR.com_akeebasubs.menu.ini</language>
-			<language tag="es-ES">es-ES.com_akeebasubs.ini</language>
-			<language tag="es-ES">es-ES.com_akeebasubs.menu.ini</language>
-			<language tag="nl-NL">nl-NL.com_akeebasubs.ini</language>
-			<language tag="nl-NL">nl-NL.com_akeebasubs.menu.ini</language>
-			<language tag="sv-SE">sv-SE.com_akeebasubs.ini</language>
-			<language tag="sv-SE">sv-SE.com_akeebasubs.menu.ini</language>
+		<languages folder="language/backend">
+			<language tag="en-GB">en-GB/en-GB.com_akeebasubs.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_akeebasubs.sys.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_akeebasubs.menu.ini</language>
 		</languages>
 
 	</administration>

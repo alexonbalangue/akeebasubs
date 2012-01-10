@@ -11,8 +11,11 @@
 /component/backend/version.php
 component/backend/liveupdate/assets
 component/backend/liveupdate/classes
-component/backend/liveupdate/language
+component/backend/liveupdate/language/en-GB
 component/backend/liveupdate/LICENSE.txt
 component/backend/liveupdate/liveupdate.php
 plugins/system/oneclickaction
 component/backend/fof
+
+component/language/en-GB
+
