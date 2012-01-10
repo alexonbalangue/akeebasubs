@@ -2076,6 +2076,30 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       handful of trusted affiliates. If you're interested in integrating a
       much more powerful third party affiliate system, please contact our
       support.</para>
+
+      <bridgehead>How to use affiliates?</bridgehead>
+
+      <para>Each affiliate has a unique numeric Affiliate ID. You can see that
+      in the left-hand column in the affiliates management page. For our
+      example, we'll assume that our affiliate has an ID of 123.</para>
+
+      <para>In order for a sale to be registered to that affiliate, you need
+      to redirect the prospective buyer to the subscription levels list page,
+      having appended the <uri>affid=<replaceable>123</replaceable></uri> URL
+      parameter at the end of the URL. For example, if your subscription level
+      list page's URL is <uri>http://www.example.com/subscribe.html</uri> and
+      your Affiliate ID is 123 then all visitors must visit the URL
+      <uri>http://www.example.com/subscribe.html?affid=123</uri> for the sale
+      to be registered to the affiliate. If you're not using SEF URLs with
+      Joomla!, the URL would be something like
+      <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=levels&amp;affid=123</uri>
+      instead.</para>
+
+      <para>The prospective buyer is free to wander off to other pages of your
+      site freely before coming buying his subscription. The affiliate ID is
+      stored in the user's session. As long as he has activated cookies on his
+      browser (it's on by default on all browsers) then the affiliate ID will
+      be "remembered" throughout the user's session.</para>
     </section>
 
     <section xml:id="frotn-end-items">
