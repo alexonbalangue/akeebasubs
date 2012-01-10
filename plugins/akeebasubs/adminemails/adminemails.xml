@@ -13,13 +13,9 @@
 	<files>
 		<filename plugin="adminemails">adminemails.php</filename>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_akeebasubs_adminemails.ini</language>
-		<language tag="en-GB">en-GB.plg_akeebasubs_adminemails.sys.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_adminemails.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_adminemails.sys.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_adminemails.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_adminemails.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_adminemails.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_adminemails.sys.ini</language>
 	</languages>
 	<params>
 		<param name="emails" type="text" default="" label="PLG_AKEEBASUBS_ADMINEMAILS_EMAILS_LABEL" description="PLG_AKEEBASUBS_ADMINEMAILS_EMAILS_DESC" />

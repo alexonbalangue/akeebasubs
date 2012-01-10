@@ -14,11 +14,9 @@
 		<filename plugin="skrill">skrill.php</filename>
 		<folder>skrill</folder>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_akpayment_skrill.ini</language>
-		<language tag="en-GB">en-GB.plg_akpayment_skrill.sys.ini</language>
-		<language tag="es-ES">en-GB.plg_akpayment_skrill.ini</language>
-		<language tag="es-ES">en-GB.plg_akpayment_skrill.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_skrill.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_skrill.sys.ini</language>
 	</languages>
 	<params>
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_TITLE_LABEL" description="PLG_AKPAYMENT_SKRILL_TITLE_DESC"/>

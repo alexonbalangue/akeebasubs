@@ -16,7 +16,5 @@
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_affemails.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_affemails.sys.ini</language>
-		<language tag="el-GR">el-GR/el-GR.plg_akeebasubs_affemails.ini</language>
-		<language tag="el-GR">el-GR/el-GR.plg_akeebasubs_affemails.sys.ini</language>
 	</languages>
 </install>

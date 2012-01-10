@@ -13,18 +13,8 @@
 	<files>
 		<filename plugin="samplefields">samplefields.php</filename>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_akeebasubs_samplefields.ini</language>
-		<language tag="en-GB">en-GB.plg_akeebasubs_samplefields.sys.ini</language>
-		<language tag="da-DK">da-DK.plg_akeebasubs_samplefields.ini</language>
-		<language tag="da-DK">da-DK.plg_akeebasubs_samplefields.sys.ini</language>
-		<language tag="de-DE">de-DE.plg_akeebasubs_samplefields.ini</language>
-		<language tag="de-DE">de-DE.plg_akeebasubs_samplefields.sys.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_samplefields.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_samplefields.sys.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_samplefields.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_samplefields.sys.ini</language>
-		<language tag="pl-PL">pl-PL.plg_akeebasubs_samplefields.ini</language>
-		<language tag="pl-PL">pl-PL.plg_akeebasubs_samplefields.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_samplefields.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_samplefields.sys.ini</language>
 	</languages>
 </install>

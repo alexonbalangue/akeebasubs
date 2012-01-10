@@ -13,13 +13,9 @@
 	<files>
 		<filename plugin="redshop">redshop.php</filename>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_akeebasubs_redshop.ini</language>
-		<language tag="en-GB">en-GB.plg_akeebasubs_redshop.sys.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_redshop.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_redshop.sys.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_redshop.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_redshop.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_redshop.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_redshop.sys.ini</language>
 	</languages>
 	<params>
 		<param name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_REDSHOP_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_REDSHOP_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />

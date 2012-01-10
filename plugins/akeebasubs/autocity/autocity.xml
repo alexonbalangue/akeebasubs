@@ -13,18 +13,8 @@
 	<files>
 		<filename plugin="autocity">autocity.php</filename>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_akeebasubs_autocity.ini</language>
-		<language tag="en-GB">en-GB.plg_akeebasubs_autocity.sys.ini</language>
-		<language tag="da-DK">da-DK.plg_akeebasubs_autocity.ini</language>
-		<language tag="da-DK">da-DK.plg_akeebasubs_autocity.sys.ini</language>
-		<language tag="de-DE">de-DE.plg_akeebasubs_autocity.ini</language>
-		<language tag="de-DE">de-DE.plg_akeebasubs_autocity.sys.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_autocity.ini</language>
-		<language tag="el-GR">el-GR.plg_akeebasubs_autocity.sys.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_autocity.ini</language>
-		<language tag="es-ES">es-ES.plg_akeebasubs_autocity.sys.ini</language>
-		<language tag="pl-PL">pl-PL.plg_akeebasubs_autocity.ini</language>
-		<language tag="pl-PL">pl-PL.plg_akeebasubs_autocity.sys.ini</language>
+	<languages fodler="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_autocity.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_autocity.sys.ini</language>
 	</languages>
 </install>

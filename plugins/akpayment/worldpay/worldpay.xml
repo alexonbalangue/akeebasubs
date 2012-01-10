@@ -14,15 +14,9 @@
 		<filename plugin="worldpay">worldpay.php</filename>
 		<folder>worldpay</folder>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_akpayment_worldpay.ini</language>
-		<language tag="en-GB">en-GB.plg_akpayment_worldpay.sys.ini</language>
-		<language tag="da-DK">da-DK.plg_akpayment_worldpay.ini</language>
-		<language tag="da-DK">da-DK.plg_akpayment_worldpay.sys.ini</language>
-		<language tag="el-GR">el-GR.plg_akpayment_worldpay.ini</language>
-		<language tag="el-GR">el-GR.plg_akpayment_worldpay.sys.ini</language>
-		<language tag="es-ES">es-ES.plg_akpayment_worldpay.ini</language>
-		<language tag="es-ES">es-ES.plg_akpayment_worldpay.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_worldpay.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_worldpay.sys.ini</language>
 	</languages>
 	<params>
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_TITLE_LABEL" description="PLG_AKPAYMENT_WORLDPAY_TITLE_DESC"/>

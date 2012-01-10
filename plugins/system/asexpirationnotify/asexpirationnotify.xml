@@ -20,16 +20,8 @@
 		<filename plugin="asexpirationnotify">asexpirationnotify.php</filename>
 		<folder>asexpirationnotify</folder>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_system_asexpirationnotify.ini</language>
-		<language tag="en-GB">en-GB.plg_system_asexpirationnotify.sys.ini</language>
-		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.ini</language>
-		<language tag="da-DK">da-DK.plg_system_asexpirationnotify.sys.ini</language>
-		<language tag="de-DE">de-DE.plg_system_asexpirationnotify.ini</language>
-		<language tag="de-DE">de-DE.plg_system_asexpirationnotify.sys.ini</language>
-		<language tag="el-GR">el-GR.plg_system_asexpirationnotify.ini</language>
-		<language tag="el-GR">el-GR.plg_system_asexpirationnotify.sys.ini</language>
-		<language tag="es-ES">es-ES.plg_system_asexpirationnotify.ini</language>
-		<language tag="es-ES">es-ES.plg_system_asexpirationnotify.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_system_asexpirationnotify.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_system_asexpirationnotify.sys.ini</language>
 	</languages>
 </install>

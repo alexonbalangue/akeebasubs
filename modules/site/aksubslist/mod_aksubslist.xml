@@ -13,15 +13,9 @@
 	<files>
 		<file module="mod_aksubslist">mod_aksubslist.php</file>
 	</files>
-	<languages folder="translation">
-		<language tag="en-GB">en-GB.mod_aksubslist.ini</language>
-		<language tag="en-GB">en-GB.mod_aksubslist.sys.ini</language>
-		<language tag="da-DK">da-DK.mod_aksubslist.ini</language>
-		<language tag="da-DK">da-DK.mod_aksubslist.sys.ini</language>
-		<language tag="es-ES">es-ES.mod_aksubslist.ini</language>
-		<language tag="es-ES">es-ES.mod_aksubslist.sys.ini</language>
-		<language tag="pl-PL">pl-PL.mod_aksubslist.ini</language>
-		<language tag="pl-PL">pl-PL.mod_aksubslist.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.mod_aksubslist.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_aksubslist.sys.ini</language>
 	</languages>
 
 	<params>

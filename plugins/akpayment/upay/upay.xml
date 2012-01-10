@@ -14,9 +14,9 @@
 		<filename plugin="upay">upay.php</filename>
 		<folder>upay</folder>
 	</files>
-	<languages>
-		<language tag="en-GB">en-GB.plg_akpayment_upay.ini</language>
-		<language tag="en-GB">en-GB.plg_akpayment_upay.sys.ini</language>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_upay.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_upay.sys.ini</language>
 	</languages>
 	<params>
 		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_UPAY_MERCHANT_LABEL" description="PLG_AKPAYMENT_UPAY_MERCHANT_DESC"/>
