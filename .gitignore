@@ -14,8 +14,12 @@ component/backend/liveupdate/classes
 component/backend/liveupdate/language/en-GB
 component/backend/liveupdate/LICENSE.txt
 component/backend/liveupdate/liveupdate.php
-plugins/system/oneclickaction
+plugins/system/oneclickaction/language/en-GB
+plugins/system/oneclickaction/LICENSE.txt
+plugins/system/oneclickaction/oneclickaction.php
+plugins/system/oneclickaction/oneclickaction.xml
 component/backend/fof
 
 component/language/en-GB
+translations/plugins/system/oneclickaction
 
