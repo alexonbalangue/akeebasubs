@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.0
 ================================================================================
++ #47 AcyMailing integration
 # Language strings containing quotes could cause the Subscribe Now button to fail
 # MOIP payment plugin: all transactions would be reported as failed
 
