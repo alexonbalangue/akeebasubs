@@ -106,7 +106,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_akeebasubs_subscriptionemails.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
-		jinclude('joomla.html.parameter');
+		jimport('joomla.html.parameter');
 		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
