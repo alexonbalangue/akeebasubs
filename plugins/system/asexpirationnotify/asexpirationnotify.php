@@ -164,7 +164,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 						'first_contact'		=> $mNow
 					);
 					$this->sendEmail($sub, true);
-				} else {
+				} elseif($sub->contact_flag == 1) {
 					// Second and final contact
 					$data = array(
 						'contact_flag'		=> 2,
