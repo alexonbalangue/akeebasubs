@@ -25,3 +25,6 @@ translations/plugins/system/oneclickaction
 
 modules/site/*/language/en-GB
 plugins/*/*/language/en-GB
+component/language/backend
+component/language/frontend
+
