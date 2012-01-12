@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.0
 # MOIP payment plugin: all transactions would be reported as failed
 # Fatal error: Class 'JParameter' not found in plugins/akeebasubs/subscriptionemails/subscriptionemails.php on line 109
 # Link to Subscription Level in Subscriptions view is broken (thank you David-Andrew)
+# The importer wasn't being included in the installation packages
 
 Akeeba Subscriptions 2.0.RC1
 ================================================================================
