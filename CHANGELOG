@@ -3,6 +3,7 @@ Akeeba Subscriptions 2.0
 ================================================================================
 + #47 AcyMailing integration
 + Phoca Downloads plugin (thank you, Roland!)
++ The aslink plugin now adds the correct Itemid (thank you Daniel!)
 # Language strings containing quotes could cause the Subscribe Now button to fail
 # MOIP payment plugin: all transactions would be reported as failed
 # Fatal error: Class 'JParameter' not found in plugins/akeebasubs/subscriptionemails/subscriptionemails.php on line 109
