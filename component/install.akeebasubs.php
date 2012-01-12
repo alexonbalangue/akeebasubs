@@ -133,13 +133,7 @@ $removeFolders = array(
 	'administrator/components/com_akeebasubs/toolbars',
 	'administrator/components/com_akeebasubs/toolbars-xxx',
 	'administrator/components/com_akeebasubs/views/config',
-	'administrator/components/com_akeebasubs/views/coupon',
 	'administrator/components/com_akeebasubs/views/dashboard',
-	'administrator/components/com_akeebasubs/views/level',
-	'administrator/components/com_akeebasubs/views/subscription',
-	'administrator/components/com_akeebasubs/views/taxrule',
-	'administrator/components/com_akeebasubs/views/upgrade',
-	'administrator/components/com_akeebasubs/views/user',
 	'components/com_akeebasubs/templates',
 	'components/com_akeebasubs/controllers/behaviors',
 );
