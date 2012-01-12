@@ -343,16 +343,15 @@ if(count($installation_queue['plugins'])) {
 // Load the translation strings (Joomla! 1.5 and 1.6 compatible)
 if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
 	global $j15;
-	// Joomla! 1.5 will have to load the translation strings
 	$j15 = true;
-	$jlang =& JFactory::getLanguage();
-	$path = JPATH_ADMINISTRATOR.'/components/com_akeebasubs';
-	$jlang->load('com_akeebasubs.sys', $path, 'en-GB', true);
-	$jlang->load('com_akeebasubs.sys', $path, $jlang->getDefault(), true);
-	$jlang->load('com_akeebasubs.sys', $path, null, true);
 } else {
 	$j15 = false;
 }
+
+$jlang =& JFactory::getLanguage();
+$jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
+$jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+$jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, null, true);
 
 // Define the Akeeba installation translation functions, compatible with both Joomla! 1.5 and 1.6
 if(!function_exists('pitext'))
