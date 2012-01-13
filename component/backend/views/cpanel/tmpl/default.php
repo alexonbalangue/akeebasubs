@@ -362,3 +362,6 @@ $this->loadHelper('cparams');
 	});
 })(akeeba.jQuery);
 </script>
+
+<div style="clear: both;"></div>
+<?php echo $this->loadTemplate('footer'); ?>
