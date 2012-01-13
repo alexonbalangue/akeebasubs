@@ -4591,6 +4591,14 @@ LEVEL3=Group 1</programlisting>
         <uri>http://localhost/administrator/index.php?option=com_akeebasubs&amp;view=level&amp;id=2</uri>.
         The number after &amp;id= is the numeric ID of the level. In this
         example, the numeric ID is 2.</para>
+
+        <para>Moreover, you can use the following syntax:</para>
+
+        <programlisting>{ aslink view=levels }</programlisting>
+
+        <para>to create a link to the Subscription Levels view. This is
+        usually quicker than creating a link to a menu item and remembering to
+        change that link whenever your menu structure changes.</para>
       </section>
     </section>
   </chapter>
