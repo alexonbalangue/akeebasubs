@@ -2498,8 +2498,10 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         instructions message. In that message you can use the variables
         <replaceable>{SUBSCRIPTION}</replaceable> to display the subscription
         ID and <replaceable>{AMOUNT}</replaceable> to display the amount due.
-        Please use all caps for these variables and include the curly
-        braces.</para>
+        You can also use <replaceable>{FIRSTNAME}</replaceable> and
+        <replaceable>{LASTNAME}</replaceable> for the user's first and last
+        name, respectively. Please use all caps for these variables and
+        include the curly braces.</para>
 
         <para>Once the user effects the payment, simply go to your
         Subscriptions view, enable his subscriptions and set the payment

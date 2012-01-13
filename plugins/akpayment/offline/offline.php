@@ -57,6 +57,14 @@ class plgAkpaymentOffline extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
+		$nameParts = explode(' ', $user->name, 2);
+		$firstName = $nameParts[0];
+		if(count($nameParts) > 1) {
+			$lastName = $nameParts[1];
+		} else {
+			$lastName = '';
+		}
+		
 		$html = $this->params->get('instructions','');
 		if(empty($html)) {
 			$html = <<<ENDTEMPLATE
@@ -73,6 +81,8 @@ ENDTEMPLATE;
 		}
 		$html = str_replace('{AMOUNT}', sprintf('%01.02f', $subscription->gross_amount), $html);
 		$html = str_replace('{SUBSCRIPTION}', sprintf('%06u', $subscription->akeebasubs_subscription_id), $html);
+		$html = str_replace('{FIRSTNAME}', sprintf('%06u', $firstName), $html);
+		$html = str_replace('{LASTNAME}', sprintf('%06u', $lastName), $html);
 		$html = '<div>'.$html.'</div>';
 
 		return $html;
