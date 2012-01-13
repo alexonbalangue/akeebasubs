@@ -9,6 +9,7 @@ Akeeba Subscriptions 2.0
 # Fatal error: Class 'JParameter' not found in plugins/akeebasubs/subscriptionemails/subscriptionemails.php on line 109
 # Link to Subscription Level in Subscriptions view is broken (thank you David-Andrew)
 # The importer wasn't being included in the installation packages
+# "Run Integrations" would only process 100 users and never complete
 
 Akeeba Subscriptions 2.0.RC1
 ================================================================================
