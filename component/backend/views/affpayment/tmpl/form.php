@@ -25,6 +25,7 @@ $this->loadHelper('format');
 	<input type="hidden" name="view" value="affpayment" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_affpayment_id" value="<?php echo $this->item->akeebasubs_affpayment_id ?>" />
+	<input type="hidden" name="created_by" value="<?php echo empty($this->item->created_by) ? JFactory::getUser()->id : $this->item->created_by; ?>" />
 	<input type="hidden" name="<?php echo JUtility::getToken();?>" value="1" />
 
 <fieldset id="coupons-basic" style="width: 48%; float: left;">
