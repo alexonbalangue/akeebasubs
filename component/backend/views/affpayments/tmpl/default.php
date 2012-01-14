@@ -40,6 +40,9 @@ $this->loadHelper('format');
 			<th width="15%">
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFPAYMENT_CREATED', 'amount', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
+			<th width="15%">
+				<?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENT_CREATEDBY') ?>
+			</th>
 			
 		</tr>
 		<tr>
@@ -58,6 +61,7 @@ $this->loadHelper('format');
 					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
 				</button>
 			</td>
+			<td></td>
 			<td></td>
 			<td></td>
 		</tr>
@@ -86,7 +90,7 @@ $this->loadHelper('format');
 				<?php echo JHTML::_('grid.id', $i, $item->akeebasubs_affpayment_id); ?>
 			</td>
 			<td>
-					<?php if(AkeebasubsHelperCparams::getParam('gravatar')):?>
+					<?php if(AkeebasubsHelperCparams::getParam('gravatar',true)):?>
 						<?php if(JURI::getInstance()->getScheme() == 'http'): ?>
 							<img src="http://www.gravatar.com/avatar/<?php echo md5(strtolower($item->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
 						<?php else: ?>
@@ -107,6 +111,22 @@ $this->loadHelper('format');
 			</td>
 			<td>
 				<?php echo AkeebasubsHelperFormat::date($item->created_on) ?>
+			</td>
+			<td>
+				<?php $paymentUser = JFactory::getUser($item->created_by) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('gravatar',true)):?>
+					<?php if(JURI::getInstance()->getScheme() == 'http'): ?>
+						<img src="http://www.gravatar.com/avatar/<?php echo md5(strtolower($paymentUser->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
+					<?php else: ?>
+						<img src="https://secure.gravatar.com/avatar/<?php echo md5(strtolower($paymentUser->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
+					<?php endif; ?>
+					<?php endif; ?>
+				<strong><?php echo $this->escape($paymentUser->username) ?></strong>
+				<span class="small">[<?php echo $paymentUser->id?>]</span>
+				<br/>
+				<?php echo $this->escape($paymentUser->name)?>
+				<br/>
+				<?php echo $this->escape($paymentUser->email)?>	
 			</td>
 		</tr>
 		<?php endforeach; ?>

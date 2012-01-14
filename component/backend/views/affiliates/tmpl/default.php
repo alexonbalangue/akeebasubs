@@ -93,7 +93,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?php echo $this->escape($item->username) ?>::<?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_EDIT_TOOLTIP')?>">
-					<?php if(AkeebasubsHelperCparams::getParam('gravatar')):?>
+					<?php if(AkeebasubsHelperCparams::getParam('gravatar',true)):?>
 						<?php if(JURI::getInstance()->getScheme() == 'http'): ?>
 							<img src="http://www.gravatar.com/avatar/<?php echo md5(strtolower($item->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
 						<?php else: ?>

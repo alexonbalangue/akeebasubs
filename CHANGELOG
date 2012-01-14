@@ -12,6 +12,7 @@ Akeeba Subscriptions 2.0
 # The importer wasn't being included in the installation packages
 # "Run Integrations" would only process 100 users and never complete
 # created_by field not filled in when saving an affiliate payment (thanks Roland!)
+# Gravatars wouldn't load until you saved the component configuration
 
 Akeeba Subscriptions 2.0.RC1
 ================================================================================
