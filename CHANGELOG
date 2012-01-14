@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.0
 + Phoca Downloads plugin (thank you, Roland!)
 + The aslink plugin now adds the correct Itemid (thank you Daniel!)
 + Added {FIRSTNAME} and {LASTNAME} tags to the Offline Payment plugin
++ You can now see who made the affiliate payment
 # Language strings containing quotes could cause the Subscribe Now button to fail
 # MOIP payment plugin: all transactions would be reported as failed
 # Fatal error: Class 'JParameter' not found in plugins/akeebasubs/subscriptionemails/subscriptionemails.php on line 109
