@@ -32,7 +32,7 @@ Akeeba Subscriptions 2.0.RC1
 # JS error thrown in the control panel page if no subscriptions exist
 # The State field in the subscription page would show up in a very confusing place
 # Invalid characters were allowed in the Subscription Levels' slugs
-# The "Administrator Emails" plugin was broken (thanks Paven!)
+# The "Administrator Emails" plugin was broken (thanks Pavan!)
 
 Akeeba Subscriptions 2.0.b2
 ================================================================================
