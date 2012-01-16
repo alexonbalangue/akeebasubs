@@ -52,7 +52,7 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VE
 		?>
         <tr class="row<?php echo $m?> <?php echo $rowClass?>">
 	        <td>
-	      		<a href="index.php?option=com_akeebasubs&view=subscription&id=<?php $subscription->akeebasubs_subscription_id ?>">
+	      		<a href="index.php?option=com_akeebasubs&view=subscription&id=<?php echo $subscription->akeebasubs_subscription_id ?>">
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</a>
 	        </td>
