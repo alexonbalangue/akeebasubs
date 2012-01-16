@@ -15,6 +15,7 @@ Akeeba Subscriptions 2.0
 # "Run Integrations" would only process 100 users and never complete
 # created_by field not filled in when saving an affiliate payment (thanks Roland!)
 # Gravatars wouldn't load until you saved the component configuration
+# The off-line payment plugin's Instructions field wouldn't accept HTML in Joomla! 1.6 and later
 
 Akeeba Subscriptions 2.0.RC1
 ================================================================================

@@ -2503,6 +2503,17 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         name, respectively. Please use all caps for these variables and
         include the curly braces.</para>
 
+        <tip>
+          <para>The text in this field is HTML code. If you want to add
+          linebreaks, just add a &lt;br/&gt; tag. Of course you can use any
+          kind of HTML markup you wish, such as &lt;b&gt; for bold text, or
+          even embed a Flash file (even though I can't possibly think
+          <emphasis>why</emphasis> you'd want to do <emphasis>that</emphasis>)
+          as long as it's allowed by your Joomla! version and preferences.
+          It's safe to assume that basic HTML like &lt;p&gt;, &lt;em&gt;,
+          &lt;b&gt; and &lt;a&gt; tags will work.</para>
+        </tip>
+
         <para>Once the user effects the payment, simply go to your
         Subscriptions view, enable his subscriptions and set the payment
         status to "Completed". That's all!</para>
