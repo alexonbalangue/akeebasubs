@@ -12,7 +12,7 @@ $jRelDate = new JDate(AKEEBASUBS_DATE);
 	</strong>
 	<br/>
 	<span style="font-size: x-small">
-		Copyright &copy;2010&ndash;<?php echo $jRelDate->format('y') ?>
+		Copyright &copy;2010&ndash;<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? $jRelDate->format('y') : $jRelDate->toFormat('%y') ?>
 		Nicholas K. Dionysopoulos / AkeebaBackup.com
 	</span>
 	<br/>
