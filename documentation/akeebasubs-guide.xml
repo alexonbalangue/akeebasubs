@@ -4229,7 +4229,7 @@ LEVEL3=Group 1</programlisting>
         in the past.</para>
       </section>
 
-      <section>
+      <section xml:id="integration-sql">
         <title>Custom SQL scripts</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
@@ -4258,6 +4258,38 @@ LEVEL3=Group 1</programlisting>
         variable will be replaced with the user's numeric ID for the user
         whose subscription Akeeba Subscriptions is currently
         processing.</para>
+      </section>
+
+      <section xml:id="integration-redshopusersync">
+        <title>RedShop User Synchronisation</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - RedShop User Synchronisation</guilabel></para>
+
+        <para>This plugin provides two-way synchronisation between the user
+        data stored in RedShop and Akeeba Subscriptions. Such data include the
+        name of the user, email address, address data, business name and VAT
+        number. When enabled, two things will happen:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>When a user enters the subscription page, the form will be
+            pre-filled with his main RedShop address details, as long as he's
+            logged in</para>
+          </listitem>
+
+          <listitem>
+            <para>When the user submits the subscription form, the main
+            RedShop address of this user will be created/updated with the
+            information he entered in the subscription form</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>This plugin WILL NOT magically synchronise data when it changes
+        in RedShop. The synchronisation occurs ONLY when the user is visiting
+        the subscription page to make a new subscription or "renew" an
+        existing one (subscription renewal in Akeeba Subscriptions is the same
+        thing as a new subscription).</para>
       </section>
     </section>
 
