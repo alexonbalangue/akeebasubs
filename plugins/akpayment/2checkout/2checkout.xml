@@ -39,7 +39,7 @@
 			description="PLG_AKPAYMENT_2CHECKOUT_LANG_DESC">
 		  <option value="en">PLG_AKPAYMENT_2CHECKOUT_LANG_EN</option>
 		  <option value="zh">PLG_AKPAYMENT_2CHECKOUT_LANG_ZH</option>
-		  <option value="da">PLG_AKPAYMENT_2CHECKOUT_LANG_SA</option>
+		  <option value="da">PLG_AKPAYMENT_2CHECKOUT_LANG_DA</option>
 		  <option value="nl">PLG_AKPAYMENT_2CHECKOUT_LANG_NL</option>
 		  <option value="fr">PLG_AKPAYMENT_2CHECKOUT_LANG_FR</option>
 		  <option value="gr">PLG_AKPAYMENT_2CHECKOUT_LANG_GR</option>
@@ -90,7 +90,7 @@
 					description="PLG_AKPAYMENT_2CHECKOUT_LANG_DESC">
 				  <option value="en">PLG_AKPAYMENT_2CHECKOUT_LANG_EN</option>
 				  <option value="zh">PLG_AKPAYMENT_2CHECKOUT_LANG_ZH</option>
-				  <option value="da">PLG_AKPAYMENT_2CHECKOUT_LANG_SA</option>
+				  <option value="da">PLG_AKPAYMENT_2CHECKOUT_LANG_DA</option>
 				  <option value="nl">PLG_AKPAYMENT_2CHECKOUT_LANG_NL</option>
 				  <option value="fr">PLG_AKPAYMENT_2CHECKOUT_LANG_FR</option>
 				  <option value="gr">PLG_AKPAYMENT_2CHECKOUT_LANG_GR</option>
