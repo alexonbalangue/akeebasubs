@@ -14,14 +14,14 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="Redirect_Url" value="<?php echo $data->postback ?>" />
 	<input type="hidden" name="Checksum" value="<?php echo $data->checksum ?>" />
 	<input type="hidden" name="billing_cust_name" value="<?php echo htmlentities($data->firstname) ?> <?php echo htmlentities($data->lastname) ?>" />
-	<input type="hidden" name="billing_cust_address" value="<?php echo $kuser->address.(empty($kuser->address2)?'':', '.$kuser->address2) ?>">
+	<input type="hidden" name="billing_cust_address" value="<?php echo $kuser->address1.(empty($kuser->address2)?'':', '.$kuser->address2) ?>">
 	<input type="hidden" name="billing_cust_country" value="<?php echo $kuser->country ?>">
 	<input type="hidden" name="billing_cust_state" value="<?php echo $kuser->state ?>">
 	<input type="hidden" name="billing_zip" value="<?php echo $kuser->zip ?>">
 	<input type="hidden" name="billing_cust_city" value="<?php echo $kuser->city ?>">
 	<input type="hidden" name="billing_zip_code" value="<?php echo $kuser->zip ?>">
 	<input type="hidden" name="delivery_cust_name" value="<?php echo htmlentities($data->firstname) ?> <?php echo htmlentities($data->lastname) ?>" />
-	<input type="hidden" name="delivery_cust_address" value="<?php echo $kuser->address.(empty($kuser->address2)?'':', '.$kuser->address2) ?>">
+	<input type="hidden" name="delivery_cust_address" value="<?php echo $kuser->address1.(empty($kuser->address2)?'':', '.$kuser->address2) ?>">
 	<input type="hidden" name="delivery_cust_country" value="<?php echo $kuser->country ?>">
 	<input type="hidden" name="delivery_cust_state" value="<?php echo $kuser->state ?>">
 	<input type="hidden" name="delivery_zip" value="<?php echo $kuser->zip ?>">
