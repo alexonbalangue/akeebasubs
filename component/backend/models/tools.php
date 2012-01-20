@@ -11,6 +11,10 @@ defined('_JEXEC') or die();
 class AkeebasubsModelTools extends FOFModel
 {
 	public function __construct($config = array()) {
+		// This is a dirty trick to avoid getting warning PHP messages by the
+		// JDatabase layer
+		$config['table'] = 'levels';
+		
 		parent::__construct($config);
 		
 		$this->scanConverters();

@@ -17,6 +17,7 @@ Akeeba Subscriptions 2.0
 # Gravatars wouldn't load until you saved the component configuration
 # The off-line payment plugin's Instructions field wouldn't accept HTML in Joomla! 1.6 and later
 # ccAvenue payment: the address wasn't passed on (thank you Pavan)
+# Warnings thrown in the import page
 
 Akeeba Subscriptions 2.0.RC1
 ================================================================================
