@@ -104,7 +104,6 @@ $removeFiles = array(
 	'administrator/components/com_akeebasubs/views/affiliates/tmpl/form.php',
 	'administrator/components/com_akeebasubs/views/affpayments/tmpl/form.php',
 	'administrator/components/com_akeebasubs/views/coupons/tmpl/form.php',
-	'administrator/components/com_akeebasubs/views/levels/tmpl/form.php',
 	'administrator/components/com_akeebasubs/views/subscriptions/tmpl/form.php',
 	'administrator/components/com_akeebasubs/views/taxrules/tmpl/form.php',
 	'administrator/components/com_akeebasubs/views/upgrades/tmpl/form.php',
