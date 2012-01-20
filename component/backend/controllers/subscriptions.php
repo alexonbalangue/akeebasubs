@@ -46,4 +46,21 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		
 		return parent::browse($cachable);
 	}
+	
+	public function publish()
+	{
+		$this->noop();
+	}
+	
+	public function unpublish()
+	{
+		$this->noop();
+	}
+	
+	public function noop()
+	{
+		if($customURL = FOFInput::getString('returnurl','',$this->input)) $customURL = base64_decode($customURL);
+		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
+		$this->setRedirect($url);
+	}
 }
