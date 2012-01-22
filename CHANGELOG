@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.0.1
+================================================================================
+# The RedShop user sync plugin wasn't being installed
+
 Akeeba Subscriptions 2.0
 ================================================================================
 + #47 AcyMailing integration
