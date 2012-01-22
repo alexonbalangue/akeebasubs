@@ -54,6 +54,7 @@ $installation_queue = array(
 			'k2'					=> 0,
 			'ninjaboard'			=> 0,
 			'redshop'				=> 0,
+			'redshopusersync'		=> 0,
 			'samplefields'			=> 0,
 			'sql'					=> 0,
 			'subscriptionemails'	=> 1,
