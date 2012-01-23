@@ -112,7 +112,7 @@ unset($upgradesRaw);
 				<input type="text" name="paykey" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('paykey',''));?>"
 					class="text_area" onchange="document.adminForm.submit();"
-					title="COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY" />
+					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?>" />
 				<!--
 				<button onclick="this.form.submit();">
 					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
@@ -126,7 +126,7 @@ unset($upgradesRaw);
 				<input type="text" name="filter_discountcode" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('filter_discountcode',''));?>"
 					class="text_area" onchange="document.adminForm.submit();"
-					title="COM_AKEEBASUBS_SUBSCRIPTION_DISCOUNTCODE" />
+					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_DISCOUNTCODE')?>" />
 			</td>
 			<td></td>
 			<td>
