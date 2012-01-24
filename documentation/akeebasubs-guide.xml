@@ -2906,6 +2906,73 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           in translation. Thanks!</para>
         </important>
       </section>
+
+      <section xml:id="payment-deltapay">
+        <title>DeltaPay (Alpha Bank, Greece)</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - DeltaPay (Alpha Bank,
+        Greece)</guilabel></para>
+
+        <para>This payment method integrates the DelptaPay payment processor
+        operated in Greece by Alpha Bank. It implements the HTML method which
+        redirects your user to DeltaPay's server where they can enter their
+        Credit Card details.</para>
+
+        <warning>
+          <para>The DeltaPay system lacks any fraud protection and its
+          security model is flaky. It is trivial for an unskilled hacker to
+          spoof a payment notification and subscribe without paying. We
+          <emphasis role="bold">STRONGLY</emphasis> recommend against using
+          it. The only reason we include it is that some of our clients
+          requested it.</para>
+        </warning>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>When you open a merchant account with Alpha Bank, they'll
+              give you a merchant ID. Put it in this field.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>You will have to give some URLs to Alpha Bank before going
+        live.</para>
+
+        <para>The first one is the "Payment page". Unfortunately, this can not
+        be provided, as the referrer page (where the client performs the
+        payment from) depends on your menu structure and the subscription
+        level your user buys. If they insist, give them this URL:</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=subscribe</uri></para>
+
+        <para>Where www.example.com is the domain name of your site. If this
+        doesn't work and ask you to contact your web developer to change the
+        payment system, we regret to inform you that this IS NOT AN OPTION.
+        Besides, the bank checking the HTTP referer field for "security
+        reasons" (as they say in their documentation) is stupid. This HTTP
+        field can be forged very easily or even turned off (ref. <link
+        xlink:href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec15.html">RFC
+        2616 ch. 15.1.2 §7</link>) and must not be used for security purposes.
+        Moreover, not allowing more than one payment URLs is unheard of in
+        this decade. Please ask the bank to fix their system. After all, it's
+        YOUR money on the line.</para>
+
+        <para>The other three URLs they require are the Success, Failure and
+        Cancel pages. For all of them give them this URL:</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=deltapay</uri></para>
+
+        <para>where www.example.com must be replaced with the domain name of
+        your site.</para>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
