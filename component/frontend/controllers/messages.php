@@ -50,6 +50,43 @@ class AkeebasubsControllerMessages extends FOFController
 			->getItem();
 		$this->getThisView()->assign('subscription',$subscription);
 		
+		// Joomla! 1.6 and later - we have to effectively "re-login" the user,
+		// otherwise his ACL privileges are stale.
+		$userid = JFactory::getUser()->id;
+		if(empty($userid)) {
+			$userid = $subscription->user_id;
+		}
+		if($userid && version_compare(JVERSION, '1.6.0', 'ge')) {
+			// This line returns an empty JUser object
+			$newUserObject = new JUser();
+			// This line FORCE RELOADS the user record.
+			$newUserObject->load($userid);
+			
+			if($newUserObject->id == $userid)
+			{
+				// Mark the user as logged in
+				$newUserObject->set('guest', 0);
+				// Register the needed session variables
+				$session = JFactory::getSession();
+				$session->set('user', $newUserObject);
+				$db = JFactory::getDBO();
+				// Check to see the the session already exists.
+				$app = JFactory::getApplication();
+				$app->checkSession();
+				// Update the user related fields for the Joomla sessions table.
+				$db->setQuery(
+					'UPDATE `#__session`' .
+					' SET `guest` = '.$db->quote($newUserObject->get('guest')).',' .
+					'	`username` = '.$db->quote($newUserObject->get('username')).',' .
+					'	`userid` = '.(int) $newUserObject->get('id') .
+					' WHERE `session_id` = '.$db->quote($session->getId())
+				);
+				$db->query();
+				// Hit the user last visit field
+				$newUserObject->setLastVisit();
+			}
+		}
+		
 		return true;
 	}
 }
