@@ -14,7 +14,7 @@ class plgAkpaymentDeltapay extends JPlugin
 	/**
 	 * Maps currency three letter codes to number, as per ISO 4217
 	 */
-	const currencyMap = array(
+	private $currencyMap = array(
 		'AED' => 784, 'AFN' => 971, 'ALL' => 8, 'AMD' => 51, 'ANG' => 532, 'AOA' => 973,
 		'ARS' => 32, 'AUD' => 36, 'AWG' => 533, 'AZN' => 944, 'BAM' => 977, 'BBD' => 52,
 		'BDT' => 50, 'BGN' => 975, 'BHD' => 48, 'BIF' => 108, 'BMD' => 60, 'BND' => 96,
@@ -111,9 +111,8 @@ class plgAkpaymentDeltapay extends JPlugin
 		}
 		
 		$currency = strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'));
-		if(array_key_exists($currency, self::currencyMap)) {
-			$x = self::currencyMap;
-			$currencyCode = $x[$currency];
+		if(array_key_exists($currency, $this->currencyMap)) {
+			$currencyCode = $this->currencyMap[$currency];
 		} else {
 			$currencyCode = 999;
 		}
