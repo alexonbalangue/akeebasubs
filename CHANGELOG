@@ -6,6 +6,7 @@ Akeeba Subscriptions 2.0.1
 # The RedShop user sync plugin wasn't being installed
 # Two untranslated strings in the title fields in the subscriptions list view
 # The offline payment's text would not appear on the front-end
+# You could not change the ordering in Joomla! 2.5.0 due to undocumented JavaScript changes in the Joomla! core
 
 Akeeba Subscriptions 2.0
 ================================================================================

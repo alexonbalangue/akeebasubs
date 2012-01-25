@@ -40,7 +40,7 @@ foreach($upgradesRaw as $upgrade) {
 unset($upgradesRaw);
 
 ?>
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="subscriptions" />
 <input type="hidden" id="task" name="task" value="browse" />

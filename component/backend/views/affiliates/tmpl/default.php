@@ -13,7 +13,7 @@ JHtml::_('behavior.mootools');
 $this->loadHelper('select');
 $this->loadHelper('cparams');
 ?>
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="affiliates" />
 <input type="hidden" id="task" name="task" value="browse" />

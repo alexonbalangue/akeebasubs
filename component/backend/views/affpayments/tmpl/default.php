@@ -14,7 +14,7 @@ $this->loadHelper('select');
 $this->loadHelper('cparams');
 $this->loadHelper('format');
 ?>
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="affpayments" />
 <input type="hidden" id="task" name="task" value="browse" />
