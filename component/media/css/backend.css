@@ -29,6 +29,14 @@ span.akeebasubs-booleangroup {
 	float: left;
 }
 
+span.akeebasubs-booleangroup input,
+span.akeebasubs-booleangroup label {
+	float: none !important;
+	display: inline-block !important;
+	margin-left: 4px !important;
+	padding: 0 !important;
+}
+
 .akeebasubs-clear { clear:both; }
 label.title, input.title { font-weight: bold; font-size: larger; }
 label.main { display: inline-block; width: 45%; background: #e0e0e0; border-bottom: 1px solid gray; padding: 2px; margin-bottom: 2px }

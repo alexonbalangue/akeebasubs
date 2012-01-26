@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`price` FLOAT NOT NULL,
 	`ordertext` text,
 	`canceltext` text,
+	`only_once` TINYINT(3) DEFAULT 0,
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,

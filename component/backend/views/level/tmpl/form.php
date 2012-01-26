@@ -65,6 +65,12 @@ $this->loadHelper('cparams');
 		</span>
 		<div class="akeebasubs-clear"></div>
 		
+		<label for="only_once" class="main mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_ONLY_ONCE'); ?></label>
+		<span class="akeebasubs-booleangroup">
+			<?php echo JHTML::_('select.booleanlist', 'only_once', null, $this->item->only_once); ?>
+		</span>
+		<div class="akeebasubs-clear"></div>
+		
 		<label for="notify1_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY1'); ?></label>
 		<input type="text" size="6" id="notify1_field" name="notify1" value="<?php echo  (int)$this->item->notify1 ?>" />
 		<div class="akeebasubs-clear"></div>

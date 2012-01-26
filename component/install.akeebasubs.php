@@ -243,6 +243,22 @@ ENDSQL;
 	$status = $db->query();
 }
 
+// Upgrade the subscriptions table (2.1)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`only_once`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_levels`
+	ADD COLUMN `only_once` TINYINT(3) DEFAULT 0 AFTER `canceltext`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
+
 // =============================================================================
 // Sub-extension installation
 // =============================================================================
