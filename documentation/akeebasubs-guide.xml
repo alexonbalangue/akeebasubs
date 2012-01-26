@@ -1012,6 +1012,18 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Forbid renewals</term>
+
+          <listitem>
+            <para>Is set to Yes, a user can subscribe to this level only ONCE.
+            He won't be able to renew his subscription. Useful in setting up
+            "trial subscriptions", i.e. cheap or even free subscription levels
+            with very limited duration which a user can subscribe to only
+            once.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>First expiration notification (days)</term>
 
           <listitem>
@@ -1707,6 +1719,15 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       create 100% discount coupons for giveaways or other similar promotional
       reasons.</para>
 
+      <note>
+        <para>You can not publish/unpublish coupons. A coupon will be
+        automatically published when the current date is between its Valid
+        From / Valid To dates. Likewise, a coupon will be automatically
+        unpublished when the current date is outside its Valid From / Valid To
+        dates. In order to unpublish a coupon set its Valid To date in the
+        past and it will be automatically unpublished.</para>
+      </note>
+
       <para>Each coupon supports the following fields:</para>
 
       <variablelist>
@@ -1774,10 +1795,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
           <listitem>
             <para>When the coupon will become active (note: the date is
-            expressed in the GMT/UTC timezone). Leave blank or set to
-            0000-00-00 00:00:00 to make the coupon active right now. Note: a
-            published coupon will not be taken into account before its Valid
-            From date.</para>
+            expressed in the GMT/UTC timezone). Leave blank and it will be
+            adjusted automatically.</para>
           </listitem>
         </varlistentry>
 
@@ -1786,11 +1805,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
           <listitem>
             <para>When the coupon will become inactive (note: the date is
-            expressed in the GMT/UTC timezone). Leave blank or set to
-            0000-00-00 00:00:00 to let Akeeba Subscriptions ignore this field
-            and let the coupon active until you manually unpublish it. Note: a
-            published coupon will not be taken into account after its Valid To
-            date.</para>
+            expressed in the GMT/UTC timezone). Leave blank and it will be
+            adjusted automatically.</para>
           </listitem>
         </varlistentry>
 
