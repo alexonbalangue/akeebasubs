@@ -70,6 +70,7 @@ $installation_queue = array(
 			'ccavenue'				=> 0,
 			'deltapay'				=> 0,
 			'eway'					=> 0,
+			'googlecheckout'		=> 0,
 			'moip'					=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
