@@ -42,9 +42,9 @@ $this->loadHelper('message');
 		<div class="level-inner">
 			<div class="level-description">
 				<div class="level-description-inner">
-					<?if(!empty($level->image)):?>
+					<?php if(!empty($level->image)):?>
 					<img class="level-image" src="<?php echo JURI::base()?><?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $level->image?>" />
-					<?endif;?>
+					<?php endif;?>
 					<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description));?>
 				</div>
 			</div>

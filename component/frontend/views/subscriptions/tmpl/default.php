@@ -82,25 +82,25 @@ if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>
 				</td>
 				<td>
-					<?if(empty($subscription->publish_up) || ($subscription->publish_up == '0000-00-00 00:00:00')):?>
+					<?php if(empty($subscription->publish_up) || ($subscription->publish_up == '0000-00-00 00:00:00')):?>
 					&mdash;
-					<?else:?>
+					<?php else:?>
 					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up, '%Y-%m-%d %H:%M') ?>
-					<?endif;?>
+					<?php endif;?>
 				</td>
 				<td>
-					<?if(empty($subscription->publish_up) || ($subscription->publish_down == '0000-00-00 00:00:00')):?>
+					<?php if(empty($subscription->publish_up) || ($subscription->publish_down == '0000-00-00 00:00:00')):?>
 					&mdash;
-					<?else:?>
+					<?php else:?>
 					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down, '%Y-%m-%d %H:%M') ?>
-					<?endif;?>
+					<?php endif;?>
 				</td>
 				<td align="center">
-					<?if($subscription->enabled):?>
+					<?php if($subscription->enabled):?>
 					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/enabled.png" align="center" />
-					<?else:?>
+					<?php else:?>
 					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/disabled.png" align="center" />
-					<?endif;?>
+					<?php endif;?>
 	            </td>
 	            <td>
 					<a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscription&id='.$subscription->akeebasubs_subscription_id)?>">
@@ -108,6 +108,7 @@ if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
 					</a>
 
 	            	<?php if(($subscription->state == 'C') && (in_array($subscription->akeebasubs_level_id, $activeLevels))):?>
+					<?php if($canRenew): ?>
 	            	&bull;
 	            	<?php $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 						->setId($subscription->akeebasubs_level_id)
@@ -116,7 +117,8 @@ if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
 	            	<a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$slug)?>">
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
-	            	<?endif;?>
+	            	<?php endif;?>
+	            	<?php endif;?>
 	            </td>
 			</tr>
 			<?php endforeach; ?>

@@ -147,23 +147,23 @@ $this->loadHelper('format');
 				</a>
 			</td>
 			<td>
-				<?if(!empty($user->businessname)):?>
+				<?php if(!empty($user->businessname)):?>
 				<a href="index.php?option=com_akeebasubs&view=user&id=<?php echo $user->akeebasubs_user_id; ?>">
 					<?php echo $this->escape($user->businessname) ?>
 				</a>
-				<?else:?>
+				<?php else:?>
 				&mdash;
-				<?endif;?>
+				<?php endif;?>
 			</td>
 			<td>
-				<?if(!empty($user->vatnumber)):?>
+				<?php if(!empty($user->vatnumber)):?>
 				<a href="index.php?option=com_akeebasubs&view=user&id=<?php echo $user->akeebasubs_user_id; ?>">
 					<?php echo ($user->country == 'GR') ? 'EL' : $user->country ?>
 					<?php echo $this->escape($user->vatnumber) ?>
 				</a>
-				<?else:?>
+				<?php else:?>
 				&mdash;
-				<?endif?>
+				<?php endif?>
 			</td>
 		</tr>
 		<?php endforeach; ?>
