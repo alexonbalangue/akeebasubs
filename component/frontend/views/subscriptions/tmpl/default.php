@@ -17,9 +17,17 @@ $rawActiveLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 	->enabled(1)
 	->getList();
 $activeLevels = array();
+$allLevels = array();
 if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
 	$activeLevels[] = $l->akeebasubs_level_id;
+	$allLevels[$l->akeebasubs_level_id] = $l;
 }
+
+$subIDs = array();
+if(count($this->items)) foreach($this->items as $sub) {
+	$subIDs[] = $sub->akeebasubs_level_id;
+}
+$subIDs = array_unique($subIDs);
 ?>
 
 <div id="akeebasubs" class="subscriptions">
@@ -69,9 +77,17 @@ if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
 				$m = 1 - $m;
 				$email = trim($subscription->email);
 				$email = strtolower($email);
-				$rowClass = ($subscription->enabled) ? '' : 'expired'
+				$rowClass = ($subscription->enabled) ? '' : 'expired';
+				
+				$canRenew = true;
+				$level = $allLevels[$subscription->akeebasubs_level_id];
+				if($level->only_once) {
+					if(in_array($subscription->akeebasubs_level_id,$subIDs)) {
+						$canRenew = false;
+					}
+				}
 			?>
-			<tr class="row<?php echo$m?> <?php echo$rowClass?>">
+			<tr class="row<?php echo $m?> <?php echo $rowClass?>">
 				<td align="left">
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
