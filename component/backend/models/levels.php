@@ -33,6 +33,35 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->nameQuote('slug').' = '.$db->quote($slug));
 		}
 		
+		$only_once = $this->getState('only_once', null);
+		$user = JFactory::getUser();
+		if($only_once && $user->id) {
+			$mysubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				->user_id($user->id)
+				->getItemList();
+			$subIDs = array();
+			if(!empty($mysubs)) foreach($mysubs as $sub) {
+				$subIDs[] = $sub->akeebasubs_level_id;
+			}
+			
+			if(count($subIDs)) {
+				$subIDs = array_unique($subIDs);
+				$query->where(
+				'('.
+					'('.
+						$db->nameQuote('only_once').' = '.$db->quote(0)
+					.')'.
+					' OR '.
+					'('.
+						'('.$db->nameQuote('only_once').' = '.$db->quote(1).')'
+						.' AND '.
+						'('.$db->nameQuote('akeebasubs_level_id').' NOT IN '.'('.implode(',',$subIDs).')'.')'
+					.')'.
+				')'
+				);
+			}
+		}
+		
 		$search = $this->getState('search',null);
 		if($search)
 		{
