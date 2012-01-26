@@ -2973,6 +2973,132 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>where www.example.com must be replaced with the domain name of
         your site.</para>
       </section>
+
+      <section xml:id="payment-googlecheckout">
+        <title>Google Checkout</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Google Checkout</guilabel></para>
+
+        <para>This payment method integrates the Google Checkout payment
+        processor by Google, Inc.</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>Your Merchant ID is a unique, numeric code assigned to
+              your business by Google. In order to find it:</para>
+
+              <orderedlist>
+                <listitem>
+                  <para>Sign in to Google Checkout.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Click the <guilabel>Settings</guilabel> tab. </para>
+                </listitem>
+
+                <listitem>
+                  <para>Click <guilabel>Integration</guilabel>. </para>
+                </listitem>
+
+                <listitem>
+                  <para>Your Merchant Key and Merchant ID will appear under
+                  <guilabel>Account information</guilabel>. </para>
+                </listitem>
+              </orderedlist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant Key</term>
+
+            <listitem>
+              <para>Your Merchant Key is a unique code that helps secure your
+              communications with Google. Both you and Google will use this
+              key to authenticate and verify the integrity of any messages you
+              exchange. </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the testing (sandbox) server. No money will change hands. This
+              is supposed to be used ONLY for testing the integration with
+              Google Checkout before launching your site. Please consult
+              Google for further instructions on using their Sandbox – you
+              have to create two special Sandbox users (Sandbox Merchant and
+              Sandbox Buyer) to use it.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox Merchant ID</term>
+
+            <listitem>
+              <para>The Merchant ID when using the Sandbox</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox Merchant Key</term>
+
+            <listitem>
+              <para>The Merchant Key when using the Sandbox</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>You will have to specify the API callback URL before using
+        Google Checkout. To add or edit your API callback URL:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Sign in to Google Checkout. </para>
+          </listitem>
+
+          <listitem>
+            <para>Click the <guilabel>Settings</guilabel> tab. </para>
+          </listitem>
+
+          <listitem>
+            <para>Click <guilabel>Integration</guilabel>. </para>
+          </listitem>
+
+          <listitem>
+            <para>Find the <guilabel>API callback URL</guilabel> box and enter
+            the following:</para>
+
+            <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=subscribe</uri></para>
+
+            <para>Where www.example.com is the domain name of your
+            site.</para>
+          </listitem>
+
+          <listitem>
+            <para>Under <guilabel>Callback contents</guilabel>, select
+            <option>Notification as XML</option>. </para>
+          </listitem>
+
+          <listitem>
+            <para>Click <guilabel>Save</guilabel>.</para>
+          </listitem>
+        </orderedlist>
+
+        <warning>
+          <para>Your site MUST support HTTPS and you MUST supply an HTTPS URL
+          in the API callback URL field.</para>
+        </warning>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">

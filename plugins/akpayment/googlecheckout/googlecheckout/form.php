@@ -2,6 +2,4 @@
 
 <h3><?php echo JText::_('PLG_AKPAYMENT_GOOGLECHECKOUT_MSG_READYTOCHECKOUT') ?></h3>
 <p><?php echo JText::_('PLG_AKPAYMENT_GOOGLECHECKOUT_MSG_INFO') ?></p>
-<p align="center">
 <?php echo @$data->cart->CheckoutButtonCode("SMALL"); ?>
-</p>
