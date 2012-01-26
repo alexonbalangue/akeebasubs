@@ -22,12 +22,14 @@
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_TITLE_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_TITLE_DESC"/>
 		<param type="spacer" />
 		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_DESC"/>
+		<param name="merchant_key" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_KEY_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_KEY_DESC"/>
 		<param type="spacer" />
 		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_DESC">
 		  <option value="0">No</option>
 		  <option value="1">Yes</option>
 		</param>
 		<param name="sandbox_merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_LABEL"/>
+		<param name="sandbox_merchant_key" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_KEY_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_KEY_DESC"/>
 	</params>
 	<config>
 		<fields name="params">
@@ -35,12 +37,14 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_TITLE_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_TITLE_DESC"/>
 				<field type="spacer" />
 				<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_DESC"/>
+				<field name="merchant_key" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_KEY_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_MERCHANT_KEY_DESC"/>
 				<field type="spacer" />
 				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_DESC">
 				  <option value="0">No</option>
 				  <option value="1">Yes</option>
 				</field>
 				<field name="sandbox_merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_LABEL"/>
+				<field name="sandbox_merchant_key" type="text" size="50" default="" label="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_KEY_LABEL" description="PLG_AKPAYMENT_GOOGLECHECKOUT_SANDBOX_MERCHANT_KEY_DESC"/>
 			</fieldset>
 		</fields>
 	</config>

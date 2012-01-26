@@ -77,20 +77,59 @@ class plgAkpaymentGooglecheckout extends JPlugin
 		}
 		
 		$data = (object)array(
-			'url'			=> $this->getPaymentURL(),
+			'url'			=> $this->getPaymentURL(true).$this->getMerchantID(),
 			'merchant'		=> $this->getMerchantID(),
+			'merchant_key'	=> $this->getMerchantKey(),
+			'servertype'	=> $this->getServerType(),
 			//'postback'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=googlecheckout')),
 			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=googlecheckout',
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'firstname'		=> $firstName,
-			'lastname'		=> $lastName
+			'lastname'		=> $lastName,
+			'buttonurl'		=> $this->getPaymentURL(false),
 		);
+		
+		// Include Google Checkout library files
+		require_once dirname(__FILE__) . "/googlecheckout/library/googlecart.php";
+		require_once dirname(__FILE__) . "/googlecheckout/library/googleitem.php";
+		require_once dirname(__FILE__) . "/googlecheckout/library/googleshipping.php";
+		require_once dirname(__FILE__) . "/googlecheckout/library/googletax.php";
 		
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
+		
+		// Create Google cart
+		$cart = new GoogleCart($data->merchant, $data->merchant_key, $data->servertype, $data->currency);
+		$totalTax=0;
+		$totalPrice = 0;
+		
+		// Add item to the cart
+		$item = new GoogleItem(
+			$level->title,
+			$level->title . ' - [ ' . $user->username . ' ]',
+			1,
+			$subscription->net_amount
+		);
+		$cart->AddItem($item);
+		$totalPrice = $subscription->net_amount;
+		$totalTax = $subscription->tax_amount;
+		
+		// Apply tax rules
+		$tax_rule = new GoogleDefaultTaxRule($subscription->tax_rate);
+	    $tax_rule->SetWorldArea(true);
+	    $cart->AddDefaultTaxRules($tax_rule);
+		
+		// Set return URL
+		$cart->SetContinueShoppingUrl($data->success);
+		
+		// set order ID and data
+		$mcprivatedata= new MerchantPrivateData();
+		$mcprivatedata->data= array("akeebasubs_subscription_id"=>$subscription->akeebasubs_subscription_id);
+		$cart->SetMerchantPrivateData($mcprivatedata);
+		$data->cart=$cart;
 		
 		@ob_start();
 		include dirname(__FILE__).'/googlecheckout/form.php';
@@ -106,165 +145,178 @@ class plgAkpaymentGooglecheckout extends JPlugin
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
-		// Check IPN data for validity (i.e. protect against fraud attempt)
-		$isValid = $this->isValidIPN($data);
-		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Google Checkout reports transaction as invalid';
-		
-		// Load the relevant subscription row
-		if($isValid) {
-			$id = array_key_exists('custom', $data) ? (int)$data['custom'] : -1;
-			$subscription = null;
-			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-					->setId($id)
-					->getItem();
-				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
-					$subscription = null;
-					$isValid = false;
-				}
-			} else {
-				$isValid = false;
-			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
-		}
-		
-		// Check that receiver_email / receiver_id is what the site owner has configured
-		if($isValid) {
-			$receiver_email = $data['receiver_email'];
-			$receiver_id = $data['receiver_id'];
-			$valid_id = $this->getMerchantID();
-			$isValid =
-				($receiver_email == $valid_id)
-				|| (strtolower($receiver_email) == strtolower($receiver_email))
-				|| ($receiver_id == $valid_id)
-				|| (strtolower($receiver_id) == strtolower($receiver_id))
-			;
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Merchant ID does not match receiver_email or receiver_id';
-		}
-		
-		// Check txn_type; we only accept web_accept transactions with this plugin
-		if($isValid) {
-			$isValid = $data['txn_type'] == 'web_accept';
-			if(!$isValid) $data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
-		}
-		
-		// Check that mc_gross is correct
-		$isPartialRefund = false;
-		if($isValid && !is_null($subscription)) {
-			$mc_gross = floatval($data['mc_gross']);
-			$gross = $subscription->gross_amount;
-			if($mc_gross > 0) {
-				// A positive value means "payment". The prices MUST match!
-				// Important: NEVER, EVER compare two floating point values for equality.
-				$isValid = ($gross - $mc_gross) < 0.01;
-			} else {
-				$isPartialRefund = false;
-				$temp_mc_gross = -1 * $mc_gross;
-				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
-			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
-		}
-		
-		// Check that txn_id has not been previously processed
-		if($isValid && !is_null($subscription) && !$isPartialRefund) {
-			if($subscription->processor_key == $data['txn_id']) {
-				if($subscription->state == 'C') {
-					$isValid = false;
-					$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
-				}
-			}
-		}
-		
-		// Check that mc_currency is correct
-		if($isValid && !is_null($subscription)) {
-			$mc_currency = strtoupper($data['mc_currency']);
-			$currency = strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'));
-			if($mc_currency != $currency) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Invalid currency; expected $currency, got $mc_currency";
-			}
-		}
-		
-		// Log the IPN data
-		$this->logIPN($data, $isValid);
-		
-		// Fraud attempt? Do nothing more!
-		if(!$isValid) return false;
+		// Include Google Checkout library files
+		require_once dirname(__FILE__) . "/googlecheckout/library/googleresponse.php";
+		require_once dirname(__FILE__) . "/googlecheckout/library/googleresult.php";
+		require_once dirname(__FILE__) . "/googlecheckout/library/googlerequest.php";
 
-		// Check the payment_status
-		switch($data['payment_status'])
+		
+		$response = new GoogleResponse($this->getMerchantID(), $this->getMerchantKey());
+		
+		$config = JFactory::getConfig();
+		$logpath = $config->getValue('log_path');
+		$response->SetLogFiles($logpath . '/google_error.log', $logpath . '/google_message.log', L_ALL);
+		
+		// Get the XML postback
+		$xml_response = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : file_get_contents('php://input');
+		if(empty($xml_response)) return false;
+		// De-slash the response on servers using magic_quotes_gpc
+		if (get_magic_quotes_gpc()) {
+			$xml_response = stripslashes($xml_response);
+		}
+		
+		list($root, $data) = $response->GetParsedXML($xml_response);
+		
+		// prepare the payment data
+		$data = $data[$root];
+		$payment_details = $this->reformatData($xml_response);
+		
+		switch($root)
 		{
-			case 'Canceled_Reversal':
-			case 'Completed':
-				$newStatus = 'C';
-				break;
-			
-			case 'Created':
-			case 'Pending':
-			case 'Processed':
-				$newStatus = 'P';
-				break;
-			
-			case 'Denied':
-			case 'Expired':
-			case 'Failed':
-			case 'Refunded':
-			case 'Reversed':
-			case 'Voided':
-			default:
-				// Partial refunds can only by issued by the merchant. In that case,
-				// we don't want the subscription to be cancelled. We have to let the
-				// merchant adjust its parameters if needed.
-				if($isPartialRefund) {
-					$newStatus = 'C';
+			// New order (payment processing began at Google Checkout side)
+			case 'new-order-notification':
+				// Update the payment processor key with the Google order ID
+				$id = $data['shopping-cart']['merchant-private-data']['akeebasubs_subscription_id']['VALUE'];
+				
+				$isValid = true;
+				
+				// Load the subscription row
+				if($isValid) {
+					if($id > 0) {
+						$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							->setId($id)
+							->getItem();
+						if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
+							$subscription = null;
+							$isValid = false;
+						}
+					} else {
+						$isValid = false;
+					}
+					if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID is invalid';
+				}
+				
+				$this->logIPN($data, $isValid);
+				
+				if($isValid) {
+					$updates = array(
+						'akeebasubs_subscription_id' => $id,
+						'state'				=> 'P', // Pending
+						'enabled'			=> 0, // Not yet enabled (it's pending!)
+						'processor_key'		=> $data['google-order-number']['VALUE'],
+					);
+					$subscription->save($updates);
 				} else {
-					$newStatus = 'X';
+					return false;
 				}
 				break;
-		}
-
-		// Update subscription status (this also automatically calls the plugins)
-		$updates = array(
-			'akeebasubs_subscription_id'				=> $id,
-			'processor_key'		=> $data['txn_id'],
-			'state'				=> $newStatus,
-			'enabled'			=> 0
-		);
-		jimport('joomla.utilities.date');
-		if($newStatus == 'C') {
-			// Fix the starting date if the payment was accepted after the subscription's start date. This
-			// works around the case where someone pays by e-Check on January 1st and the check is cleared
-			// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
-			// the user would have paid us and we'd never given him a subscription!
-			$jNow = new JDate();
-			$jStart = new JDate($subscription->publish_up);
-			$jEnd = new JDate($subscription->publish_down);
-			$now = $jNow->toUnix();
-			$start = $jStart->toUnix();
-			$end = $jEnd->toUnix();
 			
-			if($start < $now) {
-				$duration = $end - $start;
-				$start = $now;
-				$end = $start + $duration;
-				$jStart = new JDate($start);
-				$jEnd = new JDate($end);
-			}
-			
-			$updates['publish_up'] = $jStart->toMySQL();
-			$updates['publish_down'] = $jEnd->toMySQL();
-			$updates['enabled'] = 1;
+			// Process a payment change notification
+			case 'order-state-change-notification':
+				$processor_key = $data['google-order-number']['VALUE'];
+				
+				$isValid = true;
+				
+				if($isValid) {
+					$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							->paykey($processor_key)
+							->getFirstItem();
+					if( (!$subscription->processor_key) || ($subscription->processor_key != $processor_key) ) {
+						$subscription = null;
+						$isValid = false;
+					}
+					
+					if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid Google order ID';
+				}
+				
+				// Check the total amount paid
+				if($isValid) {
+					$totalPaid = (float)$data['total-charge-amount']['VALUE'];
+					$gross = $subscription->gross_amount;
+					
+					if(abs($totalPaid - $gross) > 1) $isValid = false;
+					
+					if(!$isValid) $data['akeebasubs_failure_reason'] = "Invalid amount paid: $totalPaid does not match expected $gross";
+				}
+				
+				// Log the IPN data
+				$this->logIPN($data, $isValid);
+				
+				// Fraud attempt? Do nothing more!
+				if(!$isValid) return false;
 
+				// Send ACK
+				$serial = $data[$root]['serial-number'];
+				$response->SendAck($serial);
+				
+				// Check the payment_status
+				switch($data ['new-financial-order-state']['VALUE'])
+				{
+					case 'CHARGED':
+						$newStatus = 'C';
+						break;
+
+					case 'REVIEWING':
+					case 'CHARGEABLE':
+					case 'CHARGING':
+						$newStatus = 'P';
+						break;
+
+					case 'PAYMENT_DECLINED':
+					case 'CANCELLED':
+					case 'CANCELLED_BY_GOOGLE':
+					default:
+						$newStatus = 'X';
+						break;
+				}
+
+				// Update subscription status (this also automatically calls the plugins)
+				$updates = array(
+					'akeebasubs_subscription_id' => $subscription->akeebasubs_subscription_id,
+					'state'				=> $newStatus,
+					'enabled'			=> 0
+				);
+				jimport('joomla.utilities.date');
+				if($newStatus == 'C') {
+					// Fix the starting date if the payment was accepted after the subscription's start date. This
+					// works around the case where someone pays by e-Check on January 1st and the check is cleared
+					// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
+					// the user would have paid us and we'd never given him a subscription!
+					$jNow = new JDate();
+					$jStart = new JDate($subscription->publish_up);
+					$jEnd = new JDate($subscription->publish_down);
+					$now = $jNow->toUnix();
+					$start = $jStart->toUnix();
+					$end = $jEnd->toUnix();
+
+					if($start < $now) {
+						$duration = $end - $start;
+						$start = $now;
+						$end = $start + $duration;
+						$jStart = new JDate($start);
+						$jEnd = new JDate($end);
+					}
+
+					$updates['publish_up'] = $jStart->toMySQL();
+					$updates['publish_down'] = $jEnd->toMySQL();
+					$updates['enabled'] = 1;
+
+				}
+				$subscription->save($updates);
+
+				// Run the onAKAfterPaymentCallback events
+				jimport('joomla.plugin.helper');
+				JPluginHelper::importPlugin('akeebasubs');
+				$app = JFactory::getApplication();
+				$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
+					$subscription
+				));
+				break;
+			
+			default:
+				return false;
+				break;
 		}
-		$subscription->save($updates);
-		
-		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akeebasubs');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
-			$subscription
-		));
 		
 		return true;
 	}
@@ -272,18 +324,49 @@ class plgAkpaymentGooglecheckout extends JPlugin
 	/**
 	 * Gets the form action URL for the payment
 	 */
-	private function getPaymentURL()
+	private function getPaymentURL($full = true)
 	{
 		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
-			return 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+		if($full) {
+			if($sandbox) {
+				return 'https://sandbox.google.com/checkout/api/checkout/v2/checkoutForm/Merchant/';
+			} else {
+				return 'https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/';
+			}
 		} else {
-			return 'https://www.paypal.com/cgi-bin/webscr';
+			if($sandbox) {
+				return 'https://sandbox.google.com/checkout';
+			} else {
+				return 'https://checkout.google.com';
+			}
 		}
 	}
 	
 	/**
-	 * Gets the PayPal Merchant ID (usually the email address)
+	 * Get the server type for the Google Checkout API
+	 * @return type 
+	 */
+	private function getServerType()
+	{
+		$sandbox = $this->params->get('sandbox',0);
+		return $sandbox ? 'sandbox' : 'production';
+	}
+	
+	/**
+	 * Gets the Google Checkout Merchant Key
+	 */
+	private function getMerchantKey()
+	{
+		$sandbox = $this->params->get('sandbox',0);
+		if($sandbox) {
+			return $this->params->get('sandbox_merchant_key','');
+		} else {
+			return $this->params->get('merchant_key','');
+		}
+	}
+	
+	/**
+	 * Gets the Google Checkout Merchant ID (usually the email address)
 	 */
 	private function getMerchantID()
 	{
@@ -293,61 +376,17 @@ class plgAkpaymentGooglecheckout extends JPlugin
 		} else {
 			return $this->params->get('merchant','');
 		}
-	}	
-
-	/**
-	 * Gets the IPN callback URL
-	 */
-	private function getCallbackURL()
-	{
-		$sandbox = $this->params->get('sandbox',0);
-		$ssl = $this->params->get('secureipn',0);
-		$scheme = $ssl ? 'ssl://' : '';
-		if($sandbox) {
-			return $scheme.'www.sandbox.paypal.com';
-		} else {
-			return $scheme.'www.paypal.com';
-		}
 	}
 	
 	/**
-	 * Validates the incoming data against PayPal's IPN to make sure this is not a
-	 * fraudelent request.
+	 * Reformats the XML response for logging
 	 */
-	private function isValidIPN($data)
+	private function reformatData($data)
 	{
-		$url = $this->getCallbackURL();
-		
-		$req = 'cmd=_notify-validate';
-		foreach($data as $key => $value) {
-			$value = urlencode($value);
-			$req .= "&$key=$value";
-		}
-		$header = '';
-		$header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
-		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-		
-		$ssl = $this->params->get('secureipn',0);
-		$port = $ssl ? 443 : 80;
-		
-		$fp = fsockopen ($url, $port, $errno, $errstr, 30);
-		
-		if (!$fp) {
-			// HTTP ERROR
-			return false;
-		} else {
-			fputs ($fp, $header . $req);
-			while (!feof($fp)) {
-				$res = fgets ($fp, 1024);
-				if (strcmp ($res, "VERIFIED") == 0) {
-					return true;
-				} else if (strcmp ($res, "INVALID") == 0) {
-					return false;
-				}
-			}
-			fclose ($fp);
-		}
+		$data = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $data);
+		$data = str_replace(array('<', '>'), array('[', ']'), $data);
+
+		return $data;
 	}
 	
 	private function logIPN($data, $isValid)
