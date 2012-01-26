@@ -1,7 +1,9 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.1
 ================================================================================
++ #54 Trial subscriptions (subscription levels you can only subscribe to once)
 + #6 Google Checkout
+# You had to log out to subscribe to a different level than the one you're already subscribed to
 
 Akeeba Subscriptions 2.0.1
 ================================================================================

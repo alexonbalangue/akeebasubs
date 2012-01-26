@@ -86,6 +86,7 @@ class AkeebasubsControllerLevels extends FOFController
 				->slug($slug)
 				->getFirstItem();
 			if(!empty($item->akeebasubs_level_id)) {
+				$id = $item->akeebasubs_level_id;
 				$this->getThisModel()->setId($item->akeebasubs_level_id);
 			}
 		}
@@ -100,6 +101,7 @@ class AkeebasubsControllerLevels extends FOFController
 				// User trying to renew a level which is marked as only_once
 				return false;
 			}
+			$this->getThisModel()->setId($id);
 		}
 		
 		$view = $this->getThisView();

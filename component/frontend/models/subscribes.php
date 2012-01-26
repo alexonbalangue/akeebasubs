@@ -82,6 +82,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 			);
 		}
 		
+		// Otherwise we always see the same level over and over again
+		if(array_key_exists('id',$this->_cache['state'])) {
+			unset($this->_cache['state']['id']);
+		}
+		
 		$rawDataCache = $this->_cache['state'];
 		$rawDataPost = JRequest::get('POST', 2);
 		$rawDataGet = JRequest::get('GET', 2);
@@ -966,6 +971,23 @@ class AkeebasubsModelSubscribes extends FOFModel
 			->getItem()
 			->save($data);
 		
+		// Is this actually an allowed subscription level?
+		$allowedLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->only_once(1)
+			->enabled(1)
+			->getItemList();
+		$allowed = false;
+		if(count($allowedLevels)) foreach($allowedLevels as $l) {
+			if($l->akeebasubs_level_id == $state->id) {
+				$allowed = true;
+				break;
+			}
+		}
+		
+		if(!$allowed) {
+			return false;
+		}
+		
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -1113,6 +1135,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)) );
 			return false;
 		}
+		
+		// Clear the session
+		// ----------------------------------------------------------------------
+		$session = JFactory::getSession();
+		$session->set('validation_cache_data', null, 'com_akeebasubs');		
 		
 		// Return true
 		// ----------------------------------------------------------------------
