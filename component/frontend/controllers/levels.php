@@ -90,6 +90,18 @@ class AkeebasubsControllerLevels extends FOFController
 			}
 		}
 		
+		$level = $this->getThisModel()->getItem();
+		if($level->only_once) {
+			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->slug($level->slug)
+				->only_once(1)
+				->getItemList();
+			if(!count($levels)) {
+				// User trying to renew a level which is marked as only_once
+				return false;
+			}
+		}
+		
 		$view = $this->getThisView();
 		
 		// Get the user model and load the user data
