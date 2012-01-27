@@ -70,6 +70,7 @@ $installation_queue = array(
 			'eway'					=> 0,
 			'googlecheckout'		=> 0,
 			'moip'					=> 0,
+			'moneris'				=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
 			'paypal'				=> 1,
