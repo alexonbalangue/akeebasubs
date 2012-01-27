@@ -14,7 +14,7 @@ class LiveUpdateConfig extends LiveUpdateAbstractConfig
 {
 	var $_extensionName			= 'com_akeebasubs';
 	var $_extensionTitle		= 'Akeeba Subscriptions';
-	var $_versionStrategy		= 'different';
+	var $_versionStrategy		= 'vcompare';
 	var $_updateURL				= 'http://nocdn.akeebabackup.com/updates/akeebasubs.ini';
 	var $_requiresAuthorization = false;
 	/**
@@ -24,4 +24,13 @@ class LiveUpdateConfig extends LiveUpdateAbstractConfig
 			'key'			=> 'liveupdate'
 		);
 	*/
+	
+	public function __construct() {
+		parent::__construct();
+		
+		// Dev releases use the "newest" strategy
+		if(substr($this->_currentVersion,1,2) == 'ev') {
+			$this->_versionStrategy = 'newest';
+		}
+	}
 }
