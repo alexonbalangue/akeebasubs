@@ -53,15 +53,15 @@ $this->loadHelper('format');
 				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_VALUE', 'value', $this->lists->order_Dir, $this->lists->order); ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'Ordering', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php echo JHTML::_('grid.order', $this->items); ?>
-			</th>			
-			<th width="8%">
 				<?php if(version_compare(JVERSION,'1.6.0','ge')):?>
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
 				<?php else: ?>
 				<?php echo JHTML::_('grid.sort', 'PUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
 				<?php endif; ?>
+			</th>
+			<th width="8%">
+				<?php echo JHTML::_('grid.sort', 'Ordering', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 		</tr>
 		<tr>
