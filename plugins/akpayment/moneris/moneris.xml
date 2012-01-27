@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - Moneris</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2011-03-04</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_MONERIS_DESCRIPTION</description>
+	<files>
+		<filename plugin="moneris">moneris.php</filename>
+		<folder>moneris</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_moneris.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_moneris.sys.ini</language>
+	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_TITLE_LABEL" description="PLG_AKPAYMENT_MONERIS_TITLE_DESC"/>
+		<param type="spacer" />
+		<param name="storeid" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_STOREID_LABEL" description="PLG_AKPAYMENT_MONERIS_STOREID_DESC"/>
+		<param name="apikey" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_APIKEY_LABEL" description="PLG_AKPAYMENT_MONERIS_APIKEY_DESC"/>
+		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_MONERIS_SANDBOX_LABEL" description="PLG_AKPAYMENT_MONERIS_SANDBOX_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_TITLE_LABEL" description="PLG_AKPAYMENT_MONERIS_TITLE_DESC"/>
+				<field type="spacer" />
+				<field name="storeid" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_STOREID_LABEL" description="PLG_AKPAYMENT_MONERIS_STOREID_DESC"/>
+				<field name="apikey" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_APIKEY_LABEL" description="PLG_AKPAYMENT_MONERIS_APIKEY_DESC"/>
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_MONERIS_SANDBOX_LABEL" description="PLG_AKPAYMENT_MONERIS_SANDBOX_DESC">
+				  <option value="0">No</option>
+				  <option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</install>

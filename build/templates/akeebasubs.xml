@@ -65,6 +65,7 @@
 			<filename>toolbar.php</filename>
 			<filename>version.php</filename>
 			
+			<folder>assets</folder>
 			<folder>controllers</folder>
 			<folder>converter</folder>
 			<folder>fof</folder>
