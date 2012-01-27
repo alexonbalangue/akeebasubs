@@ -25,6 +25,30 @@ class AkeebasubsControllerSubscribes extends FOFController
 	}
 	
 	public function add() {
+		$id = $this->getThisModel()->getState('id',0,'int');
+		$slug = FOFInput::getString('slug',null,$this->input);
+		if(!$id && $slug) {
+			$item = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($slug)
+				->getFirstItem();
+			if(!empty($item->akeebasubs_level_id)) {
+				$id = $item->akeebasubs_level_id;
+			}
+		}
+		
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($id)->getItem();
+		if($level->only_once) {
+			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->slug($level->slug)
+				->only_once(1)
+				->getItemList();
+			if(!count($levels)) {
+				// User trying to renew a level which is marked as only_once
+				return false;
+			}
+		}
+		$this->getThisModel()->setState('id',$id);
+		
 		$result = $this->getThisModel()->createNewSubscription();
 		if($result) {
 			$view = $this->getThisView();
