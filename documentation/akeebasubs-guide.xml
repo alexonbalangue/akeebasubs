@@ -3015,16 +3015,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
                 </listitem>
 
                 <listitem>
-                  <para>Click the <guilabel>Settings</guilabel> tab. </para>
+                  <para>Click the <guilabel>Settings</guilabel> tab.</para>
                 </listitem>
 
                 <listitem>
-                  <para>Click <guilabel>Integration</guilabel>. </para>
+                  <para>Click <guilabel>Integration</guilabel>.</para>
                 </listitem>
 
                 <listitem>
                   <para>Your Merchant Key and Merchant ID will appear under
-                  <guilabel>Account information</guilabel>. </para>
+                  <guilabel>Account information</guilabel>.</para>
                 </listitem>
               </orderedlist>
             </listitem>
@@ -3037,7 +3037,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               <para>Your Merchant Key is a unique code that helps secure your
               communications with Google. Both you and Google will use this
               key to authenticate and verify the integrity of any messages you
-              exchange. </para>
+              exchange.</para>
             </listitem>
           </varlistentry>
 
@@ -3079,15 +3079,15 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <orderedlist>
           <listitem>
-            <para>Sign in to Google Checkout. </para>
+            <para>Sign in to Google Checkout.</para>
           </listitem>
 
           <listitem>
-            <para>Click the <guilabel>Settings</guilabel> tab. </para>
+            <para>Click the <guilabel>Settings</guilabel> tab.</para>
           </listitem>
 
           <listitem>
-            <para>Click <guilabel>Integration</guilabel>. </para>
+            <para>Click <guilabel>Integration</guilabel>.</para>
           </listitem>
 
           <listitem>
@@ -3102,7 +3102,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
           <listitem>
             <para>Under <guilabel>Callback contents</guilabel>, select
-            <option>Notification as XML</option>. </para>
+            <option>Notification as XML</option>.</para>
           </listitem>
 
           <listitem>
@@ -3114,6 +3114,86 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           <para>Your site MUST support HTTPS and you MUST supply an HTTPS URL
           in the API callback URL field.</para>
         </warning>
+      </section>
+
+      <section xml:id="payment-moneris">
+        <title>Moneris</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Moneris</guilabel></para>
+
+        <para>This payment method integrates the Canadian Moneris (eSelect)
+        credit card processing service. Moneris offers is the largest payment
+        processor in Canada and offers its services even to non-Canadian
+        businesses.</para>
+
+        <important>
+          <para>Moneris does not allow us to communicate the transaction
+          currency. Please ensure that your prices are displayed in the same
+          currency as the one set up in your Moneris account.</para>
+        </important>
+
+        <warning>
+          <para>Moneris is a Credit Card processor, not a payment gateway.
+          This means that your clients will be entering their Credit Card
+          information on a page hosted on <emphasis>your </emphasis>site. As a
+          result, you MUST use HTTPS for your site so as not to expose your
+          clients to any risk of stolen information.</para>
+
+          <para>Akeeba Subscriptions does not record the credit card number,
+          expiration date or CVV2 of the Credit Card used by your client,
+          therefore PCI compliance of your site is not required.</para>
+        </warning>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Moneris" or type in a custom name to
+              show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Store ID</term>
+
+            <listitem>
+              <para>The Store ID given to you by Moneris. When testing, please
+              use one of the test shop names, e.g.
+              <option>store1</option></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Key</term>
+
+            <listitem>
+              <para>The is the API key given to you by Moneris and acts as the
+              password authenticating you to Moneris services. When testing,
+              please use the API key of the test shop, e.g
+              <option>yesguy</option></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Test Mode</term>
+
+            <listitem>
+              <para>When enabled, the transactions will be performed against
+              Moneris' test server. DO NOT USE THIS ON A LIVE SITE!</para>
+
+              <warning>
+                <para>The transaction status depends on the penny value of the
+                gross price. You need a gross price with a zero penny value
+                (e.g. 1.00 CAD) to get a successful test transaction. Read the
+                Moneris integration manual for more information.</para>
+              </warning>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
     </section>
 
