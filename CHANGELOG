@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.1
 + #6 Google Checkout payment gateway
 + Moneris payment gateway
 # You had to log out to subscribe to a different level than the one you're already subscribed to
+# Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
 
 Akeeba Subscriptions 2.0.1
 ================================================================================

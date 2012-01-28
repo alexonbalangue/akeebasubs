@@ -31,7 +31,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="x_receipt_link_url" value="<?php echo htmlentities($data->x_receipt_link_url) ?>" />
 	
 	<input type="hidden" name="card_holder_name" value="<?php echo htmlentities($data->name) ?>" />
-	<input type="hidden" name="street_address" value="<?php echo $kuser->address ?>">
+	<input type="hidden" name="street_address" value="<?php echo $kuser->address1 ?>">
 	<input type="hidden" name="street_address2" value="<?php echo $kuser->address2 ?>">
 	<input type="hidden" name="city" value="<?php echo $kuser->city ?>">
 	<input type="hidden" name="state" value="<?php echo $kuser->state ?>">

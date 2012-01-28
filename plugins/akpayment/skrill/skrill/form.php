@@ -28,7 +28,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="pay_from_email" value="<?php echo $user->email ?>">
 	<input type="hidden" name="firstname" value="<?php echo htmlentities($data->firstname) ?>" />
 	<input type="hidden" name="lastname" value="<?php echo htmlentities($data->lastname) ?>" />
-	<input type="hidden" name="address" value="<?php echo $kuser->address ?>">
+	<input type="hidden" name="address" value="<?php echo $kuser->address1 ?>">
 	<input type="hidden" name="address2" value="<?php echo $kuser->address2 ?>">
 	<input type="hidden" name="city" value="<?php echo $kuser->city ?>">
 	<input type="hidden" name="state" value="<?php echo $kuser->state ?>">

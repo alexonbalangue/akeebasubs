@@ -179,7 +179,7 @@ class plgAkpaymentEway extends JPlugin
 		if($this->params->get('companyname','')) $eWayURL->setVar('CompanyName', $this->params->get('companyname',''));
 		$eWayURL->setVar('CustomerFirstName', $firstName);
 		$eWayURL->setVar('CustomerLastName', $lastName);
-		$eWayURL->setVar('CustomerAddress', $kuser->address.(empty($kuser->address2)?'':', '.$kuser->address2));
+		$eWayURL->setVar('CustomerAddress', $kuser->address1.(empty($kuser->address2)?'':', '.$kuser->address2));
 		$eWayURL->setVar('CustomerCity', $kuser->city);
 		$eWayURL->setVar('CustomerState', $kuser->state);
 		$eWayURL->setVar('CustomerPostCode', $kuser->zip);
