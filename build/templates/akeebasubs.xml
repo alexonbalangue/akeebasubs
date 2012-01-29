@@ -106,7 +106,9 @@
 			<dir>modules/mod_akslevels</dir>
 			<dir>modules/mod_akssubslist</dir>
 
+			<dir>plugins/akeebasubs/acymailing</dir>
 			<dir>plugins/akeebasubs/adminemails</dir>
+			<dir>plugins/akeebasubs/affemails</dir>
 			<dir>plugins/akeebasubs/autocity</dir>
 			<dir>plugins/akeebasubs/cb</dir>
 			<dir>plugins/akeebasubs/ccinvoices</dir>
@@ -119,7 +121,9 @@
 			<dir>plugins/akeebasubs/jxjomsocial</dir>
 			<dir>plugins/akeebasubs/k2</dir>
 			<dir>plugins/akeebasubs/ninjaboard</dir>
+			<dir>plugins/akeebasubs/phocadownload</dir>
 			<dir>plugins/akeebasubs/redshop</dir>
+			<dir>plugins/akeebasubs/redshopusersync</dir>
 			<dir>plugins/akeebasubs/samplefields</dir>
 			<dir>plugins/akeebasubs/sql</dir>
 			<dir>plugins/akeebasubs/subscriptionemails</dir>
@@ -129,20 +133,30 @@
 			<dir>plugins/akeebasubs/vm2</dir>
 			<dir>plugins/akpayment/2checkout</dir>
 			<dir>plugins/akpayment/ccavenue</dir>
+			<dir>plugins/akpayment/deltapay</dir>
 			<dir>plugins/akpayment/eway</dir>
+			<dir>plugins/akpayment/googlecheckout</dir>
+			<dir>plugins/akpayment/moip</dir>
+			<dir>plugins/akpayment/moneris</dir>
 			<dir>plugins/akpayment/none</dir>
 			<dir>plugins/akpayment/offline</dir>
 			<dir>plugins/akpayment/paypal</dir>
 			<dir>plugins/akpayment/skrill</dir>
+			<dir>plugins/akpayment/upay</dir>
 			<dir>plugins/akpayment/worldpay</dir>
 			<dir>plugins/content/aslink</dir>
 			<dir>plugins/content/asrestricted</dir>
 			<dir>plugins/system/asexpirationcontrol</dir>
 			<dir>plugins/system/asexpirationnotify</dir>
+			<dir>plugins/system/oneclickaction</dir>
 		</customdirs>
 		<customfiles>
+			<file>plugins/akeebasubs/acymailing.php</file>
+			<file>plugins/akeebasubs/acymailing.xml</file>
 			<file>plugins/akeebasubs/adminemails.php</file>
 			<file>plugins/akeebasubs/adminemails.xml</file>
+			<file>plugins/akeebasubs/affemails.php</file>
+			<file>plugins/akeebasubs/affemails.xml</file>
 			<file>plugins/akeebasubs/autocity.php</file>
 			<file>plugins/akeebasubs/autocity.xml</file>
 			<file>plugins/akeebasubs/cb.php</file>
@@ -167,8 +181,12 @@
 			<file>plugins/akeebasubs/k2.xml</file>
 			<file>plugins/akeebasubs/ninjaboard.php</file>
 			<file>plugins/akeebasubs/ninjaboard.xml</file>
+			<file>plugins/akeebasubs/phocadownload.php</file>
+			<file>plugins/akeebasubs/phocadownload.xml</file>
 			<file>plugins/akeebasubs/redshop.php</file>
 			<file>plugins/akeebasubs/redshop.xml</file>
+			<file>plugins/akeebasubs/redshopusersync.php</file>
+			<file>plugins/akeebasubs/redshopusersync.xml</file>
 			<file>plugins/akeebasubs/samplefields.php</file>
 			<file>plugins/akeebasubs/samplefields.xml</file>
 			<file>plugins/akeebasubs/sql.php</file>
@@ -187,8 +205,16 @@
 			<file>plugins/akpayment/2checkout.xml</file>
 			<file>plugins/akpayment/ccavenue.php</file>
 			<file>plugins/akpayment/ccavenue.xml</file>
+			<file>plugins/akpayment/deltapay.php</file>
+			<file>plugins/akpayment/deltapay.xml</file>
 			<file>plugins/akpayment/eway.php</file>
 			<file>plugins/akpayment/eway.xml</file>
+			<file>plugins/akpayment/googlecheckout.php</file>
+			<file>plugins/akpayment/googlecheckout.xml</file>
+			<file>plugins/akpayment/moip.php</file>
+			<file>plugins/akpayment/moip.xml</file>
+			<file>plugins/akpayment/moneris.php</file>
+			<file>plugins/akpayment/moneris.xml</file>
 			<file>plugins/akpayment/none.php</file>
 			<file>plugins/akpayment/none.xml</file>
 			<file>plugins/akpayment/offline.php</file>
@@ -197,6 +223,8 @@
 			<file>plugins/akpayment/paypal.xml</file>
 			<file>plugins/akpayment/skrill.php</file>
 			<file>plugins/akpayment/skrill.xml</file>
+			<file>plugins/akpayment/upay.php</file>
+			<file>plugins/akpayment/upay.xml</file>
 			<file>plugins/akpayment/worldpay.php</file>
 			<file>plugins/akpayment/worldpay.xml</file>
 			<file>plugins/content/aslink.php</file>
@@ -207,13 +235,17 @@
 			<file>plugins/system/asexpirationcontrol.xml</file>
 			<file>plugins/system/asexpirationnotify.php</file>
 			<file>plugins/system/asexpirationnotify.xml</file>
+			<file>plugins/system/oneclickaction.php</file>
+			<file>plugins/system/oneclickaction.xml</file>
 		</customfiles>
 		<langfiles>
 			<lang>mod_akeebasubs</lang>
 			<lang>mod_aksexpires</lang>
 			<lang>mod_akslevels</lang>
 			<lang>mod_aksubslist</lang>
+			<lang>plg_akeebasubs_acymailing</lang>
 			<lang>plg_akeebasubs_adminemails</lang>
+			<lang>plg_akeebasubs_affemails</lang>
 			<lang>plg_akeebasubs_autocity</lang>
 			<lang>plg_akeebasubs_cb</lang>
 			<lang>plg_akeebasubs_ccinvoices</lang>
@@ -226,7 +258,9 @@
 			<lang>plg_akeebasubs_jxjomsocial</lang>
 			<lang>plg_akeebasubs_k2</lang>
 			<lang>plg_akeebasubs_ninjaboard</lang>
+			<lang>plg_akeebasubs_phocadownload</lang>
 			<lang>plg_akeebasubs_redshop</lang>
+			<lang>plg_akeebasubs_redshopusersync</lang>
 			<lang>plg_akeebasubs_samplefields</lang>
 			<lang>plg_akeebasubs_sql</lang>
 			<lang>plg_akeebasubs_subscriptionemails</lang>
@@ -236,17 +270,26 @@
 			<lang>plg_akeebasubs_vm2</lang>
 			<lang>plg_akpayment_2checkout</lang>
 			<lang>plg_akpayment_ccavenue</lang>
+			<lang>plg_akpayment_deltapay</lang>
 			<lang>plg_akpayment_eway</lang>
+			<lang>plg_akpayment_googlecheckout</lang>
+			<lang>plg_akpayment_moip</lang>
+			<lang>plg_akpayment_moneris</lang>
 			<lang>plg_akpayment_none</lang>
 			<lang>plg_akpayment_offline</lang>
 			<lang>plg_akpayment_paypal</lang>
 			<lang>plg_akpayment_skrill</lang>
+			<lang>plg_akpayment_upay</lang>
 			<lang>plg_akpayment_worldpay</lang>
 			<lang>plg_content_aslink</lang>
 			<lang>plg_content_asrestricted</lang>
 			<lang>plg_system_asexpirationcontrol</lang>
 			<lang>plg_system_asexpirationnotify</lang>
-		</langfiles>	
+			<lang>plg_system_oneclickaction</lang>
+		</langfiles>
+		<skiptables>
+			<table>akeebasubs_subscriptions</table>
+		</skiptables>
 	</restorepoint>
 	
 </install>
