@@ -6,7 +6,9 @@ Akeeba Subscriptions 2.1
 + Moneris payment gateway
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
-# The frontend module displayed the subscription levels ordered by their ID instead of their ordering preference
+# The backend module displayed the subscription levels ordered by their ID instead of their ordering preference
+# mod_akslevels showed disabled subscriptions
+# mod_akslevels showed subscriptions in wrong order, not the ordering set in the component
 
 Akeeba Subscriptions 2.0.1
 ================================================================================

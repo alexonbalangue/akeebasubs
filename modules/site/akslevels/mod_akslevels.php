@@ -39,7 +39,10 @@ $config = array(
 		'limit'		=> 0,
 		'limitstart'=> 0,
 		'no_clear'	=> true,
-		'task'		=> 'browse'
+		'task'		=> 'browse',
+		'filter_order' => 'ordering',
+		'filter_order_Dir' => 'ASC',
+		'enabled'	=> 1
 	)
 );
 if(!empty($ids)) $config['input']['id'] = $ids;
