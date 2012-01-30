@@ -21,7 +21,7 @@ $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 
 $items = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-	->filter_order('akeebasubs_subscription_id')
+	->filter_order('ordering')
 	->filter_order_Dir('desc')
 	->limit(10)
 	->getList();
