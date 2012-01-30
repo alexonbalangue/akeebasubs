@@ -86,10 +86,14 @@ class plgAkeebasubsSql extends JPlugin
 		// Get DB connection
 		$db = JFactory::getDBO();
 		
+		// Get the username
+		$username = JFactory::getUser($user_id)->username;
+		
 		// Deactivation SQL
 		if(!empty($removeGroups)) {
 			foreach($removeGroups as $sql) {
 				$sql = str_replace('[USERID]', $user_id, $sql);
+				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
 				$db->queryBatch(false);
 			}
@@ -99,6 +103,7 @@ class plgAkeebasubsSql extends JPlugin
 		if(!empty($addGroups)) {
 			foreach($addGroups as $sql) {
 				$sql = str_replace('[USERID]', $user_id, $sql);
+				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
 				$db->queryBatch(false);
 			}

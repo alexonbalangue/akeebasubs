@@ -4545,8 +4545,9 @@ LEVEL3=Group 1</programlisting>
         command will run. The rightmost part is the list of SQL commands,
         separated by semicolons. The <replaceable>[USERID]</replaceable>
         variable will be replaced with the user's numeric ID for the user
-        whose subscription Akeeba Subscriptions is currently
-        processing.</para>
+        whose subscription Akeeba Subscriptions is currently processing. The
+        [USERNAME] variable will be replaced with the user's username
+        (available since Akeeba Subscriptions 2.1).</para>
       </section>
 
       <section xml:id="integration-redshopusersync">
