@@ -56,7 +56,7 @@ $this->loadHelper('message');
 			</div>
 		</div>
 	</div>
-<?endforeach;?>
+<?php endforeach;?>
 <div class="level-clear"></div>	
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionslistfooter')?>
