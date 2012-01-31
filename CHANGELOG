@@ -10,6 +10,7 @@ Akeeba Subscriptions 2.1
 # The backend module displayed the subscription levels ordered by their ID instead of their ordering preference
 # mod_akslevels showed disabled subscriptions
 # mod_akslevels showed subscriptions in wrong order, not the ordering set in the component
+# Wrong image directory used in front-end (thank you, Jurian!)
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
