@@ -877,7 +877,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				if (!$newUsertype) {
 					$newUsertype = 'Registered';
 				}
-				$acl =& JFactory::getACL();
+				$acl = JFactory::getACL();
 				$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
 			}
 			

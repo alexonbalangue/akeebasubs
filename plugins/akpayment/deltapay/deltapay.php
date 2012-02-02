@@ -60,7 +60,7 @@ class plgAkpaymentDeltapay extends JPlugin
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		
 		// Load the language files
-		$jlang =& JFactory::getLanguage();
+		$jlang = JFactory::getLanguage();
 		$jlang->load('plg_akpayment_deltapay', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('plg_akpayment_deltapay', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		$jlang->load('plg_akpayment_deltapay', JPATH_ADMINISTRATOR, null, true);

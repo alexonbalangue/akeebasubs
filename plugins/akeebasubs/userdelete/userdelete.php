@@ -65,7 +65,7 @@ class plgAkeebasubsUserdelete extends JPlugin
 	 */
 	private function removeJ15($id)
 	{
-		$acl			=& JFactory::getACL();
+		$acl			= JFactory::getACL();
 		
 		// check for a super admin ... can't delete them
 		$objectID 	= $acl->get_object_id( 'users', $id, 'ARO' );
@@ -76,7 +76,7 @@ class plgAkeebasubsUserdelete extends JPlugin
 		if ( $this_group == 'super administrator' ) {
 			return;
 		} else {
-			$user =& JUser::getInstance((int)$id);
+			$user = JUser::getInstance((int)$id);
 			$user->delete();
 		}
 	}

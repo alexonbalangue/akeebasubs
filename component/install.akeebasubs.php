@@ -359,7 +359,7 @@ if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
 	$j15 = false;
 }
 
-$jlang =& JFactory::getLanguage();
+$jlang = JFactory::getLanguage();
 $jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 $jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, null, true);

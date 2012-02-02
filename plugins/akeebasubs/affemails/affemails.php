@@ -99,7 +99,7 @@ class plgAkeebasubsAffemails extends JPlugin
 		$affiliateUser = JFactory::getUser($affiliate->user_id);
 		
 		// Load the language files and their overrides
-		$jlang =& JFactory::getLanguage();
+		$jlang = JFactory::getLanguage();
 		// -- English (default fallback)
 		$jlang->load('plg_akeebasubs_affemails', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('plg_akeebasubs_affemails.override', JPATH_ADMINISTRATOR, 'en-GB', true);

@@ -40,7 +40,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		}
 		
 		// Load the language files		
-		$jlang =& JFactory::getLanguage();
+		$jlang = JFactory::getLanguage();
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
@@ -81,7 +81,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	private function getComponentParameters()
 	{
 		jimport('joomla.html.parameter');
-		$component =& JComponentHelper::getComponent( 'com_akeebasubs' );
+		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
 		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;
 		} elseif(!empty($component->params)) {
@@ -116,7 +116,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$params = $this->getComponentParameters();
 		$params->set('plg_akeebasubs_asexpirationcontrol_timestamp', $lastRun);
 		
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 		$data = $params->toString();
 		
 		if(version_compare(JVERSION, '1.6.0', 'ge')) {

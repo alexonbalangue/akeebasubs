@@ -195,7 +195,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 	private function getComponentParameters()
 	{
 		jimport('joomla.html.parameter');
-		$component =& JComponentHelper::getComponent( 'com_akeebasubs' );
+		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
 		
 		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;
@@ -231,7 +231,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$params = $this->getComponentParameters();
 		$params->set('plg_akeebasubs_asexpirationnotify_timestamp', $lastRun);
 		
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 		
 		if(version_compare(JVERSION, '1.6.0', 'ge')) {
 			// Joomla! 1.6
@@ -266,7 +266,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		
 		// Load the language files
 		// Load the language files and their overrides
-		$jlang =& JFactory::getLanguage();
+		$jlang = JFactory::getLanguage();
 		// -- English (default fallback)
 		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, 'en-GB', true);

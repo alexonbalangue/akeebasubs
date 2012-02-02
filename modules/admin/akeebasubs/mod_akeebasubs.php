@@ -16,7 +16,7 @@ if(!defined('FOF_INCLUDED')) return;
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 
-$jlang =& JFactory::getLanguage();
+$jlang = JFactory::getLanguage();
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 

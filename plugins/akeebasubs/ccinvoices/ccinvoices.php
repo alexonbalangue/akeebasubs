@@ -109,7 +109,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				}
 			}
 			
-			$jlang =& JFactory::getLanguage();
+			$jlang = JFactory::getLanguage();
 			// Front-end translation
 			$jlang->load('com_ccinvoices', JPATH_SITE, 'en-GB', true);
 			$jlang->load('com_ccinvoices', JPATH_SITE, $jlang->getDefault(), true);
