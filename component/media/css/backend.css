@@ -14,6 +14,7 @@
 }
 
 .icon-32-subrefresh { background: transparent url(../images/subrefresh.png); }
+#toolbar-Link .icon-32-export { background: transparent url(../images/export.png); }
 
 fieldset label { float: left; }
 

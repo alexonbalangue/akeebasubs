@@ -11,7 +11,8 @@ Akeeba Subscriptions 2.1
 # mod_akslevels showed disabled subscriptions
 # mod_akslevels showed subscriptions in wrong order, not the ordering set in the component
 # Wrong image directory used in front-end (thank you, Jurian!)
-# "Run Integrations" would not work on Joomla! 1.5
+# "Run Integrations" would not work in Joomla! 1.5
+# Missing icon for "Export to CSV" in Joomla! 1.5
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
