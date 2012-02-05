@@ -29,6 +29,7 @@
 	<fileset dir="${dirs.component}" id="component">
 		<include name="backend/**" />
 		<include name="frontend/**" />
+		<include name="fof/**" />
 		<include name="media/**" />
 		<include name="translations/**" />
 		<include name="*" />

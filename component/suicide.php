@@ -146,59 +146,18 @@ if(count($installation_queue['plugins'])) {
 	}
 }
 
-// Load the translation strings (Joomla! 1.5 and 1.6 compatible)
-if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
-	global $j15;
-	// Joomla! 1.5 will have to load the translation strings
-	$j15 = true;
-	$jlang = JFactory::getLanguage();
-	$path = JPATH_ADMINISTRATOR.'/components/com_akeebasubs';
-	$jlang->load('com_akeebasubs.sys', $path, 'en-GB', true);
-	$jlang->load('com_akeebasubs.sys', $path, $jlang->getDefault(), true);
-	$jlang->load('com_akeebasubs.sys', $path, null, true);
-} else {
-	$j15 = false;
-}
-
-if(!function_exists('pitext'))
-{
-	function pitext($key)
-	{
-		global $j15;
-		$string = JText::_($key);
-		if($j15)
-		{
-			$string = str_replace('"_QQ_"', '"', $string);
-		}
-		echo $string;
-	}
-}
-
-if(!function_exists('pisprint'))
-{
-	function pisprint($key, $param)
-	{
-		global $j15;
-		$string = JText::sprintf($key, $param);
-		if($j15)
-		{
-			$string = str_replace('"_QQ_"', '"', $string);
-		}
-		echo $string;
-	}
-}
 
 $akeeba_installation_has_run = true;
 ?>
 
 <?php $rows = 0;?>
-<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;<?php pitext('COM_AKEEBASUBS_PIUNINSTALL'); ?></h2>
-<p><?php pitext('COM_AKEEBASUBS_PIUNINSTALLTEXT')?></p>
+<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba Subscriptions Uninstallation</h2>
+<p>We are sorry that you decided to uninstall Akeeba Subscriptions. Please let us know why by posting in the Pre-Sales area of our ticket system. We appreciate your feedback; it helps us develop better software!</p>
 <table class="adminlist">
 	<thead>
 		<tr>
-			<th class="title" colspan="2"><?php pitext('COM_AKEEBASUBS_PIEXTENSION'); ?></th>
-			<th width="30%"><?php pitext('COM_AKEEBASUBS_PISTATUS'); ?></th>
+			<th class="title" colspan="2">Extension</th>
+			<th width="30%">Status</th>
 		</tr>
 	</thead>
 	<tfoot>
@@ -209,23 +168,23 @@ $akeeba_installation_has_run = true;
 	<tbody>
 		<tr class="row0">
 			<td class="key" colspan="2">
-				<strong><?php pitext('COM_AKEEBASUBS_PICOMPONENT'); ?></strong>
+				<strong>Akeeba Subscriptions component</strong>
 			</td>
-			<td><strong style="color: green"><?php pitext('COM_AKEEBASUBS_PIUNINSTALLED');?></strong></td>
+			<td><strong style="color: green">Uninstalled</strong></td>
 		</tr>
 		<?php if (count($status->modules)) : ?>
 		<tr>
-			<th><?php pitext('COM_AKEEBASUBS_PIMODULE'); ?></th>
-			<th><?php pitext('COM_AKEEBASUBS_PICLIENT'); ?></th>
+			<th>Module</th>
+			<th>Client</th>
 			<th></th>
 		</tr>
 		<?php foreach ($status->modules as $module) : ?>
 		<tr class="row<?php echo (++ $rows % 2); ?>">
 			<td class="key"><?php echo $module['name']; ?></td>
-			<td class="key"><?php pitext('COM_AKEEBASUBS_PICLIENT_').strtoupper($module['client']); ?></td>
+			<td class="key"><?php echo $module['client']; ?></td>
 			<td>
 				<span style="color: <?php echo ($module['result'])?'green':'red'?>; font-weight: bold;">
-					<?php ($module['result'])?pitext('COM_AKEEBASUBS_PIUNINSTALLED'):pitext('COM_AKEEBASUBS_PINOTUNINSTALLED'); ?>
+					<?php echi ($module['result'])?'Uninstalled':'Not Uninstalled'; ?>
 				</span>
 			</td>
 		</tr>
@@ -233,8 +192,8 @@ $akeeba_installation_has_run = true;
 		<?php endif;?>
 		<?php if (count($status->plugins)) : ?>
 		<tr>
-			<th><?php pitext('COM_AKEEBASUBS_PIPLUGIN'); ?></th>
-			<th><?php pitext('COM_AKEEBASUBS_PIGROUP'); ?></th>
+			<th>Plugin</th>
+			<th>Group</th>
 			<th></th>
 		</tr>
 		<?php foreach ($status->plugins as $plugin) : ?>
@@ -243,7 +202,7 @@ $akeeba_installation_has_run = true;
 			<td class="key"><?php echo ucfirst($plugin['group']); ?></td>
 			<td>
 				<span style="color: <?php echo ($plugin['result'])?'green':'red'?>; font-weight: bold;">
-					<?php ($plugin['result'])?pitext('COM_AKEEBASUBS_PIUNINSTALLED'):pitext('COM_AKEEBASUBS_PINOTUNINSTALLED'); ?>
+					<?php ($plugin['result'])?'Uninstalled':'Not Uninstalled'; ?>
 				</span>
 			</td>
 		</tr>
