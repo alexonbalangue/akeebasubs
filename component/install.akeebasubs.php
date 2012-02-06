@@ -329,12 +329,54 @@ if(count($installation_queue['modules'])) {
 			$status->modules[] = array('name'=>'mod_'.$module, 'client'=>$folder, 'result'=>$result);
 			// Modify where it's published and its published state
 			if(!$count) {
+				// A. Position and state
 				list($modulePosition, $modulePublished) = $modulePreferences;
+				if(version_compare(JVERSION, '2.5.0', 'ge') && ($modulePosition == 'cpanel')) {
+					$modulePosition = 'icon';
+				}
 				$sql = "UPDATE #__modules SET position=".$db->Quote($modulePosition);
 				if($modulePublished) $sql .= ', published=1';
 				$sql .= ' WHERE `module`='.$db->Quote('mod_'.$module);
 				$db->setQuery($sql);
 				$db->query();
+				if(version_compare(JVERSION, '1.7.0', 'ge')) {
+					// B. Change the ordering of back-end modules to 1 + max ordering in J! 1.7+
+					if($folder == 'admin') {
+						$query = $db->getQuery(true);
+						$query->select('MAX('.$db->nq('ordering').')')
+							->from($db->nq('#__modules'))
+							->where($db->nq('position').'='.$db->q($modulePosition));
+						$position = $db->loadResult();
+						$position++;
+						
+						$query = $db->getQuery(true);
+						$query->update($db->nq('#__modules'))
+							->set($db->nq('ordering').' = '.$db->q($position))
+							->where($db->nq('module').' = '.$db->q('mod_'.$module));
+						$db->setQuery($query);
+						$db->query();
+					}
+					// C. Link to all pages on Joomla! 1.7+
+					$query = $db->getQuery(true);
+					$query->select('id')->from($db->nq('#__modules'))
+						->where($db->nq('module').' = '.$db->q('mod_'.$module));
+					$db->setQuery($query);
+					$moduleid = $db->loadResult();
+					
+					$query = $db->getQuery(true);
+					$query->select('*')->from($db->nq('#__modules_menu'))
+						->where($db->nq('moduleid').' = '.$db->q($moduleid));
+					$db->setQuery($query);
+					$assignments = $db->loadObjectList();
+					$isAssigned = !empty($assignments);
+					if(!$isAssigned) {
+						$o = (object)array(
+							'moduleid'	=> $moduleid,
+							'menuid'	=> 0
+						);
+						$db->insertObject('#__modules_menu', $o);
+					}
+				}
 			}
 		}
 	}
