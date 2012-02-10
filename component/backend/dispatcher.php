@@ -17,10 +17,19 @@ class AkeebasubsDispatcher extends FOFDispatcher
 			// Merge the language overrides
 			$paths = array(JPATH_ROOT, JPATH_ADMINISTRATOR);
 			$jlang = JFactory::getLanguage();
+			$jlang->load($this->component, $paths[0], 'en-GB', true);
+			$jlang->load($this->component, $paths[0], null, true);
+			$jlang->load($this->component, $paths[1], 'en-GB', true);
+			$jlang->load($this->component, $paths[1], null, true);
+			
 			$jlang->load($this->component.'.override', $paths[0], 'en-GB', true);
 			$jlang->load($this->component.'.override', $paths[0], null, true);
 			$jlang->load($this->component.'.override', $paths[1], 'en-GB', true);
 			$jlang->load($this->component.'.override', $paths[1], null, true);
+			// Live Update translation
+			$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.DS.'liveupdate', 'en-GB', true);
+			$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.DS.'liveupdate', $jlang->getDefault(), true);
+			$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.DS.'liveupdate', null, true);
 		}
 		
 		return $result;
