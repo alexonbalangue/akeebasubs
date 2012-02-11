@@ -95,6 +95,7 @@ class AkeebaRelink
 		// Iterate directories
 		$this->_modules = array();
 		foreach($paths as $path) {
+			if( !is_dir($path) && !is_link($path) ) continue;
 			foreach(new DirectoryIterator($path) as $fileInfo) {
 				if($fileInfo->isDot()) continue;
 				if(!$fileInfo->isDir()) continue;
@@ -134,6 +135,7 @@ class AkeebaRelink
 		// Iterate directories
 		$this->_plugins = array();
 		foreach($paths as $path) {
+			if( !is_dir($path) && !is_link($path) ) continue;
 			foreach(new DirectoryIterator($path) as $fileInfo) {
 				if($fileInfo->isDot()) continue;
 				if(!$fileInfo->isDir()) continue;
