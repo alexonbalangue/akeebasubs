@@ -19,6 +19,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 				return false;
 			} else {
 				$list = $this->getThisModel()
+					->savestate(0)
 					->limit(0)
 					->limitstart(0)
 					->getItemList();
@@ -40,6 +41,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		// If it's the back-end CSV view, force no limits
 		if(JFactory::getApplication()->isAdmin() && (FOFInput::getCmd('format','html',$this->input) == 'csv')) {
 			$this->getThisModel()
+				->savestate(0)
 				->limit(0)
 				->limitstart(0);
 		}

@@ -20,6 +20,7 @@ $this->loadHelper('select');
 $this->loadHelper('format');
 
 $couponsRaw = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+	->savestate(0)
 	->limit(0)
 	->limitstart(0)
 	->getList();
@@ -30,6 +31,7 @@ foreach($couponsRaw as $coupon) {
 unset($couponsRaw);
 
 $upgradesRaw = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+	->savestate(0)
 	->limit(0)
 	->limitstart(0)
 	->getList();

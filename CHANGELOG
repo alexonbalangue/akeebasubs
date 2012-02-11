@@ -13,6 +13,7 @@ Akeeba Subscriptions 2.1
 # Wrong image directory used in front-end (thank you, Jurian!)
 # "Run Integrations" would not work in Joomla! 1.5
 # Missing icon for "Export to CSV" in Joomla! 1.5
+# #60 Subscriptions list length always reset to "all items"
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
