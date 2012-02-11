@@ -346,6 +346,7 @@ if(count($installation_queue['modules'])) {
 						$query->select('MAX('.$db->nq('ordering').')')
 							->from($db->nq('#__modules'))
 							->where($db->nq('position').'='.$db->q($modulePosition));
+						$db->setQuery($query);
 						$position = $db->loadResult();
 						$position++;
 						
