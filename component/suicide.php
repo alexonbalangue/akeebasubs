@@ -52,6 +52,7 @@ $installation_queue = array(
 			'juga'					=> 0,
 			'jxjomsocial'			=> 0,
 			'k2'					=> 0,
+			'kunena'				=> 0,
 			'ninjaboard'			=> 0,
 			'phocadownload'			=> 0,
 			'redshop'				=> 0,
