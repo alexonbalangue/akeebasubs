@@ -126,7 +126,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				'website'		=> '',
 				'featured'		=> 0,
 				'icon'			=> 'nopic.png',
-				'clicence'		=> '',
+				'clicense'		=> '',
 				'language'		=> '',
 				'state'			=> 1,
 				'params'		=> ''
