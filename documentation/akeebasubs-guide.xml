@@ -4643,7 +4643,7 @@ LEVEL3=Group 3, Group 4</programlisting>
         </variablelist>
       </section>
 
-      <section xml:id="integration-cb">
+      <section xml:id="integration-iproperty">
         <title>Intellectual Property integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
