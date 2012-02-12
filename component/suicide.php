@@ -46,6 +46,7 @@ $installation_queue = array(
 			'ccinvoices'			=> 0,
 			'communityacl'			=> 0,
 			'docman'				=> 0,
+			'iproperty'				=> 0,
 			'jce'					=> 0,
 			'jomsocial'				=> 0,
 			'joomla'				=> 0,

@@ -5,7 +5,8 @@ Akeeba Subscriptions 2.1
 + #6 Google Checkout payment gateway
 + Moneris payment gateway
 + The SQL script plugin now supports the variable [USERNAME]
-+ #25 Add/remove to Kunena groups
++ #25 Add/remove to Kunena groups (thank you, Roland!)
++ Intellectual Property integration
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
 # The backend module displayed the subscription levels ordered by their ID instead of their ordering preference
