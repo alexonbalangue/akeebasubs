@@ -4583,7 +4583,7 @@ LEVEL3=Group 1</programlisting>
       </section>
 
       <section xml:id="integration-kunena">
-        <title>K2 Integration</title>
+        <title>Kunena Integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - Kunena Integration</guilabel></para>
@@ -4638,6 +4638,48 @@ LEVEL3=Group 3, Group 4, Group 5</programlisting>
               <programlisting>LEVEL1=Group 1
 LEVEL2=Group 2
 LEVEL3=Group 3, Group 4</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-cb">
+        <title>Intellectual Property integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Intellectual Property Integration</guilabel></para>
+
+        <para>This plugin integrates Akeeba Subscriptions with the
+        Intellectual Property real estate component by The Thinkery LLC. It
+        allows subscribers to specific Subscription Levels to be automatically
+        assigned as Agents in Intellectual Property. This allows you to create
+        a real estate portal with self-registering real estate agents. </para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Intellectual Property</term>
+
+            <listitem>
+              <para>When a user has an active subscription in this level, he
+              is added to Intellectual Property. If the user did not
+              previously have an Agent record associated with his user
+              account, a new Company and a new Agent record are created and
+              activated. If the user had existing, but unpublished, Agent
+              records, the plugin will activate those records but will NOT
+              create a new Company and/or Agent record.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Intellectual Property</term>
+
+            <listitem>
+              <para>When a user has an expired subscription in this level, he
+              is removed from Intellectual Property. This means that all Agent
+              records associated with this user account will be
+              unpublished.</para>
             </listitem>
           </varlistentry>
         </variablelist>
