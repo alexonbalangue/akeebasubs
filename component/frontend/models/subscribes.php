@@ -555,13 +555,29 @@ class AkeebasubsModelSubscribes extends FOFModel
 							->limitstart(0)
 							->getTotal();
 						if($coupon->hitslimit >= 0) {
-							$valid = $hits < $coupon->hitslimit;
+							$valid = $hits <= $coupon->hitslimit;
 							if(($coupon->hits != $hits) || ($hits >= $coupon->hitslimit)) {
 								$coupon->hits = $hits;
 								$coupon->enabled = $hits < $coupon->hitslimit;
 								$coupon->store();
 							}
 						}
+					}
+					
+					// Check user hits limit
+					if($valid && $coupon->userhits && !JFactory::getUser()->guest) {
+						$user_id = JFactory::getUser()->id;
+						// How many subscriptions with a paystate of C,P for this user
+						// are using this coupon code?
+						$hits = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							->savestate(0)
+							->coupon_id($coupon->akeebasubs_coupon_id)
+							->paystate('C,P')
+							->user_id($user_id)
+							->limit(0)
+							->limitstart(0)
+							->getTotal();
+						$valid = $hits <= $coupon->userhits;
 					}
 				} else {
 					$valid = false;

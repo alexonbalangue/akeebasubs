@@ -283,6 +283,21 @@ ENDSQL;
 	$status = $db->query();
 }
 
+// Upgrade the coupons table (2.1)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_coupons`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`userhits`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_coupons`
+	ADD COLUMN `userhits` BIGINT(20) DEFAULT 0 AFTER `hitslimit`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
 
 // =============================================================================
 // Sub-extension installation

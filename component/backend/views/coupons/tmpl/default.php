@@ -137,9 +137,10 @@ $this->loadHelper('format');
 			<td>
 				<?php
 					$limits = array();
-					if($coupon->user) $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_USERS');
+					if($coupon->user) $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_USERS').' ('.JFactory::getUser($coupon->user)->username.')';
 					if($coupon->subscriptions) $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_LEVELS');
 					if($coupon->hitslimit) $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_HITS');
+					if($coupon->userhits) $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_USERHITS');
 					
 					$strLimits = implode(', ', $limits);
 				?>

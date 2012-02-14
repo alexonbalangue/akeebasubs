@@ -6,6 +6,7 @@ Akeeba Subscriptions 2.1
 + Moneris payment gateway
 + The SQL script plugin now supports the variable [USERNAME]
 + #25 Add/remove to Kunena groups (thank you, Roland!)
++ #41 Limit the number of times a Coupon can be used per user
 + Intellectual Property integration
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)

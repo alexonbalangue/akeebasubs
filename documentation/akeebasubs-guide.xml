@@ -1844,6 +1844,18 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             limit.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Maximum hits per user</term>
+
+          <listitem>
+            <para>If it is greater than zero, the coupon code can be used up
+            to this number of times <emphasis>per user</emphasis>. For
+            example, if this value is set to 2 a user will be able to use it
+            only up to two times. The third time he tries to use it, the
+            coupon code will have no effect.</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
     </section>
 
@@ -4653,7 +4665,7 @@ LEVEL3=Group 3, Group 4</programlisting>
         Intellectual Property real estate component by The Thinkery LLC. It
         allows subscribers to specific Subscription Levels to be automatically
         assigned as Agents in Intellectual Property. This allows you to create
-        a real estate portal with self-registering real estate agents. </para>
+        a real estate portal with self-registering real estate agents.</para>
 
         <para>The plugin has these options:</para>
 

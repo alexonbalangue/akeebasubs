@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`user` int(10) DEFAULT NULL,
 	`params` TEXT,
 	`hitslimit` BIGINT(20) unsigned NULL,
+	`userhits` BIGINT(20) unsigned NULL,
 	`type` ENUM('value','percent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT 0.0,
 	
