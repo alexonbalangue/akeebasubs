@@ -17,6 +17,7 @@ Akeeba Subscriptions 2.1
 # "Run Integrations" would not work in Joomla! 1.5
 # Missing icon for "Export to CSV" in Joomla! 1.5
 # #60 Subscriptions list length always reset to "all items"
+# Decimals in tax rules not shown in Tax Rules view
 
 Akeeba Subscriptions 2.0.1
 ================================================================================

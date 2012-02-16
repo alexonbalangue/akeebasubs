@@ -145,7 +145,7 @@ $this->loadHelper('format');
 			</td>
 			<td>
 				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
-					<?php echo sprintf('%02.2f', (int)$taxrule->taxrate)?> %
+					<?php echo sprintf('%02.2f', $taxrule->taxrate)?> %
 				</a>
 			</td>
 			<td class="order" align="center">
