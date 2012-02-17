@@ -18,6 +18,7 @@ Akeeba Subscriptions 2.1
 # Missing icon for "Export to CSV" in Joomla! 1.5
 # #60 Subscriptions list length always reset to "all items"
 # Decimals in tax rules not shown in Tax Rules view
+# The sales graph was inaccurate (only enabled subs would show)
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
