@@ -14,7 +14,9 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		// When groupbydate is set to 1 we force a JSON view which returns the
 		// sales info (subscriptions, net amount) grouped by date. You can use
 		// the since/until or other filter in the URL to filter the whole lot
-		if(FOFInput::getInt('groupbydate',0,$this->input) == 1) {
+		$groupbydate = FOFInput::getInt('groupbydate',0,$this->input);
+		$groupbylevel = FOFInput::getInt('groupbylevel',0,$this->input);
+		if(($groupbydate == 1) || ($groupbylevel == 1)) {
 			if(JFactory::getUser()->guest) {
 				return false;
 			} else {

@@ -92,6 +92,12 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 	height: 300px;
 }
 
+#aklevelschart {
+	width: 100%;
+	min-width: 450px;
+	height: 300px;
+}
+
 .desc {
 	background: transparent url(../images/sort_desc.png) 4px right no-repeat;
 	padding: 0 11px

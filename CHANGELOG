@@ -8,6 +8,7 @@ Akeeba Subscriptions 2.1
 + #25 Add/remove to Kunena groups (thank you, Roland!)
 + #41 Limit the number of times a Coupon can be used per user
 + Intellectual Property integration
++ Pie chart to show per-level sales over the last 30 days
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
 # The backend module displayed the subscription levels ordered by their ID instead of their ordering preference

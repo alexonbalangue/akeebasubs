@@ -31,6 +31,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'expires_to'	=> $this->getState('expires_to',null,'string'),
 			'refresh'		=> $this->getState('refresh',null,'int'),
 			'groupbydate'	=> $this->getState('groupbydate',null,'int'),
+			'groupbylevel'	=> $this->getState('groupbylevel',null,'int'),
 			'moneysum'		=> $this->getState('moneysum',null,'int'),
 			'coupon_id'		=> $this->getState('coupon_id',null,'int'),
 			'filter_discountmode' => $this->getState('filter_discountmode',null,'cmd'),
@@ -79,19 +80,29 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
 		
-		if($state->groupbydate == 1) return;
+		if($state->groupbydate == 1) {
+			return;
+		} elseif($state->groupbylevel == 1) {
+			$query
+				->join('INNER', $db->nameQuote('#__akeebasubs_levels').' AS '.$db->nameQuote('l').' ON '.
+						$db->nameQuote('l').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
+						$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id'))
+				;
+		} else {
+			$query
+				->join('INNER', $db->nameQuote('#__akeebasubs_levels').' AS '.$db->nameQuote('l').' ON '.
+						$db->nameQuote('l').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
+						$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id'))
+				->join('LEFT OUTER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON '.
+						$db->nameQuote('u').'.'.$db->nameQuote('id').' = '.
+						$db->nameQuote('tbl').'.'.$db->nameQuote('user_id'))
+				->join('LEFT OUTER', $db->nameQuote('#__akeebasubs_users').' AS '.$db->nameQuote('a').' ON '.
+						$db->nameQuote('a').'.'.$db->nameQuote('user_id').' = '.
+						$db->nameQuote('tbl').'.'.$db->nameQuote('user_id'))
+			;
+		}
 		
-		$query
-			->join('INNER', $db->nameQuote('#__akeebasubs_levels').' AS '.$db->nameQuote('l').' ON '.
-					$db->nameQuote('l').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
-					$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id'))
-			->join('LEFT OUTER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON '.
-					$db->nameQuote('u').'.'.$db->nameQuote('id').' = '.
-					$db->nameQuote('tbl').'.'.$db->nameQuote('user_id'))
-			->join('LEFT OUTER', $db->nameQuote('#__akeebasubs_users').' AS '.$db->nameQuote('a').' ON '.
-					$db->nameQuote('a').'.'.$db->nameQuote('user_id').' = '.
-					$db->nameQuote('tbl').'.'.$db->nameQuote('user_id'))
-		;
+		
 	}
 	
 	protected function _buildQueryColumns(FOFQueryAbstract $query)
@@ -109,6 +120,12 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				'DATE('.$db->nameQuote('created_on').') AS '.$db->nameQuote('date'),
 				'SUM('.$db->nameQuote('net_amount').') AS '.$db->nameQuote('net'),
 				'COUNT('.$db->nameQuote('akeebasubs_subscription_id').') AS '.$db->nameQuote('subs')
+			));
+		} elseif($state->groupbylevel == 1) {
+			$query->select(array(
+				$db->nameQuote('l').'.'.$db->nameQuote('title'),
+				'SUM('.$db->nameQuote('tbl').'.'.$db->nameQuote('net_amount').') AS '.$db->nameQuote('net'),
+				'COUNT('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_subscription_id').') AS '.$db->nameQuote('subs'),
 			));
 		} else {
 			$query->select(array(
@@ -155,6 +172,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			$query->group(array(
 				'DATE('.$db->nameQuote('tbl').'.'.$db->nameQuote('created_on').')'
 			));
+		} elseif($state->groupbylevel == 1) {
+			$query->group(array(
+				$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id')
+			));
 		}
 	}
 	
@@ -192,7 +213,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			);
 		}
 		
-		if(!$state->groupbydate)
+		if(!$state->groupbydate && !$state->groupbylevel)
 		{
 			if(is_numeric($state->enabled)) {
 				$query->where(
