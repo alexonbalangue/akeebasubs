@@ -5,6 +5,15 @@
  * @license GNU/GPL version 3 or, at your option, any later version
  */
 
+function realpath2($path)
+ {
+	if(DIRECTORY_SEPARATOR == '\\') {
+		return str_replace('/', '\\', $path);
+	} else {
+		return str_replace('\\', '/', $path);
+	}
+ }
+ 
 class AkeebaRelink
 {
 	/** @var string The path to the sources */
@@ -439,7 +448,7 @@ class AkeebaRelink
 				'adminLangPath'	=> $langFolderAdmin,
 				'adminLangFiles'=> $langFilesAdmin,
 			);
-			
+
 			unset($xmlDoc);
 			return;
 		}
@@ -649,7 +658,7 @@ class AkeebaRelink
 		
 		foreach($maps as $from => $to)
 		{
-			@symlink($from, $to);
+			@symlink(realpath2($from), realpath2($to));
 		}
 	}
 	
@@ -670,7 +679,7 @@ class AkeebaRelink
 
 			foreach($maps as $from => $to)
 			{
-				@symlink($from, $to);
+				@symlink(realpath2($from), realpath2($to));
 			}
 		}
 	}
@@ -692,7 +701,7 @@ class AkeebaRelink
 
 			foreach($maps as $from => $to)
 			{
-				@symlink($from, $to);
+				@symlink(realpath2($from), realpath2($to));
 			}
 		}
 	}
@@ -706,7 +715,7 @@ class AkeebaRelink
 	{
 		foreach($dirs as $dir) {
 			if(is_link($dir)) {
-				$result = unlink($dir);
+				$result = unlink(realpath2($dir));
 			} elseif(is_dir($dir)) {
 				$result = $this->_rmrecursive($dir);
 			} else {
@@ -726,7 +735,7 @@ class AkeebaRelink
 	{
 		foreach($files as $file) {
 			if(is_link($file) || is_file($file)) {
-				$result = unlink($file);
+				$result = unlink(realpath2($file));
 			} else {
 				$result = true;
 			}
@@ -745,7 +754,7 @@ class AkeebaRelink
 		// When the directory is a symlink, don't delete recursively. That would
 		// fuck up the plugins.
 		if(is_link($dir)) {
-			return @unlink($dir);
+			return @unlink(realpath2($dir));
 		}
 		
 		$handle = opendir($dir);
@@ -753,13 +762,13 @@ class AkeebaRelink
 			if( !in_array($item, array('.','..')) ) {
 				$path = $dir.'/'.$item;
 				if(is_link($path)) {
-					$result = @unlink($path);
+					$result = @unlink(realpath2($path));
 				} elseif(is_file($path)) {
-					$result = @unlink($path);
+					$result = @unlink(realpath2($path));
 				} elseif(is_dir($path)) {
-					$result = $this->_rmrecursive($path);
+					$result = $this->_rmrecursive(realpath2($path));
 				} else {
-					$result = @unlink($path);
+					$result = @unlink(realpath2($path));
 				}
 				if(!$result) return false;
 			}
