@@ -12,7 +12,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/akeebajq.js?'.AKEEBASUBS_VERS
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSIONHASH);
 JHtml::_('behavior.tooltip');
 
-$editor =& JFactory::getEditor();
+$editor = JFactory::getEditor();
 
 $this->loadHelper('cparams');
 ?>

@@ -29,6 +29,7 @@
 	<fileset dir="${dirs.component}" id="component">
 		<include name="backend/**" />
 		<include name="frontend/**" />
+		<include name="fof/**" />
 		<include name="media/**" />
 		<include name="translations/**" />
 		<include name="*" />
@@ -160,5 +161,22 @@
 		</ftpdeploy>
 		<echo>All done. Have a cup of coffee and relax :)</echo>
 	</target>
-	
+
+	<target name="docsdeploy">
+		<!-- English manual -->
+		<echo>Uploading Akeeba Subscriptions documentation</echo>
+		<ftpdeploy
+			host="${ftp.host}"
+			port="${ftp.port}"
+			username="${ftp.username}"
+			password="${ftp.password}"
+			dir="${ftp.dir.docs}/akeeba-subscriptions"
+			mode="${ftp.mode}"
+			passive="true"
+			level="debug">
+			<fileset dir="${dirs.documentation}">
+				<include name="*.xml"/>
+			</fileset>
+		</ftpdeploy>
+	</target>
 </project>

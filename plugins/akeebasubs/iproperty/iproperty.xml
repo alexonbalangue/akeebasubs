@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - Intellectual Property Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>February 2012</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_IPROPERTY_DESCRIPTION</description>
+	<files>
+		<filename plugin="iproperty">iproperty.php</filename>
+		<folder>iproperty</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_iproperty.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_iproperty.sys.ini</language>
+	</languages>
+	<params addpath="/plugins/akeebasubs/iproperty">
+		<param name="autoauthids" type="sql2" default=""
+			label="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_TITLE"
+			description="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_DESC"
+			query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
+			key_field="key"
+			value_field="value" />
+		<param name="autodeauthids" type="sql2" default=""
+			label="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_TITLE"
+			description="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_DESC"
+			query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
+			key_field="key"
+			value_field="value" />
+	</params>
+	
+	<config addfieldpath="/plugins/akeebasubs/iproperty/iproperty">
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="autoauthids" type="sql2" default=""
+					label="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_TITLE"
+					description="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_DESC"
+					query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
+					key_field="key"
+					value_field="value" />
+				<field name="autodeauthids" type="sql2" default=""
+					label="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_TITLE"
+					description="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_DESC"
+					query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
+					key_field="key"
+					value_field="value" />
+			</fieldset>
+		</fields>
+	</config>
+</install>

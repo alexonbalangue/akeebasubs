@@ -18,7 +18,7 @@ function AkeebasubsBuildRoute(&$query)
 	
 	// We need to find out if the menu item link has a view param
 	if(array_key_exists('Itemid', $query)) {
-		$menu = JSite::getMenu()->getItem($query['Itemid']);
+		$menu = JFactory::getApplication()->getMenu()->getItem($query['Itemid']);
 		if(!is_object($menu)) {
 			$menuquery = array();
 		} else {
@@ -70,7 +70,7 @@ function AkeebasubsParseRoute($segments)
 	// default view
 	$default = 'levels';
 
-	$mObject = JSite::getMenu()->getActive();
+	$mObject = JFactory::getApplication()->getMenu()->getActive();
 	$menu = is_object($mObject) ? $mObject->query : array();
 
 	// circumvent the auto-segment decoding

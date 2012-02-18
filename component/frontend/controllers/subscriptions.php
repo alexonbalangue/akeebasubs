@@ -87,9 +87,11 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		}
 		
 		// Let me cheat. If the request doesn't specify how many records to show, show them all!
-		if(!JRequest::getInt('limit',0) && !JRequest::getInt('limitstart',0)) {
-			$this->getThisModel()->limit(0);
-			$this->getThisModel()->limitstart(0);
+		if(JRequest::getCmd('format','html') != 'html') {
+			if(!JRequest::getInt('limit',0) && !JRequest::getInt('limitstart',0)) {
+				$this->getThisModel()->limit(0);
+				$this->getThisModel()->limitstart(0);
+			}
 		}
 		
 		return true;

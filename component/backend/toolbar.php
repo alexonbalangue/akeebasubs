@@ -33,7 +33,7 @@ class AkeebasubsToolbar extends FOFToolbar
 		
 		// Add "Subscription Refresh"Run Integrations"
 		JToolBarHelper::divider();
-		$bar->appendButton('Link', 'subrefresh', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:return false;');
+		$bar->appendButton('Link', 'subrefresh', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
 		
 		// Add "Export to CSV"
 		$link = JURI::getInstance();

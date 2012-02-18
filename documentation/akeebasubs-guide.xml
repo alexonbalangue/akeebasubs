@@ -1844,6 +1844,18 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             limit.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Maximum hits per user</term>
+
+          <listitem>
+            <para>If it is greater than zero, the coupon code can be used up
+            to this number of times <emphasis>per user</emphasis>. For
+            example, if this value is set to 2 a user will be able to use it
+            only up to two times. The third time he tries to use it, the
+            coupon code will have no effect.</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
     </section>
 
@@ -4580,6 +4592,109 @@ LEVEL3=Group 1</programlisting>
         the subscription page to make a new subscription or "renew" an
         existing one (subscription renewal in Akeeba Subscriptions is the same
         thing as a new subscription).</para>
+      </section>
+
+      <section xml:id="integration-kunena">
+        <title>Kunena Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Kunena Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        Kunena groups based on their subscription status. This allows you to
+        fully utilize Kunena's built-in ACL capabilities.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Kunena groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to Kunena
+              groups. When a user has an active subscription to the specified
+              level, he'll be added to the Kunena group mentioned on the right
+              hand of the equal sign. Each assignment is done like
+              this:</para>
+
+              <programlisting>LEVEL1=Group 1, Group 2</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1 and Group 2 are the names of the Kunena groups you want
+              to add a user to when he subscribes (separate multiple groups
+              with a comma). If you want to assign multiple subscription
+              levels to multiple groups, you have to do something like that
+              (separate multiple lines with a single press of the ENTER key on
+              your keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1, Group 2
+LEVEL2=Group 2
+LEVEL3=Group 3, Group 4, Group 5</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              Kunena groups instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Kunena groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the Kunena groups to remove
+              a user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1
+LEVEL2=Group 2
+LEVEL3=Group 3, Group 4</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-iproperty">
+        <title>Intellectual Property integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Intellectual Property Integration</guilabel></para>
+
+        <para>This plugin integrates Akeeba Subscriptions with the
+        Intellectual Property real estate component by The Thinkery LLC. It
+        allows subscribers to specific Subscription Levels to be automatically
+        assigned as Agents in Intellectual Property. This allows you to create
+        a real estate portal with self-registering real estate agents.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Intellectual Property</term>
+
+            <listitem>
+              <para>When a user has an active subscription in this level, he
+              is added to Intellectual Property. If the user did not
+              previously have an Agent record associated with his user
+              account, a new Company and a new Agent record are created and
+              activated. If the user had existing, but unpublished, Agent
+              records, the plugin will activate those records but will NOT
+              create a new Company and/or Agent record.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Intellectual Property</term>
+
+            <listitem>
+              <para>When a user has an expired subscription in this level, he
+              is removed from Intellectual Property. This means that all Agent
+              records associated with this user account will be
+              unpublished.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
     </section>
 

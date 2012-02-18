@@ -19,7 +19,11 @@ function doTheHippyHippyShake($root, $target)
 			$from = $target.'/'.$area.'/'.$module.'/en-GB';
 			$to = $moduleDir.'/language/en-GB';
 			
-			@unlink($to);
+			if(is_link($to)) {
+				if(!@unlink($to)) {
+					continue;
+				}
+			}
 			@link($from, $to);
 		}
 	}	

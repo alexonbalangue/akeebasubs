@@ -45,16 +45,19 @@ $installation_queue = array(
 			'affemails'				=> 0,
 			'autocity'				=> 0,
 			'cb'					=> 0,
-			'communityacl'			=> 0,
 			'ccinvoices'			=> 0,
+			'communityacl'			=> 0,
 			'docman'				=> 0,
+			'iproperty'				=> 0,
 			'jce'					=> 0,
 			'jomsocial'				=> 0,
 			'joomla'				=> 0,
 			'juga'					=> 0,
 			'jxjomsocial'			=> 0,
 			'k2'					=> 0,
+			'kunena'				=> 0,
 			'ninjaboard'			=> 0,
+			'phocadownload'			=> 0,
 			'redshop'				=> 0,
 			'redshopusersync'		=> 0,
 			'samplefields'			=> 0,
@@ -125,6 +128,27 @@ $removeFiles = array(
 	'components/com_akeebasubs/controllers/validate.php',
 	'components/com_akeebasubs/views/level/html.php',
 	'components/com_akeebasubs/views/subscribe/html.php',
+	
+	'administrator/components/com_akeebasubs/fof/LICENSE.txt',
+	'administrator/components/com_akeebasubs/fof/controller.php',
+	'administrator/components/com_akeebasubs/fof/dispatcher.php',
+	'administrator/components/com_akeebasubs/fof/index.html',
+	'administrator/components/com_akeebasubs/fof/inflector.php',
+	'administrator/components/com_akeebasubs/fof/input.php',
+	'administrator/components/com_akeebasubs/fof/model.php',
+	'administrator/components/com_akeebasubs/fof/query.abstract.php',
+	'administrator/components/com_akeebasubs/fof/query.element.php',
+	'administrator/components/com_akeebasubs/fof/query.mysql.php',
+	'administrator/components/com_akeebasubs/fof/query.mysqli.php',
+	'administrator/components/com_akeebasubs/fof/query.sqlazure.php',
+	'administrator/components/com_akeebasubs/fof/query.sqlsrv.php',
+	'administrator/components/com_akeebasubs/fof/table.php',
+	'administrator/components/com_akeebasubs/fof/template.utils.php',
+	'administrator/components/com_akeebasubs/fof/toolbar.php',
+	'administrator/components/com_akeebasubs/fof/view.csv.php',
+	'administrator/components/com_akeebasubs/fof/view.html.php',
+	'administrator/components/com_akeebasubs/fof/view.json.php',
+	'administrator/components/com_akeebasubs/fof/view.php',
 );
 $removeFolders = array(
 	'administrator/components/com_akeebasubs/commands',
@@ -259,6 +283,21 @@ ENDSQL;
 	$status = $db->query();
 }
 
+// Upgrade the coupons table (2.1)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_coupons`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`userhits`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_coupons`
+	ADD COLUMN `userhits` BIGINT(20) DEFAULT 0 AFTER `hitslimit`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
 
 // =============================================================================
 // Sub-extension installation
@@ -307,12 +346,55 @@ if(count($installation_queue['modules'])) {
 			$status->modules[] = array('name'=>'mod_'.$module, 'client'=>$folder, 'result'=>$result);
 			// Modify where it's published and its published state
 			if(!$count) {
+				// A. Position and state
 				list($modulePosition, $modulePublished) = $modulePreferences;
+				if(version_compare(JVERSION, '2.5.0', 'ge') && ($modulePosition == 'cpanel')) {
+					$modulePosition = 'icon';
+				}
 				$sql = "UPDATE #__modules SET position=".$db->Quote($modulePosition);
 				if($modulePublished) $sql .= ', published=1';
 				$sql .= ' WHERE `module`='.$db->Quote('mod_'.$module);
 				$db->setQuery($sql);
 				$db->query();
+				if(version_compare(JVERSION, '1.7.0', 'ge')) {
+					// B. Change the ordering of back-end modules to 1 + max ordering in J! 1.7+
+					if($folder == 'admin') {
+						$query = $db->getQuery(true);
+						$query->select('MAX('.$db->nq('ordering').')')
+							->from($db->nq('#__modules'))
+							->where($db->nq('position').'='.$db->q($modulePosition));
+						$db->setQuery($query);
+						$position = $db->loadResult();
+						$position++;
+						
+						$query = $db->getQuery(true);
+						$query->update($db->nq('#__modules'))
+							->set($db->nq('ordering').' = '.$db->q($position))
+							->where($db->nq('module').' = '.$db->q('mod_'.$module));
+						$db->setQuery($query);
+						$db->query();
+					}
+					// C. Link to all pages on Joomla! 1.7+
+					$query = $db->getQuery(true);
+					$query->select('id')->from($db->nq('#__modules'))
+						->where($db->nq('module').' = '.$db->q('mod_'.$module));
+					$db->setQuery($query);
+					$moduleid = $db->loadResult();
+					
+					$query = $db->getQuery(true);
+					$query->select('*')->from($db->nq('#__modules_menu'))
+						->where($db->nq('moduleid').' = '.$db->q($moduleid));
+					$db->setQuery($query);
+					$assignments = $db->loadObjectList();
+					$isAssigned = !empty($assignments);
+					if(!$isAssigned) {
+						$o = (object)array(
+							'moduleid'	=> $moduleid,
+							'menuid'	=> 0
+						);
+						$db->insertObject('#__modules_menu', $o);
+					}
+				}
 			}
 		}
 	}
@@ -351,62 +433,71 @@ if(count($installation_queue['plugins'])) {
 	}
 }
 
-// Load the translation strings (Joomla! 1.5 and 1.6 compatible)
-if( version_compare( JVERSION, '1.6.0', 'lt' ) ) {
-	global $j15;
-	$j15 = true;
+// Install the FOF framework
+jimport('joomla.filesystem.folder');
+jimport('joomla.filesystem.file');
+jimport('joomla.utilities.date');
+$source = $src.'/fof';
+if(!defined('JPATH_LIBRARIES')) {
+	$target = JPATH_ROOT.'/libraries/fof';
 } else {
-	$j15 = false;
+	$target = JPATH_LIBRARIES.'/fof';
+}
+$haveToInstallFOF = false;
+if(!JFolder::exists($target)) {
+	JFolder::create($target);
+	$haveToInstallFOF = true;
+} else {
+	$fofVersion = array();
+	if(JFile::exists($target.'/version.txt')) {
+		$rawData = JFile::read($target.'/version.txt');
+		$info = explode("\n", $rawData);
+		$fofVersion['installed'] = array(
+			'version'	=> trim($info[0]),
+			'date'		=> new JDate(trim($info[1]))
+		);
+	} else {
+		$fofVersion['installed'] = array(
+			'version'	=> '0.0',
+			'date'		=> new JDate('2011-01-01')
+		);
+	}
+	$rawData = JFile::read($source.'/version.txt');
+	$info = explode("\n", $rawData);
+	$fofVersion['package'] = array(
+		'version'	=> trim($info[0]),
+		'date'		=> new JDate(trim($info[1]))
+	);
+	
+	$haveToInstallFOF = $fofVersion['package']['date']->toUNIX() > $fofVersion['installed']['date']->toUNIX();
 }
 
-$jlang =& JFactory::getLanguage();
-$jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, 'en-GB', true);
-$jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-$jlang->load('com_akeebasubs.sys', JPATH_ADMINISTRATOR, null, true);
-
-// Define the Akeeba installation translation functions, compatible with both Joomla! 1.5 and 1.6
-if(!function_exists('pitext'))
-{
-	function pitext($key)
-	{
-		global $j15;
-		$string = JText::_($key);
-		if($j15)
-		{
-			$string = str_replace('"_QQ_"', '"', $string);
+if($haveToInstallFOF) {
+	$installedFOF = true;
+	$files = JFolder::files($source);
+	if(!empty($files)) {
+		foreach($files as $file) {
+			$installedFOF = $installedFOF && JFile::copy($source.'/'.$file, $target.'/'.$file);
 		}
-		echo $string;
 	}
 }
 
-if(!function_exists('pisprint'))
-{
-	function pisprint($key, $param)
-	{
-		global $j15;
-		$string = JText::sprintf($key, $param);
-		if($j15)
-		{
-			$string = str_replace('"_QQ_"', '"', $string);
-		}
-		echo $string;
-	}
-}
+$akeeba_installation_has_run = true;
 ?>
 
-<h1><?php pitext('COM_AKEEBASUBS_PIHEADER'); ?></h1>
+<h1>Akeeba Subscriptions</h1>
 <?php $rows = 0;?>
 <div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
 	You can download translation files <a href="http://akeeba-cdn.s3-website-eu-west-1.amazonaws.com/language/akeebasubs/">directly from our CDN page</a>.
 </div>
 <img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions" align="left" />
-<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;<?php pitext('COM_AKEEBASUBS_WELCOME'); ?></h2>
-<span><?php pitext('COM_AKEEBASUBS_PISUBHEADER'); ?></span>
+<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">Welcome to Akeeba Subscriptions!</h2>
+<span>The easiest way to sell subscriptions on your Joomla! site</span>
 <table class="adminlist">
 	<thead>
 		<tr>
-			<th class="title" colspan="2"><?php pitext('COM_AKEEBASUBS_PIEXTENSION'); ?></th>
-			<th width="30%"><?php pitext('COM_AKEEBASUBS_PISTATUS'); ?></th>
+			<th class="title" colspan="2">Extensions</th>
+			<th width="30%">Status</th>
 		</tr>
 	</thead>
 	<tfoot>
@@ -419,23 +510,33 @@ if(!function_exists('pisprint'))
 			<td class="key" colspan="2">
 				<img src="../media/com_akeebasubs/images/akeebasubs-16.png" width="16" height="16" alt="Akeeba Subscriptions" align="left" />
 				&nbsp;
-				<strong><?php pitext('COM_AKEEBASUBS_PICOMPONENT'); ?></strong>
+				<strong>Akeeba Subscriptions Component</strong>
 			</td>
-			<td><strong style="color: green"><?php pitext('COM_AKEEBASUBS_PIINSTALLED');?></strong></td>
+			<td><strong style="color: green">Installed</strong></td>
+		</tr>
+		<tr class="row1">
+			<td class="key" colspan="2">
+				<strong>Framework on Framework (FOF)</strong>
+			</td>
+			<td><strong>
+				<span style="color: <?php echo $haveToInstallFOF ? ($installedFOF?'green':'red') : '#660' ?>; font-weight: bold;">
+					<?php echo $haveToInstallFOF ? ($installedFOF ?'Installed':'Not Installed') : 'Already up-to-date'; ?>
+				</span>	
+			</strong></td>
 		</tr>
 		<?php if (count($status->modules)) : ?>
 		<tr>
-			<th><?php pitext('COM_AKEEBASUBS_PIMODULE'); ?></th>
-			<th><?php pitext('COM_AKEEBASUBS_PICLIENT'); ?></th>
+			<th>Module</th>
+			<th>Client</th>
 			<th></th>
 		</tr>
 		<?php foreach ($status->modules as $module) : ?>
 		<tr class="row<?php echo (++ $rows % 2); ?>">
 			<td class="key"><?php echo $module['name']; ?></td>
-			<td class="key"><?php pitext('COM_AKEEBASUBS_PICLIENT_').strtoupper( empty($module['client']) ? 'site' : $module['client'] ); ?></td>
+			<td class="key"><?php echo empty($module['client']) ? 'site' : $module['client']; ?></td>
 			<td>
 				<span style="color: <?php echo ($module['result'])?'green':'red'?>; font-weight: bold;">
-					<?php ($module['result'])?pitext('COM_AKEEBASUBS_PIINSTALLED'):pitext('COM_AKEEBASUBS_PINOTINSTALLED'); ?>
+					<?php ($module['result'])?'Installed':'Not Installed'; ?>
 				</span>
 			</td>
 		</tr>
@@ -443,8 +544,8 @@ if(!function_exists('pisprint'))
 		<?php endif;?>
 		<?php if (count($status->plugins)) : ?>
 		<tr>
-			<th><?php pitext('COM_AKEEBASUBS_PIPLUGIN'); ?></th>
-			<th><?php pitext('COM_AKEEBASUBS_PIGROUP'); ?></th>
+			<th>Plugin</th>
+			<th>Group</th>
 			<th></th>
 		</tr>
 		<?php foreach ($status->plugins as $plugin) : ?>
@@ -453,7 +554,7 @@ if(!function_exists('pisprint'))
 			<td class="key"><?php echo ucfirst($plugin['group']); ?></td>
 			<td>
 				<span style="color: <?php echo ($plugin['result'])?'green':'red'?>; font-weight: bold;">
-					<?php ($plugin['result'])?pitext('COM_AKEEBASUBS_PIINSTALLED'):pitext('COM_AKEEBASUBS_PINOTINSTALLED'); ?>
+					<?php ($plugin['result'])?'Installed':'Not Installed'; ?>
 				</span>
 			</td>
 		</tr>

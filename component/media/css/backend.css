@@ -14,6 +14,7 @@
 }
 
 .icon-32-subrefresh { background: transparent url(../images/subrefresh.png); }
+#toolbar-Link .icon-32-export { background: transparent url(../images/export.png); }
 
 fieldset label { float: left; }
 
@@ -86,6 +87,12 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 }
 
 #aksaleschart {
+	width: 100%;
+	min-width: 450px;
+	height: 300px;
+}
+
+#aklevelschart {
 	width: 100%;
 	min-width: 450px;
 	height: 300px;

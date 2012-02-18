@@ -211,7 +211,7 @@ class AkeebasubsHelperSelect
 	public static function subscriptionlevels($selected = null, $id = 'akeebasubs_level_id', $attribs = array())
 	{
 		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
-		$items = $model->limit(0)->limitstart(0)->getItemList();
+		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
 		
 		$options = array();
 
@@ -255,6 +255,7 @@ class AkeebasubsHelperSelect
 	public static function levels($name = 'level', $selected = '', $attribs = array())
 	{
 		$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->savestate(0)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
 			->limit(0)
@@ -332,7 +333,7 @@ class AkeebasubsHelperSelect
 	public static function affiliates($selected = null, $id = 'akeebasubs_affiliate_id', $attribs = array())
 	{
 		$model = FOFModel::getTmpInstance('Affiliates','AkeebasubsModel');
-		$items = $model->limit(0)->limitstart(0)->getItemList();
+		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
 		
 		$options = array();
 

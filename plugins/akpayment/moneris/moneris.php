@@ -27,7 +27,7 @@ class plgAkpaymentMoneris extends JPlugin
 		require_once dirname(__FILE__).'/moneris/api.php';
 		
 		// Load the language files
-		$jlang =& JFactory::getLanguage();
+		$jlang = JFactory::getLanguage();
 		$jlang->load('plg_akpayment_moneris', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('plg_akpayment_moneris', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		$jlang->load('plg_akpayment_moneris', JPATH_ADMINISTRATOR, null, true);
@@ -46,6 +46,8 @@ class plgAkpaymentMoneris extends JPlugin
 	
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
+		if($paymentmethod != $this->ppName) return false;
+		
 		@ob_start();
 		include dirname(__FILE__).'/moneris/form.php';
 		$html = @ob_get_clean();

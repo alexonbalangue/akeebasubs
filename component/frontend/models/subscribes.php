@@ -331,6 +331,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// we will skip VIES validation. We'll also skip validation if there are no
 				// rules for this country (the default tax rate will be applied)
 				$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
+					->savestate(0)
 					->enabled(1)
 					->country($state->country)
 					->filter_order('ordering')
@@ -547,19 +548,36 @@ class AkeebasubsModelSubscribes extends FOFModel
 					if($valid && $coupon->hitslimit) {
 						// Get the real coupon hits
 						$hits = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							->savestate(0)
 							->coupon_id($coupon->akeebasubs_coupon_id)
 							->paystate('C')
 							->limit(0)
 							->limitstart(0)
 							->getTotal();
 						if($coupon->hitslimit >= 0) {
-							$valid = $hits < $coupon->hitslimit;
+							$valid = $hits <= $coupon->hitslimit;
 							if(($coupon->hits != $hits) || ($hits >= $coupon->hitslimit)) {
 								$coupon->hits = $hits;
 								$coupon->enabled = $hits < $coupon->hitslimit;
 								$coupon->store();
 							}
 						}
+					}
+					
+					// Check user hits limit
+					if($valid && $coupon->userhits && !JFactory::getUser()->guest) {
+						$user_id = JFactory::getUser()->id;
+						// How many subscriptions with a paystate of C,P for this user
+						// are using this coupon code?
+						$hits = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							->savestate(0)
+							->coupon_id($coupon->akeebasubs_coupon_id)
+							->paystate('C,P')
+							->user_id($user_id)
+							->limit(0)
+							->limitstart(0)
+							->getTotal();
+						$valid = $hits <= $coupon->userhits;
 					}
 				} else {
 					$valid = false;
@@ -591,6 +609,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		// Get applicable auto-rules
 		$autoRules = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+			->savestate(0)
 			->to_id($state->id)
 			->enabled(1)
 			->limit(0)
@@ -604,6 +623,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		// Get the user's list of subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			->savestate(0)
 			->user_id($user_id)
 			->enabled(1)
 			->limit(0)
@@ -678,6 +698,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		// Load the tax rules
 		$taxrules = FOFModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
+			->savestate(0)
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
@@ -877,7 +898,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				if (!$newUsertype) {
 					$newUsertype = 'Registered';
 				}
-				$acl =& JFactory::getACL();
+				$acl = JFactory::getACL();
 				$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
 			}
 			

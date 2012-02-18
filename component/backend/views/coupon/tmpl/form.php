@@ -71,8 +71,6 @@ $this->loadHelper('params');
 	<input type="text" size="5" id="hits_field" name="hits" value="<?php echo  $this->escape($this->item->hits) ?>" />
 	<div class="akeebasubs-clear"></div>
 
-<!-- hits -->
-	
 </fieldset>
 
 <fieldset id="coupons-finetuning" style="width: 48%; float: left;">
@@ -108,6 +106,13 @@ $this->loadHelper('params');
 	<label for="hitslimit_field" class="main"><?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_HITSLIMIT'); ?></label>
 	<input type="text" size="5" id="hitslimit_field" name="hitslimit" value="<?php echo  $this->escape($this->item->hitslimit) ?>" />
 	<div class="akeebasubs-clear"></div>
+	
+	<label for="userhits_field" class="main">
+		<?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_USERHITSLIMIT'); ?>
+	</label>
+	<input type="text" size="5" id="userhits_field" name="userhits" value="<?php echo  $this->escape($this->item->userhits) ?>" />
+	<div class="akeebasubs-clear"></div>
+
 
 </fieldset>
 

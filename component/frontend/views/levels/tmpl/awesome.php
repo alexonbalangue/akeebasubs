@@ -60,7 +60,7 @@ $this->loadHelper('message');
 				</div>
 			</div>
 		</div>
-		<?php endforeach?>
+		<?php endforeach; ?>
 		<div class="level-clear"></div>
 	</div>
 </div>

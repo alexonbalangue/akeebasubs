@@ -45,5 +45,5 @@ ln -s `pwd`/translations/plugins/system/oneclickaction/en-GB plugins/system/onec
 #
 # Link with Framework-on-Framework
 #
-rm component/backend/fof
-ln -s `pwd`/../fof/fof component/backend/fof
+rm component/fof
+ln -s `pwd`/../fof/fof component/fof
