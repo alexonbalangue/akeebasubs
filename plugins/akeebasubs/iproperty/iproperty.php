@@ -9,11 +9,8 @@ defined('_JEXEC') or die();
 
 class plgAkeebasubsIproperty extends JPlugin
 {
-	/** @var array Subscription levels which cause Companies and Agents to be added/published */
-	private $authLevels = array();
-	
-	/** @var array Subscription levels which cause Agents to be unpublished */
-	private $deauthLevels = array();
+	/** @var array Subscription levels to company properties */
+	private $addGroups = array();
 	
 	public function __construct(& $subject, $config = array())
 	{
@@ -24,8 +21,7 @@ class plgAkeebasubsIproperty extends JPlugin
 		}
 		parent::__construct($subject, $config);
 
-		$this->authLevels = $this->params->get('autoauthids',array());
-		$this->deauthLevels = $this->params->get('autodeauthids',array());
+		$this->addGroups = $this->parseAddGroups();
 	}
 	
 	/**
@@ -51,18 +47,21 @@ class plgAkeebasubsIproperty extends JPlugin
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
-	
+
 		// Do I have to activate the user?
 		$mustActivate = false;
 		$mustDeactivate = false;
+		$params = array();
+		
 		foreach($subscriptions as $sub) {
 			$level = $sub->akeebasubs_level_id;
 			if($sub->enabled) {
-				if(in_array($level, $this->authLevels)) {
+				if(array_key_exists($level, $this->addGroups)) {
 					$mustActivate = true;
+					$params = $this->mixParams($params, $this->addGroups[$level]);
 				}
 			} else {
-				if(in_array($level, $this->deauthLevels)) {
+				if(array_key_exists($level, $this->addGroups)) {
 					$mustDeactivate = true;
 				}
 			}
@@ -73,14 +72,14 @@ class plgAkeebasubsIproperty extends JPlugin
 		}
 		
 		if($mustActivate) {
-			$this->publishAgent($user_id);
+			$this->publishAgent($user_id, $params);
 		} elseif($mustDeactivate) {
 			$this->unpublishAgent($user_id);
 		}
 		
 	}
 	
-	private function publishAgent($user_id)
+	private function publishAgent($user_id, $params)
 	{
 		// First, check if we already have agents for that user ID
 		$db = JFactory::getDbo();
@@ -91,14 +90,9 @@ class plgAkeebasubsIproperty extends JPlugin
 		$db->setQuery($query);
 		$agents = $db->loadObjectList();
 		
-		if(!empty($agents)) {
-			$query = FOFQueryAbstract::getNew($db)
-				->update($db->nameQuote('#__iproperty_agents'))
-				->set($db->nameQuote('state').' = '.$db->quote(1))
-				->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
-			$db->setQuery($query);
-			$db->query();
-		} else {
+		if(empty($agents)) {
+			// If we do not have any existing agents, create a new company and a new agent record
+
 			// Load the user data
 			$user = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id($user_id)
@@ -129,7 +123,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				'clicense'		=> '',
 				'language'		=> '',
 				'state'			=> 1,
-				'params'		=> ''
+				'params'		=> json_encode($params)
 			);
 			
 			$db->insertObject('#__iproperty_companies', $company);
@@ -181,11 +175,48 @@ class plgAkeebasubsIproperty extends JPlugin
 				'params'		=> '',
 			);
 			$db->insertObject('#__iproperty_agents', $agent);
+			
+		} else {
+			// If we have existing agents, we need to do two things:
+			
+			// a. Make sure all agent records are enabled
+			$query = FOFQueryAbstract::getNew($db)
+				->update($db->nameQuote('#__iproperty_agents'))
+				->set($db->nameQuote('state').' = '.$db->quote(1))
+				->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
+			$db->setQuery($query);
+			$db->query();
+			
+			// b. Update the company parameters
+			$company_ids_raw = array();
+			foreach($agents as $agent) {
+				$company_ids_raw[] = $agent->company;
+			}
+			$company_ids_raw = array_unique($company_ids_raw);
+			$company_ids = array();
+			foreach($company_ids_raw as $cid) {
+				$company_ids[] = $db->quote($cid);
+			}
+			
+			$query = FOFQueryAbstract::getNew($db)
+				->select('*')
+				->from($db->nameQuote('#__iproperty_companies'))
+				->where($db->nameQuote('id').' IN ('.implode(',', $company_ids).')');
+			$db->setQuery($query);
+			$companies = $db->loadObjectList();
+			
+			foreach($companies as $company) {
+				$cparams = json_decode($company->params, true);
+				$cparams = $this->mixParams($cparams, $params);
+				$company->params = json_encode($cparams);
+				$db->updateObject('#__iproperty_companies', $company, 'id');
+			}
 		}
 	}
 	
 	private function unpublishAgent($user_id)
 	{
+		// Unpublish agent records
 		$db = JFactory::getDbo();
 		$query = FOFQueryAbstract::getNew($db)
 			->update($db->nameQuote('#__iproperty_agents'))
@@ -193,5 +224,109 @@ class plgAkeebasubsIproperty extends JPlugin
 			->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
 		$db->setQuery($query);
 		$db->query();
+	}
+	
+	private function parseAddGroups()
+	{
+		$ret = array();
+		
+		$rawData = $this->params->get('addgroups', '');
+		
+		if(empty($rawData)) return $ret;
+		
+		// Just in case something funky happened...
+		$rawData = str_replace("\\n", "\n", $rawData);
+		$rawData = str_replace("\r", "\n", $rawData);
+		$rawData = str_replace("\n\n", "\n", $rawData);
+		
+		$lines = explode("\n", $rawData);
+		
+		foreach($lines as $line) {
+			$line = trim($line);
+			$parts = explode('=', $line, 2);
+			if(count($parts) != 2) continue;
+			
+			$level = $parts[0];
+			$rawParams = $parts[1];
+			
+			$levelId = $this->ASLevelToId($level);
+			
+			$params = explode(',', $rawParams);
+			$paramsArray = array();
+			if(empty($params)) {
+				$ret[$levelId] = array();
+			} else {
+				foreach($params as $paramString) {
+					$paramParts = explode('=', $paramString, 2);
+					if(count($paramParts) != 2) continue;
+					$key = trim($paramParts[0]);
+					$value = intval(trim($paramParts[1]));
+					$paramsArray[$key] = $value;
+				}
+				$ret[$levelId] = $paramsArray;
+			}
+		}
+		
+		return $ret;
+	}
+	
+	private function mixParams($old, $new)
+	{
+		$oldKeys = count($old) ? array_keys($old) : array();
+		$newKeys = count($new) ? array_keys($new) : array();
+		$allKeys = array_merge($oldKeys, $newKeys);
+		
+		if(empty($allKeys)) return array();
+		$ret = array();
+		
+		foreach($allKeys as $key) {
+			if(array_key_exists($key, $old) && !array_key_exists($key, $new)) {
+				$ret[$key] = $old[$key];
+			} elseif(!array_key_exists($key, $old) && array_key_exists($key, $new)) {
+				$ret[$key] = $new[$key];
+			} else {
+				$ret[$key] = max($old[$key], $new[$key]);
+			}
+		}
+		
+		return $ret;
+	}
+	
+	/**
+	 * Converts an Akeeba Subscriptions level to a numeric ID
+	 * 
+	 * @param $title string The level's name to be converted to an ID
+	 *
+	 * @return int The subscription level's ID or -1 if no match is found
+	 */
+	private function ASLevelToId($title)
+	{
+		static $levels = null;
+		
+		// Don't process invalid titles
+		if(empty($title)) return -1;
+		
+		// Fetch a list of subscription levels if we haven't done so already
+		if(is_null($levels)) {
+			$levels = array();
+			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->getList();
+			if(count($list)) foreach($list as $level) {
+				$thisTitle = strtoupper($level->title);
+				$levels[$thisTitle] = $level->akeebasubs_level_id;
+			}
+		}
+		
+		$title = strtoupper($title);
+		if(array_key_exists($title, $levels)) {
+			// Mapping found
+			return($levels[$title]);
+		} elseif( (int)$title == $title ) {
+			// Numeric ID passed
+			return (int)$title;
+		} else {
+			// No match!
+			return -1;
+		}
 	}
 }
