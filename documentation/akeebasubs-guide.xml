@@ -4744,14 +4744,15 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
             parameters.</para>
 
             <para>If the user is already listed as an Agent to one or more
-            companies, his Agent record becomes published. This allows someone
-            with an expired subscription to re-subscribe in order to regain
-            access to his company. Furthermore, the parameters for each
-            company for which he is listed as an agent are modified. The value
-            chosen for each parameter is the maximum of the current parameter
-            and the parameter value defined in the right hand part of the
-            plugin's configuration. For example, if the company is configured
-            with maxlistings=100 and the plugin configuration defines
+            companies, the company is published and the user's Agent record
+            becomes published. This allows someone with an expired
+            subscription to re-subscribe in order to regain access to his
+            company. Furthermore, the parameters for each company for which he
+            is listed as an agent are modified. The value chosen for each
+            parameter is the maximum of the current parameter and the
+            parameter value defined in the right hand part of the plugin's
+            configuration. For example, if the company is configured with
+            maxlistings=100 and the plugin configuration defines
             maxlistings=20, the company will continue to have maxlistings=100
             (maximum value wins). On the contrary, if the company is
             configured with maxlistings=10 and the plugin configuration
@@ -4770,6 +4771,9 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
             essentially revokes any administrative rights the user may have
             had on any of the companies for which he was listed as an
             Agent.</para>
+
+            <para>Moreover, all of the companies the user was listed as an
+            Agent are unpublished.</para>
           </listitem>
         </orderedlist>
       </section>
