@@ -209,6 +209,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				$cparams = json_decode($company->params, true);
 				$cparams = $this->mixParams($cparams, $params);
 				$company->params = json_encode($cparams);
+				$company->state = 1;
 				$db->updateObject('#__iproperty_companies', $company, 'id');
 			}
 		}
@@ -222,6 +223,24 @@ class plgAkeebasubsIproperty extends JPlugin
 			->update($db->nameQuote('#__iproperty_agents'))
 			->set($db->nameQuote('state').' = '.$db->quote(0))
 			->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
+		$db->setQuery($query);
+		$db->query();
+		
+		// b. Unpublish the companies of the user
+		$company_ids_raw = array();
+		foreach($agents as $agent) {
+			$company_ids_raw[] = $agent->company;
+		}
+		$company_ids_raw = array_unique($company_ids_raw);
+		$company_ids = array();
+		foreach($company_ids_raw as $cid) {
+			$company_ids[] = $db->quote($cid);
+		}
+
+		$query = FOFQueryAbstract::getNew($db)
+			->update($db->nameQuote('#__iproperty_companies'))
+			->set($db->nameQuote('state').' = '.$db->quote('0'))
+			->where($db->nameQuote('id').' IN ('.implode(',', $company_ids).')');
 		$db->setQuery($query);
 		$db->query();
 	}
