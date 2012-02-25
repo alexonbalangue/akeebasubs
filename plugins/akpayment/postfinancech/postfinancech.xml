@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - PostFinance.ch</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-02-24</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_POSTFINANCECH_DESCRIPTION</description>
+	<files>
+		<filename plugin="postfinancech">postfinancech.php</filename>
+		<folder>postfinancech</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_postfinancech.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_postfinancech.sys.ini</language>
+	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_POSTFINANCECH_TITLE_LABEL" description="PLG_AKPAYMENT_POSTFINANCECH_TITLE_DESC"/>
+		
+		<param type="spacer" />
+		<param name="merchant" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_MERCHANT_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_MERCHANT_DESC"/>
+		<param name="sha1in" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_SHA1IN_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_SHA1IN_DESC"/>
+		<param name="sha1out" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_SHA1OUT_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_SHA1OUT_DESC"/>
+		<param name="language" type="text" size="50" default="en_US"
+			label="PLG_AKPAYMENT_POSTFINANCECH_LANGUAGE_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_LANGUAGE_DESC"/>
+		
+		<param type="spacer" />
+		<param name="sandbox" type="radio" default="0"
+			label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
+		<param name="sandbox_sha1in" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1IN_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1IN_DESC"/>
+		<param name="sandbox_sha1out" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1OUT_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1OUT_DESC"/>
+
+		<param type="spacer" />
+		<param name="title" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_TITLE_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_TITLE_DESC" />
+		<param name="bgcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_BGCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_BGCOLOR_DESC" />
+		<param name="txtcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_TXTCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_TXTCOLOR_DESC" />
+		<param name="tblbgcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_TBLBGCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_TBLBGCOLOR_DESC" />
+		<param name="tbltxtcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_TBLTXTCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_TBLTXTCOLOR_DESC" />
+		<param name="buttonbgcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_BUTTONBGCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_BUTTONBGCOLOR_DESC" />
+		<param name="buttontxtcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_BUTTONTXTCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_BUTTONTXTCOLOR_DESC" />
+		<param name="hdtblbgcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_HDTBLBGCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_HDTBLBGCOLOR_DESC" />
+		<param name="hdtbltxtcolor" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_HDTBLTXTCOLOR_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_HDTBLTXTCOLOR_DESC" />
+		<param name="fonttype" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_FONTTYPE_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_FONTTYPE_DESC" />
+		<param name="hdfonttype" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_HDFONTTYPE_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_HDFONTTYPE_DESC" />
+		<param name="logo" type="text" size="50" default=""
+			label="PLG_AKPAYMENT_POSTFINANCECH_LOGO_LABEL"
+			description="PLG_AKPAYMENT_POSTFINANCECH_LOGO_DESC" />
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_POSTFINANCECH_TITLE_LABEL" description="PLG_AKPAYMENT_POSTFINANCECH_TITLE_DESC"/>
+		
+				<field type="spacer" />
+				<field name="merchant" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_MERCHANT_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_MERCHANT_DESC"/>
+				<field name="sha1in" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_SHA1IN_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_SHA1IN_DESC"/>
+				<field name="sha1out" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_SHA1OUT_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_SHA1OUT_DESC"/>
+				<field name="language" type="text" size="50" default="en_US"
+					label="PLG_AKPAYMENT_POSTFINANCECH_LANGUAGE_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_LANGUAGE_DESC"/>
+
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0"
+					label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_DESC">
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+				</field>
+				<field name="sandbox_sha1in" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1IN_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1IN_DESC"/>
+				<field name="sandbox_sha1out" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1OUT_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1OUT_DESC"/>
+
+				<field type="spacer" />
+				<field name="title" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_TITLE_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_TITLE_DESC" />
+				<field name="bgcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_BGCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_BGCOLOR_DESC" />
+				<field name="txtcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_TXTCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_TXTCOLOR_DESC" />
+				<field name="tblbgcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_TBLBGCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_TBLBGCOLOR_DESC" />
+				<field name="tbltxtcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_TBLTXTCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_TBLTXTCOLOR_DESC" />
+				<field name="buttonbgcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_BUTTONBGCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_BUTTONBGCOLOR_DESC" />
+				<field name="buttontxtcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_BUTTONTXTCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_BUTTONTXTCOLOR_DESC" />
+				<field name="hdtblbgcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_HDTBLBGCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_HDTBLBGCOLOR_DESC" />
+				<field name="hdtbltxtcolor" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_HDTBLTXTCOLOR_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_HDTBLTXTCOLOR_DESC" />
+				<field name="fonttype" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_FONTTYPE_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_FONTTYPE_DESC" />
+				<field name="hdfonttype" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_HDFONTTYPE_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_HDFONTTYPE_DESC" />
+				<field name="logo" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_POSTFINANCECH_LOGO_LABEL"
+					description="PLG_AKPAYMENT_POSTFINANCECH_LOGO_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+</install>

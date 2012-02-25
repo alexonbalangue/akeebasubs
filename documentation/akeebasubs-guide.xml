@@ -2939,8 +2939,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <title>DeltaPay (Alpha Bank, Greece)</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions Payment - DeltaPay (Alpha Bank,
-        Greece)</guilabel></para>
+        Subscriptions Payment - DeltaPay (Alpha Bank, Greece)</guilabel>.
+        Available since Akeeba Subscriptions 2.0.1.</para>
 
         <para>This payment method integrates the DelptaPay payment processor
         operated in Greece by Alpha Bank. It implements the HTML method which
@@ -3006,7 +3006,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <title>Google Checkout</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions Payment - Google Checkout</guilabel></para>
+        Subscriptions Payment - Google Checkout</guilabel>. Available since
+        Akeeba Subscriptions 2.1.</para>
 
         <para>This payment method integrates the Google Checkout payment
         processor by Google, Inc.</para>
@@ -3132,7 +3133,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <title>Moneris</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions Payment - Moneris</guilabel></para>
+        Subscriptions Payment - Moneris</guilabel>. Available since Akeeba
+        Subscriptions 2.1.</para>
 
         <para>This payment method integrates the Canadian Moneris (eSelect)
         credit card processing service. Moneris offers is the largest payment
@@ -3206,6 +3208,287 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+      </section>
+
+      <section xml:id="payment-postfinancech">
+        <title>PostFinance.ch</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - PostFinance.ch</guilabel>. Available since
+        Akeeba Subscriptions 2.1.</para>
+
+        <para>This payment method integrates the Swiss PostFinance payment
+        processing service.</para>
+
+        <important>
+          <para>Make sure you have set up your Akeeba Subscriptions currency
+          code to one of the currency codes supported by your PostFinance.ch
+          account, e.g. EUR for Euros, USD for US Dollars and so on.</para>
+        </important>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PostFinance" or type in a custom name
+              to show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Affiliation name</term>
+
+            <listitem>
+              <para>This is the affiliation name (merchant ID) supplied to you
+              by PostFinance.ch.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for data and origin verification
+            (production)</term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment request made to PostFinance,
+              ensuring that fraudsters can not send forged payment requests
+              for lesser amounts. This parameter is the passphrase defined in
+              your PostFinance account, in Merchant’s Technical information,
+              under the tab “Data and Origin Verification”, section “Checks
+              for e-Commerce.” Enter your PROD password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for transaction feedback (production)</term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment notification sent by PostFinance
+              back to Akeeba Subscriptions, ensuring that fraudsters can not
+              send forged payment notifications in order to get free access to
+              your services. This parameter is the passphrase defined in your
+              PostFinance account, in Merchant’s Technical information, under
+              the tab “Transaction Feedback”, section “All transaction
+              Submission modes.” Enter your PROD password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment page language</term>
+
+            <listitem>
+              <para>The language code of the payment page. All languages are
+              defined as language, underscore, country code, e.g. en_US for US
+              English, de_DE for German (Germany) etc. Default: en_US
+              (English). Please ask your bank for the available
+              languages.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Testing</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the PostFinance.ch testing server.</para>
+
+              <warning>
+                <para>No money will change hands when this is enabled. Only
+                use for testing purposes, before putting a site live. Do not
+                use this on a live site, accepting transactions from your
+                clients!</para>
+              </warning>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for data and origin verification (testing)</term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment request made to PostFinance,
+              ensuring that fraudsters can not send forged payment requests
+              for lesser amounts. This parameter is the passphrase defined in
+              your PostFinance account, in Merchant’s Technical information,
+              under the tab “Data and Origin Verification”, section “Checks
+              for e-Commerce.” Enter your TEST password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for transaction feedback (testing) </term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment notification sent by PostFinance
+              back to Akeeba Subscriptions, ensuring that fraudsters can not
+              send forged payment notifications in order to get free access to
+              your services. This parameter is the passphrase defined in your
+              PostFinance account, in Merchant’s Technical information, under
+              the tab “Transaction Feedback”, section “All transaction
+              Submission modes.” Enter your TEST password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Background colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's background colour. You can use a
+              named colour, e.g. white, or a hexadecimal colour definition,
+              e.g. #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Text colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's text colour. You can use a named
+              colour, e.g. white, or a hexadecimal colour definition, e.g.
+              #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Table background colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's table background colour. You can
+              use a named colour, e.g. white, or a hexadecimal colour
+              definition, e.g. #FFFFFF (including the hash sign in front of
+              the hex value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Table text colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's table text colour. You can use a
+              named colour, e.g. white, or a hexadecimal colour definition,
+              e.g. #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Button background colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's button background colour. You
+              can use a named colour, e.g. white, or a hexadecimal colour
+              definition, e.g. #FFFFFF (including the hash sign in front of
+              the hex value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Button text colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's button text colour. You can use
+              a named colour, e.g. white, or a hexadecimal colour definition,
+              e.g. #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Background colour for the left columns (iPhone)</term>
+
+            <listitem>
+              <para>(optional) Payment page's background colour for the left
+              columns, only used in the iPhone template. You can use a named
+              colour, e.g. white, or a hexadecimal colour definition, e.g.
+              #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Text colour for the left columns (iPhone)</term>
+
+            <listitem>
+              <para>(optional) Payment page's text colour for the left
+              columns, only used in the iPhone template. You can use a named
+              colour, e.g. white, or a hexadecimal colour definition, e.g.
+              #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Font family</term>
+
+            <listitem>
+              <para>(optional) Payment page's font family, e.g. Verdana</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Font family for the left columns (iPhone)</term>
+
+            <listitem>
+              <para>(optional) Payment page's font family for the left
+              columns, only used in the iPhone template</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Custom logo image</term>
+
+            <listitem>
+              <para>(optional) The URL to your logo image file. WARNING! It
+              must be an HTTPS URL or your clients will receive warnings about
+              insecure content.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In order for this integration to work, you have to supply some
+        URLs to PostFinanace's back-end interface before using this
+        integration in a live or test environment.</para>
+
+        <warning>
+          <para>IF YOU DO NOT CARRY OUT THESE STEPS, AKEEBA SUBSCRIPTIONS WILL
+          NOT RECEIVE PAYMENT NOTIFICATIONS, THE SUBSCRIPTIONS WILL NOT BECOME
+          ACTIVE AUTOMATICALLY AND THE INTEGRATION PLUGINS WITH THIRD PARTY
+          SOFTWARE WILL NOT EXECUTE.</para>
+        </warning>
+
+        <para>Please go to the <guilabel>Technical Information</guilabel>
+        page, <guilabel>Transaction feedback</guilabel> tab, <guilabel>Direct
+        HTTP server-to-server request</guilabel> section (URL fields) and
+        enter the following URL in BOTH of those fields:</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=postfinancech</uri></para>
+
+        <para>where <uri>www.example.com</uri> is, of course, to be
+        substituted with the domain name of your site.</para>
+
+        <para>Then, please go to the <guilabel>Technical
+        Information</guilabel> page, <guilabel>Transaction feedback</guilabel>
+        tab, <guilabel>HTTP request for status changes</guilabel> section.
+        Enter the same URL there.</para>
+
+        <para>Finally, please go to the <guilabel>Technical
+        Information</guilabel> page, <guilabel>Transaction feedback</guilabel>
+        tab, <guilabel>Direct HTTP server-to-server request</guilabel>
+        section. For the timing of the feedback request please select
+        <option>Always online</option>.</para>
       </section>
     </section>
 
@@ -3451,6 +3734,14 @@ LEVEL3=entry1</programlisting>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - DOCman Integration</guilabel></para>
+
+        <warning>
+          <para>This integration has only been tested against DOCman 1.5.
+          DOCman 2.0 and later uses Joomla! 1.6 and later's user groups and
+          ACLs to control who can download what. You are advised to use the
+          Joomla! 1.6 user group integration plugin instead of the DOCman
+          integration plugin with DOCman 2.0 and later.</para>
+        </warning>
 
         <para>This integration plugin allows you to add and remove users from
         DOCman groups based on their subscription status. This allows you to
@@ -4048,6 +4339,10 @@ LEVEL3=Group 3</programlisting>
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - NinjaBoard Integration</guilabel></para>
 
+        <important>
+          <para>This integration is only available on Joomla! 1.5</para>
+        </important>
+
         <para>This integration plugin allows you to add and remove users from
         NinjaBoard groups based on their subscription status. This allows you
         to control view/post/attachments access to your NinjaBoard forums
@@ -4566,7 +4861,8 @@ LEVEL3=Group 1</programlisting>
         <title>RedShop User Synchronisation</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - RedShop User Synchronisation</guilabel></para>
+        Subscriptions - RedShop User Synchronisation</guilabel>. Available
+        since Akeeba Subscriptions 2.0.1.</para>
 
         <para>This plugin provides two-way synchronisation between the user
         data stored in RedShop and Akeeba Subscriptions. Such data include the
@@ -4598,7 +4894,8 @@ LEVEL3=Group 1</programlisting>
         <title>Kunena Integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - Kunena Integration</guilabel></para>
+        Subscriptions - Kunena Integration</guilabel>. Available since Akeeba
+        Subscriptions 2.1.</para>
 
         <para>This integration plugin allows you to add and remove users from
         Kunena groups based on their subscription status. This allows you to
@@ -4659,7 +4956,8 @@ LEVEL3=Group 3, Group 4</programlisting>
         <title>Intellectual Property integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - Intellectual Property Integration</guilabel></para>
+        Subscriptions - Intellectual Property Integration</guilabel>.
+        Available since Akeeba Subscriptions 2.1.</para>
 
         <para>This plugin integrates Akeeba Subscriptions with the
         Intellectual Property real estate component by The Thinkery LLC. It
