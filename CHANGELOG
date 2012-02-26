@@ -10,6 +10,7 @@ Akeeba Subscriptions 2.1
 + Intellectual Property integration
 + Pie chart to show per-level sales over the last 30 days
 + PostFinance.ch payment processor
++ You can now configure the position of the currency sign (before or after the amount)
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
 # The backend module displayed the subscription levels ordered by their ID instead of their ordering preference

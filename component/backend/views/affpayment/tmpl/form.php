@@ -36,8 +36,13 @@ $this->loadHelper('format');
 	<div class="akeebasubs-clear"></div>
 	
 	<label for="amount" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENT_AMOUNT')?></label>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+	<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+	<?php endif; ?>
 	<input type="text" name="amount" id="amount" value="<?php echo $this->escape($this->item->amount)?>" />
-	<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€') ?>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+	<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+	<?php endif; ?>
 	<div class="akeebasubs-clear"></div>
 	
 	<label for="created_on" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENT_CREATED')?></label>

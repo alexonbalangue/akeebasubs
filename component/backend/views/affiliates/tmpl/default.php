@@ -114,8 +114,13 @@ $this->loadHelper('cparams');
 				<?php echo sprintf('%.02f', $item->comission) ?>%
 			</td>
 			<td>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo sprintf('%.02f', $item->owed - $item->paid) ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€') ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 			<td>
 				<?php echo JHTML::_('grid.published', $item, $i); ?>

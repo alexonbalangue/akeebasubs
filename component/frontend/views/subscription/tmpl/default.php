@@ -66,8 +66,13 @@ $this->loadHelper('format');
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_AMOUNT_PAID')?></td>
 		<td class="subscription-info">
-			<?php echo sprintf('%2.02f',$this->item->gross_amount)?>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
 			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
+			<?php echo sprintf('%2.02f',$this->item->gross_amount)?>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
 		</td>
 	</tr>
 	<tr>
