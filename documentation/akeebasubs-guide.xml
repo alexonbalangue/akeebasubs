@@ -3323,7 +3323,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
-            <term>Passphrase for transaction feedback (testing) </term>
+            <term>Passphrase for transaction feedback (testing)</term>
 
             <listitem>
               <para>This is optional, but STRONGLY recommended. It will be
@@ -5017,6 +5017,14 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
                   <listitem>
                     <para>The maximum number of featured agents for that
                     company</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>maximgs</term>
+
+                  <listitem>
+                    <para>The maximum number of images per listing</para>
                   </listitem>
                 </varlistentry>
               </variablelist>
