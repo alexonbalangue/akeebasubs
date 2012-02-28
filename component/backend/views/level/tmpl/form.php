@@ -60,8 +60,13 @@ $this->loadHelper('cparams');
 
 		<label for="price_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
 		<span>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
 			<input type="text" size="15" id="price_field" name="price" value="<?php echo  $this->item->price ?>" style="float: none" />
-			<?php AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
 		</span>
 		<div class="akeebasubs-clear"></div>
 		

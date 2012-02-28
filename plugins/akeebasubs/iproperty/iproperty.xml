@@ -12,42 +12,19 @@
 	<description>PLG_AKEEBASUBS_IPROPERTY_DESCRIPTION</description>
 	<files>
 		<filename plugin="iproperty">iproperty.php</filename>
-		<folder>iproperty</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_iproperty.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_iproperty.sys.ini</language>
 	</languages>
-	<params addpath="/plugins/akeebasubs/iproperty">
-		<param name="autoauthids" type="sql2" default=""
-			label="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_TITLE"
-			description="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_DESC"
-			query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
-			key_field="key"
-			value_field="value" />
-		<param name="autodeauthids" type="sql2" default=""
-			label="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_TITLE"
-			description="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_DESC"
-			query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
-			key_field="key"
-			value_field="value" />
+	<params>
+		<param name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_IPROPERTY_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_IPROPERTY_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />
 	</params>
 	
-	<config addfieldpath="/plugins/akeebasubs/iproperty/iproperty">
+	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field name="autoauthids" type="sql2" default=""
-					label="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_TITLE"
-					description="PLG_AKEEBASUBS_IPROPERTY_AUTOAUTHIDS_DESC"
-					query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
-					key_field="key"
-					value_field="value" />
-				<field name="autodeauthids" type="sql2" default=""
-					label="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_TITLE"
-					description="PLG_AKEEBASUBS_IPROPERTY_AUTODEAUTHIDS_DESC"
-					query="SELECT `akeebasubs_level_id` AS `key`, `title` AS `value` FROM `#__akeebasubs_levels`"
-					key_field="key"
-					value_field="value" />
+				<field name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_IPROPERTY_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_IPROPERTY_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />
 			</fieldset>
 		</fields>
 	</config>

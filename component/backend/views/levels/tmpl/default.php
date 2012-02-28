@@ -115,8 +115,13 @@ $this->loadHelper('cparams');
 				<?php echo $this->escape($item->duration) ?>
 			</td>
 			<td align="right">
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo sprintf('%02.02f', (float)$item->price) ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 			<td class="order" align="center">
 				<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>

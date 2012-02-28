@@ -106,8 +106,13 @@ $this->loadHelper('format');
 				</span>
 			</td>
 			<td align="right">
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo sprintf('%.02f', $item->amount) ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€') ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 			<td>
 				<?php echo AkeebasubsHelperFormat::date($item->created_on) ?>

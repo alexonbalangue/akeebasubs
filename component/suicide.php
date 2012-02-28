@@ -77,6 +77,7 @@ $installation_queue = array(
 			'none'					=> 0,
 			'offline'				=> 0,
 			'paypal'				=> 1,
+			'postfinancech'			=> 0,
 			'skrill'				=> 0,
 			'upay'					=> 0,
 			'worldpay'				=> 0

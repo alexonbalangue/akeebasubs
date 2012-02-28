@@ -55,20 +55,40 @@ JFactory::getDocument()->addScriptDeclaration($script);
 	</noscript>
 
 	<label class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NET')?></label>
-	<span id="akeebasubs-sum-net" class="currency"><?php echo $this->validation->price->net?></span>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
 	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
+	<span id="akeebasubs-sum-net" class="currency"><?php echo $this->validation->price->net?></span>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
 	<br/>
 	<label class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')?></label>
-	<span id="akeebasubs-sum-discount" class="currency"><?php echo $this->validation->price->discount?></span>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
 	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
+	<span id="akeebasubs-sum-discount" class="currency"><?php echo $this->validation->price->discount?></span>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
 	<br/>
 	<label class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT')?></label>
-	<span id="akeebasubs-sum-vat" class="currency"><?php echo $this->validation->price->tax?></span>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
 	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
+	<span id="akeebasubs-sum-vat" class="currency"><?php echo $this->validation->price->tax?></span>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
 	<br/>
 	<label class="main  total"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')?></label>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
 	<span id="akeebasubs-sum-total" class="currency total"><?php echo $this->validation->price->gross?></span>
-	<span class="currency-symbol total"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+	<?php endif; ?>
 	<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
 	
 	<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
