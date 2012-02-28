@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - PagSeguro</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-02-23</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_PAGSEGURO_DESCRIPTION</description>
+	<files>
+		<filename plugin="pagseguro">pagseguro.php</filename>
+		<folder>pagseguro</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_pagseguro.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_pagseguro.sys.ini</language>
+	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_PAGSEGURO_TITLE_LABEL" description="PLG_AKPAYMENT_PAGSEGURO_TITLE_DESC"/>
+		<param type="spacer" />
+		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_PAGSEGURO_MERCHANT_LABEL" description="PLG_AKPAYMENT_PAGSEGURO_MERCHANT_DESC"/>
+		<param name="token" type="text" size="50" default="" label="PLG_AKPAYMENT_PAGSEGURO_TOKEN_LABEL" description="PLG_AKPAYMENT_PAGSEGURO_TOKEN_DESC"/>
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_PAGSEGURO_TITLE_LABEL" description="PLG_AKPAYMENT_PAGSEGURO_TITLE_DESC"/>
+				<field type="spacer" />
+				<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_PAGSEGURO_MERCHANT_LABEL" description="PLG_AKPAYMENT_PAGSEGURO_MERCHANT_DESC"/>
+				<field name="token" type="text" size="50" default="" label="PLG_AKPAYMENT_PAGSEGURO_TOKEN_LABEL" description="PLG_AKPAYMENT_PAGSEGURO_TOKEN_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</install>

@@ -1,0 +1,106 @@
+{2012/02/25 20:37:11} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/25 20:37:13} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/25 20:39:05} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/25 20:39:07} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 10:21:54} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 10:21:57} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 10:22:53} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 10:22:55} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 11:15:08} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 11:15:10} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 11:18:25} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 11:23:59} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 11:24:13} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 11:24:15} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 11:24:36} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 11:24:37} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 11:25:39} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 11:25:39} [Error] Exception: CURL can't connect: couldn't connect to host 
+{2012/02/26 11:26:19} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 11:26:19} [Error] Exception: CURL can't connect: SSL: certificate subject name 'pagseguro.uol.com.br' does not match target host name 'ws.pagseguro.uol.com.br' 
+{2012/02/26 11:27:40} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 11:27:40} [Error] Exception: CURL can't connect: Empty reply from server 
+{2012/02/26 14:25:54} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:25:54} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:26:31} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:26:31} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:27:29} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:31:11} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:31:26} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:34:45} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:34:55} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:36:22} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:39:48} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:40:32} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:51:31} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:56:59} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:57:48} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:57:49} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 14:58:28} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 14:59:12} [Error] Exception: PagSeguroLibrary XML parsing error: (23) EntityRef: expecting ';' 
+{2012/02/26 15:00:00} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 15:00:45} [Error] Exception: PagSeguroLibrary XML parsing error: (23) EntityRef: expecting ';' 
+{2012/02/26 17:34:39} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 17:34:39} [Error] Exception: PagSeguroLibrary XML parsing error: (23) EntityRef: expecting ';' 
+{2012/02/26 17:43:12} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 17:43:56} [Error] Exception: PagSeguroLibrary XML parsing error: (23) EntityRef: expecting ';' 
+{2012/02/26 17:44:04} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 17:46:05} [Error] Exception: PagSeguroLibrary XML parsing error: (23) EntityRef: expecting ';' 
+{2012/02/26 17:58:05} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 17:59:39} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 18:11:33} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 18:11:54} [Error] Exception: PagSeguroLibrary XML parsing error: undefined index [checkout] 
+{2012/02/26 18:19:06} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - begin 
+{2012/02/26 18:19:09} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 19:08:28} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 19:08:33} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 19:08:46} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 19:08:49} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 19:09:28} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 19:09:29} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 19:11:57} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 19:11:59} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 19:45:01} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 19:45:03} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:04:56} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:04:58} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:05:28} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:05:30} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:13:51} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:13:53} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:15:15} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:15:17} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:15:54} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:15:56} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:19:25} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:19:27} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:23:36} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:23:38} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:26:01} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:26:03} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:26:24} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:26:26} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:38:18} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:38:20} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 20:39:08} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:39:28} [Error] Exception: CURL can't connect: connect() timed out! 
+{2012/02/26 20:41:04} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 20:41:24} [Error] Exception: CURL can't connect: connect() timed out! 
+{2012/02/26 21:11:33} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 21:11:35} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 21:24:11} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 21:24:14} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/26 21:25:36} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/26 21:25:38} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/27 18:26:05} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/27 18:26:07} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/27 20:08:55} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/27 20:08:58} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/27 21:22:31} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/27 21:22:34} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/27 21:22:55} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/27 21:22:57} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/27 21:23:49} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/27 21:23:51} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
+{2012/02/28 22:34:19} [Info] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - begin 
+{2012/02/28 22:34:22} [Error] PagSeguroPaymentService.Register(PagSeguroPaymentRequest(Reference=,     SenderEmail=private.newsbox123@gmail.com)) - error [HTTP 401] - UNAUTHORIZED  
