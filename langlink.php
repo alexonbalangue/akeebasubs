@@ -24,7 +24,7 @@ function doTheHippyHippyShake($root, $target)
 					continue;
 				}
 			}
-			@link($from, $to);
+			@symlink($from, $to);
 		}
 	}	
 }
