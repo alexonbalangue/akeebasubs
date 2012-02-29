@@ -293,12 +293,7 @@ class plgAkpaymentPagseguro extends JPlugin
 	 */
 	private function getToken()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
-			return $this->params->get('sandbox_token','');
-		} else {
-			return $this->params->get('token','');
-		}
+		return $this->params->get('token','');
 	}
 	
 	/**
@@ -306,12 +301,7 @@ class plgAkpaymentPagseguro extends JPlugin
 	 */
 	private function getMerchantID()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
-			return $this->params->get('sandbox_merchant','');
-		} else {
-			return $this->params->get('merchant','');
-		}
+		return $this->params->get('merchant','');
 	}
 	
 	private function logIPN($data, $isValid)

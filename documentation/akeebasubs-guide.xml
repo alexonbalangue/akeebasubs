@@ -3490,6 +3490,57 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         section. For the timing of the feedback request please select
         <option>Always online</option>.</para>
       </section>
+
+      <section xml:id="payment-googlecheckout">
+        <title>PagSeguro</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - PagSeguro</guilabel>. Available since Akeeba
+        Subscriptions 2.1.</para>
+
+        <para>This payment method integrates <link
+        xlink:href="https://pagseguro.uol.com.br/en/what-is-pagseguro.html#rmcl">PagSeguro</link>,
+        the leading Brazilian payment processor.</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>Your Merchant ID is the email you used to register to
+              PagSeguro</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Token</term>
+
+            <listitem>
+              <para>This is the 32-character API token. You can create one in
+              the settings page of payments. For more information, please take
+              a look at the <link
+              xlink:href="https://pagseguro.uol.com.br/v2/guia-de-integracao/api-de-pagamentos.html">integration
+              notes page</link>.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>You will have to specify the API callback URL before using
+        PagSeguro. To add or edit your API callback URL, go to the settings
+        page of PagSeguro. Setup the following URL:</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=subscribe</uri></para>
+
+        <para>Where www.example.com is the domain name of your site.</para>
+
+        <para>For more information, please consult PagSeguro's <link
+        xlink:href="https://pagseguro.uol.com.br/v2/guia-de-integracao/api-de-notificacoes.html">API
+        notification instructions page</link>.</para>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">

@@ -78,6 +78,7 @@ $installation_queue = array(
 			'moneris'				=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
+			'pagseguro'				=> 0,
 			'paypal'				=> 1,
 			'postfinancech'			=> 0,
 			'skrill'				=> 0,
