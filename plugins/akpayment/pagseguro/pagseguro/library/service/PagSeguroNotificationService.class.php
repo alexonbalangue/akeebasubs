@@ -36,7 +36,7 @@ class PagSeguroNotificationService {
 	 * @param String $notificationCode
 	 * @throws PagSeguroServiceException
 	 * @throws Exception
-	 * @return a transaction
+	 * @return PagSeguroTransaction a transaction
 	 * @see PagSeguroTransaction
 	 */
 	public static function checkTransaction(PagSeguroCredentials $credentials, $notificationCode) {
@@ -48,7 +48,7 @@ class PagSeguroNotificationService {
 			
 			$connection = new PagSeguroHttpConnection();
 			$connection->get(
-				self::buildTransactionNotificationUrl($connectionData, $notificationCode), // URL + parâmetros de busca
+				self::buildTransactionNotificationUrl($connectionData, $notificationCode), // URL + parï¿½metros de busca
 				$connectionData->getServiceTimeout(), // Timeout
 				$connectionData->getCharset() // charset
 			);
