@@ -545,7 +545,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					}
 					
 					// Check user group levels
-					if ($valid && !empty($coupon->usergroups)) {
+					if ($valid && !empty($coupon->usergroups) && version_compare(JVERSION, '1.6.0', 'ge')) {
 						$groups = explode(',', $coupon->usergroups);
 						$ugroups = JFactory::getUser()->getAuthorisedGroups();
 						$valid = 0;

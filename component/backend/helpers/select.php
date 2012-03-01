@@ -189,13 +189,22 @@ class AkeebasubsHelperSelect
 		$db = JFactory::getDBO();
 
 		// Get the user groups from the database.
-		$db->setQuery(
-			'SELECT a.id, a.title, a.parent_id AS parent, COUNT(DISTINCT b.id) AS level'.
-				' FROM #__usergroups AS a'.
-				' LEFT JOIN `#__usergroups` AS b ON a.lft > b.lft AND a.rgt < b.rgt'.
-				' GROUP BY a.id'.
-				' ORDER BY a.lft ASC'
-		);
+		$query = FOFQueryAbstract::getNew($db);
+		$query->select(array(
+			$db->nameQuote('a').'.'.$db->nameQuote('id'),
+			$db->nameQuote('a').'.'.$db->nameQuote('parent_id').' AS '.$db->nameQuote('parent'),
+			'COUNT(DISTINCT '.$db->nameQuote('b').'.'.$db->nameQuote('id').') AS '.$db->nameQuote('level')
+		))->from($db->nameQuote('#__usergroups AS a'))
+		->join('left', $db->nameQuote('#__usergroups').' AS '.$db->nameQuote('b').' ON '.
+			$db->nameQuote('a').'.'.$db->nameQuote('lft').' > '.$db->nameQuote('b').'.'.$db->nameQuote('lft').
+			' AND '.$db->nameQuote('a').'.'.$db->nameQuote('rgt').' < '.$db->nameQuote('b').'.'.$db->nameQuote('rgt')
+		)->group(array(
+			$db->nameQuote('a').'.'.$db->nameQuote('id')
+		))->order(array(
+			$db->nameQuote('a').'.'.$db->nameQuote('lft').' ASC'
+		))
+		;
+		$db->setQuery($query);
 		$groups = $db->loadObjectList();
 
 		$options = array();
