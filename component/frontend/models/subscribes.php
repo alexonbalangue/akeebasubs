@@ -544,6 +544,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 						$valid = $user_id == $coupon->user;
 					}
 					
+					// Check user group levels
+					if ($valid && !empty($coupon->usergroups)) {
+						$groups = explode(',', $coupon->usergroups);
+						$ugroups = JFactory::getUser()->getAuthorisedGroups();
+						$valid = 0;
+						foreach($ugroups as $ugroup) {
+							if(in_array($ugroup, $groups)){
+								$valid = 1;
+								break;
+							}
+						}
+					}
+
 					// Check hits limit
 					if($valid && $coupon->hitslimit) {
 						// Get the real coupon hits

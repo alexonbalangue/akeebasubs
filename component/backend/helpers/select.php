@@ -183,6 +183,30 @@ class AkeebasubsHelperSelect
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
 
+	public static function usergroups($name = 'usergroups', $selected = '', $attribs = array())
+	{
+		// Get a database object.
+		$db = JFactory::getDBO();
+
+		// Get the user groups from the database.
+		$db->setQuery(
+			'SELECT a.id, a.title, a.parent_id AS parent, COUNT(DISTINCT b.id) AS level'.
+				' FROM #__usergroups AS a'.
+				' LEFT JOIN `#__usergroups` AS b ON a.lft > b.lft AND a.rgt < b.rgt'.
+				' GROUP BY a.id'.
+				' ORDER BY a.lft ASC'
+		);
+		$groups = $db->loadObjectList();
+
+		$options = array();
+		$options[] = JHTML::_('select.option', '', '- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+
+		foreach ($groups as $group) {
+			$options[] = JHTML::_('select.option', $group->id, JText::_($group->title));
+		}
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 
 	public static function published($selected = null, $id = 'enabled', $attribs = array())
 	{

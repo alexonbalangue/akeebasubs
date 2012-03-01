@@ -89,6 +89,13 @@ class AkeebasubsTableCoupon extends FOFTable
 			}
 		}
 		
+		// Make sure assigned usergroups is a string
+		if (!empty($this->usergroups)) {
+			if (is_array($this->usergroups)) {
+				$this->usergroups = implode(',', $this->usergroups);
+			}
+		}
+
 		// Check the hits limit
 		if($this->hitslimit <= 0) {
 			$this->hitslimit = 0;
