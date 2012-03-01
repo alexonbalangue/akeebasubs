@@ -192,9 +192,10 @@ class AkeebasubsHelperSelect
 		$query = FOFQueryAbstract::getNew($db);
 		$query->select(array(
 			$db->nameQuote('a').'.'.$db->nameQuote('id'),
+			$db->nameQuote('a').'.'.$db->nameQuote('title'),
 			$db->nameQuote('a').'.'.$db->nameQuote('parent_id').' AS '.$db->nameQuote('parent'),
 			'COUNT(DISTINCT '.$db->nameQuote('b').'.'.$db->nameQuote('id').') AS '.$db->nameQuote('level')
-		))->from($db->nameQuote('#__usergroups AS a'))
+		))->from($db->nameQuote('#__usergroups').' AS '.$db->nameQuote('a'))
 		->join('left', $db->nameQuote('#__usergroups').' AS '.$db->nameQuote('b').' ON '.
 			$db->nameQuote('a').'.'.$db->nameQuote('lft').' > '.$db->nameQuote('b').'.'.$db->nameQuote('lft').
 			' AND '.$db->nameQuote('a').'.'.$db->nameQuote('rgt').' < '.$db->nameQuote('b').'.'.$db->nameQuote('rgt')
