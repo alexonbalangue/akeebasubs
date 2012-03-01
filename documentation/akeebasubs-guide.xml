@@ -1811,13 +1811,30 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
-          <term>Limit to a specific user</term>
+          <term>User</term>
 
           <listitem>
             <para>Click on <guibutton>Select</guibutton> to pick a user for
             which the coupon will be active. For all other users the coupon
             will have no effect. Leave blank to let all users –even new ones–
             to use the coupon.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>User Groups</term>
+
+          <listitem>
+            <para>This option is only available when using Akeeba
+            Subscriptions on Joomla! 1.6 and later.</para>
+
+            <para>Choose the user group(s) which will have access to the
+            coupon. If a user does not belong to one of the selected groups,
+            the coupon code will not be available for him and he won't be able
+            to use it. If you don't want to impose any restriction, leave this
+            blank (or make sure that only the <option>- Select -</option>
+            pseudo-option is selected) and Akeeba Subscriptions will allow all
+            user groups to have access to this coupon code.</para>
           </listitem>
         </varlistentry>
 
