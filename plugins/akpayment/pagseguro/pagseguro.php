@@ -101,7 +101,9 @@ class plgAkpaymentPagseguro extends JPlugin
 		$paymentRequest->addItem(
 			$level->title,
 			$level->title . ' - [ ' . $user->username . ' ]',
-			$subscription->gross_amount);
+			$subscription->gross_amount,
+			1, $subscription->gross_amount, 0, 0
+		);
                 
 		// Add customer information
 		$paymentRequest->setSenderName($data->name);
@@ -113,7 +115,7 @@ class plgAkpaymentPagseguro extends JPlugin
 		$address->setCity($kuser->city);  
 		$address->setState($kuser->state); 
 		$address->setCountry($kuser->country);
-		$paymentRequest->setShipping($address);
+		$paymentRequest->setShipping($address, 'NOT_SPECIFIED');
                 
 		// Add redirect Url
 		$paymentRequest->setRedirectUrl($data->success);
