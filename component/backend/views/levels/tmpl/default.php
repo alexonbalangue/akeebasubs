@@ -40,6 +40,9 @@ $this->loadHelper('cparams');
 			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_DURATION', 'duration', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
+			<th width="5%">
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_RECURRING', 'recurring', $this->lists->order_Dir, $this->lists->order) ?>
+			</th>
 			<th width="10%">
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_PRICE', 'price', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
@@ -113,6 +116,23 @@ $this->loadHelper('cparams');
 			</td>
 			<td>
 				<?php echo $this->escape($item->duration) ?>
+			</td>
+			<td align="center">
+				<?php
+				if($item->recurring) {
+					if(version_compare(JVERSION, '1.6.0', 'ge')) {
+						echo JHtml::_('image', 'admin/tick.png', null, null, true);
+					} else {
+						echo JHtml::_('image.administrator', 'images/tick.png', null, null, true);
+					}
+				} else {
+					if(version_compare(JVERSION, '1.6.0', 'ge')) {
+						echo JHtml::_('image', 'admin/publish_x.png', null, null, true);
+					} else {
+						echo JHtml::_('image.administrator', 'images/publish_x.png', null, null, true);
+					}
+				}
+				?>
 			</td>
 			<td align="right">
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>

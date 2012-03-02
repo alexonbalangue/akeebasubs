@@ -315,6 +315,21 @@ ENDSQL;
 	$status = $db->query();
 }
 
+// Upgrade the levels table (2.1)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`recurring`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_levels`
+	ADD COLUMN `recurring` TINYINT(3) DEFAULT 0 AFTER `only_once`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
 
 // =============================================================================
 // Sub-extension installation
