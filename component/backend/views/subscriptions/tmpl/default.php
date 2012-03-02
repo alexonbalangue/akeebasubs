@@ -333,9 +333,4 @@ var akeebasubs_token = "<?php echo JUtility::getToken();?>";
 		$('#toolbar-subrefresh').click(akeebasubs_refresh_integrations);
 	});
 })(akeeba.jQuery);
-
-window.addEvent('domready', function() {
-	// TODO!
-});
-
 </script>
