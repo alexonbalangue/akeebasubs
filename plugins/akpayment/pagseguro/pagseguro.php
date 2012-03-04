@@ -99,23 +99,16 @@ class plgAkpaymentPagseguro extends JPlugin
                 
 		// Add item
 		$paymentRequest->addItem(
-			$level->title,
+			$level->akeebasubs_level_id,
 			$level->title . ' - [ ' . $user->username . ' ]',
-			$subscription->gross_amount,
-			1, $subscription->gross_amount, 0, 0
+			1,
+			sprintf('%02.2f',$subscription->gross_amount),
+			0
 		);
                 
 		// Add customer information
 		$paymentRequest->setSenderName($data->name);
 		$paymentRequest->setSenderEmail($data->email);
-		$address = new PagSeguroAddress();  
-		$address->setPostalCode($kuser->zip);
-		$address->setStreet($kuser->address1);
-		$address->setComplement($kuser->address2);  
-		$address->setCity($kuser->city);  
-		$address->setState($kuser->state); 
-		$address->setCountry($kuser->country);
-		$paymentRequest->setShipping($address, 'NOT_SPECIFIED');
                 
 		// Add redirect Url
 		$paymentRequest->setRedirectUrl($data->success);
