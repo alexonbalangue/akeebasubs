@@ -66,7 +66,7 @@ class plgAkpayment2checkout extends JPlugin
 		$data = (object)array(
 			'url'			=> 'https://www.2checkout.com/checkout/purchase',
 			'sid'			=> $this->params->get('sid',''),
-			'x_receipt_link_url'	=> $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=2checkout')),
+			'x_receipt_link_url'	=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'params'		=> $this->params,
 			'name'			=> $user->name,
 			'email'			=> $user->email
@@ -90,13 +90,22 @@ class plgAkpayment2checkout extends JPlugin
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
+		// Check if it's one of the message types supported by this plugin
+		$message_type = $data['message_type'];
+		$isValid = in_array($message_type, array(
+			'ORDER_CREATED', 'REFUND_ISSUED', 'RECURRING_INSTALLMENT_SUCCESS'
+		));
+		if(!$isValid) $data['akeebasubs_failure_reason'] = 'INS message type "'.$message_type.'" is not supported.';
+		
 		// Check IPN data for validity (i.e. protect against fraud attempt)
-		$isValid = $this->isValidIPN($data);
-		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Transaction MD5 signature is invalid. Fraudulent transaction or testing mode enabled.';
+		if($isValid) {
+			$isValid = $this->isValidIPN($data);
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Transaction MD5 signature is invalid. Fraudulent transaction or testing mode enabled.';
+		}
 		
 		// Load the relevant subscription row
 		if($isValid) {
-			$id = array_key_exists('cart_order_id', $data) ? (int)$data['cart_order_id'] : -1;
+			$id = array_key_exists('vendor_order_id', $data) ? (int)$data['vendor_order_id'] : -1;
 			$subscription = null;
 			if($id > 0) {
 				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -109,15 +118,15 @@ class plgAkpayment2checkout extends JPlugin
 			} else {
 				$isValid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("cart_order_id" field) is invalid';
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("vendor_order_id" field) is invalid';
 		}
 		
 		// Check that order_number has not been previously processed
 		if($isValid && !is_null($subscription)) {
-			if($subscription->processor_key == $data['order_number']) {
-				if($subscription->state == 'C') {
+			if($subscription->processor_key == $data['sale_id'].'/'.$data['invoice_id']) {
+				if(($subscription->state == 'C') && ($message_type == 'ORDER_CREATED')) {
 					$isValid = false;
-					$data['akeebasubs_failure_reason'] = "I will not process the same order_number twice";
+					$data['akeebasubs_failure_reason'] = "I will not process the same sale_id/invoice_id twice";
 				}
 			}
 		}
@@ -125,7 +134,7 @@ class plgAkpayment2checkout extends JPlugin
 		// Check that total is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
-			$mc_gross = floatval($data['total']);
+			$mc_gross = floatval($data['invoice_list_amount']);
 			$gross = $subscription->gross_amount;
 			if($mc_gross > 0) {
 				// A positive value means "payment". The prices MUST match!
@@ -134,7 +143,7 @@ class plgAkpayment2checkout extends JPlugin
 			} else {
 				$valid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount (invoice_list_amount) does not match the subscription amount';
 		}
 		
 		// Log the IPN data
@@ -155,24 +164,44 @@ class plgAkpayment2checkout extends JPlugin
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 		
-		// Check the payment_status
-		switch($data['credit_card_processed'])
-		{
-			case 'Y':
-				$newStatus = 'C';
-				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
-				break;
+		switch($message_type) {
+			case 'ORDER_CREATED':
+				switch($data['invoice_status'])
+				{
+					case 'approved':
+						$newStatus = 'P';
+						break;
 
-			default:
+					case 'pending':
+						$newStatus = 'P';
+						break;
+					
+					case 'deposited':
+						$newStatus = 'C';
+						break;
+					
+					case 'declined':
+					default:
+						$newStatus = 'X';
+						break;
+				}
+				break;
+			
+			case 'REFUND_ISSUED':
 				$newStatus = 'X';
-				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
 				break;
+			
+			case 'RECURRING_INSTALLMENT_SUCCESS':
+				// @todo Handle recurring payments
+				$newStatus = 'C';
+				break;
+			
 		}
-
+		
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-			'akeebasubs_subscription_id'				=> $id,
-			'processor_key'		=> $data['order_number'],
+			'akeebasubs_subscription_id' => $id,
+			'processor_key'		=> $data['sale_id'].'/'.$data['invoice_id'],
 			'state'				=> $newStatus,
 			'enabled'			=> 0
 		);
@@ -211,10 +240,6 @@ class plgAkpayment2checkout extends JPlugin
 			$subscription
 		));
 		
-		// Finally, redirect the user
-		$app = JFactory::getApplication();
-		$app->redirect($returnURL);
-		
 		return true;
 	}
 	
@@ -224,13 +249,13 @@ class plgAkpayment2checkout extends JPlugin
 	 */
 	private function isValidIPN($data)
 	{
-		$incoming_md5 = strtoupper($data['key']);
-		
+		// This is the MD5 calculations in 2Checkout's INS guide
+		$incoming_md5 = strtoupper($data['md5_hash']);
 		$calculated_md5 = md5(
-			$this->params->get('secret','').
-			$this->params->get('sid','').
-			$data['order_number'].
-			$data['total']
+			$data['sale_id'].
+			$data['vendor_id'].
+			$data['invoice_id'].
+			$this->params->get('secret','')
 		);
 		$calculated_md5 = strtoupper($calculated_md5);
 		

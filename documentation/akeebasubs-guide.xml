@@ -2571,6 +2571,12 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         Subscriptions Payment - 2Checkout Standard Purchase
         Routine</guilabel></para>
 
+        <warning>
+          <para>This payment method has been rewritten as of Akeeba
+          Subscriptions 2.1; if you were previously using it, please review
+          this documentation and reconfigure the plugin.</para>
+        </warning>
+
         <para>This payment method integrates the 2Checkout Standard Purchase
         Routine payments service (commonly simply referred to as 2checkout or
         2CO).</para>
@@ -2628,17 +2634,43 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               CUSTOMERS.</emphasis> This option should be used only in the
               integration testing phase during your initial setup. When you're
               ready to go live with your site, disable this feature.</para>
-
-              <warning>
-                <para>NONE of the Demo payments will be accepted by the
-                plugin! Demo payments deliberately carry an invalid signature
-                and will be marked as "Cancelled" in Akeeba Subscriptions. The
-                log file will mention them as fraud attempts. This is
-                deliberate and should not be considered a bug.</para>
-              </warning>
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <bridgehead>Integration Notes</bridgehead>
+
+        <para>2Checkout requires you to supply a <guilabel>Notification
+        URL</guilabel> before you can accept payments to your site. In order
+        to do that, please follow this procedure:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Login to your 2Checkout management page, <link
+            xlink:href="https://www.2checkout.com/va">https://www.2checkout.com/va</link></para>
+          </listitem>
+
+          <listitem>
+            <para>Click on <guimenu>Notifications</guimenu>,
+            <guimenuitem>Settings</guimenuitem> from the top menu</para>
+          </listitem>
+
+          <listitem>
+            <para>In the <guilabel>Global URL</guilabel> field enter:</para>
+
+            <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=2checkout</uri></para>
+
+            <para>where <uri>www.example.com</uri> must be replaced with the
+            domain name of your site. Then click on
+            <guibutton>Apply</guibutton>, <guibutton>Enable All
+            Notifications</guibutton> and <guibutton>Save Settings</guibutton>
+            buttons, in this order.</para>
+          </listitem>
+        </orderedlist>
+
+        <para>If you skip this step, or make a typo, no subscription will be
+        activated in Akeeba Subscriptions and the payment status will always
+        appear as "New".</para>
       </section>
 
       <section xml:id="payment-ccavenue">

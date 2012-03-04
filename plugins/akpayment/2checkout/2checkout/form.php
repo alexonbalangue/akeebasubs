@@ -7,30 +7,30 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 <h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER') ?></h3>
 <p><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY') ?></p>
 <p align="center">
-<form action="<?php echo htmlentities($data->url) ?>"  method="post" id="paymentForm">
-	<input type="hidden" name="sid" value="<?php echo htmlentities($data->sid)?>" />
-	<input type="hidden" name="total" value="<?php echo htmlentities($subscription->gross_amount) ?>" />
-	<input type="hidden" name="cart_order_id" value="<?php echo htmlentities($subscription->akeebasubs_subscription_id) ?>" />
+<form action="<?php echo $data->url ?>"  method="post" id="paymentForm">
+	<input type="hidden" name="sid" value="<?php echo $data->sid?>" />
+	<input type="hidden" name="total" value="<?php echo sprintf('%02.2f',$subscription->gross_amount) ?>" />
+	<input type="hidden" name="cart_order_id" value="<?php echo $subscription->akeebasubs_subscription_id ?>" />
 	
 	<input type="hidden" name="id_type" value="1" />
-	<input type="hidden" name="c_prod" value="<?php echo htmlentities($level->akeebasubs_level_id) ?>" />
-	<input type="hidden" name="c_name" value="<?php echo htmlentities($level->title) ?>" />
-	<input type="hidden" name="c_description" value="<?php echo htmlentities($level->title . ' - [ ' . $user->username . ' ]') ?>" />
-	<input type="hidden" name="c_price" value="<?php echo htmlentities($subscription->net_amount) ?>" />
+	<input type="hidden" name="c_prod" value="<?php echo $level->akeebasubs_level_id ?>" />
+	<input type="hidden" name="c_name" value="<?php echo $level->title ?>" />
+	<input type="hidden" name="c_description" value="<?php echo $level->title . ' - [ ' . $user->username . ' ]' ?>" />
+	<input type="hidden" name="c_price" value="<?php echo sprintf('%02.2f',$subscription->gross_amount) ?>" />
 	
 	<?php if($data->params->get('demo',0)): ?>
 	<input type="hidden" name="demo" value="Y" />
 	<?php endif;?>
-	<input type="hidden" name="fixed" value="Y" />
+	<!--<input type="hidden" name="fixed" value="Y" />-->
 	<input type="hidden" name="lang" value="<?php echo $data->params->get('lang','en') ?>" />
-	<input type="hidden" name="merchant_order_id" value="<?php echo htmlentities($subscription->id) ?>" />
-	<input type="hidden" name="pay_method" value="<?php echo htmlentities( strtoupper($data->params->get('pay_method','cc')) ) ?>" />
+	<input type="hidden" name="merchant_order_id" value="<?php echo $subscription->id ?>" />
+	<input type="hidden" name="pay_method" value="<?php echo strtoupper($data->params->get('pay_method','cc')) ?>" />
 	<?php if($data->params->get('skip_landing',0)): ?>
 	<input type="hidden" name="skip_landing" value="1" />
 	<?php endif; ?>
-	<input type="hidden" name="x_receipt_link_url" value="<?php echo htmlentities($data->x_receipt_link_url) ?>" />
+	<input type="hidden" name="x_receipt_link_url" value="<?php echo $data->x_receipt_link_url ?>" />
 	
-	<input type="hidden" name="card_holder_name" value="<?php echo htmlentities($data->name) ?>" />
+	<input type="hidden" name="card_holder_name" value="<?php echo $data->name ?>" />
 	<input type="hidden" name="street_address" value="<?php echo $kuser->address1 ?>">
 	<input type="hidden" name="street_address2" value="<?php echo $kuser->address2 ?>">
 	<input type="hidden" name="city" value="<?php echo $kuser->city ?>">
