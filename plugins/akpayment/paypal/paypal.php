@@ -85,8 +85,16 @@ class plgAkpaymentPaypal extends JPlugin
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'firstname'		=> $firstName,
-			'lastname'		=> $lastName
+			'lastname'		=> $lastName,
+			'cmd'			=> $level->recurring ? '_xclick-subscriptions' : '_xclick',
+			'recurring'		=> $level->recurring ? true : false
 		);
+		
+		if($level->recurring) {
+			$ppDuration = $this->_toPPDuration($level->duration);
+			$data->t3 = $ppDuration->unit;
+			$data->p3 = $ppDuration->value;
+		}
 		
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
@@ -109,6 +117,17 @@ class plgAkpaymentPaypal extends JPlugin
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'PayPal reports transaction as invalid';
+		
+		// Check txn_type; we only accept web_accept transactions with this plugin
+		if($isValid) {
+			$validTypes = array('web_accept','recurring_payment','subscr_payment');
+			$isValid = in_array($data['txn_type'], $validTypes);
+			if(!$isValid) {
+				$data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
+			} else {
+				$recurring = ($data['txn_type'] != 'web_accept');
+			}
+		}
 		
 		// Load the relevant subscription row
 		if($isValid) {
@@ -142,16 +161,11 @@ class plgAkpaymentPaypal extends JPlugin
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Merchant ID does not match receiver_email or receiver_id';
 		}
 		
-		// Check txn_type; we only accept web_accept transactions with this plugin
-		if($isValid) {
-			$isValid = $data['txn_type'] == 'web_accept';
-			if(!$isValid) $data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
-		}
-		
 		// Check that mc_gross is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
 			$mc_gross = floatval($data['mc_gross']);
+			
 			$gross = $subscription->gross_amount;
 			if($mc_gross > 0) {
 				// A positive value means "payment". The prices MUST match!
@@ -256,7 +270,24 @@ class plgAkpaymentPaypal extends JPlugin
 			$updates['enabled'] = 1;
 
 		}
+		// In the case of a successful recurring payment, fetch the old subscription's data
+		if($recurring && ($newStatus == 'C')) {
+			$oldData = $subscription->getData();
+			unset($oldData['akeebasubs_subscritpion_id']);
+			$oldData['publish_down'] = $jNow->toMySQL();
+			$oldData['enabled'] = 0;
+			if(empty($oldData['notes'])) $oldData['notes'] = '';
+			$oldData['notes'] .= "\n\nAutomatically renewed subscription";
+		}
+		// Save the changes
 		$subscription->save($updates);
+		// In the case of a successful recurring payment, store the old subscription's data to a new record
+		if($recurring && ($newStatus == 'C')) {
+			$original = clone $subscription;
+			$original->reset();
+			$original->bind($oldData);
+			$original->store();
+		}
 		
 		// Run the onAKAfterPaymentCallback events
 		jimport('joomla.plugin.helper');
@@ -381,5 +412,67 @@ class plgAkpaymentPaypal extends JPlugin
 		}
 		$logData .= "\n";
 		JFile::write($logFile, $logData);
+	}
+	
+	private function _toPPDuration($days)
+	{
+		$ret = (object)array(
+			'unit'		=> 'D',
+			'value'		=> $days
+		);
+
+		// 0-90 => return days
+		if($days < 90) return $ret;
+
+		// Translate to weeks, months and years
+		$weeks = (int)($days / 7);
+		$months = (int)($days / 30);
+		$years = (int)($days / 365);
+
+		// Find which one is the closest match
+		$deltaW = abs($days - $weeks*7);
+		$deltaM = abs($days - $months*30);
+		$deltaY = abs($days - $years*365);
+		$minDelta = min($deltaW, $deltaM, $deltaY);
+
+		// Counting weeks gives a better approximation
+		if($minDelta == $deltaW) {
+			$ret->unit = 'W';
+			$ret->value = $weeks;
+
+			// Make sure we have 1-52 weeks, otherwise go for a months or years
+			if(($ret->value > 0) && ($ret->value <= 52)) {
+				return $ret;
+			} else {
+				$minDelta = min($deltaM, $deltaY);
+			}
+		}
+
+		// Counting months gives a better approximation
+		if($minDelta == $deltaM) {
+			$ret->unit = 'M';
+			$ret->value = $months;
+
+			// Make sure we have 1-24 month, otherwise go for years
+			if(($ret->value > 0) && ($ret->value <= 24)) {
+				return $ret;
+			} else {
+				$minDelta = min($deltaM, $deltaY);
+			}
+		}
+
+		// If we're here, we're better off translating to years
+		$ret->unit = 'Y';
+		$ret->value = $years;
+
+		if($ret->value < 0) {
+			// Too short? Make it 1 (should never happen)
+			$ret->value = 1;
+		} elseif($ret->value > 5) {
+			// One major pitfall. You can't have renewal periods over 5 years.
+			$ret->value = 5;
+		}
+
+		return $ret;
 	}
 }

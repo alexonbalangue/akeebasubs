@@ -217,6 +217,12 @@
         </listitem>
 
         <listitem>
+          <para>Recurring subscriptions. Not all payment methods support
+          recurring subscriptions. Please consult the documentation for
+          further information</para>
+        </listitem>
+
+        <listitem>
           <para>Send emails to subscribers upon subscription, when their
           subscription/payment status changes and when their subscription is
           about to expire</para>
@@ -795,6 +801,17 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <para>Default: € (Euro symbol)</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Currency sign position</term>
+
+          <listitem>
+            <para>Determines if the currency symbol should appear before or
+            after the amount.</para>
+
+            <para>Default: After the amount</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Back-end display</guilabel></para>
@@ -880,7 +897,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       only)</para>
 
       <para>This is the standard Joomla! 1.6 or later ACL permissions widget.
-      The meaning of the different ACL settings is as follows:</para>
+      The meaning of the different ACL settings* is as follows:</para>
 
       <variablelist>
         <varlistentry>
@@ -893,7 +910,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
-          <term>Access Component</term>
+          <term>Access Administration Interface</term>
 
           <listitem>
             <para>Allows backend access to the component. Frontend access IS
@@ -937,6 +954,10 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </varlistentry>
       </variablelist>
+
+      <para>* actual label text may differ depending on your Joomla! version;
+      this documentation is based on English (United Kingdom) language strings
+      found in Joomla! 2.5.1.</para>
     </section>
 
     <section xml:id="subscription-levels">
@@ -1015,11 +1036,36 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           <term>Forbid renewals</term>
 
           <listitem>
+            <para>This feature is available since Akeeba Subscriptions
+            2.1</para>
+
             <para>Is set to Yes, a user can subscribe to this level only ONCE.
             He won't be able to renew his subscription. Useful in setting up
             "trial subscriptions", i.e. cheap or even free subscription levels
             with very limited duration which a user can subscribe to only
             once.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Recurring</term>
+
+          <listitem>
+            <para>This feature is available since Akeeba Subscriptions
+            2.1</para>
+
+            <para>When selected, Akeeba Subscriptions will notify the payment
+            processor plugin that the subscription should recur, i.e. it will
+            automatically be renewed on expiration. In this case, please set
+            both expiration notification parameters below to 0; there is no
+            point informing your users that their subscription is expiring
+            when it will be re-activated automatically.</para>
+
+            <warning>
+              <para>Not all payment processors support recurring
+              subscriptions. Please consult the documentation of your payment
+              processor plugin.</para>
+            </warning>
           </listitem>
         </varlistentry>
 
@@ -2293,6 +2339,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - Paypal</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">supports</emphasis> recurring
+        payments.</para>
+
         <para>This payment method integrates the standard PayPal Website
         Payments service, available without any setup fee to all verified
         PayPal clients. In other words, that's the standard way to use PayPal
@@ -2395,6 +2444,41 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <bridgehead>Recurring payments support notes</bridgehead>
+
+        <para>PayPal has some restrictions regarding the renewal period of
+        subscription. A subscription may recur in a period of 1-90 days, 1-52
+        weeks, 1-24 months or 1-5 years. Akeeba Subscriptions will
+        automatically convert the subscription duration to the closest match.
+        This may not always be what you expect. For example, 180 days is
+        converted to 6 months and 15 days is converted to 2 weeks. Due to the
+        fuzziness of the conversion and the way PayPal handles renewals, it is
+        possible that a subscription will expire before it is automatically
+        renewed. If a subscription expires, an expiration email will be sent
+        to your client.</para>
+
+        <para>Payments will recur till the end of the world unless you cancel
+        your PayPal account, your client cancels his PayPal account, your
+        client manually unsubscribes from his PayPal account's back-end or
+        your client does not have funds for 3 consecutive days after his
+        renewal is due. In all of the above cases, your client's subscription
+        may expire before it is renewed. If a subscription expires, an
+        expiration email will be sent to your client.</para>
+
+        <para>You can not cancel recurring payments through Akeeba
+        Subscriptions. You have to do so manually, from PayPal's
+        back-end.</para>
+
+        <para>When a subscription payment recurs, the original subscription
+        record is overwritten. In order for you not to lose statistics
+        information, a new <emphasis role="bold">expired</emphasis>
+        subscription record is created with the old subscription record's
+        information. This means that the subscription with the biggest
+        subscription ID (appearing towards the top of the front- and back-end
+        lists) will show as expired. This is not a bug. PayPal sends us the
+        original subscription's ID as a reference, which is why only the
+        original subscription can be updated.</para>
       </section>
 
       <section xml:id="payment-none">
@@ -2402,6 +2486,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - None</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This is a dummy payment plugin which immediately activates a
         subscription without payment.</para>
@@ -2420,6 +2507,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - WorldPay</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the WorldPay Hosted Payment Page
         payments service, available with all entry-level offerings of
@@ -2536,6 +2626,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - Off-line</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This is a payment plugin which lets your users complete their
         payment off-line, e.g. through bank (wire) transfer, money check,
         Western Union or any other means of payment that you allow. It works
@@ -2570,6 +2663,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - 2Checkout Standard Purchase
         Routine</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <warning>
           <para>This payment method has been rewritten as of Akeeba
@@ -2686,6 +2782,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - ccAvenue</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This payment method integrates the ccAvenue payments service,
         the leading payment processor in India. It can be used for
         transactions in Indian Rupees or US Dollars.</para>
@@ -2737,6 +2836,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - eWay</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the eWay payments service. It can
         work with all three local payment services offered by eWay (Australia,
@@ -2869,6 +2971,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - uPay</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This payment method integrates the uPay payments service
         (https://www.upay.co.uk), a popular payment processor in universities
         and colleges.</para>
@@ -2935,6 +3040,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - MoIP</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This payment method integrates the MoIP payments service
         (https://www.moip.com.br), a popular Brazilian payment
         processor.</para>
@@ -2997,6 +3105,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - DeltaPay (Alpha Bank, Greece)</guilabel>.
         Available since Akeeba Subscriptions 2.0.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the DelptaPay payment processor
         operated in Greece by Alpha Bank. It implements the HTML method which
@@ -3064,6 +3175,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - Google Checkout</guilabel>. Available since
         Akeeba Subscriptions 2.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the Google Checkout payment
         processor by Google, Inc.</para>
@@ -3192,6 +3306,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         Subscriptions Payment - Moneris</guilabel>. Available since Akeeba
         Subscriptions 2.1.</para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This payment method integrates the Canadian Moneris (eSelect)
         credit card processing service. Moneris offers is the largest payment
         processor in Canada and offers its services even to non-Canadian
@@ -3272,6 +3389,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - PostFinance.ch</guilabel>. Available since
         Akeeba Subscriptions 2.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the Swiss PostFinance payment
         processing service.</para>
@@ -3553,6 +3673,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - PagSeguro</guilabel>. Available since Akeeba
         Subscriptions 2.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates <link
         xlink:href="https://pagseguro.uol.com.br/en/what-is-pagseguro.html#rmcl">PagSeguro</link>,

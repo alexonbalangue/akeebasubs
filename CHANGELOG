@@ -12,6 +12,7 @@ Akeeba Subscriptions 2.1
 + PostFinance.ch payment processor
 + You can now configure the position of the currency sign (before or after the amount)
 + Limit coupons to specific user groups on Joomla! 2.5. Thank you Peter (noNumber.nl) for the patch!
++ #24 Recurring subscriptions (only with PayPal right now)
 ~ Reimplemented the 2Checkout plugin, using the INS API (more stable)
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
