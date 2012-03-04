@@ -33,14 +33,14 @@
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_TITLE_LABEL" description="PLG_AKPAYMENT_WORLDPAY_TITLE_DESC"/>
-                                <field type="spacer" />
-                                <field name="instid" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_INSTID_LABEL" description="PLG_AKPAYMENT_WORLDPAY_INSTID_DESC"/>
-                                <field name="callbackpw" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_CALLBACKPW_LABEL" description="PLG_AKPAYMENT_WORLDPAY_CALLBACKPW_DESC"/>
-                                <field type="spacer" />
-                                <field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_WORLDPAY_SANDBOX_LABEL" description="PLG_AKPAYMENT_WORLDPAY_SANDBOX_DESC">
-                                  <option value="0">JNo</option>
-                                  <option value="1">JYes</option>
-                                </field>
+				<field type="spacer" />
+				<field name="instid" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_INSTID_LABEL" description="PLG_AKPAYMENT_WORLDPAY_INSTID_DESC"/>
+				<field name="callbackpw" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_CALLBACKPW_LABEL" description="PLG_AKPAYMENT_WORLDPAY_CALLBACKPW_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_WORLDPAY_SANDBOX_LABEL" description="PLG_AKPAYMENT_WORLDPAY_SANDBOX_DESC">
+					<option value="0">JNo</option>
+					<option value="1">JYes</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

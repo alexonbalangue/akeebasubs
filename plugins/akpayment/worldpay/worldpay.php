@@ -78,7 +78,7 @@ class plgAkpaymentWorldpay extends JPlugin
 		
 		$data = (object)array(
 			'url'			=> $this->getPaymentURL(),
-			'test'			=> ($this->params->get('sandbox',0) ? '0' : '100'),
+			'test'			=> ($this->params->get('sandbox',0) ? true : false),
 			'instid'		=> $this->params->get('instid',''),
 			'postback'		=> $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=worldpay')),
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
@@ -247,9 +247,9 @@ class plgAkpaymentWorldpay extends JPlugin
 	{
 		$sandbox = $this->params->get('sandbox',0);
 		if($sandbox) {
-			return 'https://secure-test.wp3.rbsworldpay.com/wcc/purchase';
+			return 'https://secure-test.worldpay.com/wcc/purchase';
 		} else {
-			return 'https://secure.wp3.rbsworldpay.com/wcc/purchase';
+			return 'https://secure.worldpay.com/wcc/purchase';
 		}
 	}
 	

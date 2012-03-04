@@ -26,6 +26,7 @@ Akeeba Subscriptions 2.1
 # Decimals in tax rules not shown in Tax Rules view
 # The sales graph was inaccurate (only enabled subs would show)
 # Notices thrown by the aslink plugin
+# Various bugs in the WorldPay plugin
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
