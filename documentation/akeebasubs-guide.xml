@@ -2634,6 +2634,13 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               CUSTOMERS.</emphasis> This option should be used only in the
               integration testing phase during your initial setup. When you're
               ready to go live with your site, disable this feature.</para>
+
+              <warning>
+                <para>Demo transactions DO NOT send an Instant Notification
+                System (INS) message. Therefore, all subscriptions processed
+                with a demo transaction will have a payment status of New and
+                will not be enabled.</para>
+              </warning>
             </listitem>
           </varlistentry>
         </variablelist>
