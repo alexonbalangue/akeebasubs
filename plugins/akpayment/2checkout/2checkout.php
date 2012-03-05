@@ -259,7 +259,7 @@ class plgAkpayment2checkout extends JPlugin
 		);
 		$calculated_md5 = strtoupper($calculated_md5);
 		
-		return $calulated_md5 == $incoming_md5;
+		return ($calculated_md5 == $incoming_md5);
 	}
 	
 	private function logIPN($data, $isValid)
