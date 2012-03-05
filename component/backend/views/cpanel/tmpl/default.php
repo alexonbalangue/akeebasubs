@@ -352,6 +352,26 @@ $this->loadHelper('cparams');
 				</em>
 			</td>
 		</tr>
+		<tr class="row1">
+			<td width="70%" colspan="2"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_TOTALACTIVESUBSCRIBERS')?></td>
+			<td width="25%" align="right">
+			<?php
+				echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->getActiveSubscribers();
+			?>
+			</td>
+		</tr>
+		<tr class="row0">
+			<td width="70%" colspan="2"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_TOTALACTIVESUBSCRIPTIONS')?></td>
+			<td width="25%" align="right">
+			<?php
+				echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->paystate('C')
+					->enabled(1)
+					->getTotal();
+			?>
+			</td>
+		</tr>
 		</tbody>
 	</table>
 	

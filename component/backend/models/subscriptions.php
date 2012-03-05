@@ -562,4 +562,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			}		
 		}
 	}
+	
+	public function getActiveSubscribers()
+	{
+		$db = $this->getDbo();
+		$query = FOFQueryAbstract::getNew($db)
+			->select(array('COUNT(DISTINCT('.$db->nameQuote('user_id').'))'))
+			->from($db->nameQuote('#__akeebasubs_subscriptions'))
+			->where($db->nameQuote('enabled').' = '.$db->quote('1'));
+		$db->setQuery($query);
+		return $db->loadResult();
+	}
 }
