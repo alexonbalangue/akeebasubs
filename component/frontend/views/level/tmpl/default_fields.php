@@ -17,6 +17,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php'
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 
 JHTML::_('behavior.mootools');
+
 ?>
 
 <?php if(JFactory::getUser()->guest):?>
@@ -50,6 +51,10 @@ JHTML::_('behavior.mootools');
 <label for="email" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL')?></label>
 <input type="text" name="email" id="email" value="<?php echo $this->escape( !empty($this->userparams->email) ? $this->userparams->email : $this->cache['email'] )?>" class="main" />
 <span id="email_invalid" class="invalid" <?php if($this->validation->validation->email):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL')?><span class="akstriangle akstriangle-red"></span></span>
+<br/>
+<label for="email2" class="main">* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL2')?></label>
+<input type="text" name="email2" id="email2" value="<?php echo $this->escape( !empty($this->userparams->email2) ? $this->userparams->email2 : $this->cache['email2'] )?>" class="main" />
+<span id="email2_invalid" class="invalid" <?php if($this->validation->validation->email2):?>style="display:none"<?php else:?>style="display:inline-block"<?php endif?>><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL2')?><span class="akstriangle akstriangle-red"></span></span>
 <br/>
 
 <?php

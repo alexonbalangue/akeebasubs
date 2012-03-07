@@ -67,6 +67,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'password2'		=> '',
 				'name'			=> '',
 				'email'			=> '',
+				'email2'		=> '',
 				'address1'		=> '',
 				'address2'		=> '',
 				'country'		=> 'XX',
@@ -121,6 +122,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'password2'			=> $this->getState('password2','','raw'),
 			'name'				=> $this->getState('name','','string'),
 			'email'				=> $this->getState('email','','string'),
+			'email2'			=> $this->getState('email2','','string'),
 			'address1'			=> $this->getState('address1','','string'),
 			'address2'			=> $this->getState('address2','','string'),
 			'country'			=> $this->getState('country','','cmd'),
@@ -245,6 +247,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$ret = array(
 			'name'			=> !empty($state->name),
 			'email'			=> !empty($state->email),
+			'email2'		=> !empty($state->email2) && ($state->email == $state->email2),
 			'address1'		=> !empty($state->address1),
 			'country'		=> !empty($state->country),
 			'state'			=> !empty($state->state),
@@ -799,7 +802,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		{
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 			if(!AkeebasubsHelperCparams::getParam('personalinfo',1)) {
-				if(!in_array($key, array('username','email','name'))) continue;
+				if(!in_array($key, array('username','email','email2','name'))) continue;
 			}
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if($key == 'vatnumber') continue;

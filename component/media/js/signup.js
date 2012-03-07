@@ -77,6 +77,7 @@ function validateForm(callback_function)
 				'username'	:	$('#username').val(),
 				'name'		:	$('#name').val(),
 				'email'		:	$('#email').val(),
+				'email2'	:	$('#email2').val(),
 				'address1'	:	$('#address1').val(),
 				'address2'	:	$('#address2').val(),
 				'country'	:	$('select[name$="country"]').val(),
@@ -97,6 +98,7 @@ function validateForm(callback_function)
 				'username'	:	$('#username').val(),
 				'name'		:	$('#name').val(),
 				'email'		:	$('#email').val(),
+				'email2'	:	$('#email2').val(),
 				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
 				'custom'	:	{}
 			};
@@ -242,7 +244,9 @@ function validateEmail()
 	(function($) {
 		$('#email_empty').css('display','none');
 		$('#email_invalid').css('display','none');
+		$('#email2_invalid').css('display','none');
 		var email = $('#email').val();
+		var email2 = $('#email2').val();
 		if(email == '') {
 			$('#email_empty').css('display','inline-block');
 			akeebasubs_valid_form = false;
@@ -465,6 +469,13 @@ function applyValidation(response, callback)
 			$('#email_invalid').css('display','inline-block');
 		}
 		
+		if(response.email2) {
+			$('#email2_invalid').css('display','none');
+		} else {
+			akeebasubs_valid_form = false;
+			$('#email2_invalid').css('display','inline-block');
+		}
+		
 		if(akeebasubs_personalinfo) {
 			if(response.address1) {
 				$('#address1_empty').css('display','none');
@@ -580,6 +591,7 @@ function addToValidationQueue(myfunction)
 		}
 		$('#name').blur(validateName);
 		$('#email').blur(validateEmail);
+		$('#email2').blur(validateEmail);
 		if(akeebasubs_personalinfo) {
 			$('select[name$="country"]').change(validateBusiness);
 			$('select[name$="state"]').change(validateBusiness);

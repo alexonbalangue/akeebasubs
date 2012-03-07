@@ -224,6 +224,7 @@ class AkeebasubsModelUsers extends FOFModel
 		$userData = $userRow->getData();		
 		$myData = $nativeData;
 		foreach(array('name','username','email') as $key) $myData[$key] = $userData[$key];
+		$myData['email2'] = $userData['email'];
 		unset($userData);
 				
 		if($state->user_id > 0) {
