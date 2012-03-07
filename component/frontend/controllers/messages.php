@@ -62,7 +62,7 @@ class AkeebasubsControllerMessages extends FOFController
 			// This line FORCE RELOADS the user record.
 			$newUserObject->load($userid);
 			
-			if($newUserObject->id == $userid)
+			if(($newUserObject->id == $userid) && !$newUserObject->block)
 			{
 				// Mark the user as logged in
 				$newUserObject->set('guest', 0);
