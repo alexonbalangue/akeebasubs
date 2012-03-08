@@ -110,7 +110,7 @@ class AkeebasubsHelperSelect
 			'PE' => 'Prince Edward Island', 'QC' => 'Quebec', 'SK' => 'Saskatchewan', 'YT' => 'Yukon'
 			),
 		'Australia'	=> array(
-			'ACT' => 'Australian Capital Territory', 'JBT' => 'Jervis Bay Terittory', 'NSW' => 'New South Wales',
+			'ACT' => 'Australian Capital Territory', 'NSW' => 'New South Wales',
 			'AU-NT' => 'Northern Terittory', 'QLD' => 'Queensland', 'AU-SA' => 'South Australia',
 			'TAS' => 'Tasmania', 'VIC' => 'Victoria', 'AU-WA' => 'Western Australia'
 		)
