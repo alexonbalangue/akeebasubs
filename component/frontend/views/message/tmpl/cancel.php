@@ -19,6 +19,8 @@ $this->loadHelper('message');
 $message = AkeebasubsHelperMessage::processLanguage($this->item->canceltext);
 // Parse merge tags
 $message = AkeebasubsHelperMessage::processSubscriptionTags($message, $this->subscription);
+// Process content plugins
+$message = JHTML::_('content.prepare', $message);
 ?>
 
 <?php if(AkeebasubsHelperCparams::getParam('stepsbar',1) && ($this->subscription->prediscount_amount > 0.01)):?>

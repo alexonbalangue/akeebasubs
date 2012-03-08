@@ -30,6 +30,7 @@ Akeeba Subscriptions 2.1
 # Notices thrown by the aslink plugin
 # Various bugs in the WorldPay plugin
 # The messages view in the frontend would also log in blocked users
+# Content plugins were not being triggered in the order completion/cancellation pages
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
