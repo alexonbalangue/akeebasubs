@@ -244,22 +244,52 @@ unset($upgradesRaw);
 
 				<?php if($subscription->discount_amount > 0): ?>
 				<span class="akeebasubs-subscription-netamount">
-				<?php echo sprintf('%2.2f', (float)$subscription->prediscount_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
+				<?php echo sprintf('%2.2f', (float)$subscription->prediscount_amount) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</span>
 				<span class="akeebasubs-subscription-discountamount">
-				- <?php echo sprintf('%2.2f', (float)$subscription->discount_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
+				- <?php echo sprintf('%2.2f', (float)$subscription->discount_amount) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</span>
 				<?php else: ?>
 				<span class="akeebasubs-subscription-netamount">
-				<?php echo sprintf('%2.2f', (float)$subscription->net_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
+				<?php echo sprintf('%2.2f', (float)$subscription->net_amount) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</span>
 				<?php endif; ?>
 				<span class="akeebasubs-subscription-taxamount">
-				<?php echo sprintf('%2.2f', (float)$subscription->tax_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
+				<?php echo sprintf('%2.2f', (float)$subscription->tax_amount) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</span>
 				<?php endif; ?>
 				<span class="akeebasubs-subscription-grossamount">
-				<?php echo sprintf('%2.2f', (float)$subscription->gross_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
+				<?php echo sprintf('%2.2f', (float)$subscription->gross_amount) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</span>
 			</td>
 			<td>
@@ -303,9 +333,4 @@ var akeebasubs_token = "<?php echo JUtility::getToken();?>";
 		$('#toolbar-subrefresh').click(akeebasubs_refresh_integrations);
 	});
 })(akeeba.jQuery);
-
-window.addEvent('domready', function() {
-	// TODO!
-});
-
 </script>

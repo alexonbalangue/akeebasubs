@@ -99,6 +99,12 @@ $this->loadHelper('params');
 	<?php endif; ?>
 	<div class="akeebasubs-clear"></div>
 
+	<?php if(version_compare(JVERSION, '1.6.0', 'ge')): ?>
+	<label for="usergroups_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_COUPON_FIELD_USERGROUPS'); ?></label>
+	<?php echo AkeebasubsHelperSelect::usergroups('usergroups[]', empty($this->item->usergroups) ? '-1' : explode(',', $this->item->usergroups), array('multiple' => 'multiple', 'size' => 3)); ?>
+	<br />
+	<?php endif; ?>
+
 	<label for="subscriptions_field" class="main"><?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_SUBSCRIPTIONS'); ?></label>
 	<?php echo AkeebasubsHelperSelect::levels('subscriptions[]', empty($this->item->subscriptions) ? '-1' : explode(',',$this->item->subscriptions), array('multiple' => 'multiple', 'size' => 3)) ?>
 	<br />

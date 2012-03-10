@@ -56,7 +56,9 @@ $this->loadHelper('cparams');
 			?>
 			</td>
 			<td align="right" width="25%">
-			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
 			<?php echo  sprintf('%.02f',
 				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since((gmdate('Y')-1).'-01-01')
@@ -65,6 +67,9 @@ $this->loadHelper('cparams');
 					->paystate('C')
 					->getTotal()
 			)?>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
 		</td>
 		</tr>
 		<tr class="row1">
@@ -78,7 +83,9 @@ $this->loadHelper('cparams');
 				?>
 			</td>
 			<td align="right">
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-01-01')
@@ -87,6 +94,9 @@ $this->loadHelper('cparams');
 						->paystate('C')
 						->getTotal()
 				)?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<tr class="row0">
@@ -124,7 +134,9 @@ $this->loadHelper('cparams');
 				?>
 			</td>
 			<td align="right">
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since($y.'-'.$m.'-01')
@@ -133,6 +145,9 @@ $this->loadHelper('cparams');
 						->paystate('C')
 						->getTotal()
 				)?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<tr class="row1">
@@ -162,7 +177,9 @@ $this->loadHelper('cparams');
 				?>
 			</td>
 			<td align="right">
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since(gmdate('Y').'-'.gmdate('m').'-01')
@@ -171,6 +188,9 @@ $this->loadHelper('cparams');
 						->paystate('C')
 						->getTotal()
 				)?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<tr class="row0">
@@ -184,7 +204,9 @@ $this->loadHelper('cparams');
 				?>
 			</td>
 			<td align="right" width="25%">
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( gmdate('Y-m-d', time()-7*24*3600) )
@@ -193,6 +215,9 @@ $this->loadHelper('cparams');
 						->paystate('C')
 						->getTotal()
 				)?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<tr class="row1">
@@ -213,7 +238,9 @@ $this->loadHelper('cparams');
 				?>
 			</td>
 			<td align="right" width="25%">
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $yesterday )
@@ -222,6 +249,9 @@ $this->loadHelper('cparams');
 						->paystate('C')
 						->getTotal()
 				)?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 			</td>
 		</tr>
 		<tr class="row0">
@@ -242,7 +272,9 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right" width="25%">
 				<strong>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo  sprintf('%.02f',
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $date->format("Y-m-d") )
@@ -251,6 +283,9 @@ $this->loadHelper('cparams');
 						->moneysum(1)
 						->getTotal()
 				)?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</strong>
 			</td>
 		</tr>
@@ -290,8 +325,13 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right" width="25%">
 				<strong>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo sprintf('%01.2f', $summoney/$daysin)?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</strong>
 			</td>
 		</tr>
@@ -302,9 +342,34 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="right" width="25%">
 				<em>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€'); ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				<?php echo sprintf('%01.2f', $lmday * ($summoney/$daysin))?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</em>
+			</td>
+		</tr>
+		<tr class="row1">
+			<td width="70%" colspan="2"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_TOTALACTIVESUBSCRIBERS')?></td>
+			<td width="25%" align="right">
+			<?php
+				echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->getActiveSubscribers();
+			?>
+			</td>
+		</tr>
+		<tr class="row0">
+			<td width="70%" colspan="2"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_TOTALACTIVESUBSCRIPTIONS')?></td>
+			<td width="25%" align="right">
+			<?php
+				echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->paystate('C')
+					->enabled(1)
+					->getTotal();
+			?>
 			</td>
 		</tr>
 		</tbody>

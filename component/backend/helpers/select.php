@@ -110,7 +110,7 @@ class AkeebasubsHelperSelect
 			'PE' => 'Prince Edward Island', 'QC' => 'Quebec', 'SK' => 'Saskatchewan', 'YT' => 'Yukon'
 			),
 		'Australia'	=> array(
-			'ACT' => 'Australian Capital Territory', 'JBT' => 'Jervis Bay Terittory', 'NSW' => 'New South Wales',
+			'ACT' => 'Australian Capital Territory', 'NSW' => 'New South Wales',
 			'AU-NT' => 'Northern Terittory', 'QLD' => 'Queensland', 'AU-SA' => 'South Australia',
 			'TAS' => 'Tasmania', 'VIC' => 'Victoria', 'AU-WA' => 'Western Australia'
 		)
@@ -183,6 +183,40 @@ class AkeebasubsHelperSelect
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
 
+	public static function usergroups($name = 'usergroups', $selected = '', $attribs = array())
+	{
+		// Get a database object.
+		$db = JFactory::getDBO();
+
+		// Get the user groups from the database.
+		$query = FOFQueryAbstract::getNew($db);
+		$query->select(array(
+			$db->nameQuote('a').'.'.$db->nameQuote('id'),
+			$db->nameQuote('a').'.'.$db->nameQuote('title'),
+			$db->nameQuote('a').'.'.$db->nameQuote('parent_id').' AS '.$db->nameQuote('parent'),
+			'COUNT(DISTINCT '.$db->nameQuote('b').'.'.$db->nameQuote('id').') AS '.$db->nameQuote('level')
+		))->from($db->nameQuote('#__usergroups').' AS '.$db->nameQuote('a'))
+		->join('left', $db->nameQuote('#__usergroups').' AS '.$db->nameQuote('b').' ON '.
+			$db->nameQuote('a').'.'.$db->nameQuote('lft').' > '.$db->nameQuote('b').'.'.$db->nameQuote('lft').
+			' AND '.$db->nameQuote('a').'.'.$db->nameQuote('rgt').' < '.$db->nameQuote('b').'.'.$db->nameQuote('rgt')
+		)->group(array(
+			$db->nameQuote('a').'.'.$db->nameQuote('id')
+		))->order(array(
+			$db->nameQuote('a').'.'.$db->nameQuote('lft').' ASC'
+		))
+		;
+		$db->setQuery($query);
+		$groups = $db->loadObjectList();
+
+		$options = array();
+		$options[] = JHTML::_('select.option', '', '- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+
+		foreach ($groups as $group) {
+			$options[] = JHTML::_('select.option', $group->id, JText::_($group->title));
+		}
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 
 	public static function published($selected = null, $id = 'enabled', $attribs = array())
 	{

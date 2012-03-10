@@ -13,6 +13,12 @@
 			label="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL"
 			description="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL_DESC"
 		/>
+		<param name="currencypos" type="radio" default="before"
+			label="COM_AKEEBASUBS_CONFIG_CURRENCY_POS_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_CURRENCY_POS_DESC">
+			<option value="before">COM_AKEEBASUBS_CONFIG_CURRENCY_POS_BEFORE</option>
+			<option value="after">COM_AKEEBASUBS_CONFIG_CURRENCY_POS_AFTER</option>
+		</param>
 		<param name="@spacer" type="spacer" default="" label="" description="" />
 		
 		<param name="gravatar" type="radio" default="1"
@@ -62,10 +68,16 @@
 			label="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL"
 			description="COM_AKEEBASUBS_CONFIG_CURRENCY_SYMBOL_DESC"
 		/>
+		<field name="currencypos" type="list" default="before"
+			label="COM_AKEEBASUBS_CONFIG_CURRENCY_POS_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_CURRENCY_POS_DESC">
+			<option value="before">COM_AKEEBASUBS_CONFIG_CURRENCY_POS_BEFORE</option>
+			<option value="after">COM_AKEEBASUBS_CONFIG_CURRENCY_POS_AFTER</option>
+		</field>
 	</fieldset>
 	
 	<fieldset name="backend" label="COM_AKEEBASUBS_CONFIG_BACKEND_TITLE">
-		<field name="gravatar" type="radio" default="1"
+		<field name="gravatar" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR"
 			description="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR_DESC">
 			<option value="0">JNo</option>
@@ -80,19 +92,19 @@
 	</fieldset>
 	
 	<fieldset name="frontend" label="COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE">
-		<field name="stepsbar" type="radio" default="1"
+		<field name="stepsbar" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR_DESC">
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field>
-		<field name="personalinfo" type="radio" default="1"
+		<field name="personalinfo" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_DESC">
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field>
-		<field name="allowlogin" type="radio" default="1"
+		<field name="allowlogin" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">
 			<option value="0">JNo</option>

@@ -98,7 +98,6 @@ class plgContentAslink extends JPlugin
                     $itemId = '&Itemid=' . $itemId;
                 }
 
-                //@ob_clean(); header('Content-type: text/plain'); var_dump(JURI::base(),JURI::base(true));die();
                 $ret = rtrim($root, '/') . JRoute::_('index.php?option=com_akeebasubs&view=level&slug=' . $slug . $itemId);
             }
         } else {
@@ -155,13 +154,22 @@ class plgContentAslink extends JPlugin
 
         $component = & JComponentHelper::getComponent('com_akeebasubs');
         $menus = & JApplication::getMenu('site', array());
-        $items = $menus->getItems('component_id', $component->id);
+		$items = $menus->getItems('componentid', $component->id);
         $itemId = null;
 
         if (count($items)) {
             foreach ($items as $item) {
+				if(is_string($item->params)) {
+					$params = new JRegistry();
+					if(version_compare(JVERSION, '1.6.0', 'ge')) {
+						$params->loadJSON($item->params);
+					} else {
+						$params->loadINI($item->params);
+					}
+				}
+				
                 if (@$item->query['view'] == 'level') {
-                    if ((@$item->params->get('slug') == $slug)) {
+                    if ((@$params->getValue('slug') == $slug)) {
                         $itemId = $item->id;
                         break;
                     }

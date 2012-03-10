@@ -125,8 +125,13 @@ $this->loadHelper('format');
 			<td align="right">
 				<?php if($coupon->type == 'value'): ?>
 				<span class="akeebasubs-coupon-discount-value">
-				<?php echo  sprintf('%2.2f', (float)$coupon->value) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
+				<?php echo  sprintf('%2.2f', (float)$coupon->value) ?>
+				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php endif; ?>
 				</span>
 				<?php else: ?>
 				<span class="akeebasubs-coupon-discount-percent">

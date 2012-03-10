@@ -9,6 +9,13 @@ Akeeba Subscriptions 2.1
 + #41 Limit the number of times a Coupon can be used per user
 + Intellectual Property integration
 + Pie chart to show per-level sales over the last 30 days
++ PostFinance.ch payment processor
++ You can now configure the position of the currency sign (before or after the amount)
++ Limit coupons to specific user groups on Joomla! 2.5. Thank you Peter (noNumber.nl) for the patch!
++ #24 Recurring subscriptions (only with PayPal right now)
++ Total active subscribers and subscriptions in the Control Panel page
++ Email address validation by retyping it (thank you, Maurice, for the suggestion!)
+~ Reimplemented the 2Checkout plugin, using the INS API (more stable)
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
 # The backend module displayed the subscription levels ordered by their ID instead of their ordering preference
@@ -20,6 +27,10 @@ Akeeba Subscriptions 2.1
 # #60 Subscriptions list length always reset to "all items"
 # Decimals in tax rules not shown in Tax Rules view
 # The sales graph was inaccurate (only enabled subs would show)
+# Notices thrown by the aslink plugin
+# Various bugs in the WorldPay plugin
+# The messages view in the frontend would also log in blocked users
+# Content plugins were not being triggered in the order completion/cancellation pages
 
 Akeeba Subscriptions 2.0.1
 ================================================================================

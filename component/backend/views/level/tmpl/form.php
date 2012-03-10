@@ -60,14 +60,27 @@ $this->loadHelper('cparams');
 
 		<label for="price_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
 		<span>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
 			<input type="text" size="15" id="price_field" name="price" value="<?php echo  $this->item->price ?>" style="float: none" />
-			<?php AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php endif; ?>
 		</span>
 		<div class="akeebasubs-clear"></div>
 		
 		<label for="only_once" class="main mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_ONLY_ONCE'); ?></label>
 		<span class="akeebasubs-booleangroup">
 			<?php echo JHTML::_('select.booleanlist', 'only_once', null, $this->item->only_once); ?>
+		</span>
+		<div class="akeebasubs-clear"></div>
+		
+		<label for="recurring" class="main mainlabel" title="<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING_TITLE') ?>">
+			<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING'); ?>
+		</label>
+		<span class="akeebasubs-booleangroup">
+			<?php echo JHTML::_('select.booleanlist', 'recurring', null, $this->item->recurring); ?>
 		</span>
 		<div class="akeebasubs-clear"></div>
 		

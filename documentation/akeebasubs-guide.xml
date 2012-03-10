@@ -217,6 +217,12 @@
         </listitem>
 
         <listitem>
+          <para>Recurring subscriptions. Not all payment methods support
+          recurring subscriptions. Please consult the documentation for
+          further information</para>
+        </listitem>
+
+        <listitem>
           <para>Send emails to subscribers upon subscription, when their
           subscription/payment status changes and when their subscription is
           about to expire</para>
@@ -795,6 +801,17 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <para>Default: € (Euro symbol)</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Currency sign position</term>
+
+          <listitem>
+            <para>Determines if the currency symbol should appear before or
+            after the amount.</para>
+
+            <para>Default: After the amount</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Back-end display</guilabel></para>
@@ -880,7 +897,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       only)</para>
 
       <para>This is the standard Joomla! 1.6 or later ACL permissions widget.
-      The meaning of the different ACL settings is as follows:</para>
+      The meaning of the different ACL settings* is as follows:</para>
 
       <variablelist>
         <varlistentry>
@@ -893,7 +910,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
-          <term>Access Component</term>
+          <term>Access Administration Interface</term>
 
           <listitem>
             <para>Allows backend access to the component. Frontend access IS
@@ -937,6 +954,10 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </varlistentry>
       </variablelist>
+
+      <para>* actual label text may differ depending on your Joomla! version;
+      this documentation is based on English (United Kingdom) language strings
+      found in Joomla! 2.5.1.</para>
     </section>
 
     <section xml:id="subscription-levels">
@@ -1015,11 +1036,36 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           <term>Forbid renewals</term>
 
           <listitem>
+            <para>This feature is available since Akeeba Subscriptions
+            2.1</para>
+
             <para>Is set to Yes, a user can subscribe to this level only ONCE.
             He won't be able to renew his subscription. Useful in setting up
             "trial subscriptions", i.e. cheap or even free subscription levels
             with very limited duration which a user can subscribe to only
             once.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Recurring</term>
+
+          <listitem>
+            <para>This feature is available since Akeeba Subscriptions
+            2.1</para>
+
+            <para>When selected, Akeeba Subscriptions will notify the payment
+            processor plugin that the subscription should recur, i.e. it will
+            automatically be renewed on expiration. In this case, please set
+            both expiration notification parameters below to 0; there is no
+            point informing your users that their subscription is expiring
+            when it will be re-activated automatically.</para>
+
+            <warning>
+              <para>Not all payment processors support recurring
+              subscriptions. Please consult the documentation of your payment
+              processor plugin.</para>
+            </warning>
           </listitem>
         </varlistentry>
 
@@ -1811,13 +1857,30 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
-          <term>Limit to a specific user</term>
+          <term>User</term>
 
           <listitem>
             <para>Click on <guibutton>Select</guibutton> to pick a user for
             which the coupon will be active. For all other users the coupon
             will have no effect. Leave blank to let all users –even new ones–
             to use the coupon.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>User Groups</term>
+
+          <listitem>
+            <para>This option is only available when using Akeeba
+            Subscriptions on Joomla! 1.6 and later.</para>
+
+            <para>Choose the user group(s) which will have access to the
+            coupon. If a user does not belong to one of the selected groups,
+            the coupon code will not be available for him and he won't be able
+            to use it. If you don't want to impose any restriction, leave this
+            blank (or make sure that only the <option>- Select -</option>
+            pseudo-option is selected) and Akeeba Subscriptions will allow all
+            user groups to have access to this coupon code.</para>
           </listitem>
         </varlistentry>
 
@@ -2276,6 +2339,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - Paypal</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">supports</emphasis> recurring
+        payments.</para>
+
         <para>This payment method integrates the standard PayPal Website
         Payments service, available without any setup fee to all verified
         PayPal clients. In other words, that's the standard way to use PayPal
@@ -2378,6 +2444,41 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <bridgehead>Recurring payments support notes</bridgehead>
+
+        <para>PayPal has some restrictions regarding the renewal period of
+        subscription. A subscription may recur in a period of 1-90 days, 1-52
+        weeks, 1-24 months or 1-5 years. Akeeba Subscriptions will
+        automatically convert the subscription duration to the closest match.
+        This may not always be what you expect. For example, 180 days is
+        converted to 6 months and 15 days is converted to 2 weeks. Due to the
+        fuzziness of the conversion and the way PayPal handles renewals, it is
+        possible that a subscription will expire before it is automatically
+        renewed. If a subscription expires, an expiration email will be sent
+        to your client.</para>
+
+        <para>Payments will recur till the end of the world unless you cancel
+        your PayPal account, your client cancels his PayPal account, your
+        client manually unsubscribes from his PayPal account's back-end or
+        your client does not have funds for 3 consecutive days after his
+        renewal is due. In all of the above cases, your client's subscription
+        may expire before it is renewed. If a subscription expires, an
+        expiration email will be sent to your client.</para>
+
+        <para>You can not cancel recurring payments through Akeeba
+        Subscriptions. You have to do so manually, from PayPal's
+        back-end.</para>
+
+        <para>When a subscription payment recurs, the original subscription
+        record is overwritten. In order for you not to lose statistics
+        information, a new <emphasis role="bold">expired</emphasis>
+        subscription record is created with the old subscription record's
+        information. This means that the subscription with the biggest
+        subscription ID (appearing towards the top of the front- and back-end
+        lists) will show as expired. This is not a bug. PayPal sends us the
+        original subscription's ID as a reference, which is why only the
+        original subscription can be updated.</para>
       </section>
 
       <section xml:id="payment-none">
@@ -2385,6 +2486,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - None</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This is a dummy payment plugin which immediately activates a
         subscription without payment.</para>
@@ -2403,6 +2507,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - WorldPay</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the WorldPay Hosted Payment Page
         payments service, available with all entry-level offerings of
@@ -2519,6 +2626,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - Off-line</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This is a payment plugin which lets your users complete their
         payment off-line, e.g. through bank (wire) transfer, money check,
         Western Union or any other means of payment that you allow. It works
@@ -2553,6 +2663,15 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - 2Checkout Standard Purchase
         Routine</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <warning>
+          <para>This payment method has been rewritten as of Akeeba
+          Subscriptions 2.1; if you were previously using it, please review
+          this documentation and reconfigure the plugin.</para>
+        </warning>
 
         <para>This payment method integrates the 2Checkout Standard Purchase
         Routine payments service (commonly simply referred to as 2checkout or
@@ -2613,15 +2732,48 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               ready to go live with your site, disable this feature.</para>
 
               <warning>
-                <para>NONE of the Demo payments will be accepted by the
-                plugin! Demo payments deliberately carry an invalid signature
-                and will be marked as "Cancelled" in Akeeba Subscriptions. The
-                log file will mention them as fraud attempts. This is
-                deliberate and should not be considered a bug.</para>
+                <para>Demo transactions DO NOT send an Instant Notification
+                System (INS) message. Therefore, all subscriptions processed
+                with a demo transaction will have a payment status of New and
+                will not be enabled.</para>
               </warning>
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <bridgehead>Integration Notes</bridgehead>
+
+        <para>2Checkout requires you to supply a <guilabel>Notification
+        URL</guilabel> before you can accept payments to your site. In order
+        to do that, please follow this procedure:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Login to your 2Checkout management page, <link
+            xlink:href="https://www.2checkout.com/va">https://www.2checkout.com/va</link></para>
+          </listitem>
+
+          <listitem>
+            <para>Click on <guimenu>Notifications</guimenu>,
+            <guimenuitem>Settings</guimenuitem> from the top menu</para>
+          </listitem>
+
+          <listitem>
+            <para>In the <guilabel>Global URL</guilabel> field enter:</para>
+
+            <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=2checkout</uri></para>
+
+            <para>where <uri>www.example.com</uri> must be replaced with the
+            domain name of your site. Then click on
+            <guibutton>Apply</guibutton>, <guibutton>Enable All
+            Notifications</guibutton> and <guibutton>Save Settings</guibutton>
+            buttons, in this order.</para>
+          </listitem>
+        </orderedlist>
+
+        <para>If you skip this step, or make a typo, no subscription will be
+        activated in Akeeba Subscriptions and the payment status will always
+        appear as "New".</para>
       </section>
 
       <section xml:id="payment-ccavenue">
@@ -2629,6 +2781,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - ccAvenue</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the ccAvenue payments service,
         the leading payment processor in India. It can be used for
@@ -2681,6 +2836,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - eWay</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the eWay payments service. It can
         work with all three local payment services offered by eWay (Australia,
@@ -2813,6 +2971,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - uPay</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This payment method integrates the uPay payments service
         (https://www.upay.co.uk), a popular payment processor in universities
         and colleges.</para>
@@ -2879,6 +3040,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - MoIP</guilabel></para>
 
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
         <para>This payment method integrates the MoIP payments service
         (https://www.moip.com.br), a popular Brazilian payment
         processor.</para>
@@ -2939,8 +3103,11 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <title>DeltaPay (Alpha Bank, Greece)</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions Payment - DeltaPay (Alpha Bank,
-        Greece)</guilabel></para>
+        Subscriptions Payment - DeltaPay (Alpha Bank, Greece)</guilabel>.
+        Available since Akeeba Subscriptions 2.0.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the DelptaPay payment processor
         operated in Greece by Alpha Bank. It implements the HTML method which
@@ -3006,7 +3173,11 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <title>Google Checkout</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions Payment - Google Checkout</guilabel></para>
+        Subscriptions Payment - Google Checkout</guilabel>. Available since
+        Akeeba Subscriptions 2.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the Google Checkout payment
         processor by Google, Inc.</para>
@@ -3132,7 +3303,11 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <title>Moneris</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions Payment - Moneris</guilabel></para>
+        Subscriptions Payment - Moneris</guilabel>. Available since Akeeba
+        Subscriptions 2.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
 
         <para>This payment method integrates the Canadian Moneris (eSelect)
         credit card processing service. Moneris offers is the largest payment
@@ -3206,6 +3381,344 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+      </section>
+
+      <section xml:id="payment-postfinancech">
+        <title>PostFinance.ch</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - PostFinance.ch</guilabel>. Available since
+        Akeeba Subscriptions 2.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Swiss PostFinance payment
+        processing service.</para>
+
+        <important>
+          <para>Make sure you have set up your Akeeba Subscriptions currency
+          code to one of the currency codes supported by your PostFinance.ch
+          account, e.g. EUR for Euros, USD for US Dollars and so on.</para>
+        </important>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PostFinance" or type in a custom name
+              to show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Affiliation name</term>
+
+            <listitem>
+              <para>This is the affiliation name (merchant ID) supplied to you
+              by PostFinance.ch.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for data and origin verification
+            (production)</term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment request made to PostFinance,
+              ensuring that fraudsters can not send forged payment requests
+              for lesser amounts. This parameter is the passphrase defined in
+              your PostFinance account, in Merchant’s Technical information,
+              under the tab “Data and Origin Verification”, section “Checks
+              for e-Commerce.” Enter your PROD password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for transaction feedback (production)</term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment notification sent by PostFinance
+              back to Akeeba Subscriptions, ensuring that fraudsters can not
+              send forged payment notifications in order to get free access to
+              your services. This parameter is the passphrase defined in your
+              PostFinance account, in Merchant’s Technical information, under
+              the tab “Transaction Feedback”, section “All transaction
+              Submission modes.” Enter your PROD password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment page language</term>
+
+            <listitem>
+              <para>The language code of the payment page. All languages are
+              defined as language, underscore, country code, e.g. en_US for US
+              English, de_DE for German (Germany) etc. Default: en_US
+              (English). Please ask your bank for the available
+              languages.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Testing</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the PostFinance.ch testing server.</para>
+
+              <warning>
+                <para>No money will change hands when this is enabled. Only
+                use for testing purposes, before putting a site live. Do not
+                use this on a live site, accepting transactions from your
+                clients!</para>
+              </warning>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for data and origin verification (testing)</term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment request made to PostFinance,
+              ensuring that fraudsters can not send forged payment requests
+              for lesser amounts. This parameter is the passphrase defined in
+              your PostFinance account, in Merchant’s Technical information,
+              under the tab “Data and Origin Verification”, section “Checks
+              for e-Commerce.” Enter your TEST password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Passphrase for transaction feedback (testing)</term>
+
+            <listitem>
+              <para>This is optional, but STRONGLY recommended. It will be
+              used to validate the payment notification sent by PostFinance
+              back to Akeeba Subscriptions, ensuring that fraudsters can not
+              send forged payment notifications in order to get free access to
+              your services. This parameter is the passphrase defined in your
+              PostFinance account, in Merchant’s Technical information, under
+              the tab “Transaction Feedback”, section “All transaction
+              Submission modes.” Enter your TEST password here. Remember that
+              the passphrase is case sensitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Background colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's background colour. You can use a
+              named colour, e.g. white, or a hexadecimal colour definition,
+              e.g. #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Text colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's text colour. You can use a named
+              colour, e.g. white, or a hexadecimal colour definition, e.g.
+              #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Table background colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's table background colour. You can
+              use a named colour, e.g. white, or a hexadecimal colour
+              definition, e.g. #FFFFFF (including the hash sign in front of
+              the hex value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Table text colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's table text colour. You can use a
+              named colour, e.g. white, or a hexadecimal colour definition,
+              e.g. #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Button background colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's button background colour. You
+              can use a named colour, e.g. white, or a hexadecimal colour
+              definition, e.g. #FFFFFF (including the hash sign in front of
+              the hex value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Button text colour</term>
+
+            <listitem>
+              <para>(optional) Payment page's button text colour. You can use
+              a named colour, e.g. white, or a hexadecimal colour definition,
+              e.g. #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Background colour for the left columns (iPhone)</term>
+
+            <listitem>
+              <para>(optional) Payment page's background colour for the left
+              columns, only used in the iPhone template. You can use a named
+              colour, e.g. white, or a hexadecimal colour definition, e.g.
+              #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Text colour for the left columns (iPhone)</term>
+
+            <listitem>
+              <para>(optional) Payment page's text colour for the left
+              columns, only used in the iPhone template. You can use a named
+              colour, e.g. white, or a hexadecimal colour definition, e.g.
+              #FFFFFF (including the hash sign in front of the hex
+              value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Font family</term>
+
+            <listitem>
+              <para>(optional) Payment page's font family, e.g. Verdana</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Font family for the left columns (iPhone)</term>
+
+            <listitem>
+              <para>(optional) Payment page's font family for the left
+              columns, only used in the iPhone template</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Custom logo image</term>
+
+            <listitem>
+              <para>(optional) The URL to your logo image file. WARNING! It
+              must be an HTTPS URL or your clients will receive warnings about
+              insecure content.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In order for this integration to work, you have to supply some
+        URLs to PostFinanace's back-end interface before using this
+        integration in a live or test environment.</para>
+
+        <warning>
+          <para>IF YOU DO NOT CARRY OUT THESE STEPS, AKEEBA SUBSCRIPTIONS WILL
+          NOT RECEIVE PAYMENT NOTIFICATIONS, THE SUBSCRIPTIONS WILL NOT BECOME
+          ACTIVE AUTOMATICALLY AND THE INTEGRATION PLUGINS WITH THIRD PARTY
+          SOFTWARE WILL NOT EXECUTE.</para>
+        </warning>
+
+        <para>Please go to the <guilabel>Technical Information</guilabel>
+        page, <guilabel>Transaction feedback</guilabel> tab, <guilabel>Direct
+        HTTP server-to-server request</guilabel> section (URL fields) and
+        enter the following URL in BOTH of those fields:</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=postfinancech</uri></para>
+
+        <para>where <uri>www.example.com</uri> is, of course, to be
+        substituted with the domain name of your site.</para>
+
+        <para>Then, please go to the <guilabel>Technical
+        Information</guilabel> page, <guilabel>Transaction feedback</guilabel>
+        tab, <guilabel>HTTP request for status changes</guilabel> section.
+        Enter the same URL there.</para>
+
+        <para>Finally, please go to the <guilabel>Technical
+        Information</guilabel> page, <guilabel>Transaction feedback</guilabel>
+        tab, <guilabel>Direct HTTP server-to-server request</guilabel>
+        section. For the timing of the feedback request please select
+        <option>Always online</option>.</para>
+      </section>
+
+      <section xml:id="payment-googlecheckout">
+        <title>PagSeguro</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - PagSeguro</guilabel>. Available since Akeeba
+        Subscriptions 2.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates <link
+        xlink:href="https://pagseguro.uol.com.br/en/what-is-pagseguro.html#rmcl">PagSeguro</link>,
+        the leading Brazilian payment processor.</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>Your Merchant ID is the email you used to register to
+              PagSeguro</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Token</term>
+
+            <listitem>
+              <para>This is the 32-character API token. You can create one in
+              the settings page of payments. For more information, please take
+              a look at the <link
+              xlink:href="https://pagseguro.uol.com.br/v2/guia-de-integracao/api-de-pagamentos.html">integration
+              notes page</link>.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>You will have to specify the API callback URL before using
+        PagSeguro. To add or edit your API callback URL, go to the settings
+        page of PagSeguro. Setup the following URL:</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=subscribe</uri></para>
+
+        <para>Where www.example.com is the domain name of your site.</para>
+
+        <para>For more information, please consult PagSeguro's <link
+        xlink:href="https://pagseguro.uol.com.br/v2/guia-de-integracao/api-de-notificacoes.html">API
+        notification instructions page</link>.</para>
       </section>
     </section>
 
@@ -3451,6 +3964,14 @@ LEVEL3=entry1</programlisting>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - DOCman Integration</guilabel></para>
+
+        <warning>
+          <para>This integration has only been tested against DOCman 1.5.
+          DOCman 2.0 and later uses Joomla! 1.6 and later's user groups and
+          ACLs to control who can download what. You are advised to use the
+          Joomla! 1.6 user group integration plugin instead of the DOCman
+          integration plugin with DOCman 2.0 and later.</para>
+        </warning>
 
         <para>This integration plugin allows you to add and remove users from
         DOCman groups based on their subscription status. This allows you to
@@ -4048,6 +4569,10 @@ LEVEL3=Group 3</programlisting>
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions - NinjaBoard Integration</guilabel></para>
 
+        <important>
+          <para>This integration is only available on Joomla! 1.5</para>
+        </important>
+
         <para>This integration plugin allows you to add and remove users from
         NinjaBoard groups based on their subscription status. This allows you
         to control view/post/attachments access to your NinjaBoard forums
@@ -4566,7 +5091,8 @@ LEVEL3=Group 1</programlisting>
         <title>RedShop User Synchronisation</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - RedShop User Synchronisation</guilabel></para>
+        Subscriptions - RedShop User Synchronisation</guilabel>. Available
+        since Akeeba Subscriptions 2.0.1.</para>
 
         <para>This plugin provides two-way synchronisation between the user
         data stored in RedShop and Akeeba Subscriptions. Such data include the
@@ -4598,7 +5124,8 @@ LEVEL3=Group 1</programlisting>
         <title>Kunena Integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - Kunena Integration</guilabel></para>
+        Subscriptions - Kunena Integration</guilabel>. Available since Akeeba
+        Subscriptions 2.1.</para>
 
         <para>This integration plugin allows you to add and remove users from
         Kunena groups based on their subscription status. This allows you to
@@ -4659,7 +5186,8 @@ LEVEL3=Group 3, Group 4</programlisting>
         <title>Intellectual Property integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - Intellectual Property Integration</guilabel></para>
+        Subscriptions - Intellectual Property Integration</guilabel>.
+        Available since Akeeba Subscriptions 2.1.</para>
 
         <para>This plugin integrates Akeeba Subscriptions with the
         Intellectual Property real estate component by The Thinkery LLC. It
@@ -4667,34 +5195,123 @@ LEVEL3=Group 3, Group 4</programlisting>
         assigned as Agents in Intellectual Property. This allows you to create
         a real estate portal with self-registering real estate agents.</para>
 
-        <para>The plugin has these options:</para>
+        <para>The plugin has only one options:</para>
 
         <variablelist>
           <varlistentry>
             <term>Add to Intellectual Property</term>
 
             <listitem>
-              <para>When a user has an active subscription in this level, he
-              is added to Intellectual Property. If the user did not
-              previously have an Agent record associated with his user
-              account, a new Company and a new Agent record are created and
-              activated. If the user had existing, but unpublished, Agent
-              records, the plugin will activate those records but will NOT
-              create a new Company and/or Agent record.</para>
-            </listitem>
-          </varlistentry>
+              <para>This can be used to map subscription levels to
+              Intellectual Property company parameters. It uses the following
+              format:</para>
 
-          <varlistentry>
-            <term>Remove from Intellectual Property</term>
+              <programlisting>LEVEL1=maxlistings=50,maxflistings=10,maxagents=25,maxfagents=10
+LEVEL2=
+LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
 
-            <listitem>
-              <para>When a user has an expired subscription in this level, he
-              is removed from Intellectual Property. This means that all Agent
-              records associated with this user account will be
-              unpublished.</para>
+              <para>The left hand side is the title of the Subscription Level.
+              The right hand side is a comma separated list of Company
+              parameters. The available parameters are:</para>
+
+              <variablelist>
+                <varlistentry>
+                  <term>maxlistings</term>
+
+                  <listitem>
+                    <para>The maximum number of property listings for that
+                    company</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>maxflistings</term>
+
+                  <listitem>
+                    <para>The maximum number of featured property listings for
+                    that company</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>maxaganets</term>
+
+                  <listitem>
+                    <para>The maximum number of agents for that company</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>maxfagents</term>
+
+                  <listitem>
+                    <para>The maximum number of featured agents for that
+                    company</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>maximgs</term>
+
+                  <listitem>
+                    <para>The maximum number of images per listing</para>
+                  </listitem>
+                </varlistentry>
+              </variablelist>
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <para>In order to understand how this works, you have to consider the
+        following cases:</para>
+
+        <orderedlist>
+          <listitem>
+            <para><emphasis role="bold">The user has active subscriptions to
+            one or more subscription levels listed in the plugin parameters
+            (left hand side)</emphasis></para>
+
+            <para>If the user does not have any Agent records, a new Company
+            is created and the user becomes an Agent for that Company. The
+            Company parameters are those defined in the right hand side of the
+            plugin parameters (e.g. maxlistings=50,maxflistings=10 and so on).
+            If you leave them blank, like in the LEVEL2 example above,
+            Intellectual Property will use the default company
+            parameters.</para>
+
+            <para>If the user is already listed as an Agent to one or more
+            companies, the company is published and the user's Agent record
+            becomes published. This allows someone with an expired
+            subscription to re-subscribe in order to regain access to his
+            company. Furthermore, the parameters for each company for which he
+            is listed as an agent are modified. The value chosen for each
+            parameter is the maximum of the current parameter and the
+            parameter value defined in the right hand part of the plugin's
+            configuration. For example, if the company is configured with
+            maxlistings=100 and the plugin configuration defines
+            maxlistings=20, the company will continue to have maxlistings=100
+            (maximum value wins). On the contrary, if the company is
+            configured with maxlistings=10 and the plugin configuration
+            defines maxlistings=20, the company will now have maxlistings=20
+            (maximum value wins). Likewise, if the user is a subscriber to
+            multiple subscription levels, the maximum value will be
+            used.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">The user does not have active
+            subscriptions to any of the subscription levels listed in the
+            plugin parameters (left hand side)</emphasis></para>
+
+            <para>All Agent records for this user become unpublished. This
+            essentially revokes any administrative rights the user may have
+            had on any of the companies for which he was listed as an
+            Agent.</para>
+
+            <para>Moreover, all of the companies the user was listed as an
+            Agent are unpublished.</para>
+          </listitem>
+        </orderedlist>
       </section>
     </section>
 

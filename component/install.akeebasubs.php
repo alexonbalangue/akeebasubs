@@ -78,7 +78,9 @@ $installation_queue = array(
 			'moneris'				=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
+			'pagseguro'				=> 0,
 			'paypal'				=> 1,
+			'postfinancech'			=> 0,
 			'skrill'				=> 0,
 			'upay'					=> 0,
 			'worldpay'				=> 0
@@ -283,7 +285,7 @@ ENDSQL;
 	$status = $db->query();
 }
 
-// Upgrade the coupons table (2.1)
+// Upgrade the coupons table (2.1 - Part 1)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_coupons`';
 $db->setQuery($sql);
 $ctableAssoc = $db->loadResultArray(1);
@@ -293,6 +295,36 @@ if(!strstr($ctable, '`userhits`'))
 	$sql = <<<ENDSQL
 ALTER TABLE `#__akeebasubs_coupons`
 	ADD COLUMN `userhits` BIGINT(20) DEFAULT 0 AFTER `hitslimit`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
+// Upgrade the coupons table (2.1 - Part 2)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_coupons`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`usergroups`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_coupons`
+	ADD COLUMN `usergroups` VARCHAR(255) DEFAULT NULL AFTER `userhits`;
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
+// Upgrade the levels table (2.1)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, '`recurring`'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE `#__akeebasubs_levels`
+	ADD COLUMN `recurring` TINYINT(3) DEFAULT 0 AFTER `only_once`;
 ENDSQL;
 	$db->setQuery($sql);
 	$status = $db->query();

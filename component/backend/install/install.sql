@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`ordertext` text,
 	`canceltext` text,
 	`only_once` TINYINT(3) DEFAULT 0,
+	`recurring` TINYINT(3) DEFAULT 0,
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
@@ -87,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`params` TEXT,
 	`hitslimit` BIGINT(20) unsigned NULL,
 	`userhits` BIGINT(20) unsigned NULL,
+	`usergroups` VARCHAR(255) NULL,
 	`type` ENUM('value','percent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT 0.0,
 	
