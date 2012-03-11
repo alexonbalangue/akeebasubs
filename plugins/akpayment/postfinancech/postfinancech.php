@@ -313,10 +313,14 @@ class plgAkpaymentPostfinancech extends JPlugin
 		
 		// Get the password and calculate the SHA1 or SHA256 hash
 		$password = $this->getPassword($type);
+		$stringToSign = '';
 		if(!empty($password)) {
-			$stringToSign = implode($password, $temp) . $password;
+			foreach ($temp as $key => $value) {
+				if ($value)	$stringToSign .= $key.'='.$value.$password;
+			}	
 			if(function_exists('sha1')) {
-				$sha1 = sha1($stringToSign);
+				$stringToSign = iconv ( "UTF-8" , "ASCII//TRANSLIT" , $stringToSign );
+				$sha1 = strtoupper(sha1($stringToSign));
 			}
 		}
 		
