@@ -3712,7 +3712,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         PagSeguro. To add or edit your API callback URL, go to the settings
         page of PagSeguro. Setup the following URL:</para>
 
-        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=subscribe</uri></para>
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=pagseguro</uri></para>
 
         <para>Where www.example.com is the domain name of your site.</para>
 
