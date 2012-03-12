@@ -156,3 +156,19 @@ function empty (mixed_var) {
 
     return false;
 }
+
+/**
+ * Adds a function to the validation fetch queue
+ */
+function addToValidationFetchQueue(myfunction)
+{
+	// Really does nothing, it's here to avoid JS errors
+}
+
+/**
+ * Adds a function to the validation queue
+ */
+function addToValidationQueue(myfunction)
+{
+	// Really does nothing, it's here to avoid JS errors
+}

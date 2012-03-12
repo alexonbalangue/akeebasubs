@@ -33,6 +33,7 @@ Akeeba Subscriptions 2.1
 # Various bugs in the WorldPay plugin
 # The messages view in the frontend would also log in blocked users
 # Content plugins were not being triggered in the order completion/cancellation pages
+# Javascript errors in the User view in the backend
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
