@@ -15,6 +15,7 @@ Akeeba Subscriptions 2.1
 + #24 Recurring subscriptions (only with PayPal right now)
 + Total active subscribers and subscriptions in the Control Panel page
 + Email address validation by retyping it (thank you, Maurice, for the suggestion!)
++ "Agree to Terms of Service" custom field plugin
 ~ Reimplemented the 2Checkout plugin, using the INS API (more stable)
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)

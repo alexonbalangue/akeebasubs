@@ -5608,7 +5608,7 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
         </tip>
       </section>
 
-      <section>
+      <section xml:id="plugin-aslink">
         <title>The Akeeba Subscriptions Link (aslink) plugin</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Content - Akeeba
@@ -5666,6 +5666,42 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
         <para>to create a link to the Subscription Levels view. This is
         usually quicker than creating a link to a menu item and remembering to
         change that link whenever your menu structure changes.</para>
+      </section>
+
+      <section xml:id="integration-agreetotos">
+        <title>Agree to Terms of Service</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Agree to Terms of Service</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.0.1</para>
+        </note>
+
+        <para>This plugin allows you to force your users to accept your Terms
+        of Service before being able to subscribe, a requirement with many
+        payment processors. All you have to do is to enable this plugin and
+        supply a TOS URL. Unless the user indicates that he accepts the terms
+        of service, he won't be able to complete the subscription.</para>
+
+        <tip>
+          <para>If you want to change the relative position of this field to
+          other custom field plugins, you can use the plugin order in
+          Joomla!'s Manage Plugins page</para>
+        </tip>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Terms of Service URL</term>
+
+            <listitem>
+              <para>The URL to the Terms of Service document. A link to this
+              document will be displayed in the subscription page.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
     </section>
   </chapter>
