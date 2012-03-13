@@ -5740,6 +5740,24 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="integration-iplogger">
+        <title>IP Logger</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - IP Logger</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.1</para>
+        </note>
+
+        <para>This plugin allows you to log the IP address your user was using
+        during his latest sign-up attempt. In order to view it, please go to
+        the Users page of Akeeba Subscriptions and click on the user name. The
+        IP address will be displayed in the custom fields area.</para>
+
+        <para>The plugin has no options.</para>
+      </section>
     </section>
   </chapter>
 

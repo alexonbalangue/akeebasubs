@@ -985,6 +985,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$thisUser = array_pop($list);
 			$id = $thisUser->akeebasubs_user_id;
 		}
+		
 		$data = array(
 			'akeebasubs_user_id' => $id,
 			'user_id'		=> $user->id,
@@ -1001,8 +1002,29 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'state'			=> $state->state,
 			'zip'			=> $state->zip,
 			'country'		=> $state->country,
-			'params'		=> json_encode($state->custom)
+			'params'		=> $state->custom
 		);
+		
+		// Allow plugins to post-process the fields
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKSignupUserSave', array((object)$data));
+		if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $pResponse) {
+			if(!is_array($pResponse)) continue;
+			if(empty($pResponse)) continue;
+			if(array_key_exists('params', $pResponse)) {
+				if(!empty($pResponse['params'])) foreach($pResponse['params'] as $k => $v) {
+					$data['params'][$k] = $v;
+				}
+				unset($pResponse['params']);
+			}
+			$data = array_merge($data, $pResponse);
+		}
+		
+		// Serialize custom fields
+		$data['params'] = json_encode($data['params']);
+		
 		FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->setId($id)
 			->getItem()

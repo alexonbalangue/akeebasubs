@@ -17,6 +17,7 @@ Akeeba Subscriptions 2.1
 + Email address validation by retyping it (thank you, Maurice, for the suggestion!)
 + "Agree to Terms of Service" custom field plugin
 + "Age verification" custom field plugin
++ "IP logging" plugin, allows you to record the IP address the user subscribed from
 ~ Reimplemented the 2Checkout plugin, using the INS API (more stable)
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
