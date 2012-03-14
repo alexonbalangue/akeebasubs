@@ -61,6 +61,7 @@ $installation_queue = array(
 			'kunena'				=> 0,
 			'ninjaboard'			=> 0,
 			'phocadownload'			=> 0,
+			'recaptcha'				=> 0,
 			'redshop'				=> 0,
 			'redshopusersync'		=> 0,
 			'samplefields'			=> 0,
