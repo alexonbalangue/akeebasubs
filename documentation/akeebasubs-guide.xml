@@ -3667,7 +3667,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <option>Always online</option>.</para>
       </section>
 
-      <section xml:id="payment-googlecheckout">
+      <section xml:id="payment-pagseguro">
         <title>PagSeguro</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
