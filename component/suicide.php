@@ -42,6 +42,7 @@ $installation_queue = array(
 			'adminemails'			=> 0,
 			'affemails'				=> 0,
 			'ageverification'		=> 0,
+			'agora'					=> 0,
 			'agreetotos'			=> 0,
 			'autocity'				=> 0,
 			'cb'					=> 0,
