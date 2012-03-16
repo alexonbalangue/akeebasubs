@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.1.1
+================================================================================
+# You can not subscribe when not using SEF URLs. Oops.
+
 Akeeba Subscriptions 2.1
 ================================================================================
 + #54 Trial subscriptions (subscription levels you can only subscribe to once)
