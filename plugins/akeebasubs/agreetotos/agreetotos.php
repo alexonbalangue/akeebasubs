@@ -54,7 +54,7 @@ class plgAkeebasubsAgreetotos extends JPlugin
 			$urlField = JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL');
 		} else {
 			$text = JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL');
-			$urlField = '<a href="javascript:window.open(\''.$url.'\',\'toswindow\',\'width=640,height=480,resizable=yes,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no\')">'.$text.'</a>';
+			$urlField = '<a href="javascript:return false;" onclick="window.open(\''.$url.'\',\'toswindow\',\'width=640,height=480,resizable=yes,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no\');">'.$text.'</a>';
 		}
 		$field = array(
 			'id'			=> 'agreetotos',
