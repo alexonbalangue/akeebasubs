@@ -18,15 +18,31 @@ class AkeebasubsTableLevel extends FOFTable
 			$result = false;
 		}
 		
-		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/filter.php';
-		
-		// Auto-fetch a slug
-		if(empty($this->slug)) {
-			$this->slug = AkeebasubsHelperFilter::toSlug($this->title);
+		// Make sure the title is unique
+		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->title($this->title)
+			->getList(true);
+		if(!empty($existingItems)) {
+			$count = 0;
+			$k = $this->getKeyName();
+			foreach($existingItems as $item) {
+				if($item->$k != $this->$k) $count++;
+			}
+			if($count) {
+				$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_TITLEUNIQUE'));
+				$result = false;
+			}
 		}
 		
-		// Make sure nobody adds crap characters to the slug
-		$this->slug = AkeebasubsHelperFilter::toSlug($this->slug);
+		// Create a new or sanitise an existing slug
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/filter.php';
+		if(empty($this->slug)) {
+			// Auto-fetch a slug
+			$this->slug = AkeebasubsHelperFilter::toSlug($this->title);
+		} else {
+			// Make sure nobody adds crap characters to the slug
+			$this->slug = AkeebasubsHelperFilter::toSlug($this->slug);
+		}
 		
 		// Look for a similar slug
 		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
