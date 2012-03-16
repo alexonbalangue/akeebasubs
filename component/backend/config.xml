@@ -59,6 +59,12 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>				
 		</param>
+		<param name="dateformat" type="text"
+			default="%Y-%m-%d %H:%M"
+			size="30"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
+		/>
 	</params>
 	
 	<fieldset name="currency" label="COM_AKEEBASUBS_CONFIG_CURRENCY_TITLE">
@@ -122,6 +128,12 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>				
 		</field >
+		<field name="dateformat" type="text"
+			default="%Y-%m-%d %H:%M"
+			size="30"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
+		/>
 	</fieldset>
 	
 	<fieldset
