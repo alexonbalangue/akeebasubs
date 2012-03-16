@@ -5313,6 +5313,137 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
           </listitem>
         </orderedlist>
       </section>
+
+      <section xml:id="integration-agora">
+        <title>Agora integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Agora Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        Agora Groups, with different Roles based on their subscription
+        status.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin in this documentation; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>Before we begin taking a look at the plugin options, please note
+        that Agora defines Groups and Role. Each user can belong to one or
+        more groups with a different Role, e.g. belong to Group One as a
+        Guest, Group Two as a Member, Group Three as a Moderator and Group
+        Four as an Administrator. Are you confused yet? Tell me about it...
+        Unfortunately, we have to follow the same inconvenient structure for
+        the plugin parameters. Each entry which can be assigned or removed
+        from the user's record can therefore consist of a Group, or a Group
+        and a Role. For example:</para>
+
+        <para><programlisting>My Group</programlisting>defines an entry which
+        only mentions a Group. The Role assigned to the user will be Member
+        (it's a hardcoded default).</para>
+
+        <programlisting>My Group/<replaceable>My Role</replaceable></programlisting>
+
+        <para>defines an entry which defines a Group and a Role.
+        <replaceable>My Role</replaceable> can be one of:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>None</term>
+
+            <listitem>
+              <para>The user will be removed from that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Guest</term>
+
+            <listitem>
+              <para>The user will become a Guest in that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Member</term>
+
+            <listitem>
+              <para>The user will become a Member in that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Moderator</term>
+
+            <listitem>
+              <para>The user will become a Moderator in that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Admin</term>
+
+            <listitem>
+              <para>The user will become an Admin in that Group</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Sometimes you will have a conflict. For example, a user may have
+        two subscriptions. One subscriptions says that he should belong to
+        Group One as a Member. The other says he should belong to Group One as
+        a Moderator. In case of conflict, the highest Role wins. In our
+        example, the user would become a Moderator in that group.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Agora groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to Agora
+              groups. When a user has an active subscription to the specified
+              level, he'll be added to the Agora group/role mentioned on the
+              right hand of the equal sign. Each assignment is done like
+              this:</para>
+
+              <programlisting>LEVEL1=entry1,entry2,entry3</programlisting>
+
+              <para>Where entry1, entry2 and entry3 is a Group/Role entry as
+              described above.</para>
+
+              <para>If you want to assign multiple subscription levels to
+              multiple entries, you have to do something like that (separate
+              multiple lines with a single press of the ENTER key on your
+              keyboard):</para>
+
+              <programlisting>LEVEL1=entry1,entry2,entry3
+LEVEL2=entry2
+LEVEL3=entry4,entry1</programlisting>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Agora groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the Agora groups to remove a
+              user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=entry1,entry2
+LEVEL2=entry2
+LEVEL3=entry1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-other">

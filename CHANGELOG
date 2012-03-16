@@ -21,6 +21,7 @@ Akeeba Subscriptions 2.1
 + ReCAPTCHA integration
 + You can now chose if you want the Renew link to appear or not in the subscriptions list
 + #44 Customisable date format
++ #10 Add/remove to Agora groups (integration with the Agora forum)
 ~ Reimplemented the 2Checkout plugin, using the INS API (more stable)
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
