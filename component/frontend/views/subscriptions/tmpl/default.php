@@ -79,7 +79,7 @@ $subIDs = array_unique($subIDs);
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
 				
-				$canRenew = true;
+				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
 				$level = $allLevels[$subscription->akeebasubs_level_id];
 				if($level->only_once) {
 					if(in_array($subscription->akeebasubs_level_id,$subIDs)) {

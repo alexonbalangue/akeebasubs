@@ -53,6 +53,12 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>				
 		</param>
+		<param name="showrenew" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>				
+		</param>
 	</params>
 	
 	<fieldset name="currency" label="COM_AKEEBASUBS_CONFIG_CURRENCY_TITLE">
@@ -110,6 +116,12 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>				
 		</field>
+		<field name="showrenew" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>				
+		</field >
 	</fieldset>
 	
 	<fieldset
