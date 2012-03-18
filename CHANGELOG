@@ -3,6 +3,7 @@ Akeeba Subscriptions 2.1.1
 ================================================================================
 # You can not subscribe when not using SEF URLs. Oops.
 # Clicking on the Terms of Service link in the Agree to TOS plugin causes the main window to go blank, displaying [object Object] on non-WebKit browsers
+# The Users page should not have Publish/Unpublish buttons
 
 Akeeba Subscriptions 2.1
 ================================================================================
