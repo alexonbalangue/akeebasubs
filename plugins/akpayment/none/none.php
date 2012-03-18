@@ -38,6 +38,7 @@ class plgAkpaymentNone extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> JText::_($this->ppKey)
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
 		return (object)$ret;
 	}
 	

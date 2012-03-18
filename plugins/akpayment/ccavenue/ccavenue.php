@@ -35,6 +35,10 @@ class plgAkpaymentCcavenue extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
+		if(empty($ret['image'])) {
+			$ret['image'] = rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/ccavenue_lowres.gif';
+		}
 		return (object)$ret;
 	}
 	

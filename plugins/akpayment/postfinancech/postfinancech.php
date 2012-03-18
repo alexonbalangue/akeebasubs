@@ -40,6 +40,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
 		return (object)$ret;
 	}
 	
@@ -88,7 +89,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 			'OWNERTOWN'		=> $kuser->city,
 			'OWNERCTY'		=> $kuser->country,
 			'COM'			=> $level->title . ' - [ ' . $user->username . ' ]',
-			'TITLE'			=> $this->params->get('title',''),
+			'TITLE'			=> $this->params->get('ptitle',''),
 			'BGCOLOR'		=> $this->params->get('bgcolor',''),
 			
 			'ACCEPTURL'		=> $successURL,

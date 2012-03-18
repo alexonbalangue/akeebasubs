@@ -891,6 +891,47 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             hence this option.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Show renew</term>
+
+          <listitem>
+            <para>When enabled, the front-end subscriptions list (the "My
+            Subscriptions" page) will show a Renew link next to each
+            subscription. Please note that only renewable subscriptions (the
+            subscription level is still published and it doesn't have the
+            Forbid Renew checked) will have such a link next to them when this
+            option is enabled.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment method rendering</term>
+
+          <listitem>
+            <para>How are the payment method going to be rendered in the
+            bottom of the new subscription page? The <guilabel>Text
+            Only</guilabel> option renders them as drop-down list (combo box),
+            i.e. the way they were rendered in Akeeba Subscriptions up to and
+            including 2.1.0. The <guilabel>Images Only</guilabel> displays a
+            radio list of images (logos). The images can be modified at the
+            plugin parameters. Finally, the <guilabel>Images and
+            Text</guilabel> displays the same radio list as the Images Only
+            option, but next to each image you now have the (user-defined)
+            payment option title.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Custom date format</term>
+
+          <listitem>
+            <para>You can customise the date and time format for the front-end
+            display. For more information regarding date/time format strings,
+            please consult the PHP manual:
+            http://www.php.net/manual/en/function.date.php</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Permissions</guilabel> (Joomla! 1.6 or later
@@ -2360,6 +2401,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Merchant ID</term>
 
             <listitem>
@@ -2583,6 +2634,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Installation ID</term>
 
             <listitem>
@@ -2694,6 +2755,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               <para>Leave blank to use "2Checkout" or type in a custom name to
               show to your customer's, e.g. "Visa, MasterCard or American
               Express cards"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
             </listitem>
           </varlistentry>
 
@@ -2810,6 +2881,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Merchant ID</term>
 
             <listitem>
@@ -2862,6 +2943,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <listitem>
               <para>Leave blank to use "eWay" or type in a custom name to show
               to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
             </listitem>
           </varlistentry>
 
@@ -2982,6 +3073,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <variablelist>
           <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "eWay" or type in a custom name to show
+              to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Site ID</term>
 
             <listitem>
@@ -3050,6 +3160,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>The options you have with this plugin are:</para>
 
         <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "eWay" or type in a custom name to show
+              to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
           <varlistentry>
             <term>Identification</term>
 
@@ -3127,6 +3256,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <variablelist>
           <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "eWay" or type in a custom name to show
+              to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Merchant ID</term>
 
             <listitem>
@@ -3185,6 +3333,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>The options you have with this plugin are:</para>
 
         <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "eWay" or type in a custom name to show
+              to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
           <varlistentry>
             <term>Merchant ID</term>
 
@@ -3345,6 +3512,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Store ID</term>
 
             <listitem>
@@ -3411,6 +3588,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <listitem>
               <para>Leave blank to use "PostFinance" or type in a custom name
               to show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
             </listitem>
           </varlistentry>
 
@@ -3684,6 +3871,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>The options you have with this plugin are:</para>
 
         <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PostFinance" or type in a custom name
+              to show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
           <varlistentry>
             <term>Merchant ID</term>
 

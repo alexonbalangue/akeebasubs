@@ -1,4 +1,7 @@
-/* @override http://dev15.local.web/media/com_akeebasubs/css/frontend.css */
+/* @override 
+	http://dev15.local.web/media/com_akeebasubs/css/frontend.css
+	http://dev25.local.web/media/com_akeebasubs/css/frontend.css?f4b7b1505825d884cc5d41e6b5dc39ba
+*/
 
 /**
  * @package		akeebasubs
@@ -523,7 +526,39 @@ input.akeebasubs-awesome-subscribe-button:hover {
 	font-weight: bold;
 	font-size: 9pt;
 	color: gray;
-} 
+}
+
+#paymentmethod-container label {
+	float: left;
+}
+
+#akeebasubs span.akeebasubs-paymentmethod-images {
+	display: inline-block;
+	float: left;
+	width: 60%;
+}
+
+#akeebasubs span.akeebasubs-paymentmethod-images input {
+	clear: both;
+	float: left;
+	width: 32px;
+	margin-top:  10px;
+}
+
+#akeebasubs span.akeebasubs-paymentmethod-images label {
+	float: left;
+}
+
+#akeebasubs span.akeebasubs-paymentmethod-images img {
+	float: left;
+	margin-bottom: 6px;
+}
+
+#akeebasubs span.akeebasubs-paymentmethod-images span {
+	margin-left: 5px;
+	margin-top: 10px;
+	float: left;
+}
 
 /**
  * Subscription viewer

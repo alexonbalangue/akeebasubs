@@ -40,6 +40,7 @@ class plgAkpaymentOffline extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
 		return (object)$ret;
 	}
 	

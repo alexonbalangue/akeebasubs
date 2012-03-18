@@ -147,6 +147,25 @@ class AkeebasubsHelperSelect
 		return JHTML::_('select.genericlist', $list, $name, $attribs, 'value', 'text', $selected, $idTag);
 	}
 
+	protected static function genericradiolist($list, $name, $attribs, $selected, $idTag)
+	{
+		if(empty($attribs))
+		{
+			$attribs = null;
+		}
+		else
+		{
+			$temp = '';
+			foreach($attribs as $key=>$value)
+			{
+				$temp .= $key.' = "'.$value.'"';
+			}
+			$attribs = $temp;
+		}
+
+		return JHTML::_('select.radiolist', $list, $name, $attribs, 'value', 'text', $selected, $idTag);
+	}
+
 	public static function booleanlist( $name, $attribs = null, $selected = null )
 	{
 		$options = array(
@@ -353,15 +372,41 @@ class AkeebasubsHelperSelect
  	 */
  	public static function paymentmethods($name = 'paymentmethod', $selected = '', $attribs = array())
  	{	
+		// Get the list of payment plugins
  		$plugins = FOFModel::getTmpInstance('Subscribes','AkeebasubsModel')
 			->getPaymentPlugins();
- 		
-		$options = array();
-		foreach($plugins as $plugin) {
-			$options[] = JHTML::_('select.option',$plugin->name,$plugin->title);
- 		}
- 		
- 		return self::genericlist($options, $name, $attribs, $selected, $name);
+
+		// Load the component parameters helper
+		if(!class_exists('AkeebasubsHelperCparams')) {
+			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		}
+		
+		// Determine how to render the payment method (drop-down or radio box)
+		if(AkeebasubsHelperCparams::getParam('useppimages', 1) > 0) {
+			// Show images instead of a drop-down
+			foreach($plugins as $plugin) {
+				if(!isset($plugin->image)) {
+					$plugin->image = rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/credit_card_logos.gif';
+				}
+				$innerHTML = '<img border="0" src="'.$plugin->image.'" /> ';
+				if(AkeebasubsHelperCparams::getParam('useppimages', 1) == 2) {
+					$innerHTML .= '<span>'.$plugin->title.'</span>';
+				}
+				$options[] = JHTML::_('select.option',$plugin->name,$innerHTML);
+			}
+			$html = '<span class="akeebasubs-paymentmethod-images">';
+			$html .= self::genericradiolist($options, $name, $attribs, $selected, $name);
+			$html .= '</span>';
+			return $html;
+		} else {
+			// Show drop-down
+			$options = array();
+			foreach($plugins as $plugin) {
+				$options[] = JHTML::_('select.option',$plugin->name,$plugin->title);
+			}
+
+			return self::genericlist($options, $name, $attribs, $selected, $name);
+		}
  	}
 	
 	public static function affiliates($selected = null, $id = 'akeebasubs_affiliate_id', $attribs = array())

@@ -74,6 +74,10 @@ class plgAkpaymentDeltapay extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
+		if(empty($ret['image'])) {
+			$ret['image'] = rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/alphalogo.gif';
+		}
 		return (object)$ret;
 	}
 	

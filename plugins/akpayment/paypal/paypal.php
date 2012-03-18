@@ -40,6 +40,10 @@ class plgAkpaymentPaypal extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
+		if(empty($ret['image'])) {
+			$ret['image'] = 'https://www.paypal.com/en_US/i/bnr/horizontal_solution_PPeCheck.gif';
+		}
 		return (object)$ret;
 	}
 	

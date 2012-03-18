@@ -59,6 +59,13 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>				
 		</param>
+		<param name="useppimages" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_DESC">
+			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_DROPDOWN</option>
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEONLY</option>				
+			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEANDTEXT</option>				
+		</param>
 		<param name="dateformat" type="text"
 			default="%Y-%m-%d %H:%M"
 			size="30"
@@ -128,6 +135,13 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>				
 		</field >
+		<field name="useppimages" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_DESC">
+			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_DROPDOWN</option>
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEONLY</option>				
+			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEANDTEXT</option>				
+		</field>
 		<field name="dateformat" type="text"
 			default="%Y-%m-%d %H:%M"
 			size="30"

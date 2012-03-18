@@ -19,6 +19,7 @@
 	</languages>
 	<params>
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_OFFLINE_TITLE_LABEL" description="PLG_AKPAYMENT_OFFLINE_TITLE_DESC"/>
+		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_OFFLINE_PPIMAGE_LABEL" description="PLG_AKPAYMENT_OFFLINE_PPIMAGE_DESC" />
 		<param type="spacer" />
 		<param name="instructions" type="textarea" rows="20" cols="50" default="Dear Sir/Madam, In order to complete your payment, please deposit {AMOUNT}€ to our bank account with IBAN XX00.000000.00000000.00000000, BIC XXXXXXXX Please reference subscription code {SUBSCRIPTION} in your payment. Make sure that any bank charges are paid by you in full and not deducted from the transferred amount. If you're using e-Banking to transfer the funds, please select the 'OUR' bank expenses option. Thank you in advance, The management" label="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_LABEL" description="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_DESC" />
 	</params>
@@ -26,6 +27,7 @@
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_OFFLINE_TITLE_LABEL" description="PLG_AKPAYMENT_OFFLINE_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_OFFLINE_PPIMAGE_LABEL" description="PLG_AKPAYMENT_OFFLINE_PPIMAGE_DESC" />
 				<field type="spacer" />
 				<field name="instructions" type="textarea" rows="20" cols="50" default="Dear Sir/Madam, In order to complete your payment, please deposit {AMOUNT}€ to our bank account with IBAN XX00.000000.00000000.00000000, BIC XXXXXXXX Please reference subscription code {SUBSCRIPTION} in your payment. Make sure that any bank charges are paid by you in full and not deducted from the transferred amount. If you're using e-Banking to transfer the funds, please select the 'OUR' bank expenses option. Thank you in advance, The management" label="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_LABEL" description="PLG_AKPAYMENT_OFFLINE_INSTRUCTIONS_DESC" filter="raw" />
 			</fieldset>
