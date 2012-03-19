@@ -138,7 +138,12 @@ ENDFORM;
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)); 
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		$url = $rootURL.str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)); 
 		$app = JFactory::getApplication();
 		$app->redirect($url);
 		
