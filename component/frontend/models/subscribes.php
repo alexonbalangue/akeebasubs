@@ -641,7 +641,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->savestate(0)
 			->user_id($user_id)
-			->enabled(1)
 			->limit(0)
 			->limitstart(0)
 			->getList();
