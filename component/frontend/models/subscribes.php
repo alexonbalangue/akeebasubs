@@ -615,6 +615,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		$state = $this->getStateVariables();
 		
+		// Get the id from the slug if it's not present
+		if($state->slug && empty($state->id)) {
+			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			 if(!empty($list)) {
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			 } else {
+				$state->id = 0;
+			 }
+		}
+		
 		// Check that we do have a user (if there's no logged in user, we have
 		// no subscription information, ergo upgrades are not applicable!)
 		$user_id = JFactory::getUser()->id;
