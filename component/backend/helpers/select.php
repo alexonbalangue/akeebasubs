@@ -386,6 +386,11 @@ class AkeebasubsHelperSelect
 			// Show images instead of a drop-down
 			foreach($plugins as $plugin) {
 				if(!isset($plugin->image)) {
+					$plugin->image = '';
+				} else {
+					$plugin->image = trim($plugin->image);
+				}
+				if(empty($plugin->image)) {
 					$plugin->image = rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/credit_card_logos.gif';
 				}
 				$innerHTML = '<img border="0" src="'.$plugin->image.'" /> ';
