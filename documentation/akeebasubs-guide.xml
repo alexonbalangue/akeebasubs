@@ -191,7 +191,7 @@
         </listitem>
 
         <listitem>
-          <para>Integration with Joomla! 1.6/1.7 and later user group
+          <para>Integration with Joomla! 1.6 and later user group
           mapping</para>
         </listitem>
 
@@ -260,7 +260,7 @@
         </listitem>
 
         <listitem>
-          <para>Joomla! 1.5.14 or later (fully supported) or Joomla! 1.6.0 or
+          <para>Joomla! 1.5.14 or later (fully supported) or Joomla! 1.7.0 or
           later.</para>
         </listitem>
       </itemizedlist>
@@ -294,7 +294,7 @@
       <section xml:id="installation-troubleshooting">
         <title>Installation troubleshooting</title>
 
-        <bridgehead>Joomla! 1.6/1.7 is logging you out during
+        <bridgehead>Joomla! 1.6+ is logging you out during
         installation</bridgehead>
 
         <para>The first thing you might observe is that <emphasis
@@ -309,7 +309,7 @@
         link on the top-right of your page, then log back in. Everything is
         back to normal and you can retry the installation.</para>
 
-        <bridgehead>Joomla! 1.6/1.7 says "can't build admin menu" and
+        <bridgehead>Joomla! 1.6+ says "can't build admin menu" and
         fails</bridgehead>
 
         <note>
@@ -320,7 +320,7 @@
         <para>On some other occasions, especially when trying to install or
         update the component after an installation error, Joomla! will
         complain that it <emphasis role="bold">cannot build admin
-        menus</emphasis>. This is due to another Joomla! 1.6 bug <link
+        menus</emphasis>. This is due to another Joomla! 1.6/1.7 bug <link
         xlink:href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&amp;tracker_item_id=25663">we
         have sent a patch for</link> to the Joomla! development team.
         Meanwhile, you will have to run a few SQL statements against your
@@ -346,12 +346,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         Again, these are limitations of those outdated Joomla! releases on
         certain hosts. The only workaround is to upgrade your Joomla!
         installation.</para>
-
-        <para>If you have Joomla! 1.6 make sure that you are using Joomla!
-        1.6.0 (the "stable" release, not the RC or any of the betas). Mind
-        you, we have only tested the installation with Joomla! 1.6.2 and later
-        releases. Akeeba Subscriptions works perfectly on Joomla! 1.7
-        sites.</para>
 
         <bridgehead>Checking your temporary directory</bridgehead>
 
@@ -414,7 +408,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </orderedlist>
 
-        <bridgehead renderas="sect4">Joomla! 1.6/1.7</bridgehead>
+        <bridgehead renderas="sect4">Joomla! 1.6/1.7 and later</bridgehead>
 
         <orderedlist>
           <listitem>
@@ -549,7 +543,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <guimenu>Extensions</guimenu>,
         <guimenuitem>Install/Uninstall</guimenuitem> (Joomla! 1.5) or
         <guimenu>Extensions</guimenu>, <guimenuitem>Manage</guimenuitem>
-        (Joomla! 1.6 users) link on the top menu. In this page, locate the
+        (Joomla! 1.6+ users) link on the top menu. In this page, locate the
         <guibutton>Install Directory</guibutton> edit box in the
         <guilabel>Install from Directory</guilabel> area. It is already filled
         in with the absolute path to your temporary directory, for example
@@ -4427,14 +4421,14 @@ LEVEL3=Group 1</programlisting>
       </section>
 
       <section xml:id="integration-joomla">
-        <title>Joomla! 1.6 User Groups Integration</title>
+        <title>Joomla! User Groups Integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - Joomla! 1.6 Usergroups Integration</guilabel></para>
+        Subscriptions - Joomla! Usergroups Integration</guilabel></para>
 
         <para>This integration plugin allows you to add and remove users from
-        Joomla! 1.6 groups based on their subscription status. This allows you
-        to fully utilize Joomla! 1.6's built-in ACL capabilities on compatible
+        Joomla! 1.6 or later groups based on their subscription status. This allows you
+        to fully utilize Joomla! 1.6 or later's built-in ACL capabilities on compatible
         extensions.</para>
 
         <para>Please note that this is a smart integration, exactly as
