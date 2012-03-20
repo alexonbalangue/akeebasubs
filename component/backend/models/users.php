@@ -258,6 +258,7 @@ class AkeebasubsModelUsers extends FOFModel
 				$myData = array_merge($myData, $pResponse);
 			}
 		}
+		$myData['params'] = (object)$myData['params'];
 
 		return (object)$myData;
 	}
