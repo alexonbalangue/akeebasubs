@@ -8,6 +8,7 @@ Akeeba Subscriptions 2.1.1
 # The Users page should not have Publish/Unpublish buttons
 # The None payment plugin would redirect to the a page throwing a 404 error when using Joomla! 1.7/2.5's multilingual feature and SEF URLs.
 # The default values for custom fields were not remembered when making a new subscription
+# The "List subscription levels" module would show the Forbid Renewal levels even if the user is not supposed to access them again
 
 Akeeba Subscriptions 2.1
 ================================================================================
