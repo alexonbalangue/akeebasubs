@@ -2,11 +2,12 @@
 Akeeba Subscriptions 2.1.1
 ================================================================================
 + Image support in payment method selection
-~ Small improvements to the ccInvoices integration
++ Customisable invoice description for the ccInvoices integration
 # You can not subscribe when not using SEF URLs. Oops.
 # Clicking on the Terms of Service link in the Agree to TOS plugin causes the main window to go blank, displaying [object Object] on non-WebKit browsers
 # The Users page should not have Publish/Unpublish buttons
 # The None payment plugin would redirect to the a page throwing a 404 error when using Joomla! 1.7/2.5's multilingual feature and SEF URLs.
+# The default values for custom fields were not remembered when making a new subscription
 
 Akeeba Subscriptions 2.1
 ================================================================================

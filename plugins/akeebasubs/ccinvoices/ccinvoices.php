@@ -30,6 +30,9 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		$lang->load('com_ccinvoices', JPATH_ADMINISTRATOR, $lang->getDefault(), true);
 		$lang->load('com_ccinvoices', JPATH_ADMINISTRATOR, null, true);
 
+		// Do not issue invoices for free subscriptions
+		if($row->gross_amount < 0.01) return;
+		
 		// Only handle not expired subscriptions
 		if( ($row->state == "C") && $row->enabled ) {
 			$db = JFactory::getDBO();
@@ -77,13 +80,19 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			
 			if($invoice_number < $ccConfig->invoice_start) $invoice_number = $ccConfig->invoice_start;
 			
-			$subname = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 					->setId($row->akeebasubs_level_id)
-					->getItem()
-					->title;
+					->getItem();
+			$subname = $level->title;
 			
-			$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
-			if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
+			$description = $this->params->getValue('description','');
+			if(empty($description)) {
+				$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
+				if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
+				$description = $subname.$suffix;
+			} else {
+				$description = $this->parseDescription($description, $row, $level);
+			}
 			
 			if($row->tax_percent > 0) {
 				$taxrate = $row->tax_percent;
@@ -107,7 +116,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'totaltax'		=> $row->tax_amount,
 				'total'			=> $row->gross_amount,
 				'quantity'		=> 1,
-				'pname'			=> $subname.$suffix,
+				'pname'			=> $description,
 				'price'			=> $row->net_amount,
 				'tax'			=> sprintf('%.2f', $row->tax_percent),
 				'note'			=> "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",
@@ -296,5 +305,67 @@ class plgAkeebasubsCcinvoices extends JPlugin
         $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/'.$file_name;
         $pdf->Output($file_path, 'F');
 		return $file_path;
+	}
+	
+	/**
+	 * Parses a description string
+	 * 
+	 * @param string $description
+	 * @param AkeebasubsTableSubscription $row
+	 * @param AkeebasubsTableLevel $level 
+	 */
+	private function parseDescription($description, $row, $level)
+	{
+		// Get the user object for this subscription
+		$user = JFactory::getUser($row->user_id);
+		
+		// Get the extra user parameters object for the subscription
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+			->user_id($row->user_id)
+			->getFirstItem();
+		
+		// Merge the user objects
+		$userdata = array_merge((array)$user, (array)($kuser->getData()));
+		
+		$text = $description;
+		
+		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
+		foreach((array)($row->getData()) as $k => $v) {
+			if(is_array($v) || is_object($v)) continue;
+			if(substr($k,0,1) == '_') continue;
+			if($k == 'akeebasubs_subscription_id') $k = 'id';
+			$tag = '[SUB:'.strtoupper($k).']';
+			$text = str_replace($tag, $v, $text);
+		}
+		
+		// Create and replace merge tags for subscription level. Format [LEVEL:KEYNAME]
+		foreach((array)($level->getData()) as $k => $v) {
+			if(is_array($v) || is_object($v)) continue;
+			if(substr($k,0,1) == '_') continue;
+			if($k == 'akeebasubs_subscription_id') $k = 'id';
+			$tag = '[LEVEL:'.strtoupper($k).']';
+			$text = str_replace($tag, $v, $text);
+		}
+		
+		// Create and replace merge tags for user data. Format [USER:KEYNAME]
+		foreach($userdata as $k => $v) {
+			if(is_object($v) || is_array($v)) continue;
+			if(substr($k,0,1) == '_') continue;
+			if($k == 'akeebasubs_subscription_id') $k = 'id';
+			$tag = '[USER:'.strtoupper($k).']';
+			$text = str_replace($tag, $v, $text);
+		}
+		
+		// Create and replace merge tags for custom fields data. Format [CUSTOM:KEYNAME]
+		if(array_key_exists('params', $userdata)) {
+			$custom = json_decode($userdata['params']);
+			if(!empty($custom)) foreach($custom as $k => $v) {
+				if(substr($k,0,1) == '_') continue;
+				$tag = '[CUSTOM:'.strtoupper($k).']';
+				$text = str_replace($tag, $v, $text);
+			}
+		}
+		
+		return $text;
 	}
 }
