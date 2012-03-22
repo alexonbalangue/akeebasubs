@@ -9,35 +9,12 @@
 defined('_JEXEC') or die();
 
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/akeebajq.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jquery.jqplot.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.highlighter.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.pieRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUBS_VERSIONHASH);
 
 $this->loadHelper('cparams');
 ?>
 <div style="width:51%;float:left;">
-	<h2><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_SALES') ?></h2>
-	<div id="aksaleschart">
-		<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber" />
-		<p id="aksaleschart-nodata" style="display:none">
-			<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_NODATA')?>
-		</p>
-	</div>
-	
-	<h2><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_LEVELSTATS') ?></h2>
-	<div id="aklevelschart">
-		<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber2" />
-		<p id="aklevelschart-nodata" style="display:none">
-			<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_NODATA')?>
-		</p>
-	</div>	
+<?php echo $this->loadTemplate('graphs'); ?>	
 </div>
 
 <div id="cpanel" style="width:47%;float:right;">
@@ -381,107 +358,6 @@ $this->loadHelper('cparams');
 	<?php echo $this->loadTemplate('quickicons'); ?>
 
 </div>
-
-<?php
-	$xday = gmdate('Y-m-d', time() - 30 * 24 * 3600);
-?>
-<script type="text/javascript">
-(function($) {
-	var salesPoints = [];
-	var subsPoints = [];
-	var levelsPoints = [];
-	
-	function akeebasubs_load_sales()
-	{
-		var url = "index.php?option=com_akeebasubs&view=subscriptions&since=<?php echo $xday?>&groupbydate=1&paystate=C&savestate=0&format=json";
-		$.getJSON(url, function(data){
-			$.each(data, function(index, item){
-				salesPoints.push([item.date, parseInt(item.net * 100) * 1 / 100]);
-				subsPoints.push([item.date, item.subs * 1]);
-			});
-			$('#akthrobber').hide();
-			if(salesPoints.length == 0) {
-				$('#aksaleschart-nodata').show();
-				return;
-			}
-			akeebasubs_render_sales();
-			akeebasubs_load_levels();
-		});
-	}
-	
-	function akeebasubs_load_levels()
-	{
-		var url = "index.php?option=com_akeebasubs&view=subscriptions&since=<?php echo $xday?>&groupbylevel=1&paystate=C&savestate=0&format=json";
-		$.getJSON(url, function(data){
-			$.each(data, function(index, item){
-				levelsPoints.push([item.title, parseInt(item.net * 100) * 1 / 100]);
-			});
-			$('#akthrobber2').hide();
-			if(levelsPoints.length == 0) {
-				$('#aklevelschart-nodata').show();
-				return;
-			}
-			akeebasubs_render_levels();
-		});
-	}
-	
-	function akeebasubs_render_sales()
-	{
-		$.jqplot.config.enablePlugins = true;
-		plot1 = $.jqplot('aksaleschart', [subsPoints, salesPoints], {
-			show: true,
-			axes:{
-				xaxis:{renderer:$.jqplot.DateAxisRenderer,tickInterval:'1 week'},
-				yaxis:{min: 0,tickOptions:{formatString:'%.2f'}},
-				y2axis:{min: 0,tickOptions:{formatString:'%u'}}
-			},
-			series:[ 
-				{
-					yaxis: 'y2axis',
-					lineWidth:1,
-					renderer:$.jqplot.BarRenderer,
-					rendererOptions:{barPadding: 0, barMargin: 0, barWidth: 5, shadowDepth: 0, varyBarColor: 0},
-					markerOptions: {
-						style:'none'
-					},
-					color: '#aae0aa'
-				},
-				{
-					lineWidth:3,
-					markerOptions:{
-						style:'filledCircle',
-						size:8
-					},
-					renderer: $.jqplot.hermiteSplineRenderer,
-					rendererOptions:{steps: 60, tension: 0.6}
-				}
-			],
-			highlighter: {sizeAdjust: 7.5},
-			axesDefaults:{useSeriesColor: true}
-		});
-	}
-	
-	function akeebasubs_render_levels()
-	{
-		$.jqplot.config.enablePlugins = true;
-		plot1 = $.jqplot('aklevelschart', [levelsPoints], {
-			show: true,
-			seriesDefaults: {
-				renderer: jQuery.jqplot.PieRenderer, 
-				rendererOptions: {
-					showDataLabels: true,
-					dataLabels: 'value'
-				}
-			},
-			legend: { show:true, location: 'e' }
-		});
-	}
-	
-	$(document).ready(function(){
-		akeebasubs_load_sales();
-	});
-})(akeeba.jQuery);
-</script>
 
 <div style="clear: both;"></div>
 <?php echo $this->loadTemplate('footer'); ?>

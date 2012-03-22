@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.1.2
 ================================================================================
++ You can reload stats graphs using an arbitrary starting date in the backend
 # The asrestricted plugin would show limited content to people with cancelled/incomplete subscriptions
 
 Akeeba Subscriptions 2.1.1
