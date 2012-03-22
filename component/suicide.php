@@ -193,7 +193,7 @@ $akeeba_installation_has_run = true;
 			<td class="key"><?php echo $module['client']; ?></td>
 			<td>
 				<span style="color: <?php echo ($module['result'])?'green':'red'?>; font-weight: bold;">
-					<?php echi ($module['result'])?'Uninstalled':'Not Uninstalled'; ?>
+					<?php echo ($module['result'])?'Uninstalled':'Not Uninstalled'; ?>
 				</span>
 			</td>
 		</tr>
