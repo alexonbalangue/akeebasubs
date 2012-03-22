@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.1.2
+================================================================================
+# The asrestricted plugin would show limited content to people with cancelled/incomplete subscriptions
+
 Akeeba Subscriptions 2.1.1
 ================================================================================
 + Image support in payment method selection
