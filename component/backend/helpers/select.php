@@ -398,6 +398,10 @@ class AkeebasubsHelperSelect
 					$innerHTML .= '<span>'.$plugin->title.'</span>';
 				}
 				$options[] = JHTML::_('select.option',$plugin->name,$innerHTML);
+				// In case we don't have a default selection, select the first item on the list
+				if(empty($selected)) {
+					$selected = $plugin->name;
+				}
 			}
 			$html = '<span class="akeebasubs-paymentmethod-images">';
 			$html .= self::genericradiolist($options, $name, $attribs, $selected, $name);
