@@ -480,7 +480,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Get the applicable tax rule
 		$taxRule = $this->_getTaxRule();		
-		
+				
 		return (object)array(
 			'net'		=> sprintf('%1.02f',$netPrice),
 			'discount'	=> sprintf('%1.02f',$discount),
@@ -654,6 +654,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->savestate(0)
 			->user_id($user_id)
+			->enabled(1)
 			->limit(0)
 			->limitstart(0)
 			->getList();
