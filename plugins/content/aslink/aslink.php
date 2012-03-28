@@ -154,7 +154,11 @@ class plgContentAslink extends JPlugin
 
         $component = & JComponentHelper::getComponent('com_akeebasubs');
         $menus = & JApplication::getMenu('site', array());
-		$items = $menus->getItems('componentid', $component->id);
+		if(version_compare(JVERSION, '1.7.0', 'ge')) {
+			$items = $menus->getItems('component_id', $component->id);
+		} else {
+			$items = $menus->getItems('componentid', $component->id);
+		}
         $itemId = null;
 
         if (count($items)) {
@@ -162,10 +166,13 @@ class plgContentAslink extends JPlugin
 				if(is_string($item->params)) {
 					$params = new JRegistry();
 					if(version_compare(JVERSION, '1.6.0', 'ge')) {
+						// This should never happen; Joomla! 1.6+ should return a JRegistry object in $item->params
 						$params->loadJSON($item->params);
 					} else {
 						$params->loadINI($item->params);
 					}
+				} else {
+					$params = $item->params;
 				}
 				
                 if (@$item->query['view'] == 'level') {

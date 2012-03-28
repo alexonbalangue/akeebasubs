@@ -3,6 +3,9 @@ Akeeba Subscriptions 2.1.2
 ================================================================================
 + You can reload stats graphs using an arbitrary starting date in the backend
 # The asrestricted plugin would show limited content to people with cancelled/incomplete subscriptions
+# The default payment option would not be selected when using the image list
+# Automatic discounts don't work under some circumstances
+# The aslink plugin would produce invalid links (missing Itemid) under Joomla! 2.5 (thanks Daniel!)
 
 Akeeba Subscriptions 2.1.1
 ================================================================================
