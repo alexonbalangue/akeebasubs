@@ -8,11 +8,12 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 <p><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY') ?></p>
 <p align="center">
 <form action="<?php echo htmlentities($data->url) ?>"  method="post" id="paymentForm">
-	<input type="hidden" name="verotel_id" value="<?php echo $data->verotel_id ?>" />
-	<input type="hidden" name="website_id" value="<?php echo $data->website_id ?>" />
-	<input type="hidden" name="verotel_usercode" value="<?php echo $data->verotel_usercode ?>" />
-	<input type="hidden" name="verotel_passcode" value="<?php echo $data->verotel_passcode ?>" />
-	<input type="hidden" name="verotel_custom1" value="<?php echo $data->verotel_custom1 ?>" />
+	<input type="hidden" name="shopID" value="<?php echo $data->shopID ?>" />
+	<input type="hidden" name="priceAmount" value="<?php echo $data->priceAmount ?>" />
+	<input type="hidden" name="priceCurrency" value="<?php echo $data->priceCurrency ?>" />
+	<input type="hidden" name="description" value="<?php echo $data->description ?>" />
+	<input type="hidden" name="referenceID" value="<?php echo $data->referenceID ?>" />
+	<input type="hidden" name="signature" value="<?php echo $data->signature ?>" />
 	<input type="submit" />
 </form>
 </p>
