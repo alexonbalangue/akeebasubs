@@ -22,8 +22,8 @@
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_TITLE_LABEL" description="PLG_AKPAYMENT_VEROTEL_TITLE_DESC"/>
 		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_PPIMAGE_LABEL" description="PLG_AKPAYMENT_VEROTEL_PPIMAGE_DESC" />
 		<param type="spacer" />
-		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_MERCHANT_LABEL" description="PLG_AKPAYMENT_VEROTEL_MERCHANT_DESC"/>
-		<param name="website" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_WEBSITE_LABEL" description="PLG_AKPAYMENT_VEROTEL_WEBSITE_DESC"/>
+		<param name="shopid" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_SHOPID_LABEL" description="PLG_AKPAYMENT_VEROTEL_SHOPID_DESC"/>
+		<param name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_KEY_LABEL" description="PLG_AKPAYMENT_VEROTEL_KEY_DESC"/>
 	</params>
 	<config>
 		<fields name="params">
@@ -31,8 +31,8 @@
         		<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_TITLE_LABEL" description="PLG_AKPAYMENT_VEROTEL_TITLE_DESC"/>
         		<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_PPIMAGE_LABEL" description="PLG_AKPAYMENT_VEROTEL_PPIMAGE_DESC" />
         		<field type="spacer" />
-        		<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_MERCHANT_LABEL" description="PLG_AKPAYMENT_VEROTEL_MERCHANT_DESC"/>
-            	<field name="website" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_WEBSITE_LABEL" description="PLG_AKPAYMENT_VEROTEL_WEBSITE_DESC"/>
+                <field name="shopid" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_SHOPID_LABEL" description="PLG_AKPAYMENT_VEROTEL_SHOPID_DESC"/>
+        		<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_KEY_LABEL" description="PLG_AKPAYMENT_VEROTEL_KEY_DESC"/>
 			</fieldset>
 		</fields>
 	</config>
