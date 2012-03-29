@@ -2916,9 +2916,13 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </note>
 
         <para>The ccAvenue documentation can be quite confusing. ccAvenue has
-        three different options to choose from. In order to use Akeeba
-        Subscriptions with ccAvenue, you have to select the first option
-        (variable amount).</para>
+        three different transaction type options to choose from. In order to
+        use Akeeba Subscriptions with ccAvenue, you have to select the first
+        transaction type option (variable amount) in ccAvenue's
+        interface.</para>
+
+        <para>Moreover, some users report that you have to deactivate the
+        Working Key if it's activated.</para>
       </section>
 
       <section xml:id="payment-eway">
