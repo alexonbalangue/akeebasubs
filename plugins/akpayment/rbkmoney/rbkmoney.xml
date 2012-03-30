@@ -22,8 +22,7 @@
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_TITLE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_TITLE_DESC"/>
 		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_DESC" />
 		<param type="spacer" />
-		<param name="siteid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_SITEID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_SITEID_DESC"/>
-		<param name="accountid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_ACCOUNTID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_ACCOUNTID_DESC"/>
+		<param name="eshopid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_ESHOPID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_ESHOPID_DESC"/>
 		<param name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_KEY_LABEL" description="PLG_AKPAYMENT_RBKMONEY_KEY_DESC"/>
 		<param type="spacer" />
 		<param name="language" type="radio" default="en" label="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_DESC">
@@ -37,8 +36,7 @@
                 <field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_TITLE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_TITLE_DESC"/>
                 <field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_DESC" />
                 <field type="spacer" />
-                <field name="siteid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_SITEID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_SITEID_DESC"/>
-                <field name="accountid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_ACCOUNTID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_ACCOUNTID_DESC"/>
+				<field name="eshopid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_ESHOPID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_ESHOPID_DESC"/>
                 <field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_KEY_LABEL" description="PLG_AKPAYMENT_RBKMONEY_KEY_DESC"/>
                 <field type="spacer" />
 				<field name="language" type="radio" default="en" label="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_DESC">
