@@ -75,8 +75,8 @@ class plgAkpaymentVerotel extends JPlugin
 			->user_id($user->id)
 			->getFirstItem();
         
-        $signatureKey = $this->params->get('key','');
-        $data->signature = sha1($signatureKey . ":description=" . $data->description .
+		$signatureKey = $this->params->get('key','');
+		$data->signature = sha1($signatureKey . ":description=" . $data->description .
 			':priceAmount=' . $data->priceAmount .
 			':priceCurrency=' .$data->priceCurrency .
 			':referenceID=' .$data->referenceID .
@@ -164,13 +164,13 @@ class plgAkpaymentVerotel extends JPlugin
 				'version'	=> '1',
 				'shopID'	=> trim($this->params->get('shopid','')),
 				'saleID'	=> $data['saleID']
-            );
-            $signatureKey = $this->params->get('key','');
-            $requestData->signature = sha1($signatureKey .
+			);
+			$signatureKey = $this->params->get('key','');
+			$requestData->signature = sha1($signatureKey .
 				':saleID=' . $data->saleID .
 				':shopID=' . $data->shopID .
 				':version=' . $data->version);
-            $requestURL = $requestData->url .
+			$requestURL = $requestData->url .
 				'?shopID=' . $requestData->shopID .
 				'&version=' . $requestData->version .
 				'&saleID=' . $requestData->saleID .
