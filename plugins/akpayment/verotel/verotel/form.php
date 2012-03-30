@@ -8,6 +8,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 <p><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY') ?></p>
 <p align="center">
 <form action="<?php echo htmlentities($data->url) ?>"  method="post" id="paymentForm">
+	<input type="hidden" name="version" value="1" />
 	<input type="hidden" name="shopID" value="<?php echo $data->shopID ?>" />
 	<input type="hidden" name="priceAmount" value="<?php echo $data->priceAmount ?>" />
 	<input type="hidden" name="priceCurrency" value="<?php echo $data->priceCurrency ?>" />

@@ -2707,6 +2707,30 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           &lt;b&gt; and &lt;a&gt; tags will work.</para>
         </tip>
 
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Off-line" or type in a custom name to
+              show to your customer's, e.g. "Bank deposit and Western
+              Union"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
         <para>Once the user effects the payment, simply go to your
         Subscriptions view, enable his subscriptions and set the payment
         status to "Completed". That's all!</para>
@@ -3089,7 +3113,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <term>Payment option title</term>
 
             <listitem>
-              <para>Leave blank to use "eWay" or type in a custom name to show
+              <para>Leave blank to use "uPay" or type in a custom name to show
               to your customer's, e.g. "Credit Card"</para>
             </listitem>
           </varlistentry>
@@ -3177,7 +3201,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <term>Payment option title</term>
 
             <listitem>
-              <para>Leave blank to use "eWay" or type in a custom name to show
+              <para>Leave blank to use "MoIP" or type in a custom name to show
               to your customer's, e.g. "Credit Card"</para>
             </listitem>
           </varlistentry>
@@ -3272,8 +3296,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <term>Payment option title</term>
 
             <listitem>
-              <para>Leave blank to use "eWay" or type in a custom name to show
-              to your customer's, e.g. "Credit Card"</para>
+              <para>Leave blank to use "DeltaPay" or type in a custom name to
+              show to your customer's, e.g. "Credit Card"</para>
             </listitem>
           </varlistentry>
 
@@ -3350,8 +3374,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <term>Payment option title</term>
 
             <listitem>
-              <para>Leave blank to use "eWay" or type in a custom name to show
-              to your customer's, e.g. "Credit Card"</para>
+              <para>Leave blank to use "Google Checkout" or type in a custom
+              name to show to your customer's, e.g. "Credit Card"</para>
             </listitem>
           </varlistentry>
 
@@ -3888,8 +3912,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <term>Payment option title</term>
 
             <listitem>
-              <para>Leave blank to use "PostFinance" or type in a custom name
-              to show to your customer's, e.g. "VISA or MasterCard"</para>
+              <para>Leave blank to use "PagSeguro" or type in a custom name to
+              show to your customer's, e.g. "VISA or MasterCard"</para>
             </listitem>
           </varlistentry>
 
@@ -3938,6 +3962,156 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>For more information, please consult PagSeguro's <link
         xlink:href="https://pagseguro.uol.com.br/v2/guia-de-integracao/api-de-notificacoes.html">API
         notification instructions page</link>.</para>
+      </section>
+
+      <section xml:id="payment-verotel">
+        <title>Verotel</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Verotel</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the dutch Verotel FlexPay
+        payments service (https://www.verotel.com).</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Verotel" or type in a custom name to
+              show to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Shop ID</term>
+
+            <listitem>
+              <para>Your identification with Verotel. This is a numeric ID you
+              have to get from Verotel.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Key</term>
+
+            <listitem>
+              <para>This is the "signature key" Verotel sends you, a
+              verification code which ensures the security of the transactions
+              and helps Akeeba Subscriptions recognise and not process
+              fraudulent requests.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In your Verotel control center, please enable "FlexPay" (my
+        setup &gt; FlexPay options). You will also receive your "signature
+        key" which you must supply in the Key field of the plugin's
+        parameters.</para>
+
+        <para>Add the following URL as your "Postback script":</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=verotel</uri></para>
+
+        <para>where www.example.com must be replaced with the domain name of
+        your site.</para>
+
+        <para>In the "Success page" field please enter the URL of your site
+        where all visitors will be directed after their payment.
+        Unfortunately, Verotel doesn't allow for Akeeba Subscriptions'
+        customised per-level success messages. You will have to direct all
+        your customers to a generic page on your site, e.g. an article created
+        in Joomla!.</para>
+      </section>
+
+      <section xml:id="payment-rbkmoney">
+        <title>RBK Money</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - RBK Money</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Russian RBK Money payments
+        service (https://www.rbkmoney.com).</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "RBK Money" or type in a custom name to
+              show to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Shop ID</term>
+
+            <listitem>
+              <para>Your identification with RBK Money.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secret Key</term>
+
+            <listitem>
+              <para>This is the 32-character "secret key" you configure in RBK
+              Money ("Секретный ключ"), a verification code which ensures the
+              security of the transactions and helps Akeeba Subscriptions
+              recognise and not process fraudulent requests.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>The payment page language (English or Russian)</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In your RBK Money backend, please set the following URL as your
+        callback URL ("URL Оповещение о Переводе"):</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=rbkmoney</uri></para>
+
+        <para>where www.example.com must be replaced with the domain name of
+        your site.</para>
       </section>
     </section>
 

@@ -80,7 +80,9 @@ class plgAkpaymentVerotel extends JPlugin
 			':priceAmount=' . $data->priceAmount .
 			':priceCurrency=' .$data->priceCurrency .
 			':referenceID=' .$data->referenceID .
-			':shopID=' . $data->shopID);
+			':shopID=' . $data->shopID.
+			':version=1'
+		);
 
 		@ob_start();
 		include dirname(__FILE__).'/verotel/form.php';
