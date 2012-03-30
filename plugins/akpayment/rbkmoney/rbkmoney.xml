@@ -30,11 +30,6 @@
 			<option value="en">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_EN</option>
 			<option value="ru">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_RU</option>
 		</param>
-		<param type="spacer" />
-		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_RBKMONEY_SANDBOX_LABEL" description="PLG_AKPAYMENT_RBKMONEY_SANDBOX_DESC">
-		  <option value="0">No</option>
-		  <option value="1">Yes</option>
-		</param>
 	</params>
 	<config>
 		<fields name="params">
@@ -50,11 +45,6 @@
 					<option value="en">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_EN</option>
 					<option value="ru">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_RU</option>
 				</field>
-				<param type="spacer" />
-                <field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_RBKMONEY_SANDBOX_LABEL" description="PLG_AKPAYMENT_RBKMONEY_SANDBOX_DESC">
-                    <option value="0">JNo</option>
-                    <option value="1">JYes</option>
-                </field>
 			</fieldset>
 		</fields>
 	</config>
