@@ -92,8 +92,6 @@ class plgAkpaymentVerotel extends JPlugin
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		jimport('joomla.utilities.date');
-        
-		// ### Receive postback (Step 2) ###
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
@@ -154,88 +152,15 @@ class plgAkpaymentVerotel extends JPlugin
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-        
-		// ### Request purchase status (Step 3 & 4) ###
-
-		if($isValid) {
-			// Generate the request
-			$requestData = (object)array(
-				'url'		=> 'https://secure.verotel.com/status/purchase',
-				'version'	=> '1',
-				'shopID'	=> trim($this->params->get('shopid','')),
-				'saleID'	=> $data['saleID']
-			);
-			$signatureKey = $this->params->get('key','');
-			$requestData->signature = sha1($signatureKey .
-				':saleID=' . $data->saleID .
-				':shopID=' . $data->shopID .
-				':version=' . $data->version);
-			$requestURL = $requestData->url .
-				'?shopID=' . $requestData->shopID .
-				'&version=' . $requestData->version .
-				'&saleID=' . $requestData->saleID .
-				'&signature=' . $requestData->signature;
-
-			// Call the url and get response
-			$purchaseResponse = file_get_contents($requestURL);
-
-			// Check response
-			if(! preg_match('/^response: (FOUND|NOTFOUND|ERROR)/', $purchaseResponse)) {
-				// Unvalid response (like 404)
-				$isValid = false;
-			} else {
-				$res = $this->getResponseValue($purchaseResponse, 'response');
-				switch($res) {
-					case 'NOTFOUND':
-						$isValid = false;
-						$data['akeebasubs_failure_reason'] = 'Purchase not found';
-						break;
-					case 'ERROR':
-						$isValid = false;
-						$data['akeebasubs_failure_reason'] = $this->getResponseValue($purchaseResponse, 'error');
-						break;
-					case 'FOUND':
-						break;
-					default:
-						$isValid = false;
-						$data['akeebasubs_failure_reason'] = 'Unknown response';
-						break;
-				}
-			}
-			// Check if data matches with the previous response
-			if(($this->getResponseValue($purchaseResponse, 'referenceID') != trim($data['referenceID']))
-				|| ($this->getResponseValue($purchaseResponse, 'saleID') != trim($data['saleID']))
-				|| ($this->getResponseValue($purchaseResponse, 'priceAmount') != trim($data['priceAmount']))
-				|| ($this->getResponseValue($purchaseResponse, 'priceCurrency') != trim($data['priceCurrency']))) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = 'Data mismatch in purchase response';
-			}
-		}
-
-		// Check the shopID
-		if($isValid) {
-			if($this->getResponseValue($purchaseResponse, 'shopID') != trim($this->params->get('shopid',''))) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = 'ShopID of the purchase response doesn\'t match the one that is configured';
-			}
-		}
-
-		// The only saleResult that is supported by Verotel: APPROVED
-		if($isValid) {
-			$saleResult = $this->getResponseValue($purchaseResponse, 'saleResult');
-			if($saleResult == 'APPROVED') {
-				$newStatus = 'C';
-			} else {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = 'Unknown saleResult: ' . $saleResult;
-			}
-		}
                 
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
+		
+		// Payment status always complete if this point is reached
+		$newStatus = 'C';
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
