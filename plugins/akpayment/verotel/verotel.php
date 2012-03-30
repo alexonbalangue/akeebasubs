@@ -280,18 +280,10 @@ class plgAkpaymentVerotel extends JPlugin
 			$subscription
 		));
 
-		// Callback is valid - redirect to success page
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-			->setId($subscription->akeebasubs_level_id)
-			->getItem()
-			->slug;
-		$rootURL = rtrim(JURI::base(),'/');
-		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
-		}
-		$successURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
-		$app->redirect($successURL);
+		// Callback is valid - respond with OK
+		@ob_end_clean();
+		echo "OK";
+		$app->close();
         
 		return true;
 	}
