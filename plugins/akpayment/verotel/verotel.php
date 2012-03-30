@@ -93,7 +93,7 @@ class plgAkpaymentVerotel extends JPlugin
 	{
 		jimport('joomla.utilities.date');
         
-        // ### Receive postback (Step 2) ###
+		// ### Receive postback (Step 2) ###
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
@@ -155,9 +155,9 @@ class plgAkpaymentVerotel extends JPlugin
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
         
-        // ### Request purchase status (Step 3 & 4) ###
-        
-        if($isValid) {
+		// ### Request purchase status (Step 3 & 4) ###
+
+		if($isValid) {
 			// Generate the request
 			$requestData = (object)array(
 				'url'		=> 'https://secure.verotel.com/status/purchase',
@@ -327,14 +327,15 @@ class plgAkpaymentVerotel extends JPlugin
 
 		return $isValid;
 	}
-     
-    private function getResponseValue($purchaseResponse, $parameter) {
+ 
+	private function getResponseValue($purchaseResponse, $parameter)
+	{
 		preg_match("/^$parameter: ([^\r\n\t\f]+)/m", $purchaseResponse, $matches);
 		if(! empty($matches[1])) {
 			return trim($matches[1]);
 		}
 		return "";
-    }
+	}
 	
 	private function logIPN($data, $isValid)
 	{
