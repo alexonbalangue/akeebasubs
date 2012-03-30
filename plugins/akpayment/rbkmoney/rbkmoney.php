@@ -81,7 +81,7 @@ class plgAkpaymentRBKMoney extends JPlugin
 		
 		$data = (object)array(
 			'url'               => 'https://rbkmoney.ru/acceptpurchase.aspx',
-			'eshopId'           => trim($this->params->get('siteid','')),
+			'eshopId'           => trim($this->params->get('eshopid','')),
 			'orderId'           => $subscription->akeebasubs_subscription_id,
 			'serviceName'       => $level->title . ' - [ ' . $user->username . ' ]',
 			'recipientAmount'   => sprintf('%.2f',$subscription->gross_amount),
@@ -131,7 +131,7 @@ class plgAkpaymentRBKMoney extends JPlugin
 		
 		// Check eshopId
 		if($isValid) {
-			if($data['eshopId'] != trim($this->params->get('siteid',''))) {
+			if($data['eshopId'] != trim($this->params->get('eshopid',''))) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Invalid eshopId: Doesn't match with the one used in the request";
 			}
