@@ -86,8 +86,10 @@ $installation_queue = array(
 			'pagseguro'				=> 0,
 			'paypal'				=> 1,
 			'postfinancech'			=> 0,
+			'rbkmoney'				=> 0,
 			'skrill'				=> 0,
 			'upay'					=> 0,
+			'verotel'				=> 0,
 			'worldpay'				=> 0
 		),
 		'content' => array(
