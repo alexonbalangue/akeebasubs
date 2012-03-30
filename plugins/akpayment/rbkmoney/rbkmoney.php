@@ -85,13 +85,12 @@ class plgAkpaymentRBKMoney extends JPlugin
 			'orderId'           => $subscription->akeebasubs_subscription_id,
 			'serviceName'       => $level->title . ' - [ ' . $user->username . ' ]',
 			'recipientAmount'   => sprintf('%.2f',$subscription->gross_amount),
-            // Currency: USD, RUR, EUR, UAH or GBP
+			// Currency: USD, RUR, EUR, UAH or GBP
 			'recipientCurrency' => strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'language'			=> $this->params->get('language','en'),
 			'user_email'        => trim($_REQUEST['email']),
 			'successUrl'        => $successURL,
 			'failUrl'           => $failureURL
-			// @TODO version
 		);
 
 		@ob_start();
@@ -145,7 +144,7 @@ class plgAkpaymentRBKMoney extends JPlugin
 				$data['akeebasubs_failure_reason'] = "I will not process the same paymentId twice";
 			}
 		}
-        
+
 		// Check that recipientCurrency is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_currency = strtoupper($data['recipientCurrency']);
@@ -155,7 +154,7 @@ class plgAkpaymentRBKMoney extends JPlugin
 				$data['akeebasubs_failure_reason'] = "Invalid currency; expected $currency, got $mc_currency";
 			}
 		}
-		
+
 		// Check that recipientAmount is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
