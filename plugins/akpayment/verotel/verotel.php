@@ -61,33 +61,14 @@ class plgAkpaymentVerotel extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
-		$nameParts = explode(' ', $user->name, 2);
-		$firstName = $nameParts[0];
-		if(count($nameParts) > 1) {
-			$lastName = $nameParts[1];
-		} else {
-			$lastName = '';
-		}
-		
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
-		
-		$rootURL = rtrim(JURI::base(),'/');
-		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
-		}
-		
 		$data = (object)array(
-			'url'               => 'https://secure.verotel.com/order/purchase',
-			'shopID'            => $this->params->get('shopid',''),
-			'priceAmount'       => sprintf('%.2f',$subscription->gross_amount),
-            // Currency must be one of these: USD, EUR, GBP, NOK, SEK, DKK, CAD or CHF
-			'priceCurrency'     => strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
-			'description'       => $level->title . ' - [ ' . $user->username . ' ]',
-			'referenceID'       => $subscription->akeebasubs_subscription_id
+			'url'				=> 'https://secure.verotel.com/order/purchase',
+			'shopID'			=> trim($this->params->get('shopid','')),
+			'priceAmount'		=> sprintf('%.2f',$subscription->gross_amount),
+			// Currency must be one of these: USD, EUR, GBP, NOK, SEK, DKK, CAD or CHF
+			'priceCurrency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
+			'description'		=> $level->title . ' - [ ' . $user->username . ' ]',
+			'referenceID'		=> $subscription->akeebasubs_subscription_id
 		);
 		
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
@@ -96,10 +77,10 @@ class plgAkpaymentVerotel extends JPlugin
         
         $signatureKey = $this->params->get('key','');
         $data->signature = sha1($signatureKey . ":description=" . $data->description .
-            ":priceAmount=" . $data->priceAmount .
-            ":priceCurrency=" .$data->priceCurrency .
-            ":referenceID=" .$data->referenceID .
-            ":shopID=" . $data->shopID);
+			':priceAmount=' . $data->priceAmount .
+			':priceCurrency=' .$data->priceCurrency .
+			':referenceID=' .$data->referenceID .
+			':shopID=' . $data->shopID);
 
 		@ob_start();
 		include dirname(__FILE__).'/verotel/form.php';
@@ -111,6 +92,8 @@ class plgAkpaymentVerotel extends JPlugin
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		jimport('joomla.utilities.date');
+        
+        // ### Receive postback (Step 2) ###
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
@@ -171,6 +154,82 @@ class plgAkpaymentVerotel extends JPlugin
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
+        
+        // ### Request purchase status (Step 3 & 4) ###
+        
+        if($isValid) {
+			// Generate the request
+			$requestData = (object)array(
+				'url'		=> 'https://secure.verotel.com/status/purchase',
+				'version'	=> '1',
+				'shopID'	=> trim($this->params->get('shopid','')),
+				'saleID'	=> $data['saleID']
+            );
+            $signatureKey = $this->params->get('key','');
+            $requestData->signature = sha1($signatureKey .
+				':saleID=' . $data->saleID .
+				':shopID=' . $data->shopID .
+				':version=' . $data->version);
+            $requestURL = $requestData->url .
+				'?shopID=' . $requestData->shopID .
+				'&version=' . $requestData->version .
+				'&saleID=' . $requestData->saleID .
+				'&signature=' . $requestData->signature;
+
+			// Call the url and get response
+			$purchaseResponse = file_get_contents($requestURL);
+
+			// Check response
+			if(! preg_match('/^response: (FOUND|NOTFOUND|ERROR)/', $purchaseResponse)) {
+				// Unvalid response (like 404)
+				$isValid = false;
+			} else {
+				$res = $this->getResponseValue($purchaseResponse, 'response');
+				switch($res) {
+					case 'NOTFOUND':
+						$isValid = false;
+						$data['akeebasubs_failure_reason'] = 'Purchase not found';
+						break;
+					case 'ERROR':
+						$isValid = false;
+						$data['akeebasubs_failure_reason'] = $this->getResponseValue($purchaseResponse, 'error');
+						break;
+					case 'FOUND':
+						break;
+					default:
+						$isValid = false;
+						$data['akeebasubs_failure_reason'] = 'Unknown response';
+						break;
+				}
+			}
+			// Check if data matches with the previous response
+			if(($this->getResponseValue($purchaseResponse, 'referenceID') != trim($data['referenceID']))
+				|| ($this->getResponseValue($purchaseResponse, 'saleID') != trim($data['saleID']))
+				|| ($this->getResponseValue($purchaseResponse, 'priceAmount') != trim($data['priceAmount']))
+				|| ($this->getResponseValue($purchaseResponse, 'priceCurrency') != trim($data['priceCurrency']))) {
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = 'Data mismatch in purchase response';
+			}
+		}
+
+		// Check the shopID
+		if($isValid) {
+			if($this->getResponseValue($purchaseResponse, 'shopID') != trim($this->params->get('shopid',''))) {
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = 'ShopID of the purchase response doesn\'t match the one that is configured';
+			}
+		}
+
+		// The only saleResult that is supported by Verotel: APPROVED
+		if($isValid) {
+			$saleResult = $this->getResponseValue($purchaseResponse, 'saleResult');
+			if($saleResult == 'APPROVED') {
+				$newStatus = 'C';
+			} else {
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = 'Unknown saleResult: ' . $saleResult;
+			}
+		}
                 
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
@@ -178,13 +237,10 @@ class plgAkpaymentVerotel extends JPlugin
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
 
-        // @TODO Check payment status
-		$newStatus = 'X';
-
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-				'akeebasubs_subscription_id'    => $id,
-				'processor_key'                 => $data['saleID'],
+				'akeebasubs_subscription_id'	=> $data['referenceID'],
+				'processor_key'					=> $data['saleID'],
 				'state'							=> $newStatus,
 				'enabled'						=> 0
 		);
@@ -200,7 +256,7 @@ class plgAkpaymentVerotel extends JPlugin
 			$now = $jNow->toUnix();
 			$start = $jStart->toUnix();
 			$end = $jEnd->toUnix();
-
+			
 			if($start < $now) {
 				$duration = $end - $start;
 				$start = $now;
@@ -224,6 +280,19 @@ class plgAkpaymentVerotel extends JPlugin
 			$subscription
 		));
 
+		// Callback is valid - redirect to success page
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->setId($subscription->akeebasubs_level_id)
+			->getItem()
+			->slug;
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		$successURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
+		$app->redirect($successURL);
+        
 		return true;
 	}
     
@@ -232,32 +301,40 @@ class plgAkpaymentVerotel extends JPlugin
 	 */
 	private function isValidIPN($data)
 	{
-        $isValid = true;
-        
-        // Check the required data
-        $signatureKey = $this->params->get('key','');
-        if(empty($signatureKey)) $isValid = false;
-        if(empty($data['priceAmount'])) $isValid = false;
-        if(empty($data['priceCurrency'])) $isValid = false;
-        if(empty($data['referenceID'])) $isValid = false;
-        if(empty($data['saleID'])) $isValid = false;
-        if(empty($data['shopID'])) $isValid = false;
-        if(empty($data['signature'])) $isValid = false;
-        
-        // Check the signature
-        if($isValid) {
-            $signature = sha1($signatureKey .
-                ":priceAmount=" . $data['priceAmount'] .
-                ":priceCurrency=" . $data['priceCurrency'] .
-                ":referenceID=" . $data['referenceID'] .
-                ":saleID=" . $data['saleID'] .
-                ":shopID=" . $data['shopID']);
+		$isValid = true;
 
-            $isValid = $data['signature'] == $signature;   
-        }
-		
+		// Check the required data
+		$signatureKey = $this->params->get('key','');
+		if(empty($signatureKey)) $isValid = false;
+		if(empty($data['priceAmount'])) $isValid = false;
+		if(empty($data['priceCurrency'])) $isValid = false;
+		if(empty($data['referenceID'])) $isValid = false;
+		if(empty($data['saleID'])) $isValid = false;
+		if(empty($data['shopID'])) $isValid = false;
+		if(empty($data['signature'])) $isValid = false;
+
+		// Check the signature
+		if($isValid) {
+			$signature = sha1($signatureKey .
+				":priceAmount=" . $data['priceAmount'] .
+				":priceCurrency=" . $data['priceCurrency'] .
+				":referenceID=" . $data['referenceID'] .
+				":saleID=" . $data['saleID'] .
+				":shopID=" . $data['shopID']);
+
+			$isValid = $data['signature'] == $signature;
+		}
+
 		return $isValid;
 	}
+     
+    private function getResponseValue($purchaseResponse, $parameter) {
+		preg_match("/^$parameter: ([^\r\n\t\f]+)/m", $purchaseResponse, $matches);
+		if(! empty($matches[1])) {
+			return trim($matches[1]);
+		}
+		return "";
+    }
 	
 	private function logIPN($data, $isValid)
 	{
