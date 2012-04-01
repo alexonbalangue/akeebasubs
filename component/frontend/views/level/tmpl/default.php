@@ -102,6 +102,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 		<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod')) ?>
 		<br/>
 	</div>
+	<div class="akeebasubs-clear"></div><br/>
 	<label for="subscribenow" class="main">&nbsp;</label>
 	<button id="subscribenow" type="submit"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?></button>
 	<img id="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />	

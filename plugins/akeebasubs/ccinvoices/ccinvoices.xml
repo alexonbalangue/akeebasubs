@@ -17,4 +17,14 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_ccinvoices.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_ccinvoices.sys.ini</language>
 	</languages>
+	<params>
+		<param name="description" type="text" default="" label="PLG_AKEEBASUBS_CCINVOICES_DESCRIPTION_LABEL" description="PLG_AKEEBASUBS_CCINVOICES_DESCRIPTION_DESC" size="45" />
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="description" type="text" default="" label="PLG_AKEEBASUBS_CCINVOICES_DESCRIPTION_LABEL" description="PLG_AKEEBASUBS_CCINVOICES_DESCRIPTION_DESC" size="45" />
+			</fieldset>
+		</fields>
+	</config>
 </install>

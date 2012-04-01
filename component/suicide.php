@@ -41,11 +41,15 @@ $installation_queue = array(
 			'acymailing'			=> 0,
 			'adminemails'			=> 0,
 			'affemails'				=> 0,
+			'ageverification'		=> 0,
+			'agora'					=> 0,
+			'agreetotos'			=> 0,
 			'autocity'				=> 0,
 			'cb'					=> 0,
 			'ccinvoices'			=> 0,
 			'communityacl'			=> 0,
 			'docman'				=> 0,
+			'iplogger'				=> 0,
 			'iproperty'				=> 0,
 			'jce'					=> 0,
 			'jomsocial'				=> 0,
@@ -56,6 +60,7 @@ $installation_queue = array(
 			'kunena'				=> 0,
 			'ninjaboard'			=> 0,
 			'phocadownload'			=> 0,
+			'recaptcha'				=> 0,
 			'redshop'				=> 0,
 			'redshopusersync'		=> 0,
 			'samplefields'			=> 0,
@@ -79,8 +84,10 @@ $installation_queue = array(
 			'pagseguro'				=> 0,
 			'paypal'				=> 1,
 			'postfinancech'			=> 0,
+			'rbkmoney'				=> 0,
 			'skrill'				=> 0,
 			'upay'					=> 0,
+			'verotel'				=> 0,
 			'worldpay'				=> 0
 		),
 		'content' => array(
@@ -188,7 +195,7 @@ $akeeba_installation_has_run = true;
 			<td class="key"><?php echo $module['client']; ?></td>
 			<td>
 				<span style="color: <?php echo ($module['result'])?'green':'red'?>; font-weight: bold;">
-					<?php echi ($module['result'])?'Uninstalled':'Not Uninstalled'; ?>
+					<?php echo ($module['result'])?'Uninstalled':'Not Uninstalled'; ?>
 				</span>
 			</td>
 		</tr>

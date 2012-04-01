@@ -40,6 +40,10 @@ class plgAkpaymentGooglecheckout extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
+		if(empty($ret['image'])) {
+			$ret['image'] = 'https://checkout.google.com/buttons/checkout.gif?merchant_id=&w=180&h=46&style=white&variant=text&loc=en_US';
+		}
 		return (object)$ret;
 	}
 	

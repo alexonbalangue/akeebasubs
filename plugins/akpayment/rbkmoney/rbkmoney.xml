@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - RBK Money</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-03-30</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_RBKMONEY_DESCRIPTION</description>
+	<files>
+		<filename plugin="rbkmoney">rbkmoney.php</filename>
+		<folder>rbkmoney</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_rbkmoney.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_rbkmoney.sys.ini</language>
+	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_TITLE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_TITLE_DESC"/>
+		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_DESC" />
+		<param type="spacer" />
+		<param name="eshopid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_ESHOPID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_ESHOPID_DESC"/>
+		<param name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_KEY_LABEL" description="PLG_AKPAYMENT_RBKMONEY_KEY_DESC"/>
+		<param type="spacer" />
+		<param name="language" type="radio" default="en" label="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_DESC">
+			<option value="en">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_EN</option>
+			<option value="ru">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_RU</option>
+		</param>
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+                <field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_TITLE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_TITLE_DESC"/>
+                <field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_DESC" />
+                <field type="spacer" />
+				<field name="eshopid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_ESHOPID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_ESHOPID_DESC"/>
+                <field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_KEY_LABEL" description="PLG_AKPAYMENT_RBKMONEY_KEY_DESC"/>
+                <field type="spacer" />
+				<field name="language" type="radio" default="en" label="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_LANGUAGE_DESC">
+					<option value="en">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_EN</option>
+					<option value="ru">PLG_AKPAYMENT_RBKMONEY_LANGUAGE_RU</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</install>

@@ -15,7 +15,10 @@ class AkeebasubsHelperFormat
 		$jDate = new JDate($date);
 		
 		if(empty($format)) {
-			$format = '%Y-%m-%d %H:%M';
+			if(!class_exists('AkeebasubsHelperCparams')) {
+				require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+			}
+			$format = AkeebasubsHelperCparams::getParam('dateformat', '%Y-%m-%d %H:%M');
 		}
 		
 		return $jDate->toFormat($format);

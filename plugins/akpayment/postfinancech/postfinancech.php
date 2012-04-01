@@ -40,6 +40,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
 		return (object)$ret;
 	}
 	
@@ -88,7 +89,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 			'OWNERTOWN'		=> $kuser->city,
 			'OWNERCTY'		=> $kuser->country,
 			'COM'			=> $level->title . ' - [ ' . $user->username . ' ]',
-			'TITLE'			=> $this->params->get('title',''),
+			'TITLE'			=> $this->params->get('ptitle',''),
 			'BGCOLOR'		=> $this->params->get('bgcolor',''),
 			
 			'ACCEPTURL'		=> $successURL,
@@ -313,10 +314,14 @@ class plgAkpaymentPostfinancech extends JPlugin
 		
 		// Get the password and calculate the SHA1 or SHA256 hash
 		$password = $this->getPassword($type);
+		$stringToSign = '';
 		if(!empty($password)) {
-			$stringToSign = implode($password, $temp) . $password;
+			foreach ($temp as $key => $value) {
+				if ($value)	$stringToSign .= $key.'='.$value.$password;
+			}	
 			if(function_exists('sha1')) {
-				$sha1 = sha1($stringToSign);
+				$stringToSign = iconv ( "UTF-8" , "ASCII//TRANSLIT" , $stringToSign );
+				$sha1 = strtoupper(sha1($stringToSign));
 			}
 		}
 		

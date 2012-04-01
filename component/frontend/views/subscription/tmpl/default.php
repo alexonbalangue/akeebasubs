@@ -40,13 +40,13 @@ $this->loadHelper('format');
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP')?></td>
 		<td class="subscription-info">
-			<?php echo AkeebasubsHelperFormat::date($this->item->publish_up, '%Y-%m-%d %H:%M') ?>
+			<?php echo AkeebasubsHelperFormat::date($this->item->publish_up) ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN')?></td>
 		<td class="subscription-info">
-			<?php echo AkeebasubsHelperFormat::date($this->item->publish_down, '%Y-%m-%d %H:%M') ?>
+			<?php echo AkeebasubsHelperFormat::date($this->item->publish_down) ?>
 		</td>
 	</tr>
 	<tr>
@@ -78,7 +78,7 @@ $this->loadHelper('format');
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_SUBSCRIBED_ON')?></td>
 		<td class="subscription-info">
-			<?php echo AkeebasubsHelperFormat::date($this->item->created_on, '%Y-%m-%d %H:%M') ?>
+			<?php echo AkeebasubsHelperFormat::date($this->item->created_on) ?>
 		</td>
 	</tr>
 </table>

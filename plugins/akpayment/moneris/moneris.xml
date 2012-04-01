@@ -20,6 +20,7 @@
 	</languages>
 	<params>
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_TITLE_LABEL" description="PLG_AKPAYMENT_MONERIS_TITLE_DESC"/>
+		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_MONERIS_PPIMAGE_DESC" />
 		<param type="spacer" />
 		<param name="storeid" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_STOREID_LABEL" description="PLG_AKPAYMENT_MONERIS_STOREID_DESC"/>
 		<param name="apikey" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_APIKEY_LABEL" description="PLG_AKPAYMENT_MONERIS_APIKEY_DESC"/>
@@ -32,6 +33,7 @@
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_TITLE_LABEL" description="PLG_AKPAYMENT_MONERIS_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_MONERIS_PPIMAGE_DESC" />
 				<field type="spacer" />
 				<field name="storeid" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_STOREID_LABEL" description="PLG_AKPAYMENT_MONERIS_STOREID_DESC"/>
 				<field name="apikey" type="text" size="50" default="" label="PLG_AKPAYMENT_MONERIS_APIKEY_LABEL" description="PLG_AKPAYMENT_MONERIS_APIKEY_DESC"/>

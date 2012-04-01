@@ -79,6 +79,7 @@ class plgContentAsrestricted extends JPlugin
 			$list = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->expires_from($jNow->toMySQL())
+				->paystate('C')
 				//->publish_down($jNow->toMySQL())
 				->getList();
 			

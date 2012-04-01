@@ -234,7 +234,7 @@ class AkeebasubsModelUsers extends FOFModel
 			if($row->user_id == $state->user_id) {
 				$myData = array_merge($myData, $row->getData());
 				if(is_string($myData['params'])) {
-					$myData['params'] = json_decode($myData['params']);
+					$myData['params'] = json_decode($myData['params'], true);
 					if(is_null($myData['params'])) $myData['params'] = array();
 				}
 			}
@@ -249,9 +249,16 @@ class AkeebasubsModelUsers extends FOFModel
 			if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $pResponse) {
 				if(!is_array($pResponse)) continue;
 				if(empty($pResponse)) continue;
+				if(array_key_exists('params', $pResponse)) {
+					if(!empty($pResponse['params'])) foreach($pResponse['params'] as $k => $v) {
+						$myData['params'][$k] = $v;
+					}
+					unset($pResponse['params']);
+				}
 				$myData = array_merge($myData, $pResponse);
 			}
 		}
+		$myData['params'] = (object)$myData['params'];
 
 		return (object)$myData;
 	}

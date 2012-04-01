@@ -18,11 +18,21 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		if(is_null($info['modified']) || empty($info['modified'])) return;
 		if(!array_key_exists('enabled', (array)$info['modified'])) return;
 		
-		// Load the language
+		// Load the plugin's language files
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_akeebasubs_ccinvoices', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$lang->load('plg_akeebasubs_ccinvoices', JPATH_ADMINISTRATOR, null, true);
+		// ccInvoices language files
+		$lang->load('com_ccinvoices', JPATH_SITE, 'en-GB', true);
+		$lang->load('com_ccinvoices', JPATH_SITE, $lang->getDefault(), true);
+		$lang->load('com_ccinvoices', JPATH_SITE, null, true);
+		$lang->load('com_ccinvoices', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$lang->load('com_ccinvoices', JPATH_ADMINISTRATOR, $lang->getDefault(), true);
+		$lang->load('com_ccinvoices', JPATH_ADMINISTRATOR, null, true);
 
+		// Do not issue invoices for free subscriptions
+		if($row->gross_amount < 0.01) return;
+		
 		// Only handle not expired subscriptions
 		if( ($row->state == "C") && $row->enabled ) {
 			$db = JFactory::getDBO();
@@ -30,12 +40,10 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			// Get or create ccInvoices contact for user
 			$contact_id = $this->getContactID($row->user_id);
 			
-			// @todo Load the existing invoices of the user
+			// LEGACY CHECK -- Will be removed in a future release
 			$sql = 'SELECT * FROM `#__ccinvoices_invoices` WHERE `contact_id` = '.$contact_id;
 			$db->setQuery($sql);
 			$invoices = $db->loadObjectList();
-			
-			// Check if any of the invoices references this subscription
 			if(count($invoices)) foreach($invoices as $invoice) {
 				// Try to understand which subscription ID corresponds to this invoice
 				$note = strip_tags($invoice->note);
@@ -47,6 +55,15 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				// If there is an invoice for the current subscription, bail out
 				if($sub_id == $row->akeebasubs_subscription_id) return;
 			}
+			
+			// Check if there is an invoice for this subscription already 
+			$query = FOFQueryAbstract::getNew($db)
+				->select('COUNT(*)')
+				->from('#__akeebasubs_invoices')
+				->where($db->nameQuote('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));
+			$db->setQuery($query);
+			$oldInvoices = $db->loadResult();
+			if($oldInvoices) return;
 			
 			// Load the ccInvoices configuration
 			$sql = 'SELECT * FROM `#__ccinvoices_configuration` LIMIT 0,1';
@@ -63,13 +80,19 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			
 			if($invoice_number < $ccConfig->invoice_start) $invoice_number = $ccConfig->invoice_start;
 			
-			$subname = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 					->setId($row->akeebasubs_level_id)
-					->getItem()
-					->title;
+					->getItem();
+			$subname = $level->title;
 			
-			$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
-			if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
+			$description = $this->params->getValue('description','');
+			if(empty($description)) {
+				$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
+				if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
+				$description = $subname.$suffix;
+			} else {
+				$description = $this->parseDescription($description, $row, $level);
+			}
 			
 			if($row->tax_percent > 0) {
 				$taxrate = $row->tax_percent;
@@ -77,26 +100,51 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				$taxrate = 100*($row->tax_amount/$row->net_amount);
 			}
 			
+			jimport('joomla.utilities.date');
+			$jNow = new JDate();
+			
 			$invoice = (object)array(
 				'number'		=> $invoice_number,
-				'invoice_date'	=> $row->created_on,
+				'invoice_date'	=> $jNow->toMySQL(),
 				'status'		=> 4,
-				'duedate'		=> $row->created_on,
+				'duedate'		=> $jNow->toMySQL(),
 				'numbercheck'	=> 0,
+				'invoice_sent_date'	=> $jNow->toMySQL(),
 				'communication'	=> '',
-				'discount'		=> 0,
-				'subtotal'		=> $row->net_amount,
+				'discount'		=> $row->discount_amount * 1.0,
+				'subtotal'		=> $row->prediscount_amount,
 				'totaltax'		=> $row->tax_amount,
 				'total'			=> $row->gross_amount,
 				'quantity'		=> 1,
-				'pname'			=> $subname.$suffix,
+				'pname'			=> $description,
 				'price'			=> $row->net_amount,
-				'tax'			=> sprintf('%.2f', $taxrate),
+				'tax'			=> sprintf('%.2f', $row->tax_percent),
 				'note'			=> "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",
 				'contact_id'	=> $contact_id
 			);
 			$db->insertObject('#__ccinvoices_invoices', $invoice, 'id');
 			$id = $db->insertid();
+			
+			// Create an invoice payment
+			$invoicePayment = (object)array(
+				'inv_id'		=> $id,
+				'method'		=> 'akeebasubs',
+				'transaction_id'=> $row->processor.'/'.$row->processor_key,
+				'pdate'			=> $jNow->toMySQL(),
+				'status'		=> 1
+			);
+			$db->insertObject('#__ccinvoices_payment', $invoicePayment, 'id');
+			
+			// Create an Akeeba Subscriptions invoice record
+			$object = (object)array(
+				'akeebasubs_subscription_id'	=> $row->akeebasubs_subscription_id,
+				'invoice_no'					=> $id,
+				'invoice_date'					=> $jNow->toMySQL(),
+				'enabled'						=> 1,
+				'created_on'					=> $jNow->toMySQL(),
+				'created_by'					=> $row->created_by,
+			);
+			$db->insertObject('#__akeebasubs_invoices', $object, 'akeebasubs_subscription_id');
 			
 			// Try to send the invoice
 			if(!class_exists('ccInvoicesControllerInvoices')) {
@@ -109,16 +157,21 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				}
 			}
 			
-			$jlang = JFactory::getLanguage();
-			// Front-end translation
-			$jlang->load('com_ccinvoices', JPATH_SITE, 'en-GB', true);
-			$jlang->load('com_ccinvoices', JPATH_SITE, $jlang->getDefault(), true);
-			$jlang->load('com_ccinvoices', JPATH_SITE, null, true);
-
 			$controller = new ccInvoicesControllerInvoices;
 			$file_path = $this->createInvoice($id);
 			$controller->sendEmail(0,1,0,$file_path,$id);
 		}
+	}
+	
+	/**
+	 * Called whenever a subscription is displayed on the front-end list
+	 * 
+	 * @param AkeebasubsTableSubscription $row 
+	 */
+	public function onAKSubscriptionsList($row)
+	{
+		// @todo
+		// index.php?option=com_ccinvoices&view=ccinvoices&task=download&id=1
 	}
 	
 	/**
@@ -209,7 +262,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
         require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/config/lang/eng.php');
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('David');
+        $pdf->SetAuthor('Akeeba Subscriptions');
         $pdf->SetTitle('Invoice');
         $pdf->SetSubject('Invoice');
         $pdf->SetKeywords('Invoice');
@@ -252,5 +305,67 @@ class plgAkeebasubsCcinvoices extends JPlugin
         $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/'.$file_name;
         $pdf->Output($file_path, 'F');
 		return $file_path;
+	}
+	
+	/**
+	 * Parses a description string
+	 * 
+	 * @param string $description
+	 * @param AkeebasubsTableSubscription $row
+	 * @param AkeebasubsTableLevel $level 
+	 */
+	private function parseDescription($description, $row, $level)
+	{
+		// Get the user object for this subscription
+		$user = JFactory::getUser($row->user_id);
+		
+		// Get the extra user parameters object for the subscription
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+			->user_id($row->user_id)
+			->getFirstItem();
+		
+		// Merge the user objects
+		$userdata = array_merge((array)$user, (array)($kuser->getData()));
+		
+		$text = $description;
+		
+		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
+		foreach((array)($row->getData()) as $k => $v) {
+			if(is_array($v) || is_object($v)) continue;
+			if(substr($k,0,1) == '_') continue;
+			if($k == 'akeebasubs_subscription_id') $k = 'id';
+			$tag = '[SUB:'.strtoupper($k).']';
+			$text = str_replace($tag, $v, $text);
+		}
+		
+		// Create and replace merge tags for subscription level. Format [LEVEL:KEYNAME]
+		foreach((array)($level->getData()) as $k => $v) {
+			if(is_array($v) || is_object($v)) continue;
+			if(substr($k,0,1) == '_') continue;
+			if($k == 'akeebasubs_subscription_id') $k = 'id';
+			$tag = '[LEVEL:'.strtoupper($k).']';
+			$text = str_replace($tag, $v, $text);
+		}
+		
+		// Create and replace merge tags for user data. Format [USER:KEYNAME]
+		foreach($userdata as $k => $v) {
+			if(is_object($v) || is_array($v)) continue;
+			if(substr($k,0,1) == '_') continue;
+			if($k == 'akeebasubs_subscription_id') $k = 'id';
+			$tag = '[USER:'.strtoupper($k).']';
+			$text = str_replace($tag, $v, $text);
+		}
+		
+		// Create and replace merge tags for custom fields data. Format [CUSTOM:KEYNAME]
+		if(array_key_exists('params', $userdata)) {
+			$custom = json_decode($userdata['params']);
+			if(!empty($custom)) foreach($custom as $k => $v) {
+				if(substr($k,0,1) == '_') continue;
+				$tag = '[CUSTOM:'.strtoupper($k).']';
+				$text = str_replace($tag, $v, $text);
+			}
+		}
+		
+		return $text;
 	}
 }

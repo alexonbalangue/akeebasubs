@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - Verotel</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-03-23</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_VEROTEL_DESCRIPTION</description>
+	<files>
+		<filename plugin="verotel">verotel.php</filename>
+		<folder>verotel</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_verotel.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_verotel.sys.ini</language>
+	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_TITLE_LABEL" description="PLG_AKPAYMENT_VEROTEL_TITLE_DESC"/>
+		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_PPIMAGE_LABEL" description="PLG_AKPAYMENT_VEROTEL_PPIMAGE_DESC" />
+		<param type="spacer" />
+		<param name="shopid" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_SHOPID_LABEL" description="PLG_AKPAYMENT_VEROTEL_SHOPID_DESC"/>
+		<param name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_KEY_LABEL" description="PLG_AKPAYMENT_VEROTEL_KEY_DESC"/>
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+        		<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_TITLE_LABEL" description="PLG_AKPAYMENT_VEROTEL_TITLE_DESC"/>
+        		<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_PPIMAGE_LABEL" description="PLG_AKPAYMENT_VEROTEL_PPIMAGE_DESC" />
+        		<field type="spacer" />
+                <field name="shopid" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_SHOPID_LABEL" description="PLG_AKPAYMENT_VEROTEL_SHOPID_DESC"/>
+        		<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_KEY_LABEL" description="PLG_AKPAYMENT_VEROTEL_KEY_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</install>

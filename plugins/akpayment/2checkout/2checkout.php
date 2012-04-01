@@ -35,6 +35,10 @@ class plgAkpayment2checkout extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
+		if(empty($ret['image'])) {
+			$ret['image'] = 'http://www.2checkout.com/images/paymentlogoshorizontal.png';
+		}
 		return (object)$ret;
 	}
 	

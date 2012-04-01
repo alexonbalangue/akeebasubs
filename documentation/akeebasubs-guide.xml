@@ -191,7 +191,7 @@
         </listitem>
 
         <listitem>
-          <para>Integration with Joomla! 1.6/1.7 and later user group
+          <para>Integration with Joomla! 1.6 and later user group
           mapping</para>
         </listitem>
 
@@ -260,7 +260,7 @@
         </listitem>
 
         <listitem>
-          <para>Joomla! 1.5.14 or later (fully supported) or Joomla! 1.6.0 or
+          <para>Joomla! 1.5.14 or later (fully supported) or Joomla! 1.7.0 or
           later.</para>
         </listitem>
       </itemizedlist>
@@ -294,7 +294,7 @@
       <section xml:id="installation-troubleshooting">
         <title>Installation troubleshooting</title>
 
-        <bridgehead>Joomla! 1.6/1.7 is logging you out during
+        <bridgehead>Joomla! 1.6+ is logging you out during
         installation</bridgehead>
 
         <para>The first thing you might observe is that <emphasis
@@ -309,7 +309,7 @@
         link on the top-right of your page, then log back in. Everything is
         back to normal and you can retry the installation.</para>
 
-        <bridgehead>Joomla! 1.6/1.7 says "can't build admin menu" and
+        <bridgehead>Joomla! 1.6+ says "can't build admin menu" and
         fails</bridgehead>
 
         <note>
@@ -320,7 +320,7 @@
         <para>On some other occasions, especially when trying to install or
         update the component after an installation error, Joomla! will
         complain that it <emphasis role="bold">cannot build admin
-        menus</emphasis>. This is due to another Joomla! 1.6 bug <link
+        menus</emphasis>. This is due to another Joomla! 1.6/1.7 bug <link
         xlink:href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&amp;tracker_item_id=25663">we
         have sent a patch for</link> to the Joomla! development team.
         Meanwhile, you will have to run a few SQL statements against your
@@ -346,12 +346,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         Again, these are limitations of those outdated Joomla! releases on
         certain hosts. The only workaround is to upgrade your Joomla!
         installation.</para>
-
-        <para>If you have Joomla! 1.6 make sure that you are using Joomla!
-        1.6.0 (the "stable" release, not the RC or any of the betas). Mind
-        you, we have only tested the installation with Joomla! 1.6.2 and later
-        releases. Akeeba Subscriptions works perfectly on Joomla! 1.7
-        sites.</para>
 
         <bridgehead>Checking your temporary directory</bridgehead>
 
@@ -414,7 +408,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </orderedlist>
 
-        <bridgehead renderas="sect4">Joomla! 1.6/1.7</bridgehead>
+        <bridgehead renderas="sect4">Joomla! 1.6/1.7 and later</bridgehead>
 
         <orderedlist>
           <listitem>
@@ -549,7 +543,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <guimenu>Extensions</guimenu>,
         <guimenuitem>Install/Uninstall</guimenuitem> (Joomla! 1.5) or
         <guimenu>Extensions</guimenu>, <guimenuitem>Manage</guimenuitem>
-        (Joomla! 1.6 users) link on the top menu. In this page, locate the
+        (Joomla! 1.6+ users) link on the top menu. In this page, locate the
         <guibutton>Install Directory</guibutton> edit box in the
         <guilabel>Install from Directory</guilabel> area. It is already filled
         in with the absolute path to your temporary directory, for example
@@ -889,6 +883,81 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             reported that the login feature is confusing and redundant, as
             there is usually a login button or module for the same function,
             hence this option.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Show renew</term>
+
+          <listitem>
+            <para>When enabled, the front-end subscriptions list (the "My
+            Subscriptions" page) will show a Renew link next to each
+            subscription. Please note that only renewable subscriptions (the
+            subscription level is still published and it doesn't have the
+            Forbid Renew checked) will have such a link next to them when this
+            option is enabled.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment method rendering</term>
+
+          <listitem>
+            <para>How are the payment method going to be rendered in the
+            bottom of the new subscription page? The <guilabel>Text
+            Only</guilabel> option renders them as drop-down list (combo box),
+            i.e. the way they were rendered in Akeeba Subscriptions up to and
+            including 2.1.0. The <guilabel>Images Only</guilabel> displays a
+            radio list of images (logos). The images can be modified at the
+            plugin parameters. Finally, the <guilabel>Images and
+            Text</guilabel> displays the same radio list as the Images Only
+            option, but next to each image you now have the (user-defined)
+            payment option title.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Custom date format</term>
+
+          <listitem>
+            <para>You can customise the date and time format for the front-end
+            display. For more information regarding date/time format strings,
+            please consult the PHP manual:
+            http://www.php.net/manual/en/function.date.php</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>VIES Validation API</term>
+
+          <listitem>
+            <para>Select which VIES validation API to use. This is only used
+            when you have tax rules based on the VIES validation for VAT
+            numbers, something you only need if your business is based in a
+            European country or you have an EU VAT ID. The two options
+            are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>RESTful API. This is the default option and what was
+                used in previous versions of Akeeba Subscriptions. This is
+                compatible with virtually all versions of PHP, but is known to
+                produce inaccurate results for some VAT numbers, especially
+                those from Spain.</para>
+              </listitem>
+
+              <listitem>
+                <para>SOAP API. This option tells Akeeba Subscriptions to use
+                the official SOAP API of the European Union's VIES portal. The
+                results are always accurate (as long as the VIES portal is not
+                down) but it requires that you have the SOAP PHP extension
+                activated. Most hosts with modern PHP versions do have this.
+                Some older hosts might not have this and end up throwing
+                errors or a blank page.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>If unsure, the safest choice is the RESTful API.</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -2360,6 +2429,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Merchant ID</term>
 
             <listitem>
@@ -2583,6 +2662,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Installation ID</term>
 
             <listitem>
@@ -2652,6 +2741,30 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           &lt;b&gt; and &lt;a&gt; tags will work.</para>
         </tip>
 
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Off-line" or type in a custom name to
+              show to your customer's, e.g. "Bank deposit and Western
+              Union"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
         <para>Once the user effects the payment, simply go to your
         Subscriptions view, enable his subscriptions and set the payment
         status to "Completed". That's all!</para>
@@ -2694,6 +2807,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               <para>Leave blank to use "2Checkout" or type in a custom name to
               show to your customer's, e.g. "Visa, MasterCard or American
               Express cards"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
             </listitem>
           </varlistentry>
 
@@ -2810,6 +2933,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Merchant ID</term>
 
             <listitem>
@@ -2829,6 +2962,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <note>
+          <para>The following notes were shared with us by our clients. We
+          include them here in hope that it will help you setting up the
+          payment plugin. We have not been able to verify them ourselves in
+          any other way except checking with our users that the payment plugin
+          works for them.</para>
+        </note>
+
+        <para>The ccAvenue documentation can be quite confusing. ccAvenue has
+        three different transaction type options to choose from. In order to
+        use Akeeba Subscriptions with ccAvenue, you have to select the first
+        transaction type option (variable amount) in ccAvenue's
+        interface.</para>
+
+        <para>Moreover, some users report that you have to deactivate the
+        Working Key if it's activated.</para>
       </section>
 
       <section xml:id="payment-eway">
@@ -2862,6 +3014,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <listitem>
               <para>Leave blank to use "eWay" or type in a custom name to show
               to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
             </listitem>
           </varlistentry>
 
@@ -2982,6 +3144,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <variablelist>
           <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "uPay" or type in a custom name to show
+              to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Site ID</term>
 
             <listitem>
@@ -3050,6 +3231,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>The options you have with this plugin are:</para>
 
         <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "MoIP" or type in a custom name to show
+              to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
           <varlistentry>
             <term>Identification</term>
 
@@ -3127,6 +3327,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <variablelist>
           <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "DeltaPay" or type in a custom name to
+              show to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Merchant ID</term>
 
             <listitem>
@@ -3185,6 +3404,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>The options you have with this plugin are:</para>
 
         <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Google Checkout" or type in a custom
+              name to show to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
           <varlistentry>
             <term>Merchant ID</term>
 
@@ -3345,6 +3583,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
             <term>Store ID</term>
 
             <listitem>
@@ -3411,6 +3659,16 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <listitem>
               <para>Leave blank to use "PostFinance" or type in a custom name
               to show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
             </listitem>
           </varlistentry>
 
@@ -3667,7 +3925,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <option>Always online</option>.</para>
       </section>
 
-      <section xml:id="payment-googlecheckout">
+      <section xml:id="payment-pagseguro">
         <title>PagSeguro</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
@@ -3684,6 +3942,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>The options you have with this plugin are:</para>
 
         <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PagSeguro" or type in a custom name to
+              show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
           <varlistentry>
             <term>Merchant ID</term>
 
@@ -3712,13 +3989,163 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         PagSeguro. To add or edit your API callback URL, go to the settings
         page of PagSeguro. Setup the following URL:</para>
 
-        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=subscribe</uri></para>
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=pagseguro</uri></para>
 
         <para>Where www.example.com is the domain name of your site.</para>
 
         <para>For more information, please consult PagSeguro's <link
         xlink:href="https://pagseguro.uol.com.br/v2/guia-de-integracao/api-de-notificacoes.html">API
         notification instructions page</link>.</para>
+      </section>
+
+      <section xml:id="payment-verotel">
+        <title>Verotel</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Verotel</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the dutch Verotel FlexPay
+        payments service (https://www.verotel.com).</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Verotel" or type in a custom name to
+              show to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Shop ID</term>
+
+            <listitem>
+              <para>Your identification with Verotel. This is a numeric ID you
+              have to get from Verotel.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Key</term>
+
+            <listitem>
+              <para>This is the "signature key" Verotel sends you, a
+              verification code which ensures the security of the transactions
+              and helps Akeeba Subscriptions recognise and not process
+              fraudulent requests.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In your Verotel control center, please enable "FlexPay" (my
+        setup &gt; FlexPay options). You will also receive your "signature
+        key" which you must supply in the Key field of the plugin's
+        parameters.</para>
+
+        <para>Add the following URL as your "Postback script":</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=verotel</uri></para>
+
+        <para>where www.example.com must be replaced with the domain name of
+        your site.</para>
+
+        <para>In the "Success page" field please enter the URL of your site
+        where all visitors will be directed after their payment.
+        Unfortunately, Verotel doesn't allow for Akeeba Subscriptions'
+        customised per-level success messages. You will have to direct all
+        your customers to a generic page on your site, e.g. an article created
+        in Joomla!.</para>
+      </section>
+
+      <section xml:id="payment-rbkmoney">
+        <title>RBK Money</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - RBK Money</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Russian RBK Money payments
+        service (https://www.rbkmoney.com).</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "RBK Money" or type in a custom name to
+              show to your customer's, e.g. "Credit Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Shop ID</term>
+
+            <listitem>
+              <para>Your identification with RBK Money.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secret Key</term>
+
+            <listitem>
+              <para>This is the 32-character "secret key" you configure in RBK
+              Money ("Секретный ключ"), a verification code which ensures the
+              security of the transactions and helps Akeeba Subscriptions
+              recognise and not process fraudulent requests.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>The payment page language (English or Russian)</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In your RBK Money backend, please set the following URL as your
+        callback URL ("URL Оповещение о Переводе"):</para>
+
+        <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=rbkmoney</uri></para>
+
+        <para>where www.example.com must be replaced with the domain name of
+        your site.</para>
       </section>
     </section>
 
@@ -4221,15 +4648,15 @@ LEVEL3=Group 1</programlisting>
       </section>
 
       <section xml:id="integration-joomla">
-        <title>Joomla! 1.6 User Groups Integration</title>
+        <title>Joomla! User Groups Integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-        Subscriptions - Joomla! 1.6 Usergroups Integration</guilabel></para>
+        Subscriptions - Joomla! Usergroups Integration</guilabel></para>
 
         <para>This integration plugin allows you to add and remove users from
-        Joomla! 1.6 groups based on their subscription status. This allows you
-        to fully utilize Joomla! 1.6's built-in ACL capabilities on compatible
-        extensions.</para>
+        Joomla! 1.6 or later groups based on their subscription status. This
+        allows you to fully utilize Joomla! 1.6 or later's built-in ACL
+        capabilities on compatible extensions.</para>
 
         <para>Please note that this is a smart integration, exactly as
         described in the JUGA plugin earlier in this documentation; instead of
@@ -4577,8 +5004,7 @@ LEVEL3=Group 3</programlisting>
         NinjaBoard groups based on their subscription status. This allows you
         to control view/post/attachments access to your NinjaBoard forums
         based on a user's subscription status and can form the basis of a
-        commercial support forum, like the one we use at
-        AkeebaBackup.com.</para>
+        commercial support forum.</para>
 
         <para>Please note that this is a smart integration, exactly as
         described in the JUGA plugin earlier in this documentation; instead of
@@ -5313,6 +5739,223 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
           </listitem>
         </orderedlist>
       </section>
+
+      <section xml:id="integration-agora">
+        <title>Agora integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Agora Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        Agora Groups, with different Roles based on their subscription
+        status.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin in this documentation; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>Before we begin taking a look at the plugin options, please note
+        that Agora defines Groups and Role. Each user can belong to one or
+        more groups with a different Role, e.g. belong to Group One as a
+        Guest, Group Two as a Member, Group Three as a Moderator and Group
+        Four as an Administrator. Are you confused yet? Tell me about it...
+        Unfortunately, we have to follow the same inconvenient structure for
+        the plugin parameters. Each entry which can be assigned or removed
+        from the user's record can therefore consist of a Group, or a Group
+        and a Role. For example:</para>
+
+        <para><programlisting>My Group</programlisting>defines an entry which
+        only mentions a Group. The Role assigned to the user will be Member
+        (it's a hardcoded default).</para>
+
+        <programlisting>My Group/<replaceable>My Role</replaceable></programlisting>
+
+        <para>defines an entry which defines a Group and a Role.
+        <replaceable>My Role</replaceable> can be one of:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>None</term>
+
+            <listitem>
+              <para>The user will be removed from that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Guest</term>
+
+            <listitem>
+              <para>The user will become a Guest in that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Member</term>
+
+            <listitem>
+              <para>The user will become a Member in that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Moderator</term>
+
+            <listitem>
+              <para>The user will become a Moderator in that Group</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Admin</term>
+
+            <listitem>
+              <para>The user will become an Admin in that Group</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Sometimes you will have a conflict. For example, a user may have
+        two subscriptions. One subscriptions says that he should belong to
+        Group One as a Member. The other says he should belong to Group One as
+        a Moderator. In case of conflict, the highest Role wins. In our
+        example, the user would become a Moderator in that group.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Agora groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to Agora
+              groups. When a user has an active subscription to the specified
+              level, he'll be added to the Agora group/role mentioned on the
+              right hand of the equal sign. Each assignment is done like
+              this:</para>
+
+              <programlisting>LEVEL1=entry1,entry2,entry3</programlisting>
+
+              <para>Where entry1, entry2 and entry3 is a Group/Role entry as
+              described above.</para>
+
+              <para>If you want to assign multiple subscription levels to
+              multiple entries, you have to do something like that (separate
+              multiple lines with a single press of the ENTER key on your
+              keyboard):</para>
+
+              <programlisting>LEVEL1=entry1,entry2,entry3
+LEVEL2=entry2
+LEVEL3=entry4,entry1</programlisting>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Agora groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the Agora groups to remove a
+              user from when his subscription to the specified level is no
+              longer active. Do note that you can specify a different set of
+              groups to remove the user from than the ones you are adding him
+              to. For example:</para>
+
+              <programlisting>LEVEL1=entry1,entry2
+LEVEL2=entry2
+LEVEL3=entry1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-phocadownload">
+        <title>Phoca Download Integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Phoca Download Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        Phoca Download categories based on their subscription status. This
+        allows you to control who can access the downloads based on a user's
+        subscription status.</para>
+
+        <para>Please note that this is a smart integration, exactly as
+        described in the JUGA plugin earlier in this documentation; instead of
+        adding users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to Phoca Download groups</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to Phoca
+              Download categories. When a user has an active subscription to
+              the specified level, he'll be added to the Phoca Download
+              categories mentioned on the right hand of the equal sign. Each
+              assignment is done like this:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Group 1, Group 2 and Group 3 are the names of the Phoca Download
+              categories you want to add a user to when he subscribes. If you
+              want to assign multiple subscription levels to multiple
+              categories, you have to do something like that (separate
+              multiple lines with a single press of the ENTER key on your
+              keyboard):</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2,Group 3
+LEVEL2=Group 2
+LEVEL3=Group 4,Group 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels or
+              Phoca Download categories instead of their titles. However, we
+              consider working with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from Phoca Download groups</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the Phoca Download
+              categories to remove a user from when his subscription to the
+              specified level is no longer active. Do note that you can
+              specify a different set of categories to remove the user from
+              than the ones you are adding him to. For example:</para>
+
+              <programlisting>LEVEL1=Group 1,Group 2
+LEVEL2=Group 2
+LEVEL3=Group 1</programlisting>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>In this example, together with the rules displayed in "Add to
+        Phoca Download groups", when a subscription to the LEVEL1 level
+        expires, the user will still belong to Phoca Download category Group
+        3, as it's not removed from his account; only categories Group 1 and
+        Group 2 are removed. Likewise, if the user has an expired LEVEL1
+        subscription and an active LEVEL2 subscription he'll now belong to
+        categories Group 2 and Group 3: category Group 3 because it's not
+        removed when his subscription expires and category Group 2 because his
+        active LEVEL2 subscription suggests that he should be granted Group 2
+        access despite his expired LEVEL1 subscription.</para>
+
+        <para>If you find this hard to understand, join the club. ACLs are not
+        meant to be easy to setup or understand. It's a power feature and, as
+        such, poses a great difficulty to even the most seasoned web site
+        integrators. Take your time and experiment on a dev copy of your site
+        before going live.</para>
+      </section>
     </section>
 
     <section xml:id="plugins-other">
@@ -5608,7 +6251,7 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
         </tip>
       </section>
 
-      <section>
+      <section xml:id="plugin-aslink">
         <title>The Akeeba Subscriptions Link (aslink) plugin</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Content - Akeeba
@@ -5666,6 +6309,142 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
         <para>to create a link to the Subscription Levels view. This is
         usually quicker than creating a link to a menu item and remembering to
         change that link whenever your menu structure changes.</para>
+      </section>
+
+      <section xml:id="integration-agreetotos">
+        <title>Agree to Terms of Service</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Agree to Terms of Service</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.1</para>
+        </note>
+
+        <para>This plugin allows you to force your users to accept your Terms
+        of Service before being able to subscribe, a requirement with many
+        payment processors. All you have to do is to enable this plugin and
+        supply a TOS URL. Unless the user indicates that he accepts the terms
+        of service, he won't be able to complete the subscription.</para>
+
+        <tip>
+          <para>If you want to change the relative position of this field to
+          other custom field plugins, you can use the plugin order in
+          Joomla!'s Manage Plugins page</para>
+        </tip>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Terms of Service URL</term>
+
+            <listitem>
+              <para>The URL to the Terms of Service document. A link to this
+              document will be displayed in the subscription page.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-ageverification">
+        <title>Age verification</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Age verification</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.1</para>
+        </note>
+
+        <para>This plugin allows you to force your users to verify that their
+        age i above a certain (configurable) limit before being able to
+        subscribe, a requirement for many sites which can not provide services
+        to minors. All you have to do is to enable this plugin and supply the
+        minimum age. Unless the user indicates that he/she is over that age,
+        he/she won't be able to complete the subscription.</para>
+
+        <tip>
+          <para>If you want to change the relative position of this field to
+          other custom field plugins, you can use the plugin order in
+          Joomla!'s Manage Plugins page</para>
+        </tip>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Minimum age</term>
+
+            <listitem>
+              <para>The minimum age the user has to confirm before being able
+              to subscribe.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-iplogger">
+        <title>IP Logger</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - IP Logger</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.1</para>
+        </note>
+
+        <para>This plugin allows you to log the IP address your user was using
+        during his latest sign-up attempt. In order to view it, please go to
+        the Users page of Akeeba Subscriptions and click on the user name. The
+        IP address will be displayed in the custom fields area.</para>
+
+        <para>The plugin has no options.</para>
+      </section>
+
+      <section xml:id="integration-recaptcha">
+        <title>ReCAPTCHA integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - ReCAPTCHA integration</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.1</para>
+        </note>
+
+        <para>This plugin allows you to have your users fill in a CAPTCHA
+        before they can subscribe to your site. This is a good measure to
+        prevent automated/bulk registrations, especially if you offer free or
+        trial subscriptions. The CAPTCHA is provided by <link
+        xlink:href="http://www.ReCAPTCHA.net">ReCAPTCHA.net</link>. You will
+        need to have created a ReCAPTCHA account before using this
+        plugin.</para>
+
+        <tip>
+          <para>If you want to change the relative position of this field to
+          other custom field plugins, you can use the plugin order in
+          Joomla!'s Manage Plugins page</para>
+        </tip>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Public key</term>
+
+            <listitem>
+              <para>Your ReCAPTCHA public key</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Private key</term>
+
+            <listitem>
+              <para>Your ReCAPTCHA private key</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
     </section>
   </chapter>

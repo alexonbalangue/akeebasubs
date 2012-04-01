@@ -39,6 +39,7 @@ $config = array(
 		'limit'		=> 0,
 		'limitstart'=> 0,
 		'no_clear'	=> true,
+		'only_once'	=> true,
 		'task'		=> 'browse',
 		'filter_order' => 'ordering',
 		'filter_order_Dir' => 'ASC',

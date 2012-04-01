@@ -79,7 +79,7 @@ $subIDs = array_unique($subIDs);
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
 				
-				$canRenew = true;
+				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
 				$level = $allLevels[$subscription->akeebasubs_level_id];
 				if($level->only_once) {
 					if(in_array($subscription->akeebasubs_level_id,$subIDs)) {
@@ -101,14 +101,14 @@ $subIDs = array_unique($subIDs);
 					<?php if(empty($subscription->publish_up) || ($subscription->publish_up == '0000-00-00 00:00:00')):?>
 					&mdash;
 					<?php else:?>
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up, '%Y-%m-%d %H:%M') ?>
+					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up) ?>
 					<?php endif;?>
 				</td>
 				<td>
 					<?php if(empty($subscription->publish_up) || ($subscription->publish_down == '0000-00-00 00:00:00')):?>
 					&mdash;
 					<?php else:?>
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down, '%Y-%m-%d %H:%M') ?>
+					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down) ?>
 					<?php endif;?>
 				</td>
 				<td align="center">

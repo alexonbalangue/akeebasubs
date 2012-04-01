@@ -33,6 +33,7 @@ class AkeebasubsHelperMessage
 		
 		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
 		foreach((array)($sub->getData()) as $k => $v) {
+			if(is_array($v) || is_object($v)) continue;
 			if(substr($k,0,1) == '_') continue;
 			if($k == 'akeebasubs_subscription_id') $k = 'id';
 			$tag = '[SUB:'.strtoupper($k).']';

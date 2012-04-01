@@ -53,6 +53,31 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>				
 		</param>
+		<param name="showrenew" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>				
+		</param>
+		<param name="useppimages" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_DESC">
+			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_DROPDOWN</option>
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEONLY</option>				
+			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEANDTEXT</option>				
+		</param>
+		<param name="dateformat" type="text"
+			default="%Y-%m-%d %H:%M"
+			size="30"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
+		/>
+		<param name="viesmethod" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_DESC">
+			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_REST</option>
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_SOAP</option>
+		</param>
 	</params>
 	
 	<fieldset name="currency" label="COM_AKEEBASUBS_CONFIG_CURRENCY_TITLE">
@@ -109,6 +134,31 @@
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>				
+		</field>
+		<field name="showrenew" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>				
+		</field >
+		<field name="useppimages" type="radio" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_DESC">
+			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_DROPDOWN</option>
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEONLY</option>				
+			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEANDTEXT</option>				
+		</field>
+		<field name="dateformat" type="text"
+			default="%Y-%m-%d %H:%M"
+			size="30"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
+		/>
+		<field name="viesmethod" type="radio" default="0"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_DESC">
+			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_REST</option>
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_SOAP</option>
 		</field>
 	</fieldset>
 	

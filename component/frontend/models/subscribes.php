@@ -353,48 +353,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$mustCheck = ($catchRules < 2) && ($catchRules > 0);
 			
 				if($mustCheck) {
-					// Validate VAT number
-					$vat = trim(strtoupper($state->vatnumber));
-					$country = ($state->country == 'GR') ? 'EL' : $state->country;
-					// (remove the country prefix if present)
-					if(substr($vat,0,2) == $country) $vat = trim(substr($vat,2));
-					
-					$url = 'http://isvat.appspot.com/'.$country.'/'.$vat.'/';
-					
-					// Is the validation already cached?
-					$key = $country.$vat;
-					$ret['vatnumber'] = null;
-					if(array_key_exists('vat', $this->_cache)) {
-						if(array_key_exists($key, $this->_cache['vat'])) {
-							$ret['vatnumber'] = $this->_cache['vat'][$key];
-						}
-					}				
-					
-					if(is_null($ret['vatnumber']))
-					{
-						$res = @file_get_contents($url);
-						if($res === false) {
-							$ch = curl_init($url);
-							curl_setopt($ch, CURLOPT_HEADER, 0);
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-							$res = @curl_exec($ch);
-						}
-		
-						if($res !== false) {
-							$res = @json_decode($res);
-						}
-						
-						$ret['vatnumber'] = $res === true;
-						
-						if(!array_key_exists('vat', $this->_cache)) {
-							$this->_cache['vat'] = array();
-						}
-						$this->_cache['vat'][$key] = $ret['vatnumber'];
-						$encodedCacheData = json_encode($this->_cache);
-						
-						$session = JFactory::getSession();
-						$session->set('validation_cache_data', $encodedCacheData, 'com_akeebasubs');
-					}
+					$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
 					$ret['novatrequired'] = false;
 				} else {
 					$ret['novatrequired'] = true;
@@ -480,7 +439,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Get the applicable tax rule
 		$taxRule = $this->_getTaxRule();		
-		
+				
 		return (object)array(
 			'net'		=> sprintf('%1.02f',$netPrice),
 			'discount'	=> sprintf('%1.02f',$discount),
@@ -614,6 +573,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 	private function _getAutoDiscount()
 	{
 		$state = $this->getStateVariables();
+		
+		// Get the id from the slug if it's not present
+		if($state->slug && empty($state->id)) {
+			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			 if(!empty($list)) {
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			 } else {
+				$state->id = 0;
+			 }
+		}
 		
 		// Check that we do have a user (if there's no logged in user, we have
 		// no subscription information, ergo upgrades are not applicable!)
@@ -985,6 +957,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$thisUser = array_pop($list);
 			$id = $thisUser->akeebasubs_user_id;
 		}
+		
 		$data = array(
 			'akeebasubs_user_id' => $id,
 			'user_id'		=> $user->id,
@@ -1001,8 +974,29 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'state'			=> $state->state,
 			'zip'			=> $state->zip,
 			'country'		=> $state->country,
-			'params'		=> json_encode($state->custom)
+			'params'		=> $state->custom
 		);
+		
+		// Allow plugins to post-process the fields
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKSignupUserSave', array((object)$data));
+		if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $pResponse) {
+			if(!is_array($pResponse)) continue;
+			if(empty($pResponse)) continue;
+			if(array_key_exists('params', $pResponse)) {
+				if(!empty($pResponse['params'])) foreach($pResponse['params'] as $k => $v) {
+					$data['params'][$k] = $v;
+				}
+				unset($pResponse['params']);
+			}
+			$data = array_merge($data, $pResponse);
+		}
+		
+		// Serialize custom fields
+		$data['params'] = json_encode($data['params']);
+		
 		FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->setId($id)
 			->getItem()
@@ -1360,5 +1354,69 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 		}
 		return true;
+	}
+	
+	private function isVIESValidVAT($country, $vat)
+	{
+		// Validate VAT number
+		$vat = trim(strtoupper($vat));
+		$country = $country == 'GR' ? 'EL' : $country;
+		// (remove the country prefix if present)
+		if(substr($vat,0,2) == $country) $vat = trim(substr($vat,2));
+
+		// Is the validation already cached?
+		$key = $country.$vat;
+		$ret = null;
+		if(array_key_exists('vat', $this->_cache)) {
+			if(array_key_exists($key, $this->_cache['vat'])) {
+				$ret = $this->_cache['vat'][$key];
+			}
+		}
+		
+		if(!is_null($ret)) return $ret;
+		
+		if(AkeebasubsHelperCparams::getParam('viesmethod',0)) {
+			// Using the RESTful API
+			
+			$url = 'http://isvat.appspot.com/'.$country.'/'.$vat.'/';
+
+			$res = @file_get_contents($url);
+			if($res === false) {
+				$ch = curl_init($url);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				$res = @curl_exec($ch);
+			}
+
+			if($res !== false) {
+				$res = @json_decode($res);
+			}
+
+			$ret = $res === true;
+		} else {
+			// Using the SOAP API
+			// Code credits: Angel Melguiz / KMELWEBDESIGN SLNE (www.kmelwebdesign.com)
+			$sClient = new SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl');
+			$params = array('countryCode'=>$country,'vatNumber'=>$vat);
+			$response = $sClient->checkVat($params);
+			if ($response->valid) {
+				$ret = true;
+			}else{
+				$ret = false;
+			}
+		}
+
+		// Cache the result
+		if(!array_key_exists('vat', $this->_cache)) {
+			$this->_cache['vat'] = array();
+		}
+		$this->_cache['vat'][$key] = $ret;
+		$encodedCacheData = json_encode($this->_cache);
+
+		$session = JFactory::getSession();
+		$session->set('validation_cache_data', $encodedCacheData, 'com_akeebasubs');
+		
+		// Return the result
+		return $ret;
 	}
 }

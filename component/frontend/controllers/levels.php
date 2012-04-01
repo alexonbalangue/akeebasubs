@@ -114,7 +114,8 @@ class AkeebasubsControllerLevels extends FOFController
 		
 		// Load any cached user supplied information
 		$vModel = FOFModel::getAnInstance('Subscribes','AkeebasubsModel')
-			->slug($slug);
+			->slug($slug)
+			->id($id);
 		$cache = (array)($vModel->getData());
 		if($cache['firstrun']) {
 			foreach($cache as $k => $v) {

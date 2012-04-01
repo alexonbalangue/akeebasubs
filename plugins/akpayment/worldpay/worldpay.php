@@ -40,6 +40,10 @@ class plgAkpaymentWorldpay extends JPlugin
 			'name'		=> $this->ppName,
 			'title'		=> $title
 		);
+		$ret['image'] = trim($this->params->get('ppimage',''));
+		if(empty($ret['image'])) {
+			$ret['image'] = 'https://www.worldpay.com/images/poweredByWorldPay.gif';
+		}
 		return (object)$ret;
 	}
 	

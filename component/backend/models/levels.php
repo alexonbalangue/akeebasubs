@@ -33,6 +33,11 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->nameQuote('slug').' = '.$db->quote($slug));
 		}
 		
+		$title = $this->getState('title',null);
+		if($title) {
+			$query->where($db->nameQuote('title').' = '.$db->quote($title));
+		}
+		
 		$only_once = $this->getState('only_once', null);
 		$user = JFactory::getUser();
 		if($only_once && $user->id) {

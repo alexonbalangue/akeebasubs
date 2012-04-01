@@ -27,4 +27,5 @@ modules/site/*/language/en-GB
 plugins/*/*/language/en-GB
 component/language/backend
 component/language/frontend
+modules/admin/akeebasubs/language/en-GB
 

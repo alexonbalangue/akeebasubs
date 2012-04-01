@@ -1,4 +1,24 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.1.2
+================================================================================
++ You can reload stats graphs using an arbitrary starting date in the backend
++ Choose between RESTful (more compatible) or SOAP (more accurate) API for VIES check
+# The asrestricted plugin would show limited content to people with cancelled/incomplete subscriptions
+# The default payment option would not be selected when using the image list
+# Automatic discounts don't work under some circumstances
+# The aslink plugin would produce invalid links (missing Itemid) under Joomla! 2.5 (thanks Daniel!)
+
+Akeeba Subscriptions 2.1.1
+================================================================================
++ Image support in payment method selection
++ Customisable invoice description for the ccInvoices integration
+# You can not subscribe when not using SEF URLs. Oops.
+# Clicking on the Terms of Service link in the Agree to TOS plugin causes the main window to go blank, displaying [object Object] on non-WebKit browsers
+# The Users page should not have Publish/Unpublish buttons
+# The None payment plugin would redirect to the a page throwing a 404 error when using Joomla! 1.7/2.5's multilingual feature and SEF URLs.
+# The default values for custom fields were not remembered when making a new subscription
+# The "List subscription levels" module would show the Forbid Renewal levels even if the user is not supposed to access them again
+
 Akeeba Subscriptions 2.1
 ================================================================================
 + #54 Trial subscriptions (subscription levels you can only subscribe to once)
@@ -15,6 +35,13 @@ Akeeba Subscriptions 2.1
 + #24 Recurring subscriptions (only with PayPal right now)
 + Total active subscribers and subscriptions in the Control Panel page
 + Email address validation by retyping it (thank you, Maurice, for the suggestion!)
++ "Agree to Terms of Service" custom field plugin
++ "Age verification" custom field plugin
++ "IP logging" plugin, allows you to record the IP address the user subscribed from
++ ReCAPTCHA integration
++ You can now chose if you want the Renew link to appear or not in the subscriptions list
++ #44 Customisable date format
++ #10 Add/remove to Agora groups (integration with the Agora forum)
 ~ Reimplemented the 2Checkout plugin, using the INS API (more stable)
 # You had to log out to subscribe to a different level than the one you're already subscribed to
 # Use of $kuser->address instead of $kuser->address1 in payment plugins (thanks, Sander!)
@@ -31,6 +58,8 @@ Akeeba Subscriptions 2.1
 # Various bugs in the WorldPay plugin
 # The messages view in the frontend would also log in blocked users
 # Content plugins were not being triggered in the order completion/cancellation pages
+# Javascript errors in the User view in the backend
+# Duplicate level titles were being allowed
 
 Akeeba Subscriptions 2.0.1
 ================================================================================
