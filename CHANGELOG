@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.1.2
 # The default payment option would not be selected when using the image list
 # Automatic discounts don't work under some circumstances
 # The aslink plugin would produce invalid links (missing Itemid) under Joomla! 2.5 (thanks Daniel!)
+# Nooku Framework's plugin was removed during uninstallation, even though it's no longer installed or used by Akeeba Subscriptions
 
 Akeeba Subscriptions 2.1.1
 ================================================================================

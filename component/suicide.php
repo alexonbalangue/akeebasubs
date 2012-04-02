@@ -95,7 +95,6 @@ $installation_queue = array(
 			'asrestricted'			=> 1
 		),
 		'system' => array(
-			'koowa'					=> 1,
 			'asexpirationcontrol'	=> 1,
 			'asexpirationnotify'	=> 1
 		)
