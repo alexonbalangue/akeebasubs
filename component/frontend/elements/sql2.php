@@ -47,7 +47,7 @@ class ASElementSQL2 extends ASElementBase
 	
 	function getInput()
 	{
-		$db			= & JFactory::getDBO();
+		$db			= JFactory::getDBO();
 		$db->setQuery($this->element['query']);
 		$key = ($this->element['key_field'] ? $this->element['key_field']->data() : 'value');
 		$val = ($this->element['value_field'] ? $this->element['value_field']->data() : $this->name);
