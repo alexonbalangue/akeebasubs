@@ -3631,6 +3631,124 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </variablelist>
       </section>
 
+      <section xml:id="payment-skrill">
+        <title>Skrill</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Skrill (Moneybookers)</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Skrill (formerly:
+        Moneybookers) payment processor. Please note that you need to have a
+        Merchant Account at Skrill for this plugin to work. The options you
+        have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Skrill" or type in a custom name to
+              show to your customer's, e.g. "Skrill, bank account or Credit
+              Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>Your Skrill email address</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secure POST</term>
+
+            <listitem>
+              <para>If enabled, the verification postback to PayPal will be
+              over an SSL connection. In order for this to work, your host
+              needs to support SSL connections using cURL to PayPal's IP
+              address block.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secret Word</term>
+
+            <listitem>
+              <para>The Secret Word you have defined in the Merchant Tools of
+              your Skrill account. This is used to check transactions against
+              potential fraud and is never transmitted over the
+              network.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Company text</term>
+
+            <listitem>
+              <para>The company name to be displayed in Skrill's payment page,
+              maximum 30 characters</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>(optional) The language the Skrill payment page will be
+              in.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Confirmation Note</term>
+
+            <listitem>
+              <para>A short notice (up to 240 characters) which is shown to
+              your users after they've finished paying and before they are
+              redirected back to your site.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Custom Logo Image</term>
+
+            <listitem>
+              <para>(optional) The URL to an image to be shown on the top of
+              Skrill's checkout page header. It'd better be hosted on an HTTPS
+              URL, otherwise your customers will get a warning about insecure
+              content on their browser.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Test mode</term>
+
+            <listitem>
+              <para>When enabled, all transaction are performed against the
+              test gateway (no money changes hands). Please note that you MUST
+              specifically ask Skrill to also enable that feature on your
+              account and provide you with a test merchant and a test user to
+              use during your testing.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
       <section xml:id="payment-postfinancech">
         <title>PostFinance.ch</title>
 
