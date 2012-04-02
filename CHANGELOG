@@ -9,6 +9,7 @@ Akeeba Subscriptions 2.1.2
 # The aslink plugin would produce invalid links (missing Itemid) under Joomla! 2.5 (thanks Daniel!)
 # Nooku Framework's plugin was removed during uninstallation, even though it's no longer installed or used by Akeeba Subscriptions
 # Wrong redirect in login when the site is in a subdirectory
+# Skrill payment notifications would never succeed due to a typo
 
 Akeeba Subscriptions 2.1.1
 ================================================================================
