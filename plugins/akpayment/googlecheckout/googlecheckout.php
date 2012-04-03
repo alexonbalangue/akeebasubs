@@ -122,7 +122,7 @@ class plgAkpaymentGooglecheckout extends JPlugin
 		$totalTax = $subscription->tax_amount;
 		
 		// Apply tax rules
-		$tax_rule = new GoogleDefaultTaxRule($subscription->tax_percent);
+		$tax_rule = new GoogleDefaultTaxRule($subscription->tax_percent / 100);
 	    $tax_rule->SetWorldArea(true);
 	    $cart->AddDefaultTaxRules($tax_rule);
 		

@@ -10,6 +10,7 @@ Akeeba Subscriptions 2.1.2
 # Nooku Framework's plugin was removed during uninstallation, even though it's no longer installed or used by Akeeba Subscriptions
 # Wrong redirect in login when the site is in a subdirectory
 # Skrill payment notifications would never succeed due to a typo
+# Google Checkout: wrong amount in checkout when using tax rules.
 
 Akeeba Subscriptions 2.1.1
 ================================================================================
