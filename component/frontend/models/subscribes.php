@@ -1375,7 +1375,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		if(!is_null($ret)) return $ret;
 		
-		if(AkeebasubsHelperCparams::getParam('viesmethod',0)) {
+		if(empty($vat)) {
+			$ret = false;
+		} elseif(AkeebasubsHelperCparams::getParam('viesmethod',0)) {
 			// Using the RESTful API
 			
 			$url = 'http://isvat.appspot.com/'.$country.'/'.$vat.'/';
