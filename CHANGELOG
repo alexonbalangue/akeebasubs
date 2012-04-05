@@ -3,6 +3,7 @@ Akeeba Subscriptions 2.1.2
 ================================================================================
 + You can reload stats graphs using an arbitrary starting date in the backend
 + Choose between RESTful (more compatible) or SOAP (more accurate) API for VIES check
+~ Improved Agora integration, now supports Agora Pro (version 4) as well
 # The asrestricted plugin would show limited content to people with cancelled/incomplete subscriptions
 # The default payment option would not be selected when using the image list
 # Automatic discounts don't work under some circumstances

@@ -5986,6 +5986,30 @@ LEVEL2=entry2
 LEVEL3=entry1</programlisting>
             </listitem>
           </varlistentry>
+
+          <varlistentry>
+            <term>Spare admins from removal?</term>
+
+            <listitem>
+              <para>If enabled, users with Admin role will not be removed,
+              i.e. the "Remove from Agora groups" rules won't apply to
+              them</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Agora Version Installed</term>
+
+            <listitem>
+              <para>Select which version of Agora you have installed. Choose 3
+              if you have Agora 3 installed. Choose 4 If you have Agora Pro
+              (at the time of this writing it's version 4) installed. The
+              difference between the two is that they use different table
+              names. Using the wrong Agora version will result in no changes
+              taking place in Agora after a subscription is
+              enabled/disabled.</para>
+            </listitem>
+          </varlistentry>
         </variablelist>
       </section>
 
