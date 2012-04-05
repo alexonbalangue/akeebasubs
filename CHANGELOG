@@ -12,6 +12,7 @@ Akeeba Subscriptions 2.1.2
 # Wrong redirect in login when the site is in a subdirectory
 # Skrill payment notifications would never succeed due to a typo
 # Google Checkout: wrong amount in checkout when using tax rules.
+# Plugins would send a URL with /administrator/ in it if they were fired from the back-end of your site and your site was in a subdirectory (not the root) of its domain
 
 Akeeba Subscriptions 2.1.1
 ================================================================================
