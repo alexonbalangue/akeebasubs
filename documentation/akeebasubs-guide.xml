@@ -2465,7 +2465,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               <para>When enabled, transactions are processed by PayPal
               Sandbox, i.e. PayPal's testing mode. This is designed for
               integration tests, BEFORE going live with your site. <emphasis
-              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU NOT
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
               ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
               AND/OR CUSTOMERS.</emphasis></para>
             </listitem>
