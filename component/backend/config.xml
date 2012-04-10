@@ -72,12 +72,6 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
 		/>
-		<param name="viesmethod" type="radio" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_LABEL"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_DESC">
-			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_REST</option>
-			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_SOAP</option>
-		</param>
 	</params>
 	
 	<fieldset name="currency" label="COM_AKEEBASUBS_CONFIG_CURRENCY_TITLE">
@@ -154,12 +148,6 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
 		/>
-		<field name="viesmethod" type="radio" default="0"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_LABEL"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_DESC">
-			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_REST</option>
-			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_VIESMETHOD_SOAP</option>
-		</field>
 	</fieldset>
 	
 	<fieldset

@@ -1377,24 +1377,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		if(empty($vat)) {
 			$ret = false;
-		} elseif(AkeebasubsHelperCparams::getParam('viesmethod',0)) {
-			// Using the RESTful API
-			
-			$url = 'http://isvat.appspot.com/'.$country.'/'.$vat.'/';
-
-			$res = @file_get_contents($url);
-			if($res === false) {
-				$ch = curl_init($url);
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				$res = @curl_exec($ch);
-			}
-
-			if($res !== false) {
-				$res = @json_decode($res);
-			}
-
-			$ret = $res === true;
 		} else {
 			// Using the SOAP API
 			// Code credits: Angel Melguiz / KMELWEBDESIGN SLNE (www.kmelwebdesign.com)

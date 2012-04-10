@@ -926,40 +926,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             http://www.php.net/manual/en/function.date.php</para>
           </listitem>
         </varlistentry>
-
-        <varlistentry>
-          <term>VIES Validation API</term>
-
-          <listitem>
-            <para>Select which VIES validation API to use. This is only used
-            when you have tax rules based on the VIES validation for VAT
-            numbers, something you only need if your business is based in a
-            European country or you have an EU VAT ID. The two options
-            are:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>RESTful API. This is the default option and what was
-                used in previous versions of Akeeba Subscriptions. This is
-                compatible with virtually all versions of PHP, but is known to
-                produce inaccurate results for some VAT numbers, especially
-                those from Spain.</para>
-              </listitem>
-
-              <listitem>
-                <para>SOAP API. This option tells Akeeba Subscriptions to use
-                the official SOAP API of the European Union's VIES portal. The
-                results are always accurate (as long as the VIES portal is not
-                down) but it requires that you have the SOAP PHP extension
-                activated. Most hosts with modern PHP versions do have this.
-                Some older hosts might not have this and end up throwing
-                errors or a blank page.</para>
-              </listitem>
-            </itemizedlist>
-
-            <para>If unsure, the safest choice is the RESTful API.</para>
-          </listitem>
-        </varlistentry>
       </variablelist>
 
       <para><guilabel>Permissions</guilabel> (Joomla! 1.6 or later
