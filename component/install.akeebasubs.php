@@ -575,7 +575,7 @@ $akeeba_installation_has_run = true;
 			<td class="key"><?php echo empty($module['client']) ? 'site' : $module['client']; ?></td>
 			<td>
 				<span style="color: <?php echo ($module['result'])?'green':'red'?>; font-weight: bold;">
-					<?php ($module['result'])?'Installed':'Not Installed'; ?>
+					<?php echo ($module['result'])?'Installed':'Not Installed'; ?>
 				</span>
 			</td>
 		</tr>
@@ -593,7 +593,7 @@ $akeeba_installation_has_run = true;
 			<td class="key"><?php echo ucfirst($plugin['group']); ?></td>
 			<td>
 				<span style="color: <?php echo ($plugin['result'])?'green':'red'?>; font-weight: bold;">
-					<?php ($plugin['result'])?'Installed':'Not Installed'; ?>
+					<?php echo ($plugin['result'])?'Installed':'Not Installed'; ?>
 				</span>
 			</td>
 		</tr>
