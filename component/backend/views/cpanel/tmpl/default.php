@@ -28,6 +28,7 @@ $this->loadHelper('cparams');
 				echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since((gmdate('Y')-1).'-01-01 00:00:00')
 					->until((gmdate('Y')-1).'-12-31 23:59:59')
+					->nozero(1)
 					->paystate('C')
 					->getTotal();
 			?>
@@ -41,6 +42,7 @@ $this->loadHelper('cparams');
 					->since((gmdate('Y')-1).'-01-01')
 					->until((gmdate('Y')-1).'-12-31 23:59:59')
 					->moneysum(1)
+					->nozero(1)
 					->paystate('C')
 					->getTotal()
 			)?>
@@ -55,6 +57,7 @@ $this->loadHelper('cparams');
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-01-01')
 					->until(gmdate('Y').'-12-31 23:59:59')
+					->nozero(1)
 					->paystate('C')
 					->getTotal()
 				?>
@@ -68,6 +71,7 @@ $this->loadHelper('cparams');
 						->since(gmdate('Y').'-01-01')
 						->until(gmdate('Y').'-12-31 23:59:59')
 						->moneysum(1)
+						->nozero(1)
 						->paystate('C')
 						->getTotal()
 				)?>
@@ -106,6 +110,7 @@ $this->loadHelper('cparams');
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since($y.'-'.$m.'-01')
 					->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
+					->nozero(1)
 					->paystate('C')
 					->getTotal()
 				?>
@@ -119,6 +124,7 @@ $this->loadHelper('cparams');
 						->since($y.'-'.$m.'-01')
 						->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 						->moneysum(1)
+						->nozero(1)
 						->paystate('C')
 						->getTotal()
 				)?>
@@ -149,6 +155,7 @@ $this->loadHelper('cparams');
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-'.gmdate('m').'-01')
 					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+					->nozero(1)
 					->paystate('C')
 					->getTotal()
 				?>
@@ -162,6 +169,7 @@ $this->loadHelper('cparams');
 						->since(gmdate('Y').'-'.gmdate('m').'-01')
 						->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 						->moneysum(1)
+						->nozero(1)
 						->paystate('C')
 						->getTotal()
 				)?>
@@ -176,6 +184,7 @@ $this->loadHelper('cparams');
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since( gmdate('Y-m-d', time()-7*24*3600) )
 					->until( gmdate('Y-m-d') )
+					->nozero(1)
 					->paystate('C')
 					->getTotal()
 				?>
@@ -189,6 +198,7 @@ $this->loadHelper('cparams');
 						->since( gmdate('Y-m-d', time()-7*24*3600) )
 						->until( gmdate('Y-m-d') )
 						->moneysum(1)
+						->nozero(1)
 						->paystate('C')
 						->getTotal()
 				)?>
@@ -210,6 +220,7 @@ $this->loadHelper('cparams');
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since( $yesterday )
 					->until( $date->format("Y-m-d") )
+					->nozero(1)
 					->paystate('C')
 					->getTotal()
 				?>
@@ -223,6 +234,7 @@ $this->loadHelper('cparams');
 						->since( $yesterday )
 						->until( $date->format("Y-m-d") )
 						->moneysum(1)
+						->nozero(1)
 						->paystate('C')
 						->getTotal()
 				)?>
@@ -242,6 +254,7 @@ $this->loadHelper('cparams');
 				<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since( $date->format("Y-m-d") )
 					->until( $expiry->format("Y-m-d") )
+					->nozero(1)
 					->paystate('C')
 					->getTotal()
 				?>
@@ -256,6 +269,7 @@ $this->loadHelper('cparams');
 					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->since( $date->format("Y-m-d") )
 						->until( $expiry->format("Y-m-d") )
+						->nozero(1)
 						->paystate('C')
 						->moneysum(1)
 						->getTotal()
@@ -287,6 +301,7 @@ $this->loadHelper('cparams');
 				$numsubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->since(gmdate('Y').'-'.gmdate('m').'-01')
 					->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+					->nozero(1)
 					->paystate('C')
 					->getTotal();
 				$summoney = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')

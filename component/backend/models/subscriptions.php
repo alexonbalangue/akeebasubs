@@ -35,7 +35,8 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'moneysum'		=> $this->getState('moneysum',null,'int'),
 			'coupon_id'		=> $this->getState('coupon_id',null,'int'),
 			'filter_discountmode' => $this->getState('filter_discountmode',null,'cmd'),
-			'filter_discountcode' => $this->getState('filter_discountcode',null,'cmd')
+			'filter_discountcode' => $this->getState('filter_discountcode',null,'cmd'),
+			'nozero'		=> $this->getState('nozero',null,'int'),
 		);
 	}
 	
@@ -505,6 +506,14 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			$query->where(
 				$db->nameQuote('tbl').'.'.$db->nameQuote('publish_down').' <= '.
 					$db->quote($to)
+			);
+		}
+		
+		// No-zero toggle
+		if(!empty($state->nozero)) {
+			$query->where(
+				$db->nameQuote('tbl').'.'.$db->nameQuote('net_amount').' > '.
+					$db->quote('0')
 			);
 		}
 	}
