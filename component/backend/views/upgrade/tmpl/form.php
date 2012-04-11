@@ -63,7 +63,7 @@ $this->loadHelper('format');
 		<div class="akeebasubs-clear"></div>
 
 		<label for="type_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_TYPE'); ?></label>
-		<?php echo AkeebasubsHelperSelect::coupontypes('type', $this->item->type) ?>
+		<?php echo AkeebasubsHelperSelect::upgradetypes('type', $this->item->type) ?>
 		<div class="akeebasubs-clear"></div>
 		
 		<label for="value_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_VALUE'); ?></label>

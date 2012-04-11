@@ -448,4 +448,18 @@ class AkeebasubsHelperSelect
 		
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
+	
+	/**
+	 * Drop down list of upgrade types
+	 */
+	public static function upgradetypes($name = 'type', $selected = 'value', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','value',JText::_('COM_AKEEBASUBS_UPGRADE_TYPE_VALUE'));
+		$options[] = JHTML::_('select.option','percent',JText::_('COM_AKEEBASUBS_UPGRADE_TYPE_PERCENT'));
+		$options[] = JHTML::_('select.option','lastpercent',JText::_('COM_AKEEBASUBS_UPGRADE_TYPE_LASTPERCENT'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 }

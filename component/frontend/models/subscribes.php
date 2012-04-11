@@ -627,11 +627,30 @@ class AkeebasubsModelSubscribes extends FOFModel
 		jimport('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
+		
+		$subPayments = array();
+		
 		foreach($subscriptions as $subscription) {
 			$jFrom = new JDate($subscription->publish_up);
 			$uFrom = $jFrom->toUnix();
 			$presence = $uNow - $uFrom;
 			$subs[$subscription->akeebasubs_level_id] = $presence;
+			
+			$jOn = new JDate($subscription->created_on);
+			if(!array_key_exists($subscription->akeebasubs_level_id, $subPayments)) {
+				$subPayments[$subscription->akeebasubs_level_id] = array(
+					'value'		=> $subscription->net_amount,
+					'on'		=> $jOn->toUnix(),
+				);
+			} else {
+				$oldOn = $subPayments[$subscription->akeebasubs_level_id]['on'];
+				if($oldOn < $jOn->toUnix()) {
+					$subPayments[$subscription->akeebasubs_level_id] = array(
+						'value'		=> $subscription->net_amount,
+						'on'		=> $jOn->toUnix(),
+					);
+				}
+			}
 		}
 		
 		// Get the current subscription level's net worth
@@ -663,6 +682,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 					
 				case 'percent':
 					$newDiscount = $net * (float)$rule->value / 100.00;
+					if($newDiscount > $discount) {
+						$discount = $newDiscount;
+						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					}
+					break;
+				
+				case 'lastpercent':
+					if(!array_key_exists($rule->from_id, $subPayments)) {
+						$lastNet = 0.00;
+					} else {
+						$lastNet = $subPayments[$rule->from_id]['value'];
+					}
+					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
 					if($newDiscount > $discount) {
 						$discount = $newDiscount;
 						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;

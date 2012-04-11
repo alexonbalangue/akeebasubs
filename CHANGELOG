@@ -1,7 +1,10 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.1.2
+Akeeba Subscriptions 2.2
 ================================================================================
 + You can reload stats graphs using an arbitrary starting date in the backend
++ New upgrade type, % of last payment (% of net_amount)
++ New payment plugin: RBKMoney (experimental)
++ New payment plugin: Verotel (experimental)
 ~ Now using the official SOAP API for VIES VAT validation, since the isvat.appspot.com RESTful API died in April 2012
 ~ Improved Agora integration, now supports Agora Pro (version 4) as well
 # The asrestricted plugin would show limited content to people with cancelled/incomplete subscriptions

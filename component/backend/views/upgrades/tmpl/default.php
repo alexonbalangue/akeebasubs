@@ -142,7 +142,7 @@ $this->loadHelper('format');
 				<?php endif; ?>
 				</span>
 				<?php else: ?>
-				<span class="akeebasubs-coupon-discount-percent">
+				<span class="akeebasubs-coupon-discount-percent<?php if($upgrade->type == 'lastpercent'): ?> akeebasubs-coupon-discount-lastpercent<?php endif; ?>">
 				<?php echo sprintf('%2.2f', (float)$upgrade->value) ?> %
 				</span>
 				<?php endif; ?>

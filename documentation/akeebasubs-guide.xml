@@ -1739,6 +1739,13 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             subtracted from the price. If its Percent, then the Value field
             contains a percentage, e.g. if you type a value of 20 then a 20%
             discount will be applied to the price.</para>
+
+            <para>A special type, available since version 2.2, is the "Percent
+            of last payment". When this option is selected, Akeeba
+            Subscriptions looks for the paid amount in the user's latest
+            subscription in the "From level" subscription level and applies
+            the percentage on that amount (which may be different from the
+            current subscription level's price).</para>
           </listitem>
         </varlistentry>
 

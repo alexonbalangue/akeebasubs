@@ -59,7 +59,7 @@ fieldset.akeebasubs-float-left {
 .akeebasubs-subscription-grossamount { display: block; font-weight: bold; color: #333; font-size: larger; border-top: thin solid #999; }
 .akeebasubs-subscription-amount { text-align: right; width: 60px; }
 
-.akeebasubs-payment { display: block; position: relative; float: left: margin: 0px auto; padding: 0; width: 30px; height: 30px; background-image: url('../images/dollaricons.png'); background-repeat: no-repeat; }
+.akeebasubs-payment { display: block; position: relative; float: left; margin: 0px auto; padding: 0; width: 30px; height: 30px; background-image: url('../images/dollaricons.png'); background-repeat: no-repeat; }
 .akeebasubs-payment-n { background-position: 0px 0px }
 .akeebasubs-payment-p { background-position: -30px 0px }
 .akeebasubs-payment-c { background-position: -60px 0px }
@@ -75,6 +75,7 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 .akeebasubs-coupon-discount-value { color: red; font-weight: bold; }
 
 .akeebasubs-coupon-discount-percent { color: #336666; font-weight: bold; }
+.akeebasubs-coupon-discount-lastpercent { color: #F90; font-weight: bold; }
 
 #refreshMessage h3, #refreshMessage p { text-align: center; }
 

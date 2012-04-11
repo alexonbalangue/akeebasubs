@@ -337,6 +337,21 @@ ENDSQL;
 	$status = $db->query();
 }
 
+ // Upgrade the upgrades table (2.2)
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_upgrade`';
+$db->setQuery($sql);
+$ctableAssoc = $db->loadResultArray(1);
+$ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
+if(!strstr($ctable, 'lastpercent'))
+{
+	$sql = <<<ENDSQL
+ALTER TABLE #__akeebasubs_upgrades
+	CHANGE `type` `type` enum('value','percent','lastpercent')
+ENDSQL;
+	$db->setQuery($sql);
+	$status = $db->query();
+}
+
 
 // =============================================================================
 // Sub-extension installation
