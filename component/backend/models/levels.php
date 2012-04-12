@@ -43,6 +43,7 @@ class AkeebasubsModelLevels extends FOFModel
 		if($only_once && $user->id) {
 			$mysubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
+				->paystate('C')
 				->getItemList();
 			$subIDs = array();
 			if(!empty($mysubs)) foreach($mysubs as $sub) {
