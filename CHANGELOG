@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.2
 ================================================================================
++ Import from AEC
 + You can reload stats graphs using an arbitrary starting date in the backend
 + New upgrade type, % of last payment (% of net_amount)
 + New payment plugin: RBKMoney (experimental)
