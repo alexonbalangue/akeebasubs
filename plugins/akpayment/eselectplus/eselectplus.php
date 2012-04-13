@@ -61,7 +61,7 @@ class plgAkpaymentESelectPlus extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
-		$nameParts = explode(' ', trim($_REQUEST['name']), 2);
+		$nameParts = explode(' ', trim($user->name), 2);
 		$firstName = $nameParts[0];
 		if(count($nameParts) > 1) {
 			$lastName = $nameParts[1];
@@ -100,17 +100,17 @@ class plgAkpaymentESelectPlus extends JPlugin
 			// Billing
 			'bill_first_name'		=> $firstName,
 			'bill_last_name'		=> $lastName,
-			'bill_address_one'		=> trim($_REQUEST['address1']),
-			'bill_city'				=> trim($_REQUEST['city']),
-			'bill_postal_code'		=> trim($_REQUEST['zip']),
-			'bill_country'			=> trim($_REQUEST['country'])
+			'bill_address_one'		=> trim($kuser->address1),
+			'bill_city'				=> trim($kuser->city),
+			'bill_postal_code'		=> trim($kuser->zip),
+			'bill_country'			=> trim($kuser->country)
 		);
 		
-		if(! empty($_REQUEST['businessname'])) {
-			$data->bill_company_name = trim($_REQUEST['businessname']);
+		if(! empty($kuser->businessname)) {
+			$data->bill_company_name = trim($kuser->businessname);
 		}
-		if(! empty($_REQUEST['state'])) {
-			$data->bill_state_or_province = trim($_REQUEST['state']);
+		if(! empty($kuser->state)) {
+			$data->bill_state_or_province = trim($kuser->state);
 		}
 
 		@ob_start();
@@ -187,10 +187,10 @@ class plgAkpaymentESelectPlus extends JPlugin
 		if(!$isValid) return false;
 
 		// Check the response_code
-		$response_code = (int) $_REQUEST['response_code'];
+		$response_code = (int) $data['response_code'];
 		if($response_code < 50) {
 			// Transaction approved
-			$transName = $_REQUEST['trans_name'];
+			$transName = $data['trans_name'];
 			if((!empty($transName)) && ($transName == 'preauth' || $transName == 'cavv_preauth')) {
 				$newStatus = 'P';
 			} else {

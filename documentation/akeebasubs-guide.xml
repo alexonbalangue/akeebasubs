@@ -4238,6 +4238,129 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <para>where www.example.com must be replaced with the domain name of
         your site.</para>
       </section>
+
+      <section xml:id="payment-eselectplus">
+        <title>Moneris eSelect Plus</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - eSelect Plus</guilabel>. Available since
+        Akeeba Subscriptions 2.2.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Canadian Moneris (eSelect)
+        credit card processing service, namely their eSelect Plus payment
+        methof. Moneris offers is the largest payment processor in Canada and
+        offers its services even to non-Canadian businesses. The eSelect plus
+        method is a hosted payments solution, which means that your site
+        needn't have an SSL certificate, as your users are not entering their
+        credit card information directly on your site, but on a Moneris-hosted
+        page.</para>
+
+        <important>
+          <para>Moneris does not allow us to communicate the transaction
+          currency. Please ensure that your prices are displayed in the same
+          currency as the one set up in your Moneris account.</para>
+        </important>
+
+        <important>
+          <para>Please read the Integration Notes section below before using
+          this payment plugin.</para>
+        </important>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "eSelect Plus" or type in a custom name
+              to show to your customer's, e.g. "VISA or MasterCard"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>DirectPost ID</term>
+
+            <listitem>
+              <para>The DirectPost ID (ps_store_id) given to you by
+              Moneris.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>DirectPost Token</term>
+
+            <listitem>
+              <para>The is the token (hpp_key) given to you by Moneris and
+              acts as the password authenticating you to Moneris
+              services.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>You can select the language Moneris' hosted payment page
+              will display in. You can choose between English and
+              French.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Test Mode</term>
+
+            <listitem>
+              <para>When enabled, the transactions will be performed against
+              Moneris' test server. DO NOT USE THIS ON A LIVE SITE!</para>
+
+              <warning>
+                <para>The transaction status depends on the penny value of the
+                gross price. You need a gross price with a zero penny value
+                (e.g. 1.00 CAD) to get a successful test transaction. Read the
+                Moneris integration manual for more information.</para>
+              </warning>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In the Moneris account settings page
+        (https://esqa.moneris.com/mpg/) you have to set the following
+        options:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Set the <guilabel>Response Method</guilabel> to "Sent to
+            your server as a POST". Do not use the GET option, it doesn't work
+            correctly</para>
+          </listitem>
+
+          <listitem>
+            <para>For all three links <guilabel>Approved URL</guilabel>,
+            <guilabel>Declined URL</guilabel> and <guilabel>Response
+            URL</guilabel> (found in <guilabel>Security Features</guilabel>)
+            the URL
+            <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=eselectplus</uri>
+            must be used, after replacing <uri>www.example.com</uri> with your
+            site's domain name.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
