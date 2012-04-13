@@ -22,8 +22,8 @@ rm component/backend/liveupdate/classes
 ln -s `pwd`/../liveupdate/code/classes component/backend/liveupdate/classes
 rm component/backend/liveupdate/liveupdate.php
 ln `pwd`/../liveupdate/code/liveupdate.php component/backend/liveupdate/liveupdate.php
-rm component/backend/liveupdate/language
-ln -s `pwd`/../liveupdate/code/language component/backend/liveupdate/language
+rm component/backend/liveupdate/language/en-GB
+ln -s `pwd`/../liveupdate/code/language/en-GB component/backend/liveupdate/language/en-GB
 
 #
 # Link with the OTP plugin
