@@ -88,7 +88,7 @@ class plgAkpaymentRBKMoney extends JPlugin
 			// Currency: USD, RUR, EUR, UAH or GBP
 			'recipientCurrency' => strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'language'			=> $this->params->get('language','en'),
-			'user_email'        => trim($_REQUEST['email']),
+			'user_email'        => trim($user->email),
 			'successUrl'        => $successURL,
 			'failUrl'           => $failureURL
 		);

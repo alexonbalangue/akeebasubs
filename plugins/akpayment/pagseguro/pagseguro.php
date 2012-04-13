@@ -88,8 +88,8 @@ class plgAkpaymentPagseguro extends JPlugin
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','BRL')),
-			'name'			=> trim($_REQUEST['name']),
-			'email'			=> trim($_REQUEST['email']),
+			'name'			=> trim($user->name),
+			'email'			=> trim($user->email),
 		);
                         
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
