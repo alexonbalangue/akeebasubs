@@ -13,6 +13,101 @@ class plgAkpaymentESelectPlus extends JPlugin
 {
 	private $ppName = 'eselectplus';
 	private $ppKey = 'PLG_AKPAYMENT_ESELECTPLUS_TITLE';
+	
+	private $requestParams = array(
+		'ca'	=> array (
+			'url'					=> 'url',
+			'merchant_id'			=> 'ps_store_id',
+			'merchant_key'			=> 'hpp_key',
+			'price_total'			=> 'charge_total',
+			'item_id'				=> 'id1',
+			'item_desc'				=> 'description1',
+			'item_quantity'			=> 'quantity1',
+			'item_price_unit'		=> 'price1',
+			'price_taxes'			=> 'gst',
+			'subscription_id'		=> 'rvarSubscriptionID',
+			'customer_id'			=> 'cust_id',
+			'customer_email'		=> 'email',
+			'language'				=> 'lang',
+			'order_id'				=> 'order_id',
+			'bill_first_name'		=> 'bill_first_name',
+			'bill_last_name'		=> 'bill_last_name',
+			'bill_address'			=> 'bill_address_one',
+			'bill_city'				=> 'bill_city',
+			'bill_postal_code'		=> 'bill_postal_code',
+			'bill_country'			=> 'bill_country',
+			'bill_company'			=> 'bill_company_name',
+			'bill_state'			=> 'bill_state_or_province',
+			'ver_key'				=> 'transactionKey'
+		),
+		'us'	=> array (
+			'url'					=> 'url',
+			'merchant_id'			=> 'hpp_id',
+			'merchant_key'			=> 'hpp_key',
+			'price_total'			=> 'amount',
+			'item_id'				=> 'li_id1',
+			'item_desc'				=> 'li_description1',
+			'item_quantity'			=> 'li_quantity1',
+			'item_price_unit'		=> 'li_price1',
+			'price_taxes'			=> 'li_taxes',
+			'subscription_id'		=> 'rvarSubscriptionID',
+			'customer_id'			=> 'cust_id',
+			'customer_email'		=> 'client_email',
+			'language'				=> 'lang',
+			'order_id'				=> 'order_no',
+			'bill_first_name'		=> 'od_bill_firstname',
+			'bill_last_name'		=> 'od_bill_lastname',
+			'bill_address'			=> 'od_bill_address',
+			'bill_city'				=> 'od_bill_city',
+			'bill_postal_code'		=> 'od_bill_zipcode',
+			'bill_country'			=> 'od_bill_country',
+			'bill_company'			=> 'od_bill_company',
+			'bill_state'			=> 'od_bill_state',
+			'ver_key'				=> 'verify_key'
+		)
+	);
+	
+	private $responseParams = array(
+		'ca'	=> array (
+			'subscription_id'		=> 'rvarSubscriptionID',
+			'processor_key'			=> 'bank_transaction_id',
+			'order_id'				=> 'response_order_id',
+			'charge_total'			=> 'charge_total',
+			'response_code'			=> 'response_code',
+			'ver_key'				=> 'transactionKey',
+			'transaction_type'		=> 'trans_name',
+			'txn_num'				=> 'txn_num'
+		),
+		'us'	=> array (
+			'subscription_id'		=> 'rvarSubscriptionID',
+			'processor_key'			=> 'ref_num',
+			'order_id'				=> 'order_no',
+			'charge_total'			=> 'amount',
+			'response_code'			=> 'response_code',
+			'ver_key'				=> 'verify_key',
+			'transaction_type'		=> 'txn_type',
+			'txn_num'				=> 'txn_num'
+		)
+	);
+	
+	private $verificationParams = array(
+		'ca'	=> array (
+			'ver_key'		=> 'transactionKey',
+			'order_id'		=> 'order_id',
+			'response_code'	=> 'response_code',
+			'charge_total'	=> 'amount',
+			'txn_num'		=> 'txn_num',
+			'status'		=> 'status'
+		),
+		'us'	=> array (
+			'ver_key'		=> 'verify_key',
+			'order_id'		=> 'order_no',
+			'response_code'	=> 'response_code',
+			'charge_total'	=> 'amount',
+			'txn_num'		=> 'txn_num',
+			'status'		=> 'message'
+		)
+	);
 
 	public function __construct(&$subject, $config = array())
 	{
@@ -73,44 +168,44 @@ class plgAkpaymentESelectPlus extends JPlugin
 			->user_id($user->id)
 			->getFirstItem();
 		
-		$grossAcount = sprintf('%.2f',$subscription->gross_amount);
+
+		$v = $this->params->get('version', 'ca');
+		$p = $this->requestParams[$v];
 		
 		$data = (object)array(
-			'url'					=> $this->getPaymentURL(),
-			'ps_store_id'			=> trim($this->params->get('store_id','')),
-			'hpp_key'				=> trim($this->params->get('key','')),
-			'charge_total'			=> $grossAcount,
+			$p['url']					=> $this->getPaymentURL(),
+			$p['merchant_id']			=> trim($this->params->get('store_id','')),
+			$p['merchant_key']			=> trim($this->params->get('key','')),
+			$p['price_total']			=> sprintf('%.2f',$subscription->gross_amount),
 			// Item details
-			'id1'					=> $level->akeebasubs_level_id,
-			'description1'			=> $level->title . ' - [ ' . $user->username . ' ]',
-			'quantity1'				=> 1,
-			'price1'				=> $grossAcount,
-			'subtotal1'				=> $grossAcount,
+			$p['item_id']				=> $level->akeebasubs_level_id,
+			$p['item_desc']				=> $level->title . ' - [ ' . $user->username . ' ]',
+			$p['item_quantity']			=> 1,
+			$p['item_price_unit']		=> sprintf('%.2f',$subscription->net_amount),
 			// Transaction details
-			'rvarSubscriptionID'	=> $subscription->akeebasubs_subscription_id,
-			'cust_id'				=> $user->username,
-			'lang'					=> $this->params->get('language','en-ca'),
-			'gst'					=> $subscription->tax_amount,
+			$p['subscription_id']		=> $subscription->akeebasubs_subscription_id,
+			$p['customer_id']			=> $user->username,
+			$p['customer_email']		=> $user->email,
+			$p['language']				=> $this->params->get('language','en-ca'),
+			$p['price_taxes']			=> sprintf('%.2f',$subscription->tax_amount),
 			// To have a unique order_id it consists of the level's title and the subscription's ID
 			// in order to avoid that the order_id might be already used in the merchant's account.
 			// The Id only is used for the parameter rvarSubscriptionID above.
-			'order_id'				=> str_replace(' ', '', $level->title) . $subscription->akeebasubs_subscription_id,
-			// CVD always present
-			'cvd_indicator'			=> 1,
+			$p['order_id']				=> str_replace(' ', '', $level->title) . $subscription->akeebasubs_subscription_id,
 			// Billing
-			'bill_first_name'		=> $firstName,
-			'bill_last_name'		=> $lastName,
-			'bill_address_one'		=> trim($kuser->address1),
-			'bill_city'				=> trim($kuser->city),
-			'bill_postal_code'		=> trim($kuser->zip),
-			'bill_country'			=> trim($kuser->country)
+			$p['bill_first_name']		=> $firstName,
+			$p['bill_last_name']		=> $lastName,
+			$p['bill_address']			=> trim($kuser->address1),
+			$p['bill_city']				=> trim($kuser->city),
+			$p['bill_postal_code']		=> trim($kuser->zip),
+			$p['bill_country']			=> trim($kuser->country)
 		);
 		
-		if(! empty($kuser->businessname)) {
-			$data->bill_company_name = trim($kuser->businessname);
+		if($kuser->isbusiness) {
+			$data->$p['bill_company'] = trim($kuser->businessname);
 		}
 		if(! empty($kuser->state)) {
-			$data->bill_state_or_province = trim($kuser->state);
+			$data->$p['bill_state'] = trim($kuser->state);
 		}
 
 		@ob_start();
@@ -123,6 +218,9 @@ class plgAkpaymentESelectPlus extends JPlugin
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		jimport('joomla.utilities.date');
+
+		$v = $this->params->get('version', 'ca');
+		$p = $this->responseParams[$v];
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
@@ -133,7 +231,7 @@ class plgAkpaymentESelectPlus extends JPlugin
 
 		// Load the relevant subscription row
 		if($isValid) {
-			$id = $data['rvarSubscriptionID'];
+			$id = $data[$p['subscription_id']];
 			$subscription = null;
 			if($id > 0) {
 				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -146,27 +244,21 @@ class plgAkpaymentESelectPlus extends JPlugin
 			} else {
 				$isValid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The orderId is invalid. ' . $data['message'];
-		}
-		
-		// Check CVD response code
-		if($data['cvd_response_code'] == 'N') {
-			$isValid = false;
-			$data['akeebasubs_failure_reason'] = "The Card Validation Digits (CVD) don't match. " . $data['message'];
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The ' . $data[$p['subscription_id']] . ' is invalid. ' . $data['message'];
 		}
         
 		// Check that bank_transaction_id has not been previously processed
 		if($isValid && !is_null($subscription)) {
-			if($subscription->processor_key == $data['bank_transaction_id']) {
+			if($subscription->processor_key == $data[$p['processor_key']]) {
 				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "I will not process the same bank_transaction_id twice";
+				$data['akeebasubs_failure_reason'] = "I will not process the same " . $data[$p['processor_key']] . " twice";
 			}
 		}
 
 		// Check that charge_total is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
-			$mc_gross = floatval($data['charge_total']);
+			$mc_gross = floatval($data[$p['charge_total']]);
 			$gross = $subscription->gross_amount;
 			if($mc_gross > 0) {
 				// A positive value means "payment". The prices MUST match!
@@ -179,7 +271,7 @@ class plgAkpaymentESelectPlus extends JPlugin
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-                
+			
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
@@ -187,11 +279,11 @@ class plgAkpaymentESelectPlus extends JPlugin
 		if(!$isValid) return false;
 
 		// Check the response_code
-		$response_code = (int) $data['response_code'];
+		$response_code = (int) $data[$p['response_code']];
 		if($response_code < 50) {
 			// Transaction approved
-			$transName = $data['trans_name'];
-			if((!empty($transName)) && ($transName == 'preauth' || $transName == 'cavv_preauth')) {
+			$transType = $data[$p['transaction_type']];
+			if((!empty($transType)) && ($transType == 'preauth' || $transType == 'cavv_preauth')) {
 				$newStatus = 'P';
 			} else {
 				$newStatus = 'C';
@@ -204,7 +296,7 @@ class plgAkpaymentESelectPlus extends JPlugin
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
 				'akeebasubs_subscription_id'	=> $id,
-				'processor_key'					=> $data['bank_transaction_id'],
+				'processor_key'					=> $data[$p['processor_key']],
 				'state'							=> $newStatus,
 				'enabled'						=> 0
 		);
@@ -252,44 +344,75 @@ class plgAkpaymentESelectPlus extends JPlugin
 	 */
 	private function getPaymentURL()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
-			return 'https://esqa.moneris.com/HPPDP/index.php';
+		$version = $this->params->get('version', 'ca');
+		$sandbox = $this->params->get('sandbox', 0);
+		if($version == 'ca') {
+			if($sandbox) {
+				return 'https://esqa.moneris.com/HPPDP/index.php';
+			} else {
+				return 'https://www3.moneris.com/HPPDP/index.php';
+			}
 		} else {
-			return 'https://www3.moneris.com/HPPDP/index.php';
+			if($sandbox) {
+				return 'https://esplusqa.moneris.com/DPHPP/index.php';
+			} else {
+				return 'https://esplus.moneris.com/DPHPP/index.php';
+			}
 		}
 	}
 
-	/**
-	 * Gets the verification URL
-	 */
 	private function getVerificationHost()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
-			return 'ssl://esqa.moneris.com';
+		$version = $this->params->get('version', 'ca');
+		$sandbox = $this->params->get('sandbox', 0);
+		if($version == 'ca') {
+			if($sandbox) {
+				return 'ssl://esqa.moneris.com';
+			} else {
+				return 'ssl://www3.moneris.com';
+			}
 		} else {
-			return 'ssl://www3.moneris.com';
+			if($sandbox) {
+				return 'ssl://esplusqa.moneris.com';
+			} else {
+				return 'ssl://esplus.moneris.com';
+			}
+		}
+	}
+
+	private function getVerificationFile()
+	{
+		$version = $this->params->get('version', 'ca');
+		if($version == 'ca') {
+			return '/HPPDP/verifyTxn.php';
+		} else {
+			return '/DPHPP/index.php';
 		}
 	}
 	
 	private function isValidIPN($data)
 	{
+		$v = $this->params->get('version', 'ca');
+		$reqParams = $this->requestParams[$v]; // request
+		$cbParams = $this->responseParams[$v]; // callback
+		$verParams = $this->verificationParams[$v]; // verification
+		
 		// A empty transactionKey is possible if the Transaction Verification
 		// is not enabled in the account settings
-		if(! empty($data['transactionKey'])) {
+		if(! empty($data[$cbParams['ver_key']])) {
 			
 			// Build the verification request
-			$req = 'ps_store_id=' . urlencode(trim($this->params->get('store_id',''))) .
-					'&hpp_key=' . urlencode(trim($this->params->get('key',''))) . 
-					'&transactionKey=' . urlencode($data['transactionKey']);
+			$req = $reqParams['merchant_id'] . '=' . urlencode(trim($this->params->get('store_id',''))) .
+					'&' . $reqParams['merchant_key'] . '=' . urlencode(trim($this->params->get('key',''))) . 
+					'&' . $reqParams['ver_key'] . '=' . urlencode($data[$cbParams['ver_key']]);
 			$header = '';
-			$header .= "POST /HPPDP/verifyTxn.php HTTP/1.0\r\n";
+			$header .= "POST " . $this->getVerificationFile() . " HTTP/1.0\r\n";
 			$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 			$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-
+ 
 			// Send the request and get the result
 			$fp = fsockopen($this->getVerificationHost(), 443, $errno, $errstr, 30);
+		
 			if (!$fp) {
 				// HTTP ERROR
 				return false;
@@ -302,16 +425,20 @@ class plgAkpaymentESelectPlus extends JPlugin
 			}
 			
 			// Verify the result:
-			// order_id, transactionKey, amount and response_code
-			// should be the same like in the original response
-			if(($this->getResponseValue($res, 'order_id') != $data['response_order_id'])
-					|| ($this->getResponseValue($res, 'transactionKey') != $data['transactionKey'])
-					|| ($this->getResponseValue($res, 'response_code') != $data['response_code'])
-					|| ($this->getResponseValue($res, 'amount') != $data['charge_total'])) {
+			// order_id, response_code, txn_num and charge_total
+			// should be the same like in the original callback
+			if(($this->getResponseValue($res, $verParams['order_id']) != $data[$cbParams['order_id']])
+					|| ($this->getResponseValue($res, $verParams['response_code']) != $data[$cbParams['response_code']])
+					|| (!empty($data[$cbParams['txn_num']]) && $this->getResponseValue($res, $verParams['txn_num']) != $data[$cbParams['txn_num']])
+					|| ($this->getResponseValue($res, $verParams['charge_total']) != $data[$cbParams['charge_total']])) {
+				return false;
+			}
+			// Check response code too for the Canadian version only
+			if($v == 'ca' && $this->getResponseValue($res, $verParams['ver_key']) != $data[$cbParams['ver_key']]) {
 				return false;
 			}
 			// The status is expected to start with 'Valid'
-			if(! preg_match('/^Valid/', $this->getResponseValue($res, 'status'))) {
+			if(! preg_match('/^Valid/', $this->getResponseValue($res, $verParams['status']))) {
 				return false;
 			}
 		}
@@ -319,8 +446,8 @@ class plgAkpaymentESelectPlus extends JPlugin
 	}
 	
 	private function getResponseValue($res, $param)
-	{	
-		preg_match('/' . $param . '.*value="(.*)"/', $res, $matches);
+	{
+		preg_match('/<input[^>]+' . $param . '[^>]+"([^>]+)"/', $res, $matches);
 		return $matches[1];
 	}
 	
@@ -380,48 +507,4 @@ class plgAkpaymentESelectPlus extends JPlugin
 		
 		return JHTML::_('select.genericlist', $options, 'expYear', '', 'value', 'text', '', 'expYear');
 	}
-}
-
-class Logging {
-    // define default log file
-    private $log_file = '/tmp/logfile.log';
-    // define default newline character
-    private $nl = "\n";
-    // define file pointer
-    private $fp = null;
-    // set log file (path and name)
-    public function lfile($path) {
-        $this->log_file = $path;
-    }
-    // write message to the log file
-    public function lwrite($message) {
-        // if file pointer doesn't exist, then open log file
-        if (!$this->fp) {
-            $this->lopen();
-        }
-        // define script name
-        $script_name = pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME);
-        // define current time
-        $time = date('H:i:s');
-        // write current time, script name and message to the log file
-        fwrite($this->fp, "$time ($script_name) $message". $this->nl);
-    }
-    // close log file (it's always a good idea to close a file when you're done with it)
-    public function lclose() {
-        fclose($this->fp);
-    }
-    // open log file
-    private function lopen() {
-        // define log file path and name
-        $lfile = $this->log_file;
-        // set newline character to "\r\n" if script is used on Windows
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $this->nl = "\r\n";
-        }
-        // define the current date (it will be appended to the log file name)
-        $today = date('Y-m-d');
-        // open log file for writing only; place the file pointer at the end of the file
-        // if the file does not exist, attempt to create it
-        $this->fp = fopen($lfile . '_' . $today, 'a') or exit("Can't open $lfile!");
-    }
 }

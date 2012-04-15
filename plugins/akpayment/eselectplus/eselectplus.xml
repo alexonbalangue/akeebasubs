@@ -22,6 +22,11 @@
 		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_TITLE_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_TITLE_DESC"/>
 		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_PPIMAGE_DESC" />
 		<param type="spacer" />
+		<param name="version" type="radio" default="ca" label="PLG_AKPAYMENT_ESELECTPLUS_VERSION_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_VERSION_DESC">
+			<option value="ca">PLG_AKPAYMENT_ESELECTPLUS_VERSION_CA</option>
+			<option value="us">PLG_AKPAYMENT_ESELECTPLUS_VERSION_US</option>
+		</param>
+		<param type="spacer" />
 		<param name="store_id" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_STOREID_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_STOREID_DESC"/>
 		<param name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_KEY_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_KEY_DESC"/>
 		<param type="spacer" />
@@ -40,6 +45,11 @@
 			<fieldset name="basic">
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_TITLE_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_PPIMAGE_DESC" />	
+				<field type="spacer" />
+				<field name="version" type="radio" default="ca" label="PLG_AKPAYMENT_ESELECTPLUS_VERSION_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_VERSION_DESC">
+					<option value="ca">PLG_AKPAYMENT_ESELECTPLUS_VERSION_CA</option>
+					<option value="us">PLG_AKPAYMENT_ESELECTPLUS_VERSION_US</option>
+				</field>
 				<field type="spacer" />
 				<field name="store_id" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_STOREID_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_STOREID_DESC"/>
 				<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_KEY_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_KEY_DESC"/>
