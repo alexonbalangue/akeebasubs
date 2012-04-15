@@ -3602,6 +3602,36 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>You have to set the following options to your Moneris settings
+        page</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Set the <guilabel>Response Method</guilabel> to "Sent to
+            your server as a POST". Do not use the GET option, it doesn't work
+            correctly</para>
+          </listitem>
+
+          <listitem>
+            <para>For all three links <guilabel>Approved URL</guilabel>,
+            <guilabel>Declined URL</guilabel> and <guilabel>Response
+            URL</guilabel> (found in <guilabel>Security Features</guilabel>)
+            the URL
+            <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=moneris</uri>
+            must be used, after replacing <uri>www.example.com</uri> with your
+            site's domain name.</para>
+          </listitem>
+
+          <listitem>
+            <para>Remember that in order to use this plugin, you have to set
+            up a "directpost config", not a "hosted config". Otherwise, please
+            use the eSELECTplus integration plugin for Akeeba
+            Subscriptions.</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section xml:id="payment-skrill">
@@ -4292,16 +4322,29 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
 
           <varlistentry>
-            <term>DirectPost ID</term>
+            <term>eSELECTplus Version</term>
 
             <listitem>
-              <para>The DirectPost ID (ps_store_id) given to you by
+              <para>Choose whether you're using the Canada or US version of
+              the service. If unsure, look at your eSELECT back-end URL. If it
+              is <uri>https://esqa.moneris.com/mpg</uri> then you are using
+              the Canadian version. Otherwise, if it is
+              <uri>https://esplus.moneris.com/usmpg</uri> then you are using
+              the US version.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The Merchant ID (ps_store_id or hpp_id) given to you by
               Moneris.</para>
             </listitem>
           </varlistentry>
 
           <varlistentry>
-            <term>DirectPost Token</term>
+            <term>Merchant Key</term>
 
             <listitem>
               <para>The is the token (hpp_key) given to you by Moneris and
@@ -4314,9 +4357,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <term>Language</term>
 
             <listitem>
-              <para>You can select the language Moneris' hosted payment page
-              will display in. You can choose between English and
-              French.</para>
+              <para>You can select the language Moneris will send emails in.
+              You can choose between English and French.</para>
             </listitem>
           </varlistentry>
 
@@ -4339,9 +4381,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
         <bridgehead>Integration notes</bridgehead>
 
-        <para>In the Moneris account settings page
-        (https://esqa.moneris.com/mpg/) you have to set the following
-        options:</para>
+        <para>In the Moneris account settings page you have to set the
+        following options:</para>
 
         <itemizedlist>
           <listitem>
@@ -4358,6 +4399,13 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=eselectplus</uri>
             must be used, after replacing <uri>www.example.com</uri> with your
             site's domain name.</para>
+          </listitem>
+
+          <listitem>
+            <para>Remember that in order to use this plugin, you have to set
+            up a "hosted config", not a "directpost config". Otherwise, please
+            use the Moneris integration plugin for Akeeba
+            Subscriptions.</para>
           </listitem>
         </itemizedlist>
       </section>
