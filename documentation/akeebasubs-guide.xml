@@ -79,6 +79,16 @@
           <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
         </author>
       </revision>
+
+      <revision>
+        <revnumber>2.2</revnumber>
+
+        <date>April 2012</date>
+
+        <author>
+          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
+        </author>
+      </revision>
     </revhistory>
 
     <legalnotice>
@@ -249,7 +259,7 @@
       <itemizedlist>
         <listitem>
           <para>PHP 5.2.7 or later. Running it on earlier versions will either
-          be problematic or it won't work at all.</para>
+          be problematic or it won't work at all. PHP 5.3 recommended.</para>
         </listitem>
 
         <listitem>
@@ -260,8 +270,8 @@
         </listitem>
 
         <listitem>
-          <para>Joomla! 1.5.14 or later (fully supported) or Joomla! 1.7.0 or
-          later.</para>
+          <para>Joomla! 1.5.14 or later (fully supported), Joomla! 1.7.x or
+          Joomla! 2.5.x.</para>
         </listitem>
       </itemizedlist>
 
@@ -285,10 +295,10 @@
 
         <para>Installing the package is the same as with any other Joomla!
         component. Go to your site's back-end, Extensions, Install/Uninstall
-        (Joomla! 1.5) or Extensions, Manage (Joomla! 1.6) and click on Browse.
-        Locate the ZIP package and click on Upload and Install. If the
-        installation fails, please refer to the installation troubleshooting
-        section of this guide.</para>
+        (Joomla! 1.5) or Extensions, Manage (Joomla! 1.6 or later) and click
+        on Browse. Locate the ZIP package and click on Upload and Install. If
+        the installation fails, please refer to the installation
+        troubleshooting section of this guide.</para>
       </section>
 
       <section xml:id="installation-troubleshooting">
@@ -408,7 +418,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </orderedlist>
 
-        <bridgehead renderas="sect4">Joomla! 1.6/1.7 and later</bridgehead>
+        <bridgehead renderas="sect4">Joomla! 1.6/1.7/2.5 and
+        later</bridgehead>
 
         <orderedlist>
           <listitem>
