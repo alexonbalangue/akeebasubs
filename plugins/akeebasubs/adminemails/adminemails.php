@@ -24,7 +24,12 @@ class plgAkeebasubsAdminemails extends JPlugin
 		}
 		parent::__construct($subject, $config);
 
-		$this->emails = explode(',', $this->params->get('emails', ''));
+		$emailsString = trim($this->params->getValue('emails', ''));
+		if(empty($emailsString)) {
+			$this->emails = array();
+		} else {
+			$this->emails = explode(',', $emailsString);
+		}
 	}
 
 	/**
@@ -199,5 +204,6 @@ class plgAkeebasubsAdminemails extends JPlugin
 		$mailer->setSubject($subject);
 		$mailer->setBody($body);
 		$mailer->Send();
+		$result = $mailer->Send();
 	}
 }

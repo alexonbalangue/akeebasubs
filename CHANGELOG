@@ -21,6 +21,7 @@ Akeeba Subscriptions 2.2
 # Plugins would send a URL with /administrator/ in it if they were fired from the back-end of your site and your site was in a subdirectory (not the root) of its domain
 # Zero-amount subscriptions, usually gifts, were counting towards the stats (thank you, Peter!)
 # You could not come back and re-apply for a "Forbid Renewals" subscription if you never completed paying for it
+# The Administrator Emails plugin would throw an error if you did not specify any administrator email addresses
 
 Akeeba Subscriptions 2.1.1
 ================================================================================

@@ -190,6 +190,6 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$mailer->addRecipient($user->email);
 		$mailer->setSubject($subject);
 		$mailer->setBody($body);
-		$mailer->Send();	
+		$result = $mailer->Send();
 	}
 }
