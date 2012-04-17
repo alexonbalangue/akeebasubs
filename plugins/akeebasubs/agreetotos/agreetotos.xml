@@ -19,11 +19,19 @@
 	</languages>
 	<params>
 		<param name="tosurl" type="text" default="" label="PLG_AKEEBASUBS_AGREETOTOS_TOSURL_TITLE" description="PLG_AKEEBASUBS_AGREETOTOS_TOSURL_DESC" length="50" />
+		<param name="cachechoice" type="radio" default="1" label="PLG_AKEEBASUBS_AGREETOTOS_CACHECHOICE_TITLE" description="PLG_AKEEBASUBS_AGREETOTOS_CACHECHOICE_DESCRIPTION">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
 	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="tosurl" type="text" default="" label="PLG_AKEEBASUBS_AGREETOTOS_TOSURL_TITLE" description="PLG_AKEEBASUBS_AGREETOTOS_TOSURL_DESC" length="50" />
+				<field name="cachechoice" type="radio" default="1" label="PLG_AKEEBASUBS_AGREETOTOS_CACHECHOICE_TITLE" description="PLG_AKEEBASUBS_AGREETOTOS_CACHECHOICE_DESCRIPTION">
+					<option value="0">JNo</option>
+					<option value="1">JYes</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

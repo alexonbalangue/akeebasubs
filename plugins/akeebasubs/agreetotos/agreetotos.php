@@ -19,6 +19,8 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, null, true);
+		
+		$cachechoice = $this->params->getValue('cachechoice', 0);
 	
 		// Init the fields array which will be returned
 		$fields = array();
@@ -26,12 +28,20 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		// ----- AGREE TO TOS FIELD -----
 		// Get the current setting (or 0 if none)
 		if(array_key_exists('agreetotos', $cache['custom'])) {
-			$current = $cache['custom']['agreetotos'];
+			if($cachechoice) {
+				$current = $cache['custom']['agreetotos'];
+			} else {
+				$current = '';
+			}
 		} else {
 			if(!is_object($userparams->params)) {
 				$current = '';
 			} else {
-				$current = property_exists($userparams->params, 'agreetotos') ? $userparams->params->agreetotos : 0;
+				if($cachechoice) {
+					$current = property_exists($userparams->params, 'agreetotos') ? $userparams->params->agreetotos : 0;
+				} else {
+					$current = '';
+				}
 			}
 		}
 		// Setup the combobox parameters
