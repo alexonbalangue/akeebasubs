@@ -2542,6 +2542,21 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         lists) will show as expired. This is not a bug. PayPal sends us the
         original subscription's ID as a reference, which is why only the
         original subscription can be updated.</para>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>PayPal doesn't handle UTF-8 data very gracefully by default. You
+        will have to enable UTF-8 on your PayPal account to let accented and
+        international characters be accepted in the payment pages.</para>
+
+        <para>Log in to your PayPal account. Click the
+        <guimenuitem>Profile</guimenuitem> link in the menu bar under
+        <guimenu>My Account</guimenu>. In the <guilabel>Selling
+        Preferences</guilabel> columns click on the <guilabel>Language
+        Encoding</guilabel> option. Click on <guibutton>More
+        Options</guibutton>. Set <guilabel>Encoding</guilabel> to
+        <option>UTF-8</option> and click on
+        <guibutton>Save</guibutton>.</para>
       </section>
 
       <section xml:id="payment-none">
