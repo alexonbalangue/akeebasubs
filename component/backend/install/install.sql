@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`hitslimit` BIGINT(20) unsigned NULL,
 	`userhits` BIGINT(20) unsigned NULL,
 	`usergroups` VARCHAR(255) NULL,
-	`type` ENUM('value','percent') NOT NULL DEFAULT 'value',
+	`type` ENUM('value','percent','lastpercent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT 0.0,
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
