@@ -11,12 +11,12 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_V
 
 $this->loadHelper('modules');
 
-$postURL = JURI::base() . 'index.php?option=com_akeebasubs&view=userinfo&task=save';
 ?>
 
 <div id="akeebasubs" class="userinfo">
 	
-<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionslistheader')?>
+<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsuserinfoheader')?>
+
 <noscript>
 <hr/>
 <h1><?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_NOJS_HEADER')?></h1>
@@ -24,22 +24,17 @@ $postURL = JURI::base() . 'index.php?option=com_akeebasubs&view=userinfo&task=sa
 <hr/>
 </noscript>
 
-<?php if(JFactory::getUser()->guest && AkeebasubsHelperCparams::getParam('allowlogin',1)):?>
-	<?php echo $this->loadTemplate('login') ?>
-<?php endif?>
-
-<form action="<?php echo $postURL ?>" method="post" id="userinfoForm" >
+<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=userinfo') ?>" method="post" id="userinfoForm" >
 	<input type="hidden" name="_token" value="<?php echo JUtility::getToken()?>" />
+	<input type="hidden" name="task" value="save" />
 	
-	<?php echo $this->loadAnyTemplate('level/default_fields') ?>
+	<?php echo $this->loadAnyTemplate('site:com_akeebasubs/level/default_fields') ?>
 	
-	<br />
-	<?php if(JFactory::getUser()->guest):?>
-	<button id="update_userinfo" type="submit"><?php echo JText::_('COM_AKEEBASUBS_USERINFO_BUTTON_CREATE_USER')?></button>
-	<?php else: ?>
 	<button id="update_userinfo" type="submit"><?php echo JText::_('COM_AKEEBASUBS_USERINFO_BUTTON_UPDATE_USER')?></button>
-	<?php endif; ?>
 </form>
+
+	<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsuserinfofooter')?>
+
 </div>
 
 <?php
