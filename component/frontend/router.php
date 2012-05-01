@@ -41,17 +41,21 @@ function AkeebasubsBuildRoute(&$query)
 			$newView = 'cancelled';
 		}
 		unset($query['layout']);
+	} elseif($newView == 'userinfo') {
+		if(!array_key_exists('layout', $query)) unset($query['layout']);
 	}
 	$segments[] = $newView;
 	unset($query['view']);
 	
 	// Add the slug
-	if(array_key_exists('slug', $query) && (FOFInflector::isSingular($segments[0]) || ($segments[0] == 'new')) ){
-		$segments[1] = $query['slug'];
-		unset($query['slug']);
-	} elseif(array_key_exists('id', $query) && ($segments[0] == 'subscription')) {
-		$segments[1] = $query['id'];
-		unset($query['id']);
+	if($newView != 'userinfo') {
+		if(array_key_exists('slug', $query) && (FOFInflector::isSingular($segments[0]) || ($segments[0] == 'new')) ){
+			$segments[1] = $query['slug'];
+			unset($query['slug']);
+		} elseif(array_key_exists('id', $query) && ($segments[0] == 'subscription')) {
+			$segments[1] = $query['id'];
+			unset($query['id']);
+		}
 	}
 	
 	return $segments;
@@ -99,6 +103,10 @@ function AkeebasubsParseRoute($segments)
 				$vars['view'] = 'message';
 				$vars['layout'] = 'cancel';
 				break;
+			case 'userinfo':
+				$vars['view'] = 'userinfo';
+				$vars['layout'] = 'default';
+				break;
 		}
 
 		array_push($segments, $vars['view']);
@@ -110,9 +118,9 @@ function AkeebasubsParseRoute($segments)
 		} else {
 			$vars['layout'] = array_shift($segments);
 		}
-
-		// if we are in a singular view, the next item is the slug
-		if(FOFInflector::isSingular($vars['view'])) {
+		
+		// if we are in a singular view, the next item is the slug, unless we are in the userinfo view
+		if(FOFInflector::isSingular($vars['view']) && ($vars['view'] != 'userinfo')) {
 			if($vars['view'] == 'subscription') {
 				$vars['id'] = array_shift($segments);
 			} else {
