@@ -10,11 +10,14 @@ defined('_JEXEC') or die();
 class AkeebasubsControllerUserinfos extends FOFController
 {
 	public function __construct($config = array()) {
+		// Setup our configuration overrides
+		$configOverride = array(
+			// Reuse the Subscribes model
+			'modelName'	=> 'AkeebasubsModelSubscribes'
+		);
+		$config = array_merge($config, $configOverride);
+		
 		parent::__construct($config);
-		
-		$this->csrfProtection = false;
-		
-		$this->cacheableTasks = array('browse');
 	}
 	
 	public function execute($task) {
