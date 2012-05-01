@@ -40,6 +40,14 @@ class AkeebasubsControllerUserinfos extends FOFController
 	 */
 	public function onBeforeBrowse()
 	{	
+		// Make sure there's a logged in user, or ask him to log in
+		if(JFactory::getUser()->guest) {
+			$returnURL = base64_encode(JFactory::getURI()->toString());
+			$comUsers = version_compare(JVERSION, '1.6.0', 'ge') ? 'com_users' : 'com_user';
+			$url = JRoute::_('index.php?option='.$comUsers.'&view=login&return='.$returnURL);
+			JFactory::getApplication()->redirect($url);
+		}
+		
 		$view = $this->getThisView();
 		$model = $this->getThisModel();
 		
@@ -66,13 +74,17 @@ class AkeebasubsControllerUserinfos extends FOFController
 	}
 	
 	/**
-	 * Always allow the active user to save its user data
+	 * Always allow the currently logged in user to save his user data
 	 * 
 	 * @return bool
 	 */
 	protected function onBeforeSave()
 	{
-		return true;
+		if(JFactory::getUser()->guest) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 }
