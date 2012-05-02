@@ -60,7 +60,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$query = FOFQueryAbstract::getNew($db)
 				->select('COUNT(*)')
 				->from('#__akeebasubs_invoices')
-				->where($db->nameQuote('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));
+				->where($db->nameQuote('akeebasubs_subscription_id').' = '.$db->Quote($row->akeebasubs_subscription_id));
 			$db->setQuery($query);
 			$oldInvoices = $db->loadResult();
 			if($oldInvoices) return;
