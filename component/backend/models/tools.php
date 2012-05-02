@@ -20,7 +20,7 @@ class AkeebasubsModelTools extends FOFModel
 		$this->scanConverters();
 	}
 	
-	public function &getItemList($overrideLimits = false)
+	public function &getItemList($overrideLimits = false, $group = '')
 	{
 		return $this->list;
 	}
