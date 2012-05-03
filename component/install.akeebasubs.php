@@ -339,7 +339,7 @@ ENDSQL;
 }
 
  // Upgrade the upgrades table (2.2)
-$sql = 'SHOW CREATE TABLE `#__akeebasubs_upgrade`';
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_upgrades`';
 $db->setQuery($sql);
 $ctableAssoc = $db->loadResultArray(1);
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
