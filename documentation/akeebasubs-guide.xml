@@ -258,8 +258,10 @@
 
       <itemizedlist>
         <listitem>
-          <para>PHP 5.2.7 or later. Running it on earlier versions will either
-          be problematic or it won't work at all. PHP 5.3 recommended.</para>
+          <para><trademark>Joomla!</trademark> and PHP version compatibilities
+          are detailed in <link
+          xlink:href="https://www.akeebabackup.com/compatibility.html">our
+          Version Compatibility matrix</link>.</para>
         </listitem>
 
         <listitem>
@@ -267,11 +269,6 @@
           not be supported. Do note that earlier releases of MySQL are
           obsolete and not supported any more by Oracle (the company who
           controls the development of MySQL).</para>
-        </listitem>
-
-        <listitem>
-          <para>Joomla! 1.5.14 or later (fully supported), Joomla! 1.7.x or
-          Joomla! 2.5.x.</para>
         </listitem>
       </itemizedlist>
 
