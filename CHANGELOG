@@ -2,6 +2,7 @@
 Akeeba Subscriptions 2.2.1
 ================================================================================
 # Double email sent by the Administrator Email plugin
+# Users would not get removed from K2 groups on subscription expiration
 ! Typo in the installation file, didn't allow upgrading to 2.2.0
 
 Akeeba Subscriptions 2.2
