@@ -1054,8 +1054,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 */
 	public function createNewSubscription()
 	{
-		// Fetch state variables
+		// Fetch state and validation variables
 		$state = $this->getStateVariables();
+		$validation = $this->getValidation();
 		
 		// Step #1.a. Check that the form is valid
 		// ----------------------------------------------------------------------
@@ -1105,7 +1106,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// ----------------------------------------------------------------------
 		$user = JFactory::getUser();
 		$this->setState('user', $user);
-		$userSaved = $this->updateUserInfo(true);
+		$userIsSaved = $this->updateUserInfo(true);
 		
 		if(!$userIsSaved) {
 			return false;
