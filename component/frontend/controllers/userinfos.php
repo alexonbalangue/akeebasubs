@@ -93,26 +93,28 @@ class AkeebasubsControllerUserinfos extends FOFController
 			$this->_csrfProtection();
 		}
 		
+		// Set error message in case data won't be updated below
+		$msgType = 'error';
+		$msg = JText::_('COM_AKEEBASUBS_LBL_USERINFO_ERROR');
+		
 		// Is this a valid form?
 		$isValid = $this->getThisModel()->isValid();
-		if(!$isValid) {
-			return false;
+		if($isValid) {
+			// Try saving the user data
+			$result = $this->getThisModel()->updateUserInfo(false);
+			if($result) {
+				// And save the custom fields, too.
+				$this->getThisModel()->saveCustomFields();
+
+				$msgType = 'info';
+				$msg = JText::_('COM_AKEEBASUBS_LBL_USERINFO_SAVED');
+			}
 		}
 		
 		// Try saving the user data
 		$result = $this->getThisModel()->updateUserInfo(false);
 		
 		// Redirect to the display task
-		if($result) {
-			// And save the custom fields, too.
-			$this->getThisModel()->saveCustomFields();
-			
-			$msgType = 'info';
-			$msg = JText::_('COM_AKEEBASUBS_LBL_USERINFO_SAVED');
-		} else {
-			$msgType = 'error';
-			$msg = JText::_('COM_AKEEBASUBS_LBL_USERINFO_ERROR');
-		}
 		$url = 'index.php?option=com_akeebasubs&view=userinfo';
 		$this->setRedirect($url, $msg, $msgType);
 	}
