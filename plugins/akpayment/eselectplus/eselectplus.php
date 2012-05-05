@@ -483,28 +483,4 @@ class plgAkpaymentESelectPlus extends JPlugin
 		$logData .= "\n";
 		JFile::write($logFile, $logData);
 	}
-	
-	public function selectMonth()
-	{
-		$options = array();
-		$options[] = JHTML::_('select.option',0,'--');
-		for($i = 1; $i <= 12; $i++) {
-			$options[] = JHTML::_('select.option', sprintf('%02u', $i), sprintf('%02u', $i));
-		}
-		
-		return JHTML::_('select.genericlist', $options, 'expMonth', '', 'value', 'text', '', 'expMonth');
-	}
-	
-	public function selectYear()
-	{
-		$year = gmdate('Y');
-		
-		$options = array();
-		$options[] = JHTML::_('select.option',0,'--');
-		for($i = 0; $i <= 10; $i++) {
-			$options[] = JHTML::_('select.option', sprintf('%02u', ($i+$year) % 100), sprintf('%04u', $i+$year));
-		}
-		
-		return JHTML::_('select.genericlist', $options, 'expYear', '', 'value', 'text', '', 'expYear');
-	}
 }
