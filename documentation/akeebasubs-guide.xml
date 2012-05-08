@@ -4511,6 +4511,79 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </itemizedlist>
       </section>
+
+      <section xml:id="payment-nochex">
+        <title>NoChex</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - NoChex</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <warning>
+          <para>This payment processor only accepts payments in Great Britain
+          Pounds (GBP - £). You must make sure that Akeeba Subscriptions is
+          set up to use GBP as the currency and that all of your prices are
+          listed in GBP.</para>
+        </warning>
+
+        <para>This payment method integrates the NoChex payment processor. The
+        options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "NoChex" or type in a custom name to
+              show to your customer's, e.g. "MasterCard, Visa, Maestro"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The email address you use with your NoChex account</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secure POST</term>
+
+            <listitem>
+              <para>If enabled, the verification postback to NoChex will be
+              over an SSL connection. In order for this to work, your host
+              needs to support SSL connections using cURL to NoChex' IP
+              address block.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Test Mode</term>
+
+            <listitem>
+              <para>When enabled, transactions are processed by NoChex'
+              testing server. This is designed for integration tests, BEFORE
+              going live with your site. <emphasis role="bold">NEVER, EVER, NO
+              MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION SITES!
+              IF YOU DO, YOU WILL LOSE MONEY AND/OR
+              CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">

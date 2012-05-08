@@ -80,6 +80,7 @@ $installation_queue = array(
 			'googlecheckout'		=> 0,
 			'moip'					=> 0,
 			'moneris'				=> 0,
+			'nochex'				=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
 			'pagseguro'				=> 0,
