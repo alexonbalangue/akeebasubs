@@ -6414,6 +6414,461 @@ LEVEL3=Group 1</programlisting>
 
         <para>We strongly recommend publishing this plugin at all
         times.</para>
+
+        <bridgehead>Easily edit your email text in Joomla! 2.5 and
+        later</bridgehead>
+
+        <para>While creating the .override.ini translation files is a
+        geek-friendly way of supplying custom email text, it is certainly not
+        a user-friendly way. Most likely your clients have no idea what FTP
+        is, making it impossible to trust them to find, create or edit INI
+        files and upload them through FTP. Don't worry and don't despair!
+        There's a Joomla! hidden secret called Language Overrides baked right
+        into Joomla! 2.5 and later!</para>
+
+        <para>Here's how to edit your emails text using Joomla! 2.5 and
+        later's Language Override's feature. Log into your site's back-end and
+        go to <guimenu>Extensions</guimenu>, <guimenuitem>Language
+        Manager</guimenuitem>, then click on <guilabel>Overrides</guilabel>.
+        Right above the list, on the right-hand side, there is a drop down.
+        Select your desired language, e.g. <option>English (United Kingdom) -
+        Administrator</option>.</para>
+
+        <important>
+          <para>Make sure you select the "- Administrator" variant of your
+          language. Counter-intuitively, plugin translation files are
+          considered administrator language files.</para>
+        </important>
+
+        <para>Click on the <guibutton>New</guibutton> button. In the new page,
+        in the right-hand side of the page, there is a search box. Enter a
+        part of the email text you want to translate. For example, let's
+        change the email header of a new (just-paid) subscription. We will
+        search for <replaceable>new subscription</replaceable>. Make sure the
+        radio button called <guilabel>Value</guilabel> is selected and click
+        on <guibutton>Search</guibutton>. After 1-5 seconds, a list of
+        matching language strings is shown below. You can use the
+        <guilabel>More results</guilabel> link to load more language
+        strings.</para>
+
+        <para>The email language strings begin with
+        <option>PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_</option>. In our case, we
+        want to change the email header, so it is the
+        <option>PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_HEAD_NEW_ACTIVE</option>
+        option from the list. Click on it. Magically, the <guilabel>Language
+        constant</guilabel> and <guilabel>Text</guilabel> fields on the
+        left-hand side of the interface are populated.</para>
+
+        <para>Brilliant! Now edit the text in the <guilabel>Text</guilabel>
+        area to whatever you want. You can use the following variables in the
+        text:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>\n</term>
+
+            <listitem>
+              <para>A new line. Please use it only in the email body
+              text.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SITENAME]</term>
+
+            <listitem>
+              <para>The website's name, as configured in Global
+              Configuration</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[FULLNAME]</term>
+
+            <listitem>
+              <para>User's full name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[FIRSTNAME]</term>
+
+            <listitem>
+              <para>User's first name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[LASTNAME]</term>
+
+            <listitem>
+              <para>User's last name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USERNAME]</term>
+
+            <listitem>
+              <para>User's username</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USEREMAIL]</term>
+
+            <listitem>
+              <para>User's email address</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[LEVEL]</term>
+
+            <listitem>
+              <para>Subscription level's title</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[ENABLED]</term>
+
+            <listitem>
+              <para>The text "Enabled" if the subscription is enabled,
+              "Disabled" otherwise. The actual string is translated to the
+              current language.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[PAYSTATE]</term>
+
+            <listitem>
+              <para>The payment state: New, Pending, Completed, Rejected or
+              Refunded. The actual string is translated to the current
+              language.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[PUBLISH_UP]</term>
+
+            <listitem>
+              <para>The date when the subscription becomes active in a format
+              like this: 2011-12-31 21:34:59. Dates and times are always
+              expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[PUBLISH_DOWN]</term>
+
+            <listitem>
+              <para>The date when the subscription becomes inactive in a
+              format like this: 2011-12-31 21:34:59. Dates and times are
+              always expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[MYSUBSURL]</term>
+
+            <listitem>
+              <para>The URL to the "My Subscriptions" page</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:ID]</term>
+
+            <listitem>
+              <para>The numeric, unique Subscription ID</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:USER_ID]</term>
+
+            <listitem>
+              <para>The numeric Joomla! user ID of the subscriber</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_LEVEL_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the subscription level</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PUBLISH_UP]</term>
+
+            <listitem>
+              <para>The exact date and time the subscription will be activated
+              in YYYY-MM-DD hh:mm:ss format, e.g. 2011-12-31 13:10:50. Dates
+              and times are always expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PUBLISH_DOWN]</term>
+
+            <listitem>
+              <para>The exact date and time the subscription will be
+              deactivated in YYYY-MM-DD hh:mm:ss format, e.g. 2012-12-31
+              13:10:49. Dates and times are always expressed in UTC
+              timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:ENABLED]</term>
+
+            <listitem>
+              <para>This returns 1 if the subscription is enabled (e.g. the
+              payment processor already notified us that the transaction is
+              valid and it's not a renewal for a future date) or 0 if it's not
+              enabled yet.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PROCESSOR]</term>
+
+            <listitem>
+              <para>The name of the payment processor plugin, e.g. "paypal"
+              for the PayPal payment plugin</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PROCESSOR_KEY]</term>
+
+            <listitem>
+              <para>The unique transaction ID assigned by the payment
+              processor.</para>
+
+              <note>
+                <para>This may NOT be available if the payment processor has
+                not contacted your site with the result of the transaction
+                before redirecting the user back to your site.</para>
+              </note>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:STATE]</term>
+
+            <listitem>
+              <para>The payment state. C means completed, P is pending, X is
+              cancelled, N means it hasn't been processed yet.</para>
+
+              <note>
+                <para>This may NOT be available if the payment processor has
+                not contacted your site with the result of the transaction
+                before redirecting the user back to your site.</para>
+              </note>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:NET_AMOUNT]</term>
+
+            <listitem>
+              <para>The amount the user paid, before taxes.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:TAX_AMOUNT]</term>
+
+            <listitem>
+              <para>The amount of taxes that the user paid.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:GROSS_AMOUNT]</term>
+
+            <listitem>
+              <para>The total amount the user paid, including taxes.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:CREATED_ON]</term>
+
+            <listitem>
+              <para>The exact date and time the user pressed the Subscribe Now
+              button in YYYY-MM-DD hh:mm:ss format. Dates and times are always
+              expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_COUPON_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the coupon used during the subscription,
+              or 0 if no coupon was used</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_UPGRADE_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the upgrade rule automatically applied
+              to the subscription, or 0 if no upgrade rule was used</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_AFFILIATE_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the affiliate who referred this
+              subscription, or 0 if no affiliate was used</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PREDISCOUNT_AMOUNT]</term>
+
+            <listitem>
+              <para>The price of the subscription, before any coupon or
+              upgrade rule discount was applied</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:DISCOUNT_AMOUNT]</term>
+
+            <listitem>
+              <para>The exact discount amount (coupon, upgrade rule) applied
+              to the subscription</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ISBUSINESS]</term>
+
+            <listitem>
+              <para>1 if the user chose to perform a business registration, 0
+              otherwise</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:BUSINESSNAME]</term>
+
+            <listitem>
+              <para>The business name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:OCCUPATION]</term>
+
+            <listitem>
+              <para>The business occupation specified</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:VATNUMBER]</term>
+
+            <listitem>
+              <para>The VAT registration number</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:VIESREGISTERED]</term>
+
+            <listitem>
+              <para>1 if the VAT number is VIES-registered</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ADDRESS1]</term>
+
+            <listitem>
+              <para>The address field (part 1)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ADDRESS2]</term>
+
+            <listitem>
+              <para>The address field (part 2)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:CITY]</term>
+
+            <listitem>
+              <para>City</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:STATE]</term>
+
+            <listitem>
+              <para>State (two letter code); only exists for Australia, Canada
+              and USA</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ZIP]</term>
+
+            <listitem>
+              <para>ZIP/Postal Code</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:COUNTRY]</term>
+
+            <listitem>
+              <para>Two-letter ISO code of the selected country, e.g. DE for
+              Germany, FR for France, US for USA, CA for Canada and so
+              on</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[CUSTOM:<replaceable>YourFieldName</replaceable>]</term>
+
+            <listitem>
+              <para>Where <replaceable>yourFieldName</replaceable> is the name
+              of a custom field in all uppercase letters. Custom fields can be
+              defined in plugins. If you have created any custom field
+              plugins, you know what this is. If you don't know what this is,
+              you most likely don't need it!</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Then make sure you tick the <guilabel>For both
+        locations</guilabel> checkbox. Finally click on the <guibutton>Save
+        &amp; Close</guibutton> button to save your override. From now on,
+        Joomla! will use your overridden translation string instead of
+        <guilabel>Akeeba Subscriptions - Subscriptions Emails</guilabel>
+        plugin's built-in strings. After setting up all those overrides, it's
+        easy to train your client to edit those emails all by themselves,
+        without your intervention.</para>
+
+        <para>The author would like to thank Joomla! co-founder and expert
+        Brian Teeman for pointing us to this very useful Joomla! hidden
+        secret.</para>
       </section>
 
       <section xml:id="plugin-adminemails">
@@ -6460,6 +6915,12 @@ LEVEL3=Group 1</programlisting>
           to send a test email to Super Administrators) before activating this
           plugin.</para>
         </note>
+
+        <important>
+          <para>In Joomla! 2.5 and later you can customise the emails using
+          Joomla!'s Language Overrides feature, as explained in the
+          Subscription Emails section of this documentation.</para>
+        </important>
       </section>
 
       <section xml:id="plugin-affemails">
@@ -6499,6 +6960,12 @@ LEVEL3=Group 1</programlisting>
           to send a test email to Super Administrators) before activating this
           plugin.</para>
         </note>
+
+        <important>
+          <para>In Joomla! 2.5 and later you can customise the emails using
+          Joomla!'s Language Overrides feature, as explained in the
+          Subscription Emails section of this documentation.</para>
+        </important>
       </section>
 
       <section xml:id="plugin-asexpirationnotify">
@@ -6539,6 +7006,12 @@ LEVEL3=Group 1</programlisting>
         Now, edit any of the subscription email texts. The Emails plugin will
         use your override file instead of the default when sending out
         emails!</para>
+
+        <important>
+          <para>In Joomla! 2.5 and later you can customise the emails using
+          Joomla!'s Language Overrides feature, as explained in the
+          Subscription Emails section of this documentation.</para>
+        </important>
       </section>
 
       <section xml:id="plugin-asrestricted">
