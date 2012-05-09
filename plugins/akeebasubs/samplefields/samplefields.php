@@ -23,6 +23,29 @@ class plgAkeebasubsSamplefields extends JPlugin
 		// Init the fields array which will be returned
 		$fields = array();
 		
+		// ----- TELEPHONE FIELD -----
+		if(array_key_exists('phonenumber', $cache['custom'])) {
+			$current = $cache['custom']['phonenumber'];
+		} else {
+			if(!is_object($userparams->params)) {
+				$current = '';
+			} else {
+				$current = property_exists($userparams->params, 'phonenumber') ? $userparams->params->phonenumber : '';
+			}
+		}
+		$html = '<input type="text" name="custom[phonenumber]" id="phonenumber" value="'.htmlentities($current).'" />';
+
+		// Setup the field
+		$field = array(
+			'id'			=> 'phonenumber',
+			'label'			=> '* '.JText::_('PLG_AKEEBASUBS_SAMPLEFIELDS_PHONENUMBER_LABEL'),
+			'elementHTML'	=> $html,
+			'invalidLabel'	=> JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED'),
+			'isValid'		=> !empty($current)
+		);
+		// Add the field to the return output
+		$fields[] = $field;
+		
 		// ----- AGE GROUP FIELD -----
 		// Get the current setting (or 0 if none)
 		if(array_key_exists('agegroup', $cache['custom'])) {
@@ -102,6 +125,7 @@ function plg_akeebasubs_samplefields_fetch()
 	(function($) {
 		result.agegroup = $('#agegroup').val();
 		result.gender = $('#gender').val();
+		result.phonenumber = $('#phonenumber').val();
 	})(akeeba.jQuery);
 	
 	return result;
@@ -130,17 +154,26 @@ ENDJS;
 	
 	function onValidate($data)
 	{
+		// Initialise the validation respone
 		$response = array(
 			'isValid'			=> true,
 			'custom_validation'	=> array()
 		);
 		
+		// Fetch the custom data
 		$custom = $data->custom;
-		
+
+		// Validate the age group
 		if(!array_key_exists('agegroup',$custom)) $custom['agegroup'] = 0;
-		
 		$response['custom_validation']['agegroup'] = $custom['agegroup'] != 0;
-		$response['valid'] = $response['custom_validation']['agegroup']; 
+
+		// Validate the phone number
+		if(!array_key_exists('phonenumber',$custom)) $custom['phonenumber'] = 0;
+		$response['custom_validation']['phonenumber'] = !empty($custom['phonenumber']);
+		
+		// The overall validation response is based on both validatable fields
+		$response['valid'] = $response['custom_validation']['agegroup'] &&
+			$response['custom_validation']['phonenumber']; 
 		
 		return $response;
 	}
