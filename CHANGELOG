@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.2.1
 + Adding a per-level class name in front-end subscription level display to allow custom per-level styling
 # Double email sent by the Administrator Email plugin
 # Users would not get removed from K2 groups on subscription expiration
+# Upgrade rules would be applied erratically under some circumstances
 ! Subscriptions with recurring payments would not be activated
 ! Typo in the installation file, didn't allow upgrading to 2.2.0
 

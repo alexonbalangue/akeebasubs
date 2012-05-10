@@ -668,9 +668,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$this->_upgrade_id = null;
 		
 		foreach($autoRules as $rule) {
+			// Make sure there is an active subscription in the From level
 			if(!array_key_exists($rule->from_id, $subs)) continue;
+			// Make sure the min/max presence is repected
 			if($subs[$rule->from_id] < ($rule->min_presence*86400)) continue;
 			if($subs[$rule->from_id] > ($rule->max_presence*86400)) continue;
+			// If From and To levels are different, make sure there is no active subscription in the To level yet
+			if($rule->to_id != $rule->from_id) {
+				if(array_key_exists($rule->to_id, $subs)) continue;
+			}
 			
 			switch($rule->type) {
 				case 'value':
