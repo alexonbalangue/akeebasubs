@@ -665,7 +665,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
     <title>Initial set-up and usage</title>
 
     <section xml:id="how-subscriptions-work">
-      <title>How subscriptions work</title>
+      <title>How subscriptions work and Quick Start</title>
 
       <para>Before you begin setting up Akeeba Subscriptions, you should be
       aware of the way subscriptions work under the hood. The most basic
@@ -2440,7 +2440,96 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             their address and VAT number.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>AEC</term>
+
+          <listitem>
+            <para>Imports subscription from the AEC subscription management
+            component from Valanx.de. Please note that it is a lossy import;
+            not all AEC options and features are supported in Akeeba
+            Subscriptions</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
+    </section>
+
+    <section xml:id="customising-akeeba-subs">
+      <title>Customising Akeeba Subscriptions</title>
+
+      <para>The author has no illusions about being any good as a web
+      designer. The opposite is true. To this end, we've made it very easy for
+      users to override the CSS files of Akeeba Subscriptions in their
+      templates. The following sections will explain how to customise Akeeba
+      Subscriptions' front-end display.</para>
+
+      <section>
+        <title>Customising the front-end layout</title>
+
+        <para>Layout customisation usually involves either changing just the
+        CSS or changing both the CSS and HTML output of the component. Both
+        can be accomplished with template overrides. We will explain the two
+        procedures below.</para>
+
+        <warning>
+          <para>Newer versions of the component may introduce changes to the
+          base CSS files and HTML output. We recommend you to review your
+          overridden files every time you upgrade Akeeba Subscriptions. We
+          regret to inform you that we can not accept bug reports and support
+          requests unless the issues you have can be reproduced <emphasis>even
+          after disabling your overrides</emphasis>.</para>
+        </warning>
+
+        <bridgehead>Customising the CSS</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Find your current template's subdirectory in your site's
+            root, under the <filename>tempates</filename> directory. In this
+            example, we will assume it is
+            <filename>templates/<replaceable>mytemplate</replaceable></filename></para>
+          </step>
+
+          <step>
+            <para>Create a new directory
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/css</filename>
+            This is your media files overrides directory.</para>
+          </step>
+
+          <step>
+            <para>Copy the file
+            <filename>media/com_akeebasubs/css/frontend.css</filename> into
+            the
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/css</filename>
+            directory. From now on, Akeeba Subscription will load this new
+            <filename>frontend.css</filename> file instead of the file found
+            under <filename>media/com_akeebasubs/css</filename>.</para>
+          </step>
+
+          <step>
+            <para>Edit the
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/css/frontend.css</filename>
+            file replacing or adding CSS rules so that the design matches your
+            desired style </para>
+          </step>
+        </procedure>
+
+        <para>Please don't ask us for CSS or design ideas. We are good
+        developers and horrid designers. You can ask us, however, regarding
+        any issues you might experience overriding our CSS files.</para>
+
+        <bridgehead>Customising the HTML output</bridgehead>
+
+        <para>Sometimes it's not enough modifying the CSS. In order to achieve
+        your desired styling you may also have to add some extra div or span
+        elements in the HTML output. When this happens you need to perform
+        template overrides for our view template PHP files, a process called
+        Template Overrides in Joomla! jargon. Instead of reinventing the wheel
+        by writing lengthy instructions, we think it's better for you to read
+        the <link
+        xlink:href="http://docs.joomla.org/How_to_override_the_output_from_the_Joomla!_core">official
+        Joomla! documentation on the subject</link>.</para>
+      </section>
     </section>
   </chapter>
 
