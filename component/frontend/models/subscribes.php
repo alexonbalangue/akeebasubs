@@ -243,19 +243,22 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		$state = $this->getStateVariables();
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		$noPersonalInfo = !AkeebasubsHelperCparams::getParam('personalinfo',1);
+		
 		// 1. Basic checks
 		$ret = array(
 			'name'			=> !empty($state->name),
 			'email'			=> !empty($state->email),
 			'email2'		=> !empty($state->email2) && ($state->email == $state->email2),
-			'address1'		=> !empty($state->address1),
-			'country'		=> !empty($state->country),
-			'state'			=> !empty($state->state),
-			'city'			=> !empty($state->city),
-			'zip'			=> !empty($state->zip),
-			'businessname'	=> !empty($state->businessname),
-			'vatnumber'		=> !empty($state->vatnumber),
-			'coupon'		=> !empty($state->coupon)
+			'address1'		=> $noPersonalInfo ? true : !empty($state->address1),
+			'country'		=> $noPersonalInfo ? true : !empty($state->country),
+			'state'			=> $noPersonalInfo ? true : !empty($state->state),
+			'city'			=> $noPersonalInfo ? true : !empty($state->city),
+			'zip'			=> $noPersonalInfo ? true : !empty($state->zip),
+			'businessname'	=> $noPersonalInfo ? true : !empty($state->businessname),
+			'vatnumber'		=> $noPersonalInfo ? true : !empty($state->vatnumber),
+			'coupon'		=> $noPersonalInfo ? true : !empty($state->coupon)
 		);
 		
 		$ret['rawDataForDebug'] = (array)$state;
@@ -307,24 +310,30 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		
 		// 2. Country validation
-		if($ret['country']) {
+		if($ret['country'] && !$noPersonalInfo) {
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 			$ret['country'] = array_key_exists($state->country, AkeebasubsHelperSelect::$countries);
+		} else {
+			$ret['country'] = true;
 		}
 		
 		// 3. State validation
-		if(in_array($state->country,array('US','CA'))) {
-			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
-			$ret['state'] = false;
-			foreach(AkeebasubsHelperSelect::$states as $country => $states) {
-				if(array_key_exists($state->state, $states)) $ret['state'] = true;
-			}
-		} else {
+		if($noPersonalInfo) {
 			$ret['state'] = true;
+		} else {
+			if(in_array($state->country,array('US','CA'))) {
+				require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
+				$ret['state'] = false;
+				foreach(AkeebasubsHelperSelect::$states as $country => $states) {
+					if(array_key_exists($state->state, $states)) $ret['state'] = true;
+				}
+			} else {
+				$ret['state'] = true;
+			}
 		}
 		
 		// 4. Business validation
-		if(!$state->isbusiness) {
+		if(!$state->isbusiness || $noPersonalInfo) {
 			$ret['businessname'] = true;
 			$ret['vatnumber'] = false;
 		} else {
