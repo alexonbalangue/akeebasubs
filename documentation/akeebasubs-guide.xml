@@ -2510,7 +2510,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <para>Edit the
             <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/css/frontend.css</filename>
             file replacing or adding CSS rules so that the design matches your
-            desired style </para>
+            desired style</para>
           </step>
         </procedure>
 
@@ -4669,6 +4669,48 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION SITES!
               IF YOU DO, YOU WILL LOSE MONEY AND/OR
               CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="payment-zarinpal">
+        <title>ZarinPal</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - ZarinPal</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Iranian payment processor
+        ZarinPal. The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "ZarinPal" or type in a custom name to
+              show to your customer's, e.g. "MasterCard, Visa, Maestro"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The merchant ID assigned to you by ZarinPal</para>
             </listitem>
           </varlistentry>
         </variablelist>

@@ -90,7 +90,8 @@ $installation_queue = array(
 			'skrill'				=> 0,
 			'upay'					=> 0,
 			'verotel'				=> 0,
-			'worldpay'				=> 0
+			'worldpay'				=> 0,
+			'zarinpal'				=> 0,
 		),
 		'content' => array(
 			'aslink'				=> 1,
