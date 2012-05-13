@@ -31,7 +31,7 @@ $this->loadHelper('message');
 			$price_integer = substr($formatedPrice,0,$dotpos);
 			$price_fractional = substr($formatedPrice,$dotpos+1);
 		?>
-		<div class="akeebasubs-awesome-column">
+		<div class="akeebasubs-awesome-column akeebasubs-level-<?php echo $level->akeebasubs_level_id ?>">
 			<div class="column-<?php echo $i == 1 ? 'first' : ($i == $max ? 'last' : 'middle')?>">
 				<div class="akeebasubs-awesome-header">
 					<div class="akeebasubs-awesome-level">

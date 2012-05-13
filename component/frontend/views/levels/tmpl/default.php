@@ -27,7 +27,7 @@ $this->loadHelper('message');
 	$price_integer = substr($formatedPrice,0,$dotpos);
 	$price_fractional = substr($formatedPrice,$dotpos+1);
 ?>
-	<div class="level">
+	<div class="level akeebasubs-level-<?php echo $level->akeebasubs_level_id ?>">
 		<p class="level-title">
 			<span class="level-price">
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>

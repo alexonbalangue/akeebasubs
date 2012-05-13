@@ -203,7 +203,6 @@ class plgAkeebasubsAdminemails extends JPlugin
 		$mailer->addRecipient($this->emails);
 		$mailer->setSubject($subject);
 		$mailer->setBody($body);
-		$mailer->Send();
 		$result = $mailer->Send();
 	}
 }

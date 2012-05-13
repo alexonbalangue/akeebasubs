@@ -82,6 +82,7 @@ $installation_queue = array(
 			'googlecheckout'		=> 0,
 			'moip'					=> 0,
 			'moneris'				=> 0,
+			'nochex'				=> 0,
 			'none'					=> 0,
 			'offline'				=> 0,
 			'pagseguro'				=> 0,
@@ -91,7 +92,8 @@ $installation_queue = array(
 			'skrill'				=> 0,
 			'upay'					=> 0,
 			'verotel'				=> 0,
-			'worldpay'				=> 0
+			'worldpay'				=> 0,
+			'zarinpal'				=> 0,
 		),
 		'content' => array(
 			'aslink'				=> 1,
@@ -339,7 +341,7 @@ ENDSQL;
 }
 
  // Upgrade the upgrades table (2.2)
-$sql = 'SHOW CREATE TABLE `#__akeebasubs_upgrade`';
+$sql = 'SHOW CREATE TABLE `#__akeebasubs_upgrades`';
 $db->setQuery($sql);
 $ctableAssoc = $db->loadResultArray(1);
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];

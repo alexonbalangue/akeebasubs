@@ -243,19 +243,22 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		$state = $this->getStateVariables();
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		$noPersonalInfo = !AkeebasubsHelperCparams::getParam('personalinfo',1);
+		
 		// 1. Basic checks
 		$ret = array(
 			'name'			=> !empty($state->name),
 			'email'			=> !empty($state->email),
 			'email2'		=> !empty($state->email2) && ($state->email == $state->email2),
-			'address1'		=> !empty($state->address1),
-			'country'		=> !empty($state->country),
-			'state'			=> !empty($state->state),
-			'city'			=> !empty($state->city),
-			'zip'			=> !empty($state->zip),
-			'businessname'	=> !empty($state->businessname),
-			'vatnumber'		=> !empty($state->vatnumber),
-			'coupon'		=> !empty($state->coupon)
+			'address1'		=> $noPersonalInfo ? true : !empty($state->address1),
+			'country'		=> $noPersonalInfo ? true : !empty($state->country),
+			'state'			=> $noPersonalInfo ? true : !empty($state->state),
+			'city'			=> $noPersonalInfo ? true : !empty($state->city),
+			'zip'			=> $noPersonalInfo ? true : !empty($state->zip),
+			'businessname'	=> $noPersonalInfo ? true : !empty($state->businessname),
+			'vatnumber'		=> $noPersonalInfo ? true : !empty($state->vatnumber),
+			'coupon'		=> $noPersonalInfo ? true : !empty($state->coupon)
 		);
 		
 		$ret['rawDataForDebug'] = (array)$state;
@@ -307,24 +310,30 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		
 		// 2. Country validation
-		if($ret['country']) {
+		if($ret['country'] && !$noPersonalInfo) {
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 			$ret['country'] = array_key_exists($state->country, AkeebasubsHelperSelect::$countries);
+		} else {
+			$ret['country'] = true;
 		}
 		
 		// 3. State validation
-		if(in_array($state->country,array('US','CA'))) {
-			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
-			$ret['state'] = false;
-			foreach(AkeebasubsHelperSelect::$states as $country => $states) {
-				if(array_key_exists($state->state, $states)) $ret['state'] = true;
-			}
-		} else {
+		if($noPersonalInfo) {
 			$ret['state'] = true;
+		} else {
+			if(in_array($state->country,array('US','CA'))) {
+				require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
+				$ret['state'] = false;
+				foreach(AkeebasubsHelperSelect::$states as $country => $states) {
+					if(array_key_exists($state->state, $states)) $ret['state'] = true;
+				}
+			} else {
+				$ret['state'] = true;
+			}
 		}
 		
 		// 4. Business validation
-		if(!$state->isbusiness) {
+		if(!$state->isbusiness || $noPersonalInfo) {
 			$ret['businessname'] = true;
 			$ret['vatnumber'] = false;
 		} else {
@@ -668,9 +677,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$this->_upgrade_id = null;
 		
 		foreach($autoRules as $rule) {
+			// Make sure there is an active subscription in the From level
 			if(!array_key_exists($rule->from_id, $subs)) continue;
+			// Make sure the min/max presence is repected
 			if($subs[$rule->from_id] < ($rule->min_presence*86400)) continue;
 			if($subs[$rule->from_id] > ($rule->max_presence*86400)) continue;
+			// If From and To levels are different, make sure there is no active subscription in the To level yet
+			if($rule->to_id != $rule->from_id) {
+				if(array_key_exists($rule->to_id, $subs)) continue;
+			}
 			
 			switch($rule->type) {
 				case 'value':
@@ -791,9 +806,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 	}
 	
 	/**
-	 * Processes the form data and creates a new subscription
+	 * Checks that the current state passes the validation
+	 * 
+	 * @return bool
 	 */
-	public function createNewSubscription()
+	public function isValid()
 	{
 		// Step #1. Check the validity of the user supplied information
 		// ----------------------------------------------------------------------
@@ -833,29 +850,25 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Make sure custom fields also validate
 		$isValid = $isValid && $validation->custom_valid;
 		
-		if(!$isValid) return false;
-
-		// Step #2. Check that the payment plugin exists or return false
-		// ----------------------------------------------------------------------
-		$plugins = $this->getPaymentPlugins();
-		$found = false;
-		if(!empty($plugins)) {
-			foreach($plugins as $plugin) {
-				if($plugin->name == $state->paymentmethod) {
-					$found = true;
-					break;
-				}
-			}
-		}
-		if(!$found) return false;
-		
-		// Reset the session flag, so that future registrations will merge the
-		// data from the database
-		JFactory::getSession()->set('firstrun', true, 'com_akeebasubs');
-
-		// Step #3. Create or update a user record
-		// ----------------------------------------------------------------------
+		return $isValid;
+	}
+	
+	/**
+	 * Updates the user info based on the state data 
+	 * 
+	 * @param bool $allowNewUser When true, we can create a new user. False, only update an existing user's data.
+	 * @return boolean 
+	 */
+	public function updateUserInfo($allowNewUser = true)
+	{
+		$state = $this->getStateVariables();
 		$user = JFactory::getUser();
+		$user = $this->getState('user', $user);
+		
+		if(($user->id == 0) && !$allowNewUser) {
+			// New user creation is not allowed. Sorry.
+			return false;
+		}
 		
 		if($user->id == 0) {
 			// Check for an existing, blocked, unactivated user with the same
@@ -974,10 +987,24 @@ class AkeebasubsModelSubscribes extends FOFModel
 		if(!$userIsSaved) {
 			JError::raiseWarning('', JText::_( $user->getError())); // ...raise a Warning
 			return false;
+		} else {
+			$this->setState('user', $user);
 		}
 		
-		// Step #4. Create or add user extra fields
-		// ----------------------------------------------------------------------
+		return $userIsSaved;
+	}
+	
+	/**
+	 * Saves the custom fields of a user record
+	 * 
+	 * @return bool
+	 */
+	public function saveCustomFields()
+	{
+		$state = $this->getStateVariables();
+		$user = JFactory::getUser();
+		$user = $this->getState('user', $user);
+
 		// Find an existing record
 		$list = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
@@ -1029,10 +1056,31 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Serialize custom fields
 		$data['params'] = json_encode($data['params']);
 		
-		FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$status = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->setId($id)
 			->getItem()
 			->save($data);
+		
+		return $status;
+	}
+	
+	/**
+	 * Processes the form data and creates a new subscription
+	 */
+	public function createNewSubscription()
+	{
+		// Fetch state and validation variables
+		$state = $this->getStateVariables();
+		$validation = $this->getValidation();
+		
+		// Step #1.a. Check that the form is valid
+		// ----------------------------------------------------------------------
+		$isValid = $this->isValid();
+		
+		if(!$isValid) return false;
+		
+		// Step #1.b. Check that the subscription level is allowed
+		// ----------------------------------------------------------------------
 		
 		// Is this actually an allowed subscription level?
 		$allowedLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
@@ -1049,7 +1097,42 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		if(!$allowed) {
 			return false;
+		}		
+
+		// Step #2. Check that the payment plugin exists or return false
+		// ----------------------------------------------------------------------
+		$plugins = $this->getPaymentPlugins();
+		$found = false;
+		if(!empty($plugins)) {
+			foreach($plugins as $plugin) {
+				if($plugin->name == $state->paymentmethod) {
+					$found = true;
+					break;
+				}
+			}
 		}
+		if(!$found) return false;
+		
+		// Reset the session flag, so that future registrations will merge the
+		// data from the database
+		JFactory::getSession()->set('firstrun', true, 'com_akeebasubs');
+
+		// Step #3. Create or update a user record
+		// ----------------------------------------------------------------------
+		$user = JFactory::getUser();
+		$this->setState('user', $user);
+		$userIsSaved = $this->updateUserInfo(true);
+		
+		if(!$userIsSaved) {
+			return false;
+		} else {
+			$user = $this->getState('user', $user);
+		}
+		
+		// Step #4. Create or add user extra fields
+		// ----------------------------------------------------------------------
+		// Find an existing record
+		$dummy = $this->saveCustomFields();
 		
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - NoChex</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-05-04</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_NOCHEX_DESCRIPTION</description>
+	<files>
+		<filename plugin="nochex">nochex.php</filename>
+		<folder>nochex</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_nochex.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_nochex.sys.ini</language>
+	</languages>
+	<params>
+		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_NOCHEX_TITLE_LABEL" description="PLG_AKPAYMENT_NOCHEX_TITLE_DESC"/>
+		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_NOCHEX_PPIMAGE_LABEL" description="PLG_AKPAYMENT_NOCHEX_PPIMAGE_DESC" />
+		<param type="spacer" />
+		<param name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_NOCHEX_MERCHANTID_LABEL" description="PLG_AKPAYMENT_NOCHEX_MERCHANTID_DESC"/>
+		<param name="secureipn" type="radio" default="0" label="PLG_AKPAYMENT_NOCHEX_SECUREIPN_LABEL" description="PLG_AKPAYMENT_NOCHEX_SECUREIPN_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
+		<param type="spacer" />
+		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_NOCHEX_SANDBOX_LABEL" description="PLG_AKPAYMENT_NOCHEX_SANDBOX_DESC">
+		  <option value="0">No</option>
+		  <option value="1">Yes</option>
+		</param>
+	</params>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_NOCHEX_TITLE_LABEL" description="PLG_AKPAYMENT_NOCHEX_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_NOCHEX_PPIMAGE_LABEL" description="PLG_AKPAYMENT_NOCHEX_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_NOCHEX_MERCHANTID_LABEL" description="PLG_AKPAYMENT_NOCHEX_MERCHANTID_DESC"/>
+				<field name="secureipn" type="radio" default="1" label="PLG_AKPAYMENT_NOCHEX_SECUREIPN_LABEL" description="PLG_AKPAYMENT_NOCHEX_SECUREIPN_DESC">
+				<option value="1">Yes</option>
+				<option value="0">No</option>
+				</field>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_NOCHEX_SANDBOX_LABEL" description="PLG_AKPAYMENT_NOCHEX_SANDBOX_DESC">
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</install>

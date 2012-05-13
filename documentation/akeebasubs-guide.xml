@@ -258,8 +258,10 @@
 
       <itemizedlist>
         <listitem>
-          <para>PHP 5.2.7 or later. Running it on earlier versions will either
-          be problematic or it won't work at all. PHP 5.3 recommended.</para>
+          <para><trademark>Joomla!</trademark> and PHP version compatibilities
+          are detailed in <link
+          xlink:href="https://www.akeebabackup.com/compatibility.html">our
+          Version Compatibility matrix</link>.</para>
         </listitem>
 
         <listitem>
@@ -267,11 +269,6 @@
           not be supported. Do note that earlier releases of MySQL are
           obsolete and not supported any more by Oracle (the company who
           controls the development of MySQL).</para>
-        </listitem>
-
-        <listitem>
-          <para>Joomla! 1.5.14 or later (fully supported), Joomla! 1.7.x or
-          Joomla! 2.5.x.</para>
         </listitem>
       </itemizedlist>
 
@@ -668,7 +665,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
     <title>Initial set-up and usage</title>
 
     <section xml:id="how-subscriptions-work">
-      <title>How subscriptions work</title>
+      <title>How subscriptions work and Quick Start</title>
 
       <para>Before you begin setting up Akeeba Subscriptions, you should be
       aware of the way subscriptions work under the hood. The most basic
@@ -761,6 +758,85 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
       <para>The sections below will tell you how to go through each of these
       steps.</para>
+
+      <bridgehead>How to make it all work together to make money from your
+      site</bridgehead>
+
+      <para>What we described above cover just one small part of Akeeba
+      Subscriptions' functionality: how to create something that your clients
+      can buy and how to sell it. Obviously, your clients expect to get
+      something for the money they paid. In other words, you need to make the
+      subscriptions <emphasis>do something</emphasis> on your site. Akeeba
+      Subscriptions' integration plugins are that magic glue which binds
+      together subscriptions and features on your site.</para>
+
+      <para>In order to make it easier to understand, let's take a simple
+      example. Alice wants to set up a magazine site. Subscribers will have
+      access to premium content. She wants to sell 3, 6 and 12 months
+      subscriptions. How can she do it? Very easily, but she has to start
+      <emphasis>backwards</emphasis>. She will set up her site's Joomla! ACL
+      to limit access to the premium content, Akeeba Subscriptions to sell
+      subscriptions to the premium content and the <guilabel>Akeeba
+      Subscriptions - Joomla! Usergroups Integration</guilabel> plugin as the
+      glue to link Joomla! ACL (usergroups) to subscriptions. Still with us?
+      Let's see how she can do it in 5 minutes or less.</para>
+
+      <para>First, she has to ensure that premium content can only be accessed
+      by subscribers. Using Joomla! 1.6 and later it is very easy to do so.
+      She needs to create a Joomla! user group called
+      <option>Subscribers</option>. Then, she will create a new View Access
+      Level called <option>Premium Content</option>, adding only the new
+      Subscribers group to it. Then she will set the View Access Level to all
+      her premium Joomla! articles to, you guessed it, Premium Content.</para>
+
+      <para>Then, she will set up the three subscription levels. The first
+      level is called <option>3MONTHS</option> and has a duration of 90 days.
+      The second one is called <option>6MONTHS</option> and has a length of
+      180 days. The last one is called <option>12MONTHS</option> and has a
+      length of 365 days.</para>
+
+      <para>Now she can limit who can access the premium content and she can
+      sell subscriptions. It's time to glue things together, making sure that
+      buying a subscription gives you access to the premium content. The logic
+      is simple: you need to use the relevant Akeeba Subscriptions integration
+      plugin. In our case, we want to glue together Akeeba Subscriptions and
+      Joomla! user groups. Cool bananas! There's a plugin for that, it's
+      called "Akeeba Subscriptions - Joomla! Usergroups Integration". First
+      stop for Alice is the Extensions, Plugin Manager page where she finds
+      the plugin and activates it. The plugin, however, is just your typical
+      computer personality: dumb. You need to tell it what to do. Easy peasy.
+      Click on it and the configuration page appears. After reading the fine
+      documentation, Alice figure out that she needs to enter the following in
+      the two text areas:</para>
+
+      <programlisting>3MONTHS=Subscribers
+6MONTHS=Subscribers
+12MONTHS=Subscribers</programlisting>
+
+      <para>Translation for everyone else. Each line "glues" one Subscription
+      Level to one Joomla! User Group. Left hand side: the title of the
+      Subscription Level, as you entered it in Akeeba Subscriptions. The right
+      hand side: the name of the Joomla! user group, as you entered it in
+      Joomla!'s user group management.</para>
+
+      <para>One final detail left: handling user payments. Essentially, you
+      need a payments processor that Akeeba Subscriptions can talk to and ask
+      them to handle the gory details of payments. The easiest option is
+      PayPal. Setting it up is very easy, indeed. Just go to PayPal and open a
+      new account. Now go to your site's Plugin Manager, find the "Akeeba
+      Subscriptions - PayPal integration" plugin, enable it and edit its
+      configuration. All you need to do is enter your email address, the same
+      one you used to open a PayPal account, into the Merchant ID or Email
+      field. Save and close. Done!</para>
+
+      <para>Now you get the idea of how subscriptions and site features glue
+      together. You start by developing your site, limiting access to premium
+      content using groups or whatever your components provide. Then create
+      your Subscription Levels in Akeeba Subscriptions. Continue with enabling
+      and configuring the respective Akeeba Subscriptions integration
+      plugin(s), gluing subscriptions to your site features. Finally add the
+      payment plugins you want and you're ready to start making some
+      money.</para>
     </section>
 
     <section xml:id="configuration">
@@ -2364,7 +2440,96 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             their address and VAT number.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>AEC</term>
+
+          <listitem>
+            <para>Imports subscription from the AEC subscription management
+            component from Valanx.de. Please note that it is a lossy import;
+            not all AEC options and features are supported in Akeeba
+            Subscriptions</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
+    </section>
+
+    <section xml:id="customising-akeeba-subs">
+      <title>Customising Akeeba Subscriptions</title>
+
+      <para>The author has no illusions about being any good as a web
+      designer. The opposite is true. To this end, we've made it very easy for
+      users to override the CSS files of Akeeba Subscriptions in their
+      templates. The following sections will explain how to customise Akeeba
+      Subscriptions' front-end display.</para>
+
+      <section>
+        <title>Customising the front-end layout</title>
+
+        <para>Layout customisation usually involves either changing just the
+        CSS or changing both the CSS and HTML output of the component. Both
+        can be accomplished with template overrides. We will explain the two
+        procedures below.</para>
+
+        <warning>
+          <para>Newer versions of the component may introduce changes to the
+          base CSS files and HTML output. We recommend you to review your
+          overridden files every time you upgrade Akeeba Subscriptions. We
+          regret to inform you that we can not accept bug reports and support
+          requests unless the issues you have can be reproduced <emphasis>even
+          after disabling your overrides</emphasis>.</para>
+        </warning>
+
+        <bridgehead>Customising the CSS</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Find your current template's subdirectory in your site's
+            root, under the <filename>tempates</filename> directory. In this
+            example, we will assume it is
+            <filename>templates/<replaceable>mytemplate</replaceable></filename></para>
+          </step>
+
+          <step>
+            <para>Create a new directory
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/css</filename>
+            This is your media files overrides directory.</para>
+          </step>
+
+          <step>
+            <para>Copy the file
+            <filename>media/com_akeebasubs/css/frontend.css</filename> into
+            the
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/css</filename>
+            directory. From now on, Akeeba Subscription will load this new
+            <filename>frontend.css</filename> file instead of the file found
+            under <filename>media/com_akeebasubs/css</filename>.</para>
+          </step>
+
+          <step>
+            <para>Edit the
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/css/frontend.css</filename>
+            file replacing or adding CSS rules so that the design matches your
+            desired style</para>
+          </step>
+        </procedure>
+
+        <para>Please don't ask us for CSS or design ideas. We are good
+        developers and horrid designers. You can ask us, however, regarding
+        any issues you might experience overriding our CSS files.</para>
+
+        <bridgehead>Customising the HTML output</bridgehead>
+
+        <para>Sometimes it's not enough modifying the CSS. In order to achieve
+        your desired styling you may also have to add some extra div or span
+        elements in the HTML output. When this happens you need to perform
+        template overrides for our view template PHP files, a process called
+        Template Overrides in Joomla! jargon. Instead of reinventing the wheel
+        by writing lengthy instructions, we think it's better for you to read
+        the <link
+        xlink:href="http://docs.joomla.org/How_to_override_the_output_from_the_Joomla!_core">official
+        Joomla! documentation on the subject</link>.</para>
+      </section>
     </section>
   </chapter>
 
@@ -4435,6 +4600,121 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </listitem>
         </itemizedlist>
       </section>
+
+      <section xml:id="payment-nochex">
+        <title>NoChex</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - NoChex</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <warning>
+          <para>This payment processor only accepts payments in Great Britain
+          Pounds (GBP - £). You must make sure that Akeeba Subscriptions is
+          set up to use GBP as the currency and that all of your prices are
+          listed in GBP.</para>
+        </warning>
+
+        <para>This payment method integrates the NoChex payment processor. The
+        options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "NoChex" or type in a custom name to
+              show to your customer's, e.g. "MasterCard, Visa, Maestro"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The email address you use with your NoChex account</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Secure POST</term>
+
+            <listitem>
+              <para>If enabled, the verification postback to NoChex will be
+              over an SSL connection. In order for this to work, your host
+              needs to support SSL connections using cURL to NoChex' IP
+              address block.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Test Mode</term>
+
+            <listitem>
+              <para>When enabled, transactions are processed by NoChex'
+              testing server. This is designed for integration tests, BEFORE
+              going live with your site. <emphasis role="bold">NEVER, EVER, NO
+              MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION SITES!
+              IF YOU DO, YOU WILL LOSE MONEY AND/OR
+              CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="payment-zarinpal">
+        <title>ZarinPal</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - ZarinPal</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Iranian payment processor
+        ZarinPal. The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "ZarinPal" or type in a custom name to
+              show to your customer's, e.g. "MasterCard, Visa, Maestro"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The merchant ID assigned to you by ZarinPal</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
@@ -6338,6 +6618,461 @@ LEVEL3=Group 1</programlisting>
 
         <para>We strongly recommend publishing this plugin at all
         times.</para>
+
+        <bridgehead>Easily edit your email text in Joomla! 2.5 and
+        later</bridgehead>
+
+        <para>While creating the .override.ini translation files is a
+        geek-friendly way of supplying custom email text, it is certainly not
+        a user-friendly way. Most likely your clients have no idea what FTP
+        is, making it impossible to trust them to find, create or edit INI
+        files and upload them through FTP. Don't worry and don't despair!
+        There's a Joomla! hidden secret called Language Overrides baked right
+        into Joomla! 2.5 and later!</para>
+
+        <para>Here's how to edit your emails text using Joomla! 2.5 and
+        later's Language Override's feature. Log into your site's back-end and
+        go to <guimenu>Extensions</guimenu>, <guimenuitem>Language
+        Manager</guimenuitem>, then click on <guilabel>Overrides</guilabel>.
+        Right above the list, on the right-hand side, there is a drop down.
+        Select your desired language, e.g. <option>English (United Kingdom) -
+        Administrator</option>.</para>
+
+        <important>
+          <para>Make sure you select the "- Administrator" variant of your
+          language. Counter-intuitively, plugin translation files are
+          considered administrator language files.</para>
+        </important>
+
+        <para>Click on the <guibutton>New</guibutton> button. In the new page,
+        in the right-hand side of the page, there is a search box. Enter a
+        part of the email text you want to translate. For example, let's
+        change the email header of a new (just-paid) subscription. We will
+        search for <replaceable>new subscription</replaceable>. Make sure the
+        radio button called <guilabel>Value</guilabel> is selected and click
+        on <guibutton>Search</guibutton>. After 1-5 seconds, a list of
+        matching language strings is shown below. You can use the
+        <guilabel>More results</guilabel> link to load more language
+        strings.</para>
+
+        <para>The email language strings begin with
+        <option>PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_</option>. In our case, we
+        want to change the email header, so it is the
+        <option>PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_HEAD_NEW_ACTIVE</option>
+        option from the list. Click on it. Magically, the <guilabel>Language
+        constant</guilabel> and <guilabel>Text</guilabel> fields on the
+        left-hand side of the interface are populated.</para>
+
+        <para>Brilliant! Now edit the text in the <guilabel>Text</guilabel>
+        area to whatever you want. You can use the following variables in the
+        text:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>\n</term>
+
+            <listitem>
+              <para>A new line. Please use it only in the email body
+              text.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SITENAME]</term>
+
+            <listitem>
+              <para>The website's name, as configured in Global
+              Configuration</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[FULLNAME]</term>
+
+            <listitem>
+              <para>User's full name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[FIRSTNAME]</term>
+
+            <listitem>
+              <para>User's first name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[LASTNAME]</term>
+
+            <listitem>
+              <para>User's last name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USERNAME]</term>
+
+            <listitem>
+              <para>User's username</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USEREMAIL]</term>
+
+            <listitem>
+              <para>User's email address</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[LEVEL]</term>
+
+            <listitem>
+              <para>Subscription level's title</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[ENABLED]</term>
+
+            <listitem>
+              <para>The text "Enabled" if the subscription is enabled,
+              "Disabled" otherwise. The actual string is translated to the
+              current language.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[PAYSTATE]</term>
+
+            <listitem>
+              <para>The payment state: New, Pending, Completed, Rejected or
+              Refunded. The actual string is translated to the current
+              language.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[PUBLISH_UP]</term>
+
+            <listitem>
+              <para>The date when the subscription becomes active in a format
+              like this: 2011-12-31 21:34:59. Dates and times are always
+              expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[PUBLISH_DOWN]</term>
+
+            <listitem>
+              <para>The date when the subscription becomes inactive in a
+              format like this: 2011-12-31 21:34:59. Dates and times are
+              always expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[MYSUBSURL]</term>
+
+            <listitem>
+              <para>The URL to the "My Subscriptions" page</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:ID]</term>
+
+            <listitem>
+              <para>The numeric, unique Subscription ID</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:USER_ID]</term>
+
+            <listitem>
+              <para>The numeric Joomla! user ID of the subscriber</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_LEVEL_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the subscription level</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PUBLISH_UP]</term>
+
+            <listitem>
+              <para>The exact date and time the subscription will be activated
+              in YYYY-MM-DD hh:mm:ss format, e.g. 2011-12-31 13:10:50. Dates
+              and times are always expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PUBLISH_DOWN]</term>
+
+            <listitem>
+              <para>The exact date and time the subscription will be
+              deactivated in YYYY-MM-DD hh:mm:ss format, e.g. 2012-12-31
+              13:10:49. Dates and times are always expressed in UTC
+              timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:ENABLED]</term>
+
+            <listitem>
+              <para>This returns 1 if the subscription is enabled (e.g. the
+              payment processor already notified us that the transaction is
+              valid and it's not a renewal for a future date) or 0 if it's not
+              enabled yet.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PROCESSOR]</term>
+
+            <listitem>
+              <para>The name of the payment processor plugin, e.g. "paypal"
+              for the PayPal payment plugin</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PROCESSOR_KEY]</term>
+
+            <listitem>
+              <para>The unique transaction ID assigned by the payment
+              processor.</para>
+
+              <note>
+                <para>This may NOT be available if the payment processor has
+                not contacted your site with the result of the transaction
+                before redirecting the user back to your site.</para>
+              </note>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:STATE]</term>
+
+            <listitem>
+              <para>The payment state. C means completed, P is pending, X is
+              cancelled, N means it hasn't been processed yet.</para>
+
+              <note>
+                <para>This may NOT be available if the payment processor has
+                not contacted your site with the result of the transaction
+                before redirecting the user back to your site.</para>
+              </note>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:NET_AMOUNT]</term>
+
+            <listitem>
+              <para>The amount the user paid, before taxes.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:TAX_AMOUNT]</term>
+
+            <listitem>
+              <para>The amount of taxes that the user paid.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:GROSS_AMOUNT]</term>
+
+            <listitem>
+              <para>The total amount the user paid, including taxes.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:CREATED_ON]</term>
+
+            <listitem>
+              <para>The exact date and time the user pressed the Subscribe Now
+              button in YYYY-MM-DD hh:mm:ss format. Dates and times are always
+              expressed in UTC timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_COUPON_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the coupon used during the subscription,
+              or 0 if no coupon was used</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_UPGRADE_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the upgrade rule automatically applied
+              to the subscription, or 0 if no upgrade rule was used</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:AKEEBASUBS_AFFILIATE_ID]</term>
+
+            <listitem>
+              <para>The numeric ID of the affiliate who referred this
+              subscription, or 0 if no affiliate was used</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:PREDISCOUNT_AMOUNT]</term>
+
+            <listitem>
+              <para>The price of the subscription, before any coupon or
+              upgrade rule discount was applied</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[SUB:DISCOUNT_AMOUNT]</term>
+
+            <listitem>
+              <para>The exact discount amount (coupon, upgrade rule) applied
+              to the subscription</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ISBUSINESS]</term>
+
+            <listitem>
+              <para>1 if the user chose to perform a business registration, 0
+              otherwise</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:BUSINESSNAME]</term>
+
+            <listitem>
+              <para>The business name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:OCCUPATION]</term>
+
+            <listitem>
+              <para>The business occupation specified</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:VATNUMBER]</term>
+
+            <listitem>
+              <para>The VAT registration number</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:VIESREGISTERED]</term>
+
+            <listitem>
+              <para>1 if the VAT number is VIES-registered</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ADDRESS1]</term>
+
+            <listitem>
+              <para>The address field (part 1)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ADDRESS2]</term>
+
+            <listitem>
+              <para>The address field (part 2)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:CITY]</term>
+
+            <listitem>
+              <para>City</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:STATE]</term>
+
+            <listitem>
+              <para>State (two letter code); only exists for Australia, Canada
+              and USA</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:ZIP]</term>
+
+            <listitem>
+              <para>ZIP/Postal Code</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[USER:COUNTRY]</term>
+
+            <listitem>
+              <para>Two-letter ISO code of the selected country, e.g. DE for
+              Germany, FR for France, US for USA, CA for Canada and so
+              on</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[CUSTOM:<replaceable>YourFieldName</replaceable>]</term>
+
+            <listitem>
+              <para>Where <replaceable>yourFieldName</replaceable> is the name
+              of a custom field in all uppercase letters. Custom fields can be
+              defined in plugins. If you have created any custom field
+              plugins, you know what this is. If you don't know what this is,
+              you most likely don't need it!</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Then make sure you tick the <guilabel>For both
+        locations</guilabel> checkbox. Finally click on the <guibutton>Save
+        &amp; Close</guibutton> button to save your override. From now on,
+        Joomla! will use your overridden translation string instead of
+        <guilabel>Akeeba Subscriptions - Subscriptions Emails</guilabel>
+        plugin's built-in strings. After setting up all those overrides, it's
+        easy to train your client to edit those emails all by themselves,
+        without your intervention.</para>
+
+        <para>The author would like to thank Joomla! co-founder and expert
+        Brian Teeman for pointing us to this very useful Joomla! hidden
+        secret.</para>
       </section>
 
       <section xml:id="plugin-adminemails">
@@ -6384,6 +7119,12 @@ LEVEL3=Group 1</programlisting>
           to send a test email to Super Administrators) before activating this
           plugin.</para>
         </note>
+
+        <important>
+          <para>In Joomla! 2.5 and later you can customise the emails using
+          Joomla!'s Language Overrides feature, as explained in the
+          Subscription Emails section of this documentation.</para>
+        </important>
       </section>
 
       <section xml:id="plugin-affemails">
@@ -6423,6 +7164,12 @@ LEVEL3=Group 1</programlisting>
           to send a test email to Super Administrators) before activating this
           plugin.</para>
         </note>
+
+        <important>
+          <para>In Joomla! 2.5 and later you can customise the emails using
+          Joomla!'s Language Overrides feature, as explained in the
+          Subscription Emails section of this documentation.</para>
+        </important>
       </section>
 
       <section xml:id="plugin-asexpirationnotify">
@@ -6463,6 +7210,12 @@ LEVEL3=Group 1</programlisting>
         Now, edit any of the subscription email texts. The Emails plugin will
         use your override file instead of the default when sending out
         emails!</para>
+
+        <important>
+          <para>In Joomla! 2.5 and later you can customise the emails using
+          Joomla!'s Language Overrides feature, as explained in the
+          Subscription Emails section of this documentation.</para>
+        </important>
       </section>
 
       <section xml:id="plugin-asrestricted">

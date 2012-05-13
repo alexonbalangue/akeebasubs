@@ -53,7 +53,7 @@ class plgAkeebasubsK2 extends JPlugin
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
-	
+		
 		// Get all of the user's subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
@@ -112,7 +112,7 @@ class plgAkeebasubsK2 extends JPlugin
 		
 		// Get DB connection
 		$db = JFactory::getDBO();
-		$db->setQuery('SELECT COUNT(*) FROM `#__k2_users` WHERE userID = '.$db->Quote($user_id));
+		$db->setQuery('SELECT COUNT(*) FROM `#__k2_users` WHERE `userID` = '.$db->Quote($user_id));
 		$numRecords = $db->loadResult();
 		
 		if(empty($addGroups) && empty($removeGroups)) {
@@ -126,7 +126,7 @@ class plgAkeebasubsK2 extends JPlugin
 				$db->setQuery('UPDATE `#__k2_users` SET `group` = '.$db->Quote($group).' WHERE userID = '.$db->Quote($user_id));
 				$db->query();
 			} else {
-				// Case 2a. Add a new record
+				// Case 1b. Add a new record
 				$user = JFactory::getUser($user_id);
 				$db->setQuery('INSERT INTO `#__k2_users` (`userID`,`group`,`userName`,`description`) VALUES ('.
 					$user_id.', '.$group.', '.$db->Quote($user->name).', "")');
@@ -135,13 +135,15 @@ class plgAkeebasubsK2 extends JPlugin
 		} elseif(!empty($removeGroups)) {
 			// Case 2: Don't add to groups, remove from groups
 			if($numRecords) {
-				// Unless we have an existing record, there's no point removing anything!
-				$db->setQuery('SELECT `group` FROM `#__k2users` WHERE userID = '.$db->Quote($user_id));
+				// Case 2a. Update an existing record
+				$db->setQuery('SELECT `group` FROM `#__k2_users` WHERE userID = '.$db->Quote($user_id));
 				$group = $db->loadResult();
 				if(in_array($group, $removeGroups)) {
 					$db->setQuery('UPDATE `#__k2_users` SET `group` = 0 WHERE userID = '.$db->Quote($user_id));
 					$db->query();
 				}
+			} else {
+				
 			}
 		}
 	}

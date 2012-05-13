@@ -275,18 +275,18 @@ class plgAkpaymentPaypal extends JPlugin
 
 		}
 		// In the case of a successful recurring payment, fetch the old subscription's data
-		if($recurring && ($newStatus == 'C')) {
+		if($recurring && ($newStatus == 'C') && ($subscription->state == 'C')) {
 			$oldData = $subscription->getData();
-			unset($oldData['akeebasubs_subscritpion_id']);
+			unset($oldData['akeebasubs_subscription_id']);
 			$oldData['publish_down'] = $jNow->toMySQL();
 			$oldData['enabled'] = 0;
 			if(empty($oldData['notes'])) $oldData['notes'] = '';
-			$oldData['notes'] .= "\n\nAutomatically renewed subscription";
+			$oldData['notes'] .= "\n\nAutomatically renewed subscription on ".$jNow->toMySQL();
 		}
 		// Save the changes
 		$subscription->save($updates);
 		// In the case of a successful recurring payment, store the old subscription's data to a new record
-		if($recurring && ($newStatus == 'C')) {
+		if($recurring && isset($oldData)) {
 			$original = clone $subscription;
 			$original->reset();
 			$original->bind($oldData);
