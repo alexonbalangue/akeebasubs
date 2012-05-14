@@ -303,7 +303,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 		$temp = array();
 		foreach($array as $k => $v) {
 			$k = strtoupper($k);
-			if($k == 'SHASIGN') continue;
+			if(in_array($k,array('SHASIGN','OPTION','VIEW','PAYMENTMETHOD','ITEMID'))) continue;
 			if(empty($v)) continue;
 			$temp[$k] = $v;
 		}
