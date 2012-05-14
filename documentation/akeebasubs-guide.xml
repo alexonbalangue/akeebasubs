@@ -3946,12 +3946,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <section xml:id="payment-postfinancech">
         <title>PostFinance.ch</title>
 
-        <warning>
-          <para>The documentation sent to us by the payment processor was
-          incorrect and the plugin does not work properly. It has been removed
-          and no longer supported as of Akeeba Subscriptions 2.2.1.</para>
-        </warning>
-
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - PostFinance.ch</guilabel>. Available since
         Akeeba Subscriptions 2.1.</para>
