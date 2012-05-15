@@ -208,7 +208,9 @@
         <listitem>
           <para>Integration with third party components: JUGA, K2, DOCman,
           JCE, NinjaBoard, VirtueMart, Tienda, JomSocial, Community Builder,
-          ccInvoices and much more! Check out our documentation for more
+          ccInvoices, <link
+          xlink:href="http://www.nobbis.net/produkte/akeeba-g-sales-plugin.html">G*Sales</link>[1]
+          and much more! Check out our documentation for more
           information.</para>
         </listitem>
 
@@ -238,6 +240,9 @@
           about to expire</para>
         </listitem>
       </itemizedlist>
+
+      <para>[1] This is a third-party integration plugin, not distributed with
+      Akeeba Subscriptions.</para>
 
       <bridgehead>Support policy</bridgehead>
 
