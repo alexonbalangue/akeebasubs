@@ -58,6 +58,18 @@ class plgAkpaymentOffline extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
+		// Set the payment status to Pending
+		$oSub = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			->setId($subscriptions->akeebasubs_subscription_id)
+			->getItem();
+		$updates = array(
+			'state'				=> 'P',
+			'enabled'			=> 0,
+			'processor_key'		=> md5(time()),
+		);
+		$oSub->save($updates);
+		
+		// Render the HTML form
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
 		if(count($nameParts) > 1) {
