@@ -86,11 +86,10 @@ class plgAkpaymentAlloPass extends JPlugin
 		
 		// Language settings
 		try {
-			$lang = substr(JFactory::getLanguage()->getTag(), 0, 2);
+			$lang = strtolower(substr(JFactory::getLanguage()->getTag(), 0, 2));
 			$url .= '&lang=' . $lang;
 			// Button in English (default), French or German
-			if($lang == 'fr' || $lang == 'FR'
-					 || $lang == 'de' || $lang == 'DE') {
+			if($lang == 'fr' || $lang == 'de') {
 				$button = 'https://payment.allopass.com/static/buy/button/' . $lang . '/162x56.png';
 			}
 		} catch(Exception $e) {
