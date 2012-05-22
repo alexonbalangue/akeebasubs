@@ -208,10 +208,17 @@
         <listitem>
           <para>Integration with third party components: JUGA, K2, DOCman,
           JCE, NinjaBoard, VirtueMart, Tienda, JomSocial, Community Builder,
-          ccInvoices, <link
-          xlink:href="http://www.nobbis.net/produkte/akeeba-g-sales-plugin.html">G*Sales</link>[1]
-          and much more! Check out our documentation for more
+          ccInvoices, and much more! Check out our documentation for more
           information.</para>
+        </listitem>
+
+        <listitem>
+          <para>Third party integrations for Akeeba Subscriptions are
+          available[1]: <link
+          xlink:href="http://www.nobbis.net/produkte/akeeba-g-sales-plugin.html">G*Sales</link>,
+          <link
+          xlink:href="https://www.zoolanders.com/extensions/item/zooaksubs">Zoo</link>,
+          <link xlink:href="http://www.hikashop.com/">HikaShop</link>.</para>
         </listitem>
 
         <listitem>
@@ -222,9 +229,9 @@
 
         <listitem>
           <para>Payment methods: PayPal (for personal, verified and business
-          accounts) is supported out of the box. Other payment methods
-          (ccAvenue, WorldPay, 2Checkout and more) are being added
-          continuously. Check out our documentation for more
+          accounts) is supported out of the box. Other payment methods are
+          being added continuously. Over twenty of them are already
+          implemented. Check out our documentation for more
           information.</para>
         </listitem>
 
@@ -241,15 +248,19 @@
         </listitem>
       </itemizedlist>
 
-      <para>[1] This is a third-party integration plugin, not distributed with
-      Akeeba Subscriptions.</para>
+      <para>[1] These are third-party integration plugins, not distributed
+      with Akeeba Subscriptions.</para>
 
       <bridgehead>Support policy</bridgehead>
 
       <para>Please note that the software is provided free of charge, but
       support is not. You need to have an AKEEBADELUXE, SUPPORT or
       FORUMSUPPORT subscription on AkeebaBackup.com to seek support regarding
-      setting up, using and customizing Akeeba Subscriptions.</para>
+      setting up, using and customizing Akeeba Subscriptions. Please note that
+      we can not help you with design requests or write customisation code for
+      you. We can, however, help you by telling you what you have to do to
+      accomplish your intended goal, e.g. which files to modify and pretty
+      much a list of what you should do.</para>
     </section>
 
     <section xml:id="requirements">
