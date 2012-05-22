@@ -920,7 +920,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$user = JFactory::getUser(0);
 
 			jimport('joomla.application.component.helper');
-			$usersConfig = &JComponentHelper::getParams( 'com_users' );
+			$usersConfig = JComponentHelper::getParams( 'com_users' );
 			$newUsertype = $usersConfig->get( 'new_usertype' );
 			
 			if(version_compare(JVERSION, '1.6.0', 'ge')) {

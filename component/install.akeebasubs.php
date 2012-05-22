@@ -399,7 +399,7 @@ ENDSQL;
 
 // Setup the sub-extensions installer
 jimport('joomla.installer.installer');
-$db = & JFactory::getDBO();
+$db = JFactory::getDBO();
 $status = new JObject();
 $status->modules = array();
 $status->plugins = array();
