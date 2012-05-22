@@ -4720,6 +4720,224 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="payment-allopass">
+        <title>AlloPass</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Allopass</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the mobile micro-payment
+        processor Allopass.</para>
+
+        <warning>
+          <para>Due to international regulations regarding the mobile phone
+          market, Allopass has <emphasis role="bold">FIXED PRICE
+          POINTS</emphasis>. You will have to select which of those fixed
+          price points is closer to your subscription value. This also means
+          that things like coupons, upgrade rules and tax rules <emphasis
+          role="bold">ARE COMPLETELY IGNORED</emphasis> when using this
+          plugin. Also note that the maximum payment you can request through
+          Allopass is 10$ due to mobile industry regulations.</para>
+
+          <para>We generally don't recommend using this payment method as it
+          makes it very hard for your customers to figure out how much they
+          have to pay before clicking the Subscribe Now button. Moreover, the
+          amount of money you earn is only a small fraction of what your
+          customers actually pay.</para>
+        </warning>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Allopass" or type in a custom name to
+              show to your customer's, e.g. "Pay via Mobile Phone"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Key</term>
+
+            <listitem>
+              <para>Provided by Allopass</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Secret Key</term>
+
+            <listitem>
+              <para>Provided by Allopass</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Map price-points</term>
+
+            <listitem>
+              <para>This is used to map subscription levels to site IDs,
+              Product IDs and Price Point IDs in Allopass. The format is
+              <replaceable>LEVELTITLE</replaceable>=<replaceable>11111</replaceable>:<replaceable>22222</replaceable>:<replaceable>33333</replaceable>
+              where <replaceable>LEVELTITLE</replaceable> is the Title of your
+              subscription level, 11111 is your Site ID, 22222 is your Product
+              ID and 33333 is your Price Point ID. See the Integration Notes
+              below for more information. You can enter multiple subscription
+              levels, one level per line.</para>
+
+              <important>
+                <para>If you do not map a subscription level to a site,
+                product and price point ID then you will not be able to sell a
+                subscription to this level using the AlloPass payment
+                plugin.</para>
+              </important>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead renderas="sect3">Integration notes</bridgehead>
+
+        <para>Before you can start selling subscriptions using the Allopass
+        plugin you have to create a Site, Product and Price Point in Allopass.
+        We will guide you through, but please note that this is only for your
+        convenience. If you have questions about how Allopass works please
+        contact Allopass, not AkeebaBackup.com.</para>
+
+        <bridgehead renderas="sect4">Creating a Site</bridgehead>
+
+        <para>This procedure is required only once before you can create a
+        product.</para>
+
+        <procedure>
+          <step>
+            <para>Log in to Allopass and go to <guimenu>My Account</guimenu>,
+            <guimenuitem>My Products</guimenuitem>. Direct link:
+            https://www.allopass.com/merchant/product</para>
+          </step>
+
+          <step>
+            <para>Click on the <guibutton>Add a new site...</guibutton> button
+            to the right hand side of <guilabel>My Sites List</guilabel>
+            header. Direct link:
+            https://www.allopass.com/merchant/product/site-add</para>
+          </step>
+
+          <step>
+            <para>Enter all the necessary details and click on the
+            <guibutton>Add Site</guibutton> button.</para>
+          </step>
+        </procedure>
+
+        <bridgehead renderas="sect4">Creating a Product and getting its
+        information</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Log in to Allopass and go to <guimenu>My Account</guimenu>,
+            <guimenuitem>My Products</guimenuitem>. Direct link:
+            https://www.allopass.com/merchant/product</para>
+          </step>
+
+          <step>
+            <para>Click on the <guibutton>Add a new product...</guibutton>
+            button to the right hand side of <guilabel>My Sites
+            List</guilabel> header. Direct link:
+            https://www.allopass.com/merchant/product/add</para>
+          </step>
+
+          <step>
+            <para>Select the site you created in the "Creating a Site ID"
+            procedure.</para>
+          </step>
+
+          <step>
+            <para>Select the <guilabel>One-Time</guilabel>, <guilabel>Fixed
+            pricepoints</guilabel> payment method. That's the only method
+            supported by Akeeba Subscriptions' plugin. Click on
+            <guibutton>Next</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>Enter your product information.</para>
+
+            <important>
+              <para>You MUST enter a Notification URL. The URL
+              <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=allopass</uri>
+              must be used, after replacing <uri>www.example.com</uri> with
+              your site's domain name.</para>
+            </important>
+
+            <para>Click on <guibutton>Next</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>Select all your price points per continent and country. Yes,
+            it's a long list. We also strongly suggest creating a test code.
+            Then click on <guibutton>Next</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>Make sure all is to your liking and click on
+            <guibutton>Confirm</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>You now see your product. Under the <guilabel>#
+            auth</guilabel> column there are three numbers separated by a
+            slash, for example 11111/22222/33333. Note them down. These are
+            your Site ID, Product ID and Price Point ID. Replace the slash
+            with a colon, i.e. 11111/22222/33333 becomes
+            <option>11111:22222:33333</option>. Note that down. This is what
+            you need to put in Akeeba Subscriptions' plugin.</para>
+          </step>
+        </procedure>
+
+        <para>If you need to fetch back this information in the future, go to
+        My Products, click on your site's name and make sure that One-Time,
+        Fixed price points is selected. You will now see your products and
+        their # auth fields.</para>
+
+        <bridgehead renderas="sect4">Setting up the product in Akeeba
+        Subscriptions</bridgehead>
+
+        <para>First create a subscription level and note down its title. For
+        the sake of this example let's say it is called LEVEL1. Then perform
+        the procedure above to get the product's setup string which contains
+        the site, product and pricepoints ID, e.g. 11111:22222:33333. You need
+        to enter the following line in the Map price-points field in Akeeba
+        Subscriptions:</para>
+
+        <programlisting>LEVEL1=11111:22222:33333</programlisting>
+
+        <para>If you want to set up multiple levels, you can enter one level
+        per line. For example, in order to map a second subscription level
+        called LEVEL2 to the same Allopass product enter this:</para>
+
+        <programlisting>LEVEL1=11111:22222:33333
+LEVEL2=11111:22222:33333</programlisting>
+
+        <para>We are not through yet. We also need to enter the API keys. Go
+        to your Allopass My Profile page. On the right hand side you will find
+        the API Key and API Secret Key. Copy those keys to Akeeba
+        Subscriptions plugin's same-named fields. Now save the plugin, publish
+        it and you're ready to start selling.</para>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">

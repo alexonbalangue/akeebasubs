@@ -73,6 +73,7 @@ $installation_queue = array(
 		),
 		'akpayment' => array(
 			'2checkout'				=> 0,
+			'allopass'				=> 0,
 			'ccavenue'				=> 0,
 			'deltapay'				=> 0,
 			'eselectplus'			=> 0,
