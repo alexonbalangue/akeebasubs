@@ -21,12 +21,52 @@
 	<params>
 		<param name="publickey" type="text" default="" label="PLG_AKEEBASUBS_RECAPTCHA_PUBLICKEY_LABEL" description="PLG_AKEEBASUBS_RECAPTCHA_PUBLICKEY_DESC" size="30" />
 		<param name="privatekey" type="text" default="" label="PLG_AKEEBASUBS_RECAPTCHA_PRIVATEKEY_LABEL" description="PLG_AKEEBASUBS_RECAPTCHA_PRIVATEKEY_DESC" size="30" />
+		<param name="theme" type="list" default="red"
+			label="PLG_AKEEBASUBS_RECAPTCHA_THEME_LABEL"
+			description="PLG_AKEEBASUBS_RECAPTCHA_THEME_DESC">
+			<option value="red">PLG_AKEEBASUBS_RECAPTCHA_THEME_RED</option>
+			<option value="white">PLG_AKEEBASUBS_RECAPTCHA_THEME_WHITE</option>
+			<option value="blackglass">PLG_AKEEBASUBS_RECAPTCHA_THEME_BLACKGLASS</option>
+			<option value="clean">PLG_AKEEBASUBS_RECAPTCHA_THEME_CLEAN</option>
+		</param>
+		<param name="language" type="list" default="en"
+			label="PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_LABEL"
+			description="PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_DESC">
+			<option value="en">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_EN</option>
+			<option value="nl">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_NL</option>
+			<option value="fr">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_FR</option>
+			<option value="de">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_DE</option>
+			<option value="pt">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_PT</option>
+			<option value="ru">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_RU</option>
+			<option value="es">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_ES</option>
+			<option value="tr">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_TR</option>
+		</param>
 	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="publickey" type="text" default="" label="PLG_AKEEBASUBS_RECAPTCHA_PUBLICKEY_LABEL" description="PLG_AKEEBASUBS_RECAPTCHA_PUBLICKEY_DESC" size="30" />
 				<field name="privatekey" type="text" default="" label="PLG_AKEEBASUBS_RECAPTCHA_PRIVATEKEY_LABEL" description="PLG_AKEEBASUBS_RECAPTCHA_PRIVATEKEY_DESC" size="30" />
+				<field name="theme" type="list" default="red"
+					label="PLG_AKEEBASUBS_RECAPTCHA_THEME_LABEL"
+					description="PLG_AKEEBASUBS_RECAPTCHA_THEME_DESC">
+					<option value="red">PLG_AKEEBASUBS_RECAPTCHA_THEME_RED</option>
+					<option value="white">PLG_AKEEBASUBS_RECAPTCHA_THEME_WHITE</option>
+					<option value="blackglass">PLG_AKEEBASUBS_RECAPTCHA_THEME_BLACKGLASS</option>
+					<option value="clean">PLG_AKEEBASUBS_RECAPTCHA_THEME_CLEAN</option>
+				</field>
+				<field name="language" type="list" default="en"
+					label="PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_LABEL"
+					description="PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_DESC">
+					<option value="en">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_EN</option>
+					<option value="nl">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_NL</option>
+					<option value="fr">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_FR</option>
+					<option value="de">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_DE</option>
+					<option value="pt">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_PT</option>
+					<option value="ru">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_RU</option>
+					<option value="es">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_ES</option>
+					<option value="tr">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_TR</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

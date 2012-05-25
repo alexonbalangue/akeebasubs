@@ -8031,6 +8031,28 @@ LEVEL3=Group 1</programlisting>
               <para>Your ReCAPTCHA private key</para>
             </listitem>
           </varlistentry>
+
+          <varlistentry>
+            <term>Theme</term>
+
+            <listitem>
+              <para>Choose one of the predefined ReCAPTCHA themes. By default
+              the "red" theme is used (classic ReCAPTCHA)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>Choose the default language for the ReCAPTCHA interface.
+              Please note that ReCAPTCHA treats that as a suggestion. It may
+              override it based on your browser settings. For example, if you
+              choose French but your browser specified that English should be
+              preferred over French, the interface will display in
+              English.</para>
+            </listitem>
+          </varlistentry>
         </variablelist>
       </section>
     </section>

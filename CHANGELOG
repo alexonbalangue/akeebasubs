@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.2.1
 + #93 NoChex payment plugin (experimental)
 + Adding a per-level class name in front-end subscription level display to allow custom per-level styling
 ~ The Offline Payment plugin now sets the payment status to Pending instead of New
+~ The ReCaptcha plugin now supports selecting a theme other than the default (red) one
 # Double email sent by the Administrator Email plugin
 # Users would not get removed from K2 groups on subscription expiration
 # Upgrade rules would be applied erratically under some circumstances
