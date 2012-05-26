@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.2.1
 + #93 NoChex payment plugin (experimental)
 + Adding a per-level class name in front-end subscription level display to allow custom per-level styling
 + New view which allows users to edit their own information
++ ccInvoices integration: Allow appending a notice to intra-EU transactions where the VAT liability is transferred to the recipient, according to EU legislation
 ~ The Offline Payment plugin now sets the payment status to Pending instead of New
 ~ The ReCaptcha plugin now supports selecting a theme other than the default (red) one
 # Double email sent by the Administrator Email plugin
