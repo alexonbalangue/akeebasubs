@@ -73,6 +73,7 @@ $installation_queue = array(
 		),
 		'akpayment' => array(
 			'2checkout'				=> 0,
+			'allopass'				=> 0,
 			'ccavenue'				=> 0,
 			'deltapay'				=> 0,
 			'eselectplus'			=> 0,
@@ -113,7 +114,7 @@ if( version_compare( JVERSION, '1.6.0', 'ge' ) && !defined('_AKEEBA_HACK') ) {
 
 // Setup the sub-extensions installer
 jimport('joomla.installer.installer');
-$db = & JFactory::getDBO();
+$db = JFactory::getDBO();
 $status = new JObject();
 $status->modules = array();
 $status->plugins = array();

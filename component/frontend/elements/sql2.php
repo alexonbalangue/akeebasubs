@@ -36,7 +36,7 @@ class ASElementSQL2 extends ASElementBase
 
 	function fetchElement($name, $value, &$node, $control_name)
 	{
-		$db			= & JFactory::getDBO();
+		$db			= JFactory::getDBO();
 		$db->setQuery($node->attributes('query'));
 		$key = ($node->attributes('key_field') ? $node->attributes('key_field') : 'value');
 		$val = ($node->attributes('value_field') ? $node->attributes('value_field') : $name);

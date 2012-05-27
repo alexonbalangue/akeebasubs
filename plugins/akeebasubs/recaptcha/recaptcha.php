@@ -41,9 +41,22 @@ class plgAkeebasubsRecaptcha extends JPlugin
 		
 		// ----- RECAPTCHA FIELD -----
 		$uri = new JURI();
+		
+		$theme = $this->params->getValue('theme','red');
+		$language = $this->params->getValue('language','en');
+		$html = <<<ENDSCRIPT
+<script type="text/javascript">
+var RecaptchaOptions = {
+	lang : '$language',
+	theme : '$theme'
+};
+</script>
+
+ENDSCRIPT;
+		
 		$useSSL = strtolower($uri->getScheme()) == 'https';
 		$publickey = $this->params->getValue('publickey','');
-		$html = '<div style="display: inline-block"><div style="float: left">'.recaptcha_get_html($publickey, null, $useSSL).'</div></div><div style="clear: both"></div>';
+		$html .= '<div style="display: inline-block"><div style="float: left">'.recaptcha_get_html($publickey, null, $useSSL).'</div></div><div style="clear: both"></div>';
 		
 		// Setup the field
 		$field = array(

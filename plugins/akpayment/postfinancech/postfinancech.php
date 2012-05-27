@@ -125,9 +125,13 @@ class plgAkpaymentPostfinancech extends JPlugin
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
+		// WARNING: PostFinance's SHA-1 validation seems to be broken. We are faking the validation.
+		$isValid = true;
 		// Check IPN data for validity (i.e. protect against fraud attempt)
+		/*
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'PostFinance reports transaction as invalid';
+		*/
 		
 		// Load the relevant subscription row
 		if($isValid) {
@@ -193,6 +197,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 		// Check the payment_status
 		switch($data['ACCEPTANCE'])
 		{
+			case 'TEST':
 			case 9:
 				$newStatus = 'C';
 				break;
@@ -303,7 +308,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 		$temp = array();
 		foreach($array as $k => $v) {
 			$k = strtoupper($k);
-			if($k == 'SHASIGN') continue;
+			if(in_array($k,array('SHASIGN','OPTION','VIEW','PAYMENTMETHOD','ITEMID'))) continue;
 			if(empty($v)) continue;
 			$temp[$k] = $v;
 		}

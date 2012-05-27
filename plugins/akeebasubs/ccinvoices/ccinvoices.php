@@ -102,6 +102,24 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
+			
+			$note = "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>";
+			$euvatoption = $this->params->getValue('euvatoption', 0);
+			if($euvatoption && ($row->tax_amount < 0.01)) {
+				$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+					->user_id($row->user_id)
+					->getFirstItem();
+				
+				$country = $kuser->country;
+				$isbusiness = $kuser->isbusiness;
+				$viesregistered = $kuser->viesregistered;
+				$inEU = in_array($country, array('AT','BE','BG','CY','CZ','DK','EE','FI','FR','GB','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'));
+				
+				if($inEU && $isbusiness && $viesregistered) {
+					$euvatnote = $this->params->getValue('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+					$note .= "<p>$euvatnote</p>";
+				}
+			}
 
 			$invoice = (object)array(
 				'number'		=> $invoice_number,
@@ -119,7 +137,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'pname'			=> $description,
 				'price'			=> $row->net_amount,
 				'tax'			=> sprintf('%.2f', $row->tax_percent),
-				'note'			=> "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>",
+				'note'			=> $note,
 				'contact_id'	=> $contact_id
 			);
 			$db->insertObject('#__ccinvoices_invoices', $invoice, 'id');

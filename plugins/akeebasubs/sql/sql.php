@@ -95,7 +95,12 @@ class plgAkeebasubsSql extends JPlugin
 				$sql = str_replace('[USERID]', $user_id, $sql);
 				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
-				$db->queryBatch(false);
+				if(version_compare(JVERION, '3.0', 'ge')) {
+					// Joomla! 3.0... Whatever!!!!
+					$db->query();
+				} else {
+					$db->queryBatch(false);
+				}
 			}
 		}
 
@@ -105,7 +110,12 @@ class plgAkeebasubsSql extends JPlugin
 				$sql = str_replace('[USERID]', $user_id, $sql);
 				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
-				$db->queryBatch(false);
+				if(version_compare(JVERION, '3.0', 'ge')) {
+					// Joomla! 3.0... Whatever!!!!
+					$db->query();
+				} else {
+					$db->queryBatch(false);
+				}
 			}
 		}
 	}

@@ -208,8 +208,17 @@
         <listitem>
           <para>Integration with third party components: JUGA, K2, DOCman,
           JCE, NinjaBoard, VirtueMart, Tienda, JomSocial, Community Builder,
-          ccInvoices and much more! Check out our documentation for more
+          ccInvoices, and much more! Check out our documentation for more
           information.</para>
+        </listitem>
+
+        <listitem>
+          <para>Third party integrations for Akeeba Subscriptions are
+          available[1]: <link
+          xlink:href="http://www.nobbis.net/produkte/akeeba-g-sales-plugin.html">G*Sales</link>,
+          <link
+          xlink:href="https://www.zoolanders.com/extensions/item/zooaksubs">Zoo</link>,
+          <link xlink:href="http://www.hikashop.com/">HikaShop</link>.</para>
         </listitem>
 
         <listitem>
@@ -220,9 +229,9 @@
 
         <listitem>
           <para>Payment methods: PayPal (for personal, verified and business
-          accounts) is supported out of the box. Other payment methods
-          (ccAvenue, WorldPay, 2Checkout and more) are being added
-          continuously. Check out our documentation for more
+          accounts) is supported out of the box. Other payment methods are
+          being added continuously. Over twenty of them are already
+          implemented. Check out our documentation for more
           information.</para>
         </listitem>
 
@@ -239,12 +248,19 @@
         </listitem>
       </itemizedlist>
 
+      <para>[1] These are third-party integration plugins, not distributed
+      with Akeeba Subscriptions.</para>
+
       <bridgehead>Support policy</bridgehead>
 
       <para>Please note that the software is provided free of charge, but
       support is not. You need to have an AKEEBADELUXE, SUPPORT or
       FORUMSUPPORT subscription on AkeebaBackup.com to seek support regarding
-      setting up, using and customizing Akeeba Subscriptions.</para>
+      setting up, using and customizing Akeeba Subscriptions. Please note that
+      we can not help you with design requests or write customisation code for
+      you. We can, however, help you by telling you what you have to do to
+      accomplish your intended goal, e.g. which files to modify and pretty
+      much a list of what you should do.</para>
     </section>
 
     <section xml:id="requirements">
@@ -2617,6 +2633,17 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
               ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
               AND/OR CUSTOMERS.</emphasis></para>
+
+              <warning>
+                <para>Using the Sandbox is not as straightforward as it
+                sounds. It is actually a long, complicated process. We have
+                documented the entire 43 step process for your convenience. It
+                can be found further down this documentation page. If it
+                sounds overly technical and complicated to you, you can simply
+                use the live (normal) PayPal and a credit card not associated
+                with your PayPal account to test the purchase of a
+                subscription.</para>
+              </warning>
             </listitem>
           </varlistentry>
 
@@ -2722,6 +2749,283 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         Options</guibutton>. Set <guilabel>Encoding</guilabel> to
         <option>UTF-8</option> and click on
         <guibutton>Save</guibutton>.</para>
+
+        <bridgehead>Using the PayPal Sandbox</bridgehead>
+
+        <para>Using the PayPal Sandbox is not even half as intuitive as you
+        might think. Since most of our users think that our software is broken
+        because they are not able to use the Sandbox, we have documented every
+        single step you have to take in order to use the Sandbox on your
+        site.</para>
+
+        <bridgehead renderas="sect4">A. Signing up for Sandbox
+        access</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Go to the <link
+            xlink:href="https://developer.paypal.com">PayPal Sandbox
+            site</link></para>
+          </step>
+
+          <step>
+            <para>Click on Sign Up. Important: do not use your regular PayPal
+            email address to subscribe!</para>
+          </step>
+
+          <step>
+            <para>You get an email. Click on the link to activate your Sandbox
+            access.</para>
+          </step>
+
+          <step>
+            <para>Log in to the Sandbox using the email and password you
+            created</para>
+          </step>
+        </procedure>
+
+        <bridgehead renderas="sect4">B.1. Create a seller account</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Go to the <link
+            xlink:href="https://developer.paypal.com/cgi-bin/devscr?cmd=home/main">main
+            Sandbox page</link></para>
+          </step>
+
+          <step>
+            <para>Click on <guilabel>Create a preconfigured
+            account</guilabel></para>
+
+            <warning>
+              <para>MAJOR SUPER DUPER IMPORTANT PITFALL WARNING!!! Choose a
+              country with the same currency as your site. For example United
+              States for transactions in USD.</para>
+            </warning>
+          </step>
+
+          <step>
+            <para>Set the account type to <option>Seller</option></para>
+          </step>
+
+          <step>
+            <para>Optional: set the login email to "seller". It will make it
+            easier for you to remember what you're doing</para>
+          </step>
+
+          <step>
+            <para>Note down your password. This will not be visible anywhere
+            else.</para>
+          </step>
+
+          <step>
+            <para>Set <guilabel>Add Bank Account</guilabel> to Yes and set the
+            <guilabel>Account Balance</guilabel> to something like 100.00
+            USD</para>
+          </step>
+
+          <step>
+            <para>Click on <guibutton>Create account</guibutton></para>
+
+            <important>
+              <para>Make sure that <guilabel>Payment Review</guilabel> and
+              <guilabel>Negative Test Mode</guilabel> are set to Disabled
+              (that's the default)</para>
+            </important>
+          </step>
+
+          <step>
+            <para>PITFALL: PayPal will modify your email address, appending a
+            random number and _biz to it. Please verify it at the Test
+            Accounts section of your Sandbox Account. Note down your email and
+            password, you will need them!</para>
+          </step>
+        </procedure>
+
+        <bridgehead renderas="sect4">B.1. Create a buyer account</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Go to the <link
+            xlink:href="https://developer.paypal.com/cgi-bin/devscr?cmd=home/main">main
+            Sandbox page</link></para>
+          </step>
+
+          <step>
+            <para>Click on <guilabel>Create a preconfigured
+            account</guilabel></para>
+
+            <warning>
+              <para>MAJOR SUPER DUPER IMPORTANT PITFALL WARNING!!! Choose a
+              country with the same currency as your site. For example United
+              States for transactions in USD.</para>
+            </warning>
+          </step>
+
+          <step>
+            <para>Set the account type to <option>Buyer</option> (not "Buyer
+            In-Store")</para>
+          </step>
+
+          <step>
+            <para>Optional: set the login email to "buyer". It will make it
+            easier for you to remember what you're doing</para>
+          </step>
+
+          <step>
+            <para>Note down your password. This will not be visible anywhere
+            else.</para>
+          </step>
+
+          <step>
+            <para>Set <guilabel>Add Bank Account</guilabel> to Yes and set the
+            <guilabel>Account Balance</guilabel> to something like 1000.00
+            USD</para>
+          </step>
+
+          <step>
+            <para>Click on <guibutton>Create account</guibutton></para>
+
+            <important>
+              <para>Make sure that <guilabel>Payment Review</guilabel> is set
+              to Disabled (that's the default)</para>
+            </important>
+          </step>
+
+          <step>
+            <para>PITFALL: PayPal will modify your email address. Please
+            verify it at the Test Accounts section of your Sandbox Account.
+            Note down your email and password, you will need them!</para>
+          </step>
+        </procedure>
+
+        <bridgehead renderas="sect4">C. Set up Akeeba Subscriptions PayPal
+        plugin for use with PayPal Sandbox</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Go to <guimenu>Extensions</guimenu>, <guimenuitem>Plug-in
+            Manager</guimenuitem></para>
+          </step>
+
+          <step>
+            <para>Find the <guilabel>Akeeba Subscriptions Payment -
+            Paypal</guilabel> plugin and edit it</para>
+          </step>
+
+          <step>
+            <para>Set <guilabel>Sandbox</guilabel> to
+            <option>Yes</option></para>
+          </step>
+
+          <step>
+            <para>In the <guilabel>Sandbox Merchant</guilabel> field enter
+            your seller's email address</para>
+          </step>
+
+          <step>
+            <para>Click on <guibutton>Save &amp; Close</guibutton></para>
+          </step>
+        </procedure>
+
+        <bridgehead renderas="sect4">D. Testing Akeeba Subscriptions with
+        PayPal Sandbox</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Make sure you have at least one published Subscription Level
+            with a value of AT LEAST 1. Smaller values WILL NOT go
+            through!</para>
+          </step>
+
+          <step>
+            <para>Go ahead with buying a subscription to that level.</para>
+          </step>
+
+          <step>
+            <para>Make sure the URL begins with
+            https://www.sandbox.paypal.com. If not, you are doing something
+            wrong and you have to set up the plugin again.</para>
+          </step>
+
+          <step>
+            <para>Make sure that in the top left corner you see the name you
+            registered with Paypal Sandbox followed by the words "Test Store".
+            If not, you are doing something wrong and you have to set up the
+            plugin again.</para>
+          </step>
+
+          <step>
+            <para>Login using the Sandbox buyer email and password and go
+            through with the payment.</para>
+          </step>
+
+          <step>
+            <para>Go to your site's back-end, Components, Akeeba
+            Subscritpions, Subscriptions</para>
+          </step>
+
+          <step>
+            <para>The subscription will be disabled and Payment column will
+            display a dollar sign with an excalamation mark inside a solid red
+            circle. This means that the payment is pending. That's good! It
+            actually means that PayPal did communicate with your site!</para>
+          </step>
+
+          <step>
+            <para>Go back to the PayPal Sandbox site</para>
+          </step>
+
+          <step>
+            <para>Go to Test Accounts</para>
+          </step>
+
+          <step>
+            <para>Click on the orange "Enter Sandbox Test Site" button; a new
+            popup window displays</para>
+          </step>
+
+          <step>
+            <para>Click on Logout. Not the one on the top right, the one right
+            below it.</para>
+          </step>
+
+          <step>
+            <para>Now click on Log In</para>
+          </step>
+
+          <step>
+            <para>Log in with your Sandbox seller's email and password</para>
+          </step>
+
+          <step>
+            <para>You will see the transaction with a "Payment status" of
+            Unclaimed. Click on the Accept button to its right.</para>
+          </step>
+
+          <step>
+            <para>It may ask you what to do. If it does, choose the first
+            Accept option and then click on Submit.</para>
+          </step>
+
+          <step>
+            <para>Wait for 1-5 minutes for the payment notification to be sent
+            to your site</para>
+          </step>
+
+          <step>
+            <para>Go to your site's back-end, Components, Akeeba
+            Subscritpions, Subscriptions</para>
+          </step>
+
+          <step>
+            <para>The subscription will be enabled now and the Payment will
+            display as a green dollar sign. Awesome! You're ready to start
+            selling! Remember to set the plugin's Sandbox to Off and enter
+            your real email address to the Merchant ID field of the
+            plugin.</para>
+          </step>
+        </procedure>
       </section>
 
       <section xml:id="payment-none">
@@ -4714,6 +5018,224 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             </listitem>
           </varlistentry>
         </variablelist>
+      </section>
+
+      <section xml:id="payment-allopass">
+        <title>AlloPass</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Allopass</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the mobile micro-payment
+        processor Allopass.</para>
+
+        <warning>
+          <para>Due to international regulations regarding the mobile phone
+          market, Allopass has <emphasis role="bold">FIXED PRICE
+          POINTS</emphasis>. You will have to select which of those fixed
+          price points is closer to your subscription value. This also means
+          that things like coupons, upgrade rules and tax rules <emphasis
+          role="bold">ARE COMPLETELY IGNORED</emphasis> when using this
+          plugin. Also note that the maximum payment you can request through
+          Allopass is 10$ due to mobile industry regulations.</para>
+
+          <para>We generally don't recommend using this payment method as it
+          makes it very hard for your customers to figure out how much they
+          have to pay before clicking the Subscribe Now button. Moreover, the
+          amount of money you earn is only a small fraction of what your
+          customers actually pay.</para>
+        </warning>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Allopass" or type in a custom name to
+              show to your customer's, e.g. "Pay via Mobile Phone"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Key</term>
+
+            <listitem>
+              <para>Provided by Allopass</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Secret Key</term>
+
+            <listitem>
+              <para>Provided by Allopass</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Map price-points</term>
+
+            <listitem>
+              <para>This is used to map subscription levels to site IDs,
+              Product IDs and Price Point IDs in Allopass. The format is
+              <replaceable>LEVELTITLE</replaceable>=<replaceable>11111</replaceable>:<replaceable>22222</replaceable>:<replaceable>33333</replaceable>
+              where <replaceable>LEVELTITLE</replaceable> is the Title of your
+              subscription level, 11111 is your Site ID, 22222 is your Product
+              ID and 33333 is your Price Point ID. See the Integration Notes
+              below for more information. You can enter multiple subscription
+              levels, one level per line.</para>
+
+              <important>
+                <para>If you do not map a subscription level to a site,
+                product and price point ID then you will not be able to sell a
+                subscription to this level using the AlloPass payment
+                plugin.</para>
+              </important>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead renderas="sect3">Integration notes</bridgehead>
+
+        <para>Before you can start selling subscriptions using the Allopass
+        plugin you have to create a Site, Product and Price Point in Allopass.
+        We will guide you through, but please note that this is only for your
+        convenience. If you have questions about how Allopass works please
+        contact Allopass, not AkeebaBackup.com.</para>
+
+        <bridgehead renderas="sect4">Creating a Site</bridgehead>
+
+        <para>This procedure is required only once before you can create a
+        product.</para>
+
+        <procedure>
+          <step>
+            <para>Log in to Allopass and go to <guimenu>My Account</guimenu>,
+            <guimenuitem>My Products</guimenuitem>. Direct link:
+            https://www.allopass.com/merchant/product</para>
+          </step>
+
+          <step>
+            <para>Click on the <guibutton>Add a new site...</guibutton> button
+            to the right hand side of <guilabel>My Sites List</guilabel>
+            header. Direct link:
+            https://www.allopass.com/merchant/product/site-add</para>
+          </step>
+
+          <step>
+            <para>Enter all the necessary details and click on the
+            <guibutton>Add Site</guibutton> button.</para>
+          </step>
+        </procedure>
+
+        <bridgehead renderas="sect4">Creating a Product and getting its
+        information</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Log in to Allopass and go to <guimenu>My Account</guimenu>,
+            <guimenuitem>My Products</guimenuitem>. Direct link:
+            https://www.allopass.com/merchant/product</para>
+          </step>
+
+          <step>
+            <para>Click on the <guibutton>Add a new product...</guibutton>
+            button to the right hand side of <guilabel>My Sites
+            List</guilabel> header. Direct link:
+            https://www.allopass.com/merchant/product/add</para>
+          </step>
+
+          <step>
+            <para>Select the site you created in the "Creating a Site ID"
+            procedure.</para>
+          </step>
+
+          <step>
+            <para>Select the <guilabel>One-Time</guilabel>, <guilabel>Fixed
+            pricepoints</guilabel> payment method. That's the only method
+            supported by Akeeba Subscriptions' plugin. Click on
+            <guibutton>Next</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>Enter your product information.</para>
+
+            <important>
+              <para>You MUST enter a Notification URL. The URL
+              <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=allopass</uri>
+              must be used, after replacing <uri>www.example.com</uri> with
+              your site's domain name.</para>
+            </important>
+
+            <para>Click on <guibutton>Next</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>Select all your price points per continent and country. Yes,
+            it's a long list. We also strongly suggest creating a test code.
+            Then click on <guibutton>Next</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>Make sure all is to your liking and click on
+            <guibutton>Confirm</guibutton>.</para>
+          </step>
+
+          <step>
+            <para>You now see your product. Under the <guilabel>#
+            auth</guilabel> column there are three numbers separated by a
+            slash, for example 11111/22222/33333. Note them down. These are
+            your Site ID, Product ID and Price Point ID. Replace the slash
+            with a colon, i.e. 11111/22222/33333 becomes
+            <option>11111:22222:33333</option>. Note that down. This is what
+            you need to put in Akeeba Subscriptions' plugin.</para>
+          </step>
+        </procedure>
+
+        <para>If you need to fetch back this information in the future, go to
+        My Products, click on your site's name and make sure that One-Time,
+        Fixed price points is selected. You will now see your products and
+        their # auth fields.</para>
+
+        <bridgehead renderas="sect4">Setting up the product in Akeeba
+        Subscriptions</bridgehead>
+
+        <para>First create a subscription level and note down its title. For
+        the sake of this example let's say it is called LEVEL1. Then perform
+        the procedure above to get the product's setup string which contains
+        the site, product and pricepoints ID, e.g. 11111:22222:33333. You need
+        to enter the following line in the Map price-points field in Akeeba
+        Subscriptions:</para>
+
+        <programlisting>LEVEL1=11111:22222:33333</programlisting>
+
+        <para>If you want to set up multiple levels, you can enter one level
+        per line. For example, in order to map a second subscription level
+        called LEVEL2 to the same Allopass product enter this:</para>
+
+        <programlisting>LEVEL1=11111:22222:33333
+LEVEL2=11111:22222:33333</programlisting>
+
+        <para>We are not through yet. We also need to enter the API keys. Go
+        to your Allopass My Profile page. On the right hand side you will find
+        the API Key and API Secret Key. Copy those keys to Akeeba
+        Subscriptions plugin's same-named fields. Now save the plugin, publish
+        it and you're ready to start selling.</para>
       </section>
     </section>
 
@@ -7507,6 +8029,28 @@ LEVEL3=Group 1</programlisting>
 
             <listitem>
               <para>Your ReCAPTCHA private key</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Theme</term>
+
+            <listitem>
+              <para>Choose one of the predefined ReCAPTCHA themes. By default
+              the "red" theme is used (classic ReCAPTCHA)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>Choose the default language for the ReCAPTCHA interface.
+              Please note that ReCAPTCHA treats that as a suggestion. It may
+              override it based on your browser settings. For example, if you
+              choose French but your browser specified that English should be
+              preferred over French, the interface will display in
+              English.</para>
             </listitem>
           </varlistentry>
         </variablelist>

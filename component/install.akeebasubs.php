@@ -75,6 +75,7 @@ $installation_queue = array(
 		),
 		'akpayment' => array(
 			'2checkout'				=> 0,
+			'allopass'				=> 0,
 			'ccavenue'				=> 0,
 			'deltapay'				=> 0,
 			'eselectplus'			=> 0,
@@ -217,7 +218,11 @@ if(!version_compare($db->getVersion(), '5.0.41', 'ge')) {
 // Upgrade the levels table (1.0.0)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`notify1`'))
 {
@@ -233,7 +238,11 @@ ENDSQL;
 // Upgrade the subscriptions table (2.0.a1)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_subscriptions`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`akeebasubs_coupon_id`'))
 {
@@ -253,7 +262,11 @@ ENDSQL;
 // Upgrade the subscriptions table (2.0.a2)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_subscriptions`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`affiliate_comission`'))
 {
@@ -268,7 +281,11 @@ ENDSQL;
 // Upgrade the subscriptions table (2.0.b3)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_subscriptions`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`tax_percent`'))
 {
@@ -283,7 +300,11 @@ ENDSQL;
 // Upgrade the subscriptions table (2.1)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`only_once`'))
 {
@@ -298,7 +319,11 @@ ENDSQL;
 // Upgrade the coupons table (2.1 - Part 1)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_coupons`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`userhits`'))
 {
@@ -313,7 +338,11 @@ ENDSQL;
 // Upgrade the coupons table (2.1 - Part 2)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_coupons`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`usergroups`'))
 {
@@ -328,7 +357,11 @@ ENDSQL;
 // Upgrade the levels table (2.1)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_levels`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, '`recurring`'))
 {
@@ -343,7 +376,11 @@ ENDSQL;
  // Upgrade the upgrades table (2.2)
 $sql = 'SHOW CREATE TABLE `#__akeebasubs_upgrades`';
 $db->setQuery($sql);
-$ctableAssoc = $db->loadResultArray(1);
+if(version_compare(JVERSION, '3.0', 'ge')) {
+	$ctableAssoc = $db->loadColumn(1);
+} else {
+	$ctableAssoc = $db->loadResultArray(1);
+}
 $ctable = empty($ctableAssoc) ? '' : $ctableAssoc[0];
 if(!strstr($ctable, 'lastpercent'))
 {
@@ -362,7 +399,7 @@ ENDSQL;
 
 // Setup the sub-extensions installer
 jimport('joomla.installer.installer');
-$db = & JFactory::getDBO();
+$db = JFactory::getDBO();
 $status = new JObject();
 $status->modules = array();
 $status->plugins = array();
@@ -417,30 +454,30 @@ if(count($installation_queue['modules'])) {
 					// B. Change the ordering of back-end modules to 1 + max ordering in J! 1.7+
 					if($folder == 'admin') {
 						$query = $db->getQuery(true);
-						$query->select('MAX('.$db->nq('ordering').')')
-							->from($db->nq('#__modules'))
-							->where($db->nq('position').'='.$db->q($modulePosition));
+						$query->select('MAX('.$db->qn('ordering').')')
+							->from($db->qn('#__modules'))
+							->where($db->qn('position').'='.$db->q($modulePosition));
 						$db->setQuery($query);
 						$position = $db->loadResult();
 						$position++;
 						
 						$query = $db->getQuery(true);
-						$query->update($db->nq('#__modules'))
-							->set($db->nq('ordering').' = '.$db->q($position))
-							->where($db->nq('module').' = '.$db->q('mod_'.$module));
+						$query->update($db->qn('#__modules'))
+							->set($db->qn('ordering').' = '.$db->q($position))
+							->where($db->qn('module').' = '.$db->q('mod_'.$module));
 						$db->setQuery($query);
 						$db->query();
 					}
 					// C. Link to all pages on Joomla! 1.7+
 					$query = $db->getQuery(true);
-					$query->select('id')->from($db->nq('#__modules'))
-						->where($db->nq('module').' = '.$db->q('mod_'.$module));
+					$query->select('id')->from($db->qn('#__modules'))
+						->where($db->qn('module').' = '.$db->q('mod_'.$module));
 					$db->setQuery($query);
 					$moduleid = $db->loadResult();
 					
 					$query = $db->getQuery(true);
-					$query->select('*')->from($db->nq('#__modules_menu'))
-						->where($db->nq('moduleid').' = '.$db->q($moduleid));
+					$query->select('*')->from($db->qn('#__modules_menu'))
+						->where($db->qn('moduleid').' = '.$db->q($moduleid));
 					$db->setQuery($query);
 					$assignments = $db->loadObjectList();
 					$isAssigned = !empty($assignments);
