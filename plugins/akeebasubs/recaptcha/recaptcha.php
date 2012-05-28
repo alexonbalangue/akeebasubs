@@ -137,8 +137,8 @@ ENDJS;
 		
 		$challenge = JRequest::getVar('recaptcha_challenge_field','');
 		$response = JRequest::getVar('recaptcha_response_field','');
-		if(!array_key_exists('recaptcha_challenge',$custom)) $custom['recaptcha_challenge'] = $challenge;
-		if(!array_key_exists('recaptcha_response',$custom)) $custom['recaptcha_response'] = $response;
+		if( (!array_key_exists('recaptcha_challenge',$custom)) || (!empty($challenge)) ) $custom['recaptcha_challenge'] = $challenge;
+		if( (!array_key_exists('recaptcha_response',$custom)) || (!empty($response)) ) $custom['recaptcha_response'] = $response;
 		
 		$privkey = $this->params->getValue('privatekey','');
 		$remoteip =  $_SERVER["REMOTE_ADDR"];
