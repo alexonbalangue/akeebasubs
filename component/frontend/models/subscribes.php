@@ -448,13 +448,20 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Get the applicable tax rule
 		$taxRule = $this->_getTaxRule();		
-				
+		
+		// Calculate the base price minimising rounding errors
+		$basePrice = 0.01 * (100*$netPrice - 100*$discount);
+		// Calculate the tax amount minimising rounding errors
+		$taxAmount = 0.01 * ($taxRule->taxrate * $basePrice);
+		// Calculate the gross amount minimising rounding errors
+		$grossAmount = 0.01 * (100*$basePrice + 100*$taxAmount);
+		
 		return (object)array(
 			'net'		=> sprintf('%1.02f',$netPrice),
 			'discount'	=> sprintf('%1.02f',$discount),
 			'taxrate'	=> sprintf('%1.02f',(float)$taxRule->taxrate),
-			'tax'		=> sprintf('%1.02f',0.01 * $taxRule->taxrate * ($netPrice - $discount)),
-			'gross'		=> sprintf('%1.02f',($netPrice - $discount) + 0.01 * $taxRule->taxrate * ($netPrice - $discount)),
+			'tax'		=> sprintf('%1.02f',$taxAmount),
+			'gross'		=> sprintf('%1.02f',$grossAmount),
 			'usecoupon'	=> $useCoupon ? 1 : 0,
 			'useauto'	=> $useAuto ? 1 : 0,
 			'couponid'	=> $couponid,

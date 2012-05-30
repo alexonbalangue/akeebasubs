@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions DEV RELEASE
+================================================================================
+# Rounding issue (±0.01) in Gross amount under some circumstances
+
 Akeeba Subscriptions 2.2.1
 ================================================================================
 + #93 NoChex payment plugin (experimental)
