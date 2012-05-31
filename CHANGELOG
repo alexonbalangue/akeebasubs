@@ -1,7 +1,8 @@
 <?php die(); ?>
 Akeeba Subscriptions DEV RELEASE
 ================================================================================
-# Rounding issue (±0.01) in Gross amount under some circumstances
+# [LOW] Rounding issue (±0.01) in Gross amount under some circumstances
+# [LOW] Invalid date in subscription or coupon would result in an error
 
 Akeeba Subscriptions 2.2.1
 ================================================================================

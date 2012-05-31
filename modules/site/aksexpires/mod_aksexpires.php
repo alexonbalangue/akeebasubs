@@ -53,7 +53,11 @@ if(JFactory::getUser()->guest) {
 	jimport('joomla.utilities.date');
 
 	$expires = 0;
+	$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 	foreach($list as $s) {
+		if(!preg_match($regex, $s->publish_down)) {
+			$s->publish_down = '2037-01-01';
+		}
 		$ed = new JDate($s->publish_down);
 		$ex = $ed->toUnix();
 		if($ex > $expires) $expires = $ex;

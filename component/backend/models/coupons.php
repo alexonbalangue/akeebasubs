@@ -73,6 +73,13 @@ class AkeebasubsModelCoupons extends FOFModel
 			if(!property_exists($row, 'publish_up')) continue;
 			
 			if($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00')) {
+				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+				if(!preg_match($regex, $row->publish_down)) {
+					$row->publish_down = '2037-01-01';
+				}
+				if(!preg_match($regex, $row->publish_up)) {
+					$row->publish_up = '2001-01-01';
+				}
 				$jDown = new JDate($row->publish_down);
 				$jUp = new JDate($row->publish_up);
 				if( ($uNow >= $jDown->toUnix()) && $row->enabled ) {

@@ -32,6 +32,10 @@ class AkeebasubsTableCoupon extends FOFTable
 			$jUp = new JDate();
 			$this->publish_up = $jUp->toMySQL();
 		} else {
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $this->publish_up)) {
+				$this->publish_up = '2001-01-01';
+			}
 			$jUp = new JDate($this->publish_up);
 		}
 		
@@ -39,6 +43,10 @@ class AkeebasubsTableCoupon extends FOFTable
 			$jDown = new JDate('2030-01-01 00:00:00');
 			$this->publish_down = $jDown->toMySQL();
 		} else {
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $this->publish_down)) {
+				$this->publish_down = '2037-01-01';
+			}
 			$jDown = new JDate($this->publish_down);
 		}
 		

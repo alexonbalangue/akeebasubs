@@ -36,6 +36,10 @@ class AkeebasubsTableSubscription extends FOFTable
 			$result = false;
 		} else {
 			jimport('joomla.utilities.date');
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $this->publish_up)) {
+				$this->publish_up = '2000-01-01';
+			}
 			$test = new JDate($this->publish_up);
 			if($test->toMySQL() == '0000-00-00 00:00:00') {
 				$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_UP'));
@@ -50,6 +54,10 @@ class AkeebasubsTableSubscription extends FOFTable
 			$result = false;
 		} else {
 			jimport('joomla.utilities.date');
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $this->publish_down)) {
+				$this->publish_down = '2037-01-01';
+			}
 			$test = new JDate($this->publish_down);
 			if($test->toMySQL() == '0000-00-00 00:00:00') {
 				$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN'));
