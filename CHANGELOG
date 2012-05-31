@@ -3,6 +3,7 @@ Akeeba Subscriptions DEV RELEASE
 ================================================================================
 # [LOW] Rounding issue (±0.01) in Gross amount under some circumstances
 # [LOW] Invalid date in subscription or coupon would result in an error
+# [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
 
 Akeeba Subscriptions 2.2.1
 ================================================================================

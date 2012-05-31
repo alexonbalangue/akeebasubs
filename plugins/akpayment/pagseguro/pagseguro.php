@@ -207,7 +207,7 @@ class plgAkpaymentPagseguro extends JPlugin
 		// Check that id has not been previously processed
 		if($isValid) {
 			$processorKey = $transaction->getCode();
-			if($subscription->processor_key == $processorKey) {
+			if( ($subscription->processor_key == $processorKey) && ($subscription->state == 'C') ) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = 'This transaction is already processed';
 			}
