@@ -203,11 +203,45 @@ class plgAkpaymentPagseguro extends JPlugin
 				if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 			}
 		}
+
+		// Check the payment_status
+		$status = $transaction->getStatus();
+		switch($status->getTypeFromValue())
+		{
+			case 'AVAILABLE':
+			// the transaction was paid and
+			// the end of period is reached in which a dispute is possible
+			case 'PAID':
+			// the transaction was paid,
+			// but the customer has some time to open a dispute
+				$newStatus = 'C';
+				break;
+
+			case 'WAITING_PAYMENT':
+			// the buyer initiated the transaction,
+			// but so far the PagSeguro not received any payment information
+			case 'IN_ANALYSIS':
+			// the buyer chose to pay with a credit card and
+			// PagSeguro is analyzing the risk of the transaction
+			case 'IN_DISPUTE':
+			// a dispute was opened by the purchaser 
+				$newStatus = 'P';
+				break;
+
+			case 'REFUNDED':
+			// the transaction amount refunded
+			case 'CANCELLED':
+			// the transaction was canceled
+			// without having been finalized
+			default:
+				$newStatus = 'X';
+				break;
+		}
 		
 		// Check that id has not been previously processed
 		if($isValid) {
 			$processorKey = $transaction->getCode();
-			if( ($subscription->processor_key == $processorKey) && ($subscription->state == 'C') ) {
+			if( ($subscription->processor_key == $processorKey) && ($subscription->state == $newStatus) ) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = 'This transaction is already processed';
 			}
@@ -218,28 +252,6 @@ class plgAkpaymentPagseguro extends JPlugin
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
-
-		// Check the payment_status
-		$status = $transaction->getStatus();
-		switch($status->getTypeFromValue())
-		{
-			case 'AVAILABLE':
-				$newStatus = 'C';
-				break;
-
-			case 'WAITING_PAYMENT':
-			case 'IN_ANALYSIS':
-			case 'PAID':
-			case 'IN_DISPUTE':
-				$newStatus = 'P';
-				break;
-
-			case 'REFUNDED':
-			case 'CANCELLED':
-			default:
-				$newStatus = 'X';
-				break;
-		}
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
