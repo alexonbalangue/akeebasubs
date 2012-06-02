@@ -24,7 +24,6 @@ class plgAkpaymentZarinPal extends JPlugin
 		parent::__construct($subject, $config);
 		
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-		//require_once dirname(__FILE__).'/zarinpal/library/nusoap.php';
 		
 		// Load the language files
 		$jlang = JFactory::getLanguage();
@@ -92,7 +91,7 @@ class plgAkpaymentZarinPal extends JPlugin
 	{
 		jimport('joomla.utilities.date');
 		
-		// Check if we're supposed to handle this$
+		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
 		// Check IPN data for validity (i.e. protect against fraud attempt)
