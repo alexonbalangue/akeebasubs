@@ -82,11 +82,7 @@ unset($upgradesRaw);
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON', 'created_on', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
 			<th width="8%">
-				<?php if(version_compare(JVERSION,'1.6.0','ge')):?>
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php else: ?>
-				<?php echo JHTML::_('grid.sort', 'PUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php endif; ?>
 			</th>
 		</tr>
 		<tr>
@@ -102,10 +98,10 @@ unset($upgradesRaw);
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.search.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td  colspan="2">
@@ -117,10 +113,10 @@ unset($upgradesRaw);
 					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?>" />
 				<!--
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.paykey.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 				-->
 				
@@ -186,7 +182,7 @@ unset($upgradesRaw);
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?php echo $this->escape($subscription->title); ?>::<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL_EDIT_TOOLTIP')?>">
-					<img src="<?php echo JURI::base(); ?>../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $subscription->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?php echo JURI::base(); ?>../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $subscription->image;?>" width="32" height="32" class="sublevelpic" />
 					<a href="index.php?option=com_akeebasubs&view=level&id=<?php echo $subscription->akeebasubs_level_id ?>" class="subslevel">
     					<?php echo $this->escape($subscription->title)?>
     				</a>

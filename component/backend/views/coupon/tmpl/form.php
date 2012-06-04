@@ -54,11 +54,7 @@ $this->loadHelper('params');
 	<div class="akeebasubs-clear"></div>
 
 	<label for="enabled" class="main" class="mainlabel">
-		<?php if(version_compare(JVERSION,'1.6.0','ge')): ?>
 		<?php echo JText::_('JPUBLISHED'); ?>
-		<?php else: ?>
-		<?php echo JText::_('PUBLISHED'); ?>
-		<?php endif; ?>
 	</label>
 	<span class="akeebasubs-booleangroup">
 		<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
@@ -92,18 +88,12 @@ $this->loadHelper('params');
 	<input type="hidden" name="user" id="userid" value="<?php echo $this->item->user?>" />
 	<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user ? JFactory::getUser($this->item->user)->username : '' ?>" disabled="disabled" />
 	<button onclick="return false;" class="modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
-	<?php if(version_compare(JVERSION, '1.6.0', 'ge')): ?>
 	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-	<?php else: ?>
-	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&amp;view=jusers&amp;tmpl=component" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-	<?php endif; ?>
 	<div class="akeebasubs-clear"></div>
 
-	<?php if(version_compare(JVERSION, '1.6.0', 'ge')): ?>
 	<label for="usergroups_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_COUPON_FIELD_USERGROUPS'); ?></label>
 	<?php echo AkeebasubsHelperSelect::usergroups('usergroups[]', empty($this->item->usergroups) ? '-1' : explode(',', $this->item->usergroups), array('multiple' => 'multiple', 'size' => 3)); ?>
 	<br />
-	<?php endif; ?>
 
 	<label for="subscriptions_field" class="main"><?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_SUBSCRIPTIONS'); ?></label>
 	<?php echo AkeebasubsHelperSelect::levels('subscriptions[]', empty($this->item->subscriptions) ? '-1' : explode(',',$this->item->subscriptions), array('multiple' => 'multiple', 'size' => 3)) ?>

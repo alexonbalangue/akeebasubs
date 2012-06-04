@@ -44,11 +44,7 @@ $this->loadHelper('select');
 	<div class="akeebasubs-clear"></div>
 
 	<label for="enabled" class="main" class="main">
-		<?php if(version_compare(JVERSION,'1.6.0','ge')): ?>
 		<?php echo JText::_('JPUBLISHED'); ?>
-		<?php else: ?>
-		<?php echo JText::_('PUBLISHED'); ?>
-		<?php endif; ?>
 	</label>
 	<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 

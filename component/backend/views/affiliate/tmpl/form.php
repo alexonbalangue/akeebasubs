@@ -35,11 +35,7 @@ $this->loadHelper('format');
 	<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
 	<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
 	<button onclick="return false;" class="modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
-	<?php if(version_compare(JVERSION, '1.6.0', 'ge')): ?>
 	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-	<?php else: ?>
-	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_akeebasubs&amp;view=jusers&amp;tmpl=component" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-	<?php endif; ?>
 	<div class="akeebasubs-clear"></div>
 	
 	<label for="comission" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_COMISSION')?></label>
@@ -47,11 +43,7 @@ $this->loadHelper('format');
 	<div class="akeebasubs-clear"></div>
 	
 	<label for="enabled" class="main" class="mainlabel">
-		<?php if(version_compare(JVERSION,'1.6.0','ge')): ?>
 		<?php echo JText::_('JPUBLISHED'); ?>
-		<?php else: ?>
-		<?php echo JText::_('PUBLISHED'); ?>
-		<?php endif; ?>
 	</label>
 	<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 	

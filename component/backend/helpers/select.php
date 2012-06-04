@@ -241,8 +241,8 @@ class AkeebasubsHelperSelect
 	{
 		$options = array();
 		$options[] = JHTML::_('select.option',null,'- '.JText::_('COM_AKEEBASUBS_COMMON_SELECTSTATE').' -');
-		$options[] = JHTML::_('select.option',0,JText::_((version_compare(JVERSION, '1.6.0', 'ge')?'J':'').'UNPUBLISHED'));
-		$options[] = JHTML::_('select.option',1,JText::_((version_compare(JVERSION, '1.6.0', 'ge')?'J':'').'PUBLISHED'));
+		$options[] = JHTML::_('select.option',0,JText::_('JUNPUBLISHED'));
+		$options[] = JHTML::_('select.option',1,JText::_('JPUBLISHED'));
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}

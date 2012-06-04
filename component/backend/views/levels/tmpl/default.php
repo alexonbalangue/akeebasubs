@@ -47,15 +47,11 @@ $this->loadHelper('cparams');
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_PRICE', 'price', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'Ordering', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th width="8%">
-				<?php if(version_compare(JVERSION,'1.6.0','ge')):?>
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php else: ?>
-				<?php echo JHTML::_('grid.sort', 'PUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php endif; ?>
 			</th>			
 		</tr>
 		<tr>
@@ -68,10 +64,10 @@ $this->loadHelper('cparams');
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.search.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td></td>
@@ -108,7 +104,7 @@ $this->loadHelper('cparams');
 			</td>
 			<td align="left">
 				<span class="editlinktip hasTip" title="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_EDITLEVEL_TOOLTIP')?> <?php echo $this->escape($item->title); ?>::<?php echo $this->escape(substr(strip_tags($item->description), 0, 300)).'...'; ?>">
-					<img src="<?php echo JURI::base(); ?>../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $item->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?php echo JURI::base(); ?>../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir', 'images/'),'/') ?>/<?php echo $item->image;?>" width="32" height="32" class="sublevelpic" />
 					<a href="index.php?option=com_akeebasubs&view=level&id=<?php echo $item->akeebasubs_level_id ?>" class="subslevel">
 						<strong><?php echo $this->escape($item->title) ?></strong>
 					</a>
@@ -120,17 +116,9 @@ $this->loadHelper('cparams');
 			<td align="center">
 				<?php
 				if($item->recurring) {
-					if(version_compare(JVERSION, '1.6.0', 'ge')) {
-						echo JHtml::_('image', 'admin/tick.png', null, null, true);
-					} else {
-						echo JHtml::_('image.administrator', 'images/tick.png', null, null, true);
-					}
+					echo JHtml::_('image', 'admin/tick.png', null, null, true);
 				} else {
-					if(version_compare(JVERSION, '1.6.0', 'ge')) {
-						echo JHtml::_('image', 'admin/publish_x.png', null, null, true);
-					} else {
-						echo JHtml::_('image.administrator', 'images/publish_x.png', null, null, true);
-					}
+					echo JHtml::_('image', 'admin/publish_x.png', null, null, true);
 				}
 				?>
 			</td>

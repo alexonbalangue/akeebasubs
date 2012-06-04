@@ -37,11 +37,7 @@ $this->loadHelper('cparams');
 		<div class="akeebasubs-clear"></div>
 		
 		<label for="enabled" class="main" class="mainlabel">
-			<?php if(version_compare(JVERSION,'1.6.0','ge')): ?>
 			<?php echo JText::_('JPUBLISHED'); ?>
-			<?php else: ?>
-			<?php echo JText::_('PUBLISHED'); ?>
-			<?php endif; ?>
 		</label>
 		<span class="akeebasubs-booleangroup">
 			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
@@ -49,9 +45,9 @@ $this->loadHelper('cparams');
 		<div class="akeebasubs-clear"></div>
 		
 		<label for="image_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
-		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/').'/', 'swf|gif|jpg|png|bmp'); ?>
+		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/').'/', 'swf|gif|jpg|png|bmp'); ?>
 		<div class="akeebasubs-clear"></div>
-		<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
+		<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
 		<div class="akeebasubs-clear"></div>
 
 		<label for="duration_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>

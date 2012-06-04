@@ -53,11 +53,7 @@ class AkeebasubsToolbar extends FOFToolbar
 		$this->onBrowse();
 		
 		JToolBarHelper::divider();
-		if(version_compare(JVERSION, '1.6.0', 'ge')) {
-			JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
-		} else {
-			JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'Copy', false);
-		}
+		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
 	}
 	
 	public function onUsersBrowse()

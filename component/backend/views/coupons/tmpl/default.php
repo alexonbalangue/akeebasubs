@@ -48,7 +48,7 @@ $this->loadHelper('format');
 				<?php echo JText::_('COM_AKEEBASUBS_COUPONS_LIMITS') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'Ordering', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th>
@@ -58,11 +58,7 @@ $this->loadHelper('format');
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_PUBLISH_DOWN', 'publish_down', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
 			<th width="8%">
-				<?php if(version_compare(JVERSION,'1.6.0','ge')):?>
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php else: ?>
-				<?php echo JHTML::_('grid.sort', 'PUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php endif; ?>
 			</th>			
 		</tr>
 		<tr>
@@ -75,10 +71,10 @@ $this->loadHelper('format');
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.search.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td></td>

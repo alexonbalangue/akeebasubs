@@ -48,7 +48,7 @@ $this->loadHelper('message');
 			<div class="level-description">
 				<div class="level-description-inner">
 					<?php if(!empty($level->image)):?>
-					<img class="level-image" src="<?php echo JURI::base()?><?php echo trim(AkeebasubsHelperCparams::getParam('imagedir',version_compare(JVERSION,'1.6.0','ge') ? 'images/' :'images/stories/'),'/') ?>/<?php echo $level->image?>" />
+					<img class="level-image" src="<?php echo JURI::base()?><?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $level->image?>" />
 					<?php endif;?>
 					<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description));?>
 				</div>

@@ -73,11 +73,7 @@ class AkeebasubsHelperMessage
 	{
 		// Get the default language
 		if(empty($lang)) {
-			if(version_compare(JVERSION, '1.6.0', 'ge')) {
-				$enableTranslation = JFactory::getApplication()->getLanguageFilter();
-			} else {
-				$enableTranslation = false;
-			}
+			$enableTranslation = JFactory::getApplication()->getLanguageFilter();
 			
 			if($enableTranslation) {
 				$lang = JFactory::getLanguage()->getTag();

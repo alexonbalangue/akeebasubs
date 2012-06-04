@@ -56,7 +56,7 @@ class AkeebasubsControllerMessages extends FOFController
 		if(empty($userid)) {
 			$userid = $subscription->user_id;
 		}
-		if($userid && version_compare(JVERSION, '1.6.0', 'ge')) {
+		if($userid) {
 			// This line returns an empty JUser object
 			$newUserObject = new JUser();
 			// This line FORCE RELOADS the user record.
