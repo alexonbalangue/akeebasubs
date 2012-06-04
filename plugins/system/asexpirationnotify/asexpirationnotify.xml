@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="system" method="upgrade">
+<extension version="2.5.0" type="plugin" group="system" method="upgrade">
 	<name>System - Akeeba Subscriptions Expiration Notification</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -24,4 +23,4 @@
 		<language tag="en-GB">en-GB/en-GB.plg_system_asexpirationnotify.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_system_asexpirationnotify.sys.ini</language>
 	</languages>
-</install>
+</extension>

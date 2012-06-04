@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
 	<name>Akeeba Subscriptions - Agora Integration</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -17,20 +16,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_agora.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_agora.sys.ini</language>
 	</languages>
-	<params>
-		<param name="agoraversion" type="list" default="3" label="PLG_AKEEBASUBS_AGORA_VERSION" desription="PLG_AKEEBASUBS_AGORA_VERSION_DESCRIPTION">
-			<option value="3">3</option>
-			<option value="4">4</option>
-		</param>
-		<param name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_AGORA_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_AGORA_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />
-		<param name="removegroups" type="textarea" default="" label="PLG_AKEEBASUBS_AGORA_REMOVEGROUPS_TITLE" description="PLG_AKEEBASUBS_AGORA_REMOVEGROUPS_DESCRIPTION" rows="5" cols="30" />
-		<param name="ignoreadmins" type="list" default="1" label="PLG_AKEEBASUBS_AGORA_IGNOREADMINS" description="PLG_AKEEBASUBS_AGORA_IGNOREADMINS_DESCRIPTION">
-			<option value="0">NO</option>
-			<option value="1">YES</option>
-		</param>
-			
-	</params>
-	
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -47,4 +32,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

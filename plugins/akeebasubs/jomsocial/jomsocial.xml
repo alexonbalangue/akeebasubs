@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
 	<name>Akeeba Subscriptions - JomSocial Integration</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -17,10 +16,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_jomsocial.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_jomsocial.sys.ini</language>
 	</languages>
-	<params>
-		<param name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_JOMSOCIAL_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_JOMSOCIAL_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />
-		<param name="removegroups" type="textarea" default="" label="PLG_AKEEBASUBS_JOMSOCIAL_REMOVEGROUPS_TITLE" description="PLG_AKEEBASUBS_JOMSOCIAL_REMOVEGROUPS_DESCRIPTION" rows="5" cols="30" />
-	</params>
 	
 	<config>
 		<fields name="params">
@@ -30,4 +25,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

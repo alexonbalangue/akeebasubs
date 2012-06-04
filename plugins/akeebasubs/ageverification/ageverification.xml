@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
 	<name>Akeeba Subscriptions - Age verification</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -17,9 +16,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_ageverification.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_ageverification.sys.ini</language>
 	</languages>
-	<params>
-		<param name="minage" type="text" default="" label="PLG_AKEEBASUBS_AGEVERIFICATION_MINAGE_LABEL" description="PLG_AKEEBASUBS_AGEVERIFICATION_MINAGE_DESC" size="5" />
-	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -27,4 +23,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

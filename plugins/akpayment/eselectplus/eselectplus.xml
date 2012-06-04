@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
 	<name>Akeeba Subscriptions Payment - eSelect Plus</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -18,28 +17,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_eselectplus.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_eselectplus.sys.ini</language>
 	</languages>
-	<params>
-		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_TITLE_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_TITLE_DESC"/>
-		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_PPIMAGE_DESC" />
-		<param type="spacer" />
-		<param name="version" type="radio" default="ca" label="PLG_AKPAYMENT_ESELECTPLUS_VERSION_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_VERSION_DESC">
-			<option value="ca">PLG_AKPAYMENT_ESELECTPLUS_VERSION_CA</option>
-			<option value="us">PLG_AKPAYMENT_ESELECTPLUS_VERSION_US</option>
-		</param>
-		<param type="spacer" />
-		<param name="store_id" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_STOREID_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_STOREID_DESC"/>
-		<param name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_ESELECTPLUS_KEY_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_KEY_DESC"/>
-		<param type="spacer" />
-		<param name="language" type="radio" default="en-ca" label="PLG_AKPAYMENT_ESELECTPLUS_LANGUAGE_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_LANGUAGE_DESC">
-			<option value="en-ca">PLG_AKPAYMENT_ESELECTPLUS_LANGUAGE_EN</option>
-			<option value="fr-ca">PLG_AKPAYMENT_ESELECTPLUS_LANGUAGE_FR</option>
-		</param>
-		<param type="spacer" />
-		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_ESELECTPLUS_SANDBOX_LABEL" description="PLG_AKPAYMENT_ESELECTPLUS_SANDBOX_DESC">
-		  <option value="0">No</option>
-		  <option value="1">Yes</option>
-		</param>
-	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -66,4 +43,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

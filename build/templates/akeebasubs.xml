@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
-<install type="component" version="1.5.0" method="upgrade">
+<extension type="component" version="1.5.0" method="upgrade">
 	<name>AkeebaSubs</name>
 	<creationDate>##DATE##</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
@@ -292,4 +291,4 @@
 		</skiptables>
 	</restorepoint>
 	
-</install>
+</extension>

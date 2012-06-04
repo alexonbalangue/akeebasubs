@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
 	<name>Akeeba Subscriptions Payment - Skrill (Moneybookers)</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -18,42 +17,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_skrill.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_skrill.sys.ini</language>
 	</languages>
-	<params>
-		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_TITLE_LABEL" description="PLG_AKPAYMENT_SKRILL_TITLE_DESC"/>
-		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_PPIMAGE_LABEL" description="PLG_AKPAYMENT_SKRILL_PPIMAGE_DESC" />
-
-		<param type="spacer" />
-		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_MERCHANT_LABEL" description="PLG_AKPAYMENT_SKRILL_MERCHANT_DESC"/>
-		<param name="secret" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_SECRET_LABEL" description="PLG_AKPAYMENT_SKRILL_SECRET_DESC"/>
-
-		<param type="spacer" />
-		<param name="company" type="text" size="30" default="" label="PLG_AKPAYMENT_SKRILL_COMPANY_LABEL" description="PLG_AKPAYMENT_SKRILL_COMPANY_DESC"/>
-		<param name="language" type="list" default="0" label="PLG_AKPAYMENT_SKRILL_LANGUAGE_LABEL" description="PLG_AKPAYMENT_SKRILL_LANGUAGE_DESC">
-			<option value="EN">PLG_AKPAYMENT_SKRILL_LANGUAGE_EN</option>
-			<option value="DE">PLG_AKPAYMENT_SKRILL_LANGUAGE_DE</option>
-			<option value="ES">PLG_AKPAYMENT_SKRILL_LANGUAGE_ES</option>
-			<option value="FR">PLG_AKPAYMENT_SKRILL_LANGUAGE_FR</option>
-			<option value="IT">PLG_AKPAYMENT_SKRILL_LANGUAGE_IT</option>
-			<option value="PL">PLG_AKPAYMENT_SKRILL_LANGUAGE_PL</option>
-			<option value="GR">PLG_AKPAYMENT_SKRILL_LANGUAGE_GR</option>
-			<option value="RO">PLG_AKPAYMENT_SKRILL_LANGUAGE_RO</option>
-			<option value="RU">PLG_AKPAYMENT_SKRILL_LANGUAGE_RU</option>
-			<option value="TR">PLG_AKPAYMENT_SKRILL_LANGUAGE_TR</option>
-			<option value="CN">PLG_AKPAYMENT_SKRILL_LANGUAGE_CN</option>
-			<option value="CZ">PLG_AKPAYMENT_SKRILL_LANGUAGE_CZ</option>
-			<option value="NL">PLG_AKPAYMENT_SKRILL_LANGUAGE_NL</option>
-			<option value="DA">PLG_AKPAYMENT_SKRILL_LANGUAGE_DA</option>
-			<option value="SV">PLG_AKPAYMENT_SKRILL_LANGUAGE_SV</option>
-			<option value="FI">PLG_AKPAYMENT_SKRILL_LANGUAGE_FI</option>
-		</param>
-		<param name="confnotice" type="text" size="30" default="" label="PLG_AKPAYMENT_SKRILL_CONFNOTICE_LABEL" description="PLG_AKPAYMENT_SKRILL_CONFNOTICE_DESC"/>
-		<param name="header" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_HEADER_LABEL" description="PLG_AKPAYMENT_SKRILL_HEADER_DESC" />
-		<param type="spacer" />
-		<param name="sandbox" type="list" default="0" label="PLG_AKPAYMENT_SKRILL_SANDBOX_LABEL" description="PLG_AKPAYMENT_SKRILL_SANDBOX_DESC">
-		  <option value="0">No</option>
-		  <option value="1">Yes</option>
-		</param>
-	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -94,4 +57,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

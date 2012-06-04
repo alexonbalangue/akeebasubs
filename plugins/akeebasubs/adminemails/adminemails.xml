@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
 	<name>Akeeba Subscriptions - Administrator Emails</name>
 	<author>ZOOlanders.com</author>
 	<authorEmail>info@zoolanders.com</authorEmail>
@@ -17,9 +16,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_adminemails.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_adminemails.sys.ini</language>
 	</languages>
-	<params>
-		<param name="emails" type="text" default="" label="PLG_AKEEBASUBS_ADMINEMAILS_EMAILS_LABEL" description="PLG_AKEEBASUBS_ADMINEMAILS_EMAILS_DESC" />
-	</params>
 	<config>
 		<fields name="params" >
 			<fieldset name="basic">
@@ -27,4 +23,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>
