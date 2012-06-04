@@ -1859,6 +1859,50 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <para>See above.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Combine</term>
+
+          <listitem>
+            <para>The final discount is normally defined by the upgrade rule
+            that generates the highest discount. When upgrade rules have the
+            <guilabel>Combine</guilabel> option set to <option>Yes</option>,
+            then all these (that apply to the subscriber's situation) will be
+            added together (combined) to define the discount. In other words,
+            the applicable upgrade rules with the Combined flag turned on work
+            accumulatively instead of exclusively. This feature comes in handy
+            when you want to give discounts to "bundle" subscriptions, i.e.
+            subscription levels which give you the same privileges as buying
+            several other subscription levels at the same time.</para>
+
+            <para>Example #1 (without Combine):</para>
+
+            <programlisting>Rule A gives $ 10 discount
+Rule B gives $ 15 discount
+Rule C gives $ 20 discount</programlisting>
+
+            <para>Total discount will be $20 given by rule C because it's the
+            biggest discount of the three.</para>
+
+            <para>Example #2:</para>
+
+            <programlisting>Rule A gives $ 10 discount =&gt; combine is on
+Rule B gives $ 15 discount =&gt; combine is on
+Rule C gives $ 20 discount</programlisting>
+
+            <para>Total discount will be $25 given by rule A + B because A+B
+            (combined) give a bigger discount than C.</para>
+
+            <para>Example #3:</para>
+
+            <programlisting>Rule A gives $ 10 discount =&gt; combine is on
+Rule B gives $ 15 discount =&gt; combine is on
+Rule C gives $ 30 discount</programlisting>
+
+            <para>Total discount will be $30 given by rule C because C gives a
+            bigger discount than A+B (combined).</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para>Practical examples of upgrade rules:</para>

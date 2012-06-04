@@ -114,7 +114,8 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_upgrades` (
 	`max_presence` int(5) unsigned NOT NULL,
 	`type` ENUM('value','percent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT '0.0',
-	
+
+	`combine` tinyint(1) NOT NULL DEFAULT '0',
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',

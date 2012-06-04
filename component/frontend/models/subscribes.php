@@ -668,13 +668,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 			}
 		}
-		
+
 		// Get the current subscription level's net worth
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
 		$net = (float)$level->price;
-		
+
 		if($net == 0) {
 			$this->_upgrade_id = null;
 			return 0;
@@ -682,17 +682,56 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		$discount = 0;
 		$this->_upgrade_id = null;
-		
-		foreach($autoRules as $rule) {
-			// Make sure there is an active subscription in the From level
-			if(!array_key_exists($rule->from_id, $subs)) continue;
-			// Make sure the min/max presence is repected
-			if($subs[$rule->from_id] < ($rule->min_presence*86400)) continue;
-			if($subs[$rule->from_id] > ($rule->max_presence*86400)) continue;
-			// If From and To levels are different, make sure there is no active subscription in the To level yet
-			if($rule->to_id != $rule->from_id) {
-				if(array_key_exists($rule->to_id, $subs)) continue;
+
+
+		// Remove any rules that do not apply
+		foreach($autoRules as $i => $rule) {
+			if(
+				// Make sure there is an active subscription in the From level
+				!(array_key_exists($rule->from_id, $subs))
+				// Make sure the min/max presence is repected
+				|| ($subs[$rule->from_id] < ($rule->min_presence*86400))
+				|| ($subs[$rule->from_id] > ($rule->max_presence*86400))
+				// If From and To levels are different, make sure there is no active subscription in the To level yet
+				|| ($rule->to_id != $rule->from_id && array_key_exists($rule->to_id, $subs))
+			) {
+				unset($autoRules[$i]);
 			}
+		}
+
+		// First add add all combined rules
+		foreach($autoRules as $i => $rule) {
+			if (!$rule->combine) continue;
+
+			switch($rule->type) {
+				case 'value':
+					$discount += $rule->value;
+					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'percent':
+					$newDiscount = $net * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'lastpercent':
+					if(!array_key_exists($rule->from_id, $subPayments)) {
+						$lastNet = 0.00;
+					} else {
+						$lastNet = $subPayments[$rule->from_id]['value'];
+					}
+					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+			}
+			unset($autoRules[$i]);
+		}
+
+		// Then check all non-combined rules if they give a higher discount
+		foreach($autoRules as $rule) {
+			if ($rule->combine) continue;
 			
 			switch($rule->type) {
 				case 'value':
@@ -724,7 +763,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					break;
 			}
 		}
-		
+
 		return $discount;
 	}
 	

@@ -46,11 +46,11 @@ $this->loadHelper('format');
 	<fieldset id="upgrade-discount">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_UPGRADE_DISCOUNT_TITLE')?></legend>
 		
-		<label for="from_id_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID'); ?></label>
+		<label for="from_id" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID'); ?></label>
 		<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->item->from_id, 'from_id'); ?>
 		<div class="akeebasubs-clear"></div>
 		
-		<label for="to_id_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_TO_ID'); ?></label>
+		<label for="to_id" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_TO_ID'); ?></label>
 		<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->item->to_id, 'to_id'); ?>
 		<div class="akeebasubs-clear"></div>
 		
@@ -62,11 +62,15 @@ $this->loadHelper('format');
 		<input type="text" size="5" id="max_presence_field" name="max_presence" value="<?php echo $this->escape($this->item->max_presence) ?>" />
 		<div class="akeebasubs-clear"></div>
 
-		<label for="type_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_TYPE'); ?></label>
+		<label for="type" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_TYPE'); ?></label>
 		<?php echo AkeebasubsHelperSelect::upgradetypes('type', $this->item->type) ?>
 		<div class="akeebasubs-clear"></div>
 		
 		<label for="value_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_VALUE'); ?></label>
 		<input type="text" size="10" id="value_field" name="value" value="<?php echo $this->escape($this->item->value) ?>" />
+
+		<div class="akeebasubs-clear"></div>
+		<label for="combine" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_COMBINE'); ?></label>
+		<?php echo JHTML::_('select.booleanlist', 'combine', null, $this->item->combine); ?>
 	</fieldset>
 </form>

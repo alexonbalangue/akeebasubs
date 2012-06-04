@@ -52,6 +52,9 @@ $this->loadHelper('format');
 			<th>
 				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_VALUE', 'value', $this->lists->order_Dir, $this->lists->order); ?>
 			</th>
+			<th>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_COMBINE', 'combine', $this->lists->order_Dir, $this->lists->order); ?>
+			</th>
 			<th width="8%">
 				<?php if(version_compare(JVERSION,'1.6.0','ge')):?>
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
@@ -80,6 +83,7 @@ $this->loadHelper('format');
 					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
 				</button>
 			</td>
+			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
@@ -146,6 +150,23 @@ $this->loadHelper('format');
 				<?php echo sprintf('%2.2f', (float)$upgrade->value) ?> %
 				</span>
 				<?php endif; ?>
+			</td>
+			<td align="center">
+				<?php
+				if($upgrade->combine) {
+					if(version_compare(JVERSION, '1.6.0', 'ge')) {
+						echo JHtml::_('image', 'admin/tick.png', null, null, true);
+					} else {
+						echo JHtml::_('image.administrator', 'images/tick.png', null, null, true);
+					}
+				} else {
+					if(version_compare(JVERSION, '1.6.0', 'ge')) {
+						echo JHtml::_('image', 'admin/publish_x.png', null, null, true);
+					} else {
+						echo JHtml::_('image.administrator', 'images/publish_x.png', null, null, true);
+					}
+				}
+				?>
 			</td>
 			<td align="center">
 				<?php echo JHTML::_('grid.published', $upgrade, $i); ?>

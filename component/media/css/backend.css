@@ -19,6 +19,7 @@
 fieldset label { float: left; }
 
 #enabled0, #enabled1, label[for=enabled0], label[for=enabled1],
+#combine0, #combine1, label[for=combine0], label[for=combine1],
 #isbusiness0, #isbusiness1, label[for=isbusiness0], label[for=isbusiness1],
 #viesregistered0, #viesregistered1, label[for=viesregistered0], label[for=viesregistered1]
 {
