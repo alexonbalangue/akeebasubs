@@ -51,33 +51,7 @@ class plgAkeebasubsUserdelete extends JPlugin
 		}
 		
 		if(!$active) {
-			if(version_compare(JVERSION, '1.6.0', 'ge')) {
-				$this->removeJ16($user_id);
-			} else {
-				$this->removeJ15($user_id);
-			}
-		}
-	}
-	
-	/**
-	 * Removes a user using the Joomla! 1.5 method
-	 * @param int $id The user ID to delete
-	 */
-	private function removeJ15($id)
-	{
-		$acl			= JFactory::getACL();
-		
-		// check for a super admin ... can't delete them
-		$objectID 	= $acl->get_object_id( 'users', $id, 'ARO' );
-		$groups 	= $acl->get_object_groups( $objectID, 'ARO' );
-		$this_group = strtolower( $acl->get_group_name( $groups[0], 'ARO' ) );
-
-		$success = false;
-		if ( $this_group == 'super administrator' ) {
-			return;
-		} else {
-			$user = JUser::getInstance((int)$id);
-			$user->delete();
+			$this->removeJ16($user_id);
 		}
 	}
 	

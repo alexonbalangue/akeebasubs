@@ -151,20 +151,6 @@ class plgContentAsrestricted extends JPlugin
 		return $ret;
 	}
 	
-	public function onPrepareContent( &$article, &$params, $limitstart = 0 )
-	{
-		// Check whether the plugin should process or not
-		if ( JString::strpos( $article->text, 'akeebasubs' ) === false )
-		{
-			return true;
-		}
-		
-		// Search for this tag in the content
-		$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
-		
-		$article->text = preg_replace_callback( $regex, array('self', 'process'), $article->text );
-	}
-	
 	public function onContentPrepare($context, &$row, &$params, $page = 0)
 	{
 		if(is_object($row)) {

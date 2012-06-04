@@ -19,10 +19,8 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			$config['params'] = new JParameter($config['params']);
 		}
 		parent::__construct($subject, $config);
 		
@@ -119,15 +117,8 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$db = JFactory::getDBO();
 		$data = $params->toString();
 		
-		if(version_compare(JVERSION, '1.6.0', 'ge')) {
-			// Joomla! 1.6
-			$sql = 'UPDATE `#__extensions` SET `params` = '.$db->Quote($data).' WHERE '.
-				"`element` = 'com_akeebasubs' AND `type` = 'component'";
-		} else {
-			// Joomla! 1.5
-			$sql = 'UPDATE `#__components` SET `params` = '.$db->Quote($data).' WHERE '.
-				"`option` = 'com_akeebasubs' AND `parent` = 0 AND `menuid` = 0";
-		}
+		$sql = 'UPDATE `#__extensions` SET `params` = '.$db->Quote($data).' WHERE '.
+			"`element` = 'com_akeebasubs' AND `type` = 'component'";
 		
 		$db->setQuery($sql);
 		$db->query();

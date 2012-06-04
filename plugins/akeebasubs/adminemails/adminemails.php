@@ -17,11 +17,10 @@ class plgAkeebasubsAdminemails extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			$config['params'] = new JParameter($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		$emailsString = trim($this->params->getValue('emails', ''));
@@ -176,8 +175,8 @@ class plgAkeebasubsAdminemails extends JPlugin
 			'[LEVEL]'		=> $level->title,
 			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_AFFEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
 			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'[PUBLISH_UP]'	=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			'[PUBLISH_DOWN]' => version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_DOWN]' => $jTo->format(JText::_('DATE_FORMAT_LC2')),
 			'[MYSUBSURL]'	=> $url
 		);
 		
