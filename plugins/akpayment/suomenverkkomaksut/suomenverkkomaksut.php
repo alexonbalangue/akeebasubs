@@ -83,10 +83,12 @@ class plgAkpaymentSuomenVerkkomaksut extends JPlugin
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 		
+		$sandbox = $this->params->get('sandbox',0);
+		
 		$data = (object)array(
 			'url'					=> 'https://payment.verkkomaksut.fi',
-			'merchant_hash'			=> trim($this->params->get('merchant_hash','')),
-			'merchant_id'			=> trim($this->params->get('merchant_id','')),
+			'merchant_hash'			=> $sandbox ? '6pKF4jkv97zmqBJ3ZL8gUw5DfT2NMQ' : trim($this->params->get('merchant_hash','')),
+			'merchant_id'			=> $sandbox ? '13466' : trim($this->params->get('merchant_id','')),
 			'order_number'			=> str_replace(' ', '', $level->title) . '-' . $subscription->akeebasubs_subscription_id,
 			'order_description'		=> $level->title . ' - [ ' . $user->username . ' ]',
 			'currency'				=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
