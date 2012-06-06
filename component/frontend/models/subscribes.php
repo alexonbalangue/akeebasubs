@@ -1048,6 +1048,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 	public function saveCustomFields()
 	{
 		$state = $this->getStateVariables();
+		$validation = $this->getValidation();
+		
 		$user = JFactory::getUser();
 		$user = $this->getState('user', $user);
 
