@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 
-include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED')) return;
 
 class plgContentAsrestricted extends JPlugin
