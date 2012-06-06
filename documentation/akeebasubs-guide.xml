@@ -5281,6 +5281,161 @@ LEVEL2=11111:22222:33333</programlisting>
         Subscriptions plugin's same-named fields. Now save the plugin, publish
         it and you're ready to start selling.</para>
       </section>
+
+      <section xml:id="payment-suomen-verkkomaksut-oy">
+        <title>Suomen Verkkomaksut Oy</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Suomen Verkkomaksut Oy</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.3.0.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Finnish payment processor
+        Suomen Verkkomaksut Oy.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Allopass" or type in a custom name to
+              show to your customer's, e.g. "Pay via Mobile Phone"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the identification number given to you by Suomen
+              Verkkomaksut</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant Auth. Hash</term>
+
+            <listitem>
+              <para>The Merchant Authentication Hash is the merchant hash code
+              given by Suomen Verkkomaksut. This is used during payment
+              transactions for authentication and security.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Culture</term>
+
+            <listitem>
+              <para>Select the language of the payment page of Suomen
+              Verkkomaksut.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, Akeeba Subscriptions will use a test
+              merchant and hash. The values in Merchant ID and Merchant Auth.
+              Hash are ignored. This is designed for integration tests, BEFORE
+              going live with your site. <emphasis role="bold">NEVER, EVER, NO
+              MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION SITES!
+              IF YOU DO, YOU WILL LOSE MONEY AND/OR
+              CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="payment-payfast">
+        <title>Payfast</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Payfast</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.3.0.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the payment processor
+        Payfast.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Allopass" or type in a custom name to
+              show to your customer's, e.g. "Pay via Mobile Phone"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the identification number given to you by the
+              PayFast system</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant Key</term>
+
+            <listitem>
+              <para>The Merchant Key given to you by PayFast.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the sandbox (testing server). This is designed for integration
+              tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+
+              <important>
+                <para>When using the Sandbox option please use the test login
+                sbtu01@payfast.co.za (username), clientpass (password), which
+                can be found in the integration guide
+                (https://www.payfast.co.za/s/std/integration-guide).</para>
+              </important>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
