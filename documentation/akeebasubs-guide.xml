@@ -5303,8 +5303,9 @@ LEVEL2=11111:22222:33333</programlisting>
             <term>Payment option title</term>
 
             <listitem>
-              <para>Leave blank to use "Allopass" or type in a custom name to
-              show to your customer's, e.g. "Pay via Mobile Phone"</para>
+              <para>Leave blank to use "Suomen Verkkomaksut Oy" or type in a
+              custom name to show to your customer's, e.g. "Pay by credit
+              card"</para>
             </listitem>
           </varlistentry>
 
@@ -5383,8 +5384,8 @@ LEVEL2=11111:22222:33333</programlisting>
             <term>Payment option title</term>
 
             <listitem>
-              <para>Leave blank to use "Allopass" or type in a custom name to
-              show to your customer's, e.g. "Pay via Mobile Phone"</para>
+              <para>Leave blank to use "PayFast" or type in a custom name to
+              show to your customer's, e.g. "Pay by credit card"</para>
             </listitem>
           </varlistentry>
 
