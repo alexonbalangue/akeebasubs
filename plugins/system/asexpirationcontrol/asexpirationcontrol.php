@@ -73,7 +73,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	}
 	
 	/**
-	 * Fetches the com_akeebasubs component's parameters as a JParameter instance
+	 * Fetches the com_akeebasubs component's parameters as a JRegistry instance
 	 *
 	 * @return JRegistry The component parameters
 	 */

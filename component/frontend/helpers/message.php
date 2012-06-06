@@ -84,8 +84,8 @@ class AkeebasubsHelperMessage
 				} else {
 					$params = $user->params;
 					if(!is_object($params)) {
-						jimport('joomla.html.parameter');
-						$params = new JParameter($params);
+						jimport('joomla.registry.registry');
+						$params = new JRegistry($params);
 					}
 					$lang = $params->getValue('language','');
 				}
