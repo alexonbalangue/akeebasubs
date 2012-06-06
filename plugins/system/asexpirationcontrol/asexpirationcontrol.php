@@ -20,7 +20,8 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	public function __construct(& $subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
-			$config['params'] = new JParameter($config['params']);
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
 		parent::__construct($subject, $config);
 		
@@ -74,18 +75,18 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	/**
 	 * Fetches the com_akeebasubs component's parameters as a JParameter instance
 	 *
-	 * @return JParameter The component parameters
+	 * @return JRegistry The component parameters
 	 */
 	private function getComponentParameters()
 	{
-		jimport('joomla.html.parameter');
+		jimport('joomla.registry.registry');
 		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
 		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;
 		} elseif(!empty($component->params)) {
-			$cparams = new JParameter($component->params);
+			$cparams = new JRegistry($component->params);
 		} else {
-			$cparams = new JParameter('');
+			$cparams = new JRegistry('{}');
 		}
 		return $cparams;
 	}

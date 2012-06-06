@@ -189,19 +189,19 @@ class plgSystemAsexpirationnotify extends JPlugin
 	/**
 	 * Fetches the com_akeebasubs component's parameters as a JParameter instance
 	 *
-	 * @return JParameter The component parameters
+	 * @return JRegistry The component parameters
 	 */
 	private function getComponentParameters()
 	{
-		jimport('joomla.html.parameter');
+		jimport('joomla.registry.registry');
 		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
 		
 		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;
 		} elseif(!empty($component->params)) {
-			$cparams = new JParameter($component->params);
+			$cparams = new JRegistry($component->params);
 		} else {
-			$cparams = new JParameter('');
+			$cparams = new JRegistry('{}');
 		}
 		return $cparams;
 	}
@@ -268,7 +268,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
-		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
+		jimport('joomla.registry.registry');
+		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
 			$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $userlang, true);

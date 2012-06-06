@@ -110,7 +110,8 @@ class plgAkeebasubsAffemails extends JPlugin
 		$jlang->load('plg_akeebasubs_affemails', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_akeebasubs_affemails.override', JPATH_ADMINISTRATOR, null, true);
 		// -- Affiliate user's preferred language
-		$uparams = is_object($user->params) ? $user->params : new JParameter($affiliateUser->params);
+		jimport('joomla.registry.registry');
+		$uparams = is_object($user->params) ? $user->params : new JRegistry($affiliateUser->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
 			$jlang->load('plg_akeebasubs_affemails', JPATH_ADMINISTRATOR, $affiliateUser, true);

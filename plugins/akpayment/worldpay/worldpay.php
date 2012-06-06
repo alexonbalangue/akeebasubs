@@ -18,7 +18,8 @@ class plgAkpaymentWorldpay extends JPlugin
 	{
 		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
 			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
+				jimport('joomla.registry.registry');
+				$config['params'] = new JRegistry($config['params']);
 			}
 		}
 		parent::__construct($subject, $config);

@@ -15,7 +15,8 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	public function __construct(& $subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
-			$config['params'] = new JParameter($config['params']);
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
 		
 		parent::__construct($subject, $config);
@@ -105,8 +106,8 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_akeebasubs_subscriptionemails.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
-		jimport('joomla.html.parameter');
-		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
+		jimport('joomla.registry.registry');		
+		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
 			$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, $userlang, true);
