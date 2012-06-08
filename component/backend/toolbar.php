@@ -75,4 +75,24 @@ class AkeebasubsToolbar extends FOFToolbar
 		
 		$this->renderSubmenu();
 	}
+	
+	public function onAffpaymentsBrowse()
+	{
+		// Set toolbar title
+		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input));
+		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
+		
+		// Add toolbar buttons
+		if($this->perms->delete) {
+			JToolBarHelper::deleteList();
+		}
+		if($this->perms->edit) {
+			JToolBarHelper::editListX();
+		}
+		if($this->perms->create) {
+			JToolBarHelper::addNewX();
+		}
+		
+		$this->renderSubmenu();
+	}
 }
