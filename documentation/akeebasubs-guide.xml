@@ -2604,6 +2604,26 @@ Rule C gives $ 30 discount</programlisting>
     of by plugins. This documentation chapter will guide you through the
     details of each plugin.</para>
 
+    <warning>
+      <para><emphasis role="bold">EXTREMELY IMPORTANT! DO NOT SEEK SUPPORT IF
+      YOU DO NOT HEED THIS WARNING.</emphasis></para>
+
+      <para>ALL AKEEBA SUBSCRIPTIONS AND PAYMENT PLUGINS MUST BE PUBLISHED
+      WITH "Public" ACCESS. IF YOU SET THEIR ACCESS TO "Registered" OR IN ANY
+      OTHER WAY MODIFY YOUR SITE'S ACL SETTINGS TO FORBID NON LOGGED IN USERS
+      FROM ACCESSING THE PLUGINS AKEEBA SUBSCRIPTIONS WILL WORK ERRATICALLY OR
+      NOT AT ALL.</para>
+
+      <para>If you think that Akeeba Subscriptions does not work correctly
+      because it does not activate subscriptions, run integrations (e.g.
+      doesn't assign subscribers to Joomla! groups), accept payments or
+      malfunctions in any other way, the first you MUST do before even
+      contemplating on whether you should contact us is to check your plugins.
+      During the first week of June 2012 we had four people with the same
+      self-induced problem. <emphasis role="bold">YOU MUST NEVER, EVER CHANGE
+      THE ACCESS OF THE PLUGINS</emphasis>!</para>
+    </warning>
+
     <section xml:id="payment-plugins">
       <title>Payment methods</title>
 
