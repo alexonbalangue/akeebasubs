@@ -42,8 +42,10 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 					$this->sendEmail($row, 'new_active');
 				}
 			} elseif($row->state == 'C') {
-				// A new subscription which is for a renewal (will be active in a future date)
-				$this->sendEmail($row, 'new_renewal');
+				if($row->contact_flag <= 2) {
+					// A new subscription which is for a renewal (will be active in a future date)
+					$this->sendEmail($row, 'new_renewal');
+				}
 			} else {
 				// A new subscription which is pending payment by the processor
 				$this->sendEmail($row, 'new_pending');

@@ -2,6 +2,7 @@
 Akeeba Subscriptions DEV RELEASE
 ================================================================================
 + "Combine" feature in Upgrade Rules (thank you @nonumber_nl)
+# [MEDIUM] PayPal: recurring subscriptions were not working from the second renewal onwards
 # [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
 # [LOW] Rounding issue (±0.01) in Gross amount under some circumstances
 # [LOW] Invalid date in subscription or coupon would result in an error
