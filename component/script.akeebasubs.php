@@ -25,7 +25,7 @@ defined('_JEXEC') or die();
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 
-class Com_AkeebasubsInstallerScript extends ComAkeebaStandardInstallationLibrary
+class Com_AkeebasubsInstallerScript
 {
 	/** @var string The component's name */
 	protected $_akeeba_extension = 'com_akeebasubs';
