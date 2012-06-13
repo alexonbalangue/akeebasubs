@@ -68,7 +68,7 @@ class plgAkpayment2checkout extends JPlugin
 		}
 		
 		$data = (object)array(
-			'url'			=> 'https://www.2checkout.com/checkout/purchase',
+			'url' => ($this->params->get('checkout') == 'single') ? 'https://www.2checkout.com/checkout/spurchase' : 'https://www.2checkout.com/checkout/purchase',
 			'sid'			=> $this->params->get('sid',''),
 			'x_receipt_link_url'	=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'params'		=> $this->params,

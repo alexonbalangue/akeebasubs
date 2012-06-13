@@ -96,6 +96,10 @@ $this->loadHelper('format');
 		</span>
 		<div class="akeebasubs-clear"></div>
 		
+		<label for="akeebasubs_invoice_id" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_INVOICE_ID')?></label>
+		<input type="text" name="akeebasubs_invoice_id" id="akeebasubs_invoice_id" value="<?php echo $this->item->akeebasubs_invoice_id?>"/>
+		<div class="akeebasubs-clear"></div>
+		
 		<label for="params" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PARAMS')?></label>
 		<div class="akeebasubs-clear"></div>
 		<textarea name="params" id="params" cols="40" rows="10" style="margin-left: 5em;"><?php echo $this->item->params?></textarea>		
