@@ -43,6 +43,7 @@ $lang->load('com_akeebasubs',JPATH_SITE,null,true);
 <?php else: ?>
 <?php FOFDispatcher::getTmpInstance('com_akeebasubs', 'subscriptions', array(
 	'input'		=> array(
+		'savestate'	=> 0,
 		'option'	=> 'com_akeebasubs',
 		'view'		=> 'subscriptions',
 		'layout'	=> 'itemized',

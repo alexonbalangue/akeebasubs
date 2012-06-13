@@ -7,6 +7,7 @@ Akeeba Subscriptions DEV RELEASE
 # [LOW] Rounding issue (±0.01) in Gross amount under some circumstances
 # [LOW] Invalid date in subscription or coupon would result in an error
 # [LOW] VIES registration status not passed along to custom field plugins
+# [LOW] Front-end modules could unintentionally set state variables used by the component in later requests
 
 Akeeba Subscriptions 2.2.1
 ================================================================================
