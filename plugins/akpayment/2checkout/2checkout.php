@@ -109,7 +109,7 @@ class plgAkpayment2checkout extends JPlugin
 		
 		// Load the relevant subscription row
 		if($isValid) {
-			$id = array_key_exists('vendor_order_id', $data) ? (int)$data['vendor_order_id'] : -1;
+			$id = array_key_exists('item_id_1', $data) ? (int)$data['item_id_1'] : -1;
 			$subscription = null;
 			if($id > 0) {
 				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -122,7 +122,7 @@ class plgAkpayment2checkout extends JPlugin
 			} else {
 				$isValid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("vendor_order_id" field) is invalid';
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("item_id_1" field) is invalid';
 		}
 		
 		// Check that order_number has not been previously processed
