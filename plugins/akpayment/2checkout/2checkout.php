@@ -173,7 +173,7 @@ class plgAkpayment2checkout extends JPlugin
 				switch($data['invoice_status'])
 				{
 					case 'approved':
-						$newStatus = 'P';
+						$newStatus = 'C';
 						break;
 
 					case 'pending':
