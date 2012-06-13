@@ -2,6 +2,8 @@
 Akeeba Subscriptions DEV RELEASE
 ================================================================================
 + "Combine" feature in Upgrade Rules (thank you @nonumber_nl)
++ Show Invoice ID in subscription backend form (thanks Sander!)
++ Add option to select Multi or Single Page Checkout for 2checkout (thanks Sander!)
 # [MEDIUM] PayPal: recurring subscriptions were not working from the second renewal onwards
 # [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
 # [MEDIUM] 2Checkout plugin, vendor_order_id always empty (thanks Sander!)
