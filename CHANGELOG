@@ -12,6 +12,7 @@ Akeeba Subscriptions DEV RELEASE
 # [LOW] VIES registration status not passed along to custom field plugins
 # [LOW] Front-end modules could unintentionally set state variables used by the component in later requests
 # [LOW] 2Checkout plugin, payment state should be Completed when invoice_status is "approved" (thanks Sander!)
+# [LOW] Postfinance.ch, subscriptions were not getting published due to a mistake in their documentation (it's STATUS, not ACCEPTANCE, we have to check...)
 
 Akeeba Subscriptions 2.2.1
 ================================================================================

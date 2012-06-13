@@ -195,7 +195,7 @@ class plgAkpaymentPostfinancech extends JPlugin
 		if(!$isValid) return false;
 
 		// Check the payment_status
-		switch($data['ACCEPTANCE'])
+		switch($data['STATUS'])
 		{
 			case 'TEST':
 			case 9:
