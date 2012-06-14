@@ -96,6 +96,12 @@ ENDTEMPLATE;
 		$html = str_replace('{SUBSCRIPTION}', sprintf('%06u', $subscription->akeebasubs_subscription_id), $html);
 		$html = str_replace('{FIRSTNAME}', $firstName, $html);
 		$html = str_replace('{LASTNAME}', $lastName, $html);
+		
+		@include_once JPATH_SITE.'/components/com_akeebasubs/helpers/message.php';
+		if(class_exists('AkeebasubsHelperMessage')) {
+			$html = AkeebasubsHelperMessage::processLanguage($html);
+		}
+		
 		$html = '<div>'.$html.'</div>';
 
 		return $html;
