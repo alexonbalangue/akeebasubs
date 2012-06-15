@@ -115,10 +115,14 @@ class plgAkeebasubsRedshop extends JPlugin
 		
 		// Remove from RedShop
 		if(!empty($removeGroups)) {
-			$protoSQL = 'UPDATE `#__redshop_users_info` SET `shopper_group_id` = 1 WHERE `user_id` = ' . $db->Quote($user_id) . ' AND `shopper_group_id` = ';
+			$protoQuery = $db->getQuery(true)
+				->update($db->qn('#__redshop_users_info'))
+				->set($db->qn('shopper_group_id').' = '.$db->q('1'))
+				->where($db->qn('user_id').' = '.$db->q($user_id));
 			foreach($removeGroups as $group) {
-				$sql = $protoSQL . $db->Quote($group);
-				$db->setQuery($sql);
+				$query = clone $protoQuery;
+				$query->where($db->qn('shopper_group_id').' = '.$db->q($group));
+				$db->setQuery($query);
 				$db->query();
 			}
 		}
@@ -127,8 +131,11 @@ class plgAkeebasubsRedshop extends JPlugin
 		if(!empty($addGroups)) {
 			$group = array_pop($addGroups);
 
-			$sql = 'UPDATE `#__redshop_users_info` SET `shopper_group_id` = '.$db->Quote($group).' WHERE `user_id` = '.$db->Quote($user_id);
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->update($db->qn('#__redshop_users_info'))
+				->set($db->qn('shopper_group_id').' = '.$db->q($group))
+				->where($db->qn('user_id').' = '.$db->q($user_id));
+			$db->setQuery($query);
 			$db->query();
 		}
 	}
@@ -181,8 +188,12 @@ class plgAkeebasubsRedshop extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `shopper_group_name` AS `title`, `shopper_group_id` AS `id` FROM `#__redshop_shopper_group`';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('shopper_group_name').' AS '.$db->qn('title'),
+					$db->qn('shopper_group_id').' AS '.$db->qn('id'),
+				))->from($db->qn('#__redshop_shopper_group'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {
