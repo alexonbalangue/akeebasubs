@@ -230,7 +230,7 @@ class plgAkeebasubsDocman extends JPlugin
 					$db->qn('groups_id').' AS '.$db->qn('id'),
 				))
 				->from($db->qn('#__docman_groups'));
-			$db->setQuery($sql);
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {
