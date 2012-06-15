@@ -115,25 +115,54 @@ class plgAkeebasubsJomsocial extends JPlugin
 		
 		// Add to JomSocial groups
 		if(!empty($addGroups)) {
-			$sql = 'REPLACE INTO `#__community_groups_members` (`memberid`,`groupid`,`approved`,`permissions`) VALUES ';
-			
-			$values = array();
 			foreach($addGroups as $group) {
-				$values[] = '('.$db->Quote($user_id).', '.$db->Quote($group).', 1, 1)';
+				$query = $db->getQuery(true)
+					->select('COUNT(*)')
+					->from($db->qn('#__community_groups_members'))
+					->where($db->qn('memberid').' = '.$db->q($user_id))
+					->where($db->qn('groupid').' = '.$db->q($group));
+				$db->setQuery($query);
+				$count = $db->loadResult();
+
+				if($count) {
+					// Update record
+					$query = $db->getQuery(true)
+						->update($db->qn('#__community_groups_members'))
+						->set(array(
+							$db->qn('approved').' = '.$db->q('1'),
+							$db->qn('permissions').' = '.$db->q('1')
+						))
+						->where($db->qn('memberid').' = '.$db->q($user_id))
+						->where($db->qn('groupid').' = '.$db->q($group));
+				} else {
+					// Insert record
+					$query = $db->getQuery(true)
+						->insert($db->qn('#__community_groups_members'))
+						->columns(array(
+							$db->qn('memberid'),
+							$db->qn('groupid'),
+							$db->qn('approved'),
+							$db->qn('permissions'),
+						))->values(
+							$db->q($user_id).', '.$db->q($group).', '.$db->q('1').', '.$db->q('1')
+						);
+				}
+				
+				$db->setQuery($query);
+				$db->query();
 			}
-			
-			$sql .= implode(', ', $values);
-			
-			$db->setQuery($sql);
-			$db->query();
 		}
 		
 		// Remove from JomSocial groups
 		if(!empty($removeGroups)) {
-			$protoSQL = 'DELETE FROM `#__community_groups_members` WHERE `memberid` = ' . $db->Quote($user_id) . ' AND `groupid` = ';
+			$protoQuery = $db->getQuery(true)
+				->delete($db->qn('#__community_groups_members'))
+				->where($db->qn('memberid').' = '.$db->q($user_id));
+			//$protoSQL = 'DELETE FROM `#__community_groups_members` WHERE `memberid` = ' . $db->Quote($user_id) . ' AND `groupid` = ';
 			foreach($removeGroups as $group) {
-				$sql = $protoSQL . $db->Quote($group);
-				$db->setQuery($sql);
+				$query = clone $protoQuery;
+				$query->where($db->qn('groupid').' = '.$db->q($group));
+				$db->setQuery($query);
 				$db->query();
 			}
 		}
@@ -187,8 +216,12 @@ class plgAkeebasubsJomsocial extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `name`, `id` AS `id` FROM #__community_groups';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('name'),
+					$db->qn('id'),
+				))->from($db->qn('#__community_groups'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {
