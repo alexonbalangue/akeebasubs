@@ -1152,6 +1152,61 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Group</term>
+
+          <listitem>
+            <para>When a subscription is not part of a group, the Valid From
+            date of a new subscription is set to the maximum Valid To date of
+            a properly paid (payment status set to "Completed") subscription
+            at the same level. This is what allows Akeeba Backup to treat
+            purchases of a new subscription on the same level as a renewal of
+            the subscription. </para>
+
+            <para>When a subscription is part of a group, the Valid From date
+            of a new subscription is set to the maximum Valid To date of a
+            properly paid (payment status set to "Completed") subscription at
+            any level belonging to this group.</para>
+
+            <para>For example, let's say FOOBAR6 is a subscription level with
+            a 6 month duration and FOOBAR12 is a subscription level with a 12
+            month duration. A user has a subscription in the FOOBAR6 level
+            valid from 2013-01-01 to 2013-05-31. On May 1st, 2013 he decides
+            to renew his subscription. We have the following
+            possibilities:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>No matter of the level grouping, if he buys a new
+                FOOBAR6 subscription, the new subscription will be valid from
+                2013-05-31 to 2013-12-31, as it is a renewal on the same
+                level.</para>
+              </listitem>
+
+              <listitem>
+                <para>If the two levels <emphasis>do not</emphasis> belong to
+                the same group and he buys a FOOBAR12 subscription, the new
+                subscription will be valid from 2013-05-01 to 2014-04-30. In
+                this case, the user loses a month because Akeeba Subscriptions
+                doesn't know that the two levels are the same thing with a
+                different duration.</para>
+              </listitem>
+
+              <listitem>
+                <para>If the two levels <emphasis>belong to the same
+                group</emphasis> and he buys a FOOBAR12 subscription, the new
+                subscription will be valid from 2013-05-31 to 2014-05-30. In
+                this case, Akeeba Subscriptions known that buying a FOOBAR12
+                subscription must be treated as a renewal of the FOOBAR6
+                subscription.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>You can set up your groups in the <guilabel>Level
+            Groups</guilabel> page of the component.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Slug</term>
 
           <listitem>
