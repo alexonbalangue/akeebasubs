@@ -30,7 +30,7 @@ class AkeebasubsHelperFormat
 		
 		if(empty($levels)) {
 			$levelsList = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->getItemList();
+				->getItemList(true);
 			if(!empty($levelsList)) foreach($levelsList as $level) {
 				$levels[$level->akeebasubs_level_id] = $level->title;
 			}
@@ -40,6 +40,25 @@ class AkeebasubsHelperFormat
 			return $levels[$id];
 		} else {
 			return '&mdash;&mdash;&mdash;';
+		}
+	}
+	
+	public static function formatLevelgroup($id)
+	{
+		static $levelgroups;
+		
+		if(empty($levelgroups)) {
+			$levelgroupsList = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
+				->getItemList(true);
+			if(!empty($levelgroupsList)) foreach($levelgroupsList as $levelgroup) {
+				$levelgroups[$levelgroup->akeebasubs_levelgroup_id] = $levelgroup->title;
+			}
+		}
+		
+		if(array_key_exists($id, $levelgroups)) {
+			return $levelgroups[$id];
+		} else {
+			return JText::_('COM_AKEEBASUBS_SELECT_LEVELGROUP');
 		}
 	}
 }

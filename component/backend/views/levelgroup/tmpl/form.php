@@ -1,0 +1,37 @@
+<?php
+/**
+ *  @package AkeebaSubs
+ *  @copyright Copyright (c)2010-2012 Nicholas K. Dionysopoulos
+ *  @license GNU General Public License version 3, or later
+ */
+
+defined('_JEXEC') or die();
+
+FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
+FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSIONHASH);
+JHtml::_('behavior.tooltip');
+
+?>
+<form action="index.php" method="post" name="adminForm">
+	<input type="hidden" name="option" value="com_akeebasubs" />
+	<input type="hidden" name="view" value="levelgroup" />
+	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="akeebasubs_levelgroup_id" value="<?php echo $this->item->akeebasubs_levelgroup_id ?>" />
+	<input type="hidden" name="<?php echo JUtility::getToken();?>" value="1" />
+	
+	<fieldset>
+	<label for="title_field" class="main title"><?php echo JText::_('COM_AKEEBASUBS_LEVELGROUPS_FIELD_TITLE'); ?></label>
+	<input type="text" size="20" id="title_field" name="title" class="title" value="<?php echo $this->escape($this->item->title) ?>" />
+	<div class="akeebasubs-clear"></div>
+
+	<label for="enabled" class="main" class="mainlabel">
+		<?php echo JText::_('JPUBLISHED'); ?>
+	</label>
+	<span class="akeebasubs-booleangroup">
+		<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
+	</span>
+	<div class="akeebasubs-clear"></div>
+	</fieldset>
+
+
+</form>

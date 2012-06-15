@@ -13,6 +13,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSI
 JHtml::_('behavior.tooltip');
 
 $this->loadHelper('select');
+$this->loadHelper('format');
 $this->loadHelper('cparams');
 
 ?>
@@ -36,6 +37,9 @@ $this->loadHelper('cparams');
 			<th></th>
 			<th>
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order) ?>
+			</th>
+			<th width="8%">
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP', 'akeebasubs_levelgroup_id', $this->lists->order_Dir, $this->lists->order) ?>
 			</th>
 			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_DURATION', 'duration', $this->lists->order_Dir, $this->lists->order) ?>
@@ -70,6 +74,7 @@ $this->loadHelper('cparams');
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
+			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
@@ -109,6 +114,9 @@ $this->loadHelper('cparams');
 						<strong><?php echo $this->escape($item->title) ?></strong>
 					</a>
 				</span>
+			</td>
+			<td>
+				<?php echo AkeebasubsHelperFormat::formatLevelgroup($item->akeebasubs_levelgroup_id) ?>
 			</td>
 			<td>
 				<?php echo $this->escape($item->duration) ?>

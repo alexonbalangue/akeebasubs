@@ -1185,11 +1185,46 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->user_id($user->id)
-			->level($state->id)
-			->enabled(1)
-			->getList();
+		// First, the question: is this level part of a group?
+		$haveLevelGroup = false;
+		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->getItem($state->id);
+		if($level->akeebasubs_levelgroup_id > 0) {
+			// Is the level group published?
+			$levelGroup = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
+				->getItem($level->akeebasubs_levelgroup_id);
+			if($levelGroup instanceof FOFTable) {
+				$haveLevelGroup = $levelGroup->enabled;
+			}
+		}
+		
+		if($haveLevelGroup) {
+			// We have a level group. Get all subscriptions for all levels in
+			// the group.
+			$subscriptions = array();
+			$levelsInGroup = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->levelgroup($level->akeebasubs_levelgroup_id)
+				->getList(true);
+			foreach($levelsInGroup as $l) {
+				$someSubscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->user_id($user->id)
+					->level($l->akeebasubs_level_id)
+					->enabled(1)
+					->getList(true);
+				if(count($someSubscriptions)) {
+					$subscriptions = array_merge($subscriptions, $someSubscriptions);
+				}
+			}
+		} else {
+			// No level group found. Get subscriptions on the same level.
+			$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				->user_id($user->id)
+				->level($state->id)
+				->enabled(1)
+				->getList(true);
+		}
+		
+		
 			
 		$jNow = new JDate();
 		$now = $jNow->toUnix();

@@ -14,6 +14,7 @@ JHtml::_('behavior.tooltip');
 
 $editor = JFactory::getEditor();
 
+$this->loadHelper('select');
 $this->loadHelper('cparams');
 ?>
 <form action="index.php" method="post" name="adminForm">
@@ -63,6 +64,12 @@ $this->loadHelper('cparams');
 			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
 			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 			<?php endif; ?>
+		</span>
+		<div class="akeebasubs-clear"></div>
+		
+		<label for="akeebasubs_level_id" class="main mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP'); ?></label>
+		<span>
+			<?php echo AkeebasubsHelperSelect::levelgroups($this->item->akeebasubs_level_id); ?>
 		</span>
 		<div class="akeebasubs-clear"></div>
 		

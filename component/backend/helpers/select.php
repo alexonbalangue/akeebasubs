@@ -462,4 +462,21 @@ class AkeebasubsHelperSelect
 		
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
+	
+	public static function levelgroups($selected = null, $id = 'akeebasubs_levelgroup_id', $attribs = array())
+	{
+		$model = FOFModel::getTmpInstance('Levelgroups','AkeebasubsModel');
+		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
+		
+		$options = array();
+
+		if(count($items)) foreach($items as $item)
+		{
+			$options[] = JHTML::_('select.option',$item->akeebasubs_levelgroup_id, $item->title);
+		}
+
+	   array_unshift($options, JHTML::_('select.option',0,JText::_('COM_AKEEBASUBS_SELECT_LEVELGROUP')));
+
+		return self::genericlist($options, $id, $attribs, $selected, $id);
+	}
 }

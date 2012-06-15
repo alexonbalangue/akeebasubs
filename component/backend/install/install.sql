@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`canceltext` text,
 	`only_once` TINYINT(3) DEFAULT 0,
 	`recurring` TINYINT(3) DEFAULT 0,
+	`akeebasubs_levelgroup_id` BIGINT(20) UNSIGNED NULL,
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
@@ -174,18 +175,33 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_affiliates` (
-  `akeebasubs_affiliate_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `comission` float NOT NULL DEFAULT '30',
-  `enabled` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`akeebasubs_affiliate_id`)
+	`akeebasubs_affiliate_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+	`user_id` bigint(20) unsigned NOT NULL,
+	`comission` float NOT NULL DEFAULT '30',
+	`enabled` tinyint(1) NOT NULL DEFAULT '1',
+	PRIMARY KEY (`akeebasubs_affiliate_id`)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_affpayments` (
-  `akeebasubs_affpayment_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `akeebasubs_affiliate_id` bigint(20) NOT NULL,
-  `amount` float NOT NULL DEFAULT '0',
-  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `created_by` bigint(20) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`akeebasubs_affpayment_id`)
+	`akeebasubs_affpayment_id` bigint(20) NOT NULL AUTO_INCREMENT,
+	`akeebasubs_affiliate_id` bigint(20) NOT NULL,
+	`amount` float NOT NULL DEFAULT '0',
+	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`created_by` bigint(20) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`akeebasubs_affpayment_id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_levelgroups` (
+	`akeebasubs_levelgroup_id` bigint(20) NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR(255) NOT NULL,
+
+	`enabled` tinyint(1) NOT NULL DEFAULT '1',
+	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
+	`created_by` int(11) NOT NULL DEFAULT 0,
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` int(11) NOT NULL DEFAULT 0,
+	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`locked_by` int(11) NOT NULL DEFAULT 0,
+
+	PRIMARY KEY (`akeebasubs_levelgroup_id`)
 ) DEFAULT CHARSET=utf8;
