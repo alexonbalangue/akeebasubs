@@ -3328,6 +3328,12 @@ Rule C gives $ 30 discount</programlisting>
           &lt;b&gt; and &lt;a&gt; tags will work.</para>
         </tip>
 
+        <tip>
+          <para>Since Akeeba Subscriptions 2.3.0 you can also use language
+          merge tags. They work the same way as the language merge tags in the
+          Subscriptions Levels messages.</para>
+        </tip>
+
         <para>The options you have in this plugin are:</para>
 
         <variablelist>
