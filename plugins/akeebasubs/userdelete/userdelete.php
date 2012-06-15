@@ -13,7 +13,7 @@ class plgAkeebasubsUserdelete extends JPlugin
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
 	 */
-	public function onAKSubscriptionChange($row)
+	public function onAKSubscriptionChange($row, $info)
 	{
 		if(is_null($info['modified']) || empty($info['modified'])) return;
 		if(!array_key_exists('enabled', (array)$info['modified'])) return;
@@ -34,7 +34,7 @@ class plgAkeebasubsUserdelete extends JPlugin
 		// Get all of the user's subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
-			->getList();
+			->getList(true);
 			
 		// Make sure there are subscriptions set for the user
 		if(!count($subscriptions)) return;
