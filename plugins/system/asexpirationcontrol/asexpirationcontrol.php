@@ -118,10 +118,12 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$db = JFactory::getDBO();
 		$data = $params->toString();
 		
-		$sql = 'UPDATE `#__extensions` SET `params` = '.$db->Quote($data).' WHERE '.
-			"`element` = 'com_akeebasubs' AND `type` = 'component'";
-		
-		$db->setQuery($sql);
+		$query = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params').' = '.$db->q($data))
+			->where($db->qn('element').' = '.$db->q('com_akeebasubs'))
+			->where($db->qn('type').' = '.$db->qn('component'));
+		$db->setQuery($query);
 		$db->query();
 	}
 	
