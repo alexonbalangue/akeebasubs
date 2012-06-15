@@ -3455,6 +3455,45 @@ Rule C gives $ 30 discount</programlisting>
               </warning>
             </listitem>
           </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>Select the language the 2Checkout interface will be
+              displayed in.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Default payment method</term>
+
+            <listitem>
+              <para>2Checkout allows different payment methods. Select which
+              one will be pre-selected in the checkout page.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Skip landing page</term>
+
+            <listitem>
+              <para>When enabled your users will not see the order review page
+              when they are redirected to 2Checkout.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Checkout Process</term>
+
+            <listitem>
+              <para>You can select between the Multi Page Checkout and Single
+              Page Checkout modes. Single page checkout is likely to give you
+              a much better conversion rate as the client just fills in his
+              information and clicks on a button. The less steps to performing
+              the payment, the more likely a user is to actually pay.</para>
+            </listitem>
+          </varlistentry>
         </variablelist>
 
         <bridgehead>Integration Notes</bridgehead>
