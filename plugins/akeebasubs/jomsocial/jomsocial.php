@@ -218,7 +218,7 @@ class plgAkeebasubsJomsocial extends JPlugin
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(true)
 				->select(array(
-					$db->qn('name'),
+					$db->qn('name').' AS '.$db->qn('title'),
 					$db->qn('id'),
 				))->from($db->qn('#__community_groups'));
 			$db->setQuery($query);
