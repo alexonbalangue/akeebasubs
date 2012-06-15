@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://www.joomla.org/xml/dtd/1.5/module-install.dtd">
-<install type="module" version="1.5.0" method="upgrade" client="site">
+<extension type="module" version="2.5.0" method="upgrade" client="site">
 	<name>Akeeba Subscriptions - List subscription levels</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<creationDate>March 2011</creationDate>
@@ -19,27 +18,6 @@
 		<language tag="en-GB">en-GB/en-GB.mod_akslevels.sys.ini</language>
 	</languages>
 
-	<params addpath="/modules/mod_akslevels/elements">
-		<param name="moduleclass_sfx" type="text" default="" label="MOD_AKSLEVELS_SUFFIX_LABEL" description="MOD_AKSLEVELS_SUFFIX_DESC" />
-		<param name="ids" type="sql2" default=""
-			label="MOD_AKSLEVELS_LEVELS_TITLE"
-			description="MOD_AKSLEVELS_LEVELS_DESC"
-			query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`"
-			key_field="akeebasubs_level_id"
-			value_field="title" />
-		<param name="layout" type="list" default="awesome" label="MOD_AKSLEVELS_LAYOUT_LABEL" description="MOD_AKSLEVELS_LAYOUT_DESC">
-			<option value="default">MOD_AKSLEVELS_LAYOUT_OPT_DEFAULT</option>
-			<option value="awesome">MOD_AKSLEVELS_LAYOUT_OPT_AWESOME</option>
-		</param>
-	</params>
-	<params group="advanced">
-		<param name="cache" type="list" default="1" label="MOD_AKSLEVELS_CACHING_LABEL" description="MOD_AKSLEVELS_CACHING_DESC">
-			<option value="1">MOD_AKSLEVELS_CACHING_OPT_GLOBAL</option>
-			<option value="0">MOD_AKSLEVELS_CACHING_OPT_NONE</option>
-		</param>
-		<param name="cache_time" type="text" default="900" label="MOD_AKSLEVELS_CACHETIME_LABEL" description="MOD_AKSLEVELS_CACHETIME_DESC" />
-	</params>
-	
 	<config addfieldpath="/modules/mod_akslevels/elements">
 		<fields name="params">
 			<fieldset name="basic">
@@ -64,4 +42,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>
