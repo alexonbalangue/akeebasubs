@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.3 DEV RELEASE
 ================================================================================
+! THIS RELEASE IS ONLY COMPATIBLE WITH JOOMLA! 2.5.1 AND LATER
 + "Combine" feature in Upgrade Rules (thank you @nonumber_nl)
 + Show Invoice ID in subscription backend form (thanks Sander!)
 + Add option to select Multi or Single Page Checkout for 2checkout (thanks Sander!)

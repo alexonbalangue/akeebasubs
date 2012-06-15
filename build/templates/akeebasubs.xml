@@ -31,18 +31,31 @@
 	<!-- SQL query files to execute on installation -->
 	<install>
 		<sql>
-			<file charset="utf8" driver="mysql">install/install.sql</file>
-			<file charset="utf8" driver="mysqli">install/install.sql</file>
+			<file charset="utf8" driver="mysql">sql/install/mysql/install.sql</file>
+			<file charset="utf8">sql/install/mysql/install.sql</file>
+			<file charset="utf8" driver="mysqli">sql/install/mysql/install.sql</file>
+			<file charset="utf8">sql/install/mysql/install.sql</file>
 		</sql>
 	</install>
 
 	<!-- SQL query files to execute on uninstallation -->
 	<uninstall>
 		<sql>
-			<file charset="utf8" driver="mysql">install/uninstall.sql</file>
-			<file charset="utf8" driver="mysqli">install/uninstall.sql</file>
+			<file charset="utf8" driver="mysql">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysql">sql/install/mysql/uninstall.sql</file>
+			<file charset="utf8" driver="mysqli">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysqli">sql/install/mysql/uninstall.sql</file>
 		</sql>
 	</uninstall>
+	
+	<!-- SQL files to run on update -->
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+			<schemapath type="sqlsrv">sql/updates/sqlsrv</schemapath>
+			<schemapath type="sqlazure">sql/updates/sqlazure</schemapath>
+		</schemas>
+	</update>
 	
 	<!-- Media files -->
 	<media destination="com_akeebasubs" folder="media">
