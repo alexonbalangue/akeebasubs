@@ -122,7 +122,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 			->update($db->qn('#__extensions'))
 			->set($db->qn('params').' = '.$db->q($data))
 			->where($db->qn('element').' = '.$db->q('com_akeebasubs'))
-			->where($db->qn('type').' = '.$db->qn('component'));
+			->where($db->qn('type').' = '.$db->q('component'));
 		$db->setQuery($query);
 		$db->query();
 	}
