@@ -10,6 +10,7 @@ Akeeba Subscriptions 2.3 DEV RELEASE
 # [MEDIUM] PayPal: recurring subscriptions were not working from the second renewal onwards
 # [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
 # [MEDIUM] 2Checkout plugin, vendor_order_id always empty (thanks Sander!)
+# [MEDIUM] eWay plugin, would throw error when trying to use it
 # [LOW] Rounding issue (¬±0.01) in Gross amount under some circumstances
 # [LOW] Invalid date in subscription or coupon would result in an error
 # [LOW] VIES registration status not passed along to custom field plugins

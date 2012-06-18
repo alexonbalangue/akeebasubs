@@ -104,7 +104,7 @@ class plgAkpaymentEway extends JPlugin
 		);
 		$ret['image'] = trim($this->params->get('ppimage',''));
 		if(empty($ret['image'])) {
-			$ret['image'] = rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/alphalogo.gif';
+			$ret['image'] = rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/eway.gif';
 		}
 		return (object)$ret;
 	}
@@ -169,30 +169,30 @@ class plgAkpaymentEway extends JPlugin
 		}
 		
 		$eWayURL = new JURI($apiURL);
-		$eWayURL->setVar('CustomerID', $this->params->get('customerid',''));
-		$eWayURL->setVar('UserName', $this->params->get('username',''));
-		$eWayURL->setVar('Amount', sprintf('%0.2f',$subscription->gross_amount));
-		$eWayURL->setVar('Currency', strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')));
-		$eWayURL->setVar('ReturnURL', JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal');
-		$eWayURL->setVar('CancelURL', $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel')));
-		if($this->params->get('companylogo','')) $eWayURL->setVar('CompanyLogo', $this->params->get('companylogo',''));
-		if($this->params->get('pagebanner','')) $eWayURL->setVar('Pagebanner', $this->params->get('pagebanner',''));
+		$eWayURL->setVar('CustomerID', urlencode($this->params->get('customerid','')));
+		$eWayURL->setVar('UserName', urlencode($this->params->get('username','')));
+		$eWayURL->setVar('Amount', urlencode(sprintf('%0.2f',$subscription->gross_amount)));
+		$eWayURL->setVar('Currency', urlencode(strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'))));
+		$eWayURL->setVar('ReturnURL', urlencode(JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal'));
+		$eWayURL->setVar('CancelURL', urlencode($rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel'))));
+		if($this->params->get('companylogo','')) $eWayURL->setVar('CompanyLogo', urlencode($this->params->get('companylogo','')));
+		if($this->params->get('pagebanner','')) $eWayURL->setVar('Pagebanner', urlencode($this->params->get('pagebanner','')));
 		$eWayURL->setVar('ModifiableCustomerDetails', 'True');
-		if($this->params->get('language','')) $eWayURL->setVar('Language', $this->params->get('language',''));
-		if($this->params->get('companyname','')) $eWayURL->setVar('CompanyName', $this->params->get('companyname',''));
-		$eWayURL->setVar('CustomerFirstName', $firstName);
-		$eWayURL->setVar('CustomerLastName', $lastName);
-		$eWayURL->setVar('CustomerAddress', $kuser->address1.(empty($kuser->address2)?'':', '.$kuser->address2));
-		$eWayURL->setVar('CustomerCity', $kuser->city);
-		$eWayURL->setVar('CustomerState', $kuser->state);
-		$eWayURL->setVar('CustomerPostCode', $kuser->zip);
-		$eWayURL->setVar('CustomerCountry', $kuser->country);
-		$eWayURL->setVar('CustomerEmail', $user->email);
-		$eWayURL->setVar('InvoiceDescription', $level->title . ' - [ ' . $user->username . ' ]');
-		$eWayURL->setVar('MerchantReference', $subscription->akeebasubs_subscription_id);
-		if($this->params->get('pagetitle','')) $eWayURL->setVar('PageTitle', $this->params->get('pagetitle',''));
-		if($this->params->get('pagedescription','')) $eWayURL->setVar('PageDescription', $this->params->get('pagedescription',''));
-		if($this->params->get('pagefooter','')) $eWayURL->setVar('PageFooter', $this->params->get('pagefooter',''));
+		if($this->params->get('language','')) $eWayURL->setVar('Language', urlencode($this->params->get('language','')));
+		if($this->params->get('companyname','')) $eWayURL->setVar('CompanyName', urlencode($this->params->get('companyname','')));
+		$eWayURL->setVar('CustomerFirstName', urlencode($firstName));
+		$eWayURL->setVar('CustomerLastName', urlencode($lastName));
+		$eWayURL->setVar('CustomerAddress', urlencode($kuser->address1.(empty($kuser->address2)?'':', '.$kuser->address2)));
+		$eWayURL->setVar('CustomerCity', urlencode($kuser->city));
+		$eWayURL->setVar('CustomerState', urlencode($kuser->state));
+		$eWayURL->setVar('CustomerPostCode', urlencode($kuser->zip));
+		$eWayURL->setVar('CustomerCountry', urlencode($kuser->country));
+		$eWayURL->setVar('CustomerEmail', urlencode($user->email));
+		$eWayURL->setVar('InvoiceDescription', urlencode($level->title . ' - [ ' . $user->username . ' ]'));
+		$eWayURL->setVar('MerchantReference', urlencode($subscription->akeebasubs_subscription_id));
+		if($this->params->get('pagetitle','')) $eWayURL->setVar('PageTitle', urlencode($this->params->get('pagetitle','')));
+		if($this->params->get('pagedescription','')) $eWayURL->setVar('PageDescription', urlencode($this->params->get('pagedescription','')));
+		if($this->params->get('pagefooter','')) $eWayURL->setVar('PageFooter', urlencode($this->params->get('pagefooter','')));
 		
 		$postURL = $eWayURL->toString();
 		$postURL = str_replace('Request?', 'Request/?', $postURL);
@@ -215,14 +215,11 @@ class plgAkpaymentEway extends JPlugin
 		
 		$responsemode = $this->fetch_data($response, '<result>', '</result>');
 	    $responseurl = $this->fetch_data($response, '<uri>', '</uri>');
-		   
+		
 		if($responsemode=="True") {
-			@ob_start();
-			include dirname(__FILE__).'/eway/form.php';
-			$html = @ob_get_clean();
-			return $html;
-		}
-		else {
+			JFactory::getApplication()->redirect($responseurl);
+			return;
+		} else {
 			JError::raiseError(500, 'You have an error in your eWay setup: '.$response);
 		}
 	}
@@ -251,9 +248,9 @@ class plgAkpaymentEway extends JPlugin
 		}
 		
 		$eWayURL = new JURI($apiURL);
-		$eWayURL->setVar('CustomerID', $this->params->get('customerid',''));
-		$eWayURL->setVar('UserName', $this->params->get('username',''));
-		$eWayURL->setVar('AccessPaymentCode', $data['AccessPaymentCode']);
+		$eWayURL->setVar('CustomerID', urlencode($this->params->get('customerid','')));
+		$eWayURL->setVar('UserName', urlencode($this->params->get('username','')));
+		$eWayURL->setVar('AccessPaymentCode', urlencode($data['AccessPaymentCode']));
 		
 		$posturl=$eWayURL->toString();
 		$posturl = str_replace('Result?', 'Result/?', $posturl);
