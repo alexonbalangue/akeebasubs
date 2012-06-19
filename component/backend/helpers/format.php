@@ -52,6 +52,8 @@ class AkeebasubsHelperFormat
 				->getItemList(true);
 			if(!empty($levelgroupsList)) foreach($levelgroupsList as $levelgroup) {
 				$levelgroups[$levelgroup->akeebasubs_levelgroup_id] = $levelgroup->title;
+			} else {
+				$levelgroups = array();
 			}
 		}
 		
