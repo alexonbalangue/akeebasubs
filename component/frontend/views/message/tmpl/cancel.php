@@ -36,3 +36,5 @@ $message = JHTML::_('content.prepare', $message);
 <div class="akeebasubs-goback">
 	<p><a href="<?php echo JURI::base()?>"><?php echo JText::_('COM_AKEEBASUBS_MESSAGE_BACK')?></a></p>
 </div>
+
+<?php echo $this->pluginHTML; ?>
