@@ -1160,7 +1160,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             a properly paid (payment status set to "Completed") subscription
             at the same level. This is what allows Akeeba Backup to treat
             purchases of a new subscription on the same level as a renewal of
-            the subscription. </para>
+            the subscription.</para>
 
             <para>When a subscription is part of a group, the Valid From date
             of a new subscription is set to the maximum Valid To date of a
@@ -8687,10 +8687,10 @@ LEVEL3=Group 1</programlisting>
         custom fields and update the display status of the valid/invalid
         labels. It is your responsibility. In this event, you can call
         <code>JFactory::getDocument()-&gt;addScriptDeclaration($scriptData)</code>
-        where $scriptData is the Javscript validation code.</para>
+        where $scriptData is the Javascript validation code.</para>
 
         <para>In order to make it easier for you, Akeeba Subscriptions offers
-        an architecture similar to an observer pattern in the Javscript code.
+        an architecture similar to an observer pattern in the Javascript code.
         You can have Javascript functions called when Akeeba Subscriptions'
         Javascript code is fetching the contents of the fields before sending
         a data validation request through AJAX and another function which is
@@ -8790,8 +8790,58 @@ LEVEL3=Group 1</programlisting>
         the user record with new information, either during sign-up or when
         you manually update this information in the back-end.</para>
 
-        <para>The $row variable contains a KRowDatabaseDefault object with the
+        <para>The $row variable contains a AkeebasubsTableUser object with the
         information to be stored in the #__akeebasubs_users table.</para>
+      </section>
+
+      <section xml:id="dev-onAKUserSaveData">
+        <title>onCancelMessage</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onCancelMessage($row)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
+        when Akeeba Subscriptions is displaying the order cancellation
+        message.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>: </para>
+
+        <para><emphasis role="bold">Since</emphasis>: 2.3.0</para>
+
+        <para>This method is called whenever Akeeba Subscriptions is
+        displaying the order cancellation message in the front-end of the
+        site.</para>
+
+        <para>The $row variable contains an AkeebasubsTableSubscription object
+        of the subscription for which the message is being displayed.</para>
+
+        <para>Anything you return is considered to be HTML which will be
+        displayed on the message page, right after the message.</para>
+      </section>
+
+      <section xml:id="dev-onAKUserSaveData">
+        <title>onCancelMessage</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onCancelMessage($row)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
+        when Akeeba Subscriptions is displaying the order confirmation
+        message.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:</para>
+
+        <para><emphasis role="bold">Since</emphasis>: 2.3.0</para>
+
+        <para>This method is called whenever Akeeba Subscriptions is
+        displaying the order confirmation message in the front-end of the
+        site.</para>
+
+        <para>The $row variable contains an AkeebasubsTableSubscription object
+        of the subscription for which the message is being displayed.</para>
+
+        <para>Anything you return is considered to be HTML which will be
+        displayed on the message page, right after the message.</para>
       </section>
     </section>
 
