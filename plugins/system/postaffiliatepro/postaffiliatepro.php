@@ -19,7 +19,6 @@ class plgSystemPostaffiliatepro extends JPlugin
 		parent::__construct($subject, $config);
 		
 		if($this->isTrackingCodeRelevant()) {
-			// Add javascript file of the PAP installation
 			$papUrl = rtrim(trim($this->params->get('url', '')), '/');
 			$document = JFactory::getDocument();
 			$document->addCustomTag('<script id="pap_x2s6df8d" src="' . $papUrl . '/scripts/trackjs.js" type="text/javascript"></script>');
