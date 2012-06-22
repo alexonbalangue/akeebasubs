@@ -267,7 +267,7 @@ class AkeebasubsHelperSelect
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
 		
 		$options = array();
-
+		
 		if(count($items)) foreach($items as $item)
 		{
 			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id, $item->title);
@@ -316,7 +316,27 @@ class AkeebasubsHelperSelect
 			->getList();
 		
 		$options   = array();
-		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		
+		$include_none = false;
+		$include_all = false;
+		if(array_key_exists('include_none', $attribs)) {
+			$include_none = $attribs['include_none'];
+			unset($attribs['include_none']);
+		}
+		if(array_key_exists('include_all', $attribs)) {
+			$include_all = $attribs['include_all'];
+			unset($attribs['include_all']);
+		}
+		
+		if($include_none) {
+			$options[] = JHTML::_('select.option','-1',JText::_('COM_AKEEBASUBS_COMMON_SELECTLEVEL_NONE'));
+		}
+		if($include_all) {
+			$options[] = JHTML::_('select.option','0',JText::_('COM_AKEEBASUBS_COMMON_SELECTLEVEL_ALL'));
+		}
+		if(!$include_none && !$include_all) {
+			$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		}
 		
 		foreach($list as $item) {
 			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id,$item->title);

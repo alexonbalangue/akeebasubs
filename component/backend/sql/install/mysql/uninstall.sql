@@ -10,3 +10,4 @@ DROP TABLE IF EXISTS `#__akeebasubs_invoices`;
 DROP TABLE IF EXISTS `#__akeebasubs_affpayments`;
 DROP TABLE IF EXISTS `#__akeebasubs_affiliates`;
 DROP TABLE IF EXISTS `#__akeebasubs_levelgroups`;
+DROP TABLE IF EXISTS `#__akeebasubs_invoicetemplates`;
