@@ -2372,6 +2372,13 @@ Rule C gives $ 30 discount</programlisting>
       Subscriptions with a web-based affiliate management system, like OSI
       Affiliates.</para>
 
+      <important>
+        <para>We also ship plugins which allow you to integrate Akeeba
+        Subscriptions with third party affiliate management solutions. Please
+        take a look at the integration plugins section of our
+        documentation.</para>
+      </important>
+
       <para>The concept of affiliates in Akeeba Subscriptions is based on some
       simple rules:</para>
 
@@ -8375,6 +8382,57 @@ LEVEL3=Group 1</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="integration-postaffiliatepro">
+        <title>PostAffilatePro integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>System - Post
+        Affiliate Pro integration</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.3.0</para>
+        </note>
+
+        <para>This plugin allows you to integrate Akeeba Subscriptions with
+        the third party affiliate management service PostAffiliatePro.</para>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>URL of Post Affiliate Pro</term>
+
+            <listitem>
+              <para>Specify the url of your installation of Post Affiliate
+              Pro. Please note that you need to specify the full url including
+              the protocol like https://www.yoursite.com/affiliate</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In the merchant's web interface:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Create an affiliate (Affiliate Manager)</para>
+          </listitem>
+
+          <listitem>
+            <para>Add the tracking URL of the affiliate's website (like
+            "www.affiliate-website.com") to the affiliate's profile.</para>
+          </listitem>
+
+          <listitem>
+            <para>Create a banner and the target URL is the merchant's website
+            (like "www.merchant-website.com")</para>
+          </listitem>
+        </orderedlist>
+
+        <para>In the affiliate's web interface, go to Home, Banner &amp; Links
+        and get the code to the banner.</para>
+      </section>
     </section>
   </chapter>
 
@@ -8804,7 +8862,7 @@ LEVEL3=Group 1</programlisting>
         when Akeeba Subscriptions is displaying the order cancellation
         message.</para>
 
-        <para><emphasis role="bold">Sample plugin</emphasis>: </para>
+        <para><emphasis role="bold">Sample plugin</emphasis>:</para>
 
         <para><emphasis role="bold">Since</emphasis>: 2.3.0</para>
 
