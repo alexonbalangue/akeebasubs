@@ -49,10 +49,26 @@ class plgSystemPostaffiliatepro extends JPlugin
 	 */
 	public function onOrderMessage($subscription)
 	{
+		// Do not track if there is no subscription ID
+		if($subscription->akeebasubs_subscription_id <= 0) {
+			return;
+		}
+		
+		// If the Affiliate ID is set to -1 do not issue a second sale 
+		if($subscription->akeebasubs_affiliate_id < 0) {
+			return;
+		}
+		
 		if($this->isTrackingCodeRelevant()) {
-			$price = $subscription->price;
-			$orderId = str_replace(' ', '', $subscription->title) . '-' . $subscription->akeebasubs_level_id;
-			$productTitle = $subscription->title;
+			// Load the subscription level
+			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->getItem($subscription->akeebasubs_level_id);
+			
+			// Set up the sale
+			$price = $subscription->gross;
+			$orderId = $subscription->akeebasubs_subscription_id;
+			$productTitle = $level->title;
+			
 			$document = JFactory::getDocument();
 			$document->addCustomTag(
 '<script type="text/javascript">
@@ -63,6 +79,12 @@ class plgSystemPostaffiliatepro extends JPlugin
   sale.setProductID(\'' . $productTitle . '\');
   PostAffTracker.register();
   </script>');
+			
+			// Update the subscription record
+			$updates = array(
+				'akeebasubs_affiliate_id'	=> -1
+			);
+			$subscription->save($updates);
 		}
 	}
 	
