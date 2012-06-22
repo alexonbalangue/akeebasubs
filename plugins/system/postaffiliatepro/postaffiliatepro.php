@@ -65,7 +65,7 @@ class plgSystemPostaffiliatepro extends JPlugin
 				->getItem($subscription->akeebasubs_level_id);
 			
 			// Set up the sale
-			$price = $subscription->gross;
+			$price = $subscription->gross_amount;
 			$orderId = $subscription->akeebasubs_subscription_id;
 			$productTitle = $level->title;
 			
