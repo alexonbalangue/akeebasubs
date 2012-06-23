@@ -99,6 +99,9 @@ class Com_AkeebasubsInstallerScript
 				'worldpay'				=> 0,
 				'zarinpal'				=> 0,
 			),
+			'ccinvoicetags' => array(
+				'akeebasubs'			=> 1,
+			),
 			'content' => array(
 				'aslink'				=> 1,
 				'asrestricted'			=> 1

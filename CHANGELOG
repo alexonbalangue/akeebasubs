@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.3 DEV RELEASE
 + Add option to select Multi or Single Page Checkout for 2checkout (thanks Sander!)
 + #100 Language merge tags for the Off-Line payment plugin
 + #96 Subscription Level relations
++ Plugin to allow ccInvoices to access Akeeba Subscriptions' information for the user, subscription level and subscription
 # [MEDIUM] PayPal: recurring subscriptions were not working from the second renewal onwards
 # [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
 # [MEDIUM] 2Checkout plugin, vendor_order_id always empty (thanks Sander!)

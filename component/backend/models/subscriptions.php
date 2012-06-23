@@ -23,6 +23,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'publish_down'	=> $this->getState('publish_down',null,'string'),
 			'user_id'		=> $this->getState('user_id',null,'int'),
 			'paystate'		=> $this->getState('paystate',null,'string'),
+			'processor'		=> $this->getState('processor',null,'string'),
 			'paykey'		=> $this->getState('paykey',null,'string'),
 			'since'			=> $this->getState('since',null,'string'),
 			'until'			=> $this->getState('until',null,'string'),
@@ -205,6 +206,13 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						implode(',',$states).')'
 				);
 			}
+		}
+		
+		if($state->processor) {
+			$query->where(
+				$db->nameQuote('tbl').'.'.$db->nameQuote('processor').' = '.
+					$db->quote($state->processor)
+			);
 		}
 		
 		if($state->paykey) {
