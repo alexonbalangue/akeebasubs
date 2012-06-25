@@ -332,7 +332,6 @@ class plgAkpaymentPostfinancech extends JPlugin
 				if ($value)	$stringToSign .= $key.'='.$value.$password;
 			}	
 			if(function_exists('sha1')) {
-				$stringToSign = iconv ( "UTF-8" , "ASCII//TRANSLIT" , $stringToSign );
 				$sha1 = strtoupper(sha1($stringToSign));
 			}
 		}
