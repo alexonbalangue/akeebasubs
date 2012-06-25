@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/version.php';
 
 // Include FOF
-include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED')) {?>
 <h1>Akeeba Subscriptions</h1>
 <h2>Incomplete installation detected</h2>
@@ -26,8 +26,7 @@ if(!defined('FOF_INCLUDED')) {?>
 		<a href="https://www.akeebabackup.com/download/official/akeeba-subscriptions.html">Downloads page</a>.
 	</li>
 	<li>
-		Go to <a href="<?php echo JURI::base() ?>index.php?option=com_installer">Extensions &gt;
-		<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? "Install/Uninstall" : "Manage"; ?>
+		Go to <a href="<?php echo JURI::base() ?>index.php?option=com_installer">Extensions &gt; Manage
 		</a>, click on &quot;Browse...&quot;, find the ZIP file you downloaded and double click on it.
 	</li>
 	<li>

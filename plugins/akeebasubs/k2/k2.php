@@ -17,11 +17,11 @@ class plgAkeebasubsK2 extends JPlugin
 
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		// Load level to group mapping from plugin parameters		
@@ -112,7 +112,11 @@ class plgAkeebasubsK2 extends JPlugin
 		
 		// Get DB connection
 		$db = JFactory::getDBO();
-		$db->setQuery('SELECT COUNT(*) FROM `#__k2_users` WHERE `userID` = '.$db->Quote($user_id));
+		$query = $db->getQuery(true)
+			->select('COUNT(*)')
+			->from($db->qn('#__k2_users'))
+			->where($db->qn('userID').' = '.$db->q($user_id));
+		$db->setQuery($query);
 		$numRecords = $db->loadResult();
 		
 		if(empty($addGroups) && empty($removeGroups)) {
@@ -123,23 +127,46 @@ class plgAkeebasubsK2 extends JPlugin
 			if($numRecords) {
 				// Case 1a. Update an existing record
 				$group = array_pop($addGroups);
-				$db->setQuery('UPDATE `#__k2_users` SET `group` = '.$db->Quote($group).' WHERE userID = '.$db->Quote($user_id));
+				
+				$query = $db->getQuery(true)
+					->update($db->qn('#__k2_users'))
+					->set($db->qn('group').' = '.$db->q($group))
+					->where($db->qn('userID').' = '.$db->q($user_id));
+				$db->setQuery($query);
 				$db->query();
 			} else {
 				// Case 1b. Add a new record
 				$user = JFactory::getUser($user_id);
-				$db->setQuery('INSERT INTO `#__k2_users` (`userID`,`group`,`userName`,`description`) VALUES ('.
-					$user_id.', '.$group.', '.$db->Quote($user->name).', "")');
+				
+				$query = $db->getQuery(true)
+					->insert($db->qn('#__k2_users'))
+					->columns(array(
+						$db->qn('userID'),
+						$db->qn('group'),
+						$db->qn('userName'),
+						$db->qn('description'),
+					))->values(
+						$db->q($user_id).', '.$db->q($group).', '.$db->q($user->name).', '.$db->q('')
+					);
+				$db->setQuery($query);
 				$db->query();
 			}
 		} elseif(!empty($removeGroups)) {
 			// Case 2: Don't add to groups, remove from groups
 			if($numRecords) {
 				// Case 2a. Update an existing record
-				$db->setQuery('SELECT `group` FROM `#__k2_users` WHERE userID = '.$db->Quote($user_id));
+				$query = $db->getQuery(true)
+					->select($db->qn('group'))
+					->from($db->qn('#__k2_users'))
+					->where($db->qn('userID').' = '.$db->q($user_id));
+				$db->setQuery($query);
 				$group = $db->loadResult();
 				if(in_array($group, $removeGroups)) {
-					$db->setQuery('UPDATE `#__k2_users` SET `group` = 0 WHERE userID = '.$db->Quote($user_id));
+					$query = $db->getQuery(true)
+						->update($db->qn('#__k2_users'))
+						->set($db->qn('group').' = '.$db->q('0'))
+						->where($db->qn('userID').' = '.$db->q($user_id));
+					$db->setQuery($query);
 					$db->query();
 				}
 			} else {
@@ -196,8 +223,12 @@ class plgAkeebasubsK2 extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `name` AS `title`, `id` FROM #__k2_user_groups';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('name').' AS '.$db->qn('title'),
+					$db->qn('id'),
+				))->from($db->qn('#__k2_user_groups'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {

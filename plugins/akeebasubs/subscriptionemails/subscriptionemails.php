@@ -14,11 +14,11 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+		
 		parent::__construct($subject, $config);
 	}
 
@@ -42,8 +42,10 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 					$this->sendEmail($row, 'new_active');
 				}
 			} elseif($row->state == 'C') {
-				// A new subscription which is for a renewal (will be active in a future date)
-				$this->sendEmail($row, 'new_renewal');
+				if($row->contact_flag <= 2) {
+					// A new subscription which is for a renewal (will be active in a future date)
+					$this->sendEmail($row, 'new_renewal');
+				}
 			} else {
 				// A new subscription which is pending payment by the processor
 				$this->sendEmail($row, 'new_pending');
@@ -106,8 +108,8 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_akeebasubs_subscriptionemails.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
-		jimport('joomla.html.parameter');
-		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
+		jimport('joomla.registry.registry');		
+		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
 			$jlang->load('plg_akeebasubs_subscriptionemails', JPATH_ADMINISTRATOR, $userlang, true);
@@ -127,6 +129,13 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 			
 		// Get the from/to dates
 		jimport('joomla.utilities.date');
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+		if(!preg_match($regex, $row->publish_up)) {
+			$row->publish_up = '2001-01-01';
+		}
+		if(!preg_match($regex, $row->publish_down)) {
+			$row->publish_down = '2037-01-01';
+		}
 		$jFrom = new JDate($row->publish_up);
 		$jTo = new JDate($row->publish_down);
 		
@@ -157,8 +166,8 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 			'[LEVEL]'		=> $level->title,
 			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
 			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'[PUBLISH_UP]'	=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			'[PUBLISH_DOWN]' => version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_DOWN]' => $jTo->format(JText::_('DATE_FORMAT_LC2')),
 			'[MYSUBSURL]'	=> $url
 		);
 		

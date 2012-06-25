@@ -45,16 +45,9 @@ class plgAkeebasubsAgreetotos extends JPlugin
 			}
 		}
 		// Setup the combobox parameters
-		if(version_compare(JVERSION, '1.6.0', 'ge')) {
-			$no = 'JNO';
-			$yes = 'JYES';
-		} else {
-			$no = 'NO';
-			$yes = 'YES';
-		}
 		$options = array(
-			JHTML::_('select.option',  0, JText::_($no) ),
-			JHTML::_('select.option',  1, JText::_($yes) ),
+			JHTML::_('select.option',  0, JText::_('JNO') ),
+			JHTML::_('select.option',  1, JText::_('JYES') ),
 		);
 		$html = JHTML::_('select.genericlist', $options, 'custom[agreetotos]', array(), 'value', 'text', $current, 'agreetotos');
 

@@ -29,7 +29,7 @@ class AkeebasubsModelTools extends FOFModel
 		$this->id = $id;
 	}
 	
-	public function getItem($id = null) {
+	public function &getItem($id = null) {
 		$dummy = null;
 		
 		if(is_null($id)) $id = $this->id;

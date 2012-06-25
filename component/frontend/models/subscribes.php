@@ -448,13 +448,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Get the applicable tax rule
 		$taxRule = $this->_getTaxRule();		
-				
+		
+		// Calculate the base price minimising rounding errors
+		$basePrice = 0.01 * (100*$netPrice - 100*$discount);
+		// Calculate the tax amount minimising rounding errors
+		$taxAmount = 0.01 * ($taxRule->taxrate * $basePrice);
+		// Calculate the gross amount minimising rounding errors
+		$grossAmount = 0.01 * (100*$basePrice + 100*$taxAmount);
+		
 		return (object)array(
 			'net'		=> sprintf('%1.02f',$netPrice),
 			'discount'	=> sprintf('%1.02f',$discount),
 			'taxrate'	=> sprintf('%1.02f',(float)$taxRule->taxrate),
-			'tax'		=> sprintf('%1.02f',0.01 * $taxRule->taxrate * ($netPrice - $discount)),
-			'gross'		=> sprintf('%1.02f',($netPrice - $discount) + 0.01 * $taxRule->taxrate * ($netPrice - $discount)),
+			'tax'		=> sprintf('%1.02f',$taxAmount),
+			//'gross'		=> sprintf('%1.02f',$grossAmount),
+			'gross'		=> sprintf('%1.02f', round($grossAmount, 2)),
 			'usecoupon'	=> $useCoupon ? 1 : 0,
 			'useauto'	=> $useAuto ? 1 : 0,
 			'couponid'	=> $couponid,
@@ -516,7 +524,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					}
 					
 					// Check user group levels
-					if ($valid && !empty($coupon->usergroups) && version_compare(JVERSION, '1.6.0', 'ge')) {
+					if ($valid && !empty($coupon->usergroups)) {
 						$groups = explode(',', $coupon->usergroups);
 						$ugroups = JFactory::getUser()->getAuthorisedGroups();
 						$valid = 0;
@@ -661,13 +669,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 			}
 		}
-		
+
 		// Get the current subscription level's net worth
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
 		$net = (float)$level->price;
-		
+
 		if($net == 0) {
 			$this->_upgrade_id = null;
 			return 0;
@@ -675,17 +683,56 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		$discount = 0;
 		$this->_upgrade_id = null;
-		
-		foreach($autoRules as $rule) {
-			// Make sure there is an active subscription in the From level
-			if(!array_key_exists($rule->from_id, $subs)) continue;
-			// Make sure the min/max presence is repected
-			if($subs[$rule->from_id] < ($rule->min_presence*86400)) continue;
-			if($subs[$rule->from_id] > ($rule->max_presence*86400)) continue;
-			// If From and To levels are different, make sure there is no active subscription in the To level yet
-			if($rule->to_id != $rule->from_id) {
-				if(array_key_exists($rule->to_id, $subs)) continue;
+
+
+		// Remove any rules that do not apply
+		foreach($autoRules as $i => $rule) {
+			if(
+				// Make sure there is an active subscription in the From level
+				!(array_key_exists($rule->from_id, $subs))
+				// Make sure the min/max presence is repected
+				|| ($subs[$rule->from_id] < ($rule->min_presence*86400))
+				|| ($subs[$rule->from_id] > ($rule->max_presence*86400))
+				// If From and To levels are different, make sure there is no active subscription in the To level yet
+				|| ($rule->to_id != $rule->from_id && array_key_exists($rule->to_id, $subs))
+			) {
+				unset($autoRules[$i]);
 			}
+		}
+
+		// First add add all combined rules
+		foreach($autoRules as $i => $rule) {
+			if (!$rule->combine) continue;
+
+			switch($rule->type) {
+				case 'value':
+					$discount += $rule->value;
+					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'percent':
+					$newDiscount = $net * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'lastpercent':
+					if(!array_key_exists($rule->from_id, $subPayments)) {
+						$lastNet = 0.00;
+					} else {
+						$lastNet = $subPayments[$rule->from_id]['value'];
+					}
+					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+			}
+			unset($autoRules[$i]);
+		}
+
+		// Then check all non-combined rules if they give a higher discount
+		foreach($autoRules as $rule) {
+			if ($rule->combine) continue;
 			
 			switch($rule->type) {
 				case 'value':
@@ -717,7 +764,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					break;
 			}
 		}
-		
+
 		return $discount;
 	}
 	
@@ -1002,6 +1049,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 	public function saveCustomFields()
 	{
 		$state = $this->getStateVariables();
+		$validation = $this->getValidation();
+		
 		$user = JFactory::getUser();
 		$user = $this->getState('user', $user);
 
@@ -1136,11 +1185,46 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->user_id($user->id)
-			->level($state->id)
-			->enabled(1)
-			->getList();
+		// First, the question: is this level part of a group?
+		$haveLevelGroup = false;
+		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->getItem($state->id);
+		if($level->akeebasubs_levelgroup_id > 0) {
+			// Is the level group published?
+			$levelGroup = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
+				->getItem($level->akeebasubs_levelgroup_id);
+			if($levelGroup instanceof FOFTable) {
+				$haveLevelGroup = $levelGroup->enabled;
+			}
+		}
+		
+		if($haveLevelGroup) {
+			// We have a level group. Get all subscriptions for all levels in
+			// the group.
+			$subscriptions = array();
+			$levelsInGroup = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->levelgroup($level->akeebasubs_levelgroup_id)
+				->getList(true);
+			foreach($levelsInGroup as $l) {
+				$someSubscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->user_id($user->id)
+					->level($l->akeebasubs_level_id)
+					->enabled(1)
+					->getList(true);
+				if(count($someSubscriptions)) {
+					$subscriptions = array_merge($subscriptions, $someSubscriptions);
+				}
+			}
+		} else {
+			// No level group found. Get subscriptions on the same level.
+			$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				->user_id($user->id)
+				->level($state->id)
+				->enabled(1)
+				->getList(true);
+		}
+		
+		
 			
 		$jNow = new JDate();
 		$now = $jNow->toUnix();

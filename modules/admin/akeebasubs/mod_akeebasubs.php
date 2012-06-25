@@ -11,7 +11,7 @@
 defined('_JEXEC') or die();
 
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
-include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED')) return;
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';

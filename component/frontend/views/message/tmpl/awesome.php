@@ -9,4 +9,3 @@
 defined('_JEXEC') or die();
 
 echo $this->loadAnyTemplate('order');
-//require_once(dirname(__FILE__).'/order.php');

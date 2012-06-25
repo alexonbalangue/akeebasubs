@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 
-include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED')) return;
 
 class plgSystemAsexpirationnotify extends JPlugin
@@ -19,11 +19,11 @@ class plgSystemAsexpirationnotify extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 		
 		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)
@@ -188,21 +188,21 @@ class plgSystemAsexpirationnotify extends JPlugin
 	}
 	
 	/**
-	 * Fetches the com_akeebasubs component's parameters as a JParameter instance
+	 * Fetches the com_akeebasubs component's parameters as a JRegistry instance
 	 *
-	 * @return JParameter The component parameters
+	 * @return JRegistry The component parameters
 	 */
 	private function getComponentParameters()
 	{
-		jimport('joomla.html.parameter');
+		jimport('joomla.registry.registry');
 		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
 		
 		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;
 		} elseif(!empty($component->params)) {
-			$cparams = new JParameter($component->params);
+			$cparams = new JRegistry($component->params);
 		} else {
-			$cparams = new JParameter('');
+			$cparams = new JRegistry('{}');
 		}
 		return $cparams;
 	}
@@ -233,19 +233,13 @@ class plgSystemAsexpirationnotify extends JPlugin
 		
 		$db = JFactory::getDBO();
 		
-		if(version_compare(JVERSION, '1.6.0', 'ge')) {
-			// Joomla! 1.6
-			$data = $params->toString('JSON');
-			$sql = 'UPDATE `#__extensions` SET `params` = '.$db->Quote($data).' WHERE '.
-				"`element` = 'com_akeebasubs' AND `type` = 'component'";
-		} else {
-			// Joomla! 1.5
-			$data = $params->toString('INI');
-			$sql = 'UPDATE `#__components` SET `params` = '.$db->Quote($data).' WHERE '.
-				"`option` = 'com_akeebasubs' AND `parent` = 0 AND `menuid` = 0";
-		}
-		
-		$db->setQuery($sql);
+		$data = $params->toString('JSON');
+		$query = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params').' = '.$db->q($data))
+			->where($db->qn('element').' = '.$db->q('com_akeebasubs'))
+			->where($db->qn('type').' = '.$db->q('component'));
+		$db->setQuery($query);
 		$db->query();
 	}
 	
@@ -277,7 +271,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
-		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
+		jimport('joomla.registry.registry');
+		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
 			$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $userlang, true);
@@ -291,6 +286,13 @@ class plgSystemAsexpirationnotify extends JPlugin
 			
 		// Get the from/to dates
 		jimport('joomla.utilities.date');
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+		if(!preg_match($regex, $row->publish_up)) {
+			$row->publish_up = '2001-01-01';
+		}
+		if(!preg_match($regex, $row->publish_down)) {
+			$row->publish_down = '2037-01-01';
+		}
 		$jFrom = new JDate($row->publish_up);
 		$jTo = new JDate($row->publish_down);
 		
@@ -326,8 +328,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 			'level'				=> $level->title,
 			'enabled'			=> $row->enabled ? JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_ENABLED') : JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_DISABLED'),
 			'state'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'from'				=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			'to'				=> version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'from'				=> $jFrom->format(JText::_('DATE_FORMAT_LC2')),
+			'to'				=> $jTo->format(JText::_('DATE_FORMAT_LC2')),
 			'url'				=> $url
 		);
 		

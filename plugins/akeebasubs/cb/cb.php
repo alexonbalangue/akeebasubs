@@ -20,10 +20,9 @@ class plgAkeebasubsCb extends JPlugin
 	
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
 		parent::__construct($subject, $config);
 
@@ -91,14 +90,32 @@ class plgAkeebasubsCb extends JPlugin
 	{
 		// Make sure there is no user already added
 		$db = JFactory::getDBO();
-		$sql = 'SELECT count(*) FROM `#__comprofiler` WHERE `user_id` = '.$db->Quote($user_id);
+		$sql = $db->getQuery(true)
+			->select('COUNT(*)')
+			->from($db->qn('#__comprofiler'))
+			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($sql);
 		$count = $db->loadResult();
 		
 		if($count) return;
+
+		$query = $db->getQuery(true)
+			->insert('#__comprofiler')
+			->columns(array(
+				$db->qn('id'),
+				$db->qn('user_id'),
+				$db->qn('firstname'),
+				$db->qn('middlename'),
+				$db->qn('lastname'),
+				$db->qn('avatarapproved'),
+				$db->qn('confirmed'),
+				$db->qn('registeripaddr'),
+				$db->qn('cbactivation'),
+				$db->qn('banned'),
+				$db->qn('acceptedterms'),
+			));
 		
-		$sql = 'INSERT INTO `#__comprofiler` (`id`, `user_id`, `firstname`, `middlename`, `lastname`, `avatarapproved`, `confirmed`, `registeripaddr`, `cbactivation`, `banned`, `acceptedterms`) VALUES(';
-		$sql .= $db->Quote($user_id).', '.$db->Quote($user_id).', ';
+		$values = $db->q($user_id).', '.$db->q($user_id).', ';
 		$user = JFactory::getUser($user_id);
 		$nameParts = explode(' ', $user->name, 3);
 		switch(count($nameParts)) {
@@ -123,12 +140,13 @@ class plgAkeebasubsCb extends JPlugin
 				$middleName = $nameParts[1];
 				break;
 		}
-		$sql .= $db->Quote($firstName) .', '. $db->Quote($middleName) .', '. $db->Quote($lastName) .', ';
-		$sql .= '1, 1, ';
+		$values .= $db->q($firstName) .', '. $db->q($middleName) .', '. $db->q($lastName) .', ';
+		$values .= $db->q('1').', '.$db->q('1').', ';
 		$ip = htmlspecialchars($_SERVER['REMOTE_ADDR']);
-		$sql .= $db->Quote( empty($ip) ? '127.0.0.1' : $ip ).', ';
-		$sql .= '\'\', 0, 1)';
-		$db->setQuery($sql);
+		$values .= $db->q( empty($ip) ? '127.0.0.1' : $ip ).', ';
+		$values .= $db->q('').', '.$db->q('0').', '.$db->q('1');
+		$query->values($values);
+		$db->setQuery($query);
 		$db->query();
 	}
 
@@ -137,8 +155,13 @@ class plgAkeebasubsCb extends JPlugin
 		$auth = $auth ? 1 : 0;
 		$user_id  = (int)$user_id;
 		$db = JFactory::getDBO();
-		$sql = "UPDATE `#__comprofiler` SET `approved` = $auth, `confirmed` = $auth, `acceptedterms` = $auth WHERE `user_id` = $user_id";
-		$db->setQuery($sql);
+		$query = $db->getQuery(true)
+			->update($db->qn('#__comprofiler'))
+			->set($db->qn('approved').' = '.$db->q($auth))
+			->set($db->qn('confirmed').' = '.$db->q($auth))
+			->set($db->qn('acceptedterms').' = '.$db->q($auth))
+			->where($db->qn('user_id').' = '.$db->q($user_id));
+		$db->setQuery($query);
 		$db->query();
 		if($db->getError()) die($db->getError());
 	}

@@ -16,11 +16,11 @@ class plgAkpaymentPagseguro extends JPlugin
 
 	public function __construct(&$subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 		
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -203,11 +203,45 @@ class plgAkpaymentPagseguro extends JPlugin
 				if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 			}
 		}
+
+		// Check the payment_status
+		$status = $transaction->getStatus();
+		switch($status->getTypeFromValue())
+		{
+			case 'AVAILABLE':
+			// the transaction was paid and
+			// the end of period is reached in which a dispute is possible
+			case 'PAID':
+			// the transaction was paid,
+			// but the customer has some time to open a dispute
+				$newStatus = 'C';
+				break;
+
+			case 'WAITING_PAYMENT':
+			// the buyer initiated the transaction,
+			// but so far the PagSeguro not received any payment information
+			case 'IN_ANALYSIS':
+			// the buyer chose to pay with a credit card and
+			// PagSeguro is analyzing the risk of the transaction
+			case 'IN_DISPUTE':
+			// a dispute was opened by the purchaser 
+				$newStatus = 'P';
+				break;
+
+			case 'REFUNDED':
+			// the transaction amount refunded
+			case 'CANCELLED':
+			// the transaction was canceled
+			// without having been finalized
+			default:
+				$newStatus = 'X';
+				break;
+		}
 		
 		// Check that id has not been previously processed
 		if($isValid) {
 			$processorKey = $transaction->getCode();
-			if($subscription->processor_key == $processorKey) {
+			if( ($subscription->processor_key == $processorKey) && ($subscription->state == $newStatus) ) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = 'This transaction is already processed';
 			}
@@ -218,28 +252,6 @@ class plgAkpaymentPagseguro extends JPlugin
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
-
-		// Check the payment_status
-		$status = $transaction->getStatus();
-		switch($status->getTypeFromValue())
-		{
-			case 'AVAILABLE':
-				$newStatus = 'C';
-				break;
-
-			case 'WAITING_PAYMENT':
-			case 'IN_ANALYSIS':
-			case 'PAID':
-			case 'IN_DISPUTE':
-				$newStatus = 'P';
-				break;
-
-			case 'REFUNDED':
-			case 'CANCELLED':
-			default:
-				$newStatus = 'X';
-				break;
-		}
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
@@ -254,6 +266,13 @@ class plgAkpaymentPagseguro extends JPlugin
 			// works around the case where someone pays by e-Check on January 1st and the check is cleared
 			// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
 			// the user would have paid us and we'd never given him a subscription!
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $subscription->publish_up)) {
+				$subscription->publish_up = '2001-01-01';
+			}
+			if(!preg_match($regex, $subscription->publish_down)) {
+				$subscription->publish_down = '2037-01-01';
+			}
 			$jNow = new JDate();
 			$jStart = new JDate($subscription->publish_up);
 			$jEnd = new JDate($subscription->publish_down);

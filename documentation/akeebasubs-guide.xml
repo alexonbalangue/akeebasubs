@@ -1152,6 +1152,61 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Group</term>
+
+          <listitem>
+            <para>When a subscription is not part of a group, the Valid From
+            date of a new subscription is set to the maximum Valid To date of
+            a properly paid (payment status set to "Completed") subscription
+            at the same level. This is what allows Akeeba Backup to treat
+            purchases of a new subscription on the same level as a renewal of
+            the subscription.</para>
+
+            <para>When a subscription is part of a group, the Valid From date
+            of a new subscription is set to the maximum Valid To date of a
+            properly paid (payment status set to "Completed") subscription at
+            any level belonging to this group.</para>
+
+            <para>For example, let's say FOOBAR6 is a subscription level with
+            a 6 month duration and FOOBAR12 is a subscription level with a 12
+            month duration. A user has a subscription in the FOOBAR6 level
+            valid from 2013-01-01 to 2013-05-31. On May 1st, 2013 he decides
+            to renew his subscription. We have the following
+            possibilities:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>No matter of the level grouping, if he buys a new
+                FOOBAR6 subscription, the new subscription will be valid from
+                2013-05-31 to 2013-12-31, as it is a renewal on the same
+                level.</para>
+              </listitem>
+
+              <listitem>
+                <para>If the two levels <emphasis>do not</emphasis> belong to
+                the same group and he buys a FOOBAR12 subscription, the new
+                subscription will be valid from 2013-05-01 to 2014-04-30. In
+                this case, the user loses a month because Akeeba Subscriptions
+                doesn't know that the two levels are the same thing with a
+                different duration.</para>
+              </listitem>
+
+              <listitem>
+                <para>If the two levels <emphasis>belong to the same
+                group</emphasis> and he buys a FOOBAR12 subscription, the new
+                subscription will be valid from 2013-05-31 to 2014-05-30. In
+                this case, Akeeba Subscriptions known that buying a FOOBAR12
+                subscription must be treated as a renewal of the FOOBAR6
+                subscription.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>You can set up your groups in the <guilabel>Level
+            Groups</guilabel> page of the component.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Slug</term>
 
           <listitem>
@@ -1512,7 +1567,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           <term>[USER:OCCUPATION]</term>
 
           <listitem>
-            <para>The business occupation specified</para>
+            <para>The business activity specified</para>
           </listitem>
         </varlistentry>
 
@@ -1857,6 +1912,50 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
           <listitem>
             <para>See above.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Combine</term>
+
+          <listitem>
+            <para>The final discount is normally defined by the upgrade rule
+            that generates the highest discount. When upgrade rules have the
+            <guilabel>Combine</guilabel> option set to <option>Yes</option>,
+            then all these (that apply to the subscriber's situation) will be
+            added together (combined) to define the discount. In other words,
+            the applicable upgrade rules with the Combined flag turned on work
+            accumulatively instead of exclusively. This feature comes in handy
+            when you want to give discounts to "bundle" subscriptions, i.e.
+            subscription levels which give you the same privileges as buying
+            several other subscription levels at the same time.</para>
+
+            <para>Example #1 (without Combine):</para>
+
+            <programlisting>Rule A gives $ 10 discount
+Rule B gives $ 15 discount
+Rule C gives $ 20 discount</programlisting>
+
+            <para>Total discount will be $20 given by rule C because it's the
+            biggest discount of the three.</para>
+
+            <para>Example #2:</para>
+
+            <programlisting>Rule A gives $ 10 discount =&gt; combine is on
+Rule B gives $ 15 discount =&gt; combine is on
+Rule C gives $ 20 discount</programlisting>
+
+            <para>Total discount will be $25 given by rule A + B because A+B
+            (combined) give a bigger discount than C.</para>
+
+            <para>Example #3:</para>
+
+            <programlisting>Rule A gives $ 10 discount =&gt; combine is on
+Rule B gives $ 15 discount =&gt; combine is on
+Rule C gives $ 30 discount</programlisting>
+
+            <para>Total discount will be $30 given by rule C because C gives a
+            bigger discount than A+B (combined).</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -2273,6 +2372,13 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       Subscriptions with a web-based affiliate management system, like OSI
       Affiliates.</para>
 
+      <important>
+        <para>We also ship plugins which allow you to integrate Akeeba
+        Subscriptions with third party affiliate management solutions. Please
+        take a look at the integration plugins section of our
+        documentation.</para>
+      </important>
+
       <para>The concept of affiliates in Akeeba Subscriptions is based on some
       simple rules:</para>
 
@@ -2559,6 +2665,26 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
     subscription or email reminders for subscription expiration) is take care
     of by plugins. This documentation chapter will guide you through the
     details of each plugin.</para>
+
+    <warning>
+      <para><emphasis role="bold">EXTREMELY IMPORTANT! DO NOT SEEK SUPPORT IF
+      YOU DO NOT HEED THIS WARNING.</emphasis></para>
+
+      <para>ALL AKEEBA SUBSCRIPTIONS AND PAYMENT PLUGINS MUST BE PUBLISHED
+      WITH "Public" ACCESS. IF YOU SET THEIR ACCESS TO "Registered" OR IN ANY
+      OTHER WAY MODIFY YOUR SITE'S ACL SETTINGS TO FORBID NON LOGGED IN USERS
+      FROM ACCESSING THE PLUGINS AKEEBA SUBSCRIPTIONS WILL WORK ERRATICALLY OR
+      NOT AT ALL.</para>
+
+      <para>If you think that Akeeba Subscriptions does not work correctly
+      because it does not activate subscriptions, run integrations (e.g.
+      doesn't assign subscribers to Joomla! groups), accept payments or
+      malfunctions in any other way, the first you MUST do before even
+      contemplating on whether you should contact us is to check your plugins.
+      During the first week of June 2012 we had four people with the same
+      self-induced problem. <emphasis role="bold">YOU MUST NEVER, EVER CHANGE
+      THE ACCESS OF THE PLUGINS</emphasis>!</para>
+    </warning>
 
     <section xml:id="payment-plugins">
       <title>Payment methods</title>
@@ -3209,6 +3335,12 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           &lt;b&gt; and &lt;a&gt; tags will work.</para>
         </tip>
 
+        <tip>
+          <para>Since Akeeba Subscriptions 2.3.0 you can also use language
+          merge tags. They work the same way as the language merge tags in the
+          Subscriptions Levels messages.</para>
+        </tip>
+
         <para>The options you have in this plugin are:</para>
 
         <variablelist>
@@ -3328,6 +3460,45 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
                 with a demo transaction will have a payment status of New and
                 will not be enabled.</para>
               </warning>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>Select the language the 2Checkout interface will be
+              displayed in.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Default payment method</term>
+
+            <listitem>
+              <para>2Checkout allows different payment methods. Select which
+              one will be pre-selected in the checkout page.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Skip landing page</term>
+
+            <listitem>
+              <para>When enabled your users will not see the order review page
+              when they are redirected to 2Checkout.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Checkout Process</term>
+
+            <listitem>
+              <para>You can select between the Multi Page Checkout and Single
+              Page Checkout modes. Single page checkout is likely to give you
+              a much better conversion rate as the client just fills in his
+              information and clicks on a button. The less steps to performing
+              the payment, the more likely a user is to actually pay.</para>
             </listitem>
           </varlistentry>
         </variablelist>
@@ -5236,6 +5407,162 @@ LEVEL2=11111:22222:33333</programlisting>
         the API Key and API Secret Key. Copy those keys to Akeeba
         Subscriptions plugin's same-named fields. Now save the plugin, publish
         it and you're ready to start selling.</para>
+      </section>
+
+      <section xml:id="payment-suomen-verkkomaksut-oy">
+        <title>Suomen Verkkomaksut Oy</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Suomen Verkkomaksut Oy</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.3.0.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the Finnish payment processor
+        Suomen Verkkomaksut Oy.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Suomen Verkkomaksut Oy" or type in a
+              custom name to show to your customer's, e.g. "Pay by credit
+              card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the identification number given to you by Suomen
+              Verkkomaksut</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant Auth. Hash</term>
+
+            <listitem>
+              <para>The Merchant Authentication Hash is the merchant hash code
+              given by Suomen Verkkomaksut. This is used during payment
+              transactions for authentication and security.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Culture</term>
+
+            <listitem>
+              <para>Select the language of the payment page of Suomen
+              Verkkomaksut.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, Akeeba Subscriptions will use a test
+              merchant and hash. The values in Merchant ID and Merchant Auth.
+              Hash are ignored. This is designed for integration tests, BEFORE
+              going live with your site. <emphasis role="bold">NEVER, EVER, NO
+              MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION SITES!
+              IF YOU DO, YOU WILL LOSE MONEY AND/OR
+              CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="payment-payfast">
+        <title>Payfast</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Payfast</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.3.0.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the payment processor
+        Payfast.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PayFast" or type in a custom name to
+              show to your customer's, e.g. "Pay by credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the identification number given to you by the
+              PayFast system</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant Key</term>
+
+            <listitem>
+              <para>The Merchant Key given to you by PayFast.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the sandbox (testing server). This is designed for integration
+              tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+
+              <important>
+                <para>When using the Sandbox option please use the test login
+                sbtu01@payfast.co.za (username), clientpass (password), which
+                can be found in the integration guide
+                (https://www.payfast.co.za/s/std/integration-guide).</para>
+              </important>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
     </section>
 
@@ -7499,7 +7826,7 @@ LEVEL3=Group 1</programlisting>
             <term>[USER:OCCUPATION]</term>
 
             <listitem>
-              <para>The business occupation specified</para>
+              <para>The business activity specified</para>
             </listitem>
           </varlistentry>
 
@@ -8055,6 +8382,57 @@ LEVEL3=Group 1</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="integration-postaffiliatepro">
+        <title>PostAffilatePro integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>System - Post
+        Affiliate Pro integration</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.3.0</para>
+        </note>
+
+        <para>This plugin allows you to integrate Akeeba Subscriptions with
+        the third party affiliate management service PostAffiliatePro.</para>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>URL of Post Affiliate Pro</term>
+
+            <listitem>
+              <para>Specify the url of your installation of Post Affiliate
+              Pro. Please note that you need to specify the full url including
+              the protocol like https://www.yoursite.com/affiliate</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>In the merchant's web interface:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Create an affiliate (Affiliate Manager)</para>
+          </listitem>
+
+          <listitem>
+            <para>Add the tracking URL of the affiliate's website (like
+            "www.affiliate-website.com") to the affiliate's profile.</para>
+          </listitem>
+
+          <listitem>
+            <para>Create a banner and the target URL is the merchant's website
+            (like "www.merchant-website.com")</para>
+          </listitem>
+        </orderedlist>
+
+        <para>In the affiliate's web interface, go to Home, Banner &amp; Links
+        and get the code to the banner.</para>
+      </section>
     </section>
   </chapter>
 
@@ -8367,10 +8745,10 @@ LEVEL3=Group 1</programlisting>
         custom fields and update the display status of the valid/invalid
         labels. It is your responsibility. In this event, you can call
         <code>JFactory::getDocument()-&gt;addScriptDeclaration($scriptData)</code>
-        where $scriptData is the Javscript validation code.</para>
+        where $scriptData is the Javascript validation code.</para>
 
         <para>In order to make it easier for you, Akeeba Subscriptions offers
-        an architecture similar to an observer pattern in the Javscript code.
+        an architecture similar to an observer pattern in the Javascript code.
         You can have Javascript functions called when Akeeba Subscriptions'
         Javascript code is fetching the contents of the fields before sending
         a data validation request through AJAX and another function which is
@@ -8470,8 +8848,58 @@ LEVEL3=Group 1</programlisting>
         the user record with new information, either during sign-up or when
         you manually update this information in the back-end.</para>
 
-        <para>The $row variable contains a KRowDatabaseDefault object with the
+        <para>The $row variable contains a AkeebasubsTableUser object with the
         information to be stored in the #__akeebasubs_users table.</para>
+      </section>
+
+      <section xml:id="dev-onAKUserSaveData">
+        <title>onCancelMessage</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onCancelMessage($row)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
+        when Akeeba Subscriptions is displaying the order cancellation
+        message.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:</para>
+
+        <para><emphasis role="bold">Since</emphasis>: 2.3.0</para>
+
+        <para>This method is called whenever Akeeba Subscriptions is
+        displaying the order cancellation message in the front-end of the
+        site.</para>
+
+        <para>The $row variable contains an AkeebasubsTableSubscription object
+        of the subscription for which the message is being displayed.</para>
+
+        <para>Anything you return is considered to be HTML which will be
+        displayed on the message page, right after the message.</para>
+      </section>
+
+      <section xml:id="dev-onAKUserSaveData">
+        <title>onCancelMessage</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onCancelMessage($row)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
+        when Akeeba Subscriptions is displaying the order confirmation
+        message.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:</para>
+
+        <para><emphasis role="bold">Since</emphasis>: 2.3.0</para>
+
+        <para>This method is called whenever Akeeba Subscriptions is
+        displaying the order confirmation message in the front-end of the
+        site.</para>
+
+        <para>The $row variable contains an AkeebasubsTableSubscription object
+        of the subscription for which the message is being displayed.</para>
+
+        <para>Anything you return is considered to be HTML which will be
+        displayed on the message page, right after the message.</para>
       </section>
     </section>
 

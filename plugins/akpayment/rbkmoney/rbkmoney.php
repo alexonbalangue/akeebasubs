@@ -16,11 +16,11 @@ class plgAkpaymentRBKMoney extends JPlugin
 
 	public function __construct(&$subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 		
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -205,6 +205,13 @@ class plgAkpaymentRBKMoney extends JPlugin
 			// works around the case where someone pays by e-Check on January 1st and the check is cleared
 			// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
 			// the user would have paid us and we'd never given him a subscription!
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $subscription->publish_up)) {
+				$subscription->publish_up = '2001-01-01';
+			}
+			if(!preg_match($regex, $subscription->publish_down)) {
+				$subscription->publish_down = '2037-01-01';
+			}
 			$jNow = new JDate();
 			$jStart = new JDate($subscription->publish_up);
 			$jEnd = new JDate($subscription->publish_down);

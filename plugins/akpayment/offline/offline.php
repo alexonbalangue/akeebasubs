@@ -16,11 +16,11 @@ class plgAkpaymentOffline extends JPlugin
 
 	public function __construct(&$subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 		
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -96,6 +96,12 @@ ENDTEMPLATE;
 		$html = str_replace('{SUBSCRIPTION}', sprintf('%06u', $subscription->akeebasubs_subscription_id), $html);
 		$html = str_replace('{FIRSTNAME}', $firstName, $html);
 		$html = str_replace('{LASTNAME}', $lastName, $html);
+		
+		@include_once JPATH_SITE.'/components/com_akeebasubs/helpers/message.php';
+		if(class_exists('AkeebasubsHelperMessage')) {
+			$html = AkeebasubsHelperMessage::processLanguage($html);
+		}
+		
 		$html = '<div>'.$html.'</div>';
 
 		return $html;

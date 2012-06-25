@@ -87,7 +87,7 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 		
 		// Post-processing
 		if(isset($this->data['levels'])) {
-			$defaultImagePath = version_compare(JVERSION, '1.6.0', 'ge') ? 'images/' : 'images/stories';
+			$defaultImagePath = 'images/';
 			if(!empty($this->data['levels'])) foreach($this->data['levels'] as $id => $level) {
 				$articleText = '<p></p>';
 				$articleid = (int)($level['articleid']);

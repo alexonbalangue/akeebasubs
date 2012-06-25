@@ -110,7 +110,8 @@ class plgAkeebasubsAffemails extends JPlugin
 		$jlang->load('plg_akeebasubs_affemails', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_akeebasubs_affemails.override', JPATH_ADMINISTRATOR, null, true);
 		// -- Affiliate user's preferred language
-		$uparams = is_object($user->params) ? $user->params : new JParameter($affiliateUser->params);
+		jimport('joomla.registry.registry');
+		$uparams = is_object($user->params) ? $user->params : new JRegistry($affiliateUser->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
 			$jlang->load('plg_akeebasubs_affemails', JPATH_ADMINISTRATOR, $affiliateUser, true);
@@ -130,6 +131,13 @@ class plgAkeebasubsAffemails extends JPlugin
 			
 		// Get the from/to dates
 		jimport('joomla.utilities.date');
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+		if(!preg_match($regex, $row->publish_up)) {
+			$row->publish_up = '2001-01-01';
+		}
+		if(!preg_match($regex, $row->publish_down)) {
+			$row->publish_down = '2037-01-01';
+		}
 		$jFrom = new JDate($row->publish_up);
 		$jTo = new JDate($row->publish_down);
 		
@@ -162,8 +170,8 @@ class plgAkeebasubsAffemails extends JPlugin
 			'[LEVEL]'		=> $level->title,
 			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
 			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'[PUBLISH_UP]'	=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			'[PUBLISH_DOWN]' => version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_DOWN]' => $jTo->format(JText::_('DATE_FORMAT_LC2')),
 			'[MYSUBSURL]'	=> $url,
 			'[CURRENCY]'	=> AkeebasubsHelperCparams::getParam('currencysymbol','€'),
 		);

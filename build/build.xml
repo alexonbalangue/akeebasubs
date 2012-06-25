@@ -140,7 +140,7 @@
 		<exec command="php ./buildlang.php" dir="buildlang" passthru="true" />
 	</target>
 	
-	<target name="ftpdeploy" depends="git,lang">
+	<target name="ftpdeploy" depends="git">
 		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
 		<echo>Uploading release</echo>
 		<ftpdeploy
@@ -178,5 +178,8 @@
 				<include name="*.xml"/>
 			</fileset>
 		</ftpdeploy>
+	</target>
+	
+	<target name="deployall" depends="ftpdeploy,lang,docsdeploy">
 	</target>
 </project>

@@ -16,11 +16,11 @@ class plgAkpaymentPaypal extends JPlugin
 
 	public function __construct(&$subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 		
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -254,6 +254,13 @@ class plgAkpaymentPaypal extends JPlugin
 			// works around the case where someone pays by e-Check on January 1st and the check is cleared
 			// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
 			// the user would have paid us and we'd never given him a subscription!
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $subscription->publish_up)) {
+				$subscription->publish_up = '2001-01-01';
+			}
+			if(!preg_match($regex, $subscription->publish_down)) {
+				$subscription->publish_down = '2037-01-01';
+			}
 			$jNow = new JDate();
 			$jStart = new JDate($subscription->publish_up);
 			$jEnd = new JDate($subscription->publish_down);
@@ -276,22 +283,44 @@ class plgAkpaymentPaypal extends JPlugin
 		}
 		// In the case of a successful recurring payment, fetch the old subscription's data
 		if($recurring && ($newStatus == 'C') && ($subscription->state == 'C')) {
+			// Create a new record for the old subscription
 			$oldData = $subscription->getData();
-			unset($oldData['akeebasubs_subscription_id']);
+			$oldData['akeebasubs_subscription_id'] = 0;
 			$oldData['publish_down'] = $jNow->toMySQL();
 			$oldData['enabled'] = 0;
-			if(empty($oldData['notes'])) $oldData['notes'] = '';
-			$oldData['notes'] .= "\n\nAutomatically renewed subscription on ".$jNow->toMySQL();
+			$oldData['contact_flag'] = 3;
+			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toMySQL();			
+			
+			// Calculate new start/end time for the subscription
+			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->paystate('C')
+				->level($subscription->akeebasubs_level_id)
+				->user_id($subscription->user_id);
+			$max_expire = 0;
+			if(count($allSubs)) foreach($allSubs as $aSub) {
+				$jExpire = new JDate($aSub->publish_down);
+				$expire = $jExpire->toUnix();
+				if($expire > $max_expire) $max_expire = $expire;
+			}
+			
+			$duration = $end - $start;
+			$start = max($now, $max_expire);
+			$end = $start + $duration;
+			$jStart = new JDate($start);
+			$jEnd = new JDate($end);
+			
+			$updates['publish_up'] = $jStart->toMySQL();
+			$updates['publish_down'] = $jEnd->toMySQL();
+			
+			// Save the record for the old subscription
+			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->getTable();
+			$table->reset();
+			$table->bind($oldData);
+			$table->store();
 		}
 		// Save the changes
 		$subscription->save($updates);
-		// In the case of a successful recurring payment, store the old subscription's data to a new record
-		if($recurring && isset($oldData)) {
-			$original = clone $subscription;
-			$original->reset();
-			$original->bind($oldData);
-			$original->store();
-		}
 		
 		// Run the onAKAfterPaymentCallback events
 		jimport('joomla.plugin.helper');

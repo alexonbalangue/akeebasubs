@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://www.joomla.org/xml/dtd/1.5/module-install.dtd">
-<install type="module" version="1.5.0" method="upgrade" client="site">
+<extension type="module" version="2.5.0" method="upgrade" client="site">
 	<name>Akeeba Subscriptions - Subscription expiration</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<creationDate>October 2011</creationDate>
@@ -17,17 +16,6 @@
 		<language tag="en-GB">en-GB/en-GB.mod_aksexpires.ini</language>
 	</languages>
 
-	<params>
-		<param name="moduleclass_sfx" type="text" default="" label="MOD_AKSEXPIRES_SUFFIX_LABEL" description="MOD_AKSEXPIRES_SUFFIX_DESC" />
-	</params>
-	<params group="advanced">
-		<param name="cache" type="list" default="1" label="MOD_AKSEXPIRES_CACHING_LABEL" description="MOD_AKSEXPIRES_CACHING_DESC">
-			<option value="1">MOD_AKSEXPIRES_CACHING_OPT_GLOBAL</option>
-			<option value="0">MOD_AKSEXPIRES_CACHING_OPT_NONE</option>
-		</param>
-		<param name="cache_time" type="text" default="900" label="MOD_AKSEXPIRES_CACHETIME_LABEL" description="MOD_AKSEXPIRES_CACHETIME_DESC" />
-	</params>
-	
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -42,4 +30,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

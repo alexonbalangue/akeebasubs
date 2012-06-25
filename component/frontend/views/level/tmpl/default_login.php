@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-$login_url = version_compare(JVERSION, '1.6.0', 'ge') ? 'index.php?option=com_users&task=user.login' : 'index.php?option=com_user&task=login';
+$login_url = 'index.php?option=com_users&task=user.login';
 
 $rootURL = rtrim(JURI::base(),'/');
 $subpathURL = JURI::base(true);
@@ -28,8 +28,8 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 		<label for="username" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_USERNAME')?></label>
 		<input type="text" class="main" name="username" value="" />
 		<br/>
-		<label for="<?php echo version_compare(JVERSION,'1.6.0','ge') ? 'password' : 'passwd'?>" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_PASSWORD')?></label>
-		<input type="password" class="main" name="<?php echo version_compare(JVERSION,'1.6.0','ge') ? 'password' : 'passwd'?>" value="" />
+		<label for="password" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_PASSWORD')?></label>
+		<input type="password" class="main" name="password" value="" />
 		<br/>
 		<input type="submit" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?>" />
 		<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_ORCONTINUE')?>

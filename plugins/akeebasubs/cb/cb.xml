@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
 	<name>Akeeba Subscriptions - Community Builder Integration</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -18,14 +17,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_cb.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_cb.sys.ini</language>
 	</languages>
-	<params addpath="/plugins/akeebasubs/cb">
-		<param name="adduser" type="radio" default="1" label="PLG_AKEEBASUBS_CB_ADDUSER_TITLE" description="PLG_AKEEBASUBS_CB_ADDUSER_DESCRIPTION">
-		  <option value="0">No</option>
-		  <option value="1">Yes</option>
-		</param>
-		<param name="autoauthids" type="sql2" default="" label="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_TITLE" description="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_DESC" query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`" key_field="akeebasubs_level_id" value_field="title"/>
-		<param name="autodeauthids" type="sql2" default="" label="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_TITLE" description="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_DESC" query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`" key_field="akeebasubs_level_id" value_field="title"/>
-	</params>
 	
 	<config addfieldpath="/plugins/akeebasubs/cb/cb">
 		<fields name="params">
@@ -44,4 +35,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

@@ -1,4 +1,29 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.3 DEV RELEASE
+================================================================================
+! THIS RELEASE IS ONLY COMPATIBLE WITH JOOMLA! 2.5.1 AND LATER
++ "Combine" feature in Upgrade Rules (thank you @nonumber_nl)
++ Show Invoice ID in subscription backend form (thanks Sander!)
++ Add option to select Multi or Single Page Checkout for 2checkout (thanks Sander!)
++ #100 Language merge tags for the Off-Line payment plugin
++ #96 Subscription Level relations
++ Plugin to allow ccInvoices to access Akeeba Subscriptions' information for the user, subscription level and subscription
+# [MEDIUM] PayPal: recurring subscriptions were not working from the second renewal onwards
+# [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
+# [MEDIUM] 2Checkout plugin, vendor_order_id always empty (thanks Sander!)
+# [MEDIUM] eWay plugin, would throw error when trying to use it
+# [LOW] Rounding issue (¬±0.01) in Gross amount under some circumstances
+# [LOW] Invalid date in subscription or coupon would result in an error
+# [LOW] VIES registration status not passed along to custom field plugins
+# [LOW] Front-end modules could unintentionally set state variables used by the component in later requests
+# [LOW] 2Checkout plugin, payment state should be Completed when invoice_status is "approved" (thanks Sander!)
+# [LOW] Postfinance.ch, subscriptions were not getting published due to a mistake in their documentation (it's STATUS, not ACCEPTANCE, we have to check...)
+# [LOW] User Delete plugin did not work
+# [LOW] JCE plugin would not remove users from JCE groups on subscription expiration
+# [LOW] Image files over 15 characters long would not be accepted in subscription levels
+# [LOW] Notices thrown in userinfo frontend view
+# [LOW] PostFinance.ch plugin: the use of iconv broke the transaction validation if the user's name contains accented characters
+
 Akeeba Subscriptions 2.2.1
 ================================================================================
 + #93 NoChex payment plugin (experimental)

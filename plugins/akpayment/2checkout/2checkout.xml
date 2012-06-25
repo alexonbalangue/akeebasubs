@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
 	<name>Akeeba Subscriptions Payment - 2Checkout Standard Purchase Routine</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -18,56 +17,7 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_2checkout.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_2checkout.sys.ini</language>
 	</languages>
-	<params>
-		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_2CHECKOUT_TITLE_LABEL" description="PLG_AKPAYMENT_2CHECKOUT_TITLE_DESC"/>
-		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_2CHECKOUT_PPIMAGE_LABEL" description="PLG_AKPAYMENT_2CHECKOUT_PPIMAGE_DESC" />
-		<param type="spacer" />
-		<param name="sid" type="text" size="50" default=""
-			label="PLG_AKPAYMENT_2CHECKOUT_SID_LABEL"
-			description="PLG_AKPAYMENT_2CHECKOUT_SID_DESC"/>
-		<param name="secret" type="text" size="50" default=""
-			label="PLG_AKPAYMENT_2CHECKOUT_SECRET_LABEL"
-			description="PLG_AKPAYMENT_2CHECKOUT_SECRET_DESC"/>
-		<param name="demo" type="radio" default="0"
-			label="PLG_AKPAYMENT_2CHECKOUT_DEMO_LABEL"
-			description="PLG_AKPAYMENT_2CHECKOUT_DEMO_DESC">
-		  <option value="0">NO</option>
-		  <option value="1">YES</option>
-		</param>
-		<param type="spacer" />
-		<param name="lang" type="radio" default="en"
-			label="PLG_AKPAYMENT_2CHECKOUT_LANG_LABEL"
-			description="PLG_AKPAYMENT_2CHECKOUT_LANG_DESC">
-		  <option value="en">PLG_AKPAYMENT_2CHECKOUT_LANG_EN</option>
-		  <option value="zh">PLG_AKPAYMENT_2CHECKOUT_LANG_ZH</option>
-		  <option value="da">PLG_AKPAYMENT_2CHECKOUT_LANG_DA</option>
-		  <option value="nl">PLG_AKPAYMENT_2CHECKOUT_LANG_NL</option>
-		  <option value="fr">PLG_AKPAYMENT_2CHECKOUT_LANG_FR</option>
-		  <option value="gr">PLG_AKPAYMENT_2CHECKOUT_LANG_GR</option>
-		  <option value="el">PLG_AKPAYMENT_2CHECKOUT_LANG_EL</option>
-		  <option value="it">PLG_AKPAYMENT_2CHECKOUT_LANG_IT</option>
-		  <option value="jp">PLG_AKPAYMENT_2CHECKOUT_LANG_JP</option>
-		  <option value="no">PLG_AKPAYMENT_2CHECKOUT_LANG_NO</option>
-		  <option value="pt">PLG_AKPAYMENT_2CHECKOUT_LANG_PT</option>
-		  <option value="sl">PLG_AKPAYMENT_2CHECKOUT_LANG_SL</option>
-		  <option value="es_ib">PLG_AKPAYMENT_2CHECKOUT_LANG_ES_IB</option>
-		  <option value="es_la">PLG_AKPAYMENT_2CHECKOUT_LANG_ES_LA</option>
-		  <option value="sv">PLG_AKPAYMENT_2CHECKOUT_LANG_SV</option>
-		</param>
-		<param name="pay_method" type="radio" default="cc"
-			label="PLG_AKPAYMENT_2CHECKOUT_PAY_METHOD_LABEL"
-			description="PLG_AKPAYMENT_2CHECKOUT_PAY_METHOD_DESC">
-		  <option value="cc">PLG_AKPAYMENT_2CHECKOUT_PAY_METHOD_CC</option>
-		  <option value="al">PLG_AKPAYMENT_2CHECKOUT_PAY_METHOD_AL</option>
-		  <option value="ppi">PLG_AKPAYMENT_2CHECKOUT_PAY_METHOD_PPI</option>
-		</param>
-		<param name="skip_landing" type="radio" default="0"
-			label="PLG_AKPAYMENT_2CHECKOUT_SKIP_LANDING_LABEL"
-			description="PLG_AKPAYMENT_2CHECKOUT_SKIP_LANDING_DESC">
-		  <option value="0">NO</option>
-		  <option value="1">YES</option>
-		</param>
-	</params>
+
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -87,7 +37,7 @@
 				  <option value="1">JYES</option>
 				</field>
 				<field type="spacer" />
-				<field name="lang" type="radio" default="en"
+				<field name="lang" type="list" default="en"
 					label="PLG_AKPAYMENT_2CHECKOUT_LANG_LABEL"
 					description="PLG_AKPAYMENT_2CHECKOUT_LANG_DESC">
 				  <option value="en">PLG_AKPAYMENT_2CHECKOUT_LANG_EN</option>
@@ -119,7 +69,13 @@
 				  <option value="0">JNO</option>
 				  <option value="1">JYES</option>
 				</field>
+				<field name="checkout" type="radio" default="multi"
+					label="PLG_AKPAYMENT_2CHECKOUT_CHECKOUT_PROCESS_LABEL"
+					description="PLG_AKPAYMENT_2CHECKOUT_CHECKOUT_PROCESS_DESC">
+				  <option value="multi">PLG_AKPAYMENT_2CHECKOUT_CHECKOUT_PROCESS_MULTI</option>
+				  <option value="single">PLG_AKPAYMENT_2CHECKOUT_CHECKOUT_PROCESS_SINGLE</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

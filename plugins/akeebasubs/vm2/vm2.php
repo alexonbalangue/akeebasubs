@@ -17,11 +17,11 @@ class plgAkeebasubsVm2 extends JPlugin
 
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		// Load level to group mapping from plugin parameters		
@@ -115,23 +115,45 @@ class plgAkeebasubsVm2 extends JPlugin
 		
 		// Add to VM
 		if(!empty($addGroups)) {
-			$sql = 'DELETE FROM `#__virtuemart_vmuser_shoppergroups` WHERE `virtuemart_user_id` = ' . $db->Quote($user_id);
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__virtuemart_vmuser_shoppergroups'))
+				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id));
+			$db->setQuery($query);
 			$db->query();
 			
 			$group = array_pop($addGroups);
 
-			$sql = 'REPLACE INTO `#__virtuemart_vmuser_shoppergroups` (`virtuemart_user_id`,`virtuemart_shoppergroup_id`) VALUES ('.$db->Quote($user_id).', '.$db->Quote($group).')';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__virtuemart_vmuser_shoppergroups'))
+				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id))
+				->where($db->qn('virtuemart_shoppergroup_id').' = '.$db->q($group));
+			$db->setQuery($query);
+			$db->query();
+			
+			$query = $db->getQuery(true)
+				->insert($db->qn('#__virtuemart_vmuser_shoppergroups'))
+				->columns(array(
+					$db->qn('virtuemart_user_id'),
+					$db->qn('virtuemart_shoppergroup_id'),
+				))->values(
+					$db->q($user_id).', '.$db->q($group)
+				);
+			$db->setQuery($query);
 			$db->query();
 		}
 		
 		// Remove from VM
 		if(!empty($removeGroups)) {
+			$protoQuery = $db->getQuery(true)
+				->delete($db->qn('#__virtuemart_vmuser_shoppergroups'))
+				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id));
+			
 			$protoSQL = 'DELETE FROM `#__virtuemart_vmuser_shoppergroups` WHERE `virtuemart_user_id` = ' . $db->Quote($user_id) . ' AND `virtuemart_shoppergroup_id` = ';
+			
 			foreach($removeGroups as $group) {
-				$sql = $protoSQL . $db->Quote($group);
-				$db->setQuery($sql);
+				$query = clone $protoQuery;
+				$query->where($db->qn('virtuemart_shoppergroup_id').' = '.$db->q($group));
+				$db->setQuery($query);
 				$db->query();
 			}
 		}
@@ -185,8 +207,13 @@ class plgAkeebasubsVm2 extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `shopper_group_name` AS `title`, `virtuemart_shoppergroup_id` AS `id` FROM `#__virtuemart_shoppergroups` WHERE `virtuemart_vendor_id` = 1';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('shopper_group_name').' AS '.$db->qn('title'),
+					$db->qn('virtuemart_shoppergroup_id').' AS '.$db->qn('id'),
+				))->from($db->qn('#__virtuemart_shoppergroups'))
+				->where($db->qn('virtuemart_vendor_id').' = '.$db->q('1'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {

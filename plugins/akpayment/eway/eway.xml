@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
 	<name>Akeeba Subscriptions Payment - eWay Shared</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -18,32 +17,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_eway.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_eway.sys.ini</language>
 	</languages>
-	<params>
-		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_TITLE_LABEL" description="PLG_AKPAYMENT_EWAY_TITLE_DESC"/>
-		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_EWAY_PPIMAGE_DESC" />
-		<param type="spacer" />
-		<param name="site" type="radio" default="0" label="PLG_AKPAYMENT_EWAY_SITE_LABEL" description="PLG_AKPAYMENT_EWAY_SITE_DESC">
-			<option value="0">PLG_AKPAYMENT_EWAY_SITE_AUSTRALIA</option>
-			<option value="1">PLG_AKPAYMENT_EWAY_SITE_UK</option>
-			<option value="2">PLG_AKPAYMENT_EWAY_SITE_NZ</option>
-		</param>
-		<param type="spacer" />
-		<param name="customerid" type="text" size="50" default="87654321" label="PLG_AKPAYMENT_EWAY_CUSTOMERID_LABEL" description="PLG_AKPAYMENT_EWAY_CUSTOMERID_DESC"/>
-		<param name="username" type="text" size="50" default="TestAccount" label="PLG_AKPAYMENT_EWAY_USERNAME_LABEL" description="PLG_AKPAYMENT_EWAY_USERNAME_DESC"/>
-		<param name="companylogo" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_COMPANYLOGO_LABEL" description="PLG_AKPAYMENT_EWAY_COMPANYLOGO_DESC"/>
-		<param name="pagebanner" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_PAGEBANNER_LABEL" description="PLG_AKPAYMENT_EWAY_PAGEBANNER_DESC"/>
-		<param name="language" type="radio" default="EN" label="PLG_AKPAYMENT_EWAY_LANGUAGE_LABEL" description="PLG_AKPAYMENT_EWAY_LANGUAGE_DESC">
-			<option value="EN">PLG_AKPAYMENT_EWAY_LANGUAGE_EN</option>
-			<option value="ES">PLG_AKPAYMENT_EWAY_LANGUAGE_ES</option>
-			<option value="FR">PLG_AKPAYMENT_EWAY_LANGUAGE_FR</option>
-			<option value="DE">PLG_AKPAYMENT_EWAY_LANGUAGE_DE</option>
-			<option value="NL">PLG_AKPAYMENT_EWAY_LANGUAGE_NL</option>
-		</param>
-		<param name="companyname" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_COMPANYNAME_LABEL" description="PLG_AKPAYMENT_EWAY_COMPANYNAME_DESC"/>
-		<param name="pagetitle" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_PAGETITLE_LABEL" description="PLG_AKPAYMENT_EWAY_PAGETITLE_DESC"/>
-		<param name="pagedescription" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_PAGEDESCRIPTION_LABEL" description="PLG_AKPAYMENT_EWAY_PAGEDESCRIPTION_DESC"/>
-		<param name="pagefooter" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAY_PAGEFOOTER_LABEL" description="PLG_AKPAYMENT_EWAY_PAGEFOOTER_DESC"/>
-	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -74,4 +47,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akeebasubs" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
 	<name>Akeeba Subscriptions - Agree to Terms of Service</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -17,13 +16,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_agreetotos.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_agreetotos.sys.ini</language>
 	</languages>
-	<params>
-		<param name="tosurl" type="text" default="" label="PLG_AKEEBASUBS_AGREETOTOS_TOSURL_TITLE" description="PLG_AKEEBASUBS_AGREETOTOS_TOSURL_DESC" length="50" />
-		<param name="cachechoice" type="radio" default="1" label="PLG_AKEEBASUBS_AGREETOTOS_CACHECHOICE_TITLE" description="PLG_AKEEBASUBS_AGREETOTOS_CACHECHOICE_DESCRIPTION">
-		  <option value="0">No</option>
-		  <option value="1">Yes</option>
-		</param>
-	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -35,4 +27,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>

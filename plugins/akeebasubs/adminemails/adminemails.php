@@ -17,11 +17,11 @@ class plgAkeebasubsAdminemails extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		$emailsString = trim($this->params->getValue('emails', ''));
@@ -119,7 +119,8 @@ class plgAkeebasubsAdminemails extends JPlugin
 		$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, null, true);
 		$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
-		$uparams = is_object($user->params) ? $user->params : new JParameter($user->params);
+		jimport('joomla.registry.registry');
+		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
 		$userlang = $uparams->getValue('language','');
 		if(!empty($userlang)) {
 			$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, $userlang, true);
@@ -139,6 +140,13 @@ class plgAkeebasubsAdminemails extends JPlugin
 			
 		// Get the from/to dates
 		jimport('joomla.utilities.date');
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+		if(!preg_match($regex, $row->publish_up)) {
+			$row->publish_up = '2001-01-01';
+		}
+		if(!preg_match($regex, $row->publish_down)) {
+			$row->publish_down = '2037-01-01';
+		}
 		$jFrom = new JDate($row->publish_up);
 		$jTo = new JDate($row->publish_down);
 		
@@ -169,8 +177,8 @@ class plgAkeebasubsAdminemails extends JPlugin
 			'[LEVEL]'		=> $level->title,
 			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_AFFEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
 			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'[PUBLISH_UP]'	=> version_compare(JVERSION, '1.6', 'ge') ? $jFrom->format(JText::_('DATE_FORMAT_LC2')) : $jFrom->toFormat(JText::_('DATE_FORMAT_LC2')),
-			'[PUBLISH_DOWN]' => version_compare(JVERSION, '1.6', 'ge') ? $jTo->format(JText::_('DATE_FORMAT_LC2')) : $jTo->toFormat(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_DOWN]' => $jTo->format(JText::_('DATE_FORMAT_LC2')),
 			'[MYSUBSURL]'	=> $url
 		);
 		

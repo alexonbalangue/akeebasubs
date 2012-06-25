@@ -41,8 +41,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$contact_id = $this->getContactID($row->user_id);
 
 			// LEGACY CHECK -- Will be removed in a future release
-			$sql = 'SELECT * FROM `#__ccinvoices_invoices` WHERE `contact_id` = '.$contact_id;
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select('*')
+				->from($db->qn('#__ccinvoices_invoices'))
+				->where($db->qn('contact_id').' = '.$db->q($contact_id));
+			$db->setQuery($query);
 			$invoices = $db->loadObjectList();
 			if(count($invoices)) foreach($invoices as $invoice) {
 				// Try to understand which subscription ID corresponds to this invoice
@@ -66,14 +69,23 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			if($oldInvoices) return;
 
 			// Load the ccInvoices configuration
-			$sql = 'SELECT * FROM `#__ccinvoices_configuration` LIMIT 0,1';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select('*')
+				->from($db->qn('#__ccinvoices_configuration'));
+			$db->setQuery($query, 0, 1);
 			$ccConfig = $db->loadObject();
 
 			// Create new invoice
-			$db->setQuery('SELECT max(`number`) FROM `#__ccinvoices_invoices`');
+			$query = $db->getQuery(true)
+				->select('MAX('.$db->qn('number').')')
+				->from($db->qn('#__ccinvoices_invoices'));
+			$db->setQuery($query);
 			$max1 = $db->loadResult();
-			$db->setQuery('SELECT max(`custom_invoice_number`) FROM `#__ccinvoices_invoices`');
+			
+			$query = $db->getQuery(true)
+				->select('MAX('.$db->qn('custom_invoice_number').')')
+				->from($db->qn('#__ccinvoices_invoices'));
+			$db->setQuery($query);
 			$max2 = $db->loadResult();
 			$invoice_number = max($max1, $max2);
 			$invoice_number++;
@@ -206,8 +218,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 	{
 		$db = JFactory::getDBO();
 
-		$sql = 'SELECT `contact_id` FROM `#__ccinvoices_users` WHERE `user_id` = '.(int)$userid;
-		$db->setQuery($sql);
+		$query = $db->getQuery(true)
+			->select($db->qn('contact_id'))
+			->from($db->qn('#__ccinvoices_users'))
+			->where($db->qn('user_id').' = '.$db->q($userid));
+		$db->setQuery($query);
 		$id = $db->loadResult();
 
 		if(!$id) {
@@ -229,7 +244,10 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			->getFirstItem();
 
 		// get the next contact number
-		$db->setQuery('SELECT max(contact_number) FROM `#__ccinvoices_contacts`');
+		$query = $db->getQuery(true)
+				->select('MAX('.$db->qn('contact_number').')')
+				->from($db->qn('#__ccinvoices_contacts'));
+		$db->setQuery($query);
 		$contact_number = $db->loadResult();
 		if(!$contact_number) $contact_number = 0;
 		$contact_number++;
@@ -250,22 +268,44 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$country .
 			(empty($kuser->vatnumber) ? '' : "\nVAT ".$kuser->vatnumber);
 		$email = $juser->email;
+		
+		$query = $db->getQuery(true)
+			->insert($db->qb('#__ccinvoices_contacts'))
+			->columns(array(
+				$db->qn('name'),
+				$db->qn('contact'),
+				$db->qn('contact_number'),
+				$db->qn('address'),
+				$db->qn('email'),
+			))->values(
+				$db->q($name).', '.
+				$db->q($contact).', '.
+				$db->q($contact_number).', '.
+				$db->q($address).', '.
+				$db->q($email)
+			)
+		;
 
-		$sql = 'REPLACE INTO `#__ccinvoices_contacts` (`name`,`contact`,`contact_number`,`address`,`email`) VALUES ('.
-			$db->quote($name).', '.
-			$db->quote($contact).', '.
-			$db->quote($contact_number).', '.
-			$db->quote($address).', '.
-			$db->quote($email).
-		')';
-		$db->setQuery($sql);
+		$db->setQuery($query);
 		$db->query();
 
 		$id = $db->insertid();
 
-		$sql = 'REPLACE INTO `#__ccinvoices_users` (`user_id`,`contact_id`) VALUES ('.
-			$userid.', '.$id.')';
-		$db->setQuery($sql);
+		$query = $db->getQuery(true)
+			->delete($db->qn('#__ccinvoices_users'))
+			->where($db->qn('user_id').' = '.$db->q($userid));
+		$db->setQuery($query);
+		$db->query();
+		
+		$query = $db->getQuery(true)
+			->insert($db->qn('#__ccinvoices_users'))
+			->columns(array(
+				$db->qn('user_id'),
+				$db->qn('contact_id')
+			))->values(
+				$db->q($userid).', '.$db->q($id)
+			);
+		$db->setQuery($query);
 		$db->query();
 
 		return $id;
@@ -274,11 +314,16 @@ class plgAkeebasubsCcinvoices extends JPlugin
 	private function createInvoice($id)
 	{
 		$db = JFactory::getDBO();
-		$sql = "SELECT * FROM #__ccinvoices_configuration WHERE id = 1  LIMIT 1";
-		$db->setQuery($sql);
+		$query = $db->getQuery(true)
+			->select('*')
+			->from($db->qn('#__ccinvoices_configuration'))
+			->where($db->qn('id').' = '.$db->q('1'));
+		$db->setQuery($query, 0, 1);
 		$config = $db->loadObject();
+		
         require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/tcpdf.php');
         require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/config/lang/eng.php');
+		
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Akeeba Subscriptions');
@@ -308,17 +353,18 @@ class plgAkeebasubsCcinvoices extends JPlugin
         $model = new ccInvoicesModelInvoices;
 		$template=$model->gettemplatelayout($id);
         $v=$pdf->writeHTML($template, true, false, false, false, '');
-		$query	= "SELECT *  FROM #__ccinvoices_configuration where id = 1 LIMIT 1";
-		$db->setQuery($query);
-		$conf = $db->loadObject();
-		$query	= "SELECT *  FROM #__ccinvoices_invoices where id = ".$id." LIMIT 1";
-		$db->setQuery($query);
+		
+		$query = $db->getQuery(true)
+			->select('*')
+			->from($db->qn('#__ccinvoices_invoices'))
+			->where($db->qn('id').' = '.$db->q($id));
+		$db->setQuery($query, 0, 1);
 		$invRow = $db->loadObject();
-		if($conf->invoice_format != "")
+		
+		if($config->invoice_format != "")
 		{
-		$file_name = $model->getInvoiceNumberFormat($invRow->number).".pdf";
-		}else
-		{
+			$file_name = $model->getInvoiceNumberFormat($invRow->number).".pdf";
+		} else {
 			$file_name = $invRow->number.".pdf";
 		}
         $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/'.$file_name;

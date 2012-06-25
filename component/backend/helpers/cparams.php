@@ -16,7 +16,8 @@ class AkeebasubsHelperCparams
 			$component = JComponentHelper::getComponent('com_akeebasubs');
 			$params = $component->params;
 			if(!($params instanceof JRegistry)) {
-				$params = new JParameter($params);
+				jimport('joomla.registry.registry');
+				$params = new JRegistry($params);
 			}
 		}
 		

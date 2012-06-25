@@ -30,7 +30,7 @@ class AkeebasubsHelperFormat
 		
 		if(empty($levels)) {
 			$levelsList = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->getItemList();
+				->getItemList(true);
 			if(!empty($levelsList)) foreach($levelsList as $level) {
 				$levels[$level->akeebasubs_level_id] = $level->title;
 			}
@@ -41,5 +41,64 @@ class AkeebasubsHelperFormat
 		} else {
 			return '&mdash;&mdash;&mdash;';
 		}
+	}
+	
+	public static function formatLevelgroup($id)
+	{
+		static $levelgroups;
+		
+		if(empty($levelgroups)) {
+			$levelgroupsList = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
+				->getItemList(true);
+			if(!empty($levelgroupsList)) foreach($levelgroupsList as $levelgroup) {
+				$levelgroups[$levelgroup->akeebasubs_levelgroup_id] = $levelgroup->title;
+			} else {
+				$levelgroups = array();
+			}
+		}
+		
+		if(array_key_exists($id, $levelgroups)) {
+			return $levelgroups[$id];
+		} else {
+			return JText::_('COM_AKEEBASUBS_SELECT_LEVELGROUP');
+		}
+	}
+	
+	public static function formatInvTempLevels($ids)
+	{
+		if(empty($ids)) {
+			return JText::_('COM_AKEEBASUBS_COMMON_LEVEL_ALL');
+		}
+		if(empty($ids)) {
+			return JText::_('COM_AKEEBASUBS_COMMON_LEVEL_NONE');
+		}
+		
+		if(!is_array($ids)) {
+			$ids = explode(',', $ids);
+		}
+		
+		static $levels;
+		
+		if(empty($levels)) {
+			$levelsList = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->getItemList(true);
+			if(!empty($levelsList)) foreach($levelsList as $level) {
+				$levels[$level->akeebasubs_level_id] = $level->title;
+			}
+			
+			$levels[-1] =  JText::_('COM_AKEEBASUBS_COMMON_LEVEL_NONE');
+			$levels[0] =  JText::_('COM_AKEEBASUBS_COMMON_LEVEL_ALL');
+		}
+		
+		$ret = array();
+		foreach($ids as $id) {
+			if(array_key_exists($id, $levels)) {
+				$ret[] = $levels[$id];
+			} else {
+				$ret[] = '&mdash;';
+			}
+		}
+		
+		return implode(', ',$ret);
 	}
 }

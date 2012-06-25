@@ -23,6 +23,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'publish_down'	=> $this->getState('publish_down',null,'string'),
 			'user_id'		=> $this->getState('user_id',null,'int'),
 			'paystate'		=> $this->getState('paystate',null,'string'),
+			'processor'		=> $this->getState('processor',null,'string'),
 			'paykey'		=> $this->getState('paykey',null,'string'),
 			'since'			=> $this->getState('since',null,'string'),
 			'until'			=> $this->getState('until',null,'string'),
@@ -207,6 +208,13 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			}
 		}
 		
+		if($state->processor) {
+			$query->where(
+				$db->nameQuote('tbl').'.'.$db->nameQuote('processor').' = '.
+					$db->quote($state->processor)
+			);
+		}
+		
 		if($state->paykey) {
 			$query->where(
 				$db->nameQuote('tbl').'.'.$db->nameQuote('processor_key').' LIKE '.
@@ -274,6 +282,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if(empty($from)) {
 				$from = '';
 			} else {
+				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+				if(!preg_match($regex, $from)) {
+					$from = '2001-01-01';
+				}
 				$jFrom = new JDate($from);
 				$from = $jFrom->toUnix();
 				if($from == 0) {
@@ -287,6 +299,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if(empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00')) {
 				$to = '';
 			} else {
+				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+				if(!preg_match($regex, $to)) {
+					$to = '2037-01-01';
+				}
 				$jTo = new JDate($to);
 				$to = $jTo->toUnix();
 				if($to == 0) {
@@ -425,6 +441,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if(empty($since) || ($since == '0000-00-00') || ($since == '0000-00-00 00:00:00')) {
 			$since = '';
 		} else {
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $since)) {
+				$since = '2001-01-01';
+			}
 			$jFrom = new JDate($since);
 			$since = $jFrom->toUnix();
 			if($since == 0) {
@@ -444,6 +464,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if(empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00')) {
 			$until = '';
 		} else {
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $until)) {
+				$until = '2037-01-01';
+			}
 			$jFrom = new JDate($until);
 			$until = $jFrom->toUnix();
 			if($until == 0) {
@@ -463,6 +487,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if(empty($from)) {
 			$from = '';
 		} else {
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $from)) {
+				$from = '2001-01-01';
+			}
 			$jFrom = new JDate($from);
 			$from = $jFrom->toUnix();
 			if($from == 0) {
@@ -476,6 +504,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if(empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00')) {
 			$to = '';
 		} else {
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $to)) {
+				$to = '2037-01-01';
+			}
 			$jTo = new JDate($to);
 			$to = $jTo->toUnix();
 			if($to == 0) {
@@ -553,6 +585,13 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if($row->state != 'C') continue;
 			
 			if($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00')) {
+				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+				if(!preg_match($regex, $row->publish_down)) {
+					$row->publish_down = '2037-01-01';
+				}
+				if(!preg_match($regex, $row->publish_up)) {
+					$row->publish_up = '2001-01-01';
+				}
 				$jDown = new JDate($row->publish_down);
 				$jUp = new JDate($row->publish_up);
 				if( ($uNow >= $jDown->toUnix()) && $row->enabled ) {

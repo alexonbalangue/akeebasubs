@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 
-include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED')) return;
 
 class plgSystemAsexpirationcontrol extends JPlugin
@@ -19,10 +19,9 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
 		parent::__construct($subject, $config);
 		
@@ -74,20 +73,20 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	}
 	
 	/**
-	 * Fetches the com_akeebasubs component's parameters as a JParameter instance
+	 * Fetches the com_akeebasubs component's parameters as a JRegistry instance
 	 *
-	 * @return JParameter The component parameters
+	 * @return JRegistry The component parameters
 	 */
 	private function getComponentParameters()
 	{
-		jimport('joomla.html.parameter');
+		jimport('joomla.registry.registry');
 		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
 		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;
 		} elseif(!empty($component->params)) {
-			$cparams = new JParameter($component->params);
+			$cparams = new JRegistry($component->params);
 		} else {
-			$cparams = new JParameter('');
+			$cparams = new JRegistry('{}');
 		}
 		return $cparams;
 	}
@@ -119,17 +118,12 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$db = JFactory::getDBO();
 		$data = $params->toString();
 		
-		if(version_compare(JVERSION, '1.6.0', 'ge')) {
-			// Joomla! 1.6
-			$sql = 'UPDATE `#__extensions` SET `params` = '.$db->Quote($data).' WHERE '.
-				"`element` = 'com_akeebasubs' AND `type` = 'component'";
-		} else {
-			// Joomla! 1.5
-			$sql = 'UPDATE `#__components` SET `params` = '.$db->Quote($data).' WHERE '.
-				"`option` = 'com_akeebasubs' AND `parent` = 0 AND `menuid` = 0";
-		}
-		
-		$db->setQuery($sql);
+		$query = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params').' = '.$db->q($data))
+			->where($db->qn('element').' = '.$db->q('com_akeebasubs'))
+			->where($db->qn('type').' = '.$db->q('component'));
+		$db->setQuery($query);
 		$db->query();
 	}
 	

@@ -43,7 +43,7 @@ class AkeebasubsControllerUserinfos extends FOFController
 		// Make sure there's a logged in user, or ask him to log in
 		if(JFactory::getUser()->guest) {
 			$returnURL = base64_encode(JFactory::getURI()->toString());
-			$comUsers = version_compare(JVERSION, '1.6.0', 'ge') ? 'com_users' : 'com_user';
+			$comUsers = 'com_users';
 			$url = JRoute::_('index.php?option='.$comUsers.'&view=login&return='.$returnURL);
 			JFactory::getApplication()->redirect($url);
 		}

@@ -54,7 +54,8 @@ class AkeebasubsControllerSubscribes extends FOFController
 			$view = $this->getThisView();
 			$view->setLayout('form');
 			$view->assign('form', $this->getThisModel()->getForm());
-			$view->setModel($this->getThisModel(),true);
+			$model = $this->getThisModel();
+			$view->setModel($model,true);
 			$view->display();
 		} else {
 			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.$this->getThisModel()->slug));

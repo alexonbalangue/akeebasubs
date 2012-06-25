@@ -73,11 +73,7 @@ class AkeebasubsHelperMessage
 	{
 		// Get the default language
 		if(empty($lang)) {
-			if(version_compare(JVERSION, '1.6.0', 'ge')) {
-				$enableTranslation = JFactory::getApplication()->getLanguageFilter();
-			} else {
-				$enableTranslation = false;
-			}
+			$enableTranslation = JFactory::getApplication()->getLanguageFilter();
 			
 			if($enableTranslation) {
 				$lang = JFactory::getLanguage()->getTag();
@@ -88,8 +84,8 @@ class AkeebasubsHelperMessage
 				} else {
 					$params = $user->params;
 					if(!is_object($params)) {
-						jimport('joomla.html.parameter');
-						$params = new JParameter($params);
+						jimport('joomla.registry.registry');
+						$params = new JRegistry($params);
 					}
 					$lang = $params->getValue('language','');
 				}

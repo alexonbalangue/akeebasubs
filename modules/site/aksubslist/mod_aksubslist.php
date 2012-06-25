@@ -23,7 +23,7 @@
 defined('_JEXEC') or die('');
 
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
-include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED')) return;
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -43,6 +43,7 @@ $lang->load('com_akeebasubs',JPATH_SITE,null,true);
 <?php else: ?>
 <?php FOFDispatcher::getTmpInstance('com_akeebasubs', 'subscriptions', array(
 	'input'		=> array(
+		'savestate'	=> 0,
 		'option'	=> 'com_akeebasubs',
 		'view'		=> 'subscriptions',
 		'layout'	=> 'itemized',

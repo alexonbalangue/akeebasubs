@@ -17,11 +17,11 @@ class plgAkeebasubsJce extends JPlugin
 
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		// Load level to group mapping from plugin parameters		
@@ -115,7 +115,11 @@ class plgAkeebasubsJce extends JPlugin
 		
 		// For each of the add groups, load them and make sure the user is added to them
 		foreach($addGroups as $gid) {
-			$db->setQuery('SELECT * FROM `#__jce_groups` WHERE `id` = '.$db->Quote($gid));
+			$query = $db->getQuery(true)
+				->select('*')
+				->from($db->qn('#__jce_groups'))
+				->where($db->qn('id').' = '.$db->q($gid));
+			$db->setQuery($query);
 			$groupData = $db->loadObject();
 			if(empty($groupData)) continue;
 			$mustAdd = false;
@@ -129,15 +133,22 @@ class plgAkeebasubsJce extends JPlugin
 			if($mustAdd) {
 				$userList[] = $user_id;
 				$users = implode(',', $userList);
-				$sql = 'UPDATE `#__jce_groups` SET `users` = '.$db->Quote($users).' WHERE `id` = '.$db->Quote($gid);
-				$db->setQuery($sql);
+				$query = $db->getQuery(true)
+					->update($db->qn('#__jce_groups'))
+					->set($db->qn('users').' = '.$db->q($users))
+					->where($db->qn('id').' = '.$db->q($gid));
+				$db->setQuery($query);
 				$db->query();
 			}
 		}
 
 		// For each of the remove groups, load them and make sure the user is not in them
 		foreach($removeGroups as $gid) {
-			$db->setQuery('SELECT * FROM `#__docman_groups` WHERE `id` = '.$db->Quote($gid));
+			$query = $db->getQuery(true)
+				->select('*')
+				->from($db->qn('#__jce_groups'))
+				->where($db->qn('id').' = '.$db->q($gid));
+			$db->setQuery($query);
 			$groupData = $db->loadObject();
 			if(empty($groupData)) continue;
 			$mustRemove = false;
@@ -154,8 +165,11 @@ class plgAkeebasubsJce extends JPlugin
 					unset($userList[$key]);
 				}
 				$users = empty($userList) ? '' : implode(',', $userList);
-				$sql = 'UPDATE `#__jce_groups` SET `users` = '.$db->Quote($users).' WHERE `id` = '.$db->Quote($gid);
-				$db->setQuery($sql);
+				$query = $db->getQuery(true)
+					->update($db->qn('#__jce_groups'))
+					->set($db->qn('users').' = '.$db->q($users))
+					->where($db->qn('id').' = '.$db->q($gid));
+				$db->setQuery($query);
 				$db->query();
 			}
 		}
@@ -210,8 +224,12 @@ class plgAkeebasubsJce extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `name` AS `title`, `id` FROM `#__jce_groups`';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->nq('name').' AS '.$db->nq('title'),
+					$db->nq('id'),
+				))->from($db->nq('#__jce_groups'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {

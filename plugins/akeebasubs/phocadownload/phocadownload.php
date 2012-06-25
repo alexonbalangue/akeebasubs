@@ -17,11 +17,11 @@ class plgAkeebasubsPhocadownload extends JPlugin
 
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		// Load level to group mapping from plugin parameters		
@@ -115,7 +115,11 @@ class plgAkeebasubsPhocadownload extends JPlugin
 		
 		// For each of the add groups, load them and make sure the user is added to them
 		foreach($addGroups as $gid) {
-			$db->setQuery('SELECT * FROM `#__phocadownload_categories` WHERE `id` = '.$db->Quote($gid));
+			$query = $db->getQuery(true)
+				->select('*')
+				->from($db->qn('#__phocadownload_categories'))
+				->where($db->qn('id').' = '.$db->q($gid));
+			$db->setQuery($query);
 			$groupData = $db->loadObject();
 			if(empty($groupData)) continue;
 			$mustAdd = false;
@@ -123,21 +127,31 @@ class plgAkeebasubsPhocadownload extends JPlugin
 			if(empty($groupData->accessuserid)) {
 				$mustAdd = true;
 			} else {
-				$userList = explode(',',$groupData->accessuserid);
+				$temp = explode(',',$groupData->accessuserid);
+				foreach($temp as $t) {
+					$userList[] = $db->q($t);
+				}
 				$mustAdd = !in_array($user_id, $userList);
 			}
 			if($mustAdd) {
-				$userList[] = $user_id;
+				$userList[] = $db->q($user_id);
 				$users = implode(',', $userList);
-				$sql = 'UPDATE `#__phocadownload_categories` SET `accessuserid` = '.$db->Quote($users).' WHERE `id` = '.$db->Quote($gid);
-				$db->setQuery($sql);
+				$query = $db->getQuery(true)
+					->update($db->qn('#__phocadownload_categories'))
+					->set($db->qn('accessuserid').' = '.$db->q($users))
+					->where($db->qn('id').' = '.$db->q($gid));
+				$db->setQuery($query);
 				$db->query();
 			}
 		}
 
 		// For each of the remove groups, load them and make sure the user is not in them
 		foreach($removeGroups as $gid) {
-			$db->setQuery('SELECT * FROM `#__phocadownload_categories` WHERE `id` = '.$db->Quote($gid));
+			$query = $db->getQuery(true)
+				->select('*')
+				->from($db->qn('#__phocadownload_categories'))
+				->where($db->qn('id').' = '.$db->q($gid));
+			$db->setQuery($query);
 			$groupData = $db->loadObject();
 			if(empty($groupData)) continue;
 			$mustRemove = false;
@@ -145,17 +159,23 @@ class plgAkeebasubsPhocadownload extends JPlugin
 			if(empty($groupData->accessuserid)) {
 				$mustRemove = false;
 			} else {
-				$userList = explode(',',$groupData->accessuserid);
+				$temp = explode(',',$groupData->accessuserid);
+				foreach($temp as $t) {
+					$userList[] = $db->q($t);
+				}
 				$mustRemove = in_array($user_id, $userList);
 			}
 			if($mustRemove) {
-				$key = array_search($user_id, $userList);
+				$key = array_search($db->q($user_id), $userList);
 				if($key !== false) {
 					unset($userList[$key]);
 				}
 				$users = empty($userList) ? '' : implode(',', $userList);
-				$sql = 'UPDATE `#__phocadownload_categories` SET `accessuserid` = '.$db->Quote($users).' WHERE `id` = '.$db->Quote($gid);
-				$db->setQuery($sql);
+				$query = $db->getQuery(true)
+					->update($db->qn('#__phocadownload_categories'))
+					->set($db->qn('accessuserid').' = '.$db->q($users))
+					->where($db->qn('id').' = '.$db->q($gid));
+				$db->setQuery($query);
 				$db->query();
 			}
 		}
@@ -210,8 +230,12 @@ class plgAkeebasubsPhocadownload extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `title`, `id` FROM `#__phocadownload_categories`';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('title'),
+					$db->qn('id'),
+				))->from($db->qn('#__phocadownload_categories'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {

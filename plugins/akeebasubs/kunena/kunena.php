@@ -17,11 +17,11 @@ class plgAkeebasubsKunena extends JPlugin
 
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		// Load level to group mapping from plugin parameters		
@@ -107,17 +107,21 @@ class plgAkeebasubsKunena extends JPlugin
 		// Get DB connection
 		$db = JFactory::getDBO();
 		
-		// For each of the add groups, load them and make sure the user is added to them
 		foreach($addGroups as $gid) {
-			$sql = 'UPDATE `#__kunena_users` SET `rank` = '.$db->Quote($gid).' WHERE `userid` = '.$user_id;
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->update($db->qn('#__kunena_users'))
+				->set($db->qn('rank').' = '.$db->q($gid))
+				->where($db->qn('userid').' = '.$db->q($user_id));
+			$db->setQuery($query);
 			$db->query();
 		}
 
-		// For each of the remove groups, load them and make sure the user is not in them
 		foreach($removeGroups as $gid) {
-			$sql = 'UPDATE `#__kunena_users` SET `rank` = '.$db->Quote($gid).' WHERE `userid` = '.$user_id;
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->update($db->qn('#__kunena_users'))
+				->set($db->qn('rank').' = '.$db->q($gid))
+				->where($db->qn('userid').' = '.$db->q($user_id));
+			$db->setQuery($query);
 			$db->query();
 		}
 		
@@ -171,8 +175,13 @@ class plgAkeebasubsKunena extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `rank_title`, `rank_id` FROM `#__kunena_ranks`';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('rank_title'),
+					$db->qn('rank_id'),
+				))
+				->from($db->qn('#__kunena_ranks'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {

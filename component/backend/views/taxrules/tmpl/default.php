@@ -51,15 +51,11 @@ $this->loadHelper('format');
 				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_TAXRATE', 'taxrate', $this->lists->order_Dir, $this->lists->order); ?>
 			</th>
 			<th width="50px">
-				<?php echo JHTML::_('grid.sort', 'Ordering', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th width="100px">
-				<?php if(version_compare(JVERSION,'1.6.0','ge')):?>
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php else: ?>
-				<?php echo JHTML::_('grid.sort', 'PUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
-				<?php endif; ?>
 			</th>			
 		</tr>
 		<tr>
@@ -78,10 +74,10 @@ $this->loadHelper('format');
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.search.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td>
@@ -137,11 +133,7 @@ $this->loadHelper('format');
 				</a>
 			</td>
 			<td>
-				<?php if(version_compare(JVERSION, '1.6.0', 'ge')): ?>
 				<?php echo $taxrule->vies ? JText::_('jyes') : JText::_('jno')?>
-				<?php else: ?>
-				<?php echo $taxrule->vies ? JText::_('yes') : JText::_('no')?>
-				<?php endif; ?>
 			</td>
 			<td>
 				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">

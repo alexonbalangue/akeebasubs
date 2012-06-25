@@ -23,7 +23,7 @@
 defined('_JEXEC') or die('');
 
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
-include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/fof/include.php';
+include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED')) return;
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -36,6 +36,7 @@ $config = array(
 	'view'		=> 'levels',
 	'layout'	=> $layout,
 	'input'		=> array(
+		'savestate'	=> 0,
 		'limit'		=> 0,
 		'limitstart'=> 0,
 		'no_clear'	=> true,
@@ -48,4 +49,8 @@ $config = array(
 );
 if(!empty($ids)) $config['input']['id'] = $ids;
 
+$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('*', 78)."\n\n\n");fclose($fp);
+
 FOFDispatcher::getTmpInstance('com_akeebasubs', 'levels', $config)->dispatch();
+
+$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('~', 78)."\n\n\n");fclose($fp);

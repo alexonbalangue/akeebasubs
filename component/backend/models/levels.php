@@ -103,6 +103,11 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->nameQuote('akeebasubs_level_id').' IN ('.$ids.')');
 		}
 		
+		$levelgroup = $this->getState('levelgroup',null,'int');
+		if(is_numeric($levelgroup)) {
+			$query->where($db->nameQuote('akeebasubs_levelgroup_id').' = '.(int)$levelgroup);
+		}
+		
 		$order = $this->getState('filter_order', 'akeebasubs_level_id', 'cmd');
 		if(!in_array($order, array_keys($this->getTable()->getData()))) $order = 'akeebasubs_level_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');

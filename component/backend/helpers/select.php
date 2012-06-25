@@ -241,8 +241,8 @@ class AkeebasubsHelperSelect
 	{
 		$options = array();
 		$options[] = JHTML::_('select.option',null,'- '.JText::_('COM_AKEEBASUBS_COMMON_SELECTSTATE').' -');
-		$options[] = JHTML::_('select.option',0,JText::_((version_compare(JVERSION, '1.6.0', 'ge')?'J':'').'UNPUBLISHED'));
-		$options[] = JHTML::_('select.option',1,JText::_((version_compare(JVERSION, '1.6.0', 'ge')?'J':'').'PUBLISHED'));
+		$options[] = JHTML::_('select.option',0,JText::_('JUNPUBLISHED'));
+		$options[] = JHTML::_('select.option',1,JText::_('JPUBLISHED'));
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
@@ -267,7 +267,7 @@ class AkeebasubsHelperSelect
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
 		
 		$options = array();
-
+		
 		if(count($items)) foreach($items as $item)
 		{
 			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id, $item->title);
@@ -316,7 +316,27 @@ class AkeebasubsHelperSelect
 			->getList();
 		
 		$options   = array();
-		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		
+		$include_none = false;
+		$include_all = false;
+		if(array_key_exists('include_none', $attribs)) {
+			$include_none = $attribs['include_none'];
+			unset($attribs['include_none']);
+		}
+		if(array_key_exists('include_all', $attribs)) {
+			$include_all = $attribs['include_all'];
+			unset($attribs['include_all']);
+		}
+		
+		if($include_none) {
+			$options[] = JHTML::_('select.option','-1',JText::_('COM_AKEEBASUBS_COMMON_SELECTLEVEL_NONE'));
+		}
+		if($include_all) {
+			$options[] = JHTML::_('select.option','0',JText::_('COM_AKEEBASUBS_COMMON_SELECTLEVEL_ALL'));
+		}
+		if(!$include_none && !$include_all) {
+			$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		}
 		
 		foreach($list as $item) {
 			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id,$item->title);
@@ -461,5 +481,22 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','lastpercent',JText::_('COM_AKEEBASUBS_UPGRADE_TYPE_LASTPERCENT'));
 		
 		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
+	public static function levelgroups($selected = null, $id = 'akeebasubs_levelgroup_id', $attribs = array())
+	{
+		$model = FOFModel::getTmpInstance('Levelgroups','AkeebasubsModel');
+		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
+		
+		$options = array();
+
+		if(count($items)) foreach($items as $item)
+		{
+			$options[] = JHTML::_('select.option',$item->akeebasubs_levelgroup_id, $item->title);
+		}
+
+	   array_unshift($options, JHTML::_('select.option',0,JText::_('COM_AKEEBASUBS_SELECT_LEVELGROUP')));
+
+		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
 }

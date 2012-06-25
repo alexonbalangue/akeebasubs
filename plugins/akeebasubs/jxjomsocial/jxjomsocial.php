@@ -17,11 +17,11 @@ class plgAkeebasubsJxjomsocial extends JPlugin
 
 	public function __construct(& $subject, $config = array())
 	{
-		if(!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if(!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
+		if(!is_object($config['params'])) {
+			jimport('joomla.registry.registry');
+			$config['params'] = new JRegistry($config['params']);
 		}
+
 		parent::__construct($subject, $config);
 
 		// Load level to group mapping from plugin parameters		
@@ -115,27 +115,46 @@ class plgAkeebasubsJxjomsocial extends JPlugin
 		
 		// Add to JoomlaXI JomSocial User Profile Types
 		if(!empty($addGroups)) {
-			$sql = 'REPLACE INTO `#__xipt_users` (`userid`,`profiletype`) VALUES ';
-			
-			$values = array();
+			// 1. Delete existing assignments
+			$groupSet = array();
 			foreach($addGroups as $group) {
-				$values[] = '('.$db->Quote($user_id).', '.$db->Quote($group).')';
+				$groupSet[] = $db->q($group);
+			}
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__xipt_users'))
+				->where($db->qn('user_id').' = '.$user_id)
+				->where($db->qn('profiletype').' IN ('.implode(', ', $groupSet).')');
+			$db->setQuery($query);
+			$db->query();
+			
+			// 2. Add new assignments
+			$query = $db->getQuery(true)
+				->insert($db->qn('#__xipt_users'))
+				->columns(array(
+					$db->qn('user_id'),
+					$db->qn('profiletype'),
+				));
+			
+			foreach($addGroups as $group) {
+				$query->values($db->q($user_id).', '.$db->q($group));
 			}
 			
-			$sql .= implode(', ', $values);
-			
-			$db->setQuery($sql);
+			$db->setQuery($query);
 			$db->query();
 		}
 		
 		// Remove from Add to JoomlaXI JomSocial User Profile Types
 		if(!empty($removeGroups)) {
-			$protoSQL = 'DELETE FROM `#__xipt_users` WHERE `userid` = ' . $db->Quote($user_id) . ' AND `profiletype` = ';
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__xipt_users'))
+				->where($db->qn('user_id').' = '.$db->q($user_id));
+			$groupSet = array();
 			foreach($removeGroups as $group) {
-				$sql = $protoSQL . $db->Quote($group);
-				$db->setQuery($sql);
-				$db->query();
+				$groupSet[] = $db->q($group);
 			}
+			$query->where($db->qn('profiletype').' IN ('.implode(', ', $groupSet).')');
+			$db->setQuery($query);
+			$db->query();
 		}
 	}
 	
@@ -187,8 +206,12 @@ class plgAkeebasubsJxjomsocial extends JPlugin
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$sql = 'SELECT `name`, `id` AS `id` FROM #__xipt_profiletypes';
-			$db->setQuery($sql);
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('name').' AS '.$db->qn('title'),
+					$db->qn('id'),
+				))->from($db->qn('#__xipt_profiletypes'));
+			$db->setQuery($query);
 			$res = $db->loadObjectList();
 			
 			if(!empty($res)) {

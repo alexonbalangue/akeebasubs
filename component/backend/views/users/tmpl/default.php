@@ -60,10 +60,10 @@ $this->loadHelper('format');
 					value="<?php echo $this->escape($this->getModel()->getState('username',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.username.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td>
@@ -71,10 +71,10 @@ $this->loadHelper('format');
 					value="<?php echo $this->escape($this->getModel()->getState('name',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.name.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td>
@@ -82,10 +82,10 @@ $this->loadHelper('format');
 					value="<?php echo $this->escape($this->getModel()->getState('email',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.email.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td>
@@ -93,10 +93,10 @@ $this->loadHelper('format');
 					value="<?php echo $this->escape($this->getModel()->getState('businessname',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.businessname.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 			<td>
@@ -104,10 +104,10 @@ $this->loadHelper('format');
 					value="<?php echo $this->escape($this->getModel()->getState('vatnumber',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
 				<button onclick="this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_FILTER') : JText::_('Go'); ?>
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button onclick="document.adminForm.vatnumber.value='';this.form.submit();">
-					<?php echo version_compare(JVERSION, '1.6.0', 'ge') ? JText::_('JSEARCH_RESET') : JText::_('Reset'); ?>
+					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
 			</td>
 		</tr>

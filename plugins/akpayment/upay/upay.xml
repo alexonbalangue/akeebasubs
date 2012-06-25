@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="akpayment" method="upgrade">
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
 	<name>Akeeba Subscriptions Payment - uPay</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
@@ -18,18 +17,6 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_upay.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_upay.sys.ini</language>
 	</languages>
-	<params>
-		<param name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_UPAY_TITLE_LABEL" description="PLG_AKPAYMENT_UPAY_TITLE_DESC"/>
-		<param name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_UPAY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_UPAY_PPIMAGE_DESC" />
-		<param type="spacer" />
-		
-		<param name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_UPAY_MERCHANT_LABEL" description="PLG_AKPAYMENT_UPAY_MERCHANT_DESC"/>
-		<param type="spacer" />
-		<param name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_UPAY_SANDBOX_LABEL" description="PLG_AKPAYMENT_UPAY_SANDBOX_DESC">
-		  <option value="0">No</option>
-		  <option value="1">Yes</option>
-		</param>
-	</params>
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
@@ -46,4 +33,4 @@
 			</fieldset>
 		</fields>
 	</config>
-</install>
+</extension>
