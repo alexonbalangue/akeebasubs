@@ -1567,7 +1567,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
           <term>[USER:OCCUPATION]</term>
 
           <listitem>
-            <para>The business occupation specified</para>
+            <para>The business activity specified</para>
           </listitem>
         </varlistentry>
 
@@ -7826,7 +7826,7 @@ LEVEL3=Group 1</programlisting>
             <term>[USER:OCCUPATION]</term>
 
             <listitem>
-              <para>The business occupation specified</para>
+              <para>The business activity specified</para>
             </listitem>
           </varlistentry>
 
