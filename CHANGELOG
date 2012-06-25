@@ -21,6 +21,7 @@ Akeeba Subscriptions 2.3 DEV RELEASE
 # [LOW] User Delete plugin did not work
 # [LOW] JCE plugin would not remove users from JCE groups on subscription expiration
 # [LOW] Image files over 15 characters long would not be accepted in subscription levels
+# [LOW] Notices thrown in userinfo frontend view
 
 Akeeba Subscriptions 2.2.1
 ================================================================================
