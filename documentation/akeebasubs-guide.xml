@@ -8476,6 +8476,78 @@ LEVEL3=Group 1</programlisting>
         and get the code to the banner.</para>
       </section>
 
+      <section xml:id="integration-idevaffiliate">
+        <title>iDevAffiliate integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>System -
+        iDevAffiliate integration</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.3.0</para>
+        </note>
+
+        <para>This plugin allows you to integrate Akeeba Subscriptions with
+        the third party affiliate management software iDevAffiliate. Please
+        note that this plugin integrates with the version of iDevAffiliate you
+        get to install on your own site, not the iDevAffiliate service which
+        is hosted on their servers.</para>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>URL of iDevAffiliate</term>
+
+            <listitem>
+              <para>Specify the url of your installation of iDevAffiliate.
+              Please note that you need to specify the full url including the
+              protocol like <uri>https://www.yoursite.com/idevaffiliate</uri>
+              or <uri>http://www.yoursite.com/idevaffiliate</uri>.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Recurring Commissions</term>
+
+            <listitem>
+              <para>If this is set to Yes, then the affiliate gets not only
+              commission for the first sale, but for each additional purchase
+              (renewing subscription e.g.) that is done by the same
+              user.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>This is what a merchant needs to do in the back-end of
+        iDevAffiliate in order to get it working with the plugin</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Enable Generic Tracking Pixel. Go to <guimenu>Cart
+            Integration</guimenu>, <guimenuitem>Shopping Cart Integration
+            Wizard</guimenuitem> and select <guilabel>Enable Generic Tracking
+            Pixel</guilabel>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Pass Affiliate ID: Go to <guimenu>Setup &amp;
+            Tools</guimenu>, <guisubmenu>Advanced Developer
+            Tools</guisubmenu>, <guimenuitem>Custom Functions</guimenuitem>,
+            <guilabel>Pass Variables To Incoming Traffic Page</guilabel> and
+            set <guilabel>Affiliate ID</guilabel> to Enabled = yes. </para>
+          </listitem>
+
+          <listitem>
+            <para>Optional but helpful: Make sure that Email is setup
+            correctly in order to receive messages about commissions (after
+            sales): <guimenu>Setup &amp; Tools</guimenu>, <guimenuitem>Email
+            Settings</guimenuitem></para>
+          </listitem>
+        </orderedlist>
+      </section>
+
       <section xml:id="integration-ccinvoicetags">
         <title>ccInvoices tags</title>
 
@@ -9335,7 +9407,7 @@ LEVEL3=Group 1</programlisting>
         information to be stored in the #__akeebasubs_users table.</para>
       </section>
 
-      <section xml:id="dev-onAKUserSaveData">
+      <section xml:id="dev-onCancelMessage">
         <title>onCancelMessage</title>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
@@ -9360,11 +9432,11 @@ LEVEL3=Group 1</programlisting>
         displayed on the message page, right after the message.</para>
       </section>
 
-      <section xml:id="dev-onAKUserSaveData">
-        <title>onCancelMessage</title>
+      <section xml:id="dev-onOrderMessage">
+        <title>onOrderMessage</title>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
-        function onCancelMessage($row)</code></para>
+        function onOrderMessage($row)</code></para>
 
         <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
         when Akeeba Subscriptions is displaying the order confirmation
