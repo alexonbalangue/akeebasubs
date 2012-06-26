@@ -1352,7 +1352,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       this:</para>
 
       <programlisting>[IFLANG en-GB]This is the English description[/IFLANG]
-[IFLANF fr-FR]Ceci est la description française[/IFLANG]
+[IFLANG fr-FR]Ceci est la description française[/IFLANG]
 [IFLANG de-DE]Diese ist die deutsche Beschreibung[/IFLANG]
 [IFLANG el-GR]Αυτή είναι η Ελληνική περιγραφή[/IFLANG]</programlisting>
 
@@ -8536,7 +8536,7 @@ LEVEL3=Group 1</programlisting>
             Tools</guimenu>, <guisubmenu>Advanced Developer
             Tools</guisubmenu>, <guimenuitem>Custom Functions</guimenuitem>,
             <guilabel>Pass Variables To Incoming Traffic Page</guilabel> and
-            set <guilabel>Affiliate ID</guilabel> to Enabled = yes. </para>
+            set <guilabel>Affiliate ID</guilabel> to Enabled = yes.</para>
           </listitem>
 
           <listitem>
