@@ -569,7 +569,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 							->limit(0)
 							->limitstart(0)
 							->getTotal();
-						$valid = $hits <= $coupon->userhits;
+						$valid = $hits < $coupon->userhits;
 					}
 				} else {
 					$valid = false;

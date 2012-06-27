@@ -1,5 +1,5 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.3 DEV RELEASE
+Akeeba Subscriptions 2.3.0 DEV RELEASE
 ================================================================================
 ! THIS RELEASE IS ONLY COMPATIBLE WITH JOOMLA! 2.5.1 AND LATER
 + "Combine" feature in Upgrade Rules (thank you @nonumber_nl)
@@ -23,6 +23,7 @@ Akeeba Subscriptions 2.3 DEV RELEASE
 # [LOW] Image files over 15 characters long would not be accepted in subscription levels
 # [LOW] Notices thrown in userinfo frontend view
 # [LOW] PostFinance.ch plugin: the use of iconv broke the transaction validation if the user's name contains accented characters
+# [LOW] Coupons' user hits limit were off by one
 
 Akeeba Subscriptions 2.2.1
 ================================================================================
