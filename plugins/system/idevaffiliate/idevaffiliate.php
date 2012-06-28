@@ -52,12 +52,15 @@ class plgSystemIdevaffiliate extends JPlugin
 	public function onAKSignupUserSave($userData)
 	{
 		if($this->isTrackingRelevant()) {
-			$session = JFactory::getSession();
-			$affiliateId = $session->get('idevaffiliate.idev_id', 0, 'com_akeebasubs');
-			if($affiliateId) {
-				return array(
-					'params' => array('idev_affiliate' => $affiliateId)
-				);
+			$recurring = $this->params->get('recurring', 0);
+			if($recurring) {
+				$session = JFactory::getSession();
+				$affiliateId = $session->get('idevaffiliate.idev_id', 0, 'com_akeebasubs');
+				if($affiliateId) {
+					return array(
+						'params' => array('idev_affiliate' => $affiliateId)
+					);
+				}
 			}
 		}
 	}
