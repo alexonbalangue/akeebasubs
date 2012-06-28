@@ -109,6 +109,7 @@ class Com_AkeebasubsInstallerScript
 			'system' => array(
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
+				'idevaffiliate'			=> 0,
 				'postaffiliatepro'		=> 0,
 			)
 		)

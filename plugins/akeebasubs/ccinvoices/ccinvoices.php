@@ -41,6 +41,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$contact_id = $this->getContactID($row->user_id);
 
 			// LEGACY CHECK -- Will be removed in a future release
+			/*
 			$query = $db->getQuery(true)
 				->select('*')
 				->from($db->qn('#__ccinvoices_invoices'))
@@ -58,6 +59,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				// If there is an invoice for the current subscription, bail out
 				if($sub_id == $row->akeebasubs_subscription_id) return;
 			}
+			*/
 
 			// Check if there is an invoice for this subscription already
 			$query = FOFQueryAbstract::getNew($db)
@@ -269,22 +271,14 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			(empty($kuser->vatnumber) ? '' : "\nVAT ".$kuser->vatnumber);
 		$email = $juser->email;
 		
-		$query = $db->getQuery(true)
-			->insert($db->qb('#__ccinvoices_contacts'))
-			->columns(array(
-				$db->qn('name'),
-				$db->qn('contact'),
-				$db->qn('contact_number'),
-				$db->qn('address'),
-				$db->qn('email'),
-			))->values(
-				$db->q($name).', '.
-				$db->q($contact).', '.
-				$db->q($contact_number).', '.
-				$db->q($address).', '.
-				$db->q($email)
-			)
-		;
+		$contact = (object)array(
+			'name'				=> $name,
+			'contact'			=> $contact,
+			'contact_number'	=> $contact_number,
+			'address'			=> $address,
+			'email'				=> $email
+		);
+		$db->insertObject('#__ccinvoices_contacts', $contact);
 
 		$db->setQuery($query);
 		$db->query();
