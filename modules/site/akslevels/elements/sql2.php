@@ -23,7 +23,7 @@ class JFormFieldSQL2 extends JFormField
 
 	function getInput()
 	{
-		$db			= & JFactory::getDBO();
+		$db			= JFactory::getDBO();
 		$db->setQuery($this->element['query']);
 		$key = ($this->element['key_field'] ? $this->element['key_field'] : 'value');
 		$val = ($this->element['value_field'] ? $this->element['value_field'] : $this->name);
