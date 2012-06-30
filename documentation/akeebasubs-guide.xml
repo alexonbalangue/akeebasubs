@@ -7197,6 +7197,41 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
             Agent are unpublished.</para>
           </listitem>
         </orderedlist>
+
+        <bridgehead>How is this all supposed to work in real
+        life?</bridgehead>
+
+        <para>The flow is very simple: the user comes to your site and clicks
+        the Subscribe menu item. He fills in his information and clicks on
+        Subscribe Now. He's forwarded to the payment processor's page (e.g.
+        PayPal) and pays. When his payment is cleared, the payment processor
+        calls back your site. Akeeba Subscriptions handles the callback and
+        enables the subscription. Enabling the subscription triggers the
+        "Akeeba Subscriptions - Intellectual Property integration" plugin. The
+        plugin adds the user as an Agent to IP. At the same time, the email
+        plugin is triggered and send the user an email which tells him that
+        his subscription is now activated. Your user can begin filing
+        properties on your site. </para>
+
+        <para>When a subscription expires and has not been renewed, the
+        "Akeeba Subscriptions - Intellectual Property integration" plugin is
+        triggered again. This time it removes the user from Intellectual
+        Property. At the same time, the email plugin is triggered and send the
+        user an email which tells him that his subscription has now expired.
+        Your user can no longer file new or manage his existing properties on
+        your site. </para>
+
+        <para>The exact limits for the Intellectual Property agent are defined
+        by the plugin's setup parameters. In the setup parameters you actually
+        tell the plugin what are the limits imposed by each subscription
+        level. You can have, for example, two levels. LEVEL1 can tell the
+        plugin that the user can create up to 10 properties, LEVEL2 can tell
+        the plugin that the user can create up to 20 properties. If the user
+        subscribes only to LEVEL1 he will be able to create up to 10
+        properties. If the user subscribes only to LEVEL2 he will be able to
+        create up to 20 properties. If the user subscribes to both, he will be
+        able to create up to 20 properties (the largest value wins, the values
+        are not added). </para>
       </section>
 
       <section xml:id="integration-agora">
