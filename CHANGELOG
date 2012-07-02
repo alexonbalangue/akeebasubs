@@ -24,6 +24,7 @@ Akeeba Subscriptions 2.3.0 DEV RELEASE
 # [LOW] Notices thrown in userinfo frontend view
 # [LOW] PostFinance.ch plugin: the use of iconv broke the transaction validation if the user's name contains accented characters
 # [LOW] Coupons' user hits limit were off by one
+# [LOW] Sometimes you could not select Joomla! users in the Affiliates and Users view
 
 Akeeba Subscriptions 2.2.1
 ================================================================================
