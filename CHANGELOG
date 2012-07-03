@@ -26,6 +26,7 @@ Akeeba Subscriptions 2.3.0 DEV RELEASE
 # [LOW] PostFinance.ch plugin: the use of iconv broke the transaction validation if the user's name contains accented characters
 # [LOW] Coupons' user hits limit were off by one
 # [LOW] Sometimes you could not select Joomla! users in the Affiliates and Users view
+# [LOW] Enabling caching would make all instances of the "Akeeba Subscriptions - List subscription levels" module on a single page to show the same subscription levels
 
 Akeeba Subscriptions 2.2.1
 ================================================================================
