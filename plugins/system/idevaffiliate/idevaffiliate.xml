@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="system" method="upgrade">
+	<name>System - iDevAffiliate Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>June 2012</creationDate>
+	<version>1.0</version>
+	<description>PLG_SYSTEM_IDEVAFFILIATE_DESCRIPTION</description>
+	<files>
+		<filename plugin="idevaffiliate">idevaffiliate.php</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_system_idevaffiliate.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_system_idevaffiliate.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="url" type="text" size="37" default="" label="PLG_SYSTEM_IDEVAFFILIATE_URL_LABEL" description="PLG_SYSTEM_IDEVAFFILIATE_URL_DESC"/>
+				<field type="spacer" />
+				<field name="recurring" type="radio" default="0" label="PLG_SYSTEM_IDEVAFFILIATE_RECURRING_LABEL" description="PLG_SYSTEM_IDEVAFFILIATE_RECURRING_DESC">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

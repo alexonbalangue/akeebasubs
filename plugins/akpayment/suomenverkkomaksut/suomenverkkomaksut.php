@@ -192,12 +192,6 @@ class plgAkpaymentSuomenVerkkomaksut extends JPlugin
 		} else {
 			$newStatus = 'C';
 		}
-                
-		// Log the IPN data
-		$this->logIPN($data, $isValid);
-
-		// Fraud attempt? Do nothing more!
-		if(!$isValid) return false;
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(

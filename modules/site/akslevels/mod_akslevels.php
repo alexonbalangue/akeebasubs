@@ -44,13 +44,12 @@ $config = array(
 		'task'		=> 'browse',
 		'filter_order' => 'ordering',
 		'filter_order_Dir' => 'ASC',
-		'enabled'	=> 1
+		'enabled'	=> 1,
+		'caching'	=> false
 	)
 );
 if(!empty($ids)) $config['input']['id'] = $ids;
 
-$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('*', 78)."\n\n\n");fclose($fp);
-
+//$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('*', 78)."\n\n\n");fclose($fp);
 FOFDispatcher::getTmpInstance('com_akeebasubs', 'levels', $config)->dispatch();
-
-$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('~', 78)."\n\n\n");fclose($fp);
+//$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('~', 78)."\n\n\n");fclose($fp);

@@ -1352,7 +1352,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       this:</para>
 
       <programlisting>[IFLANG en-GB]This is the English description[/IFLANG]
-[IFLANF fr-FR]Ceci est la description française[/IFLANG]
+[IFLANG fr-FR]Ceci est la description française[/IFLANG]
 [IFLANG de-DE]Diese ist die deutsche Beschreibung[/IFLANG]
 [IFLANG el-GR]Αυτή είναι η Ελληνική περιγραφή[/IFLANG]</programlisting>
 
@@ -5678,9 +5678,51 @@ LEVEL2=11111:22222:33333</programlisting>
         change the wording, as the invoices generated from subscriptions are
         already paid for. You don't want to confuse your customers!</para>
 
-        <para>The plugin has no parameters. If you would like to customise its
-        behaviour, please use our forum to post a feature request, describing
-        what you have in mind.</para>
+        <para>The parameters to this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Subscription description</term>
+
+            <listitem>
+              <para>How the subscription will be rendered in the invoice's
+              description field. You may use the same merge tags you can use
+              in the order success message. Leave empty for a default
+              description.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Add Intra-EU Note</term>
+
+            <listitem>
+              <para>If set to Yes, transactions with EU-based businesses with
+              VIES-registered VAT numbers will have the "Intra-EU" not below
+              shown in the notes. This is required to comply with EU
+              legislation for intra-EU B2B transactions where the VAT
+              liability is transferred to the recipient.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Intra-EU Note</term>
+
+            <listitem>
+              <para>The note to be appended to intra-EU, VAT-free
+              transactions. The default text reads:</para>
+
+              <para>VAT liability is transferred to the recipient, pursuant EU
+              Directive nr 2006/112/EC and local tax laws implementing this
+              directive.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <tip>
+          <para>You may also be interested in our <link
+          linkend="integration-ccinvoicetags">ccInvoices tags plugin</link>
+          which complements this integration plugin.</para>
+        </tip>
       </section>
 
       <section xml:id="integration-communityacl">
@@ -7155,6 +7197,41 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
             Agent are unpublished.</para>
           </listitem>
         </orderedlist>
+
+        <bridgehead>How is this all supposed to work in real
+        life?</bridgehead>
+
+        <para>The flow is very simple: the user comes to your site and clicks
+        the Subscribe menu item. He fills in his information and clicks on
+        Subscribe Now. He's forwarded to the payment processor's page (e.g.
+        PayPal) and pays. When his payment is cleared, the payment processor
+        calls back your site. Akeeba Subscriptions handles the callback and
+        enables the subscription. Enabling the subscription triggers the
+        "Akeeba Subscriptions - Intellectual Property integration" plugin. The
+        plugin adds the user as an Agent to IP. At the same time, the email
+        plugin is triggered and send the user an email which tells him that
+        his subscription is now activated. Your user can begin filing
+        properties on your site. </para>
+
+        <para>When a subscription expires and has not been renewed, the
+        "Akeeba Subscriptions - Intellectual Property integration" plugin is
+        triggered again. This time it removes the user from Intellectual
+        Property. At the same time, the email plugin is triggered and send the
+        user an email which tells him that his subscription has now expired.
+        Your user can no longer file new or manage his existing properties on
+        your site. </para>
+
+        <para>The exact limits for the Intellectual Property agent are defined
+        by the plugin's setup parameters. In the setup parameters you actually
+        tell the plugin what are the limits imposed by each subscription
+        level. You can have, for example, two levels. LEVEL1 can tell the
+        plugin that the user can create up to 10 properties, LEVEL2 can tell
+        the plugin that the user can create up to 20 properties. If the user
+        subscribes only to LEVEL1 he will be able to create up to 10
+        properties. If the user subscribes only to LEVEL2 he will be able to
+        create up to 20 properties. If the user subscribes to both, he will be
+        able to create up to 20 properties (the largest value wins, the values
+        are not added). </para>
       </section>
 
       <section xml:id="integration-agora">
@@ -8433,6 +8510,519 @@ LEVEL3=Group 1</programlisting>
         <para>In the affiliate's web interface, go to Home, Banner &amp; Links
         and get the code to the banner.</para>
       </section>
+
+      <section xml:id="integration-idevaffiliate">
+        <title>iDevAffiliate integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>System -
+        iDevAffiliate integration</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.3.0</para>
+        </note>
+
+        <para>This plugin allows you to integrate Akeeba Subscriptions with
+        the third party affiliate management software iDevAffiliate. Please
+        note that this plugin integrates with the version of iDevAffiliate you
+        get to install on your own site, not the iDevAffiliate service which
+        is hosted on their servers.</para>
+
+        <para>The plugin has the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>URL of iDevAffiliate</term>
+
+            <listitem>
+              <para>Specify the url of your installation of iDevAffiliate.
+              Please note that you need to specify the full url including the
+              protocol like <uri>https://www.yoursite.com/idevaffiliate</uri>
+              or <uri>http://www.yoursite.com/idevaffiliate</uri>.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Recurring Commissions</term>
+
+            <listitem>
+              <para>If this is set to Yes, then the affiliate gets not only
+              commission for the first sale, but for each additional purchase
+              (renewing subscription e.g.) that is done by the same
+              user.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>This is what a merchant needs to do in the back-end of
+        iDevAffiliate in order to get it working with the plugin</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Enable Generic Tracking Pixel. Go to <guimenu>Cart
+            Integration</guimenu>, <guimenuitem>Shopping Cart Integration
+            Wizard</guimenuitem> and select <guilabel>Enable Generic Tracking
+            Pixel</guilabel>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Pass Affiliate ID: Go to <guimenu>Setup &amp;
+            Tools</guimenu>, <guisubmenu>Advanced Developer
+            Tools</guisubmenu>, <guimenuitem>Custom Functions</guimenuitem>,
+            <guilabel>Pass Variables To Incoming Traffic Page</guilabel> and
+            set <guilabel>Affiliate ID</guilabel> to Enabled = yes.</para>
+          </listitem>
+
+          <listitem>
+            <para>Optional but helpful: Make sure that Email is setup
+            correctly in order to receive messages about commissions (after
+            sales): <guimenu>Setup &amp; Tools</guimenu>, <guimenuitem>Email
+            Settings</guimenuitem></para>
+          </listitem>
+        </orderedlist>
+      </section>
+
+      <section xml:id="integration-ccinvoicetags">
+        <title>ccInvoices tags</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>ccInvoices -
+        Akeeba Subscriptions merge tags</guilabel></para>
+
+        <note>
+          <para>Available since Akeeba Subscriptions 2.3.0</para>
+        </note>
+
+        <para>This plugin allows you to access Akeeba Subscriptions
+        information from within your ccInvoices "Invoice PDF Template". Just
+        enable this plugin to make the following tags available:</para>
+
+        <para>Subscription record information:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>{asubs_id}</term>
+
+            <listitem>
+              <para>Subscription ID</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_user_id}</term>
+
+            <listitem>
+              <para>User's numeric ID</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_akeebasubs_level_id}</term>
+
+            <listitem>
+              <para>Subscription level's numeric ID</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_publish_up}</term>
+
+            <listitem>
+              <para>Subscription activation date (GMT)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_publish_down}</term>
+
+            <listitem>
+              <para>Subscription expiration date (GMT)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_notes}</term>
+
+            <listitem>
+              <para>Any notes you have entered for the subscription</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_enabled}</term>
+
+            <listitem>
+              <para>1 if the subscription is already active, 0
+              otherwise</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_processor}</term>
+
+            <listitem>
+              <para>Payment processor, e.g. paypal</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_processor_key}</term>
+
+            <listitem>
+              <para>Unique transaction key</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_state}</term>
+
+            <listitem>
+              <para>N for a new subscription, P for pending payment, C for
+              completed payment, X for cancelled. This should normally be set
+              to C at all times.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_net_amount}</term>
+
+            <listitem>
+              <para>Total payable amount before tax</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_tax_amount}</term>
+
+            <listitem>
+              <para>Tax amount</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_gross_amount}</term>
+
+            <listitem>
+              <para>Total payable amount including tax</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_tax_percent}</term>
+
+            <listitem>
+              <para>Tax percentage, or 0 if there is no tax</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_created_on}</term>
+
+            <listitem>
+              <para>When the subscription was created (GMT)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_akeebasubs_coupon_id}</term>
+
+            <listitem>
+              <para>Numeric ID of the coupon used, if applicable</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_akeebasubs_upgrade_id}</term>
+
+            <listitem>
+              <para>Numeric ID of the upgrade rule used, if applicable</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_akeebasubs_affiliate_id}</term>
+
+            <listitem>
+              <para>Numeric ID of the affiliate who referred this
+              subscription, if applicable</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_affiliate_comission}</term>
+
+            <listitem>
+              <para>Affiliate's commission, if applicable</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_akeebasubs_invoice_id}</term>
+
+            <listitem>
+              <para>The invoice's ID. May be different than the invoice
+              number!</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_prediscount_amount}</term>
+
+            <listitem>
+              <para>The price of the subscription before any discount (coupon
+              or upgrade rule) is applied</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_discount_amount}</term>
+
+            <listitem>
+              <para>The discount (coupon or upgrade rule) applied to the
+              subscription's price</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Subscription level information:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>{aslevel_id}</term>
+
+            <listitem>
+              <para>Subscription level's numeric ID</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{aslevel_title}</term>
+
+            <listitem>
+              <para>Subscription level's title</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{aslevel_slug}</term>
+
+            <listitem>
+              <para>Subscription level's alias (slug)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{aslevel_image}</term>
+
+            <listitem>
+              <para>The subscription level's image path, relative to the
+              images directory</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{aslevel_description}</term>
+
+            <listitem>
+              <para>The description of the subscription level</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{aslevel_duration}</term>
+
+            <listitem>
+              <para>Duration in days</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{aslevel_price}</term>
+
+            <listitem>
+              <para>The price of the subscription level</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>User information:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>{asuser_id}</term>
+
+            <listitem>
+              <para>User's numeric ID</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_name}</term>
+
+            <listitem>
+              <para>User's full (real) name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_username}</term>
+
+            <listitem>
+              <para>Username</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_email}</term>
+
+            <listitem>
+              <para>Email address</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_isbusiness}</term>
+
+            <listitem>
+              <para>1 if user registered as business</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_businessname}</term>
+
+            <listitem>
+              <para>Business name</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_occupation}</term>
+
+            <listitem>
+              <para>Business activity</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_vatnumber}</term>
+
+            <listitem>
+              <para>VAT number</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_viesregistered}</term>
+
+            <listitem>
+              <para>1 if the VAT number is VIES registered</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_taxauthority}</term>
+
+            <listitem>
+              <para>(not used)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_address1}</term>
+
+            <listitem>
+              <para>First part of the address field</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_address2}</term>
+
+            <listitem>
+              <para>Second part of the address field</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_city}</term>
+
+            <listitem>
+              <para>City</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_state}</term>
+
+            <listitem>
+              <para>State (Canada and US only)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_zip}</term>
+
+            <listitem>
+              <para>ZIP / Postal code</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_country}</term>
+
+            <listitem>
+              <para>Country</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asuser_custom_***}</term>
+
+            <listitem>
+              <para>Access custom fields. Substitute *** with your custom
+              field's name.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Miscellaneous information:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>{$}</term>
+
+            <listitem>
+              <para>Currency sign, e.g. € for Euros (as configured in Akeeba
+              Subscriptions, not ccInvoices)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{asubs_vat_notice}</term>
+
+            <listitem>
+              <para>If the transaction is for a business located in EU with a
+              VIES-registered VAT number, it returns the following
+              text:</para>
+
+              <para>VAT liability is transferred to the recipient, pursuant EU
+              Directive nr 2006/112/EC and local tax laws implementing this
+              directive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>{akeeba_dlid}</term>
+
+            <listitem>
+              <para>Returns the Download ID for the user. This Download ID is
+              for use with Akeeba Release System and Akeeba Live
+              Update.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
   </chapter>
 
@@ -8852,7 +9442,7 @@ LEVEL3=Group 1</programlisting>
         information to be stored in the #__akeebasubs_users table.</para>
       </section>
 
-      <section xml:id="dev-onAKUserSaveData">
+      <section xml:id="dev-onCancelMessage">
         <title>onCancelMessage</title>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
@@ -8877,11 +9467,11 @@ LEVEL3=Group 1</programlisting>
         displayed on the message page, right after the message.</para>
       </section>
 
-      <section xml:id="dev-onAKUserSaveData">
-        <title>onCancelMessage</title>
+      <section xml:id="dev-onOrderMessage">
+        <title>onOrderMessage</title>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
-        function onCancelMessage($row)</code></para>
+        function onOrderMessage($row)</code></para>
 
         <para><emphasis role="bold">Synopsis</emphasis>: This plugin is called
         when Akeeba Subscriptions is displaying the order confirmation

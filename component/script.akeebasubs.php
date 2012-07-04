@@ -77,6 +77,7 @@ class Com_AkeebasubsInstallerScript
 			'akpayment' => array(
 				'2checkout'				=> 0,
 				'allopass'				=> 0,
+				'cashu'					=> 0,
 				'ccavenue'				=> 0,
 				'deltapay'				=> 0,
 				'eselectplus'			=> 0,
@@ -109,6 +110,7 @@ class Com_AkeebasubsInstallerScript
 			'system' => array(
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
+				'idevaffiliate'			=> 0,
 				'postaffiliatepro'		=> 0,
 			)
 		)
@@ -752,7 +754,7 @@ class Com_AkeebasubsInstallerScript
 	{
 		jimport('joomla.installer.installer');
 		
-		$db = & JFactory::getDBO();
+		$db = JFactory::getDBO();
 		
 		$status = new JObject();
 		$status->modules = array();

@@ -151,6 +151,9 @@ window.addEvent("domready", function() {
 		el.addEvent("click", function(e) {
 			new Event(e).stop();
 			SqueezeBox.fromElement($('userselect'));
+			SqueezeBox.fromElement($('userselect'), {
+				parse: 'rel'
+			});
 		});
 	});
 });

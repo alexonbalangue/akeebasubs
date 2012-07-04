@@ -147,8 +147,8 @@ class plgContentAslink extends JPlugin
     private static function _findItem($slug)
     {
 
-        $component = & JComponentHelper::getComponent('com_akeebasubs');
-        $menus = & JApplication::getMenu('site', array());
+        $component = JComponentHelper::getComponent('com_akeebasubs');
+        $menus = JApplication::getMenu('site', array());
 		$items = $menus->getItems('component_id', $component->id);
         $itemId = null;
 
