@@ -12,7 +12,11 @@ class AkeebasubsControllerLevels extends FOFController
 	public function __construct($config = array()) {
 		parent::__construct($config);
 		
-		$this->cacheableTasks = array('browse');
+		if(FOFInput::getBool('caching', true, $this->input)) {
+			$this->cacheableTasks = array('browse');
+		} else {
+			$this->cacheableTasks = array();
+		}
 	}
 	
 	public function onBeforeBrowse() {

@@ -625,6 +625,14 @@ function addToValidationQueue(myfunction)
 				$('#isbusiness0').click();
 			}
 		}
+		
+		// Disable form submit when ENTER is hit in the coupon field
+		$('input#coupon').keypress(function(e){
+			if ( e.which == 13 ) {
+				validateForm();
+				return false;
+			}
+		});
 	});
 })(akeeba.jQuery);
 
