@@ -5564,6 +5564,147 @@ LEVEL2=11111:22222:33333</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="payment-payfast">
+        <title>CashU</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - CashU</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.3.0.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the payment processor CashU, a
+        popular payment processor for countries in the Middle East and North
+        Africa.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "CashU" or type in a custom name to
+              show to your customer's, e.g. "Pay by credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the identification number given to you by the
+              CashU system during the registration of your account</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Encryption Keyword</term>
+
+            <listitem>
+              <para>This is the encryption keyword (case sensitive) that you
+              choose in your CashU account. It will be used to secure each
+              payment. If it's missing or wrong all transactions will
+              fail.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Service/Product Name</term>
+
+            <listitem>
+              <para>If you are not using "Multiple Checkout" you can leave
+              this field empty. Otherwise it is the service/product name you
+              want your clients to see when you're using Multiple
+              checkout.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>Selects the language of the CashU interface that your
+              clients will see. You can select between English, Arabic and
+              Farsi.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Enhanced Encryption</term>
+
+            <listitem>
+              <para>If you are using the "Enhanced Encryption" (under the
+              "Encryption Type" tab) in your CashU account you must set this
+              option to Yes.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the sandbox (testing server). This is designed for integration
+              tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>Before you can use this Akeeba Subscriptions payment plugin you
+        will have to do some changes in your CashU account.</para>
+
+        <procedure>
+          <step>
+            <para>Log in to your CashU merchant's interface at
+            https://www.cashu.com/business/cashu_prepaid</para>
+          </step>
+
+          <step>
+            <para>In the interface go to "My Account" &gt; "Payment Security"
+            (see sreenshot_1).</para>
+          </step>
+
+          <step>
+            <para>In this new site you will have to change the
+            <guilabel>Notification URL</guilabel> to
+            <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=cashu</uri>
+            after replacing <uri>www.example.com</uri> with your site's domain
+            name.</para>
+          </step>
+
+          <step>
+            <para>On the same site, please change the <guilabel>Return
+            URL</guilabel> to the SEF URL of an article in your site. This is
+            where the customers will be redirected after paying.</para>
+
+            <important>
+              <para>It MUST be a SEF URL, e.g.
+              <uri>http://www.example.com/something/somearticle.html</uri>.
+              You cannot use a non-SEF URL which contains index.php. Such
+              non-SEF URLs will not work correctly with CashU.</para>
+            </important>
+          </step>
+        </procedure>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
@@ -7211,7 +7352,7 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
         plugin adds the user as an Agent to IP. At the same time, the email
         plugin is triggered and send the user an email which tells him that
         his subscription is now activated. Your user can begin filing
-        properties on your site. </para>
+        properties on your site.</para>
 
         <para>When a subscription expires and has not been renewed, the
         "Akeeba Subscriptions - Intellectual Property integration" plugin is
@@ -7219,7 +7360,7 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
         Property. At the same time, the email plugin is triggered and send the
         user an email which tells him that his subscription has now expired.
         Your user can no longer file new or manage his existing properties on
-        your site. </para>
+        your site.</para>
 
         <para>The exact limits for the Intellectual Property agent are defined
         by the plugin's setup parameters. In the setup parameters you actually
@@ -7231,7 +7372,7 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
         properties. If the user subscribes only to LEVEL2 he will be able to
         create up to 20 properties. If the user subscribes to both, he will be
         able to create up to 20 properties (the largest value wins, the values
-        are not added). </para>
+        are not added).</para>
       </section>
 
       <section xml:id="integration-agora">
