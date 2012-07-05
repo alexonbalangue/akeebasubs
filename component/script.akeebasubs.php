@@ -64,6 +64,7 @@ class Com_AkeebasubsInstallerScript
 				'jxjomsocial'			=> 0,
 				'k2'					=> 0,
 				'kunena'				=> 0,
+				'mailchimp'				=> 0,
 				'phocadownload'			=> 0,
 				'recaptcha'				=> 0,
 				'redshop'				=> 0,
