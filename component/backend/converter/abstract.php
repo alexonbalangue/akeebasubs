@@ -80,6 +80,8 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 		if(is_null($this->convertername)) {
 			$this->convertername = basename(__FILE__, '.php');
 		}
+		
+		$this->debug = JRequest::getBool('debug', false);
 	}
 	
 	/**
