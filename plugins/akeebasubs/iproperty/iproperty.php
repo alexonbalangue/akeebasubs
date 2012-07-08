@@ -85,8 +85,8 @@ class plgAkeebasubsIproperty extends JPlugin
 		$db = JFactory::getDbo();
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
-			->from($db->nameQuote('#__iproperty_agents'))
-			->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
+			->from($db->qn('#__iproperty_agents'))
+			->where($db->qn('user_id').' = '.$db->quote($user_id));
 		$db->setQuery($query);
 		$agents = $db->loadObjectList();
 		
@@ -181,9 +181,9 @@ class plgAkeebasubsIproperty extends JPlugin
 			
 			// a. Make sure all agent records are enabled
 			$query = FOFQueryAbstract::getNew($db)
-				->update($db->nameQuote('#__iproperty_agents'))
-				->set($db->nameQuote('state').' = '.$db->quote(1))
-				->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
+				->update($db->qn('#__iproperty_agents'))
+				->set($db->qn('state').' = '.$db->quote(1))
+				->where($db->qn('user_id').' = '.$db->quote($user_id));
 			$db->setQuery($query);
 			$db->query();
 			
@@ -200,8 +200,8 @@ class plgAkeebasubsIproperty extends JPlugin
 			
 			$query = FOFQueryAbstract::getNew($db)
 				->select('*')
-				->from($db->nameQuote('#__iproperty_companies'))
-				->where($db->nameQuote('id').' IN ('.implode(',', $company_ids).')');
+				->from($db->qn('#__iproperty_companies'))
+				->where($db->qn('id').' IN ('.implode(',', $company_ids).')');
 			$db->setQuery($query);
 			$companies = $db->loadObjectList();
 			
@@ -220,9 +220,9 @@ class plgAkeebasubsIproperty extends JPlugin
 		// Unpublish agent records
 		$db = JFactory::getDbo();
 		$query = FOFQueryAbstract::getNew($db)
-			->update($db->nameQuote('#__iproperty_agents'))
-			->set($db->nameQuote('state').' = '.$db->quote(0))
-			->where($db->nameQuote('user_id').' = '.$db->quote($user_id));
+			->update($db->qn('#__iproperty_agents'))
+			->set($db->qn('state').' = '.$db->quote(0))
+			->where($db->qn('user_id').' = '.$db->quote($user_id));
 		$db->setQuery($query);
 		$db->query();
 		
@@ -238,9 +238,9 @@ class plgAkeebasubsIproperty extends JPlugin
 		}
 
 		$query = FOFQueryAbstract::getNew($db)
-			->update($db->nameQuote('#__iproperty_companies'))
-			->set($db->nameQuote('state').' = '.$db->quote('0'))
-			->where($db->nameQuote('id').' IN ('.implode(',', $company_ids).')');
+			->update($db->qn('#__iproperty_companies'))
+			->set($db->qn('state').' = '.$db->quote('0'))
+			->where($db->qn('id').' IN ('.implode(',', $company_ids).')');
 		$db->setQuery($query);
 		$db->query();
 	}

@@ -31,11 +31,11 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 		
 		$subquery = FOFQueryAbstract::getNew($db)
 			->select(array(
-				'MAX('.$db->nameQuote('id').') AS '.$db->nameQuote('invid'),
-				$db->nameQuote('subscr_id')
-			))->from($db->nameQuote('#__acctexp_invoices'))
+				'MAX('.$db->qn('id').') AS '.$db->qn('invid'),
+				$db->qn('subscr_id')
+			))->from($db->qn('#__acctexp_invoices'))
 			->group(array(
-				$db->nameQuote('subscr_id')
+				$db->qn('subscr_id')
 			));
 		$subquery = (string)$subquery;
 		
@@ -46,13 +46,13 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 				'foreignkey'=>	'akeebasubs_level_id',
 				'query'		=> FOFQueryAbstract::getNew($db)
 					->select(array(
-						$db->nameQuote('id'),
-						$db->nameQuote('id').' AS '.$db->nameQuote('akeebasubs_level_id'),
-						$db->nameQuote('name').' AS '.$db->nameQuote('title'),
-						$db->nameQuote('desc').' AS '.$db->nameQuote('description'),
-						$db->nameQuote('params'),
-						$db->nameQuote('active').' AS '.$db->nameQuote('enabled'),
-						$db->nameQuote('ordering'),
+						$db->qn('id'),
+						$db->qn('id').' AS '.$db->qn('akeebasubs_level_id'),
+						$db->qn('name').' AS '.$db->qn('title'),
+						$db->qn('desc').' AS '.$db->qn('description'),
+						$db->qn('params'),
+						$db->qn('active').' AS '.$db->qn('enabled'),
+						$db->qn('ordering'),
 					))
 			),
 			array(
@@ -61,27 +61,27 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 				'foreignkey'=>	'akeebasubs_subscription_id',
 				'query'		=> FOFQueryAbstract::getNew($db)
 					->select(array(
-						$db->nameQuote('tbl').'.'.$db->nameQuote('id'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('id').' AS '.$db->nameQuote('akeebasubs_subscription_id'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('userid').' AS '.$db->nameQuote('user_id'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('plan').' AS '.$db->nameQuote('akeebasubs_level_id'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('signup_date').' AS '.$db->nameQuote('publish_up'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('expiration').' AS '.$db->nameQuote('publish_down'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('type').' AS '.$db->nameQuote('processor'),
-						$db->nameQuote('inv').'.'.$db->nameQuote('invoice_number').' AS '.$db->nameQuote('processor_key'),
-						$db->nameQuote('inv').'.'.$db->nameQuote('amount').' AS '.$db->nameQuote('net_amount'),
-						$db->quote('0').' AS '.$db->nameQuote('tax_amount'),
-						$db->nameQuote('inv').'.'.$db->nameQuote('amount').' AS '.$db->nameQuote('gross_amount'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('signup_date').' AS '.$db->nameQuote('created_on'),
-						$db->nameQuote('inv').'.'.$db->nameQuote('amount').' AS '.$db->nameQuote('prediscount_amount'),
-						$db->quote('0.0').' AS '.$db->nameQuote('discount_amount'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('status').' AS '.$db->nameQuote('aec_status'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('lifetime').' AS '.$db->nameQuote('aec_lifetime'),
-					))->join('INNER', "($subquery) AS ".$db->nameQuote('glue').' ON('.
-							$db->nameQuote('glue').'.'.$db->nameQuote('subscr_id').'='.$db->nameQuote('tbl').'.'.$db->nameQuote('id')
+						$db->qn('tbl').'.'.$db->qn('id'),
+						$db->qn('tbl').'.'.$db->qn('id').' AS '.$db->qn('akeebasubs_subscription_id'),
+						$db->qn('tbl').'.'.$db->qn('userid').' AS '.$db->qn('user_id'),
+						$db->qn('tbl').'.'.$db->qn('plan').' AS '.$db->qn('akeebasubs_level_id'),
+						$db->qn('tbl').'.'.$db->qn('signup_date').' AS '.$db->qn('publish_up'),
+						$db->qn('tbl').'.'.$db->qn('expiration').' AS '.$db->qn('publish_down'),
+						$db->qn('tbl').'.'.$db->qn('type').' AS '.$db->qn('processor'),
+						$db->qn('inv').'.'.$db->qn('invoice_number').' AS '.$db->qn('processor_key'),
+						$db->qn('inv').'.'.$db->qn('amount').' AS '.$db->qn('net_amount'),
+						$db->quote('0').' AS '.$db->qn('tax_amount'),
+						$db->qn('inv').'.'.$db->qn('amount').' AS '.$db->qn('gross_amount'),
+						$db->qn('tbl').'.'.$db->qn('signup_date').' AS '.$db->qn('created_on'),
+						$db->qn('inv').'.'.$db->qn('amount').' AS '.$db->qn('prediscount_amount'),
+						$db->quote('0.0').' AS '.$db->qn('discount_amount'),
+						$db->qn('tbl').'.'.$db->qn('status').' AS '.$db->qn('aec_status'),
+						$db->qn('tbl').'.'.$db->qn('lifetime').' AS '.$db->qn('aec_lifetime'),
+					))->join('INNER', "($subquery) AS ".$db->qn('glue').' ON('.
+							$db->qn('glue').'.'.$db->qn('subscr_id').'='.$db->qn('tbl').'.'.$db->qn('id')
 						.')')
-					->join('INNER', $db->nameQuote('#__acctexp_invoices').' AS '.$db->nameQuote('inv').' ON ('.
-							$db->nameQuote('inv').'.'.$db->nameQuote('id').' = '.$db->nameQuote('glue').'.'.$db->nameQuote('invid')
+					->join('INNER', $db->qn('#__acctexp_invoices').' AS '.$db->qn('inv').' ON ('.
+							$db->qn('inv').'.'.$db->qn('id').' = '.$db->qn('glue').'.'.$db->qn('invid')
 						.')')
 			)
 		);

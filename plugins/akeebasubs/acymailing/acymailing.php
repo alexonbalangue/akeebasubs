@@ -115,9 +115,9 @@ class plgAkeebasubsAcymailing extends JPlugin
 		
 		// Does this user have an AcyMailing user record?
 		$query = FOFQueryAbstract::getNew($db)
-			->select($db->nameQuote('subid'))
+			->select($db->qn('subid'))
 			->from('#__acymailing_subscriber')
-			->where($db->nameQuote('userid').' = '.$db->quote($user_id));
+			->where($db->qn('userid').' = '.$db->quote($user_id));
 		$db->setQuery($query);
 		$amsubid = $db->loadResult();
 		
@@ -143,34 +143,34 @@ class plgAkeebasubsAcymailing extends JPlugin
 			foreach($addGroups as $group) {
 				// Check for old record
 				$query = FOFQueryAbstract::getNew($db)
-					->select($db->nameQuote('subid'))
-					->from($db->nameQuote('#__acymailing_listsub'))
-					->where($db->nameQuote('listid') .'='. $db->quote($group))
-					->where($db->nameQuote('subid') .'='. $db->quote($amsubid));
+					->select($db->qn('subid'))
+					->from($db->qn('#__acymailing_listsub'))
+					->where($db->qn('listid') .'='. $db->quote($group))
+					->where($db->qn('subid') .'='. $db->quote($amsubid));
 				$db->setQuery($query);
 				$test = $db->loadResult();
 				
 				// Remove old record
 				if(!empty($test) && !is_null($test)) {
 					$query = FOFQueryAbstract::getNew($db)
-						->delete($db->nameQuote('#__acymailing_listsub'))
-						->where($db->nameQuote('listid') .'='. $db->quote($group))
-						->where($db->nameQuote('subid') .'='. $db->quote($amsubid));
+						->delete($db->qn('#__acymailing_listsub'))
+						->where($db->qn('listid') .'='. $db->quote($group))
+						->where($db->qn('subid') .'='. $db->quote($amsubid));
 					$db->setQuery($query);
 					$db->query();
 				}
 				
 				// Insert new record
 				$query = FOFQueryAbstract::getNew($db)
-					->insert($db->nameQuote('#__acymailing_listsub'))
+					->insert($db->qn('#__acymailing_listsub'))
 					->values(
 						$db->quote($group).', '.$db->quote($amsubid).', '.
 						$db->quote(time()).', '.$db->quote(null).', '.
 						$db->quote(1)
 					)->columns(array(
-						$db->nameQuote('listid'), $db->nameQuote('subid'),
-						$db->nameQuote('subdate'), $db->nameQuote('unsubdate'),
-						$db->nameQuote('status'),
+						$db->qn('listid'), $db->qn('subid'),
+						$db->qn('subdate'), $db->qn('unsubdate'),
+						$db->qn('status'),
 					));
 				;
 				$db->setQuery($query);
@@ -182,9 +182,9 @@ class plgAkeebasubsAcymailing extends JPlugin
 		if(!empty($removeGroups)) {
 			foreach($removeGroups as $group) {
 				$query = FOFQueryAbstract::getNew($db)
-					->delete($db->nameQuote('#__acymailing_listsub'))
-					->where($db->nameQuote('listid') .'='. $db->quote($group))
-					->where($db->nameQuote('subid') .'='. $db->quote($amsubid));
+					->delete($db->qn('#__acymailing_listsub'))
+					->where($db->qn('listid') .'='. $db->quote($group))
+					->where($db->qn('subid') .'='. $db->quote($amsubid));
 				$db->setQuery($query);
 				$db->query();
 			}
@@ -241,9 +241,9 @@ class plgAkeebasubsAcymailing extends JPlugin
 			$db = JFactory::getDBO();
 			$query = FOFQueryAbstract::getNew($db)
 				->select(array(
-					$db->nameQuote('listid').' AS '.$db->nameQuote('id'),
-					$db->nameQuote('name').' AS '.$db->nameQuote('title'),
-				))->from($db->nameQuote('#__acymailing_list'))
+					$db->qn('listid').' AS '.$db->qn('id'),
+					$db->qn('name').' AS '.$db->qn('title'),
+				))->from($db->qn('#__acymailing_list'))
 			;
 			$db->setQuery($query);
 			$res = $db->loadObjectList();

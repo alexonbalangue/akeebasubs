@@ -15,26 +15,26 @@ class AkeebasubsModelJusers extends FOFModel
 		
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
-			->from($db->nameQuote('#__users'));
+			->from($db->qn('#__users'));
 		
 		$username = $this->getState('username',null,'raw');
 		if(!empty($username)) {
-			$query->where($db->nameQuote('username').' = '.$db->quote($username));
+			$query->where($db->qn('username').' = '.$db->quote($username));
 		}
 		
 		$userid = $this->getState('user_id',null,'int');
 		if(!empty($userid)) {
-			$query->where($db->nameQuote('id').' = '.$db->quote($userid));
+			$query->where($db->qn('id').' = '.$db->quote($userid));
 		}
 		
 		$email = $this->getState('email',null,'raw');
 		if(!empty($email)) {
-			$query->where($db->nameQuote('email').' = '.$db->quote($email));
+			$query->where($db->qn('email').' = '.$db->quote($email));
 		}
 		
 		$block = $this->getState('block',null,'int');
 		if(!is_null($block)) {
-			$query->where($db->nameQuote('block').' = '.$db->quote($block));
+			$query->where($db->qn('block').' = '.$db->quote($block));
 		}
 		
 		$search = $this->getState('search',null);
@@ -43,9 +43,9 @@ class AkeebasubsModelJusers extends FOFModel
 			$search = '%'.$search.'%';
 			$query->where(
 				'('.
-				'('.$db->nameQuote('username').' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('name').' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('email').' LIKE '.$db->quote($search).') '.
+				'('.$db->qn('username').' LIKE '.$db->quote($search).') OR '.
+				'('.$db->qn('name').' LIKE '.$db->quote($search).') OR '.
+				'('.$db->qn('email').' LIKE '.$db->quote($search).') '.
 				')'
 			);
 		}

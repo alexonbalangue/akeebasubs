@@ -15,22 +15,22 @@ class AkeebasubsModelCoupons extends FOFModel
 		
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
-			->from($db->nameQuote('#__akeebasubs_coupons'));
+			->from($db->qn('#__akeebasubs_coupons'));
 		
 		$ordering = $this->getState('ordering',null,'int');
 		if(is_numeric($ordering)) {
-			$query->where($db->nameQuote('ordering').' = '.(int)$ordering);
+			$query->where($db->qn('ordering').' = '.(int)$ordering);
 		}
 		
 		$enabled = $this->getState('enabled','','cmd');
 		if($enabled !== '') $enabled = (int)$enabled;
 		if(is_numeric($enabled)) {
-			$query->where($db->nameQuote('enabled').' = '.(int)$enabled);
+			$query->where($db->qn('enabled').' = '.(int)$enabled);
 		}
 		
 		$coupon = $this->getState('coupon','','cmd');
 		if(!empty($coupon)) {
-			$query->where($db->nameQuote('coupon').' LIKE '.$db->quote($coupon));
+			$query->where($db->qn('coupon').' LIKE '.$db->quote($coupon));
 		}
 		
 		$search = $this->getState('search',null);
@@ -39,8 +39,8 @@ class AkeebasubsModelCoupons extends FOFModel
 			$search = '%'.$search.'%';
 			$query->where(
 				'('.
-				'('.$db->nameQuote('title').' LIKE '.$db->quote($search).') OR'.
-				'('.$db->nameQuote('coupon').' LIKE '.$db->quote($search).')'.
+				'('.$db->qn('title').' LIKE '.$db->quote($search).') OR'.
+				'('.$db->qn('coupon').' LIKE '.$db->quote($search).')'.
 				')'
 			);
 		}

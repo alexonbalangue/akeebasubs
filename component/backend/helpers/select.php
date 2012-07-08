@@ -210,18 +210,18 @@ class AkeebasubsHelperSelect
 		// Get the user groups from the database.
 		$query = FOFQueryAbstract::getNew($db);
 		$query->select(array(
-			$db->nameQuote('a').'.'.$db->nameQuote('id'),
-			$db->nameQuote('a').'.'.$db->nameQuote('title'),
-			$db->nameQuote('a').'.'.$db->nameQuote('parent_id').' AS '.$db->nameQuote('parent'),
-			'COUNT(DISTINCT '.$db->nameQuote('b').'.'.$db->nameQuote('id').') AS '.$db->nameQuote('level')
-		))->from($db->nameQuote('#__usergroups').' AS '.$db->nameQuote('a'))
-		->join('left', $db->nameQuote('#__usergroups').' AS '.$db->nameQuote('b').' ON '.
-			$db->nameQuote('a').'.'.$db->nameQuote('lft').' > '.$db->nameQuote('b').'.'.$db->nameQuote('lft').
-			' AND '.$db->nameQuote('a').'.'.$db->nameQuote('rgt').' < '.$db->nameQuote('b').'.'.$db->nameQuote('rgt')
+			$db->qn('a').'.'.$db->qn('id'),
+			$db->qn('a').'.'.$db->qn('title'),
+			$db->qn('a').'.'.$db->qn('parent_id').' AS '.$db->qn('parent'),
+			'COUNT(DISTINCT '.$db->qn('b').'.'.$db->qn('id').') AS '.$db->qn('level')
+		))->from($db->qn('#__usergroups').' AS '.$db->qn('a'))
+		->join('left', $db->qn('#__usergroups').' AS '.$db->qn('b').' ON '.
+			$db->qn('a').'.'.$db->qn('lft').' > '.$db->qn('b').'.'.$db->qn('lft').
+			' AND '.$db->qn('a').'.'.$db->qn('rgt').' < '.$db->qn('b').'.'.$db->qn('rgt')
 		)->group(array(
-			$db->nameQuote('a').'.'.$db->nameQuote('id')
+			$db->qn('a').'.'.$db->qn('id')
 		))->order(array(
-			$db->nameQuote('a').'.'.$db->nameQuote('lft').' ASC'
+			$db->qn('a').'.'.$db->qn('lft').' ASC'
 		))
 		;
 		$db->setQuery($query);

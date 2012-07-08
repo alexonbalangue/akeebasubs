@@ -156,7 +156,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 						// Filter only valid fields
 						if(!in_array($column, $validColumns)) continue;
 						// Add valid fields
-						$columns[] = $db->nameQuote($column);
+						$columns[] = $db->qn($column);
 					}
 					$query->columns($columns);
 				}
@@ -227,7 +227,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 		{
 			$name = $table['name'];
 			$query = clone $table['query'];
-			$query->from($db->nameQuote($table['foreign']).' AS '.$db->nameQuote('tbl'));
+			$query->from($db->qn($table['foreign']).' AS '.$db->qn('tbl'));
 
 			if($offset === false)
 			{
@@ -274,7 +274,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 					$name = $table['name'];
 					$query = clone $table['query'];
 					
-					$query->from($db->nameQuote($table['foreign']).' AS '.$db->nameQuote('tbl'));
+					$query->from($db->qn($table['foreign']).' AS '.$db->qn('tbl'));
 					$db->setQuery($query, $offset, $limit);
 
 					if($this->data[$name] == array() || is_numeric($this->data[$name])) {
@@ -307,7 +307,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 		
 		$db = JFactory::getDbo();
 
-		$sql = 'TRUNCATE TABLE '.$db->nameQuote($name);
+		$sql = 'TRUNCATE TABLE '.$db->qn($name);
 
 		//Execute the query
 		$db->setQuery($sql);

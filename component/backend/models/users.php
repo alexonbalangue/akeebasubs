@@ -42,10 +42,10 @@ class AkeebasubsModelUsers extends FOFModel
 		
 		$query = FOFQueryAbstract::getNew($db)
 			->select('COUNT(*)')
-			->from($db->nameQuote('#__akeebasubs_users').' AS '.$db->nameQuote('tbl'))
-			->join('INNER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON '.
-				$db->nameQuote('u').'.'.$db->nameQuote('id').' = '.
-				$db->nameQuote('tbl').'.'.$db->nameQuote('user_id')
+			->from($db->qn('#__akeebasubs_users').' AS '.$db->qn('tbl'))
+			->join('INNER', $db->qn('#__users').' AS '.$db->qn('u').' ON '.
+				$db->qn('u').'.'.$db->qn('id').' = '.
+				$db->qn('tbl').'.'.$db->qn('user_id')
 			);
 
 		$this->_buildQueryWhere($query);
@@ -59,10 +59,10 @@ class AkeebasubsModelUsers extends FOFModel
 		$state = $this->getFilterValues();
 		
 		$query->select(array(
-			$db->nameQuote('tbl').'.*',
-			$db->nameQuote('u').'.'.$db->nameQuote('name'),
-			$db->nameQuote('u').'.'.$db->nameQuote('username'),
-			$db->nameQuote('u').'.'.$db->nameQuote('email'),
+			$db->qn('tbl').'.*',
+			$db->qn('u').'.'.$db->qn('name'),
+			$db->qn('u').'.'.$db->qn('username'),
+			$db->qn('u').'.'.$db->qn('email'),
 		));
 		
 	}
@@ -73,77 +73,77 @@ class AkeebasubsModelUsers extends FOFModel
 		$state = $this->getFilterValues();
 		
 		if(is_numeric($state->ordering)) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('ordering').
+			$query->where($db->qn('tbl').'.'.$db->qn('ordering').
 				'='.$state->ordering);
 		}
 		
 		if(is_numeric($state->enabled)) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('enabled').
+			$query->where($db->qn('tbl').'.'.$db->qn('enabled').
 				'='.$state->enabled);
 		}
 		
 		if(is_numeric($state->user_id) && ($state->user_id > 0)) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('user_id').
+			$query->where($db->qn('tbl').'.'.$db->qn('user_id').
 				'='.$state->user_id);
 		}
 		
 		if($state->username) {
-			$query->where($db->nameQuote('u').'.'.$db->nameQuote('username').
+			$query->where($db->qn('u').'.'.$db->qn('username').
 				' LIKE '.$db->quote('%'.$state->username.'%'));
 		}
 		
 		if($state->name) {
-			$query->where($db->nameQuote('u').'.'.$db->nameQuote('name').
+			$query->where($db->qn('u').'.'.$db->qn('name').
 				' LIKE '.$db->quote('%'.$state->name.'%'));
 		}
 		
 		if($state->email) {
-			$query->where($db->nameQuote('u').'.'.$db->nameQuote('email').
+			$query->where($db->qn('u').'.'.$db->qn('email').
 				' LIKE '.$db->quote('%'.$state->email.'%'));
 		}
 		
 		if($state->businessname) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('businessname').
+			$query->where($db->qn('tbl').'.'.$db->qn('businessname').
 				' LIKE '.$db->quote('%'.$state->businessname.'%'));
 		}
 		
 		if($state->occupation) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('occupation').
+			$query->where($db->qn('tbl').'.'.$db->qn('occupation').
 				' LIKE '.$db->quote('%'.$state->occupation.'%'));
 		}
 		
 		if($state->vatnumber) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('vatnumber').
+			$query->where($db->qn('tbl').'.'.$db->qn('vatnumber').
 				' LIKE '.$db->quote('%'.$state->vatnumber.'%'));
 		}
 		
 		if($state->address1) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('address1').
+			$query->where($db->qn('tbl').'.'.$db->qn('address1').
 				' LIKE '.$db->quote('%'.$state->address1.'%'));
 		}
 		
 		if($state->address2) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('address2').
+			$query->where($db->qn('tbl').'.'.$db->qn('address2').
 				' LIKE '.$db->quote('%'.$state->address2.'%'));
 		}
 		
 		if($state->city) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('city').
+			$query->where($db->qn('tbl').'.'.$db->qn('city').
 				' LIKE '.$db->quote('%'.$state->city.'%'));
 		}
 		
 		if($state->state) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('state').
+			$query->where($db->qn('tbl').'.'.$db->qn('state').
 				' LIKE '.$db->quote('%'.$state->state.'%'));
 		}
 		
 		if($state->zip) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('zip').
+			$query->where($db->qn('tbl').'.'.$db->qn('zip').
 				' LIKE '.$db->quote('%'.$state->zip.'%'));
 		}
 		
 		if($state->country) {
-			$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('country').
+			$query->where($db->qn('tbl').'.'.$db->qn('country').
 				' = '.$db->quote($state->country));
 		}
 		
@@ -151,21 +151,21 @@ class AkeebasubsModelUsers extends FOFModel
 			$search = '%'.$state->search.'%';
 			$query->where(
 				'('.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('businessname').
+				'('.$db->qn('tbl').'.'.$db->qn('businessname').
 				' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('occupation').
+				'('.$db->qn('tbl').'.'.$db->qn('occupation').
 				' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('vatnumber').
+				'('.$db->qn('tbl').'.'.$db->qn('vatnumber').
 				' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('address1').
+				'('.$db->qn('tbl').'.'.$db->qn('address1').
 				' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('address2').
+				'('.$db->qn('tbl').'.'.$db->qn('address2').
 				' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('city').
+				'('.$db->qn('tbl').'.'.$db->qn('city').
 				' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('state').
+				'('.$db->qn('tbl').'.'.$db->qn('state').
 				' LIKE '.$db->quote($search).') OR '.
-				'('.$db->nameQuote('tbl').'.'.$db->nameQuote('zip').
+				'('.$db->qn('tbl').'.'.$db->qn('zip').
 				' LIKE '.$db->quote($search).')'
 				.')'
 			);
@@ -175,10 +175,10 @@ class AkeebasubsModelUsers extends FOFModel
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
 		$query = FOFQueryAbstract::getNew($db)
-				->from($db->nameQuote('#__akeebasubs_users').' AS '.$db->nameQuote('tbl'))
-				->join('INNER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON '.
-					$db->nameQuote('u').'.'.$db->nameQuote('id').' = '.
-					$db->nameQuote('tbl').'.'.$db->nameQuote('user_id')
+				->from($db->qn('#__akeebasubs_users').' AS '.$db->qn('tbl'))
+				->join('INNER', $db->qn('#__users').' AS '.$db->qn('u').' ON '.
+					$db->qn('u').'.'.$db->qn('id').' = '.
+					$db->qn('tbl').'.'.$db->qn('user_id')
 				);
 		
 		$this->_buildQueryColumns($query);
