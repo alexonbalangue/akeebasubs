@@ -86,7 +86,7 @@ class plgAkeebasubsIproperty extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
 			->from($db->qn('#__iproperty_agents'))
-			->where($db->qn('user_id').' = '.$db->quote($user_id));
+			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($query);
 		$agents = $db->loadObjectList();
 		
@@ -182,8 +182,8 @@ class plgAkeebasubsIproperty extends JPlugin
 			// a. Make sure all agent records are enabled
 			$query = FOFQueryAbstract::getNew($db)
 				->update($db->qn('#__iproperty_agents'))
-				->set($db->qn('state').' = '.$db->quote(1))
-				->where($db->qn('user_id').' = '.$db->quote($user_id));
+				->set($db->qn('state').' = '.$db->q(1))
+				->where($db->qn('user_id').' = '.$db->q($user_id));
 			$db->setQuery($query);
 			$db->query();
 			
@@ -195,7 +195,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			$company_ids_raw = array_unique($company_ids_raw);
 			$company_ids = array();
 			foreach($company_ids_raw as $cid) {
-				$company_ids[] = $db->quote($cid);
+				$company_ids[] = $db->q($cid);
 			}
 			
 			$query = FOFQueryAbstract::getNew($db)
@@ -221,8 +221,8 @@ class plgAkeebasubsIproperty extends JPlugin
 		$db = JFactory::getDbo();
 		$query = FOFQueryAbstract::getNew($db)
 			->update($db->qn('#__iproperty_agents'))
-			->set($db->qn('state').' = '.$db->quote(0))
-			->where($db->qn('user_id').' = '.$db->quote($user_id));
+			->set($db->qn('state').' = '.$db->q(0))
+			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($query);
 		$db->query();
 		
@@ -234,12 +234,12 @@ class plgAkeebasubsIproperty extends JPlugin
 		$company_ids_raw = array_unique($company_ids_raw);
 		$company_ids = array();
 		foreach($company_ids_raw as $cid) {
-			$company_ids[] = $db->quote($cid);
+			$company_ids[] = $db->q($cid);
 		}
 
 		$query = FOFQueryAbstract::getNew($db)
 			->update($db->qn('#__iproperty_companies'))
-			->set($db->qn('state').' = '.$db->quote('0'))
+			->set($db->qn('state').' = '.$db->q('0'))
 			->where($db->qn('id').' IN ('.implode(',', $company_ids).')');
 		$db->setQuery($query);
 		$db->query();

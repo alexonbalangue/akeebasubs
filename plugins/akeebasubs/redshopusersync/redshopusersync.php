@@ -34,8 +34,8 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
 			->from($db->qn('#__redshop_users_info'))
-			->where($db->qn('user_id') .'='. $db->quote($user_id))
-			->where($db->qn('address_type') .' = '. $db->quote('BT'))
+			->where($db->qn('user_id') .'='. $db->q($user_id))
+			->where($db->qn('address_type') .' = '. $db->q('BT'))
 		;
 		$db->setQuery($query);
 		$dummy = $db->loadObject();
@@ -58,7 +58,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select('state_2_code')
 			->from($db->qn('#__redshop_state'))
-			->where($db->qn('state_id').' = '.$db->quote($dummy->state_code))
+			->where($db->qn('state_id').' = '.$db->q($dummy->state_code))
 			;
 		$db->setQuery($query);
 		$state = $db->loadResult();
@@ -67,7 +67,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select('country_2_code')
 			->from($db->qn('#__redshop_country'))
-			->where($db->qn('country_id').' = '.$db->quote($dummy->country_code));
+			->where($db->qn('country_id').' = '.$db->q($dummy->country_code));
 		$db->setQuery($query);
 		$country = $db->loadResult();
 		
@@ -107,8 +107,8 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
 			->from($db->qn('#__redshop_users_info'))
-			->where($db->qn('user_id') .'='. $db->quote($userData->user_id))
-			->where($db->qn('address_type') .'='. $db->quote('BT'))
+			->where($db->qn('user_id') .'='. $db->q($userData->user_id))
+			->where($db->qn('address_type') .'='. $db->q('BT'))
 		;
 		$db->setQuery($query);
 		$dummy = $db->loadObject();
@@ -142,7 +142,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select('country_id')
 			->from($db->qn('#__redshop_country'))
-			->where($db->qn('country_2_code').' = '.$db->quote($userData->country));
+			->where($db->qn('country_2_code').' = '.$db->q($userData->country));
 		$db->setQuery($query);
 		$country = $db->loadResult();
 		
@@ -151,8 +151,8 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select('state_id')
 			->from($db->qn('#__redshop_state'))
-			->where($db->qn('state_'.$slen.'_code').' = '.$db->quote($userData->state))
-			->where($db->qn('country_id').' = '.$db->quote($country))
+			->where($db->qn('state_'.$slen.'_code').' = '.$db->q($userData->state))
+			->where($db->qn('country_id').' = '.$db->q($country))
 			;
 		$db->setQuery($query);
 		$state = $db->loadResult();

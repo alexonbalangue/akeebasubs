@@ -117,7 +117,7 @@ class plgAkeebasubsAcymailing extends JPlugin
 		$query = FOFQueryAbstract::getNew($db)
 			->select($db->qn('subid'))
 			->from('#__acymailing_subscriber')
-			->where($db->qn('userid').' = '.$db->quote($user_id));
+			->where($db->qn('userid').' = '.$db->q($user_id));
 		$db->setQuery($query);
 		$amsubid = $db->loadResult();
 		
@@ -145,8 +145,8 @@ class plgAkeebasubsAcymailing extends JPlugin
 				$query = FOFQueryAbstract::getNew($db)
 					->select($db->qn('subid'))
 					->from($db->qn('#__acymailing_listsub'))
-					->where($db->qn('listid') .'='. $db->quote($group))
-					->where($db->qn('subid') .'='. $db->quote($amsubid));
+					->where($db->qn('listid') .'='. $db->q($group))
+					->where($db->qn('subid') .'='. $db->q($amsubid));
 				$db->setQuery($query);
 				$test = $db->loadResult();
 				
@@ -154,8 +154,8 @@ class plgAkeebasubsAcymailing extends JPlugin
 				if(!empty($test) && !is_null($test)) {
 					$query = FOFQueryAbstract::getNew($db)
 						->delete($db->qn('#__acymailing_listsub'))
-						->where($db->qn('listid') .'='. $db->quote($group))
-						->where($db->qn('subid') .'='. $db->quote($amsubid));
+						->where($db->qn('listid') .'='. $db->q($group))
+						->where($db->qn('subid') .'='. $db->q($amsubid));
 					$db->setQuery($query);
 					$db->query();
 				}
@@ -164,9 +164,9 @@ class plgAkeebasubsAcymailing extends JPlugin
 				$query = FOFQueryAbstract::getNew($db)
 					->insert($db->qn('#__acymailing_listsub'))
 					->values(
-						$db->quote($group).', '.$db->quote($amsubid).', '.
-						$db->quote(time()).', '.$db->quote(null).', '.
-						$db->quote(1)
+						$db->q($group).', '.$db->q($amsubid).', '.
+						$db->q(time()).', '.$db->q(null).', '.
+						$db->q(1)
 					)->columns(array(
 						$db->qn('listid'), $db->qn('subid'),
 						$db->qn('subdate'), $db->qn('unsubdate'),
@@ -183,8 +183,8 @@ class plgAkeebasubsAcymailing extends JPlugin
 			foreach($removeGroups as $group) {
 				$query = FOFQueryAbstract::getNew($db)
 					->delete($db->qn('#__acymailing_listsub'))
-					->where($db->qn('listid') .'='. $db->quote($group))
-					->where($db->qn('subid') .'='. $db->quote($amsubid));
+					->where($db->qn('listid') .'='. $db->q($group))
+					->where($db->qn('subid') .'='. $db->q($amsubid));
 				$db->setQuery($query);
 				$db->query();
 			}

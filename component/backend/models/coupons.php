@@ -30,7 +30,7 @@ class AkeebasubsModelCoupons extends FOFModel
 		
 		$coupon = $this->getState('coupon','','cmd');
 		if(!empty($coupon)) {
-			$query->where($db->qn('coupon').' LIKE '.$db->quote($coupon));
+			$query->where($db->qn('coupon').' LIKE '.$db->q($coupon));
 		}
 		
 		$search = $this->getState('search',null);
@@ -39,8 +39,8 @@ class AkeebasubsModelCoupons extends FOFModel
 			$search = '%'.$search.'%';
 			$query->where(
 				'('.
-				'('.$db->qn('title').' LIKE '.$db->quote($search).') OR'.
-				'('.$db->qn('coupon').' LIKE '.$db->quote($search).')'.
+				'('.$db->qn('title').' LIKE '.$db->q($search).') OR'.
+				'('.$db->qn('coupon').' LIKE '.$db->q($search).')'.
 				')'
 			);
 		}

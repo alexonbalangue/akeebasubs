@@ -38,7 +38,7 @@ class AkeebasubsModelUpgrades extends FOFModel
 		{
 			$search = '%'.$search.'%';
 			$query->where(
-				$db->qn('title').' LIKE '.$db->quote($search)
+				$db->qn('title').' LIKE '.$db->q($search)
 			);
 		}
 		

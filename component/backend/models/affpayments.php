@@ -31,23 +31,23 @@ class AkeebasubsModelAffpayments extends FOFModel
 		// Filter by User ID
 		$user_id = $this->getState('user_id',null,'int');
 		if(is_numeric($user_id) && ($user_id > 0)) {
-			$query->where($db->qn('a').'.'.$db->qn('user_id').' = '.$db->quote($user_id));
+			$query->where($db->qn('a').'.'.$db->qn('user_id').' = '.$db->q($user_id));
 		}
 		
 		// Search for username, fullname and/or email
 		$search = $this->getState('search',null,'string');
 		if(!empty($search)) {
 			$search = '%'.$search.'%';
-			$q1 = '('.$db->qn('u').'.'.$db->qn('username').' LIKE '.$db->quote($search).')';
-			$q2 = '('.$db->qn('u').'.'.$db->qn('name').' LIKE '.$db->quote($search).')';
-			$q3 = '('.$db->qn('u').'.'.$db->qn('email').' LIKE '.$db->quote($search).')';
+			$q1 = '('.$db->qn('u').'.'.$db->qn('username').' LIKE '.$db->q($search).')';
+			$q2 = '('.$db->qn('u').'.'.$db->qn('name').' LIKE '.$db->q($search).')';
+			$q3 = '('.$db->qn('u').'.'.$db->qn('email').' LIKE '.$db->q($search).')';
 			$query->where("($q1 OR $q2 OR $q3)");
 		}
 		
 		// Filter by affiliate ID
 		$affiliate_id = $this->getState('affiliate_id',null,'int');
 		if($affiliate_id > 0) {
-			$query->where ($db->qn('a').'.'.$db->qn('akeebasubs_affiliate_id').' = '.$db->quote($affiliate_id));
+			$query->where ($db->qn('a').'.'.$db->qn('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
 		}
 		
 		// Fix the ordering

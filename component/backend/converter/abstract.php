@@ -168,7 +168,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				$values = array();
 				foreach($row as $column => $v) {
 					if(!in_array($column, $validColumns)) continue;
-					$values[] = $db->quote($v);
+					$values[] = $db->q($v);
 				}
 				$values = implode(',',$values);
 				$runningSum += strlen($values);

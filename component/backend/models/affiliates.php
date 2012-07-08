@@ -23,11 +23,11 @@ class AkeebasubsModelAffiliates extends FOFModel
 				'SUM('.$db->qn('affiliate_comission').') AS '.$db->qn('owed'),
 			))
 			->from($db->qn('#__akeebasubs_subscriptions'))
-			->where($db->qn('akeebasubs_affiliate_id').' > '.$db->quote(0))
-			->where($db->qn('state').' = '.$db->quote('C'))
+			->where($db->qn('akeebasubs_affiliate_id').' > '.$db->q(0))
+			->where($db->qn('state').' = '.$db->q('C'))
 			->group($db->qn('akeebasubs_affiliate_id'))
 		;
-		if($affiliate_id > 0) $subquery1->where ($db->nameQuote ('akeebasubs_affiliate_id').' = '.$db->quote($affiliate_id));
+		if($affiliate_id > 0) $subquery1->where ($db->nameQuote ('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
 		
 		// Sub-query 2: total payments made to this affiliate
 		$subquery2 = FOFQueryAbstract::getNew($db)
@@ -36,10 +36,10 @@ class AkeebasubsModelAffiliates extends FOFModel
 				'SUM('.$db->qn('amount').') AS '.$db->qn('paid'),
 			))
 			->from($db->qn('#__akeebasubs_affpayments'))
-			->where($db->qn('akeebasubs_affiliate_id').' > '.$db->quote(0))
+			->where($db->qn('akeebasubs_affiliate_id').' > '.$db->q(0))
 			->group($db->qn('akeebasubs_affiliate_id'))
 		;
-		if($affiliate_id > 0) $subquery2->where ($db->nameQuote ('akeebasubs_affiliate_id').' = '.$db->quote($affiliate_id));
+		if($affiliate_id > 0) $subquery2->where ($db->nameQuote ('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
 		$subquery2 = (string)$subquery2;
 		
 		// Main query
@@ -61,27 +61,27 @@ class AkeebasubsModelAffiliates extends FOFModel
 		// Filter by User ID
 		$user_id = $this->getState('user_id',null,'int');
 		if(is_numeric($user_id) && ($user_id > 0)) {
-			$query->where($db->qn('a').'.'.$db->qn('user_id').' = '.$db->quote($user_id));
+			$query->where($db->qn('a').'.'.$db->qn('user_id').' = '.$db->q($user_id));
 		}
 		
 		// Filter by Enabled status
 		$enabled = $this->getState('enabled',null,'cmd');
 		if(is_numeric($enabled)) {
-			$query->where($db->qn('a').'.'.$db->qn('enabled').' = '.$db->quote($enabled));
+			$query->where($db->qn('a').'.'.$db->qn('enabled').' = '.$db->q($enabled));
 		}
 		
 		// Search for username, fullname and/or email
 		$search = $this->getState('search',null,'string');
 		if(!empty($search)) {
 			$search = '%'.$search.'%';
-			$q1 = '('.$db->qn('u').'.'.$db->qn('username').' LIKE '.$db->quote($search).')';
-			$q2 = '('.$db->qn('u').'.'.$db->qn('name').' LIKE '.$db->quote($search).')';
-			$q3 = '('.$db->qn('u').'.'.$db->qn('email').' LIKE '.$db->quote($search).')';
+			$q1 = '('.$db->qn('u').'.'.$db->qn('username').' LIKE '.$db->q($search).')';
+			$q2 = '('.$db->qn('u').'.'.$db->qn('name').' LIKE '.$db->q($search).')';
+			$q3 = '('.$db->qn('u').'.'.$db->qn('email').' LIKE '.$db->q($search).')';
 			$query->where("($q1 OR $q2 OR $q3)");
 		}
 		
 		// Filter by affiliate ID
-		if($affiliate_id > 0) $query->where ($db->qn('a').'.'.$db->qn('akeebasubs_affiliate_id').' = '.$db->quote($affiliate_id));
+		if($affiliate_id > 0) $query->where ($db->qn('a').'.'.$db->qn('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
 		
 		// Fix the ordering
 		$order = $this->getState('filter_order', 'akeebasubs_affiliate_id', 'cmd');

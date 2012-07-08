@@ -70,11 +70,11 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 						$db->qn('tbl').'.'.$db->qn('type').' AS '.$db->qn('processor'),
 						$db->qn('inv').'.'.$db->qn('invoice_number').' AS '.$db->qn('processor_key'),
 						$db->qn('inv').'.'.$db->qn('amount').' AS '.$db->qn('net_amount'),
-						$db->quote('0').' AS '.$db->qn('tax_amount'),
+						$db->q('0').' AS '.$db->qn('tax_amount'),
 						$db->qn('inv').'.'.$db->qn('amount').' AS '.$db->qn('gross_amount'),
 						$db->qn('tbl').'.'.$db->qn('signup_date').' AS '.$db->qn('created_on'),
 						$db->qn('inv').'.'.$db->qn('amount').' AS '.$db->qn('prediscount_amount'),
-						$db->quote('0.0').' AS '.$db->qn('discount_amount'),
+						$db->q('0.0').' AS '.$db->qn('discount_amount'),
 						$db->qn('tbl').'.'.$db->qn('status').' AS '.$db->qn('aec_status'),
 						$db->qn('tbl').'.'.$db->qn('lifetime').' AS '.$db->qn('aec_lifetime'),
 					))->join('INNER', "($subquery) AS ".$db->qn('glue').' ON('.

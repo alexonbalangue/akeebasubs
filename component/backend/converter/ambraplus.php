@@ -59,17 +59,17 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 						$db->qn('tbl').'.'.$db->qn('userid').' AS '.$db->qn('user_id'),
 						$db->qn('tbl').'.'.$db->qn('typeid').' AS '.$db->qn('akeebasubs_level_id'),
 						$db->qn('p').'.'.$db->qn('created_datetime').' AS '.$db->qn('publish_up'),
-						'IF('.$db->qn('tbl').'.'.$db->qn('expires_datetime').' > '.$db->quote('2038-01-01').', '.$db->quote('NADA').', '.$db->qn('tbl').'.'.$db->qn('expires_datetime').') AS '.$db->qn('publish_down'),
+						'IF('.$db->qn('tbl').'.'.$db->qn('expires_datetime').' > '.$db->q('2038-01-01').', '.$db->q('NADA').', '.$db->qn('tbl').'.'.$db->qn('expires_datetime').') AS '.$db->qn('publish_down'),
 						$db->qn('tbl').'.'.$db->qn('notes').' AS '.$db->qn('notes'),
 						$db->qn('tbl').'.'.$db->qn('status').' AS '.$db->qn('enabled'),
-						'IF('.$db->qn('p').'.'.$db->qn('payment_type').' IS NULL, '.$db->quote('none').', '.$db->qn('p').'.'.$db->qn('payment_type').') AS '.$db->qn('processor'),
-						'IF('.$db->qn('p').'.'.$db->qn('payment_id').' IS NULL, '.$db->quote('Import').', '.$db->qn('p').'.'.$db->qn('payment_id').') AS '.$db->qn('processor_key'),
-						'IF('.$db->qn('p').'.'.$db->qn('payment_status').' = '.$db->quote('1').', '.$db->quote('C').', IF('.$db->qn('p').'.'.$db->qn('payment_status').' IS NULL, '.$db->quote('C').', '.$db->quote('X').')) AS '.$db->qn('state'),
-						'IF('.$db->qn('p').'.'.$db->qn('payment_amount').'IS NULL, '.$db->quote('0').', '.$db->qn('p').'.'.$db->qn('payment_amount').') AS '.$db->qn('net_amount'),
-						$db->quote('0').' AS '.$db->qn('tax_amount'),
-						'IF('.$db->qn('p').'.'.$db->qn('payment_amount').'IS NULL, '.$db->quote('0').', '.$db->qn('p').'.'.$db->qn('payment_amount').') AS '.$db->qn('gross_amount'),
-						'IF('.$db->qn('p').'.'.$db->qn('payment_datetime').'IS NULL, '.$db->quote('0000-00-00 00:00:00').', '.$db->qn('p').'.'.$db->qn('payment_datetime').') AS '.$db->qn('created_on'),
-						$db->quote('').' AS '.$db->qn('params'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_type').' IS NULL, '.$db->q('none').', '.$db->qn('p').'.'.$db->qn('payment_type').') AS '.$db->qn('processor'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_id').' IS NULL, '.$db->q('Import').', '.$db->qn('p').'.'.$db->qn('payment_id').') AS '.$db->qn('processor_key'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_status').' = '.$db->q('1').', '.$db->q('C').', IF('.$db->qn('p').'.'.$db->qn('payment_status').' IS NULL, '.$db->q('C').', '.$db->q('X').')) AS '.$db->qn('state'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_amount').'IS NULL, '.$db->q('0').', '.$db->qn('p').'.'.$db->qn('payment_amount').') AS '.$db->qn('net_amount'),
+						$db->q('0').' AS '.$db->qn('tax_amount'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_amount').'IS NULL, '.$db->q('0').', '.$db->qn('p').'.'.$db->qn('payment_amount').') AS '.$db->qn('gross_amount'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_datetime').'IS NULL, '.$db->q('0000-00-00 00:00:00').', '.$db->qn('p').'.'.$db->qn('payment_datetime').') AS '.$db->qn('created_on'),
+						$db->q('').' AS '.$db->qn('params'),
 						$db->qn('tbl').'.'.$db->qn('flag_contact').' AS '.$db->qn('contact_flag'),
 						$db->qn('tbl').'.'.$db->qn('contact_datetime').' AS '.$db->qn('first_contact'),
 						$db->qn('tbl').'.'.$db->qn('contact_datetime').' AS '.$db->qn('second_contact'),
@@ -129,7 +129,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 						->select(array('introtext','fulltext'))
 						->from($db->qn('#__content'))
 						->where(
-							$db->qn('id').' = '.$db->quote($articleid)
+							$db->qn('id').' = '.$db->q($articleid)
 						)
 						;
 					$db->setQuery($q);

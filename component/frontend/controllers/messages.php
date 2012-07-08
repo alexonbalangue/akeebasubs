@@ -76,10 +76,10 @@ class AkeebasubsControllerMessages extends FOFController
 				// Update the user related fields for the Joomla sessions table.
 				$db->setQuery(
 					'UPDATE `#__session`' .
-					' SET `guest` = '.$db->quote($newUserObject->get('guest')).',' .
-					'	`username` = '.$db->quote($newUserObject->get('username')).',' .
+					' SET `guest` = '.$db->q($newUserObject->get('guest')).',' .
+					'	`username` = '.$db->q($newUserObject->get('username')).',' .
 					'	`userid` = '.(int) $newUserObject->get('id') .
-					' WHERE `session_id` = '.$db->quote($session->getId())
+					' WHERE `session_id` = '.$db->q($session->getId())
 				);
 				$db->query();
 				// Hit the user last visit field

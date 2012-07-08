@@ -89,62 +89,62 @@ class AkeebasubsModelUsers extends FOFModel
 		
 		if($state->username) {
 			$query->where($db->qn('u').'.'.$db->qn('username').
-				' LIKE '.$db->quote('%'.$state->username.'%'));
+				' LIKE '.$db->q('%'.$state->username.'%'));
 		}
 		
 		if($state->name) {
 			$query->where($db->qn('u').'.'.$db->qn('name').
-				' LIKE '.$db->quote('%'.$state->name.'%'));
+				' LIKE '.$db->q('%'.$state->name.'%'));
 		}
 		
 		if($state->email) {
 			$query->where($db->qn('u').'.'.$db->qn('email').
-				' LIKE '.$db->quote('%'.$state->email.'%'));
+				' LIKE '.$db->q('%'.$state->email.'%'));
 		}
 		
 		if($state->businessname) {
 			$query->where($db->qn('tbl').'.'.$db->qn('businessname').
-				' LIKE '.$db->quote('%'.$state->businessname.'%'));
+				' LIKE '.$db->q('%'.$state->businessname.'%'));
 		}
 		
 		if($state->occupation) {
 			$query->where($db->qn('tbl').'.'.$db->qn('occupation').
-				' LIKE '.$db->quote('%'.$state->occupation.'%'));
+				' LIKE '.$db->q('%'.$state->occupation.'%'));
 		}
 		
 		if($state->vatnumber) {
 			$query->where($db->qn('tbl').'.'.$db->qn('vatnumber').
-				' LIKE '.$db->quote('%'.$state->vatnumber.'%'));
+				' LIKE '.$db->q('%'.$state->vatnumber.'%'));
 		}
 		
 		if($state->address1) {
 			$query->where($db->qn('tbl').'.'.$db->qn('address1').
-				' LIKE '.$db->quote('%'.$state->address1.'%'));
+				' LIKE '.$db->q('%'.$state->address1.'%'));
 		}
 		
 		if($state->address2) {
 			$query->where($db->qn('tbl').'.'.$db->qn('address2').
-				' LIKE '.$db->quote('%'.$state->address2.'%'));
+				' LIKE '.$db->q('%'.$state->address2.'%'));
 		}
 		
 		if($state->city) {
 			$query->where($db->qn('tbl').'.'.$db->qn('city').
-				' LIKE '.$db->quote('%'.$state->city.'%'));
+				' LIKE '.$db->q('%'.$state->city.'%'));
 		}
 		
 		if($state->state) {
 			$query->where($db->qn('tbl').'.'.$db->qn('state').
-				' LIKE '.$db->quote('%'.$state->state.'%'));
+				' LIKE '.$db->q('%'.$state->state.'%'));
 		}
 		
 		if($state->zip) {
 			$query->where($db->qn('tbl').'.'.$db->qn('zip').
-				' LIKE '.$db->quote('%'.$state->zip.'%'));
+				' LIKE '.$db->q('%'.$state->zip.'%'));
 		}
 		
 		if($state->country) {
 			$query->where($db->qn('tbl').'.'.$db->qn('country').
-				' = '.$db->quote($state->country));
+				' = '.$db->q($state->country));
 		}
 		
 		if($state->search) {
@@ -152,21 +152,21 @@ class AkeebasubsModelUsers extends FOFModel
 			$query->where(
 				'('.
 				'('.$db->qn('tbl').'.'.$db->qn('businessname').
-				' LIKE '.$db->quote($search).') OR '.
+				' LIKE '.$db->q($search).') OR '.
 				'('.$db->qn('tbl').'.'.$db->qn('occupation').
-				' LIKE '.$db->quote($search).') OR '.
+				' LIKE '.$db->q($search).') OR '.
 				'('.$db->qn('tbl').'.'.$db->qn('vatnumber').
-				' LIKE '.$db->quote($search).') OR '.
+				' LIKE '.$db->q($search).') OR '.
 				'('.$db->qn('tbl').'.'.$db->qn('address1').
-				' LIKE '.$db->quote($search).') OR '.
+				' LIKE '.$db->q($search).') OR '.
 				'('.$db->qn('tbl').'.'.$db->qn('address2').
-				' LIKE '.$db->quote($search).') OR '.
+				' LIKE '.$db->q($search).') OR '.
 				'('.$db->qn('tbl').'.'.$db->qn('city').
-				' LIKE '.$db->quote($search).') OR '.
+				' LIKE '.$db->q($search).') OR '.
 				'('.$db->qn('tbl').'.'.$db->qn('state').
-				' LIKE '.$db->quote($search).') OR '.
+				' LIKE '.$db->q($search).') OR '.
 				'('.$db->qn('tbl').'.'.$db->qn('zip').
-				' LIKE '.$db->quote($search).')'
+				' LIKE '.$db->q($search).')'
 				.')'
 			);
 		}

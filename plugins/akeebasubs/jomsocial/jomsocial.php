@@ -158,7 +158,7 @@ class plgAkeebasubsJomsocial extends JPlugin
 			$protoQuery = $db->getQuery(true)
 				->delete($db->qn('#__community_groups_members'))
 				->where($db->qn('memberid').' = '.$db->q($user_id));
-			//$protoSQL = 'DELETE FROM `#__community_groups_members` WHERE `memberid` = ' . $db->Quote($user_id) . ' AND `groupid` = ';
+			//$protoSQL = 'DELETE FROM `#__community_groups_members` WHERE `memberid` = ' . $db->q($user_id) . ' AND `groupid` = ';
 			foreach($removeGroups as $group) {
 				$query = clone $protoQuery;
 				$query->where($db->qn('groupid').' = '.$db->q($group));

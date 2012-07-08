@@ -119,7 +119,7 @@ class plgAkeebasubsAgora extends JPlugin
 			$query = FOFQueryAbstract::getNew($db)
 				->select($db->qn('id'))
 				->from($db->qn('#__agora_users'))
-				->where($db->qn('jos_id').' = '.$db->quote($user_id));
+				->where($db->qn('jos_id').' = '.$db->q($user_id));
 			$db->setQuery($query);
 			$agora_user_id = $db->loadResult();
 			if(empty($agora_user_id )) {
@@ -160,7 +160,7 @@ class plgAkeebasubsAgora extends JPlugin
 			$query = FOFQueryAbstract::getNew($db)
 				->select($db->qn('id'))
 				->from($db->qn('#__agorapro_users'))
-				->where($db->qn('id').' = '.$db->quote($user_id));
+				->where($db->qn('id').' = '.$db->q($user_id));
 			$db->setQuery($query);
 			$agora_user_id = $db->loadResult();
 			if(empty($agora_user_id )) {
@@ -184,12 +184,12 @@ class plgAkeebasubsAgora extends JPlugin
 				// Remove old records
 				$query = FOFQueryAbstract::getNew($db)
 					->delete($db->qn($this->agoraDbPrefix . '_user_group'))
-					->where($db->qn('user_id').' = '.$db->quote($agora_user_id))
-					->where($db->qn('group_id').' = '.$db->quote($gid));
+					->where($db->qn('user_id').' = '.$db->q($agora_user_id))
+					->where($db->qn('group_id').' = '.$db->q($gid));
 
 				//should admins be spared from being removed?
 				if ($ignoreAdmins) {
-					$query->where($db->qn('role_id').' != '.$db->quote('4'));
+					$query->where($db->qn('role_id').' != '.$db->q('4'));
 				}
 
 				$db->setQuery($query);
@@ -200,9 +200,9 @@ class plgAkeebasubsAgora extends JPlugin
 					$query = FOFQueryAbstract::getNew($db)
 						->select($db->qn('id'))
 						->from($db->qn($this->agoraDbPrefix."_user_group"))
-						->where($db->qn('role_id').' = '.$db->quote($rid))
-						->where($db->qn('group_id').' = '.$db->quote($gid))
-						->where($db->qn('user_id').' = '.$db->quote($agora_user_id));
+						->where($db->qn('role_id').' = '.$db->q($rid))
+						->where($db->qn('group_id').' = '.$db->q($gid))
+						->where($db->qn('user_id').' = '.$db->q($agora_user_id));
 					$db->setQuery($query);
 					$user_already_admin = $db->loadResult();
 					if (!empty($user_already_admin)) {

@@ -30,12 +30,12 @@ class AkeebasubsModelLevels extends FOFModel
 		
 		$slug = $this->getState('slug',null);
 		if($slug) {
-			$query->where($db->qn('slug').' = '.$db->quote($slug));
+			$query->where($db->qn('slug').' = '.$db->q($slug));
 		}
 		
 		$title = $this->getState('title',null);
 		if($title) {
-			$query->where($db->qn('title').' = '.$db->quote($title));
+			$query->where($db->qn('title').' = '.$db->q($title));
 		}
 		
 		$only_once = $this->getState('only_once', null);
@@ -55,11 +55,11 @@ class AkeebasubsModelLevels extends FOFModel
 				$query->where(
 				'('.
 					'('.
-						$db->qn('only_once').' = '.$db->quote(0)
+						$db->qn('only_once').' = '.$db->q(0)
 					.')'.
 					' OR '.
 					'('.
-						'('.$db->qn('only_once').' = '.$db->quote(1).')'
+						'('.$db->qn('only_once').' = '.$db->q(1).')'
 						.' AND '.
 						'('.$db->qn('akeebasubs_level_id').' NOT IN '.'('.implode(',',$subIDs).')'.')'
 					.')'.
@@ -72,7 +72,7 @@ class AkeebasubsModelLevels extends FOFModel
 		if($search)
 		{
 			$search = '%'.$search.'%';
-			$query->where($db->qn('description').' LIKE '.$db->quote($search));
+			$query->where($db->qn('description').' LIKE '.$db->q($search));
 		}
 		
 		// Filter by IDs

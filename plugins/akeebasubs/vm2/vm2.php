@@ -148,7 +148,7 @@ class plgAkeebasubsVm2 extends JPlugin
 				->delete($db->qn('#__virtuemart_vmuser_shoppergroups'))
 				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id));
 			
-			$protoSQL = 'DELETE FROM `#__virtuemart_vmuser_shoppergroups` WHERE `virtuemart_user_id` = ' . $db->Quote($user_id) . ' AND `virtuemart_shoppergroup_id` = ';
+			$protoSQL = 'DELETE FROM `#__virtuemart_vmuser_shoppergroups` WHERE `virtuemart_user_id` = ' . $db->q($user_id) . ' AND `virtuemart_shoppergroup_id` = ';
 			
 			foreach($removeGroups as $group) {
 				$query = clone $protoQuery;
