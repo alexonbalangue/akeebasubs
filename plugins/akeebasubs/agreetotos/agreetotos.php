@@ -77,6 +77,14 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		addToValidationFetchQueue(plg_akeebasubs_agreetotos_fetch);
 		// Tell Akeeba Subscriptions how to validate the extra field data
 		addToValidationQueue(plg_akeebasubs_agreetotos_validate);
+		// Immadiate validation of the field
+		$('#agreetotos').change(function(e){
+			if($('#agreetotos').val() == 1) {
+				$('#agreetotos_invalid').css('display','none');
+			} else {
+				$('#agreetotos_invalid').css('display','inline-block');
+			}
+		});
 	});
 })(akeeba.jQuery);
 

@@ -8,6 +8,7 @@ Akeeba Subscriptions 2.3.0 DEV RELEASE
 + #100 Language merge tags for the Off-Line payment plugin
 + #96 Subscription Level relations
 + Plugin to allow ccInvoices to access Akeeba Subscriptions' information for the user, subscription level and subscription
++ Converter from RS!Membership
 ~ Disable form submit when ENTER is hit in the coupon field
 # [MEDIUM] PayPal: recurring subscriptions were not working from the second renewal onwards
 # [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
@@ -27,6 +28,7 @@ Akeeba Subscriptions 2.3.0 DEV RELEASE
 # [LOW] Coupons' user hits limit were off by one
 # [LOW] Sometimes you could not select Joomla! users in the Affiliates and Users view
 # [LOW] Enabling caching would make all instances of the "Akeeba Subscriptions - List subscription levels" module on a single page to show the same subscription levels
+# [LOW] The "Agree to TOS" field's validation error text would remain, even after setting the field to Yes, until you tried changing an address field.
 
 Akeeba Subscriptions 2.2.1
 ================================================================================

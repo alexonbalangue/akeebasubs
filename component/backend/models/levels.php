@@ -15,27 +15,27 @@ class AkeebasubsModelLevels extends FOFModel
 		
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
-			->from($db->nameQuote('#__akeebasubs_levels'));
+			->from($db->qn('#__akeebasubs_levels'));
 		
 		$ordering = $this->getState('ordering',null,'int');
 		if(is_numeric($ordering)) {
-			$query->where($db->nameQuote('ordering').' = '.(int)$ordering);
+			$query->where($db->qn('ordering').' = '.(int)$ordering);
 		}
 		
 		$enabled = $this->getState('enabled','','cmd');
 		if($enabled !== '') $enabled = (int)$enabled;
 		if(is_numeric($enabled)) {
-			$query->where($db->nameQuote('enabled').' = '.(int)$enabled);
+			$query->where($db->qn('enabled').' = '.(int)$enabled);
 		}
 		
 		$slug = $this->getState('slug',null);
 		if($slug) {
-			$query->where($db->nameQuote('slug').' = '.$db->quote($slug));
+			$query->where($db->qn('slug').' = '.$db->q($slug));
 		}
 		
 		$title = $this->getState('title',null);
 		if($title) {
-			$query->where($db->nameQuote('title').' = '.$db->quote($title));
+			$query->where($db->qn('title').' = '.$db->q($title));
 		}
 		
 		$only_once = $this->getState('only_once', null);
@@ -55,13 +55,13 @@ class AkeebasubsModelLevels extends FOFModel
 				$query->where(
 				'('.
 					'('.
-						$db->nameQuote('only_once').' = '.$db->quote(0)
+						$db->qn('only_once').' = '.$db->q(0)
 					.')'.
 					' OR '.
 					'('.
-						'('.$db->nameQuote('only_once').' = '.$db->quote(1).')'
+						'('.$db->qn('only_once').' = '.$db->q(1).')'
 						.' AND '.
-						'('.$db->nameQuote('akeebasubs_level_id').' NOT IN '.'('.implode(',',$subIDs).')'.')'
+						'('.$db->qn('akeebasubs_level_id').' NOT IN '.'('.implode(',',$subIDs).')'.')'
 					.')'.
 				')'
 				);
@@ -72,7 +72,7 @@ class AkeebasubsModelLevels extends FOFModel
 		if($search)
 		{
 			$search = '%'.$search.'%';
-			$query->where($db->nameQuote('description').' LIKE '.$db->quote($search));
+			$query->where($db->qn('description').' LIKE '.$db->q($search));
 		}
 		
 		// Filter by IDs
@@ -100,12 +100,12 @@ class AkeebasubsModelLevels extends FOFModel
 			$ids = '';
 		}
 		if($ids) {
-			$query->where($db->nameQuote('akeebasubs_level_id').' IN ('.$ids.')');
+			$query->where($db->qn('akeebasubs_level_id').' IN ('.$ids.')');
 		}
 		
 		$levelgroup = $this->getState('levelgroup',null,'int');
 		if(is_numeric($levelgroup)) {
-			$query->where($db->nameQuote('akeebasubs_levelgroup_id').' = '.(int)$levelgroup);
+			$query->where($db->qn('akeebasubs_levelgroup_id').' = '.(int)$levelgroup);
 		}
 		
 		$order = $this->getState('filter_order', 'akeebasubs_level_id', 'cmd');

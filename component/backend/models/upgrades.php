@@ -15,22 +15,22 @@ class AkeebasubsModelUpgrades extends FOFModel
 		
 		$query = FOFQueryAbstract::getNew($db)
 			->select('*')
-			->from($db->nameQuote('#__akeebasubs_upgrades'));
+			->from($db->qn('#__akeebasubs_upgrades'));
 		
 		$ordering = $this->getState('ordering',null,'int');
 		if(is_numeric($ordering)) {
-			$query->where($db->nameQuote('ordering').' = '.(int)$ordering);
+			$query->where($db->qn('ordering').' = '.(int)$ordering);
 		}
 		
 		$to_id = $this->getState('to_id',null,'int');
 		if(is_numeric($to_id)) {
-			$query->where($db->nameQuote('to_id').' = '.(int)$to_id);
+			$query->where($db->qn('to_id').' = '.(int)$to_id);
 		}
 		
 		$enabled = $this->getState('enabled','','cmd');
 		if($enabled !== '') $enabled = (int)$enabled;
 		if(is_numeric($enabled)) {
-			$query->where($db->nameQuote('enabled').' = '.(int)$enabled);
+			$query->where($db->qn('enabled').' = '.(int)$enabled);
 		}
 		
 		$search = $this->getState('search',null);
@@ -38,7 +38,7 @@ class AkeebasubsModelUpgrades extends FOFModel
 		{
 			$search = '%'.$search.'%';
 			$query->where(
-				$db->nameQuote('title').' LIKE '.$db->quote($search)
+				$db->qn('title').' LIKE '.$db->q($search)
 			);
 		}
 		

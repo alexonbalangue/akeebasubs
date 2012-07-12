@@ -117,9 +117,9 @@ class plgAkeebasubsAgora extends JPlugin
 		$agora_user_id = 0;
 		if ($this->agoraVersion == '3') {
 			$query = FOFQueryAbstract::getNew($db)
-				->select($db->nameQuote('id'))
-				->from($db->nameQuote('#__agora_users'))
-				->where($db->nameQuote('jos_id').' = '.$db->quote($user_id));
+				->select($db->qn('id'))
+				->from($db->qn('#__agora_users'))
+				->where($db->qn('jos_id').' = '.$db->q($user_id));
 			$db->setQuery($query);
 			$agora_user_id = $db->loadResult();
 			if(empty($agora_user_id )) {
@@ -158,9 +158,9 @@ class plgAkeebasubsAgora extends JPlugin
 			}
 		} else {
 			$query = FOFQueryAbstract::getNew($db)
-				->select($db->nameQuote('id'))
-				->from($db->nameQuote('#__agorapro_users'))
-				->where($db->nameQuote('id').' = '.$db->quote($user_id));
+				->select($db->qn('id'))
+				->from($db->qn('#__agorapro_users'))
+				->where($db->qn('id').' = '.$db->q($user_id));
 			$db->setQuery($query);
 			$agora_user_id = $db->loadResult();
 			if(empty($agora_user_id )) {
@@ -183,13 +183,13 @@ class plgAkeebasubsAgora extends JPlugin
 			foreach ($assignment as $gid => $rid) {
 				// Remove old records
 				$query = FOFQueryAbstract::getNew($db)
-					->delete($db->nameQuote($this->agoraDbPrefix . '_user_group'))
-					->where($db->nameQuote('user_id').' = '.$db->quote($agora_user_id))
-					->where($db->nameQuote('group_id').' = '.$db->quote($gid));
+					->delete($db->qn($this->agoraDbPrefix . '_user_group'))
+					->where($db->qn('user_id').' = '.$db->q($agora_user_id))
+					->where($db->qn('group_id').' = '.$db->q($gid));
 
 				//should admins be spared from being removed?
 				if ($ignoreAdmins) {
-					$query->where($db->nameQuote('role_id').' != '.$db->quote('4'));
+					$query->where($db->qn('role_id').' != '.$db->q('4'));
 				}
 
 				$db->setQuery($query);
@@ -198,11 +198,11 @@ class plgAkeebasubsAgora extends JPlugin
 				//if admins should be ignored, check to see if the user is already an admin for this group to prevent duplicate entries
 				if ($ignoreAdmins && $rid == '4') {
 					$query = FOFQueryAbstract::getNew($db)
-						->select($db->nameQuote('id'))
-						->from($db->nameQuote($this->agoraDbPrefix."_user_group"))
-						->where($db->nameQuote('role_id').' = '.$db->quote($rid))
-						->where($db->nameQuote('group_id').' = '.$db->quote($gid))
-						->where($db->nameQuote('user_id').' = '.$db->quote($agora_user_id));
+						->select($db->qn('id'))
+						->from($db->qn($this->agoraDbPrefix."_user_group"))
+						->where($db->qn('role_id').' = '.$db->q($rid))
+						->where($db->qn('group_id').' = '.$db->q($gid))
+						->where($db->qn('user_id').' = '.$db->q($agora_user_id));
 					$db->setQuery($query);
 					$user_already_admin = $db->loadResult();
 					if (!empty($user_already_admin)) {
@@ -382,9 +382,9 @@ class plgAkeebasubsAgora extends JPlugin
 		$db = JFactory::getDBO();
 		$query = FOFQueryAbstract::getNew($db)
 			->select(array(
-				$db->nameQuote('name'),
-				$db->nameQuote('id'),
-			))->from($db->nameQuote($this->agoraDbPrefix . '_group'));
+				$db->qn('name'),
+				$db->qn('id'),
+			))->from($db->qn($this->agoraDbPrefix . '_group'));
 		$db->setQuery($query);
 		$temp = $db->loadAssocList();
 		$this->agoraGroups = array();

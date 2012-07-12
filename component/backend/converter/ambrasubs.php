@@ -36,17 +36,17 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 				'foreignkey'=>	'akeebasubs_level_id',
 				'query'		=> FOFQueryAbstract::getNew($db)
 					->select(array(
-						$db->nameQuote('id'),
-						$db->nameQuote('id').' AS '.$db->nameQuote('akeebasubs_level_id'),
-						$db->nameQuote('title'),
-						'LOWER('.$db->nameQuote('title').') AS '.$db->nameQuote('slug'),
-						$db->nameQuote('description'),
-						$db->nameQuote('img').' AS '.$db->nameQuote('image'),
-						$db->nameQuote('period').' AS '.$db->nameQuote('duration'),
-						$db->nameQuote('value').' AS '.$db->nameQuote('price'),
-						$db->nameQuote('articleid'),
-						$db->nameQuote('published').' AS '.$db->nameQuote('enabled'),
-						$db->nameQuote('ordering'),
+						$db->qn('id'),
+						$db->qn('id').' AS '.$db->qn('akeebasubs_level_id'),
+						$db->qn('title'),
+						'LOWER('.$db->qn('title').') AS '.$db->qn('slug'),
+						$db->qn('description'),
+						$db->qn('img').' AS '.$db->qn('image'),
+						$db->qn('period').' AS '.$db->qn('duration'),
+						$db->qn('value').' AS '.$db->qn('price'),
+						$db->qn('articleid'),
+						$db->qn('published').' AS '.$db->qn('enabled'),
+						$db->qn('ordering'),
 					))
 			),
 			array(
@@ -55,29 +55,29 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 				'foreignkey'=>	'akeebasubs_subscription_id',
 				'query'		=> FOFQueryAbstract::getNew($db)
 					->select(array(
-						$db->nameQuote('tbl').'.'.$db->nameQuote('u2tid').' AS '.$db->nameQuote('akeebasubs_subscription_id'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('userid').' AS '.$db->nameQuote('user_id'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('typeid').' AS '.$db->nameQuote('akeebasubs_level_id'),
-						$db->nameQuote('p').'.'.$db->nameQuote('created_datetime').' AS '.$db->nameQuote('publish_up'),
-						'IF('.$db->nameQuote('tbl').'.'.$db->nameQuote('expires_datetime').' > '.$db->quote('2038-01-01').', '.$db->quote('NADA').', '.$db->nameQuote('tbl').'.'.$db->nameQuote('expires_datetime').') AS '.$db->nameQuote('publish_down'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('notes').' AS '.$db->nameQuote('notes'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('status').' AS '.$db->nameQuote('enabled'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_type').' IS NULL, '.$db->quote('none').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_type').') AS '.$db->nameQuote('processor'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_id').' IS NULL, '.$db->quote('Import').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_id').') AS '.$db->nameQuote('processor_key'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_status').' = '.$db->quote('1').', '.$db->quote('C').', IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_status').' IS NULL, '.$db->quote('C').', '.$db->quote('X').')) AS '.$db->nameQuote('state'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_amount').'IS NULL, '.$db->quote('0').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_amount').') AS '.$db->nameQuote('net_amount'),
-						$db->quote('0').' AS '.$db->nameQuote('tax_amount'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_amount').'IS NULL, '.$db->quote('0').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_amount').') AS '.$db->nameQuote('gross_amount'),
-						'IF('.$db->nameQuote('p').'.'.$db->nameQuote('payment_datetime').'IS NULL, '.$db->quote('0000-00-00 00:00:00').', '.$db->nameQuote('p').'.'.$db->nameQuote('payment_datetime').') AS '.$db->nameQuote('created_on'),
-						$db->quote('').' AS '.$db->nameQuote('params'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('flag_contact').' AS '.$db->nameQuote('contact_flag'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('contact_datetime').' AS '.$db->nameQuote('first_contact'),
-						$db->nameQuote('tbl').'.'.$db->nameQuote('contact_datetime').' AS '.$db->nameQuote('second_contact'),
+						$db->qn('tbl').'.'.$db->qn('u2tid').' AS '.$db->qn('akeebasubs_subscription_id'),
+						$db->qn('tbl').'.'.$db->qn('userid').' AS '.$db->qn('user_id'),
+						$db->qn('tbl').'.'.$db->qn('typeid').' AS '.$db->qn('akeebasubs_level_id'),
+						$db->qn('p').'.'.$db->qn('created_datetime').' AS '.$db->qn('publish_up'),
+						'IF('.$db->qn('tbl').'.'.$db->qn('expires_datetime').' > '.$db->q('2038-01-01').', '.$db->q('NADA').', '.$db->qn('tbl').'.'.$db->qn('expires_datetime').') AS '.$db->qn('publish_down'),
+						$db->qn('tbl').'.'.$db->qn('notes').' AS '.$db->qn('notes'),
+						$db->qn('tbl').'.'.$db->qn('status').' AS '.$db->qn('enabled'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_type').' IS NULL, '.$db->q('none').', '.$db->qn('p').'.'.$db->qn('payment_type').') AS '.$db->qn('processor'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_id').' IS NULL, '.$db->q('Import').', '.$db->qn('p').'.'.$db->qn('payment_id').') AS '.$db->qn('processor_key'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_status').' = '.$db->q('1').', '.$db->q('C').', IF('.$db->qn('p').'.'.$db->qn('payment_status').' IS NULL, '.$db->q('C').', '.$db->q('X').')) AS '.$db->qn('state'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_amount').'IS NULL, '.$db->q('0').', '.$db->qn('p').'.'.$db->qn('payment_amount').') AS '.$db->qn('net_amount'),
+						$db->q('0').' AS '.$db->qn('tax_amount'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_amount').'IS NULL, '.$db->q('0').', '.$db->qn('p').'.'.$db->qn('payment_amount').') AS '.$db->qn('gross_amount'),
+						'IF('.$db->qn('p').'.'.$db->qn('payment_datetime').'IS NULL, '.$db->q('0000-00-00 00:00:00').', '.$db->qn('p').'.'.$db->qn('payment_datetime').') AS '.$db->qn('created_on'),
+						$db->q('').' AS '.$db->qn('params'),
+						$db->qn('tbl').'.'.$db->qn('flag_contact').' AS '.$db->qn('contact_flag'),
+						$db->qn('tbl').'.'.$db->qn('contact_datetime').' AS '.$db->qn('first_contact'),
+						$db->qn('tbl').'.'.$db->qn('contact_datetime').' AS '.$db->qn('second_contact'),
 					))
 					->join('LEFT',
-							$db->nameQuote('#__ambrasubs_payments').' AS '.$db->nameQuote('p').' ON('.
-							$db->nameQuote('p').'.'.$db->nameQuote('id').' = '.
-							$db->nameQuote('tbl').'.'.$db->nameQuote('paymentid').')'
+							$db->qn('#__ambrasubs_payments').' AS '.$db->qn('p').' ON('.
+							$db->qn('p').'.'.$db->qn('id').' = '.
+							$db->qn('tbl').'.'.$db->qn('paymentid').')'
 					)
 			)
 		);
@@ -94,9 +94,9 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 				if($articleid > 0) {
 					$q = FOFQueryAbstract::getNew($db)
 						->select(array('introtext','fulltext'))
-						->from($db->nameQuote('#__content'))
+						->from($db->qn('#__content'))
 						->where(
-							$db->nameQuote('id').' = '.$db->quote($articleid)
+							$db->qn('id').' = '.$db->q($articleid)
 						)
 						;
 					$db->setQuery($q);

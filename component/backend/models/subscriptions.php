@@ -48,7 +48,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if($state->refresh == 1) {
 			$query = FOFQueryAbstract::getNew($db)
 				->select('COUNT(*)')
-				->from($db->nameQuote('#__akeebasubs_subscriptions').' AS '.$db->nameQuote('tbl'));
+				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
 
 			//$this->_buildQueryFrom($query);
 			$this->_buildQueryJoins($query);
@@ -58,13 +58,13 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			// $query retruns X rows, where X is the number of users. We need the count of users, so...
 			$query2 =  FOFQueryAbstract::getNew($db)
 					->select('COUNT(*)')
-					->from( '('.(string)$query.') AS '.$db->nameQuote('tbl'));
+					->from( '('.(string)$query.') AS '.$db->qn('tbl'));
 			
 			return $query2;
 		} elseif($state->moneysum == 1) {
 			$query = FOFQueryAbstract::getNew($db)
-				->select('SUM('.$db->nameQuote('net_amount').') AS '.$db->nameQuote('x'))
-				->from($db->nameQuote('#__akeebasubs_subscriptions').' AS '.$db->nameQuote('tbl'));
+				->select('SUM('.$db->qn('net_amount').') AS '.$db->qn('x'))
+				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
 			
 			//$this->_buildQueryFrom($query);
 			$this->_buildQueryJoins($query);
@@ -86,21 +86,21 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			return;
 		} elseif($state->groupbylevel == 1) {
 			$query
-				->join('INNER', $db->nameQuote('#__akeebasubs_levels').' AS '.$db->nameQuote('l').' ON '.
-						$db->nameQuote('l').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
-						$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id'))
+				->join('INNER', $db->qn('#__akeebasubs_levels').' AS '.$db->qn('l').' ON '.
+						$db->qn('l').'.'.$db->qn('akeebasubs_level_id').' = '.
+						$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id'))
 				;
 		} else {
 			$query
-				->join('INNER', $db->nameQuote('#__akeebasubs_levels').' AS '.$db->nameQuote('l').' ON '.
-						$db->nameQuote('l').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
-						$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id'))
-				->join('LEFT OUTER', $db->nameQuote('#__users').' AS '.$db->nameQuote('u').' ON '.
-						$db->nameQuote('u').'.'.$db->nameQuote('id').' = '.
-						$db->nameQuote('tbl').'.'.$db->nameQuote('user_id'))
-				->join('LEFT OUTER', $db->nameQuote('#__akeebasubs_users').' AS '.$db->nameQuote('a').' ON '.
-						$db->nameQuote('a').'.'.$db->nameQuote('user_id').' = '.
-						$db->nameQuote('tbl').'.'.$db->nameQuote('user_id'))
+				->join('INNER', $db->qn('#__akeebasubs_levels').' AS '.$db->qn('l').' ON '.
+						$db->qn('l').'.'.$db->qn('akeebasubs_level_id').' = '.
+						$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id'))
+				->join('LEFT OUTER', $db->qn('#__users').' AS '.$db->qn('u').' ON '.
+						$db->qn('u').'.'.$db->qn('id').' = '.
+						$db->qn('tbl').'.'.$db->qn('user_id'))
+				->join('LEFT OUTER', $db->qn('#__akeebasubs_users').' AS '.$db->qn('a').' ON '.
+						$db->qn('a').'.'.$db->qn('user_id').' = '.
+						$db->qn('tbl').'.'.$db->qn('user_id'))
 			;
 		}
 		
@@ -114,44 +114,44 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		
 		if($state->refresh == 1) {
 			$query->select(array(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_subscription_id'),
-				$db->nameQuote('tbl').'.'.$db->nameQuote('user_id')
+				$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id'),
+				$db->qn('tbl').'.'.$db->qn('user_id')
 			));
 		} elseif($state->groupbydate == 1) {
 			$query->select(array(
-				'DATE('.$db->nameQuote('created_on').') AS '.$db->nameQuote('date'),
-				'SUM('.$db->nameQuote('net_amount').') AS '.$db->nameQuote('net'),
-				'COUNT('.$db->nameQuote('akeebasubs_subscription_id').') AS '.$db->nameQuote('subs')
+				'DATE('.$db->qn('created_on').') AS '.$db->qn('date'),
+				'SUM('.$db->qn('net_amount').') AS '.$db->qn('net'),
+				'COUNT('.$db->qn('akeebasubs_subscription_id').') AS '.$db->qn('subs')
 			));
 		} elseif($state->groupbylevel == 1) {
 			$query->select(array(
-				$db->nameQuote('l').'.'.$db->nameQuote('title'),
-				'SUM('.$db->nameQuote('tbl').'.'.$db->nameQuote('net_amount').') AS '.$db->nameQuote('net'),
-				'COUNT('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_subscription_id').') AS '.$db->nameQuote('subs'),
+				$db->qn('l').'.'.$db->qn('title'),
+				'SUM('.$db->qn('tbl').'.'.$db->qn('net_amount').') AS '.$db->qn('net'),
+				'COUNT('.$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id').') AS '.$db->qn('subs'),
 			));
 		} else {
 			$query->select(array(
-				$db->nameQuote('tbl').'.*',
-				$db->nameQuote('l').'.'.$db->nameQuote('title'),
-				$db->nameQuote('l').'.'.$db->nameQuote('image'),
-				$db->nameQuote('u').'.'.$db->nameQuote('name'),
-				$db->nameQuote('u').'.'.$db->nameQuote('username'),
-				$db->nameQuote('u').'.'.$db->nameQuote('email'),
-				$db->nameQuote('u').'.'.$db->nameQuote('block'),
-				$db->nameQuote('a').'.'.$db->nameQuote('isbusiness'),
-				$db->nameQuote('a').'.'.$db->nameQuote('businessname'),
-				$db->nameQuote('a').'.'.$db->nameQuote('occupation'),
-				$db->nameQuote('a').'.'.$db->nameQuote('vatnumber'),
-				$db->nameQuote('a').'.'.$db->nameQuote('viesregistered'),
-				$db->nameQuote('a').'.'.$db->nameQuote('taxauthority'),
-				$db->nameQuote('a').'.'.$db->nameQuote('address1'),
-				$db->nameQuote('a').'.'.$db->nameQuote('address2'),
-				$db->nameQuote('a').'.'.$db->nameQuote('city'),
-				$db->nameQuote('a').'.'.$db->nameQuote('state').' AS '.$db->nameQuote('userstate'),
-				$db->nameQuote('a').'.'.$db->nameQuote('zip'),
-				$db->nameQuote('a').'.'.$db->nameQuote('country'),
-				$db->nameQuote('a').'.'.$db->nameQuote('params').' AS '.$db->nameQuote('userparams'),
-				$db->nameQuote('a').'.'.$db->nameQuote('notes').' AS '.$db->nameQuote('usernotes'),
+				$db->qn('tbl').'.*',
+				$db->qn('l').'.'.$db->qn('title'),
+				$db->qn('l').'.'.$db->qn('image'),
+				$db->qn('u').'.'.$db->qn('name'),
+				$db->qn('u').'.'.$db->qn('username'),
+				$db->qn('u').'.'.$db->qn('email'),
+				$db->qn('u').'.'.$db->qn('block'),
+				$db->qn('a').'.'.$db->qn('isbusiness'),
+				$db->qn('a').'.'.$db->qn('businessname'),
+				$db->qn('a').'.'.$db->qn('occupation'),
+				$db->qn('a').'.'.$db->qn('vatnumber'),
+				$db->qn('a').'.'.$db->qn('viesregistered'),
+				$db->qn('a').'.'.$db->qn('taxauthority'),
+				$db->qn('a').'.'.$db->qn('address1'),
+				$db->qn('a').'.'.$db->qn('address2'),
+				$db->qn('a').'.'.$db->qn('city'),
+				$db->qn('a').'.'.$db->qn('state').' AS '.$db->qn('userstate'),
+				$db->qn('a').'.'.$db->qn('zip'),
+				$db->qn('a').'.'.$db->qn('country'),
+				$db->qn('a').'.'.$db->qn('params').' AS '.$db->qn('userparams'),
+				$db->qn('a').'.'.$db->qn('notes').' AS '.$db->qn('usernotes'),
 			));
 			
 			$order = $this->getState('filter_order', 'akeebasubs_subscription_id', 'cmd');
@@ -168,15 +168,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		
 		if($state->refresh == 1) {
 			$query->group(array(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('user_id')
+				$db->qn('tbl').'.'.$db->qn('user_id')
 			));
 		} elseif($state->groupbydate == 1) {
 			$query->group(array(
-				'DATE('.$db->nameQuote('tbl').'.'.$db->nameQuote('created_on').')'
+				'DATE('.$db->qn('tbl').'.'.$db->qn('created_on').')'
 			));
 		} elseif($state->groupbylevel == 1) {
 			$query->group(array(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id')
+				$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id')
 			));
 		}
 	}
@@ -198,11 +198,11 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			foreach($states_temp as $s) {
 				$s = strtoupper($s);
 				if(!in_array($s, array('C','P','N','X'))) continue;
-				$states[] = $db->quote($s);
+				$states[] = $db->q($s);
 			}
 			if(!empty($states)) {
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('state').' IN ('.
+					$db->qn('tbl').'.'.$db->qn('state').' IN ('.
 						implode(',',$states).')'
 				);
 			}
@@ -210,15 +210,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		
 		if($state->processor) {
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('processor').' = '.
-					$db->quote($state->processor)
+				$db->qn('tbl').'.'.$db->qn('processor').' = '.
+					$db->q($state->processor)
 			);
 		}
 		
 		if($state->paykey) {
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('processor_key').' LIKE '.
-					$db->quote('%'.$state->paykey.'%')
+				$db->qn('tbl').'.'.$db->qn('processor_key').' LIKE '.
+					$db->q('%'.$state->paykey.'%')
 			);
 		}
 		
@@ -226,16 +226,16 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		{
 			if(is_numeric($state->enabled)) {
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('enabled').' = '.
-						$db->quote($state->enabled)
+					$db->qn('tbl').'.'.$db->qn('enabled').' = '.
+						$db->q($state->enabled)
 				);
 			}
 	
 			if($state->title) {
 				$search = '%'.$state->title.'%';
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('title').' LIKE '.
-						$db->quote($search)
+					$db->qn('tbl').'.'.$db->qn('title').' LIKE '.
+						$db->q($search)
 				);
 			}
 			
@@ -245,35 +245,35 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				// @todo Try to use JDatabase quoting functions on this beast without a strong urge to commit suicide
 				$query->where(
 					'CONCAT(IF(u.name IS NULL,"",u.name),IF(u.username IS NULL,"",u.username),IF(u.email IS NULL, "", u.email),IF(a.businessname IS NULL, "", a.businessname), IF(a.vatnumber IS NULL,"",a.vatnumber)) LIKE '.
-						$db->quote($search)
+						$db->q($search)
 				);
 			}
 			
 			if(is_numeric($state->level) && ($state->level > 0)) {
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_level_id').' = '.
-						$db->quote($state->level)
+					$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id').' = '.
+						$db->q($state->level)
 				);
 			}
 			
 			if(is_numeric($state->coupon_id) && ($state->coupon_id > 0)) {
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' = '.
-						$db->quote($state->coupon_id)
+					$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' = '.
+						$db->q($state->coupon_id)
 				);
 			}
 			
 			if(is_numeric($state->user_id) && ($state->user_id > 0)) {
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('user_id').' = '.
-						$db->quote($state->user_id)
+					$db->qn('tbl').'.'.$db->qn('user_id').' = '.
+						$db->q($state->user_id)
 				);
 			}
 			
 			if(is_numeric($state->contact_flag)) {
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('contact_flag').' = '.
-						$db->quote($state->contact_flag)
+					$db->qn('tbl').'.'.$db->qn('contact_flag').' = '.
+						$db->q($state->contact_flag)
 				);
 			}
 			
@@ -315,24 +315,24 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if(!empty($from) && !empty($to)) {
 				// Filter from-to dates
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('publish_up').' >= '.
-						$db->quote($from)
+					$db->qn('tbl').'.'.$db->qn('publish_up').' >= '.
+						$db->q($from)
 				);
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('publish_up').' <= '.
-						$db->quote($to)
+					$db->qn('tbl').'.'.$db->qn('publish_up').' <= '.
+						$db->q($to)
 				);
 			} elseif(!empty($from) && empty($to)) {
 				// Filter after date
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('publish_up').' >= '.
-						$db->quote($from)
+					$db->qn('tbl').'.'.$db->qn('publish_up').' >= '.
+						$db->q($from)
 				);
 			} elseif(empty($from) && !empty($to)) {
 				// Filter up to a date
 				$query->where(
-					$db->nameQuote('tbl').'.'.$db->nameQuote('publish_down').' <= '.
-						$db->quote($to)
+					$db->qn('tbl').'.'.$db->qn('publish_down').' <= '.
+						$db->q($to)
 				);
 			}
 			
@@ -344,11 +344,11 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				case 'none':
 					$query->where(
 						'('.
-						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' = '.
-						$db->quote(0).')'
+						'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' = '.
+						$db->q(0).')'
 						.' AND '.
-						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' = '.
-						$db->quote(0).')'
+						'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_upgrade_id').' = '.
+						$db->q(0).')'
 						.')'
 					);
 					break;
@@ -356,11 +356,11 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				case 'coupon':
 					$query->where(
 						'('.
-						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' > '.
-						$db->quote(0).')'
+						'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' > '.
+						$db->q(0).')'
 						.' AND '.
-						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' = '.
-						$db->quote(0).')'
+						'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_upgrade_id').' = '.
+						$db->q(0).')'
 						.')'
 					);
 					if($state->filter_discountcode) {
@@ -377,11 +377,11 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				case 'upgrade':
 					$query->where(
 						'('.
-						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' = '.
-						$db->quote(0).')'
+						'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' = '.
+						$db->q(0).')'
 						.' AND '.
-						'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' > '.
-						$db->quote(0).')'
+						'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_upgrade_id').' > '.
+						$db->q(0).')'
 						.')'
 					);
 					if($state->filter_discountcode) {
@@ -420,19 +420,19 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if(!empty($coupon_ids) && !empty($upgrade_ids)) {
 				$query->where(
 					'('.	
-					'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' IN ('.
-						$db->quote(implode(',', $coupon_ids)).'))'
+					'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' IN ('.
+						$db->q(implode(',', $coupon_ids)).'))'
 					.' OR '.
-					'('.$db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' IN ('.
-						$db->quote(implode(',', $upgrade_ids)).'))'
+					'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_upgrade_id').' IN ('.
+						$db->q(implode(',', $upgrade_ids)).'))'
 					.')'
 				);
 			} elseif(!empty($coupon_ids)) {
-				$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_coupon_id').' IN ('.
-					$db->quote(implode(',', $coupon_ids)).')');
+				$query->where($db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' IN ('.
+					$db->q(implode(',', $coupon_ids)).')');
 			} elseif(!empty($upgrade_ids)) {
-				$query->where($db->nameQuote('tbl').'.'.$db->nameQuote('akeebasubs_upgrade_id').' IN ('.
-					$db->quote(implode(',', $upgrade_ids)).')');
+				$query->where($db->qn('tbl').'.'.$db->qn('akeebasubs_upgrade_id').' IN ('.
+					$db->q(implode(',', $upgrade_ids)).')');
 			}
 		}
 		
@@ -454,8 +454,8 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			}
 			// Filter from-to dates
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('created_on').' >= '.
-					$db->quote($since)
+				$db->qn('tbl').'.'.$db->qn('created_on').' >= '.
+					$db->q($since)
 			);
 		}
 		
@@ -476,8 +476,8 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$until = $jFrom->toMySQL();
 			}
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('created_on').' <= '.
-					$db->quote($until)
+				$db->qn('tbl').'.'.$db->qn('created_on').' <= '.
+					$db->q($until)
 			);
 		}
 		
@@ -520,32 +520,32 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if(!empty($from) && !empty($to)) {
 			// Filter from-to dates
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('publish_down').' >= '.
-					$db->quote($from)
+				$db->qn('tbl').'.'.$db->qn('publish_down').' >= '.
+					$db->q($from)
 			);
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('publish_down').' <= '.
-					$db->quote($to)
+				$db->qn('tbl').'.'.$db->qn('publish_down').' <= '.
+					$db->q($to)
 			);
 		} elseif(!empty($from) && empty($to)) {
 			// Filter after date
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('publish_down').' >= '.
-					$db->quote($from)
+				$db->qn('tbl').'.'.$db->qn('publish_down').' >= '.
+					$db->q($from)
 			);
 		} elseif(empty($from) && !empty($to)) {
 			// Filter up to a date
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('publish_down').' <= '.
-					$db->quote($to)
+				$db->qn('tbl').'.'.$db->qn('publish_down').' <= '.
+					$db->q($to)
 			);
 		}
 		
 		// No-zero toggle
 		if(!empty($state->nozero)) {
 			$query->where(
-				$db->nameQuote('tbl').'.'.$db->nameQuote('net_amount').' > '.
-					$db->quote('0')
+				$db->qn('tbl').'.'.$db->qn('net_amount').' > '.
+					$db->q('0')
 			);
 		}
 	}
@@ -553,7 +553,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
 		$query = FOFQueryAbstract::getNew($db)
-				->from($db->nameQuote('#__akeebasubs_subscriptions').' AS '.$db->nameQuote('tbl'));
+				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
 		
 		$this->_buildQueryColumns($query);
 		$this->_buildQueryJoins($query);
@@ -615,9 +615,9 @@ class AkeebasubsModelSubscriptions extends FOFModel
 	{
 		$db = $this->getDbo();
 		$query = FOFQueryAbstract::getNew($db)
-			->select(array('COUNT(DISTINCT('.$db->nameQuote('user_id').'))'))
-			->from($db->nameQuote('#__akeebasubs_subscriptions'))
-			->where($db->nameQuote('enabled').' = '.$db->quote('1'));
+			->select(array('COUNT(DISTINCT('.$db->qn('user_id').'))'))
+			->from($db->qn('#__akeebasubs_subscriptions'))
+			->where($db->qn('enabled').' = '.$db->q('1'));
 		$db->setQuery($query);
 		return $db->loadResult();
 	}
