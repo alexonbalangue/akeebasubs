@@ -25,11 +25,6 @@
 				<field type="spacer" />
 				<field name="entidade" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_ENTIDADE_LABEL" description="PLG_AKPAYMENT_IFTHEN_ENTIDADE_DESC"/>
 				<field name="subentidade" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_SUBENTIDADE_LABEL" description="PLG_AKPAYMENT_IFTHEN_SUBENTIDADE_DESC"/>
-				<field type="spacer" />
-				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_IFTHEN_SANDBOX_LABEL" description="PLG_AKPAYMENT_IFTHEN_SANDBOX_DESC">
-				<option value="0">No</option>
-				<option value="1">Yes</option>
-				</field>
 			</fieldset>
 		</fields>
 	</config>
