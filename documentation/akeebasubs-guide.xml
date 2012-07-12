@@ -1700,34 +1700,78 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       Kingdom. For the country of your business (e.g. Greece for a
       Greece-based business) create on more rule with <guilabel>VIES
       Reg</guilabel> set to Yes and the tax rate set to your local VAT tax
-      rate (e.g. 23% for Greece). This way, the following happens:</para>
+      rate (e.g. 23% for Greece).</para>
+
+      <para>After setting up the tax rules you need to pay attention to the
+      ordering of the rules. The correct ordering of the rules is:</para>
 
       <itemizedlist>
         <listitem>
-          <para>If the customer is extra-EU he will be charged no VAT</para>
+          <para>The first published rule must be the catch-all default rule
+          for EU countries: no country selected, VIES Reg set to Yes, tax rate
+          set to 0.</para>
         </listitem>
 
         <listitem>
-          <para>If the customer is an intra-EU business, he will be charged no
-          VAT (he's liable to VAT on his local tax authorities, not your
-          country's tax authorities)</para>
+          <para>The second published rule must be the catch-all default rule
+          for non-EU countries: no country selected, VIES Reg set to No, tax
+          rate set to 0.</para>
+        </listitem>
+
+        <listitem>
+          <para>The following rules, in any order, are the tax rules for each
+          EU country except yours: VIES Reg set to Yes and tax rate set to
+          0</para>
+        </listitem>
+
+        <listitem>
+          <para>Finally, publish the two rules for your country:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>One rule where VIES Reg is set to Yes and tax set to your
+              local VAT rate</para>
+            </listitem>
+
+            <listitem>
+              <para>One more rule where VIES Reg is set to No and tax set to
+              your local VAT rate</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>This way, the following happens:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>If the customer is extra-EU he will be charged no VAT (the
+          first catch-all rule kicks in)</para>
         </listitem>
 
         <listitem>
           <para>If the customer is intra-EU, but not a business with a
-          VIES-registered VAT number, he's paying VAT.</para>
+          VIES-registered VAT number, he's paying VAT (the second catch-all
+          rule kicks in).</para>
+        </listitem>
+
+        <listitem>
+          <para>If the customer is an intra-EU business, he will be charged no
+          VAT (the specific country rule kicks in). He's liable to VAT on his
+          local tax authorities, not your country's tax authorities.</para>
         </listitem>
 
         <listitem>
           <para>If the customer is from your own country, you are charging him
-          with VAT no matter what.</para>
+          with VAT no matter of the VIES registration status (the final two
+          rules kick in).</para>
         </listitem>
       </itemizedlist>
 
       <para>Do note that the same setup is required if you are an extra-EU
       business –e.g. US-based– with an EU VAT ID (it's in the format
       EU012345678). In this case, you have no EU country of residence, so you
-      can skip the last tax rule mentioned above.</para>
+      can skip the last set of two tax rules mentioned above.</para>
 
       <bridgehead>Intra-EU businesses without a VIES-registered VAT
       number</bridgehead>
