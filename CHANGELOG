@@ -28,6 +28,7 @@ Akeeba Subscriptions 2.3.0 DEV RELEASE
 # [LOW] Coupons' user hits limit were off by one
 # [LOW] Sometimes you could not select Joomla! users in the Affiliates and Users view
 # [LOW] Enabling caching would make all instances of the "Akeeba Subscriptions - List subscription levels" module on a single page to show the same subscription levels
+# [LOW] The "Agree to TOS" field's validation error text would remain, even after setting the field to Yes, until you tried changing an address field.
 
 Akeeba Subscriptions 2.2.1
 ================================================================================
