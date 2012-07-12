@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - IFmb (IFthen)</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-07-07</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_IFTHEN_DESCRIPTION</description>
+	<files>
+		<filename plugin="ifthen">ifthen.php</filename>
+		<folder>ifthen</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_ifthen.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_ifthen.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_TITLE_LABEL" description="PLG_AKPAYMENT_IFTHEN_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_PPIMAGE_LABEL" description="PLG_AKPAYMENT_IFTHEN_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="entidade" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_ENTIDADE_LABEL" description="PLG_AKPAYMENT_IFTHEN_ENTIDADE_DESC"/>
+				<field name="subentidade" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_SUBENTIDADE_LABEL" description="PLG_AKPAYMENT_IFTHEN_SUBENTIDADE_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_IFTHEN_SANDBOX_LABEL" description="PLG_AKPAYMENT_IFTHEN_SANDBOX_DESC">
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
