@@ -118,7 +118,7 @@ class plgAkeebasubsJuga extends JPlugin
 			/*
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
-			$mNow = $jNow->toMySQL();
+			$mNow = $jNow->toSql();
 			*/
 			
 			$sql = 'REPLACE INTO `#__juga_u2g` (`user_id`,`group_id`) VALUES ';

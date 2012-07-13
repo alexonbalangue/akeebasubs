@@ -149,11 +149,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 			$invoice = (object)array(
 				'number'		=> $invoice_number,
-				'invoice_date'	=> $jNow->toMySQL(),
+				'invoice_date'	=> $jNow->toSql(),
 				'status'		=> 4,
-				'duedate'		=> $jNow->toMySQL(),
+				'duedate'		=> $jNow->toSql(),
 				'numbercheck'	=> 0,
-				'invoice_sent_date'	=> $jNow->toMySQL(),
+				'invoice_sent_date'	=> $jNow->toSql(),
 				'communication'	=> '',
 				'discount'		=> $row->discount_amount * 1.0,
 				'subtotal'		=> $row->prediscount_amount,
@@ -174,7 +174,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				'inv_id'		=> $id,
 				'method'		=> 'akeebasubs',
 				'transaction_id'=> $row->processor.'/'.$row->processor_key,
-				'pdate'			=> $jNow->toMySQL(),
+				'pdate'			=> $jNow->toSql(),
 				'status'		=> 1
 			);
 			$db->insertObject('#__ccinvoices_payment', $invoicePayment, 'id');
@@ -183,9 +183,9 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$object = (object)array(
 				'akeebasubs_subscription_id'	=> $row->akeebasubs_subscription_id,
 				'invoice_no'					=> $id,
-				'invoice_date'					=> $jNow->toMySQL(),
+				'invoice_date'					=> $jNow->toSql(),
 				'enabled'						=> 1,
-				'created_on'					=> $jNow->toMySQL(),
+				'created_on'					=> $jNow->toSql(),
 				'created_by'					=> $row->created_by,
 			);
 			$db->insertObject('#__akeebasubs_invoices', $object, 'akeebasubs_subscription_id');

@@ -134,8 +134,8 @@ class AkeebasubsConverterAmbrasubs extends AkeebasubsConverterAbstract
 				$jExp = new JDate($this->data['subscriptions'][$id]['publish_down']);
 				if($jExp->toUnix() < $tsNow) {
 					$this->data['subscriptions'][$id]['contact_flag'] = 2;
-					$this->data['subscriptions'][$id]['first_contact'] = $jNow->toMySQL();
-					$this->data['subscriptions'][$id]['second_contact'] = $jNow->toMySQL();
+					$this->data['subscriptions'][$id]['first_contact'] = $jNow->toSql();
+					$this->data['subscriptions'][$id]['second_contact'] = $jNow->toSql();
 				}
 			}
 		}

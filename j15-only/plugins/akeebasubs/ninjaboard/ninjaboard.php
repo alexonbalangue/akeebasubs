@@ -118,7 +118,7 @@ class plgAkeebasubsNinjaboard extends JPlugin
 			/*
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
-			$mNow = $jNow->toMySQL();
+			$mNow = $jNow->toSql();
 			*/
 			
 			$sql = 'REPLACE INTO `#__ninjaboard_user_group_maps` (`joomla_user_id`,`ninjaboard_user_group_id`) VALUES ';

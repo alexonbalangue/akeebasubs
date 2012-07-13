@@ -224,8 +224,8 @@ class plgAkpaymentCcavenue extends JPlugin
 				$jEnd = new JDate($end);
 			}
 			
-			$updates['publish_up'] = $jStart->toMySQL();
-			$updates['publish_down'] = $jEnd->toMySQL();
+			$updates['publish_up'] = $jStart->toSql();
+			$updates['publish_down'] = $jEnd->toSql();
 			$updates['enabled'] = 1;
 		}
 		$subscription->save($updates);

@@ -65,7 +65,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		// Load a list of subscriptions which have to expire -- Nooku does the rest magically!
 		$subs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->enabled(1)
-			->expires_to($jNow->toMySQL())
+			->expires_to($jNow->toSql())
 			->getList();
 		
 		// Update the last run info and quit

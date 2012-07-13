@@ -118,7 +118,7 @@ class plgAkeebasubsTienda extends JPlugin
 			/*
 			jimport('joomla.utilities.date');
 			$jNow = new JDate();
-			$mNow = $jNow->toMySQL();
+			$mNow = $jNow->toSql();
 			*/
 			
 			$sql = 'REPLACE INTO `#__tienda_usergroupxref` (`user_id`,`group_id`) VALUES ';

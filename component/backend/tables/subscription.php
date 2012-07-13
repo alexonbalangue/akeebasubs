@@ -41,11 +41,11 @@ class AkeebasubsTableSubscription extends FOFTable
 				$this->publish_up = '2000-01-01';
 			}
 			$test = new JDate($this->publish_up);
-			if($test->toMySQL() == '0000-00-00 00:00:00') {
+			if($test->toSql() == '0000-00-00 00:00:00') {
 				$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_UP'));
 				$result = false;
 			} else {
-				$this->publish_up = $test->toMySQL();
+				$this->publish_up = $test->toSql();
 			}
 		}
 
@@ -59,11 +59,11 @@ class AkeebasubsTableSubscription extends FOFTable
 				$this->publish_down = '2037-01-01';
 			}
 			$test = new JDate($this->publish_down);
-			if($test->toMySQL() == '0000-00-00 00:00:00') {
+			if($test->toSql() == '0000-00-00 00:00:00') {
 				$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN'));
 				$result = false;
 			}  else {
-				$this->publish_down = $test->toMySQL();
+				$this->publish_down = $test->toSql();
 			}
 		}
 		

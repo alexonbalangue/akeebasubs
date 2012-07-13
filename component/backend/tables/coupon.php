@@ -30,7 +30,7 @@ class AkeebasubsTableCoupon extends FOFTable
 		jimport('joomla.utilities.date');
 		if(empty($this->publish_up) || ($this->publish_up == '0000-00-00 00:00:00')) {
 			$jUp = new JDate();
-			$this->publish_up = $jUp->toMySQL();
+			$this->publish_up = $jUp->toSql();
 		} else {
 			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 			if(!preg_match($regex, $this->publish_up)) {
@@ -41,7 +41,7 @@ class AkeebasubsTableCoupon extends FOFTable
 		
 		if(empty($this->publish_down) || ($this->publish_down == '0000-00-00 00:00:00')) {
 			$jDown = new JDate('2030-01-01 00:00:00');
-			$this->publish_down = $jDown->toMySQL();
+			$this->publish_down = $jDown->toSql();
 		} else {
 			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 			if(!preg_match($regex, $this->publish_down)) {
@@ -56,7 +56,7 @@ class AkeebasubsTableCoupon extends FOFTable
 			$this->publish_down = $temp;
 		} elseif($jDown->toUnix() == $jUp->toUnix()) {
 			$jDown = new JDate('2030-01-01 00:00:00');
-			$this->publish_down = $jDown->toMySQL();
+			$this->publish_down = $jDown->toSql();
 		}
 		
 		// Make sure assigned subscriptions really do exist and normalize the list

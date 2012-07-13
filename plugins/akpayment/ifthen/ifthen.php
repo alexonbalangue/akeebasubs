@@ -136,8 +136,8 @@ class plgAkpaymentIFthen extends JPlugin
 			'processor_key'		=> $key,
 			'state'				=> 'C',
 			'enabled'			=> 1,
-			'publish_up'		=> $jStart->toMySQL(),
-			'publish_down'		=> $jEnd->toMySQL()
+			'publish_up'		=> $jStart->toSql(),
+			'publish_down'		=> $jEnd->toSql()
 		);
 		$subscription->save($updates);
 		

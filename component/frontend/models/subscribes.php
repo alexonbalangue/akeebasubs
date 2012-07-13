@@ -1234,7 +1234,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
-		$mNow = $jNow->toMySQL();
+		$mNow = $jNow->toSql();
 		
 		if(empty($subscriptions)) {
 			$startDate = $now;
@@ -1274,9 +1274,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$endDate = $startDate + $duration;
 
 		$jStartDate = new JDate($startDate);
-		$mStartDate = $jStartDate->toMySQL();
+		$mStartDate = $jStartDate->toSql();
 		$jEndDate = new JDate($endDate);
-		$mEndDate = $jEndDate->toMySQL();
+		$mEndDate = $jEndDate->toSql();
 		
 		// Get the affiliate ID and make sure it exists and that it's enabled
 		$session = JFactory::getSession();

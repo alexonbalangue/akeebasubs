@@ -88,8 +88,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 				->contact_flag(0)
 				->level($level->akeebasubs_level_id)
 				->enabled(1)
-				->expires_from($jFrom->toMySQL())
-				->expires_to($jTo->toMySQL())
+				->expires_from($jFrom->toSql())
+				->expires_to($jTo->toSql())
 				->getList();
 
 			// Get the subscriptions expiring within the next $notify2 days for
@@ -104,8 +104,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 					->contact_flag(1)
 					->level($level->akeebasubs_level_id)
 					->enabled(1)
-					->expires_from($jFrom->toMySQL())
-					->expires_to($jTo->toMySQL())
+					->expires_from($jFrom->toSql())
+					->expires_to($jTo->toSql())
 					->getList();
 			}
 				
@@ -154,7 +154,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			
 			// Loop through subscriptions and send out emails, checking for timeout
 			$jNow = new JDate();
-			$mNow = $jNow->toMySQL();
+			$mNow = $jNow->toSql();
 			foreach($realSubs as $sub) {
 				// Is it the first or the second contact?
 				if($sub->contact_flag == 0) {

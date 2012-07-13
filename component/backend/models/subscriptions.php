@@ -291,7 +291,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				if($from == 0) {
 					$from = '';
 				} else {
-					$from = $jFrom->toMySQL();
+					$from = $jFrom->toSql();
 				}
 			}
 			
@@ -308,7 +308,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				if($to == 0) {
 					$to = '';
 				} else {
-					$to = $jTo->toMySQL();
+					$to = $jTo->toSql();
 				}
 			}
 			
@@ -450,7 +450,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if($since == 0) {
 				$since = '';
 			} else {
-				$since = $jFrom->toMySQL();
+				$since = $jFrom->toSql();
 			}
 			// Filter from-to dates
 			$query->where(
@@ -473,7 +473,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if($until == 0) {
 				$until = '';
 			} else {
-				$until = $jFrom->toMySQL();
+				$until = $jFrom->toSql();
 			}
 			$query->where(
 				$db->qn('tbl').'.'.$db->qn('created_on').' <= '.
@@ -496,7 +496,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if($from == 0) {
 				$from = '';
 			} else {
-				$from = $jFrom->toMySQL();
+				$from = $jFrom->toSql();
 			}
 		}
 		
@@ -513,7 +513,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if($to == 0) {
 				$to = '';
 			} else {
-				$to = $jTo->toMySQL();
+				$to = $jTo->toSql();
 			}
 		}
 		

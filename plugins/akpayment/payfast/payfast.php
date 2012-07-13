@@ -230,8 +230,8 @@ class plgAkpaymentPayFast extends JPlugin
 				$jEnd = new JDate($end);
 			}
 
-			$updates['publish_up'] = $jStart->toMySQL();
-			$updates['publish_down'] = $jEnd->toMySQL();
+			$updates['publish_up'] = $jStart->toSql();
+			$updates['publish_down'] = $jEnd->toSql();
 			$updates['enabled'] = 1;
 
 		}
@@ -362,7 +362,7 @@ class plgAkpaymentPayFast extends JPlugin
 		$config = JFactory::getConfig();
 		if(version_compare(JVERSION, '3.0.0', 'ge')) {
 			$logpath = $config->get('log_path');
-		} else P
+		} else {
 			$logpath = $config->getValue('log_path');
 		}
 		$logFile = $logpath.'/akpayment_payfast_ipn.php';

@@ -78,9 +78,9 @@ class plgContentAsrestricted extends JPlugin
 			$jNow = new JDate();
 			$list = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
-				->expires_from($jNow->toMySQL())
+				->expires_from($jNow->toSql())
 				->paystate('C')
-				//->publish_down($jNow->toMySQL())
+				//->publish_down($jNow->toSql())
 				->getList();
 			
 			if(count($list)) foreach($list as $sub) {

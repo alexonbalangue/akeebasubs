@@ -198,8 +198,8 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 			$tsNow = $jNow->toUnix();
 			if(!empty($this->data['subscriptions'])) foreach($this->data['subscriptions'] as $id => $subscription) {
 				if($subscription['lifetime']) {
-					$subscription['publish_down'] = $jForever->toMySQL();
-					$this->data['subscriptions'][$id]['publish_down'] = $jForever->toMySQL();
+					$subscription['publish_down'] = $jForever->toSql();
+					$this->data['subscriptions'][$id]['publish_down'] = $jForever->toSql();
 				}
 				
 				if($subscription['aec_status'] == 'Active') {
@@ -218,8 +218,8 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 				$jExp = new JDate($this->data['subscriptions'][$id]['publish_down']);
 				if($jExp->toUnix() < $tsNow) {
 					$this->data['subscriptions'][$id]['contact_flag'] = 2;
-					$this->data['subscriptions'][$id]['first_contact'] = $jNow->toMySQL();
-					$this->data['subscriptions'][$id]['second_contact'] = $jNow->toMySQL();
+					$this->data['subscriptions'][$id]['first_contact'] = $jNow->toSql();
+					$this->data['subscriptions'][$id]['second_contact'] = $jNow->toSql();
 				} else {
 					$this->data['subscriptions'][$id]['contact_flag'] = 0;
 					$this->data['subscriptions'][$id]['first_contact'] = '0000-00-00 00:00:00';

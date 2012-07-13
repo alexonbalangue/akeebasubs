@@ -276,8 +276,8 @@ class plgAkpaymentPaypal extends JPlugin
 				$jEnd = new JDate($end);
 			}
 			
-			$updates['publish_up'] = $jStart->toMySQL();
-			$updates['publish_down'] = $jEnd->toMySQL();
+			$updates['publish_up'] = $jStart->toSql();
+			$updates['publish_down'] = $jEnd->toSql();
 			$updates['enabled'] = 1;
 
 		}
@@ -286,10 +286,10 @@ class plgAkpaymentPaypal extends JPlugin
 			// Create a new record for the old subscription
 			$oldData = $subscription->getData();
 			$oldData['akeebasubs_subscription_id'] = 0;
-			$oldData['publish_down'] = $jNow->toMySQL();
+			$oldData['publish_down'] = $jNow->toSql();
 			$oldData['enabled'] = 0;
 			$oldData['contact_flag'] = 3;
-			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toMySQL();			
+			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();			
 			
 			// Calculate new start/end time for the subscription
 			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
@@ -309,8 +309,8 @@ class plgAkpaymentPaypal extends JPlugin
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
 			
-			$updates['publish_up'] = $jStart->toMySQL();
-			$updates['publish_down'] = $jEnd->toMySQL();
+			$updates['publish_up'] = $jStart->toSql();
+			$updates['publish_down'] = $jEnd->toSql();
 			
 			// Save the record for the old subscription
 			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
