@@ -142,8 +142,8 @@ class plgAkeebasubsCommunityacl extends JPlugin
 		if(!empty($removeGroups)) {
 			$protoSQL = 'DELETE FROM `#__community_acl_users` WHERE `user_id` = ' . $db->Quote($user_id) . ' AND `group_id` = ';
 			foreach($removeGroups as $group) {
-				$sql = $protoSQL . $db->Quote($group->group) . 'AND '.$db->nameQuote('role_id').' = '.$db->Quote($group->role)
-					. 'AND '.$db->nameQuote('function_id').' = '.$db->Quote($group->function);
+				$sql = $protoSQL . $db->Quote($group->group) . 'AND '.$db->quoteName('role_id').' = '.$db->Quote($group->role)
+					. 'AND '.$db->quoteName('function_id').' = '.$db->Quote($group->function);
 				$db->setQuery($sql);
 				$db->query();
 			}
