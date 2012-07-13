@@ -28,7 +28,7 @@ $this->loadHelper('format');
 	<input type="hidden" name="view" value="upgrade" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_upgrade_id" value="<?php echo $this->item->akeebasubs_upgrade_id ?>" />
-	<input type="hidden" name="<?php echo JUtility::getToken();?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
 	<fieldset id="upgrade-basic">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_UPGRADE_BASIC_TITLE')?></legend>

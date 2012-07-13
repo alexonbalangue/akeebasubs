@@ -41,7 +41,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 
 <form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscribe&layout=default&slug='.FOFInput::getString('slug','',$this->input))?>" method="post"
 	id="signupForm" >
-	<input type="hidden" name="_token" value="<?php echo JUtility::getToken()?>" />
+	<input type="hidden" name="_token" value="<?php echo JFactory::getSession()->getToken()?>" />
 	
 	<?php echo $this->loadTemplate('fields'); ?>
 	

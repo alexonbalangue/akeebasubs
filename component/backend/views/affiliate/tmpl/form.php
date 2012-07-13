@@ -29,7 +29,7 @@ $this->loadHelper('format');
 	<input type="hidden" name="view" value="affiliate" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_affiliate_id" value="<?php echo $this->item->akeebasubs_affiliate_id ?>" />
-	<input type="hidden" name="<?php echo JUtility::getToken();?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
 <fieldset id="coupons-basic" style="width: 48%; float: left;">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_AFFILIATE_BASIC_TITLE')?></legend>

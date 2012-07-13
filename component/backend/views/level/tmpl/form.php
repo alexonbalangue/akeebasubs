@@ -22,7 +22,7 @@ $this->loadHelper('cparams');
 	<input type="hidden" name="view" value="level" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_level_id" value="<?php echo $this->item->akeebasubs_level_id ?>" />
-	<input type="hidden" name="<?php echo JUtility::getToken();?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 	
 	<fieldset id="levels-basic">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BASIC_TITLE'); ?></legend>
