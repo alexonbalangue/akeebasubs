@@ -49,6 +49,7 @@ class AkeebasubsHelperFormat
 		
 		if(empty($levelgroups)) {
 			$levelgroupsList = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
+				->savestate(0)
 				->getItemList(true);
 			if(!empty($levelgroupsList)) foreach($levelgroupsList as $levelgroup) {
 				$levelgroups[$levelgroup->akeebasubs_levelgroup_id] = $levelgroup->title;

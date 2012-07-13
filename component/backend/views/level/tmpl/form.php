@@ -69,7 +69,7 @@ $this->loadHelper('cparams');
 		
 		<label for="akeebasubs_level_id" class="main mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP'); ?></label>
 		<span>
-			<?php echo AkeebasubsHelperSelect::levelgroups($this->item->akeebasubs_level_id); ?>
+			<?php echo AkeebasubsHelperSelect::levelgroups($this->item->akeebasubs_levelgroup_id); ?>
 		</span>
 		<div class="akeebasubs-clear"></div>
 		
