@@ -20,7 +20,11 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.pieRenderer.min.js?'.A
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUBS_VERSIONHASH);
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/cpanelgraphs.js?'.AKEEBASUBS_VERSIONHASH);
 
-JHTML::_('behavior.mootools');
+if(version_compare(JVERSION, '3.0.0', 'ge')) {
+	JHTML::_('behavior.framework');
+} else {
+	JHTML::_('behavior.mootools');
+}
 
 $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);
 ?>

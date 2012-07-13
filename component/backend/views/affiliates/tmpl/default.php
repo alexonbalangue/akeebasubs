@@ -8,7 +8,11 @@
 defined('_JEXEC') or die();
 
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
-JHtml::_('behavior.mootools');
+if(version_compare(JVERSION, '3.0.0', 'ge')) {
+	JHTML::_('behavior.framework');
+} else {
+	JHTML::_('behavior.mootools');
+}
 
 $this->loadHelper('select');
 $this->loadHelper('cparams');
