@@ -1000,7 +1000,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// prevent spam registrations when the subscription form is abused.
 			jimport('joomla.user.helper');
 			$params['block'] = 1;
-			$params['activation'] = JUtility::getHash( JUserHelper::genRandomPassword() );
+			$params['activation'] = JFactory::getApplication()->getHash( JUserHelper::genRandomPassword() );
 			
 			$userIsSaved = false;
 			$user->bind($params);
