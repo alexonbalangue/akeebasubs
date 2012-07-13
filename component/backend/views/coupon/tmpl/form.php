@@ -23,7 +23,7 @@ $this->loadHelper('cparams');
 $this->loadHelper('select');
 $this->loadHelper('params');
 ?>
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="coupon" />
 <input type="hidden" name="task" value="" />

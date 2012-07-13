@@ -12,7 +12,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSI
 JHtml::_('behavior.tooltip');
 
 ?>
-<form action="index.php" method="post" name="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="levelgroup" />
 	<input type="hidden" name="task" value="" />
