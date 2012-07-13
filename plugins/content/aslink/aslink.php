@@ -156,7 +156,11 @@ class plgContentAslink extends JPlugin
             foreach ($items as $item) {
 				if(is_string($item->params)) {
 					$params = new JRegistry();
-					$params->loadJSON($item->params);
+					if(version_compare(JVERSION, '3.0.0', 'ge')) {
+						$params->loadString($item->params, 'JSON');
+					} else {
+						$params->loadJSON($item->params);
+					}
 				} else {
 					$params = $item->params;
 				}
