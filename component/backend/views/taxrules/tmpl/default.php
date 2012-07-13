@@ -61,7 +61,7 @@ $this->loadHelper('format');
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->items ) + 1; ?>);" />
+				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(<?php echo count( $this->items ) + 1; ?>);" />
 			</td>
 			<td>
 				<?php echo AkeebasubsHelperSelect::countries($this->getModel()->getState('country',''), 'country', array('onchange'=>'this.form.submit();')); ?>

@@ -68,7 +68,7 @@ $this->loadHelper('format');
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count( $this->items ) + 1; ?>);" />
+				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(<?php echo count( $this->items ) + 1; ?>);" />
 			</td>
 			<td colspan="2">
 				<input type="text" name="search" id="search"
