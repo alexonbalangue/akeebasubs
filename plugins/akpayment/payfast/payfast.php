@@ -360,7 +360,11 @@ class plgAkpaymentPayFast extends JPlugin
 	private function logIPN($data, $isValid)
 	{
 		$config = JFactory::getConfig();
-		$logpath = $config->getValue('log_path');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$logpath = $config->get('log_path');
+		} else P
+			$logpath = $config->getValue('log_path');
+		}
 		$logFile = $logpath.'/akpayment_payfast_ipn.php';
 		jimport('joomla.filesystem.file');
 		if(!JFile::exists($logFile)) {

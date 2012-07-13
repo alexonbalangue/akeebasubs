@@ -82,7 +82,11 @@ class plgAkeebasubsAffemails extends JPlugin
 	{
 		// Get the site name
 		$config = JFactory::getConfig();
-		$sitename = $config->getValue('config.sitename');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$sitename = $config->get('sitename');
+		} else {
+			$sitename = $config->getValue('config.sitename');
+		}
 	
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
@@ -112,7 +116,11 @@ class plgAkeebasubsAffemails extends JPlugin
 		// -- Affiliate user's preferred language
 		jimport('joomla.registry.registry');
 		$uparams = is_object($user->params) ? $user->params : new JRegistry($affiliateUser->params);
-		$userlang = $uparams->getValue('language','');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$userlang = $uparams->get('language','');
+		} else {
+			$userlang = $uparams->getValue('language','');
+		}
 		if(!empty($userlang)) {
 			$jlang->load('plg_akeebasubs_affemails', JPATH_ADMINISTRATOR, $affiliateUser, true);
 			$jlang->load('plg_akeebasubs_affemails.override', JPATH_ADMINISTRATOR, $affiliateUser, true);
@@ -201,7 +209,14 @@ class plgAkeebasubsAffemails extends JPlugin
 
 		// Send the email
 		$mailer = JFactory::getMailer();
-		$mailer->setSender(array( $config->getvalue('config.mailfrom'), $config->getvalue('config.fromname') ));
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$mailfrom = $config->get('mailfrom');
+			$fromname = $config->get('fromname');
+		} else {
+			$mailfrom = $config->getValue('config.mailfrom');
+			$fromname = $config->getValue('config.fromname');
+		}
+		$mailer->setSender(array( $mailfrom, $fromname ));
 		$mailer->addRecipient($affiliateUser->email);
 		$mailer->setSubject($subject);
 		$mailer->setBody($body);

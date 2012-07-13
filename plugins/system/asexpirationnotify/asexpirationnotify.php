@@ -253,7 +253,11 @@ class plgSystemAsexpirationnotify extends JPlugin
 	{
 		// Get the site name
 		$config = JFactory::getConfig();
-		$sitename = $config->getValue('config.sitename');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$sitename = $config->get('sitename');
+		} else {
+			$sitename = $config->getValue('config.sitename');
+		}
 	
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
@@ -273,7 +277,11 @@ class plgSystemAsexpirationnotify extends JPlugin
 		// -- User's preferred language
 		jimport('joomla.registry.registry');
 		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
-		$userlang = $uparams->getValue('language','');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$userlang = $uparams->get('language','');
+		} else {
+			$userlang = $uparams->getValue('language','');
+		}
 		if(!empty($userlang)) {
 			$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $userlang, true);
 			$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, $userlang, true);
@@ -349,7 +357,14 @@ class plgSystemAsexpirationnotify extends JPlugin
 		
 		// Send the email
 		$mailer = JFactory::getMailer();
-		$mailer->setSender(array( $config->getvalue('config.mailfrom'), $config->getvalue('config.fromname') ));
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$mailfrom = $config->get('mailfrom');
+			$fromname = $config->get('fromname');
+		} else {
+			$mailfrom = $config->getValue('config.mailfrom');
+			$fromname = $config->getValue('config.fromname');
+		}
+		$mailer->setSender(array( $mailfrom, $fromname ));
 		$mailer->addRecipient($user->email);
 		$mailer->setSubject($subject);
 		$mailer->setBody($body);

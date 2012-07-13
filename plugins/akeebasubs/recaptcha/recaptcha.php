@@ -42,8 +42,13 @@ class plgAkeebasubsRecaptcha extends JPlugin
 		// ----- RECAPTCHA FIELD -----
 		$uri = new JURI();
 		
-		$theme = $this->params->getValue('theme','red');
-		$language = $this->params->getValue('language','en');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$theme = $this->params->get('theme','red');
+			$language = $this->params->get('language','en');
+		} else {
+			$theme = $this->params->getValue('theme','red');
+			$language = $this->params->getValue('language','en');
+		}
 		$html = <<<ENDSCRIPT
 <script type="text/javascript">
 var RecaptchaOptions = {
@@ -55,7 +60,11 @@ var RecaptchaOptions = {
 ENDSCRIPT;
 		
 		$useSSL = strtolower($uri->getScheme()) == 'https';
-		$publickey = $this->params->getValue('publickey','');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$publickey = $this->params->get('publickey','');
+		} else {
+			$publickey = $this->params->getValue('publickey','');
+		}
 		$html .= '<div style="display: inline-block"><div style="float: left">'.recaptcha_get_html($publickey, null, $useSSL).'</div></div><div style="clear: both"></div>';
 		
 		// Setup the field
@@ -140,7 +149,11 @@ ENDJS;
 		if( (!array_key_exists('recaptcha_challenge',$custom)) || (!empty($challenge)) ) $custom['recaptcha_challenge'] = $challenge;
 		if( (!array_key_exists('recaptcha_response',$custom)) || (!empty($response)) ) $custom['recaptcha_response'] = $response;
 		
-		$privkey = $this->params->getValue('privatekey','');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$privkey = $this->params->get('privatekey','');
+		} else {
+			$privkey = $this->params->getValue('privatekey','');
+		}
 		$remoteip =  $_SERVER["REMOTE_ADDR"];
 		$challenge = $custom['recaptcha_challenge'];
 		$response = $custom['recaptcha_response'];

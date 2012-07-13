@@ -99,7 +99,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 					->getItem();
 			$subname = $level->title;
 
-			$description = $this->params->getValue('description','');
+			if(version_compare(JVERSION, '3.0.0', 'ge')) {
+				$description = $this->params->get('description','');
+			} else {
+				$description = $this->params->getValue('description','');
+			}
 			if(empty($description)) {
 				$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
 				if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
@@ -118,7 +122,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$jNow = new JDate();
 			
 			$note = "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>";
-			$euvatoption = $this->params->getValue('euvatoption', 0);
+			if(version_compare(JVERSION, '3.0.0', 'ge')) {
+				$euvatoption = $this->params->get('euvatoption', 0);
+			} else {
+				$euvatoption = $this->params->getValue('euvatoption', 0);
+			}
 			if($euvatoption && ($row->tax_amount < 0.01)) {
 				$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 					->user_id($row->user_id)
@@ -130,7 +138,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				$inEU = in_array($country, array('AT','BE','BG','CY','CZ','DK','EE','FI','FR','GB','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'));
 				
 				if($inEU && $isbusiness && $viesregistered) {
-					$euvatnote = $this->params->getValue('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+					if(version_compare(JVERSION, '3.0.0', 'ge')) {
+						$euvatnote = $this->params->get('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+					} else {
+						$euvatnote = $this->params->getValue('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+					}
 					$note .= "<p>$euvatnote</p>";
 				}
 			}

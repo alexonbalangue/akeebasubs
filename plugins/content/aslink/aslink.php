@@ -166,10 +166,17 @@ class plgContentAslink extends JPlugin
 				}
 				
                 if (@$item->query['view'] == 'level') {
-                    if ((@$params->getValue('slug') == $slug)) {
-                        $itemId = $item->id;
-                        break;
-                    }
+					if(version_compare(JVERSION, '3.0.0', 'ge')) {
+						if ((@$params->get('slug') == $slug)) {
+							$itemId = $item->id;
+							break;
+						}
+					} else {
+						if ((@$params->getValue('slug') == $slug)) {
+							$itemId = $item->id;
+							break;
+						}
+					}
                 }
 
                 if (@$item->query['view'] == 'levels') {

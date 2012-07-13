@@ -42,7 +42,11 @@ class plgAkeebasubsAgeverification extends JPlugin
 		$html = JHTML::_('select.genericlist', $options, 'custom[ageverification]', array(), 'value', 'text', $current, 'ageverification');
 
 		// Setup the field
-		$minage = $this->params->getValue('minage','18');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$minage = $this->params->get('minage','18');
+		} else {
+			$minage = $this->params->getValue('minage','18');
+		}
 		$field = array(
 			'id'			=> 'ageverification',
 			'label'			=> '* '.JText::sprintf('PLG_AKEEBASUBS_AGEVERIFICATION_AGE_LABEL', $minage),

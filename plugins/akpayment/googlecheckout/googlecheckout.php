@@ -158,7 +158,11 @@ class plgAkpaymentGooglecheckout extends JPlugin
 		$response = new GoogleResponse($this->getMerchantID(), $this->getMerchantKey());
 		
 		$config = JFactory::getConfig();
-		$logpath = $config->getValue('log_path');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$logpath = $config->get('log_path');
+		} else {
+			$logpath = $config->getValue('log_path');
+		}
 		$response->SetLogFiles($logpath . '/google_error.log', $logpath . '/google_message.log', L_ALL);
 		
 		// Get the XML postback
@@ -403,7 +407,11 @@ class plgAkpaymentGooglecheckout extends JPlugin
 	private function logIPN($data, $isValid)
 	{
 		$config = JFactory::getConfig();
-		$logpath = $config->getValue('log_path');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$logpath = $config->get('log_path');
+		} else {
+			$logpath = $config->getValue('log_path');
+		}
 		$logFile = $logpath.'/akpayment_googlecheckout_ipn.php';
 		jimport('joomla.filesystem.file');
 		if(!JFile::exists($logFile)) {

@@ -24,7 +24,11 @@ class plgAkeebasubsAdminemails extends JPlugin
 
 		parent::__construct($subject, $config);
 
-		$emailsString = trim($this->params->getValue('emails', ''));
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$emailsString = trim($this->params->get('emails', ''));
+		} else {
+			$emailsString = trim($this->params->getValue('emails', ''));
+		}
 		if(empty($emailsString)) {
 			$this->emails = array();
 		} else {
@@ -102,7 +106,11 @@ class plgAkeebasubsAdminemails extends JPlugin
 	{
 		// Get the site name
 		$config = JFactory::getConfig();
-		$sitename = $config->getValue('config.sitename');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$sitename = $config->get('sitename');
+		} else {
+			$sitename = $config->getValue('config.sitename');
+		}
 	
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
@@ -121,7 +129,11 @@ class plgAkeebasubsAdminemails extends JPlugin
 		// -- User's preferred language
 		jimport('joomla.registry.registry');
 		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
-		$userlang = $uparams->getValue('language','');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$userlang = $uparams->get('language','');
+		} else {
+			$userlang = $uparams->getValue('language','');
+		}
 		if(!empty($userlang)) {
 			$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, $userlang, true);
 			$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, $userlang, true);
@@ -207,7 +219,14 @@ class plgAkeebasubsAdminemails extends JPlugin
 
 		// Send the email
 		$mailer = JFactory::getMailer();
-		$mailer->setSender(array( $config->getvalue('config.mailfrom'), $config->getvalue('config.fromname') ));
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$mailfrom = $config->get('mailfrom');
+			$fromname = $config->get('fromname');
+		} else {
+			$mailfrom = $config->getValue('config.mailfrom');
+			$fromname = $config->getValue('config.fromname');
+		}
+		$mailer->setSender(array( $mailfrom, $fromname ));
 		$mailer->addRecipient($this->emails);
 		$mailer->setSubject($subject);
 		$mailer->setBody($body);

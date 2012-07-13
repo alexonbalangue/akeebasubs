@@ -20,7 +20,11 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, null, true);
 		
-		$cachechoice = $this->params->getValue('cachechoice', 0);
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$cachechoice = $this->params->get('cachechoice', 0);
+		} else {	
+			$cachechoice = $this->params->getValue('cachechoice', 0);
+		}
 	
 		// Init the fields array which will be returned
 		$fields = array();
@@ -52,7 +56,11 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		$html = JHTML::_('select.genericlist', $options, 'custom[agreetotos]', array(), 'value', 'text', $current, 'agreetotos');
 
 		// Setup the field
-		$url = $this->params->getValue('tosurl','');
+		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			$url = $this->params->get('tosurl','');
+		} else {
+			$url = $this->params->getValue('tosurl','');
+		}
 		if(empty($url)) {
 			$urlField = JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL');
 		} else {
