@@ -19,7 +19,7 @@ $PagSeguroConfig['application']['charset'] = "ISO-8859-1"; // UTF-8, ISO-8859-1
 
 $PagSeguroConfig['log'] = Array();
 $PagSeguroConfig['log']['active'] = TRUE;
-if(version_compare(JVERSION, '3.0.0', 'ge')) {
+if(version_compare(JVERSION, '3.0', 'ge')) {
 	$PagSeguroConfig['log']['fileLocation'] = JFactory::getConfig()->get('log_path').'/pagseguro.log';
 } else {
 	$PagSeguroConfig['log']['fileLocation'] = JFactory::getConfig()->getValue('log_path').'/pagseguro.log';

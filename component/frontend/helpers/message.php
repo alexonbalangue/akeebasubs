@@ -87,7 +87,7 @@ class AkeebasubsHelperMessage
 						jimport('joomla.registry.registry');
 						$params = new JRegistry($params);
 					}
-					if(version_compare(JVERSION, '3.0.0', 'ge')) {
+					if(version_compare(JVERSION, '3.0', 'ge')) {
 						$lang = $params->get('language','');
 					} else {
 						$lang = $params->getValue('language','');

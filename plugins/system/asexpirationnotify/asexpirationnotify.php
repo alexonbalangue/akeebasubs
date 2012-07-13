@@ -253,7 +253,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 	{
 		// Get the site name
 		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$sitename = $config->get('sitename');
 		} else {
 			$sitename = $config->getValue('config.sitename');
@@ -277,7 +277,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		// -- User's preferred language
 		jimport('joomla.registry.registry');
 		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$userlang = $uparams->get('language','');
 		} else {
 			$userlang = $uparams->getValue('language','');
@@ -357,7 +357,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		
 		// Send the email
 		$mailer = JFactory::getMailer();
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$mailfrom = $config->get('mailfrom');
 			$fromname = $config->get('fromname');
 		} else {

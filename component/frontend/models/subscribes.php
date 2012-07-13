@@ -985,7 +985,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$params['sendEmail'] = 0;
 			
 			// Set the user's default language to whatever the site's current language is
-			if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			if(version_compare(JVERSION, '3.0', 'ge')) {
 				$params['params'] = array(
 					'language'	=> JFactory::getConfig()->get('language')
 				);

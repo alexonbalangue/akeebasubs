@@ -141,7 +141,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 			
 			// Make sure we will only be using valid column names
 			$validColumns = array();
-			if(version_compare(JVERSION, '3.0.0', 'ge')) {
+			if(version_compare(JVERSION, '3.0', 'ge')) {
 				$allFields = $db->getTableColumns($tableName, false);
 			} else {
 				$allFields = $db->getTableFields($tableName, false);

@@ -12,7 +12,7 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/akeebajq.js?'.AKEEBASUBS_VERS
 FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSIONHASH);
 
 JHtml::_('behavior.tooltip');
-if(version_compare(JVERSION, '3.0.0', 'ge')) {
+if(version_compare(JVERSION, '3.0', 'ge')) {
 	JHTML::_('behavior.framework');
 } else {
 	JHTML::_('behavior.mootools');

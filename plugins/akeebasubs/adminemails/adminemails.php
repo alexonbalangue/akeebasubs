@@ -24,7 +24,7 @@ class plgAkeebasubsAdminemails extends JPlugin
 
 		parent::__construct($subject, $config);
 
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$emailsString = trim($this->params->get('emails', ''));
 		} else {
 			$emailsString = trim($this->params->getValue('emails', ''));
@@ -106,7 +106,7 @@ class plgAkeebasubsAdminemails extends JPlugin
 	{
 		// Get the site name
 		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$sitename = $config->get('sitename');
 		} else {
 			$sitename = $config->getValue('config.sitename');
@@ -129,7 +129,7 @@ class plgAkeebasubsAdminemails extends JPlugin
 		// -- User's preferred language
 		jimport('joomla.registry.registry');
 		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$userlang = $uparams->get('language','');
 		} else {
 			$userlang = $uparams->getValue('language','');
@@ -219,7 +219,7 @@ class plgAkeebasubsAdminemails extends JPlugin
 
 		// Send the email
 		$mailer = JFactory::getMailer();
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$mailfrom = $config->get('mailfrom');
 			$fromname = $config->get('fromname');
 		} else {

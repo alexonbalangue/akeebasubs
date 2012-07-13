@@ -42,7 +42,7 @@ class plgAkeebasubsRecaptcha extends JPlugin
 		// ----- RECAPTCHA FIELD -----
 		$uri = new JURI();
 		
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$theme = $this->params->get('theme','red');
 			$language = $this->params->get('language','en');
 		} else {
@@ -60,7 +60,7 @@ var RecaptchaOptions = {
 ENDSCRIPT;
 		
 		$useSSL = strtolower($uri->getScheme()) == 'https';
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$publickey = $this->params->get('publickey','');
 		} else {
 			$publickey = $this->params->getValue('publickey','');
@@ -149,7 +149,7 @@ ENDJS;
 		if( (!array_key_exists('recaptcha_challenge',$custom)) || (!empty($challenge)) ) $custom['recaptcha_challenge'] = $challenge;
 		if( (!array_key_exists('recaptcha_response',$custom)) || (!empty($response)) ) $custom['recaptcha_response'] = $response;
 		
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$privkey = $this->params->get('privatekey','');
 		} else {
 			$privkey = $this->params->getValue('privatekey','');

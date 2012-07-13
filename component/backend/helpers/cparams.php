@@ -21,7 +21,7 @@ class AkeebasubsHelperCparams
 			}
 		}
 		
-		if(version_compare(JVERSION, '3.0.0', 'ge')) {
+		if(version_compare(JVERSION, '3.0', 'ge')) {
 			return $params->get($key, $default);
 		} else {
 			return $params->getValue($key, $default);
