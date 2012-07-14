@@ -158,10 +158,10 @@ $this->loadHelper('format');
 				<input type="text" name="order[]" size="5" value="<?php echo $coupon->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperFormat::date($coupon->publish_up, '%Y-%m-%d %H:%M') ?>
+				<?php echo AkeebasubsHelperFormat::date($coupon->publish_up, 'Y-m-d H:i') ?>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperFormat::date($coupon->publish_down, '%Y-%m-%d %H:%M') ?>
+				<?php echo AkeebasubsHelperFormat::date($coupon->publish_down, 'Y-m-d H:i') ?>
 			</td>
 			<td align="center">
 				<?php echo JHTML::_('grid.published', $coupon, $i); ?>

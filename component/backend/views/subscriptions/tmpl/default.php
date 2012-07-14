@@ -290,14 +290,14 @@ unset($upgradesRaw);
 			</td>
 			<td>
 				<div class="akeebasubs-susbcription-publishup">
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up, '%Y-%m-%d %H:%M') ?>
+					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up, 'Y-m-d H:i') ?>
 				</div>
 				<div class="akeebasubs-susbcription-publishdown">
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down, '%Y-%m-%d %H:%M') ?>
+					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down, 'Y-m-d H:i') ?>
 				</div>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperFormat::date($subscription->created_on, '%Y-%m-%d %H:%M') ?>
+				<?php echo AkeebasubsHelperFormat::date($subscription->created_on, 'Y-m-d H:i') ?>
 			</td>
 			<td align="center">
 				<?php echo JHTML::_('grid.published', $subscription, $i); ?>

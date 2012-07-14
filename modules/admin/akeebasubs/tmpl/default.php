@@ -71,7 +71,7 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VE
 				<?php echo sprintf('%2.2f', (float)$subscription->net_amount) ?> <?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 	        </td>
 	        <td>
-				<?php echo AkeebasubsHelperFormat::date($subscription->created_on, '%Y-%m-%d %H:%M'); ?>
+				<?php echo AkeebasubsHelperFormat::date($subscription->created_on, 'Y-m-d H:i'); ?>
 	        </td>
 		</tr>
 		<?php endforeach; ?>
