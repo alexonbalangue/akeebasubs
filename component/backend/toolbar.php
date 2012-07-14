@@ -21,10 +21,10 @@ class AkeebasubsToolbar extends FOFToolbar
 			JToolBarHelper::deleteList();
 		}
 		if($this->perms->edit) {
-			JToolBarHelper::editListX();
+			JToolBarHelper::editList();
 		}
 		if($this->perms->create) {
-			JToolBarHelper::addNewX();
+			JToolBarHelper::addNew();
 		}
 		
 		$this->renderSubmenu();
@@ -67,10 +67,10 @@ class AkeebasubsToolbar extends FOFToolbar
 			JToolBarHelper::deleteList();
 		}
 		if($this->perms->edit) {
-			JToolBarHelper::editListX();
+			JToolBarHelper::editList();
 		}
 		if($this->perms->create) {
-			JToolBarHelper::addNewX();
+			JToolBarHelper::addNew();
 		}
 		
 		$this->renderSubmenu();
@@ -87,10 +87,10 @@ class AkeebasubsToolbar extends FOFToolbar
 			JToolBarHelper::deleteList();
 		}
 		if($this->perms->edit) {
-			JToolBarHelper::editListX();
+			JToolBarHelper::editList();
 		}
 		if($this->perms->create) {
-			JToolBarHelper::addNewX();
+			JToolBarHelper::addNew();
 		}
 		
 		$this->renderSubmenu();
