@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
-<install type="component" version="1.5.0" method="upgrade">
+<extension type="component" version="1.5.0" method="upgrade">
 	<name>AkeebaSubs</name>
 	<creationDate>2011-11-09</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
@@ -109,4 +109,4 @@
 		<server type="extension" priority="1" name="Akeeba Subscriptions Updates"><![CDATA[http://nocdn.akeebabackup.com/updates/akeebasubs.xml]]></server>
 	</updateservers>
 	
-</install>
+</extension>
