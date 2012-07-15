@@ -153,7 +153,19 @@ function jSelectUser_userid(id, username)
 window.addEvent("domready", function() {
 	$$("button.modal").each(function(el) {
 		el.addEvent("click", function(e) {
-			new Event(e).stop();
+			try {
+				new Event(e).stop();
+			} catch(anotherMTUpgradeIssue) {
+				try {
+					e.stop();
+				} catch(WhateverIsWrongWithYouIDontCare) {
+					try {
+						DOMEvent(e).stop();
+					} catch(NoBleepinWay) {
+						alert('If you see this message, your copy of Joomla! is FUBAR');
+					}
+				}
+			}
 			SqueezeBox.fromElement($('userselect'));
 			SqueezeBox.fromElement($('userselect'), {
 				parse: 'rel'
