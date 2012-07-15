@@ -373,7 +373,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		} else {
 			$file_name = $invRow->number.".pdf";
 		}
-        $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/'.$file_name;
+        $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/files/pdf/'.$file_name;
         $pdf->Output($file_path, 'F');
 		return $file_path;
 	}
