@@ -195,9 +195,6 @@ class plgAkpaymentPayFast extends JPlugin
 		} else {
 			$newStatus = 'X';
 		}
-                
-		// Log the IPN data
-		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
