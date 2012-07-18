@@ -355,6 +355,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->SetFont('times', '', 8);
         $pdf->AddPage();
+		
 		require_once JPATH_ADMINISTRATOR.'/components/com_ccinvoices/models/invoices.php';
         $model = new ccInvoicesModelInvoices;
 		$template=$model->gettemplatelayout($id);
@@ -369,10 +370,13 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		
 		if($config->invoice_format != "")
 		{
-			$file_name = $model->getInvoiceNumberFormat($invRow->number).".pdf";
+			$file_name = $model->getInvoiceNumberFormat($invRow->number);
 		} else {
-			$file_name = $invRow->number.".pdf";
+			$file_name = $invRow->number;
 		}
+		$charfound=strpos($_SERVER['SERVER_NAME'],".");
+		$file_name .= "_".strtotime($invRow->invoice_date).ord(base64_encode("pdf")).ord(substr($_SERVER['SERVER_NAME'],$charfound+1,1)).ord(substr($_SERVER['SERVER_NAME'],$charfound+2,1)).".pdf";
+		
         $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/files/pdf/'.$file_name;
         $pdf->Output($file_path, 'F');
 		return $file_path;
