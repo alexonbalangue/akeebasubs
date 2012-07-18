@@ -196,9 +196,6 @@ class plgAkpaymentPayFast extends JPlugin
 			$newStatus = 'X';
 		}
 
-		// Fraud attempt? Do nothing more!
-		if(!$isValid) return false;
-
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
 				'akeebasubs_subscription_id'	=> $id,
