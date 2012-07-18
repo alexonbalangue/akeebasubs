@@ -23,6 +23,7 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_TITLE_LABEL" description="PLG_AKPAYMENT_IFTHEN_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_PPIMAGE_LABEL" description="PLG_AKPAYMENT_IFTHEN_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="chave" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_CHAVE_LABEL" description="PLG_AKPAYMENT_IFTHEN_CHAVE_DESC"/>
 				<field name="entidade" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_ENTIDADE_LABEL" description="PLG_AKPAYMENT_IFTHEN_ENTIDADE_DESC"/>
 				<field name="subentidade" type="text" size="50" default="" label="PLG_AKPAYMENT_IFTHEN_SUBENTIDADE_LABEL" description="PLG_AKPAYMENT_IFTHEN_SUBENTIDADE_DESC"/>
 			</fieldset>

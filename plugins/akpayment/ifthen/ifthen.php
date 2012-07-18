@@ -77,7 +77,11 @@ class plgAkpaymentIFthen extends JPlugin
 				$data->subentidade,
 				$data->subscription_id,
 				$data->valor);
-
+		
+		$subscription->save(array(
+			'processor_key'		=> $data->referencia
+		));
+		
 		@ob_start();
 		include dirname(__FILE__).'/ifthen/form.php';
 		$html = @ob_get_clean();
@@ -85,62 +89,107 @@ class plgAkpaymentIFthen extends JPlugin
 		return $html;
 	}
 	
-	
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
-		if($paymentmethod != $this->ppName) return false;
-		
-		// Enable the subscription
-		$id = (int)$data['subscription'];
-		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->setId($id)
-			->getItem();
-		
-		if(empty($subscription->akeebasubs_subscription_id)) return false;
-		
-		if($subscription->akeebasubs_subscription_id != $id) return false;
-		
-		$key = $data['reference'];
-		if(empty($key)) return false;
-		
-		// Fix the starting date if the payment was accepted after the subscription's start date. This
-		// works around the case where someone pays by e-Check on January 1st and the check is cleared
-		// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
-		// the user would have paid us and we'd never given him a subscription!
-		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-		if(!preg_match($regex, $subscription->publish_up)) {
-			$subscription->publish_up = '2001-01-01';
-		}
-		if(!preg_match($regex, $subscription->publish_down)) {
-			$subscription->publish_down = '2037-01-01';
-		}
 		jimport('joomla.utilities.date');
-		$jNow = new JDate();
-		$jStart = new JDate($subscription->publish_up);
-		$jEnd = new JDate($subscription->publish_down);
-		$now = $jNow->toUnix();
-		$start = $jStart->toUnix();
-		$end = $jEnd->toUnix();
 		
-		if($start < $now) {
-			$duration = $end - $start;
-			$start = $now;
-			$end = $start + $duration;
-			$jStart = new JDate($start);
-			$jEnd = new JDate($end);
+		// Check if we're supposed to handle this
+		if($paymentmethod != $this->ppName) return false;
+        
+		// Check IPN data for validity (i.e. protect against fraud attempt)
+		$isValid = $this->isValidIPN($data);
+		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
+
+		// Load the relevant subscription row
+		if($isValid) {
+			$reference = $data['referencia'];
+			$subscription = null;
+			if(! empty($reference)) {
+				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->processor('ifthen')
+					->paystate('N')
+					->paykey($reference)
+					->getFirstItem(true);
+				$id = (int)$subscription->akeebasubs_subscription_id;
+				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->processor_key != $reference) ) {
+					$subscription = null;
+					$isValid = false;
+				}
+			} else {
+				$isValid = false;
+			}
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referencia is invalid';
+		}
+        
+		// Check that entidade is correct
+		if($isValid && !is_null($subscription)) {
+			if(trim($this->params->get('entidade','')) != $data['entidade']) {
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = "The received entidade does not match the one that was sent.";
+			}
 		}
 		
-		$id = (int)$data['subscription'];
-		$updates = array(
-			'akeebasubs_subscription_id' => $id,
-			'processor_key'		=> $key,
-			'state'				=> 'C',
-			'enabled'			=> 1,
-			'publish_up'		=> $jStart->toSql(),
-			'publish_down'		=> $jEnd->toSql()
-		);
-		$subscription->save($updates);
+		// Check that amount_gross is correct
+		$isPartialRefund = false;
+		if($isValid && !is_null($subscription)) {
+			$mc_gross = floatval($data['valor']);
+			$gross = $subscription->gross_amount;
+			if($mc_gross > 0) {
+				// A positive value means "payment". The prices MUST match!
+				// Important: NEVER, EVER compare two floating point values for equality.
+				$isValid = ($gross - $mc_gross) < 0.01;
+			} else {
+				$isPartialRefund = false;
+				$temp_mc_gross = -1 * $mc_gross;
+				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
+			}
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+		}
+			
+		// Log the IPN data
+		$this->logIPN($data, $isValid);
+
+		// Fraud attempt? Do nothing more!
+		if(!$isValid) return false;
 		
+		// Payment status always COMPLETED if this point is reached
+		$newStatus = 'C';
+
+		// Update subscription status (this also automatically calls the plugins)
+		$updates = array(
+				'akeebasubs_subscription_id'	=> $id,
+				'processor_key'					=> $reference,
+				'state'							=> $newStatus,
+				'enabled'						=> 0
+		);
+		jimport('joomla.utilities.date');
+		if($newStatus == 'C') {
+			// Fix the starting date if the payment was accepted after the subscription's start date. This
+			// works around the case where someone pays by e-Check on January 1st and the check is cleared
+			// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
+			// the user would have paid us and we'd never given him a subscription!
+			$jNow = new JDate();
+			$jStart = new JDate($subscription->publish_up);
+			$jEnd = new JDate($subscription->publish_down);
+			$now = $jNow->toUnix();
+			$start = $jStart->toUnix();
+			$end = $jEnd->toUnix();
+			
+			if($start < $now) {
+				$duration = $end - $start;
+				$start = $now;
+				$end = $start + $duration;
+				$jStart = new JDate($start);
+				$jEnd = new JDate($end);
+			}
+
+			$updates['publish_up'] = $jStart->toSql();
+			$updates['publish_down'] = $jEnd->toSql();
+			$updates['enabled'] = 1;
+
+		}
+		$subscription->save($updates);
+
 		// Run the onAKAfterPaymentCallback events
 		jimport('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -148,25 +197,58 @@ class plgAkpaymentIFthen extends JPlugin
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
-		// This plugin is a tricky one; it will redirect you to the thank you page
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
-		$rootURL = rtrim(JURI::base(),'/');
-		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
-		}
-		/**
-		$url = $rootURL.str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)); 
-		/**/ 
-		$url = 'index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id;
-		$app = JFactory::getApplication();
-		$app->redirect($url);
-		
-		// Everything is fine, no matter what
+        
 		return true;
+	}
+	
+    
+	/**
+	 * Validates the incoming data.
+	 */
+	private function isValidIPN($data)
+	{
+		$chave = trim($this->params->get('chave',''));
+		if(! empty($chave)) {
+			return trim($data['chave']) == trim($this->params->get('chave',''));
+		}
+		return false;
+	}
+	
+	
+	private function logIPN($data, $isValid)
+	{
+		$config = JFactory::getConfig();
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$logpath = $config->get('log_path');
+		} else {
+			$logpath = $config->getValue('log_path');
+		}
+		$logFile = $logpath.'/akpayment_ifthen_ipn.php';
+		jimport('joomla.filesystem.file');
+		if(!JFile::exists($logFile)) {
+			$dummy = "<?php die(); ?>\n";
+			JFile::write($logFile, $dummy);
+		} else {
+			if(@filesize($logFile) > 1048756) {
+				$altLog = $logpath.'/akpayment_ifthen_ipn-1.php';
+				if(JFile::exists($altLog)) {
+					JFile::delete($altLog);
+				}
+				JFile::copy($logFile, $altLog);
+				JFile::delete($logFile);
+				$dummy = "<?php die(); ?>\n";
+				JFile::write($logFile, $dummy);
+			}
+		}
+		$logData = JFile::read($logFile);
+		if($logData === false) $logData = '';
+		$logData .= "\n" . str_repeat('-', 80);
+		$logData .= $isValid ? 'VALID IFTHEN IPN' : 'INVALID IFTHEN IPN *** FRAUD ATTEMPT OR INVALID NOTIFICATION ***';
+		$logData .= "\nDate/time : ".gmdate('Y-m-d H:i:s')." GMT\n\n";
+		foreach($data as $key => $value) {
+			$logData .= '  ' . str_pad($key, 30, ' ') . $value . "\n";
+		}
+		$logData .= "\n";
+		JFile::write($logFile, $logData);
 	}
 }

@@ -18,9 +18,3 @@ $t5 = JText::_('PLG_AKPAYMENT_IFTHEN_COMPLETE_SUBSCRIPTION');
 <label><?php echo JText::_('PLG_AKPAYMENT_IFTHEN_VALOR_LABEL') ?>:</label>
 <span><b><?php echo str_replace('.', ',', $data->valor) . ' ' . $data->currency ?></b></span>
 </div>
-<br/>
-<form action="<?php echo htmlentities($data->url) ?>" method="POST">
-	<input type="hidden" name="subscription" value="<?php echo $data->subscription_id ?>" />
-	<input type="hidden" name="reference" value="<?php echo $data->referencia ?>" />
-	<input type="submit" value="<?php echo JText::_('PLG_AKPAYMENT_IFTHEN_COMPLETE_SUBSCRIPTION') ?>" />
-</form>
