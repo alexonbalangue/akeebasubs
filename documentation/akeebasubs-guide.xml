@@ -5839,15 +5839,16 @@ LEVEL2=11111:22222:33333</programlisting>
         <orderedlist>
           <listitem>
             <para>The callback URL which is
-            <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=ifthen</uri>
-            replacing <uri>www.example.com</uri> with your site's domain
+            <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=ifthen&amp;chave=[CHAVE_ANTI_PHISHING]&amp;entidade=[ENTIDADE]&amp;referencia=[REFERENCIA]&amp;valor=[VALOR]
+            </uri>replacing <uri>www.example.com</uri> with your site's domain
             name</para>
           </listitem>
 
           <listitem>
-            <para>Your Validation string, as entered in the plugin. Please
-            note that it is case-sensitive, i.e. ABC, Abc and abc are three
-            different validation strings!</para>
+            <para>Your Validation string (call it "Antiphishing Key" in your
+            email), as entered in the plugin. Please note that it is
+            case-sensitive, i.e. ABC, Abc and abc are three different
+            validation strings!</para>
           </listitem>
         </orderedlist>
       </section>
