@@ -5749,6 +5749,108 @@ LEVEL2=11111:22222:33333</programlisting>
           </step>
         </procedure>
       </section>
+
+      <section xml:id="payment-ifthen">
+        <title>IFmb (IFthen)</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - IFmb (IFthen)</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.3.0.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows your clients to use the
+        Portuguese IFTHEN off-line payment system. Using this system, your
+        clients are allowed to complete the purchase at their bank's ATM using
+        the codes provided by this plugin.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "IFthen" or type in a custom name to
+              show to your customer's, e.g. "Pay in your bank's ATM"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Validation string</term>
+
+            <listitem>
+              <para>This is the validation string you are using for the
+              callback service. Please read the integration notes
+              below.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Entity</term>
+
+            <listitem>
+              <para>The entity number (Entidade) provided by IFthen. This is a
+              5 digit number, e.g. 12345</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sub-entity</term>
+
+            <listitem>
+              <para>The sub-entity number (Subentidade) provided by IFthen.
+              This is a 3 digit number, e.g. 678</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration Notes</bridgehead>
+
+        <para>There are two ways to confirm the payments made by your clients
+        and activate subscriptions, the manual method and the automatic
+        method.</para>
+
+        <para>In the manual method you have to check for IFthen payments
+        daily. Then you must go to your Subscriptions view, find the
+        subscriptions which have been paid for an enable them by setting the
+        payment status to "Completed". Please note that the IFthen reference
+        number is displayed in the Processor Key field.</para>
+
+        <para>The second method is an automatic call-back made by IFthen to
+        your site when each payment is completed. This will allow Akeeba
+        Subscriptions to enable paid subscriptions automatically. In order to
+        use that you have to send an email to IFthen asking them to enable
+        callbacks. In the email, you need to provide two pieces of
+        information:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>The callback URL which is
+            <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=ifthen</uri>
+            replacing <uri>www.example.com</uri> with your site's domain
+            name</para>
+          </listitem>
+
+          <listitem>
+            <para>Your Validation string, as entered in the plugin. Please
+            note that it is case-sensitive, i.e. ABC, Abc and abc are three
+            different validation strings!</para>
+          </listitem>
+        </orderedlist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
