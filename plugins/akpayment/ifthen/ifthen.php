@@ -82,6 +82,25 @@ class plgAkpaymentIFthen extends JPlugin
 			'processor_key'		=> $data->referencia
 		));
 		
+		// Add the style for the payment form
+		$document = JFactory::getDocument();
+		$document->addStyleDeclaration(
+'  table#ifthen-form {
+	   width: 250px;
+  }
+  table#ifthen-form tr, table#ifthen-form thead, table#ifthen-form tfoot, table#ifthen-form td {
+	   border: none;
+  }
+  table#ifthen-form > thead td {
+	   padding-bottom: 5px;
+  }
+  table#ifthen-form > tfoot td {
+	   padding-top: 6px;
+  }
+  table#ifthen-form table tr > td {
+	   padding-right: 27px;
+  }');
+		
 		@ob_start();
 		include dirname(__FILE__).'/ifthen/form.php';
 		$html = @ob_get_clean();
