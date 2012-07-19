@@ -84,6 +84,7 @@ class Com_AkeebasubsInstallerScript
 				'eselectplus'			=> 0,
 				'eway'					=> 0,
 				'googlecheckout'		=> 0,
+				'ifthen'				=> 0,
 				'moip'					=> 0,
 				'moneris'				=> 0,
 				'nochex'				=> 0,

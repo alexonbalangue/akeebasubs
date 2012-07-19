@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5.0" type="plugin" group="ccinvoicetags">
+<extension version="2.5.0" type="plugin" group="ccinvoicetags" method="upgrade">
 	<name>PLG_CCINVOICETAGS_AKEEBASUBS_TITLE</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
