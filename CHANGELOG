@@ -11,6 +11,7 @@ Akeeba Subscriptions 2.3.0 DEV RELEASE
 + Converter from RS!Membership
 ~ Disable form submit when ENTER is hit in the coupon field
 ~ Bringing the ccInvoices plugin up-to-date with changes in the location and naming scheme of invoice PDF files
+# [MEDIUM] 500 error when the EU VIES service is not responding
 # [MEDIUM] PayPal: recurring subscriptions were not working from the second renewal onwards
 # [MEDIUM] PagSeguro: If a transaction is pending, the notification that it's paid would not result in the subscription becoming active
 # [MEDIUM] 2Checkout plugin, vendor_order_id always empty (thanks Sander!)

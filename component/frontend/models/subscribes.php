@@ -1588,12 +1588,16 @@ class AkeebasubsModelSubscribes extends FOFModel
 			} else {
 				// Using the SOAP API
 				// Code credits: Angel Melguiz / KMELWEBDESIGN SLNE (www.kmelwebdesign.com)
-				$sClient = new SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl');
-				$params = array('countryCode'=>$country,'vatNumber'=>$vat);
-				$response = $sClient->checkVat($params);
-				if ($response->valid) {
-					$ret = true;
-				}else{
+				try {
+					$sClient = new SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl');
+					$params = array('countryCode'=>$country,'vatNumber'=>$vat);
+					$response = $sClient->checkVat($params);
+					if ($response->valid) {
+						$ret = true;
+					}else{
+						$ret = false;
+					}
+				} catch(SoapFault $e) {
 					$ret = false;
 				}
 			}
