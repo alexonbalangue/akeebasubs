@@ -9,6 +9,15 @@ Akeeba Subscriptions 2.3.0 DEV RELEASE
 + #96 Subscription Level relations
 + Plugin to allow ccInvoices to access Akeeba Subscriptions' information for the user, subscription level and subscription
 + Converter from RS!Membership
++ Payment plugin: Suomen Verkkomaksut Oy
++ Payment plugin: ZarinPal
++ Payment plugin: PayFast
++ Payment plugin: AlloPass mobile and micro-payments
++ Payment plugin: CashU
++ Payment plugin: IFTHEN (Portuguese payment by ATM method)
++ MailChimp integration
++ PostAffiliatePro integration
++ iDevAffiliate integration
 ~ Disable form submit when ENTER is hit in the coupon field
 ~ Bringing the ccInvoices plugin up-to-date with changes in the location and naming scheme of invoice PDF files
 # [MEDIUM] 500 error when the EU VIES service is not responding
