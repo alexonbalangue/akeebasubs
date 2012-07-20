@@ -46,6 +46,7 @@ class Com_AkeebasubsInstallerScript
 		// plugins => { (folder) => { (element) => (published) }* }*
 		'plugins' => array(
 			'akeebasubs' => array(
+				'aceshop'				=> 0,
 				'acymailing'			=> 0,
 				'adminemails'			=> 0,
 				'affemails'				=> 0,

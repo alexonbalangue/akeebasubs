@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="1.5.0" method="upgrade">
+<extension version="2.5" type="component" method="upgrade">
 	<name>AkeebaSubs</name>
 	<creationDate>##DATE##</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@akeebabackup.com</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2010-2011 Nicholas K. Dionysopoulos</copyright>
-	<license>GNU/GPL v3 or later</license>
+	<license>GNU GPL v3 or later</license>
 	<version>##VERSION##</version>
 	<description>Akeeba Subscriptions v.##VERSION##</description>
 
