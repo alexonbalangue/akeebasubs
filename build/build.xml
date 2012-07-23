@@ -82,11 +82,25 @@
 	<target name="component-package" description="Akeeba Subscriptions Professional"
 		depends="new-release,setup-properties">
 		
+		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/aaa_akeebasubs.xml" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+				<replacetokens begintoken="FUCK" endtoken="FUCK">
+					<token key="MANIFESTROOT" value="extension" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
+				</replacetokens>
+				<replacetokens begintoken="FUCK" endtoken="FUCK">
+					<token key="MANIFESTROOT" value="install" />
 				</replacetokens>
 			</filterchain>
 		</copy>
