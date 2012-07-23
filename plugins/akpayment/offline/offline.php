@@ -60,7 +60,7 @@ class plgAkpaymentOffline extends JPlugin
 		
 		// Set the payment status to Pending
 		$oSub = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->setId($subscriptions->akeebasubs_subscription_id)
+			->setId($subscription->akeebasubs_subscription_id)
 			->getItem();
 		$updates = array(
 			'state'				=> 'P',
