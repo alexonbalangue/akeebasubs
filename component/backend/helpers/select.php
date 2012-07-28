@@ -170,8 +170,8 @@ class AkeebasubsHelperSelect
 	{
 		$options = array(
 			JHTML::_('select.option','','---'),
-			JHTML::_('select.option',  '0', JText::_( 'No' ) ),
-			JHTML::_('select.option',  '1', JText::_( 'Yes' ) )
+			JHTML::_('select.option',  '0', JText::_( 'JNo' ) ),
+			JHTML::_('select.option',  '1', JText::_( 'JYes' ) )
 		);
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
