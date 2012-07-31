@@ -1,5 +1,9 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.3.0 DEV RELEASE
+Akeeba Subscriptions 2.3.1
+================================================================================
+# [MEDIUM] Joomla! forgets to run a necessary SQL file when upgrading from Akeeba Subscriptions 2.2.1 or earlier
+
+Akeeba Subscriptions 2.3.0
 ================================================================================
 ! THIS RELEASE IS ONLY COMPATIBLE WITH JOOMLA! 2.5.1 AND LATER
 + "Combine" feature in Upgrade Rules (thank you @nonumber_nl)
