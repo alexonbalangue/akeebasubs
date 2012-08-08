@@ -97,7 +97,7 @@ class plgAkpayment2checkout extends JPlugin
 		// Check if it's one of the message types supported by this plugin
 		$message_type = $data['message_type'];
 		$isValid = in_array($message_type, array(
-			'ORDER_CREATED', 'REFUND_ISSUED', 'RECURRING_INSTALLMENT_SUCCESS', 'FRAUD_STATUS_CHANGED'
+			'ORDER_CREATED', 'REFUND_ISSUED', 'RECURRING_INSTALLMENT_SUCCESS', 'FRAUD_STATUS_CHANGED', 'INVOICE_STATUS_CHANGED'
 		));
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'INS message type "'.$message_type.'" is not supported.';
 		
@@ -171,6 +171,7 @@ class plgAkpayment2checkout extends JPlugin
 		switch($message_type) {
 			case 'ORDER_CREATED':
 			case 'FRAUD_STATUS_CHANGED':
+			case 'INVOICE_STATUS_CHANGED':
 				switch($data['invoice_status'])
 				{
 					case 'approved':
