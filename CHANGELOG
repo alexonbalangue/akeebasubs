@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.3.1
 # [MEDIUM] Joomla! forgets to run a necessary SQL file when upgrading from Akeeba Subscriptions 2.2.1 or earlier
 # [MEDIUM] You could no longer log in users through the subscription page
 # [HIGH] The PhocaDownloads integration plugin was broken
+# [LOW] 2Checkout: FRAUD_STATUS_CHANGED messages were not being parsed, causing CC payments to not be automatically approved
 
 Akeeba Subscriptions 2.3.0
 ================================================================================
