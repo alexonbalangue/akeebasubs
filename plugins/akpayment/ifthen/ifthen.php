@@ -79,7 +79,7 @@ class plgAkpaymentIFthen extends JPlugin
 				$data->valor);
 		
 		$subscription->save(array(
-			'processor_key'		=> $data->referencia
+			'processor_key'		=> str_replace(' ', '', $data->referencia)
 		));
 		
 		// Add the style for the payment form
