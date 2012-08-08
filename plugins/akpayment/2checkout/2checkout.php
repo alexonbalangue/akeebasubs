@@ -172,22 +172,27 @@ class plgAkpayment2checkout extends JPlugin
 			case 'ORDER_CREATED':
 			case 'FRAUD_STATUS_CHANGED':
 			case 'INVOICE_STATUS_CHANGED':
+				// Let me translate the goofy statuses sent by 2Checkout to English for ya
 				switch($data['invoice_status'])
 				{
 					case 'approved':
+						// "Approved" means "we're about to request the money" or something like that, dunno
 						$newStatus = 'C';
 						break;
 
 					case 'pending':
-						$newStatus = 'P';
+						// "Pending" means "accepted by bank, the money is not in your account yet"
+						$newStatus = 'C';
 						break;
 					
 					case 'deposited':
+						// "Deposited" means "the money is yours"
 						$newStatus = 'C';
 						break;
 					
 					case 'declined':
 					default:
+						// "Declined" means "you ain't gonna have your money, bro"
 						$newStatus = 'X';
 						break;
 				}
