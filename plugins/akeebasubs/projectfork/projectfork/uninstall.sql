@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `#__akeebasubs_pf_projects`;

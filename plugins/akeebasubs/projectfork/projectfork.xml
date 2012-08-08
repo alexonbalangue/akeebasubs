@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - ProjectFork Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>July 2012</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_PROJECTFORK_DESCRIPTION</description>
+	<files>
+		<filename plugin="projectfork">projectfork.php</filename>
+		<folder>projectfork</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_projectfork.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_projectfork.sys.ini</language>
+	</languages>
+	
+	<!-- SQL query files to execute on uninstallation -->
+	<uninstall>
+		<sql>
+			<file charset="utf8" driver="mysql">projectfork/uninstall.sql</file>
+		</sql>
+	</uninstall>
+	
+	<config addfieldpath="/plugins/akeebasubs/projectfork/projectfork">
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="level_ids" type="sql2" default=""
+					label="PLG_AKEEBASUBS_PROJECTFORK_SUBSCRIPTIONLEVEL_TITLE"
+					description="PLG_AKEEBASUBS_PROJECTFORK_SUBSCRIPTIONLEVEL_DESC"
+					query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`"
+					key_field="akeebasubs_level_id"
+					value_field="title" />
+				<field name="archive" type="radio" default="true" label="PLG_AKEEBASUBS_PROJECTFORK_ARCHIVE_TITLE" description="PLG_AKEEBASUBS_PROJECTFORK_ARCHIVE_DESC">
+				  <option value="true">PLG_AKEEBASUBS_PROJECTFORK_ARCHIVE_YES</option>
+				  <option value="false">PLG_AKEEBASUBS_PROJECTFORK_ARCHIVE_NO</option>
+				</field>
+				<field name="author" type="text" size="25" default="" label="PLG_AKEEBASUBS_PROJECTFORK_AUTHOR_TITLE" description="PLG_AKEEBASUBS_PROJECTFORK_AUTHOR_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
