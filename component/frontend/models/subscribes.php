@@ -312,9 +312,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// 2. Country validation
 		if($ret['country'] && !$noPersonalInfo) {
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
-			$ret['country'] = array_key_exists($state->country, AkeebasubsHelperSelect::$countries);
+			$ret['country'] = array_key_exists($state->country, AkeebasubsHelperSelect::$countries) && !empty($state->country);
 		} else {
-			$ret['country'] = true;
+			$ret['country'] = !empty($state->country);
 		}
 		
 		// 3. State validation

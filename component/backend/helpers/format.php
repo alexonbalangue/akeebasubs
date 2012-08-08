@@ -19,6 +19,7 @@ class AkeebasubsHelperFormat
 				require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 			}
 			$format = AkeebasubsHelperCparams::getParam('dateformat', 'Y-m-d H:i');
+			$format = str_replace('%', '', $format);
 		}
 		
 		return $jDate->format($format);

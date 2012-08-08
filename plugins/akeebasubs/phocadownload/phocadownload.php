@@ -127,14 +127,11 @@ class plgAkeebasubsPhocadownload extends JPlugin
 			if(empty($groupData->accessuserid)) {
 				$mustAdd = true;
 			} else {
-				$temp = explode(',',$groupData->accessuserid);
-				foreach($temp as $t) {
-					$userList[] = $db->q($t);
-				}
+				$userList = explode(',',$groupData->accessuserid);
 				$mustAdd = !in_array($user_id, $userList);
 			}
 			if($mustAdd) {
-				$userList[] = $db->q($user_id);
+				$userList[] = $user_id;
 				$users = implode(',', $userList);
 				$query = $db->getQuery(true)
 					->update($db->qn('#__phocadownload_categories'))
