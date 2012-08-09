@@ -12,7 +12,6 @@ class plgAkeebasubsProjectfork extends JPlugin
 	private $levels = array();
 	private $archive = false;
 	private $author_id = 0;
-	static private $doesAKTableExist = false;
 
 	public function __construct(& $subject, $config = array())
 	{		
@@ -41,20 +40,6 @@ class plgAkeebasubsProjectfork extends JPlugin
 				->where($db->qn('username') . ' = ' . $db->q($author_name));
 			$db->setQuery($query);
 			$this->author_id = $db->loadResult();
-		}
-		
-		// Initialise the DB table
-		if(! plgAkeebasubsProjectfork::$doesAKTableExist) {
-			$db = JFactory::getDBO();
-			$query = "CREATE TABLE IF NOT EXISTS `#__akeebasubs_pf_projects` (
-					`users_id` bigint(20) unsigned NOT NULL,
-					`akeebasubs_level_id` bigint(20) unsigned NOT NULL,
-					`pf_projects_id` bigint(20) unsigned NOT NULL,
-					PRIMARY KEY (`users_id`, `akeebasubs_level_id`)
-				) DEFAULT CHARSET=utf8";
-			$db->setQuery($query);
-			$db->query();
-			plgAkeebasubsProjectfork::$doesAKTableExist = true;
 		}
 	}
 	
