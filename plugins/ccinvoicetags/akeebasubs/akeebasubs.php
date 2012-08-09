@@ -135,7 +135,7 @@ class plgccInvoicetagsAkeebasubs extends JPlugin
 			$european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK');
 			if(in_array($kuser->country, $european_states)) {
 				// Show the VIES notice
-				$ret['asubs_vat_notice'] = JText::_('');
+				$ret['asubs_vat_notice'] = JText::_('PLG_CCINVOICETAGS_AKEEBASUBS_VATNOTICE');
 			}
 		}
 		

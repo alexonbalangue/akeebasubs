@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.3.1
 # [MEDIUM] You could no longer log in users through the subscription page
 # [HIGH] The PhocaDownloads integration plugin was broken
 # [LOW] IFTHEN payment plugin: callbacks would not work
+# [LOW] The VAT notice for intra-EU transactions was not being displayed with the ccInvoices custom tags plugin
 
 Akeeba Subscriptions 2.3.0
 ================================================================================
