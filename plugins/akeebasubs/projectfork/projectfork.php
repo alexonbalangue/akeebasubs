@@ -133,7 +133,8 @@ class plgAkeebasubsProjectfork extends JPlugin
 					$proj_title = strtoupper($sub->username) . ' - ' . strtoupper($level_title) . ' - ' . date('Y/m/d');
 				}
 				if($proj_id) {
-					$this->setProjectTitle($proj_id, $proj_title);
+					$this->updateProjectTitle($proj_id, $proj_title);
+					$this->activateArchivedProject($proj_id);
 				} else {
 					$proj_id = $this->createProject($user_id, $level, $author_id, $proj_title);
 				}
@@ -159,6 +160,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 	 */
 	private function getProjectId($user_id, $level_id)
 	{
+		// Check if reference to this project is stored
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true)
 			->select($db->qn('pf_projects_id'))
@@ -166,7 +168,27 @@ class plgAkeebasubsProjectfork extends JPlugin
 			->where($db->qn('users_id') . ' = ' . $db->q($user_id))
 			->where($db->qn('akeebasubs_level_id') . ' = ' . $db->q($level_id));
 		$db->setQuery($query);
-		return $db->loadResult();
+		$proj_id = $db->loadResult();
+		if($proj_id == null) return null;
+		
+		// Check if project actually exists
+		$query = $db->getQuery(true)
+			->select('COUNT(*)')
+			->from($db->qn('#__pf_projects'))
+			->where($db->qn('id') . ' = ' . $db->q($proj_id));
+		$db->setQuery($query);
+		$proj_count = $db->loadResult();
+		if(! ($proj_count > 0)) {
+			// Delete the reference if the project doesn't exist
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__akeebasubs_pf_projects'))
+				->where($db->qn('pf_projects_id') . ' = ' . $db->q($proj_id));
+			$db->setQuery($query);
+			$db->query();
+			return null;
+		}
+		
+		return $proj_id;
 	}
 	
 	/**
@@ -231,13 +253,14 @@ class plgAkeebasubsProjectfork extends JPlugin
 	/**
 	 * Sets/updates the project's title.
 	 */
-	private function setProjectTitle($project_id, $project_title)
+	private function updateProjectTitle($project_id, $project_title)
 	{
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true)
 			->update($db->qn('#__pf_projects'))
 			->set($db->qn('title') . ' = ' . $db->q($project_title))
-			->where($db->qn('id').' = '.$db->q($project_id));
+			->where($db->qn('id')  .' = '. $db->q($project_id))
+			->where($db->qn('title') . ' != '. $db->q($project_title));
 		$db->setQuery($query);
 		$db->query();
 	}
@@ -251,7 +274,23 @@ class plgAkeebasubsProjectfork extends JPlugin
 		$query = $db->getQuery(true)
 			->update($db->qn('#__pf_projects'))
 			->set($db->qn('archived') . ' = ' . $db->q('1'))
-			->where($db->qn('id').' = '.$db->q($project_id));
+			->where($db->qn('id') .' = '. $db->q($project_id));
+		$db->setQuery($query);
+		$db->query();
+		if($db->getError()) die($db->getError());
+	}
+	
+	/**
+	 * Activates/publishes the project.
+	 */
+	private function activateArchivedProject($project_id)
+	{
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true)
+			->update($db->qn('#__pf_projects'))
+			->set($db->qn('archived') . ' = ' . $db->q('0'))
+			->where($db->qn('id') .' = '. $db->q($project_id))
+			->where($db->qn('archived') . ' != ' . $db->q('0'));
 		$db->setQuery($query);
 		$db->query();
 		if($db->getError()) die($db->getError());
