@@ -7918,6 +7918,67 @@ LEVEL3=List 1</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="integration-mailchimp">
+        <title>ProjectFork integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - ProjectFork Integration</guilabel></para>
+
+        <para>This integration plugin allows you to automatically add
+        ProjectFork projects when someone subscribes on your site, depending
+        on their subscription level.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Subscription Levels</term>
+
+            <listitem>
+              <para>Choose the subscription levels handled by this plugin.
+              When a user subscribes to one of these levels, a new project
+              will be created in ProjectFork.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Archive Projects</term>
+
+            <listitem>
+              <para>When set to Yes, existing projects will be set to
+              "Archived" status in ProjectFork when the user's subscription
+              expires. If set to No the user will continue having access to
+              his project even after the expiration of his
+              subscription.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Project Author</term>
+
+            <listitem>
+              <para>When left blank the user who subscribed will be assigned
+              as the "Author" of the Project in ProjectFork. This grants him
+              several implicit privileges in ProjectFork. If unsure please
+              consult ProjectFork's documentation.</para>
+
+              <para>You can enter a Joomla! username here. The username you
+              enter here will be assigned as the "Author" of the project. It's
+              a good idea setting this to a site Administrator or Super
+              Administrator so that you keep total control of your
+              subscribers' Projects in ProjectFork should the need
+              arise.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>If you want to assign subscribers to ProjectFork groups you can
+        do so by using the Akeeba Subscriptions - Joomla! Usergroups
+        Integration plugin to assign subscribers to Joomla! user groups. All
+        ProjectFork groups are set up to be automatically assigned based on a
+        user's Joomla! usergroup membership.</para>
+      </section>
     </section>
 
     <section xml:id="plugins-other">

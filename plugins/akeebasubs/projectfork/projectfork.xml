@@ -22,12 +22,18 @@
 	<install>
 		<sql>
 			<file charset="utf8" driver="mysql">projectfork/install.sql</file>
+			<file charset="utf8" driver="mysqli">projectfork/install.sql</file>
+			<file driver="mysql">projectfork/install.sql</file>
+			<file driver="mysqli">projectfork/install.sql</file>
 		</sql>
 	</install>
 	<!-- SQL query files to execute on uninstallation -->
 	<uninstall>
 		<sql>
 			<file charset="utf8" driver="mysql">projectfork/uninstall.sql</file>
+			<file charset="utf8" driver="mysqli">projectfork/uninstall.sql</file>
+			<file driver="mysql">projectfork/uninstall.sql</file>
+			<file driver="mysqli">projectfork/uninstall.sql</file>
 		</sql>
 	</uninstall>
 	

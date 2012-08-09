@@ -1,11 +1,12 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.3.1
 ================================================================================
++ ProjectFork integration
+~ 2Checkout: Improvement in handling of payment messages
 # [MEDIUM] Joomla! forgets to run a necessary SQL file when upgrading from Akeeba Subscriptions 2.2.1 or earlier
 # [MEDIUM] You could no longer log in users through the subscription page
 # [HIGH] The PhocaDownloads integration plugin was broken
-# [LOW] 2Checkout: FRAUD_STATUS_CHANGED messages were not being parsed, causing some subscriptions to not be automatically approved
-# [LOW] 2Checkout: INVOICE_STATUS_CHANGED messages were not being parsed, causing some subscriptions to not be automatically approved
+# [LOW] IFTHEN payment plugin: callbacks would not work
 
 Akeeba Subscriptions 2.3.0
 ================================================================================
