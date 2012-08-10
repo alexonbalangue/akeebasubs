@@ -14,7 +14,24 @@ if (!defined('FOF_INCLUDED')) return;
 
 class plgccInvoicetagsAkeebasubs extends JPlugin
 {
-	function _getCustomTags($val)
+	public function __construct(&$subject, $config = array()) {
+		parent::__construct($subject, $config);
+		
+		// Load the language files and their overrides
+		$jlang = JFactory::getLanguage();
+		// -- English (default fallback)
+		$jlang->load('plg_ccinvoicetags_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_ccinvoicetags_akeebasubs.override', JPATH_ADMINISTRATOR, 'en-GB', true);
+		// -- Default site language
+		$jlang->load('plg_ccinvoicetags_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_ccinvoicetags_akeebasubs.override', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		// -- Current site language
+		$jlang->load('plg_ccinvoicetags_akeebasubs', JPATH_ADMINISTRATOR, null, true);
+		$jlang->load('plg_ccinvoicetags_akeebasubs.override', JPATH_ADMINISTRATOR, null, true);
+	}
+	
+	
+	public function _getCustomTags($val)
 	{
 		include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 		if(!class_exists('AkeebasubsHelperSelect')) {
