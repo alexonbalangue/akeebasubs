@@ -60,6 +60,11 @@ class plgAkeebasubsProjectfork extends JPlugin
 					$current = property_exists($userparams->params, 'projectfork') ? $userparams->params->projectfork : '';
 				}
 			}
+			if(empty($current)) {
+				// Take the existing title if the project already exists
+				$user_id = $userparams->user_id;
+				$current = $this->getProjectTitle($user_id, $level);
+			}
 			$html = '<input type="text" name="custom[projectfork]" id="projectfork" value="'.htmlentities($current).'" class="main" />';
 
 			// Setup the field
@@ -189,6 +194,34 @@ class plgAkeebasubsProjectfork extends JPlugin
 		}
 		
 		return $proj_id;
+	}
+
+	/**
+	 * Returns the title of the project or an empty string if it doesn't exist.
+	 */
+	private function getProjectTitle($user_id, $level_id)
+	{
+		// Check if reference to this project is stored
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true)
+			->select($db->qn('pf_projects_id'))
+			->from($db->qn('#__akeebasubs_pf_projects'))
+			->where($db->qn('users_id') . ' = ' . $db->q($user_id))
+			->where($db->qn('akeebasubs_level_id') . ' = ' . $db->q($level_id));
+		$db->setQuery($query);
+		$proj_id = $db->loadResult();
+		if($proj_id == null) return "";
+		
+		// Get the title
+		$query = $db->getQuery(true)
+			->select($db->qn('title'))
+			->from($db->qn('#__pf_projects'))
+			->where($db->qn('id') . ' = ' . $db->q($proj_id));
+		$db->setQuery($query);
+		$proj_title = $db->loadResult();
+		if($proj_title == null) return "";
+		
+		return $proj_title;
 	}
 	
 	/**
