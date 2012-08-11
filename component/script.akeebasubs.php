@@ -165,6 +165,7 @@ class Com_AkeebasubsInstallerScript
 			'components/com_akeebasubs/controllers/validate.php',
 			'components/com_akeebasubs/views/level/html.php',
 			'components/com_akeebasubs/views/subscribe/html.php',
+			'media/com_akeebasubs/js/akeebajq.js',
 
 			'administrator/components/com_akeebasubs/fof/LICENSE.txt',
 			'administrator/components/com_akeebasubs/fof/controller.php',
@@ -251,8 +252,11 @@ class Com_AkeebasubsInstallerScript
 		// Install FOF
 		$fofStatus = $this->_installFOF($parent);
 		
+		// Install Akeeba Straper
+		$straperStatus = $this->_installStraper($parent);
+		
 		// Show the post-installation page
-		$this->_renderPostInstallation($status, $fofStatus, $parent);
+		$this->_renderPostInstallation($status, $fofStatus, $straperStatus, $parent);
 	}
 	
 	/**
@@ -327,13 +331,13 @@ class Com_AkeebasubsInstallerScript
 	/**
 	 * Renders the post-installation message 
 	 */
-	private function _renderPostInstallation($status, $fofStatus, $parent)
+	private function _renderPostInstallation($status, $fofStatus, $straperStatus, $parent)
 	{
 ?>
 
 <h1>Akeeba Subscriptions</h1>
 
-<?php $rows = 0;?>
+<?php $rows = 1;?>
 <img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions" align="left" />
 <h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">Welcome to Akeeba Subscriptions!</h2>
 <span>The easiest way to sell subscriptions on your Joomla! site</span>
@@ -370,6 +374,16 @@ class Com_AkeebasubsInstallerScript
 			<td><strong>
 				<span style="color: <?php echo $fofStatus['required'] ? ($fofStatus['installed']?'green':'red') : '#660' ?>; font-weight: bold;">
 					<?php echo $fofStatus['required'] ? ($fofStatus['installed'] ?'Installed':'Not Installed') : 'Already up-to-date'; ?>
+				</span>	
+			</strong></td>
+		</tr>
+		<tr class="row0">
+			<td class="key" colspan="2">
+				<strong>Akeeba Strapper <?php echo $straperStatus['version']?></strong> [<?php echo $straperStatus['date'] ?>]
+			</td>
+			<td><strong>
+				<span style="color: <?php echo $straperStatus['required'] ? ($straperStatus['installed']?'green':'red') : '#660' ?>; font-weight: bold;">
+					<?php echo $straperStatus['required'] ? ($straperStatus['installed'] ?'Installed':'Not Installed') : 'Already up-to-date'; ?>
 				</span>	
 			</strong></td>
 		</tr>
@@ -930,6 +944,90 @@ class Com_AkeebasubsInstallerScript
 			'installed'	=> $installedFOF,
 			'version'	=> $fofVersion[$versionSource]['version'],
 			'date'		=> $fofVersion[$versionSource]['date']->format('Y-m-d'),
+		);
+	}
+	
+	private function _installStraper($parent)
+	{
+		$src = $parent->getParent()->getPath('source');
+		
+		// Install the FOF framework
+		jimport('joomla.filesystem.folder');
+		jimport('joomla.filesystem.file');
+		jimport('joomla.utilities.date');
+		$source = $src.'/strapper';
+		$target = JPATH_ROOT.'/media/akeeba_strapper';
+
+		$haveToInstallStraper = false;
+		if(!JFolder::exists($target)) {
+			$haveToInstallStraper = true;
+		} else {
+			$straperVersion = array();
+			if(JFile::exists($target.'/version.txt')) {
+				$rawData = JFile::read($target.'/version.txt');
+				$info = explode("\n", $rawData);
+				$straperVersion['installed'] = array(
+					'version'	=> trim($info[0]),
+					'date'		=> new JDate(trim($info[1]))
+				);
+			} else {
+				$straperVersion['installed'] = array(
+					'version'	=> '0.0',
+					'date'		=> new JDate('2011-01-01')
+				);
+			}
+			$rawData = JFile::read($source.'/version.txt');
+			$info = explode("\n", $rawData);
+			$straperVersion['package'] = array(
+				'version'	=> trim($info[0]),
+				'date'		=> new JDate(trim($info[1]))
+			);
+
+			$haveToInstallStraper = $straperVersion['package']['date']->toUNIX() > $straperVersion['installed']['date']->toUNIX();
+		}
+
+		$installedStraper = false;
+		if($haveToInstallStraper) {
+			$versionSource = 'package';
+			$installer = new JInstaller;
+			$installedStraper = $installer->install($source);
+		} else {
+			$versionSource = 'installed';
+		}
+		
+		if(!isset($straperVersion)) {
+			$straperVersion = array();
+			if(JFile::exists($target.'/version.txt')) {
+				$rawData = JFile::read($target.'/version.txt');
+				$info = explode("\n", $rawData);
+				$straperVersion['installed'] = array(
+					'version'	=> trim($info[0]),
+					'date'		=> new JDate(trim($info[1]))
+				);
+			} else {
+				$straperVersion['installed'] = array(
+					'version'	=> '0.0',
+					'date'		=> new JDate('2011-01-01')
+				);
+			}
+			$rawData = JFile::read($source.'/version.txt');
+			$info = explode("\n", $rawData);
+			$straperVersion['package'] = array(
+				'version'	=> trim($info[0]),
+				'date'		=> new JDate(trim($info[1]))
+			);
+			$versionSource = 'installed';
+		}
+		
+		if(!($straperVersion[$versionSource]['date'] instanceof JDate)) {
+			$straperVersion[$versionSource]['date'] = new JDate();
+		}
+		
+		return array(
+			'required'	=> $haveToInstallStraper,
+			'installed'	=> $installedStraper,
+			'version'	=> $straperVersion[$versionSource]['version'],
+			'date'		=> $straperVersion[$versionSource]['date']->format('Y-m-d'),
 		);
 	}
 }

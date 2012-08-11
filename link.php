@@ -20,6 +20,8 @@ $symlink_folders = array(
 	'../liveupdate/code/language'				=> 'component/backend/liveupdate/language',
 	# FOF
 	'../fof/fof'								=> 'component/fof',
+	# Akeeba Strapper
+	'../fof/strapper'							=> 'component/strapper',
 );
 
 $path = dirname(__FILE__);

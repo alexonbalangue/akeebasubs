@@ -35,6 +35,17 @@ class AkeebasubsDispatcher extends FOFDispatcher
 			$jlang->load($this->component.'.override', $paths[1], 'en-GB', true);
 			$jlang->load($this->component.'.override', $paths[1], null, true);
 			
+			// Load Akeeba Strapper
+			if(!defined('AKEEBASUBSMEDIATAG')) {
+				$staticFilesVersioningTag = md5(AKEEBASUBS_VERSION.AKEEBASUBS_DATE);
+				define('AKEEBASUBSMEDIATAG', $staticFilesVersioningTag);
+			}
+			include_once JPATH_ROOT.'/media/akeeba_strapper/strapper.php';
+			AkeebaStrapper::$tag = AKEEBASUBSMEDIATAG;
+			AkeebaStrapper::bootstrap();
+			AkeebaStrapper::jQueryUI();
+			AkeebaStrapper::addCSSfile('media://com_akeebasubs/css/frontend.css');
+			
 			// Load helpers
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 

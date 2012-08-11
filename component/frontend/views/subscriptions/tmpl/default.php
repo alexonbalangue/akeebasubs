@@ -30,11 +30,11 @@ if(count($this->items)) foreach($this->items as $sub) {
 $subIDs = array_unique($subIDs);
 ?>
 
-<div id="akeebasubs" class="subscriptions">
+<div id="akeebasubs" class="subscriptions akeeba-bootstrap">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
 	<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions') ?>" method="post" class="adminform" name="adminForm" id="adminForm">
 		<?php echo JHtml::_('form.token'); ?>
-	<table class="asfelist" width="100%">
+	<table class="table table-striped" width="100%">
 		<thead>
 			<tr>
 				<th width="60px">
@@ -119,18 +119,17 @@ $subIDs = array_unique($subIDs);
 					<?php endif;?>
 	            </td>
 	            <td>
-					<a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscription&id='.$subscription->akeebasubs_subscription_id)?>">
+					<a class="btn btn-mini btn-info" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscription&id='.$subscription->akeebasubs_subscription_id)?>">
 						<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_VIEW')?>
 					</a>
 
 	            	<?php if(($subscription->state == 'C') && (in_array($subscription->akeebasubs_level_id, $activeLevels))):?>
 					<?php if($canRenew): ?>
-	            	&bull;
 	            	<?php $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 						->setId($subscription->akeebasubs_level_id)
 						->getItem()
 						->slug;?>
-	            	<a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$slug)?>">
+	            	<a class="btn btn-mini btn-inverse" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$slug)?>">
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
 	            	<?php endif;?>
