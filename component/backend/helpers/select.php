@@ -404,6 +404,7 @@ class AkeebasubsHelperSelect
 		// Determine how to render the payment method (drop-down or radio box)
 		if(AkeebasubsHelperCparams::getParam('useppimages', 1) > 0) {
 			// Show images instead of a drop-down
+			$options = array();
 			foreach($plugins as $plugin) {
 				if(!isset($plugin->image)) {
 					$plugin->image = '';
@@ -415,16 +416,27 @@ class AkeebasubsHelperSelect
 				}
 				$innerHTML = '<img border="0" src="'.$plugin->image.'" /> ';
 				if(AkeebasubsHelperCparams::getParam('useppimages', 1) == 2) {
-					$innerHTML .= '<span>'.$plugin->title.'</span>';
+					$innerHTML .= '<span class="pull-left">'.$plugin->title.'</span>';
 				}
-				$options[] = JHTML::_('select.option',$plugin->name,$innerHTML);
+				$options[] = array(
+					'value'		=> $plugin->name,
+					'label'		=> $innerHTML,
+				);
 				// In case we don't have a default selection, select the first item on the list
 				if(empty($selected)) {
 					$selected = $plugin->name;
 				}
 			}
 			$html = '<span class="akeebasubs-paymentmethod-images">';
-			$html .= self::genericradiolist($options, $name, $attribs, $selected, $name);
+			if(!empty($options)) {
+				foreach($options as $o) {
+					$html .= '<label class="radio input-xxlarge"><input type="radio" name="'.$name.'" id="'.
+							$name.$o['value'].'" value="'.$o['value'].'" ';
+					if($o['value'] == $selected) $html.='checked="checked"';
+					$html.='/>'.$o['label'].'</label>';
+				}
+			}
+			//$html .= self::genericradiolist($options, $name, $attribs, $selected, $name);
 			$html .= '</span>';
 			return $html;
 		} else {

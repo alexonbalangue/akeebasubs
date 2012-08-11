@@ -15,9 +15,9 @@ $this->loadHelper('format');
 
 ?>
 
-<div id="akeebasubs">
+<div id="akeebasubs" class="akeeba-bootstrap">
 
-<table class="subscription-table">
+<table class="table table-striped">
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?></td>
 		<td class="subscription-info">
@@ -84,7 +84,7 @@ $this->loadHelper('format');
 </table>
 	
 <div class="akeebasubs-goback">
-	<p><a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions')?>"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></a></p>
+	<p><a class="btn btn-large btn-primary" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions')?>"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></a></p>
 </div>
 
 </div>

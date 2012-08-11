@@ -13,7 +13,7 @@ $this->loadHelper('modules');
 
 ?>
 
-<div id="akeebasubs" class="userinfo">
+<div id="akeebasubs" class="userinfo akeeba-bootstrap">
 	
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsuserinfoheader')?>
 
@@ -30,7 +30,9 @@ $this->loadHelper('modules');
 	
 	<?php echo $this->loadAnyTemplate('site:com_akeebasubs/level/default_fields') ?>
 	
-	<button id="update_userinfo" type="submit"><?php echo JText::_('COM_AKEEBASUBS_USERINFO_BUTTON_UPDATE_USER')?></button>
+	<div class="form-actions">
+		<button class="btn btn-primary btn-large" id="update_userinfo" type="submit"><?php echo JText::_('COM_AKEEBASUBS_USERINFO_BUTTON_UPDATE_USER')?></button>
+	</div>
 </form>
 
 	<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsuserinfofooter')?>

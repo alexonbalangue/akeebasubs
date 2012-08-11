@@ -16,9 +16,11 @@ $script = <<<ENDSCRIPT
 akeebasubs_level_id = {$this->item->akeebasubs_level_id};
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);
+
+$prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'before' ? 'input-prepend' : 'input-append';
 ?>
 
-<div id="akeebasubs">
+<div id="akeebasubs" class="akeeba-bootstrap">
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsheader')?>
 
@@ -40,72 +42,130 @@ JFactory::getDocument()->addScriptDeclaration($script);
 <?php endif?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscribe&layout=default&slug='.FOFInput::getString('slug','',$this->input))?>" method="post"
-	id="signupForm" >
+	id="signupForm" class="form form-horizontal" >
 	<input type="hidden" name="_token" value="<?php echo JFactory::getSession()->getToken()?>" />
 	
 	<?php echo $this->loadTemplate('fields'); ?>
 	
 	<?php if($this->validation->price->net < 0.01): ?><div style="display:none"><?php endif ?>
-	<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')?></h3>
+		
+	<fieldset>
+		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')?></legend>
 
-	<noscript>
-		<p>
-			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NOSCRIPT')?>
-		</p>
-	</noscript>
+		<noscript>
+			<p class="alert alert-warning">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NOSCRIPT')?>
+			</p>
+		</noscript>
 
-	<label class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NET')?></label>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<span id="akeebasubs-sum-net" class="currency"><?php echo $this->validation->price->net?></span>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<br/>
-	<label class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')?></label>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<span id="akeebasubs-sum-discount" class="currency"><?php echo $this->validation->price->discount?></span>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<br/>
-	<label class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT')?></label>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<span id="akeebasubs-sum-vat" class="currency"><?php echo $this->validation->price->tax?></span>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<br/>
-	<label class="main  total"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')?></label>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<span id="akeebasubs-sum-total" class="currency total"><?php echo $this->validation->price->gross?></span>
-	<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-	<span class="currency-symbol"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
-	<?php endif; ?>
-	<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
+		<div class="control-group">
+			<label class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NET')?>
+			</label>
+			<div class="controls">
+				<div class="<?php echo $prepend_class?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+					<input id="akeebasubs-sum-net" type="text" disabled="disabled" class="input-small"
+						value="<?php echo $this->validation->price->net?>" />
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')?>
+			</label>
+			<div class="controls">
+				<div class="<?php echo $prepend_class?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+					<input id="akeebasubs-sum-discount" type="text" disabled="disabled" class="input-small"
+						value="<?php echo $this->validation->price->discount?>" />
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT')?>
+			</label>
+			<div class="controls">
+				<div class="<?php echo $prepend_class?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+					<input id="akeebasubs-sum-vat" type="text" disabled="disabled" class="input-small"
+						value="<?php echo $this->validation->price->tax?>" />
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		
+		<div class="control-group success">
+			<label class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')?>
+			</label>
+			<div class="controls">
+				<div class="<?php echo $prepend_class?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+					<input id="akeebasubs-sum-total" type="text" disabled="disabled" class="input-small"
+						value="<?php echo $this->validation->price->gross?>" />
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		
+		<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
+	</fieldset>
 	
-	<h3 class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></h3>
-	<?php if($this->validation->price->net > 0): ?>
-	<label for="coupon" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?></label>
-	<input type="text" name="coupon" id="coupon" value="<?php echo $this->escape($this->cache['coupon'])?>" class="vat" />
-	<?php endif; ?>
-	<br/>
+	<fieldset>
+		<legend class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></legend>
+		
+		<?php if($this->validation->price->net > 0): ?>
+		<div class="control-group">
+			<label for="coupon" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?>
+			</label>
+			<div class="controls">
+				<input type="text" class="input-medium" name="coupon" id="coupon" value="<?php echo $this->escape($this->cache['coupon'])?>" />
+			</div>
+		</div>
+		<?php endif; ?>
+	</fieldset>
+	
 	<div id="paymentmethod-container" <?php echo ($this->validation->price->gross < 0.01) ? 'style="display: none;"' : '' ?>>
-		<label for="paymentmethod" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?></label>
-		<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod')) ?>
-		<br/>
+		<div class="control-group">
+			<label for="paymentmethod" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?>
+			</label>
+			<div class="controls">
+				<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod')) ?>
+			</div>
+		</div>
 	</div>
-	<div class="akeebasubs-clear"></div><br/>
-	<label for="subscribenow" class="main">&nbsp;</label>
-	<button id="subscribenow" type="submit"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?></button>
-	<img id="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />	
+
+	<div class="form-actions">
+		<button id="subscribenow" class="btn btn-large btn-primary" type="submit">
+			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>
+		</button>
+		<img id="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />			
+	</div>
+		
 </form>
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsfooter')?>

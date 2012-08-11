@@ -11,6 +11,14 @@
 
 @CHARSET "UTF-8";
 
+/**
+ * Selective reset of Bootstrap styling
+ */
+div.akeeba-bootstrap { background: transparent; }
+
+/**
+ * Bottom margin
+ */
 #akeebasubs { margin-bottom: 1em; }
 
 /*
@@ -538,12 +546,14 @@ input.akeebasubs-awesome-subscribe-button:hover {
 	width: 60%;
 }
 
+/*
 #akeebasubs span.akeebasubs-paymentmethod-images input {
 	clear: both;
 	float: left;
 	width: 32px;
 	margin-top:  10px;
 }
+*/
 
 #akeebasubs span.akeebasubs-paymentmethod-images label {
 	float: left;

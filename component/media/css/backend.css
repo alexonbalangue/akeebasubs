@@ -4,6 +4,35 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+ /**
+ * Selective reset of Bootstrap styling
+ */
+div.akeeba-bootstrap { background: transparent; }
+div.icon a.modal { position: relative; top: inherit; left: inherit; z-index: inherit; margin: 0 !important; box-shadow: none;  }
+div.ak_clr_left { clear: left; }
+div.ak_clr { clear: both; }
+div.icon-wrapper, .akeeba-bootstrap [class^="icon-wrapper"] { display: inline; }
+
+div.akeeba-bootstrap form.form-horizontal-wide label.control-label { width: 300px }
+div.akeeba-bootstrap form.form-horizontal-wide div.controls { margin-left: 320px }
+div.akeeba-bootstrap form.form-horizontal-wide textarea { width: 450px }
+
+td.order span { line-height: 16px; height: 16px; margin: 0; padding: 0; }
+td.order a.jgrid span.state { background-repeat: no-repeat; height: 12px; margin-bottom: 2px }
+td.order a.jgrid span.state span.text { line-height: 16px; }
+td.order input.text_area { width: 20px; }
+
+div.akeeba-bootstrap label.radiobtn { display: inline-block; }
+.decrapbooleanlist label.radiobtn { display: inline-block; float: none; clear: none; }
+.decrapbooleanlist input { display: inline-block; float: none; clear: none; }
+
+div.controls span.floatme { display: inline-block; float: left; padding: 5px; }
+
+/**
+ * Icons and stuff
+ */
+ 
+ 
 .icon-48-akeebasubs {
 	background: transparent url(../images/akeebasubs-48.png) no-repeat !important;
 }

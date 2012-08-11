@@ -19,7 +19,9 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 	JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.FOFInput::getString('slug','',$this->input)))
 ?>
 
-<form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post">
+<div class="akeeba-bootstrap">
+
+<form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post" class="form form-horizontal">
 	<input type="hidden" name="return" value="<?php echo base64_encode($redirectURL)?>" />
 	<input type="hidden" name="remember" value="1" />
 	<?php if(version_compare(JVERSION, '3.0.0', 'ge')): ?>
@@ -29,13 +31,35 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 	<?php endif; ?>
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?></legend>
-		<label for="username" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_USERNAME')?></label>
-		<input type="text" class="main" name="username" value="" />
-		<br/>
-		<label for="password" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_PASSWORD')?></label>
-		<input type="password" class="main" name="password" value="" />
-		<br/>
-		<input type="submit" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?>" />
-		<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_ORCONTINUE')?>
+		
+		<div class="control-group">
+			<label for="username" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_USERNAME')?>
+			</label>
+			<div class="controls">
+				<input type="text" name="username" value="" />
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="password" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_PASSWORD')?>
+			</label>
+			<div class="controls">
+				<input type="password" name="password" value="" />
+			</div>
+		</div>
+
+		<div class="form-actions">
+			<input type="submit" class="btn btn-primary" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?>" />
+			<span>
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_ORCONTINUE')?>
+			</span>
+		</div>
+		
+		
+		
 	</fieldset>
 </form>
+	
+</div>
