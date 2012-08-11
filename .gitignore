@@ -19,6 +19,7 @@ plugins/system/oneclickaction/LICENSE.txt
 plugins/system/oneclickaction/oneclickaction.php
 plugins/system/oneclickaction/oneclickaction.xml
 component/fof
+component/strapper
 
 component/language/en-GB
 translations/plugins/system/oneclickaction
