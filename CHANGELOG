@@ -4,9 +4,10 @@ Akeeba Subscriptions 2.3.1
 + ProjectFork integration
 + Remove country prefix and non alphanumeric characters from VAT field, also checking it's a valid VAT number before saving it
 ~ 2Checkout: Improvement in handling of payment messages
+# [HIGH] The PhocaDownloads integration plugin was broken
+# [MEDIUM] The MailChimp integration plugin wouldn't install its library folder
 # [MEDIUM] Joomla! forgets to run a necessary SQL file when upgrading from Akeeba Subscriptions 2.2.1 or earlier
 # [MEDIUM] You could no longer log in users through the subscription page
-# [HIGH] The PhocaDownloads integration plugin was broken
 # [LOW] IFTHEN payment plugin: callbacks would not work
 # [LOW] The VAT notice for intra-EU transactions was not being displayed with the ccInvoices custom tags plugin
 
