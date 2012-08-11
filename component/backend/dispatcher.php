@@ -41,6 +41,7 @@ class AkeebasubsDispatcher extends FOFDispatcher
 			AkeebaStrapper::bootstrap();
 			AkeebaStrapper::jQueryUI();
 			AkeebaStrapper::addCSSfile('media://com_akeebasubs/css/backend.css');
+			AkeebaStrapper::addJSfile('media://com_akeebasubs/js/backend.js');
 		}
 		
 		return $result;
