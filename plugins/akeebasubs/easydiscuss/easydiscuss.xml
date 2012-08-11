@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - EasyDiscuss Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>August 2012</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_EASYDISCUSS_DESCRIPTION</description>
+	<files>
+		<filename plugin="easydiscuss">easydiscuss.php</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_easydiscuss.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_easydiscuss.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="addranks" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_ADDRANKS_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_ADDRANKS_DESCRIPTION" rows="5" cols="30" />
+				<field name="removeranks" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_REMOVERANKS_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_REMOVERANKS_DESCRIPTION" rows="5" cols="30" />
+			</fieldset>
+			<fieldset name="basic">
+				<field name="addbadges" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_ADDBADGES_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_ADDBADGES_DESCRIPTION" rows="5" cols="30" />
+				<field name="removebadges" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_REMOVEBADGES_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_REMOVEBADGES_DESCRIPTION" rows="5" cols="30" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>
