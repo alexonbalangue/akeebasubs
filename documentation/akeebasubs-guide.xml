@@ -7919,7 +7919,7 @@ LEVEL3=List 1</programlisting>
         </variablelist>
       </section>
 
-      <section xml:id="integration-mailchimp">
+      <section xml:id="integration-projectfork">
         <title>ProjectFork integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
@@ -7978,6 +7978,125 @@ LEVEL3=List 1</programlisting>
         Integration plugin to assign subscribers to Joomla! user groups. All
         ProjectFork groups are set up to be automatically assigned based on a
         user's Joomla! usergroup membership.</para>
+      </section>
+
+      <section xml:id="integration-easydiscuss">
+        <title>EasyDiscuss integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - EasyDiscuss Integration</guilabel></para>
+
+        <para>This integration plugin allows you to automatically add/remove
+        EasyDiscuss ranks and badges to users based on their subscriptions.
+        <link
+        xlink:href="http://stackideas.com/easydiscuss.html">EasyDiscuss</link>
+        is a Joomla! forum discussion extension created by StackIdeas.</para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Active rank</term>
+
+            <listitem>
+              <para>This is a list for assigning ranks to users when their
+              subscription becomes active. When a user has an active
+              subscription to the specified level, he'll be assigned to the
+              rank mentioned on the right hand of the equal sign. Each
+              assignment is done like this:</para>
+
+              <programlisting>LEVEL1=Rank 1</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Rank 1 is the name of the EasyDiscuss rank you want to add a
+              user to when he subscribes.</para>
+
+              <para>You can also use the numeric IDs of subscription levels
+              and/or ranks instead of their titles. However, we consider
+              working with numeric IDs very counter-intuitive.</para>
+
+              <important>
+                <para>Please note that EasyDiscuss only allows one rank per
+                user. The rank specified by the latest subscription bought by
+                the user will be used.</para>
+              </important>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Inactive rank</term>
+
+            <listitem>
+              <para>This is the list for removing ranks from users when their
+              subscription becomes inactive. When a user's subscription to the
+              specified level expires, he'll be removed from the rank
+              mentioned on the right hand of the equal sign. Each assignment
+              is done as in Active Rank above.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Active badge</term>
+
+            <listitem>
+              <para>This is a list for assigning subscription levels to
+              EasyDiscuss badges. When a user has an active subscription to
+              the specified level, he'll be given the EasyDiscuss badge
+              mentioned on the right hand of the equal sign. Each assignment
+              is done like this:</para>
+
+              <programlisting>LEVEL1=Badge 1,Badge 2,Badge 3</programlisting>
+
+              <para>Where LEVEL1 is the Title of the subscription level and
+              Badge 1, Badge 2 and Badge 3 are the names of the EasyDiscuss
+              badges you want to add a user to when he subscribes. If you want
+              to assign multiple subscription levels to multiple badges, you
+              have to do something like that (separate multiple lines with a
+              single press of the ENTER key on your keyboard):</para>
+
+              <programlisting>LEVEL1=Badge 1,Badge 2,Badge 3
+LEVEL2=Badge 2
+LEVEL3=Badge 4,Badge 1</programlisting>
+
+              <para>You can also use the numeric IDs of subscription levels
+              and badges instead of their titles. However, we consider working
+              with numeric IDs very counter-intuitive.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Inactive badge</term>
+
+            <listitem>
+              <para>Likewise, this is the list of the EasyDiscuss badges to
+              remove a user from when his subscription to the specified level
+              is no longer active. Do note that you can specify a different
+              set of badges to remove the user from than the ones you are
+              adding him to. For example:</para>
+
+              <programlisting>LEVEL1=Badge 1,Badge 2
+LEVEL2=Badge 2
+LEVEL3=Badge 1</programlisting>
+
+              <para>In this example, together with the rules displayed in
+              "Active Badge", when a subscription to the LEVEL1 level expires,
+              the user will still belong to EasyDiscuss badgeBadgeList 3, as
+              he's not removed from it; he's only removed only from the badges
+              Badge 1 and Badge 2. Likewise, if the user has an expired LEVEL1
+              subscription and an active LEVEL2 subscription he'll now belong
+              to badges Badge 2 and Badge 3: Badge 3 because it's not removed
+              when his subscription expires and badge Badge 2 because his
+              active LEVEL2 subscription suggests that he should be added to
+              Badge 2 despite his expired LEVEL1 subscription.</para>
+
+              <para>If you find this hard to understand, join the club. ACLs
+              are not meant to be easy to setup or understand. It's a power
+              feature and, as such, poses a great difficulty to even the most
+              seasoned web site integrators. Take your time and experiment on
+              a dev copy of your site before going live.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
     </section>
 
