@@ -57,6 +57,7 @@ class Com_AkeebasubsInstallerScript
 				'cb'					=> 0,
 				'ccinvoices'			=> 0,
 				'docman'				=> 0,
+				'easydiscuss'			=> 0,
 				'iplogger'				=> 0,
 				'iproperty'				=> 0,
 				'jce'					=> 0,
