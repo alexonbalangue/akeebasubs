@@ -9041,6 +9041,25 @@ LEVEL3=Badge 1</programlisting>
           Joomla!'s Manage Plugins page</para>
         </tip>
 
+        <important>
+          <para>Showing a CAPTCHA on your subscription page will result in
+          many lost sales. By showing a CAPTCHA in the subscription page you
+          are making your potential subscribers to think hard before they part
+          with their money, as well as frustrate them (according to our
+          experience, one in two CAPTCHAs is unsolvable and makes the user
+          feel they are stupid). As any undergrad business school student can
+          tell you, the more you make people think, the less likely they are
+          to pay. Besides, if someone actually pays you he is certainly not a
+          spammer, therefore the CAPTCHA is unnecessary.</para>
+
+          <para>We strongly advise you <emphasis
+          role="bold">AGAINST</emphasis> using this plugin. If you decide to
+          use it, you should limit its display only to free or trial
+          subscriptions using the "Enable on these levels" option described
+          below. You can always ignore our advice to your business'
+          detriment.</para>
+        </important>
+
         <para>The plugin has the following options:</para>
 
         <variablelist>
@@ -9079,6 +9098,19 @@ LEVEL3=Badge 1</programlisting>
               choose French but your browser specified that English should be
               preferred over French, the interface will display in
               English.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Enable on these levels</term>
+
+            <listitem>
+              <para>Select when to show the ReCAPTCHA. It will be shown only
+              on the subscription page for the subscription levels you select
+              here. You can do multiple selection by holding down the CTRL key
+              (Windows, Linux) or CMD key (Mac) when clicking the levels. If
+              you select the first option, the three dashes, ReCAPTCHA will be
+              shown for all subscription levels.</para>
             </listitem>
           </varlistentry>
         </variablelist>

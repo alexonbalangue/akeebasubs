@@ -17,7 +17,7 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_recaptcha.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_recaptcha.sys.ini</language>
 	</languages>
-	<config>
+	<config addfieldpath="/plugins/akeebasubs/recaptcha/recaptcha">
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="publickey" type="text" default="" label="PLG_AKEEBASUBS_RECAPTCHA_PUBLICKEY_LABEL" description="PLG_AKEEBASUBS_RECAPTCHA_PUBLICKEY_DESC" size="30" />
@@ -42,6 +42,12 @@
 					<option value="es">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_ES</option>
 					<option value="tr">PLG_AKEEBASUBS_RECAPTCHA_LANGUAGE_TR</option>
 				</field>
+				<field name="autoauthids" type="sql3" default=""
+					label="PLG_AKEEBASUBS_RECAPTCHA_LEVELS_TITLE"
+					description="PLG_AKEEBASUBS_RECAPTCHA_LEVELS_DESC"
+					query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`"
+					key_field="akeebasubs_level_id"
+					value_field="title" />
 			</fieldset>
 		</fields>
 	</config>

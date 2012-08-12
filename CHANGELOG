@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.3.1
 + ProjectFork integration
 + EasyDiscuss integration
 + Remove country prefix and non alphanumeric characters from VAT field, also checking it's a valid VAT number before saving it
+~ Allow ReCAPTCHA to be shown only for specific subscription levels
 ~ 2Checkout: Improvement in handling of payment messages
 # [HIGH] The PhocaDownloads integration plugin was broken
 # [MEDIUM] The MailChimp integration plugin wouldn't install its library folder

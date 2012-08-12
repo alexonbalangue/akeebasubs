@@ -14,8 +14,23 @@ class plgAkeebasubsRecaptcha extends JPlugin
 {
 	function onSubscriptionFormRender($userparams, $cache)
 	{
+		$showReCAPTCHA = true;
 		if(!array_key_exists('subscriptionlevel', $cache)) $cache['subscriptionlevel'] = null;
 		if(is_null($cache['subscriptionlevel'])) {
+			$showReCAPTCHA = false;
+		}
+		if($showReCAPTCHA) {
+			$levels = $this->params->getValue('autoauthids', array());
+			if(!is_null($levels) && !empty($levels)) {
+				if(!in_array($cache['subscriptionlevel'], $levels)) {
+					if(!in_array(0, $levels)) {
+						$showReCAPTCHA = false;
+					}
+				}
+			}
+		}
+		
+		if(!$showReCAPTCHA) {
 			// When we're not showing the CAPTCHA pretend it's always valid
 			$session = JFactory::getSession();
 			$session->set('recaptcha.valid', true, 'com_akeebasubs');
