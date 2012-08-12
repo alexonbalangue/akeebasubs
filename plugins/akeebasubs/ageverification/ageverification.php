@@ -82,10 +82,13 @@ function plg_akeebasubs_ageverification_fetch()
 function plg_akeebasubs_ageverification_validate(response)
 {
 	(function($) {
+		$('#ageverification').parent().parent().removeClass('error').removeClass('success');
 		if(response.custom_validation.ageverification) {
+			$('#ageverification').parent().parent().addClass('success');
 			$('#ageverification_invalid').css('display','none');
 			return true;
 		} else {
+			$('#ageverification').parent().parent().addClass('error');
 			$('#ageverification_invalid').css('display','inline-block');
 			return false;
 		}

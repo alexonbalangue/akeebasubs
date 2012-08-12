@@ -517,10 +517,10 @@ function applyValidation(response, callback)
 		if(akeebasubs_personalinfo) {
 			$('#address1').parent().parent().removeClass('error').removeClass('success');
 			if(response.address1) {
-				$('#address1').addClass('success');
+				$('#address1').parent().parent().addClass('success');
 				$('#address1_empty').css('display','none');
 			} else {
-				$('#address1').addClass('error');
+				$('#address1').parent().parent().addClass('error');
 				akeebasubs_valid_form = false;
 				$('#address1_empty').css('display','inline-block');
 			}

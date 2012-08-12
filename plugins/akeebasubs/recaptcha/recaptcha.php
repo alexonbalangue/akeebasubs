@@ -14,6 +14,14 @@ class plgAkeebasubsRecaptcha extends JPlugin
 {
 	function onSubscriptionFormRender($userparams, $cache)
 	{
+		if(!array_key_exists('subscriptionlevel', $cache)) $cache['subscriptionlevel'] = null;
+		if(is_null($cache['subscriptionlevel'])) {
+			// When we're not showing the CAPTCHA pretend it's always valid
+			$session = JFactory::getSession();
+			$session->set('recaptcha.valid', true, 'com_akeebasubs');
+			return;
+		}
+		
 		// Load the library
 		if(!defined('RECAPTCHA_API_SERVER')) {
 			@include_once dirname(__FILE__).'/recaptcha/recaptchalib.php';

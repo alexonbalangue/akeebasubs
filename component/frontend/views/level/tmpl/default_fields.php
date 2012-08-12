@@ -20,6 +20,8 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 	JHTML::_('behavior.mootools');
 }
 
+if(isset($this->item)) $akeebasubs_subscription_level = $this->item->akeebasubs_level_id;
+
 $field_data = array(
 	'name'				=> !empty($this->userparams->name) ? $this->userparams->name : $this->cache['name'],
 	'email'				=> !empty($this->userparams->email) ? $this->userparams->email : $this->cache['email'],
@@ -161,7 +163,7 @@ if(JFactory::getUser()->guest) {
 jimport('joomla.plugin.helper');
 JPluginHelper::importPlugin('akeebasubs');
 $app = JFactory::getApplication();
-$jResponse = $app->triggerEvent('onSubscriptionFormRender', array($this->userparams, $this->cache));
+$jResponse = $app->triggerEvent('onSubscriptionFormRender', array($this->userparams, array_merge($this->cache,array('subscriptionlevel' => $akeebasubs_subscription_level))));
 if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
 if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):
 if(array_key_exists('isValid', $field)) {

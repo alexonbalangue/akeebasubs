@@ -110,10 +110,13 @@ function plg_akeebasubs_agreetotos_fetch()
 function plg_akeebasubs_agreetotos_validate(response)
 {
 	(function($) {
+		$('#agreetotos').parent().parent().removeClass('error').removeClass('success');
 		if(response.custom_validation.agreetotos) {
+			$('#agreetotos').parent().parent().addClass('success');
 			$('#agreetotos_invalid').css('display','none');
 			return true;
 		} else {
+			$('#agreetotos').parent().parent().addClass('error');
 			$('#agreetotos_invalid').css('display','inline-block');
 			return false;
 		}

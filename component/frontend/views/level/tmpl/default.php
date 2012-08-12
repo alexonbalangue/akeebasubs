@@ -25,7 +25,7 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsheader')?>
 
 <?php if(AkeebasubsHelperCparams::getParam('stepsbar',1) && ($this->validation->price->net > 0.01)):?>
-<?php echo $this->loadAnyTemplate('level/steps',array('step'=>'subscribe')); ?>
+<?php echo $this->loadAnyTemplate('level/steps',array('step'=>'subscribe', 'akeebasubs_subscription_level' => $this->item->akeebasubs_level_id)); ?>
 <?php endif; ?>
 
 <?php echo $this->loadTemplate('level') ?>

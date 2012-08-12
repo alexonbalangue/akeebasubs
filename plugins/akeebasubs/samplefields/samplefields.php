@@ -133,14 +133,29 @@ function plg_akeebasubs_samplefields_fetch()
 
 function plg_akeebasubs_samplefields_validate(response)
 {
+	var thisIsValid = true;
 	(function($) {
+		$('#agegroup').parent().parent().removeClass('error').removeClass('success');
 		if(response.custom_validation.agegroup) {
+			$('#agegroup').parent().parent().addClass('success');
 			$('#agegroup_invalid').css('display','none');
-			return true;
 		} else {
+		$('#agegroup').parent().parent().addClass('error');
 			$('#agegroup_invalid').css('display','inline-block');
-			return false;
+			thisIsValid = false;
 		}
+		
+		$('#phonenumber').parent().parent().removeClass('error').removeClass('success');
+		if(response.custom_validation.phonenumber) {
+			$('#phonenumber').parent().parent().addClass('success');
+			$('#phonenumber_invalid').css('display','none');
+		} else {
+			$('#phonenumber').parent().parent().addClass('error');
+			$('#phonenumber_invalid').css('display','inline-block');
+			thisIsValid = false
+		}
+		
+		return thisIsValid;
 	})(akeeba.jQuery);
 }
 
