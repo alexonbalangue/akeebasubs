@@ -332,6 +332,41 @@ input.akeebasubs-awesome-subscribe-button:hover {
 }
 
 /*
+ * Subscriptions "strappy" layout
+ */
+td.akeebasubs-strappy-level {
+	text-align: center !important;
+} 
+td.akeebasubs-strappy-level a {
+	color: black;
+	font-weight: bolder;
+	font-size: 110%;
+	text-transform: capitalize;
+	text-decoration: none;
+	text-align: center;
+	text-shadow: #aaa 1px 1px 3px;
+}
+
+td.akeebasubs-strappy-price {
+	font-size: 200%;
+	font-style: italic;
+	font-weight: bold;
+	text-align: center !important;
+	padding: 0.2em 0;
+	text-shadow: #aaa 1px 1px 3px;
+	padding: 0.5em 0.25em !important;
+}
+
+.akeebasubs-strappy-price-currency:after {
+	content: " ";
+}
+
+.akeebasubs-strappy-price-separator,
+.akeebasubs-strappy-price-decimal {
+	font-size: 50%;
+}
+
+/*
  * Subscription page
  */
  

@@ -22,7 +22,7 @@ $this->loadHelper('message');
 
 <?php $max = count($this->items); ?>
 
-<div class="akeebasubs-awesome">
+<div class="akeebasubs-awesome akeeba-bootstrap">
 	<div class="columns columns-<?php echo $max?>">
 		<?php $i = 0; foreach($this->items as $level): $i++?>
 		<?php
@@ -53,7 +53,9 @@ $this->loadHelper('message');
 				</div>
 				<div class="akeebasubs-awesome-footer">
 					<td class="akeebasubs-awesome-subscribe">
-						<button onclick="window.location='<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
+						<button
+							class="btn btn-inverse"
+							onclick="window.location='<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
 						</button>
 					</td>
