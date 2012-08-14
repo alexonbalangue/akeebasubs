@@ -20,7 +20,11 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 	JHTML::_('behavior.mootools');
 }
 
-if(isset($this->item)) $akeebasubs_subscription_level = $this->item->akeebasubs_level_id;
+if(isset($this->item)) {
+	$akeebasubs_subscription_level = $this->item->akeebasubs_level_id;
+} else {
+	$akeebasubs_subscription_level = null;
+}
 
 $field_data = array(
 	'name'				=> !empty($this->userparams->name) ? $this->userparams->name : $this->cache['name'],
