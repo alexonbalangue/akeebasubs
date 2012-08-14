@@ -56,6 +56,7 @@ class Com_AkeebasubsInstallerScript
 				'autocity'				=> 0,
 				'cb'					=> 0,
 				'ccinvoices'			=> 0,
+				'customfields'			=> 1,
 				'docman'				=> 0,
 				'easydiscuss'			=> 0,
 				'iplogger'				=> 0,
