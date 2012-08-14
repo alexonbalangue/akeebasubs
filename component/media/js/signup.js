@@ -680,8 +680,16 @@ function addToValidationQueue(myfunction)
 		}
 		// Attach onBlur events to custom fields
 		$('#signupForm *[name]').filter(function(index){
-			return $(this).attr('name').substr(0, 7) == 'custom[';
+			if($(this).is('input')) return $(this).attr('name').substr(0, 7) == 'custom[';
+			return false;
 		}).blur(validateForm);
+		// Attach onChange events to custom checkboxes
+		$('#signupForm *[name]').filter(function(index){
+			if($(this).attr('type') == 'checkbox') return true;
+			if($(this).attr('type') == 'radio') return true;
+			if($(this).is('select')) return true;
+			return false;
+		}).change(validateForm);
 		
 		// Workaround for RocketTheme's fancy option hider
 		var rokkedLabel = $('label[for="isbusiness1"]');
