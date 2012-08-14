@@ -495,6 +495,9 @@ class AkeebasubsHelperSelect
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
 	
+	/**
+	 * Drop down list of level groups
+	 */
 	public static function levelgroups($selected = null, $id = 'akeebasubs_levelgroup_id', $attribs = array())
 	{
 		$model = FOFModel::getTmpInstance('Levelgroups','AkeebasubsModel');
@@ -511,4 +514,35 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
+	
+	/**
+	 * Drop down list of custom field types
+	 */
+	public static function fieldtypes($name = 'type', $selected = 'text', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','text',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_TEXT'));
+		$options[] = JHTML::_('select.option','password',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_PASSWORD'));
+		$options[] = JHTML::_('select.option','checkbox',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_CHECKBOX'));
+		$options[] = JHTML::_('select.option','dropdown',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_DROPDOWN'));
+		$options[] = JHTML::_('select.option','multiselect',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_MULTISELECT'));
+		$options[] = JHTML::_('select.option','radio',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_RADIO'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
+	/**
+	 * Drop down list of when to show custom fields
+	 */
+	public static function fieldshow($name = 'show', $selected = 'all', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','all',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_ALL'));
+		$options[] = JHTML::_('select.option','level',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_LEVEL'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
 }
