@@ -8,8 +8,6 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
-
 JHTML::_('behavior.tooltip');
 if(version_compare(JVERSION, '3.0', 'ge')) {
 	JHTML::_('behavior.framework');

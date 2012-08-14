@@ -7,8 +7,6 @@
 
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/backend.js?'.AKEEBASUBS_VERSIONHASH);
 JHtml::_('behavior.tooltip');
 
 ?>

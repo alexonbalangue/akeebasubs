@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
 JHtml::_('behavior.tooltip');
 
 $editor = JFactory::getEditor();
