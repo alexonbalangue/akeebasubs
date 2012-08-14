@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_customfields` (
+	`akeebasubs_customfield_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+	`title` varchar(255) NOT NULL DEFAULT '',
+	`slug` varchar(255) NOT NULL DEFAULT '',
+	`show` enum('all','level') NOT NULL DEFAULT 'all',
+	`akeebasubs_level_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+	`type` varchar(100) NOT NULL DEFAULT 'text',
+	`options` mediumtext,
+	`default` varchar(255) DEFAULT '',
+	`allow_empty` tinyint(3) NOT NULL DEFAULT '0',
+	`valid_label` varchar(255) DEFAULT '',
+	`invalid_label` varchar(255) DEFAULT '',
+	`params` mediumtext,
+	`enabled` tinyint(3) NOT NULL DEFAULT '1',
+	`ordering` bigint(20) unsigned NOT NULL DEFAULT '0',
+	`created_by` bigint(20) NOT NULL DEFAULT '0',
+	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`modified_by` bigint(20) NOT NULL DEFAULT '0',
+	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	PRIMARY KEY (`akeebasubs_customfield_id`)
+) DEFAULT CHARSET=utf8;
