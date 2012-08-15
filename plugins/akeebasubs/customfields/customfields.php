@@ -493,6 +493,14 @@ ENDJS;
 				);
 				$values[] = $value;
 			}
+			
+			if(!in_array('', $values)) {
+				$entry = array(
+					'value'	=> '',
+					'label'	=> '- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -'
+				);
+				array_unshift($options, $entry);
+			}
 		} else {
 			return null;
 		}
@@ -533,7 +541,7 @@ ENDJS;
 				break;
 
 			case 'radio':
-				$html = "<label class=\"radio inline\">\n";
+				$html = "<label class=\"radio inline\" id=\"{$item->slug}\">\n";
 				foreach($options as $o)
 				{
 					$value = $o['value'];
