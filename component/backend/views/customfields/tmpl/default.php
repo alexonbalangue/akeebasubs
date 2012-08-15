@@ -11,8 +11,18 @@ JHtml::_('behavior.tooltip');
 
 $this->loadHelper('select');
 
+$pEnabled = JPluginHelper::getPlugin('system','admintools');
+
 ?>
 <div class="akeeba-bootstrap">
+	
+<?php if(!$pEnabled): ?>
+<div class="alert alert-error">
+	<a class="close" data-dismiss="alert" href="#">×</a>
+	<h3><?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_ERR_NOPLUGIN_HEADER'); ?></h3>
+	<p><?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_ERR_NOPLUGIN_BODY'); ?></p>
+</div>
+<?php endif; ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
