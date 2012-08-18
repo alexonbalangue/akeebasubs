@@ -54,32 +54,32 @@ unset($upgradesRaw);
 		<tr>
 			<th width="16px"></th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COMMON_ID', 'akeebasubs_subscription_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COMMON_ID', 'akeebasubs_subscription_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL', 'akeebasubs_level_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL', 'akeebasubs_level_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_USER', 'user_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_USER', 'user_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="30px">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_STATE', 'state', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_STATE', 'state', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="60px">
 				<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT') ?>
 			</th>
 			<th width="60px">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_AMOUNT', 'gross_amount', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_AMOUNT', 'gross_amount', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="120px">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP', 'publish_up', $this->lists->order_Dir, $this->lists->order) ?><br/>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN', 'publish_down', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP', 'publish_up', $this->lists->order_Dir, $this->lists->order, 'browse') ?><br/>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN', 'publish_down', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="120px">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON', 'created_on', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON', 'created_on', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 		</tr>
 		<tr>

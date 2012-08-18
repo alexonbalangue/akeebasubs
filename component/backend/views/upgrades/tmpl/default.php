@@ -31,31 +31,31 @@ $this->loadHelper('format');
 			<th width="10px"><?php echo JText::_('Num'); ?></th>
 			<th width="16px"></th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID', 'from_id', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID', 'from_id', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_TO_ID', 'to_id', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_TO_ID', 'to_id', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_MIN_PRESENCE', 'min_presence', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_MIN_PRESENCE', 'min_presence', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_MAX_PRESENCE', 'max_presence', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_MAX_PRESENCE', 'max_presence', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_VALUE', 'value', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_VALUE', 'value', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_COMBINE', 'combine', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_UPGRADES_FIELD_COMBINE', 'combine', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 		</tr>

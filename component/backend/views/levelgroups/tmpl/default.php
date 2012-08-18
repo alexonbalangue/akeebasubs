@@ -27,14 +27,14 @@ $this->loadHelper('select');
 	<thead>
 		<tr>
 			<th width="50">
-				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_levelgroup_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_levelgroup_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="20"></th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELGROUPS_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELGROUPS_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>			
 		</tr>
 		<tr>

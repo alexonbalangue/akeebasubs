@@ -32,26 +32,26 @@ $this->loadHelper('format');
 			<th width="10px"><?php echo  JText::_('Num'); ?></th>
 			<th width="16px"></th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_COUNTRY', 'country', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_COUNTRY', 'country', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_STATE', 'state', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_STATE', 'state', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_CITY', 'city', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_CITY', 'city', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th width="30px">
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_VIES', 'vies', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_VIES', 'vies', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th width="60px">
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_TAXRATE', 'taxrate', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_TAXRATE', 'taxrate', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th width="50px">
-				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th width="100px">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>			
 		</tr>
 		<tr>

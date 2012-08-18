@@ -30,20 +30,20 @@ $this->loadHelper('cparams');
 	<thead>
 		<tr>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_affiliate_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_affiliate_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="16"></th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFILIATES_USER_ID', 'user_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFILIATES_USER_ID', 'user_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="10%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFILIATES_COMISSION', 'comission', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFILIATES_COMISSION', 'comission', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="10%">
 				<?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_OUTSTANDING') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 		</tr>
 		<tr>

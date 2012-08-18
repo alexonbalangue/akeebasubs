@@ -29,23 +29,23 @@ $this->loadHelper('format');
 	<thead>
 		<tr>
 			<th width="30px">
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_USERID', 'user_id', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_USERID', 'user_id', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th width="16px"></th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_USERNAME', 'username', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_USERNAME', 'username', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_NAME', 'name', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_NAME', 'name', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_EMAIL', 'email', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_EMAIL', 'email', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_BUSINESSNAME', 'businessname', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_BUSINESSNAME', 'businessname', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
-				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_VATNUMBER', 'vatnumber', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_USERS_FIELD_VATNUMBER', 'vatnumber', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 		</tr>
 		<tr>

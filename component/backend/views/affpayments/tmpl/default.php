@@ -31,17 +31,17 @@ $this->loadHelper('format');
 	<thead>
 		<tr>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_affpayment_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_affpayment_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="16"></th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFPAYMENT_USER_ID', 'akeebasubs_affiliate_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFPAYMENT_USER_ID', 'akeebasubs_affiliate_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="10%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFPAYMENT_AMOUNT', 'amount', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFPAYMENT_AMOUNT', 'amount', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="15%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFPAYMENT_CREATED', 'amount', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_AFFPAYMENT_CREATED', 'amount', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="15%">
 				<?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENT_CREATEDBY') ?>

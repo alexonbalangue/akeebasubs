@@ -29,30 +29,30 @@ $this->loadHelper('cparams');
 	<thead>
 		<tr>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_level_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_level_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th></th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP', 'akeebasubs_levelgroup_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP', 'akeebasubs_levelgroup_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_DURATION', 'duration', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_DURATION', 'duration', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="5%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_RECURRING', 'recurring', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_RECURRING', 'recurring', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="10%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_PRICE', 'price', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_LEVELS_FIELD_PRICE', 'price', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>			
 		</tr>
 		<tr>

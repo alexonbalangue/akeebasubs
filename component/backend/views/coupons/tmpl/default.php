@@ -33,33 +33,33 @@ $this->loadHelper('format');
 	<thead>
 		<tr>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_level_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_level_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th></th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_FTITLE', 'title', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_FTITLE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_COUPON', 'coupon', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_COUPON', 'coupon', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_VALUE', 'value', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_VALUE', 'value', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th>
 				<?php echo JText::_('COM_AKEEBASUBS_COUPONS_LIMITS') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_PUBLISH_UP', 'publish_up', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_PUBLISH_UP', 'publish_up', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_PUBLISH_DOWN', 'publish_down', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_COUPONS_PUBLISH_DOWN', 'publish_down', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>			
 		</tr>
 		<tr>

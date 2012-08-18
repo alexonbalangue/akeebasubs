@@ -38,24 +38,24 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 	<thead>
 		<tr>
 			<th width="30">
-				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_customfield_id', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_customfield_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="20"></th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TITLE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="50">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE', 'title', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="80">
-				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_DEFAULT', 'title', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_DEFAULT', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
 			<th width="8%">
-				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order); ?>
+				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 		</tr>
 		<tr>

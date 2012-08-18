@@ -31,13 +31,13 @@ $this->loadHelper('cparams');
 			<th width="5"><?php echo  JText::_('#'); ?></th>
 			<th width="5">ID</th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_UNITE_JUSER_USERNAME', 'username', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_UNITE_JUSER_USERNAME', 'username', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_UNITE_JUSER_NAME', 'name', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_UNITE_JUSER_NAME', 'name', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th>
-				<?php echo JHTML::_('grid.sort', 'COM_UNITE_JUSER_EMAIL', 'email', $this->lists->order_Dir, $this->lists->order) ?>
+				<?php echo JHTML::_('grid.sort', 'COM_UNITE_JUSER_EMAIL', 'email', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 		</tr>
 		<tr>
