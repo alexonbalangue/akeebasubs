@@ -80,7 +80,7 @@ class plgAkeebasubsMailchimp extends JPlugin
 				if(!array_key_exists($level, $this->addLists)) continue;
 				$lists = $this->addLists[$level];
 				foreach($lists as $list) {
-					if(!in_array($list, $addLists) && ($list > 0)) {
+					if(!in_array($list, $addLists) && !empty($list)) {
 						$addLists[] = $list;
 					}
 				}
@@ -91,7 +91,7 @@ class plgAkeebasubsMailchimp extends JPlugin
 				$lists = $this->removeLists[$level];
 				
 				foreach($lists as $list) {
-					if(!in_array($list, $removeLists) && ($list > 0)) {
+					if(!in_array($list, $removeLists) && !empty($list)) {
 						$removeLists[] = $list;
 					}
 				}
