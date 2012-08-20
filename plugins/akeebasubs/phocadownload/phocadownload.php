@@ -158,12 +158,12 @@ class plgAkeebasubsPhocadownload extends JPlugin
 			} else {
 				$temp = explode(',',$groupData->accessuserid);
 				foreach($temp as $t) {
-					$userList[] = $db->q($t);
+					$userList[] = $t;
 				}
 				$mustRemove = in_array($user_id, $userList);
 			}
 			if($mustRemove) {
-				$key = array_search($db->q($user_id), $userList);
+				$key = array_search($user_id, $userList);
 				if($key !== false) {
 					unset($userList[$key]);
 				}

@@ -8,6 +8,7 @@ Akeeba Subscriptions 2.3.2
 ~ Allow ReCAPTCHA to be shown only for specific subscription levels
 ~ 2Checkout: Improvement in handling of payment messages
 ~ Now using Bootstrap in the front-end
+# [HIGH] The PhocaDownloads integration plugin was broken (the last fix only dealt with half of the problem)
 # [MEDIUM] The MailChimp integration plugin wouldn't install its library folder
 # [LOW] IFTHEN payment plugin: callbacks would not work
 # [LOW] The VAT notice for intra-EU transactions was not being displayed with the ccInvoices custom tags plugin
