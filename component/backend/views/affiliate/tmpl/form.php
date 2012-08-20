@@ -22,7 +22,7 @@ $this->loadHelper('format');
 
 ?>
 
-<form action="index.php" method="post" name="adminForm" id="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="affiliate" />
 	<input type="hidden" name="task" value="" />
@@ -31,27 +31,38 @@ $this->loadHelper('format');
 
 <div class="row-fluid">
 <div class="span6">
-<div class="well">
-	<legend><?php echo JText::_('COM_AKEEBASUBS_AFFILIATE_BASIC_TITLE')?></legend>
+	<h3><?php echo JText::_('COM_AKEEBASUBS_AFFILIATE_BASIC_TITLE')?></h3>
 	
 	<?php jimport('joomla.user.user'); ?>
-	<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_USER_ID')?></label>
-	<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
-	<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
-	<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
-	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="userid_visible" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_USER_ID')?></label>
+		<div class="controls">
+			<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
+			<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
+			<button onclick="return false;" class="btn btn-mini btn-inverse modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
+			<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label for="comission" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_COMISSION')?></label>
+		<div class="controls">
+			<div class="input-append">
+				<input type="text" name="comission" id="comission" class="input-mini" value="<?php echo $this->escape($this->item->comission)?>" />
+				<span class="add-on">%</span>
+			</div>
+		</div>
+	</div>
 	
-	<label for="comission" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_COMISSION')?></label>
-	<input type="text" name="comission" id="comission" value="<?php echo $this->escape($this->item->comission)?>" />
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="enabled" class="control-label">
+			<?php echo JText::_('JPUBLISHED'); ?>
+		</label>
+		<div class="controls">
+			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
+		</div>
+	</div>
 	
-	<label for="enabled" class="main" class="mainlabel">
-		<?php echo JText::_('JPUBLISHED'); ?>
-	</label>
-	<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
-	<div class="akeebasubs-clear"></div>
-</div>
 </div>
 </div>
 </form>
