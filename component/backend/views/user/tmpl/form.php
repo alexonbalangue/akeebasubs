@@ -22,6 +22,8 @@ $this->loadHelper('format');
 
 ?>
 
+<div class="akeeba-bootstrap">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="user" />
@@ -29,7 +31,10 @@ $this->loadHelper('format');
 	<input type="hidden" name="akeebasubs_user_id" value="<?php echo $this->item->akeebasubs_user_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
-<fieldset id="coupons-basic" style="width: 48%; float: left;">
+<div class="row-fluid">
+	
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_TITLE')?></legend>
 
 <?php $userEditorLink = 'index.php?option=com_users&task=user.edit&id='; ?>
@@ -45,7 +50,7 @@ $this->loadHelper('format');
 	<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 	<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
 	<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
-	<button onclick="return false;" class="modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
+	<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
 	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 	<div class="akeebasubs-clear"></div>
 	
@@ -73,9 +78,11 @@ $this->loadHelper('format');
 	<?php echo AkeebasubsHelperSelect::countries($this->item->country, 'country'); ?>
 	<div class="akeebasubs-clear"></div>
 	
-</fieldset>
+</div>
+</div>
 
-<fieldset id="coupons-finetuning" style="width: 48%; float: left;">
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_BUSINESS')?></legend>
 
 	<label for="isbusiness" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ISBUSINESS')?></label>
@@ -98,18 +105,23 @@ $this->loadHelper('format');
 	<?php echo JHTML::_('select.booleanlist', 'viesregistered', null, $this->item->viesregistered); ?>
 	<div class="akeebasubs-clear"></div>
 	
-</fieldset>
+</div>
+</div>
 
 <div class="akeebasubs-clear"></div>
 
-<fieldset id="coupons-basic" style="width: 48%; float: left;">
+<div class="row-fluid">
+	
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_NOTES_TITLE')?></legend>
 
-	<textarea rows="10" cols="40" id="notes" name="notes"><?php echo $this->item->notes ?></textarea>
+	<textarea rows="10" cols="40" id="notes" name="notes" style="width: 95%;"><?php echo $this->item->notes ?></textarea>
+</div>
+</div>
 
-</fieldset>
-
-<fieldset id="coupons-basic" style="width: 48%; float: left;">
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_CUSTOMPARAMS_TITLE')?></legend>
 
 	<?php
@@ -128,12 +140,14 @@ $this->loadHelper('format');
 	<div class="akeebasubs-clear"></div>
 	
 	<?php endforeach; endforeach;?>
-
-</fieldset>
+</div>
+</div>
 
 <div class="akeebasubs-clear"></div>
 
 </form>
+	
+</div>
 
 <script type="text/javascript">
 function jSelectUser_userid(id, username)

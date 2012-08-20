@@ -39,6 +39,11 @@ foreach($upgradesRaw as $upgrade) {
 unset($upgradesRaw);
 
 ?>
+
+<div class="akeeba-bootstrap">
+<div class="row-fluid">
+<div class="span12">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="subscriptions" />
@@ -88,25 +93,27 @@ unset($upgradesRaw);
 			</td>
 			<td></td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->getModel()->getState('level',''), 'level', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->getModel()->getState('level',''), 'level', array('onchange'=>'this.form.submit();', 'class'=>'minwidth')) ?>
 			</td>
 			<td>
 				<input type="text" name="search" id="search"
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.search.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.search.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td  colspan="2">
-				<?php echo AkeebasubsHelperSelect::paystates($this->getModel()->getState('paystate',''), 'paystate', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::paystates($this->getModel()->getState('paystate',''), 'paystate', array('onchange'=>'this.form.submit();', 'class'=>'minwidth nomargin')) ?>
 				
 				<input type="text" name="paykey" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('paykey',''));?>"
-					class="text_area" onchange="document.adminForm.submit();"
+					class="text_area nomargin" onchange="document.adminForm.submit();"
 					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?>" />
 				<!--
 				<button onclick="this.form.submit();">
@@ -117,7 +124,7 @@ unset($upgradesRaw);
 				</button>
 				-->
 				
-				<?php echo AkeebasubsHelperSelect::discountmodes('filter_discountmode', $this->getModel()->getState('filter_discountmode','') , array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::discountmodes('filter_discountmode', $this->getModel()->getState('filter_discountmode','') , array('onchange'=>'this.form.submit();', 'class'=>'minwidth nomargin')) ?>
 				<input type="text" name="filter_discountcode" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('filter_discountcode',''));?>"
 					class="text_area" onchange="document.adminForm.submit();"
@@ -125,12 +132,12 @@ unset($upgradesRaw);
 			</td>
 			<td></td>
 			<td>
-				<?php echo JHTML::_('calendar', $this->getModel()->getState('publish_up',''), 'publish_up', 'publish_up', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?>
-				<br/><?php echo JHTML::_('calendar', $this->getModel()->getState('publish_down',''), 'publish_down', 'publish_down', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?>
+				<?php echo JHTML::_('calendar', $this->getModel()->getState('publish_up',''), 'publish_up', 'publish_up', '%Y-%m-%d', array('onchange' => 'this.form.submit();', 'class'=>'calendar nomargin')); ?>
+				<br/><?php echo JHTML::_('calendar', $this->getModel()->getState('publish_down',''), 'publish_down', 'publish_down', '%Y-%m-%d', array('onchange' => 'this.form.submit();', 'class'=>'calendar nomargin')); ?>
 			</td>
-			<td><?php echo JHTML::_('calendar', $this->getModel()->getState('since',''), 'since', 'since', '%Y-%m-%d', array('onchange' => 'this.form.submit();')); ?></td>
+			<td><?php echo JHTML::_('calendar', $this->getModel()->getState('since',''), 'since', 'since', '%Y-%m-%d', array('onchange' => 'this.form.submit();', 'class'=>'calendar nomargin')); ?></td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'minwidth')) ?>
 			</td>
 		</tr>
 	</thead>
@@ -316,6 +323,10 @@ unset($upgradesRaw);
 	<h3><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_TITLE');?></h3>
 	<p><img id="asriSpinner" src="<?php echo JURI::base()?>../media/com_akeebasubs/images/throbber.gif" align="center" /></p>
 	<p><span id="asriPercent">0</span><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_PROGRESS')?></p>
+</div>
+	
+</div>
+</div>
 </div>
 
 <script type="text/javascript">

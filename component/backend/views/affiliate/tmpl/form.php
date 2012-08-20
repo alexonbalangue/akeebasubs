@@ -22,6 +22,8 @@ $this->loadHelper('format');
 
 ?>
 
+<div class="akeeba-bootstrap">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="affiliate" />
@@ -29,14 +31,16 @@ $this->loadHelper('format');
 	<input type="hidden" name="akeebasubs_affiliate_id" value="<?php echo $this->item->akeebasubs_affiliate_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
-<fieldset id="coupons-basic" style="width: 48%; float: left;">
+<div class="row-fluid">
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_AFFILIATE_BASIC_TITLE')?></legend>
 	
 	<?php jimport('joomla.user.user'); ?>
 	<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_USER_ID')?></label>
 	<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
 	<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
-	<button onclick="return false;" class="modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
+	<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
 	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 	<div class="akeebasubs-clear"></div>
 	
@@ -48,12 +52,13 @@ $this->loadHelper('format');
 		<?php echo JText::_('JPUBLISHED'); ?>
 	</label>
 	<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
-	
-</fieldset>
-
-<div class="akeebasubs-clear"></div>
-
+	<div class="akeebasubs-clear"></div>
+</div>
+</div>
+</div>
 </form>
+	
+</div>
 
 <script type="text/javascript">
 function jSelectUser_userid(id, username)

@@ -27,12 +27,12 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 
 $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);
 ?>
-<h2><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_SALES') ?></h2>
+<h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_SALES') ?></h3>
 <p>
 	<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_FROMDATE') ?>
 	<?php echo JHTML::_('calendar', $graphDayFrom, 'akeebasubs_graph_datepicker', 'akeebasubs_graph_datepicker'); ?>
 	&nbsp;
-	<button id="akeebasubs_graph_reload" onclick="return false">
+	<button class="btn btn-mini" id="akeebasubs_graph_reload" onclick="return false">
 		<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_RELOADGRAPHS') ?>
 	</button>
 </p>
@@ -43,7 +43,9 @@ $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);
 	</p>
 </div>
 
-<h2><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_LEVELSTATS') ?></h2>
+<div style="clear: both;">&nbsp;</div>
+
+<h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_LEVELSTATS') ?></h3>
 <div id="aklevelschart">
 	<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber2" />
 	<p id="aklevelschart-nodata" style="display:none">

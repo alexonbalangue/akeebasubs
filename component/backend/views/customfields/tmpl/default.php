@@ -67,12 +67,14 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 				<input type="text" name="search" id="search"
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
+				<nobr>
 				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
 				<button class="btn btn-mini" onclick="document.adminForm.search.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td>
 				<?php echo AkeebasubsHelperSelect::fieldtypes($this->getModel()->getState('type',''), 'type', array('onchange'=>'this.form.submit();')) ?>

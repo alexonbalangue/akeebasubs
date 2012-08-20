@@ -13,6 +13,10 @@ $this->loadHelper('select');
 
 ?>
 
+<div class="akeeba-bootstrap">
+<div class="row-fluid">
+<div class="span12">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="levelgroups" />
@@ -44,7 +48,7 @@ $this->loadHelper('select');
 			</td>
 			<td></td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'minwidth')) ?>
 			</td>
 		</tr>
 	</thead>
@@ -91,3 +95,7 @@ $this->loadHelper('select');
 	</tbody>
 </table>
 </form>
+
+</div>
+</div>
+</div>

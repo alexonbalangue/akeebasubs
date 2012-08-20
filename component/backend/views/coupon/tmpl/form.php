@@ -19,6 +19,9 @@ $this->loadHelper('cparams');
 $this->loadHelper('select');
 $this->loadHelper('params');
 ?>
+
+<div class="akeeba-bootstrap">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="coupon" />
@@ -26,7 +29,9 @@ $this->loadHelper('params');
 <input type="hidden" name="akeebasubs_coupon_id" value="<?php echo $this->item->akeebasubs_coupon_id ?>" />
 <input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
-<fieldset id="coupons-basic" style="width: 48%; float: left;">
+<div class="row-fluid">
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_COUPON_BASIC_TITLE')?></legend>
 	
 	<label for="title_field" class="main title">
@@ -66,10 +71,11 @@ $this->loadHelper('params');
 	</label>
 	<input type="text" size="5" id="hits_field" name="hits" value="<?php echo  $this->escape($this->item->hits) ?>" />
 	<div class="akeebasubs-clear"></div>
+</div>
+</div>
 
-</fieldset>
-
-<fieldset id="coupons-finetuning" style="width: 48%; float: left;">
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_COUPON_FINETUNING_TITLE')?></legend>
 	
 	<label for="publish_up" class="main"><?php echo JText::_('COM_AKEEBASUBS_COUPON_PUBLISH_UP')?></label>
@@ -87,7 +93,7 @@ $this->loadHelper('params');
 	<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 	<input type="hidden" name="user" id="userid" value="<?php echo $this->item->user?>" />
 	<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user ? JFactory::getUser($this->item->user)->username : '' ?>" disabled="disabled" />
-	<button onclick="return false;" class="modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
+	<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
 	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 	<div class="akeebasubs-clear"></div>
 
@@ -108,13 +114,12 @@ $this->loadHelper('params');
 	</label>
 	<input type="text" size="5" id="userhits_field" name="userhits" value="<?php echo  $this->escape($this->item->userhits) ?>" />
 	<div class="akeebasubs-clear"></div>
-
-
-</fieldset>
-
-<div class="akeebasubs-clear"></div>
-
+</div>
+</div>
+</div>
 </form>
+	
+</div>
 
 <script type="text/javascript">
 function jSelectUser_userid(id, username)

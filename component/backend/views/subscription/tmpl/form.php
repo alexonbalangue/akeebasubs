@@ -21,6 +21,9 @@ $this->loadHelper('select');
 $this->loadHelper('format');
 
 ?>
+
+<div class="akeeba-bootstrap">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="subscription" />
@@ -28,22 +31,24 @@ $this->loadHelper('format');
 	<input type="hidden" name="akeebasubs_subscription_id" value="<?php echo $this->item->akeebasubs_subscription_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
-	<fieldset id="subscriptions-basic">
+	<div class="row-fluid">
+	<div class="span6">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LBL_SUB')?></legend>
 		
 		<label for="levelid" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL')?></label>
-		<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->item->akeebasubs_level_id, 'akeebasubs_level_id') ?>
+		<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->item->akeebasubs_level_id, 'akeebasubs_level_id', array('class'=>'minwidth')) ?>
 		<div class="akeebasubs-clear"></div>
 		
 		<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 		<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
 		<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
-		<button onclick="return false;" class="modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
+		<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
 		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 		<div class="akeebasubs-clear"></div>
 
 		<label for="enabled" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ENABLED')?></label>
-		<span class="akeebasubs-booleangroup">
+		<span class="akeebasubs-booleangroup" style="float: none;">
 			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 		</span>
 		<div class="akeebasubs-clear"></div>
@@ -62,10 +67,12 @@ $this->loadHelper('format');
 		
 		<label for="notes" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NOTES')?></label>
 		<div class="akeebasubs-clear"></div>
-		<textarea name="notes" id="notes" cols="40" rows="10" style="margin-left: 5em;"><?php echo $this->item->notes?></textarea>
-
-	</fieldset>
-	<fieldset>
+		<textarea name="notes" id="notes" cols="40" rows="10" style="margin-left: 5em; width: 70%;"><?php echo $this->item->notes?></textarea>
+	</div>
+	</div>
+	
+	<div class="span6">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LBL_PAYMENT')?></legend>
 		
 		<label for="processor" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR')?></label>
@@ -77,7 +84,7 @@ $this->loadHelper('format');
 		<div class="akeebasubs-clear"></div>
 
 		<label for="state" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE')?></label>
-		<?php echo AkeebasubsHelperSelect::paystates($this->item->state,'state') ?>
+		<?php echo AkeebasubsHelperSelect::paystates($this->item->state,'state', array('class'=>'minwidth')) ?>
 		<div class="akeebasubs-clear"></div>
 		
 		<label for="net_amount" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NET_AMOUNT')?></label>
@@ -104,9 +111,13 @@ $this->loadHelper('format');
 		
 		<label for="params" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PARAMS')?></label>
 		<div class="akeebasubs-clear"></div>
-		<textarea name="params" id="params" cols="40" rows="10" style="margin-left: 5em;"><?php echo $this->item->params?></textarea>		
-	</fieldset>
+		<textarea name="params" id="params" cols="40" rows="10" style="margin-left: 5em; width: 70%;"><?php echo $this->item->params?></textarea>		
+	</div>
+	</div>
+	</div>
 </form>
+	
+</div>
 
 <script type="text/javascript">
 function jSelectUser_userid(id, username)

@@ -16,6 +16,11 @@ $this->loadHelper('select');
 $this->loadHelper('format');
 
 ?>
+
+<div class="akeeba-bootstrap">
+<div class="row-fluid">
+<div class="span12">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="taxrules" />
@@ -60,29 +65,31 @@ $this->loadHelper('format');
 				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::countries($this->getModel()->getState('country',''), 'country', array('onchange'=>'this.form.submit();')); ?>
+				<?php echo AkeebasubsHelperSelect::countries($this->getModel()->getState('country',''), 'country', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')); ?>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::states($this->getModel()->getState('state',''), 'state', array('onchange'=>'this.form.submit();')); ?>
+				<?php echo AkeebasubsHelperSelect::states($this->getModel()->getState('state',''), 'state', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')); ?>
 			</td>
 			<td>
 				<input type="text" name="search" id="search"
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.search.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.search.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('vies',''), 'vies', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('vies',''), 'vies', array('onchange'=>'this.form.submit();', 'class'=>'minwidth')) ?>
 			</td>
 			<td></td>
 			<td></td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'minwidth')) ?>
 			</td>
 		</tr>
 		
@@ -133,7 +140,7 @@ $this->loadHelper('format');
 			</td>
 			<td>
 				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
-					<?php echo sprintf('%02.2f', $taxrule->taxrate)?> %
+					<nobr><?php echo sprintf('%02.2f', $taxrule->taxrate)?> %</nobr>
 				</a>
 			</td>
 			<td class="order" align="center">
@@ -157,3 +164,7 @@ $this->loadHelper('format');
 	</tbody>
 </table>
 </form>
+	
+</div>
+</div>
+</div>

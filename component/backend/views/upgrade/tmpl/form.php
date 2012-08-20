@@ -21,14 +21,19 @@ $this->loadHelper('select');
 $this->loadHelper('format');
 
 ?>
+
+<div class="akeeba-bootstrap">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="upgrade" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_upgrade_id" value="<?php echo $this->item->akeebasubs_upgrade_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
-
-	<fieldset id="upgrade-basic">
+ 
+	<div class="row-fluid">
+	<div class="span12">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_UPGRADE_BASIC_TITLE')?></legend>
 		
 		<label for="title_field" class="main title"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_TITLE'); ?></label>
@@ -39,9 +44,13 @@ $this->loadHelper('format');
 			<?php echo JText::_('JPUBLISHED'); ?>
 		</label>
 		<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
-	</fieldset>
+	</div>
+	</div>
+	</div>
 
-	<fieldset id="upgrade-discount">
+	<div class="row-fluid">
+	<div class="span12">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_UPGRADE_DISCOUNT_TITLE')?></legend>
 		
 		<label for="from_id" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_FROM_ID'); ?></label>
@@ -70,5 +79,9 @@ $this->loadHelper('format');
 		<div class="akeebasubs-clear"></div>
 		<label for="combine" class="main"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_COMBINE'); ?></label>
 		<?php echo JHTML::_('select.booleanlist', 'combine', null, $this->item->combine); ?>
-	</fieldset>
+	</div>
+	</div>
+	</div>
 </form>
+	
+</div>

@@ -15,6 +15,11 @@ $this->loadHelper('select');
 $this->loadHelper('format');
 
 ?>
+
+<div class="akeeba-bootstrap">
+<div class="row-fluid">
+<div class="span12">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="users" />
@@ -57,56 +62,66 @@ $this->loadHelper('format');
 				<input type="text" name="username" id="username"
 					value="<?php echo $this->escape($this->getModel()->getState('username',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.username.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.username.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td>
 				<input type="text" name="name" id="name"
 					value="<?php echo $this->escape($this->getModel()->getState('name',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.name.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.name.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td>
 				<input type="text" name="email" id="email"
 					value="<?php echo $this->escape($this->getModel()->getState('email',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.email.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.email.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td>
 				<input type="text" name="businessname" id="businessname"
 					value="<?php echo $this->escape($this->getModel()->getState('businessname',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.businessname.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.businessname.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td>
 				<input type="text" name="vatnumber" id="vatnumber"
 					value="<?php echo $this->escape($this->getModel()->getState('vatnumber',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.vatnumber.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.vatnumber.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 		</tr>
 	</thead>
@@ -174,3 +189,7 @@ $this->loadHelper('format');
 		<?php endif; ?>
 	</tbody>
 </table>
+
+</div>
+</div>
+</div>

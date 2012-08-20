@@ -14,6 +14,9 @@ $editor = JFactory::getEditor();
 $this->loadHelper('select');
 $this->loadHelper('cparams');
 ?>
+
+<div class="akeeba-bootstrap">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="level" />
@@ -21,7 +24,10 @@ $this->loadHelper('cparams');
 	<input type="hidden" name="akeebasubs_level_id" value="<?php echo $this->item->akeebasubs_level_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 	
-	<fieldset id="levels-basic">
+<div class="row-fluid">
+	
+	<div class="span6">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BASIC_TITLE'); ?></legend>
 		
 		<label for="title_field" class="main title"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_TITLE'); ?></label>
@@ -91,23 +97,37 @@ $this->loadHelper('cparams');
 		<label for="notify2_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY2'); ?></label>
 		<input type="text" size="6" id="notify2_field" name="notify2" value="<?php echo  (int)$this->item->notify2 ?>" />
 		<div class="akeebasubs-clear"></div>
-	</fieldset>
+	</div>
+	</div>
 	
-	<fieldset>
+	<div class="span6">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DESCRIPTION') ?></legend>
 		<?php echo $editor->display( 'description',  $this->item->description, '450', '210', '50', '10', false ) ; ?>
-	</fieldset>
-
-	<div class="akeebasubs-clear"></div>
-		
-	<fieldset class="akeebasubs-float-left">
+		<div class="akeebasubs-clear"></div>
+	</div>
+	</div>
+	
+</div>
+<div class="row-fluid">
+	
+	<div class="span6">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ORDERTEXT') ?></legend>
 		<?php echo $editor->display( 'ordertext',  $this->item->ordertext, '97%', '391', '50', '20', false ) ; ?>
-	</fieldset>
+		<div class="akeebasubs-clear"></div>
+	</div>
+	</div>
 
-	<fieldset class="akeebasubs-float-left">
+	<div class="span6">
+	<div class="well">
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CANCELTEXT') ?></legend>
 		<?php echo $editor->display( 'canceltext',  $this->item->canceltext, '97%', '391', '50', '20', false ) ; ?>
-	</fieldset>
+		<div class="akeebasubs-clear"></div>
+	</div>
+	</div>
+</div>
 
 </form>
+	
+</div>

@@ -16,6 +16,11 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 $this->loadHelper('select');
 $this->loadHelper('cparams');
 ?>
+
+<div class="akeeba-bootstrap">
+<div class="row-fluid">
+<div class="span12">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="affiliates" />
@@ -55,16 +60,18 @@ $this->loadHelper('cparams');
 				<input type="text" name="search" id="search"
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
 					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.search.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.search.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 			<td></td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'minwidth')) ?>
 			</td>
 		</tr>
 	</thead>
@@ -132,3 +139,7 @@ $this->loadHelper('cparams');
 </table>
 
 </form>
+	
+</div>
+</div>
+</div>

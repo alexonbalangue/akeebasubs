@@ -22,6 +22,8 @@ $this->loadHelper('format');
 
 ?>
 
+<div class="akeeba-bootstrap">
+
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="affpayment" />
@@ -30,7 +32,9 @@ $this->loadHelper('format');
 	<input type="hidden" name="created_by" value="<?php echo empty($this->item->created_by) ? JFactory::getUser()->id : $this->item->created_by; ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
-<fieldset id="coupons-basic" style="width: 48%; float: left;">
+<div class="row-fluid">
+<div class="span6">
+<div class="well">
 	<legend><?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENTS_BASIC_TITLE')?></legend>
 	
 	<label for="affiliate" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENT_USER_ID')?></label>
@@ -50,7 +54,9 @@ $this->loadHelper('format');
 	<label for="created_on" class="main"><?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENT_CREATED')?></label>
 	<?php echo JHTML::_('calendar', $this->item->created_on, 'created_on', 'created_on'); ?>	
 	<div class="akeebasubs-clear"></div>
-</fieldset>
-
-<div class="akeebasubs-clear"></div>
+</div>
+</div>
+</div>
 </form>
+	
+</div>

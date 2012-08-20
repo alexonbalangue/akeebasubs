@@ -11,8 +11,17 @@ FOFTemplateUtils::addJS('media://com_akeebasubs/js/blockui.js?'.AKEEBASUBS_VERSI
 
 JHTML::_('behavior.tooltip');
 
-JError::raiseNotice(0, JText::_('COM_AKEEBASUBS_TOOLS_BIGFATWARNING'));
 ?>
+
+<div class="akeeba-bootstrap">
+<div class="row-fluid">
+<div class="span12">
+
+<div class="alert alert-danger">
+	<button class="close" data-dismiss="alert">×</button>
+	<?php echo JText::_('COM_AKEEBASUBS_TOOLS_BIGFATWARNING'); ?>
+</div>
+
 <h1><?php echo JText::_('COM_AKEEBASUBS_TOOLS_IMPORT_TITLE');?></h1>
 
 <?php if(!empty($this->items)): ?>
@@ -33,3 +42,7 @@ JError::raiseNotice(0, JText::_('COM_AKEEBASUBS_TOOLS_BIGFATWARNING'));
 	<?php echo JText::_('COM_AKEEBASUBS_TOOLS_ERR_NOTOOLS') ?>
 </p>
 <?php endif; ?>
+
+</div>
+</div>
+</div>
