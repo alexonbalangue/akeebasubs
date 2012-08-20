@@ -22,7 +22,7 @@ $this->loadHelper('format');
 
 ?>
 
-<form action="index.php" method="post" name="adminForm" id="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="subscription" />
 	<input type="hidden" name="task" value="" />
@@ -31,85 +31,159 @@ $this->loadHelper('format');
 
 	<div class="row-fluid">
 	<div class="span6">
-	<div class="well">
-		<legend><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LBL_SUB')?></legend>
+	
+	<div>
+		<h3><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LBL_SUB')?></h3>
 		
-		<label for="levelid" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL')?></label>
-		<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->item->akeebasubs_level_id, 'akeebasubs_level_id', array('class'=>'minwidth')) ?>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="levelid" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL')?></label>
+			<div class="controls">
+				<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->item->akeebasubs_level_id, 'akeebasubs_level_id', array('class'=>'minwidth')) ?>
+			</div>
+		</div>
 		
-		<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
-		<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
-		<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
-		<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
-		<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-		<div class="akeebasubs-clear"></div>
-
-		<label for="enabled" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ENABLED')?></label>
-		<span class="akeebasubs-booleangroup" style="float: none;">
-			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
-
-		<label for="publish_up" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_UP')?></label>
-		<span class="akeebasubs-nofloat-input">
-		<?php echo JHTML::_('calendar', $this->item->publish_up, 'publish_up', 'publish_up'); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
-
-		<label for="publish_down" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_DOWN')?></label>
-		<span class="akeebasubs-nofloat-input">
-		<?php echo JHTML::_('calendar', $this->item->publish_down, 'publish_down', 'publish_down'); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="userid_visible" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
+			<div class="controls">
+				<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
+				<input type="text" class="input-medium" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
+				<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
+				<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
+			</div>
+		</div>
 		
-		<label for="notes" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NOTES')?></label>
-		<div class="akeebasubs-clear"></div>
-		<textarea name="notes" id="notes" cols="40" rows="10" style="margin-left: 5em; width: 70%;"><?php echo $this->item->notes?></textarea>
+		<div class="control-group">
+			<label for="enabled" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ENABLED')?></label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="publish_up" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_UP')?></label>
+			<div class="controls">
+				<?php echo JHTML::_('calendar', $this->item->publish_up, 'publish_up', 'publish_up'); ?>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="publish_down" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_DOWN')?></label>
+			<div class="controls">
+				<?php echo JHTML::_('calendar', $this->item->publish_down, 'publish_down', 'publish_down'); ?>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="notes" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NOTES')?></label>
+			<div class="controls">
+				<textarea name="notes" id="notes" cols="40" rows="10"><?php echo $this->item->notes?></textarea>
+			</div>
+		</div>
 	</div>
 	</div>
 	
 	<div class="span6">
-	<div class="well">
-		<legend><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LBL_PAYMENT')?></legend>
+	<div>
+		<h3><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LBL_PAYMENT')?></h3>
 		
-		<label for="processor" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR')?></label>
-		<input type="text" name="processor" id="processor" value="<?php echo $this->item->processor?>"/>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="processor" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR')?></label>
+			<div class="controls">
+				<input type="text" name="processor" id="processor" value="<?php echo $this->item->processor?>"/>
+			</div>
+		</div>
 
-		<label for="processor_key" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?></label>
-		<input type="text" name="processor_key" id="processor_key" value="<?php echo $this->item->processor_key?>"/>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="processor_key" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?></label>
+			<div class="controls">
+				<input type="text" name="processor_key" id="processor_key" value="<?php echo $this->item->processor_key?>"/>
+			</div>
+		</div>
 
-		<label for="state" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE')?></label>
-		<?php echo AkeebasubsHelperSelect::paystates($this->item->state,'state', array('class'=>'minwidth')) ?>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="state" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE')?></label>
+			<div class="controls">
+				<?php echo AkeebasubsHelperSelect::paystates($this->item->state,'state', array('class'=>'minwidth')) ?>
+			</div>
+		</div>
 		
-		<label for="net_amount" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NET_AMOUNT')?></label>
-		<input type="text" name="net_amount" id="net_amount" value="<?php echo $this->item->net_amount?>"/>
-		<div class="akeebasubs-clear"></div>
-
-		<label for="tax_amount" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_TAX_AMOUNT')?></label>
-		<input type="text" name="tax_amount" id="tax_amount" value="<?php echo $this->item->tax_amount?>"/>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="net_amount" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NET_AMOUNT')?></label>
+			<div class="controls">
+				<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+					<input type="text" class="input-medium" name="net_amount" id="net_amount" value="<?php echo $this->item->net_amount?>"/>
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
 		
-		<label for="gross_amount" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_GROSS_AMOUNT')?></label>
-		<input type="text" name="gross_amount" id="gross_amount" value="<?php echo $this->item->gross_amount?>"/>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+				<label for="tax_amount" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_TAX_AMOUNT')?></label>
+			<div class="controls">
+				<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+					<input type="text" class="input-medium" name="tax_amount" id="tax_amount" value="<?php echo $this->item->tax_amount?>"/>
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
 		
-		<label for="created_on" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON')?></label>
-		<span class="akeebasubs-nofloat-input">
-		<?php echo JHTML::_('calendar', $this->item->created_on, 'created_on', 'created_on'); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="gross_amount" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_GROSS_AMOUNT')?></label>
+			<div class="controls">
+				<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+					<input type="text" class="input-medium" name="gross_amount" id="gross_amount" value="<?php echo $this->item->gross_amount?>"/>
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
 		
-		<label for="akeebasubs_invoice_id" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_INVOICE_ID')?></label>
-		<input type="text" name="akeebasubs_invoice_id" id="akeebasubs_invoice_id" value="<?php echo $this->item->akeebasubs_invoice_id?>"/>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="created_on" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON')?></label>
+			<div class="controls">
+				<?php echo JHTML::_('calendar', $this->item->created_on, 'created_on', 'created_on'); ?>
+			</div>
+		</div>
 		
-		<label for="params" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PARAMS')?></label>
-		<div class="akeebasubs-clear"></div>
-		<textarea name="params" id="params" cols="40" rows="10" style="margin-left: 5em; width: 70%;"><?php echo $this->item->params?></textarea>		
+		<div class="control-group">
+			<label for="akeebasubs_invoice_id" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_INVOICE_ID')?></label>
+			<div class="controls">
+				<input type="text" name="akeebasubs_invoice_id" id="akeebasubs_invoice_id" value="<?php echo $this->item->akeebasubs_invoice_id?>"/>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="params" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PARAMS')?></label>
+			<div class="controls">
+				<textarea name="params" id="params" cols="40" rows="10"><?php echo $this->item->params?></textarea>		
+			</div>
+		</div>
 	</div>
 	</div>
 	</div>

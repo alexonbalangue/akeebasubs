@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.3.2
 + ProjectFork integration
 + EasyDiscuss integration
 + Remove country prefix and non alphanumeric characters from VAT field, also checking it's a valid VAT number before saving it
+~ The interface now uses Bootstrap
 ~ Allow ReCAPTCHA to be shown only for specific subscription levels
 ~ 2Checkout: Improvement in handling of payment messages
 ~ Now using Bootstrap in the front-end

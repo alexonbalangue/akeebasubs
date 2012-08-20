@@ -22,105 +22,139 @@ $this->loadHelper('format');
 
 ?>
 
-<form action="index.php" method="post" name="adminForm" id="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="user" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_user_id" value="<?php echo $this->item->akeebasubs_user_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
-<div class="row-fluid">
-	
-<div class="span6">
-<div class="well">
-	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_TITLE')?></legend>
-
-<?php $userEditorLink = 'index.php?option=com_users&task=user.edit&id='; ?>
+	<?php $userEditorLink = 'index.php?option=com_users&task=user.edit&id='; ?>
 	<?php if($this->item->user_id): ?>
-	<a href="<?php echo $userEditorLink.$this->item->user_id?>">
-		<span class="akstriangle"></span><span class="akstriangle"></span><span class="akstriangle"></span>
+<div class="row-fluid">
+<div class="span12">
+	<a class="btn btn-inverse" href="<?php echo $userEditorLink.$this->item->user_id?>">
+		<i class="icon-pencil icon-white"></i>
 		<?php echo JText::_('COM_AKEEBASUBS_USER_EDITTHISINJUSERMANAGER')?>
 	</a>
+</div>
+</div>
 	<?php endif; ?>
-	<div class="akeebasubs-clear"></div>
+
+
+<div class="row-fluid">
+
+<div class="span6">
+	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_TITLE')?></h3>
 	
 	<?php jimport('joomla.user.user'); ?>
-	<label for="userid_visible" class="main"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
-	<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
-	<input type="text" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
-	<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
-	<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
-	<div class="akeebasubs-clear"></div>
 	
-	<label for="address1" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ADDRESS1')?></label>
-	<input type="text" name="address1" id="address1" class="longer" value="<?php echo $this->escape($this->item->address1)?>" />
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="userid_visible" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
+		<div class="controls">
+			<input type="hidden" name="user_id" id="userid" value="<?php echo $this->item->user_id?>" />
+			<input type="text" class="input-medium" name="xxx_userid" id="userid_visible" value="<?php echo $this->item->user_id ? JFactory::getUser($this->item->user_id)->username : '' ?>" disabled="disabled" />
+			<button onclick="return false;" class="btn btn-mini modal"><?php echo JText::_('COM_AKEEBASUBS_COMMON_SELECTUSER')?></button>
+			<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
+		</div>
+	</div>
 	
-	<label for="address2" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ADDRESS2')?></label>
-	<input type="text" name="address2" id="address2" class="longer" value="<?php echo $this->escape($this->item->address2)?>" />
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="address1" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ADDRESS1')?></label>
+		<div class="controls">
+			<input type="text" name="address1" id="address1" value="<?php echo $this->escape($this->item->address1)?>" />
+		</div>
+	</div>
 	
-	<label for="city" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_CITY')?></label>
-	<input type="text" name="city" id="city" class="longer" value="<?php echo $this->escape($this->item->city)?>" />
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="address2" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ADDRESS2')?></label>
+		<div class="controls">
+			<input type="text" name="address2" id="address2" value="<?php echo $this->escape($this->item->address2)?>" />
+		</div>
+	</div>
 	
-	<label for="zip" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ZIP')?></label>
-	<input type="text" name="zip" id="zip" value="<?php echo $this->escape($this->item->zip)?>" />
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="city" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_CITY')?></label>
+		<div class="controls">
+			<input type="text" name="city" id="city" value="<?php echo $this->escape($this->item->city)?>" />
+		</div>
+	</div>
 	
-	<label for="state" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_STATE')?></label>
-	<?php echo AkeebasubsHelperSelect::states($this->item->state, 'state'); ?>
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="zip" class="control-label">
+			<?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ZIP')?>
+		</label>
+		<div class="controls">
+			<input type="text" class="input-small" name="zip" id="zip" value="<?php echo $this->escape($this->item->zip)?>" />
+		</div>
+	</div>
 	
-	<label for="state" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_COUNTRY')?></label>
-	<?php echo AkeebasubsHelperSelect::countries($this->item->country, 'country'); ?>
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="state" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_STATE')?></label>
+		<div class="controls">
+			<?php echo AkeebasubsHelperSelect::states($this->item->state, 'state'); ?>
+		</div>
+	</div>
 	
-</div>
+	<div class="control-group">
+		<label for="state" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_COUNTRY')?></label>
+		<div class="controls">
+			<?php echo AkeebasubsHelperSelect::countries($this->item->country, 'country'); ?>
+		</div>
+	</div>
 </div>
 
 <div class="span6">
-<div class="well">
-	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_BUSINESS')?></legend>
+	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_BUSINESS')?></h3>
 
-	<label for="isbusiness" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ISBUSINESS')?></label>
-	<?php echo JHTML::_('select.booleanlist', 'isbusiness', null, $this->item->isbusiness); ?>
-	<div class="akeebasubs-clear"></div>
-	
-	<label for="businessname" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_BUSINESSNAME')?></label>
-	<input type="text" name="businessname" id="businessname" class="longer" value="<?php echo $this->escape($this->item->businessname)?>" />
-	<div class="akeebasubs-clear"></div>
-	
-	<label for="occupation" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_OCCUPATION')?></label>
-	<input type="text" name="occupation" id="occupation" class="longer" value="<?php echo $this->escape($this->item->occupation)?>" />
-	<div class="akeebasubs-clear"></div>
-	
-	<label for="vatnumber" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_VATNUMBER')?></label>
-	<input type="text" name="vatnumber" id="vatnumber" class="longer" value="<?php echo $this->escape($this->item->vatnumber)?>" />
-	<div class="akeebasubs-clear"></div>
-	
-	<label for="viesregistered" class="main"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_VIESREGISTERED')?></label>
-	<?php echo JHTML::_('select.booleanlist', 'viesregistered', null, $this->item->viesregistered); ?>
-	<div class="akeebasubs-clear"></div>
-	
-</div>
+	<div class="control-group">
+		<label for="isbusiness" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ISBUSINESS')?></label>
+		<div class="controls">
+			<?php echo JHTML::_('select.booleanlist', 'isbusiness', null, $this->item->isbusiness); ?>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label for="businessname" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_BUSINESSNAME')?></label>
+		<div class="controls">
+			<input type="text" name="businessname" id="businessname" class="longer" value="<?php echo $this->escape($this->item->businessname)?>" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label for="occupation" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_OCCUPATION')?></label>
+		<div class="controls">
+			<input type="text" name="occupation" id="occupation" class="longer" value="<?php echo $this->escape($this->item->occupation)?>" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label for="vatnumber" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_VATNUMBER')?></label>
+		<div class="controls">
+			<input type="text" name="vatnumber" id="vatnumber" class="longer" value="<?php echo $this->escape($this->item->vatnumber)?>" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label for="viesregistered" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_VIESREGISTERED')?></label>
+		<div class="controls">
+			<?php echo JHTML::_('select.booleanlist', 'viesregistered', null, $this->item->viesregistered); ?>
+		</div>
+	</div>
 </div>
 
-<div class="akeebasubs-clear"></div>
+</div>
 
 <div class="row-fluid">
 	
 <div class="span6">
-<div class="well">
-	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_NOTES_TITLE')?></legend>
+	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_NOTES_TITLE')?></h3>
 
 	<textarea rows="10" cols="40" id="notes" name="notes" style="width: 95%;"><?php echo $this->item->notes ?></textarea>
 </div>
-</div>
 
 <div class="span6">
-<div class="well">
-	<legend><?php echo JText::_('COM_AKEEBASUBS_USER_CUSTOMPARAMS_TITLE')?></legend>
+	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_CUSTOMPARAMS_TITLE')?></h3>
 
 	<?php
 	jimport('joomla.plugin.helper');
@@ -132,16 +166,17 @@ $this->loadHelper('format');
 	$jResponse = $app->triggerEvent('onSubscriptionFormRender', array($userparams, array('subscriptionlevel'=>null, 'custom'=>array())));
 	if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
 	if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):?>
-	
-	<label for="<?php echo $field['id']?>" class="main"><?php echo $field['label']?></label>
-	<?php echo $field['elementHTML']?>
-	<div class="akeebasubs-clear"></div>
+	<div class="control-group">
+		<label for="<?php echo $field['id']?>" class="control-label"><?php echo $field['label']?></label>
+		<div class="controls">
+			<?php echo $field['elementHTML']?>
+		</div>
+	</div>
 	
 	<?php endforeach; endforeach;?>
 </div>
-</div>
 
-<div class="akeebasubs-clear"></div>
+</div>
 
 </form>
 	

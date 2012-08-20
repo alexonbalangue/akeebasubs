@@ -15,7 +15,7 @@ $this->loadHelper('select');
 $this->loadHelper('cparams');
 ?>
 
-<form action="index.php" method="post" name="adminForm" id="adminForm">
+<form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="level" />
 	<input type="hidden" name="task" value="" />
@@ -25,104 +25,144 @@ $this->loadHelper('cparams');
 <div class="row-fluid">
 	
 	<div class="span6">
-	<div class="well">
-		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BASIC_TITLE'); ?></legend>
+		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BASIC_TITLE'); ?></h3>
 		
-		<label for="title_field" class="main title"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_TITLE'); ?></label>
-		<input type="text" size="20" id="title_field" name="title" class="title" value="<?php echo $this->escape($this->item->title) ?>" />
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="title_field" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_TITLE'); ?></label>
+			<div class="controls">
+				<input type="text" size="20" id="title_field" name="title" class="title" value="<?php echo $this->escape($this->item->title) ?>" />
+			</div>
+		</div>
 		
-		<span class="hasTip" title="<?php echo JText::_( 'COM_AKEEBASUBS_LEVEL_FIELD_SLUG_TIP' );?>::<?php echo JText::_( 'Slug Tip' ); ?>">
-		<label for="slug_field" class="main" class="mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SLUG'); ?></label>					
-		</span>
-		<input id="slug_field" type="text" name="slug" class="slug" value="<?php echo  $this->item->slug; ?>" />
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="slug_field" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SLUG'); ?></label>					
+			<div class="controls">
+				<input id="slug_field" type="text" name="slug" class="slug" value="<?php echo  $this->item->slug; ?>" />
+				<p class="help-block">
+					<?php echo JText::_( 'COM_AKEEBASUBS_LEVEL_FIELD_SLUG_TIP' );?>
+				</p>
+			</div>
+		</div>
 		
-		<label for="enabled" class="main" class="mainlabel">
-			<?php echo JText::_('JPUBLISHED'); ?>
-		</label>
-		<span class="akeebasubs-booleangroup">
-			<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="enabled" class="control-label">
+				<?php echo JText::_('JPUBLISHED'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
+			</div>
+		</div>
 		
-		<label for="image_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?></label>
-		<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/').'/', 'swf|gif|jpg|png|bmp'); ?>
-		<div class="akeebasubs-clear"></div>
-		<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
-		<div class="akeebasubs-clear"></div>
-
-		<label for="duration_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?></label>
-		<input type="text" size="6" id="duration_field" name="duration" value="<?php echo (int)$this->item->duration ?>" />
-		<div class="akeebasubs-clear"></div>
-
-		<label for="price_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?></label>
-		<span>
-			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
-			<?php endif; ?>
-			<input type="text" size="15" id="price_field" name="price" value="<?php echo  $this->item->price ?>" style="float: none" />
-			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
-			<?php endif; ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="image_field" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/').'/', 'swf|gif|jpg|png|bmp'); ?>
+				<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
+			</div>
+		</div>
 		
-		<label for="akeebasubs_level_id" class="main mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP'); ?></label>
-		<span>
-			<?php echo AkeebasubsHelperSelect::levelgroups($this->item->akeebasubs_levelgroup_id); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="duration_field" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="6" id="duration_field" name="duration" value="<?php echo (int)$this->item->duration ?>" />
+			</div>
+		</div>
 		
-		<label for="only_once" class="main mainlabel"><?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_ONLY_ONCE'); ?></label>
-		<span class="akeebasubs-booleangroup">
-			<?php echo JHTML::_('select.booleanlist', 'only_once', null, $this->item->only_once); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="price_field" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?>
+			</label>
+			<div class="controls">
+				<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+					<input type="text" size="15" id="price_field" name="price" value="<?php echo  $this->item->price ?>" style="float: none" />
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
 		
-		<label for="recurring" class="main mainlabel" title="<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING_TITLE') ?>">
-			<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING'); ?>
-		</label>
-		<span class="akeebasubs-booleangroup">
-			<?php echo JHTML::_('select.booleanlist', 'recurring', null, $this->item->recurring); ?>
-		</span>
-		<div class="akeebasubs-clear"></div>
-		
-		<label for="notify1_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY1'); ?></label>
-		<input type="text" size="6" id="notify1_field" name="notify1" value="<?php echo  (int)$this->item->notify1 ?>" />
-		<div class="akeebasubs-clear"></div>
-		
-		<label for="notify2_field" class="main"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY2'); ?></label>
-		<input type="text" size="6" id="notify2_field" name="notify2" value="<?php echo  (int)$this->item->notify2 ?>" />
-		<div class="akeebasubs-clear"></div>
+		<div class="control-group">
+			<label for="akeebasubs_level_id" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP'); ?>
+			</label>
+			<div class="controls">
+				<?php echo AkeebasubsHelperSelect::levelgroups($this->item->akeebasubs_levelgroup_id); ?>
+			</div>
+		</div>
 	</div>
-	</div>
-	
+
 	<div class="span6">
-	<div class="well">
-		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DESCRIPTION') ?></legend>
-		<?php echo $editor->display( 'description',  $this->item->description, '450', '210', '50', '10', false ) ; ?>
-		<div class="akeebasubs-clear"></div>
-	</div>
+		<div class="control-group">
+			<label for="only_once" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_ONLY_ONCE'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'only_once', null, $this->item->only_once); ?>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="recurring" class="control-label" title="<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING_TITLE') ?>">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'recurring', null, $this->item->recurring); ?>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="notify1_field" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY1'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="6" id="notify1_field" name="notify1" value="<?php echo  (int)$this->item->notify1 ?>" />
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="notify2_field" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY2'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="6" id="notify2_field" name="notify2" value="<?php echo  (int)$this->item->notify2 ?>" />
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label for="description" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DESCRIPTION'); ?>
+			</label>
+			<div class="controls">
+			</div>
+		</div>
+		
+		<?php echo $editor->display( 'description',  $this->item->description, '97%', '210', '50', '10', false ) ; ?>
 	</div>
 	
 </div>
+<hr/>
 <div class="row-fluid">
 	
 	<div class="span6">
-	<div class="well">
-		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ORDERTEXT') ?></legend>
+		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ORDERTEXT') ?></h3>
 		<?php echo $editor->display( 'ordertext',  $this->item->ordertext, '97%', '391', '50', '20', false ) ; ?>
-		<div class="akeebasubs-clear"></div>
-	</div>
 	</div>
 
 	<div class="span6">
-	<div class="well">
-		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CANCELTEXT') ?></legend>
+		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CANCELTEXT') ?></h3>
 		<?php echo $editor->display( 'canceltext',  $this->item->canceltext, '97%', '391', '50', '20', false ) ; ?>
-		<div class="akeebasubs-clear"></div>
-	</div>
 	</div>
 </div>
 
