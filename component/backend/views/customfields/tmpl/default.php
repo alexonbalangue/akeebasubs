@@ -65,7 +65,9 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 			<td class="form-inline">
 				<input type="text" name="search" id="search"
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
-					class="text_area" onchange="document.adminForm.submit();" />
+					class="input-medium" onchange="document.adminForm.submit();"
+					placeholder="<?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TITLE') ?>"
+					/>
 				<nobr>
 				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
@@ -76,7 +78,7 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 				</nobr>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::fieldtypes($this->getModel()->getState('type',''), 'type', array('onchange'=>'this.form.submit();')) ?>
+				<?php echo AkeebasubsHelperSelect::fieldtypes($this->getModel()->getState('type',''), 'type', array('onchange'=>'this.form.submit();','class' => 'input-medium')) ?>
 			</td>
 			<td></td>
 			<td></td>

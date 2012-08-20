@@ -33,7 +33,7 @@ $this->loadHelper('format');
 <input type="hidden" name="filter_order_Dir" id="filter_order_Dir" value="<?php echo $this->lists->order_Dir ?>" />
 <input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
-<table class="adminlist">
+<table class="adminlist table table-striped">
 	<thead>
 		<tr>
 			<th>
@@ -74,7 +74,9 @@ $this->loadHelper('format');
 			<td colspan="2">
 				<input type="text" name="search" id="search"
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
-					class="text_area" onchange="document.adminForm.submit();" />
+					class="input-medium" onchange="document.adminForm.submit();"
+					placeholder="<?php echo JText::_('COM_AKEEBASUBS_COUPONS_FTITLE') ?> / <?php echo JText::_('COM_AKEEBASUBS_COUPONS_COUPON') ?>"
+					/>
 				<nobr>
 				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
@@ -88,8 +90,9 @@ $this->loadHelper('format');
 			<td></td>
 			<td></td>
 			<td></td>
+			<td></td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'minwidth')) ?>
+				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 			</td>
 		</tr>
 	</thead>

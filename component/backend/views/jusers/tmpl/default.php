@@ -25,7 +25,7 @@ $this->loadHelper('cparams');
 <input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 <input type="hidden" name="tmpl" value="component" />
 
-<table class="adminlist"  style="clear: both;">
+<table class="adminlist table table-striped"  style="clear: both;">
 	<thead>
 		<tr>
 			<th width="5"><?php echo  JText::_('#'); ?></th>
@@ -46,13 +46,17 @@ $this->loadHelper('cparams');
 			<td colspan="3">
 				<input type="text" name="search" id="search"
 					value="<?php echo $this->escape($this->getModel()->getState('search',''));?>"
-					class="text_area" onchange="document.adminForm.submit();" />
-				<button onclick="this.form.submit();">
+					class="input-large" onchange="document.adminForm.submit();"
+					placeholder="<?php echo JText::_('COM_UNITE_JUSER_USERNAME') ?> / <?php echo JText::_('COM_UNITE_JUSER_NAME') ?> / <?php echo JText::_('COM_UNITE_JUSER_EMAIL') ?>"
+					/>
+				<nobr>
+				<button class="btn btn-mini" onclick="this.form.submit();">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</button>
-				<button onclick="document.adminForm.search.value='';this.form.submit();">
+				<button class="btn btn-mini" onclick="document.adminForm.search.value='';this.form.submit();">
 					<?php echo JText::_('JSEARCH_RESET'); ?>
 				</button>
+				</nobr>
 			</td>
 		</tr>
 	</thead>
