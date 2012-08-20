@@ -13,7 +13,7 @@ $this->loadHelper('modules');
 
 ?>
 
-<div id="akeebasubs" class="userinfo akeeba-bootstrap">
+<div id="akeebasubs" class="userinfo">
 	
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsuserinfoheader')?>
 

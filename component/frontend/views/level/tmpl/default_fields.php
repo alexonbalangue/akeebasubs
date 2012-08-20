@@ -65,7 +65,6 @@ if(JFactory::getUser()->guest) {
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="form form-horizontal">
 	
 <fieldset>
@@ -344,7 +343,6 @@ if(array_key_exists('isValid', $field)) {
 <?php endif;?>
 
 </fieldset>
-</div>
 </div>
 
 <?php

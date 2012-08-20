@@ -20,8 +20,6 @@ $this->loadHelper('select');
 $this->loadHelper('params');
 ?>
 
-<div class="akeeba-bootstrap">
-
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="coupon" />
@@ -119,8 +117,6 @@ $this->loadHelper('params');
 </div>
 </form>
 	
-</div>
-
 <script type="text/javascript">
 function jSelectUser_userid(id, username)
 {

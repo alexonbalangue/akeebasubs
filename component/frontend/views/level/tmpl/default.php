@@ -20,7 +20,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'before' ? 'input-prepend' : 'input-append';
 ?>
 
-<div id="akeebasubs" class="akeeba-bootstrap">
+<div id="akeebasubs">
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsheader')?>
 

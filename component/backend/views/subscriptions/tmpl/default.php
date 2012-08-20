@@ -40,7 +40,6 @@ unset($upgradesRaw);
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -325,7 +324,6 @@ unset($upgradesRaw);
 	<p><span id="asriPercent">0</span><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_PROGRESS')?></p>
 </div>
 	
-</div>
 </div>
 </div>
 

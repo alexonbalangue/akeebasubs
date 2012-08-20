@@ -15,7 +15,7 @@ $this->loadHelper('format');
 
 ?>
 
-<div id="akeebasubs" class="akeeba-bootstrap">
+<div id="akeebasubs">
 
 <table class="table table-striped">
 	<tr>

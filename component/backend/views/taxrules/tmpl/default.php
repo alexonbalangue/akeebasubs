@@ -17,7 +17,6 @@ $this->loadHelper('format');
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -165,6 +164,5 @@ $this->loadHelper('format');
 </table>
 </form>
 	
-</div>
 </div>
 </div>

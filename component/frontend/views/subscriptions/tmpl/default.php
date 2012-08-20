@@ -30,7 +30,7 @@ if(count($this->items)) foreach($this->items as $sub) {
 $subIDs = array_unique($subIDs);
 ?>
 
-<div id="akeebasubs" class="subscriptions akeeba-bootstrap">
+<div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
 	<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions') ?>" method="post" class="adminform" name="adminForm" id="adminForm">
 		<?php echo JHtml::_('form.token'); ?>

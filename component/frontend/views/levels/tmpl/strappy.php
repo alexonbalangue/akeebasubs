@@ -16,7 +16,7 @@ $this->loadHelper('message');
 
 ?>
 
-<div id="akeebasubs" class="levels akeeba-bootstrap">
+<div id="akeebasubs" class="levels">
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionslistheader')?>
 

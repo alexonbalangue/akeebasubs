@@ -14,7 +14,6 @@ $this->loadHelper('select');
 $pEnabled = JPluginHelper::getPlugin('system','admintools');
 
 ?>
-<div class="akeeba-bootstrap">
 	
 <?php if(!$pEnabled): ?>
 <div class="alert alert-error">
@@ -144,5 +143,3 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 	</tbody>
 </table>
 </form>
-
-</div>

@@ -13,7 +13,6 @@ $this->loadHelper('select');
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -96,6 +95,5 @@ $this->loadHelper('select');
 </table>
 </form>
 
-</div>
 </div>
 </div>

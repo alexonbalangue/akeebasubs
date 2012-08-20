@@ -19,8 +19,6 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 	JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.FOFInput::getString('slug','',$this->input)))
 ?>
 
-<div class="akeeba-bootstrap">
-
 <form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post" class="form form-horizontal">
 	<input type="hidden" name="return" value="<?php echo base64_encode($redirectURL)?>" />
 	<input type="hidden" name="remember" value="1" />
@@ -61,5 +59,3 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 		
 	</fieldset>
 </form>
-	
-</div>

@@ -22,8 +22,6 @@ $this->loadHelper('format');
 
 ?>
 
-<div class="akeeba-bootstrap">
-
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="subscription" />
@@ -117,8 +115,6 @@ $this->loadHelper('format');
 	</div>
 </form>
 	
-</div>
-
 <script type="text/javascript">
 function jSelectUser_userid(id, username)
 {

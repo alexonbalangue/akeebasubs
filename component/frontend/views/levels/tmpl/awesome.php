@@ -22,7 +22,7 @@ $this->loadHelper('message');
 
 <?php $max = count($this->items); ?>
 
-<div class="akeebasubs-awesome akeeba-bootstrap">
+<div class="akeebasubs-awesome">
 	<div class="columns columns-<?php echo $max?>">
 		<?php $i = 0; foreach($this->items as $level): $i++?>
 		<?php

@@ -22,8 +22,6 @@ $this->loadHelper('format');
 
 ?>
 
-<div class="akeeba-bootstrap">
-
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="affpayment" />
@@ -58,5 +56,3 @@ $this->loadHelper('format');
 </div>
 </div>
 </form>
-	
-</div>

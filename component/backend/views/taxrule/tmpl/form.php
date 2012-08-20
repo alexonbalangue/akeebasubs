@@ -15,7 +15,6 @@ $this->loadHelper('cparams');
 $this->loadHelper('select');
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -55,6 +54,5 @@ $this->loadHelper('select');
 
 </form>
 	
-</div>
 </div>
 </div>

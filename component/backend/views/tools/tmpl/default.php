@@ -13,7 +13,6 @@ JHTML::_('behavior.tooltip');
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -43,6 +42,5 @@ JHTML::_('behavior.tooltip');
 </p>
 <?php endif; ?>
 
-</div>
 </div>
 </div>

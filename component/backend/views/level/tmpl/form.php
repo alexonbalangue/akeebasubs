@@ -15,8 +15,6 @@ $this->loadHelper('select');
 $this->loadHelper('cparams');
 ?>
 
-<div class="akeeba-bootstrap">
-
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="level" />
@@ -129,5 +127,3 @@ $this->loadHelper('cparams');
 </div>
 
 </form>
-	
-</div>

@@ -14,10 +14,8 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 ?>
-<div class="akeeba-bootstrap">
 <?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
 <?php echo $this->loadAnyTemplate('level/steps',array('step'=>'payment')); ?>
 <?php endif; ?>
 
 <?php echo $this->form ?>
-</div>

@@ -14,7 +14,6 @@ $this->loadHelper('cparams');
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -109,6 +108,5 @@ $this->loadHelper('cparams');
 	</div>
 </form>
 	
-</div>
 </div>
 </div>

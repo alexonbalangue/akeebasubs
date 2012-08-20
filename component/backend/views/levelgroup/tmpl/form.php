@@ -11,7 +11,6 @@ JHtml::_('behavior.tooltip');
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -37,6 +36,5 @@ JHtml::_('behavior.tooltip');
 	</div>
 </form>
 	
-</div>
 </div>
 </div>

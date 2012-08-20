@@ -11,8 +11,6 @@ defined('_JEXEC') or die();
 $this->loadHelper('cparams');
 ?>
 
-<div class="akeeba-bootstrap" style="width:100%;">
-
 	<div class="row-fluid">
 		
 		<div id="cpanel" class="span6">
@@ -383,5 +381,3 @@ $this->loadHelper('cparams');
 			<?php echo $this->loadTemplate('footer'); ?>
 		</div>
 	</div>
-
-</div>

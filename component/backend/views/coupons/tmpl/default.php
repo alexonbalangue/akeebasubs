@@ -20,7 +20,6 @@ $this->loadHelper('format');
 
 ?>
 
-<div class="akeeba-bootstrap">
 <div class="row-fluid">
 <div class="span12">
 
@@ -184,6 +183,5 @@ $this->loadHelper('format');
 
 </form>
 	
-</div>
 </div>
 </div>
