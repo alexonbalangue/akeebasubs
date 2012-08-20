@@ -6,7 +6,7 @@ $jRelDate = new JDate(AKEEBASUBS_DATE);
 
 // IMPORTANT!!! DO NOT TRANSLATE THESE MESSAGES!!!
 ?>
-<p style="font-size: small">
+<p style="font-size: small" class="well">
 	<strong>
 		Akeeba Subscriptions <?php echo AKEEBASUBS_VERSION ?>
 	</strong>

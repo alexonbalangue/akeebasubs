@@ -19,7 +19,7 @@ $this->loadHelper('cparams');
 
 		<div id="cpanel" class="span6">			
 			<h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS')?></h3>
-			<table width="100%" class="adminlist">
+			<table width="100%" class="table table-striped">
 				<tbody>
 				<tr class="row0">
 					<td width="50%"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_LASTYEAR')?></td>
