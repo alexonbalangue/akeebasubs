@@ -186,8 +186,13 @@ class plgAkpayment2checkout extends JPlugin
 						break;
 					
 					case 'deposited':
-						// "Deposited" means "the money is yours"
+						// "Deposited" means "the money is yours".
 						$newStatus = 'C';
+						// However, if the subscription is CANCELLED then a refund has already
+						// been issued, but 2Checkout sends a "deposited" status. What the hell?!
+						if($subscription->state == 'X') {
+							$newStatus = 'X';
+						}
 						break;
 					
 					case 'declined':
