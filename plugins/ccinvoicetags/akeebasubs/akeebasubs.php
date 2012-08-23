@@ -96,6 +96,11 @@ class plgccInvoicetagsAkeebasubs extends JPlugin
 			$ret['asuser_state'] = AkeebasubsHelperSelect::formatState($userdata['state']);
 		}
 		
+		// Blank out the company if it's not a business registration
+		if(!$userdata['isbusiness']) {
+			$ret['asuser_businessname'] = '';
+		}
+		
 		// Add custom fields data. Format {asuser_custom_variablename}
 		if(array_key_exists('params', $userdata)) {
 			$custom = json_decode($userdata['params']);
