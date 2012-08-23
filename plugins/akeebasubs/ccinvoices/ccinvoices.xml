@@ -27,6 +27,12 @@
 					<option value="1">JYes</option>
 				</field>
 				<field name="euvatnote" type="textarea" default="VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive." label="PLG_AKEEBASUBS_CCINVOICES_EUVATNOTE_TITLE" description="PLG_AKEEBASUBS_CCINVOICES_EUVATNOTE_DESC" rows="5" cols="30" />
+				<field name="generatewhen" type="radio" default="0"
+					label="PLG_AKEEBASUBS_CCINVOICES_GENERATEWHEN_TITLE"
+					description="PLG_AKEEBASUBS_CCINVOICES_GENERATEWHEN_DESC">
+					<option value="0">PLG_AKEEBASUBS_CCINVOICES_GENERATEWHEN_OPT_COMPLETED</option>
+					<option value="1">PLG_AKEEBASUBS_CCINVOICES_GENERATEWHEN_OPT_NEW</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>

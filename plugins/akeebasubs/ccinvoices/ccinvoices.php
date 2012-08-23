@@ -33,8 +33,19 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		// Do not issue invoices for free subscriptions
 		if($row->gross_amount < 0.01) return;
 
+		// Should we handle this subscription?
+		$generateAnInvoice = false;
+		$whenToGenerate = $this->params->get('generatewhen','0');
+		if($whenToGenerate == 0) {
+			// Only handle not expired subscriptions
+			$generateAnInvoice = ($row->state == "C") && $row->enabled;
+		} elseif($whenToGenerate == 1) {
+			// Handle new subscription, even if they are not yet enabled
+			$generateAnInvoice = in_array($row->state, array('N','P','C'));
+		}
+		
 		// Only handle not expired subscriptions
-		if( ($row->state == "C") && $row->enabled ) {
+		if( $generateAnInvoice ) {
 			$db = JFactory::getDBO();
 
 			// Get or create ccInvoices contact for user
