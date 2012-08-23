@@ -250,12 +250,14 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 		if(!$id) {
 			$id = $this->createContact($userid);
+		} else {
+			$this->createContact($userid, $id);
 		}
 
 		return $id;
 	}
 
-	private function createContact($userid)
+	private function createContact($userid, $contact_id = null)
 	{
 		$db = JFactory::getDBO();
 
@@ -267,13 +269,17 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			->getFirstItem();
 
 		// get the next contact number
-		$query = $db->getQuery(true)
-				->select('MAX('.$db->qn('contact_number').')')
-				->from($db->qn('#__ccinvoices_contacts'));
-		$db->setQuery($query);
-		$contact_number = $db->loadResult();
-		if(!$contact_number) $contact_number = 0;
-		$contact_number++;
+		if(is_null($contact_id)) {
+			$query = $db->getQuery(true)
+					->select('MAX('.$db->qn('contact_number').')')
+					->from($db->qn('#__ccinvoices_contacts'));
+			$db->setQuery($query);
+			$contact_number = $db->loadResult();
+			if(!$contact_number) $contact_number = 0;
+			$contact_number++;
+		} else {
+			$contact_number = $contact_id;
+		}
 
 		// get country/state names
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
@@ -283,47 +289,70 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 		// Create contact
 		$name = $juser->name;
-		$contact = $name;
 		$address = $kuser->address1."\n".
 			(empty($kuser->address2) ? '' : $kuser->address2."\n").
 			$kuser->zip." ".$kuser->city."\n".
 			(empty($state) ? '' : "$state\n") .
-			$country .
-			(empty($kuser->vatnumber) ? '' : "\nVAT ".$kuser->vatnumber);
+			$country;
 		$email = $juser->email;
+		if($kuser->isbusiness) {
+			$contact = $kuser->businessname;
+			$vatnumber = ($kuser->country == 'GR' ? 'EL' : $kuser->country).' '.$kuser->vatnumber;
+		} else {
+			$contact = $name;
+			$vatnumber = '';
+		}
 		
-		$contact = (object)array(
+		$contact = array(
 			'name'				=> $name,
 			'contact'			=> $contact,
 			'contact_number'	=> $contact_number,
 			'address'			=> $address,
-			'email'				=> $email
+			'email'				=> $email,
+			'tax_id'			=> $vatnumber,
 		);
-		$db->insertObject('#__ccinvoices_contacts', $contact);
-
-		$db->setQuery($query);
-		$db->query();
-
-		$id = $db->insertid();
-
-		$query = $db->getQuery(true)
-			->delete($db->qn('#__ccinvoices_users'))
-			->where($db->qn('user_id').' = '.$db->q($userid));
-		$db->setQuery($query);
-		$db->query();
 		
-		$query = $db->getQuery(true)
-			->insert($db->qn('#__ccinvoices_users'))
-			->columns(array(
-				$db->qn('user_id'),
-				$db->qn('contact_id')
-			))->values(
-				$db->q($userid).', '.$db->q($id)
-			);
-		$db->setQuery($query);
-		$db->query();
+		if(is_null($contact_id)) {
+			// CREATE NEW CONTACT
+			$contact = (object)$contact;
+			$db->insertObject('#__ccinvoices_contacts', $contact);
 
-		return $id;
+			$db->setQuery($query);
+			$db->query();
+
+			$id = $db->insertid();
+
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__ccinvoices_users'))
+				->where($db->qn('user_id').' = '.$db->q($userid));
+			$db->setQuery($query);
+			$db->query();
+
+			$query = $db->getQuery(true)
+				->insert($db->qn('#__ccinvoices_users'))
+				->columns(array(
+					$db->qn('user_id'),
+					$db->qn('contact_id')
+				))->values(
+					$db->q($userid).', '.$db->q($id)
+				);
+			$db->setQuery($query);
+			$db->query();
+
+			return $id;
+		} else {
+			// UPDATE EXISTING CONTACT
+			$query = $db->getQuery(true)
+				->update($db->qn('#__ccinvoices_contacts'))
+				->where($db->qn('id').' = '.$db->q($contact_number));
+			foreach($contact as $k => $v) {
+				$query->set($db->qn($k).' = '.$db->q($v));
+			}
+			$db->setQuery($query);
+			$db->query();
+			
+			return $contact_id;
+		}
 	}
 
 	private function createInvoice($id)
