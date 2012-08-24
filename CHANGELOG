@@ -10,6 +10,8 @@ Akeeba Subscriptions 2.3.2
 ~ 2Checkout: Improvement in handling of payment messages
 ~ Now using Bootstrap in the front-end
 ~ ccInvoices plugin: allow generation of invoices for pending payments (e.g. off-line payments)
+~ ccInvoices plugin: update contact information when the subscriber updates his information in Akeeba Subscriptions
+~ ccInvoices plugin: sunchronise the VAT field in ccInvoices 1.5
 # [HIGH] The PhocaDownloads integration plugin was broken (the last fix only dealt with half of the problem)
 # [MEDIUM] The MailChimp integration plugin wouldn't install its library folder
 # [LOW] IFTHEN payment plugin: callbacks would not work
