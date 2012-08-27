@@ -22,7 +22,7 @@ class AkeebasubsHelperFormat
 			$format = str_replace('%', '', $format);
 		}
 		
-		return $jDate->format($format);
+		return $jDate->format($format, true);
 	}
 	
 	public static function formatLevel($id)

@@ -178,8 +178,8 @@ class plgAkeebasubsAffemails extends JPlugin
 			'[LEVEL]'		=> $level->title,
 			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
 			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2')),
-			'[PUBLISH_DOWN]' => $jTo->format(JText::_('DATE_FORMAT_LC2')),
+			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
+			'[PUBLISH_DOWN]' => $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
 			'[MYSUBSURL]'	=> $url,
 			'[CURRENCY]'	=> AkeebasubsHelperCparams::getParam('currencysymbol','€'),
 		);

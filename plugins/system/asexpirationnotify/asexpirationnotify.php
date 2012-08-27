@@ -336,8 +336,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 			'level'				=> $level->title,
 			'enabled'			=> $row->enabled ? JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_ENABLED') : JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_DISABLED'),
 			'state'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'from'				=> $jFrom->format(JText::_('DATE_FORMAT_LC2')),
-			'to'				=> $jTo->format(JText::_('DATE_FORMAT_LC2')),
+			'from'				=> $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
+			'to'				=> $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
 			'url'				=> $url
 		);
 		
