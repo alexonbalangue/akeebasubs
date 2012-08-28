@@ -64,7 +64,6 @@ class Com_AkeebasubsInstallerScript
 				'jce'					=> 0,
 				'jomsocial'				=> 0,
 				'joomla'				=> 0,
-				'jxjomsocial'			=> 0,
 				'k2'					=> 0,
 				'kunena'				=> 0,
 				'mailchimp'				=> 0,
