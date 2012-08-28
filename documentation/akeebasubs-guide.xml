@@ -2620,6 +2620,355 @@ Rule C gives $ 30 discount</programlisting>
       </variablelist>
     </section>
 
+    <section xml:id="custom-fields">
+      <title>Custom fields</title>
+
+      <para>This feature was added in Akeeba Subscritpions 3.4.0.</para>
+
+      <important>
+        <para>You need to publish the "Akeeba Subscriptions - Custom fields"
+        plugin for this feature to work. This plugin is installed and
+        automatically activated when you install or update Akeeba
+        Subscriptions.</para>
+      </important>
+
+      <para>One of the most frequently requested features in Akeeba
+      Subscriptions has been the customisation of the fields shown in the
+      subscription page. Traditionally, this has been possible only by
+      creating specialised Joomla! plugins. For all the merits of custom
+      plugins, there was always one major drawback: it takes a developer to
+      create them, making it impossible for non-developer site owners and
+      integrators to add custom fields. Not any more! The Custom Fields
+      feature of Akeeba Subscriptions allows you to easily create simple
+      fields, such as text boxes and selection lists, using a simple graphical
+      user interface. The custom fields are stored per user and shown in
+      Akeeba Subscriptions' <guilabel>Users</guilabel> page.</para>
+
+      <para>You can access this feature by clicking on the Custom Fields
+      toolbar link.</para>
+
+      <para>The parameters for each custom field are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Title</term>
+
+          <listitem>
+            <para>The display title of the field. If you want to translate the
+            title, please use a language constant as described in our <link
+            linkend="custom-fields-translation">translation
+            instructions</link> below.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Slug</term>
+
+          <listitem>
+            <para>The internal name of the field. It should consist of only
+            lowercase, unaccented letters (a-z) and numbers (0-9). This is
+            used when you need to <link
+            linkend="custom-fields-accessing">access the field
+            data</link>.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>When to Show</term>
+
+          <listitem>
+            <para>Fields can be shown for all subscription levels or for a
+            specific subscription level only.</para>
+
+            <warning>
+              <para>When you select <option>Specific level</option> the custom
+              field will not be displayed in the Users page of Akeeba
+              Subscriptions. It will only be available in the
+              post-subscription messages and emails.</para>
+            </warning>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Subscription Level</term>
+
+          <listitem>
+            <para>If you set the option above to <option>Specific
+            level</option> this defines for which level the field will be
+            displayed. When the <guilabel>When to show</guilabel> option is
+            set to <option>All levels</option> this will be ignored.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Field Type</term>
+
+          <listitem>
+            <para>Chose the type of the field. The available options
+            are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><emphasis role="bold">Text box</emphasis>. Creates a
+                simple text entry box.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Password box</emphasis>. Creates a
+                simple password entry box.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Checkbox</emphasis>. Creates a
+                single tick box.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Drop-down</emphasis>. Creates a
+                drop-down selection field. Ideal for selecting between short
+                descriptions or a lengthy list. You can define the available
+                options in the <guilabel>Options</guilabel> field
+                below.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Mutliple selection
+                list</emphasis>. Creates a multiple selection list. You can
+                define the available options in the
+                <guilabel>Options</guilabel> field below.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Radio buttons</emphasis>. Creates
+                a one-of-many selection field using vertically stacked radio
+                buttons. Ideal for selecting between a few, described in great
+                length, options. You can define the available options in the
+                <guilabel>Options</guilabel> field below.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Options</term>
+
+          <listitem>
+            <para>Its function depends on the field type:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><emphasis role="bold">Text and password box</emphasis>.
+                Anything you type in here will be shown as a placeholder (gray
+                text which disappears when you start typing) inside the
+                box.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Checkbox</emphasis>. Anything you
+                type in Options is ignored.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Everything else</emphasis>. For
+                all other field types this is how you define options and their
+                labels. The format is VALUE=LABEL, on pair per line. For
+                example:</para>
+
+                <programlisting>1=One
+10=Ten
+100=A hundred
+1000=A thousand</programlisting>
+
+                <para>With the example above, a drop=down list would show you
+                the options One, Ten, A hundred and A thousand. The value
+                stored, depending on your selection, would be 1, 10, 100 or
+                1000.</para>
+
+                <para>To make it clear: Each line defines one option to be
+                shown to the user. Anything to the left of the equals sign is
+                saved in the database and is made available to you when you
+                display the contents of the field. Anything to the right of
+                the equals sign is what your subscriber sees in the
+                subscription page.</para>
+
+                <para>If you want to translate the label (right hand part) of
+                the options you can use a language constant as described in
+                our <link linkend="custom-fields-translation">translation
+                instructions</link> below.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Default value</term>
+
+          <listitem>
+            <para>The default value the field is set to. It depends on the
+            field type:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><emphasis role="bold">Text and password box</emphasis>.
+                The contents of the box.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Checkbox</emphasis>. Use ON, TRUE,
+                1 or ENABLED to have the checkbox checked by default. Anything
+                else will result in the checkbox being cleared (unchecked) by
+                default</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Everything else</emphasis>. Enter
+                the value (left-hand part) of an option you defined in the
+                <guilabel>Options</guilabel> above.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Allow Empty</term>
+
+          <listitem>
+            <para>If checked the custom field is allowed to be left empty /
+            unchecked by your subscriber. If it's not checked (default),
+            Akeeba Subscriptions will not allow your subscriber to submit the
+            subscription form unless he fills in / checks the field.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Valid Field Label</term>
+
+          <listitem>
+            <para>If <guilabel>Allow Empty</guilabel> above is NOT checked,
+            the contents of this field are shown next to your custom field
+            when it's valid (filled in / checked). If you want to translate
+            this label you can use a language constant as described in our
+            <link linkend="custom-fields-translation">translation
+            instructions</link> below.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Invalid Field Label</term>
+
+          <listitem>
+            <para>If <guilabel>Allow Empty</guilabel> above is NOT checked,
+            the contents of this field are shown next to your custom field
+            when it's invalid (not filled in / checked). If you want to
+            translate this label you can use a language constant as described
+            in our <link linkend="custom-fields-translation">translation
+            instructions</link> below.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <section xml:id="custom-fields-accessing">
+        <title>Accessing custom fields data</title>
+
+        <para>Custom fields can be accessed like any other custom field
+        throughout the component. Whenever our documentation is talking about
+        the field name's it means the Slug you have entered in the custom
+        field edit page. Below you can find the most common uses.</para>
+
+        <bridgehead>Subscription Levels</bridgehead>
+
+        <para>You can use custom field data in a Subscription Level's sign-up
+        and cancellation messages. Assuming that your custom field's slug is
+        my_field you can use the merge tag <option>[CUSTOM:MY_FIELD]</option>
+        to access your custom field's contents. Please note that despite the
+        case (lower or upper case) you've used for the slug you have to type
+        the merge tag in all uppercase letters.</para>
+
+        <bridgehead>Subscription and administrator emails</bridgehead>
+
+        <para>In both the "Akeeba Subscriptions - Emails" and "Akeeba
+        Subscriptions - Administrator Emails" plugins it's possible to
+        customise the email messages sent to users and administrators
+        respectively. Assuming that your custom field's slug is my_field you
+        can use the merge tag <option>[CUSTOM:MY_FIELD]</option> to access
+        your custom field's contents. Please note that despite the case (lower
+        or upper case) you've used for the slug you have to type the merge tag
+        in all uppercase letters.</para>
+
+        <bridgehead>ccInvoices Tags</bridgehead>
+
+        <para>If you are using our "ccInvoices - Akeeba Subscriptions merge
+        tags" plugin it's possible to access the value of custom fields for
+        use in your invoices. Assuming that your custom field's slug is
+        my_field you can use the merge tag
+        <option>{asuser_custom_<replaceable>my_field</replaceable>}</option>
+        to access your custom field's contents. Please note that despite the
+        case (lower or upper case) you've used for the slug you have to type
+        the merge tag in all lowercase letters.</para>
+      </section>
+
+      <section xml:id="custom-fields-translation">
+        <title>Localising (translating) custom fields' labels and
+        options</title>
+
+        <para>It is possible to use "language constants" instead of plain
+        words in titles and option values. A "language constant" is an
+        arbitrary string consisting of uppercase English characters and
+        underscores. It doesn't have to mean anything. It's just a
+        placeholder. You will assign a meaning to each language constant later
+        on. This is a language constant: THIS_IS_A_LANGUAGE_CONSTANT. This is
+        also a language constant:
+        COM_AKEEBASUBS_MYCUSTOMFIELDS_FOOBAR_TITLE.</para>
+
+        <tip>
+          <para>As a rule of thumb, we recommend using the naming convention
+          COM_AKEEBASUBS_USERCUSTOMFIELD_<replaceable>FIELDNAME</replaceable>_TITLE
+          for field title language constant and
+          COM_AKEEBASUBS_USERCUSTOMFIELD_<replaceable>FIELDNAME</replaceable>_OPTION_<replaceable>OPTIONNAME</replaceable>
+          for field option language constants, where
+          <replaceable>FIELDNAME</replaceable> is the field's slug in all
+          uppercase letters and <replaceable>OPTIONNAME</replaceable> is a
+          shorthand for the name of the option.</para>
+
+          <para>Likewise, we suggest using
+          COM_AKEEBASUBS_USERCUSTOMFIELD_<replaceable>FIELDNAME</replaceable>_LABEL_VALID
+          and
+          COM_AKEEBASUBS_USERCUSTOMFIELD_<replaceable>FIELDNAME</replaceable>_LABEL_INVALID
+          for the Valid Field Label and Invalid Field Label language
+          constants.</para>
+
+          <para>While it is not mandatory to follow this convention, it makes
+          translation much easier as the key name provides
+          <emphasis>context</emphasis> to your translators, e.g. it tells them
+          that they are translating the field title for such and such user
+          defined custom field in Akeeba Subscriptions.</para>
+        </tip>
+
+        <para>And now, the interesting part: assigning a localised message per
+        language constant and site language. Using Joomla! 2.5 and later it is
+        easy, using its <guilabel>Language Override</guilabel> feature. Log
+        into your site's back-end and go to <guimenu>Extensions</guimenu>,
+        <guisubmenu>Language Manager</guisubmenu>, then click on
+        <guimenuitem>Overrides</guimenuitem>. Right above the list, on the
+        right-hand side, there is a drop down. Select your desired language,
+        e.g. <guilabel>English (United Kingdom) - Site</guilabel>.</para>
+
+        <important>
+          <para>Make sure you select the "- Site" variant of your
+          language.</para>
+        </important>
+
+        <para>Click on the <guibutton>New</guibutton> button. In the new page,
+        type the language constant in the <guilabel>Language
+        constant</guilabel> field. Then enter the translation in the
+        <guilabel>Text</guilabel> field. Then make sure you tick the
+        <guilabel>For both locations</guilabel> checkbox. Finally click on the
+        <guibutton>Save &amp; Close</guibutton> button to save your language
+        override. Repeat those steps for each language on your site and your
+        fields' labels will be localised.</para>
+      </section>
+    </section>
+
     <section xml:id="customising-akeeba-subs">
       <title>Customising Akeeba Subscriptions</title>
 
@@ -6004,6 +6353,35 @@ LEVEL2=11111:22222:33333</programlisting>
               directive.</para>
             </listitem>
           </varlistentry>
+
+          <varlistentry>
+            <term>Generate invoice</term>
+
+            <listitem>
+              <para>Determines when to generate an invoice. The available
+              options are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><option>After the payment</option>. This is the
+                  default option. An invoice will be generated once the
+                  subscription is paid for, i.e. the payment status is set to
+                  Completed and the subscription is enabled.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>Before the payment</option>. When this option
+                  is selected, an invoice will be generated as soon as a new
+                  subscription with a pending payment is generated. You will
+                  have to issue a payment receipt manually when the
+                  subscription is paid. This option is usually useful when
+                  used together with the Offline payment plugin as many
+                  companies require the receipt of an invoice before paying
+                  for a subscription.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </varlistentry>
         </variablelist>
 
         <tip>
@@ -9248,6 +9626,13 @@ LEVEL3=Badge 1</programlisting>
         <note>
           <para>Available since Akeeba Subscriptions 2.3.0</para>
         </note>
+
+        <important>
+          <para>If you wish to use ccInvoices to generate invoices outside of
+          Akeeba Subscriptions please DO NOT use this plugin. It will result
+          in fields containing the raw merge tags, e.g. {asubs_id} which
+          certainly looks weird on an invoice.</para>
+        </important>
 
         <para>This plugin allows you to access Akeeba Subscriptions
         information from within your ccInvoices "Invoice PDF Template". Just
