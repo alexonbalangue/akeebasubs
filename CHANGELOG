@@ -1,6 +1,7 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.3.2
+Akeeba Subscriptions 2.4.0
 ================================================================================
++ Experimental Joomla! 3.0 support
 + #79 Custom fields (form builder)
 + ProjectFork integration
 + EasyDiscuss integration
@@ -16,6 +17,7 @@ Akeeba Subscriptions 2.3.2
 # [MEDIUM] The MailChimp integration plugin wouldn't install its library folder
 # [LOW] IFTHEN payment plugin: callbacks would not work
 # [LOW] The VAT notice for intra-EU transactions was not being displayed with the ccInvoices custom tags plugin
+# [LOW] Custom SQL plugin would throw a notice
 
 Akeeba Subscriptions 2.3.1
 ================================================================================
