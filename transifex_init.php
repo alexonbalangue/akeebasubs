@@ -4,6 +4,10 @@ $component = 'com_akeebasubs';
 $txproject = 'akeebasubs';
 $root = dirname(__FILE__);
 
+$action = "scan_leaf_symlink";
+
+$symlink_lang = 'pt-BR';
+
 function fix_file($file)
 {
 	echo basename($file)."\n";
@@ -46,7 +50,7 @@ function fix_file($file)
 	file_put_contents($file, $out);
 }
 
-function scan_leaf($slugArray, $rootDir)
+function scan_leaf_fixfile($slugArray, $rootDir)
 {
 	foreach(new DirectoryIterator($rootDir) as $oLang)
 	{
@@ -61,7 +65,27 @@ function scan_leaf($slugArray, $rootDir)
 	}
 }
 
-function real_scan_leaf($slugArray, $rootDir) {
+function scan_leaf_symlink($slugArray, $rootDir)
+{
+	global $symlink_lang;
+	
+	foreach(new DirectoryIterator($rootDir) as $oLang)
+	{
+		if(!$oLang->isDir()) continue;
+		if($oLang->isDot()) continue;
+		$lang = $oLang->getFilename();
+		
+		$files = glob($rootDir.'/'.$lang.'/*.ini');
+		foreach($files as $f) {
+			if(substr(basename($f), 0, 5) != $symlink_lang) continue;
+			echo basename($f)."\n";
+			#copy($f, __DIR__.'/000/'.basename($f));
+			copy(__DIR__.'/000/'.basename($f), $f);
+		}
+	}
+}
+
+function scan_leaf_txinit($slugArray, $rootDir) {
 	global $root, $txproject;
 	
 	$files = glob($rootDir.'/en-GB/*.ini');
@@ -128,7 +152,7 @@ foreach(new DirectoryIterator($myRoot) as $oArea)
 		
 		if(is_dir($folderDir.'/en-GB')) {
 			// A component
-			scan_leaf($slug, $folderDir);
+			call_user_func($action, $slug, $folderDir);
 		} else {
 			// A module or plugin
 			foreach(new DirectoryIterator($folderDir) as $oExtension)
@@ -140,7 +164,7 @@ foreach(new DirectoryIterator($myRoot) as $oArea)
 				$slug[] = $extension;
 				$extensionDir = $folderDir.'/'.$extension;
 				if(is_dir($extensionDir.'/en-GB')) {
-					scan_leaf($slug, $extensionDir);
+					call_user_func($action, $slug, $extensionDir);
 				}
 				array_pop($slug);
 			}
