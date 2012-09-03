@@ -214,12 +214,12 @@ $this->loadHelper('cparams');
 						$date = new DateTime();
 						$date->setDate(gmdate('Y'), gmdate('m'), gmdate('d'));
 						$date->modify("-1 day");
-						$yesterday = $date->format("Y-m-d", true);
+						$yesterday = $date->format("Y-m-d");
 						$date->modify("+1 day")
 						?>
 						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since( $yesterday )
-							->until( $date->format("Y-m-d", true) )
+							->until( $date->format("Y-m-d") )
 							->nozero(1)
 							->paystate('C')
 							->getTotal()
@@ -232,7 +232,7 @@ $this->loadHelper('cparams');
 						<?php echo  sprintf('%.02f',
 							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 								->since( $yesterday )
-								->until( $date->format("Y-m-d", true) )
+								->until( $date->format("Y-m-d") )
 								->moneysum(1)
 								->nozero(1)
 								->paystate('C')
@@ -252,8 +252,8 @@ $this->loadHelper('cparams');
 							$expiry->modify('+1 day');
 						?>
 						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-							->since( $date->format("Y-m-d", true) )
-							->until( $expiry->format("Y-m-d", true) )
+							->since( $date->format("Y-m-d") )
+							->until( $expiry->format("Y-m-d") )
 							->nozero(1)
 							->paystate('C')
 							->getTotal()
@@ -267,8 +267,8 @@ $this->loadHelper('cparams');
 						<?php endif; ?>
 						<?php echo  sprintf('%.02f',
 							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-								->since( $date->format("Y-m-d", true) )
-								->until( $expiry->format("Y-m-d", true) )
+								->since( $date->format("Y-m-d") )
+								->until( $expiry->format("Y-m-d") )
 								->nozero(1)
 								->paystate('C')
 								->moneysum(1)
