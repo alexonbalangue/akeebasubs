@@ -130,7 +130,7 @@ class plgAkeebasubsJomsocial extends JPlugin
 						->update($db->qn('#__community_groups_members'))
 						->set(array(
 							$db->qn('approved').' = '.$db->q('1'),
-							$db->qn('permissions').' = '.$db->q('1')
+							$db->qn('permissions').' = '.$db->q('0')
 						))
 						->where($db->qn('memberid').' = '.$db->q($user_id))
 						->where($db->qn('groupid').' = '.$db->q($group));
@@ -144,7 +144,7 @@ class plgAkeebasubsJomsocial extends JPlugin
 							$db->qn('approved'),
 							$db->qn('permissions'),
 						))->values(
-							$db->q($user_id).', '.$db->q($group).', '.$db->q('1').', '.$db->q('1')
+							$db->q($user_id).', '.$db->q($group).', '.$db->q('1').', '.$db->q('0')
 						);
 				}
 				

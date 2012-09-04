@@ -15,6 +15,7 @@ Akeeba Subscriptions 2.4.0
 ~ ccInvoices plugin: sunchronise the VAT field in ccInvoices 1.5
 # [HIGH] The PhocaDownloads integration plugin was broken (the last fix only dealt with half of the problem)
 # [MEDIUM] The MailChimp integration plugin wouldn't install its library folder
+# [MEDIUM] The JomSocial integration assigned users as administrators of the group, not just members
 # [LOW] IFTHEN payment plugin: callbacks would not work
 # [LOW] The VAT notice for intra-EU transactions was not being displayed with the ccInvoices custom tags plugin
 # [LOW] Custom SQL plugin would throw a notice
