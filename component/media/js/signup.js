@@ -621,10 +621,10 @@ function applyPrice(response)
 {
 	(function($) {
 		if($('#akeebasubs-sum-net').length > 0) {
-			$('#akeebasubs-sum-net').text(response.net);
-			$('#akeebasubs-sum-discount').text(response.discount);
-			$('#akeebasubs-sum-vat').text(response.tax);
-			$('#akeebasubs-sum-total').text(response.gross);
+			$('#akeebasubs-sum-net').val(response.net);
+			$('#akeebasubs-sum-discount').val(response.discount);
+			$('#akeebasubs-sum-vat').val(response.tax);
+			$('#akeebasubs-sum-total').val(response.gross);
 
 			if(response.gross <= 0) {
 				$('#paymentmethod-container').css('display','none');
