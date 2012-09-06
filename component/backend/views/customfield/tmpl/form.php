@@ -83,7 +83,7 @@ $this->loadHelper('cparams');
 		<div class="control-group">
 			<label class="control-label" for="allow_empty"><?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_ALLOW_EMPTY') ?></label>
 			<div class="controls">
-				<input type="checkbox" name="allow_empty" id="allow_empty" <?php echo ($this->item->allow_empty) ? 'checked="checked"' : '' ?> />
+				<?php echo JHTML::_('select.booleanlist', 'allow_empty', null, $this->item->allow_empty); ?>
 				<p class="help-block"><?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_HELP_ALLOW_EMPTY') ?></p>
 			</div>
 		</div>
