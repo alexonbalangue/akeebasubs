@@ -3,6 +3,7 @@ Akeeba Subscriptions 2.4.1
 ================================================================================
 # [MEDIUM] Discount and tax not updated automatically
 # [MEDIUM] "Allow Empty" in Custom Fields would not get saved
+# [MEDIUM] You could still not create invoices for off-line payments automatically
 
 Akeeba Subscriptions 2.4.0
 ================================================================================

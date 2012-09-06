@@ -16,7 +16,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 	public function onAKSubscriptionChange($row, $info)
 	{
 		if(is_null($info['modified']) || empty($info['modified'])) return;
-		if(!array_key_exists('enabled', (array)$info['modified'])) return;
+		//if(!array_key_exists('enabled', (array)$info['modified'])) return;
 
 		// Load the plugin's language files
 		$lang = JFactory::getLanguage();
