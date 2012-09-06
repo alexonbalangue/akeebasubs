@@ -388,8 +388,9 @@ class plgAkpaymentPaypal extends JPlugin
 			$req .= "&$key=$value";
 		}
 		$header = '';
-		$header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
+		$header .= "POST /cgi-bin/webscr HTTP/1.1\r\n";
 		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
+		$header .= "Host: www.paypal.com\r\n";
 		$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
 		
 		$ssl = $this->params->get('secureipn',0);
