@@ -60,11 +60,6 @@ class plgAkpaymentBeanstream extends JPlugin
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
-		
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
