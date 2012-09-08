@@ -58,8 +58,14 @@
 		<field name="showrenew" type="radio" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_DESC">
-			<option value="0">No</option>
-			<option value="1">Yes</option>				
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>				
+		</field >
+		<field name="noneuvat" type="radio" default="0"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_NONEUVAT_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_NONEUVAT_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>				
 		</field >
 		<field name="useppimages" type="radio" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_LABEL"

@@ -16,6 +16,7 @@ var akeebasubs_validation_fetch_queue = [];
 var akeebasubs_validation_queue = [];
 var akeebasubs_level_id = 0;
 var akeebasubs_submit_after_validation = false;
+var akeebasubs_noneuvat = false;
 
 function cacheSubmitAction(e)
 {
@@ -306,9 +307,15 @@ function validateAddress()
 			// If that's an EU country, show and update the VAT field
 			if($('#vatfields')) {
 				$('#vatfields').css('display','none');
+				
+				if(akeebasubs_noneuvat) {
+					$('#vatfields').css('display','block');
+					$('#vatcountry').css('display','none');
+				}
 				for(key in european_union_countries) {
 					if(european_union_countries[key] == country) {
 						$('#vatfields').css('display','block');
+						$('#vatcountry').css('display','inline-block');
 						var ccode = country;
 						if(ccode == 'GR') {ccode = 'EL';}
 						$('#vatcountry').text(ccode);
@@ -399,9 +406,14 @@ function validateBusiness()
 		// Do I have to show VAT fields?
 		var country = $('select[name$="country"]').val();
 		$('#vatfields').css('display','none');
+		if(akeebasubs_noneuvat) {
+			$('#vatfields').css('display','block');
+			$('#vatcountry').css('display','none');
+		}
 		for(key in european_union_countries) {
 			if(european_union_countries[key] == country) {
 				$('#vatfields').css('display','block');
+				$('#vatcountry').css('display','inline-block');
 				var ccode = country;
 				if(ccode == 'GR') {ccode = 'EL';}
 				$('#vatcountry').text(ccode);

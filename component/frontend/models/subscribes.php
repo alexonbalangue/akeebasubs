@@ -245,6 +245,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		$noPersonalInfo = !AkeebasubsHelperCparams::getParam('personalinfo',1);
+		$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
 		
 		// 1. Basic checks
 		$ret = array(
@@ -376,6 +377,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 				} else {
 					$ret['novatrequired'] = true;
 				}
+			} elseif($allowNonEUVAT) {
+				// Allow non-EU VAT input
+				$ret['novatrequired'] = true;
+				$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
 			}
 		}
 		
@@ -1925,7 +1930,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 				break;
 
 			default:
-				$ret->valid = false;
+				$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
+				$ret->valid = $allowNonEUVAT ? true : false;
 				break;
 		}
 

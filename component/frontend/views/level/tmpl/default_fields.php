@@ -320,7 +320,7 @@ if(array_key_exists('isValid', $field)) {
 	
 	<div class="control-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
 		<label for="vatnumber" class="control-label" id="vatlabel">
-			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER')?>
+			* <?php echo AkeebasubsHelperCparams::getParam('noneuvat', 0) ? JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') : JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER')?>
 		</label>
 		<div class="controls">
 			<div class="input-prepend">
@@ -348,9 +348,11 @@ if(array_key_exists('isValid', $field)) {
 <?php
 $aks_validate_url = JURI::base().'index.php';
 $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
+$aks_noneuvat = AkeebasubsHelperCparams::getParam('noneuvat',0)?'true':'false';
 $script = <<<ENDSCRIPT
 var akeebasubs_validate_url = "$aks_validate_url";
 var akeebasubs_valid_form = false;
 var akeebasubs_personalinfo = $aks_personal_info;
+var akeebasubs_noneuvat = $aks_noneuvat;
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);

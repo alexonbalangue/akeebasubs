@@ -931,6 +931,19 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Allow non-EU VAT entry</term>
+
+          <listitem>
+            <para>By default, only European Unions are allowed to enter their
+            VAT number, for VIES registration checking. When you enable this
+            option business users from countries outside the EU will be able
+            to enter their VAT number. Their VAT number will, of course, not
+            be checked for VIES registration and will always be accepted
+            without any further check.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Payment method rendering</term>
 
           <listitem>
