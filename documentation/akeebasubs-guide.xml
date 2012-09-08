@@ -6128,6 +6128,71 @@ LEVEL2=11111:22222:33333</programlisting>
           </listitem>
         </orderedlist>
       </section>
+
+      <section xml:id="payment-payu">
+        <title>PayU</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - PayU</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.4.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <warning>
+          <para>This is a plugin contributed by a third-party (IML
+          Educations). It has not been developed by Akeeba Ltd. We include
+          with permission from its creator, IML Educations, in hope that users
+          of Akeeba Subscriptions will find it useful. We regret to inform you
+          that, unlike the plugins written by us, we cannot provide support
+          for it.</para>
+        </warning>
+
+        <para>This is a payment plugin which allows your clients to use the
+        India-based PayU payment processor service.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PayU" or type in a custom name to show
+              to your customer's, e.g. "Pay with credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the merchant ID assigned to you by PayU.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Working Key</term>
+
+            <listitem>
+              <para>This is the working key (password) assigned to you by
+              PayU. Without it, Akeeba Subscriptions cannot validate the
+              transactions.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
@@ -8502,7 +8567,7 @@ LEVEL3=Badge 1</programlisting>
 
         <note>
           <para>It cannot "hide" entire articles, e.g. not show them at all to
-          non-subscribers. At best, only the title will be shown. </para>
+          non-subscribers. At best, only the title will be shown.</para>
 
           <para>If you have Joomla! 1.6 or later you can use the bundled
           Joomla! 1.6 User Group integration plugin to automatically assign
