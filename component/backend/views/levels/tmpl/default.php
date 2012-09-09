@@ -82,6 +82,7 @@ $this->loadHelper('cparams');
 			<td></td>
 			<td></td>
 			<td></td>
+			<td></td>
 			<td>
 				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 			</td>
