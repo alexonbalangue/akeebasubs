@@ -40,6 +40,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="country" value="<?php echo $kuser->country ?>">
 	<input type="hidden" name="email" value="<?php echo $data->email ?>">
 
-	<input type="submit" />
+	<input class="btn" type="submit" />
 </form>
 </p>

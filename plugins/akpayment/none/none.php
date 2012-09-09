@@ -72,7 +72,7 @@ class plgAkpaymentNone extends JPlugin
 <p>$t2</p>
 <form action="$uri" method="POST" id="paymentForm">
 	<input type="hidden" name="subscription" value="{$subscription->akeebasubs_subscription_id}" />
-	<input type="submit" value="Complete subscription" />
+	<input type="submit" class="btn" value="Complete subscription" />
 </form>
 ENDFORM;
 		

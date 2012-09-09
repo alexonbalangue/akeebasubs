@@ -21,6 +21,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<?php if(isset($data->service_name)) { ?>
 	<input type="hidden" name="service_name" value="<?php echo $data->service_name ?>" />
 	<?php } ?>
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

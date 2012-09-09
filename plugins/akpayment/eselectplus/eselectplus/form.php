@@ -33,6 +33,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<?php if($data->$p['bill_state']) { ?>
 	<input type="hidden" id="<?php echo $p['bill_state'] ?>" name="<?php echo $p['bill_state'] ?>" value="<?php echo $data->$p['bill_state'] ?>" />
 	<?php } ?>
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

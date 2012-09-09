@@ -28,6 +28,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="delivery_cust_city" value="<?php echo $kuser->city ?>">
 	<input type="hidden" name="delivery_zip_code" value="<?php echo $kuser->zip ?>">
 	
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

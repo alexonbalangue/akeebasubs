@@ -17,6 +17,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="pagador_nome" value="<?php echo htmlentities( $user->name ) ?>" />
 	<input type="hidden" name="pagador_email" value="<?php echo htmlentities( $user->email ) ?>" />
 
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

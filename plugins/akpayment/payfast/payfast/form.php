@@ -20,6 +20,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="item_name" value="<?php echo $data->item_name ?>" />
 	<input type="hidden" name="custom_str1" value="<?php echo $data->custom_str1 ?>" />
 	<input type="hidden" name="signature" value="<?php echo $data->signature ?>" />
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

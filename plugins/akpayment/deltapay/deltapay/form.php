@@ -17,6 +17,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="Param1" value="12345"/>
 	<input type="hidden" name="Param2" value="<?php echo htmlentities($subscription->akeebasubs_subscription_id) ?>"/>
 
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

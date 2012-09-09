@@ -37,7 +37,7 @@
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<button type="submit">
+			<button type="submit" class="btn">
 				<?php echo JText::_('PLG_AKPAYMENT_MONERIS_PAYNOW') ?>
 			</button>
 		</td>

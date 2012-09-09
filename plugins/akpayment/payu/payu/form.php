@@ -21,6 +21,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="furl" value="<?php echo $data->postback ?>" />
 	
 	
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>
