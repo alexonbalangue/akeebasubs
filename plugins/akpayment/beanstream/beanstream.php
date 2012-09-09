@@ -77,7 +77,6 @@ class plgAkpaymentBeanstream extends JPlugin
 			'merchant_id'		=> trim($this->params->get('merchant_id','')),
 			'trnOrderNumber'	=> $subscription->akeebasubs_subscription_id,
 			'trnAmount'			=> sprintf('%.2f',$subscription->gross_amount),
-			'errorPage'			=> trim($this->params->get('error_url','')),
 			'declinedPage'		=> $callbackUrl,
 			'approvedPage'		=> $callbackUrl,
 			'ordName'			=> trim($user->name),
