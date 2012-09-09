@@ -14,6 +14,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="SUCCESS_LINK" value="<?php echo $data->success ?>" />
 	<input type="hidden" name="AMT" value="<?php echo htmlentities($subscription->gross_amount) ?>" />
 
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

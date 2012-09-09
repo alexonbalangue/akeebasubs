@@ -30,6 +30,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="testMode" value="100" />
 	<?php endif; ?>
 
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

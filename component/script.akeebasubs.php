@@ -81,6 +81,7 @@ class Com_AkeebasubsInstallerScript
 			'akpayment' => array(
 				'2checkout'				=> 0,
 				'allopass'				=> 0,
+				'beanstream'			=> 0,
 				'cashu'					=> 0,
 				'ccavenue'				=> 0,
 				'deltapay'				=> 0,

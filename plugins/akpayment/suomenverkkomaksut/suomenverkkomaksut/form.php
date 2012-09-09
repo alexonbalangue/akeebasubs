@@ -34,6 +34,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="ITEM_PRICE[0]" value="<?php echo $data->item_price_0 ?>" />
 	<input type="hidden" name="ITEM_TAX[0]" value="<?php echo $data->item_tax_0 ?>" />
 	<input type="hidden" name="AUTHCODE" value="<?php echo $data->authcode ?>" />
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

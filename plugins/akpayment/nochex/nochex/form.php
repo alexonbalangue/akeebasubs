@@ -23,6 +23,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="billing_address" value="<?php echo $data->billing_address ?>" />
 	<input type="hidden" name="billing_postcode" value="<?php echo $data->billing_postcode ?>" />
 	<input type="hidden" name="email_address" value="<?php echo $data->email_address ?>" />
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>

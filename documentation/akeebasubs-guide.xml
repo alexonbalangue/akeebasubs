@@ -6206,6 +6206,82 @@ LEVEL2=11111:22222:33333</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="payment-beanstream">
+        <title>Beanstream</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Beanstream</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.4.1.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows you to use Beanstream
+        (http://www.beanstream.com) to handle credit card payments.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Beanstream" or type in a custom name
+              to show to your customer's, e.g. "Pay with credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the 9-digit merchant ID assigned to you by
+              Beanstream.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Hash Key</term>
+
+            <listitem>
+              <para>Please enter the hash key here if you have enabled
+              <guilabel>Hash validation in Transaction Response
+              Page</guilabel> in your Beanstream account.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>We strongly advise you to enable hash validation as it allows
+        Akeeba Subscriptions to authenticate the transaction response
+        messages. In order to do that go to your Beanstream account and select
+        <guimenu>Administration</guimenu>, <guisubmenu>Account
+        Settings</guisubmenu>, <guimenuitem>Order Settings</guimenuitem>. Tick
+        the <guilabel>Include hash validation in Transaction Response Page
+        redirection and Payment Gateway Response Notification</guilabel>
+        checkbox. Right below it enter a <guilabel>Hash key</guilabel> of your
+        liking. In the <guilabel>Hash algorithm</guilabel> area make sure that
+        <option>SHA-1</option> is selected.</para>
+
+        <para>During the payment process the customer gets redirected to the
+        merchant's payment form in Beanstream. The merchant (you) can
+        configure that form at <guimenu>Configuration</guimenu>,
+        <guimenuitem>Payment</guimenuitem> form in the Beanstream
+        backend.</para>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">

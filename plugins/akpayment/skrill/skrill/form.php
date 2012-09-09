@@ -49,6 +49,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="detail2_description" value="<?php echo htmlentities(JText::_('PLG_AKPAYMENT_SKRILL_LBL_USERNAME'))?>" />
 	<input type="hidden" name="detail2_text" value="<?php echo htmlentities($user->username) ?>" />
 
-	<input type="submit" />
+	<input type="submit" class="btn" />
 </form>
 </p>
