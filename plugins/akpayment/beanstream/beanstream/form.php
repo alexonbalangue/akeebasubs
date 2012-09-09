@@ -11,7 +11,6 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="merchant_id" value="<?php echo $data->merchant_id ?>" />
 	<input type="hidden" name="trnOrderNumber" value="<?php echo $data->trnOrderNumber ?>" />
 	<input type="hidden" name="trnAmount" value="<?php echo $data->trnAmount ?>" />
-	<input type="hidden" name="errorPage" value="<?php echo $data->errorPage ?>" />
 	<input type="hidden" name="declinedPage" value="<?php echo $data->declinedPage ?>" />
 	<input type="hidden" name="approvedPage" value="<?php echo $data->approvedPage ?>" />
 	<input type="hidden" name="ordName" value="<?php echo $data->ordName ?>" />
