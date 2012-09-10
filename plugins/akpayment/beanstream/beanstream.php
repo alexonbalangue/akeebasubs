@@ -247,25 +247,24 @@ class plgAkpaymentBeanstream extends JPlugin
 			$respondString .= '&' . $key . '=' . urlencode($val);	
 		}
 		$respondString = substr($respondString, 1);
+		$redirectUrl = null;
 		if($data['trnApproved'] == 1) {
 			$defaultSuccessUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
-			$successUrl = trim($this->params->get('success_url', $defaultSuccessUrl));
-			if(strpos($successUrl, '?') === false) {
-				$successUrl .= '?' . $respondString;
-			} else {
-				$successUrl .= '&' . $respondString;
-			}
-			$app->redirect($successUrl);
+			$redirectUrl = trim($this->params->get('success_url', $defaultSuccessUrl));
 		} else {
 			$defaultDeclineUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
-			$declineUrl = trim($this->params->get('decline_url', $defaultDeclineUrl));
-			if(strpos($declineUrl, '?') === false) {
-				$declineUrl .= '?' . $respondString;
-			} else {
-				$declineUrl .= '&' . $respondString;
-			}
-			$app->redirect($declineUrl);
+			$redirectUrl = trim($this->params->get('decline_url', $defaultDeclineUrl));
 		}
+		// Only append the $respondString to non-SEO URLs (doesn't contain a dot)
+		// so that these will still work too, but the parameters are not added (which is not necessarily needed)
+		if(strpos($redirectUrl, '.') !== false) {
+			if(strpos($redirectUrl, '?') === false) {
+				$redirectUrl .= '?' . $respondString;
+			} else {
+				$redirectUrl .= '&' . $respondString;
+			}	
+		}
+		$app->redirect($redirectUrl);
    
 		return true;
 	}
