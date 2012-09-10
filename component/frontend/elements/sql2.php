@@ -25,10 +25,24 @@ class JFormFieldSQL2 extends JFormField
 	{
 		$db			= JFactory::getDBO();
 		$db->setQuery($this->element['query']);
-		$key = ($this->element['key_field'] ? $this->element['key_field']->data() : 'value');
-		$val = ($this->element['value_field'] ? $this->element['value_field']->data() : $this->name);
 		$nodes = $db->loadObjectList();
-		array_unshift($nodes, (object)array($key=>'',$val=>JText::_('COM_AKEEBASUBS_SELECT_GENERIC')));
-		return JHTML::_('select.genericlist',  $nodes, $this->name.'[]', 'class="inputbox" multiple="multiple" size="5"', $key, $val, $this->value, $this->id);
+		if(version_compare(JVERSION, '3.0', 'lt')) {
+			$key = ($this->element['key_field'] ? $this->element['key_field']->data() : 'value');
+			$val = ($this->element['value_field'] ? $this->element['value_field']->data() : $this->name);
+			$defaultOption = array(
+				(object)array((string)$key=>'',(string)$val=>JText::_('COM_AKEEBASUBS_SELECT_GENERIC'))
+			);
+			$nodes = array_merge($defaultOption, $nodes);
+			return JHTML::_('select.genericlist',  $nodes, $this->name.'[]', 'class="inputbox" multiple="multiple" size="5"', $key, $val, $this->value, $this->id);
+		} else {
+			$key = ($this->element['key_field'] ? $this->element['key_field'] : 'value');
+			$val = ($this->element['value_field'] ? $this->element['value_field'] : $this->name);
+			$defaultOption = array(
+				(object)array((string)$key=>'',(string)$val=>JText::_('COM_AKEEBASUBS_SELECT_GENERIC'))
+			);
+			$nodes = array_merge($defaultOption, $nodes);
+			return JHTML::_('select.genericlist',  $nodes, $this->name.'[]', 'multiple="multiple"', $key, $val, $this->value, $this->id);
+		}
+		
 	}
 }
