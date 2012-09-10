@@ -227,6 +227,47 @@ class plgAkpaymentBeanstream extends JPlugin
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
+		
+		// Redirect to success- or decline-URL
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem()
+				->slug;
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		$respondString = '';
+		foreach($data as $key => $val) {
+			if($key == 'option'
+					|| $key == 'view'
+					|| $key == 'paymentmethod'
+					|| $key == 'marker') continue;
+			$respondString .= '&' . $key . '=' . urlencode($val);	
+		}
+		$respondString = substr($respondString, 1);
+		if($data['trnApproved'] == 1) {
+			$defaultSuccessUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
+			$successUrl = trim($this->params->get('success_url', $defaultSuccessUrl));
+			if(strpos($successUrl, '?') === false) {
+				$successUrl .= '?' . $respondString;
+			} else {
+				$successUrl .= '&' . $respondString;
+			}
+			$app->redirect($successUrl);
+		} else {
+			$declineUrl = trim($this->params->get('decline_url', ''));
+			if(! empty($declineUrl))
+			{
+				if(strpos($declineUrl, '?') === false) {
+					$declineUrl .= '?' . $respondString;
+				} else {
+					$declineUrl .= '&' . $respondString;
+				}
+				$app->redirect($declineUrl);	
+			}
+		}
    
 		return true;
 	}
@@ -234,20 +275,20 @@ class plgAkpaymentBeanstream extends JPlugin
 	private function isValidIPN($data)
 	{
 		if($data['hashValue']) {
-			$requestString = null;
+			$respondString = null;
 			foreach($data as $key => $val) {
 				if($key == 'hashValue') break;
-				if(isset($requestString)) {
+				if(isset($respondString)) {
 					if($key == 'trnAmount') {
-						$requestString .= '&' . $key . '=' . urlencode($val);	
+						$respondString .= '&' . $key . '=' . urlencode($val);	
 					} else {
-						$requestString .= '&' . $key . '=' . str_replace('.', '%2E', urlencode($val));
+						$respondString .= '&' . $key . '=' . str_replace('.', '%2E', urlencode($val));
 					}
 				} else if($key == 'marker') {
-					$requestString =  'trnApproved=' . $data['trnApproved'];	
+					$respondString =  'trnApproved=' . $data['trnApproved'];	
 				}
 			}
-			$calcHash = sha1($requestString . trim($this->params->get('hash_key','')));
+			$calcHash = sha1($respondString . trim($this->params->get('hash_key','')));
 			return $calcHash == $data['hashValue'];	
 		}
 		return true;
