@@ -257,16 +257,14 @@ class plgAkpaymentBeanstream extends JPlugin
 			}
 			$app->redirect($successUrl);
 		} else {
-			$declineUrl = trim($this->params->get('decline_url', ''));
-			if(! empty($declineUrl))
-			{
-				if(strpos($declineUrl, '?') === false) {
-					$declineUrl .= '?' . $respondString;
-				} else {
-					$declineUrl .= '&' . $respondString;
-				}
-				$app->redirect($declineUrl);	
+			$defaultDeclineUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
+			$declineUrl = trim($this->params->get('decline_url', $defaultDeclineUrl));
+			if(strpos($declineUrl, '?') === false) {
+				$declineUrl .= '?' . $respondString;
+			} else {
+				$declineUrl .= '&' . $respondString;
 			}
+			$app->redirect($declineUrl);
 		}
    
 		return true;
