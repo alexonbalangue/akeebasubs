@@ -138,7 +138,8 @@ class plgAkpaymentBeanstream extends JPlugin
         
 		// Check that trnId has not been previously processed
 		if($isValid && !is_null($subscription)) {
-			if($subscription->processor_key == $data['trnId']) {
+			if($subscription->processor_key == $data['trnId']
+					&& !(empty($data['trnId']) && $data['messageText'] == "Payment Canceled")) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "I will not process the same transaction " . $data['trnId'] . " twice";
 			}
@@ -252,8 +253,13 @@ class plgAkpaymentBeanstream extends JPlugin
 			$defaultSuccessUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
 			$redirectUrl = trim($this->params->get('success_url', $defaultSuccessUrl));
 		} else {
-			$defaultDeclineUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
-			$redirectUrl = trim($this->params->get('decline_url', $defaultDeclineUrl));
+			$defaultCancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
+			if(empty($data['trnId']) && $data['messageText'] == "Payment Canceled") {
+				// Customer cancelled the payment
+				$redirectUrl = $defaultCancelUrl;
+			} else {
+				$redirectUrl = trim($this->params->get('decline_url', $defaultCancelUrl));
+			}
 		}
 		// Only append the $respondString to non-SEO URLs (doesn't contain a dot)
 		// so that these will still work too, but the parameters are not added (which is not necessarily needed)
