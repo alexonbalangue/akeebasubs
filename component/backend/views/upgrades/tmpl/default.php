@@ -14,6 +14,7 @@ $this->loadHelper('cparams');
 $this->loadHelper('select');
 $this->loadHelper('format');
 
+$hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 ?>
 
 <div class="row-fluid">
@@ -32,6 +33,11 @@ $this->loadHelper('format');
 <table class="adminlist table table-striped">
 	<thead>
 		<tr>
+			<?php if($hasAjaxOrderingSupport !== false): ?>
+			<th width="20px">
+				<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'ordering', $this->lists->order_Dir, $this->lists->order, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+			</th>
+			<?php endif; ?>
 			<th width="10px"><?php echo JText::_('Num'); ?></th>
 			<th width="16px"></th>
 			<th>
@@ -58,12 +64,17 @@ $this->loadHelper('format');
 			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
+			<?php if($hasAjaxOrderingSupport === false): ?>
 			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
+			<?php endif; ?>
 		</tr>
 		<tr>
+			<?php if($hasAjaxOrderingSupport !== false): ?>
+			<td></td>
+			<?php endif; ?>
 			<td></td>
 			<td>
 				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />
@@ -92,7 +103,9 @@ $this->loadHelper('format');
 			<td>
 				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 			</td>
+			<?php if($hasAjaxOrderingSupport === false): ?>
 			<td></td>
+			<?php endif; ?>
 		</tr>
 	</thead>
 	<tfoot>
@@ -113,6 +126,27 @@ $this->loadHelper('format');
 			$upgrade->published = $upgrade->enabled;
 		?>
 		<tr class="<?php echo 'row'.$m; ?>">
+			<?php if($hasAjaxOrderingSupport !== false): ?>
+			<td class="order nowrap center hidden-phone">
+			<?php if ($this->perms->editstate) :
+				$disableClassName = '';
+				$disabledLabel	  = '';
+				if (!$hasAjaxOrderingSupport['saveOrder']) :
+					$disabledLabel    = JText::_('JORDERINGDISABLED');
+					$disableClassName = 'inactive tip-top';
+				endif; ?>
+				<span class="sortable-handler <?php echo $disableClassName?>" title="<?php echo $disabledLabel?>" rel="tooltip">
+					<i class="icon-menu"></i>
+				</span>
+				<input type="text" style="display:none"  name="order[]" size="5"
+					value="<?php echo $upgrade->ordering;?>" class="input-mini text-area-order " />
+			<?php else : ?>
+				<span class="sortable-handler inactive" >
+					<i class="icon-menu"></i>
+				</span>
+			<?php endif; ?>
+			</td>
+			<?php endif; ?>
 			<td align="center">
 				<?php echo $upgrade->akeebasubs_upgrade_id; ?>
 			</td>
@@ -173,12 +207,14 @@ $this->loadHelper('format');
 			<td align="center">
 				<?php echo JHTML::_('grid.published', $upgrade, $i); ?>
 			</td>
+			<?php if($hasAjaxOrderingSupport === false): ?>
 			<td class="order" align="center">
 				<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>
 				<span><?php echo $this->pagination->orderDownIcon( $i, $count, true, 'orderdown', 'Move Down', $ordering ); ?></span>
 				<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
 				<input type="text" name="order[]" size="5" value="<?php echo $upgrade->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 			</td>
+			<?php endif; ?>
 		</tr>
 		<?php endforeach; ?>
 		<?php else: ?>

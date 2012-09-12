@@ -13,6 +13,7 @@ $this->loadHelper('select');
 
 $pEnabled = JPluginHelper::getPlugin('system','admintools');
 
+$hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 ?>
 	
 <?php if(!$pEnabled): ?>
@@ -36,6 +37,11 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 <table class="table table-striped">
 	<thead>
 		<tr>
+			<?php if($hasAjaxOrderingSupport !== false): ?>
+			<th width="20px">
+				<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'ordering', $this->lists->order_Dir, $this->lists->order, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+			</th>
+			<?php endif; ?>
 			<th width="30">
 				<?php echo JHTML::_('grid.sort', 'Num', 'akeebasubs_customfield_id', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
@@ -49,15 +55,20 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 			<th width="80">
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_DEFAULT', 'title', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
+			<?php if($hasAjaxOrderingSupport === false): ?>
 			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
+			<?php endif; ?>
 			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 		</tr>
 		<tr>
+			<?php if($hasAjaxOrderingSupport !== false): ?>
+			<td></td>
+			<?php endif; ?>
 			<td></td>
 			<td>
 				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />
@@ -81,7 +92,9 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 				<?php echo AkeebasubsHelperSelect::fieldtypes($this->getModel()->getState('type',''), 'type', array('onchange'=>'this.form.submit();','class' => 'input-medium')) ?>
 			</td>
 			<td></td>
+			<?php if($hasAjaxOrderingSupport === false): ?>
 			<td></td>
+			<?php endif; ?>
 			<td>
 				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class' => 'input-medium')) ?>
 			</td>
@@ -104,6 +117,27 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 			$ordering = $this->lists->order == 'ordering';
 		?>
 		<tr class="<?php echo 'row'.$m; ?>">
+			<?php if($hasAjaxOrderingSupport !== false): ?>
+			<td class="order nowrap center hidden-phone">
+			<?php if ($this->perms->editstate) :
+				$disableClassName = '';
+				$disabledLabel	  = '';
+				if (!$hasAjaxOrderingSupport['saveOrder']) :
+					$disabledLabel    = JText::_('JORDERINGDISABLED');
+					$disableClassName = 'inactive tip-top';
+				endif; ?>
+				<span class="sortable-handler <?php echo $disableClassName?>" title="<?php echo $disabledLabel?>" rel="tooltip">
+					<i class="icon-menu"></i>
+				</span>
+				<input type="text" style="display:none"  name="order[]" size="5"
+					value="<?php echo $item->ordering;?>" class="input-mini text-area-order " />
+			<?php else : ?>
+				<span class="sortable-handler inactive" >
+					<i class="icon-menu"></i>
+				</span>
+			<?php endif; ?>
+			</td>
+			<?php endif; ?>
 			<td align="center">
 				<?php echo $item->akeebasubs_customfield_id; ?>
 			</td>
@@ -124,12 +158,14 @@ $pEnabled = JPluginHelper::getPlugin('system','admintools');
 			<td>
 				<?php echo $this->escape($item->default); ?>
 			</td>
+			<?php if($hasAjaxOrderingSupport === false): ?>
 			<td class="order" align="center">
 				<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>
 				<span><?php echo $this->pagination->orderDownIcon( $i, $count, true, 'orderdown', 'Move Down', $ordering ); ?></span>
 				<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
 				<input type="text" name="order[]" size="5" value="<?php echo $item->ordering;?>" <?php echo $disabled ?> class="text_area" style="text-align: center" />
 			</td>
+			<?php endif; ?>
 			<td align="center">
 				<?php echo JHTML::_('grid.published', $item, $i); ?>
 			</td>

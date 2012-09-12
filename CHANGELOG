@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.4.1
 + PayU integration (contributed by IML Educations - www.imustlearn.co.in)
 + Allow non-EU clients to enter their VAT numbers (if you enable the relevant option in the component's Options page)
 + Beanstream payments integration
++ Support for Joomla! 3.0 drag'n'drop re-ordering
 ~ Paypal validation postback changed to HTTP/1.1 as per Paypal's new standards
 # [MEDIUM] Discount and tax not updated automatically
 # [MEDIUM] "Allow Empty" in Custom Fields would not get saved
