@@ -239,15 +239,6 @@ class plgAkpaymentBeanstream extends JPlugin
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		$respondString = '';
-		foreach($data as $key => $val) {
-			if($key == 'option'
-					|| $key == 'view'
-					|| $key == 'paymentmethod'
-					|| $key == 'marker') continue;
-			$respondString .= '&' . $key . '=' . urlencode($val);	
-		}
-		$respondString = substr($respondString, 1);
 		$redirectUrl = null;
 		if($data['trnApproved'] == 1) {
 			$defaultSuccessUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
@@ -261,13 +252,16 @@ class plgAkpaymentBeanstream extends JPlugin
 				$redirectUrl = trim($this->params->get('decline_url', $defaultCancelUrl));
 			}
 		}
-		// Only append the $respondString to non-SEO URLs (doesn't contain a dot)
+		// Only append the query to non-SEO URLs (doesn't contain a dot)
 		// so that these will still work too, but the parameters are not added (which is not necessarily needed)
 		if(strpos($redirectUrl, '.') !== false) {
+			$query = $_SERVER['QUERY_STRING'];
+			preg_match('/marker=000\?(.+)/', $query, $matches);
+			$query = $matches[1];
 			if(strpos($redirectUrl, '?') === false) {
-				$redirectUrl .= '?' . $respondString;
+				$redirectUrl .= '?' . $query;
 			} else {
-				$redirectUrl .= '&' . $respondString;
+				$redirectUrl .= '&' . $query;
 			}	
 		}
 		$app->redirect($redirectUrl);
@@ -278,20 +272,9 @@ class plgAkpaymentBeanstream extends JPlugin
 	private function isValidIPN($data)
 	{
 		if($data['hashValue']) {
-			$respondString = null;
-			foreach($data as $key => $val) {
-				if($key == 'hashValue') break;
-				if(isset($respondString)) {
-					if($key == 'trnAmount') {
-						$respondString .= '&' . $key . '=' . urlencode($val);	
-					} else {
-						$respondString .= '&' . $key . '=' . str_replace('.', '%2E', urlencode($val));
-					}
-				} else if($key == 'marker') {
-					$respondString =  'trnApproved=' . $data['trnApproved'];	
-				}
-			}
-			$calcHash = sha1($respondString . trim($this->params->get('hash_key','')));
+			$query = $_SERVER['QUERY_STRING'];
+			preg_match('/marker=000\?(.+)&hashValue/', $query, $matches);
+			$calcHash = sha1($matches[1] . trim($this->params->get('hash_key','')));
 			return $calcHash == $data['hashValue'];	
 		}
 		return true;
