@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.4.2
+================================================================================
+# [HIGH] Display bug with bundled FOF version
+
 Akeeba Subscriptions 2.4.1
 ================================================================================
 + PayU integration (contributed by IML Educations - www.imustlearn.co.in)
