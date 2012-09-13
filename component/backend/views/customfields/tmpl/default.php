@@ -11,7 +11,7 @@ JHtml::_('behavior.tooltip');
 
 $this->loadHelper('select');
 
-$pEnabled = JPluginHelper::getPlugin('system','admintools');
+$pEnabled = JPluginHelper::getPlugin('akeebasubs','customfields');
 
 $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 ?>
