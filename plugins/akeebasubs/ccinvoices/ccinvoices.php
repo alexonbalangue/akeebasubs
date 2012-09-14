@@ -247,11 +247,10 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			->where($db->qn('user_id').' = '.$db->q($userid));
 		$db->setQuery($query);
 		$id = $db->loadResult();
-
 		if(!$id) {
 			$id = $this->createContact($userid);
 		} else {
-			$this->createContact($userid, $id);
+			$id = $this->createContact($userid, $id);
 		}
 
 		return $id;
