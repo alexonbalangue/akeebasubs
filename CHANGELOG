@@ -1,7 +1,8 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.4.4
 ================================================================================
-# [LOW] (I mean "as low as it gets" low) Country field off by 2 pixels.
+# [LOW] Country field off by 2 pixels.
+# [LOW] "Repeat email" field would always say that emails don't match
 
 Akeeba Subscriptions 2.4.3
 ================================================================================

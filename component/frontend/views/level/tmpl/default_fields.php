@@ -156,7 +156,7 @@ if(JFactory::getUser()->guest) {
 		</label>
 		<div class="controls">
 			<input type="text" name="email2" id="email2" value="<?php echo $this->escape($field_data['email2']);?>" />
-			<span id="email_invalid" class="help-inline" <?php if($group_classes['email2'] != 'error'):?>style="display:none"<?php endif?>>
+			<span id="email2_invalid" class="help-inline" <?php if($group_classes['email2'] != 'error'):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL2')?>
 			</span>
 		</div>
