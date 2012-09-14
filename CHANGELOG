@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.4.4
+================================================================================
+# [LOW] (I mean "as low as it gets" low) Country field off by 2 pixels.
+
 Akeeba Subscriptions 2.4.3
 ================================================================================
 # [MEDIUM] ccInvoices integration would not create contact for new users

@@ -539,11 +539,11 @@ function applyValidation(response, callback)
 			
 			$('#country').parent().parent().removeClass('error').removeClass('success');
 			if(response.country) {
-				$('#country').addClass('success');
+				$('#country').parent().parent().addClass('success');
 				$('#country_empty').css('display','none');
 			} else {
 				akeebasubs_valid_form = false;
-				$('#country').addClass('error');
+				$('#country').parent().parent().addClass('error');
 				$('#country_empty').css('display','inline-block');
 			}
 			
