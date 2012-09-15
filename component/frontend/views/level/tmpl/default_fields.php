@@ -213,7 +213,7 @@ if(array_key_exists('isValid', $field)) {
 		</div>
 	</div>
 	
-	<div class="control-group <?php echo $group_classes['address2'] ?>">
+	<div class="control-group">
 		<label for="address2" class="control-label">
 			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS2')?>
 		</label>
