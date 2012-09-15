@@ -1,16 +1,13 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.4.4
+Akeeba Subscriptions 2.4.3
 ================================================================================
 + Front-end display tax rate option, allows you to display prices inclusive VAT in the front-end.
 # [HIGH] PayPal plugin broke after recent PayPal changes.
 # [HIGH] On some locales (e.g. Greek) using comma instead of dot to separate decimal digits you would get weird prices output and subscription may fail
+# [MEDIUM] ccInvoices integration would not create contact for new users
 # [MEDIUM] VAT field's formatting did not reflect VIES registration status
 # [LOW] Country field off by 2 pixels.
 # [LOW] "Repeat email" field would always say that emails don't match
-
-Akeeba Subscriptions 2.4.3
-================================================================================
-# [MEDIUM] ccInvoices integration would not create contact for new users
 
 Akeeba Subscriptions 2.4.2
 ================================================================================
