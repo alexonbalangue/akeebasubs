@@ -603,19 +603,19 @@ function applyValidation(response, callback)
 				$('#occupation_empty').css('display','inline-block');
 			}
 			
-			$('#vatnumber').parent().parent().removeClass('warning').removeClass('success');
-			if(response.vatnumber && ($('#vatfields').css('display') != 'none')) {
-				$('#vatnumber').parent().parent().addClass('success');
+			$('#vatnumber').parent().parent().parent().removeClass('warning').removeClass('success');
+			if(response.vatnumber) {
+				$('#vatnumber').parent().parent().parent().addClass('success');
 				$('#vat-status-invalid').css('display','none');
 				$('#vat-status-valid').css('display','inline-block');
 			} else {
-				$('#vatnumber').parent().parent().addClass('warning');
+				$('#vatnumber').parent().parent().parent().addClass('warning');
 				$('#vat-status-invalid').css('display','inline-block');
 				$('#vat-status-valid').css('display','none');
 			}
 			
 			if(response.novatrequired) {
-				$('#vatnumber').parent().parent().removeClass('warning').removeClass('success');
+				$('#vatnumber').parent().parent().parent().removeClass('warning').removeClass('success');
 				$('#vat-status-invalid').css('display','none');
 				$('#vat-status-valid').css('display','none');
 			}
