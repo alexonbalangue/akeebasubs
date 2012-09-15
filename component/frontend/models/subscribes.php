@@ -1362,7 +1362,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 		if($subscription->gross_amount != 0) {
 			// Non-zero charges; use the plugins
 			$app = JFactory::getApplication();
-			echo "<pre>";var_dump($subscription);die();
 			$jResponse = $app->triggerEvent('onAKPaymentNew',array(
 				$state->paymentmethod,
 				$user,
