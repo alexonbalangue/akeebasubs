@@ -37,7 +37,7 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 		</tr>
 		<tr>
 		<?php foreach($this->items as $level):
-			$formatedPrice = sprintf('%1.02f', $level->price * $vatMultiplier);
+			$formatedPrice = sprintf('%1.02F', $level->price * $vatMultiplier);
 			$dotpos = strpos($formatedPrice, '.');
 			$price_integer = substr($formatedPrice,0,$dotpos);
 			$price_fractional = substr($formatedPrice,$dotpos+1);?>

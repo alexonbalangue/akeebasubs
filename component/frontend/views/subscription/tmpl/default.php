@@ -69,7 +69,7 @@ $this->loadHelper('format');
 			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
 			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 			<?php endif; ?>
-			<?php echo sprintf('%2.02f',$this->item->gross_amount)?>
+			<?php echo sprintf('%2.02F',$this->item->gross_amount)?>
 			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
 			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 			<?php endif; ?>

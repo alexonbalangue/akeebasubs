@@ -471,12 +471,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$grossAmount = 0.01 * (100*$basePrice + 100*$taxAmount);
 		
 		return (object)array(
-			'net'		=> sprintf('%1.02f',$netPrice),
-			'discount'	=> sprintf('%1.02f',$discount),
-			'taxrate'	=> sprintf('%1.02f',(float)$taxRule->taxrate),
-			'tax'		=> sprintf('%1.02f',$taxAmount),
-			//'gross'		=> sprintf('%1.02f',$grossAmount),
-			'gross'		=> sprintf('%1.02f', round($grossAmount, 2)),
+			'net'		=> sprintf('%1.02F',$netPrice),
+			'discount'	=> sprintf('%1.02F',$discount),
+			'taxrate'	=> sprintf('%1.02F',(float)$taxRule->taxrate),
+			'tax'		=> sprintf('%1.02F',$taxAmount),
+			//'gross'		=> sprintf('%1.02F',$grossAmount),
+			'gross'		=> sprintf('%1.02F', round($grossAmount, 2)),
 			'usecoupon'	=> $useCoupon ? 1 : 0,
 			'useauto'	=> $useAuto ? 1 : 0,
 			'couponid'	=> $couponid,
@@ -1362,6 +1362,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		if($subscription->gross_amount != 0) {
 			// Non-zero charges; use the plugins
 			$app = JFactory::getApplication();
+			echo "<pre>";var_dump($subscription);die();
 			$jResponse = $app->triggerEvent('onAKPaymentNew',array(
 				$state->paymentmethod,
 				$user,
