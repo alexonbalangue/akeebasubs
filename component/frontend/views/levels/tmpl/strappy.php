@@ -14,6 +14,9 @@ $this->loadHelper('modules');
 $this->loadHelper('format');
 $this->loadHelper('message');
 
+// Take display VAT into account
+$vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
+$vatMultiplier = (100 + (int)$vatRate) / 100;
 ?>
 
 <div id="akeebasubs" class="levels">
@@ -34,7 +37,7 @@ $this->loadHelper('message');
 		</tr>
 		<tr>
 		<?php foreach($this->items as $level):
-			$formatedPrice = sprintf('%1.02f',$level->price);
+			$formatedPrice = sprintf('%1.02f', $level->price * $vatMultiplier);
 			$dotpos = strpos($formatedPrice, '.');
 			$price_integer = substr($formatedPrice,0,$dotpos);
 			$price_fractional = substr($formatedPrice,$dotpos+1);?>

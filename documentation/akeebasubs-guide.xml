@@ -970,10 +970,35 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             http://www.php.net/manual/en/function.date.php</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Tax rate for display</term>
+
+          <listitem>
+            <para>This is the tax rate (in percentage units) used ONLY for
+            front-end display. We strongly advise against using this option
+            unless you are obliged to for legal reasons.</para>
+
+            <para>One of the problems faced by our users is that they have to
+            display prices inclusive VAT, no matter if they have tax rules
+            which define that no VAT tax will be applied in some cases. So far
+            the only way to do that was editing Akeeba Subscriptions' files
+            directly or doing template overrides. This option is here to
+            eliminate that need.</para>
+
+            <para>Please note that this value IS NOT taken into account when
+            calculating the amount of money to charge to the subscriber. It
+            only modifies the price displayed in the All Levels view.</para>
+
+            <para>Example: Let's say you have a subscription level which costs
+            10 EUR. You enter a "Tax rate for display" value of 19. The price
+            of the subscription level will be listed as 11.90 EUR (that's 10
+            EUR plus 19% VAT).</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
-      <para><guilabel>Permissions</guilabel> (Joomla! 1.6 or later
-      only)</para>
+      <para><guilabel>Permissions</guilabel></para>
 
       <para>This is the standard Joomla! 1.6 or later ACL permissions widget.
       The meaning of the different ACL settings* is as follows:</para>

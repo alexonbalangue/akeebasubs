@@ -80,6 +80,12 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
 		/>
+		<field name="vatrate" type="text"
+			default="0"
+			size="3"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_VATRATE_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_VATRATE_DESC"
+		/>
 	</fieldset>
 	
 	<fieldset

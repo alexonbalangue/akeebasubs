@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.4.4
 ================================================================================
++ Front-end display tax rate option, allows you to display prices inclusive VAT in the front-end.
 # [LOW] Country field off by 2 pixels.
 # [LOW] "Repeat email" field would always say that emails don't match
 
