@@ -360,27 +360,16 @@ class plgAkpaymentPaypal extends JPlugin
 	}	
 
 	/**
-	 * Gets the IPN callback URL
-	 */
-	private function getCallbackURL()
-	{
-		$sandbox = $this->params->get('sandbox',0);
-		$ssl = $this->params->get('secureipn',0);
-		$scheme = $ssl ? 'ssl://' : '';
-		if($sandbox) {
-			return $scheme.'www.sandbox.paypal.com';
-		} else {
-			return $scheme.'www.paypal.com';
-		}
-	}
-	
-	/**
 	 * Validates the incoming data against PayPal's IPN to make sure this is not a
 	 * fraudelent request.
 	 */
 	private function isValidIPN($data)
-	{
-		$url = $this->getCallbackURL();
+	{		
+		$sandbox = $this->params->get('sandbox',0);
+		$hostname = $sandbox ? 'www.sandbox.paypal.com' : 'www.paypal.com';
+		
+		$url = 'ssl://'.$hostname;
+		$port = 443;
 		
 		$req = 'cmd=_notify-validate';
 		foreach($data as $key => $value) {
@@ -389,12 +378,11 @@ class plgAkpaymentPaypal extends JPlugin
 		}
 		$header = '';
 		$header .= "POST /cgi-bin/webscr HTTP/1.1\r\n";
+		$header .= "Host: $hostname:$port\r\n";
 		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$header .= "Host: www.paypal.com\r\n";
-		$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
+		$header .= "Content-Length: " . strlen($req) . "\r\n";
+		$header .= "Connection: Close\r\n\r\n";
 		
-		$ssl = $this->params->get('secureipn',0);
-		$port = $ssl ? 443 : 80;
 		
 		$fp = fsockopen ($url, $port, $errno, $errstr, 30);
 		
@@ -405,9 +393,9 @@ class plgAkpaymentPaypal extends JPlugin
 			fputs ($fp, $header . $req);
 			while (!feof($fp)) {
 				$res = fgets ($fp, 1024);
-				if (strcmp ($res, "VERIFIED") == 0) {
+				if (stristr($res, "VERIFIED")) {
 					return true;
-				} else if (strcmp ($res, "INVALID") == 0) {
+				} else if (stristr($res, "INVALID")) {
 					return false;
 				}
 			}
