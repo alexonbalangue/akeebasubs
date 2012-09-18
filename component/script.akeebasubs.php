@@ -346,7 +346,7 @@ class Com_AkeebasubsInstallerScript
 <span>The easiest way to sell subscriptions on your Joomla! site</span>
 
 <div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
-	You can download translation files <a href="http://akeeba-cdn.s3-website-eu-west-1.amazonaws.com/language/akeebasubs/">directly from our CDN page</a>.
+	You can download translation files <a href="http://cdn.akeebabackup.com/language/akeebasubs/">directly from our CDN page</a>.
 </div>
 
 <table class="adminlist">
