@@ -168,7 +168,6 @@ class Com_AkeebasubsInstallerScript
 			'components/com_akeebasubs/controllers/validate.php',
 			'components/com_akeebasubs/views/level/html.php',
 			'components/com_akeebasubs/views/subscribe/html.php',
-			'media/com_akeebasubs/js/akeebajq.js',
 
 			'administrator/components/com_akeebasubs/fof/LICENSE.txt',
 			'administrator/components/com_akeebasubs/fof/controller.php',
