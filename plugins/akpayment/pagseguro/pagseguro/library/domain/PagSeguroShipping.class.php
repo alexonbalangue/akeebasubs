@@ -43,7 +43,7 @@ class PagSeguroShipping {
 	 * Initializes a new instance of the PagSeguroShipping class 
 	 * @param array $data
 	 */
-	public function __constuct(Array $data = null) {
+	public function __construct(Array $data = null) {
 		if ($data) {
 			if (isset($data['address']) && $data['address'] instanceof PagSeguroAddress) {
 				$this->address = $data['address'];
