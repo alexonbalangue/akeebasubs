@@ -42,6 +42,15 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$generateAnInvoice = $generateAnInvoice || $specialCasePending;
 		}
 		
+		// If the payment is over a week old do not generate an invoice. This
+		// prevents accidentally creating an invoice for pas subscriptions not
+		// handled by ccInvoices
+		jimport('joomla.utilities.date');
+		$jCreated = new JDate($row->created_on);
+		$jNow = new JDate();
+		$dateDiff = $jNow->toUnix() - $jCreated->toUnix();
+		if($dateDiff > 604800) return;
+		
 		// Only handle not expired subscriptions
 		if( $generateAnInvoice ) {
 			$db = JFactory::getDBO();
