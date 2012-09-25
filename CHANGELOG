@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.4.4
 ================================================================================
++ Mass coupon code generator. It comes in really handy for raffles and similar occasions!
 # [HIGH] The ccInvoices plugin could issue erroneous invoices for past subscriptions when renewing your susbcription if the old subscription, the one you are renewing, hadn't been handled by the ccInvoices integration plugin
 
 Akeeba Subscriptions 2.4.3

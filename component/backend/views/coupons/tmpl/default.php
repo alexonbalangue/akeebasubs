@@ -33,6 +33,11 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 <input type="hidden" name="filter_order_Dir" id="filter_order_Dir" value="<?php echo $this->lists->order_Dir ?>" />
 <input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
 
+<a href="index.php?option=com_akeebasubs&view=makecoupons" class="btn btn-success">
+	<i class="icon icon-cog icon-white"></i>
+	<?php echo JText::_('COM_AKEEBASUBS_TITLE_MAKECOUPONS')?>
+</a>
+
 <table class="adminlist table table-striped" id="itemsList">
 	<thead>
 		<tr>
