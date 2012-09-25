@@ -366,7 +366,21 @@ class PagSeguroPaymentRequest  {
     		$this->shipping->setType(new PagSeguroShippingType($param));
     	}
     }
-    
+
+    /**
+     * Sets the shipping cost for this payment request
+     * @param shippinCost
+     */
+    public function setShippingCost($shippinCost) {
+        $param = $shippinCost;
+        if ($this->shipping == null) {
+            $this->shipping = new PagSeguroShipping();
+        }
+
+        $this->shipping->setCost($param);
+    }
+
+       
     /**
      * @return the max age of this payment request
      *
