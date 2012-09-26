@@ -4,6 +4,16 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+/**
+ * Setup (required for Joomla! 3)
+ */
+if(typeof(akeeba) == 'undefined') {
+	var akeeba = {};
+}
+if(typeof(akeeba.jQuery) == 'undefined') {
+	akeeba.jQuery = jQuery.noConflict();
+}
+
 var akeebasubs_ri_offset = 0;
 var akeebasubs_ri_limit = 0;
 var akeebasubs_ri_total = 0;

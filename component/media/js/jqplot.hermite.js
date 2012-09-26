@@ -10,6 +10,16 @@
  * making a donation at: http://www.jqplot.com/donate.php .
  *
  */
+/**
+ * Setup (required for Joomla! 3)
+ */
+if(typeof(akeeba) == 'undefined') {
+	var akeeba = {};
+}
+if(typeof(akeeba.jQuery) == 'undefined') {
+	akeeba.jQuery = jQuery.noConflict();
+}
+
 (function($) {
     // Class: $.jqplot.hermiteSplineRenderer
     // A plugin renderer for jqPlot to draw a Hermite spline.
