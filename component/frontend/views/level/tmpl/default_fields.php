@@ -283,9 +283,7 @@ if(array_key_exists('isValid', $field)) {
 		* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')?>
 	</label>
 	<div class="controls">
-		<div class="radio inline">
 		<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness : (@array_key_exists('isbusiness',$this->cache) ? $this->cache['isbusiness'] : 0)); ?>
-		</div>
 	</div>
 </div>
 
