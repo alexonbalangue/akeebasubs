@@ -6,7 +6,7 @@
  * @version $Id: header.php 218 2011-06-02 10:45:00Z nikosdion $
  */
 
-defined('_JEXEC') or die('Restricted Access');
+defined('_JEXEC') or die();
 
 /**
  * Our main element class

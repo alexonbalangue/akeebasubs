@@ -6,7 +6,7 @@
  * @version $Id$
  */
 
-defined('_JEXEC') or die('Restricted Access');
+defined('_JEXEC') or die();
 
 /**
  * Our main element class, creating a multi-select list out of an SQL statement
