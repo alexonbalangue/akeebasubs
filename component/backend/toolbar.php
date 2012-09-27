@@ -45,7 +45,8 @@ class AkeebasubsToolbar extends FOFToolbar
 		$link->setQuery($query);
 		
 		JToolBarHelper::divider();
-		$bar->appendButton('Link', 'export', JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
+		$icon = version_compare(JVERSION, '3.0', 'lt') ? 'export' : 'download';
+		$bar->appendButton('Link', $icon, JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
 	}
 	
 	public function onLevelsBrowse()
