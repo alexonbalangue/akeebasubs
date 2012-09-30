@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - Przelewy24</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-09-27</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_PRZELEWY24_DESCRIPTION</description>
+	<files>
+		<filename plugin="przelewy24">przelewy24.php</filename>
+		<folder>przelewy24</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_przelewy24.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_przelewy24.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_PRZELEWY24_TITLE_LABEL" description="PLG_AKPAYMENT_PRZELEWY24_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_PRZELEWY24_PPIMAGE_LABEL" description="PLG_AKPAYMENT_PRZELEWY24_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="seller_id" type="text" size="50" default="" label="PLG_AKPAYMENT_PRZELEWY24_SELLERID_LABEL" description="PLG_AKPAYMENT_PRZELEWY24_SELLERID_DESC"/>
+				<field name="crc_key" type="text" size="50" default="" label="PLG_AKPAYMENT_PRZELEWY24_CRCKEY_LABEL" description="PLG_AKPAYMENT_PRZELEWY24_CRCKEY_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
