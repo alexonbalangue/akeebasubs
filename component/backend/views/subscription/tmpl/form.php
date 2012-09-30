@@ -76,7 +76,7 @@ $this->loadHelper('format');
 		<div class="control-group">
 			<label for="notes" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NOTES')?></label>
 			<div class="controls">
-				<textarea name="notes" id="notes" cols="40" rows="10"><?php echo $this->item->notes?></textarea>
+				<textarea name="notes" id="notes" cols="40" rows="5" class="input-xlarge"><?php echo $this->item->notes?></textarea>
 			</div>
 		</div>
 	</div>
@@ -171,19 +171,14 @@ $this->loadHelper('format');
 			</div>
 		</div>
 		
+		<!--
 		<div class="control-group">
 			<label for="akeebasubs_invoice_id" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_INVOICE_ID')?></label>
 			<div class="controls">
 				<input type="text" name="akeebasubs_invoice_id" id="akeebasubs_invoice_id" value="<?php echo $this->item->akeebasubs_invoice_id?>"/>
 			</div>
 		</div>
-		
-		<div class="control-group">
-			<label for="params" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PARAMS')?></label>
-			<div class="controls">
-				<textarea name="params" id="params" cols="40" rows="10"><?php echo $this->item->params?></textarea>		
-			</div>
-		</div>
+		-->
 	</div>
 	</div>
 	</div>
