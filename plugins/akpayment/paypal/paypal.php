@@ -248,6 +248,20 @@ class plgAkpaymentPaypal extends JPlugin
 			'state'				=> $newStatus,
 			'enabled'			=> 0
 		);
+		// On recurring payments also store the subscription ID
+		if(array_key_exists('subscr_id', $data)) {
+			$subscr_id = $data['subscr_id'];
+			$params = $subscription->params;
+			if(!is_array($params)) {
+				$params = json_decode($params, true);
+			}
+			if(is_null($params) || empty($params)) {
+				$params = array();
+			}
+			$params['recurring_id'] = $subscr_id;
+			$updates['params'] = $params;
+		}
+
 		jimport('joomla.utilities.date');
 		if($newStatus == 'C') {
 			// Fix the starting date if the payment was accepted after the subscription's start date. This
