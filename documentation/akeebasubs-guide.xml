@@ -6307,6 +6307,61 @@ LEVEL2=11111:22222:33333</programlisting>
         <guimenuitem>Payment</guimenuitem> form in the Beanstream
         backend.</para>
       </section>
+
+      <section xml:id="payment-przelewy24">
+        <title>Przelewy24</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Przelewy24</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.4.4.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows you to use the Polish
+        payment processor Przelewy24.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Przelewy24" or type in a custom name
+              to show to your customer's, e.g. "Pay with credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Seller ID</term>
+
+            <listitem>
+              <para>This is the seller ID assigned to you by
+              Przelewy24.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>CRC Key</term>
+
+            <listitem>
+              <para>The CRC Key assigned to you by Przelewy24.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
