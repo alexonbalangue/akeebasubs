@@ -577,6 +577,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		$k = $table->getKeyName();
 		
 		foreach($resultArray as $index => &$row) {
+			if(!is_array($row->params)) {
+				if(!empty($row->params)) {
+					$row->params = json_decode($row->params, true);
+				}
+			}
+			if(is_null($row->params) || empty($row->params)) {
+				$row->params = array();
+			}
+			
 			$triggered = false;
 			
 			if(!property_exists($row, 'publish_down')) continue;
@@ -620,5 +629,17 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			->where($db->qn('enabled').' = '.$db->q('1'));
 		$db->setQuery($query);
 		return $db->loadResult();
+	}
+	
+	protected function onBeforeSave(&$data, &$table)
+	{
+		if(array_key_exists('params', $data)) {
+			if(is_array($data['params'])) {
+				$params = json_encode($data['params']);
+				$data['params'] = json_encode($data['params']);
+			}
+		}
+		
+		return true;
 	}
 }

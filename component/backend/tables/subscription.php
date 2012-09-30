@@ -67,6 +67,16 @@ class AkeebasubsTableSubscription extends FOFTable
 			}
 		}
 		
+		//var_dump($this->params);die();
+		if(is_array($this->params)) {
+			if(!empty($this->params)) {
+				$this->params = json_encode($this->params);
+			}
+		}
+		if(is_null($this->params) || empty($this->params)) {
+			$this->params = '';
+		}
+		
 		if(empty($this->processor)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PROCESSOR'));
 			$result = false;
@@ -129,6 +139,18 @@ class AkeebasubsTableSubscription extends FOFTable
 	 */
 	public function onAfterLoad(&$result) {
 		$this->_selfCache = $result ? clone $this : null;
+		
+		// Convert params to an array
+		if(!is_array($this->params)) {
+			if(!empty($this->params)) {
+				$this->params = json_decode($this->params, true);
+			}
+		}
+		if(is_null($this->params) || empty($this->params)) {
+			$this->params = array();
+		}
+		
+		
 		return parent::onAfterLoad($result);
 	}
 	
