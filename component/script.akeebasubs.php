@@ -99,6 +99,7 @@ class Com_AkeebasubsInstallerScript
 				'paypal'				=> 1,
 				'payu'					=> 0,
 				'postfinancech'			=> 0,
+				'prezlewy24'			=> 0,
 				'rbkmoney'				=> 0,
 				'skrill'				=> 0,
 				'suomenverkkomaksut'	=> 0,
