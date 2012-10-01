@@ -655,7 +655,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
       <para>Once the user finishes the payment, he's redirected to the
       Subscription Confirmation page. If he changes his mind and cancels the
-      payment, he will be takes to the Subscription Cancellation page. The
+      payment, he will be taken to the Subscription Cancellation page. The
       text on each page is determined by the relevant fields in the Level
       configuration.</para>
 
