@@ -77,7 +77,7 @@ class plgAkpaymentPrzelewy24 extends JPlugin
 			'p24_session_id'		=> str_replace(' ', '', $level->title) . '-' . $subscription->akeebasubs_subscription_id,
 			'p24_id_sprzedawcy'		=> trim($this->params->get('seller_id','')),
 			// Amount in Polish Grosz (PLN/100)
-			'p24_kwota'				=> sprintf('%.2f',$subscription->gross_amount),
+			'p24_kwota'				=> (int)($subscription->gross_amount * 100),
 			'p24_opis'				=> $level->title,
 			'p24_klient'			=> trim($user->name),
 			'p24_adres'				=> trim($user->address1),
