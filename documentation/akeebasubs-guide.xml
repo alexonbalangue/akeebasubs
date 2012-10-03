@@ -7364,7 +7364,7 @@ LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
                 </varlistentry>
 
                 <varlistentry>
-                  <term>maxaganets</term>
+                  <term>maxagents</term>
 
                   <listitem>
                     <para>The maximum number of agents for that company</para>
