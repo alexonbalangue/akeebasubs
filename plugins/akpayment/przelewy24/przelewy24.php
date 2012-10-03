@@ -108,7 +108,7 @@ class plgAkpaymentPrzelewy24 extends JPlugin
 		}
 		
 		$crc = md5($data->p24_session_id .
-				'|'	. $data->p2_order_id .
+				'|'	. $data->p24_id_sprzedawcy .
 				'|' . $data->p24_kwota .
 				'|' . trim($this->params->get('crc_key','')));
 		$data->p24_crc = $crc;
@@ -161,7 +161,6 @@ class plgAkpaymentPrzelewy24 extends JPlugin
 		if($isValid && isset($data['p24_error_code'])) {
 			$data['akeebasubs_failure_reason'] = "Error code " . $data['p24_error_code'];
 			$this->logIPN($data, false);
-			
 			$updates = array(
 					'akeebasubs_subscription_id'	=> $data['p24_session_id'],
 					'processor_key'					=> '',
@@ -189,7 +188,7 @@ class plgAkpaymentPrzelewy24 extends JPlugin
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
 			$mc_gross = floatval($data['p24_kwota']);
-			$gross = $subscription->gross_amount;
+			$gross = (int)($subscription->gross_amount * 100);
 			if($mc_gross > 0) {
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
@@ -204,10 +203,14 @@ class plgAkpaymentPrzelewy24 extends JPlugin
 		
 		if($isValid) {
 			$verificationRequest = array();
+			$verificationRequest['p24_id_sprzedawcy'] = trim($this->params->get('seller_id',''));
 			$verificationRequest['p24_session_id'] = $data['p24_session_id'];
 			$verificationRequest['p24_order_id'] = $data['p24_order_id'];
-			$verificationRequest['p24_id_sprzedawcy'] = trim($this->params->get('seller_id',''));
 			$verificationRequest['p24_kwota'] = $data['p24_kwota'];
+			$crc = md5($verificationRequest['p24_session_id'] .
+				'|'	. $verificationRequest['p24_order_id'] .
+				'|' . $verificationRequest['p24_kwota'] .
+				'|' . trim($this->params->get('crc_key','')));
 			$verificationRequest['p24_crc'] = $crc;
 			$requestQuery = http_build_query($verificationRequest);
 			$requestContext = stream_context_create(array(
@@ -297,7 +300,7 @@ class plgAkpaymentPrzelewy24 extends JPlugin
 	private function isValidIPN($data)
 	{
 		$crc = md5($data['p24_session_id'] .
-				'|'	. $data['$p24_order_id'] .
+				'|'	. $data['p24_order_id'] .
 				'|' . $data['p24_kwota'] .
 				'|' . trim($this->params->get('crc_key','')));
 		return $data['p24_crc'] == $crc;
