@@ -25,13 +25,13 @@
 				<field type="spacer" />
 				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_NOCHEX_MERCHANTID_LABEL" description="PLG_AKPAYMENT_NOCHEX_MERCHANTID_DESC"/>
 				<field name="secureipn" type="radio" default="1" label="PLG_AKPAYMENT_NOCHEX_SECUREIPN_LABEL" description="PLG_AKPAYMENT_NOCHEX_SECUREIPN_DESC">
-				<option value="1">Yes</option>
-				<option value="0">No</option>
+				<option value="0">JNo</option>
+				<option value="1">JYes</option>
 				</field>
 				<field type="spacer" />
 				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_NOCHEX_SANDBOX_LABEL" description="PLG_AKPAYMENT_NOCHEX_SANDBOX_DESC">
-				<option value="0">No</option>
-				<option value="1">Yes</option>
+				<option value="0">JNo</option>
+				<option value="1">JYes</option>
 				</field>
 			</fieldset>
 		</fields>

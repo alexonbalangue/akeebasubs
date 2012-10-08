@@ -41,8 +41,8 @@
 				<field name="sandbox" type="radio" default="0"
 					label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_LABEL"
 					description="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_DESC">
-				<option value="0">No</option>
-				<option value="1">Yes</option>
+				<option value="0">JNo</option>
+				<option value="1">JYes</option>
 				</field>
 				<field name="sandbox_sha1in" type="text" size="50" default=""
 					label="PLG_AKPAYMENT_POSTFINANCECH_SANDBOX_SHA1IN_LABEL"

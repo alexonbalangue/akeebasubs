@@ -32,8 +32,8 @@
 				<field name="sb_apisig" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_SB_APISIG_LABEL" description="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_SB_APISIG_DESC"/>
 				<field type="spacer" />
 				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_SANDBOX_LABEL" description="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_SANDBOX_DESC">
-				  <option value="0">No</option>
-				  <option value="1">Yes</option>
+				  <option value="0">JNo</option>
+				  <option value="1">JYes</option>
 				</field>
 			</fieldset>
 		</fields>

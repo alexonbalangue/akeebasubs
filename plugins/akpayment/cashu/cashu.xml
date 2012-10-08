@@ -33,12 +33,12 @@
 					<option value="ir">PLG_AKPAYMENT_CASHU_LANG_IR</option>
 				</field>
 				<field name="enhanced_encryption" type="radio" default="0" label="PLG_AKPAYMENT_CASHU_ENHANCED_ENCRYPTION_LABEL" description="PLG_AKPAYMENT_CASHU_ENHANCED_ENCRYPTION_DESC">
-					<option value="0">No</option>
-					<option value="1">Yes</option>
+					<option value="0">JNo</option>
+					<option value="1">JYes</option>
 				</field>
 				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_CASHU_SANDBOX_LABEL" description="PLG_AKPAYMENT_CASHU_SANDBOX_DESC">
-					<option value="0">No</option>
-					<option value="1">Yes</option>
+					<option value="0">JNo</option>
+					<option value="1">JYes</option>
 				</field>
 			</fieldset>
 		</fields>
