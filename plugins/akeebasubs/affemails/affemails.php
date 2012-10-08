@@ -27,10 +27,10 @@ class plgAkeebasubsAffemails extends JPlugin
 		// Did the payment status just change to C or P? It's a new subscription
 		if(array_key_exists('state', (array)$info['modified']) && in_array($row->state, array('P','C'))) {
 			if($row->enabled) {
-				if(is_object($info['previous']) && $info['previous']->state == 'P') {
+				if(is_object($info['previous']) && ($row->state == 'C') && ($info['previous']->state == 'P')) {
 					// A pending subscription just got paid
 					$this->sendEmail($row, 'paid');
-				} else {
+				} elseif($row->state == 'C') {
 					// A new subscription just got paid; send new subscription notification
 					$this->sendEmail($row, 'new_active');
 				}
