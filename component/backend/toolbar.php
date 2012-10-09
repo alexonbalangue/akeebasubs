@@ -10,9 +10,60 @@ defined('_JEXEC') or die();
 
 class AkeebasubsToolbar extends FOFToolbar
 {
+	protected function renderSubmenu()
+	{
+		$views = array(
+			'cpanel',
+			'COM_AKEEBASUBS_MAINMENU_SETUP' => array('levelgroups', 'levels', 'customfields', 'upgrades', 'taxrules'),
+			'subscriptions',
+			'coupons',
+			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array('affiliates', 'affpayments'),
+			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array('tools', 'users'),
+		);
+		
+		foreach($views as $label => $view) {
+			if(!is_array($view)) {
+				$this->addSubmenuLink($view);
+			} else {
+				$label = JText::_($label);
+				$this->appendLink($label, '', false);
+				foreach($view as $v) {
+					$this->addSubmenuLink($v, $label);
+				}
+			}
+		}
+	}
+	
+	private function addSubmenuLink($view, $parent = null)
+	{
+		static $activeView = null;
+		if(empty($activeView)) {
+			$activeView = FOFInput::getCmd('view','cpanel',$this->input);
+		}
+		
+		$key = strtoupper($this->component).'_TITLE_'.strtoupper($view);
+		if(strtoupper(JText::_($key)) == $key) {
+			$altview = FOFInflector::isPlural($view) ? FOFInflector::singularize($view) : FOFInflector::pluralize($view);
+			$key2 = strtoupper($this->component).'_TITLE_'.strtoupper($altview);
+			if(strtoupper(JText::_($key2)) == $key2) {
+				$name = ucfirst($view);
+			} else {
+				$name = JText::_($key2);
+			}
+		} else {
+			$name = JText::_($key);
+		}
+
+		$link = 'index.php?option='.$this->component.'&view='.$view;
+
+		$active = $view == $activeView;
+
+		$this->appendLink($name, $link, $active, null, $parent);
+	}
+	
 	protected function getMyViews()
 	{
-		$views = array('cpanel', 'subscriptions', 'levels', 'coupons', 'upgrades', 'taxrules');
+		$views = array('cpanel');
 		
 		$allViews = parent::getMyViews();
 		foreach($allViews as $view) {
