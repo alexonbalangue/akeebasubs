@@ -69,6 +69,17 @@ class plgAkpaymentOffline extends JPlugin
 		);
 		$oSub->save($updates);
 		
+		// Activate the user account, if the option is selected
+		$activate = $this->params->get('activate', 0);
+		if($activate && $user->block) {
+			$updates = array(
+				'block'			=> 0,
+				'activation'	=> ''
+			);
+			$user->bind($updates);
+			$user->save($updates);
+		}
+		
 		// Render the HTML form
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
