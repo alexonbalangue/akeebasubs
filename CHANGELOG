@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.4.4
 + Included special 2Checkout offer notification in the Control Panel of the component (deliberately untranslated)
 + Off-Line payment: option to activate the user account immediately
 + Vastly improved subscription level image selector on Joomla! 3.0
+~ Rearranged back-end tab order based on what is most used in real life instead of alpha-sorting
 # [LOW] J3 Apparently the Joomla! 3 guys changed their mind again and using JHtml::_('form.token') for the login forms instead of the session token. Whatever.
 # [LOW] Affiliate emails are sent when a payment is Pending, implying that they got a commission even though this may not end up being true
 # [LOW] Strappy layout missing from the "List subscription levels" module

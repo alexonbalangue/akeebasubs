@@ -10,6 +10,20 @@ defined('_JEXEC') or die();
 
 class AkeebasubsToolbar extends FOFToolbar
 {
+	protected function getMyViews()
+	{
+		$views = array('cpanel', 'subscriptions', 'levels', 'coupons', 'upgrades', 'taxrules');
+		
+		$allViews = parent::getMyViews();
+		foreach($allViews as $view) {
+			if(!in_array($view, $views)) {
+				$views[] = $view;
+			}
+		}
+		
+		return $views;
+	}
+	
 	public function onSubscriptionsBrowse()
 	{
 		// Set toolbar title
