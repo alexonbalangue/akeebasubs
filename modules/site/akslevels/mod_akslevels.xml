@@ -31,6 +31,7 @@
 				<field name="layout" type="list" default="awesome" label="MOD_AKSLEVELS_LAYOUT_LABEL" description="MOD_AKSLEVELS_LAYOUT_DESC">
 					<option value="default">MOD_AKSLEVELS_LAYOUT_OPT_DEFAULT</option>
 					<option value="awesome">MOD_AKSLEVELS_LAYOUT_OPT_AWESOME</option>
+					<option value="strappy">MOD_AKSLEVELS_LAYOUT_OPT_STRAPPY</option>
 				</field>
 			</fieldset>
 			<fieldset name="advanced">
