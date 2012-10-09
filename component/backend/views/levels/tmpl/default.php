@@ -9,9 +9,10 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.tooltip');
 
-$this->loadHelper('select');
-$this->loadHelper('format');
 $this->loadHelper('cparams');
+$this->loadHelper('format');
+$this->loadHelper('image');
+$this->loadHelper('select');
 
 $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 ?>
@@ -148,7 +149,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 			</td>
 			<td align="left">
 				<span class="editlinktip hasTip" title="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_EDITLEVEL_TOOLTIP')?> <?php echo $this->escape($item->title); ?>::<?php echo $this->escape(substr(strip_tags($item->description), 0, 300)).'...'; ?>">
-					<img src="<?php echo JURI::base(); ?>../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir', 'images/'),'/') ?>/<?php echo $item->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?php echo AkeebasubsHelperImage::getURL($item->image)?>" width="32" height="32" class="sublevelpic" />
 					<a href="index.php?option=com_akeebasubs&view=level&id=<?php echo $item->akeebasubs_level_id ?>" class="subslevel">
 						<strong><?php echo $this->escape($item->title) ?></strong>
 					</a>

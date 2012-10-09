@@ -58,8 +58,19 @@ $this->loadHelper('cparams');
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?>
 			</label>
 			<div class="controls">
+				<?php if(version_compare(JVERSION, '3.0', 'lt')): ?>
 				<?php echo JHTML::_('list.images', 'image', $this->item->image, null, '/'.trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/').'/', 'swf|gif|jpg|png|bmp'); ?>
 				<img class="level-image-preview" src="../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $this->item->image?>" name="imagelib" />
+				<?php else: ?>
+				<?php
+					$fake_data = '<field name="image" type="media" directory="images" />';
+					$fakeElement = new SimpleXMLElement($fake_data);
+					$fakeForm = new JForm('fakeForm');
+					$media = new JFormFieldMedia($fakeForm);
+					$media->setup($fakeElement, $this->item->image);
+					echo $media->input;
+				?>
+				<?php endif; ?>
 			</div>
 		</div>
 		

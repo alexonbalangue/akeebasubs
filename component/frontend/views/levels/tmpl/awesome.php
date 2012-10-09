@@ -13,6 +13,7 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 $this->loadHelper('message');
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
 $vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
@@ -48,7 +49,7 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 				</div>
 				<div class="akeebasubs-awesome-body">
 					<div class="akeebasubs-awesome-image">
-						<img src="<?php echo JURI::base()?><?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $level->image?>" />
+						<img src="<?php echo AkeebasubsHelperImage::getURL($level->image)?>" />
 					</div>
 					<div class="akeebasubs-awesome-description">
 						<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description) );?>

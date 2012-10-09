@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`akeebasubs_level_id` bigint(20) unsigned NOT NULL auto_increment,
 	`title` varchar(255) NOT NULL,
 	`slug` varchar(255) NOT NULL,
-	`image` varchar(255) NOT NULL,
+	`image` varchar(1024) NOT NULL,
 	`description` text,
 	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
 	`price` FLOAT NOT NULL,

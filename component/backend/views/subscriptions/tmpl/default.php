@@ -15,6 +15,7 @@ JHTML::_('behavior.tooltip');
 $this->loadHelper('cparams');
 $this->loadHelper('select');
 $this->loadHelper('format');
+$this->loadHelper('image');
 
 $couponsRaw = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
 	->savestate(0)
@@ -185,7 +186,7 @@ unset($upgradesRaw);
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?php echo $this->escape($subscription->title); ?>::<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL_EDIT_TOOLTIP')?>">
-					<img src="<?php echo JURI::base(); ?>../<?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $subscription->image;?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?php echo AkeebasubsHelperImage::getURL($subscription->image)?>" width="32" height="32" class="sublevelpic" />
 					<a href="index.php?option=com_akeebasubs&view=level&id=<?php echo $subscription->akeebasubs_level_id ?>" class="subslevel">
     					<?php echo $this->escape($subscription->title)?>
     				</a>

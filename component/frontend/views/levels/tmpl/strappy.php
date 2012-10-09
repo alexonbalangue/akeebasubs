@@ -13,6 +13,8 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 $this->loadHelper('message');
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
+if(!class_exists('AkeebasubsHelperImage')) die('SKATA');
 
 // Take display VAT into account
 $vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
@@ -49,7 +51,7 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 		<tr>
 		<?php foreach($this->items as $level):?>
 			<td class="akeebasubs-strappy-image">
-				<img src="<?php echo JURI::base()?><?php echo trim(AkeebasubsHelperCparams::getParam('imagedir','images/'),'/') ?>/<?php echo $level->image?>" />
+				<img src="<?php echo AkeebasubsHelperImage::getURL($level->image)?>" />
 			</td>
 		<?php endforeach ?>
 		</tr>

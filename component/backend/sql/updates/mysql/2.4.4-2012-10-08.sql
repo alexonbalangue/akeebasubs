@@ -1,0 +1,1 @@
+ALTER TABLE `#__akeebasubs_levels` MODIFY COLUMN `image` VARCHAR(1024) NOT NULL;
