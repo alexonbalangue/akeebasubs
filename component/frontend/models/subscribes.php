@@ -246,6 +246,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		$noPersonalInfo = !AkeebasubsHelperCparams::getParam('personalinfo',1);
 		$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
+		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
 		
 		// 1. Basic checks
 		$ret = array(
@@ -385,7 +386,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		
 		// 5. Coupon validation
-		$ret['coupon'] = $this->_validateCoupon(true);
+		$ret['coupon'] = $this->_validateCoupon(!$requireCoupon);
 		
 		return (object)$ret;
 	}
@@ -878,6 +879,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$validation = $this->getValidation();
 		$state = $this->getStateVariables();
 		
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
+
+		
 		// Iterate the core validation rules
 		$isValid = true;
 		foreach($validation->validation as $key => $validData)
@@ -888,8 +893,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if($key == 'vatnumber') continue;
-			// A wrong coupon code is not a fatal error
-			if($key == 'coupon') continue;
+			// A wrong coupon code is not a fatal error, unless we require a coupon code
+			if(!$requireCoupon && ($key == 'coupon')) continue;
 			// A missing business occupation is not a fatal error either
 			if($key == 'occupation') continue;
 			// This is a dummy key which must be ignored

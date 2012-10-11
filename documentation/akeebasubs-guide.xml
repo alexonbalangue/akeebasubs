@@ -996,6 +996,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             EUR plus 19% VAT).</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Require valid coupon</term>
+
+          <listitem>
+            <para>There are some cases when you want your users to enter an
+            "authorization code" before they can subscribe. One prime example
+            is a complimentary subscription to your site once a user buys a
+            tangible or intangible good from you, or when you want to track
+            the origin of your subscribers. When this option is enabled it
+            allows you to use Akeeba Subscriptions in such a scenario: in
+            order for the user to be allowed to subscribe he will have to
+            provide a valid coupon code. If no valid code is provided the user
+            will not be allowed to proceed with the subscription. You can
+            always create coupon codes withe their type set to Amount and
+            their value set to 0 to create "authorization codes" which only
+            allow users to subscribe but not give them any discount.</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Permissions</guilabel></para>

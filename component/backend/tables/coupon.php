@@ -115,7 +115,7 @@ class AkeebasubsTableCoupon extends FOFTable
 		}
 		
 		// Check value
-		if(!$this->value || ($this->value <= 0)) {
+		if($this->value < 0) {
 			$this->setError(JText::_('COM_AKEEBASUBS_COUPON_ERR_VALUE'));
 			$result = false;
 		} elseif( ($this->value > 100) && ($this->type == 'percent') ) {
