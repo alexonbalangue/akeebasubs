@@ -292,7 +292,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		// get country/state names
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 		$country = AkeebasubsHelperSelect::$countries[$kuser->country];
-		$state = AkeebasubsHelperSelect::$states[$kuser->state];
+		if(array_key_exists($kuser->state, AkeebasubsHelperSelect::$states)) {
+			$state = AkeebasubsHelperSelect::$states[$kuser->state];
+		} else {
+			$state = '';
+		}
 		if($state == 'N/A') $state = '';
 
 		// Create contact
