@@ -591,7 +591,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if(!property_exists($row, 'publish_down')) continue;
 			if(!property_exists($row, 'publish_up')) continue;
 			
-			if($row->state != 'C') continue;
+			if($row->state != 'C') {
+				if($row->enabled) {
+					$row->enabled = false;
+					$table->reset();
+					$table->load($row->$k);
+					$table->save($row);
+				}
+				continue;
+			}
 			
 			if($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00')) {
 				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
