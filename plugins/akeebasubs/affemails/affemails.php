@@ -56,10 +56,10 @@ class plgAkeebasubsAffemails extends JPlugin
 			// already renewed his subscription.
 			if(array_key_exists('enabled', (array)$info['modified']) && !$row->enabled && ($row->contact_flag == 3)) {
 				return;
-			} elseif(array_key_exists('enabled', (array)$info['modified']) && !$row->enabled) {
+			} elseif(array_key_exists('enabled', (array)$info['modified']) && !$row->enabled && ($row->state == 'C')) {
 				// Disabled subscription, suppose expired
 				$this->sendEmail($row, 'expired');
-			} elseif(array_key_exists('enabled', (array)$info['modified']) && $row->enabled) {
+			} elseif(array_key_exists('enabled', (array)$info['modified']) && $row->enabled && ($row->state == 'C')) {
 				// Subscriptions just enabled, suppose date triggered
 				$this->sendEmail($row, 'published');
 			} elseif(array_key_exists('contact_flag', (array)$info['modified']) ) {
