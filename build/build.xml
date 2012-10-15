@@ -157,14 +157,13 @@
 	<target name="ftpdeploy" depends="git">
 		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
 		<echo>Uploading release</echo>
-		<ftpdeploy
-			host="${ftp.host}"
-			port="${ftp.port}"
-			username="${ftp.username}"
-			password="${ftp.password}"
-			dir="${ftp.dir}/akeebasubs/${git.lastrevision}"
-			mode="${ftp.mode}"
-			passive="true"
+		<scp
+			host="${scp.host}"
+			port="${scp.port}"
+			username="${scp.username}"
+			password="${scp.password}"
+			todir="${scp.dir}/akeebasubs/${git.lastrevision}"
+			autocreate="true"
 			level="debug">
 			<fileset dir="${dirs.root}">
 				<include name="CHANGELOG"/>
@@ -172,26 +171,25 @@
 			<fileset dir="${dirs.release}">
 				<include name="com_akeebasubs-*.zip"/>
 			</fileset>			
-		</ftpdeploy>
+		</scp>
 		<echo>All done. Have a cup of coffee and relax :)</echo>
 	</target>
 
 	<target name="docsdeploy">
 		<!-- English manual -->
 		<echo>Uploading Akeeba Subscriptions documentation</echo>
-		<ftpdeploy
-			host="${ftp.host}"
-			port="${ftp.port}"
-			username="${ftp.username}"
-			password="${ftp.password}"
-			dir="${ftp.dir.docs}/akeeba-subscriptions"
-			mode="${ftp.mode}"
-			passive="true"
+		<scp
+			host="${scp.host}"
+			port="${scp.port}"
+			username="${scp.username}"
+			password="${scp.password}"
+			dir="${scp.dir.docs}/akeeba-subscriptions"
+			autocreate="true"
 			level="debug">
 			<fileset dir="${dirs.documentation}">
 				<include name="*.xml"/>
 			</fileset>
-		</ftpdeploy>
+		</scp>
 	</target>
 	
 	<target name="deployall" depends="ftpdeploy,lang,docsdeploy">
