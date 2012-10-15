@@ -119,7 +119,7 @@ class plgAkpaymentClickandBuy extends JPlugin
 		// 3. Use redirect-URL for the form and save transaction-ID for the callback
 		$data->url = $transactionResponse->redirectURL;
 		$subscription->save(array(
-			'processor_key'		=> str_replace(' ', '', $transactionResponse->transactionID)
+			'processor_key'		=> $transactionResponse->transactionID
 		));
 
 		@ob_start();
