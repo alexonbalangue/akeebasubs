@@ -84,6 +84,7 @@ class Com_AkeebasubsInstallerScript
 				'beanstream'			=> 0,
 				'cashu'					=> 0,
 				'ccavenue'				=> 0,
+				'clickandbuy'			=> 0,
 				'deltapay'				=> 0,
 				'eselectplus'			=> 0,
 				'eway'					=> 0,
