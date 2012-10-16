@@ -6591,6 +6591,122 @@ LEVEL2=11111:22222:33333</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="payment-clickandbuy">
+        <title>ClickAndBuy</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - ClickAndBuy</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.4.4.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows you to use the German
+        payment processor ClickAndBuy.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "ClickAndBuy" or type in a custom name
+              to show to your customer's, e.g. "Pay with credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The Merchant ID assigned to you by ClickAndBuy. It's
+              available at the top right corner of all pages of your account
+              page https://merchant.clickandbuy.com/</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Project ID</term>
+
+            <listitem>
+              <para>The Project ID assigned by ClickAndBuy. You have to go to
+              your account page at https://merchant.clickandbuy.com/,
+              Configuration and open the options on the left hand side with a
+              little arrow. This allows you to manage your projects. Here you
+              need to select the project of your choice and you will see the
+              value Project ID. Copy it to Akeeba Subscriptions'
+              plugin.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Key</term>
+
+            <listitem>
+              <para>The Project ID assigned by ClickAndBuy. You have to go to
+              your account page at https://merchant.clickandbuy.com/,
+              Configuration and open the options on the left hand side with a
+              little arrow. This allows you to manage your projects. Here you
+              need to select the project of your choice and you will see the
+              value Shared Secret Key. Copy it to Akeeba Subscriptions'
+              plugin.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox Merchant ID</term>
+
+            <listitem>
+              <para>The Merchant ID used when the Sandbox option below is
+              enabled.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox Project ID</term>
+
+            <listitem>
+              <para>The Project ID used when the Sandbox option below is
+              enabled.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox Key</term>
+
+            <listitem>
+              <para>The Shared Secret Key used when the Sandbox option below
+              is enabled.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the sandbox (testing server). This is designed for integration
+              tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
