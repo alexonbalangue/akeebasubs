@@ -12,6 +12,7 @@ Akeeba Subscriptions 2.4.4
 # [LOW] Affiliate emails are sent when a payment is Pending, implying that they got a commission even though this may not end up being true
 # [LOW] Strappy layout missing from the "List subscription levels" module
 # [LOW] Do not send expired subscription emails when a subscription's status is other than "Completed"
+# [LOW] VAT entry field too small
 
 Akeeba Subscriptions 2.4.4.rc1
 ================================================================================

@@ -323,7 +323,7 @@ if(array_key_exists('isValid', $field)) {
 		<div class="controls">
 			<div class="input-prepend">
 				<span class="add-on" id="vatcountry">EU</span>
-				<input type="text" name="vatnumber" id="vatnumber" class="span2" size="16"
+				<input type="text" name="vatnumber" id="vatnumber" class="input-small" size="16"
 					value="<?php echo $this->escape($field_data['vatnumber']);?>" />
 			</div>
 			<span id="vat-status-invalid" class="help-inline" <?php if($group_classes['vatnumber'] != 'warning'):?>style="display:none"<?php endif?>>

@@ -18,6 +18,7 @@ plugins/system/oneclickaction/language/en-GB
 plugins/system/oneclickaction/LICENSE.txt
 plugins/system/oneclickaction/oneclickaction.php
 plugins/system/oneclickaction/oneclickaction.xml
+plugins/system/oneclickaction/sql
 component/fof
 component/strapper
 
