@@ -3082,8 +3082,15 @@ Rule C gives $ 30 discount</programlisting>
         <para>This payment method integrates the standard PayPal Website
         Payments service, available without any setup fee to all verified
         PayPal clients. In other words, that's the standard way to use PayPal
-        as your payment processor. The options you have in this plugin
-        are:</para>
+        as your payment processor.</para>
+
+        <important>
+          <para>Please DO READ the integration notes below. Do not ask for
+          support if you have not read and followed the instructions contained
+          therein.</para>
+        </important>
+
+        <para>The options you have in this plugin are:</para>
 
         <variablelist>
           <varlistentry>
@@ -3274,6 +3281,20 @@ Rule C gives $ 30 discount</programlisting>
         Options</guibutton>. Set <guilabel>Encoding</guilabel> to
         <option>UTF-8</option> and click on
         <guibutton>Save</guibutton>.</para>
+
+        <para>Some people have reported that the subscriptions are not
+        automatically updated after their subscribers pay in PayPal. If this
+        happens you will need to set up an IPN URL in PayPal's back-end. Log
+        in to PayPal and go to <guilabel>Profile</guilabel>, <guilabel>My
+        Selling Tools</guilabel>, and click on the <guilabel>Update</guilabel>
+        link next to <guilabel>Instant Payment Notifications</guilabel>. Click
+        on <guibutton>Choose IPN Settings</guibutton>. In the
+        <guibutton>Notification URL</guibutton> enter
+        <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=paypalpaymentspro</uri>
+        where http://www.example.com is the URL to your site. Under
+        <guilabel>IPN Messages</guilabel> select <option>Receive IPN Messages
+        (Enabled)</option> and click on <guibutton>Save</guibutton>. This step
+        is always required when using recurring payments.</para>
 
         <bridgehead>Using the PayPal Sandbox</bridgehead>
 
