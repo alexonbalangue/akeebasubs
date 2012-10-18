@@ -9,6 +9,7 @@ Akeeba Subscriptions 2.4.4
 + Option to confirm free subscriptions by email (double opt-in)
 ~ Rearranged back-end tab order based on what is most used in real life instead of alpha-sorting
 # [HIGH] New subscription's start date would be the end date of the last canceled subscription (thank you NoNumber.nl)
+# [HIGH] Some custom field types didn't work at all
 # [LOW] J3 Apparently the Joomla! 3 guys changed their mind again and using JHtml::_('form.token') for the login forms instead of the session token. Whatever.
 # [LOW] Affiliate emails are sent when a payment is Pending, implying that they got a commission even though this may not end up being true
 # [LOW] Strappy layout missing from the "List subscription levels" module

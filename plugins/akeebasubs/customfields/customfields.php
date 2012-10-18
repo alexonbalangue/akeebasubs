@@ -514,7 +514,7 @@ ENDJS;
 				$multiselect = true;
 
 			case 'dropdown':
-				$html = "<select name=\"{$item->slug}\" id=\"{$item->slug}\"";
+				$html = "<select name=\"custom[{$item->slug}]\" id=\"{$item->slug}\"";
 				if($multiselect) {
 					$html .= " size=\"5\" multiple=\"multiple\"";
 				}
@@ -551,7 +551,7 @@ ENDJS;
 					if($current == $value) {
 						$checked = "checked=\"checked\"";
 					}
-					$html .= "\t<input type=\"radio\" name=\"{$item->slug}\" id=\"$id\" value=\"$value\" $checked />\n";
+					$html .= "\t<input type=\"radio\" name=\"custom[{$item->slug}]\" id=\"$id\" value=\"$value\" $checked />\n";
 					$html .= "\t<label for=\"$id\">$label</label>\n";
 				}
 				$html .= "</label>\n";
@@ -665,7 +665,7 @@ function plg_akeebasubs_customfields_fetch_$slug()
 {
 	var result = {};
 	(function($) {
-		result.$slug = $('input:radio[name=$slug]:checked').val();
+		result.$slug = $('input:radio[name=custom\\\\[$slug\\\\]]:checked').val();
 	})(akeeba.jQuery);
 	return result;
 }
