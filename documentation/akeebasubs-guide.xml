@@ -1015,6 +1015,36 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             allow users to subscribe but not give them any discount.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Confirm free subscriptions</term>
+
+          <listitem>
+            <para>When disabled (default) free subscriptions –that is,
+            subscriptions to subscription levels with a price of 0– will be
+            activated immediately. If a new user account was created for a
+            free subscription it will enabled automatically.</para>
+
+            <para>When this option is enabled, the subscription to a
+            subscription level with a price of 0 will be activated
+            automatically, but the new user account will not. Instead, the
+            standard Joomla! user activation email will be sent out.</para>
+
+            <para>The email which is sent by this feature depends on your
+            Joomla! User Manager setup. Go to Joomla!'s <guilabel>User
+            Manager</guilabel> and click on the <guibutton>Options</guibutton>
+            button. In the <guilabel>Component</guilabel> area you have to set
+            <guilabel>New User Activation</guilabel> to either
+            <option>Self</option> or <option>Admin</option>. When you select
+            Self an email will be sent to the user with the free subscription
+            containing an activation link. Visiting it will activate his user
+            account. When it is set to Admin the administrators of the site
+            will receive an email which will allow them to manually activate
+            the user with the free subscription. If you select
+            <option>None</option> then no email is sent and the free
+            subscribers will never get activated!</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Permissions</guilabel></para>
