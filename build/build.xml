@@ -157,21 +157,22 @@
 	<target name="ftpdeploy" depends="git">
 		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
 		<echo>Uploading release</echo>
-		<scp
-			host="${scp.host}"
-			port="${scp.port}"
-			username="${scp.username}"
-			password="${scp.password}"
-			todir="${scp.dir}/akeebasubs/${git.lastrevision}"
-			autocreate="true"
+		<ftpdeploy
+			host="${ftp.host}"
+			port="${ftp.port}"
+			username="${ftp.username}"
+			password="${ftp.password}"
+			dir="${ftp.dir}/akeebasubs/${git.lastrevision}"
+			mode="${ftp.mode}"
+			passive="true"
 			level="debug">
-			<fileset dir="${dirs.root}">
-				<include name="CHANGELOG"/>
-			</fileset>			
 			<fileset dir="${dirs.release}">
 				<include name="com_akeebasubs-*.zip"/>
 			</fileset>			
-		</scp>
+			<fileset dir="${dirs.root}">
+				<include name="CHANGELOG"/>
+			</fileset>			
+		</ftpdeploy>
 		<echo>All done. Have a cup of coffee and relax :)</echo>
 	</target>
 
