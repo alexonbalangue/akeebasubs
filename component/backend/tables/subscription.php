@@ -124,6 +124,21 @@ class AkeebasubsTableSubscription extends FOFTable
 		// Paid and enabled subscription; enable the user if he's not already enabled
 		$user = JFactory::getUser($this->user_id);
 		if($user->block) {
+			// Check the confirmfree component parameter and subscription level's price
+			// If it's a free subscription do not activate the user.
+			if(!class_exists('AkeebasubsHelperCparams')) {
+				require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+			}
+			$confirmfree = AkeebasubsHelperCparams::getParam('confirmfree', 0);
+			if($confirmfree) {
+				$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+					->getItem($this->akeebasubs_level_id);
+				if($level->price < 0.01) {
+					// Do not activate free subscription
+					return;
+				}
+			}
+			
 			$updates = array(
 				'block'			=> 0,
 				'activation'	=> ''

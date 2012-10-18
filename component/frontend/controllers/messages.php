@@ -84,6 +84,24 @@ class AkeebasubsControllerMessages extends FOFController
 				$db->query();
 				// Hit the user last visit field
 				$newUserObject->setLastVisit();
+			} elseif(($newUserObject->id == $userid) && $newUserObject->block) {
+				// Register the needed session variables
+				$session = JFactory::getSession();
+				$newUserObject = new JUser();
+				$session->set('user', $newUserObject);
+				$db = JFactory::getDBO();
+				// Check to see the the session already exists.
+				$app = JFactory::getApplication();
+				$app->checkSession();
+				// Update the user related fields for the Joomla sessions table.
+				$db->setQuery(
+					'UPDATE `#__session`' .
+					' SET `guest` = '.$db->q($newUserObject->get('guest')).',' .
+					'	`username` = '.$db->q($newUserObject->get('username')).',' .
+					'	`userid` = '.(int) $newUserObject->get('id') .
+					' WHERE `session_id` = '.$db->q($session->getId())
+				);
+				$db->query();
 			}
 		}
 		

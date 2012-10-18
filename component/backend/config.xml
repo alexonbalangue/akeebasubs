@@ -93,6 +93,12 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>				
 		</field >
+		<field name="confirmfree" type="list" default="0"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_CONFIRMFREE_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_CONFIRMFREE_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>				
+		</field >
 	</fieldset>
 	
 	<fieldset

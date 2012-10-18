@@ -925,7 +925,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 * @param bool $allowNewUser When true, we can create a new user. False, only update an existing user's data.
 	 * @return boolean 
 	 */
-	public function updateUserInfo($allowNewUser = true)
+	public function updateUserInfo($allowNewUser = true, $level = null)
 	{
 		$state = $this->getStateVariables();
 		$user = JFactory::getUser();
@@ -1056,6 +1056,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$userIsSaved = $userRecord->save($updates);			
 		}
 		
+		// Send activation email for free subscriptions if confirmfree is enabled
+		if($user->block && ($level->price < 0.01)) {
+			if(!class_exists('AkeebasubsHelperCparams')) {
+				require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+			}
+			$confirmfree = AkeebasubsHelperCparams::getParam('confirmfree', 0);
+			if($confirmfree) {
+				// Send the activation email
+				if(!isset($params)) $params = array();
+				$this->sendActivationEmail($user, $params);
+			}
+		}
+		
 		if(!$userIsSaved) {
 			JError::raiseWarning('', JText::_( $user->getError())); // ...raise a Warning
 			return false;
@@ -1171,7 +1184,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		if(!$allowed) {
 			return false;
-		}		
+		}
+		
+		// Fetch the level's object, used later on
+		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->getItem($state->id);
 
 		// Step #2. Check that the payment plugin exists or return false
 		// ----------------------------------------------------------------------
@@ -1195,7 +1212,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// ----------------------------------------------------------------------
 		$user = JFactory::getUser();
 		$this->setState('user', $user);
-		$userIsSaved = $this->updateUserInfo(true);
+		$userIsSaved = $this->updateUserInfo(true, $level);
 		
 		if(!$userIsSaved) {
 			return false;
@@ -1212,8 +1229,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// ----------------------------------------------------------------------
 		// First, the question: is this level part of a group?
 		$haveLevelGroup = false;
-		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->getItem($state->id);
 		if($level->akeebasubs_levelgroup_id > 0) {
 			// Is the level group published?
 			$levelGroup = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
@@ -1941,5 +1956,142 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		return $ret;
+	}
+	
+	/**
+	 * Send an activation email to the user
+	 * 
+	 * @param JUser $user
+	 */
+	private function sendActivationEmail($user, $data)
+	{
+		$app		= JFactory::getApplication();
+		$config		= JFactory::getConfig();
+		$uparams	= JComponentHelper::getParams('com_users');
+		$db			= JFactory::getDbo();
+		
+		$data = array_merge((array)$user->getProperties(), $data);
+		
+		$useractivation = $uparams->get('useractivation');
+
+		// Load the users plugin group.
+		JPluginHelper::importPlugin('user');
+		
+		if (($useractivation == 1) || ($useractivation == 2)) {
+			$params = array();
+			$params['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
+			$user->bind($params);
+			$userIsSaved = $user->save();
+		}
+		
+		// Set up data
+		$data = $user->getProperties();
+		$data['fromname']	= $config->get('fromname');
+		$data['mailfrom']	= $config->get('mailfrom');
+		$data['sitename']	= $config->get('sitename');
+		$data['siteurl']	= JUri::root();
+
+		// Load com_users translation files
+		$jlang = JFactory::getLanguage();
+		$jlang->load('com_users', JPATH_SITE, 'en-GB', true); // Load English (British)
+		$jlang->load('com_users', JPATH_SITE, $jlang->getDefault(), true); // Load the site's default language
+		$jlang->load('com_users', JPATH_SITE, null, true); // Load the currently selected language
+		
+		// Handle account activation/confirmation emails.
+		if ($useractivation == 2)
+		{
+			// Set the link to confirm the user email.
+			$uri = JURI::getInstance();
+			$base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
+			$data['activate'] = $base.JRoute::_('index.php?option=com_users&task=registration.activate&token='.$data['activation'], false);
+
+			$emailSubject	= JText::sprintf(
+				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
+				$data['name'],
+				$data['sitename']
+			);
+
+			$emailBody = JText::sprintf(
+				'COM_USERS_EMAIL_REGISTERED_WITH_ADMIN_ACTIVATION_BODY',
+				$data['name'],
+				$data['sitename'],
+				$data['siteurl'].'index.php?option=com_users&task=registration.activate&token='.$data['activation'],
+				$data['siteurl'],
+				$data['username'],
+				$data['password_clear']
+			);
+		}
+		elseif ($useractivation == 1)
+		{
+			// Set the link to activate the user account.
+			$uri = JURI::getInstance();
+			$base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
+			$data['activate'] = $base.JRoute::_('index.php?option=com_users&task=registration.activate&token='.$data['activation'], false);
+
+			$emailSubject	= JText::sprintf(
+				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
+				$data['name'],
+				$data['sitename']
+			);
+
+			$emailBody = JText::sprintf(
+				'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY',
+				$data['name'],
+				$data['sitename'],
+				$data['siteurl'].'index.php?option=com_users&task=registration.activate&token='.$data['activation'],
+				$data['siteurl'],
+				$data['username'],
+				$data['password_clear']
+			);
+		} else {
+
+			$emailSubject	= JText::sprintf(
+				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
+				$data['name'],
+				$data['sitename']
+			);
+
+			$emailBody = JText::sprintf(
+				'COM_USERS_EMAIL_REGISTERED_BODY',
+				$data['name'],
+				$data['sitename'],
+				$data['siteurl']
+			);
+		}
+		
+		// Send the registration email.
+		$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody);
+
+		//Send Notification mail to administrators
+		if (($uparams->get('useractivation') < 2) && ($uparams->get('mail_to_admin') == 1)) {
+			$emailSubject = JText::sprintf(
+				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
+				$data['name'],
+				$data['sitename']
+			);
+
+			$emailBodyAdmin = JText::sprintf(
+				'COM_USERS_EMAIL_REGISTERED_NOTIFICATION_TO_ADMIN_BODY',
+				$data['name'],
+				$data['username'],
+				$data['siteurl']
+			);
+
+			// get all admin users
+			$query = 'SELECT name, email, sendEmail' .
+					' FROM #__users' .
+					' WHERE sendEmail=1';
+
+			$db->setQuery( $query );
+			$rows = $db->loadObjectList();
+
+			// Send mail to all superadministrators id
+			foreach( $rows as $row )
+			{
+				$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $row->email, $emailSubject, $emailBodyAdmin);
+			}
+		}
+		
+		return $return;
 	}
 }
