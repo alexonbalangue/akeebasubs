@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.4.4
 + Flag to require a valid coupon code to be supplied in order to be allowed to subscribe (use coupon codes as authorization codes)
 + ClickAndBuy payment processor integration
 + Option to confirm free subscriptions by email (double opt-in)
++ Option to display 0.00 price tag as "FREE" in the front-end
 ~ Rearranged back-end tab order based on what is most used in real life instead of alpha-sorting
 # [HIGH] New subscription's start date would be the end date of the last canceled subscription (thank you NoNumber.nl)
 # [HIGH] Some custom field types didn't work at all

@@ -34,12 +34,16 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 	<div class="level akeebasubs-level-<?php echo $level->akeebasubs_level_id ?>">
 		<p class="level-title">
 			<span class="level-price">
+				<?php if(AkeebasubsHelperCparams::getParam('renderasfree', 0) && ($level->price < 0.01)):?>
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
+				<?php else: ?>
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
 				<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
 				<?php endif; ?>
 				<span class="level-price-integer"><?php echo $price_integer ?></span><?php if((int)$price_fractional > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?>
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
 				<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+				<?php endif; ?>
 				<?php endif; ?>
 			</span>
 			<span class="level-title-text">

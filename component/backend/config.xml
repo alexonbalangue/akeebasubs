@@ -99,6 +99,12 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>				
 		</field >
+		<field name="renderasfree" type="list" default="0"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_RENDERASFREE_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_RENDERASFREE_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>				
+		</field >
 	</fieldset>
 	
 	<fieldset
