@@ -16,6 +16,7 @@ Akeeba Subscriptions 2.4.4
 # [LOW] Strappy layout missing from the "List subscription levels" module
 # [LOW] Do not send expired subscription emails when a subscription's status is other than "Completed"
 # [LOW] VAT entry field too small
+# [LOW] Sometimes the interface renders strangely (e.g. when a plugin sets format="")
 
 Akeeba Subscriptions 2.4.4.rc1
 ================================================================================
