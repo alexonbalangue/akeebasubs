@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.4.5
+================================================================================
+# [LOW] Stat graphs broken when the error reporting in Joomla!' Global Configuration is set to Development
+
 Akeeba Subscriptions 2.4.4
 ================================================================================
 + Included special 2Checkout offer notification in the Control Panel of the component (deliberately untranslated)

@@ -577,6 +577,8 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		$k = $table->getKeyName();
 		
 		foreach($resultArray as $index => &$row) {
+			if(!property_exists($row, 'params')) continue;
+			
 			if(!is_array($row->params)) {
 				if(!empty($row->params)) {
 					$row->params = json_decode($row->params, true);
