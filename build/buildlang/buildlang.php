@@ -202,9 +202,6 @@ ENDHEAD;
 	// Add back-end files to archives
 	if(array_key_exists('backend', $files)){
 		foreach($files['backend'] as $file) {
-			$zip15->add($file,
-                	PCLZIP_OPT_ADD_PATH, 'backend' ,
-                	PCLZIP_OPT_REMOVE_PATH, dirname($file) );
 			$zip20->add($file,
                 	PCLZIP_OPT_ADD_PATH, 'backend' ,
                 	PCLZIP_OPT_REMOVE_PATH, dirname($file) );
@@ -213,9 +210,6 @@ ENDHEAD;
 	// Add front-end files to archives
 	if(array_key_exists('frontend', $files)){
 		foreach($files['frontend'] as $file) {
-			$zip15->add($file,
-                	PCLZIP_OPT_ADD_PATH, 'frontend' ,
-                	PCLZIP_OPT_REMOVE_PATH, dirname($file) );
 			$zip20->add($file,
                 	PCLZIP_OPT_ADD_PATH, 'frontend' ,
                 	PCLZIP_OPT_REMOVE_PATH, dirname($file) );
