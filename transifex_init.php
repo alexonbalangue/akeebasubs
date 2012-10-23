@@ -4,8 +4,7 @@ $component = 'com_akeebasubs';
 $txproject = 'akeebasubs';
 $root = dirname(__FILE__);
 
-$action = "scan_leaf_symlink";
-
+$action = "scan_leaf_txinit";
 $symlink_lang = 'pt-BR';
 
 function fix_file($file)
@@ -88,6 +87,11 @@ function scan_leaf_symlink($slugArray, $rootDir)
 function scan_leaf_txinit($slugArray, $rootDir) {
 	global $root, $txproject;
 	
+	if(!file_exists('tx.sh')) {
+		file_put_contents('tx.sh', '#!/bin/bash'."\n");
+		chmod('tx.sh', 0755);
+	}
+	
 	$files = glob($rootDir.'/en-GB/*.ini');
 	$slug = implode($slugArray, '_');
 	foreach($files as $f) {
@@ -109,7 +113,47 @@ function scan_leaf_txinit($slugArray, $rootDir) {
 		$cmd = "tx set --auto-local -r $txproject.$slug '$file_proto' --source-lang en-GB";
 		$cmd .= ' --execute';
 		
-		passthru($cmd);
+		//passthru($cmd);
+		$fp = fopen('tx.sh', 'at');
+		fwrite($fp, $cmd."\n");
+		fclose($fp);
+	}
+}
+
+function scan_leaf_outputcommand($slugArray, $rootDir) {
+	global $root, $txproject;
+	
+	if(!file_exists('tx.sh')) {
+		file_put_contents('tx.sh', '#!/bin/bash'."\n");
+		chmod('tx.sh', 0755);
+	}
+	
+	$files = glob($rootDir.'/en-GB/*.ini');
+	$slug = implode($slugArray, '_');
+	foreach($files as $f) {
+		
+		if(substr($f, -8) == '.sys.ini') {
+			$slug .= '_sys';
+		} elseif(substr($f, -9) == '.menu.ini') {
+			$slug .= '_menu';
+		} else {
+			$slug .= '_main';
+		}
+		
+		$file_proto = basename($f);
+		$file_proto = substr($file_proto, 5);
+		$file_proto = $rootDir.'/<lang>/<lang>'.$file_proto;
+		$file_proto = substr($file_proto, strlen($root)+1);
+		
+		echo $rootDir."\n";
+		$cmd = "tx pull -a -f -r $txproject.$slug";
+		$cmd .= "\n". '[ $? -ne 0 ] && echo "'.$cmd.'" >> tx_fucked.sh';
+		$cmd .= "\n\n";
+		$cmd = "clear\n$cmd";
+		
+		$fp = fopen('tx.sh', 'at');
+		fwrite($fp, $cmd);
+		fclose($fp);
 	}
 }
 
