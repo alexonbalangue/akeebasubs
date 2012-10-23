@@ -33,3 +33,5 @@ modules/admin/akeebasubs/language/en-GB
 
 /.tx/
 /tx_config
+
+/tx.sh
