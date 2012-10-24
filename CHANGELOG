@@ -2,6 +2,7 @@
 Akeeba Subscriptions 2.4.5
 ================================================================================
 # [LOW] Stat graphs broken when the error reporting in Joomla!' Global Configuration is set to Development
+! [HIGH] *SECURITY FIX* The payment success message logs in the user based on the subscription ID but doesn't log him out, leading to a potential security issue.
 
 Akeeba Subscriptions 2.4.4
 ================================================================================

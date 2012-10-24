@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerMessages extends FOFController
 {
+	private static $loggedinUser = false;
+	
 	public function __construct($config = array()) {
 		parent::__construct($config);
 		
@@ -54,8 +56,13 @@ class AkeebasubsControllerMessages extends FOFController
 		// otherwise his ACL privileges are stale.
 		$userid = JFactory::getUser()->id;
 		if(empty($userid)) {
+			self::$loggedinUser = true;
 			$userid = $subscription->user_id;
+		} else {
+			self::$loggedinUser = false;
+			$session->set('loggedin', null, 'com_akeebasubs');
 		}
+		
 		if($userid) {
 			// This line returns an empty JUser object
 			$newUserObject = new JUser();
@@ -105,6 +112,26 @@ class AkeebasubsControllerMessages extends FOFController
 			}
 		}
 		
+		return true;
+	}
+	
+	public function onAfterRead()
+	{
+		if(self::$loggedinUser) {
+			$newUserObject = new JUser();
+			$newUserObject->set('guest', 0);
+
+			$session->set('user', $newUserObject);
+			$db = JFactory::getDBO();
+			$app = JFactory::getApplication();
+			$app->checkSession();
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__session'))
+				->where( $db->qn('session_id') .' = '.$db->q($session->getId()) );
+			$db->setQuery($query);
+			$db->query();
+		}
+				
 		return true;
 	}
 }
