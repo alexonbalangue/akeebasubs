@@ -7,7 +7,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 <h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER') ?></h3>
 <p><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY') ?></p>
 <p align="center">
-<form action="<?php echo htmlentities($data->url) ?>"  method="post" >
+<form action="<?php echo htmlentities($data->url) ?>"  method="post" id="paymentForm">
 	<input type="hidden" name="gate" value="<?php echo $data->gate ?>" />
 	<input type="hidden" name="adminemail" value="<?php echo $data->adminemail ?>" />
 	<input type="hidden" name="process" value="<?php echo $data->process ?>" />
