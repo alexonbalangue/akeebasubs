@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - SCNet</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-06-02</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_SCNET_DESCRIPTION</description>
+	<files>
+		<filename plugin="scnet">scnet.php</filename>
+		<folder>scnet</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_scnet.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_scnet.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNET_TITLE_LABEL" description="PLG_AKPAYMENT_SCNET_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNET_PPIMAGE_LABEL" description="PLG_AKPAYMENT_SCNET_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNET_MERCHANTID_LABEL" description="PLG_AKPAYMENT_SCNET_MERCHANTID_DESC"/>
+				<field name="adminemail" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNET_EMAIL_LABEL" description="PLG_AKPAYMENT_SCNET_EMAIL_DESC"/>
+				<field name="url" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNET_URL_LABEL" description="PLG_AKPAYMENT_SCNET_URL_DESC"/>
+				<field type="spacer" />
+				<field name="image" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNET_IMAGE_LABEL" description="PLG_AKPAYMENT_SCNET_IMAGE_DESC"/>
+				<field name="backgroundimage" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNET_BGIMAGE_LABEL" description="PLG_AKPAYMENT_SCNET_BGIMAGE_DESC"/>
+				<field name="tablebgcolour" type="color" size="50" default="#57577A" label="PLG_AKPAYMENT_SCNET_BGCOLOUR_LABEL" description="PLG_AKPAYMENT_SCNET_BGCOLOUR_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_SCNET_SANDBOX_LABEL" description="PLG_AKPAYMENT_SCNET_SANDBOX_DESC">
+				<option value="0">JNo</option>
+				<option value="1">JYes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
