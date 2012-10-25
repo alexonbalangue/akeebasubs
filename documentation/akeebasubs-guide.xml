@@ -6758,6 +6758,114 @@ LEVEL2=11111:22222:33333</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="payment-clickandbuy">
+        <title>SCNet</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - SCNet</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.4.5.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows you to use the payment
+        processor SCNet.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "SCNet" or type in a custom name to
+              show to your customer's, e.g. "Pay with credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The Merchant ID as given by SCNet.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Admin Email</term>
+
+            <listitem>
+              <para>Usually the Merchant's Administration Email account. This
+              email address will receive a copy of all successful
+              receipts.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment Page</term>
+
+            <listitem>
+              <para>The URL of your Hosted Payment Page as given by
+              SCNet.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Thumbprint Image</term>
+
+            <listitem>
+              <para>Thumbprint (thumbnail) image to be displayed on the
+              Payment Page. The image can be uploaded using the Administration
+              Panel of SCNet.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Background image</term>
+
+            <listitem>
+              <para>If you want your own background water mark gif/jpg you can
+              upload it to our server using our Administration Panel of SCNet.
+              You can then enter the gif/jpg filename in this field e.g.
+              logo.gif.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Table background color</term>
+
+            <listitem>
+              <para>Set the table background caption color shown on the
+              Payment Page.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the sandbox (testing server). This is designed for integration
+              tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="plugins-integration">
