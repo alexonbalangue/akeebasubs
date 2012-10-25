@@ -80,11 +80,11 @@ class plgAkpaymentPrzelewy24 extends JPlugin
 			'p24_kwota'				=> (int)($subscription->gross_amount * 100),
 			'p24_opis'				=> $level->title,
 			'p24_klient'			=> trim($user->name),
-			'p24_adres'				=> trim($user->address1),
-			'p24_kod'				=> trim($user->zip),
+			'p24_adres'				=> trim($kuser->address1),
+			'p24_kod'				=> trim($kuser->zip),
 			'p24_miasto'			=> trim($kuser->city),
 			'p24_kraj'				=> strtoupper(trim($kuser->country)),
-			'p24_email'				=> trim($kuser->email),
+			'p24_email'				=> trim($user->email),
 			'p24_return_url_ok'		=> $callbackUrl,
 			'p24_return_url_error'	=> $callbackUrl
 		);
