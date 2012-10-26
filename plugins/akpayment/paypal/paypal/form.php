@@ -40,6 +40,9 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="state" value="<?php echo $kuser->state ?>">
 	<input type="hidden" name="zip" value="<?php echo $kuser->zip ?>">
 	<input type="hidden" name="country" value="<?php echo $kuser->country ?>">
+	
+	<?php // Remove the following line if PayPal doing POST to your site causes a problem ?>
+	<input type="hidden" name="rm" value="2">
 
 	<input type="hidden" name="no_note" value="1" />
 	<input type="hidden" name="no_shipping" value="1" />
