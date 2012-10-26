@@ -13,18 +13,8 @@ class AkeebasubsHelperCparams
 		
 		if(!is_object($params)) {
 			jimport('joomla.application.component.helper');
-			$component = JComponentHelper::getComponent('com_akeebasubs');
-			$params = $component->params;
-			if(!($params instanceof JRegistry)) {
-				jimport('joomla.registry.registry');
-				$params = new JRegistry($params);
-			}
+			$params = JComponentHelper::getParams('com_akeebasubs');
 		}
-		
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			return $params->get($key, $default);
-		} else {
-			return $params->getValue($key, $default);
-		}
+		return $params->get($key, $default);
 	}
 }
