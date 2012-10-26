@@ -60,6 +60,7 @@ class AkeebasubsControllerMessages extends FOFController
 			$userid = $subscription->user_id;
 		} else {
 			self::$loggedinUser = false;
+			$session = JFactory::getSession();
 			$session->set('loggedin', null, 'com_akeebasubs');
 		}
 		
