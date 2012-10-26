@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.4.5
 ================================================================================
++ #117 ePay (Scandinavian payment processor) integration
 + SCNet payment gateway plugin
 # [HIGH] The payment success message logs in the user based on the subscription ID but doesn't log him out, leading to a potential security issue.
 # [LOW] Stat graphs broken when the error reporting in Joomla!' Global Configuration is set to Development
