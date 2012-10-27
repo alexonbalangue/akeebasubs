@@ -87,6 +87,7 @@ class Com_AkeebasubsInstallerScript
 				'clickandbuy'			=> 0,
 				'deltapay'				=> 0,
 				'eselectplus'			=> 0,
+				'epaydk'				=> 0,
 				'eway'					=> 0,
 				'googlecheckout'		=> 0,
 				'ifthen'				=> 0,
