@@ -6759,7 +6759,7 @@ LEVEL2=11111:22222:33333</programlisting>
         </variablelist>
       </section>
 
-      <section xml:id="payment-clickandbuy">
+      <section xml:id="payment-scnet">
         <title>SCNet</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
@@ -6862,6 +6862,159 @@ LEVEL2=11111:22222:33333</programlisting>
               role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
               ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
               AND/OR CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="payment-epay">
+        <title>ePay (Denmark)</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - ePay</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.4.5.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows you to use the Danish
+        payment processor ePay (http://www.epay.dk).</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "ePay" or type in a custom name to show
+              to your customer's, e.g. "Pay with credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>The Merchant Number as given by ePay. Can be found under
+              the menu <guimenu>Settings</guimenu> and <guimenuitem>payment
+              system</guimenuitem> in the ePay administration.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the sandbox (testing server). This is designed for integration
+              tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox Merchant</term>
+
+            <listitem>
+              <para>The test account's merchant number. This is only used when
+              the Sandbox option above is turned on.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Use MD5 hash</term>
+
+            <listitem>
+              <para>When enabled it allows you to validate that the payment
+              responses actually do come from ePay and are not faked by
+              potential fraudsters.</para>
+
+              <warning>
+                <para>Before enabling this option in the plugin, you have to
+                enable this feature in ePay. So just remember to set
+                <guilabel>MD5 security check</guilabel> to <option>On
+                accepturl and by authorization</option> in the ePay
+                administration under the menu <guimenu>Settings</guimenu>,
+                <guimenuitem>Payment</guimenuitem> system. </para>
+              </warning>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment types</term>
+
+            <listitem>
+              <para>Select the accepted payment types. This is a multiple
+              selection box. You can hold down the CTRL key (Windows, Linux)
+              or CMD key (Mac) when clicking to select multiple items on the
+              list.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Language</term>
+
+            <listitem>
+              <para>The language the payment page will be displayed on. Select
+              "Auto detect" to have ePay detect the user's preferred language
+              automatically.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Callback text</term>
+
+            <listitem>
+              <para>(optional) Normally, when the user completes the payment,
+              ePay shows him a button with the default label "Return to
+              Merchant". If you type in something in here, it will be shown on
+              that button instead of the default label. For example, you can
+              type in something like "Return to Example.com"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Custom Header Image</term>
+
+            <listitem>
+              <para>(optional) The URL to an image to be shown on ePay's
+              checkout page header. It'd better be hosted on an HTTPS URL,
+              otherwise your customers will get a warning about insecure
+              content on their browser.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Header background color</term>
+
+            <listitem>
+              <para>(optional) The hex code of ePay checkout page's header
+              background color. For example, white is FFFFFF (note: there is
+              no # sign in front of the hex color code!)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Header border color</term>
+
+            <listitem>
+              <para>The hex code of ePay checkout page's header border color.
+              For example, light gray is CCCCCC (note: there is no # sign in
+              front of the hex color code!)</para>
             </listitem>
           </varlistentry>
         </variablelist>
