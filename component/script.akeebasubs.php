@@ -85,6 +85,7 @@ class Com_AkeebasubsInstallerScript
 				'cashu'					=> 0,
 				'ccavenue'				=> 0,
 				'clickandbuy'			=> 0,
+				'cmcic'					=> 0,
 				'deltapay'				=> 0,
 				'eselectplus'			=> 0,
 				'epaydk'				=> 0,
