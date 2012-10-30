@@ -514,9 +514,12 @@ ENDJS;
 				$multiselect = true;
 
 			case 'dropdown':
-				$html = "<select name=\"custom[{$item->slug}]\" id=\"{$item->slug}\"";
+				
 				if($multiselect) {
+					$html = "<select name=\"custom[{$item->slug}][]\" id=\"{$item->slug}\"";
 					$html .= " size=\"5\" multiple=\"multiple\"";
+				} else {
+					$html = "<select name=\"custom[{$item->slug}]\" id=\"{$item->slug}\"";
 				}
 				$html .= ">\n";
 				

@@ -7,6 +7,7 @@ Akeeba Subscriptions 2.4.5
 # [LOW] Stat graphs broken when the error reporting in Joomla!' Global Configuration is set to Development
 # [LOW] Przelewy24: user address, zip and email not sent to payment processor
 # [LOW] PayPal uses GET on return URL; when used with recurring payments causes variable replacement to fail on the message page
+# [LOW] Multiple selection custom fields didn't work
 
 Akeeba Subscriptions 2.4.4
 ================================================================================
