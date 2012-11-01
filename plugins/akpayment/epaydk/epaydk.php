@@ -423,7 +423,11 @@ if (isset($_GET["error"])) {
 	private function logIPN($data, $isValid)
 	{
 		$config = JFactory::getConfig();
-		$logpath = $config->getValue('log_path');
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$logpath = $config->get('log_path');
+		} else {
+			$logpath = $config->getValue('log_path');
+		}
 		$logFile = $logpath.'/akpayment_epay_ipn.php';
 		
 		jimport('joomla.filesystem.file');
