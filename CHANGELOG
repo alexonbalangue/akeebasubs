@@ -8,6 +8,7 @@ Akeeba Subscriptions 2.4.5
 # [LOW] Przelewy24: user address, zip and email not sent to payment processor
 # [LOW] PayPal uses GET on return URL; when used with recurring payments causes variable replacement to fail on the message page
 # [LOW] Multiple selection custom fields didn't work
+# [LOW] #118 ReCAPTCHA plugin doesn't work on Joomla! 3.0
 
 Akeeba Subscriptions 2.4.4
 ================================================================================

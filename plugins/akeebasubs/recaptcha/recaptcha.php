@@ -20,7 +20,11 @@ class plgAkeebasubsRecaptcha extends JPlugin
 			$showReCAPTCHA = false;
 		}
 		if($showReCAPTCHA) {
-			$levels = $this->params->getValue('autoauthids', array());
+			if(version_compare(JVERSION, '3.0', 'ge')) {
+				$levels = $this->params->get('autoauthids', array());
+			} else {
+				$levels = $this->params->getValue('autoauthids', array());
+			}
 			if(!is_null($levels) && !empty($levels)) {
 				if(!in_array($cache['subscriptionlevel'], $levels)) {
 					if(!in_array(0, $levels)) {
