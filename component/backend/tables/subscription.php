@@ -67,7 +67,22 @@ class AkeebasubsTableSubscription extends FOFTable
 			}
 		}
 		
-		//var_dump($this->params);die();
+		// If the current date is outside the publish_up / publish_down range
+		// then disable the subscription. Otherwise make sure it's enabled.
+		jimport('joomla.utilities.date');
+		$jNow = new JDate();
+		$uNow = $jNow->toUnix();
+		$jDown = new JDate($this->publish_down);
+		$jUp = new JDate($this->publish_up);
+		
+		if( ($uNow >= $jDown->toUnix()) ) {
+			$this->enabled = 0;
+		} elseif( ($uNow >= $jUp->toUnix()) && ($uNow < $jDown->toUnix())) {
+			$this->enabled = 1;
+		} else {
+			$this->enabled = 0;
+		}
+		
 		if(is_array($this->params)) {
 			if(!empty($this->params)) {
 				$this->params = json_encode($this->params);
