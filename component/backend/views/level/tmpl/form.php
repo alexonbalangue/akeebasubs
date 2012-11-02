@@ -163,6 +163,49 @@ $this->loadHelper('cparams');
 	</div>
 	
 </div>
+
+
+<?php
+	jimport('joomla.plugin.helper');
+	JPluginHelper::importPlugin('akeebasubs');
+	$app = JFactory::getApplication();
+	$params = $this->item->params;
+	if(is_array($params)) {
+		$params = (object)$params;
+	} else {
+		$params = new stdClass();
+	}
+	$this->item->params = $params;
+	$jResponse = $app->triggerEvent('onSubscriptionLevelFormRender', array($this->item));
+	if(is_array($jResponse) && !empty($jResponse)):
+?>
+<hr/>
+<div class="row-fluid">
+	<div class="span12">
+		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INTEGRATION_TITLE'); ?></h3>
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+<?php $n = 0; foreach($jResponse as $customGroup): $n++; ?>
+				<li <?php if($n==1): ?>class="active"<?php endif; ?>>
+					<a href="#tab<?php echo $n ?>" data-toggle="tab"><?php echo $customGroup->title ?></a>
+				</li>
+
+<?php endforeach; ?>
+			</ul>
+			<div class="tab-content">
+<?php $n = 0; foreach($jResponse as $customGroup): $n++; ?>
+				<div class="tab-pane <?php if($n==1): ?>active<?php endif; ?>" id="tab<?php echo $n ?>">
+<?php echo $customGroup->html ?>
+				</div>
+
+<?php endforeach; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php endif; ?>
+	
 <hr/>
 <div class="row-fluid">
 	

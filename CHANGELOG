@@ -1,8 +1,9 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.4.5
 ================================================================================
-+ #117 ePay (Scandinavian payment processor) integration
-+ SCNet payment gateway plugin
++ #117 ePay (Scandinavian payment processor) integration (beta)
++ #120 Easier configuration of the Joomla! usergroups integration
++ SCNet payment gateway plugin (beta)
 # [HIGH] The payment success message logs in the user based on the subscription ID but doesn't log him out, leading to a potential security issue.
 # [HIGH] Integration plugins would sometime not run or run under the wrong context
 # [HIGH] Sometimes users were not removed from usergroups after their subscription expired (linked to integration plugins issue)

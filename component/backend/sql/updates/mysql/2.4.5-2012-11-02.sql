@@ -1,0 +1,1 @@
+ALTER TABLE `#__akeebasubs_levels` ADD COLUMN `params` TEXT AFTER `akeebasubs_levelgroup_id`

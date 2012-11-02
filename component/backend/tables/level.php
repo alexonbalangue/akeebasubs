@@ -73,6 +73,16 @@ class AkeebasubsTableLevel extends FOFTable
 			$result = false;
 		}
 		
+		// Serialise params
+		if(is_array($this->params)) {
+			if(!empty($this->params)) {
+				$this->params = json_encode($this->params);
+			}
+		}
+		if(is_null($this->params) || empty($this->params)) {
+			$this->params = '';
+		}
+		
 		return $result;
 	}
 	
@@ -95,5 +105,24 @@ class AkeebasubsTableLevel extends FOFTable
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Unserialises the parameters when loading the record
+	 * @param AkeebasubsTableLevel $result
+	 * @return bool
+	 */
+	public function onAfterLoad(&$result) {
+		// Convert params to an array
+		if(!is_array($this->params)) {
+			if(!empty($this->params)) {
+				$this->params = json_decode($this->params, true);
+			}
+		}
+		if(is_null($this->params) || empty($this->params)) {
+			$this->params = array();
+		}
+		
+		return parent::onAfterLoad($result);
 	}
 }
