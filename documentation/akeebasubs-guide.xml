@@ -718,6 +718,12 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <bridgehead>How to make it all work together to make money from your
       site</bridgehead>
 
+      <note>
+        <para>The procedure outlined below works with Akeeba Subscriptions
+        2.4.5 or later. For earlier versions please consult the documentation
+        PDF file of your Akeeba Subscriptions version.</para>
+      </note>
+
       <para>What we described above cover just one small part of Akeeba
       Subscriptions' functionality: how to create something that your clients
       can buy and how to sell it. Obviously, your clients expect to get
@@ -745,54 +751,41 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       Subscribers group to it. Then she will set the View Access Level to all
       her premium Joomla! articles to, you guessed it, Premium Content.</para>
 
+      <para>Before we go back to defining our subscription levels, Alice has
+      to do one small thing. She has to go to the Extensions, Plugin Manager
+      page where she makes sure that the "Akeeba Subscriptions - Joomla!
+      Usergroups Integration" is enabled.</para>
+
       <para>Then, she will set up the three subscription levels. The first
       level is called <option>3MONTHS</option> and has a duration of 90 days.
       The second one is called <option>6MONTHS</option> and has a length of
       180 days. The last one is called <option>12MONTHS</option> and has a
-      length of 365 days.</para>
-
-      <para>Now she can limit who can access the premium content and she can
-      sell subscriptions. It's time to glue things together, making sure that
-      buying a subscription gives you access to the premium content. The logic
-      is simple: you need to use the relevant Akeeba Subscriptions integration
-      plugin. In our case, we want to glue together Akeeba Subscriptions and
-      Joomla! user groups. Cool bananas! There's a plugin for that, it's
-      called "Akeeba Subscriptions - Joomla! Usergroups Integration". First
-      stop for Alice is the Extensions, Plugin Manager page where she finds
-      the plugin and activates it. The plugin, however, is just your typical
-      computer personality: dumb. You need to tell it what to do. Easy peasy.
-      Click on it and the configuration page appears. After reading the fine
-      documentation, Alice figure out that she needs to enter the following in
-      the two text areas:</para>
-
-      <programlisting>3MONTHS=Subscribers
-6MONTHS=Subscribers
-12MONTHS=Subscribers</programlisting>
-
-      <para>Translation for everyone else. Each line "glues" one Subscription
-      Level to one Joomla! User Group. Left hand side: the title of the
-      Subscription Level, as you entered it in Akeeba Subscriptions. The right
-      hand side: the name of the Joomla! user group, as you entered it in
-      Joomla!'s user group management.</para>
+      length of 365 days. For each plugin, in the Integration area, she has to
+      click on the User Groups tab. Most likely it's the only tab and it's
+      already active. See those "Add to Joomla! Usergroups" and "Remove from
+      Joomla! Usergroups" lists? She just has to select the
+      <option>Subscribers</option> group on each one of them. This tells
+      Akeeba Subscriptions to add the subscribers to the Subscribers group
+      once their subscription is enabled and remove them from this group when
+      their subscription expires. Phew! It's easier done than said!</para>
 
       <para>One final detail left: handling user payments. Essentially, you
       need a payments processor that Akeeba Subscriptions can talk to and ask
       them to handle the gory details of payments. The easiest option is
-      PayPal. Setting it up is very easy, indeed. Just go to PayPal and open a
-      new account. Now go to your site's Plugin Manager, find the "Akeeba
-      Subscriptions - PayPal integration" plugin, enable it and edit its
-      configuration. All you need to do is enter your email address, the same
-      one you used to open a PayPal account, into the Merchant ID or Email
-      field. Save and close. Done!</para>
+      PayPal. Setting it up is very easy, indeed. Alice has to go to PayPal
+      and open a new account. Now back she goes to her site's Plugin Manager,
+      finds the "Akeeba Subscriptions - PayPal integration" plugin, enables it
+      and edits its configuration. All she needs to do is enter her email
+      address, the same one she used to open a PayPal account, into the
+      Merchant ID or Email field. Save and close. Done!</para>
 
       <para>Now you get the idea of how subscriptions and site features glue
       together. You start by developing your site, limiting access to premium
       content using groups or whatever your components provide. Then create
-      your Subscription Levels in Akeeba Subscriptions. Continue with enabling
-      and configuring the respective Akeeba Subscriptions integration
-      plugin(s), gluing subscriptions to your site features. Finally add the
-      payment plugins you want and you're ready to start making some
-      money.</para>
+      your Subscription Levels in Akeeba Subscriptions and select the
+      appropriate group(s) for each level, gluing subscriptions to your site
+      features. Finally add the payment plugins you want and you're ready to
+      start making some money.</para>
     </section>
 
     <section xml:id="configuration">
@@ -2647,7 +2640,7 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="custom-fields">
       <title>Custom fields</title>
 
-      <para>This feature was added in Akeeba Subscritpions 3.4.0.</para>
+      <para>This feature was added in Akeeba Subscriptions 3.4.0.</para>
 
       <important>
         <para>You need to publish the "Akeeba Subscriptions - Custom fields"
@@ -3548,7 +3541,7 @@ Rule C gives $ 30 discount</programlisting>
 
           <step>
             <para>Go to your site's back-end, Components, Akeeba
-            Subscritpions, Subscriptions</para>
+            Subscriptions, Subscriptions</para>
           </step>
 
           <step>
@@ -3601,7 +3594,7 @@ Rule C gives $ 30 discount</programlisting>
 
           <step>
             <para>Go to your site's back-end, Components, Akeeba
-            Subscritpions, Subscriptions</para>
+            Subscriptions, Subscriptions</para>
           </step>
 
           <step>
@@ -6959,7 +6952,7 @@ LEVEL2=11111:22222:33333</programlisting>
                 <guilabel>MD5 security check</guilabel> to <option>On
                 accepturl and by authorization</option> in the ePay
                 administration under the menu <guimenu>Settings</guimenu>,
-                <guimenuitem>Payment</guimenuitem> system. </para>
+                <guimenuitem>Payment</guimenuitem> system.</para>
               </warning>
             </listitem>
           </varlistentry>
@@ -7494,7 +7487,16 @@ LEVEL3=Group 1</programlisting>
         at all of the user's active and inactive subscriptions and decide
         which groups the user should be added to or removed from.</para>
 
-        <para>The plugin has these options:</para>
+        <note>
+          <para>The instructions below apply to Akeeba Subscriptions 2.4.5 and
+          later. For earlier versions please do consult the documentation PDF
+          file for your version.</para>
+        </note>
+
+        <para>The plugin has no options. Its configuration is integrated to
+        each subscription level. In each subscription level, under the
+        Integrations area, you will see a "User Groups" tab when this plugin
+        is enabled. The options given are:</para>
 
         <variablelist>
           <varlistentry>
@@ -7503,26 +7505,8 @@ LEVEL3=Group 1</programlisting>
             <listitem>
               <para>This is a list for assigning subscription levels to
               Joomla! groups. When a user has an active subscription to the
-              specified level, he'll be added to the Joomla! group mentioned
-              on the right hand of the equal sign. Each assignment is done
-              like this:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1, Group 2 and Group 3 are the names of the Joomla! groups
-              you want to add a user to when he subscribes. If you want to
-              assign multiple subscription levels to multiple groups, you have
-              to do something like that (separate multiple lines with a single
-              press of the ENTER key on your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              Joomla! groups instead of their titles. However, we consider
-              working with numeric IDs very counter-intuitive.</para>
+              specified level, he'll be added to the Joomla! groups selected
+              in the list.</para>
             </listitem>
           </varlistentry>
 
@@ -7534,30 +7518,18 @@ LEVEL3=Group 4,Group 1</programlisting>
               a user from when his subscription to the specified level is no
               longer active. Do note that you can specify a different set of
               groups to remove the user from than the ones you are adding him
-              to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
+              to. </para>
             </listitem>
           </varlistentry>
         </variablelist>
 
-        <para>In this example, together with the rules displayed in "Add to
-        Joomla! groups", when a subscription to the LEVEL1 level expires, the
-        user will still belong to Joomla!'s Group 3, as it's not removed from
-        his account; only Group 1 and Group 2 are removed. Likewise, if the
-        user has an expired LEVEL1 subscription and an active LEVEL2
-        subscription he'll now belong to Group 2 and Group 3: Group 3 because
-        it's not removed when his subscription expires and Group 2 because his
-        active LEVEL2 subscription suggests that he should be granted Group 2
-        access despite his expired LEVEL1 subscription.</para>
-
-        <para>If you find this hard to understand, join the club. ACLs are not
-        meant to be easy to setup or understand. It's a power feature and, as
-        such, poses a great difficulty to even the most seasoned web site
-        integrators. Take your time and experiment on a dev copy of your site
-        before going live.</para>
+        <para>When deciding which groups to add users to / remove from, this
+        plugin takes into account all of the user's active and expired
+        subscriptions. If a user group ends up begging to both be removed from
+        the user account and added to it add wins. That is to say that if an
+        expired subscription tells us to remove a user from Group A and
+        another one tells us to add the user to Group A then the plugin always
+        decides to add the user to Group A.</para>
       </section>
 
       <section xml:id="integration-k2">
