@@ -813,7 +813,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         <listitem>
           <para><link xlink:href="http://www.aclmanager.net/">ACL
           Manager</link> is a third party commercial component which can help
-          you effectively managing ACLs on complex sites. </para>
+          you effectively managing ACLs on complex sites.</para>
         </listitem>
       </itemizedlist>
 
@@ -7896,7 +7896,7 @@ LEVEL3=Group 1</programlisting>
               a user from when his subscription to the specified level is no
               longer active. Do note that you can specify a different set of
               groups to remove the user from than the ones you are adding him
-              to. </para>
+              to.</para>
             </listitem>
           </varlistentry>
         </variablelist>
@@ -9833,6 +9833,187 @@ LEVEL3=Badge 1</programlisting>
           subscribers and non-subscribers, no matter if you have decided on
           the final list or naming of your subscription levels.</para>
         </tip>
+      </section>
+
+      <section xml:id="plugin-astimedcontent">
+        <title>Timed content release</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Content - Akeeba
+        Subscriptions Timed Release</guilabel></para>
+
+        <para>This content plugin allows you to show parts of your content
+        only to specific subscribers, depending on how many days they are on
+        particular subscription levels, or how many days remain in their
+        subscription to perticular subscription levels. This is a very
+        powerful feature that allows you to "drip feed" information to your
+        subscribers.</para>
+
+        <para>Practical use case: e-Learning sites. On an e-learning site a
+        user usually subscribes to a course which lasts for weeks. Typically,
+        you only want your student to see certain information every few
+        days/weeks, disallowing them to peek through to the end of the course.
+        This plugin will help do exactly that.</para>
+
+        <para>Another practical use case: showing coupon codes to your
+        subscribers as the end of their subscription expiration comes near,
+        e.g. during the last 30 days of their subscription.</para>
+
+        <note>
+          <para>Like the content restriction plugin, it cannot "hide" entire
+          articles, e.g. not show them at all to people outside the specified
+          time constraints. At best, only the title will be shown.</para>
+        </note>
+
+        <para>Its syntax is:</para>
+
+        <programlisting>{astimedrelease <replaceable>expression</replaceable> }Your content{/astimedrelease}</programlisting>
+
+        <para>This means that "Your content" will only be displayed to users
+        whose subscriptions satisfy the <replaceable>expression</replaceable>.
+        In the simplest form, expression is just the name of a subscription
+        level, e.g.</para>
+
+        <programlisting>{astimedrelease LEVEL1}Your content{/astimedrelease}</programlisting>
+
+        <para>In this form it will only show the content if the user has or
+        has ever had a subscription on the LEVEL1 subscription level. It gets
+        infinitely more useful appending time expressions after the
+        subscription level.</para>
+
+        <para>Time expressions follow the subscription level, are enclosed in
+        parentheses and consist of one or two arguments. Since it's hard to
+        explain this otherwise, let's take some examples:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>LEVEL1(10)</term>
+
+            <listitem>
+              <para>The user must have more than 10 days of presence in the
+              LEVEL1 subscription level</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>LEVEL1(X,10)</term>
+
+            <listitem>
+              <para>The user must have less than 10 days of presence in the
+              LEVEL1 subscription level</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>LEVEL1(10,20)</term>
+
+            <listitem>
+              <para>The user must have between 10 and 20 days of presence in
+              the LEVEL1 subscription level</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>LEVEL1(-10)</term>
+
+            <listitem>
+              <para>The user must have more than 10 days before his
+              subscription at the LEVEL1 subscription level expires</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>LEVEL1(-5,-10)</term>
+
+            <listitem>
+              <para>The user must have more than 10 but less than 5 days
+              before his subscription at the LEVEL1 subscription level
+              expires</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>LEVEL1(X,-5)</term>
+
+            <listitem>
+              <para>The user must have less than 5 days before his
+              subscription at the LEVEL1 subscription level expires</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>You can create complex situations involving multiple checks
+        using the &amp;&amp; (and) and || (or) operators. For example:</para>
+
+        <programlisting>{astimedrelease LEVEL1(X,10) &amp;&amp; LEVEL2(-10)}Your content{/astimedrelease}</programlisting>
+
+        <para>means that the user must be in his first 10 days of a LEVEL1
+        subscription and his last 10 days of a LEVEL2 subscription (but not
+        one without the other also being true). Conversely:</para>
+
+        <programlisting>{astimedrelease LEVEL1(X,10) &amp;&amp; LEVEL2(-10)}Your content{/astimedrelease}</programlisting>
+
+        <para>means that the user must be in his first 10 days of a LEVEL1
+        subscription or his last 10 days of a LEVEL2 subscription (or
+        both).</para>
+
+        <para>Moreover you can use the ! (not) operator to negate the effect
+        of an expression. For example:</para>
+
+        <programlisting>{astimedrelease LEVEL1(X,10) &amp;&amp; !LEVEL2(-10)}Your content{/astimedrelease}</programlisting>
+
+        <para>means that the user must be in his first 10 days of a LEVEL1
+        subscription but not his last 10 days of a LEVEL2 subscription.</para>
+
+        <important>
+          <para>he logical OR consists of two "pipe" symbols. These are not
+          the same as capital I! On a Mac's keyboard, the pipe symbol is
+          present next to the ENTER key, accessible by pressing SHIFT-\. On
+          most Windows/Linux machines, this key is usually somewhere near the
+          ENTER key and is most likely accessible by pressing SHIFT-\ as
+          well.</para>
+        </important>
+
+        <note>
+          <para>This plugin does a "smart calculation" of the time the user
+          has a subscription on a particular level. It sums up the time he has
+          consumed for all of his subscriptions on that level to date,
+          including expired subscriptions.</para>
+
+          <para>For example a user has two subscriptions: LEVEL1 from 1/1/2012
+          to 31/1/2012, expired. LEVEL1 from 15/3/2012 to 15/4/2102, active.
+          Assuming that the current date is April 1st, 2012 the user's
+          calculated time on LEVEL1 is 46 days: 31 days from his expired
+          subscription and 15 days from his current subscription.</para>
+
+          <para>Similarly the number of days till the subscription expiration
+          are calculated based on the expiration date of the last expiring
+          paid subscription of the user on that level, one which may not be
+          active yet.</para>
+        </note>
+
+        <para>Moreover, the plugin allows you to display the number of days a
+        user has accumulated on a subscription level and how many days remain
+        until his subscription expires:</para>
+
+        <programlisting>{asdayselapsed LEVEL1}</programlisting>
+
+        <para>shows how many days the user has had subscriptions for the
+        LEVEL1 subscription level.</para>
+
+        <programlisting>{asdaysremaining LEVEL1}</programlisting>
+
+        <para>shows how many days remain until the users subscription to
+        LEVEL1 expires.</para>
+
+        <para>You can also append a comma and a number to add/remove a number
+        of days. For example:</para>
+
+        <programlisting>{asdaysremaining LEVEL1,-10}</programlisting>
+
+        <para>shows how many days remain until the users subscription to
+        LEVEL1 expires, minus 10 days. This feature is useful for displaying
+        the number of days left before you allow your user to view some timed
+        release content.</para>
       </section>
 
       <section xml:id="plugin-aslink">
