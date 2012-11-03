@@ -316,6 +316,20 @@
       <section xml:id="installation">
         <title>Installation</title>
 
+        <screenshot>
+          <info>
+            <title>Installing Akeeba Subscriptions through Extension
+            Manager</title>
+          </info>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata depth="50%" fileref="images/1.png" scalefit="1"
+                         width="95%"/>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
         <para>Installing the package is the same as with any other Joomla!
         component. Go to your site's back-end Extensions, Manage and click on
         Browse. Locate the ZIP package and click on Upload and Install. If the
@@ -326,13 +340,14 @@
       <section xml:id="installation-troubleshooting">
         <title>Installation troubleshooting</title>
 
-        <bridgehead>Joomla! 1.6+ is logging you out during
+        <bridgehead>Joomla! is logging you out during
         installation</bridgehead>
 
         <para>The first thing you might observe is that <emphasis
-        role="bold">Joomla! 1.6 is logging you out when trying to
+        role="bold">Joomla! is logging you out when trying to
         install</emphasis> Akeeba Subscriptions. This is due to a bug in
-        Joomla! 1.6. Please <link
+        Joomla! session handling (the session storage space is too small).
+        Please <link
         xlink:href="http://docs.joomla.org/Why_does_the_administrator_logoff_all_of_the_sudden">follow
         these instructions</link> to fix the database table that causes this
         issue. After doing that you will have to log in again to your site.
@@ -341,18 +356,18 @@
         link on the top-right of your page, then log back in. Everything is
         back to normal and you can retry the installation.</para>
 
-        <bridgehead>Joomla! 1.6+ says "can't build admin menu" and
-        fails</bridgehead>
+        <bridgehead>Joomla! says "can't build admin menu" and fails or Akeeba
+        Subscriptions' entry under the Components menu disappears</bridgehead>
 
         <note>
-          <para>This problem should have gone away since Akeeba Subscriptions
-          1.0.0 (Stable) and later releases</para>
+          <para>This problem should be mostly fixed as of Joomla! 2.5.6 and
+          later releases</para>
         </note>
 
         <para>On some other occasions, especially when trying to install or
         update the component after an installation error, Joomla! will
         complain that it <emphasis role="bold">cannot build admin
-        menus</emphasis>. This is due to another Joomla! 1.6/1.7 bug <link
+        menus</emphasis>. This is due to another Joomla! bug <link
         xlink:href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&amp;tracker_item_id=25663">we
         have sent a patch for</link> to the Joomla! development team.
         Meanwhile, you will have to run a few SQL statements against your
@@ -581,8 +596,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         means that they resolve to a different IP depending on where in the
         world you are.</para>
 
-        <bridgehead>Using Joomla! 1.6 and later's extension
-        update</bridgehead>
+        <bridgehead>Using Joomla! extensions update</bridgehead>
 
         <para>Since Joomla! 1.6, the Joomla! Extensions Manager allows
         directly updating your extensions. Just log in to the backend of your
@@ -608,12 +622,31 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
     <section xml:id="uninstallation">
       <title>Uninstallation</title>
 
+      <screenshot>
+        <info>
+          <title>Uninstalling Akeeba Subscriptions through Extension
+          Manager</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/2.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
       <para>You can uninstall the component just like any other Joomla!
       component. In your site's back-end, just go to <guimenuitem>Extensions
-      Manager</guimenuitem>, click on <guilabel>Uninstall</guilabel>, select
-      Akeeba Subscriptions and click on <guibutton>Uninstall</guibutton>. This
-      will completely remove Akeeba Subscriptions including all subscriber
-      information.</para>
+      Manager</guimenuitem>, click on <guilabel>Uninstall</guilabel>. In the
+      <guilabel>Filter</guilabel> area type
+      <parameter>subscription</parameter> and click on
+      <guibutton>Search</guibutton>. Several entries appear. Select the entry
+      where the <guilabel>Name</guilabel> is Akeeba Susbcriptions and
+      <guilabel>Type</guilabel> is Component. Do not select the other entries;
+      they are removed automatically. Now click on
+      <guibutton>Uninstall</guibutton>. This will completely remove Akeeba
+      Subscriptions including all subscriber information.</para>
     </section>
   </chapter>
 
@@ -733,59 +766,389 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       together subscriptions and features on your site.</para>
 
       <para>In order to make it easier to understand, let's take a simple
-      example. Alice wants to set up a magazine site. Subscribers will have
-      access to premium content. She wants to sell 3, 6 and 12 months
-      subscriptions. How can she do it? Very easily, but she has to start
-      <emphasis>backwards</emphasis>. She will set up her site's Joomla! ACL
-      to limit access to the premium content, Akeeba Subscriptions to sell
+      example. You want to set up a magazine site. Subscribers will have
+      access to premium content. You want to sell 3, 6 and 12 months
+      subscriptions. How can you do it? Very easily, but you have to start
+      <emphasis>backwards</emphasis>. We will set up you site's Joomla! ACL to
+      limit access to the premium content, Akeeba Subscriptions to sell
       subscriptions to the premium content and the <guilabel>Akeeba
       Subscriptions - Joomla! Usergroups Integration</guilabel> plugin as the
       glue to link Joomla! ACL (usergroups) to subscriptions. Still with us?
-      Let's see how she can do it in 5 minutes or less.</para>
+      Let's see how we can do it in 5 minutes or less.</para>
 
-      <para>First, she has to ensure that premium content can only be accessed
-      by subscribers. Using Joomla! 1.6 and later it is very easy to do so.
-      She needs to create a Joomla! user group called
-      <option>Subscribers</option>. Then, she will create a new View Access
-      Level called <option>Premium Content</option>, adding only the new
-      Subscribers group to it. Then she will set the View Access Level to all
-      her premium Joomla! articles to, you guessed it, Premium Content.</para>
+      <bridgehead renderas="sect4">Setting up Joomla! access control (ACL) for
+      your content</bridgehead>
 
-      <para>Before we go back to defining our subscription levels, Alice has
-      to do one small thing. She has to go to the Extensions, Plugin Manager
-      page where she makes sure that the "Akeeba Subscriptions - Joomla!
-      Usergroups Integration" is enabled.</para>
+      <para>First, we have to ensure that premium content can only be accessed
+      by subscribers only. Using Joomla!'s powerful access control features it
+      is very easy to do so. Before we begin, we strongly recommend reading
+      some more about how Joomla! access control works:</para>
 
-      <para>Then, she will set up the three subscription levels. The first
-      level is called <option>3MONTHS</option> and has a duration of 90 days.
-      The second one is called <option>6MONTHS</option> and has a length of
-      180 days. The last one is called <option>12MONTHS</option> and has a
-      length of 365 days. For each plugin, in the Integration area, she has to
-      click on the User Groups tab. Most likely it's the only tab and it's
-      already active. See those "Add to Joomla! Usergroups" and "Remove from
-      Joomla! Usergroups" lists? She just has to select the
-      <option>Subscribers</option> group on each one of them. This tells
-      Akeeba Subscriptions to add the subscribers to the Subscribers group
-      once their subscription is enabled and remove them from this group when
-      their subscription expires. Phew! It's easier done than said!</para>
+      <itemizedlist>
+        <listitem>
+          <para><link
+          xlink:href="http://magazine.joomla.org/issues/issue-jan-2012/item/637-Joomla-1-6,-1-7,-and-2-5-ACL-Concepts-Overview">ACL
+          concepts overview</link> (beginners)</para>
+        </listitem>
 
-      <para>One final detail left: handling user payments. Essentially, you
-      need a payments processor that Akeeba Subscriptions can talk to and ask
-      them to handle the gory details of payments. The easiest option is
-      PayPal. Setting it up is very easy, indeed. Alice has to go to PayPal
-      and open a new account. Now back she goes to her site's Plugin Manager,
-      finds the "Akeeba Subscriptions - PayPal integration" plugin, enables it
-      and edits its configuration. All she needs to do is enter her email
-      address, the same one she used to open a PayPal account, into the
-      Merchant ID or Email field. Save and close. Done!</para>
+        <listitem>
+          <para><link
+          xlink:href="http://magazine.joomla.org/issues/issue-feb-2012/item/639-Joomla-ACL-Access-Levels">Joomla!
+          ACL: Access Levels</link> (beginners; scroll all the way down for a
+          very good video)</para>
+        </listitem>
 
-      <para>Now you get the idea of how subscriptions and site features glue
-      together. You start by developing your site, limiting access to premium
-      content using groups or whatever your components provide. Then create
-      your Subscription Levels in Akeeba Subscriptions and select the
-      appropriate group(s) for each level, gluing subscriptions to your site
-      features. Finally add the payment plugins you want and you're ready to
-      start making some money.</para>
+        <listitem>
+          <para><link
+          xlink:href="http://magazine.joomla.org/issues/Issue-Aug-2012/item/825-A-Case-for-Role-Based-ACL">A
+          case for role-based ACL</link> (advanced)</para>
+        </listitem>
+
+        <listitem>
+          <para><link
+          xlink:href="http://magazine.joomla.org/issues/Issue-Sept-2012/item/856-Implementing-Role-Based-ACL">Implementing
+          role-based ACL</link> (advanced)</para>
+        </listitem>
+
+        <listitem>
+          <para><link xlink:href="http://www.aclmanager.net/">ACL
+          Manager</link> is a third party commercial component which can help
+          you effectively managing ACLs on complex sites. </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Alternatively, you'll have to just take our word and follow our
+      easy instructions below. So, let's get down to business! You need to
+      create a Joomla! user group called <option>Subscribers</option>. In
+      order to do so go to <guimenu>Users</guimenu>,
+      <guimenuitem>Groups</guimenuitem> menu item.</para>
+
+      <screenshot>
+        <info>
+          <title>Going into the User Groups page</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth=" " fileref="images/3.png" scalefit="1"
+                       width="320px"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Then click on the <guibutton>New</guibutton> button.</para>
+
+      <screenshot>
+        <info>
+          <title>The User Groups page</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/4.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Enter the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><guilabel>Group title</guilabel>: Subscriber</para>
+        </listitem>
+
+        <listitem>
+          <para><guilabel>Group Parent</guilabel>: Public</para>
+        </listitem>
+      </itemizedlist>
+
+      <screenshot>
+        <info>
+          <title>Adding a new user group</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/5.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>and click on <guibutton>Save &amp; Close</guibutton>. No, we will
+      create a new Viewing Access Level called <option>Premium
+      Content</option>, adding only the new Subscribers group to it. Click on
+      <guilabel>Viewing Access Level</guilabel> and then click on
+      <guibutton>New</guibutton>.</para>
+
+      <screenshot>
+        <info>
+          <title>The Viewing Access Level page</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/6.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>In the new page enter Premium Content as your level title and
+      select ONLY the Subscriber group. There are two very common mistakes
+      we've seen people doing:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Using the Registered or any other built-in user group instead
+          of a dedicated Subscriber user group. This is wrong. Without getting
+          into too much technical details and rare exceptions, you should keep
+          in mind that all Joomla! user accounts belong to the Registered
+          group. Otherwise they wouldn't be able to log in at all. If you use
+          the Registered group as your subscribers group then all users are
+          subscribers, no matter if they paid or not. This is not a bug in
+          Akeeba Subscriptions, it's how Joomla! works.</para>
+        </listitem>
+
+        <listitem>
+          <para>Some people select both the Subscriber and Registered (or,
+          worse, Public!) user groups in their Viewing Access Level. This is
+          wrong. A user has access to content assigned to a particular Viewing
+          Access Level if he belongs to <emphasis>any</emphasis> of the groups
+          selected in the Viewing Access Level or one of their children
+          groups. For example, if you select the Manager group in a Viewing
+          Access Level then user who belong to either the Manager or the
+          Administrator user group have access to the content. This happens
+          because the Administrator group is a child (is
+          <emphasis>under</emphasis>) the Manager group. This takes some
+          getting used to, no doubt. Again, this is not a bug with Akeeba
+          Subscriptions, it's the way Joomla! is designed to work.</para>
+        </listitem>
+      </itemizedlist>
+
+      <screenshot>
+        <info>
+          <title>Creating a new Viewing Access Level</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/7.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Then click on <guibutton>Save &amp; Close</guibutton>.</para>
+
+      <para>Then you have to set the Access to all the premium Joomla!
+      articles and components to, you guessed it, Premium Content. The easiest
+      way is using the batch processing feature of Joomla!. Go to Joomla!
+      article manager, select all the subscriber-only articles and scroll
+      down. You'll see the <guilabel>Batch process the selected articles
+      area</guilabel>. Set the <guilabel>Set Access Level</guilabel> to
+      <option>Premium Content</option> and click on
+      <guibutton>Process</guibutton>. Done!</para>
+
+      <screenshot>
+        <info>
+          <title>Assigning a different access level to many articles at
+          once</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/8.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <bridgehead renderas="sect4">Using Akeeba Subscriptions to sell access
+      to your site</bridgehead>
+
+      <para>Before we go back to defining our subscription levels, you have to
+      do one small thing. Go to the Extensions, Plugin Manager page and make
+      sure that the "Akeeba Subscriptions - Joomla! Usergroups Integration"
+      plugin is enabled.</para>
+
+      <screenshot>
+        <info>
+          <title>Checking that the "Akeeba Subscriptions - Joomla! Usergroups
+          Integration" plugin is enabled</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/9.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Then, we will set up the three subscription levels. Go to
+      <guimenu>Components</guimenu>, <guimenuitem>Akeeba
+      Subscriptions</guimenuitem>. Click on the <guimenu>Setup</guimenu>,
+      <guimenuitem>Subscription Levels</guimenuitem> menu item.</para>
+
+      <screenshot>
+        <info>
+          <title>Going into the Subscription Levels editor</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth=" " fileref="images/10.png" scalefit="1"
+                       width="400px"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>The first level is called <option>3MONTHS</option> and has a
+      duration of 90 days. The second one is called <option>6MONTHS</option>
+      and has a length of 180 days. The last one is called
+      <option>12MONTHS</option> and has a length of 365 days. For each plugin,
+      in the Integration area, she has to click on the User Groups tab. Most
+      likely it's the only tab and it's already active. See those "Add to
+      Joomla! Usergroups" and "Remove from Joomla! Usergroups" lists? She just
+      has to select the <option>Subscribers</option> group on each one of
+      them. This tells Akeeba Subscriptions to add the subscribers to the
+      Subscribers group once their subscription is enabled and remove them
+      from this group when their subscription expires.</para>
+
+      <important>
+        <para>Make sure each subscription level has its Published option set
+        to Yes, otherwise users won't be able to subscribe to it.</para>
+      </important>
+
+      <para>For example, here's how to set up the 3MONTHS level:</para>
+
+      <screenshot>
+        <info>
+          <title>Creating a new subscription level</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth=" 80%" fileref="images/11.png" scalefit="1"
+                       width="90% "/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Don't be intimidated by the many options you see in here. Stick to
+      the basic option and don't touch what you don't understand. Once you set
+      up your site you have all the time in the world to read the
+      documentation and deal with the more advanced options.</para>
+
+      <para>One important detail left: handling user payments. Essentially,
+      you need a payments processor that Akeeba Subscriptions can talk to and
+      ask them to handle the gory details of payments. The easiest option is
+      PayPal. Setting it up is very easy, indeed. For the purpose of this
+      tutorial we are going to demonstrate how you can integrate with PayPal
+      payments. PayPal allows you to start selling without filing out
+      paperwork until you reach a certain income level. Of course, Akeeba
+      Subscriptions supports dozen of payment processors other than PayPal. If
+      you haven't done so already, you have to go to PayPal and open a new
+      account.</para>
+
+      <para>Now back you go to your site's Plugin Manager and find the "Akeeba
+      Subscriptions - PayPal integration" plugin.</para>
+
+      <screenshot>
+        <info>
+          <title>Finding the "Akeeba Subscriptions - PayPal integration"
+          plugin</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/12.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Click on it to edit its configuration. All you need to do is enter
+      your email address, the same one you used to open your PayPal account,
+      into the Merchant ID or Email field. Make sure that Status is set to
+      Enabled and Access set to Public.</para>
+
+      <warning>
+        <para>Never, ever, <emphasis role="bold">E V E R</emphasis>, set the
+        Access of payment plugins to anything else than Public.</para>
+      </warning>
+
+      <screenshot>
+        <info>
+          <title>Configuring the "Akeeba Subscriptions - PayPal integration"
+          plugin</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/13.png" scalefit="1"
+                       width="95%"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Save and close. Done!</para>
+
+      <para>The final touch is creating a menu item so that your users can
+      subscribe. Go to Menus, Main Menu, Add New Menu Item.</para>
+
+      <screenshot>
+        <info>
+          <title>Getting read to add a menu</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth=" " fileref="images/14.png" scalefit="1"
+                       width="350px"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>In the <guilabel>Menu Item Type</guilabel> area click on
+      <guibutton>Select</guibutton>. A popup appears:</para>
+
+      <screenshot>
+        <info>
+          <title>The menu item popup</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/15.png" scalefit="1"
+                       width="500px"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>You will need one of the "All Levels" option under Akeeba
+      Subscriptions. We recommend using the <option>All Levels (Awesome
+      layout)</option> when you have less than 5 subscription levels. Set up
+      all other menu options to your liking. And that's how it shows in the
+      front-end:</para>
+
+      <screenshot>
+        <info>
+          <title>The Awesome layout</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata depth="50%" fileref="images/16.png" scalefit="1"
+                       width="500px"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>That's all folks! You are now ready to start making some money
+      from your site!</para>
     </section>
 
     <section xml:id="configuration">
@@ -1314,6 +1677,21 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
             <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
             codes (like our own aslink plugin) in the description.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Integration</term>
+
+          <listitem>
+            <para>Since Akeeba Subscriptions 2.4.5 you may see a section in
+            the page called Integration. Here you can configure the parameters
+            for second-generation integration plugins, e.g. the "Akeeba
+            Subscriptions - Joomla! Usergroups Integration" plugin. Each
+            integration plugin renders a tab in this area. The parameters
+            under each tab are detailed in the respective plugin's
+            documentation page. You can enable integration plugins from your
+            site's Extensions, Plugin Manager page.</para>
           </listitem>
         </varlistentry>
 
