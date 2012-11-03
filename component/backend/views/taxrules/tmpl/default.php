@@ -17,6 +17,14 @@ $this->loadHelper('format');
 
 $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 ?>
+<div class="row-fluid">
+	<div class="span12">
+		<a href="index.php?option=com_akeebasubs&view=taxconfigs" class="btn btn-primary">
+			<i class="icon-white icon-plane"></i>
+			<?php echo JText::_('COM_AKEEBASUBS_TITLE_TAXCONFIGS') ?>
+		</a>
+	</div>
+</div>
 
 <div class="row-fluid">
 <div class="span12">
