@@ -229,6 +229,31 @@ class plgContentAstimedrelease extends JPlugin
 	}
 	
 	/**
+	 * preg_match callback to process each match
+	 */
+	private function processElapsed($match)
+	{
+		$ret = '';
+		
+		return $this->analyzeTime($match[1], true);
+		
+		return $ret;
+	}
+	
+	/**
+	/**
+	 * preg_match callback to process each match
+	 */
+	private function processRemaining($match)
+	{
+		$ret = '';
+		
+		return $this->analyzeTime($match[1], false);
+		
+		return $ret;
+	}
+	
+	/**
 	 * Analyzes a filter statement and decides if it's true or not
 	 * 
 	 * @return boolean
@@ -267,6 +292,38 @@ class plgContentAstimedrelease extends JPlugin
 		return $ret;
 	}
 	
+	private function analyzeTime($expr, $isElapsed = true)
+	{
+		$level = ''; $expression = '';
+		$paremPos = strrpos($expr, ',');
+		if($paremPos !== false) {
+			$level = $this->getId(substr($expr, 0, -$paremPos));
+			$expression = substr($expr, -$paremPos);
+		} else {
+			$level = $this->getId($expr);
+		}
+		
+		// No level? No joy.
+		if($level <= 0) return 0;
+		
+		// Level not in array? No joy.
+		if(!array_key_exists($level, $this->levelElapsed)) 0;
+		
+		// Parse the time expression
+		$addRemove = 0;
+		if(!empty($expression)) {
+			$expression = trim($expression,', ');
+			$expression = str_replace(' ','',$expression);
+			$addRemove = (int)$expression;
+		}
+		
+		$result = $isElapsed ? $this->levelElapsed[$level] : $this->levelRemaining[$level];
+		
+		$result += $addRemove;
+		
+		return $result;
+	}
+	
 	public function onContentPrepare($context, &$row, &$params, $page = 0)
 	{
 		$text = is_object($row) ? $row->text : $row;
@@ -274,6 +331,14 @@ class plgContentAstimedrelease extends JPlugin
 		if ( JString::strpos( $row->text, 'astimedrelease' ) !== false ) {
 			$regex = "#{astimedrelease(.*?)}(.*?){/astimedrelease}#s";
 			$text = preg_replace_callback( $regex, array('self', 'process'), $text );
+		}
+		if ( JString::strpos( $row->text, 'asdayselapsed' ) !== false ) {
+			$regex = "#{asdayselapsed(.*?)}#s";
+			$text = preg_replace_callback( $regex, array('self', 'processElapsed'), $text );
+		}
+		if ( JString::strpos( $row->text, 'asdaysremaining' ) !== false ) {
+			$regex = "#{asdaysremaining(.*?)}#s";
+			$text = preg_replace_callback( $regex, array('self', 'processRemaining'), $text );
 		}
 		
 		if(is_object($row)) {
