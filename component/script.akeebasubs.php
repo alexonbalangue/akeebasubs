@@ -63,7 +63,7 @@ class Com_AkeebasubsInstallerScript
 				'iproperty'				=> 0,
 				'jce'					=> 0,
 				'jomsocial'				=> 0,
-				'joomla'				=> 0,
+				'joomla'				=> 1,
 				'k2'					=> 0,
 				'kunena'				=> 0,
 				'mailchimp'				=> 0,
