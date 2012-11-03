@@ -190,6 +190,5 @@ class AkeebasubsToolbar extends FOFToolbar
 		JToolBarHelper::title(JText::_( strtoupper($option)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $option));
 		
 		JToolBarHelper::save();
-		JToolBarHelper::cancel();
 	}
 }

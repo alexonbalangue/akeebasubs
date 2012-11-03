@@ -43,21 +43,4 @@ class AkeebasubsControllerTaxconfigs extends FOFController
 		}
 		$this->setRedirect($url, JText::_('COM_AKEEBASUBS_TAXCONFIGS_MSG_APPLIED'));
 	}
-	
-	public function cancel()
-	{
-		// CSRF protection
-		$this->_csrfProtection();
-
-		// Redirect back to the control panel
-		$url = '';
-		$returnurl = FOFInput::getBase64('returnurl', '', $this->input);
-		if(!empty($returnurl)) {
-			$url = base64_decode($returnurl);
-		}
-		if(empty($url)) {
-			$url = JURI::base().'index.php?option=com_akeebasubs';
-		}
-		$this->setRedirect($url);
-	}
 }

@@ -81,7 +81,7 @@ $this->loadHelper('select');
 			<i class="icon-white icon-check"></i>
 			<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_SUBMIT') ?>
 		</button>
-		<a href="idnex.php?option=com_akeebasubs" class="btn btn-danger">
+		<a href="index.php?option=com_akeebasubs" class="btn btn-danger">
 			<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_CANCEL') ?>
 		</a>
 	</div>
