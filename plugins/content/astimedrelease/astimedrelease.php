@@ -269,23 +269,17 @@ class plgContentAstimedrelease extends JPlugin
 	
 	public function onContentPrepare($context, &$row, &$params, $page = 0)
 	{
+		$text = is_object($row) ? $row->text : $row;
+		
+		if ( JString::strpos( $row->text, 'astimedrelease' ) !== false ) {
+			$regex = "#{astimedrelease(.*?)}(.*?){/astimedrelease}#s";
+			$text = preg_replace_callback( $regex, array('self', 'process'), $text );
+		}
+		
 		if(is_object($row)) {
-			// Check whether the plugin should process or not
-			if ( JString::strpos( $row->text, 'astimedrelease' ) === false )
-			{
-				return true;
-			}
-			
-			// Search for this tag in the content
-			$regex = "#{astimedrelease(.*?)}(.*?){/astimedrelease}#s";
-			
-			$row->text = preg_replace_callback( $regex, array($this, 'process'), $row->text );
+			$row->text = $text;
 		} else {
-			if ( JString::strpos( $row, 'astimedrelease' ) === false ) {
-				return true;
-			}
-			$regex = "#{astimedrelease(.*?)}(.*?){/astimedrelease}#s";
-			$row = preg_replace_callback( $regex, array('self', 'process'), $row );
+			$row = $text;
 		}
 		
 		return true;
