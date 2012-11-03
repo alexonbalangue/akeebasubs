@@ -14,7 +14,7 @@ class AkeebasubsToolbar extends FOFToolbar
 	{
 		$views = array(
 			'cpanel',
-			'COM_AKEEBASUBS_MAINMENU_SETUP' => array('levelgroups', 'levels', 'customfields', 'upgrades', 'taxrules'),
+			'COM_AKEEBASUBS_MAINMENU_SETUP' => array('levelgroups', 'levels', 'customfields', 'upgrades', 'taxconfigs', 'taxrules'),
 			'subscriptions',
 			'coupons',
 			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array('affiliates', 'affpayments'),
@@ -168,5 +168,28 @@ class AkeebasubsToolbar extends FOFToolbar
 		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
 		
 		$this->renderSubmenu();
+	}
+	
+	/**
+	 * Renders the toolbar for the component's Control Panel page
+	 */
+	public function onTaxconfigsMain()
+	{
+		//on frontend, buttons must be added specifically
+		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+		
+		if($isAdmin || $this->renderFrontendSubmenu) {
+			$this->renderSubmenu();
+		}
+		
+		if(!$isAdmin && !$this->renderFrontendButtons) return;
+		
+		// Set toolbar title
+		$option = FOFInput::getCmd('option','com_foobar',$this->input);
+		$subtitle_key = strtoupper($option.'_TITLE_'.FOFInput::getCmd('view','cpanel',$this->input));
+		JToolBarHelper::title(JText::_( strtoupper($option)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $option));
+		
+		JToolBarHelper::save();
+		JToolBarHelper::cancel();
 	}
 }
