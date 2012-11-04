@@ -9,10 +9,15 @@ defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
 
+// Make sure FOF is loaded, otherwise do not run
 if(!defined('FOF_INCLUDED')) {
 	include_once JPATH_LIBRARIES.'/fof/include.php';
 }
 if(!defined('FOF_INCLUDED')) return;
+
+// Do not run if Akeeba Subscriptions is not enabled
+jimport('joomla.application.component.helper');
+if(!JComponentHelper::isEnabled('com_akeebasubs', true)) return;
 
 class plgContentAstimedrelease extends JPlugin
 {
