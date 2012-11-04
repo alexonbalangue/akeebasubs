@@ -27,7 +27,7 @@ $this->loadHelper('format');
 	<input type="hidden" name="view" value="user" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_user_id" value="<?php echo $this->item->akeebasubs_user_id ?>" />
-	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 	<?php $userEditorLink = 'index.php?option=com_users&task=user.edit&id='; ?>
 	<?php if($this->item->user_id): ?>

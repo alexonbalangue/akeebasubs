@@ -43,7 +43,7 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 
 <form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscribe&layout=default&slug='.FOFInput::getString('slug','',$this->input))?>" method="post"
 	id="signupForm" class="form form-horizontal" >
-	<input type="hidden" name="_token" value="<?php echo JFactory::getSession()->getToken()?>" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	
 	<?php echo $this->loadTemplate('fields'); ?>
 	

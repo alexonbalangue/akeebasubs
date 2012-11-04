@@ -28,7 +28,7 @@ $this->loadHelper('format');
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_affpayment_id" value="<?php echo $this->item->akeebasubs_affpayment_id ?>" />
 	<input type="hidden" name="created_by" value="<?php echo empty($this->item->created_by) ? JFactory::getUser()->id : $this->item->created_by; ?>" />
-	<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 	<h3><?php echo JText::_('COM_AKEEBASUBS_AFFPAYMENTS_BASIC_TITLE')?></h3>
 	

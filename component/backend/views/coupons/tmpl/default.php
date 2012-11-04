@@ -31,7 +31,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 <input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 <input type="hidden" name="filter_order" id="filter_order" value="<?php echo $this->lists->order ?>" />
 <input type="hidden" name="filter_order_Dir" id="filter_order_Dir" value="<?php echo $this->lists->order_Dir ?>" />
-<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
+<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 <a href="index.php?option=com_akeebasubs&view=makecoupons" class="btn btn-success">
 	<i class="icon icon-cog icon-white"></i>

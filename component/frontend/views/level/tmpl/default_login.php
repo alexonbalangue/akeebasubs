@@ -22,7 +22,7 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 <form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post" class="form form-horizontal">
 	<input type="hidden" name="return" value="<?php echo base64_encode($redirectURL)?>" />
 	<input type="hidden" name="remember" value="1" />
-	<?php echo JHtml::_('form.token'); ?>
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?></legend>
 		

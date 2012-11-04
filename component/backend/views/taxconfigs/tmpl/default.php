@@ -14,7 +14,7 @@ $this->loadHelper('select');
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="taxconfigs" />
 <input type="hidden" id="task" name="task" value="apply" />
-<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
+<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 <div class="form-horizontal">
 	<div class="control-group">

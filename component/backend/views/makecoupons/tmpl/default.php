@@ -35,7 +35,7 @@ if(is_array($subscriptions)) $subscriptions = implode(',', $subscriptions);
 <input type="hidden" name="option" value="com_akeebasubs" />
 <input type="hidden" name="view" value="makecoupons" />
 <input type="hidden" id="task" name="task" value="generate" />
-<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
+<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 <fieldset>
 	<legend><?php echo JText::_('COM_AKEEBASUBS_MAKECOUPONS_GENERATE_LABEL')?></legend>

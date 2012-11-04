@@ -25,7 +25,7 @@ $this->loadHelper('params');
 <input type="hidden" name="view" value="coupon" />
 <input type="hidden" name="task" value="" />
 <input type="hidden" name="akeebasubs_coupon_id" value="<?php echo $this->item->akeebasubs_coupon_id ?>" />
-<input type="hidden" name="<?php echo JFactory::getSession()->getToken();?>" value="1" />
+<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 <div class="row-fluid">
 <div class="span6">

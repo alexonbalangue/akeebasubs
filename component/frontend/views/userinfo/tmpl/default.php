@@ -25,7 +25,7 @@ $this->loadHelper('modules');
 </noscript>
 
 <form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=userinfo') ?>" method="post" id="userinfoForm" >
-	<input type="hidden" name="_token" value="<?php echo JFactory::getSession()->getToken()?>" />
+	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<input type="hidden" name="task" value="save" />
 	
 	<?php echo $this->loadAnyTemplate('site:com_akeebasubs/level/default_fields') ?>
