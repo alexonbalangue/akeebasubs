@@ -118,7 +118,8 @@ class Com_AkeebasubsInstallerScript
 			),
 			'content' => array(
 				'aslink'				=> 1,
-				'asrestricted'			=> 1
+				'asrestricted'			=> 1,
+				'astimedrelease'		=> 1,
 			),
 			'system' => array(
 				'asexpirationcontrol'	=> 1,
