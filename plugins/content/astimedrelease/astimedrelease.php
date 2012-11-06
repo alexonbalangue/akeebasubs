@@ -322,7 +322,19 @@ class plgContentAstimedrelease extends JPlugin
 			$addRemove = (int)$expression;
 		}
 		
-		$result = $isElapsed ? $this->levelElapsed[$level] : $this->levelRemaining[$level];
+		if($isElapsed) {
+			if(!array_key_exists($level, $this->levelElapsed)) {
+				$result = 0;
+			} else {
+				$result = $this->levelElapsed[$level];
+			}
+		} else {
+			if(!array_key_exists($level, $this->levelRemaining)) {
+				$result = 0;
+			} else {
+				$result = $this->levelRemaining[$level];
+			}
+		}
 		
 		$result += $addRemove;
 		
