@@ -8,51 +8,22 @@
 
 defined('_JEXEC') or die();
 
-jimport('joomla.plugin.plugin');
+$akpaymentinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akpayment.php';
+if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpaymentinclude); }
 
-class plgAkpaymentEpaydk extends JPlugin
+class plgAkpaymentEpaydk extends plgAkpaymentAbstract
 {
-	private $ppName = 'epaydk';
-	private $ppKey = 'PLG_AKPAYMENT_EPAYDK_TITLE';
-
 	public function __construct(&$subject, $config = array())
 	{
-		if (!version_compare(JVERSION, '1.6.0', 'ge')) {
-			if (!is_object($config['params'])) {
-				$config['params'] = new JParameter($config['params']);
-			}
-		}
+		$config = array_merge($config, array(
+			'ppName'		=> 'epaydk',
+			'ppKey'			=> 'PLG_AKPAYMENT_EPAYDK_TITLE',
+			'ppImage'		=> 'http://tech.epay.dk/kb_upload/image/epay_logos/uk.gif',
+		));
+		
 		parent::__construct($subject, $config);
-		
-		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-		
-		// Load the language files
-		$jlang = JFactory::getLanguage();
-		$jlang->load('plg_akpayment_epaydk', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_akpayment_epaydk', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_akpayment_epaydk', JPATH_ADMINISTRATOR, null, true);
 	}
 
-	public function onAKPaymentGetIdentity()
-	{
-		$title = $this->params->get('title','');
-		if (empty($title)){
-			$title = JText::_($this->ppKey);
-		}
-		
-		$ret = array(
-			'name'		=> $this->ppName,
-			'title'		=> $title,
-			'image'		=> trim($this->params->get('ppimage',''))
-		);
-		
-		if (empty($ret['image'])) {
-			$ret['image'] = 'http://tech.epay.dk/kb_upload/image/epay_logos/uk.gif';
-		}
-		
-		return (object) $ret;
-	}
-	
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
@@ -304,29 +275,7 @@ if (isset($_GET["error"])) {
 		
 		jimport('joomla.utilities.date');
 		if ($newStatus == 'C') {
-			// Fix the starting date if the payment was accepted after the subscription's start date. This
-			// works around the case where someone pays by e-Check on January 1st and the check is cleared
-			// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
-			// the user would have paid us and we'd never given him a subscription!
-			$jNow = new JDate();
-			$jStart = new JDate($subscription->publish_up);
-			$jEnd = new JDate($subscription->publish_down);
-			$now = $jNow->toUnix();
-			$start = $jStart->toUnix();
-			$end = $jEnd->toUnix();
-			
-			if ($start < $now) {
-				$duration = $end - $start;
-				$start = $now;
-				$end = $start + $duration;
-				$jStart = new JDate($start);
-				$jEnd = new JDate($end);
-			}
-			
-			$updates['publish_up'] = $jStart->toMySQL();
-			$updates['publish_down'] = $jEnd->toMySQL();
-			$updates['enabled'] = 1;
-
+			$this->fixDates($subscription, $updates);
 		}
 		
 		/*
@@ -417,46 +366,6 @@ if (isset($_GET["error"])) {
 		}
 		
 		return true;
-	}
-	
-	
-	private function logIPN($data, $isValid)
-	{
-		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$logpath = $config->get('log_path');
-		} else {
-			$logpath = $config->getValue('log_path');
-		}
-		$logFile = $logpath.'/akpayment_epay_ipn.php';
-		
-		jimport('joomla.filesystem.file');
-		
-		if (!JFile::exists($logFile)) {
-			$dummy = "<?php die(); ?>\n";
-			JFile::write($logFile, $dummy);
-		} else {
-			if (@filesize($logFile) > 1048756) {
-				$altLog = $logpath.'/akpayment_epay_ipn-1.php';
-				if (JFile::exists($altLog)) {
-					JFile::delete($altLog);
-				}
-				JFile::copy($logFile, $altLog);
-				JFile::delete($logFile);
-				$dummy = "<?php die(); ?>\n";
-				JFile::write($logFile, $dummy);
-			}
-		}
-		$logData = JFile::read($logFile);
-		if ($logData === false) $logData = '';
-		$logData .= "\n" . str_repeat('-', 80) ."\n";
-		$logData .= $isValid ? 'VALID EPAY CB' : 'INVALID EPAY CB *** FRAUD ATTEMPT OR INVALID NOTIFICATION ***';
-		$logData .= "\nDate/time : ".gmdate('Y-m-d H:i:s')." GMT\n\n";
-		foreach($data as $key => $value) {
-			$logData .= '  ' . str_pad($key, 30, ' ') . $value . "\n";
-		}
-		$logData .= "\n";
-		JFile::write($logFile, $logData);
 	}
 	
 	private function _toPPDuration($days)

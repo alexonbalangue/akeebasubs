@@ -7,41 +7,19 @@
 
 defined('_JEXEC') or die();
 
-jimport('joomla.plugin.plugin');
+$akpaymentinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akpayment.php';
+if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpaymentinclude); }
 
-class plgAkpaymentOffline extends JPlugin
+class plgAkpaymentOffline extends plgAkpaymentAbstract
 {
-	private $ppName = 'offline';
-	private $ppKey = 'PLG_AKPAYMENT_OFFLINE_TITLE';
-
 	public function __construct(&$subject, $config = array())
 	{
-		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
-			$config['params'] = new JRegistry($config['params']);
-		}
-
+		$config = array_merge($config, array(
+			'ppName'		=> 'offline',
+			'ppKey'			=> 'PLG_AKPAYMENT_OFFLINE_TITLE',
+		));
+		
 		parent::__construct($subject, $config);
-		
-		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-		
-		// Load the language files
-		$jlang = JFactory::getLanguage();
-		$jlang->load('plg_akpayment_offline', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_akpayment_offline', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_akpayment_offline', JPATH_ADMINISTRATOR, null, true);
-	}
-
-	public function onAKPaymentGetIdentity()
-	{
-		$title = $this->params->get('title','');
-		if(empty($title)) $title = JText::_($this->ppKey);
-		$ret = array(
-			'name'		=> $this->ppName,
-			'title'		=> $title
-		);
-		$ret['image'] = trim($this->params->get('ppimage',''));
-		return (object)$ret;
 	}
 	
 	/**

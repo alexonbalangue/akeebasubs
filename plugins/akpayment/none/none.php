@@ -7,39 +7,19 @@
 
 defined('_JEXEC') or die();
 
-jimport('joomla.plugin.plugin');
+$akpaymentinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akpayment.php';
+if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpaymentinclude); }
 
-class plgAkpaymentNone extends JPlugin
+class plgAkpaymentNone extends plgAkpaymentAbstract
 {
-	private $ppName = 'none';
-	private $ppKey = 'PLG_AKPAYMENT_NONE_TITLE';
-	
 	public function __construct(&$subject, $config = array())
 	{
-		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
-			$config['params'] = new JRegistry($config['params']);
-		}
-
+		$config = array_merge($config, array(
+			'ppName'		=> 'none',
+			'ppKey'			=> 'PLG_AKPAYMENT_NONE_TITLE',
+		));
+		
 		parent::__construct($subject, $config);
-		
-		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-		
-		// Load the language files
-		$jlang = JFactory::getLanguage();
-		$jlang->load('plg_akpayment_none', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_akpayment_none', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_akpayment_none', JPATH_ADMINISTRATOR, null, true);
-	}
-	
-	public function onAKPaymentGetIdentity()
-	{
-		$ret = array(
-			'name'		=> $this->ppName,
-			'title'		=> JText::_($this->ppKey)
-		);
-		$ret['image'] = trim($this->params->get('ppimage',''));
-		return (object)$ret;
 	}
 	
 	/**
@@ -94,33 +74,6 @@ ENDFORM;
 		
 		if($subscription->akeebasubs_subscription_id != $id) return false;
 		
-		// Fix the starting date if the payment was accepted after the subscription's start date. This
-		// works around the case where someone pays by e-Check on January 1st and the check is cleared
-		// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
-		// the user would have paid us and we'd never given him a subscription!
-		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-		if(!preg_match($regex, $subscription->publish_up)) {
-			$subscription->publish_up = '2001-01-01';
-		}
-		if(!preg_match($regex, $subscription->publish_down)) {
-			$subscription->publish_down = '2037-01-01';
-		}
-		jimport('joomla.utilities.date');
-		$jNow = new JDate();
-		$jStart = new JDate($subscription->publish_up);
-		$jEnd = new JDate($subscription->publish_down);
-		$now = $jNow->toUnix();
-		$start = $jStart->toUnix();
-		$end = $jEnd->toUnix();
-		
-		if($start < $now) {
-			$duration = $end - $start;
-			$start = $now;
-			$end = $start + $duration;
-			$jStart = new JDate($start);
-			$jEnd = new JDate($end);
-		}
-		
 		$id = (int)$data['subscription'];
 		$updates = array(
 			'akeebasubs_subscription_id' => $id,
@@ -130,6 +83,7 @@ ENDFORM;
 			'publish_up'		=> $jStart->toSql(),
 			'publish_down'		=> $jEnd->toSql()
 		);
+		$this->fixDates($subscription, $updates);
 		$subscription->save($updates);
 		
 		// Run the onAKAfterPaymentCallback events

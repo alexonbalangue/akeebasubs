@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
+jimport('joomla.html.parameter');
 
 /**
  * Akeeba Subscriptions payment plugin abstract class
