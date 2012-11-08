@@ -56,7 +56,7 @@ class AkeebasubsTableSubscription extends FOFTable
 			jimport('joomla.utilities.date');
 			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 			if(!preg_match($regex, $this->publish_down)) {
-				$this->publish_down = '2037-01-01';
+				$this->publish_down = '2038-01-01';
 			}
 			$test = new JDate($this->publish_down);
 			if($test->toSql() == '0000-00-00 00:00:00') {

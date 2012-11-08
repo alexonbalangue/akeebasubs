@@ -159,7 +159,11 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 				<?php echo AkeebasubsHelperFormat::formatLevelgroup($item->akeebasubs_levelgroup_id) ?>
 			</td>
 			<td>
+				<?php if($item->forever): ?>
+				<strong><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FOREVER'); ?></strong>
+				<?php else: ?>
 				<?php echo $this->escape($item->duration) ?>
+				<?php endif; ?>
 			</td>
 			<td align="center">
 				<?php

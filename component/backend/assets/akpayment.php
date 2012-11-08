@@ -128,9 +128,15 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$end = $jEnd->toUnix();
 
 		if($start < $now) {
-			$duration = $end - $start;
-			$start = $now;
-			$end = $start + $duration;
+			if($end >= 2145916800) {
+				// End date after 2038-01-01; forever subscription
+				$start = $now;
+			} else {
+				// Regular subscription
+				$duration = $end - $start;
+				$start = $now;
+				$end = $start + $duration;
+			}
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
 		}

@@ -1,9 +1,10 @@
 <?php die(); ?>
-Akeeba Subscriptions 2.4.5
+Akeeba Subscriptions 2.5.0.rc1
 ================================================================================
-+ #117 ePay (Scandinavian payment processor) integration (beta)
-+ #120 Easier configuration of the Joomla! usergroups integration
++ #121 "Forever" subscriptions - non-expiring subscription levels
 + #119 Timed content release plugin
++ #120 Easier configuration of the Joomla! usergroups integration
++ #117 ePay (Scandinavian payment processor) integration (beta)
 + SCNet payment gateway plugin (beta)
 # [HIGH] The payment success message logs in the user based on the subscription ID but doesn't log him out, leading to a potential security issue.
 # [HIGH] Integration plugins would sometime not run or run under the wrong context

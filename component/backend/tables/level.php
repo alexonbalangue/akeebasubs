@@ -68,7 +68,9 @@ class AkeebasubsTableLevel extends FOFTable
 		}
 		
 		// Is the duration less than a day?
-		if($this->duration < 1) {
+		if($this->forever) {
+			$this->duration = 0;
+		} elseif($this->duration < 1) {
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_LENGTH'));
 			$result = false;
 		}

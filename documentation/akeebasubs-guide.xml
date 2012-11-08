@@ -1520,6 +1520,39 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Forever</term>
+
+          <listitem>
+            <para>When this option is selected, the subscription is set to
+            never expire. Actually, the subscription date for Forever
+            subscriptions is set to January 1st, 2038 00:00:00 YTC for a very
+            good reason. </para>
+
+            <para>PHP and MySQL use something called UNIX timestamps to do
+            date calculations, like determining if a date is in the future or
+            how many days have elapsed since a certain date. Due to <link
+            xlink:href="http://en.wikipedia.org/wiki/Year_2038_problem">some
+            geeky stuff you probably don't care to understand</link> the
+            maximum date which can currently be expressed is Tuesday, 19
+            January 2038 03:14:07 UTC. That's why we use an easy to remember
+            date which is as close to this End of Time as possible.</para>
+
+            <para>OK, let's also take this practically. At the time of this
+            writing (November 2012), January 2038 is roughly 26 years in the
+            future. That's more than the lifespan of the Web as we know it (it
+            was born in 1989, 23 years ago, and took another 5 to become
+            mainstream) and it has radically changed ever since. Joomla!'s
+            predecessor, Mambo, was born in 2001. Believing that in 26 years
+            you will still be in the same business with the same business
+            model as today, we will be using 2012's web technologies, Joomla!,
+            Akeeba Subscriptions and anything else we are used to right now is
+            a pipe dream. So, yes, 26 years into the future is MORE than the
+            lifetime of your site, your business model, my business model and
+            the web as we know it.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Price</term>
 
           <listitem>

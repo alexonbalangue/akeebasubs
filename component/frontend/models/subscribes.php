@@ -1304,10 +1304,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
-		$duration = (int)$level->duration * 3600 * 24;
-		$endDate = $startDate + $duration;
+		if($level->forever) {
+			$jStartDate = new JDate();
+			$endDate = '2038-01-01 00:00:00';
+		} else {
+			$jStartDate = new JDate($startDate);
+			$duration = (int)$level->duration * 3600 * 24;
+			$endDate = $startDate + $duration;
+		}
 
-		$jStartDate = new JDate($startDate);
 		$mStartDate = $jStartDate->toSql();
 		$jEndDate = new JDate($endDate);
 		$mEndDate = $jEndDate->toSql();

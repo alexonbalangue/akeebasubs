@@ -84,6 +84,15 @@ $this->loadHelper('cparams');
 		</div>
 		
 		<div class="control-group">
+			<label for="forever" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FOREVER'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'forever', null, $this->item->forever); ?>
+			</div>
+		</div>
+		
+		<div class="control-group">
 			<label for="price_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?>
 			</label>
