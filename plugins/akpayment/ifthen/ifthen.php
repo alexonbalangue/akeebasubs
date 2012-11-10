@@ -12,9 +12,6 @@ if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpay
 
 class plgAkpaymentIFthen extends plgAkpaymentAbstract
 {
-	private $ppName = '';
-	private $ppKey = '';
-
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
