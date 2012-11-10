@@ -12,9 +12,6 @@ if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpay
 
 class plgAkpayment2checkout extends plgAkpaymentAbstract
 {
-	private $ppName = '2checkout';
-	private $ppKey = 'PLG_AKPAYMENT_2CHECKOUT_TITLE';
-
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
