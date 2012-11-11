@@ -22,7 +22,7 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 		
 		parent::__construct($subject, $config);
 		
-		require_once dirname(__FILE__).'/cmcic/library/Utils.php';
+		require_once dirname(__FILE__).'/cmcic/library/CMCIC_Tpe.inc.php';
 	}
 	
 	/**
@@ -39,47 +39,35 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
-		
-		$rootURL = rtrim(JURI::base(),'/');
-		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
-		}
-		
-		// Language settings (FR, EN, DE, IT, ES or NL)
-		$lang = strtoupper(substr(JFactory::getLanguage()->getTag(), 0, 2));
-		if($lang != 'FR' && $lang != 'EN' && $lang != 'DE' && $lang != 'IT' && $lang != 'ES' && $lang != 'NL') {
-			$lang = 'FR';
-		}
+		$cicTpe = $this->createCMCICTpe($subscription);
 		
 		$data = (object)array(
-			'url'					=> $this->getURL(),
-			'version'				=> '1.2open',
-			'TPE'					=> trim($this->params->get('tpe','')),
-			'date'					=> Utils::HtmlEncode(date("d/m/Y:H:i:s")),
-			'montant'				=> sprintf('%.2f',$subscription->gross_amount)
-											. strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
-			'reference'				=> Utils::HtmlEncode($subscription->akeebasubs_subscription_id),
-			'lgue'					=> $lang,
-			'societe'				=> Utils::HtmlEncode(trim($this->params->get('societe',''))),
-			'url_retour'			=> Utils::HtmlEncode(JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=cmcic'),
-			'url_retour_ok'			=> Utils::HtmlEncode($rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id))),
-			'url_retour_err'		=> Utils::HtmlEncode($rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)))
+			'url'				=> $cicTpe->sUrlPaiement,
+			'version'			=> $cicTpe->sVersion,
+			'TPE'				=> $cicTpe->sNumero,
+			'date'				=> date("d/m/Y:H:i:s"),
+			'montant'			=> sprintf('%.2f',$subscription->gross_amount)
+										. strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
+			'reference'			=> $subscription->akeebasubs_subscription_id,
+			'lgue'				=> $cicTpe->sLangue,
+			'societe'			=> $cicTpe->sCodeSociete,
+			'url_retour'		=> $cicTpe->sUrlKO,
+			'url_retour_ok'		=> $cicTpe->sUrlOK,
+			'url_retour_err'	=> $cicTpe->sUrlKO,
+			'mail'				=> trim($user->email)
 		);
 		
-		$data->MAC = Utils::hmac_sha1(
-				trim($this->params->get('key','')),
+		$cicMac = new CMCIC_Hmac($cicTpe);
+		$data->MAC = $cicMac->computeHmac(
 				$data->TPE
-				. '*' . $data->date
-				. '*' . $data->montant
-				. '*' . $data->reference
-				. '**' . $data->version
-				. '*' . $data->lgue
-				. '*' . $data->societe);
+					. '*' . $data->date
+					. '*' . $data->montant
+					. '*' . $data->reference
+					. '**' . $data->version
+					. '*' . $data->lgue
+					. '*' . $data->societe
+					. '*' . $data->mail
+					. '**********');
 
 		@ob_start();
 		include dirname(__FILE__).'/cmcic/form.php';
@@ -91,13 +79,16 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		jimport('joomla.utilities.date');
+		header("Pragma: no-cache");
+		header("Content-type: text/plain");
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
+		$isValid = true;
 		
-		// Check IPN data for validity (i.e. protect against fraud attempt)
-		$isValid = $this->isValidIPN($data);
-		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
+		// Clean up second question mark in response
+		preg_match('/000\?TPE=(.+)/', $data['marker'], $matches);
+		$data['TPE'] = $matches[1];
 
 		// Load the relevant subscription row
 		if($isValid) {
@@ -116,10 +107,38 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The reference is invalid';
 		}
+		
+		if($isValid) {
+			$cicTpe = $this->createCMCICTpe($subscription);
+			$cicMac = new CMCIC_Hmac($cicTpe);
+			$responseString = $cicTpe->sNumero
+				. '*' . $data['date']
+				. '*' . $data['montant']
+				. '*' . $data['reference']
+				. '*' . $data['texte-libre']
+				. '*' . $cicTpe->sVersion
+				. '*' . $data['code-retour']
+				. '*' . $data['cvx']
+				. '*' . $data['vld']
+				. '*' . $data['brand']
+				. '*' . $data['status3ds']
+				. '*' . $data['numauto']
+				. '*' . $data['motifrefus']
+				. '*' . $data['originecb']
+				. '*' . $data['bincb']
+				. '*' . $data['hpancb']
+				. '*' . $data['ipclient']
+				. '*' . $data['originetr']
+				. '*' . $data['veres']
+				. '*' . $data['pares'] . '*';
+			// Check IPN data for validity (i.e. protect against fraud attempt)
+			$isValid = $this->isValidIPN($data, $cicMac, $responseString);
+			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
+		}
         
 		// Check that bank_id has not been previously processed
-		if($isValid && !is_null($subscription)) {
-			if($subscription->state != 'N') {
+		if($isValid) {
+			if($subscription->state != 'N' || $data['MAC'] == $subscription->processor_key) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "I will not processed this payment twice";
 			}
@@ -158,6 +177,9 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
+			@ob_end_clean();
+			echo sprintf(CMCIC_CGI2_RECEIPT, (CMCIC_CGI2_MACNOTOK . $responseString));
+			@$app->close();
 			return false;
 		}
 		
@@ -173,6 +195,7 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 		// Update subscription status (this+ also automatically calls the plugins)
 		$updates = array(
 				'akeebasubs_subscription_id'	=> $id,
+				'processor_key'					=> $data['MAC'],
 				'state'							=> $newStatus,
 				'enabled'						=> 0
 		);
@@ -189,7 +212,11 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-        
+		
+		@ob_end_clean();
+		echo sprintf(CMCIC_CGI2_RECEIPT, CMCIC_CGI2_MACOK);
+		@$app->close();
+		
 		return true;
 	}
 	
@@ -201,27 +228,48 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
 	{
 		$sandbox = $this->params->get('sandbox',0);
 		if($sandbox) {
-			return 'https://ssl.paiement.cic-banques.fr/test/paiement.cgi';
+			return 'https://ssl.paiement.cic-banques.fr/test/';
 		} else {
-			return 'https://ssl.paiement.cic-banques.fr/paiement.cgi';
+			return 'https://ssl.paiement.cic-banques.fr/';
 		}
 	}
 	
 	/**
 	 * Validates the incoming data.
 	 */
-	private function isValidIPN($data)
+	private function isValidIPN($data, $cicMac, $responseString)
 	{
-		$hashCode = Utils::hmac_sha1(
-				trim($this->params->get('key','')),
-				$data['retourPLUS']
-				. trim($this->params->get('tpe',''))
-				. '+' . $data['date']
-				. '+' . $data['montant']
-				. '+' . $data['reference']
-				. '+' . $data['texte-libre']
-				. '+1.2open'
-				. '+' . $data['code-retour'] . '+');
-		return $hashCode == $data['MAC'];
+		$macCode = $cicMac->computeHmac($responseString);
+		return $macCode == strtolower($data['MAC']);
+	}
+	
+	private function createCMCICTpe($subscription)
+	{
+		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem()
+				->slug;
+		
+		$rootURL = rtrim(JURI::base(),'/');
+		$subpathURL = JURI::base(true);
+		if(!empty($subpathURL) && ($subpathURL != '/')) {
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		}
+		
+		// Language settings (FR, EN, DE, IT, ES or NL)
+		$lang = strtoupper(substr(JFactory::getLanguage()->getTag(), 0, 2));
+		if($lang != 'FR' && $lang != 'EN' && $lang != 'DE' && $lang != 'IT' && $lang != 'ES' && $lang != 'NL') {
+			$lang = 'FR';
+		}
+		
+		define("CMCIC_CLE", trim($this->params->get('key','')));
+		define("CMCIC_TPE", trim($this->params->get('tpe','')));
+		define("CMCIC_VERSION", '3.0');
+		define("CMCIC_SERVEUR", $this->getURL());
+		define("CMCIC_CODESOCIETE", trim($this->params->get('societe','')));
+		define("CMCIC_URLOK", $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)));
+		define("CMCIC_URLKO", $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)));
+		
+		return new CMCIC_Tpe($lang);
 	}
 }
