@@ -2,6 +2,7 @@
 Akeeba Subscriptions 2.5.0
 ================================================================================
 # [MEDIUM] The "none" payment plugin didn't work
+# [MEDIUM] Sometimes the ccInvoices contact ID would not be determined correctly
 
 Akeeba Subscriptions 2.5.0.rc1
 ================================================================================

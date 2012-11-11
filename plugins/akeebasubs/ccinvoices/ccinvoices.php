@@ -279,7 +279,8 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		// get the next contact number
 		if(is_null($contact_id)) {
 			$query = $db->getQuery(true)
-					->select('MAX('.$db->qn('contact_number').')')
+					// Because contact_number is a VARCHAR. WTF?!
+					->select('MAX('.$db->qn('contact_number').' * 1)')
 					->from($db->qn('#__ccinvoices_contacts'));
 			$db->setQuery($query);
 			$contact_number = $db->loadResult();
