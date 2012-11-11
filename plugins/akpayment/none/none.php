@@ -80,8 +80,6 @@ ENDFORM;
 			'processor_key'		=> md5(microtime(false)),
 			'state'				=> 'C',
 			'enabled'			=> 1,
-			'publish_up'		=> $jStart->toSql(),
-			'publish_down'		=> $jEnd->toSql()
 		);
 		$this->fixDates($subscription, $updates);
 		$subscription->save($updates);

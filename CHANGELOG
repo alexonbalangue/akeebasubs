@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.5.0
+================================================================================
+# [MEDIUM] The "none" payment plugin didn't work
+
 Akeeba Subscriptions 2.5.0.rc1
 ================================================================================
 + #121 "Forever" subscriptions - non-expiring subscription levels
