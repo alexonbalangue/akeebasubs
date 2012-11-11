@@ -41,7 +41,7 @@ class CMCIC_Tpe {
 	public $sUrlKO;		// Url de retour KO - Return URL KO
 	public $sUrlPaiement;	// Url du serveur de paiement - Payment Server URL (Ex : https://paiement.creditmutuel.fr/paiement.cgi)
 
-	private $_sCle;		// La clÈ - The Key
+	private $_sCle;		// La cl√© - The Key
 	
 
 	// ----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ class CMCIC_Tpe {
 	
 	function __construct($sLangue = "FR") {
 
-		// contrÙle de l'existence des constantes de paramÈtrages.
+		// contr√¥le de l'existence des constantes de param√©trages.
 		$aRequiredConstants = array('CMCIC_CLE', 'CMCIC_VERSION', 'CMCIC_TPE', 'CMCIC_CODESOCIETE');
 		$this->_checkTpeParams($aRequiredConstants);
 
@@ -73,7 +73,7 @@ class CMCIC_Tpe {
 	//
 	// Fonction / Function : getCle
 	//
-	// Renvoie la clÈ du TPE / return the TPE Key
+	// Renvoie la cl√© du TPE / return the TPE Key
 	//
 	// ----------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ class CMCIC_Tpe {
 	//
 	// Fonction / Function : _checkTpeParams
 	//
-	// ContrÙle l'existence des constantes d'initialisation du TPE
+	// Contr√¥le l'existence des constantes d'initialisation du TPE
 	// Check for the initialising constants of the TPE
 	//
 	// ----------------------------------------------------------------------------
@@ -95,7 +95,7 @@ class CMCIC_Tpe {
 
 		for ($i = 0; $i < count($aConstants); $i++)
 			if (!defined($aConstants[$i]))
-				die ("Erreur paramËtre " . $aConstants[$i] . " indÈfini");
+				die ("Erreur param√®tre " . $aConstants[$i] . " ind√©fini");
 	}
 
 }
@@ -109,7 +109,7 @@ class CMCIC_Tpe {
 
 class CMCIC_Hmac {
 
-	private $_sUsableKey;	// La clÈ du TPE en format opÈrationnel / The usable TPE key
+	private $_sUsableKey;	// La cl√© du TPE en format op√©rationnel / The usable TPE key
 
 	// ----------------------------------------------------------------------------
 	//
@@ -126,7 +126,7 @@ class CMCIC_Hmac {
 	//
 	// Fonction / Function : _getUsableKey
 	//
-	// Renvoie la clÈ dans un format utilisable par la certification hmac
+	// Renvoie la cl√© dans un format utilisable par la certification hmac
 	// Return the key to be used in the hmac function
 	//
 	// ----------------------------------------------------------------------------
@@ -155,7 +155,7 @@ class CMCIC_Hmac {
 	//
 	// Fonction / Function : computeHmac
 	//
-	// Renvoie le sceau HMAC d'une chaine de donnÈes
+	// Renvoie le sceau HMAC d'une chaine de donn√©es
 	// Return the HMAC for a data string
 	//
 	// ----------------------------------------------------------------------------
@@ -177,9 +177,9 @@ class CMCIC_Hmac {
 	// Eliminates the need to install mhash to compute a HMAC
 	// Adjusted from the md5 version by Lance Rushing .
 	//
-	// ImplÈmentation RFC 2104 HMAC pour PHP >= 4.3.0 - CrÈation d'un SHA1 HMAC.
+	// Impl√©mentation RFC 2104 HMAC pour PHP >= 4.3.0 - Cr√©ation d'un SHA1 HMAC.
 	// Elimine l'installation de mhash pour le calcul d'un HMAC
-	// AdaptÈe de la version MD5 de Lance Rushing.
+	// Adapt√©e de la version MD5 de Lance Rushing.
 	//
 	// ----------------------------------------------------------------------------
 
@@ -202,8 +202,8 @@ class CMCIC_Hmac {
 // function getMethode 
 //
 // IN: 
-// OUT: DonnÈes soumises par GET ou POST / Data sent by GET or POST
-// description: Renvoie le tableau des donnÈes / Send back the data array
+// OUT: Donn√©es soumises par GET ou POST / Data sent by GET or POST
+// description: Renvoie le tableau des donn√©es / Send back the data array
 // ----------------------------------------------------------------------------
 
 function getMethode()
@@ -221,11 +221,11 @@ function getMethode()
 // function HtmlEncode
 //
 // IN:  chaine a encoder / String to encode
-// OUT: Chaine encodÈe / Encoded string
+// OUT: Chaine encod√©e / Encoded string
 //
 // Description: Encode special characters under HTML format
 //                           ********************
-//              Encodage des caractËres spÈciaux au format HTML
+//              Encodage des caract√®res sp√©ciaux au format HTML
 // ----------------------------------------------------------------------------
 function HtmlEncode ($data)
 {
