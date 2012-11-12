@@ -78,7 +78,7 @@ class AkeebasubsTableSubscription extends FOFTable
 		if( ($uNow >= $jDown->toUnix()) ) {
 			$this->enabled = 0;
 		} elseif( ($uNow >= $jUp->toUnix()) && ($uNow < $jDown->toUnix())) {
-			$this->enabled = 1;
+			$this->enabled = ($this->state == 'C') ? 1 : 0;
 		} else {
 			$this->enabled = 0;
 		}
