@@ -138,7 +138,7 @@ class plgAkpaymentCmcic extends plgAkpaymentAbstract
         
 		// Check that bank_id has not been previously processed
 		if($isValid) {
-			if($subscription->state != 'N' || $data['MAC'] == $subscription->processor_key) {
+			if($data['MAC'] == $subscription->processor_key && $subscription->state == 'C') {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "I will not processed this payment twice";
 			}
