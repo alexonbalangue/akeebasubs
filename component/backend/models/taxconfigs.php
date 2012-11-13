@@ -116,6 +116,7 @@ class AkeebasubsModelTaxconfigs extends FOFModel
 			// B. All EU countries, with or without VIES registration, taxrate%
 			$data['taxrate'] = $params->taxrate;
 			foreach($euCountries as $country) {
+				$data['country'] = $country;
 				$data['vies'] = 0;
 				$data['ordering'] = ++$ordering;
 				FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
