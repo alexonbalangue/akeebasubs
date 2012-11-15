@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.5.0
 ================================================================================
+# [HIGH] Fatal error in messages view
 # [HIGH] Integration plugins wouldn't run on new subscription creation
 # [MEDIUM] The "none" payment plugin didn't work
 # [MEDIUM] Sometimes the ccInvoices contact ID would not be determined correctly

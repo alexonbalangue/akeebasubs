@@ -122,6 +122,7 @@ class AkeebasubsControllerMessages extends FOFController
 			$newUserObject = new JUser();
 			$newUserObject->set('guest', 0);
 
+			$session = JFactory::getSession();
 			$session->set('user', $newUserObject);
 			$db = JFactory::getDBO();
 			$app = JFactory::getApplication();
