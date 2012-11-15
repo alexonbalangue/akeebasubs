@@ -331,9 +331,6 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$db->insertObject('#__ccinvoices_contacts', $contact);
 			$id = $db->insertid();
 
-			$db->setQuery($query);
-			$db->query();
-
 			$query = $db->getQuery(true)
 				->delete($db->qn('#__ccinvoices_users'))
 				->where($db->qn('user_id').' = '.$db->q($userid));
