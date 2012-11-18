@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - Robokassa</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-11-17</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_ROBOKASSA_DESCRIPTION</description>
+	<files>
+		<filename plugin="robokassa">robokassa.php</filename>
+		<folder>robokassa</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_robokassa.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_robokassa.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_ROBOKASSA_TITLE_LABEL" description="PLG_AKPAYMENT_ROBOKASSA_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_ROBOKASSA_PPIMAGE_LABEL" description="PLG_AKPAYMENT_ROBOKASSA_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_ROBOKASSA_MERCHANTID_LABEL" description="PLG_AKPAYMENT_ROBOKASSA_MERCHANTID_DESC"/>
+				<field name="pass1" type="text" size="50" default="" label="PLG_AKPAYMENT_ROBOKASSA_PASS1_LABEL" description="PLG_AKPAYMENT_ROBOKASSA_PASS1_DESC"/>
+				<field name="pass2" type="text" size="50" default="" label="PLG_AKPAYMENT_ROBOKASSA_PASS2_LABEL" description="PLG_AKPAYMENT_ROBOKASSA_PASS2_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_ROBOKASSA_SANDBOX_LABEL" description="PLG_AKPAYMENT_ROBOKASSA_SANDBOX_DESC">
+				<option value="0">JNo</option>
+				<option value="1">JYes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
