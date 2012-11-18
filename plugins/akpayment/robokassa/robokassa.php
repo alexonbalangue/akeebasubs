@@ -37,7 +37,7 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
-		// Language settings (FR, EN, DE, IT, ES or NL)
+		// Language settings en or ru)
 		$lang = strtolower(substr(JFactory::getLanguage()->getTag(), 0, 2));
 		if($lang != 'en' && $lang != 'ru') {
 			$lang = 'en';
@@ -48,7 +48,7 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 			'MrchLogin'			=> $this->params->get('merchant',''),
 			'InvId'				=> $subscription->akeebasubs_subscription_id,
 			'OutSum'			=> sprintf('%.2f',$subscription->gross_amount),
-			'IncCurrLabel'		=> "WMRM",
+			'IncCurrLabel'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'Desc'				=> $level->title,
 			'Culture'			=> $lang,
 		);
