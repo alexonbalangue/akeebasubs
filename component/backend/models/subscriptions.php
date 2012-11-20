@@ -77,7 +77,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		}
 	}
 	
-	protected function _buildQueryJoins(FOFQueryAbstract $query)
+	protected function _buildQueryJoins($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
@@ -107,7 +107,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		
 	}
 	
-	protected function _buildQueryColumns(FOFQueryAbstract $query)
+	protected function _buildQueryColumns($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
@@ -161,7 +161,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		}
 	}
 	
-	protected function _buildQueryGroup(FOFQueryAbstract $query)
+	protected function _buildQueryGroup($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
@@ -181,7 +181,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		}
 	}
 	
-	protected function _buildQueryWhere(FOFQueryAbstract $query)
+	protected function _buildQueryWhere($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();

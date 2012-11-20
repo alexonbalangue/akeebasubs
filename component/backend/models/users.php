@@ -53,7 +53,7 @@ class AkeebasubsModelUsers extends FOFModel
 		return $query;
 	}
 	
-	protected function _buildQueryColumns(FOFQueryAbstract $query)
+	protected function _buildQueryColumns($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
@@ -67,7 +67,7 @@ class AkeebasubsModelUsers extends FOFModel
 		
 	}
 	
-	protected function _buildQueryWhere(FOFQueryAbstract $query)
+	protected function _buildQueryWhere($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
