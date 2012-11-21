@@ -6,6 +6,7 @@ Akeeba Subscriptions 2.5.0
 # [MEDIUM] The "none" payment plugin didn't work
 # [MEDIUM] Sometimes the ccInvoices contact ID would not be determined correctly
 # [LOW] The Tax Rules Wizard would produce invalid results if you are not VIES registered
+# [LOW] Rare issue where the wrong username or email address would be used when subscribing a new user after a failed subscription attempt
 
 Akeeba Subscriptions 2.5.0.rc1
 ================================================================================

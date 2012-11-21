@@ -955,7 +955,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 					// Username and email match with the blocked user; reuse that
 					// user, please.
 					$user = JFactory::getUser($user1->id);
-				} else {
+				} elseif($id1 && $id2) {
+					// We have both the same username and same email, but in two
+					// different users. In order to avoid confusion we will remove
+					// user 2 and change user 1's email into the email address provided
+					
 					// Remove the last subscription for $user2 (it will be an unpaid one)
 					$submodel = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel');
 					$substodelete = $submodel
@@ -969,12 +973,22 @@ class AkeebasubsModelSubscribes extends FOFModel
 					// Remove $user2 and set $user to $user1 so that it gets updated
 					$user2->delete($id2);
 					$user = JFactory::getUser($user1->id);
+					$user->email = $state->email;
+					$user->save(true);
+				} elseif(!$id1 && $id2) {
+					// We have a user with the same email, but the wrong username.
+					// Use this user (the username is updated later on)
+					$user = JFactory::getUser($user2->id);
+				} elseif($id1 && !$id2) {
+					// We have a user with the same username, but the wrong email.
+					// Use this user (the email is updated later on)
+					$user = JFactory::getUser($user1->id);
 				}
 			}
 		}
 		
 		if(is_null($user->id) || ($user->id == 0)) {
-			// New user
+			// CREATE A NEW USER
 			$params = array(
 				'name'			=> $state->name,
 				'username'		=> $state->username,
@@ -1025,6 +1039,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$user->bind($params);
 			$userIsSaved = $user->save();
 		} else {
+			// UPDATE EXISTING USER
+
 			// Remove unpaid subscriptions on the same level for this user
 			$unpaidSubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
