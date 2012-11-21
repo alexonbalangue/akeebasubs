@@ -81,12 +81,30 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 			// Check if there is an invoice for this subscription already
 			$query = FOFQueryAbstract::getNew($db)
-				->select('COUNT(*)')
+				->select('*')
 				->from('#__akeebasubs_invoices')
 				->where($db->qn('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));
 			$db->setQuery($query);
-			$oldInvoices = $db->loadResult();
-			if($oldInvoices) return;
+			$oldInvoices = $db->loadObjectList('akeebasubs_subscription_id');
+			
+			$updateInvoice = false;
+			if(count($oldInvoices) > 0) {
+				// Is it a paid invoice?
+				$oldInvoice = array_shift($oldInvoices);
+				$query = $db->getQuery(true)
+					->select(array($db->qn('id'), $db->qn('status')))
+					->from($db->qn('#__ccinvoices_invoices'))
+					->where($db->qn('id').' = '.$db->q($oldInvoice->invoice_no));
+				$db->setQuery($query);
+				$invoice = $db->loadObject();
+				if($invoice->status != 4) {
+					$updateInvoice = true;
+					$id = $invoice->id;
+				} else {
+					// Nothing to do
+					return;
+				}
+			}
 
 			// Load the ccInvoices configuration
 			$query = $db->getQuery(true)
@@ -95,118 +113,149 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$db->setQuery($query, 0, 1);
 			$ccConfig = $db->loadObject();
 
-			// Create new invoice
-			$query = $db->getQuery(true)
-				->select('MAX('.$db->qn('number').')')
-				->from($db->qn('#__ccinvoices_invoices'));
-			$db->setQuery($query);
-			$max1 = $db->loadResult();
-			
-			$query = $db->getQuery(true)
-				->select('MAX('.$db->qn('custom_invoice_number').')')
-				->from($db->qn('#__ccinvoices_invoices'));
-			$db->setQuery($query);
-			$max2 = $db->loadResult();
-			$invoice_number = max($max1, $max2);
-			$invoice_number++;
-
-			if($invoice_number < $ccConfig->invoice_start) $invoice_number = $ccConfig->invoice_start;
-
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-					->setId($row->akeebasubs_level_id)
-					->getItem();
-			$subname = $level->title;
-
-			if(version_compare(JVERSION, '3.0', 'ge')) {
-				$description = $this->params->get('description','');
-			} else {
-				$description = $this->params->getValue('description','');
-			}
-			if(empty($description)) {
-				$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
-				if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
-				$description = $subname.$suffix;
-			} else {
-				$description = $this->parseDescription($description, $row, $level);
-			}
-
-			if($row->tax_percent > 0) {
-				$taxrate = $row->tax_percent;
-			} else {
-				$taxrate = 100*($row->tax_amount/$row->net_amount);
-			}
-
-			jimport('joomla.utilities.date');
-			$jNow = new JDate();
-			
-			$note = "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>";
-			if(version_compare(JVERSION, '3.0', 'ge')) {
-				$euvatoption = $this->params->get('euvatoption', 0);
-			} else {
-				$euvatoption = $this->params->getValue('euvatoption', 0);
-			}
-			if($euvatoption && ($row->tax_amount < 0.01)) {
-				$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
-					->user_id($row->user_id)
-					->getFirstItem();
+			if(!$updateInvoice) {
+				// CREATE A BRAND NEW INVOICE
 				
-				$country = $kuser->country;
-				$isbusiness = $kuser->isbusiness;
-				$viesregistered = $kuser->viesregistered;
-				$inEU = in_array($country, array('AT','BE','BG','CY','CZ','DK','EE','FI','FR','GB','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'));
-				
-				if($inEU && $isbusiness && $viesregistered) {
-					if(version_compare(JVERSION, '3.0', 'ge')) {
-						$euvatnote = $this->params->get('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
-					} else {
-						$euvatnote = $this->params->getValue('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
-					}
-					$note .= "<p>$euvatnote</p>";
+				// Create new invoice
+				$query = $db->getQuery(true)
+					->select('MAX('.$db->qn('number').')')
+					->from($db->qn('#__ccinvoices_invoices'));
+				$db->setQuery($query);
+				$max1 = $db->loadResult();
+
+				$query = $db->getQuery(true)
+					->select('MAX('.$db->qn('custom_invoice_number').')')
+					->from($db->qn('#__ccinvoices_invoices'));
+				$db->setQuery($query);
+				$max2 = $db->loadResult();
+				$invoice_number = max($max1, $max2);
+				$invoice_number++;
+
+				if($invoice_number < $ccConfig->invoice_start) $invoice_number = $ccConfig->invoice_start;
+
+				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+						->setId($row->akeebasubs_level_id)
+						->getItem();
+				$subname = $level->title;
+
+				if(version_compare(JVERSION, '3.0', 'ge')) {
+					$description = $this->params->get('description','');
+				} else {
+					$description = $this->params->getValue('description','');
 				}
+				if(empty($description)) {
+					$suffix = JText::_('PLG_AKEEBASUBS_CCINVOICES_SUFFIX');
+					if(strtoupper($suffix) == 'PLG_AKEEBASUBS_CCINVOICES_SUFFIX') $suffix = ' subscription';
+					$description = $subname.$suffix;
+				} else {
+					$description = $this->parseDescription($description, $row, $level);
+				}
+
+				if($row->tax_percent > 0) {
+					$taxrate = $row->tax_percent;
+				} else {
+					$taxrate = 100*($row->tax_amount/$row->net_amount);
+				}
+
+				jimport('joomla.utilities.date');
+				$jNow = new JDate();
+
+				$note = "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>";
+				if(version_compare(JVERSION, '3.0', 'ge')) {
+					$euvatoption = $this->params->get('euvatoption', 0);
+				} else {
+					$euvatoption = $this->params->getValue('euvatoption', 0);
+				}
+				if($euvatoption && ($row->tax_amount < 0.01)) {
+					$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+						->user_id($row->user_id)
+						->getFirstItem();
+
+					$country = $kuser->country;
+					$isbusiness = $kuser->isbusiness;
+					$viesregistered = $kuser->viesregistered;
+					$inEU = in_array($country, array('AT','BE','BG','CY','CZ','DK','EE','FI','FR','GB','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'));
+
+					if($inEU && $isbusiness && $viesregistered) {
+						if(version_compare(JVERSION, '3.0', 'ge')) {
+							$euvatnote = $this->params->get('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+						} else {
+							$euvatnote = $this->params->getValue('euvatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+						}
+						$note .= "<p>$euvatnote</p>";
+					}
+				}
+
+				$invoice = (object)array(
+					'number'		=> $invoice_number,
+					'invoice_date'	=> $jNow->toSql(),
+					'status'		=> ($row->state == 'C') ? 4 : 2, // Pending payments' invoices are marked as PENDING
+					'duedate'		=> $jNow->toSql(),
+					'numbercheck'	=> 0,
+					'invoice_sent_date'	=> $jNow->toSql(),
+					'communication'	=> '',
+					'discount'		=> $row->discount_amount * 1.0,
+					'subtotal'		=> $row->prediscount_amount,
+					'totaltax'		=> $row->tax_amount,
+					'total'			=> $row->gross_amount,
+					'quantity'		=> 1,
+					'pname'			=> $description,
+					'price'			=> $row->net_amount,
+					'tax'			=> sprintf('%.2f', $row->tax_percent),
+					'note'			=> $note,
+					'contact_id'	=> $contact_id
+				);
+				$db->insertObject('#__ccinvoices_invoices', $invoice, 'id');
+				$id = $db->insertid();
+
+				// Create an invoice payment, if the subscription is paid
+				if($row->state == 'C') {
+					$invoicePayment = (object)array(
+						'inv_id'		=> $id,
+						'method'		=> 'akeebasubs',
+						'transaction_id'=> $row->processor.'/'.$row->processor_key,
+						'pdate'			=> $jNow->toSql(),
+						'status'		=> 1
+					);
+					$db->insertObject('#__ccinvoices_payment', $invoicePayment, 'id');
+				}
+
+				// Create an Akeeba Subscriptions invoice record
+				$object = (object)array(
+					'akeebasubs_subscription_id'	=> $row->akeebasubs_subscription_id,
+					'invoice_no'					=> $id,
+					'invoice_date'					=> $jNow->toSql(),
+					'enabled'						=> 1,
+					'created_on'					=> $jNow->toSql(),
+					'created_by'					=> $row->created_by,
+				);
+				$db->insertObject('#__akeebasubs_invoices', $object, 'akeebasubs_subscription_id');
+			} elseif($row->state == 'C') {
+				// UPDATE EXISTING INVOICE on payment
+				
+				// Update the invoice record
+				$note = "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>";
+				$invoice = (object)array(
+					'id'			=> $id,
+					'status'		=> 4,
+					'communication'	=> '',
+					'note'			=> $note,
+				);
+				$db->updateObject('#__ccinvoices_invoices', $invoice, 'id');
+				
+				// Create an invoice payment
+				$invoicePayment = (object)array(
+					'inv_id'		=> $id,
+					'method'		=> 'akeebasubs',
+					'transaction_id'=> $row->processor.'/'.$row->processor_key,
+					'pdate'			=> $jNow->toSql(),
+					'status'		=> 1
+				);
+				$db->insertObject('#__ccinvoices_payment', $invoicePayment, 'id');
+			} else {
+				// Subscription changed but still not paid; ignore
+				return;
 			}
-
-			$invoice = (object)array(
-				'number'		=> $invoice_number,
-				'invoice_date'	=> $jNow->toSql(),
-				'status'		=> 4,
-				'duedate'		=> $jNow->toSql(),
-				'numbercheck'	=> 0,
-				'invoice_sent_date'	=> $jNow->toSql(),
-				'communication'	=> '',
-				'discount'		=> $row->discount_amount * 1.0,
-				'subtotal'		=> $row->prediscount_amount,
-				'totaltax'		=> $row->tax_amount,
-				'total'			=> $row->gross_amount,
-				'quantity'		=> 1,
-				'pname'			=> $description,
-				'price'			=> $row->net_amount,
-				'tax'			=> sprintf('%.2f', $row->tax_percent),
-				'note'			=> $note,
-				'contact_id'	=> $contact_id
-			);
-			$db->insertObject('#__ccinvoices_invoices', $invoice, 'id');
-			$id = $db->insertid();
-
-			// Create an invoice payment
-			$invoicePayment = (object)array(
-				'inv_id'		=> $id,
-				'method'		=> 'akeebasubs',
-				'transaction_id'=> $row->processor.'/'.$row->processor_key,
-				'pdate'			=> $jNow->toSql(),
-				'status'		=> 1
-			);
-			$db->insertObject('#__ccinvoices_payment', $invoicePayment, 'id');
-
-			// Create an Akeeba Subscriptions invoice record
-			$object = (object)array(
-				'akeebasubs_subscription_id'	=> $row->akeebasubs_subscription_id,
-				'invoice_no'					=> $id,
-				'invoice_date'					=> $jNow->toSql(),
-				'enabled'						=> 1,
-				'created_on'					=> $jNow->toSql(),
-				'created_by'					=> $row->created_by,
-			);
-			$db->insertObject('#__akeebasubs_invoices', $object, 'akeebasubs_subscription_id');
 
 			// Try to send the invoice
 			if(!class_exists('ccInvoicesControllerInvoices')) {

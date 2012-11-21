@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.5.0
 ================================================================================
+~ The ccInvoices plugin will mark the invoice as OPEN when a subscription's payment is pending
 # [HIGH] Fatal error in messages view
 # [HIGH] Integration plugins wouldn't run on new subscription creation
 # [MEDIUM] The "none" payment plugin didn't work
