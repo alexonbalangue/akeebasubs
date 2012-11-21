@@ -219,10 +219,47 @@ class plgAkpaymentBeanstream extends plgAkpaymentAbstract
 	
 	private function isValidIPN($data)
 	{
+		static $responseVars = array(
+			'trnApproved',
+			'trnId',
+			'messageId',
+			'messageText',
+			'authCode',
+			'responseType',
+			'trnAmount',
+			'trnDate',
+			'trnOrderNumber',
+			'trnLanguage',
+			'trnCustomerName',
+			'trnEmailAddress',
+			'trnPhoneNumber',
+			'avsProcessed',
+			'avsId',
+			'avsResult',
+			'avsAddrMatch',
+			'avsPostalMatch',
+			'avsMessage',
+			'cvdId',
+			'cardType',
+			'trnType',
+			'paymentMethod',
+			'ref1',
+			'ref2',
+			'ref3',
+			'ref4',
+			'ref5'
+		);
 		if($data['hashValue']) {
 			$query = $_SERVER['QUERY_STRING'];
-			preg_match('/marker=000\?(.+)&hashValue/', $query, $matches);
-			$calcHash = sha1($matches[1] . trim($this->params->get('hash_key','')));
+			$hashString = '';
+			foreach($responseVars as $var) {
+				preg_match('/' . $var . '=([^&]+)/', $query, $matches);
+				$val = '';
+				if(isset($matches[1])) $val = $matches[1];
+				$hashString .= $var . '=' . $val . '&';
+			}
+			$hashString = substr($hashString, 0, -1);
+			$calcHash = sha1($hashString . trim($this->params->get('hash_key','')));
 			return $calcHash == $data['hashValue'];	
 		}
 		return true;
