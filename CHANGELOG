@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.5.0
 ================================================================================
++ Added minimum stability option in component Options
 ~ The ccInvoices plugin will mark the invoice as OPEN when a subscription's payment is pending
 ~ Make sure we are no longer using Joomla!'s integrated extension update (it doesn't support stability and Joomla! version compatibility checks)
 # [HIGH] Fatal error in messages view

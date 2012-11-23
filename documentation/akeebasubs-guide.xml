@@ -554,10 +554,21 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <section xml:id="updating">
         <title>Updating to the latest release</title>
 
-        <para>Akeeba Subscriptions can be updated with three different
-        methods: installing the new version on top of the old one, using the
-        integrated Live Update system or or using the extensions update
-        feature in Joomla! 1.6 and later.</para>
+        <para>Akeeba Subscriptions can be updated with two different methods:
+        installing the new version on top of the old one or using the
+        integrated Live Update system.</para>
+
+        <important>
+          <para>Akeeba Subscritpions 2.5.0 and later no longer support using
+          Joomla!'s integrated extensions installer. The problem with
+          Joomla!'s feature is that it does not allow you to select the
+          minimum stability level of the update. This has traditionally led
+          users installing unstable versions on their live sites, ending up in
+          support requests and frustration. Moreover, the integrated Joomla!
+          extensions update is unreliable on many shared hosts. Unless these
+          significant issues are addressed we are going to keep on using our
+          own Akeeba Live Update.</para>
+        </important>
 
         <bridgehead>Updating directly</bridgehead>
 
@@ -595,19 +606,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         trace them from the server as they are multicast hostnames, which
         means that they resolve to a different IP depending on where in the
         world you are.</para>
-
-        <bridgehead>Using Joomla! extensions update</bridgehead>
-
-        <para>Since Joomla! 1.6, the Joomla! Extensions Manager allows
-        directly updating your extensions. Just log in to the backend of your
-        site and go to <guimenu>Extensions</guimenu>, <guimenuitem>Extension
-        Manager</guimenuitem>. Click on the <guilabel>Update</guilabel> link
-        below the toolbar. Then click on the <guibutton>Find
-        Updates</guibutton> button. If there is a new Akeeba Subscriptions
-        release it will appear in the list below. Tick the box on the left of
-        the row and then click on the <guibutton>Update</guibutton> button. If
-        your site is compatible with this Joomla! feature, you will see the
-        new version being installed automatically for you.</para>
 
         <bridgehead>Something not working right after the update?</bridgehead>
 
@@ -1409,6 +1407,27 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             the user with the free subscription. If you select
             <option>None</option> then no email is sent and the free
             subscribers will never get activated!</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para><guilabel>Live Update</guilabel></para>
+
+      <para>These options control how the integrated Live Update which allows
+      you to update our component works</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Minimum stability</term>
+
+          <listitem>
+            <para>Choose the minimum stability level of releases to be
+            notified for. By default this is set to Stable and is the
+            recommended setting for live sites. If you want to help us build
+            better software with less bugs please consider installing alphas,
+            betas on your test/staging site or RCs on your live site. Your
+            feedback helps us improve the software. Thank you in
+            advance!</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -4358,7 +4377,7 @@ LEVEL2=11111:22222:33333</programlisting>
           </varlistentry>
 
           <varlistentry>
-            <term>EPT/TPE Number </term>
+            <term>EPT/TPE Number</term>
 
             <listitem>
               <para>This is the number of the merchant's virtual EPT/TPE. It's
