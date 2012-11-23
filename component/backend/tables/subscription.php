@@ -205,6 +205,15 @@ class AkeebasubsTableSubscription extends FOFTable
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		
+		// We don't care to trigger plugins when certain fields change
+		$ignoredFields = array(
+			'notes', 'processor', 'processor_key', 'net_amount', 'tax_amount',
+			'gross_amount', 'tax_percent', 'params', 'akeebasubs_coupon_id',
+			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id',
+			'affiliate_comission', 'akeebasubs_invoice_id', 'prediscount_amount',
+			'discount_amount', 'contact_flag', 'first_contact', 'second_contact'
+		);
+		
 		$info = array(
 			'status'	=>	'unmodified',
 			'previous'	=> empty($this->_selfCache) ? null : $this->_selfCache,
@@ -218,7 +227,11 @@ class AkeebasubsTableSubscription extends FOFTable
 		} else {
 			$modified = array();
 			foreach($this->_selfCache as $key => $value) {
+				// Skip private fields
 				if(substr($key,0,1) == '_') continue;
+				// Skip ignored fileds
+				if(in_array($key, $ignoredFields)) continue;
+				// Check if the value has changed
 				if($this->$key != $value) {
 					$info['status'] = 'modified';
 					$modified[$key] = $value;
