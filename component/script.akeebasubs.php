@@ -105,6 +105,7 @@ class Com_AkeebasubsInstallerScript
 				'postfinancech'			=> 0,
 				'przelewy24'			=> 0,
 				'rbkmoney'				=> 0,
+				'robokassa'				=> 0,
 				'scnet'					=> 0,
 				'skrill'				=> 0,
 				'suomenverkkomaksut'	=> 0,
