@@ -53,6 +53,7 @@ class Com_AkeebasubsInstallerScript
 				'ageverification'		=> 0,
 				'agora'					=> 0,
 				'agreetotos'			=> 0,
+				'atscredits'			=> 0,
 				'autocity'				=> 0,
 				'cb'					=> 0,
 				'ccinvoices'			=> 0,
