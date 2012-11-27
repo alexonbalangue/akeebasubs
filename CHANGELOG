@@ -14,6 +14,7 @@ Akeeba Subscriptions 2.5.0
 # [MEDIUM] Regression: emails about subscription modification would be sent right after a subscription expiration notice email was sent out
 # [LOW] The Tax Rules Wizard would produce invalid results if you are not VIES registered
 # [LOW] Rare issue where the wrong username or email address would be used when subscribing a new user after a failed subscription attempt
+# [LOW] Warning thrown by the IProperty integration plugin
 
 Akeeba Subscriptions 2.5.0.rc1
 ================================================================================

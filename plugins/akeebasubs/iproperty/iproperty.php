@@ -52,7 +52,7 @@ class plgAkeebasubsIproperty extends JPlugin
 		$mustActivate = false;
 		$mustDeactivate = false;
 		$params = array();
-		
+
 		foreach($subscriptions as $sub) {
 			$level = $sub->akeebasubs_level_id;
 			if($sub->enabled) {
@@ -210,13 +210,24 @@ class plgAkeebasubsIproperty extends JPlugin
 				$cparams = $this->mixParams($cparams, $params);
 				$company->params = json_encode($cparams);
 				$company->state = 1;
-				$db->updateObject('#__iproperty_companies', $company, 'id');
+				$result = $db->updateObject('#__iproperty_companies', $company, 'id');
 			}
 		}
 	}
 	
 	private function unpublishAgent($user_id)
 	{
+		// First, check if we already have agents for that user ID
+		$db = JFactory::getDbo();
+		$query = FOFQueryAbstract::getNew($db)
+			->select('*')
+			->from($db->qn('#__iproperty_agents'))
+			->where($db->qn('user_id').' = '.$db->q($user_id));
+		$db->setQuery($query);
+		$agents = $db->loadObjectList();
+		
+		if(empty($agents)) return;
+		
 		// Unpublish agent records
 		$db = JFactory::getDbo();
 		$query = FOFQueryAbstract::getNew($db)
