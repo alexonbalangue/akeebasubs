@@ -17,7 +17,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		$config = array_merge($config, array(
 			'ppName'		=> 'paypalpaymentspro',
 			'ppKey'			=> 'PLG_AKPAYMENT_PAYPALPAYMENTSPRO_TITLE',
-			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/PayPalPro1.gif'
+			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/paypaldirectcc.png'
 		));
 		
 		parent::__construct($subject, $config);
