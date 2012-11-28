@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - PayPal Payments Pro (Express Checkout)</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-11-26</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_PAYPALPROEXPRESS_DESCRIPTION</description>
+	<files>
+		<filename plugin="paypalproexpress">paypalproexpress.php</filename>
+		<folder>paypalproexpress</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_paypalproexpress.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_paypalproexpress.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_TITLE_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="apiuser" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_APIUSER_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_APIUSER_DESC"/>
+				<field name="apipw" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_APIPW_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_APIPW_DESC"/>
+				<field name="apisig" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_APISIG_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_APISIG_DESC"/>
+				<field type="spacer" />
+				<field name="sb_apiuser" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_SB_APIUSER_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_SB_APIUSER_DESC"/>
+				<field name="sb_apipw" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_SB_APIPW_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_SB_APIPW_DESC"/>
+				<field name="sb_apisig" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_SB_APISIG_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_SB_APISIG_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_PAYPALPROEXPRESS_SANDBOX_LABEL" description="PLG_AKPAYMENT_PAYPALPROEXPRESS_SANDBOX_DESC">
+				  <option value="0">JNo</option>
+				  <option value="1">JYes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
