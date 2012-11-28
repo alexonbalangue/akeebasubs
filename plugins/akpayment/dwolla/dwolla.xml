@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - Dwolla</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-11-19</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_DWOLLA_DESCRIPTION</description>
+	<files>
+		<filename plugin="dwolla">dwolla.php</filename>
+		<folder>dwolla</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_dwolla.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_dwolla.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_DWOLLA_TITLE_LABEL" description="PLG_AKPAYMENT_DWOLLA_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_DWOLLA_PPIMAGE_LABEL" description="PLG_AKPAYMENT_DWOLLA_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="accountid" type="text" size="50" default="" label="PLG_AKPAYMENT_DWOLLA_ACCOUNTID_LABEL" description="PLG_AKPAYMENT_DWOLLA_ACCOUNTID_DESC"/>
+				<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_DWOLLA_KEY_LABEL" description="PLG_AKPAYMENT_DWOLLA_KEY_DESC"/>
+				<field name="secret" type="text" size="50" default="" label="PLG_AKPAYMENT_DWOLLA_SECRET_LABEL" description="PLG_AKPAYMENT_DWOLLA_SECRET_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
