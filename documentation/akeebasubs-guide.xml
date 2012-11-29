@@ -4513,6 +4513,80 @@ LEVEL2=11111:22222:33333</programlisting>
         your site.</para>
       </section>
 
+      <section xml:id="payment-dwolla">
+        <title>Dwolla</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Dwolla</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.4.5.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows you to use the US payment
+        processor Dwolla (https://www.dwolla.com/). Dwolla allows you to
+        perform safe and easy bank-to-bank transfers between your client's and
+        your bank account.</para>
+
+        <warning>
+          <para>All Dwolla payments are in US Dollars. Since it supports no
+          other currency you MUST make sure that the configuration of Akeeba
+          Subscriptions has the currency code set to USD and the currency
+          symbol set to $.</para>
+        </warning>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "Dwolla" or type in a custom name to
+              show to your customer's, e.g. "Pay with bank transfer"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Account ID</term>
+
+            <listitem>
+              <para>Please enter your Account ID as given by Dwolla. It's in
+              the form 812-xxx-xxxx.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Application Key</term>
+
+            <listitem>
+              <para>Enter your Dwolla Application Key. You will need to create
+              a new Dwolla Application before you can get this.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Application Secret</term>
+
+            <listitem>
+              <para>Enter your Dwolla Application Secret. You will need to
+              create a new Dwolla Application before you can get this.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
       <section xml:id="payment-epay">
         <title>ePay (Denmark)</title>
 
@@ -6225,11 +6299,202 @@ LEVEL2=11111:22222:33333</programlisting>
       </section>
 
       <section xml:id="payment-paypalpaymentspro">
-        <title>Paypal Payments Pro (a.k.a. PayPal Website Payments
-        Pro)</title>
+        <title>Paypal Payments Pro</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - Paypal Payments Pro</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">supports</emphasis> recurring
+        payments.</para>
+
+        <note>
+          <para>This plugin implements the Direct Payment method.</para>
+        </note>
+
+        <para>This payment method integrates the PayPal Payments Pro, a.k.a.
+        PayPal Website Payments Pro service, available with a monthly fee to
+        merchant PayPal clients in select countries. If you are using for the
+        "simple" or "regular" PayPal integration this is NOT the plugin you
+        want. The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "PayPal Payments Pro" or type in a
+              custom name to show to your customer's, e.g. "Credit
+              Card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Username</term>
+
+            <listitem>
+              <para>This is the API username given to you by PayPal</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Password</term>
+
+            <listitem>
+              <para>This is the API password given to you by PayPal</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Signature</term>
+
+            <listitem>
+              <para>This is the API signature given to you by PayPal</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox API Username</term>
+
+            <listitem>
+              <para>This is the API username given to you by PayPal Sandbox.
+              This is only used when the <guilabel>Sandbox</guilabel> option
+              is turned on.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox API Password</term>
+
+            <listitem>
+              <para>This is the API password given to you by PayPal Sandbox.
+              This is only used when the <guilabel>Sandbox</guilabel> option
+              is turned on.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>API Sandbox Signature</term>
+
+            <listitem>
+              <para>This is the API signature given to you by PayPal Sandbox.
+              This is only used when the <guilabel>Sandbox</guilabel> option
+              is turned on.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, transactions are processed by PayPal
+              Sandbox, i.e. PayPal's testing mode. This is designed for
+              integration tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+
+              <warning>
+                <para>Using the Sandbox is not as straightforward as it
+                sounds. We recommend simply usis the live (normal) PayPal and
+                a credit card not associated with your PayPal account to test
+                the purchase of a subscription. Use a coupon code to reduce
+                your subscription price to 1 USD, 1 GBP or 1 EUR but not any
+                less (the transaction won't go through for values less than 1
+                due to PayPal Sandbox limitations)</para>
+              </warning>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Recurring payments support notes</bridgehead>
+
+        <para>PayPal has some restrictions regarding the renewal period of
+        subscription. A subscription may recur in a period of 1-90 days, 1-52
+        weeks, 1-24 months or 1-5 years. Akeeba Subscriptions will
+        automatically convert the subscription duration to the closest match.
+        This may not always be what you expect. For example, 180 days is
+        converted to 6 months and 15 days is converted to 2 weeks. Due to the
+        fuzziness of the conversion and the way PayPal handles renewals, it is
+        possible that a subscription will expire before it is automatically
+        renewed. If a subscription expires, an expiration email will be sent
+        to your client.</para>
+
+        <para>Payments will recur till the end of the world unless you cancel
+        your PayPal account, your client cancels his PayPal account, your
+        client manually unsubscribes from his PayPal account's back-end or
+        your client does not have funds for 3 consecutive days after his
+        renewal is due. In all of the above cases, your client's subscription
+        may expire before it is renewed. If a subscription expires, an
+        expiration email will be sent to your client.</para>
+
+        <para>You can not cancel recurring payments through Akeeba
+        Subscriptions. You have to do so manually, from PayPal's
+        back-end.</para>
+
+        <important>
+          <para>PayPal does not allow cancelling subscriptions / recurring
+          payments programmatically. It's not like we are missing this feature
+          in Akeeba Subscriptions; it's simply impossible with PayPal because
+          PayPal does not support this feature at all.</para>
+        </important>
+
+        <para>When a subscription payment recurs, the original subscription
+        record is overwritten. In order for you not to lose statistics
+        information, a new <emphasis role="bold">expired</emphasis>
+        subscription record is created with the old subscription record's
+        information. This means that the subscription with the biggest
+        subscription ID (appearing towards the top of the front- and back-end
+        lists) will show as expired. This is not a bug. PayPal sends us the
+        original subscription's ID as a reference, which is why only the
+        original subscription can be updated.</para>
+
+        <warning>
+          <para>In order for the recurring payments to work you have to enter
+          Akeeba Subscriptions' callback URL in PayPal's interface. Log in to
+          PayPal and go to <guilabel>Profile</guilabel>, <guilabel>My Selling
+          Tools</guilabel>, and click on the <guilabel>Update</guilabel> link
+          next to <guilabel>Instant Payment Notifications</guilabel>. Click on
+          <guibutton>Choose IPN Settings</guibutton>. In the
+          <guibutton>Notification URL</guibutton> enter
+          <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=paypalpaymentspro</uri>
+          where http://www.example.com is the URL to your site. Under
+          <guilabel>IPN Messages</guilabel> select <option>Receive IPN
+          Messages (Enabled)</option> and click on
+          <guibutton>Save</guibutton>.</para>
+        </warning>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>PayPal doesn't handle UTF-8 data very gracefully by default. You
+        will have to enable UTF-8 on your PayPal account to let accented and
+        international characters be accepted in the payment pages.</para>
+
+        <para>Log in to your PayPal account. Click the
+        <guimenuitem>Profile</guimenuitem> link in the menu bar under
+        <guimenu>My Account</guimenu>. In the <guilabel>Selling
+        Preferences</guilabel> columns click on the <guilabel>Language
+        Encoding</guilabel> option. Click on <guibutton>More
+        Options</guibutton>. Set <guilabel>Encoding</guilabel> to
+        <option>UTF-8</option> and click on
+        <guibutton>Save</guibutton>.</para>
+      </section>
+
+      <section xml:id="payment-paypalpaymentsproexpresscheckout">
+        <title>Paypal Payments Pro (Express Checkout)</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - Paypal Payments Pro (Express
+        Checkout)</guilabel></para>
 
         <para>This plugin <emphasis role="bold">supports</emphasis> recurring
         payments.</para>
@@ -6238,7 +6503,15 @@ LEVEL2=11111:22222:33333</programlisting>
         PayPal Website Payments Pro service, available with a monthly fee to
         merchant PayPal clients in select countries. If you are using for the
         "simple" or "regular" PayPal integration this is NOT the plugin you
-        want. The options you have in this plugin are:</para>
+        want.</para>
+
+        <note>
+          <para>This plugin implements the <link
+          xlink:href="https://www.x.com/developers/paypal/documentation-tools/express-checkout/integration-guide/ECGettingStarted">Express
+          Checkout</link> method.</para>
+        </note>
+
+        <para>The options you have in this plugin are:</para>
 
         <variablelist>
           <varlistentry>
