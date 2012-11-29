@@ -1470,7 +1470,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	/**
 	 * Get the form set by the active payment plugin
 	 */
-	public function getForm()
+	public function getPaymentForm()
 	{
 		return $this->paymentForm;
 	}

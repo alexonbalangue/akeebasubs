@@ -53,7 +53,7 @@ class AkeebasubsControllerSubscribes extends FOFController
 		if($result) {
 			$view = $this->getThisView();
 			$view->setLayout('form');
-			$view->assign('form', $this->getThisModel()->getForm());
+			$view->assign('form', $this->getThisModel()->getPaymentForm());
 			$model = $this->getThisModel();
 			$view->setModel($model,true);
 			$view->display();
