@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
-	<name>Akeeba Subscriptions Payment - PayPal Payments Pro</name>
+	<name>Akeeba Subscriptions Payment - PayPal Payments Pro (Direct Payment)</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
