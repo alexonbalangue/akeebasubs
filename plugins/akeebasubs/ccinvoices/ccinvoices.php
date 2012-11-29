@@ -227,7 +227,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 					'invoice_date'					=> $jNow->toSql(),
 					'enabled'						=> 1,
 					'created_on'					=> $jNow->toSql(),
-					'created_by'					=> $row->created_by,
+					'created_by'					=> $row->user_id,
 				);
 				$db->insertObject('#__akeebasubs_invoices', $object, 'akeebasubs_subscription_id');
 			} elseif($row->state == 'C') {
