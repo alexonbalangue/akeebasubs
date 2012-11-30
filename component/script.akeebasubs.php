@@ -110,6 +110,7 @@ class Com_AkeebasubsInstallerScript
 				'rbkmoney'				=> 0,
 				'robokassa'				=> 0,
 				'scnet'					=> 0,
+				'scnetintegrated'		=> 0,
 				'skrill'				=> 0,
 				'suomenverkkomaksut'	=> 0,
 				'upay'					=> 0,
