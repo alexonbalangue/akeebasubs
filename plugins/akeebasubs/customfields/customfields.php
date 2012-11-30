@@ -148,13 +148,13 @@ class plgAkeebasubsCustomfields extends JPlugin
 
 		// Parse options
 		if($item->options) {
-			$placeholder = htmlentities(str_replace("\n", '', $item->options));
+			$placeholder = htmlentities(str_replace("\n", '', $item->options), ENT_COMPAT, 'UTF-8');
 		} else {
 			$placeholder = '';
 		}
 		
 		// Set up field's HTML content
-		$html = '<input type="'.$type.'" name="custom['.$item->slug.']" id="'.$item->slug.'" value="'.htmlentities($current).'" placeholder="'.$placeholder.'" />';
+		$html = '<input type="'.$type.'" name="custom['.$item->slug.']" id="'.$item->slug.'" value="'.htmlentities($current, ENT_COMPAT, 'UTF-8').'" placeholder="'.$placeholder.'" />';
 		
 		// Setup the field
 		$field = array(

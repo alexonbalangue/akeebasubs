@@ -15,6 +15,7 @@ Akeeba Subscriptions 2.5.0
 # [LOW] The Tax Rules Wizard would produce invalid results if you are not VIES registered
 # [LOW] Rare issue where the wrong username or email address would be used when subscribing a new user after a failed subscription attempt
 # [LOW] Warning thrown by the IProperty integration plugin
+# [LOW] Custom text boxes wouldn't allow non-ASCII data to be entered
 
 Akeeba Subscriptions 2.5.0.rc1
 ================================================================================

@@ -110,7 +110,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		if($firstRun) {
 			$session->set('firstrun', false, 'com_akeebasubs');
 		}
-
+		
 		return (object)array(
 			'firstrun'			=> $firstRun,
 			'slug'				=> $this->getState('slug','','string'),
