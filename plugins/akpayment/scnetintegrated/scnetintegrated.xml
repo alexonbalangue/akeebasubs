@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - SCNet (integrated)</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2012 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-06-02</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_SCNETINTEGRATED_DESCRIPTION</description>
+	<files>
+		<filename plugin="scnetintegrated">scnetintegrated.php</filename>
+		<folder>scnetintegrated</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_scnetintegrated.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_scnetintegrated.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_TITLE_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_PPIMAGE_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTID_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTID_DESC"/>
+				<field name="merchant_pass" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTPASS_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTPASS_DESC"/>
+				<field name="adminemail" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_EMAIL_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_EMAIL_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_SCNETINTEGRATED_SANDBOX_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_SANDBOX_DESC">
+				<option value="0">JNo</option>
+				<option value="1">JYes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
