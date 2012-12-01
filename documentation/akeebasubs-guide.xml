@@ -8581,6 +8581,11 @@ LEVEL3=Group 3</programlisting>
           with VirtueMart 1.x.</para>
         </important>
 
+        <note>
+          <para>The ability to assign multiple shopper groups to a single user
+          was added in Akeeba Subscriptions 2.5.0</para>
+        </note>
+
         <para>This integration plugin allows you to add and remove users from
         VirtueMart 2.0 shopper groups based on their subscription status. This
         allows you to set special discounts to subscribers (e.g. a discount
