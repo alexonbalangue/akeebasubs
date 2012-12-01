@@ -9,6 +9,7 @@ Akeeba Subscriptions 2.5.0
 + Google Analytics Commerce integration (kudos to Daniel Dimitrov, https://compojoom.com/)
 ~ The ccInvoices plugin will mark the invoice as OPEN when a subscription's payment is pending
 ~ Make sure we are no longer using Joomla!'s integrated extension update (it doesn't support stability and Joomla! version compatibility checks)
+~ The VirtueMart 2 integration plugin now allows assigning/removing multiple shopper groups to each user
 # [MEDIUM] Regression: emails about subscription modification would be sent right after a subscription expiration notice email was sent out
 # [LOW] Rare issue where the wrong username or email address would be used when subscribing a new user after a failed subscription attempt
 # [LOW] Warning thrown by the IProperty integration plugin

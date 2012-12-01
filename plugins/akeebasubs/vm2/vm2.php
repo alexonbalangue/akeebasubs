@@ -115,47 +115,48 @@ class plgAkeebasubsVm2 extends JPlugin
 		
 		// Add to VM
 		if(!empty($addGroups)) {
-			$query = $db->getQuery(true)
-				->delete($db->qn('#__virtuemart_vmuser_shoppergroups'))
-				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id));
-			$db->setQuery($query);
-			$db->query();
-			
-			$group = array_pop($addGroups);
-
+			// 1. Delete existing assignments; required to prevent a failure from
+			//   the INSERT command in the second step
+			$groupSet = array();
+			foreach($addGroups as $group) {
+				$groupSet[] = $db->q($group);
+			}
 			$query = $db->getQuery(true)
 				->delete($db->qn('#__virtuemart_vmuser_shoppergroups'))
 				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id))
-				->where($db->qn('virtuemart_shoppergroup_id').' = '.$db->q($group));
+				->where($db->qn('virtuemart_shoppergroup_id').' IN ('.implode(', ', $groupSet).')');
 			$db->setQuery($query);
 			$db->query();
 			
+			// 2. Add new assignments with a big INSERT query
 			$query = $db->getQuery(true)
 				->insert($db->qn('#__virtuemart_vmuser_shoppergroups'))
 				->columns(array(
 					$db->qn('virtuemart_user_id'),
 					$db->qn('virtuemart_shoppergroup_id'),
-				))->values(
-					$db->q($user_id).', '.$db->q($group)
-				);
+				));
+			
+			foreach($addGroups as $group) {
+				$query->values($db->q($user_id).', '.$db->q($group));
+			}
+			
 			$db->setQuery($query);
 			$db->query();
 		}
 		
-		// Remove from VM
+		// Remove from VM shopper groups
 		if(!empty($removeGroups)) {
-			$protoQuery = $db->getQuery(true)
+			$query = $db->getQuery(true)
 				->delete($db->qn('#__virtuemart_vmuser_shoppergroups'))
 				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id));
-			
-			$protoSQL = 'DELETE FROM `#__virtuemart_vmuser_shoppergroups` WHERE `virtuemart_user_id` = ' . $db->q($user_id) . ' AND `virtuemart_shoppergroup_id` = ';
-			
+			$groupSet = array();
 			foreach($removeGroups as $group) {
-				$query = clone $protoQuery;
-				$query->where($db->qn('virtuemart_shoppergroup_id').' = '.$db->q($group));
-				$db->setQuery($query);
-				$db->query();
+				$groupSet[] = $db->q($group);
 			}
+			
+			$query->where($db->qn('virtuemart_shoppergroup_id').' IN ('.implode(', ', $groupSet).')');
+			$db->setQuery($query);
+			$db->query();
 		}
 	}
 	
