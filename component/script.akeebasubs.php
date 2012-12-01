@@ -55,6 +55,7 @@ class Com_AkeebasubsInstallerScript
 				'agreetotos'			=> 0,
 				'atscredits'			=> 0,
 				'autocity'				=> 0,
+				'canalyticscommerce'	=> 0,
 				'cb'					=> 0,
 				'ccinvoices'			=> 0,
 				'customfields'			=> 1,

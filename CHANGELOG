@@ -6,17 +6,21 @@ Akeeba Subscriptions 2.5.0
 + CM-CIC payments
 + RoboKassa payments
 + SCnet Integrated plugin
++ Google Analytics Commerce integration (kudos to Daniel Dimitrov, https://compojoom.com/)
 ~ The ccInvoices plugin will mark the invoice as OPEN when a subscription's payment is pending
 ~ Make sure we are no longer using Joomla!'s integrated extension update (it doesn't support stability and Joomla! version compatibility checks)
+# [MEDIUM] Regression: emails about subscription modification would be sent right after a subscription expiration notice email was sent out
+# [LOW] Rare issue where the wrong username or email address would be used when subscribing a new user after a failed subscription attempt
+# [LOW] Warning thrown by the IProperty integration plugin
+# [LOW] Custom text boxes wouldn't allow non-ASCII data to be entered
+
+Akeeba Subscriptions 2.5.0.rc2
+================================================================================
 # [HIGH] Fatal error in messages view
 # [HIGH] Integration plugins wouldn't run on new subscription creation
 # [MEDIUM] The "none" payment plugin didn't work
 # [MEDIUM] Sometimes the ccInvoices contact ID would not be determined correctly
-# [MEDIUM] Regression: emails about subscription modification would be sent right after a subscription expiration notice email was sent out
 # [LOW] The Tax Rules Wizard would produce invalid results if you are not VIES registered
-# [LOW] Rare issue where the wrong username or email address would be used when subscribing a new user after a failed subscription attempt
-# [LOW] Warning thrown by the IProperty integration plugin
-# [LOW] Custom text boxes wouldn't allow non-ASCII data to be entered
 
 Akeeba Subscriptions 2.5.0.rc1
 ================================================================================
