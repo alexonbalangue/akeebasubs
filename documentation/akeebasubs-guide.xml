@@ -7339,6 +7339,22 @@ LEVEL2=11111:22222:33333</programlisting>
         <para>This is a payment plugin which allows you to use the payment
         processor SCNet.</para>
 
+        <note>
+          <para>There are two plugins available with Akeeba Subscriptions. The
+          <guilabel>Akeeba Subscriptions Payment - SCNet</guilabel> plugin
+          works by redirecting your customer to SCnet's website. All credit
+          card entry and processing is done at SCnet's site. On the contrary,
+          with the <guilabel>Akeeba Subscriptions Payment - SCNet
+          (integrated)</guilabel> plugin the credit card form is rendered on
+          your site. The customer never leaves your site. The credit card data
+          is then sent to SCnet for processing. When using the "integrated"
+          plugin you must use HTTPS on your site to ensure the security of the
+          transactions. This precludes the use of the "integrated" plugin on
+          shared hosts, where setting up HTTPS is usually out of the question
+          or leads to suboptimal situations, like "shared HTTPS" setups which
+          do not always satisfy PCI compliance guidelines.</para>
+        </note>
+
         <para>The options you have in this plugin are:</para>
 
         <variablelist>
