@@ -1,10 +1,6 @@
 <?php defined('_JEXEC') or die(); ?>
-<?php
-$t1 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER');
-$t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
-?>
 
-<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER') ?></h3>
+<h3><?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_HEADER') ?></h3>
 <div class="row-fluid">
 <div class="span12">
 <br />
@@ -47,7 +43,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="NOTIFYURL" value="<?php echo $data->NOTIFYURL ?>" />
 	<div class="control-group">
 		<label for="CREDITCARDTYPE" class="control-label" style="width: 190px; margin-right: 20px;">
-			Type of credit card
+			<?php echo JText::_('PLG_AKPAYMENT_PAYPALPAYMENTSPRO_FORM_CCTYPE') ?>
 		</label>
 		<div class="controls">
 			<select id="CREDITCARDTYPE" name="CREDITCARDTYPE" class="input-medium">
@@ -60,7 +56,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	</div>
 	<div class="control-group">
 		<label for="ACCT" class="control-label" style="width:190px; margin-right:20px;">
-			Credit card number
+			<?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_CC') ?>
 		</label>
 		<div class="controls">
 			<input type="text" name="ACCT" id="ACCT" class="input-large" />
@@ -68,7 +64,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	</div>
 	<div class="control-group">
 		<label for="EXPDATE" class="control-label" style="width:190px; margin-right:20px;">
-			Expiration date (month/year)
+			<?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_EXPDATE') ?>
 		</label>
 		<div class="controls">
 			<?php echo $this->selectExpirationDate() ?>
@@ -76,7 +72,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	</div>
 	<div class="control-group">
 		<label for="CVV2" class="control-label" style="width:190px; margin-right:20px;">
-			Card Verification Value (CVV2)
+			<?php echo JText::_('PLG_AKPAYMENT_PAYPALPAYMENTSPRO_FORM_CVV') ?>
 		</label>
 		<div class="controls">
 			<input type="text" name="CVV2" id="CVV2" class="input-mini" />
