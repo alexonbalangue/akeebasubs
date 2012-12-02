@@ -1,6 +1,6 @@
 <?php defined('_JEXEC') or die(); ?>
 
-<h3><?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_HEADER') ?></h3>
+<h3><?php echo JText::_('PLG_AKPAYMENT_PAYPALPAYMENTSPRO_FORM_HEADER') ?></h3>
 <div class="row-fluid">
 <div class="span12">
 <br />
@@ -56,7 +56,7 @@
 	</div>
 	<div class="control-group">
 		<label for="ACCT" class="control-label" style="width:190px; margin-right:20px;">
-			<?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_CC') ?>
+			<?php echo JText::_('PLG_AKPAYMENT_PAYPALPAYMENTSPRO_FORM_CC') ?>
 		</label>
 		<div class="controls">
 			<input type="text" name="ACCT" id="ACCT" class="input-large" />
@@ -64,7 +64,7 @@
 	</div>
 	<div class="control-group">
 		<label for="EXPDATE" class="control-label" style="width:190px; margin-right:20px;">
-			<?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_EXPDATE') ?>
+			<?php echo JText::_('PLG_AKPAYMENT_PAYPALPAYMENTSPRO_FORM_EXPDATE') ?>
 		</label>
 		<div class="controls">
 			<?php echo $this->selectExpirationDate() ?>
