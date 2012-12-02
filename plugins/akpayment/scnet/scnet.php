@@ -168,7 +168,7 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 		if($sandbox) {
 			return 'https://www.scnet.com.au/ipayby/hostedccbuy';
 		} else {
-			return trim($this->params->get('url',''));
+			return 'https://secure.ipayby.com.au/ipayby/hostedccbuy';
 		}
 	}
 	
