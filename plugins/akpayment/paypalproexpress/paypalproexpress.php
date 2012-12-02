@@ -49,7 +49,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		}
 		
 		$amount = sprintf('%.2f',$subscription->gross_amount);
-		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id;
+		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id.'&mode=init';
 		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
 		$requestData = (object)array(
 			'METHOD'							=> 'SetExpressCheckout',
@@ -114,14 +114,14 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
-		if($data['mode'] == 'recurring') {
-			return $this->recurringPaymentCallback($data);
+		if($data['mode'] == 'init') {
+			return $this->formCallback($data);
 		} else {
-			return $this->paymentCallback($data);
+			return $this->IPNCallback($data);
 		}
 	}
 	
-	private function paymentCallback($data)
+	private function formCallback($data)
 	{
 		jimport('joomla.utilities.date');
 		$isValid = true;
@@ -193,7 +193,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			if($level->recurring) {
 				// Create recurring payment profile
 				$nextPayment = new JDate("+$level->duration day");				
-				$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&mode=recurring&sid='.$subscription->akeebasubs_subscription_id;
+				$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id;
 				$recurringRequestData = (object)array(
 					'METHOD'			=> 'CreateRecurringPaymentsProfile',
 					'NOTIFYURL'			=> $callbackUrl,
@@ -395,7 +395,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		return true;
 	}
 	
-	private function recurringPaymentCallback($data)
+	private function IPNCallback($data)
 	{
 		jimport('joomla.utilities.date');
 		
