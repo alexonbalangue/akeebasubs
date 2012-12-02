@@ -156,6 +156,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 				'PAYMENTREQUEST_0_PAYMENTACTION'	=> 'Sale',
 				'PAYMENTREQUEST_0_AMT'				=> sprintf('%.2f',$subscription->gross_amount),
 				'PAYMENTREQUEST_0_CURRENCYCODE'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
+				'PAYMENTREQUEST_0_INVNUM'			=> $subscription->akeebasubs_subscription_id,
 				'IPADDRESS'							=> $_SERVER['REMOTE_ADDR']
 			);
 
@@ -405,12 +406,12 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		
 		// Check txn_type; we only accept web_accept transactions with this plugin
 		if($isValid) {
-			$validTypes = array('web_accept','recurring_payment','subscr_payment');
+			$validTypes = array('web_accept','recurring_payment','subscr_payment','express_checkout');
 			$isValid = in_array($data['txn_type'], $validTypes);
 			if(!$isValid) {
 				$data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
 			} else {
-				$recurring = ($data['txn_type'] != 'web_accept');
+				$recurring = ($data['txn_type'] == 'recurring_payment');
 			}
 		}
 		
