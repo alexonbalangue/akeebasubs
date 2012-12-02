@@ -1,10 +1,6 @@
 <?php defined('_JEXEC') or die(); ?>
-<?php
-$t1 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER');
-$t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
-?>
 
-<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_HEADER') ?></h3>
+<h3><?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_HEADER') ?></h3>
 <div class="row-fluid">
 <div class="span12">
 <br />
