@@ -110,7 +110,7 @@
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="1" />
+					<token key="PRO" value="0" />
 				</replacetokens>
 			</filterchain>
 		</copy>
