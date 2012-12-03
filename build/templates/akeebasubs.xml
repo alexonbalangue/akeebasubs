@@ -100,11 +100,6 @@
 	
 	<scriptfile>script.akeebasubs.php</scriptfile>
 	
-	<!-- Joomla! 1.6/1.7 updates -->
-	<updateservers>
-		<server type="extension" priority="1" name="Akeeba Subscriptions Updates"><![CDATA[http://nocdn.akeebabackup.com/updates/akeebasubs.xml]]></server>
-	</updateservers>
-	
 	<!-- Akeeba Backup System Restore Points -->
 	<restorepoint>
 		<customdirs>
