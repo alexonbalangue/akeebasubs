@@ -34,7 +34,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		if($row->gross_amount < 0.01) return;
 
 		// Should we handle this subscription?
-		$generateAnInvoice = ($row->state == "C") && $row->enabled;
+		$generateAnInvoice = ($row->state == "C");
 		$whenToGenerate = $this->params->get('generatewhen','0');
 		if($whenToGenerate == 1) {
 			// Handle new subscription, even if they are not yet enabled

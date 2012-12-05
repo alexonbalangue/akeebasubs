@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.5.1
+================================================================================
+# [MEDIUM] ccInvoices integration: no invoice issued for subscribers renewing their subscription
+
 Akeeba Subscriptions 2.5.0
 ================================================================================
 + Akeeba Ticket System credits integration plugin (yes, ATS is not released yet, I know)
