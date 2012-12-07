@@ -267,12 +267,12 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		
 		// Check txn_type; we only accept web_accept transactions with this plugin
 		if($isValid) {
-			$validTypes = array('web_accept','recurring_payment','subscr_payment');
+			$validTypes = array('web_accept','recurring_payment','subscr_payment','express_checkout');
 			$isValid = in_array($data['txn_type'], $validTypes);
 			if(!$isValid) {
 				$data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
 			} else {
-				$recurring = ($data['txn_type'] != 'web_accept');
+				$recurring = ($data['txn_type'] == 'recurring_payment');
 			}
 		}
 		
@@ -292,22 +292,6 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 				$isValid = false;
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
-		}
-		
-		// Check that receiver_email is what the site owner has configured
-		if($isValid) {
-			$email = strtolower($data['receiver_email']);
-			if(strpos($this->getMerchantUsername(), '@') === false) {
-				$pos = strpos($email, '@');
-				if(!preg_match('/^' . substr($email, 0, $pos) . '/', strtolower($this->getMerchantUsername()))
-						|| !preg_match('/' . substr($email, ($pos + 1)) . '$/', strtolower($this->getMerchantUsername()))) {
-					$isValid = false;
-					$data['akeebasubs_failure_reason'] = 'Merchant email/username does not match receiver_email.';
-				}	
-			} else if($email != strtolower($this->getMerchantUsername())) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = 'Merchant email/username does not match receiver_email.';
-			}
 		}
 		
 		// Check that mc_gross is correct
@@ -398,6 +382,12 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		}
 		// In the case of a successful recurring payment, fetch the old subscription's data
 		if($recurring && ($newStatus == 'C') && ($subscription->state == 'C')) {
+			$jNow = new JDate();
+			$jStart = new JDate($subscription->publish_up);
+			$jEnd = new JDate($subscription->publish_down);
+			$now = $jNow->toUnix();
+			$start = $jStart->toUnix();
+			$end = $jEnd->toUnix();
 			// Create a new record for the old subscription
 			$oldData = $subscription->getData();
 			$oldData['akeebasubs_subscription_id'] = 0;
@@ -447,7 +437,6 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		
 		return true;
 	}
-	
 
 	/**
 	 * Validates the incoming data against PayPal's IPN to make sure this is not a
