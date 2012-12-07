@@ -193,7 +193,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
                                 ->getItem();
 			if($level->recurring) {
 				// Create recurring payment profile
-				$nextPayment = new JDate("+$level->duration day");				
+				$nextPayment = new JDate("+$level->duration day");
 				$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id;
 				$recurringRequestData = (object)array(
 					'METHOD'			=> 'CreateRecurringPaymentsProfile',
@@ -433,22 +433,6 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
 		}
 		
-		// Check that receiver_email is what the site owner has configured
-		if($isValid) {
-			$email = strtolower($data['receiver_email']);
-			if(strpos($this->getMerchantUsername(), '@') === false) {
-				$pos = strpos($email, '@');
-				if(!preg_match('/^' . substr($email, 0, $pos) . '/', strtolower($this->getMerchantUsername()))
-						|| !preg_match('/' . substr($email, ($pos + 1)) . '$/', strtolower($this->getMerchantUsername()))) {
-					$isValid = false;
-					$data['akeebasubs_failure_reason'] = 'Merchant email/username does not match receiver_email.';
-				}	
-			} else if($email != strtolower($this->getMerchantUsername())) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = 'Merchant email/username does not match receiver_email.';
-			}
-		}
-		
 		// Check that mc_gross is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
@@ -537,6 +521,12 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		}
 		// In the case of a successful recurring payment, fetch the old subscription's data
 		if($recurring && ($newStatus == 'C') && ($subscription->state == 'C')) {
+			$jNow = new JDate();
+			$jStart = new JDate($subscription->publish_up);
+			$jEnd = new JDate($subscription->publish_down);
+			$now = $jNow->toUnix();
+			$start = $jStart->toUnix();
+			$end = $jEnd->toUnix();
 			// Create a new record for the old subscription
 			$oldData = $subscription->getData();
 			$oldData['akeebasubs_subscription_id'] = 0;
