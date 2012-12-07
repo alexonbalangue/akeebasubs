@@ -426,7 +426,11 @@ class plgAkeebasubsCcinvoices extends JPlugin
         require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/tcpdf.php');
         require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/config/lang/eng.php');
 		
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		if(class_exists('TCPDF')) {
+			$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		} else {
+			$pdf = new ccInvoicesTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		}
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Akeeba Subscriptions');
         $pdf->SetTitle('Invoice');
