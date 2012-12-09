@@ -1,9 +1,7 @@
 <?php defined('_JEXEC') or die(); ?>
 
 <h3><?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_HEADER') ?></h3>
-<div id="payment-errors" class="alert alert-error" style="display: none;">
-If you are looking for the filters –e.g. for excluding files, directories and database tables– please click on the Cancel button to get back to the Control Panel page where you can access these features directly.
-</div>
+<div id="payment-errors" class="alert alert-error" style="display: none;"></div>
 <form id="payment-form" action="<?php echo $data->url ?>" method="post" class="form form-horizontal">
 	<div class="control-group" id="control-group-card-number">
 		<label for="card-number" class="control-label" style="width:190px; margin-right:20px;">
