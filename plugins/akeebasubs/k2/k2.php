@@ -23,13 +23,55 @@ class plgAkeebasubsK2 extends JPlugin
 		}
 
 		parent::__construct($subject, $config);
-
-		// Load level to group mapping from plugin parameters		
-		$strAddGroups = $this->params->get('addgroups','');
-		$this->addGroups = $this->parseGroups($strAddGroups);
 		
+		$this->loadLanguage();
+		
+		// Do we have values from the Olden Days?
+		$strAddGroups = $this->params->get('addgroups','');
 		$strRemoveGroups = $this->params->get('removegroups','');
-		$this->removeGroups = $this->parseGroups($strRemoveGroups);
+
+		if(!empty($strAddGroups) || !empty($strAddGroups)) {
+			// Load level to group mapping from plugin parameters		
+			$this->addGroups = $this->parseGroups($strAddGroups);
+			$this->removeGroups = $this->parseGroups($strRemoveGroups);
+			// Do a transparent upgrade
+			$this->upgradeSettings();
+		} else {
+			$this->loadGroupAssignments();
+		}
+	}
+	
+	/**
+	 * Renders the configuration page in the component's back-end
+	 * 
+	 * @param AkeebasubsTableLevel $level
+	 * @return object
+	 */
+	public function onSubscriptionLevelFormRender(AkeebasubsTableLevel $level)
+	{
+		jimport('joomla.filesystem.file');
+		$filename = dirname(__FILE__).'/override/default.php';
+		if(!JFile::exists($filename)) {
+			$filename = dirname(__FILE__).'/tmpl/default.php';
+		}
+		
+		if(!property_exists($level->params, 'k2_addgroups')) {
+			$level->params->k2_addgroups = array();
+		}
+		if(!property_exists($level->params, 'k2_removegroups')) {
+			$level->params->k2_removegroups = array();
+		}
+		
+		@ob_start();
+		include_once $filename;
+		$html = @ob_get_clean();
+		
+		$ret = (object)array(
+			'title'	=> JText::_('PLG_AKEEBASUBS_K2_TAB_TITLE'),
+			'html'	=> $html
+		);
+		
+		return $ret;
 	}
 
 	/**
@@ -173,6 +215,102 @@ class plgAkeebasubsK2 extends JPlugin
 				
 			}
 		}
+	}
+	
+	private function loadGroupAssignments()
+	{
+		$this->addGroups = array();
+		$this->removeGroups = array();
+		
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				$save = false;
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					continue;
+				}
+				if(property_exists($level->params, 'k2_addgroups'))
+				{
+					$this->addGroups[$level->akeebasubs_level_id] = $level->params->k2_addgroups;
+				}
+				if(property_exists($level->params, 'k2_removegroups'))
+				{
+					$this->removeGroups[$level->akeebasubs_level_id] = $level->params->k2_removegroups;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * =========================================================================
+	 * !!! CRUFT WARNING !!!
+	 * =========================================================================
+	 * 
+	 * The following methods are leftovers from the Olden Days (before 2.4.5).
+	 * At some point (most likely 2.6) they will be removed. For now they will
+	 * stay here so that we can do a transparent migration.
+	 */
+	
+	/**
+	 * Moves this plugin's settings from the plugin into each subscription
+	 * level's configuration parameters.
+	 */
+	private function upgradeSettings()
+	{
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				$save = false;
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					$level->params = new stdClass();
+				}
+				if(array_key_exists($level->akeebasubs_level_id, $this->addGroups)) {
+					if(empty($level->params->k2_addgroups)) {
+						$level->params->k2_addgroups = $this->addGroups[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				if(array_key_exists($level->akeebasubs_level_id, $this->removeGroups)) {
+					if(empty($level->params->k2_removegroups)) {
+						$level->params->k2_removegroups = $this->removeGroups[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				if($save) {
+					$level->params = json_encode($level->params);
+					$result = $model->setId($level->akeebasubs_level_id)->save( $level );
+				}
+			}
+		}
+		
+		// Remove the plugin parameters
+		$this->params->set('addgroups', '');
+		$this->params->set('removegroups', '');
+		$param_string = $this->params->toString();
+		
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->where($db->qn('type').'='.$db->q('plugin'))
+			->where($db->qn('element').'='.$db->q('k2'))
+			->where($db->qn('folder').'='.$db->q('akeebasubs'))
+			->set($db->qn('params').' = '.$db->q($param_string));
+		$db->setQuery($query);
+		$db->query();
 	}
 	
 	/**
