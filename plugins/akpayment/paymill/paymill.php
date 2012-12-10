@@ -144,18 +144,23 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
 		
 		if($isValid) {
-			$params = array(
-				'amount'		=> $data['amount'],
-				'currency'		=> $data['currency'],
-				'token'			=> $data['token'],
-				'description'	=> $data['description']
-			);
-			$apiKey = $this->getPrivateKey();
-			$apiEndpoint = 'https://api.paymill.de/v2/';
-			$transactionsObject = new Services_Paymill_Transactions(
-				$apiKey, $apiEndpoint
-			);
-			$transaction = $transactionsObject->create($params);
+			try {
+				$params = array(
+					'amount'		=> $data['amount'],
+					'currency'		=> $data['currency'],
+					'token'			=> $data['token'],
+					'description'	=> $data['description']
+				);
+				$apiKey = $this->getPrivateKey();
+				$apiEndpoint = 'https://api.paymill.de/v2/';
+				$transactionsObject = new Services_Paymill_Transactions(
+					$apiKey, $apiEndpoint
+				);
+				$transaction = $transactionsObject->create($params);	
+			}catch(Exception $e) {
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = $e->getMessage();
+			}
 		}
         
 		// Check that transaction has not been previously processed
