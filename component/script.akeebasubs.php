@@ -113,6 +113,7 @@ class Com_AkeebasubsInstallerScript
 				'scnet'					=> 0,
 				'scnetintegrated'		=> 0,
 				'skrill'				=> 0,
+				'stripe'				=> 0,
 				'suomenverkkomaksut'	=> 0,
 				'upay'					=> 0,
 				'verotel'				=> 0,

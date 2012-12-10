@@ -1,6 +1,8 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.5.1
 ================================================================================
++ PayMill payment gateway integration
++ Stripe payment gateway integration
 # [MEDIUM] ccInvoices integration: no invoice issued for subscribers renewing their subscription
 # [LOW] ccInvoices integration: compatibility with ccInvoices 1.6
 # [LOW] Warning message about missing language files in installation
