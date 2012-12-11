@@ -93,6 +93,15 @@ if(is_array($subscriptions)) $subscriptions = implode(',', $subscriptions);
 	</div>
 	
 	<div class="control-group">
+		<label for="hits" class="control-label">
+			<?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_HITSLIMIT'); ?>
+		</label>
+		<div class="controls">
+			<input type="text" size="5" id="hits" name="hits" value="<?php echo  $model->getState('hits', 0) ?>" />
+		</div>
+	</div>
+	
+	<div class="control-group">
 		<label class="control-label" for="expiration"><?php echo JText::_('COM_AKEEBASUBS_COUPON_PUBLISH_DOWN') ?></label>
 		<div class="controls">
 			<span class="akeebasubs-nofloat-input">

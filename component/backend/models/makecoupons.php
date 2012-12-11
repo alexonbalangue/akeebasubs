@@ -20,6 +20,7 @@ class AkeebasubsModelMakecoupons extends FOFModel
 		$value			= $this->getState('value', '100');
 		$subscriptions	= $this->getState('subscriptions', '');
 		$userhits		= $this->getState('userhits', '1', 'int');
+		$hitslimit		= $this->getState('hits', '0', 'int');
 		$expiration		= $this->getState('expiration', '');
 		
 		// Sanitize input data
@@ -54,6 +55,9 @@ class AkeebasubsModelMakecoupons extends FOFModel
 		if($userhits < 0) {
 			$userhits = 0;
 		}
+		if($hitslimit < 0) {
+			$hitslimit = 0;
+		}
 		
 		// Set back the values into the state
 		$this->setState('title',		$title);
@@ -63,6 +67,7 @@ class AkeebasubsModelMakecoupons extends FOFModel
 		$this->setState('value',		$value);
 		$this->setState('subscriptions', implode(',', $subscriptions));
 		$this->setState('userhits',		$userhits);
+		$this->setState('hits',			$hitslimit);
 		$this->setState('expiration',		$expiration);
 
 		// Initialise
@@ -95,6 +100,7 @@ class AkeebasubsModelMakecoupons extends FOFModel
 				'publish_down'		=> $expiration,
 				'subscriptions'		=> $subscriptions,
 				'userhits'			=> $userhits,
+				'hitslimit'			=> $hitslimit,
 				'type'				=> $type,
 				'value'				=> $value,
 				'enabled'			=> 1,
