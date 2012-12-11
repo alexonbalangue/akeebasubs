@@ -9680,6 +9680,18 @@ LEVEL3=Badge 1</programlisting>
         need to publish this plugin. It will fire once per day, expiring
         subscriptions past their expiration date. We strongly recommend
         publishing this plugin at all times.</para>
+
+        <para>Since some people reading the above paragraph had gotten the
+        wrong picture, let's try explaining this in even more detail. The
+        subscription expiration control plugin is a Joomla! plugin. It cannot
+        magically run on its own accord. The only way it will run is when a
+        page load occurs. Therefore you need to have at least a handful
+        (typically: about 10) page load requests per day on your site so that
+        this plugin can be triggered and do its job. If you have a site with
+        practically zero traffic you will have to deliberately visit it every
+        day and browse 10-20 pages so that this plugin does get activated and
+        does process expired subscriptions. The subscriber whose subscription
+        has expired does not need to visit your site.</para>
       </section>
 
       <section xml:id="plugin-subscriptionemails">
