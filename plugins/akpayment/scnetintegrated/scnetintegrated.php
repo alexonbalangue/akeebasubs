@@ -37,6 +37,15 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 	{
 		if($paymentmethod != $this->ppName) return false;
 		
+		// Force HTTPS
+		$app = JFactory::getApplication();
+        $uri = JFactory::getURI();
+		if ($uri->isSSL() == false) {
+			$uri->setScheme('https');
+			$app->redirect($uri->toString());
+			return $app->close();
+		}
+		
 		$data = (object)array(
 			'callback'	=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=scnetintegrated',
 			'arg0'		=> $this->getMerchantID(),
@@ -110,8 +119,10 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			try {
 				$soap = new SoapClient($this->getPaymentURL().'?WSDL',array('location' => $this->getPaymentURL()));
 				$response = $soap->performTransaction($data);
-				$isValid = $this->isValidIPN($response, $data);
-				if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
+				if($this->params->get('antifraud',1)) {
+					$isValid = $this->isValidIPN($response, $data);
+					if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';	
+				}
 			}catch(Exception $e) {
 				JFactory::getApplication()->redirect($error_url,$e->getMessage(),'error');
 				return false;
@@ -188,9 +199,9 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		if($newStatus == 'C') {
 			// Redirect the user to the "thank you" page if payment is complete
 			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
-			JFactory::getApplication()->redirect($thankyouUrl);
+			$app->redirect($thankyouUrl);
 		} else {
-			JFactory::getApplication()->redirect($error_url,$response->return->responseText,'error');
+			$app->redirect($error_url,$response->return->responseText,'error');
 		}
 		return true;
 	}
