@@ -31,6 +31,11 @@
 				<option value="0">JNo</option>
 				<option value="1">JYes</option>
 				</field>
+				<field type="spacer" />
+				<field name="antifraud" type="radio" default="1" label="PLG_AKPAYMENT_SCNETINTEGRATED_ANTIFRAUD_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_ANTIFRAUD_DESC">
+				  <option value="1">JYes</option>
+				  <option value="0">JNo</option>
+				</field>
 			</fieldset>
 		</fields>
 	</config>
