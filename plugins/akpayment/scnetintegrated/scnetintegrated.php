@@ -160,7 +160,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		}
 			
 		// Log the IPN data
-		$this->logIPN($data, $isValid);
+		$this->logIPN($response->return, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
@@ -216,7 +216,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		if($sandbox) {
 			return 'https://www.scnet.com.au/ipayby/ipaybyws';
 		} else {
-			return 'https://secure.ipayby.com.au/ipayby/ipaybyws';
+			return trim($this->params->get('url',''));
 		}
 	}
 	
