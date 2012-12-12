@@ -26,6 +26,7 @@
 				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTID_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTID_DESC"/>
 				<field name="merchant_pass" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTPASS_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTPASS_DESC"/>
 				<field name="adminemail" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_EMAIL_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_EMAIL_DESC"/>
+				<field name="url" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_URL_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_URL_DESC"/>
 				<field type="spacer" />
 				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_SCNETINTEGRATED_SANDBOX_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_SANDBOX_DESC">
 				<option value="0">JNo</option>
