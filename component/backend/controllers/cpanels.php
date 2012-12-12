@@ -61,6 +61,32 @@ class AkeebasubsControllerCpanels extends FOFController
 					}
 				}
 			}
+			
+			// Store the URL to this site
+			$db = JFactory::getDBO();
+			$query = $db->getQuery(true)
+				->select('params')
+				->from($db->qn('#__extensions'))
+				->where($db->qn('element').'='.$db->q('com_akeebasubs'))
+				->where($db->qn('type').'='.$db->q('component'));
+			$db->setQuery($query);
+			$rawparams = $db->loadResult();
+			$params = new JRegistry();
+			$params->loadString($rawparams, 'JSON');
+			
+			$siteURL_stored = $params->get('siteurl', '');
+			$siteURL_target = str_replace('/administrator','',JURI::base());
+			
+			if($siteURL_target != $siteURL_stored) {
+				$params->set('siteurl', $siteURL_target);
+				$query = $db->getQuery(true)
+					->update($db->qn('#__extensions'))
+					->set($db->qn('params') .'='. $db->q($params->toString()))
+					->where($db->qn('element').'='.$db->q('com_akeebasubs'))
+					->where($db->qn('type').'='.$db->q('component'));
+				$db->setQuery($query);
+				$db->query();
+			}
 		}
 		
 		return $result;

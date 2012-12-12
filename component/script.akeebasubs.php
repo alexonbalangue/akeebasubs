@@ -222,7 +222,9 @@ class Com_AkeebasubsInstallerScript
 		)
 	);
 	
-	private $akeebaCliScripts = array();
+	private $akeebaCliScripts = array(
+		'akeebasubs-expiration-notify.php',
+	);
 	
 	/**
 	 * Joomla! pre-flight event
