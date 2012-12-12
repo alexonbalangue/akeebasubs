@@ -102,6 +102,7 @@ class Com_AkeebasubsInstallerScript
 				'offline'				=> 0,
 				'pagseguro'				=> 0,
 				'payfast'				=> 0,
+				'paymill'				=> 0,
 				'paypal'				=> 1,
 				'paypalpaymentspro'		=> 0,
 				'paypalproexpress'		=> 0,
