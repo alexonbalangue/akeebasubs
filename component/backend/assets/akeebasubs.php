@@ -245,7 +245,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	
 	abstract protected function MyGroupToId($title);
 
-	private function parseGroups($rawData)
+	protected function parseGroups($rawData)
 	{
 		if(empty($rawData)) return array();
 		
