@@ -169,7 +169,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		}
 		
 		// Payment status
-		if(strtoupper($response->return->summaryResponseCode) == 'APPROVED' && $response->return->responseCode === '00') {
+		if(strtoupper($response->return->summaryResponseCode) == 'APPROVED') {
 			$newStatus = 'C';
 		} else {
 			$newStatus = 'X';
