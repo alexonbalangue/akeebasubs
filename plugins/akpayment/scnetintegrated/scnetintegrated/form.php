@@ -8,11 +8,19 @@
 	<input type="hidden" name="arg0" value="<?php echo $data->arg0 ?>" />
 	<input type="hidden" name="arg1" value="<?php echo $data->arg1 ?>" />
 	<div class="control-group">
+		<label for="arg6" class="control-label" style="width:190px; margin-right:20px;">
+			<?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_CCHOLDER') ?>
+		</label>
+		<div class="controls">
+			<input type="text" name="arg6" id="arg6" class="input-large" value="<?php echo $data->arg13 ?>" />
+		</div>
+	</div>
+	<div class="control-group">
 		<label for="arg2" class="control-label" style="width:190px; margin-right:20px;">
 			<?php echo JText::_('PLG_AKPAYMENT_SCNETINTEGRATED_FORM_CC') ?>
 		</label>
 		<div class="controls">
-			<input type="text" name="arg2" id="arg1" class="input-large" />
+			<input type="text" name="arg2" id="arg2" class="input-large" />
 		</div>
 	</div>
 	<div class="control-group">
