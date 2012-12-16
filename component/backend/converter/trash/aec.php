@@ -9,6 +9,10 @@ defined('_JEXEC') or die('');
 
 /**
  * AEC (Account Expiration Control) to Akeeba Subscriptions converter
+ * 
+ * Since AEC's database structure is such a convoluted mess, this converter
+ * doesn't really work. Oh, well, I'm not going to waste any more time on it.
+ * 
  * @author Nicholas K. Dionysopoulos
  */
 class AkeebasubsConverterAec extends AkeebasubsConverterAbstract

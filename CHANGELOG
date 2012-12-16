@@ -5,6 +5,7 @@ Akeeba Subscriptions 2.5.1
 + Stripe payment gateway integration
 + Allow you to define maximum number of hits per coupon when mass-generating coupons (useful for "free pass" one time use coupon codes)
 + CLI subscription expiration notification script
+- Removed AEC converter. If someone makes sense out of the chaotic table layout of AEC, please tell me so that I can fix the converter.
 # [MEDIUM] ccInvoices integration: no invoice issued for subscribers renewing their subscription
 # [LOW] ccInvoices integration: compatibility with ccInvoices 1.6
 # [LOW] Warning message about missing language files in installation
