@@ -2,6 +2,7 @@
 Akeeba Subscriptions 2.5.1
 ================================================================================
 + PayMill payment gateway integration
++ Content publishing plugin, allows you to publish/unpublish the user's core Joomla! articles, K2 items and ZOO items when his subscription is activated / expires.
 + Stripe payment gateway integration
 + Allow you to define maximum number of hits per coupon when mass-generating coupons (useful for "free pass" one time use coupon codes)
 + CLI subscription expiration notification script

@@ -58,6 +58,7 @@ class Com_AkeebasubsInstallerScript
 				'canalyticscommerce'	=> 0,
 				'cb'					=> 0,
 				'ccinvoices'			=> 0,
+				'contentpublish'		=> 0,
 				'customfields'			=> 1,
 				'docman'				=> 0,
 				'easydiscuss'			=> 0,
