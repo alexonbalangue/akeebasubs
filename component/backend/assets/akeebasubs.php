@@ -22,14 +22,18 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	
 	protected $name = '';
 
-	public function __construct(&$subject, $templatePath, $name, $config = array())
+	public function __construct(&$subject, $name, $config = array(), $templatePath = null)
 	{
+		if(!array_key_exists('params', $config))
+		{
+			$config['params'] = new JRegistry('');
+		}
 		if(!is_object($config['params'])) {
 			jimport('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
 
-		parent::__construct($subject, $config);
+		parent::__construct($subject, $name, $config);
 		
 		$this->templatePath = $templatePath;
 		$this->name = $name;
