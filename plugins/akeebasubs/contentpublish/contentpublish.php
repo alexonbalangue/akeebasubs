@@ -191,7 +191,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->unpublishK2) && JComponentHelper::isEnabled('com_k2', true))
+				if (array_key_exists($level_id, $this->unpublishK2))
 				{
 					if ($this->unpublishK2[$level_id])
 					{
@@ -205,7 +205,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->unpublishZOO) && array_key_exists($level_id, $this->removeGroups) && JComponentHelper::isEnabled('com_zoo', true))
+				if (array_key_exists($level_id, $this->unpublishZOO) && array_key_exists($level_id, $this->removeGroups))
 				{
 					if ($this->unpublishZOO[$level_id])
 					{
@@ -252,7 +252,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->publishK2) && JComponentHelper::isEnabled('com_k2', true))
+				if (array_key_exists($level_id, $this->publishK2))
 				{
 					if ($this->publishK2[$level_id])
 					{
@@ -267,7 +267,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->publishZOO) && array_key_exists($level_id, $this->addGroups) && JComponentHelper::isEnabled('com_zoo', true))
+				if (array_key_exists($level_id, $this->publishZOO) && array_key_exists($level_id, $this->addGroups))
 				{
 					if ($this->publishZOO[$level_id])
 					{
