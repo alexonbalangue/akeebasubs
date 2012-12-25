@@ -156,6 +156,23 @@
 		<exec command="php ./buildlang.php" dir="buildlang" passthru="true" />
 	</target>
 	
+	<target name="release" depends="setup-properties" description="Upload the release to AkeebaBackup.com">
+		<copy file="./templates/release.json" tofile="${dirs.root}/release.json" overwrite="true">
+			<filterchain id="standard-tokens">
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="RELEASEDIR" value="${phing.dir}/${dirs.release}" />
+					<token key="REPODIR" value="${phing.dir}/${dirs.root}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
+		<exec command="php ${project.basedir}/../../releasemaker/releasemaker/index.php ${project.basedir}/../release.json" dir="${project.basedir}" passthru="true" />
+
+		<delete file="${dirs.root}/release.json" quiet="yes" />
+	</target>
+
 	<target name="ftpdeploy" depends="git">
 		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
 		<echo>Uploading release</echo>

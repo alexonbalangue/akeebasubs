@@ -35,3 +35,6 @@ modules/admin/akeebasubs/language/en-GB
 /tx_config
 
 /tx.sh
+/RELEASENOTES.html
+/DESCRIPTION.html
+/build/templates/release.json
