@@ -279,6 +279,13 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$table->reset();
 			$table->bind($oldData);
 			$table->store();
+		} elseif($recurring && ($newStatus != 'C')) {
+			// Recurring payment, but payment_status is not Completed. We have
+			// stop right now and not save the changes. Otherwise the status of
+			// the subscription will become P or X and the recurring payment
+			// code above will not run when PayPal sends us a new IPN with the
+			// status set to Completed.
+			return;
 		}
 		// Save the changes
 		$subscription->save($updates);

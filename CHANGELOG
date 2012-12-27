@@ -8,6 +8,7 @@ Akeeba Subscriptions 2.5.1
 + CLI subscription expiration notification script
 - Removed AEC converter. If someone makes sense out of the chaotic table layout of AEC, please tell me so that I can fix the converter.
 # [MEDIUM] ccInvoices integration: no invoice issued for subscribers renewing their subscription
+# [MEDIUM] Recurring PayPal transactions would result in no renewal when PayPal sent a payment_status=Pending IPN before the final IPN with payment_status=Completed
 # [LOW] ccInvoices integration: compatibility with ccInvoices 1.6
 # [LOW] Warning message about missing language files in installation
 
