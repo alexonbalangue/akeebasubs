@@ -200,20 +200,20 @@ class plgContentAstimedrelease extends JPlugin
 			// Do nothing
 		} elseif($minConstraint < 0) {
 			// Negative min constraint
-			$result = $result && ($this->levelRemaining >= -$minConstraint);
+			$result = $result && ($this->levelRemaining[$level] >= -$minConstraint);
 		} else {
 			// Positive min constraint
-			$result = $result && ($this->levelElapsed >= $minConstraint);
+			$result = $result && ($this->levelElapsed[$level] >= $minConstraint);
 		}
 		
 		if(is_null($maxConstraint)) {
 			// Do nothing
 		} elseif($maxConstraint < 0) {
 			// Negative max constraint
-			$result = $result && ($this->levelRemaining <= -$maxConstraint);
+			$result = $result && ($this->levelRemaining[$level] <= -$maxConstraint);
 		} else {
 			// Positive max constraint
-			$result = $result && ($this->levelElapsed <= $maxConstraint);
+			$result = $result && ($this->levelElapsed[$level] <= $maxConstraint);
 		}
 		
 		return $result;

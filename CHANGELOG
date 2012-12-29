@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 2.5.2
+================================================================================
+# [LOW] Timed release plugin had issues determining the elapsed / remaining time per level in timed content expressions
+
 Akeeba Subscriptions 2.5.1
 ================================================================================
 + PayMill payment gateway integration
