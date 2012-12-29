@@ -546,3 +546,46 @@ class AkeebasubsHelperSelect
 	}
 	
 }
+
+// Load the states from the database
+function akeebasubsHelperSelect_init()
+{
+	$model = FOFModel::getTmpInstance('States', 'AkeebasubsModel');
+	$rawstates = $model->enabled(1)->getItemList(true);
+	$states = array();
+	$current_country = '';
+	$current_country_name = 'N/A';
+	$current_states = array('' => 'N/A');
+	foreach($rawstates as $rawstate)
+	{
+		if($rawstate->country != $current_country)
+		{
+			if (!empty($current_country_name))
+			{
+				$states[$current_country_name] = $current_states;
+				$current_states = array();
+				$current_country = '';
+				$current_country_name = '';
+			}
+			
+			if (empty($rawstate->country) || empty($rawstate->state) || empty($rawstate->label))
+			{
+				continue;
+			}
+			
+			$current_country = $rawstate->country;
+			$current_country_name = AkeebasubsHelperSelect::$countries[$current_country];
+		}
+		
+		$current_states[$rawstate->state] = $rawstate->label;
+	}
+	
+	if (!empty($current_country_name))
+	{
+		$states[$current_country_name] = $current_states;
+	}
+	
+	AkeebasubsHelperSelect::$states = $states;
+}
+
+akeebasubsHelperSelect_init();
