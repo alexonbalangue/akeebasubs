@@ -528,6 +528,7 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','dropdown',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_DROPDOWN'));
 		$options[] = JHTML::_('select.option','multiselect',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_MULTISELECT'));
 		$options[] = JHTML::_('select.option','radio',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_RADIO'));
+		$options[] = JHTML::_('select.option','date',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_DATE'));
 		
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
