@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2012 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -26,29 +26,29 @@ class AkeebasubsControllerCpanels extends FOFController
 			$tables = $db->getTableList();
 			$prefix = JFactory::getConfig()->get('dbprefix', '');
 			
-			// check for update 2.3.0-2012-06-15
+			// check for update 2.3.0-2013-06-15
 			$columnsLevels = $db->getTableColumns('#__akeebasubs_levels', true);
 			if(!array_key_exists('akeebasubs_levelgroup_id', $columnsLevels)) {
-				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2012-06-15.sql';
+				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2013-06-15.sql';
 			}
-			// check for update 2.3.0-2012-06-22
+			// check for update 2.3.0-2013-06-22
 			if(!in_array($prefix.'akeebasubs_invoicetemplates', $tables)) {
-				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2012-06-18.sql';
-				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2012-06-22.sql';
+				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2013-06-18.sql';
+				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2013-06-22.sql';
 			}
-			// check for update 2.3.0-2012-07-13
+			// check for update 2.3.0-2013-07-13
 			$columns = $db->getTableColumns('#__akeebasubs_upgrades', true);
 			if(!array_key_exists('combine', $columns)) {
-				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2012-07-13.sql';
+				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.3.0-2013-07-13.sql';
 			}
-			// check for update 2.4.0-2012-08-14
+			// check for update 2.4.0-2013-08-14
 			if(!in_array($prefix.'akeebasubs_customfields', $tables)) {
-				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.4.0-2012-08-14.sql';
+				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.4.0-2013-08-14.sql';
 			}
-			// check for update 2.4.5-2012-11-02
+			// check for update 2.4.5-2013-11-02
 			if(!array_key_exists('params', $columnsLevels)) {
-				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.4.4-2012-10-08.sql';
-				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.4.5-2012-11-02.sql';
+				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.4.4-2013-10-08.sql';
+				$files[] = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/sql/updates/mysql/2.4.5-2013-11-02.sql';
 			}
 			
 			if(!empty($files)) foreach($files as $file) {

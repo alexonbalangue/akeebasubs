@@ -1,7 +1,7 @@
 <? 
 /**
  * @package		mod_akeebasubs
- * @copyright 	Copyright (c) 2011-2012 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2013 Sander Potjer
  * @license 	GNU General Public License version 3 or later
  */
  

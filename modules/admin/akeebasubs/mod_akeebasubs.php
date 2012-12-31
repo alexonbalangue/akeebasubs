@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		mod_akeebasubs
- * @copyright 	Copyright (c) 2011-2012 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright 	Copyright (c) 2011-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license 	GNU General Public License version 3 or later
  * 
  * Originally written by Sander Potjer for Akeeba Subscriptions 1.0. Refactored
