@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 $login_url = 'index.php?option=com_users&task=user.login';
 
+$redirectURL = JURI::getInstance()->toString();
+/*
 $rootURL = rtrim(JURI::base(),'/');
 $subpathURL = JURI::base(true);
 if(!empty($subpathURL) && ($subpathURL != '/')) {
@@ -17,6 +19,7 @@ if(!empty($subpathURL) && ($subpathURL != '/')) {
 
 $redirectURL = $rootURL. str_replace('&amp;','&',
 	JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.FOFInput::getString('slug','',$this->input)))
+*/
 ?>
 
 <form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post" class="form form-horizontal">

@@ -4,6 +4,7 @@ Akeeba Subscriptions 2.6.0
 + States can now be edited in the component's back-end
 + Calendar (date picker) custom field type
 # [LOW] Timed release plugin had issues determining the elapsed / remaining time per level in timed content expressions
+# [LOW] The login redirection URL could end up being invalid on some site configurations
 
 Akeeba Subscriptions 2.5.1
 ================================================================================
