@@ -520,15 +520,33 @@ class AkeebasubsHelperSelect
 	 */
 	public static function fieldtypes($name = 'type', $selected = 'text', $attribs = array())
 	{
+		$fieldTypes = array();
+		
+		jimport('joomla.filesystem.folder');
+		$basepath = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/customfields';
+		$files = JFolder::files($basepath, '.php');
+		foreach($files as $file)
+		{
+			if ($file === 'abstract.php')
+			{
+				continue;
+			}
+			
+			require_once $basepath.'/'.$file;
+			$type = substr($file, 0, -4);
+			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			if (class_exists($class))
+			{
+				$fieldTypes[] = $type;
+			}
+		}
+		
 		$options = array();
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
-		$options[] = JHTML::_('select.option','text',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_TEXT'));
-		$options[] = JHTML::_('select.option','password',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_PASSWORD'));
-		$options[] = JHTML::_('select.option','checkbox',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_CHECKBOX'));
-		$options[] = JHTML::_('select.option','dropdown',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_DROPDOWN'));
-		$options[] = JHTML::_('select.option','multiselect',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_MULTISELECT'));
-		$options[] = JHTML::_('select.option','radio',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_RADIO'));
-		$options[] = JHTML::_('select.option','date',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_DATE'));
+		foreach ($fieldTypes as $type)
+		{
+			$options[] = JHTML::_('select.option', $type, JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type)));
+		}
 		
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}

@@ -44,5 +44,21 @@ if(!defined('FOF_INCLUDED')) {?>
 </p>
 <?php return; }
 
+if(version_compare(phpversion(), '5.3.0', 'lt')) {
+?><h1>Akeeba Subscriptions</h1>
+<h2>Incompatible PHP version</h2>
+<p>
+	Akeeba Subscriptions can not load because you are running it on an
+	incompatible version of PHP (<?php echo phpversion(); ?>). Akeeba
+	Subscriptions requires PHP 5.3.0 or later to function properly. Please
+	ask your host to upgrade the PHP version.
+</p>
+<p>
+	<strong>IMPORTANT</strong>: We can and will provide NO SUPPORT to users
+	receiving this message. We had published our intention to drop PHP 5.2
+	support since mid-2012.
+</p>
+<?php return; }
+
 // Dispatch
 FOFDispatcher::getTmpInstance('com_akeebasubs')->dispatch();
