@@ -8509,35 +8509,26 @@ LEVEL3=Group 1</programlisting>
           applied to your user if he holds several subscriptions.</para>
         </warning>
 
-        <para>The plugin has these options:</para>
+        <note>
+          <para>The instructions below apply to Akeeba Subscriptions 2.5.1 and
+          later. For earlier versions please do consult the documentation PDF
+          file for your version.</para>
+        </note>
+
+        <para>The plugin has no options. Its configuration is integrated to
+        each subscription level. In each subscription level, under the
+        Integrations area, you will see a "User Groups" tab when this plugin
+        is enabled. The options given are:</para>
 
         <variablelist>
           <varlistentry>
             <term>Add to K2 groups</term>
 
             <listitem>
-              <para>This is a list for assigning subscription levels to K2
-              groups. When a user has an active subscription to the specified
-              level, he'll be added to the K2 group mentioned on the right
-              hand of the equal sign. Each assignment is done like
-              this:</para>
-
-              <programlisting>LEVEL1=Group 1</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1 is the names of the K2 group you want to add a user to
-              when he subscribes. If you want to assign multiple subscription
-              levels to multiple groups, you have to do something like that
-              (separate multiple lines with a single press of the ENTER key on
-              your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1
-LEVEL2=Group 2
-LEVEL3=Group 3</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              K2 groups instead of their titles. However, we consider working
-              with numeric IDs very counter-intuitive.</para>
+              <para>This allows you to assign this subscription level to a K2
+              group. When a user has an active subscription to the specified
+              level, he'll be added to the K2 group selected in the
+              list.</para>
             </listitem>
           </varlistentry>
 
@@ -8545,15 +8536,10 @@ LEVEL3=Group 3</programlisting>
             <term>Remove from K2 groups</term>
 
             <listitem>
-              <para>Likewise, this is the list of the K2 groups to remove a
-              user from when his subscription to the specified level is no
-              longer active. Do note that you can specify a different set of
-              groups to remove the user from than the ones you are adding him
-              to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1
-LEVEL2=Group 2
-LEVEL3=Group 3</programlisting>
+              <para>Likewise, this is the K2 group to remove a user from when
+              his subscription to the specified level is no longer active. Do
+              note that you can specify a different group to remove the user
+              from than the one you are adding him to.</para>
             </listitem>
           </varlistentry>
         </variablelist>
