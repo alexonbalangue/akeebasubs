@@ -163,6 +163,7 @@ if(JFactory::getUser()->guest) {
 	</div>
 
 <?php
+// Render per-user custom fields
 jimport('joomla.plugin.helper');
 JPluginHelper::importPlugin('akeebasubs');
 $app = JFactory::getApplication();
@@ -337,8 +338,59 @@ if(array_key_exists('isValid', $field)) {
 	
 </div>
 
-</fieldset>
 <?php endif;?>
+
+<?php
+// Render per-subscription fields, only when we have a valid subscription level!
+if(!is_null($akeebasubs_subscription_level)):
+	jimport('joomla.plugin.helper');
+	JPluginHelper::importPlugin('akeebasubs');
+	$app = JFactory::getApplication();
+	$jResponse = $app->triggerEvent('onSubscriptionFormRenderPerSubFields', array(array_merge($this->cache,array('subscriptionlevel' => $akeebasubs_subscription_level))));
+	@ob_start();
+	if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
+		if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):
+			if(array_key_exists('isValid', $field)) {
+				$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success' : '') : 'error';
+			} else {
+				$customField_class = '';
+			}
+?>
+	<div class="control-group <?php echo $customField_class ?>">
+		<label for="<?php echo $field['id']?>" class="control-label">
+			<?php echo $field['label']?>
+		</label>
+		<div class="controls">
+			<?php echo $field['elementHTML']?>
+			<?php if(array_key_exists('validLabel', $field)):?>
+			<span id="<?php echo $field['id']?>_valid" class="help-inline"
+				  style="<?php if(!$field['isValid']):?>display:none<?php endif?>">
+					  <?php echo $field['validLabel']?>
+			</span>
+			<?php endif;?>
+			<?php if(array_key_exists('invalidLabel', $field)):?>
+			<span id="<?php echo $field['id']?>_invalid" class="help-inline"
+				  style="<?php if($field['isValid']):?>display:none<?php endif?>">
+					  <?php echo $field['invalidLabel']?>
+			</span>
+			<?php endif;?>
+		</div>
+	</div>
+
+<?php
+		endforeach;
+	endforeach;
+	$subfieldsHTML = trim(@ob_get_clean());
+	if(!empty($subfieldsHTML)):?>
+</fieldset>
+<fieldset>
+	
+<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')?></legend>
+<?php echo $subfieldsHTML ?>
+<?php
+	endif;
+endif;
+?>
 
 </fieldset>
 </div>

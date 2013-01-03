@@ -79,7 +79,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'vatnumber'		=> '',
 				'coupon'		=> '',
 				'occupation'	=> '',
-				'custom'		=> array()
+				'custom'		=> array(),
+				'subcustom'		=> array(),
 			);
 		}
 		
@@ -135,6 +136,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'vatnumber'			=> $this->getState('vatnumber','','cmd'),
 			'coupon'			=> $this->getState('coupon','','string'),
 			'custom'			=> $this->getState('custom','','raw'),
+			'subcustom'			=> $this->getState('subcustom','','raw'),
 			'opt'				=> $this->getState('opt','','cmd')
 		);
 	}
@@ -185,6 +187,26 @@ class AkeebasubsModelSubscribes extends FOFModel
 						if(!array_key_exists('custom_validation', $pluginResponse)) continue;
 						$response->custom_valid = $response->custom_valid && $pluginResponse['valid'];
 						$response->custom_validation = array_merge($response->custom_validation, $pluginResponse['custom_validation']);
+						if(array_key_exists('data', $pluginResponse)) {
+							$state = $pluginResponse['data'];
+						}
+					}
+				}
+				
+				// Get the results from the per-subscription custom validation
+				$response->subscription_custom_validation = array();
+				$response->subscription_custom_valid = true;
+				jimport('joomla.plugin.helper');
+				JPluginHelper::importPlugin('akeebasubs');
+				$app = JFactory::getApplication();
+				$jResponse = $app->triggerEvent('onValidatePerSubscription', array($state));
+				if(is_array($jResponse) && !empty($jResponse)) {
+					foreach($jResponse as $pluginResponse) {
+						if(!is_array($pluginResponse)) continue;
+						if(!array_key_exists('valid', $pluginResponse)) continue;
+						if(!array_key_exists('subscription_custom_validation', $pluginResponse)) continue;
+						$response->subscription_custom_valid = $response->subscription_custom_valid && $pluginResponse['valid'];
+						$response->subscription_custom_validation = array_merge($response->subscription_custom_validation, $pluginResponse['subscription_custom_validation']);
 						if(array_key_exists('data', $pluginResponse)) {
 							$state = $pluginResponse['data'];
 						}
@@ -914,7 +936,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 		}
 		// Make sure custom fields also validate
-		$isValid = $isValid && $validation->custom_valid;
+		$isValid = $isValid && $validation->custom_valid && $validation->subscription_custom_valid;
 		
 		return $isValid;
 	}
@@ -1352,6 +1374,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$aff_comission = $validation->price->net * $affiliate->comission / 100;
 		}
 		
+		$custom_subscription_params = json_encode($state->subcustom);
+		
 		$data = array(
 			'akeebasubs_subscription_id' => null,
 			'user_id'				=> $user->id,
@@ -1368,7 +1392,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'gross_amount'			=> $validation->price->gross,
 			'tax_percent'			=> $validation->price->taxrate,
 			'created_on'			=> $mNow,
-			'params'				=> '',
+			'params'				=> $custom_subscription_params,
 			'akeebasubs_coupon_id'	=> $validation->price->couponid,
 			'akeebasubs_upgrade_id'	=> $validation->price->upgradeid,
 			'contact_flag'			=> 0,
@@ -1397,7 +1421,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 				->hit();
 		}
 		
-		// Step #8. Call the specific plugin's onAKPaymentNew() method and get the redirection URL,
+		// Step #8. Clear the session
+		// ----------------------------------------------------------------------
+		$session = JFactory::getSession();
+		$session->set('validation_cache_data', null, 'com_akeebasubs');		
+
+		// Step #9. Call the specific plugin's onAKPaymentNew() method and get the redirection URL,
 		//          or redirect immediately on auto-activated subscriptions
 		// ----------------------------------------------------------------------
 		if($subscription->gross_amount != 0) {
@@ -1426,11 +1455,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)) );
 			return false;
 		}
-		
-		// Clear the session
-		// ----------------------------------------------------------------------
-		$session = JFactory::getSession();
-		$session->set('validation_cache_data', null, 'com_akeebasubs');		
 		
 		// Return true
 		// ----------------------------------------------------------------------

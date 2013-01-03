@@ -24,6 +24,8 @@ var akeebasubs_valid_form = true;
 var akeebasubs_personalinfo = true;
 var akeebasubs_validation_fetch_queue = [];
 var akeebasubs_validation_queue = [];
+var akeebasubs_sub_validation_fetch_queue = [];
+var akeebasubs_sub_validation_queue = [];
 var akeebasubs_level_id = 0;
 var akeebasubs_submit_after_validation = false;
 var akeebasubs_noneuvat = false;
@@ -100,7 +102,8 @@ function validateForm(callback_function)
 				'occupation':	$('#occupation').val(),
 				'vatnumber'	:	$('#vatnumber').val(),
 				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
-				'custom'	:	{}
+				'custom'	:	{},
+				'subcustom'	:	{}
 			};
 		} else {
 			var data = {
@@ -111,7 +114,8 @@ function validateForm(callback_function)
 				'email'		:	$('#email').val(),
 				'email2'	:	$('#email2').val(),
 				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
-				'custom'	:	{}
+				'custom'	:	{},
+				'subcustom'	:	{}
 			};
 		}
 		
@@ -129,6 +133,15 @@ function validateForm(callback_function)
 			}
 		});
 		
+		// Fetch the per-subscription custom fields
+		$.each(akeebasubs_sub_validation_fetch_queue, function(index, function_name){
+			var result = function_name();
+			if( (result !== null) && (typeof result == 'object') ) {
+				// Merge the result with the data object
+				$.extend(data.subcustom, result);
+			}
+		});
+		
 		blockInterface();
 		
 		$.ajax({
@@ -140,6 +153,8 @@ function validateForm(callback_function)
 				if(msg.validation) {
 					msg.validation.custom_validation = msg.custom_validation;
 					msg.validation.custom_valid = msg.custom_valid;
+					msg.validation.subcustom_validation = msg.subscription_custom_validation;
+					msg.validation.subcustom_valid = msg.subscription_custom_valid;
 					applyValidation(msg.validation, callback_function);
 				}
 				if(msg.price) applyPrice(msg.price);
@@ -636,6 +651,10 @@ function applyValidation(response, callback)
 			var isValid = function_name(response);
 			akeebasubs_valid_form = akeebasubs_valid_form & isValid;
 		});
+		$.each(akeebasubs_sub_validation_queue, function(index, function_name){
+			var isValid = function_name(response);
+			akeebasubs_valid_form = akeebasubs_valid_form & isValid;
+		});
 	})(akeeba.jQuery);
 }
 
@@ -675,6 +694,26 @@ function addToValidationQueue(myfunction)
 	akeebasubs_validation_queue.push(myfunction);
 }
 
+/**
+ * Adds a function to the per-subscription validation fetch queue
+ */
+function addToSubValidationFetchQueue(myfunction)
+{
+	if(typeof myfunction != 'function') {
+		return false;
+	}
+	akeebasubs_sub_validation_fetch_queue.push(myfunction);
+}
+
+/**
+ * Adds a function to the per-subscription validation queue
+ */
+function addToSubValidationQueue(myfunction)
+{
+	if(typeof myfunction != 'function') return false;
+	akeebasubs_sub_validation_queue.push(myfunction);
+}
+
 
 (function($) {
 	$(document).ready(function(){
@@ -703,6 +742,10 @@ function addToValidationQueue(myfunction)
 		// Attach onBlur events to custom fields
 		$('#signupForm *[name]').filter(function(index){
 			if($(this).is('input')) return $(this).attr('name').substr(0, 7) == 'custom[';
+			return false;
+		}).blur(validateForm);
+		$('#signupForm *[name]').filter(function(index){
+			if($(this).is('input')) return $(this).attr('name').substr(0, 10) == 'subcustom[';
 			return false;
 		}).blur(validateForm);
 		// Attach onChange events to custom checkboxes
