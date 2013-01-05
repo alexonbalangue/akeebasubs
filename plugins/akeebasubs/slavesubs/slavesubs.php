@@ -264,7 +264,132 @@ ENDJS;
 	 */
 	public function onAKSubscriptionChange($row, $info)
 	{
+		static $dontFire = false;
 		
+		if ($dontFire)
+		{
+			return;
+		}
+		
+		// Get the parameters of the row
+		$params = $row->params;
+		
+		// No params? No need to check anything else!
+		if (empty($params))
+		{
+			return;
+		}
+		
+		if (!is_object($params) && !is_array($params))
+		{
+			$params = json_decode($params, true);
+		}
+		else
+		{
+			$params = (array) $params;
+		}
+		
+		// Nothing in the params array? No need to check anything else!
+		if (empty($params))
+		{
+			return;
+		}
+		
+		// Create new slave subscriptions if the subscription level allows us to
+		if(!isset($params['slavesubs_ids']) && ($this->maxSlaves[$row->akeebasubs_level_id]))
+		{
+			// Do we have slave users at all?
+			if (!array_key_exists('slaveusers', $params))
+			{
+				return;
+			}
+			$slaveusers = $params['slaveusers'];
+			// Do we have at least one slave user?
+			if (empty($slaveusers))
+			{
+				return;
+			}
+
+			$newParams = $params;
+			if (isset($newParams['slavesubs_ids']))
+			{
+				unset($newParams['slavesubs_ids']);
+			}
+			unset($newParams['slaveusers']);
+			
+			// Create new slave subscriptions
+			jimport('joomla.user.helper');
+			$slavesubs_ids = array();
+			
+			$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
+			$data = $row->getData();
+			
+			foreach($slaveusers as $slaveUsername)
+			{
+				$user_id = JUserHelper::getUserId($slaveUsername);
+				if ($user_id <= 0)
+				{
+					continue;
+				}
+				
+				$newdata = array_merge($data, array(
+					'akeebasubs_subscription_id'	=> 0,
+					'user_id'						=> $user_id,
+					'net_amount'					=> 0,
+					'tax_amount'					=> 0,
+					'gross_amount'					=> 0,
+					'tax_percent'					=> 0,
+					'params'						=> $newParams,
+					'akeebasubs_coupon_id'			=> 0,
+					'akeebasubs_upgrade_id'			=> 0,
+					'akeebasubs_affiliate_id'		=> 0,
+					'affiliate_comission'			=> 0,
+					'prediscount_amount'			=> 0,
+					'discount_amount'				=> 0,
+					'contact_flag'					=> 0,
+				));
+				
+				// Save the new subscription record
+				$table = clone $mastertable;
+				$table->reset();
+				$dontFire = true;
+				$table->save($newdata);
+				$dontFire = false;
+				$slavesubs_ids[] = $table->akeebasubs_subscription_id;
+			}
+			
+			$params['slavesubs_ids'] = $slavesubs_ids;
+			
+			$newdata = array_merge($data, array(
+				'params'	=> json_encode($params),
+			));
+			$table = clone $mastertable;
+			$table->reset();
+			$dontFire = true;
+			$table->save($newdata);
+			$dontFire = false;
+		}
+		// We already have slave subscriptions, let's refresh them
+		elseif (isset($params['slavesubs_ids']))
+		{
+			$original_row = (object)($row->getData());
+			$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
+			
+			foreach ($params['slavesubs_ids'] as $sid)
+			{
+				$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+					->getItem($sid)->getData();
+				$sub = (object)$sub;
+				
+				$this->copySubscriptionInformation($original_row, $sub);
+				
+				$table = clone $mastertable;
+				$table->reset();
+				$dontFire = true;
+				$table->save($sub);
+				$dontFire = false;
+			}
+		}
 	}
 	
 	/**
@@ -276,21 +401,58 @@ ENDJS;
 	 */
 	public function onAKUserRefresh($user_id)
 	{
-		
+		// @todo
 	}	
 	
 	/**
-	 * Copies the subscription information from row $from to $to. If $to is empty
-	 * a new subscription row is created.
+	 * Copies the subscription information from row $from to $to.
 	 * 
 	 * @param   AkeebasubsTableSubscription $from  Row to copy from
 	 * @param   AkeebasubsTableSubscription $to    Row to copy to
-	 * 
-	 * @return  AkeebasubsTableSubscription The modified/created $to row
 	 */
-	private function copySubscriptionInformation($from, $to = null)
+	private function copySubscriptionInformation($from, &$to)
 	{
+		$forbiddenProperties = array(
+			'akeebasubs_subscription_id', 'user_id', 'net_amount',
+			'tax_amount', 'gross_amount', 'tax_percent', 'akeebasubs_coupon_id',
+			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id', 'affiliate_comission',
+			'prediscount_amount', 'discount_amount', 'contact_flag'
+		);
 		
+		$properties = get_object_vars($from);
+		foreach($properties as $k => $v)
+		{
+			// Do not copy forbidden properties
+			if (in_array($k, $forbiddenProperties))
+			{
+				continue;
+			}
+			// Special handling for params
+			elseif ($k == 'params')
+			{
+				$params = $from->params;
+				if (!is_object($params) && !is_array($params))
+				{
+					$params = json_decode($params, true);
+				}
+				else
+				{
+					$params = (array) $params;
+				}
+				
+				if (isset($params['slavesubs_ids']))
+				{
+					unset($params['slavesubs_ids']);
+				}
+				
+				$to->params = json_encode($params);
+			}
+			// Copy over everything else
+			elseif (property_exists($from, $k))
+			{
+				$to->$k = $from->$k;
+			}
+		}
 	}
 	
 	/**
