@@ -32,12 +32,24 @@ class AkeebasubsHelperMessage
 		$userdata = array_merge((array)$user, (array)($kuser->getData()));
 		
 		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
-		foreach((array)($sub->getData()) as $k => $v) {
+		$subData = (array)($sub->getData());
+		foreach($subData as $k => $v) {
 			if(is_array($v) || is_object($v)) continue;
 			if(substr($k,0,1) == '_') continue;
 			if($k == 'akeebasubs_subscription_id') $k = 'id';
 			$tag = '[SUB:'.strtoupper($k).']';
 			$text = str_replace($tag, $v, $text);
+		}
+		
+		// Create and replace merge tags for custom per-subscription data. Format [SUBCUSTOM:KEYNAME]
+		if(array_key_exists('params', $subData)) {
+			$custom = json_decode($subData['params']);
+			if(!empty($custom)) foreach($custom as $k => $v) {
+				if(substr($k,0,1) == '_') continue;
+				$tag = '[SUBCUSTOM:'.strtoupper($k).']';
+				if(is_array($v)) continue;
+				$text = str_replace($tag, $v, $text);
+			}
 		}
 		
 		// Create and replace merge tags for user data. Format [USER:KEYNAME]
