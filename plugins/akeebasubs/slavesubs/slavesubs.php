@@ -401,7 +401,16 @@ ENDJS;
 	 */
 	public function onAKUserRefresh($user_id)
 	{
-		// @todo
+		// Get all of the user's subscriptions
+		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			->user_id($user_id)
+			->getList();
+
+		$info = array();
+		foreach ($subscriptions as $row)
+		{
+			$this->onAKSubscriptionChange($row, $info);
+		}
 	}	
 	
 	/**
