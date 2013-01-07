@@ -76,6 +76,7 @@ class Com_AkeebasubsInstallerScript
 				'redshop'				=> 0,
 				'redshopusersync'		=> 0,
 				'samplefields'			=> 0,
+				'tracktime'				=> 0,
 				'sql'					=> 0,
 				'subscriptionemails'	=> 1,
 				'userdelete'			=> 0,

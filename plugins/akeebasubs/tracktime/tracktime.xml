@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - TrackTime integration</name>
+	<author>Davide Tampellini</author>
+	<authorEmail>davide.tampellini@fabbricabinaria.it</authorEmail>
+	<authorUrl>http://www.fabbricabinaria.it</authorUrl>
+	<copyright>Copyright (c)2012 Davide Tampellini</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2013-01-04</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_TRACKTIME_DESCRIPTION</description>
+  
+	<files>
+		<filename plugin="tracktime">tracktime.php</filename>
+        <filename>index.html</filename>
+        <folder>fields</folder>
+	</files>
+  
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_tracktime.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_tracktime.sys.ini</language>
+	</languages>
+  
+	<config addfieldpath="/plugins/akeebasubs/tracktime/fields">
+		<fields name="params">
+			<fieldset name="basic">
+                
+                <field name="invoice_template" type="invoicetemplate" label="PLG_AKEEBASUBS_TRACKTIME_INVOICETEMPLATE_LABEL"/>
+                <field name="mail_template" type="mailtemplate" label="PLG_AKEEBASUBS_TRACKTIME_MAILTEMPLATE_LABEL"/>
+                
+                <field name="mail_subject" 
+                       type="text" 
+                       label="PLG_AKEEBASUBS_TRACKTIME_MAILSUBJECT_LABEL" 
+                       description="PLG_AKEEBASUBS_TRACKTIME_MAILSUBJECT_DESC"
+                       size="45" />
+                       
+				<field name="description" type="text" default="" label="PLG_AKEEBASUBS_TRACKTIME_DESCRIPTION_LABEL" description="PLG_AKEEBASUBS_TRACKTIME_DESCRIPTION_DESC" size="45" />
+				<field name="euvatoption" type="radio" default="0"
+					label="PLG_AKEEBASUBS_TRACKTIME_EUVATOPTION_TITLE"
+					description="PLG_AKEEBASUBS_TRACKTIME_EUVATOPTION_DESC">
+					<option value="0">JNo</option>
+					<option value="1">JYes</option>
+				</field>
+				<field name="euvatnote" type="textarea" default="VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive." label="PLG_AKEEBASUBS_TRACKTIME_EUVATNOTE_TITLE" description="PLG_AKEEBASUBS_TRACKTIME_EUVATNOTE_DESC" rows="5" cols="30" />
+				<field name="generatewhen" type="radio" default="0"
+					label="PLG_AKEEBASUBS_TRACKTIME_GENERATEWHEN_TITLE"
+					description="PLG_AKEEBASUBS_TRACKTIME_GENERATEWHEN_DESC">
+					<option value="0">PLG_AKEEBASUBS_TRACKTIME_GENERATEWHEN_OPT_COMPLETED</option>
+					<option value="1">PLG_AKEEBASUBS_TRACKTIME_GENERATEWHEN_OPT_NEW</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

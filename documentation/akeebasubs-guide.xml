@@ -9643,6 +9643,20 @@ LEVEL3=Badge 1</programlisting>
           </varlistentry>
         </variablelist>
       </section>
+
+      <section xml:id="integration-tracktime">
+        <title>TrackTime integration</title>
+
+        <note>
+          <para>This is a third party plugin. It is not created or maintained
+          by Akeeba Ltd.</para>
+        </note>
+
+        <para>This plugin allows Akeeba Subscriptions to create invoices using
+        the third party TrackTime invoicing component for Joomla!. For more
+        information about the plugin and its documentation please visit <link
+        xlink:href="http://www.fabbricabinaria.it/en/docs/tracktime-docs/tracktime-akeeba-subscription-integration">http://www.fabbricabinaria.it/en/docs/tracktime-docs/tracktime-akeeba-subscription-integration</link></para>
+      </section>
     </section>
 
     <section xml:id="plugins-other">
