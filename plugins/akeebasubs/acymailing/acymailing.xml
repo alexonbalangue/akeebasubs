@@ -20,8 +20,8 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field name="addgroups" type="textarea" default="" label="PLG_AKEEBASUBS_ACYMAILING_ADDGROUPS_TITLE" description="PLG_AKEEBASUBS_ACYMAILING_ADDGROUPS_DESCRIPTION" rows="5" cols="30" />
-				<field name="removegroups" type="textarea" default="" label="PLG_AKEEBASUBS_ACYMAILING_REMOVEGROUPS_TITLE" description="PLG_AKEEBASUBS_ACYMAILING_REMOVEGROUPS_DESCRIPTION" rows="5" cols="30" />
+				<field name="addgroups" type="hidden" default="" />
+				<field name="removegroups" type="hidden" default="" />
 			</fieldset>
 		</fields>
 	</config>
