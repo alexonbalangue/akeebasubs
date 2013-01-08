@@ -362,7 +362,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/**
 	 * Not used in this plugin
 	 */
-	protected function upgradeSettings()
+	protected function upgradeSettings($config = array())
 	{
 		return true;
 	}
@@ -379,6 +379,6 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	 * Not used in this plugin
 	 */
 	protected function getGroups() {
-		
+		return array();
 	}
 }
