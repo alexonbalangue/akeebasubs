@@ -6,7 +6,7 @@
 				<?php echo JText::_('PLG_AKEEBASUBS_JOOMLA_ADDGROUPS_TITLE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHtml::_('access.usergroup', 'params[joomla_addgroups][]', $level->params->joomla_addgroups, array('multiple' => 'multiple', 'size' => 8, 'class' => 'input-large'), false) ?>
+				<?php echo $this->getSelectField($level, 'add') ?>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_JOOMLA_ADDGROUPS_DESCRIPTION2') ?>
 				</span>
@@ -19,7 +19,7 @@
 				<?php echo JText::_('PLG_AKEEBASUBS_JOOMLA_REMOVEGROUPS_TITLE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo JHtml::_('access.usergroup', 'params[joomla_removegroups][]', $level->params->joomla_removegroups, array('multiple' => 'multiple', 'size' => 8, 'class' => 'input-large'), false) ?>
+				<?php echo $this->getSelectField($level, 'remove') ?>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_JOOMLA_REMOVEGROUPS_DESCRIPTION2') ?>
 				</span>
