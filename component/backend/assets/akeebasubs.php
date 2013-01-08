@@ -47,8 +47,22 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		// Do we have values from the Olden Days?
 		if(isset($config['params'])) {
 			$configParams = @json_decode($config['params']);
-			$strAddGroups = $configParams->addgroups;
-			$strRemoveGroups = $configParams->removegroups;
+			if(property_exists($configParams, 'addgroups'))
+			{
+				$strAddGroups = $configParams->addgroups;
+			}
+			else
+			{
+				$strAddGroups = null;
+			}
+			if(property_exists($configParams, 'removegroups'))
+			{
+				$strRemoveGroups = $configParams->removegroups;
+			}
+			else
+			{
+				$strRemoveGroups =  null;
+			}
 		}
 
 		if(!empty($strAddGroups) || !empty($strAddGroups)) {
