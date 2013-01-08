@@ -28,6 +28,8 @@ if(count($this->items)) foreach($this->items as $sub) {
 	$subIDs[] = $sub->akeebasubs_level_id;
 }
 $subIDs = array_unique($subIDs);
+
+jimport('joomla.utilities.date');
 ?>
 
 <div id="akeebasubs" class="subscriptions">
@@ -87,6 +89,8 @@ $subIDs = array_unique($subIDs);
 						$canRenew = false;
 					}
 				}
+				
+				$jPublishUp = new JDate($subscription->publish_up);
 			?>
 			<tr class="row<?php echo $m?> <?php echo $rowClass?>">
 				<td align="left">
@@ -114,9 +118,11 @@ $subIDs = array_unique($subIDs);
 				</td>
 				<td align="center">
 					<?php if($subscription->enabled):?>
-					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/enabled.png" align="center" />
+					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/enabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
+					<?php elseif($jPublishUp->toUnix() >= time()):?>
+					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/scheduled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
 					<?php else:?>
-					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/disabled.png" align="center" />
+					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/disabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
 					<?php endif;?>
 	            </td>
 	            <td>

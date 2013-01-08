@@ -13,6 +13,9 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 
+jimport('joomla.utilities.date');
+
+$jPublishUp = new JDate($this->item->publish_up);
 ?>
 
 <div id="akeebasubs">
@@ -53,9 +56,11 @@ $this->loadHelper('format');
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED')?></td>
 		<td class="subscription-info">
 			<?php if($this->item->enabled):?>
-			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/enabled.png" align="center" />
+			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/enabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
+			<?php elseif($jPublishUp->toUnix() >= time()):?>
+			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/scheduled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
 			<?php else:?>
-			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/disabled.png" align="center" />
+			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/disabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
 			<?php endif;?>
 		</td>
 	</tr>
@@ -84,7 +89,12 @@ $this->loadHelper('format');
 </table>
 	
 <div class="akeebasubs-goback">
-	<p><a class="btn btn-large btn-primary" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions')?>"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></a></p>
+	<p>
+		<a class="btn btn-large btn-primary" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions')?>">
+			<span class="icon-white icon-arrow-left"></span>
+			<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?>
+		</a>
+	</p>
 </div>
 
 </div>
