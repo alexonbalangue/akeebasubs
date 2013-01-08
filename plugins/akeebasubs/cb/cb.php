@@ -7,7 +7,10 @@
 
 defined('_JEXEC') or die();
 
-class plgAkeebasubsCb extends JPlugin
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
+if(!$akeebasubsinclude) { unset($akeebasubsinclude); return; } else { unset($akeebasubsinclude); }
+
+class plgAkeebasubsCb extends plgAkeebasubsAbstract
 {
 	/** @var array Subscription levels which guarantee automatic CB user authorization */
 	private $authLevels = array();
@@ -20,26 +23,131 @@ class plgAkeebasubsCb extends JPlugin
 	
 	public function __construct(& $subject, $config = array())
 	{
-		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
-			$config['params'] = new JRegistry($config['params']);
-		}
-		parent::__construct($subject, $config);
+		$templatePath = dirname(__FILE__);
+		$name = 'cb';
+		
+		parent::__construct($subject, $name, $config, $templatePath);
 
-		$this->authLevels = $this->params->get('autoauthids',array());
-		$this->deauthLevels = $this->params->get('autodeauthids',array());
 		$this->autoAddUser = $this->params->get('adduser', 1);
+		
+		// Do we have values from the Olden Days?
+		$configParams = @json_decode($config['params']);
+		$authLevels = $configParams->autoauthids;
+		$deauthLevels = $configParams->autodeauthids;
+
+		if(!empty($authLevels) || !empty($strDeauthLevels)) {
+			// Load level to group mapping from plugin parameters		
+			$this->authLevels = $authLevels;
+			$this->deauthLevels = $deauthLevels;
+			// Do a transparent upgrade
+			$this->upgradeSettings($config);
+		} else {
+			$this->loadGroupAssignments();
+		}
+	}
+	
+	protected function loadGroupAssignments()
+	{
+		$this->authLevels = array();
+		$this->deauthLevels = array();
+		
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		$autoauthdeidsKey = 'cb_autoauthids';
+		$autodeauthidsKey = 'cb_autodeauthids';
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					continue;
+				}
+				if(property_exists($level->params, $autoauthdeidsKey) && $level->params->$autoauthdeidsKey)
+				{
+					$this->authLevels[] = $level->akeebasubs_level_id;
+				}
+				if(property_exists($level->params, $autodeauthidsKey) && $level->params->$autodeauthidsKey)
+				{
+					$this->deauthLevels[] = $level->akeebasubs_level_id;
+				}
+			}
+		}
+	}
+	
+	protected function parseGroups($rawData)
+	{
+		// Do nothing
 	}
 	
 	/**
-	 * Called whenever a subscription is modified. Namely, when its enabled status,
-	 * payment status or valid from/to dates are changed.
+	 * =========================================================================
+	 * !!! CRUFT WARNING !!!
+	 * =========================================================================
+	 * 
+	 * The following methods are leftovers from the Olden Days (before 2.4.5).
+	 * At some point (most likely 2.6) they will be removed. For now they will
+	 * stay here so that we can do a transparent migration.
 	 */
-	public function onAKSubscriptionChange($row, $info)
+	
+	/**
+	 * Moves this plugin's settings from the plugin into each subscription
+	 * level's configuration parameters.
+	 */
+	protected function upgradeSettings($config = array())
 	{
-		if(is_null($info['modified']) || empty($info['modified'])) return;
-		if(array_key_exists('enabled', (array)$info['modified'])) {
-			$this->onAKUserRefresh($row->user_id);
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					$level->params = new stdClass();
+				}
+				$lid = (string)$level->akeebasubs_level_id;
+				$level->params->cb_autoauthids = 0;
+				if(array_key_exists($lid, $this->authLevels)) {
+					if(empty($level->params->cb_autoauthids)) {
+						$level->params->cb_autoauthids = 1;
+						$save = true;
+					}
+				}
+				$level->params->cb_autodeauthids = 0;
+				if(array_key_exists($lid, $this->deauthLevels)) {
+					if(empty($level->params->cb_autodeauthids)) {
+						$level->params->cb_autodeauthids = 1;
+						$save = true;
+					}
+				}
+				$level->params = json_encode($level->params);
+				$result = $model->setId($level->akeebasubs_level_id)->save( $level );
+			}
+		}
+		
+		// Remove the plugin parameters
+		if(isset($config['params'])) {
+			$configParams = @json_decode($config['params']);
+			unset($configParams->autoauthids);
+			unset($configParams->autodeauthids);
+			$param_string = @json_encode($configParams);
+
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->update($db->qn('#__extensions'))
+				->where($db->qn('type').'='.$db->q('plugin'))
+				->where($db->qn('element').'='.$db->q('cb'))
+				->where($db->qn('folder').'='.$db->q('akeebasubs'))
+				->set($db->qn('params').' = '.$db->q($param_string));
+			$db->setQuery($query);
+			$db->query();
 		}
 	}
 	
@@ -164,5 +272,29 @@ class plgAkeebasubsCb extends JPlugin
 		$db->setQuery($query);
 		$db->query();
 		if($db->getError()) die($db->getError());
+	}
+
+	protected function groupToId($title) {
+		// do nothing
+	}
+
+	protected function getGroups() {
+		// do nothing
+	}
+	
+	protected function getSelectField($level, $type)
+	{
+		$opts = array();
+		$opts[] = JHTML::_('select.option', '0', JText::_('JNo'));
+		$opts[] = JHTML::_('select.option', '1', JText::_('JYes'));
+		if($type == 'add') {
+			$selected = in_array($level->akeebasubs_level_id, $this->authLevels);
+			return JHTML::_('select.radiolist',  $opts, 'params[cb_autoauthids]', '', 'value', 'text', (int)$selected, 'paramscb_autoauthids');
+		}
+		if($type == 'remove') {
+			$selected = in_array($level->akeebasubs_level_id, $this->deauthLevels);
+			return JHTML::_('select.radiolist',  $opts, 'params[cb_autodeauthids]', '', 'value', 'text', (int)$selected, 'paramscb_autodeauthids');
+		}
+		return '';
 	}
 }

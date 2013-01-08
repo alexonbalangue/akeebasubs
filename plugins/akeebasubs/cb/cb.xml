@@ -25,13 +25,8 @@
 				  <option value="0">No</option>
 				  <option value="1">Yes</option>
 				</field>
-				<field name="autoauthids" type="sql2" default=""
-					label="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_TITLE"
-					description="PLG_AKEEBASUBS_CB_AUTOAUTHIDS_DESC"
-					query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`"
-					key_field="akeebasubs_level_id"
-					value_field="title" />
-				<field name="autodeauthids" type="sql2" default="" label="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_TITLE" description="PLG_AKEEBASUBS_CB_AUTODEAUTHIDS_DESC" query="SELECT `akeebasubs_level_id`, `title` FROM `#__akeebasubs_levels`" key_field="akeebasubs_level_id" value_field="title"/>
+				<field name="autoauthids" type="hidden" default="" />
+				<field name="autodeauthids" type="hidden" default="" />
 			</fieldset>
 		</fields>
 	</config>
