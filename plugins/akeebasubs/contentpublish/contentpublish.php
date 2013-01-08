@@ -370,8 +370,15 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/**
 	 * Not used in this plugin
 	 */
-	protected function MyGroupToId($title)
+	protected function groupToId($title)
 	{
 		return null;
+	}
+
+	/**
+	 * Not used in this plugin
+	 */
+	protected function getGroups() {
+		
 	}
 }
