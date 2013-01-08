@@ -28,10 +28,10 @@ class plgAkeebasubsCb extends plgAkeebasubsAbstract
 		
 		parent::__construct($subject, $name, $config, $templatePath);
 
-		$this->autoAddUser = $this->params->get('adduser', 1);
+		$configParams = @json_decode($config['params']);
+		$this->autoAddUser = $configParams->adduser;
 		
 		// Do we have values from the Olden Days?
-		$configParams = @json_decode($config['params']);
 		$authLevels = $configParams->autoauthids;
 		$deauthLevels = $configParams->autodeauthids;
 
