@@ -22,9 +22,8 @@
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="mailchimp_key" type="text" size="32" default="" label="PLG_AKEEBASUBS_MAILCHIMP_APIKEY_TITLE" description="PLG_AKEEBASUBS_MAILCHIMP_APIKEY_DESC"/>
-				<field name="addlists" type="textarea" default="" label="PLG_AKEEBASUBS_MAILCHIMP_ADDLISTS_TITLE" description="PLG_AKEEBASUBS_MAILCHIMP_ADDLISTS_DESC" rows="5" cols="35" />
-				<field name="removelists" type="textarea" default="" label="PLG_AKEEBASUBS_MAILCHIMP_REMOVELISTS_TITLE" description="PLG_AKEEBASUBS_MAILCHIMP_REMOVELISTS_DESC" rows="5" cols="35" />
-				<field type="spacer" />
+				<field name="addlists" type="hidden" default="" />
+				<field name="removelists" type="hidden" default="" />
 				<field name="email_type" type="radio" default="html" label="PLG_AKEEBASUBS_MAILCHIMP_EMAILTYPE_LABEL" description="PLG_AKEEBASUBS_MAILCHIMP_EMAILTYPE_DESC">
 					<option value="html">PLG_AKEEBASUBS_MAILCHIMP_EMAILTYPE_HTML</option>
 					<option value="text">PLG_AKEEBASUBS_MAILCHIMP_EMAILTYPE_TEXT</option>
