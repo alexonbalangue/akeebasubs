@@ -38,18 +38,25 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		$this->templatePath = $templatePath;
 		$this->name = $name;
 		
-		$this->loadLanguage();
+		// Load the language files
+		$jlang = JFactory::getLanguage();
+		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, null, true);
 		
 		// Do we have values from the Olden Days?
-		$strAddGroups = $this->params->get('addgroups','');
-		$strRemoveGroups = $this->params->get('removegroups','');
+		if(isset($config['params'])) {
+			$configParams = @json_decode($config['params']);
+			$strAddGroups = $configParams->addgroups;
+			$strRemoveGroups = $configParams->removegroups;
+		}
 
 		if(!empty($strAddGroups) || !empty($strAddGroups)) {
 			// Load level to group mapping from plugin parameters		
 			$this->addGroups = $this->parseGroups($strAddGroups);
 			$this->removeGroups = $this->parseGroups($strRemoveGroups);
 			// Do a transparent upgrade
-			$this->upgradeSettings();
+			$this->upgradeSettings($config);
 		} else {
 			$this->loadGroupAssignments();
 		}
@@ -109,6 +116,66 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	 */
 	abstract public function onAKUserRefresh($user_id);
 	
+	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
+	{
+		// Make sure we're configured
+		if(empty($this->addGroups) && empty($this->removeGroups)) return;
+		
+		// Get all of the user's subscriptions
+		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			->user_id($user_id)
+			->getList();
+			
+		// Make sure there are subscriptions set for the user
+		if(!count($subscriptions)) return;
+		
+		// Get the initial list of groups to add/remove from
+		foreach($subscriptions as $sub) {
+			$level = $sub->akeebasubs_level_id;
+			if($sub->enabled) {
+				// Enabled subscription, add groups
+				if(empty($this->addGroups)) continue;
+				if(!array_key_exists($level, $this->addGroups)) continue;
+				$groups = $this->addGroups[$level];
+				foreach($groups as $group) {
+					if(!in_array($group, $addGroups) && ($group > 0)) {
+						$addGroups[] = $group;
+					}
+				}
+			} else {
+				// Disabled subscription, remove groups
+				if(empty($this->removeGroups)) continue;
+				if(!array_key_exists($level, $this->removeGroups)) continue;
+				$groups = $this->removeGroups[$level];
+				
+				foreach($groups as $group) {
+					if(!in_array($group, $removeGroups) && ($group > 0)) {
+						$removeGroups[] = $group;
+					}
+				}
+			}
+		}
+		
+		// If no groups are detected, do nothing
+		if(empty($addGroups) && empty($removeGroups)) return;
+		
+		// Sort the lists
+		asort($addGroups);
+		asort($removeGroups);
+		
+		// Clean up the remove groups: if we are asked to both add and remove a user
+		// from a group, add wins.
+		if(!empty($removeGroups) && !empty($addGroups)) {
+			$temp = $removeGroups;
+			$removeGroups = array();
+			foreach($temp as $group) {
+				if(!in_array($group, $addGroups)) {
+					$removeGroups[] = $group;
+				}
+			}
+		}
+	}
+	
 	protected function loadGroupAssignments()
 	{
 		$this->addGroups = array();
@@ -121,7 +188,6 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		if(!empty($levels)) {
 			foreach($levels as $level)
 			{
-				$save = false;
 				if(is_string($level->params)) {
 					$level->params = @json_decode($level->params);
 					if(empty($level->params)) {
@@ -132,11 +198,11 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 				}
 				if(property_exists($level->params, $addgroupsKey))
 				{
-					$this->addGroups[$level->akeebasubs_level_id] = $level->params->$addgroupsKey;
+					$this->addGroups[$level->akeebasubs_level_id] = array_filter($level->params->$addgroupsKey);
 				}
 				if(property_exists($level->params, $removegroupsKey))
 				{
-					$this->removeGroups[$level->akeebasubs_level_id] = $level->params->$removegroupsKey;
+					$this->removeGroups[$level->akeebasubs_level_id] = array_filter($level->params->$removegroupsKey);
 				}
 			}
 		}
@@ -156,7 +222,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	 * Moves this plugin's settings from the plugin into each subscription
 	 * level's configuration parameters.
 	 */
-	protected function upgradeSettings()
+	protected function upgradeSettings($config = array())
 	{
 		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
@@ -194,19 +260,22 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		}
 		
 		// Remove the plugin parameters
-		$this->params->set('addgroups', '');
-		$this->params->set('removegroups', '');
-		$param_string = $this->params->toString();
-		
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true)
-			->update($db->qn('#__extensions'))
-			->where($db->qn('type').'='.$db->q('plugin'))
-			->where($db->qn('element').'='.$db->q(strtolower($this->name)))
-			->where($db->qn('folder').'='.$db->q('akeebasubs'))
-			->set($db->qn('params').' = '.$db->q($param_string));
-		$db->setQuery($query);
-		$db->query();
+		if(isset($config['params'])) {
+			$configParams = @json_decode($config['params']);
+			unset($configParams->addgroups);
+			unset($configParams->removegroups);
+			$param_string = @json_encode($configParams);
+			
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->update($db->qn('#__extensions'))
+				->where($db->qn('type').'='.$db->q('plugin'))
+				->where($db->qn('element').'='.$db->q(strtolower($this->name)))
+				->where($db->qn('folder').'='.$db->q('akeebasubs'))
+				->set($db->qn('params').' = '.$db->q($param_string));
+			$db->setQuery($query);
+			$db->query();
+		}
 	}
 	
 	/**
@@ -247,7 +316,28 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		}
 	}
 	
-	abstract protected function MyGroupToId($title);
+	protected function groupToId($title)
+	{
+		if(empty($title)) return -1;
+		
+		$groups = $this->getGroups();
+
+		$title = strtoupper(trim($title));
+		foreach($groups as $key => $val) {
+			if(strtoupper($key) == $title) {
+				return $val;
+			}
+		}
+		if( (int)$title == $title ) {
+			// Numeric ID passed
+			return (int)$title;
+		} else {
+			// No match!
+			return -1;
+		}
+	}
+	
+	abstract protected function getGroups();
 
 	protected function parseGroups($rawData)
 	{
@@ -277,12 +367,37 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 			$levelId = $this->ASLevelToId($level);
 			$groupIds = array();
 			foreach($groups as $groupTitle) {
-				$groupIds[] = $this->MyGroupToId($groupTitle);
+				$groupIds[] = $this->groupToId($groupTitle);
 			}
 			
 			$ret[$levelId] = $groupIds;
 		}
 		
 		return $ret;
+	}
+	
+	protected function getSelectField($level, $type)
+	{
+		if(! in_array($type, array('add', 'remove'))) return '';
+		// Put groups in select field
+		$groups = $this->getGroups();
+		$options = array();
+		$options[] = JHTML::_('select.option','',JText::_('PLG_AKEEBASUBS_' . strtoupper($this->name) . '_NONE'));
+		foreach($groups as $title => $id) {
+			$options[] = JHTML::_('select.option',$id,$title);
+		}
+		// Set pre-selected values
+		$selected = array();
+		if($type == 'add') {
+			if(! empty($this->addGroups[$level->akeebasubs_level_id])) {
+				$selected = $this->addGroups[$level->akeebasubs_level_id];
+			}
+		} else {
+			if(! empty($this->removeGroups[$level->akeebasubs_level_id])) {
+				$selected = $this->removeGroups[$level->akeebasubs_level_id];
+			}
+		}
+		// Create the select field
+		return JHtmlSelect::genericlist($options, 'params[' . strtolower($this->name) . '_' . $type . 'groups][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
 	}
 }
