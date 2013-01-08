@@ -3192,6 +3192,33 @@ Rule C gives $ 30 discount</programlisting>
                 length, options. You can define the available options in the
                 <guilabel>Options</guilabel> field below.</para>
               </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Date</emphasis>. Creates a date
+                picker field. The user will be able to type in a date or
+                select a date using the standard Joomla! pop-up date
+                picker.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Subscription options</emphasis>.
+                This creates a drop-down with subscription options. This works
+                like the "Drop-down" field type, with a very important
+                difference: each option can increase or decrease the net price
+                of the subscription.</para>
+
+                <para>For example, a local footbal club could offer a
+                "supporter" membership which costs 200 Euros annually. If the
+                subscriber wants access to cheaper tickets they want an extra
+                fee of 20 Euros per year. Without "Subscription options" you'd
+                need to create two subscription levels, one without access to
+                cheaper tickets for 200 Euros and one with cheaper tickets for
+                220 Euros. With "Subscription options" you can create only one
+                subscription level for 200 Euros with a custom field for
+                access to cheaper tickets. The field allows the subscriber to
+                select between no access (no additional charge) or with access
+                (extra charge of 20 Euros).</para>
+              </listitem>
             </itemizedlist>
           </listitem>
         </varlistentry>
@@ -3242,6 +3269,34 @@ Rule C gives $ 30 discount</programlisting>
                 the options you can use a language constant as described in
                 our <link linkend="custom-fields-translation">translation
                 instructions</link> below.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Subscription options</emphasis>.
+                It works pretty much the same was as "Everything else"
+                described above. The only difference is what comes to the
+                right hand of the equals sign. Each line follows the
+                convention VALUE=LABEL|PRICE. For example:</para>
+
+                <programlisting>1=Normal price
+2=Cheaper|-9.99
+3=More expensive|9.99
+4=Invalid|foobar</programlisting>
+
+                <para>That pretty much means that after the label you are
+                expected to put a vertical bar (|) followed by the amount of
+                money you want to add/remove from the subscription's net
+                price. In this example, if someone chooses the "Normal price"
+                option the net price will be left unchanged because we did not
+                define an amount for the option. Conversely if the choose
+                "Cheaper" they will be charged 9.99 <emphasis>less</emphasis>
+                because the value after the vertical bar is negative. Finally,
+                if they choose "More expensive" they will be charged 9.99
+                <emphasis>more</emphasis> because the value after the vertical
+                bar is positive. Finally, if they choose "Invalid" the price
+                will not be modified because the value after the vertical bar
+                is not a number and Akeeba Subscriptions has no idea what you
+                want it to do.</para>
               </listitem>
             </itemizedlist>
           </listitem>

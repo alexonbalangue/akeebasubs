@@ -21,7 +21,41 @@ class plgAkeebasubsCustomfields extends JPlugin
 		$this->_loadFields();
 	}
 	
-	function onSubscriptionFormRender($userparams, $cache)
+	/**
+	 * Renders per-subscription custom fields in the form
+	 * 
+	 * @param  array  $cache
+	 * 
+	 * @return  array  The custom fields definitions
+	 */
+	public function onSubscriptionFormRenderPerSubFields($cache)
+	{
+		return $this->_customFieldRender('subscription', $cache);
+	}
+	
+	/**
+	 * Renders per-user custom fields in the form
+	 * 
+	 * @param  array  $userparams
+	 * @param  array  $cache
+	 * 
+	 * @return  array  The custom fields definitions
+	 */
+	public function onSubscriptionFormRender($userparams, $cache)
+	{
+		return $this->_customFieldRender('user', $cache, $userparams);
+	}
+	
+	/**
+	 * Renders per-subscription or per-user custom fields
+	 * 
+	 * @param   string  $fieldType  'user' or 'subscription'
+	 * @param   array   $cache
+	 * @param   array   $userparams
+	 * 
+	 * @return  array
+	 */
+	private function _customFieldRender($fieldType, $cache, $userparams = null)
 	{
 		// Load the language
 		$lang = JFactory::getLanguage();
@@ -62,7 +96,16 @@ class plgAkeebasubsCustomfields extends JPlugin
 			$object = new $class;
 			
 			// Add the field to the list
-			$result = $object->getField($item, $cache, $userparams);
+			switch($fieldType)
+			{
+				case 'user':
+					$result = $object->getField($item, $cache, $userparams);
+					break;
+
+				case 'subscription':
+					$result = $object->getPerSubscriptionField($item, $cache);
+					break;
+			}
 			
 			if(is_null($result) || empty($result)) {
 				continue;
@@ -80,7 +123,6 @@ class plgAkeebasubsCustomfields extends JPlugin
 	
 	public function onValidate($data)
 	{
-		// Initialise the validation respone
 		$response = array(
 			'valid'				=> true,
 			'isValid'			=> true,
@@ -120,7 +162,13 @@ class plgAkeebasubsCustomfields extends JPlugin
 			
 			// Get the validation result and save it in the $response array
 			$response['custom_validation'][$item->slug] = $object->validate($item, $custom);
-			if(!$item->allow_empty) {
+			
+			if(is_null($response['custom_validation'][$item->slug]))
+			{
+				unset($response['custom_validation'][$item->slug]);
+			}
+			elseif(!$item->allow_empty)
+			{
 				$response['isValid'] = $response['isValid'] && $response['custom_validation'][$item->slug];
 			}
 		}
@@ -128,6 +176,122 @@ class plgAkeebasubsCustomfields extends JPlugin
 		// Update the master "valid" reponse. If one of the fields is invalid,
 		// the entire plugin's result is invalid (the form should not be submitted)
 		$response['valid'] = $response['isValid'];
+		
+		return $response;
+	}
+	
+	public function onValidatePerSubscription($data)
+	{
+		$response = array(
+			'valid'								=> true,
+			'isValid'							=> true,
+			'subscription_custom_validation'	=> array()
+		);
+		
+		// Make sure we have a subscription level ID
+		if($data->id <= 0)
+		{
+			return $response;
+		}
+		
+		// Fetch the custom data
+		$subcustom = $data->subcustom;
+
+		// Load field definitions
+		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+			->enabled(1)
+			->filter_order('ordering')
+			->filter_order_Dir('ASC')
+			->getItemList(true);
+		
+		// If there are no custom fields return true (all valid)
+		if(empty($items)) return $response;
+		
+		// Loop through each custom field
+		foreach($items as $item) {
+			// Make sure it's supposed to be shown in the particular level
+			if($item->show == 'level') {
+				if(is_null($data->id)) continue;
+				if($data->id != $item->akeebasubs_level_id) continue;
+			}
+			
+			// Make sure there is a validation method for this type of field
+			$type = $item->type;
+			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			
+			if (!class_exists($class))
+			{
+				continue;
+			}
+			$object = new $class;
+			
+			// Get the validation result and save it in the $response array
+			$response['subscription_custom_validation'][$item->slug] = $object->validatePerSubscription($item, $subcustom);
+			
+			if(is_null($response['subscription_custom_validation'][$item->slug]))
+			{
+				unset($response['subscription_custom_validation'][$item->slug]);
+			}
+			elseif(!$item->allow_empty)
+			{
+				$response['isValid'] = $response['isValid'] && $response['subscription_custom_validation'][$item->slug];
+			}
+		}
+		
+		// Update the master "valid" reponse. If one of the fields is invalid,
+		// the entire plugin's result is invalid (the form should not be submitted)
+		$response['valid'] = $response['isValid'];
+		
+		return $response;
+	}
+	
+	public function onValidateSubscriptionPrice($data)
+	{
+		$response = null;
+		
+		// Make sure we have a subscription level ID
+		if($data->id <= 0)
+		{
+			return $response;
+		}
+		
+		// Load field definitions
+		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+			->enabled(1)
+			->filter_order('ordering')
+			->filter_order_Dir('ASC')
+			->getItemList(true);
+		
+		// If there are no custom fields return true (all valid)
+		if(empty($items)) return $response;
+		
+		$response = 0;
+		
+		// Loop through each custom field
+		foreach($items as $item) {
+			// Make sure it's supposed to be shown in the particular level
+			if($item->show == 'level') {
+				if(is_null($data->id)) continue;
+				if($data->id != $item->akeebasubs_level_id) continue;
+			}
+			
+			// Make sure there is a validation method for this type of field
+			$type = $item->type;
+			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			
+			if (!class_exists($class))
+			{
+				continue;
+			}
+			$object = new $class;
+			
+			// Get the validation result and save it in the $response array
+			$res = $object->validatePrice($item, $data);
+			if(!is_null($res))
+			{
+				$response += $res;
+			}
+		}
 		
 		return $response;
 	}

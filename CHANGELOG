@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 2.6.0
 ================================================================================
++ ON POPULAR REQUEST: "Subscription options" custom field type, allows you to add per-subscription options which can increase/decrease the subscription's price
 + States can now be edited in the component's back-end
 + Calendar (date picker) custom field type
 + TrackTime integration (third party invoicing solution)

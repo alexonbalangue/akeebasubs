@@ -8,7 +8,7 @@
 defined('_JEXEC') or die();
 
 /**
- * Abstract base class for custom fields
+ * Abstract base class for custom per-user and per-subscription fields
  * 
  * @since 2.6.0
  */
@@ -43,28 +43,75 @@ abstract class AkeebasubsCustomFieldAbstract
 	
 	/**
 	 * Creates a custom field array which will be used by the renderer to be
-	 * shown on the front- or back-end page
+	 * shown on the front- or back-end page, for per-user fields
 	 * 
 	 * @param	AkeebasubsTableCustomfield	$item	     A custom field definition
 	 * @param	array						$cache	     The values cache
 	 * @param	stdClass					$userparams  User parameters
 	 */
-	abstract public function getField($item, $cache, $userparams);
+	public function getField($item, $cache, $userparams)
+	{
+		return null;
+	}
 	
 	/**
 	 * Create the necessary Javascript and add it to the page
 	 * 
 	 * @param	AkeebasubsTableCustomfield	$item	The item to render the Javascript for
 	 */
-	abstract public function getJavascript($item);
+	public function getJavascript($item)
+	{
+		return null;
+	}
 	
 	/**
-	 * Validate a field
+	 * Validate a per-user field
 	 * 
 	 * @param AkeebasubsTableCustomfield	$item	The custom field to validate
 	 * @param array							$custom	The custom fields' values array
 	 * 
-	 * @return int 1 if the field is valid, 0 otherwise
+	 * @return int 1 if the field is valid, 0 otherwise, null if not supported
 	 */
-	abstract public function validate($item, $custom);
+	public function validate($item, $custom)
+	{
+		return null;
+	}
+	
+	/**
+	 * Creates a custom field array which will be used by the renderer to be
+	 * shown on the front- or back-end page, for per subscription fields
+	 * 
+	 * @param	AkeebasubsTableCustomfield	$item	     A custom field definition
+	 * @param	array						$cache	     The values cache
+	 */
+	public function getPerSubscriptionField($item, $cache)
+	{
+		return null;
+	}
+	
+	/**
+	 * Validate a per-subscription field
+	 * 
+	 * @param AkeebasubsTableCustomfield	$item	The custom field to validate
+	 * @param array							$custom	The custom fields' values array
+	 * 
+	 * @return int 1 if the field is valid, 0 otherwise, null if not supported
+	 */
+	public function validatePerSubscription($item, $custom)
+	{
+		return null;
+	}
+	
+	/**
+	 * Return price modifiers
+	 * 
+	 * @param AkeebasubsTableCustomfield	$item	The custom field to validate
+	 * @param array							$data	The data coming from the form
+	 * 
+	 * @return float How much we should add/remove from the price or 0/null when no modification is required
+	 */
+	public function validatePrice($item, $data)
+	{
+		return null;
+	}
 }

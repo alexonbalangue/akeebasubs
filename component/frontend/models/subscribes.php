@@ -426,6 +426,20 @@ class AkeebasubsModelSubscribes extends FOFModel
 			->setId($state->id)
 			->getItem();
 		$netPrice = (float)$level->price;
+		
+		// Net price modifiers (via plugins)
+		$price_modifier = 0;
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array($state));
+		if(is_array($jResponse) && !empty($jResponse)) {
+			foreach($jResponse as $pluginResponse) {
+				if(empty($pluginResponse)) continue;
+				$price_modifier += $pluginResponse;
+			}
+		}
+		$netPrice += $price_modifier;
 
 		// Coupon discount
 		$couponDiscount = 0;
@@ -484,7 +498,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
 
 		// Get the applicable tax rule
-		$taxRule = $this->_getTaxRule();		
+		$taxRule = $this->_getTaxRule();
 		
 		// Calculate the base price minimising rounding errors
 		$basePrice = 0.01 * (100*$netPrice - 100*$discount);
