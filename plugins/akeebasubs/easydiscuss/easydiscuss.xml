@@ -20,12 +20,12 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field name="addranks" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_ADDRANKS_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_ADDRANKS_DESCRIPTION" rows="5" cols="30" />
-				<field name="removeranks" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_REMOVERANKS_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_REMOVERANKS_DESCRIPTION" rows="5" cols="30" />
+				<field name="addranks" type="hidden" default="" />
+				<field name="removeranks" type="hidden" default="" />
 			</fieldset>
 			<fieldset name="basic">
-				<field name="addbadges" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_ADDBADGES_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_ADDBADGES_DESCRIPTION" rows="5" cols="30" />
-				<field name="removebadges" type="textarea" default="" label="PLG_AKEEBASUBS_EASYDISCUSS_REMOVEBADGES_TITLE" description="PLG_AKEEBASUBS_EASYDISCUSS_REMOVEBADGES_DESCRIPTION" rows="5" cols="30" />
+				<field name="addbadges" type="hidden" default="" />
+				<field name="removebadges" type="hidden" default="" />
 			</fieldset>
 		</fields>
 	</config>

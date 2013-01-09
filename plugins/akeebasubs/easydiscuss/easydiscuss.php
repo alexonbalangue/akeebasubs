@@ -7,7 +7,10 @@
 
 defined('_JEXEC') or die();
 
-class plgAkeebasubsEasyDiscuss extends JPlugin
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
+if(!$akeebasubsinclude) { unset($akeebasubsinclude); return; } else { unset($akeebasubsinclude); }
+
+class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 {
 	/** @var array Levels to Ranks to Add mapping */
 	private $addRanks = array();
@@ -20,48 +23,114 @@ class plgAkeebasubsEasyDiscuss extends JPlugin
 	
 	/** @var array Levels to Badges to Remove mapping */
 	private $removeBadges = array();
-
+	
 	public function __construct(& $subject, $config = array())
 	{
-		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
-			$config['params'] = new JRegistry($config['params']);
+		$templatePath = dirname(__FILE__);
+		$name = 'easydiscuss';
+		
+		parent::__construct($subject, $name, $config, $templatePath, false);
+		
+		// Do we have values from the Olden Days?
+		if(isset($config['params'])) {
+			$configParams = @json_decode($config['params']);
+			// Ranks
+			if(property_exists($configParams, 'addranks'))
+			{
+				$strAddRanks = $configParams->addranks;
+			}
+			else
+			{
+				$strAddRanks = null;
+			}
+			if(property_exists($configParams, 'removeranks'))
+			{
+				$strRemoveRanks = $configParams->removeranks;
+			}
+			else
+			{
+				$strRemoveRanks =  null;
+			}
+			// Badges
+			if(property_exists($configParams, 'addbadges'))
+			{
+				$strAddBadges = $configParams->addbadges;
+			}
+			else
+			{
+				$strAddBadges = null;
+			}
+			if(property_exists($configParams, 'removebadges'))
+			{
+				$strRemoveBadges = $configParams->removebadges;
+			}
+			else
+			{
+				$strRemoveBadges =  null;
+			}
 		}
 
-		parent::__construct($subject, $config);
-
-		// Load level to ranks mapping from plugin parameters		
-		$strAddRanks = $this->params->get('addranks','');
-		$this->addRanks = $this->parseMapping($strAddRanks, 'RANKS');
-		
-		$strRemoveRanks = $this->params->get('removeranks','');
-		$this->removeRanks = $this->parseMapping($strRemoveRanks, 'RANKS');
-
-		// Load level to badges mapping from plugin parameters		
-		$strAddBadges = $this->params->get('addbadges','');
-		$this->addBadges = $this->parseMapping($strAddBadges, 'BADGES');
-		
-		$strRemoveBadges = $this->params->get('removebadges','');
-		$this->removeBadges = $this->parseMapping($strRemoveBadges, 'BADGES');
+		if(!empty($strAddRanks) || !empty($strRemoveRanks)
+				|| !empty($strAddRanks) || !empty($strRemoveRanks)) {
+			// Load level to ranks mapping from plugin parameters	
+			$this->addRanks = $this->parseMapping($strAddRanks, 'RANKS');
+			$this->removeRanks = $this->parseMapping($strRemoveRanks, 'RANKS');
+			// Load level to badges mapping from plugin parameters	
+			$this->addBadges = $this->parseMapping($strAddBadges, 'BADGES');
+			$this->removeBadges = $this->parseMapping($strRemoveBadges, 'BADGES');
+			// Do a transparent upgrade
+			$this->upgradeSettings($config);
+		} else {
+			$this->loadGroupAssignments();
+		}
 	}
 	
-	/**
-	 * Called whenever a subscription is modified. Namely, when its enabled status,
-	 * payment status or valid from/to dates are changed.
-	 */
-	public function onAKSubscriptionChange($row, $info)
+	protected function loadGroupAssignments()
 	{
-		if(is_null($info['modified']) || empty($info['modified'])) return;
-		if(array_key_exists('enabled', (array)$info['modified'])) {
-			$this->onAKUserRefresh($row->user_id);
+		$this->addRanks = array();
+		$this->removeRanks = array();
+		$this->addBadges = array();
+		$this->removeBadges = array();
+		
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		$addranksKey = 'easydiscuss_addranks';
+		$removeranksKey = 'easydiscuss_removeranks';
+		$addbadgesKey = 'easydiscuss_addbadges';
+		$removebadgesKey = 'easydiscuss_removebadges';
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					continue;
+				}
+				// Ranks
+				if(property_exists($level->params, $addranksKey))
+				{
+					$this->addGroups[$level->akeebasubs_level_id] = array_filter($level->params->$addranksKey);
+				}
+				if(property_exists($level->params, $removeranksKey))
+				{
+					$this->removeGroups[$level->akeebasubs_level_id] = array_filter($level->params->$removeranksKey);
+				}
+				// Badges
+				if(property_exists($level->params, $addbadgesKey))
+				{
+					$this->addGroups[$level->akeebasubs_level_id] = array_filter($level->params->$addbadgesKey);
+				}
+				if(property_exists($level->params, $removebadgesKey))
+				{
+					$this->removeGroups[$level->akeebasubs_level_id] = array_filter($level->params->$removebadgesKey);
+				}
+			}
 		}
 	}
 	
-	/**
-	 * Called whenever the administrator asks to refresh integration status.
-	 * 
-	 * @param $user_id int The Joomla! user ID to refresh information for.
-	 */
 	public function onAKUserRefresh($user_id)
 	{
 		// Make sure we're configured
@@ -232,40 +301,90 @@ class plgAkeebasubsEasyDiscuss extends JPlugin
 	}
 	
 	/**
-	 * Converts an Akeeba Subscriptions level to a numeric ID
+	 * =========================================================================
+	 * !!! CRUFT WARNING !!!
+	 * =========================================================================
 	 * 
-	 * @param $title string The level's name to be converted to an ID
-	 *
-	 * @return int The subscription level's ID or -1 if no match is found
+	 * The following methods are leftovers from the Olden Days (before 2.4.5).
+	 * At some point (most likely 2.6) they will be removed. For now they will
+	 * stay here so that we can do a transparent migration.
 	 */
-	private function ASLevelToId($title)
+	
+	/**
+	 * Moves this plugin's settings from the plugin into each subscription
+	 * level's configuration parameters.
+	 */
+	protected function upgradeSettings($config = array())
 	{
-		static $levels = null;
-		
-		// Don't process invalid titles
-		if(empty($title)) return -1;
-		
-		// Fetch a list of subscription levels if we haven't done so already
-		if(is_null($levels)) {
-			$levels = array();
-			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->getList();
-			if(count($list)) foreach($list as $level) {
-				$thisTitle = strtoupper($level->title);
-				$levels[$thisTitle] = $level->akeebasubs_level_id;
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		$addranksKey = 'easydiscuss_addranks';
+		$removeranksKey = 'easydiscuss_removeranks';
+		$addbadgesKey = 'easydiscuss_addbadges';
+		$removebadgesKey = 'easydiscuss_removebadges';
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				$save = false;
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					$level->params = new stdClass();
+				}
+				// Ranks
+				if(array_key_exists($level->akeebasubs_level_id, $this->addRanks)) {
+					if(empty($level->params->$addranksKey)) {
+						$level->params->$addranksKey = $this->addRanks[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				if(array_key_exists($level->akeebasubs_level_id, $this->removeRanks)) {
+					if(empty($level->params->$removeranksKey)) {
+						$level->params->$removeranksKey = $this->removeRanks[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				// Badges
+				if(array_key_exists($level->akeebasubs_level_id, $this->addBadges)) {
+					if(empty($level->params->$addbadgesKey)) {
+						$level->params->$addbadgesKey = $this->addBadges[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				if(array_key_exists($level->akeebasubs_level_id, $this->removeBadges)) {
+					if(empty($level->params->$removebadgesKey)) {
+						$level->params->$removebadgesKey = $this->removeBadges[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				if($save) {
+					$level->params = json_encode($level->params);
+					$result = $model->setId($level->akeebasubs_level_id)->save( $level );
+				}
 			}
 		}
 		
-		$title = strtoupper($title);
-		if(array_key_exists($title, $levels)) {
-			// Mapping found
-			return($levels[$title]);
-		} elseif( (int)$title == $title ) {
-			// Numeric ID passed
-			return (int)$title;
-		} else {
-			// No match!
-			return -1;
+		// Remove the plugin parameters
+		if(isset($config['params'])) {
+			$configParams = @json_decode($config['params']);
+			unset($configParams->addranks);
+			unset($configParams->removeranks);
+			unset($configParams->addbadges);
+			unset($configParams->removebadges);
+			$param_string = @json_encode($configParams);
+			
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->update($db->qn('#__extensions'))
+				->where($db->qn('type').'='.$db->q('plugin'))
+				->where($db->qn('element').'='.$db->q(strtolower($this->name)))
+				->where($db->qn('folder').'='.$db->q('akeebasubs'))
+				->set($db->qn('params').' = '.$db->q($param_string));
+			$db->setQuery($query);
+			$db->query();
 		}
 	}
 	
@@ -376,5 +495,65 @@ class plgAkeebasubsEasyDiscuss extends JPlugin
 		}
 		
 		return $ret;
+	}
+
+	/**
+	 * Not used in this plugin
+	 */
+	protected function getGroups() {
+		return array();
+	}
+	
+	protected function getSelectField($level, $type, $group)
+	{
+		static $ranks = null;
+		static $badges = null;
+		if(! in_array($type, array('add', 'remove'))) return '';
+		if(! in_array($group, array('RANKS', 'BADGES'))) return '';
+		$options = array();
+		$options[] = JHTML::_('select.option','',JText::_('PLG_AKEEBASUBS_' . strtoupper($this->name) . '_NONE'));
+		if($group == 'RANKS') {
+			// Get ranks
+			if(is_null($ranks)) {
+				$this->ListToId('#__discuss_ranks', 'title', 'id', $ranks);
+			}
+			foreach($ranks as $title => $id) {
+				$options[] = JHTML::_('select.option',$id,$title);
+			}
+			// Set pre-selected values
+			$selected = array();
+			if($type == 'add') {
+				if(! empty($this->addRanks[$level->akeebasubs_level_id])) {
+					$selected = $this->removeRanks[$level->akeebasubs_level_id];
+				}
+			} else {
+				if(! empty($this->removeBadges[$level->akeebasubs_level_id])) {
+					$selected = $this->removeBadges[$level->akeebasubs_level_id];
+				}
+			}
+			// Create the select field
+			return JHtmlSelect::genericlist($options, 'params[easydiscuss_' . $type . 'ranks][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
+		} else {
+			// Get badges
+			if(is_null($badges)) {
+				$this->ListToId('#__discuss_badges', 'title', 'id', $badges);
+			}
+			foreach($badges as $title => $id) {
+				$options[] = JHTML::_('select.option',$id,$title);
+			}
+			// Set pre-selected values
+			$selected = array();
+			if($type == 'add') {
+				if(! empty($this->addBadges[$level->akeebasubs_level_id])) {
+					$selected = $this->addBadges[$level->akeebasubs_level_id];
+				}
+			} else {
+				if(! empty($this->removeBadges[$level->akeebasubs_level_id])) {
+					$selected = $this->removeBadges[$level->akeebasubs_level_id];
+				}
+			}
+			// Create the select field
+			return JHtmlSelect::genericlist($options, 'params[easydiscuss_' . $type . 'ranks][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
+		}
 	}
 }
