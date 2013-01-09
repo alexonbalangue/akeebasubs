@@ -43,7 +43,15 @@ class AkeebasubsHelperMessage
 		
 		// Create and replace merge tags for custom per-subscription data. Format [SUBCUSTOM:KEYNAME]
 		if(array_key_exists('params', $subData)) {
-			$custom = json_decode($subData['params']);
+			if(is_string($subData['params'])) {
+				$custom = json_decode($subData['params']);
+			} elseif(is_array($subData['params'])) {
+				$custom = $subData['params'];
+			} elseif(is_object($subData['params'])) {
+				$custom = (array)$subData['params'];
+			} else {
+				$custom = array();
+			}
 			if(!empty($custom)) foreach($custom as $k => $v) {
 				if(substr($k,0,1) == '_') continue;
 				$tag = '[SUBCUSTOM:'.strtoupper($k).']';
@@ -63,7 +71,15 @@ class AkeebasubsHelperMessage
 		
 		// Create and replace merge tags for custom fields data. Format [CUSTOM:KEYNAME]
 		if(array_key_exists('params', $userdata)) {
-			$custom = json_decode($userdata['params']);
+			if(is_string($userdata['params'])) {
+				$custom = json_decode($userdata['params']);
+			} elseif(is_array($userdata['params'])) {
+				$custom = $userdata['params'];
+			} elseif(is_object($userdata['params'])) {
+				$custom = (array)$userdata['params'];
+			} else {
+				$custom = array();
+			}
 			if(!empty($custom)) foreach($custom as $k => $v) {
 				if(substr($k,0,1) == '_') continue;
 				$tag = '[CUSTOM:'.strtoupper($k).']';
