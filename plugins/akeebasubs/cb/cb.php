@@ -26,7 +26,7 @@ class plgAkeebasubsCb extends plgAkeebasubsAbstract
 		$templatePath = dirname(__FILE__);
 		$name = 'cb';
 		
-		parent::__construct($subject, $name, $config, $templatePath);
+		parent::__construct($subject, $name, $config, $templatePath, false);
 
 		$configParams = @json_decode($config['params']);
 		$this->autoAddUser = $configParams->adduser;
@@ -35,7 +35,7 @@ class plgAkeebasubsCb extends plgAkeebasubsAbstract
 		$authLevels = $configParams->autoauthids;
 		$deauthLevels = $configParams->autodeauthids;
 
-		if(!empty($authLevels) || !empty($strDeauthLevels)) {
+		if(!empty($authLevels) || !empty($deauthLevels)) {
 			// Load level to group mapping from plugin parameters		
 			$this->authLevels = $authLevels;
 			$this->deauthLevels = $deauthLevels;
