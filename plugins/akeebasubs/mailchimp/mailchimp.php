@@ -50,8 +50,6 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 			$this->removeGroups = $this->parseGroups($strRemoveGroups);
 			// Do a transparent upgrade
 			$this->upgradeSettings($config);
-		} else {
-			$this->loadGroupAssignments();
 		}
 	}
 	
