@@ -182,6 +182,29 @@ $this->loadHelper('format');
 	</div>
 	</div>
 	</div>
+	
+	<div class="row-fluid">
+		<?php
+		$hasShownCustomParamsHeader = false;
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onSubscriptionFormRenderPerSubFields', array(array('subscriptionlevel' => $this->item->akeebasubs_level_id,  'subcustom'=>$this->item->params)));
+		if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
+		if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):?>
+		<?php if (!$hasShownCustomParamsHeader): ?>
+		<h3><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_CUSTOMPARAMS_TITLE')?></h3>
+		<?php $hasShownCustomParamsHeader = true;
+		endif; ?>
+		<div class="control-group">
+			<label for="<?php echo $field['id']?>" class="control-label"><?php echo $field['label']?></label>
+			<div class="controls">
+				<?php echo $field['elementHTML']?>
+			</div>
+		</div>
+
+		<?php endforeach; endforeach;?>
+	</div>
 </form>
 	
 <script type="text/javascript">
