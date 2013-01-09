@@ -8087,17 +8087,22 @@ LEVEL2=11111:22222:33333</programlisting>
               that they can later fill in)</para>
             </listitem>
           </varlistentry>
+        </variablelist>
 
+        <para>The plugin renders the following options in each subscription
+        level:</para>
+
+        <variablelist>
           <varlistentry>
             <term>Automatic authorization</term>
 
             <listitem>
-              <para>Select the subscription levels will be automatically
-              authorized. When a user has an active subscription to one of
-              these levels, he will be marked as an authorized user who has
-              read the terms of use in Community Builder, essentially allowing
-              her to have access to the Community Builder community on your
-              site.</para>
+              <para>Should this subscription level be automatically
+              authorized? When a user has an active subscription to one of the
+              levels with automatic authorization enabled, he will be marked
+              as an authorized user who has read the terms of use in Community
+              Builder, essentially allowing her to have access to the
+              Community Builder community on your site.</para>
             </listitem>
           </varlistentry>
 
@@ -8105,12 +8110,13 @@ LEVEL2=11111:22222:33333</programlisting>
             <term>Automatic deauthorization</term>
 
             <listitem>
-              <para>Select the subscription levels will be automatically
-              deauthorized. When a user no longer has an active subscription
-              to any of these levels, he will be marked as an unauthorized
-              user who has not read the terms of use in Community Builder,
-              essentially not allowing her to have access to the Community
-              Builder community on your site any more.</para>
+              <para>Should this subscription level be automatically
+              deauthorized? When a user no longer has an active subscription
+              to any of the levels with automatic deauthorization enabled, he
+              will be marked as an unauthorized user who has not read the
+              terms of use in Community Builder, essentially not allowing her
+              to have access to the Community Builder community on your site
+              any more.</para>
             </listitem>
           </varlistentry>
         </variablelist>
@@ -8655,35 +8661,17 @@ LEVEL3=Group 1</programlisting>
         at all of the user's active and inactive subscriptions and decide
         which groups the user should be added to or removed from.</para>
 
-        <para>The plugin has these options:</para>
+        <para>The plugin renders these options in each subscription
+        level:</para>
 
         <variablelist>
           <varlistentry>
             <term>Add to VirtueMart groups</term>
 
             <listitem>
-              <para>This is a list for assigning subscription levels to
-              VirtueMart 2.x groups. When a user has an active subscription to
-              the specified level, he'll be added to the VirtueMart 2.x group
-              mentioned on the right hand of the equal sign. Each assignment
-              is done like this:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              Group 1, Group 2 and Group 3 are the names of the VirtueMart 2.x
-              groups you want to add a user to when he subscribes. If you want
-              to assign multiple subscription levels to multiple groups, you
-              have to do something like that (separate multiple lines with a
-              single press of the ENTER key on your keyboard):</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels or
-              VirtueMart groups instead of their titles. However, we consider
-              working with numeric IDs very counter-intuitive.</para>
+              <para>When a subscription to this level becomes active, the user
+              will be added to the VirtueMart 2.x groups you have selected
+              here. You can select multiple VM groups.</para>
             </listitem>
           </varlistentry>
 
@@ -8691,34 +8679,58 @@ LEVEL3=Group 4,Group 1</programlisting>
             <term>Remove from VirtueMart groups</term>
 
             <listitem>
-              <para>Likewise, this is the list of the VirtueMart 2.x groups to
-              remove a user from when his subscription to the specified level
-              is no longer active. Do note that you can specify a different
-              set of groups to remove the user from than the ones you are
-              adding him to. For example:</para>
-
-              <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
+              <para>When a subscription to this level becomes inactive (e.g.
+              it expires or the payment is cancelled), the user will be
+              removed from the VirtueMart 2.x groups you have selected here.
+              You can select multiple VM groups.</para>
             </listitem>
           </varlistentry>
         </variablelist>
+      </section>
 
-        <para>In this example, together with the rules displayed in "Add to
-        VirtueMart groups", when a subscription to the LEVEL1 level expires,
-        the user will still belong to VirtueMart Group 3, as it's not removed
-        from his account; only Group 1 and Group 2 are removed. Likewise, if
-        the user has an expired LEVEL1 subscription and an active LEVEL2
-        subscription he'll now belong to Group 2 and Group 3: Group 3 because
-        it's not removed when his subscription expires and Group 2 because his
-        active LEVEL2 subscription suggests that he should be granted Group 2
-        access despite his expired LEVEL1 subscription.</para>
+      <section xml:id="integration-aceshop">
+        <title>AceShop Integration</title>
 
-        <para>If you find this hard to understand, join the club. ACLs are not
-        meant to be easy to setup or understand. It's a power feature and, as
-        such, poses a great difficulty to even the most seasoned web site
-        integrators. Take your time and experiment on a dev copy of your site
-        before going live.</para>
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - AceShop Integration</guilabel></para>
+
+        <para>This integration plugin allows you to add and remove users from
+        AceShop shopper groups based on their subscription status. This allows
+        you to set special discounts to subscribers (e.g. a discount club) or
+        other AceShop tricks which are based on the shopper groups a user
+        belongs to.</para>
+
+        <para>Please note that this is a smart integration; instead of adding
+        users when a subscription goes active and removing them when a
+        subscription goes inactive, Akeeba Subscriptions plugins take a look
+        at all of the user's active and inactive subscriptions and decide
+        which groups the user should be added to or removed from.</para>
+
+        <para>The plugin renders these options in each subscription
+        level:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to AceShop groups</term>
+
+            <listitem>
+              <para>When a subscription to this level becomes active, the user
+              will be added to the AceShop 2.x groups you have selected here.
+              You can select multiple VM groups.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from AceShop groups</term>
+
+            <listitem>
+              <para>When a subscription to this level becomes inactive (e.g.
+              it expires or the payment is cancelled), the user will be
+              removed from the AceShop 2.x groups you have selected here. You
+              can select multiple VM groups.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
 
       <section xml:id="integration-redshop">
@@ -9388,75 +9400,6 @@ LEVEL3=Group 1</programlisting>
           </varlistentry>
 
           <varlistentry>
-            <term>Add to MailChimp lists</term>
-
-            <listitem>
-              <para>This is a list for assigning subscription levels to
-              MailChimp lists. When a user has an active subscription to the
-              specified level, he'll be added to the MailChimp list mentioned
-              on the right hand of the equal sign. Each assignment is done
-              like this:</para>
-
-              <programlisting>LEVEL1=List 1,List 2,List 3</programlisting>
-
-              <para>Where LEVEL1 is the Title of the subscription level and
-              List 1, List 2 and List 3 are the names of the MailChimp lists
-              you want to add a user to when he subscribes. If you want to
-              assign multiple subscription levels to multiple lists, you have
-              to do something like that (separate multiple lines with a single
-              press of the ENTER key on your keyboard):</para>
-
-              <programlisting>LEVEL1=List 1,List 2,List 3
-LEVEL2=List 2
-LEVEL3=List 4,List 1</programlisting>
-
-              <para>You can also use the numeric IDs of subscription levels
-              instead of their titles. However, we consider working with
-              numeric IDs very counter-intuitive.</para>
-
-              <important>
-                <para>Please note that you have to enter the name of a
-                MailChimp <emphasis role="bold">list</emphasis>, not the
-                newsletter's name. MailChimp allows you to assign multiple
-                newsletters to the same list.</para>
-              </important>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>Remove from MailChimp lists</term>
-
-            <listitem>
-              <para>Likewise, this is the list of the MailChimp lists to
-              remove a user from when his subscription to the specified level
-              is no longer active. Do note that you can specify a different
-              set of lists to remove the user from than the ones you are
-              adding him to. For example:</para>
-
-              <programlisting>LEVEL1=List 1,List 2
-LEVEL2=List 2
-LEVEL3=List 1</programlisting>
-
-              <para>In this example, together with the rules displayed in "Add
-              to MailChimp lists", when a subscription to the LEVEL1 level
-              expires, the user will still belong to MailChimp list List 3, as
-              he's not removed from it; he's only removed only from the lists
-              List 1 and List 2. Likewise, if the user has an expired LEVEL1
-              subscription and an active LEVEL2 subscription he'll now belong
-              to lists List 2 and List 3: category List 3 because it's not
-              removed when his subscription expires and list List 2 because
-              his active LEVEL2 subscription suggests that he should be added
-              to List 2 despite his expired LEVEL1 subscription.</para>
-
-              <para>If you find this hard to understand, join the club. ACLs
-              are not meant to be easy to setup or understand. It's a power
-              feature and, as such, poses a great difficulty to even the most
-              seasoned web site integrators. Take your time and experiment on
-              a dev copy of your site before going live.</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
             <term>Email Type</term>
 
             <listitem>
@@ -9514,6 +9457,104 @@ LEVEL3=List 1</programlisting>
               <para>Normally Akeeba Subscriptions simply unsubcribes the user
               from the list when his subscription expires. When this is
               enabled, the MailChimp user is completely removed.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>The plugin renders these options in each subscription
+        level:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to MailChimp lists</term>
+
+            <listitem>
+              <para>When a user's subscription in this subscription level
+              becomes active, he will be added to the MailChimp lists you've
+              selected here. You can select multiple MailChimp lists.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from MailChimp lists</term>
+
+            <listitem>
+              <para>When a user's subscription in this subscription level
+              becomes inactive (e.g. it expires or the payment is cancelled),
+              he will be removed from the MailChimp lists you've selected
+              here. You can select multiple MailChimp lists.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-acymailing">
+        <title>AcyMailing integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - Analytics commerce</guilabel></para>
+
+        <note>
+          <para>This is a third party plugin, developed and maintained by
+          Compojoom. Akeeba Ltd cannot provide any support for it.</para>
+        </note>
+
+        <para>This integration plugin allows you to add Google Analytics
+        Commerce tracking to your Akeeba Subscriptions sales. </para>
+
+        <para>The plugin has these options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Tracking id</term>
+
+            <listitem>
+              <para>The tracking id for your google analytics profile</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Store name</term>
+
+            <listitem>
+              <para>The store name will appear in the stats of your google
+              analytics profile</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="integration-acymailing">
+        <title>Google Analytics Commerce integration</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions - AcyMailing Integration</guilabel></para>
+
+        <para>This integration plugin allows you to automatically add/remove
+        users from your AcyMailing newsletter lists.</para>
+
+        <para>The plugin renders these options in each subscription
+        level:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Add to AcyMailing lists</term>
+
+            <listitem>
+              <para>When a user's subscription in this subscription level
+              becomes active, he will be added to the AcyMailing lists you've
+              selected here. You can select multiple AcyMailing lists.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remove from AcyMailing lists</term>
+
+            <listitem>
+              <para>When a user's subscription in this subscription level
+              becomes inactive (e.g. it expires or the payment is cancelled),
+              he will be removed from the AcyMailing lists you've selected
+              here. You can select multiple AcyMailing lists.</para>
             </listitem>
           </varlistentry>
         </variablelist>
