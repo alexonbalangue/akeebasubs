@@ -119,8 +119,8 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 
 		// Clean up the remove groups: if we are asked to both add and remove a user
 		// from a group, add wins.
-		if(!empty($addGroups)) {
-			foreach($addGroups as $level => $assignment) {
+		if(!empty($removeGroups)) {
+			foreach($removeGroups as $level => $assignment) {
 				foreach ($assignment as $gid => $rid) {
 					if(array_key_exists($gid, $addGroups[$level])) {
 						$addGroups[$level][$gid] = max($rid, $addGroups[$level][$gid]);
