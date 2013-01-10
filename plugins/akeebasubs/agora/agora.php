@@ -7,45 +7,73 @@
 
 defined('_JEXEC') or die();
 
-class plgAkeebasubsAgora extends JPlugin
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
+if(!$akeebasubsinclude) { unset($akeebasubsinclude); return; } else { unset($akeebasubsinclude); }
+
+class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 {
-	/** @var array Levels to Groups to Add mapping */
-	private $addGroups = array();
-
-	/** @var array Levels to Groups to Remove mapping */
-	private $removeGroups = array();
-
 	/** @var array Agora Groups */
 	private $agoraGroups = array();
 
 	private $agoraDbPrefix = "";
-
+	private $ignoreAdmins = true;
+	
 	public function __construct(& $subject, $config = array())
 	{
-		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
-			$config['params'] = new JRegistry($config['params']);
-		}
-
-		parent::__construct($subject, $config);
-
-		$version = $this->params->get('agoraversion', '3');
-		$this->agoraDbPrefix = ($version == '3') ? '#__agora' : '#__agorapro';
-
+		$templatePath = dirname(__FILE__);
+		$name = 'agora';
 		$this->loadAgoraGroups();
-
-		// Load level to group mapping from plugin parameters
-		$strAddGroups = $this->params->get('addgroups','');
-		$this->addGroups = $this->parseGroups($strAddGroups);
-
-		$strRemoveGroups = $this->params->get('removegroups','');
-		$this->removeGroups = $this->parseGroups($strRemoveGroups);
+		
+		parent::__construct($subject, $name, $config, $templatePath);
+		
+		$configParams = @json_decode($config['params']);
+		$version = $configParams->agoraversion;
+		$this->agoraDbPrefix = ($version == '3') ? '#__agora' : '#__agorapro';
+		$this->ignoreAdmins = $configParams->ignoreadmins;
 	}
-
-	/**
-	 * Called whenever a subscription is modified. Namely, when its enabled status,
-	 * payment status or valid from/to dates are changed.
-	 */
+	
+	protected function loadGroupAssignments()
+	{
+		$this->addGroups = array();
+		$this->removeGroups = array();
+		
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		$addgroupsKey = strtolower($this->name).'_addgroups';
+		$removegroupsKey = strtolower($this->name).'_removegroups';
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					continue;
+				}
+				if(property_exists($level->params, $addgroupsKey))
+				{
+					$this->addGroups[$level->akeebasubs_level_id] = array();
+					foreach($level->params->$addgroupsKey as $compositeString) {
+						if(! empty($compositeString)) {
+							$this->addGroups[$level->akeebasubs_level_id][] = $this->parseCompositeString($compositeString);	
+						}
+					}
+				}
+				if(property_exists($level->params, $removegroupsKey))
+				{
+					$this->removeGroups[$level->akeebasubs_level_id] = array();
+					foreach($level->params->$removegroupsKey as $compositeString) {
+						if(! empty($compositeString)) {
+							$this->removeGroups[$level->akeebasubs_level_id][] = $this->parseCompositeString($compositeString);
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public function onAKSubscriptionChange($row, $info)
 	{
 		if(is_null($info['modified']) || empty($info['modified'])) return;
@@ -53,13 +81,8 @@ class plgAkeebasubsAgora extends JPlugin
 			$this->onAKUserRefresh($row->user_id);
 		}
 	}
-
-	/**
-	 * Called whenever the administrator asks to refresh integration status.
-	 *
-	 * @param $user_id int The Joomla! user ID to refresh information for.
-	 */
-	public function onAKUserRefresh($user_id)
+	
+	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
@@ -94,21 +117,26 @@ class plgAkeebasubsAgora extends JPlugin
 		// If no groups are detected, do nothing
 		if(empty($addGroups) && empty($removeGroups)) return;
 
-		$actionGroups = $addGroups;
-
 		// Clean up the remove groups: if we are asked to both add and remove a user
 		// from a group, add wins.
-		if(!empty($removeGroups)) {
-			foreach($removeGroups as $level => $assignment) {
+		if(!empty($addGroups)) {
+			foreach($addGroups as $level => $assignment) {
 				foreach ($assignment as $gid => $rid) {
-					if(array_key_exists($gid, $actionGroups[$level])) {
-						$actionGroups[$level][$gid] = max($rid, $actionGroups[$level][$gid]);
+					if(array_key_exists($gid, $addGroups[$level])) {
+						$addGroups[$level][$gid] = max($rid, $addGroups[$level][$gid]);
 					} else {
-						$actionGroups[$level][$gid] = $rid;
+						$addGroups[$level][$gid] = $rid;
 					}
 				}
 			}
 		}
+	}
+
+	public function onAKUserRefresh($user_id)
+	{
+		// Load groups
+		$actionGroups = array();
+		$this->loadUserGroups($user_id, $actionGroups, array());
 
 		// Get DB connection
 		$db = JFactory::getDBO();
@@ -178,7 +206,6 @@ class plgAkeebasubsAgora extends JPlugin
 		}
 
 		// Add/remove/modify Agora groups
-		$ignoreAdmins = $this->params->get('ignoreadmins', 1);
 		foreach($actionGroups as $level => $assignment) {
 			foreach ($assignment as $gid => $rid) {
 				// Remove old records
@@ -188,7 +215,7 @@ class plgAkeebasubsAgora extends JPlugin
 					->where($db->qn('group_id').' = '.$db->q($gid));
 
 				//should admins be spared from being removed?
-				if ($ignoreAdmins) {
+				if ($this->ignoreAdmins) {
 					$query->where($db->qn('role_id').' != '.$db->q('4'));
 				}
 
@@ -196,7 +223,7 @@ class plgAkeebasubsAgora extends JPlugin
 				$db->query();
 
 				//if admins should be ignored, check to see if the user is already an admin for this group to prevent duplicate entries
-				if ($ignoreAdmins && $rid == '4') {
+				if ($this->ignoreAdmins && $rid == '4') {
 					$query = FOFQueryAbstract::getNew($db)
 						->select($db->qn('id'))
 						->from($db->qn($this->agoraDbPrefix."_user_group"))
@@ -222,44 +249,6 @@ class plgAkeebasubsAgora extends JPlugin
 		}
 	}
 
-	/**
-	 * Converts an Akeeba Subscriptions level to a numeric ID
-	 *
-	 * @param $title string The level's name to be converted to an ID
-	 *
-	 * @return int The subscription level's ID or -1 if no match is found
-	 */
-	private function ASLevelToId($title)
-	{
-		static $levels = null;
-
-		// Don't process invalid titles
-		if(empty($title)) return -1;
-
-		// Fetch a list of subscription levels if we haven't done so already
-		if(is_null($levels)) {
-			$levels = array();
-			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->getList();
-			if(count($list)) foreach($list as $level) {
-				$thisTitle = strtoupper($level->title);
-				$levels[$thisTitle] = $level->akeebasubs_level_id;
-			}
-		}
-
-		$title = strtoupper($title);
-		if(array_key_exists($title, $levels)) {
-			// Mapping found
-			return($levels[$title]);
-		} elseif( (int)$title == $title ) {
-			// Numeric ID passed
-			return (int)$title;
-		} else {
-			// No match!
-			return -1;
-		}
-	}
-
 	private function NameToId($title, $array)
 	{
 		static $groups = null;
@@ -268,10 +257,13 @@ class plgAkeebasubsAgora extends JPlugin
 
 		$title = strtoupper(trim($title));
 
-		if(array_key_exists($title, $array)) {
+		foreach($array as $key => $val) {
 			// Mapping found
-			return($array[$title]);
-		} elseif( (int)$title == $title ) {
+			if(strtoupper($key) == $title) {
+				return $val;
+			}
+		}
+		if( (int)$title == $title ) {
 			// Numeric ID passed
 			return (int)$title;
 		} else {
@@ -331,7 +323,7 @@ class plgAkeebasubsAgora extends JPlugin
 		return $ret;
 	}
 
-	private function parseGroups($rawData)
+	protected function parseGroups($rawData)
 	{
 		if(empty($rawData)) return array();
 
@@ -389,8 +381,36 @@ class plgAkeebasubsAgora extends JPlugin
 		$temp = $db->loadAssocList();
 		$this->agoraGroups = array();
 		if(!empty($temp)) foreach($temp as $rec) {
-			$key = strtoupper($rec['name']);
+			$key = $rec['name'];
 			$this->agoraGroups[$key] = $rec['id'];
 		}
+	}
+
+	protected function getGroups() {
+		return $this->agoraGroups;
+	}
+	
+	protected function getSelectField($level, $type)
+	{
+		if(! in_array($type, array('add', 'remove'))) return '';
+		$roles = array('None', 'Guest', 'Member', 'Moderator', 'Admin');
+		$groups = $this->getGroups();
+		$selected = array();
+		$options = array();
+		$assignments = ($type == 'add') ? $this->addGroups[$level->akeebasubs_level_id] : $this->removeGroups[$level->akeebasubs_level_id];
+		$options[] = JHTML::_('select.option','',JText::_('PLG_AKEEBASUBS_' . strtoupper($this->name) . '_NONE'));
+		foreach($groups as $groupTitle => $groupId) {
+			foreach($roles as $role) {
+				$title = $groupTitle . ' [' . $role . ']';
+				$id = $groupTitle . '/' . $role;
+				$assignment = $this->parseCompositeString($id);
+				if(in_array($assignment, $assignments)) {
+					$selected[] = $id;
+				}
+				$options[] = JHTML::_('select.option',$id,$title);
+			}
+		}
+		// Create the select field
+		return JHtmlSelect::genericlist($options, 'params[' . strtolower($this->name) . '_' . $type . 'groups][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
 	}
 }
