@@ -7,49 +7,20 @@
 
 defined('_JEXEC') or die();
 
-class plgAkeebasubsSql extends JPlugin
-{
-	/** @var array Levels to SQL mapping, for subscription activation */
-	private $addGroups = array();
-	
-	/** @var array Levels to SQL mapping, for subscription deactivation */
-	private $removeGroups = array();
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
+if(!$akeebasubsinclude) { unset($akeebasubsinclude); return; } else { unset($akeebasubsinclude); }
 
+class plgAkeebasubsSql extends plgAkeebasubsAbstract
+{
 	public function __construct(& $subject, $config = array())
 	{
-		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
-			$config['params'] = new JRegistry($config['params']);
-		}
-
-		parent::__construct($subject, $config);
-
-		// Load level to group mapping from plugin parameters		
-		$strAddGroups = $this->params->get('addgroups','');
-		$this->addGroups = $this->parseSQL($strAddGroups);
+		$templatePath = dirname(__FILE__);
+		$name = 'sql';
 		
-		$strRemoveGroups = $this->params->get('removegroups','');
-		$this->removeGroups = $this->parseSQL($strRemoveGroups);
-	}
-
-	/**
-	 * Called whenever a subscription is modified. Namely, when its enabled status,
-	 * payment status or valid from/to dates are changed.
-	 */
-	public function onAKSubscriptionChange($row, $info)
-	{
-		if(is_null($info['modified']) || empty($info['modified'])) return;
-		if(array_key_exists('enabled', (array)$info['modified'])) {
-			$this->onAKUserRefresh($row->user_id);
-		}
+		parent::__construct($subject, $name, $config, $templatePath);
 	}
 	
-	/**
-	 * Called whenever the administrator asks to refresh integration status.
-	 * 
-	 * @param $user_id int The Joomla! user ID to refresh information for.
-	 */
-	public function onAKUserRefresh($user_id)
+	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
@@ -79,8 +50,14 @@ class plgAkeebasubsSql extends JPlugin
 				$removeGroups[] = $this->removeGroups[$level];
 			}
 		}
-		
-		// If no sql commands are detected, do nothing
+	}
+	
+	public function onAKUserRefresh($user_id)
+	{
+		// Load groups
+		$addGroups = array();
+		$removeGroups = array();
+		$this->loadUserGroups($user_id, $addGroups, $removeGroups);
 		if(empty($addGroups) && empty($removeGroups)) return;
 		
 		// Get DB connection
@@ -119,46 +96,47 @@ class plgAkeebasubsSql extends JPlugin
 			}
 		}
 	}
-	
-	/**
-	 * Converts an Akeeba Subscriptions level to a numeric ID
-	 * 
-	 * @param $title string The level's name to be converted to an ID
-	 *
-	 * @return int The subscription level's ID or -1 if no match is found
-	 */
-	private function ASLevelToId($title)
+	protected function loadGroupAssignments()
 	{
-		static $levels = null;
+		$this->addGroups = array();
+		$this->removeGroups = array();
 		
-		// Don't process invalid titles
-		if(empty($title)) return -1;
-		
-		// Fetch a list of subscription levels if we haven't done so already
-		if(is_null($levels)) {
-			$levels = array();
-			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->getList();
-			if(count($list)) foreach($list as $level) {
-				$thisTitle = strtoupper($level->title);
-				$levels[$thisTitle] = $level->akeebasubs_level_id;
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		$addgroupsKey = strtolower($this->name).'_addgroups';
+		$removegroupsKey = strtolower($this->name).'_removegroups';
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					continue;
+				}
+				if(property_exists($level->params, $addgroupsKey))
+				{
+					$addSqlCommands = explode("\n", $level->params->$addgroupsKey);
+					foreach($addSqlCommands as &$sqlCmd) {
+						$sqlCmd = preg_replace('/^[\s]+|[\s;]+$/', '', $sqlCmd);
+					}
+					$this->addGroups[$level->akeebasubs_level_id] = array_filter($addSqlCommands);
+				}
+				if(property_exists($level->params, $removegroupsKey))
+				{
+					$removeSqlCommands = explode("\n", $level->params->$removegroupsKey);
+					foreach($removeSqlCommands as &$sqlCmd) {
+						$sqlCmd = preg_replace('/^[\s]+|[\s;]+$/', '', $sqlCmd);
+					}
+					$this->removeGroups[$level->akeebasubs_level_id] = array_filter($removeSqlCommands);
+				}
 			}
-		}
-		
-		$title = strtoupper($title);
-		if(array_key_exists($title, $levels)) {
-			// Mapping found
-			return($levels[$title]);
-		} elseif( (int)$title == $title ) {
-			// Numeric ID passed
-			return (int)$title;
-		} else {
-			// No match!
-			return -1;
 		}
 	}
 	
-	private function parseSQL($rawData)
+	protected function parseGroups($rawData)
 	{
 		if(empty($rawData)) return array();
 		
@@ -177,12 +155,29 @@ class plgAkeebasubsSql extends JPlugin
 			if(count($parts) != 2) continue;
 			
 			$level = $parts[0];
-			$rawSQL = $parts[1];
+			$rawGroups = $parts[1];
 			
+			$groups = explode(';', $rawGroups);
+			if(empty($groups)) continue;
+			if(!is_array($groups)) $groups = array($groups);
+			foreach($groups as &$sqlCmd) {
+				$sqlCmd = trim($sqlCmd);
+			}
 			$levelId = $this->ASLevelToId($level);
-			$ret[$levelId] = $rawSQL;
+			$ret[$levelId] = $groups;
 		}
 		
 		return $ret;
+	}
+
+	protected function groupToId($title)
+	{
+		return -1;
+	}
+
+	protected function getGroups()
+	{
+		// No groups
+		return array();
 	}
 }
