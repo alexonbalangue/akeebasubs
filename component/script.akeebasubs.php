@@ -132,6 +132,7 @@ class Com_AkeebasubsInstallerScript
 				'astimedrelease'		=> 1,
 			),
 			'system' => array(
+				'affiliatesessiongeneration' => 0,
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
 				'idevaffiliate'			=> 0,

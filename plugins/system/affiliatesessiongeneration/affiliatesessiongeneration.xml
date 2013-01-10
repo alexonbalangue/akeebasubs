@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="system" method="upgrade">
+<name>Akeeba Subscriptions - Affiliates system</name>
+<license>GNU General Public License v2, see LICENSE.php</license>
+<author>Chill Creations</author>
+<copyright>[2012] Chill Creations</copyright>
+<creationDate>2012</creationDate>
+<authorEmail>info@chillcreations.com</authorEmail>
+<authorUrl>http://www.chillcreations.com</authorUrl>
+<version>2.5</version>
+<description>Allows you to pass Akeeba Subscriptions' affid URL parameter in any page of your site, letting you provide affiliate links with customised landing pages.</description>
+<files>
+   <filename plugin="affiliatesessiongeneration">affiliatesessiongeneration.php</filename>
+</files>
+
+</extension>
+
+
+
+
+
