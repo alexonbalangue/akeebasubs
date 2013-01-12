@@ -13,7 +13,7 @@ class AkeebasubsModelUpgrades extends FOFModel
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
 		
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__akeebasubs_upgrades'));
 		

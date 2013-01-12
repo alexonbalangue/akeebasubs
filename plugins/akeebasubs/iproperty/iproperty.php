@@ -83,7 +83,7 @@ class plgAkeebasubsIproperty extends JPlugin
 	{
 		// First, check if we already have agents for that user ID
 		$db = JFactory::getDbo();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__iproperty_agents'))
 			->where($db->qn('user_id').' = '.$db->q($user_id));
@@ -180,7 +180,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			// If we have existing agents, we need to do two things:
 			
 			// a. Make sure all agent records are enabled
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->update($db->qn('#__iproperty_agents'))
 				->set($db->qn('state').' = '.$db->q(1))
 				->where($db->qn('user_id').' = '.$db->q($user_id));
@@ -198,7 +198,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				$company_ids[] = $db->q($cid);
 			}
 			
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->select('*')
 				->from($db->qn('#__iproperty_companies'))
 				->where($db->qn('id').' IN ('.implode(',', $company_ids).')');
@@ -219,7 +219,7 @@ class plgAkeebasubsIproperty extends JPlugin
 	{
 		// First, check if we already have agents for that user ID
 		$db = JFactory::getDbo();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__iproperty_agents'))
 			->where($db->qn('user_id').' = '.$db->q($user_id));
@@ -230,7 +230,7 @@ class plgAkeebasubsIproperty extends JPlugin
 		
 		// Unpublish agent records
 		$db = JFactory::getDbo();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->update($db->qn('#__iproperty_agents'))
 			->set($db->qn('state').' = '.$db->q(0))
 			->where($db->qn('user_id').' = '.$db->q($user_id));
@@ -248,7 +248,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			$company_ids[] = $db->q($cid);
 		}
 
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->update($db->qn('#__iproperty_companies'))
 			->set($db->qn('state').' = '.$db->q('0'))
 			->where($db->qn('id').' IN ('.implode(',', $company_ids).')');

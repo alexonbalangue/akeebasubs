@@ -135,7 +135,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 		{
 			// Pre-construct an INSERT query prototype for performance reasons
 			$tableName = '#__akeebasubs_'.$table;
-			$query = FOFQueryAbstract::getNew($db);
+			$query = $db->getQuery(true);
 			$query->insert($tableName);
 			$columns = array();
 			

@@ -34,7 +34,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 				'name'		=>	'levels',
 				'foreign'	=>	'#__ambrasubs_types',
 				'foreignkey'=>	'akeebasubs_level_id',
-				'query'		=> FOFQueryAbstract::getNew($db)
+				'query'		=> $db->getQuery(true)
 					->select(array(
 						$db->qn('id'),
 						$db->qn('id').' AS '.$db->qn('akeebasubs_level_id'),
@@ -53,7 +53,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 				'name'		=>	'subscriptions',
 				'foreign'	=>	'#__ambrasubs_users2types',
 				'foreignkey'=>	'akeebasubs_subscription_id',
-				'query'		=> FOFQueryAbstract::getNew($db)
+				'query'		=> $db->getQuery(true)
 					->select(array(
 						$db->qn('tbl').'.'.$db->qn('u2tid').' AS '.$db->qn('akeebasubs_subscription_id'),
 						$db->qn('tbl').'.'.$db->qn('userid').' AS '.$db->qn('user_id'),
@@ -84,7 +84,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 				'name'		=> 'users',
 				'foreign'	=> '#__users',
 				'foreignkey'=> 'akeebasubs_user_id',
-				'query' => FOFQueryAbstract::getNew($db)
+				'query' => $db->getQuery(true)
 					->select(array(
 						$db->qn('tbl').'.'.$db->qn('id').' AS '.$db->qn('akeebasubs_user_id'),
 						$db->qn('tbl').'.'.$db->qn('params').' AS '.$db->qn('rawparams')
@@ -99,7 +99,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 				'name'		=> 'coupons',
 				'foreign'	=> '#__ambrasubs_coupons',
 				'foreignkey'=> 'akeebasubs_coupon_id',
-				'query' => FOFQueryAbstract::getNew($db)
+				'query' => $db->getQuery(true)
 					->select(array(
 						$db->qn('tbl').'.'.$db->qn('id').' AS '.$db->qn('akeebasubs_coupon_id'),
 						$db->qn('tbl').'.'.$db->qn('sub_id').' AS '.$db->qn('subscriptions'),
@@ -125,7 +125,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 				$articleText = '<p></p>';
 				$articleid = (int)($level['articleid']);
 				if($articleid > 0) {
-					$q = FOFQueryAbstract::getNew($db)
+					$q = $db->getQuery(true)
 						->select(array('introtext','fulltext'))
 						->from($db->qn('#__content'))
 						->where(

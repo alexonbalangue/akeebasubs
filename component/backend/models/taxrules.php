@@ -25,7 +25,7 @@ class AkeebasubsModelTaxrules extends FOFModel
 	public function buildQuery($overrideLimits = false) {
 		$state = $this->getFilterValues();
 		$db = $this->getDbo();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 				->select('*')
 				->from($db->qn('#__akeebasubs_taxrules'));
 		

@@ -180,7 +180,7 @@ class AkeebasubsHelperSelect
 		$db = JFactory::getDBO();
 
 		// Get the user groups from the database.
-		$query = FOFQueryAbstract::getNew($db);
+		$query = $db->getQuery(true);
 		$query->select(array(
 			$db->qn('a').'.'.$db->qn('id'),
 			$db->qn('a').'.'.$db->qn('title'),

@@ -31,7 +31,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		
 		$db = JFactory::getDbo();
 		// Do we have an existing RedShop user record?
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__redshop_users_info'))
 			->where($db->qn('user_id') .'='. $db->q($user_id))
@@ -55,7 +55,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		
 		// Get state
 		$slen = strlen($userData->state);
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('state_2_code')
 			->from($db->qn('#__redshop_state'))
 			->where($db->qn('state_id').' = '.$db->q($dummy->state_code))
@@ -64,7 +64,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		$state = $db->loadResult();
 		
 		// @todo Get country
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('country_2_code')
 			->from($db->qn('#__redshop_country'))
 			->where($db->qn('country_id').' = '.$db->q($dummy->country_code));
@@ -104,7 +104,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 	{
 		$db = JFactory::getDbo();
 		// Do we have an existing RedShop user record?
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__redshop_users_info'))
 			->where($db->qn('user_id') .'='. $db->q($userData->user_id))
@@ -139,7 +139,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		if(!empty($userData->address2)) $address .= ', '.$userData->address2;
 		
 		// Get the country code
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('country_id')
 			->from($db->qn('#__redshop_country'))
 			->where($db->qn('country_2_code').' = '.$db->q($userData->country));
@@ -148,7 +148,7 @@ class plgAkeebasubsRedshopusersync extends JPlugin
 		
 		// Get the state code
 		$slen = strlen($userData->state);
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('state_id')
 			->from($db->qn('#__redshop_state'))
 			->where($db->qn('state_'.$slen.'_code').' = '.$db->q($userData->state))

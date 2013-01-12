@@ -144,7 +144,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 		// Get Agora user ID
 		$agora_user_id = 0;
 		if ($this->agoraVersion == '3') {
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->select($db->qn('id'))
 				->from($db->qn('#__agora_users'))
 				->where($db->qn('jos_id').' = '.$db->q($user_id));
@@ -185,7 +185,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 				$agora_user_id = $db->insertid();
 			}
 		} else {
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->select($db->qn('id'))
 				->from($db->qn('#__agorapro_users'))
 				->where($db->qn('id').' = '.$db->q($user_id));
@@ -209,7 +209,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 		foreach($actionGroups as $level => $assignment) {
 			foreach ($assignment as $gid => $rid) {
 				// Remove old records
-				$query = FOFQueryAbstract::getNew($db)
+				$query = $db->getQuery(true)
 					->delete($db->qn($this->agoraDbPrefix . '_user_group'))
 					->where($db->qn('user_id').' = '.$db->q($agora_user_id))
 					->where($db->qn('group_id').' = '.$db->q($gid));
@@ -224,7 +224,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 
 				//if admins should be ignored, check to see if the user is already an admin for this group to prevent duplicate entries
 				if ($this->ignoreAdmins && $rid == '4') {
-					$query = FOFQueryAbstract::getNew($db)
+					$query = $db->getQuery(true)
 						->select($db->qn('id'))
 						->from($db->qn($this->agoraDbPrefix."_user_group"))
 						->where($db->qn('role_id').' = '.$db->q($rid))
@@ -372,7 +372,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 	private function loadAgoraGroups()
 	{
 		$db = JFactory::getDBO();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select(array(
 				$db->qn('name'),
 				$db->qn('id'),

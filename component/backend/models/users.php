@@ -40,7 +40,7 @@ class AkeebasubsModelUsers extends FOFModel
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
 		
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('COUNT(*)')
 			->from($db->qn('#__akeebasubs_users').' AS '.$db->qn('tbl'))
 			->join('INNER', $db->qn('#__users').' AS '.$db->qn('u').' ON '.
@@ -174,7 +174,7 @@ class AkeebasubsModelUsers extends FOFModel
 	
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 				->from($db->qn('#__akeebasubs_users').' AS '.$db->qn('tbl'))
 				->join('INNER', $db->qn('#__users').' AS '.$db->qn('u').' ON '.
 					$db->qn('u').'.'.$db->qn('id').' = '.

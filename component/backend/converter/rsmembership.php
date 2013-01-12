@@ -34,7 +34,7 @@ class AkeebasubsConverterRsmembership extends AkeebasubsConverterAbstract
 				'name'		=>	'levels',
 				'foreign'	=>	'#__rsmembership_memberships',
 				'foreignkey'=>	'akeebasubs_level_id',
-				'query'		=> FOFQueryAbstract::getNew($db)
+				'query'		=> $db->getQuery(true)
 					->select(array(
 						$db->qn('id'),
 						$db->qn('id').' AS '.$db->qn('akeebasubs_level_id'),
@@ -56,7 +56,7 @@ class AkeebasubsConverterRsmembership extends AkeebasubsConverterAbstract
 				'name'		=>	'subscriptions',
 				'foreign'	=>	'#__rsmembership_membership_users',
 				'foreignkey'=>	'akeebasubs_subscription_id',
-				'query'		=> FOFQueryAbstract::getNew($db)
+				'query'		=> $db->getQuery(true)
 					->select(array(
 						$db->qn('tbl').'.'.$db->qn('id'),
 						$db->qn('tbl').'.'.$db->qn('id').' AS '.$db->qn('akeebasubs_subscription_id'),
@@ -87,7 +87,7 @@ class AkeebasubsConverterRsmembership extends AkeebasubsConverterAbstract
 				'name'		=> 'coupons',
 				'foreign'	=> '#__rsmembership_coupons',
 				'foreignkey'=> 'akeebasubs_coupon_id',
-				'query' => FOFQueryAbstract::getNew($db)
+				'query' => $db->getQuery(true)
 					->select(array(
 						$db->qn('id'),
 						$db->qn('id').' AS '.$db->qn('akeebasubs_coupon_id'),

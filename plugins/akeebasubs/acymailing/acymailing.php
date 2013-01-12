@@ -32,7 +32,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 		$db = JFactory::getDBO();
 		
 		// Does this user have an AcyMailing user record?
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select($db->qn('subid'))
 			->from('#__acymailing_subscriber')
 			->where($db->qn('userid').' = '.$db->q($user_id));
@@ -60,7 +60,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 		if(!empty($addGroups)) {
 			foreach($addGroups as $group) {
 				// Check for old record
-				$query = FOFQueryAbstract::getNew($db)
+				$query = $db->getQuery(true)
 					->select($db->qn('subid'))
 					->from($db->qn('#__acymailing_listsub'))
 					->where($db->qn('listid') .'='. $db->q($group))
@@ -70,7 +70,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 				
 				// Remove old record
 				if(!empty($test) && !is_null($test)) {
-					$query = FOFQueryAbstract::getNew($db)
+					$query = $db->getQuery(true)
 						->delete($db->qn('#__acymailing_listsub'))
 						->where($db->qn('listid') .'='. $db->q($group))
 						->where($db->qn('subid') .'='. $db->q($amsubid));
@@ -79,7 +79,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 				}
 				
 				// Insert new record
-				$query = FOFQueryAbstract::getNew($db)
+				$query = $db->getQuery(true)
 					->insert($db->qn('#__acymailing_listsub'))
 					->values(
 						$db->q($group).', '.$db->q($amsubid).', '.
@@ -99,7 +99,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 		// Remove from AcyMailing
 		if(!empty($removeGroups)) {
 			foreach($removeGroups as $group) {
-				$query = FOFQueryAbstract::getNew($db)
+				$query = $db->getQuery(true)
 					->delete($db->qn('#__acymailing_listsub'))
 					->where($db->qn('listid') .'='. $db->q($group))
 					->where($db->qn('subid') .'='. $db->q($amsubid));
@@ -117,7 +117,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 			$groups = array();
 			
 			$db = JFactory::getDBO();
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->select(array(
 					$db->qn('listid').' AS '.$db->qn('id'),
 					$db->qn('name').' AS '.$db->qn('title'),

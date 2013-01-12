@@ -15,7 +15,7 @@ class AkeebasubsModelAffpayments extends FOFModel
 		$db = $this->getDbo();
 		
 		// Main query
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select(array(
 				$db->qn('p').'.*',
 				$db->qn('a').'.'.$db->qn('user_id'),

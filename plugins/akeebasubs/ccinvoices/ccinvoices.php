@@ -80,7 +80,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			*/
 
 			// Check if there is an invoice for this subscription already
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->select('*')
 				->from('#__akeebasubs_invoices')
 				->where($db->qn('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));

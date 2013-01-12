@@ -17,7 +17,7 @@ class AkeebasubsModelAffiliates extends FOFModel
 		$affiliate_id = $this->getState('affiliate_id',null,'int');
 		
 		// Sub-query 1: total net amount of subscriptions attributed to this affiliate
-		$subquery1 = FOFQueryAbstract::getNew($db)
+		$subquery1 = $db->getQuery(true)
 			->select(array(
 				$db->qn('akeebasubs_affiliate_id'),
 				'SUM('.$db->qn('affiliate_comission').') AS '.$db->qn('owed'),
@@ -30,7 +30,7 @@ class AkeebasubsModelAffiliates extends FOFModel
 		if($affiliate_id > 0) $subquery1->where ($db->nameQuote ('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
 		
 		// Sub-query 2: total payments made to this affiliate
-		$subquery2 = FOFQueryAbstract::getNew($db)
+		$subquery2 = $db->getQuery(true)
 			->select(array(
 				$db->qn('akeebasubs_affiliate_id'),
 				'SUM('.$db->qn('amount').') AS '.$db->qn('paid'),
@@ -43,7 +43,7 @@ class AkeebasubsModelAffiliates extends FOFModel
 		$subquery2 = (string)$subquery2;
 		
 		// Main query
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select(array(
 				$db->qn('a').'.*',
 				$db->qn('tna').'.'.$db->qn('owed'),

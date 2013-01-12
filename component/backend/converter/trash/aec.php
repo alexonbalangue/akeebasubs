@@ -33,7 +33,7 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 	{
 		$db = JFactory::getDbo();
 		
-		$subquery = FOFQueryAbstract::getNew($db)
+		$subquery = $db->getQuery(true)
 			->select(array(
 				'MAX('.$db->qn('id').') AS '.$db->qn('invid'),
 				$db->qn('subscr_id')
@@ -48,7 +48,7 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 				'name'		=>	'levels',
 				'foreign'	=>	'#__acctexp_plans',
 				'foreignkey'=>	'akeebasubs_level_id',
-				'query'		=> FOFQueryAbstract::getNew($db)
+				'query'		=> $db->getQuery(true)
 					->select(array(
 						$db->qn('id'),
 						$db->qn('id').' AS '.$db->qn('akeebasubs_level_id'),
@@ -63,7 +63,7 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 				'name'		=>	'subscriptions',
 				'foreign'	=>	'#__acctexp_subscr',
 				'foreignkey'=>	'akeebasubs_subscription_id',
-				'query'		=> FOFQueryAbstract::getNew($db)
+				'query'		=> $db->getQuery(true)
 					->select(array(
 						$db->qn('tbl').'.'.$db->qn('id'),
 						$db->qn('tbl').'.'.$db->qn('id').' AS '.$db->qn('akeebasubs_subscription_id'),

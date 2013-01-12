@@ -69,7 +69,7 @@ class plgAkeebasubsTracktime extends JPlugin
 		$contact_id = $this->getContactID($row->user_id);
 
 		// Check if there is an invoice for this subscription already
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select('COUNT(*)')
 			->from('#__akeebasubs_invoices')
 			->where($db->qn('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));

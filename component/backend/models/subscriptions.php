@@ -46,7 +46,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		$state = $this->getFilterValues();
 		
 		if($state->refresh == 1) {
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->select('COUNT(*)')
 				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
 
@@ -56,13 +56,13 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			$this->_buildQueryGroup($query);
 			
 			// $query retruns X rows, where X is the number of users. We need the count of users, so...
-			$query2 =  FOFQueryAbstract::getNew($db)
+			$query2 =  $db->getQuery(true)
 					->select('COUNT(*)')
 					->from( '('.(string)$query.') AS '.$db->qn('tbl'));
 			
 			return $query2;
 		} elseif($state->moneysum == 1) {
-			$query = FOFQueryAbstract::getNew($db)
+			$query = $db->getQuery(true)
 				->select('SUM('.$db->qn('net_amount').') AS '.$db->qn('x'))
 				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
 			
@@ -552,7 +552,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 	
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
 		
 		$this->_buildQueryColumns($query);
@@ -633,7 +633,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 	public function getActiveSubscribers()
 	{
 		$db = $this->getDbo();
-		$query = FOFQueryAbstract::getNew($db)
+		$query = $db->getQuery(true)
 			->select(array('COUNT(DISTINCT('.$db->qn('user_id').'))'))
 			->from($db->qn('#__akeebasubs_subscriptions'))
 			->where($db->qn('enabled').' = '.$db->q('1'));
