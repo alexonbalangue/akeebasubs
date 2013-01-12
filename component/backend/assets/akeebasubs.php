@@ -22,7 +22,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	
 	protected $name = '';
 
-	public function __construct(&$subject, $name, $config = array(), $templatePath = null)
+	public function __construct(&$subject, $name, $config = array(), $templatePath = null, $autoLoad = true)
 	{
 		if(!array_key_exists('params', $config))
 		{
@@ -71,7 +71,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 			$this->removeGroups = $this->parseGroups($strRemoveGroups);
 			// Do a transparent upgrade
 			$this->upgradeSettings($config);
-		} else {
+		} elseif($autoLoad) {
 			$this->loadGroupAssignments();
 		}
 	}
@@ -130,7 +130,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	 */
 	abstract public function onAKUserRefresh($user_id);
 	
-	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
+	protected function loadUserGroups($user_id, &$addGroups = array(), &$removeGroups = array())
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
