@@ -82,7 +82,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 		}
 	}
 	
-	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
+	protected function loadUserGroups($user_id, &$addGroups = array(), &$removeGroups = array())
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
@@ -136,7 +136,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 	{
 		// Load groups
 		$actionGroups = array();
-		$this->loadUserGroups($user_id, $actionGroups, array());
+		$this->loadUserGroups($user_id, $actionGroups);
 
 		// Get DB connection
 		$db = JFactory::getDBO();
