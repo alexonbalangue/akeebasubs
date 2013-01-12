@@ -36,13 +36,20 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		parent::__construct($subject, $name, $config);
 		
 		$this->templatePath = $templatePath;
-		$this->name = $name;
+		if(is_string($name))
+		{
+			$this->name = $name;
+		}
+		elseif(is_array($name))
+		{
+			$this->name = $name['name'];
+		}
 		
 		// Load the language files
 		$jlang = JFactory::getLanguage();
-		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, null, true);
+		$jlang->load('plg_akeebasubs_'.$this->name, JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_akeebasubs_'.$this->name, JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_akeebasubs_'.$this->name, JPATH_ADMINISTRATOR, null, true);
 		
 		// Do we have values from the Olden Days?
 		if(isset($config['params'])) {
