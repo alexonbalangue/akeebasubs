@@ -87,19 +87,27 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 			$level->params->contentpublish_unpublishzoo = false;
 		}
 		
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true)
-			->select(array(
-				$db->qn('id'),
-				$db->qn('name'),
-			))
-			->from($db->qn('#__zoo_application'));
-		$db->setQuery($query);
-		$appsRaw = $db->loadObjectList();
+		jimport('joomla.filesystem.folder');
+		if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo'))
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('id'),
+					$db->qn('name'),
+				))
+				->from($db->qn('#__zoo_application'));
+			$db->setQuery($query);
+			$appsRaw = $db->loadObjectList();
+		}
+		else
+		{
+			$appsRaw = null;
+		}
 		$zooApps = array();
-		$zooApps[] = JHtml::_('select.option', '', JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_SELECTNONE'));
 		if (!empty($appsRaw))
 		{
+			$zooApps[] = JHtml::_('select.option', '', JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_SELECTNONE'));
 			foreach ($appsRaw as $app)
 			{
 				$zooApps[] = JHtml::_('select.option', $app->id, $app->name);
@@ -125,6 +133,16 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	 */
 	public function onAKUserRefresh($user_id)
 	{
+		static $hasZoo = null;
+		static $hasK2 = null;
+		
+		if(is_null($hasZoo) || is_null($hasK2))
+		{
+			jimport('joomla.filesystem.folder');
+			$hasZoo = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo');
+			$hasK2 = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_k2');
+		}
+		
 		// Make sure we're configured
 		if (empty($this->addGroups) && empty($this->removeGroups))
 		{
@@ -191,7 +209,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->unpublishK2))
+				if (array_key_exists($level_id, $this->unpublishK2) && $hasK2)
 				{
 					if ($this->unpublishK2[$level_id])
 					{
@@ -205,7 +223,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->unpublishZOO) && array_key_exists($level_id, $this->removeGroups))
+				if (array_key_exists($level_id, $this->unpublishZOO) && array_key_exists($level_id, $this->removeGroups) && $hasZoo)
 				{
 					if ($this->unpublishZOO[$level_id])
 					{
@@ -252,7 +270,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->publishK2))
+				if (array_key_exists($level_id, $this->publishK2) && $hasK2)
 				{
 					if ($this->publishK2[$level_id])
 					{
@@ -267,7 +285,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
-				if (array_key_exists($level_id, $this->publishZOO) && array_key_exists($level_id, $this->addGroups))
+				if (array_key_exists($level_id, $this->publishZOO) && array_key_exists($level_id, $this->addGroups) && $hasZoo)
 				{
 					if ($this->publishZOO[$level_id])
 					{
