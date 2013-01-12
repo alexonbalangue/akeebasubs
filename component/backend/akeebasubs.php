@@ -13,7 +13,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR.'/version.php';
 
 // Include FOF
 include_once JPATH_LIBRARIES.'/fof/include.php';
-if(!defined('FOF_INCLUDED')) {?>
+if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true)) {?>
 <h1>Akeeba Subscriptions</h1>
 <h2>Incomplete installation detected</h2>
 <p>

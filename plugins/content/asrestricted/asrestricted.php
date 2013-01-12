@@ -13,7 +13,10 @@ jimport('joomla.plugin.plugin');
 if(!defined('FOF_INCLUDED')) {
 	include_once JPATH_LIBRARIES.'/fof/include.php';
 }
-if(!defined('FOF_INCLUDED')) return;
+if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+{
+	return;
+}
 
 // Do not run if Akeeba Subscriptions is not enabled
 jimport('joomla.application.component.helper');
