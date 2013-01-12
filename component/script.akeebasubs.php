@@ -86,6 +86,7 @@ class Com_AkeebasubsInstallerScript
 				'2checkout'				=> 0,
 				'allopass'				=> 0,
 				'beanstream'			=> 0,
+				'braintree'				=> 0,
 				'cashu'					=> 0,
 				'ccavenue'				=> 0,
 				'clickandbuy'			=> 0,
