@@ -270,10 +270,20 @@ class Com_AkeebasubsInstallerScript
 			$this->_bugfixCantBuildAdminMenus();
 		}
 		
-		// Only allow to install on Joomla! 2.5.1 or later
-		if(!version_compare(JVERSION, '2.5.1', 'ge')) {
-			echo "<h1>Unsupported Joomla! version</h1>";
-			echo "<p>This component can only be installed on Joomla! 2.5.1 or later</p>";
+		// Only allow to install on Joomla! 2.5.0 or later with PHP 5.3.0 or later
+		if(defined('PHP_VERSION')) {
+			$version = PHP_VERSION;
+		} elseif(function_exists('phpversion')) {
+			$version = phpversion();
+		} else {
+			$version = '5.0.0'; // all bets are off!
+		}
+		if(!version_compare(JVERSION, '2.5.0', 'ge')) {
+			echo "<p>You need Joomla! 2.5 or later to install this component</p>";
+			return false;
+		}
+		if(!version_compare($version, '5.3.0', 'ge')) {
+			echo "<p>You need PHP 5.3 or later to install this component</p>";
 			return false;
 		}
 		return true;

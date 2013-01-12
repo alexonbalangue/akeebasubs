@@ -22,6 +22,18 @@
 // no direct access
 defined('_JEXEC') or die('');
 
+// PHP version check
+if(defined('PHP_VERSION')) {
+	$version = PHP_VERSION;
+} elseif(function_exists('phpversion')) {
+	$version = phpversion();
+} else {
+	// No version info. I'll lie and hope for the best.
+	$version = '5.0.0';
+}
+// Old PHP version detected. EJECT! EJECT! EJECT!
+if(!version_compare($version, '5.3.0', '>=')) return;
+
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
 include_once JPATH_LIBRARIES.'/fof/include.php';
 if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
