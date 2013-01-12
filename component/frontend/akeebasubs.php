@@ -13,7 +13,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
 
 // Include FOF
 include_once JPATH_LIBRARIES.'/fof/include.php';
-if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true)): ?>
+if(!defined('FOF_INCLUDED')): ?>
 <h1>Akeeba Subscriptions</h1>
 <h2>Incomplete installation detected</h2>
 <p>Please visit your site's back-end and click on Components, Akeeba Subscriptions

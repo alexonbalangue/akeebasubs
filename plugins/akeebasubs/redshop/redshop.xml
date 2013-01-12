@@ -11,6 +11,8 @@
 	<description>PLG_AKEEBASUBS_REDSHOP_DESCRIPTION</description>
 	<files>
 		<filename plugin="redshop">redshop.php</filename>
+		<folder>override</folder>
+		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_redshop.ini</language>

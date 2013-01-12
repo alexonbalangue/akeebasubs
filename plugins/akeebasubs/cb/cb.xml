@@ -11,7 +11,8 @@
 	<description>PLG_AKEEBASUBS_CB_DESCRIPTION</description>
 	<files>
 		<filename plugin="cb">cb.php</filename>
-		<folder>cb</folder>
+		<folder>override</folder>
+		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_cb.ini</language>

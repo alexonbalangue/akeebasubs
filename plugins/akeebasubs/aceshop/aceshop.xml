@@ -11,6 +11,8 @@
 	<description>PLG_AKEEBASUBS_ACESHOP_DESCRIPTION</description>
 	<files>
 		<filename plugin="aceshop">aceshop.php</filename>
+		<folder>override</folder>
+		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_aceshop.ini</language>

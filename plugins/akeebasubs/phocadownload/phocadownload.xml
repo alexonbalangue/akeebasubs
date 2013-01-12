@@ -11,6 +11,8 @@
 	<description>PLG_AKEEBASUBS_PHOCADOWNLOAD_DESCRIPTION</description>
 	<files>
 		<filename plugin="phocadownload">phocadownload.php</filename>
+		<folder>override</folder>
+		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_phocadownload.ini</language>

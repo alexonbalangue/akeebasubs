@@ -11,6 +11,8 @@
 	<description>PLG_AKEEBASUBS_AGORA_DESCRIPTION</description>
 	<files>
 		<filename plugin="agora">agora.php</filename>
+		<folder>override</folder>
+		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_agora.ini</language>

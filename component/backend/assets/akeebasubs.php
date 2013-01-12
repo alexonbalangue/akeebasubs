@@ -22,7 +22,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	
 	protected $name = '';
 
-	public function __construct(&$subject, $name, $config = array(), $templatePath = null, $autoLoad = true)
+	public function __construct(&$subject, $name, $config = array(), $templatePath = null)
 	{
 		if(!array_key_exists('params', $config))
 		{
@@ -36,20 +36,13 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		parent::__construct($subject, $name, $config);
 		
 		$this->templatePath = $templatePath;
-		if(is_string($name))
-		{
-			$this->name = $name;
-		}
-		elseif(is_array($name))
-		{
-			$this->name = $name['name'];
-		}
+		$this->name = $name;
 		
 		// Load the language files
 		$jlang = JFactory::getLanguage();
-		$jlang->load('plg_akeebasubs_'.$this->name, JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_akeebasubs_'.$this->name, JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_akeebasubs_'.$this->name, JPATH_ADMINISTRATOR, null, true);
+		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, 'en-GB', true);
+		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
+		$jlang->load('plg_akeebasubs_'.$name, JPATH_ADMINISTRATOR, null, true);
 		
 		// Do we have values from the Olden Days?
 		if(isset($config['params'])) {
@@ -78,7 +71,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 			$this->removeGroups = $this->parseGroups($strRemoveGroups);
 			// Do a transparent upgrade
 			$this->upgradeSettings($config);
-		} elseif($autoLoad) {
+		} else {
 			$this->loadGroupAssignments();
 		}
 	}
@@ -137,7 +130,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	 */
 	abstract public function onAKUserRefresh($user_id);
 	
-	protected function loadUserGroups($user_id, &$addGroups = array(), &$removeGroups = array())
+	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
