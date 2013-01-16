@@ -78,6 +78,15 @@ $this->loadHelper('params');
 			</div>
 			
 			<div class="control-group">
+				<label for="combine" class="control-label">
+					<?php echo JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_COMBINE'); ?>
+				</label>
+				<div class="controls">
+					<?php echo JHTML::_('select.booleanlist', 'combine', null, $this->item->combine); ?>
+				</div>
+			</div>			
+			
+			<div class="control-group">
 				<label for="enabled" class="control-label">
 					<?php echo JText::_('JPUBLISHED'); ?>
 				</label>
