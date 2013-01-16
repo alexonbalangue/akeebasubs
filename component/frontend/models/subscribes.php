@@ -668,6 +668,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$ret = array(
 			'discount'		=> $autoDiscount,	// discount amount
 			'expiration'	=> 'overlap',		// old subscription expiration mode
+			'allsubs'		=> null,			// all old subscription ids
 			'oldsub'		=> null,			// old subscription id
 		);
 		
@@ -689,6 +690,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						$ret['discount'] = $relDiscount;
 						$ret['expiration'] = $relationData['relation']->expiration;
 						$ret['oldsub'] = $relationData['oldsub'];
+						$ret['allsubs'] = $relationData['allsubs'];
 						$this->_upgrade_id = null;
 					}
 				}
@@ -698,6 +700,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					$ret['discount'] = $relDiscount;
 					$ret['expiration'] = $relationData['relation']->expiration;
 					$ret['oldsub'] = $relationData['oldsub'];
+					$ret['allsubs'] = $relationData['allsubs'];
 					$this->_upgrade_id = null;
 				}
 			}
@@ -738,6 +741,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'discount'		=> 0,
 			'relation'		=> null,
 			'oldsub'		=> null,
+			'allsubs'		=> null,
 		);
 		
 		// Get applicable relation rules
@@ -788,6 +792,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// If there are no subscriptions on this level don't bother.
 				continue;
 			}
+			
+			$allsubs = array();
+			foreach($subscriptions as $sub)
+			{
+				$allsubs[] = $sub->akeebasubs_level_id;
+			}
+			reset($allsubs);
 			
 			switch($rule->mode)
 			{
@@ -904,6 +915,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			{
 				$ret['discount'] = $discount;
 				$ret['relation'] = clone $rule;
+				$ret['allsubs'] = $allsubs;
 				foreach($subscriptions as $sub)
 				{
 					// Loop until we find an enabled subscription
@@ -1691,6 +1703,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$priceValidation = $this->_validatePrice();
 		$subcustom['fixdates'] = array(
 			'oldsub'		=> $priceValidation->oldsub,
+			'allsubs'		=> $priceValidation->allsubs,
 			'expiration'	=> $priceValidation->expiration,
 		);
 		
