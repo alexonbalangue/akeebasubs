@@ -69,11 +69,11 @@ $this->loadHelper('params');
 			</div>
 			
 			<div class="control-group">
-				<label for="type" class="control-label">
+				<label for="expiration" class="control-label">
 					<?php echo  JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_EXPIRATION'); ?>
 				</label>
 				<div class="controls">
-					<?php echo AkeebasubsHelperSelect::flexiexpiration('type',$this->item->expiration) ?>			
+					<?php echo AkeebasubsHelperSelect::flexiexpiration('expiration',$this->item->expiration) ?>			
 				</div>
 			</div>
 			

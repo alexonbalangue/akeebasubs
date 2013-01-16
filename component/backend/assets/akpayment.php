@@ -109,9 +109,9 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 */
 	protected function fixDates($subscription, &$updates)
 	{
-		// Take into account the subcustom->fixdates data to determine when
+		// Take into account the params->fixdates data to determine when
 		// the new subscription should start and/or expire the old subscription
-		$subcustom = $subscription->subcustom;
+		$subcustom = $subscription->params;
 		if (is_string($subcustom))
 		{
 			$subcustom = json_decode($subcustom, true);
@@ -127,10 +127,12 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			unset($subcustom['fixdates']);
 		}
 		
+		$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
+		
 		if (is_numeric($oldsub))
 		{
-			$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-				->getItem($oldsub);
+			$sub = clone $mastertable;
+			$sub->load($oldsub, true);
 			if($sub->akeebasubs_subscription_id == $oldsub)
 			{
 				$oldsub = $sub;
@@ -208,19 +210,22 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		// Expiration = replace => expire old subscription
 		if ($expiration == 'replace')
 		{
-			$oldupdates = array(
+			$data = $oldsub->getData();
+			$newdata = array_merge($data, array(
 				'publish_down'	=> $jNow->toSql(),
 				'enabled'		=> 0,
 				'contact_flag'	=> 3,
 				'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$subscription->akeeabsubs_subscription_id}\n"
-			);
-			$oldsub->save($oldupdates);
+			));
+			$table = clone $mastertable;
+			$table->reset();
+			$table->save($newdata);
 		}
 
 		$updates['publish_up'] = $jStart->toSql();
 		$updates['publish_down'] = $jEnd->toSql();
 		$updates['enabled'] = 1;
-		$updates['subcustom'] = json_encode($subcustom);
+		$updates['params'] = json_encode($subcustom);
 	}
 	
 	/**

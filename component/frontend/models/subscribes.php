@@ -671,11 +671,253 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'oldsub'		=> null,			// old subscription id
 		);
 		
-		// @todo Take into account the level relations
-		
-		// @todo Set $this->_upgrade_id to null if a level relation is in use
+		// Check if we have a valid subscription level and user
+		if (!JFactory::getUser()->guest)
+		{
+			$relationData = $this->_getLevelRelation($autoDiscount);
+			// Check that a relation row is relevant
+			if (!is_null($relationData['relation']))
+			{
+				// Non-rule-based relation discount
+				if($relationData['relation']->mode != 'rules')
+				{
+					// Get the discount from the levels relation and make sure it's greater than the rule-based discount
+					$relDiscount = $relationData['discount'];
+					if ($relDiscount > $autoDiscount)
+					{
+						// yes, it's greated than the upgrade rule-based discount. Use it.
+						$ret['discount'] = $relDiscount;
+						$ret['expiration'] = $relationData['relation']->expiration;
+						$ret['oldsub'] = $relationData['oldsub'];
+						$this->_upgrade_id = null;
+					}
+				}
+				// Rule-based relation discount
+				else
+				{
+					$ret['discount'] = $relDiscount;
+					$ret['expiration'] = $relationData['relation']->expiration;
+					$ret['oldsub'] = $relationData['oldsub'];
+					$this->_upgrade_id = null;
+				}
+			}
+		}
 		
 		// Finally, return the structure
+		return $ret;
+	}
+	
+	/**
+	 * Gets the applicable subscription level relation rule applicable for this 
+	 * subscription attempt.
+	 * 
+	 * @return  array  Hash array. discount is the value of the discount,
+	 *                 relation is a copy of the relation row, oldsub is the id
+	 *                 of the old subscription on which the relation row was
+	 *                 applied against.
+	 */
+	private function _getLevelRelation($autoDiscount)
+	{
+		$state = $this->getStateVariables();
+		
+		// Get the id from the slug if it's not present
+		if($state->slug && empty($state->id)) {
+			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			 if(!empty($list)) {
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			 } else {
+				$state->id = 0;
+			 }
+		}
+		
+		// Initialise the return array
+		$ret = array(
+			'discount'		=> 0,
+			'relation'		=> null,
+			'oldsub'		=> null,
+		);
+		
+		// Get applicable relation rules
+		$autoRules = FOFModel::getTmpInstance('Relations','AkeebasubsModel')
+			->savestate(0)
+			->target_level_id($state->id)
+			->enabled(1)
+			->limit(0)
+			->limitstart(0)
+			->getItemList();
+		
+		if (empty($autoRules))
+		{
+			// No point continuing if we don't have any rules, right?
+			return $ret;
+		}
+		
+		// Get the current subscription level's net worth
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->setId($state->id)
+			->getItem();
+		$net = (float)$level->price;
+		
+		// Make sure this is not a free subscription
+		if(abs($net) < 0.01)
+		{
+			return $ret;
+		}
+		
+		foreach($autoRules as $rule)
+		{
+			// Get all of the user's paid subscriptions with an expiration date
+			// in the future in the source_level_id of the rule.
+			$jNow = new JDate();
+			$user_id = JFactory::getUser()->id;
+			$subscriptions = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->savestate(0)
+				->level($rule->source_level_id)
+				->user_id($user_id)
+				->expires_from($jNow->toSql())
+				->paystate('C')
+				->filter_order('publish_down')
+				->filter_order('ASC')
+				->getItemList(true);
+
+			if (empty($subscriptions))
+			{
+				// If there are no subscriptions on this level don't bother.
+				continue;
+			}
+			
+			switch($rule->mode)
+			{
+				// Rules-based discount.
+				case 'rules':
+					$discount = $autoDiscount;
+					break;
+
+				// Fixed discount
+				case 'fixed':
+					if($rule->type == 'value')
+					{
+						$discount = (float)$rule->amount;
+					}
+					else
+					{
+						$discount = $net * (float)$rule->amount / 100;
+					}
+					break;
+
+				// Flexible subscriptions
+				case 'flexi':
+					// Translate period to days
+					switch($rule->flex_uom)
+					{
+						case 'd':
+							$modifier = 1;
+							break;
+						
+						case 'w':
+							$modifier = 7;
+							break;
+						
+						case 'm':
+							$modifier = 30;
+							break;
+						
+						case 'y':
+							$modifier = 365;
+							break;
+					}
+					$modifier = $modifier * 86400; // translate to seconds
+					
+					$period = $rule->flex_period;
+					
+					// Calculate presence
+					$remaining_seconds = 0;
+					$jNow = new JDate();
+					$now = $jNow->toUnix();
+					foreach($subscriptions as $sub)
+					{
+						if($rule->flex_timecalculation && !$sub->enabled)
+						{
+							continue;
+						}
+						
+						$jFrom = new JDate($sub->publish_up);
+						$jTo = new JDate($sub->publish_down);
+						$from = $jFrom->toUnix();
+						$to = $jTo->toUnix();
+						if($from > $now)
+						{
+							$remaining_seconds += $to - $from;
+						}
+						else
+						{
+							$remaining_seconds += $to - $now;
+						}
+					}
+					$remaining = $remaining_seconds / $modifier;
+					
+					// Check for low threshold
+					if (($rule->low_threshold > 0) && ($remaining <= $rule->low_threshold))
+					{
+						$discount = $rule->low_amount;
+					}
+					// Check for high threshold
+					elseif (($rule->high_threshold > 0) && ($remaining >= $rule->high_threshold))
+					{
+						$discount = $rule->high_amount;
+					}
+					else
+					// Calculate discount based on presence
+					{
+						// Round the quantised presence
+						switch($rule->time_rounding)
+						{
+							case 'floor':
+								$remaining = floor($remaining / $period);
+								break;
+
+							case 'ceil':
+								$remaining = ceil($remaining / $period);
+								break;
+
+							case 'round':
+								$remaining = round($remaining / $period);
+								break;
+						}
+						$discount = $rule->flex_amount * $remaining;
+					}
+
+					// Translate percentages to net values
+					if($rule->type == 'percent')
+					{
+						$discount = $net * (float)$rule->amount / 100;
+					}
+					
+					break;
+			}
+			
+			// If the current discount is greater than what we already have, use it
+			if($discount > $ret['discount'])
+			{
+				$ret['discount'] = $discount;
+				$ret['relation'] = clone $rule;
+				foreach($subscriptions as $sub)
+				{
+					// Loop until we find an enabled subscription
+					if(!$sub->enabled)
+					{
+						continue;
+					}
+					// Use that subscription and beat it
+					$ret['oldsub'] = $sub->akeebasubs_subscription_id;
+					break;
+				}
+			}
+		}
+		
 		return $ret;
 	}
 	
