@@ -744,6 +744,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'allsubs'		=> null,
 		);
 		
+		$combineret = array(
+			'discount'		=> 0,
+			'relation'		=> null,
+			'oldsub'		=> null,
+			'allsubs'		=> array(),
+		);
+		
 		// Get applicable relation rules
 		$autoRules = FOFModel::getTmpInstance('Relations','AkeebasubsModel')
 			->savestate(0)
@@ -910,8 +917,27 @@ class AkeebasubsModelSubscribes extends FOFModel
 					break;
 			}
 			
+			// Combined rule. Add to, um, the combined rules return array
+			if($rule->combine)
+			{
+				$combineret['discount'] += $discount;
+				$combineret['relation'] = clone $rule;
+				$combineret['allsubs'] = array_merge($combineret['allsubs'], $allsubs);
+				$combineret['allsubs'] = array_unique($combineret['allsubs']);
+				foreach($subscriptions as $sub)
+				{
+					// Loop until we find an enabled subscription
+					if(!$sub->enabled)
+					{
+						continue;
+					}
+					// Use that subscription and beat it
+					$combineret['oldsub'] = $sub->akeebasubs_subscription_id;
+					break;
+				}
+			}
+			elseif($discount > $ret['discount'])
 			// If the current discount is greater than what we already have, use it
-			if($discount > $ret['discount'])
 			{
 				$ret['discount'] = $discount;
 				$ret['relation'] = clone $rule;
@@ -928,6 +954,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 					break;
 				}
 			}
+		}
+		
+		// Finally, check if the combined rule trumps the currently selected
+		// rule. If it does, use it instead of the regular return array.
+		if($combineret['discount'] > $ret['discount'])
+		{
+			$ret = $combineret;
 		}
 		
 		return $ret;
