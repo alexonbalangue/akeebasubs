@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_relations` (
   `flex_timecalculation` ENUM('current','future') NOT NULL DEFAULT 'current',
   `time_rounding` ENUM('floor','ceil','round') NOT NULL DEFAULT 'round',
   `expiration` ENUM('replace','after','overlap') NOT NULL DEFAULT 'replace',
+  `combine` tinyint(3) NOT NULL DEFAULT '0',
   `enabled` tinyint(3) NOT NULL DEFAULT '0',
   `ordering` bigint(20) unsigned NOT NULL,
   `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
