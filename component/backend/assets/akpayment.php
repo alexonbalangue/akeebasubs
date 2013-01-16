@@ -122,6 +122,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		}
 		$oldsub = isset($subcustom['fixdates']['oldsub']) ? $subcustom['fixdates']['oldsub'] : null;
 		$expiration = isset($subcustom['fixdates']['expiration']) ? $subcustom['fixdates']['expiration'] : 'overlap';
+		$allsubs = isset($subcustom['fixdates']['allsubs']) ? $subcustom['fixdates']['allsubs'] : array();
 		if (isset($subcustom['fixdates']))
 		{
 			unset($subcustom['fixdates']);
@@ -210,6 +211,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		// Expiration = replace => expire old subscription
 		if ($expiration == 'replace')
 		{
+			// Disable the primary subscription used to determine the subscription date
 			$data = $oldsub->getData();
 			$newdata = array_merge($data, array(
 				'publish_down'	=> $jNow->toSql(),
@@ -220,6 +222,31 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			$table = clone $mastertable;
 			$table->reset();
 			$table->save($newdata);
+			
+			// Disable all old subscriptions
+			if (!empty($allsubs))
+			{
+				foreach($allsubs as $sub_id)
+				{
+					$table = clone $mastertable;
+					$table->load($sub_id);
+					
+					if ($table->akeebasubs_level_id == $oldsub->akeebasubs_level_id)
+					{
+						// Don't try to disable the same subscription twice
+						continue;
+					}
+					
+					$data = $table->getData();
+					$newdata = array_merge($data, array(
+						'publish_down'	=> $jNow->toSql(),
+						'enabled'		=> 0,
+						'contact_flag'	=> 3,
+						'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$subscription->akeeabsubs_subscription_id}\n"
+					));
+					$table->save($newdata);
+				}
+			}
 		}
 
 		$updates['publish_up'] = $jStart->toSql();
