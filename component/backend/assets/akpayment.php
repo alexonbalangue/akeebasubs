@@ -109,6 +109,44 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 */
 	protected function fixDates($subscription, &$updates)
 	{
+		// Take into account the subcustom->fixdates data to determine when
+		// the new subscription should start and/or expire the old subscription
+		$subcustom = $subscription->subcustom;
+		if (is_string($subcustom))
+		{
+			$subcustom = json_decode($subcustom, true);
+		}
+		elseif (is_object($subcustom))
+		{
+			$subcustom = (array)$subcustom;
+		}
+		$oldsub = isset($subcustom['fixdates']['oldsub']) ? $subcustom['fixdates']['oldsub'] : null;
+		$expiration = isset($subcustom['fixdates']['expiration']) ? $subcustom['fixdates']['expiration'] : 'overlap';
+		if (isset($subcustom['fixdates']))
+		{
+			unset($subcustom['fixdates']);
+		}
+		
+		if (is_numeric($oldsub))
+		{
+			$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->getItem($oldsub);
+			if($sub->akeebasubs_subscription_id == $oldsub)
+			{
+				$oldsub = $sub;
+			}
+			else
+			{
+				$oldsub = null;
+				$expiration = 'overlap';
+			}
+		}
+		else
+		{
+			$oldsub = null;
+			$expiration = 'overlap';
+		}
+		
 		// Fix the starting date if the payment was accepted after the subscription's start date. This
 		// works around the case where someone pays by e-Check on January 1st and the check is cleared
 		// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
@@ -126,6 +164,22 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$now = $jNow->toUnix();
 		$start = $jStart->toUnix();
 		$end = $jEnd->toUnix();
+		if (is_null($oldsub))
+		{
+			$oldsubstart = $now;
+		}
+		else
+		{
+			if(!preg_match($regex, $oldsub->publish_down))
+			{
+				$oldsubstart = $now;
+			}
+			else
+			{
+				$jOldsubstart = new JDate($oldsub->publish_down);
+				$oldsubstart = $jOldsubstart->toUnix();
+			}
+		}
 
 		if($start < $now) {
 			if($end >= 2145916800) {
@@ -134,16 +188,39 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			} else {
 				// Regular subscription
 				$duration = $end - $start;
-				$start = $now;
+				// Expiration = after => start date = end date of old sub
+				if ($expiration == 'after')
+				{
+					$start = $oldsubstart;
+				}
+				// Expiration != after => start date = now
+				else
+				{
+					$start = $now;
+				}
+				
 				$end = $start + $duration;
 			}
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
 		}
+		
+		// Expiration = replace => expire old subscription
+		if ($expiration == 'replace')
+		{
+			$oldupdates = array(
+				'publish_down'	=> $jNow->toSql(),
+				'enabled'		=> 0,
+				'contact_flag'	=> 3,
+				'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$subscription->akeeabsubs_subscription_id}\n"
+			);
+			$oldsub->save($oldupdates);
+		}
 
 		$updates['publish_up'] = $jStart->toSql();
 		$updates['publish_down'] = $jEnd->toSql();
 		$updates['enabled'] = 1;
+		$updates['subcustom'] = json_encode($subcustom);
 	}
 	
 	/**
