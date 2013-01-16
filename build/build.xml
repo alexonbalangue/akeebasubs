@@ -35,9 +35,8 @@
 		<include name="strapper/**" />
 		<include name="*" />
 
-		<exclude name="backend/controllers/relations/**" />
-		<exclude name="backend/models/relations/**" />
 		<exclude name="backend/views/relations/**" />
+		<exclude name="backend/views/relation/**" />
 	</fileset>
 
 	<fileset dir="${dirs.component}" id="component">

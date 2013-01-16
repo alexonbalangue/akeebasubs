@@ -536,6 +536,64 @@ class AkeebasubsHelperSelect
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
 	
+	/**
+	 * Drop down list of subscription level relation modes
+	 */
+	public static function relationmode($name = 'mode', $selected = 'rules', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','rules',JText::_('COM_AKEEBASUBS_RELATIONS_MODE_RULES'));
+		$options[] = JHTML::_('select.option','fixed',JText::_('COM_AKEEBASUBS_RELATIONS_MODE_FIXED'));
+		$options[] = JHTML::_('select.option','flexi',JText::_('COM_AKEEBASUBS_RELATIONS_MODE_FLEXI'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
+	public static function flexiperioduoms($name = 'flex_uom', $selected = 'rules', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','d',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_UOM_D'));
+		$options[] = JHTML::_('select.option','w',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_UOM_W'));
+		$options[] = JHTML::_('select.option','m',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_UOM_M'));
+		$options[] = JHTML::_('select.option','y',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_UOM_Y'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
+	public static function flexitimecalc($name = 'flex_timecalculation', $selected = 'current', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','current',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMECALCULATION_CURRENT'));
+		$options[] = JHTML::_('select.option','future',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMECALCULATION_FUTURE'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
+	public static function flexirounding($name = 'flex_rounding', $selected = 'round', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','floor',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMEROUNDING_FLOOR'));
+		$options[] = JHTML::_('select.option','ceil',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMEROUNDING_CEIL'));
+		$options[] = JHTML::_('select.option','round',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMEROUNDING_ROUND'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
+	public static function flexiexpiration($name = 'expiration', $selected = 'replace', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		$options[] = JHTML::_('select.option','replace',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_EXPIRATION_REPLACE'));
+		$options[] = JHTML::_('select.option','after',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_EXPIRATION_AFTER'));
+		$options[] = JHTML::_('select.option','overlap',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_EXPIRATION_OVERLAP'));
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+	
 }
 
 // Load the states from the database
