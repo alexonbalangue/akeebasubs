@@ -14,12 +14,32 @@ class AkeebasubsToolbar extends FOFToolbar
 	{
 		$views = array(
 			'cpanel',
-			'COM_AKEEBASUBS_MAINMENU_SETUP' => array('levelgroups', 'levels', 'customfields', 'upgrades', 'taxconfigs', 'taxrules', 'states'),
+			'COM_AKEEBASUBS_MAINMENU_SETUP' => array(
+				'levels',
+				'customfields',
+				'levelgroups',
+				'relations',
+				'upgrades',
+				'taxconfigs',
+				'taxrules',
+				'states'
+			),
 			'subscriptions',
 			'coupons',
-			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array('affiliates', 'affpayments'),
-			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array('tools', 'users'),
+			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array(
+				'affiliates',
+				'affpayments'
+			),
+			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array(
+				'tools',
+				'users'
+			),
 		);
+
+		if(!AKEEBASUBS_PRO)
+		{
+			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP']['relations']);
+		}
 		
 		foreach($views as $label => $view) {
 			if(!is_array($view)) {

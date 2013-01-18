@@ -80,6 +80,7 @@
 			<folder>assets</folder>
 			<folder>controllers</folder>
 			<folder>converter</folder>
+			<folder>fields</folder>
 			<folder>fof</folder>
 			<folder>helpers</folder>
 			<folder>liveupdate</folder>

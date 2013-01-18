@@ -419,106 +419,126 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 */
 	private function _validatePrice()
 	{
-		$state = $this->getStateVariables();
+		static $result = null;
 		
-		// Get the default price value
-		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($state->id)
-			->getItem();
-		$netPrice = (float)$level->price;
-		
-		// Net price modifiers (via plugins)
-		$price_modifier = 0;
-		jimport('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akeebasubs');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array($state));
-		if(is_array($jResponse) && !empty($jResponse)) {
-			foreach($jResponse as $pluginResponse) {
-				if(empty($pluginResponse)) continue;
-				$price_modifier += $pluginResponse;
-			}
-		}
-		$netPrice += $price_modifier;
+		if(is_null($result))
+		{
 
-		// Coupon discount
-		$couponDiscount = 0;
-		$validCoupon = $this->_validateCoupon(false);
-		
-		$couponDiscount = 0;
-		if($validCoupon) {
-			$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
-				->coupon(strtoupper($state->coupon))
-				->getFirstItem();
-			
-			$this->_coupon_id = $coupon->akeebasubs_coupon_id;
-			
-			switch($coupon->type) {
-				case 'value':
-					$couponDiscount = (float)$coupon->value;
-					if($couponDiscount > $netPrice) $couponDiscount = $netPrice;
-					if($couponDiscount <= 0) $couponDiscount = 0;
-					break;
-					
-				case 'percent':
-					$percent = (float)$coupon->value / 100.0;
-					if( $percent <= 0 ) $percent = 0;
-					if( $percent > 1 ) $percent = 1;
-					$couponDiscount = $percent * $netPrice;
-					break;
+			$state = $this->getStateVariables();
+
+			// Get the default price value
+			$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->setId($state->id)
+				->getItem();
+			$netPrice = (float)$level->price;
+
+			// Net price modifiers (via plugins)
+			$price_modifier = 0;
+			jimport('joomla.plugin.helper');
+			JPluginHelper::importPlugin('akeebasubs');
+			$app = JFactory::getApplication();
+			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array($state));
+			if(is_array($jResponse) && !empty($jResponse)) {
+				foreach($jResponse as $pluginResponse) {
+					if(empty($pluginResponse)) continue;
+					$price_modifier += $pluginResponse;
+				}
 			}
-		} else {
-			$this->_coupon_id = null;
-		}
-		
-		// Upgrades (auto-rule) validation
-		$autoDiscount = 0;
-		$autoDiscount = $this->_getAutoDiscount();
-		
-		$useCoupon = false;
-		$useAuto = false;
-		if($validCoupon) {
-			if($autoDiscount > $couponDiscount) {
+			$netPrice += $price_modifier;
+
+			// Coupon discount
+			$couponDiscount = 0;
+			$validCoupon = $this->_validateCoupon(false);
+
+			$couponDiscount = 0;
+			if($validCoupon) {
+				$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+					->coupon(strtoupper($state->coupon))
+					->getFirstItem();
+
+				$this->_coupon_id = $coupon->akeebasubs_coupon_id;
+
+				switch($coupon->type) {
+					case 'value':
+						$couponDiscount = (float)$coupon->value;
+						if($couponDiscount > $netPrice) $couponDiscount = $netPrice;
+						if($couponDiscount <= 0) $couponDiscount = 0;
+						break;
+
+					case 'percent':
+						$percent = (float)$coupon->value / 100.0;
+						if( $percent <= 0 ) $percent = 0;
+						if( $percent > 1 ) $percent = 1;
+						$couponDiscount = $percent * $netPrice;
+						break;
+				}
+			} else {
+				$this->_coupon_id = null;
+			}
+
+			// Upgrades (auto-rule) validation
+			$autoDiscount = 0;
+			$discountStructure = $this->_getAutoDiscount();
+			$autoDiscount = $discountStructure['discount'];
+
+			// Should I use the coupon code or the automatic discount?
+			$useCoupon = false;
+			$useAuto = false;
+			if($validCoupon) {
+				if($autoDiscount > $couponDiscount) {
+					$discount = $autoDiscount;
+					$useAuto = true;
+					$this->_coupon_id = null;
+				} else {
+					$discount = $couponDiscount;
+					$useCoupon = true;
+					$this->_upgrade_id = null;
+				}	
+			} else {
+				$this->_coupon_id = null;
 				$discount = $autoDiscount;
 				$useAuto = true;
-				$this->_coupon_id = null;
-			} else {
-				$discount = $couponDiscount;
-				$useCoupon = true;
-				$this->_upgrade_id = null;
-			}	
-		} else {
-			$this->_coupon_id = null;
-			$discount = $autoDiscount;
-			$useAuto = true;
+			}
+
+			$discount = $useCoupon ? $couponDiscount : $autoDiscount;
+			$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
+			$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
+
+			// If we are not using the automatic discount, make sure the oldsub
+			// and expiration fields are reset
+			if (!$useAuto)
+			{
+				$discountStructure['oldsub'] = null;
+				$discountStructure['expiration'] = 'overlap';
+			}
+
+			// Get the applicable tax rule
+			$taxRule = $this->_getTaxRule();
+
+			// Calculate the base price minimising rounding errors
+			$basePrice = 0.01 * (100*$netPrice - 100*$discount);
+			// Calculate the tax amount minimising rounding errors
+			$taxAmount = 0.01 * ($taxRule->taxrate * $basePrice);
+			// Calculate the gross amount minimising rounding errors
+			$grossAmount = 0.01 * (100*$basePrice + 100*$taxAmount);
+
+			$result = (object)array(
+				'net'		=> sprintf('%1.02F',$netPrice),
+				'discount'	=> sprintf('%1.02F',$discount),
+				'taxrate'	=> sprintf('%1.02F',(float)$taxRule->taxrate),
+				'tax'		=> sprintf('%1.02F',$taxAmount),
+				//'gross'		=> sprintf('%1.02F',$grossAmount),
+				'gross'		=> sprintf('%1.02F', round($grossAmount, 2)),
+				'usecoupon'	=> $useCoupon ? 1 : 0,
+				'useauto'	=> $useAuto ? 1 : 0,
+				'couponid'	=> $couponid,
+				'upgradeid'	=> $upgradeid,
+				'oldsub'	=> $discountStructure['oldsub'],
+				'expiration'=> $discountStructure['expiration'],
+			);
 		}
 		
-		$discount = $useCoupon ? $couponDiscount : $autoDiscount;
-		$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
-		$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
-
-		// Get the applicable tax rule
-		$taxRule = $this->_getTaxRule();
-		
-		// Calculate the base price minimising rounding errors
-		$basePrice = 0.01 * (100*$netPrice - 100*$discount);
-		// Calculate the tax amount minimising rounding errors
-		$taxAmount = 0.01 * ($taxRule->taxrate * $basePrice);
-		// Calculate the gross amount minimising rounding errors
-		$grossAmount = 0.01 * (100*$basePrice + 100*$taxAmount);
-		
-		return (object)array(
-			'net'		=> sprintf('%1.02F',$netPrice),
-			'discount'	=> sprintf('%1.02F',$discount),
-			'taxrate'	=> sprintf('%1.02F',(float)$taxRule->taxrate),
-			'tax'		=> sprintf('%1.02F',$taxAmount),
-			//'gross'		=> sprintf('%1.02F',$grossAmount),
-			'gross'		=> sprintf('%1.02F', round($grossAmount, 2)),
-			'usecoupon'	=> $useCoupon ? 1 : 0,
-			'useauto'	=> $useAuto ? 1 : 0,
-			'couponid'	=> $couponid,
-			'upgradeid'	=> $upgradeid
-		);
+		return $result;
 	}
 	
 	/**
@@ -633,12 +653,326 @@ class AkeebasubsModelSubscribes extends FOFModel
 	}
 	
 	/**
-	 * Loads any relevant upgrade (auto discount) rules and returns the max
-	 * discount possible under those rules.
+	 * Loads any relevant auto discount (upgrade rules or discount) and returns
+	 * the max discount possible under those rules, as well as related
+	 * information in subscription expiration and so on.
 	 *
 	 * @return array Discount type and value
 	 */
 	private function _getAutoDiscount()
+	{
+		// Get the automatic discount based on upgrade rules
+		$autoDiscount = $this->_getUpgradeRule();
+		
+		// Initialise the return value
+		$ret = array(
+			'discount'		=> $autoDiscount,	// discount amount
+			'expiration'	=> 'overlap',		// old subscription expiration mode
+			'allsubs'		=> null,			// all old subscription ids
+			'oldsub'		=> null,			// old subscription id
+		);
+		
+		// Check if we have a valid subscription level and user
+		if (!JFactory::getUser()->guest)
+		{
+			$relationData = $this->_getLevelRelation($autoDiscount);
+			// Check that a relation row is relevant
+			if (!is_null($relationData['relation']))
+			{
+				// Non-rule-based relation discount
+				if($relationData['relation']->mode != 'rules')
+				{
+					// Get the discount from the levels relation and make sure it's greater than the rule-based discount
+					$relDiscount = $relationData['discount'];
+					if ($relDiscount > $autoDiscount)
+					{
+						// yes, it's greated than the upgrade rule-based discount. Use it.
+						$ret['discount'] = $relDiscount;
+						$ret['expiration'] = $relationData['relation']->expiration;
+						$ret['oldsub'] = $relationData['oldsub'];
+						$ret['allsubs'] = $relationData['allsubs'];
+						$this->_upgrade_id = null;
+					}
+				}
+				// Rule-based relation discount
+				else
+				{
+					$ret['discount'] = $relDiscount;
+					$ret['expiration'] = $relationData['relation']->expiration;
+					$ret['oldsub'] = $relationData['oldsub'];
+					$ret['allsubs'] = $relationData['allsubs'];
+					$this->_upgrade_id = null;
+				}
+			}
+		}
+		
+		// Finally, return the structure
+		return $ret;
+	}
+	
+	/**
+	 * Gets the applicable subscription level relation rule applicable for this 
+	 * subscription attempt.
+	 * 
+	 * @return  array  Hash array. discount is the value of the discount,
+	 *                 relation is a copy of the relation row, oldsub is the id
+	 *                 of the old subscription on which the relation row was
+	 *                 applied against.
+	 */
+	private function _getLevelRelation($autoDiscount)
+	{
+		$state = $this->getStateVariables();
+		
+		// Get the id from the slug if it's not present
+		if($state->slug && empty($state->id)) {
+			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			 if(!empty($list)) {
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			 } else {
+				$state->id = 0;
+			 }
+		}
+		
+		// Initialise the return array
+		$ret = array(
+			'discount'		=> 0,
+			'relation'		=> null,
+			'oldsub'		=> null,
+			'allsubs'		=> null,
+		);
+		
+		$combineret = array(
+			'discount'		=> 0,
+			'relation'		=> null,
+			'oldsub'		=> null,
+			'allsubs'		=> array(),
+		);
+		
+		// Get applicable relation rules
+		$autoRules = FOFModel::getTmpInstance('Relations','AkeebasubsModel')
+			->savestate(0)
+			->target_level_id($state->id)
+			->enabled(1)
+			->limit(0)
+			->limitstart(0)
+			->getItemList();
+		
+		if (empty($autoRules))
+		{
+			// No point continuing if we don't have any rules, right?
+			return $ret;
+		}
+		
+		// Get the current subscription level's net worth
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->setId($state->id)
+			->getItem();
+		$net = (float)$level->price;
+		
+		// Make sure this is not a free subscription
+		if(abs($net) < 0.01)
+		{
+			return $ret;
+		}
+		
+		foreach($autoRules as $rule)
+		{
+			// Get all of the user's paid subscriptions with an expiration date
+			// in the future in the source_level_id of the rule.
+			$jNow = new JDate();
+			$user_id = JFactory::getUser()->id;
+			$subscriptions = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->savestate(0)
+				->level($rule->source_level_id)
+				->user_id($user_id)
+				->expires_from($jNow->toSql())
+				->paystate('C')
+				->filter_order('publish_down')
+				->filter_order('ASC')
+				->getItemList(true);
+
+			if (empty($subscriptions))
+			{
+				// If there are no subscriptions on this level don't bother.
+				continue;
+			}
+			
+			$allsubs = array();
+			foreach($subscriptions as $sub)
+			{
+				$allsubs[] = $sub->akeebasubs_level_id;
+			}
+			reset($allsubs);
+			
+			switch($rule->mode)
+			{
+				// Rules-based discount.
+				case 'rules':
+					$discount = $autoDiscount;
+					break;
+
+				// Fixed discount
+				case 'fixed':
+					if($rule->type == 'value')
+					{
+						$discount = (float)$rule->amount;
+					}
+					else
+					{
+						$discount = $net * (float)$rule->amount / 100;
+					}
+					break;
+
+				// Flexible subscriptions
+				case 'flexi':
+					// Translate period to days
+					switch($rule->flex_uom)
+					{
+						case 'd':
+							$modifier = 1;
+							break;
+						
+						case 'w':
+							$modifier = 7;
+							break;
+						
+						case 'm':
+							$modifier = 30;
+							break;
+						
+						case 'y':
+							$modifier = 365;
+							break;
+					}
+					$modifier = $modifier * 86400; // translate to seconds
+					
+					$period = $rule->flex_period;
+					
+					// Calculate presence
+					$remaining_seconds = 0;
+					$jNow = new JDate();
+					$now = $jNow->toUnix();
+					foreach($subscriptions as $sub)
+					{
+						if($rule->flex_timecalculation && !$sub->enabled)
+						{
+							continue;
+						}
+						
+						$jFrom = new JDate($sub->publish_up);
+						$jTo = new JDate($sub->publish_down);
+						$from = $jFrom->toUnix();
+						$to = $jTo->toUnix();
+						if($from > $now)
+						{
+							$remaining_seconds += $to - $from;
+						}
+						else
+						{
+							$remaining_seconds += $to - $now;
+						}
+					}
+					$remaining = $remaining_seconds / $modifier;
+					
+					// Check for low threshold
+					if (($rule->low_threshold > 0) && ($remaining <= $rule->low_threshold))
+					{
+						$discount = $rule->low_amount;
+					}
+					// Check for high threshold
+					elseif (($rule->high_threshold > 0) && ($remaining >= $rule->high_threshold))
+					{
+						$discount = $rule->high_amount;
+					}
+					else
+					// Calculate discount based on presence
+					{
+						// Round the quantised presence
+						switch($rule->time_rounding)
+						{
+							case 'floor':
+								$remaining = floor($remaining / $period);
+								break;
+
+							case 'ceil':
+								$remaining = ceil($remaining / $period);
+								break;
+
+							case 'round':
+								$remaining = round($remaining / $period);
+								break;
+						}
+						$discount = $rule->flex_amount * $remaining;
+					}
+
+					// Translate percentages to net values
+					if($rule->type == 'percent')
+					{
+						$discount = $net * (float)$rule->amount / 100;
+					}
+					
+					break;
+			}
+			
+			// Combined rule. Add to, um, the combined rules return array
+			if($rule->combine)
+			{
+				$combineret['discount'] += $discount;
+				$combineret['relation'] = clone $rule;
+				$combineret['allsubs'] = array_merge($combineret['allsubs'], $allsubs);
+				$combineret['allsubs'] = array_unique($combineret['allsubs']);
+				foreach($subscriptions as $sub)
+				{
+					// Loop until we find an enabled subscription
+					if(!$sub->enabled)
+					{
+						continue;
+					}
+					// Use that subscription and beat it
+					$combineret['oldsub'] = $sub->akeebasubs_subscription_id;
+					break;
+				}
+			}
+			elseif($discount > $ret['discount'])
+			// If the current discount is greater than what we already have, use it
+			{
+				$ret['discount'] = $discount;
+				$ret['relation'] = clone $rule;
+				$ret['allsubs'] = $allsubs;
+				foreach($subscriptions as $sub)
+				{
+					// Loop until we find an enabled subscription
+					if(!$sub->enabled)
+					{
+						continue;
+					}
+					// Use that subscription and beat it
+					$ret['oldsub'] = $sub->akeebasubs_subscription_id;
+					break;
+				}
+			}
+		}
+		
+		// Finally, check if the combined rule trumps the currently selected
+		// rule. If it does, use it instead of the regular return array.
+		if($combineret['discount'] > $ret['discount'])
+		{
+			$ret = $combineret;
+		}
+		
+		return $ret;
+	}
+	
+	/**
+	 * Loads any relevant upgrade rules and returns the max discount possible
+	 * under those rules.
+	 *
+	 * @return float Discount amount
+	 */
+	private function _getUpgradeRule()
 	{
 		$state = $this->getStateVariables();
 		
@@ -1388,8 +1722,28 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$aff_comission = $validation->price->net * $affiliate->comission / 100;
 		}
 		
-		$custom_subscription_params = json_encode($state->subcustom);
+		// Store the price validation's "oldsub" and "expiration" keys in
+		// the subscriptions subcustom array
+		$subcustom = $state->subcustom;
+		if (empty($subcustom))
+		{
+			$subcustom = array();
+		}
+		elseif (is_object($subcustom))
+		{
+			$subcustom = (array)$subcustom;
+		}
+		$priceValidation = $this->_validatePrice();
+		$subcustom['fixdates'] = array(
+			'oldsub'		=> $priceValidation->oldsub,
+			'allsubs'		=> $priceValidation->allsubs,
+			'expiration'	=> $priceValidation->expiration,
+		);
 		
+		// Serialise custom subscription parameters
+		$custom_subscription_params = json_encode($subcustom);
+		
+		// Setup the new subscription
 		$data = array(
 			'akeebasubs_subscription_id' => null,
 			'user_id'				=> $user->id,

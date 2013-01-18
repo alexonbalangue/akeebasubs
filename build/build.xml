@@ -26,6 +26,19 @@
 	====================================================================================================
 	-->
 	
+	<fileset dir="${dirs.component}" id="componentcore">
+		<include name="backend/**" />
+		<include name="fof/**" />
+		<include name="frontend/**" />
+		<include name="language/**" />
+		<include name="media/**" />
+		<include name="strapper/**" />
+		<include name="*" />
+
+		<exclude name="backend/views/relations/**" />
+		<exclude name="backend/views/relation/**" />
+	</fileset>
+
 	<fileset dir="${dirs.component}" id="component">
 		<include name="backend/**" />
 		<include name="cli/**" />
@@ -107,6 +120,7 @@
 			</filterchain>
 		</copy>
 		
+		<!-- CORE -->
 		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
@@ -117,19 +131,46 @@
 			</filterchain>
 		</copy>
 		
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
-			<fileset refid="component" />
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
+			<fileset refid="componentcore" />
 		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
 			<fileset dir="${dirs.modules}">
 				<include name="**"/>
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
 			</fileset>
 		</zipme>
+		
+		<!-- PRO -->
+		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="PRO" value="1" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
+			<fileset refid="componentcore" />
+		</zipme>
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
+			<fileset dir="${dirs.modules}">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
+			<fileset dir="${dirs.plugins}">
+				<include name="**"/>
+			</fileset>
+		</zipme>
+
+
 	</target>
 	
 	<!--

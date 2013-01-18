@@ -1501,8 +1501,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
     <section xml:id="subscription-levels">
       <title>Subscription Levels</title>
 
-      <para>You can access this feature by clicking on <guilabel>Subscription
-      Levels</guilabel> in the toolbar links area.</para>
+      <para>You can access this feature by clicking on
+      <guimenu>Setup</guimenu>, <guimenuitem>Subscription Levels</guimenuitem>
+      in the toolbar links area.</para>
 
       <para>Creating or editing a Subscription Level, you have these
       options:</para>
@@ -2101,8 +2102,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
     <section xml:id="tax-rules">
       <title>Tax Rules</title>
 
-      <para>You can access this feature by clicking on <guilabel>Tax
-      Rules</guilabel> in the toolbar links area.</para>
+      <para>You can access this feature by clicking on
+      <guimenu>Setup</guimenu>, <guimenuitem>Tax Rules</guimenuitem>
+      <guilabel>Tax Rules</guilabel> in the toolbar links area.</para>
 
       <para>Out of the box, Akeeba Subscriptions is set up to not apply any
       VAT or other tax at all. However, this is not what most users would
@@ -2309,7 +2311,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <title>Upgrade Rules</title>
 
       <para>You can access this feature by clicking on
-      <guilabel>Upgrades</guilabel> in the toolbar links area.</para>
+      <guimenu>Setup</guimenu>, <guimenuitem>Upgrades</guimenuitem> in the
+      toolbar links area.</para>
 
       <para>This feature allows you to create automatically applied discount
       rules to reward your loyal customers by giving them a discount. If you
@@ -2484,6 +2487,53 @@ Rule C gives $ 30 discount</programlisting>
       only to subscribers who have already bought a SUB1 and SUB2 subscription
       using the Restricted Content plugin bundled with Akeeba
       Subscriptions.</para>
+    </section>
+
+    <section xml:id="subscription-level-relations">
+      <title>Subscription Level Relations</title>
+
+      <important>
+        <para>This feature is only available in the for-a-fee Akeeba
+        Subscriptions Professional edition of the component. It is NOT
+        available in the free of charge Akeeba Subscriptions Core
+        editions.</para>
+      </important>
+
+      <para>You can access this feature by clicking on
+      <guimenu>Setup</guimenu>, <guimenuitem>Subscription Level
+      Relations</guimenuitem> in the toolbar links area.</para>
+
+      <para>This feature allows you to create more fine-tuned subscription
+      level relations than Upgrade Rules, covering areas of business policy
+      that would otherwise be unenforceable. It can cover cases like:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>upgrading between subscriptions with the same access but
+          different lengths, e.g. between one month, six month and yearly
+          subscription levels.</para>
+        </listitem>
+
+        <listitem>
+          <para>upgrading between subscriptions, e.g. when you have Apples,
+          Oranges and Fruit Salad subscription levels it allows you to upgrade
+          from Apples or Oranges to Fruit Salad, disabling the subscriptions
+          in the Apples and Oranges levels in the process</para>
+        </listitem>
+
+        <listitem>
+          <para>giving flexible discounts, based on how much subscription time
+          remains on a user's existing subscription. This allows you to give a
+          different discount to somebody who has one month left and a
+          different discount to somebody who has six months left in his
+          subscription, using one rule (instead of several you'd need with the
+          regular Upgrade Rules)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para/>
+
+      <para/>
     </section>
 
     <section xml:id="coupons">
@@ -9500,7 +9550,7 @@ LEVEL3=Group 1</programlisting>
         </note>
 
         <para>This integration plugin allows you to add Google Analytics
-        Commerce tracking to your Akeeba Subscriptions sales. </para>
+        Commerce tracking to your Akeeba Subscriptions sales.</para>
 
         <para>The plugin has these options:</para>
 
@@ -9524,7 +9574,7 @@ LEVEL3=Group 1</programlisting>
         </variablelist>
       </section>
 
-      <section xml:id="integration-acymailing">
+      <section xml:id="integration-ganalytics-commerce">
         <title>Google Analytics Commerce integration</title>
 
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
