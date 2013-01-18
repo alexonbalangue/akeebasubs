@@ -61,7 +61,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			'CANCELURL'							=> $cancelUrl,
 			'PAYMENTREQUEST_0_AMT'				=> $amount,
 			'PAYMENTREQUEST_0_TAXAMT'			=> sprintf('%.2f',$subscription->tax_amount),
-			'PAYMENTREQUEST_0_ITEMAMT'			=> $amount,
+			'PAYMENTREQUEST_0_ITEMAMT'			=> sprintf('%.2f',$subscription->net_amount),
 			'PAYMENTREQUEST_0_PAYMENTACTION'	=> 'Sale',
 			'PAYMENTREQUEST_0_CURRENCYCODE'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'L_PAYMENTREQUEST_0_NAME0'			=> $level->title,
