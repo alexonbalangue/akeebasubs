@@ -239,18 +239,17 @@
 	<target name="docsdeploy">
 		<!-- English manual -->
 		<echo>Uploading Akeeba Subscriptions documentation</echo>
-		<scp
-			host="${scp.host}"
-			port="${scp.port}"
-			username="${scp.username}"
-			password="${scp.password}"
-			dir="${scp.dir.docs}/akeeba-subscriptions"
-			autocreate="true"
+		<ftpdeploy
+			host="${ftp.host}"
+			port="${ftp.port}"
+			username="${ftp.username}"
+			password="${ftp.password}"
+			dir="${ftp.dir.docs}/akeeba-subscriptions"
 			level="debug">
 			<fileset dir="${dirs.documentation}">
 				<include name="*.xml"/>
 			</fileset>
-		</scp>
+		</ftpdeploy>
 	</target>
 	
 	<target name="deployall" depends="ftpdeploy,lang,docsdeploy">

@@ -2496,12 +2496,8 @@ Rule C gives $ 30 discount</programlisting>
         <para>This feature is only available in the for-a-fee Akeeba
         Subscriptions Professional edition of the component. It is NOT
         available in the free of charge Akeeba Subscriptions Core
-        editions.</para>
+        edition.</para>
       </important>
-
-      <para>You can access this feature by clicking on
-      <guimenu>Setup</guimenu>, <guimenuitem>Subscription Level
-      Relations</guimenuitem> in the toolbar links area.</para>
 
       <para>This feature allows you to create more fine-tuned subscription
       level relations than Upgrade Rules, covering areas of business policy
@@ -2531,9 +2527,393 @@ Rule C gives $ 30 discount</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para/>
+      <para>The key differences from upgrade rules are:</para>
 
-      <para/>
+      <itemizedlist>
+        <listitem>
+          <para>Flexible discounts with one relation entry. You can tell
+          Akeeba Subscriptions how much discount to give every X amount of
+          time left in a subscription instead of creating dozens of Upgrade
+          Rules.</para>
+        </listitem>
+
+        <listitem>
+          <para>Control the start and end of subscriptions. With Upgrade Rules
+          you only get to give a discount. The previously active subscription
+          remains active and the new subscription is always immediately
+          activated. With relations you can give an optional discount. What is
+          more important is that you can choose the old subscription to be
+          immediately expired (therefore your subscribers not getting update
+          emails for it) or have the new subscription become active when the
+          old one expires (think about the case of buying a 3 month
+          subscription when a 1 month subscription is already active).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>You can access this feature by clicking on
+      <guimenu>Setup</guimenu>, <guimenuitem>Subscription Level
+      Relations</guimenuitem> in the toolbar links area.</para>
+
+      <para>The <guilabel>Basic options</guilabel> you have on each
+      Subscription Level Relation are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>From Level</term>
+
+          <listitem>
+            <para>In order for this relation to be applied, the user must have
+            at least one paid for subscription in this Subscription Level,
+            with a Valid To date in the future.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>To Level</term>
+
+          <listitem>
+            <para>In order for this relation to be applied, the user must be
+            trying to buy a subscription in this Subscription Level.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Discount Mode</term>
+
+          <listitem>
+            <para>There are three types of discounts which can be applied by a
+            Subscription Level Relation:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><emphasis role="bold">Use Upgrade Rules</emphasis>. The
+                discount to be applied is controlled by Upgrade Rules. This is
+                useful when you are satisfied with the automatic discount
+                given by Upgrade Rules and all you want is to control the
+                subscription expiration (see further down).</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Fixed Discount</emphasis>. A fixed
+                discount will be given to users upgrading from the
+                <guilabel>From Level</guilabel> to the <guilabel>To
+                Level</guilabel>.</para>
+              </listitem>
+
+              <listitem>
+                <para><emphasis role="bold">Flexible Discount</emphasis>. The
+                discount will be calculated based on how much subscription
+                time the user has left in his existing subscription in the
+                <guilabel>From Level</guilabel>.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>The fields you see on the right hand of the page depend on
+            your selection here.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Discount Type</term>
+
+          <listitem>
+            <para>You can choose between <option>Value</option> (deduct X from
+            the price) and <option>Percent</option> (deduct X% from the
+            price). This works in conjunction with all value fields, depending
+            on the Discount Mode you're using.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Subscription expiration handling</term>
+
+          <listitem>
+            <para>This controls the way Akeeba Subscriptions handles the
+            expiration of old subscriptions and the activation of the new
+            subscription. In this context, old subscriptions are successfully
+            paid subscriptions in the <guilabel>From Level</guilabel>
+            subscription level with a Valid To date in the future. New
+            subscription is the subscription which is being created in the
+            <guilabel>To Level</guilabel> subscription level. The options you
+            have are:</para>
+
+            <variablelist>
+              <varlistentry>
+                <term>Replace</term>
+
+                <listitem>
+                  <para>Upon successful payment of the new subscription, the
+                  old subscriptions are immediately expired. The new
+                  subscription becomes active immediately. Use it when the To
+                  Level is an upgrade to the From Level, e.g. from a Silver to
+                  a Gold subscription.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>Extend</term>
+
+                <listitem>
+                  <para>The old subscriptions are left intact. The new
+                  subscription does not become active immediately. Its Valid
+                  From date is set to be the same as the Valid To date of the
+                  currently active old subscription. Use it when the To Level
+                  provides the same access as the From Level with a different
+                  duration, e.g. a 3 month and a 6 month subscription
+                  level.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>Overlap</term>
+
+                <listitem>
+                  <para>The old subscriptions are left intact. The new
+                  subscription becomes active immediately. Both subscriptions
+                  run in parallel. This is the same behaviour as when using
+                  Upgrade Rules.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Combine with other rules</term>
+
+          <listitem>
+            <para>Normally, Akeeba Subscriptions selects the Subscription
+            Level Relation which gives the biggest discount and that's what it
+            will use. When this option is enabled, Akeeba Subscriptions will
+            combine the discount given by all applicable Level Relation rules
+            which have "Combine with other rules" enabled and apply them all
+            together. This is useful when you have, for example, a Bronze to
+            Gold and a Silver to Gold relation, the user has booth a Bronze
+            and Silver subscription and by upgrading to Gold you want to give
+            him a combined discount.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Published</term>
+
+          <listitem>
+            <para>Set to Yes to activate this subscription level
+            relation.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>Depending on which Discount Mode you have selected, on the right
+      hand side you will see one of the following sections. Please note that
+      if you chose Use Upgrade Rules then there is nothing displayed on the
+      right hand side of the page.</para>
+
+      <para>If you selected the Fixed Discount mode you will see this
+      field:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Discount Amount</term>
+
+          <listitem>
+            <para>The discount amount which will always be given. Please note
+            that this field respects the <guilabel>Discount Type</guilabel>
+            option. If you chose <option>Percent</option>, you have to enter a
+            number 0-100 in here (decimals, like 22.5) are allowed. If you
+            chose <option>Value</option> enter the amount to be directly
+            deducted from the price.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>On the other hand, if you selected the Flexible Discount you will
+      see several fields. Remember that this mode will calculate the discount
+      amount based on the remaining subscription time in the user's old
+      subscriptions. The following options will allow you to define how that
+      time is calculated and how much discount to give to your user.</para>
+
+      <para><variablelist>
+          <varlistentry>
+            <term>Flexible discount</term>
+
+            <listitem>
+              <para>You have three fields. The concept is that you give X
+              amount of discount for every Y days / weeks / months / years of
+              remaining subscription time.</para>
+
+              <para>So, the first field defines how much that X amount of
+              flexible discount is. Please note that this field respects the
+              <guilabel>Discount Type</guilabel> option. If you chose
+              <option>Percent</option>, you have to enter a number 0-100 in
+              here (decimals, like 22.5) are allowed. If you chose
+              <option>Value</option> enter the amount to be directly deducted
+              from the price.</para>
+
+              <para>The next two fields are the "period quantiser" of the
+              remaining subscription time. They let you define what Y is. You
+              can choose to enter the period in days, weeks (understood as 7
+              days), months (understood as 30 days) or years (understood as
+              365 days). So, 2 months is equivalent to choosing 60 days. For
+              every this much of remaining subscription time the user will get
+              X discount.</para>
+
+              <para>This is easier to understand with an example. Let's say
+              that you select to give 1€ of discount every 10 days. If your
+              subscriber has 40 days of subscription time left he will be
+              given a discount of 4€. That's 40 days, divided by 10 days (your
+              Y value), multiplied by 1€ (your X value).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Low threshold fixed discount</term>
+
+            <listitem>
+              <para>Sometimes you want to give a fixed discount if the
+              remaining time is below a certain amolimitunt. In these fields
+              you can select how much discount to give if the subscription
+              time remaining is less than a specific limit.</para>
+
+              <para>The first field is your fixed discount. Please note that
+              this field respects the <guilabel>Discount Type</guilabel>
+              option. If you chose <option>Percent</option>, you have to enter
+              a number 0-100 in here (decimals, like 22.5) are allowed. If you
+              chose <option>Value</option> enter the amount to be directly
+              deducted from the price.</para>
+
+              <para>The second field is the amount of time below which this
+              Low Threshold Fixed Discount is applied. It uses the same units
+              you selected in the last Flexible Discount field above.</para>
+
+              <para>For example, if the Flexible Discount is 1€ of discount
+              every 10 days and selecting to give 3€ of discount if there are
+              less than 30 days of subscription time left you will have the
+              following result. If your subscriber has 40 days of subscription
+              time left, he will be give a 4€ discount as explained in the
+              Flexible Discount field above. If he has 25 days, he will be
+              given a 3€ discount. Why? Because his remaining time (25 days)
+              is less than your low threshold (30 days), so the fixed low
+              threshold discount kicks in.</para>
+
+              <para>If you don't want to use this feature enter 0 in both
+              fields.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>High threshold fixed discount</term>
+
+            <listitem>
+              <para>Sometimes you want to give a fixed discount if the
+              remaining time is above a certain limit. In these fields you can
+              select how much discount to give if the subscription time
+              remaining is more than a specific limit.</para>
+
+              <para>The first field is your fixed discount. Please note that
+              this field respects the <guilabel>Discount Type</guilabel>
+              option. If you chose <option>Percent</option>, you have to enter
+              a number 0-100 in here (decimals, like 22.5) are allowed. If you
+              chose <option>Value</option> enter the amount to be directly
+              deducted from the price.</para>
+
+              <para>The second field is the amount of time above which this
+              High Threshold Fixed Discount is applied. It uses the same units
+              you selected in the last Flexible Discount field above.</para>
+
+              <para>For example, if the Flexible Discount is 1€ of discount
+              every 10 days and selecting to give 5€ of discount if there are
+              more than 50 days of subscription time left you will have the
+              following result. If your subscriber has 40 days of subscription
+              time left, he will be give a 4€ discount as explained in the
+              Flexible Discount field above. If he has 120 days, he will be
+              given a 5€ discount. Why? Because his remaining time (120 days)
+              is more than your high threshold (50 days), so the fixed high
+              threshold discount kicks in.</para>
+
+              <para>If you don't want to use this feature enter 0 in both
+              fields.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remaining subscription time calculation</term>
+
+            <listitem>
+              <para>Akeeba Subscriptions need to calculate the remaining
+              subscription time so that it can apply the Flexible Discount.
+              This option controls how this remaining subscription time will
+              be calculated. You have two options:</para>
+
+              <variablelist>
+                <varlistentry>
+                  <term>Use only the currently active subscription</term>
+
+                  <listitem>
+                    <para>Only the currently active (enabled) subscription in
+                    the From Level will be taken into account.</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>Currently active subscription and renewals</term>
+
+                  <listitem>
+                    <para>The currently active (enabled) subscription in the
+                    From Level and all paid (but not yet enabled)
+                    subscriptions in the From Level with a Valid To date in
+                    the future will be taken into account.</para>
+                  </listitem>
+                </varlistentry>
+              </variablelist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Remaining subscription time rounding</term>
+
+            <listitem>
+              <para>Let's say that your subscriber has 43 days of subscription
+              time and you want to give 1€ of discount every 10 days. How much
+              discount should you give that user? 4€? 5€? That's what this
+              options controls: how Akeeba Subscriptions will handle the
+              rounding of the remaining subscription time over the flexible
+              discount period you've defined. You have the following
+              options:</para>
+
+              <variablelist>
+                <varlistentry>
+                  <term>Round down</term>
+
+                  <listitem>
+                    <para>The decimals are stripped off. 1.0, 1.2, 1.5 and 1.9
+                    will all be rounded down to 1.</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>Round up</term>
+
+                  <listitem>
+                    <para>The number is rounded to the next whole number. 1.0
+                    remains 1. 1.2, 1.5 and 1.9 become 2.</para>
+                  </listitem>
+                </varlistentry>
+
+                <varlistentry>
+                  <term>Smart rounding</term>
+
+                  <listitem>
+                    <para>If the decimal value is less than 0.5 the number is
+                    rounded down. If the decimal value is equal or over 0.5 it
+                    is rounded up. 1.0 and 1.2 become 1. 1.5 and 1.9 become
+                    2.</para>
+                  </listitem>
+                </varlistentry>
+              </variablelist>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
     </section>
 
     <section xml:id="coupons">
