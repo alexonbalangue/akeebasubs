@@ -1,11 +1,11 @@
 <?php defined('_JEXEC') or die(); ?>
 
-<h3><?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_HEADER') ?></h3>
+<h3><?php echo JText::_('PLG_AKPAYMENT_STRIPE_FORM_HEADER') ?></h3>
 <div id="payment-errors" class="alert alert-error" style="display: none;"></div>
 <form id="payment-form" action="<?php echo $data->url ?>" method="post" class="form form-horizontal">
 	<div class="control-group" id="control-group-card-number">
 		<label for="card-number" class="control-label" style="width:190px; margin-right:20px;">
-			<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CC') ?>
+			<?php echo JText::_('PLG_AKPAYMENT_STRIPE_FORM_CC') ?>
 		</label>
 		<div class="controls">
 			<input type="text" name="card-number" id="card-number" class="input-large" />
@@ -13,7 +13,7 @@
 	</div>
 	<div class="control-group" id="control-group-card-expiry">
 		<label for="card-expiry" class="control-label" style="width:190px; margin-right:20px;">
-			<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_EXPDATE') ?>
+			<?php echo JText::_('PLG_AKPAYMENT_STRIPE_FORM_EXPDATE') ?>
 		</label>
 		<div class="controls">
 			<?php echo $this->selectMonth() ?><span> / </span><?php echo $this->selectYear() ?>
@@ -21,7 +21,7 @@
 	</div>
 	<div class="control-group" id="control-group-card-cvc">
 		<label for="card-cvc" class="control-label" style="width:190px; margin-right:20px;">
-			<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CVC') ?>
+			<?php echo JText::_('PLG_AKPAYMENT_STRIPE_FORM_CVC') ?>
 		</label>
 		<div class="controls">
 			<input type="text" name="card-cvc" id="card-cvc" class="input-mini" />
@@ -35,7 +35,7 @@
 		<label for="pay" class="control-label" style="width:190px; margin-right:20px;">
 		</label>
 		<div class="controls">
-			<input type="submit" id="payment-button" class="btn" value="<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_PAYBUTTON') ?>" />
+			<input type="submit" id="payment-button" class="btn" value="<?php echo JText::_('PLG_AKPAYMENT_STRIPE_FORM_PAYBUTTON') ?>" />
 		</div>
 	</div>
 </form>
