@@ -25,9 +25,9 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		require_once dirname(__FILE__).'/braintree/lib/Braintree.php';
 		
 		$sandbox = $this->params->get('sandbox',0);
-		$merchantId = $this->params->get('merchant_id','');
-		$pubKey = $this->params->get('pub_key','');
-		$privKey = $this->params->get('priv_key','');
+		$merchantId = trim($this->params->get('merchant_id',''));
+		$pubKey = trim($this->params->get('pub_key',''));
+		$privKey = trim($this->params->get('priv_key',''));
 		$environment = $sandbox ? 'sandbox' : 'production';
 		Braintree_Configuration::environment($environment);
 		Braintree_Configuration::merchantId($merchantId);
