@@ -76,7 +76,7 @@
 			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEANDTEXT</option>				
 		</field>
 		<field name="dateformat" type="text"
-			default="Y-m-d H:M"
+			default="Y-m-d H:i"
 			size="30"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
