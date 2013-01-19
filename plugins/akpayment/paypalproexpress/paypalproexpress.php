@@ -48,7 +48,6 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 		
-		$amount = sprintf('%.2f',$subscription->gross_amount);
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id.'&mode=init';
 		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
 		$requestData = (object)array(
@@ -59,14 +58,14 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			'VERSION'							=> '85.0',
 			'RETURNURL'							=> $callbackUrl,
 			'CANCELURL'							=> $cancelUrl,
-			'PAYMENTREQUEST_0_AMT'				=> $amount,
+			'PAYMENTREQUEST_0_AMT'				=> sprintf('%.2f',$subscription->gross_amount),
 			'PAYMENTREQUEST_0_TAXAMT'			=> sprintf('%.2f',$subscription->tax_amount),
 			'PAYMENTREQUEST_0_ITEMAMT'			=> sprintf('%.2f',$subscription->net_amount),
 			'PAYMENTREQUEST_0_PAYMENTACTION'	=> 'Sale',
 			'PAYMENTREQUEST_0_CURRENCYCODE'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'L_PAYMENTREQUEST_0_NAME0'			=> $level->title,
 			'L_PAYMENTREQUEST_0_QTY0'			=> 1,
-			'L_PAYMENTREQUEST_0_AMT0'			=> $amount
+			'L_PAYMENTREQUEST_0_AMT0'			=> sprintf('%.2f',$subscription->net_amount)
 		);
 		
 		if($level->recurring) {
