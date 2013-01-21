@@ -97,6 +97,32 @@ class plgAkeebasubsAdminemails extends JPlugin
 	}
 	
 	/**
+	 * Notifies the component of the supported email keys by this plugin.
+	 * 
+	 * @return  array
+	 * 
+	 * @since 3.0
+	 */
+	public function onAKGetEmailKeys()
+	{
+		return array(
+			'section'		=> $this->_name,
+			'title'			=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAILSECTION'),
+			'keys'			=> array(
+				'paid'					=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_PAID'),
+				'new_active'			=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_NEW_ACTIVE'),
+				'new_renewal'			=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_NEW_RENEWAL'),
+				'new_pending'			=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_NEW_PENDING'),
+				'cancelled_new'			=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_CANCELLED_NEW'),
+				'cancelled_existing'	=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_CANCELLED_EXISTING'),
+				'expired'				=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_EXPIRED'),
+				'published'				=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_PUBLISHED'),
+				'generic'				=> JText::_('PLG_AKEEBASUBS_ADMINEMAILS_EMAIL_GENERIC'),
+			)
+		);
+	}
+	
+	/**
 	 * Sends out the email to the owner of the subscription.
 	 * 
 	 * @param $row AkeebasubsTableSubscription The subscription row object

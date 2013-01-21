@@ -266,6 +266,25 @@ class plgSystemAsexpirationnotify extends JPlugin
 	}
 	
 	/**
+	 * Notifies the component of the supported email keys by this plugin.
+	 * 
+	 * @return  array
+	 * 
+	 * @since 3.0
+	 */
+	public function onAKGetEmailKeys()
+	{
+		return array(
+			'section'		=> $this->_name,
+			'title'			=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAILSECTION'),
+			'keys'			=> array(
+				'first'					=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_FIRST'),
+				'second'				=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_SECOND'),
+			)
+		);
+	}
+	
+	/**
 	 * Sends a notification email to the user
 	 * 
 	 * @param AkeebasubsTableSubscription $row The subscription row

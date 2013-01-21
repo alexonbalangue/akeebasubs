@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
-	<name>Akeeba Subscriptions - Administrator Emails</name>
+	<name>PLG_AKEEBASUBS_ADMINEMAILS_XML_TITLE</name>
 	<author>ZOOlanders.com</author>
 	<authorEmail>info@zoolanders.com</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
