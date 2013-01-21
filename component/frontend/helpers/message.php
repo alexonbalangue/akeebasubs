@@ -15,10 +15,13 @@ class AkeebasubsHelperMessage
 	/**
 	 * Pre-processes the message text in $text, replacing merge tags with those
 	 * fetched based on subscription $sub
-	 * @param string $text The message to process
-	 * @param AkeebasubsTableSubscritpion $sub A subscription object
+	 * 
+	 * @param   string  $text    The message to process
+	 * @param   AkeebasubsTableSubscription  $sub  A subscription object
+	 * 
+	 * @return  string  The processed string
 	 */
-	public static function processSubscriptionTags($text, $sub)
+	public static function processSubscriptionTags($text, $sub, $extras = array())
 	{
 		// Get the user object for this subscription
 		$user = JFactory::getUser($sub->user_id);
@@ -86,6 +89,76 @@ class AkeebasubsHelperMessage
 				if(is_array($v)) continue;
 				$text = str_replace($tag, $v, $text);
 			}
+		}
+		
+		// Extra variables replacement
+		// -- Get the site name
+		$config = JFactory::getConfig();
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$sitename = $config->get('sitename');
+		} else {
+			$sitename = $config->getValue('config.sitename');
+		}
+		
+		// -- First/last name
+		$fullname = $user->name;
+		$nameParts = explode(' ',$fullname, 2);
+		$firstname = array_shift($nameParts);
+		$lastname = !empty($nameParts) ? array_shift($nameParts) : '';
+		
+		// -- Get the subscription level
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->setId($sub->akeebasubs_level_id)
+			->getItem();
+		
+		// -- Site URL
+		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+		if($isCli) {
+			jimport('joomla.application.component.helper');
+			$baseURL = JComponentHelper::getParams('com_akeebasubs')->get('siteurl','http://www.example.com');
+			$temp = str_replace('http://', '', $baseURL);
+			$temp = str_replace('https://', '', $temp);
+			$parts = explode($temp, '/', 2);
+			$subpathURL = count($parts) > 1 ? $parts[1] : '';
+		} else {
+			$baseURL = JURI::base();
+			$subpathURL = JURI::base(true);
+		}
+		$baseURL = str_replace('/administrator', '', $baseURL);
+		$subpathURL = str_replace('/administrator', '', $subpathURL);
+		
+		// -- My Subscriptions URL
+		if($isAdmin || $isCli) {
+			$url = 'index.php?option=com_akeebasubs&view=subscriptions&layout=default';
+		} else {
+			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+		}
+		$url = ltrim($url, '/');
+		$subpathURL = ltrim($subpathURL, '/');
+		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+1);
+		$mysubsurl = rtrim($baseURL,'/').'/'.ltrim($url,'/');
+		
+		// -- The actual replacement
+		$extras = array_merge(array(
+			"\\n"			=> "\n",
+			'[SITENAME]'	=> $sitename,
+			'[SITEURL]'		=> $baseURL,
+			'[FULLNAME]'	=> $fullname,
+			'[FIRSTNAME]'	=> $firstname,
+			'[LASTNAME]'	=> $lastname,
+			'[USERNAME]'	=> $user->username,
+			'[USEREMAIL]'	=> $user->email,
+			'[LEVEL]'		=> $level->title,
+			'[ENABLED]'		=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_COMMON_'. ($sub->enabled ? 'ENABLED' : 'DISABLED')),
+			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$sub->state),
+			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
+			'[PUBLISH_DOWN]'=> $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
+			'[MYSUBSURL]'	=> $mysubsurl,
+			'[URL]'			=> $mysubsurl,
+		), $extras);
+		foreach ($extras as $key => $value)
+		{
+			$subject = str_replace($key, $value, $text);
 		}
 		
 		return $text;
