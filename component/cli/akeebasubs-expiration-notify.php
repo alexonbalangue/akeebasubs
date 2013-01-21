@@ -108,6 +108,12 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		
 		// ===== START
 		
+		// Preload the helper
+		if (!class_exists('AkeebasubsHelperEmail'))
+		{
+			@include_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
+		}
+		
 		// Get today's date
 		jimport('joomla.utilities.date');
 		$jNow = new JDate();
@@ -240,12 +246,6 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 					$db = JFactory::getDbo();
 					$data = (object)$data;
 					$db->updateObject('#__akeebasubs_subscriptions', $data, 'akeebasubs_subscription_id');
-					/*
-					FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-						->setId($sub->akeebasubs_subscription_id)
-						->getItem()
-						->save($data);
-					*/
 				}
 			}
 		}
@@ -263,119 +263,26 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 	 */
 	private function sendEmail($row, $firstContact)
 	{
-		// Get the site name
-		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$sitename = $config->get('sitename');
-		} else {
-			$sitename = $config->getValue('config.sitename');
-		}
-	
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
-		$this->out(" {$user->email} ", false);
 		
-		// Load the language files
-		// Load the language files and their overrides
-		$jlang = JFactory::getLanguage();
-		// -- English (default fallback)
-		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, 'en-GB', true);
-		// -- Default site language
-		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		// -- Current site language
-		$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true);
-		$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, null, true);
-		// -- User's preferred language
-		jimport('joomla.registry.registry');
-		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$userlang = $uparams->get('language','');
-		} else {
-			$userlang = $uparams->getValue('language','');
-		}
-		if(!empty($userlang)) {
-			$jlang->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, $userlang, true);
-			$jlang->load('plg_system_asexpirationnotify.override', JPATH_ADMINISTRATOR, $userlang, true);
+		$type = $firstContact ? 'first' : 'second';
+		
+		// Get a preloaded mailer
+		$key = $this->_name . '_' . $type;
+		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
+		
+		if ($mailer === false)
+		{
+			$this->out(" FAILED");
+			return false;
 		}
 		
-		// Get the level
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-			->setId($row->akeebasubs_level_id)
-			->getItem();
-			
-		// Get the from/to dates
-		jimport('joomla.utilities.date');
-		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-		if(!preg_match($regex, $row->publish_up)) {
-			$row->publish_up = '2001-01-01';
-		}
-		if(!preg_match($regex, $row->publish_down)) {
-			$row->publish_down = '2037-01-01';
-		}
-		$jFrom = new JDate($row->publish_up);
-		$jTo = new JDate($row->publish_down);
-		
-		// Get the "my subscriptions" URL
-		jimport('joomla.environment.uri');
-		jimport('joomla.application.component.helper');
-		$componentParams = JComponentHelper::getParams('com_akeebasubs');
-		$baseURL = $componentParams->get('siteurl' ,'http://www.example.com');
-		
-		$url = rtrim($baseURL, '/') . '/index.php?option=com_akeebasubs&view=subscriptions&layout=default';
-		
-		if($firstContact) {
-			$subject_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_FIRST';
-			$body_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_FIRST';
-		} else {
-			$subject_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_SUBJECT_SECOND';
-			$body_key = 'PLG_SYSTEM_ASEXPIRATIONNOTIFY_BODY_SECOND';
-		}
-		
-		$substitution_vars = array(
-			'name'				=> $user->name,
-			'username'			=> $user->username,
-			'email'				=> $user->email,
-			'sitename'			=> $sitename,
-			'level'				=> $level->title,
-			'enabled'			=> $row->enabled ? JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_ENABLED') : JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_DISABLED'),
-			'state'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'from'				=> $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
-			'to'				=> $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
-			'url'				=> $url
-		);
-		
-		$subject = JText::_($subject_key);
-		$body = JText::_($body_key);
-		
-		foreach($substitution_vars as $key => $value) {
-			$subject = str_ireplace('['.strtoupper($key).']', $value, $subject);
-			$body = str_ireplace('['.strtoupper($key).']', $value, $body);
-		}
-		
-		// DEBUG ---
-		/**
-		echo "<p><strong>From</strong>: ".$config->getvalue('config.fromname')." &lt;".$config->getvalue('config.mailfrom')."&gt;<br/><strong>To: </strong>".$user->email."</p><hr/><p>$subject</p><hr/><p>".nl2br($body)."</p>";die();
-		/**/
-		// -- DEBUG
-		
-		// Send the email
-		$mailer = JFactory::getMailer();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$mailfrom = $config->get('mailfrom');
-			$fromname = $config->get('fromname');
-		} else {
-			$mailfrom = $config->getValue('config.mailfrom');
-			$fromname = $config->getValue('config.fromname');
-		}
-		$mailer->setSender(array( $mailfrom, $fromname ));
 		$mailer->addRecipient($user->email);
-		$mailer->setSubject($subject);
-		$mailer->setBody($body);
+		
 		$result = $mailer->Send();
 		
-		if ($result instanceof Exception)
+		if (($result instanceof Exception) || ($result === false))
 		{
 			$this->out(" FAILED");
 			return false;

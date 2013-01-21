@@ -34,6 +34,11 @@ class plgAkeebasubsAdminemails extends JPlugin
 		} else {
 			$this->emails = explode(',', $emailsString);
 		}
+		
+		if (!class_exists('AkeebasubsHelperEmail'))
+		{
+			@include_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
+		}
 	}
 
 	/**
@@ -130,132 +135,21 @@ class plgAkeebasubsAdminemails extends JPlugin
 	 */
 	private function sendEmail($row, $type = '')
 	{
-		// Get the site name
-		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$sitename = $config->get('sitename');
-		} else {
-			$sitename = $config->getValue('config.sitename');
-		}
-	
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
 		
-		// Load the language files and their overrides
-		$jlang = JFactory::getLanguage();
-		// -- English (default fallback)
-		$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, 'en-GB', true);
-		$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, 'en-GB', true);
-		// -- Default site language
-		$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
-		// -- Current site language
-		$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, null, true);
-		$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, null, true);
-		// -- User's preferred language
-		jimport('joomla.registry.registry');
-		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$userlang = $uparams->get('language','');
-		} else {
-			$userlang = $uparams->getValue('language','');
-		}
-		if(!empty($userlang)) {
-			$jlang->load('plg_akeebasubs_adminemails', JPATH_ADMINISTRATOR, $userlang, true);
-			$jlang->load('plg_akeebasubs_adminemails.override', JPATH_ADMINISTRATOR, $userlang, true);
+		// Get a preloaded mailer
+		$key = $this->_name . '_' . $type;
+		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
+		
+		if ($mailer === false)
+		{
+			return false;
 		}
 		
-		// Get the user's name
-		$fullname = $user->name;
-		$nameParts = explode(' ',$fullname, 2);
-		$firstname = array_shift($nameParts);
-		$lastname = !empty($nameParts) ? array_shift($nameParts) : '';
-		
-		// Get the level
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-			->setId($row->akeebasubs_level_id)
-			->getItem();
-			
-		// Get the from/to dates
-		jimport('joomla.utilities.date');
-		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-		if(!preg_match($regex, $row->publish_up)) {
-			$row->publish_up = '2001-01-01';
-		}
-		if(!preg_match($regex, $row->publish_down)) {
-			$row->publish_down = '2037-01-01';
-		}
-		$jFrom = new JDate($row->publish_up);
-		$jTo = new JDate($row->publish_down);
-		
-		// Get the "my subscriptions" URL
-		$baseURL = JURI::base();
-		$baseURL = str_replace('/administrator', '', $baseURL);
-		$subpathURL = JURI::base(true);
-		$subpathURL = str_replace('/administrator', '', $subpathURL);
-		
-		if(JFactory::getApplication()->isAdmin()) {
-			$url = 'index.php?option=com_akeebasubs&view=subscriptions&layout=default';
-		} else {
-			$url = str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
-		}
-		$url = ltrim($url, '/');
-		$subpathURL = ltrim($subpathURL, '/');
-		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+1);
-		$url = rtrim($baseURL,'/').'/'.ltrim($url,'/');
-
-		$replacements = array(
-			"\\n"			=> "\n",
-			'[SITENAME]'	=> $sitename,
-			'[FULLNAME]'	=> $fullname,
-			'[FIRSTNAME]'	=> $firstname,
-			'[LASTNAME]'	=> $lastname,
-			'[USERNAME]'	=> $user->username,
-			'[USEREMAIL]'	=> $user->email,
-			'[LEVEL]'		=> $level->title,
-			'[ENABLED]'		=> JText::_('PLG_AKEEBASUBS_AFFEMAILS_COMMON_'. ($row->enabled ? 'ENABLED' : 'DISABLED')),
-			'[PAYSTATE]'	=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$row->state),
-			'[PUBLISH_UP]'	=> $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
-			'[PUBLISH_DOWN]' => $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
-			'[MYSUBSURL]'	=> $url
-		);
-		
-		$subject = JText::_('PLG_AKEEBASUBS_ADMINEMAILS_HEAD_'.strtoupper($type));
-		$body = JText::_('PLG_AKEEBASUBS_ADMINEMAILS_BODY_'.strtoupper($type));
-		
-		foreach($replacements as $key => $value) {
-			$subject = str_replace($key, $value, $subject);
-			$body = str_replace($key, $value, $body);
-		}
-		
-		// Process merge tags
-		require_once JPATH_SITE.'/components/com_akeebasubs/helpers/message.php';
-		$subject = AkeebasubsHelperMessage::processSubscriptionTags($subject, $row);
-		$body = AkeebasubsHelperMessage::processSubscriptionTags($body, $row);
-		
-		// If the subject or the body is empty, skip the email
-		if(empty($subject) || empty($body)) return;
-		
-		// DEBUG ---
-		/* *
-		echo "<p><strong>From</strong>: ".$config->getvalue('config.fromname')." &lt;".$config->getvalue('config.mailfrom')."&gt;<br/><strong>To: </strong>".$user->email."</p><hr/><p>$subject</p><hr/><p>".nl2br($body)."</p>"; die();
-		/* */
-		// -- DEBUG
-
-
-		// Send the email
-		$mailer = JFactory::getMailer();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$mailfrom = $config->get('mailfrom');
-			$fromname = $config->get('fromname');
-		} else {
-			$mailfrom = $config->getValue('config.mailfrom');
-			$fromname = $config->getValue('config.fromname');
-		}
-		$mailer->setSender(array( $mailfrom, $fromname ));
 		$mailer->addRecipient($this->emails);
-		$mailer->setSubject($subject);
-		$mailer->setBody($body);
 		$result = $mailer->Send();
+		
+		return $result;
 	}
 }

@@ -138,6 +138,16 @@ class AkeebasubsHelperMessage
 		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+1);
 		$mysubsurl = rtrim($baseURL,'/').'/'.ltrim($url,'/');
 		
+		$currency = '';
+		if (!class_exists('AkeebasubsHelperCparams'))
+		{
+			@include_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
+		}
+		if (class_exists('AkeebasubsHelperCparams'))
+		{
+			$currency = AkeebasubsHelperCparams::getParam('currencysymbol','€');
+		}
+		
 		// -- The actual replacement
 		$extras = array_merge(array(
 			"\\n"			=> "\n",
@@ -155,6 +165,7 @@ class AkeebasubsHelperMessage
 			'[PUBLISH_DOWN]'=> $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
 			'[MYSUBSURL]'	=> $mysubsurl,
 			'[URL]'			=> $mysubsurl,
+			'[CURRENCY]'	=> $currency,
 		), $extras);
 		foreach ($extras as $key => $value)
 		{
