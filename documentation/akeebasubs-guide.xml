@@ -12066,6 +12066,31 @@ LEVEL3=Badge 1</programlisting>
     <section xml:id="dev-akeebasubs">
       <title>The "akeebasubs" plugin events</title>
 
+      <para>Since Akeeba Subscriptions 3.5.0 we recommend developers wishing
+      to create plugins for Akeeba Subscriptions to place them in the
+      <filename>akeebasubs</filename> directory.</para>
+
+      <para>Moreover, we have created a base class,
+      <code>plgAkeebasubsAbstract</code>, which can make your life simpler.
+      You are suggested to use code like the following to create your custom
+      plugins:</para>
+
+      <programlisting>&lt;?php
+defined('_JEXEC') or die();
+
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
+if(!$akeebasubsinclude) { unset($akeebasubsinclude); return; } else { unset($akeebasubsinclude); }
+
+class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
+{
+    // your code goes here
+}</programlisting>
+
+      <para>This allows you to use our base class. In the event that a user
+      enables the plugin without having a post-3.5.0 Akeeba Subscriptions
+      version installed the plugin will not load, therefore not causing a
+      fatal PHP error.</para>
+
       <section xml:id="dev-onAKSubscriptionChange">
         <title>onAKSubscriptionChange</title>
 
@@ -12288,6 +12313,152 @@ LEVEL3=Badge 1</programlisting>
         information regarding all of the above.</para>
       </section>
 
+      <section xml:id="dev-onSubscriptionFormRenderPerSubFields">
+        <title>onSubscriptionFormRenderPerSubFields</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onSubscriptionFormRenderPerSubFields($cache)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        when the subscription form (front-end, view=level) is displayed. It
+        returns an array of extra fields which will be rendered in the form,
+        right below the email field and before the address fields. Unlike
+        onSubscriptionFormRender fields which are stored in the user's record,
+        the fields defined by onSubscriptionFormRenderPerSubFields are stored
+        inside the subscription record. This allows you to handle
+        per-subscription options.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/slavesubs.php</para>
+
+        <para>The input of this event's method is two variables:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>$cache</term>
+
+            <listitem>
+              <para>When the user submits the subscription forms but it is
+              invalid (errors don't allow it to pass the validation), Akeeba
+              Subscriptions stores the user's modified data in the $cache
+              array. The information in this array may be different than the
+              information in $userparams array.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Getting the values for your custom fields</bridgehead>
+
+        <para>To cut a long story short, if you have a field named foobar,
+        here is how to get its value:</para>
+
+        <programlisting>if(array_key_exists('<replaceable>foobar</replaceable>', $cache['subcustom'])) {
+  $current = $cache['subcustom']['<replaceable>foobar</replaceable>'];
+} else {
+  $current =<replaceable>'default value'</replaceable>;
+}</programlisting>
+
+        <bridgehead>Returning custom field definitions</bridgehead>
+
+        <para>The return of this event is an array which consists of one or
+        more hash (key/value pair) arrays. Each of the hash arrays defines
+        exactly one extra field and has the following keys:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>id</term>
+
+            <listitem>
+              <para>String. Required. The field's HTML id.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>label</term>
+
+            <listitem>
+              <para>String. Required. The label which appears to the left of
+              the field.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>elementHTML</term>
+
+            <listitem>
+              <para>String. Required. The HTML of your field.</para>
+
+              <important>
+                <para>The name value of your field <emphasis
+                role="bold">must</emphasis> be
+                <code>custom[<replaceable>id</replaceable>]</code>, where
+                <replaceable>id</replaceable> is the HTML id you defined in
+                the id key above. Also, the HTML id <emphasis
+                role="bold">must</emphasis> be defined and <emphasis
+                role="bold">must</emphasis> be equal to the HTML id you
+                defined in the id key above. If you don't do that, your extra
+                field might never be saved.</para>
+              </important>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>invalidLabel</term>
+
+            <listitem>
+              <para>String. Optional. This is the label which appears in green
+              on the right of the field when the field is valid. The HTML
+              element containing this string is named id_valid, where
+              <replaceable>id</replaceable> is the HTML id you defined in the
+              id key above.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>validLabel</term>
+
+            <listitem>
+              <para>String. Optional. This is the label which appears in red
+              on the right of the field when the field is invalid. The HTML
+              element containing this string is named id_invalid, where
+              <replaceable>id</replaceable> is the HTML id you defined in the
+              id key above.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>isValid</term>
+
+            <listitem>
+              <para>Boolean. Optional. If you defined the invalidLabel and/or
+              validLabel fields, pass a boolean here indicating if the field
+              is currently valid so that the correct label is shown when the
+              page loads.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Javascript validation</bridgehead>
+
+        <para>Akeeba Subscriptions does not make any attempt to validate the
+        custom fields and update the display status of the valid/invalid
+        labels. It is your responsibility. In this event, you can call
+        <code>JFactory::getDocument()-&gt;addScriptDeclaration($scriptData)</code>
+        where $scriptData is the Javascript validation code.</para>
+
+        <para>In order to make it easier for you, Akeeba Subscriptions offers
+        an architecture similar to an observer pattern in the Javascript code.
+        You can have Javascript functions called when Akeeba Subscriptions'
+        Javascript code is fetching the contents of the fields before sending
+        a data validation request through AJAX and another function which is
+        called when the validation results are being processed. You can add
+        the former to the stack using addToSubValidationFetchQueue() and the
+        latter using addToSubValidationQueue().</para>
+
+        <para>Please look at the very well documented slavesubs plugin for
+        more information regarding all of the above.</para>
+      </section>
+
       <section xml:id="dev-onValidate">
         <title>onValidate</title>
 
@@ -12330,6 +12501,83 @@ LEVEL3=Badge 1</programlisting>
             </listitem>
           </varlistentry>
         </variablelist>
+      </section>
+
+      <section xml:id="dev-onValidatePerSubscription">
+        <title>onValidatePerSubscription</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onValidatePerSubscription($data)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        when Akeeba Subscriptions is validating the subscription form. This
+        event is used to validate per-subscription custom fields.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>:
+        plugins/akeebasubs/slavesubs.php</para>
+
+        <para>The $data parameter is an object with all the data keys. You are
+        interested in <code>$data-&gt;custom</code> which contains the values
+        of the custom fields. You can get the value of a custom field named
+        "foobar" using <code>$data-&gt;subcustom['data']</code>.</para>
+
+        <para>The return value is a hash array with the following keys:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>subscription_custom_validation</term>
+
+            <listitem>
+              <para>A hash array of booleans, showing the validation status of
+              each field.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>isValid</term>
+
+            <listitem>
+              <para>Set to false if any of the validation errors above means
+              that the entire subscription form should be deemed invalid,
+              otherwise set it to true to not cause the entire form to become
+              invalid. The latter is useful when you have an optional field
+              whose validation status doesn't play a role in the user's
+              ability to complete the subscription transaction.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="dev-onSubscriptionLevelFormRender">
+        <title>onSubscriptionLevelFormRender</title>
+
+        <para><emphasis role="bold">Prototype</emphasis>: <code>public
+        function onSubscriptionLevelFormRender(AkeebasubsTableLevel
+        $level)</code></para>
+
+        <para><emphasis role="bold">Synopsis</emphasis>: This event is called
+        when the subscription level editor form (back-end) is displayed. It
+        returns an array defining a configuration tab for this plugin.</para>
+
+        <para><emphasis role="bold">Sample plugin</emphasis>: Look at the base
+        class' implementation</para>
+
+        <para>You will rarely have to override this method. You just need to
+        provide two subdirectories in your plugin's folder:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><filename>tmpl</filename>. This is where your back-end
+            editor form template file (<filename>default.php</filename>) is
+            stored.</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>override</filename>. Leave it empty. This is where
+            a user can put his customised <filename>default.php</filename>
+            template file to override yours.</para>
+          </listitem>
+        </itemizedlist>
       </section>
 
       <section xml:id="dev-onAKUserGetData">
