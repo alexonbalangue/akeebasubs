@@ -22,7 +22,8 @@ class AkeebasubsToolbar extends FOFToolbar
 				'upgrades',
 				'taxconfigs',
 				'taxrules',
-				'states'
+				'states',
+				'emailtemplates',
 			),
 			'subscriptions',
 			'coupons',
@@ -39,6 +40,7 @@ class AkeebasubsToolbar extends FOFToolbar
 		if(!AKEEBASUBS_PRO)
 		{
 			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP']['relations']);
+			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP']['emailtemplates']);
 		}
 		
 		foreach($views as $label => $view) {
