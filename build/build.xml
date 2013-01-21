@@ -35,6 +35,8 @@
 		<include name="strapper/**" />
 		<include name="*" />
 
+		<exclude name="backend/views/emailtemplates/**" />
+		<exclude name="backend/views/emailtemplate/**" />
 		<exclude name="backend/views/relations/**" />
 		<exclude name="backend/views/relation/**" />
 	</fileset>
