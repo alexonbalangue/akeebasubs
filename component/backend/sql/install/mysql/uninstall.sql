@@ -14,3 +14,4 @@ DROP TABLE IF EXISTS `#__akeebasubs_invoicetemplates`;
 DROP TABLE IF EXISTS `#__akeebasubs_customfields`;
 DROP TABLE IF EXISTS `#__akeebasubs_states`;
 DROP TABLE IF EXISTS `#__akeebasubs_relations`;
+DROP TABLE IF EXISTS `#__akeebasubs_emailtemplates`;
