@@ -16,6 +16,12 @@ class FOFFormFieldAkeebasubslevelid extends FOFFormFieldList
 		
 		if (is_null($options))
 		{
+			$noneoption = $this->element['none'] ? $this->element['none'] : null;
+			if ($noneoption)
+			{
+				$options[] = JHtml::_('select.option', '', JText::_($noneoption));
+			}
+			
 			$enabled = $this->element['enabled'] ? $this->element['enabled'] : '';
 			
 			$levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')

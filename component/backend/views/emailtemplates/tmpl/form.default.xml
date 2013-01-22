@@ -14,13 +14,14 @@
 			sortable="true" key_field="akeebasubs_level_id" value_field="title"
 			query="SELECT akeebasubs_level_id, title FROM #__akeebasubs_levels"
 			translate="true"
+			tdwidth="8%"
 		/>
 
 		<header name="language" type="language" sortable="true" tdwidth="8%" />
 
 		<header name="key" type="akeebasubsemailtemplatekey" sortable="true" tdwidth="8%" />
 		
-		<header name="subject" type="fieldserchable" sortable="true" tdwidth="8%" />
+		<header name="subject" type="fieldsearchable" sortable="true" />
 
 		<header name="ordering" type="ordering" sortable="true" tdwidth="10%" />
 
@@ -33,9 +34,14 @@
 
 		<field name="subscription_level_id" type="akeebasubslevelid"
 			show_link="false"
+			none="COM_AKEEBASUBS_EMAILTEMPLATES_FIELD_SUBSCRIPTION_LEVEL_ID_NONE"
 		/>
 
-		<field name="language" type="language" />
+		<field
+			name="language"
+			type="language"
+			none="COM_AKEEBASUBS_EMAILTEMPLATES_FIELD_LANGUAGE_ALL"
+		/>
 
 		<field name="key" type="akeebasubsemailtemplatekey"
 			show_link="true"

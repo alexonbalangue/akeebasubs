@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 class FOFFormFieldAkeebasubsemailtemplatekey extends FOFFormFieldList
 {
-	protected function getOptions()
+	protected function getOptions($repeatable = false)
 	{
 		static $options = null;
 		
@@ -21,11 +21,26 @@ class FOFFormFieldAkeebasubsemailtemplatekey extends FOFFormFieldList
 				require_once JPATH_ROOT.'/components/com_akeebasubs/helpers/email.php';
 			}
 			
-			$options = AkeebasubsHelperEmail::getEmailKeys(2);
+			$mode = $repeatable ? 2 : 1;
+			$options = AkeebasubsHelperEmail::getEmailKeys($mode);
 		}
 		
 		reset($options);
 		
 		return $options;
+	}
+	
+	/**
+	 * Get the rendering of this field type for a repeatable (grid) display,
+	 * e.g. in a view listing many item (typically a "browse" task)
+	 * 
+	 * @since 2.0
+	 */
+	public function getRepeatable() {
+		$class = $this->element['class'] ? ' class="' . (string) $this->element['class'] . '"' : '';
+		
+		return '<span id="' . $this->id . '" ' . $class . '>' .
+			htmlspecialchars(self::getOptionName($this->getOptions(true), $this->value), ENT_COMPAT, 'UTF-8') .
+			'</span>';
 	}
 }
