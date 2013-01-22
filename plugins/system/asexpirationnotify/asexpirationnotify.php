@@ -303,7 +303,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$type = $firstContact ? 'first' : 'second';
 		
 		// Get a preloaded mailer
-		$key = $this->_name . '_' . $type;
+		$key = 'plg_system_' . $this->_name . '_' . $type;
 		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
 		
 		if ($mailer === false)

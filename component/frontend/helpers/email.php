@@ -59,12 +59,13 @@ class AkeebasubsHelperEmail
 		$keyParts = explode('_', $key, 4);
 		
 		$extension = $keyParts[0] . '_' . $keyParts[1] . '_' . $keyParts[2];
-		$dbkey = $keyParts[2] . '_' . $keyParts[4];
+		$dbkey = $keyParts[2] . '_' . $keyParts[3];
 		
 		// Initialise
 		$templateText = '';
 		$subject = '';
-		$isHTML = true;
+		$loadLanguage = null;
+		$isHTML = false;
 
 		// Look for desired languages
 		$jLang = JFactory::getLanguage();
@@ -98,8 +99,8 @@ class AkeebasubsHelperEmail
 				
 				$isHTML = true;
 			}
-		}	
-		
+		}
+				
 		if(!$isHTML)
 		{
 			if(!array_key_exists($extension, $loadedLanguagesForExtensions))
@@ -107,14 +108,14 @@ class AkeebasubsHelperEmail
 				self::loadLanguageOverrides($extension);
 			}
 			
-			$subjectKey = $extension . '_HEAD_' . $keyParts[4];
+			$subjectKey = $extension . '_HEAD_' . $keyParts[3];
 			$subject = JText::_($subjectKey);
 			if($subject == $subjectKey) {
-				$subjectKey = $extension . '_SUBJECT_' . $keyParts[4];
+				$subjectKey = $extension . '_SUBJECT_' . $keyParts[3];
 				$subject = JText::_($subjectKey);
 			}
 			
-			$templateTextKey = $extension . '_BODY_' . $keyParts[4];
+			$templateTextKey = $extension . '_BODY_' . $keyParts[3];
 			$templateText = JText::_($templateTextKey);
 			
 			$loadLanguage = '';
@@ -152,7 +153,7 @@ class AkeebasubsHelperEmail
 	 * 
 	 * @return  boolean|PHPMailer False if something bad happened, the PHPMailer instance in any other case
 	 */
-	public static function getPreloadedMailer($sub, $key, array $extras)
+	public static function getPreloadedMailer($sub, $key, array $extras = array())
 	{
 		// Load the template
 		list($isHTML, $subject, $templateText, $loadLanguage) = self::loadEmailTemplate($key);

@@ -129,7 +129,7 @@ class plgAkeebasubsAffemails extends JPlugin
 		$user = JFactory::getUser($row->user_id);
 		
 		// Get a preloaded mailer
-		$key = $this->_name . '_' . $type;
+		$key = 'plg_akeebasubs_' . $this->_name . '_' . $type;
 		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
 		
 		if ($mailer === false)

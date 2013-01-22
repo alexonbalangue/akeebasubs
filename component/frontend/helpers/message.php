@@ -148,6 +148,11 @@ class AkeebasubsHelperMessage
 			$currency = AkeebasubsHelperCparams::getParam('currencysymbol','€');
 		}
 		
+		// Dates
+		jimport('joomla.utilities.date');
+		$jFrom = new JDate($sub->publish_up);
+		$jTo = new JDate($sub->publish_down);
+		
 		// -- The actual replacement
 		$extras = array_merge(array(
 			"\\n"			=> "\n",
@@ -169,7 +174,7 @@ class AkeebasubsHelperMessage
 		), $extras);
 		foreach ($extras as $key => $value)
 		{
-			$subject = str_replace($key, $value, $text);
+			$text = str_replace($key, $value, $text);
 		}
 		
 		return $text;
