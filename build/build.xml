@@ -37,6 +37,8 @@
 
 		<exclude name="backend/views/emailtemplates/**" />
 		<exclude name="backend/views/emailtemplate/**" />
+		<exclude name="backend/views/invoicetemplates/**" />
+		<exclude name="backend/views/invoicetemplate/**" />
 		<exclude name="backend/views/relations/**" />
 		<exclude name="backend/views/relation/**" />
 	</fileset>

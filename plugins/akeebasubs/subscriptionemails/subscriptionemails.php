@@ -95,6 +95,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 */
 	public function onAKGetEmailKeys()
 	{
+		$this->loadLanguage();
 		return array(
 			'section'		=> $this->_name,
 			'title'			=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_EMAILSECTION'),

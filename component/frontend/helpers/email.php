@@ -10,6 +10,71 @@ defined('_JEXEC') or die();
 class AkeebasubsHelperEmail
 {
 	/**
+	 * Gets the email keys currently known to the component
+	 * 
+	 * @param   integer  $style  0 = raw sections list, 1 = grouped list options, 2 = key/description array
+	 * 
+	 * @return  array|string
+	 */
+	public static function getEmailKeys($style = 0)
+	{
+		static $rawOptions = null;
+		static $htmlOptions = null;
+		static $shortlist = null;
+		
+		if (is_null($rawOptions))
+		{
+			$rawOptions = array();
+			
+			jimport('joomla.plugin.helper');
+			JPluginHelper::importPlugin('akeebasubs');
+			JPluginHelper::importPlugin('system');
+			$app = JFactory::getApplication();
+			$jResponse = $app->triggerEvent('onAKGetEmailKeys', array());
+			if (is_array($jResponse) && !empty($jResponse))
+			{
+				foreach ($jResponse as $pResponse)
+				{
+					if(!is_array($pResponse)) continue;
+					if(empty($pResponse)) continue;
+					
+					$rawOptions[$pResponse['section']] = $pResponse;
+				}
+			}
+		}
+		
+		if ($style == 0)
+		{
+			return $rawOptions;
+		}
+		
+		if (is_null($htmlOptions))
+		{
+			$htmlOptions = array();
+			
+			foreach ($rawOptions as $section)
+			{
+				$htmlOptions[] = JHTML::_('select.option', '<OPTGROUP>', $section['title']);
+				foreach ($section['keys'] as $key => $description)
+				{
+					$htmlOptions[] = JHTML::_('select.option', $section['section'] . '_' . $key, $description);
+					$shortlist[$section['section'] . '_' . $key] = $section['title'] . ' - ' . $description;
+				}
+				$htmlOptions[] = JHTML::_('select.option', '</OPTGROUP>');
+			}
+		}
+		
+		if ($style == 1)
+		{
+			return $htmlOptions;
+		}
+		else
+		{
+			return $shortlist;
+		}
+	}
+	
+	/**
 	 * Load language overrides for a specific extension. Used to load the
 	 * custom languages for each plugin, if necessary.
 	 * 
