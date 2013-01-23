@@ -111,11 +111,12 @@ class AkeebasubsHelperEmail
 	 * Loads an email template from the database or, if it doesn't exist, from
 	 * the language file.
 	 * 
-	 * @param   string  $key  The language key, in the form PLG_LOCATION_PLUGINNAME_TYPE
+	 * @param   string   $key    The language key, in the form PLG_LOCATION_PLUGINNAME_TYPE
+	 * @param   integer  $level  The subscription level we're interested in
 	 * 
 	 * @return  array  isHTML: If it's HTML override from the db; text: The unprocessed translation string
 	 */
-	private static function loadEmailTemplate($key)
+	private static function loadEmailTemplate($key, $level = null)
 	{
 		static $loadedLanguagesForExtensions = array();
 		
@@ -138,7 +139,7 @@ class AkeebasubsHelperEmail
 		$languages = array(
 			$userLang, $jLang->getTag(), $jLang->getDefault(), 'en-GB', '*'
 		);
-
+		
 		// Look for an override in the database
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
@@ -148,21 +149,62 @@ class AkeebasubsHelperEmail
 			->where($db->qn('enabled').'='.$db->q(1))
 		;
 		$db->setQuery($query);
-		$allTemplates = $db->loadObjectList('language');
+		$allTemplates = $db->loadObjectList();
 
 		if(!empty($allTemplates))
 		{
-			// Try finding the most relevant language override and load it
-			$loadLanguage = null;
-			foreach($languages as $lang) {
-				if(!array_key_exists($lang, $allTemplates)) continue;
-
-				if($lang != '*') $loadLanguage = $lang;
-
-				$subject = $allTemplates[$lang]->subject;
-				$templateText = $allTemplates[$lang]->body;
+			// Pass 1 - Give match scores to each template
+			$preferredIndex = null;
+			$preferredScore = 0;
+			foreach($allTemplates as $idx => $template)
+			{
+				// Get the language and level of this template
+				$myLang = $template->language;
+				$myLevel = $template->subscription_level_id;
 				
-				$isHTML = true;
+				// Make sure the language matches one of our desired languages, otherwise skip it
+				$langPos = array_search($myLang, $languages);
+				if ($langPos === false)
+				{
+					continue;
+				}
+				$langScore = (5 - $langPos);
+
+				// Make sure the level matches the desired or "*", otherwise skip it
+				$levelScore = 5;
+				if (!is_null($level))
+				{
+					if ($myLevel == $level)
+					{
+						$levelScore = 10;
+					}
+					elseif($myLevel != '*')
+					{
+						$levelScore = 0;
+					}
+				}
+				else
+				{
+					if ($myLevel != '*')
+					{
+						$levelScore = 0;
+					}
+				}
+				if ($levelScore == 0)
+				{
+					continue;
+				}
+				
+				// Calculate the score. If it's winning, use it
+				$score = $langScore + $levelScore;
+				if ($score > $preferredScore)
+				{
+					$loadLanguage = $myLang;
+					$subject = $template->subject;
+					$templateText = $template->body;
+
+					$isHTML = true;
+				}
 			}
 		}
 				
