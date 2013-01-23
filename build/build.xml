@@ -231,7 +231,7 @@
 			passive="true"
 			level="debug">
 			<fileset dir="${dirs.release}">
-				<include name="com_akeebasubs-*.zip"/>
+				<include name="com_akeebasubs-*-core.zip"/>
 			</fileset>			
 			<fileset dir="${dirs.root}">
 				<include name="CHANGELOG"/>
