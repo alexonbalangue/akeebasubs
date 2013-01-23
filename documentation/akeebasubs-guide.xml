@@ -3282,6 +3282,20 @@ Rule C gives $ 30 discount</programlisting>
       the CSV file. What we mean is that the filters are applied, but instead
       of exporting just one page of data (what is displayed on your screen) it
       will export all pages of data.</para>
+
+      <tip>
+        <para>If you want to get the subscriptions list as CSV data through a
+        CRON job, you can use the following URL:</para>
+
+        <para><uri>http://<replaceable>www.example.com</replaceable>/index.php?option=com_akeebasubs&amp;view=subscriptions&amp;format=csv&amp;username=<replaceable>yourusername</replaceable>&amp;password=<replaceable>yourpassword</replaceable></uri></para>
+
+        <para>where www.example.com is the domain name of your site,
+        yourusername is the user name of a Super User and yourpassword is the
+        password of that user. Please do not use this URL from your local
+        computer over an insecure HTTP connection for security reasons. Only
+        use it in CRON jobs running on your server or when accessing your site
+        over HTTPS (encrypted / SSL-secured connection).</para>
+      </tip>
     </section>
 
     <section xml:id="affiliates">
