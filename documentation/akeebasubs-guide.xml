@@ -5070,6 +5070,15 @@ LEVEL2=11111:22222:33333</programlisting>
             </listitem>
           </varlistentry>
         </variablelist>
+
+        <bridgehead>Implementation notes</bridgehead>
+
+        <para>When creating a new Dwolla Application you do not need to enter
+        anything in "OAuth Callback", "Payment Callback" and "Payment
+        Redirect" fields. If Dwolla doesn't let you move forward without
+        filling in anything you can use the URL
+        <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=dwolla</uri>
+        where www.example.com is your site's domain name.</para>
       </section>
 
       <section xml:id="payment-epay">
