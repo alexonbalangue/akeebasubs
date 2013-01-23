@@ -161,6 +161,15 @@ $this->loadHelper('cparams');
 		</div>
 		
 		<div class="control-group">
+			<label for="notifyafter_field" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFYAFTER'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="6" id="notifyafter_field" name="notifyafter" value="<?php echo  (int)$this->item->notifyafter ?>" />
+			</div>
+		</div>
+		
+		<div class="control-group">
 			<label for="description" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DESCRIPTION'); ?>
 			</label>

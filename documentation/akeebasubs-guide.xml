@@ -1720,6 +1720,24 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Notification after expiration (days)</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions will send a notification email to users
+            whose subscription has expired this many days ago. Set 0 to not
+            send out a notification email.</para>
+
+            <tip>
+              <para>You can use this post-expiration notification email to
+              offer your users a discount coupon code which can entice them to
+              re-subscribe to your site. Never underestimate the strong impact
+              of an offer to the psychology of the prospective buyer, even if
+              the value of the coupon code is only in the 10-20% area.</para>
+            </tip>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Short Description</term>
 
           <listitem>
@@ -2649,7 +2667,7 @@ Rule C gives $ 30 discount</programlisting>
         </variablelist></para>
     </section>
 
-    <section xlink:href="email-templates">
+    <section xlink:href="email-templates" xml:id="email-templates">
       <title>E-mail templates</title>
 
       <important>

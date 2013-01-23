@@ -94,6 +94,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			// Load the notification thresholds and make sure they are sorted correctly!
 			$notify1 = $level->notify1;
 			$notify2 = $level->notify2;
+			$notifyAfter = $level->notifyafter;
 			
 			if($notify2 > $notify1) {
 				$tmp = $notify2;
@@ -135,18 +136,38 @@ class plgSystemAsexpirationnotify extends JPlugin
 					->expires_to($jTo->toSql())
 					->getList();
 			}
+			
+			// Get the subscriptions expired within the last $notifyAfter days
+			$subs3 = array();
+			if($notifyAfter > 0) {
+				$jFrom = new JDate($now - ($notifyAfter + 1) * 24 * 3600);
+				$jTo = new JDate($now - 1);
+
+				$subs3 = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->level($level->akeebasubs_level_id)
+					->enabled(0)
+					->expires_from($jFrom->toSql())
+					->expires_to($jTo->toSql())
+					->getList();
+			}
 				
 			// If there are no subscriptions, bail out
-			if( (count($subs1) + count($subs2)) == 0 ) {
+			if( (count($subs1) + count($subs2) + count($subs3)) == 0 ) {
 				continue;
 			}
 			
 			// Check is some of those subscriptions have been renewed. If so, set their contactFlag to 2
 			$realSubs = array();
-			foreach(array($subs1, $subs2) as $subs)
+			foreach(array($subs1, $subs2, $subs3) as $subs)
 			{
-				foreach($subs as $sub) {
-
+				foreach($subs as $sub)
+				{
+					// Skip the subscription if the contact_flag is already 3
+					if ($sub->contact_flag == 3)
+					{
+						continue;
+					}
+					
 					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
 					$renewals = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 						->enabled(1)
@@ -184,20 +205,26 @@ class plgSystemAsexpirationnotify extends JPlugin
 			$mNow = $jNow->toSql();
 			foreach($realSubs as $sub) {
 				// Is it the first or the second contact?
-				if($sub->contact_flag == 0) {
+				if($sub->enabled && ($sub->contact_flag == 0)) {
 					// First contact
 					$data = array(
 						'contact_flag'		=> 1,
 						'first_contact'		=> $mNow
 					);
-					$this->sendEmail($sub, true);
-				} elseif($sub->contact_flag == 1) {
+					$this->sendEmail($sub, 'first');
+				} elseif($sub->enabled && ($sub->contact_flag == 1)) {
 					// Second and final contact
 					$data = array(
 						'contact_flag'		=> 2,
 						'second_contact'	=> $mNow
 					);
-					$this->sendEmail($sub, false);
+					$this->sendEmail($sub, 'second');
+				} elseif(!$sub->enabled) {
+					$data = array(
+						'contact_flag'		=> 3,
+						'after_contact'		=> $mNow
+					);
+					$this->sendEmail($sub, 'after');
 				}
 				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($sub->akeebasubs_subscription_id)
@@ -294,14 +321,12 @@ class plgSystemAsexpirationnotify extends JPlugin
 	 * Sends a notification email to the user
 	 * 
 	 * @param AkeebasubsTableSubscription $row The subscription row
-	 * @param bool $firstContact  Is this the first time we contact the user?
+	 * @param string $type  Contact type (first, second, after)
 	 */
-	private function sendEmail($row, $firstContact)
+	private function sendEmail($row, $type)
 	{
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
-		
-		$type = $firstContact ? 'first' : 'second';
 		
 		// Get a preloaded mailer
 		$key = 'plg_system_' . $this->_name . '_' . $type;

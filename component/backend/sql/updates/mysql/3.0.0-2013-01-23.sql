@@ -1,0 +1,2 @@
+ALTER TABLE `#__akeebasubs_levels` ADD COLUMN `notifyafter` int(10) unsigned NOT NULL DEFAULT '0' AFTER `notify2`;
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `after_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER `second_contact`;

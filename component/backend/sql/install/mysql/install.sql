@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 	`notify1` int(10) unsigned NOT NULL DEFAULT '30',
 	`notify2` int(10) unsigned NOT NULL DEFAULT '15',
+	`notifyafter` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY ( `akeebasubs_level_id` ),
   UNIQUE KEY `slug` (`slug`)
 ) DEFAULT CHARSET=utf8;
@@ -58,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`contact_flag` tinyint(1) NOT NULL DEFAULT '0',
 	`first_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`after_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY ( `akeebasubs_subscription_id` )
 ) DEFAULT CHARSET=utf8;
 
