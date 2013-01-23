@@ -20,7 +20,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		if(in_array($task,array('edit','add'))) $task = 'read';
 		if(!in_array($task,$allowedTasks)) return false;
 		
-		FOFInput::setVar('task',$task,$this->input);
+		$this->input->set('task',$task);
 		
 		parent::execute($task);
 	}
@@ -28,8 +28,8 @@ class AkeebasubsControllerSubscriptions extends FOFController
 	public function onBeforeBrowse()
 	{
 		// If we have a username/password pair, log in the user if he's a guest
-		$username = FOFInput::getString('username','',$this->input);
-		$password = FOFInput::getString('password','',$this->input);
+		$username = $this->input->getString('username','');
+		$password = $this->input->getString('password','');
 		$user = JFactory::getUser();
 		
 		if($user->guest && !empty($username) && !empty($password)) {
@@ -64,27 +64,23 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		}
 		
 		// Does the user have core.manage access or belongs to SA group?
-		if(version_compare(JVERSION, '1.6.0', 'ge')) {
-			$isAdmin = $user->authorise('core.manage','com_akeebasubs');
-		} else {
-			$isAdmin = $user->gid >= 23;
-		}
+		$isAdmin = $user->authorise('core.manage','com_akeebasubs');
 		
-		if(FOFInput::getInt('allUsers',0,$this->input) && $isAdmin) {
+		if($this->input->getInt('allUsers',0) && $isAdmin) {
 			$this->getThisModel()->user_id(null);
 		} else {
 			$this->getThisModel()->user_id(JFactory::getUser()->id);
 		}
 
-		if(FOFInput::getInt('allStates',0,$this->input) && $isAdmin) {
+		if($this->input->getInt('allStates',0) && $isAdmin) {
 			$this->getThisModel()->paystate(null);
 		} else {
 			$this->getThisModel()->paystate('C,P');
 		}
 		
 		// Let me cheat. If the request doesn't specify how many records to show, show them all!
-		if(JRequest::getCmd('format','html') != 'html') {
-			if(!JRequest::getInt('limit',0) && !JRequest::getInt('limitstart',0)) {
+		if($this->input->getCmd('format','html') != 'html') {
+			if(!$this->input->getInt('limit',0) && !$this->input->getInt('limitstart',0)) {
 				$this->getThisModel()->limit(0);
 				$this->getThisModel()->limitstart(0);
 			}
