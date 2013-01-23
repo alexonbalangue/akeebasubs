@@ -101,6 +101,12 @@ tr.expired td .akeebasubs-subscription-netamount { color: gray; }
 tr.expired td .akeebasubs-subscription-taxamount { color: gray; }
 tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 
+tr.pending-renewal td { background: rgba(240,255,240,128) !important; color: gray; }
+tr.pending-renewal td a { color: gray; }
+tr.pending-renewal td .akeebasubs-subscription-netamount { color: gray; }
+tr.pending-renewal td .akeebasubs-subscription-taxamount { color: gray; }
+tr.pending-renewal td .akeebasubs-subscription-grossamount { color: gray; }
+
 .akeebasubs-coupon-discount-value:before{ content: '- '; }
 .akeebasubs-coupon-discount-value { color: red; font-weight: bold; }
 

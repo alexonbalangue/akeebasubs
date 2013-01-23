@@ -158,7 +158,19 @@ unset($upgradesRaw);
 			$email = trim($subscription->email);
 			$email = strtolower($email);
 			$gravatarHash = md5($email);
-			$rowClass = ($subscription->enabled) ? '' : 'expired';
+			$rowClass = '';
+			if (!$subscription->enabled)
+			{
+				if($subscription->state == 'C')
+				{
+					$rowClass = 'pending-renewal';
+				}
+				else
+				{
+					$rowClass = 'expired';
+				}
+			}
+			
 			$subscription->published = $subscription->enabled;
 			
 			$users = FOFModel::getTmpInstance('Users','AkeebasubsModel')
