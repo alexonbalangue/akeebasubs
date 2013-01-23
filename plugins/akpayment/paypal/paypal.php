@@ -244,6 +244,24 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		}
 		// In the case of a successful recurring payment, fetch the old subscription's data
 		if($recurring && ($newStatus == 'C') && ($subscription->state == 'C')) {
+			// Fix the starting date if the payment was accepted after the subscription's start date. This
+			// works around the case where someone pays by e-Check on January 1st and the check is cleared
+			// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
+			// the user would have paid us and we'd never given him a subscription!
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			if(!preg_match($regex, $subscription->publish_up)) {
+				$subscription->publish_up = '2001-01-01';
+			}
+			if(!preg_match($regex, $subscription->publish_down)) {
+				$subscription->publish_down = '2038-01-01';
+			}
+			$jNow = new JDate();
+			$jStart = new JDate($subscription->publish_up);
+			$jEnd = new JDate($subscription->publish_down);
+			$now = $jNow->toUnix();
+			$start = $jStart->toUnix();
+			$end = $jEnd->toUnix();
+			
 			// Create a new record for the old subscription
 			$oldData = $subscription->getData();
 			$oldData['akeebasubs_subscription_id'] = 0;

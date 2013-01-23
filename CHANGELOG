@@ -10,6 +10,7 @@ Akeeba Subscriptions 2.6.0
 + Slave subscriptions: you can allow a subscriber to add up to 10 extra users (this is configurable per subscription level) to his subscription
 + Professional version: Subscription level relations, allows for fine-tuned subscription upgrades with flexible discounts
 ~ Subscriptions which are paid but inactive, due to a future Valid From date, are now shown differently than expired or unpaid subscriptions in the front-end
+# [MEDIUM] Regression: PayPal recurring payments wouldn't work
 # [MEDIUM] Missing files from the updated K2 integration plugin
 # [LOW] Timed release plugin had issues determining the elapsed / remaining time per level in timed content expressions
 # [LOW] The login redirection URL could end up being invalid on some site configurations
