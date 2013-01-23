@@ -210,3 +210,10 @@ tr.expired td .akeebasubs-subscription-grossamount { color: gray; }
 	font-size: xx-small;
 	color: #ccc;
 }
+
+.akeebasubs-subscription-processor {
+	display: block;
+	clear: left;
+	font-weight: bold;
+	color: navy;
+}

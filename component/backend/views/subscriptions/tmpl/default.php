@@ -219,7 +219,13 @@ unset($upgradesRaw);
 			</td>
 			<td class="akeebasubs-subscription-paymentstatus">
 				<span class="akeebasubs-payment akeebasubs-payment-<?php echo strtolower($subscription->state) ?> hasTip"
-					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>::<?php echo $subscription->processor?> &bull; <?php echo $subscription->processor_key?>"></span>
+					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>::<?php echo $subscription->processor?> &bull; <?php echo $subscription->processor_key?>">
+				</span>
+				
+				<span class="akeebasubs-subscription-processor">
+					<?php echo $this->escape($subscription->processor) ?>
+				</span>
+
 			</td>
 			<td>
 				<?php if($subscription->akeebasubs_coupon_id > 0):?>
