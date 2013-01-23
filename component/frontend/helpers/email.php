@@ -178,14 +178,14 @@ class AkeebasubsHelperEmail
 					{
 						$levelScore = 10;
 					}
-					elseif($myLevel != '*')
+					elseif($myLevel != 0)
 					{
 						$levelScore = 0;
 					}
 				}
 				else
 				{
-					if ($myLevel != '*')
+					if ($myLevel != 0)
 					{
 						$levelScore = 0;
 					}
@@ -207,9 +207,14 @@ class AkeebasubsHelperEmail
 				}
 			}
 		}
-				
-		if(!$isHTML)
+		
+		// If no match is found in the database (or if this is the Core release)
+		// we fall back to the legacy method of using plain text emails and
+		// translation strings.
+		if(!$isHTML || (AKEEBASUBS_PRO != 1))
 		{
+			$isHTML = false;
+			
 			if(!array_key_exists($extension, $loadedLanguagesForExtensions))
 			{
 				self::loadLanguageOverrides($extension);
