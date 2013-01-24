@@ -70,15 +70,17 @@ class Com_AkeebasubsInstallerScript
 				'k2'					=> 0,
 				'kunena'				=> 0,
 				'mailchimp'				=> 0,
+				'mijoshop'				=> 0,
 				'phocadownload'			=> 0,
 				'projectfork'			=> 0,
 				'recaptcha'				=> 0,
 				'redshop'				=> 0,
 				'redshopusersync'		=> 0,
 				'samplefields'			=> 0,
-				'tracktime'				=> 0,
+				'slavesubs'				=> 1,
 				'sql'					=> 0,
 				'subscriptionemails'	=> 1,
+				'tracktime'				=> 0,
 				'userdelete'			=> 0,
 				'vm2'					=> 0
 			),
@@ -137,6 +139,7 @@ class Com_AkeebasubsInstallerScript
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
 				'idevaffiliate'			=> 0,
+				'oneclickaction'		=> 1,
 				'postaffiliatepro'		=> 0,
 			)
 		)

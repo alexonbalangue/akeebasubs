@@ -11,6 +11,7 @@ Akeeba Subscriptions 3.0.0
 + Post-expiration notification email, sent a preset number of days after a subscription expires if it's not already renewed
 + Professional version: Subscription level relations, allows for fine-tuned subscription upgrades with flexible discounts
 + Professional version: easy to edit HTML email templates
++ MijoShop integration
 ~ Subscriptions which are paid but inactive, due to a future Valid From date, are now shown differently than expired or unpaid subscriptions in the front-end
 ~ Display the payment processor of each subscription in the back-end Subscriptions page
 ~ Renewed but not yet active subscription are shown with light green instead of pink background in the back-end Subscriptions page
