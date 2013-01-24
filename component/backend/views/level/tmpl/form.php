@@ -84,6 +84,16 @@ $this->loadHelper('cparams');
 		</div>
 		
 		<div class="control-group">
+			<label for="fixed_date" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FIXED_DATE')?></label>
+			<div class="controls">
+				<?php echo JHTML::_('calendar', $this->item->fixed_date, 'fixed_date', 'fixed_date'); ?>
+				<p class="help-block">
+					<?php echo JText::_( 'COM_AKEEBASUBS_LEVEL_FIELD_FIXED_DATE_TIP' );?>
+				</p>
+			</div>
+		</div>
+		
+		<div class="control-group">
 			<label for="forever" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FOREVER'); ?>
 			</label>
