@@ -83,7 +83,7 @@ class plgAkeebasubsAtscredits extends JPlugin
 		}
 		
 		if(!property_exists($level->params, 'atscredits_credits')) {
-			$level->params->atscredits_credits = array();
+			$level->params->atscredits_credits = 0;
 		}
 		
 		@ob_start();
