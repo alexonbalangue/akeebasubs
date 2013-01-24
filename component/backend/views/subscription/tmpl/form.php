@@ -127,6 +127,16 @@ $this->loadHelper('format');
 		</div>
 		
 		<div class="control-group">
+				<label for="tax_percent" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_TAX_PERCENT')?></label>
+			<div class="controls">
+				<div class="input-append">
+					<input type="text" class="input-mini" name="tax_percent" id="tax_percent" value="<?php echo $this->item->tax_percent ?>"/>
+					<span class="add-on">%</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="control-group">
 				<label for="tax_amount" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_TAX_AMOUNT')?></label>
 			<div class="controls">
 				<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">

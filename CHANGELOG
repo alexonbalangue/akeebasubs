@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 3.0.0
 ================================================================================
+! THIS VERSION REQUIRES PHP 5.3 OR LATER
 + ON POPULAR REQUEST: "Subscription options" custom field type, allows you to add per-subscription options which can increase/decrease the subscription's price
 + Calendar (date picker) custom field type
 + States can now be edited in the component's back-end
@@ -15,6 +16,7 @@ Akeeba Subscriptions 3.0.0
 ~ Subscriptions which are paid but inactive, due to a future Valid From date, are now shown differently than expired or unpaid subscriptions in the front-end
 ~ Display the payment processor of each subscription in the back-end Subscriptions page
 ~ Renewed but not yet active subscription are shown with light green instead of pink background in the back-end Subscriptions page
+~ Show the applied tax rate in back-end subscription editor page
 # [MEDIUM] Regression: PayPal recurring payments wouldn't work
 # [MEDIUM] Missing files from the updated K2 integration plugin
 # [LOW] Timed release plugin had issues determining the elapsed / remaining time per level in timed content expressions
