@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`recurring` TINYINT(3) NOT NULL DEFAULT 0,
 	`forever` TINYINT(3) NOT NULL DEFAULT 0,
 	`akeebasubs_levelgroup_id` BIGINT(20) UNSIGNED NULL,
+	`fixed_date` DATETIME NULL,
 	`params` TEXT,
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',

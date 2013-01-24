@@ -1,0 +1,1 @@
+ALTER TABLE `#__akeebasubs_levels` ADD COLUMN `fixed_date` DATETIME NULL AFTER `akeebasubs_levelgroup_id`;
