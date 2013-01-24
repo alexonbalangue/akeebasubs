@@ -1687,13 +1687,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 		
 		// Step #6. Create a new subscription record
 		// ----------------------------------------------------------------------
+		$nullDate = JFactory::getDbo()->getNullDate();
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
-		if($level->forever) {
+		if($level->forever)
+		{
 			$jStartDate = new JDate();
 			$endDate = '2038-01-01 00:00:00';
-		} else {
+		}
+		elseif(!is_null($level->fixed_date) && ($level->fixed_date != $nullDate))
+		{
+			$endDate = $level->fixed_date;
+		}
+		else
+		{
 			$jStartDate = new JDate($startDate);
 			$duration = (int)$level->duration * 3600 * 24;
 			$endDate = $startDate + $duration;
