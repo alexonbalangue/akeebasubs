@@ -40,6 +40,12 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/** @var array ZOO apps to unpublish items */
 	protected $removeGroups = array();
 	
+	public function __construct(&$subject, $name, $config = array(), $templatePath = null) {
+		parent::__construct($subject, $name, $config, $templatePath);
+		
+		$this->loadLanguage();
+	}
+	
 	/**
 	 * Renders the configuration page in the component's back-end
 	 * 
