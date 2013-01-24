@@ -1540,6 +1540,83 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Fixed expiration</term>
+
+          <listitem>
+            <para>Normally, subscriptions expire after a fixed amount of time
+            since their creation. This is what the "Subscription length"
+            option above does. In some cases you want to expire subscriptions
+            on a specific fixed date. For example, a football club may want
+            all of its subscriptions to end on July 1st, when the season
+            officially ends. This is what the "Fixed expiration" is meant for.
+            You have to enter the exact date (and, optionally, time) all
+            subscriptions on this level will expire on. If you don't want to
+            use this feature just leave it blank or use the pseudo-date
+            "0000-00-00 00:00:00".</para>
+
+            <important>
+              <para>We recommend against using the expiration notification
+              features with fixed expiration subscriptions. If you do use them
+              please bear in mind the following:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>All expiration notification emails will be scheduled
+                  for sending at the same time and date for all subscriptions
+                  on this level. If you have 300 subscriptions then 300 emails
+                  will be scheduled for the same date and time</para>
+                </listitem>
+
+                <listitem>
+                  <para>The expiration plugin will only send a handful of
+                  emails on each page load. This means that it will need
+                  several or even hundreds of page loads to send all
+                  notification emails. This has major effects outlined
+                  below.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If you don't have enough traffic on your site for all
+                  emails to be sent out at the specified date, expiration
+                  notification emails may end being sent too late or
+                  never.</para>
+                </listitem>
+
+                <listitem>
+                  <para>While your site is sending emails its performance will
+                  suffer. You may experience an increase of page load time of
+                  up to 3 seconds.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Most mail servers ban email addresses and email
+                  servers causing sudden traffic spikes on them. In other
+                  words, if you end sending too many emails too fast to a
+                  specific domain (e.g. many mails to GMail addresses) you
+                  might end up being marked as a spammer and banned from
+                  sending email to that domain again.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Many mail servers impose an email quota, i.e. a
+                  maximum number of emails which can be sent per day from a
+                  single email account. Most hosts have a limit of 500 or 1000
+                  emails, whereas GMail and Google Mail for Applications has a
+                  limit of 250 emails per day. If you go over this limit your
+                  emails will not be sent and it's possible that your account
+                  will be blocked.</para>
+                </listitem>
+              </itemizedlist>
+
+              <para>So, to save you from trouble, we recommend not using
+              notification emails with fixed date subscriptions unless you are
+              perfectly aware of the risks involved and you believe that your
+              site will not be adversely affected by them.</para>
+            </important>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Forever</term>
 
           <listitem>
