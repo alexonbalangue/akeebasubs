@@ -15,6 +15,8 @@ $this->loadHelper('image');
 $this->loadHelper('select');
 
 $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
+
+$nullDate = JFactory::getDbo()->getNullDate();
 ?>
 
 <div class="row-fluid">
@@ -159,7 +161,10 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 				<?php echo AkeebasubsHelperFormat::formatLevelgroup($item->akeebasubs_levelgroup_id) ?>
 			</td>
 			<td>
-				<?php if($item->forever): ?>
+				<?php if(!empty($item->fixed_date) && !($item->fixed_date == $nullDate)): ?>
+				<strong><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FIXED_DATE'); ?></strong><br/>
+				<?php echo AkeebasubsHelperFormat::date($item->fixed_date) ?>
+				<?php elseif($item->forever): ?>
 				<strong><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FOREVER'); ?></strong>
 				<?php else: ?>
 				<?php echo $this->escape($item->duration) ?>
