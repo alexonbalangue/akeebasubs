@@ -67,10 +67,34 @@ class AkeebasubsTableLevel extends FOFTable
 			$result = false;
 		}
 		
-		// Is the duration less than a day?
-		if($this->forever) {
+		// Check the fixed expiration date and make sure it's in the future
+		$nullDate = JFactory::getDbo()->getNullDate();
+		if(!empty($this->fixed_date) && !($this->fixed_date == $nullDate))
+		{
+			$jNow = JFactory::getDate();
+			$jFixed = JFactory::getDate($this->fixed_date);
+			
+			if($jNow->toUnix() > $jFixed->toUnix())
+			{
+				$this->fixed_date = $nullDate;
+			}
+		}
+		
+		// Is the duration less than a day and this is not a forever or a fixed date subscription?
+		if($this->forever)
+		{
 			$this->duration = 0;
-		} elseif($this->duration < 1) {
+		}
+		elseif(!empty($this->fixed_date) && !($this->fixed_date == $nullDate))
+		{
+			// We only want the duration to be a positive number or zero
+			if($this->duration < 0)
+			{
+				$this->duration = 0;
+			}
+		}
+		elseif($this->duration < 1)
+		{
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_LENGTH'));
 			$result = false;
 		}
