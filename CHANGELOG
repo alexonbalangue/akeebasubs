@@ -3,6 +3,7 @@ Akeeba Subscriptions 3.0.0
 ================================================================================
 ! THIS VERSION REQUIRES PHP 5.3 OR LATER
 + ON POPULAR REQUEST: "Subscription options" custom field type, allows you to add per-subscription options which can increase/decrease the subscription's price
++ ON POPULAR REQUEST: Fixed expiration date subscriptions
 + Calendar (date picker) custom field type
 + States can now be edited in the component's back-end
 + TrackTime integration (third party invoicing solution)

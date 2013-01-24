@@ -1698,6 +1698,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		elseif(!is_null($level->fixed_date) && ($level->fixed_date != $nullDate))
 		{
+			$jStartDate = new JDate();
 			$endDate = $level->fixed_date;
 		}
 		else
