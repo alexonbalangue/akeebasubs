@@ -189,20 +189,47 @@ abstract class plgAkpaymentAbstract extends JPlugin
 				// End date after 2038-01-01; forever subscription
 				$start = $now;
 			} else {
-				// Regular subscription
-				$duration = $end - $start;
-				// Expiration = after => start date = end date of old sub
-				if ($expiration == 'after')
+				// Get the subscription level and determine if this is a Fixed
+				// Expiration subscription
+				$nullDate = JFactory::getDbo()->getNullDate();
+				$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+					->getItem($subscription->akeebasubs_level_id);
+				$fixed_date = $level->fixed_date;
+				
+				if(!is_null($fixed_date) && !($fixed_date == $nullDate))
 				{
-					$start = $oldsubstart;
-				}
-				// Expiration != after => start date = now
-				else
-				{
-					$start = $now;
+					// Is the fixed date in the future?
+					$jFixedDate = JFactory::getDate($fixed_date);
+					if($now > $jFixedDate->toUnix()) 
+					{
+						// If the fixed date is in the past handle it as a regular subscription
+						$fixed_date = null;
+					}
 				}
 				
-				$end = $start + $duration;
+				if(is_null($fixed_date) || ($fixed_date == $nullDate))
+				{
+					// Regular subscription
+					$duration = $end - $start;
+					// Expiration = after => start date = end date of old sub
+					if ($expiration == 'after')
+					{
+						$start = $oldsubstart;
+					}
+					// Expiration != after => start date = now
+					else
+					{
+						$start = $now;
+					}
+
+					$end = $start + $duration;
+				}
+				else
+				{
+					// Fixed date subscription
+					$start = $now;
+					$end = $jFixedDate->toUnix();
+				}
 			}
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
