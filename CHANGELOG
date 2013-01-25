@@ -18,6 +18,7 @@ Akeeba Subscriptions 3.0.0
 ~ Display the payment processor of each subscription in the back-end Subscriptions page
 ~ Renewed but not yet active subscription are shown with light green instead of pink background in the back-end Subscriptions page
 ~ Show the applied tax rate in back-end subscription editor page
+~ Many more subscription level message/email variables and improvements in date formatting in messages/emails
 # [MEDIUM] Regression: PayPal recurring payments wouldn't work
 # [MEDIUM] Missing files from the updated K2 integration plugin
 # [LOW] Timed release plugin had issues determining the elapsed / remaining time per level in timed content expressions
