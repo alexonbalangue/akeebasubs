@@ -3,3 +3,6 @@ ALTER TABLE `#__akeebasubs_invoices` ADD COLUMN
 
 ALTER TABLE `#__akeebasubs_invoices` ADD COLUMN
 	`display_number` VARCHAR(255) NULL AFTER `invoice_no`;
+
+ALTER TABLE `#__akeebasubs_invoices` ADD COLUMN
+	`sent_on` DATETIME NULL AFTER `btxt`;
