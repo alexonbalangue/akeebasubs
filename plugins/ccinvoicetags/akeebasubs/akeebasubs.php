@@ -74,7 +74,8 @@ class plgccInvoicetagsAkeebasubs extends JPlugin
 		$query = $db->getQuery(true)
 			->select($db->qn('akeebasubs_subscription_id'))
 			->from($db->qn('#__akeebasubs_invoices'))
-			->where($db->qn('invoice_no').' = '.$db->q($invoice_id));
+			->where($db->qn('invoice_no').' = '.$db->q($invoice_id))
+			->where($db->qn('extension').' = '.$db->q('ccinvoices'));
 		$db->setQuery($query, 0, 1);
 		$subscriptionID = $db->loadResult();
 		
