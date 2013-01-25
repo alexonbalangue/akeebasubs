@@ -190,7 +190,9 @@ class plgAkeebasubsTracktime extends JPlugin
 		// Create an Akeeba Subscriptions invoice record
 		$object = (object)array(
 			'akeebasubs_subscription_id'	=> $row->akeebasubs_subscription_id,
+			'extension'						=> 'tracktime',
 			'invoice_no'					=> $invoice_number,
+			'display_number'				=> $invoice_number,
 			'invoice_date'					=> $jNow->toSql(),
 			'enabled'						=> 1,
 			'created_on'					=> $jNow->toSql(),
@@ -365,6 +367,29 @@ class plgAkeebasubsTracktime extends JPlugin
 		}
 
 		return $text;
+	}
+	
+	public function onAKGetInvoicingOptions()
+	{
+		jimport('joomla.filesystem.file');
+		$enabled = JFile::exists(JPATH_ROOT.'/administrator/components/com_tracktime/views/invoices/tmpl/default.php');
+		return array(
+			'extension'		=> 'tracktime',
+			'title'			=> 'TrackTime',
+			'enabled'		=> $enabled,
+			'backendurl'	=> null, // @todo Davide must provide this
+			'frontendurl'	=> null, // @todo Davide must provide this
+		);
+	}
+	
+	public function onAKGetInvoiceNumber($extension, $id)
+	{
+		if ($extension != 'tracktime')
+		{
+			return null;
+		}
+		
+		return $id;
 	}
 }
 

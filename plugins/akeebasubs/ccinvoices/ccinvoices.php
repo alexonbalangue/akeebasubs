@@ -223,7 +223,9 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				// Create an Akeeba Subscriptions invoice record
 				$object = (object)array(
 					'akeebasubs_subscription_id'	=> $row->akeebasubs_subscription_id,
+					'extension'						=> 'ccinvoices',
 					'invoice_no'					=> $id,
+					'display_number'				=> $invoice_number,
 					'invoice_date'					=> $jNow->toSql(),
 					'enabled'						=> 1,
 					'created_on'					=> $jNow->toSql(),
@@ -542,5 +544,53 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		}
 
 		return $text;
+	}
+	
+	public function onAKGetInvoicingOptions()
+	{
+		jimport('joomla.filesystem.file');
+		$enabled = JFile::exists(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/controllers/invoices.php');
+		return array(
+			'extension'		=> 'ccinvoices',
+			'title'			=> 'ccInvoices',
+			'enabled'		=> $enabled,
+			'backendurl'	=> 'index.php?option=com_ccinvoices&controller=invoices&task=edit&cid[]=%s',
+			'frontendurl'	=> 'index.php?option=com_ccinvoices&task=download&id=%s',
+		);
+	}
+	
+	public function onAKGetInvoiceNumber($extension, $id)
+	{
+		if ($extension != 'ccinvoices')
+		{
+			return null;
+		}
+		
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true)
+			->select('*')
+			->from($db->qn('#__ccinvoices_configuration'))
+			->where($db->qn('id').' = '.$db->q('1'));
+		$db->setQuery($query, 0, 1);
+		$config = $db->loadObject();
+		
+		require_once JPATH_ADMINISTRATOR.'/components/com_ccinvoices/models/invoices.php';
+        $model = new ccInvoicesModelInvoices;
+		
+		$query = $db->getQuery(true)
+			->select('*')
+			->from($db->qn('#__ccinvoices_invoices'))
+			->where($db->qn('id').' = '.$db->q($id));
+		$db->setQuery($query, 0, 1);
+		$invRow = $db->loadObject();
+		
+		if($config->invoice_format != "")
+		{
+			$ret = $model->getInvoiceNumberFormat($invRow->number);
+		} else {
+			$ret = $invRow->number;
+		}
+		
+		return $ret;
 	}
 }
