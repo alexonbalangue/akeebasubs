@@ -35,12 +35,19 @@ class AkeebasubsToolbar extends FOFToolbar
 				'tools',
 				'users'
 			),
+			'COM_AKEEBASUBS_MAINMENU_INVOICES' => array(
+				'invoices',
+				'invoicetemplates'
+			),
 		);
 
 		if(!AKEEBASUBS_PRO)
 		{
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP']['relations']);
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP']['emailtemplates']);
+			$key = array_search('relations', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
+			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
+			$key = array_search('emailtemplates', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
+			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
+			unset($views['COM_AKEEBASUBS_MAINMENU_INVOICES']);
 		}
 		
 		foreach($views as $label => $view) {
