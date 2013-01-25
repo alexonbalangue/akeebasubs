@@ -163,7 +163,9 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_configurations` (
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
 	`akeebasubs_subscription_id` BIGINT(20) UNSIGNED NOT NULL,
+	`extension` VARCHAR(50) NOT NULL DEFAULT "misc",
 	`invoice_no` BIGINT(20) unsigned NOT NULL,
+	`display_number` VARCHAR(255) NULL,
 	`invoice_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`html` LONGTEXT,
 	`atxt` LONGTEXT,
