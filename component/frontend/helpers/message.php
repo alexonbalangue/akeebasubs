@@ -31,6 +31,10 @@ class AkeebasubsHelperMessage
 			->user_id($sub->user_id)
 			->getFirstItem();
 		
+		// Get the subscription level
+		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->getItem($sub->akeebasubs_level_id);
+		
 		// Merge the user objects
 		$userdata = array_merge((array)$user, (array)($kuser->getData()));
 		
@@ -44,6 +48,16 @@ class AkeebasubsHelperMessage
 			$text = str_replace($tag, $v, $text);
 		}
 		
+		// Create and replace merge tags for the subscription level. Format [LEVEL:KEYNAME]
+		$levelData = (array)($level->getData());
+		foreach($levelData as $k => $v) {
+			if(is_array($v) || is_object($v)) continue;
+			if(substr($k,0,1) == '_') continue;
+			if($k == 'akeebasubs_level_id') $k = 'id';
+			$tag = '[LEVEL:'.strtoupper($k).']';
+			$text = str_replace($tag, $v, $text);
+		}
+
 		// Create and replace merge tags for custom per-subscription data. Format [SUBCUSTOM:KEYNAME]
 		if(array_key_exists('params', $subData)) {
 			if(is_string($subData['params'])) {
@@ -153,6 +167,21 @@ class AkeebasubsHelperMessage
 		$jFrom = new JDate($sub->publish_up);
 		$jTo = new JDate($sub->publish_down);
 		
+		// Download ID
+		$dlid = md5($user->id . $user->username . $user->password);
+		
+		// User's state, human readable
+		$formatted_state = '';
+		$state = $kuser->state;
+		if (!empty($state))
+		{
+			if (!class_exists('AkeebasubsHelperSelect'))
+			{
+				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
+			}
+			$formatted_state = AkeebasubsHelperSelect::formatState($state);
+		}
+		
 		// -- The actual replacement
 		$extras = array_merge(array(
 			"\\n"			=> "\n",
@@ -171,6 +200,7 @@ class AkeebasubsHelperMessage
 			'[MYSUBSURL]'	=> $mysubsurl,
 			'[URL]'			=> $mysubsurl,
 			'[CURRENCY]'	=> $currency,
+			'[DLID]'		=> $dlid,
 		), $extras);
 		foreach ($extras as $key => $value)
 		{
