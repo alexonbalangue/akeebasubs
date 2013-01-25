@@ -35,6 +35,10 @@
 		<include name="strapper/**" />
 		<include name="*" />
 
+		<exclude name="backend/controllers/invoices.php" />
+		<exclude name="backend/models/invoices.php" />
+		<exclude name="backend/views/invoices/**" />
+		<exclude name="backend/views/invoice/**" />
 		<exclude name="backend/views/emailtemplates/**" />
 		<exclude name="backend/views/emailtemplate/**" />
 		<exclude name="backend/views/invoicetemplates/**" />
