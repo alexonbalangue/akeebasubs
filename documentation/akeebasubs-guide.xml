@@ -6185,6 +6185,112 @@ LEVEL2=11111:22222:33333</programlisting>
         </variablelist>
       </section>
 
+      <section xml:id="payment-gocardless">
+        <title>GoCardless</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - GoCardless</guilabel></para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This payment method integrates the low cost GoCardless payments
+        service.</para>
+
+        <para>The options you have with this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "GoCardless" or type in a custom name
+              to show to your customer's, e.g. "Payment by direct
+              debit"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Add identifier</term>
+
+            <listitem>
+              <para>Your app identifier as given to you by GoCardless</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>App secret</term>
+
+            <listitem>
+              <para>Your app secret as given to you by GoCardless</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant access token</term>
+
+            <listitem>
+              <para>Your merchant access token as given to you by
+              GoCardless</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>Your merchant ID as given to you by GoCardless</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the testing (sandbox) server. No money will change hands. This
+              is supposed to be used ONLY for testing the integration with
+              GoCardless before launching your site.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>All GoCardless payments take a while to be processed. The
+        payments will appear as Pending in Akeeba Subscriptions' interface
+        until they are cleared by GoCardless. This means that your users'
+        subscriptions and user accounts will take a few days to be activated
+        since their payment.</para>
+
+        <para>GoCardless does not allow Akeeba Subscriptions to notify it of
+        the currency of the transaction. As a result you have to set the
+        correct currency in your GoCardless account.</para>
+
+        <para>At the GoCardless account you also have to set the following
+        parameters under URI Settings:</para>
+
+        <para>Redirect URI: <uri>https://www.example.com</uri></para>
+
+        <para>Cancel URI: <uri>https://www.example.com</uri></para>
+
+        <para>Webhook URI:
+        <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=gocardless</uri>
+        </para>
+
+        <para>Where www.example.com is the domain name of your site.</para>
+      </section>
+
       <section xml:id="payment-googlecheckout">
         <title>Google Checkout</title>
 
@@ -9281,7 +9387,7 @@ LEVEL2=11111:22222:33333</programlisting>
 
             <listitem>
               <para>If set to Yes, transactions with EU-based businesses with
-              VIES-registered VAT numbers will have the "Intra-EU" not below
+              VIES-registered VAT numbers will have the "Intra-EU" note below
               shown in the notes. This is required to comply with EU
               legislation for intra-EU B2B transactions where the VAT
               liability is transferred to the recipient.</para>
