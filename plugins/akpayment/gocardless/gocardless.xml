@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - GoCardless</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-12-10</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_GOCARDLESS_DESCRIPTION</description>
+	<files>
+		<filename plugin="gocardless">gocardless.php</filename>
+		<folder>gocardless</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_gocardless.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_gocardless.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_TITLE_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="app_id" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_APPID_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_APPID_DESC"/>
+				<field name="app_secret" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_APPSECRET_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_APPSECRET_DESC"/>
+				<field name="merchant_token" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_MERCHANTTOKEN_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_MERCHANTTOKEN_DESC"/>
+				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_MERCHANTID_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_MERCHANTID_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_GOCARDLESS_SANDBOX_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_SANDBOX_DESC">
+				  <option value="0">JNo</option>
+				  <option value="1">JYes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
