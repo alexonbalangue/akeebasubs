@@ -98,6 +98,7 @@ class Com_AkeebasubsInstallerScript
 				'epaydk'				=> 0,
 				'eselectplus'			=> 0,
 				'eway'					=> 0,
+				'gocardless'			=> 0,
 				'googlecheckout'		=> 0,
 				'ifthen'				=> 0,
 				'moip'					=> 0,
