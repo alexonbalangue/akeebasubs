@@ -80,8 +80,13 @@ class AkeebasubsHelperEmail
 	 * 
 	 * @param type $extension
 	 */
-	private static function loadLanguageOverrides($extension)
+	private static function loadLanguageOverrides($extension, $user = null)
 	{
+		if (!($user instanceof JUser))
+		{
+			$user = JFactory::getUser();
+		}
+		
 		// Load the language files and their overrides
 		$jlang = JFactory::getLanguage();
 		// -- English (default fallback)
@@ -116,9 +121,14 @@ class AkeebasubsHelperEmail
 	 * 
 	 * @return  array  isHTML: If it's HTML override from the db; text: The unprocessed translation string
 	 */
-	private static function loadEmailTemplate($key, $level = null)
+	private static function loadEmailTemplate($key, $level = null, $user = null)
 	{
 		static $loadedLanguagesForExtensions = array();
+		
+		if (is_null($user))
+		{
+			$user = JFactory::getUser();
+		}
 		
 		// Parse the key
 		$key = strtolower($key);
@@ -135,7 +145,7 @@ class AkeebasubsHelperEmail
 
 		// Look for desired languages
 		$jLang = JFactory::getLanguage();
-		$userLang = JFactory::getUser()->getParam('language','');
+		$userLang = $user->getParam('language','');
 		$languages = array(
 			$userLang, $jLang->getTag(), $jLang->getDefault(), 'en-GB', '*'
 		);
@@ -217,7 +227,7 @@ class AkeebasubsHelperEmail
 			
 			if(!array_key_exists($extension, $loadedLanguagesForExtensions))
 			{
-				self::loadLanguageOverrides($extension);
+				self::loadLanguageOverrides($extension, $user);
 			}
 			
 			$subjectKey = $extension . '_HEAD_' . $keyParts[3];
@@ -268,7 +278,7 @@ class AkeebasubsHelperEmail
 	public static function getPreloadedMailer($sub, $key, array $extras = array())
 	{
 		// Load the template
-		list($isHTML, $subject, $templateText, $loadLanguage) = self::loadEmailTemplate($key);
+		list($isHTML, $subject, $templateText, $loadLanguage) = self::loadEmailTemplate($key, $sub->akeebasubs_level_id, JFactory::getUser($sub->user_id));
 		
 		// Substitute variables in $templateText and $subject
 		if(!class_exists('AkeebasubsHelperMessage'))
