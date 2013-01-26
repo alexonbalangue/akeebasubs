@@ -4133,6 +4133,36 @@ Rule C gives $ 30 discount</programlisting>
             </varlistentry>
 
             <varlistentry>
+              <term>[PUBLISH_UP_EU]</term>
+
+              <listitem>
+                <para>The date when the subscription becomes active in a
+                format like this: 31/12/2011 21:34:59. Dates and times are
+                always expressed in UTC timezone.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[PUBLISH_UP_USA]</term>
+
+              <listitem>
+                <para>The date when the subscription becomes active in a
+                format like this: 12/31/2011 09:34:59 pm. Dates and times are
+                always expressed in UTC timezone.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[PUBLISH_UP_JAPAN]</term>
+
+              <listitem>
+                <para>The date when the subscription becomes active in a
+                format like this: 2011/12/31 21:34:59. Dates and times are
+                always expressed in UTC timezone.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
               <term>[PUBLISH_DOWN]</term>
 
               <listitem>
@@ -4143,10 +4173,58 @@ Rule C gives $ 30 discount</programlisting>
             </varlistentry>
 
             <varlistentry>
+              <term>[PUBLISH_DOWN_EU]</term>
+
+              <listitem>
+                <para>The date when the subscription becomes inactive in a
+                format like this: 31/12/2011 21:34:59. Dates and times are
+                always expressed in UTC timezone.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[PUBLISH_DOWN_USA]</term>
+
+              <listitem>
+                <para>The date when the subscription becomes inactive in a
+                format like this: 12/31/2011 09:34:59 pm. Dates and times are
+                always expressed in UTC timezone.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[PUBLISH_DOWN_JAPAN]</term>
+
+              <listitem>
+                <para>The date when the subscription becomes inactive in a
+                format like this: 2011/12/31 21:34:59. Dates and times are
+                always expressed in UTC timezone.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
               <term>[MYSUBSURL] or [URL]</term>
 
               <listitem>
                 <para>The URL to the "My Subscriptions" page</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[DLID]</term>
+
+              <listitem>
+                <para>The Download ID –as defined and used by Akeeba Release
+                System– of the subscriber.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[CURRENCY] or [$]</term>
+
+              <listitem>
+                <para>The currency symbol you've defined in Akeeba
+                Subscriptions' Options page</para>
               </listitem>
             </varlistentry>
 
@@ -4347,6 +4425,30 @@ Rule C gives $ 30 discount</programlisting>
             </varlistentry>
 
             <varlistentry>
+              <term>[LEVEL:ID]</term>
+
+              <listitem>
+                <para>The numeric ID of the subscription level.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[LEVEL:TITLE]</term>
+
+              <listitem>
+                <para>The title of the subscription level.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[LEVEL:DESCRIPTION]</term>
+
+              <listitem>
+                <para>The description of the subscription level.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
               <term>[USER:ISBUSINESS]</term>
 
               <listitem>
@@ -4415,8 +4517,15 @@ Rule C gives $ 30 discount</programlisting>
               <term>[USER:STATE]</term>
 
               <listitem>
-                <para>State (two letter code); only exists for Australia,
-                Canada and USA</para>
+                <para>State (the short two to five letter code)</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[USER:STATE_FORMATTED]</term>
+
+              <listitem>
+                <para>State (the full human-readable name of the state)</para>
               </listitem>
             </varlistentry>
 
@@ -4462,6 +4571,77 @@ Rule C gives $ 30 discount</programlisting>
               </listitem>
             </varlistentry>
           </variablelist></para>
+
+        <para>In addition to the above, the following variables are valid
+        <emphasis>only</emphasis> for invoice templates:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>[INV:PLAIN_NUMBER]</term>
+
+            <listitem>
+              <para>The plain (unformatted) invoice number</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[INV:NUMBER]</term>
+
+            <listitem>
+              <para>The formatted invoice number (if you are using a custom
+              format in the component's Options)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[INV:INVOICE_DATE]</term>
+
+            <listitem>
+              <para>The date of the invoice. The format you've set up in the
+              component's Options will be used.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[INV:INVOICE_DATE_EU]</term>
+
+            <listitem>
+              <para>The date of the invoice. The European date format
+              (DD/MM/YYYY, e.g. 31/12/2012) will be used.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[INV:INVOICE_DATE_USA]</term>
+
+            <listitem>
+              <para>The date of the invoice. The US date format (MM/DD/YYYY,
+              e.g. 12/31/2012) will be used.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[INV:INVOICE_DATE_JAPAN]</term>
+
+            <listitem>
+              <para>The date of the invoice. The Japanese date format
+              (YYYY/MM/DD, e.g. 2012/12/31) will be used.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>[VAT_NOTICE]</term>
+
+            <listitem>
+              <para>If he subscriber has chosen a country belonging to the
+              European Union and his VAT number is VIES-registered this will
+              be replaced with the standard notice "VAT liability is
+              transferred to the recipient, pursuant EU Directive nr
+              2006/112/EC and local tax laws implementing this directive." In
+              any other case this will be blank.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </section>
     </section>
   </chapter>

@@ -206,7 +206,9 @@ class AkeebasubsHelperMessage
 			'[MYSUBSURL]'			=> $mysubsurl,
 			'[URL]'					=> $mysubsurl,
 			'[CURRENCY]'			=> $currency,
+			'[$]'					=> $currency,
 			'[DLID]'				=> $dlid,
+			'[USER:STATE_FORMATTED]'=> $formatted_state,
 		), $extras);
 		foreach ($extras as $key => $value)
 		{

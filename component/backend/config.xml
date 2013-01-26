@@ -131,6 +131,12 @@
 				label="COM_AKEEBASUBS_CONFIG_INVOICE_OVERRIDE_TITLE"
 				description="COM_AKEEBASUBS_CONFIG_INVOICE_OVERRIDE_DESC"
 		/>
+		<field name="invoice_vatnote" type="text"
+				default="VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive."
+				size="50"
+				label="COM_AKEEBASUBS_CONFIG_INVOICE_VATNOTE_TITLE"
+				description="COM_AKEEBASUBS_CONFIG_INVOICE_VATNOTE_DESC"
+		/>
 	</fieldset>
 
 	<fieldset

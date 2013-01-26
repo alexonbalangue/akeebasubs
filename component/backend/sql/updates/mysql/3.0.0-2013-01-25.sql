@@ -6,3 +6,6 @@ ALTER TABLE `#__akeebasubs_invoices` ADD COLUMN
 
 ALTER TABLE `#__akeebasubs_invoices` ADD COLUMN
 	`sent_on` DATETIME NULL AFTER `btxt`;
+
+ALTER TABLE `#__akeebasubs_invoices` ADD COLUMN
+	`filename` VARCHAR(255) NULL AFTER `btxt`;

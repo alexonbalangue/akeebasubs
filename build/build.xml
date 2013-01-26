@@ -35,6 +35,8 @@
 		<include name="strapper/**" />
 		<include name="*" />
 
+		<exclude name="media/tcpdf/**" />
+		<exclude name="backend/assets/tcpdf/**" />
 		<exclude name="backend/controllers/invoices.php" />
 		<exclude name="backend/models/invoices.php" />
 		<exclude name="backend/views/invoices/**" />

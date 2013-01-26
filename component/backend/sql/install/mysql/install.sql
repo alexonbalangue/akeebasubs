@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
 	`html` LONGTEXT,
 	`atxt` LONGTEXT,
 	`btxt` LONGTEXT,
+	`filename` VARCHAR(255) NULL,
 	`sent_on` DATETIME NULL,
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
