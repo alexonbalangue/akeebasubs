@@ -1498,6 +1498,43 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       found in Joomla! 2.5.1.</para>
     </section>
 
+    <section xml:id="level-groups">
+      <title>Subscription Level Groups</title>
+
+      <para>You can access this feature by clicking on
+      <guimenu>Setup</guimenu>, <guimenuitem>Levels Groups</guimenuitem> in
+      the toolbar links area.</para>
+
+      <para>Subscription level groups allow you to visually group subscription
+      levels in related groups. Moreover, subscription level groups modify the
+      way Akeeba Subscriptions defines the Valid From date of new
+      subscriptions.</para>
+
+      <para>When a subscription level doesn't belong to a group and the user
+      buys a new subscription on this level the Valid From date for the new
+      subscription is set to the furthest in future Valid To date of other
+      paid subscriptions in the same level. If this date is in the past, the
+      current date and time is used. For example, if a user has a yearly
+      subscription until June 1st and he buys a new subscription on May 1st
+      his new subscription begins on June 1st this year and expires on June
+      1st the next year. If, however, the user tries to buy a new subscription
+      on August 1st, his new subscription will begin on August 1st this year
+      and expire on July 31st next year. Any other subscriptions in other
+      subscription levels are ignored during this calculation. With
+      subscription level groups this changes a little. Instead having Akeeba
+      Subscriptions only look for other subscriptions in the same subscription
+      level, it now looks for all subscriptions in all levels belonging to the
+      same group.</para>
+
+      <para>In practice, this means that if you have –let's say– a 3 month, a
+      6 month and a yearly subscription you should put them in the same group.
+      No matter which subscription your user buys and in which order he will
+      not lose any subscription time. Moreover, if you have a trial and a full
+      subscription you should put both of them in the same group. Thus your
+      users can upgrade from trial to full without losing subscription
+      time.</para>
+    </section>
+
     <section xml:id="subscription-levels">
       <title>Subscription Levels</title>
 
@@ -5146,6 +5183,90 @@ LEVEL2=11111:22222:33333</programlisting>
         backend.</para>
       </section>
 
+      <section xml:id="payment-braintree">
+        <title>BrainTree</title>
+
+        <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+        Subscriptions Payment - BrainTree</guilabel></para>
+
+        <para>Available since Akeeba Subscriptions 2.6.0.</para>
+
+        <para>This plugin <emphasis role="bold">does not support</emphasis>
+        recurring payments.</para>
+
+        <para>This is a payment plugin which allows you to use the low cost
+        payment processor BrainTree.</para>
+
+        <para>The options you have in this plugin are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Payment option title</term>
+
+            <listitem>
+              <para>Leave blank to use "BrainTree" or type in a custom name to
+              show to your customer's, e.g. "Pay with credit card"</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Payment option image</term>
+
+            <listitem>
+              <para>An image to show in the payment processor selection list
+              when the Image Only or Image and Text option is set in the
+              component's parameters.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Merchant ID</term>
+
+            <listitem>
+              <para>This is the merchant ID assigned to you by
+              BrainTree.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Public Key</term>
+
+            <listitem>
+              <para>This is the public key given to you by BrainTree.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Private Key</term>
+
+            <listitem>
+              <para>This is the private key given to you by BrainTree.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Sandbox</term>
+
+            <listitem>
+              <para>When enabled, all transactions will be performed against
+              the sandbox (testing server). This is designed for integration
+              tests, BEFORE going live with your site. <emphasis
+              role="bold">NEVER, EVER, NO MATTER WHAT YOU DO, SHOULD YOU
+              ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU WILL LOSE MONEY
+              AND/OR CUSTOMERS.</emphasis></para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <bridgehead>Integration notes</bridgehead>
+
+        <para>You will need to enter the following IPN URL in your BrainTree
+        configuration page:
+        <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=cashu</uri>
+        after replacing <uri>www.example.com</uri> with your site's domain
+        name.</para>
+      </section>
+
       <section xml:id="payment-cashu">
         <title>CashU</title>
 
@@ -6285,8 +6406,7 @@ LEVEL2=11111:22222:33333</programlisting>
         <para>Cancel URI: <uri>https://www.example.com</uri></para>
 
         <para>Webhook URI:
-        <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=gocardless</uri>
-        </para>
+        <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=gocardless</uri></para>
 
         <para>Where www.example.com is the domain name of your site.</para>
       </section>
