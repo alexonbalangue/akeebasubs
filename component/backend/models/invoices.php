@@ -118,7 +118,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->qn('tbl').'.'.$db->qn('invoice_no').' = '.
 						$db->q((int)$state->invoice_number)
 					. ') OR (' .
-					$db->qn('tbl').'.'.$db->qn('display_number').' = '.
+					$db->qn('tbl').'.'.$db->qn('display_number').' LIKE '.
 						$db->q('%'.$state->invoice_number.'%')
 					. '))'
 				);

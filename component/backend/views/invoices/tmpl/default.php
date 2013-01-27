@@ -12,6 +12,10 @@ JHtml::_('behavior.tooltip');
 $this->loadHelper('select');
 $this->loadHelper('format');
 $this->loadHelper('cparams');
+
+JHTML::_('behavior.modal');
+
+$nullDate = JFactory::getDbo()->getNullDate();
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -179,7 +183,35 @@ $this->loadHelper('cparams');
 				<?php echo AkeebasubsHelperFormat::date($invoice->invoice_date); ?>
 			</td>
 			<td>
-				TODO: Show actions
+				<?php if ($invoice->extension == 'akeebasubs'): ?>
+				<a href="index.php?option=com_akeebasubs&view=invoices&task=read&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>&tmpl=component" class="btn btn-info modal" rel="{handler: 'iframe', size: {x: 800, y: 500}}" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_PREVIEW') ?>">
+					<span class="icon icon-file icon-white"></span>
+				</a>
+				
+				<a href="index.php?option=com_akeebasubs&view=invoices&task=download&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>" class="btn btn-primary" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_DOWNLOAD') ?>">
+					<span class="icon icon-download-alt icon-white"></span>
+				</a>
+				
+				<a href="index.php?option=com_akeebasubs&view=invoices&task=send&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>" class="btn btn-success" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_RESEND') ?>">
+					<span class="icon icon-envelope icon-white"></span>
+				</a>
+				
+				<?php if (empty($invoice->sent_on) || ($invoice->sent_on == $nullDate)): ?>
+				<span class="label">
+					<span class="icon icon-white icon-warning-sign"></span> Not sent
+				</span>
+				<?php else: ?>
+				<span class="label label-success">
+					<span class="icon icon-white icon-ok"></span> Sent
+				</span>
+				<?php endif; ?>
+				
+				<a href="index.php?option=com_akeebasubs&view=invoices&task=generate&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>" class="btn btn-mini btn-warning" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_REGENERATE') ?>">
+					<span class="icon icon-retweet icon-white"></span>
+				</a>
+				<?php else: ?>
+				
+				<?php endif; ?>
 			</td>
 		</tr>
 		<?php endforeach; ?>
