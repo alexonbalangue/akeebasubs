@@ -594,6 +594,16 @@ class AkeebasubsHelperSelect
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
 	
+	public static function invoiceextensions($name = 'extension', $selected = '', $attribs = array())
+	{
+		$options = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+			->getExtensions(1);
+		
+		$option = JHtml::_('select.option', '', '- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
+		array_unshift($options, $option);
+		
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 }
 
 // Load the states from the database

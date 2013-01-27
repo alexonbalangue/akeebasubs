@@ -103,4 +103,24 @@ class AkeebasubsHelperFormat
 		
 		return implode(', ',$ret);
 	}
+	
+	public static function formatInvoicingExtension($extension)
+	{
+		static $map = null;
+		
+		if (is_null($map))
+		{
+			$map = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+			->getExtensions(2);
+		}
+		
+		if (array_key_exists($extension, $map))
+		{
+			return $map[$extension];
+		}
+		else
+		{
+			return $extension;
+		}
+	}
 }

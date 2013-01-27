@@ -38,3 +38,5 @@ modules/admin/akeebasubs/language/en-GB
 /RELEASENOTES.html
 /DESCRIPTION.html
 /build/templates/release.json
+
+component/backend/invoices/*.pdf

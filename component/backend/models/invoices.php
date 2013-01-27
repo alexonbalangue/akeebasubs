@@ -10,6 +10,254 @@ defined('_JEXEC') or die();
 
 class AkeebasubsModelInvoices extends FOFModel
 {
+	private function getFilterValues()
+	{
+		$enabled = $this->getState('enabled','','cmd');
+		
+		return (object)array(
+			// Default filters
+			'akeebasubs_subscription_id'	=> $this->getState('akeebasubs_subscription_id', null, 'int'),
+			'extension'		=> $this->getState('extension', null, 'cmd'),
+			'invoice_no'	=> $this->getState('invoice_no', null, 'int'),
+			'invoice_date'	=> $this->getState('invoice_date', null, 'string'),
+			'display_number'=> $this->getState('display_number', null, 'string'),
+			'html'			=> $this->getState('html', null, 'string'),
+			'atxt'			=> $this->getState('atxt', null, 'string'),
+			'btxt'			=> $this->getState('btxt', null, 'string'),
+			'filename'		=> $this->getState('filename', null, 'string'),
+			'sent_on'		=> $this->getState('sent_on', null, 'string'),
+			
+			// Custom filters
+			'user_id'		=> $this->getState('user_id', null, 'int'),
+			'user'			=> $this->getState('user', null, 'string'),
+			'invoice_number'=> $this->getState('invoice_number', null, 'string'),
+			'sent_on_before'=> $this->getState('sent_on_before', null, 'string'),
+			'sent_on_after' => $this->getState('sent_on_after', null, 'string'),
+			'invoice_date_before'=> $this->getState('invoice_date_before', null, 'string'),
+			'invoice_date_after' => $this->getState('invoice_date_after', null, 'string'),
+		);
+	}
+	
+	protected function _buildQueryJoins(&$query)
+	{
+		$db = $this->getDbo();
+		$query
+			->join('INNER', $db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('s').' ON '.
+					$db->qn('s').'.'.$db->qn('akeebasubs_subscription_id').' = '.
+					$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id'))
+			->join('LEFT OUTER', $db->qn('#__users').' AS '.$db->qn('u').' ON '.
+					$db->qn('u').'.'.$db->qn('id').' = '.
+					$db->qn('s').'.'.$db->qn('user_id'))
+			->join('LEFT OUTER', $db->qn('#__akeebasubs_users').' AS '.$db->qn('a').' ON '.
+					$db->qn('a').'.'.$db->qn('user_id').' = '.
+					$db->qn('s').'.'.$db->qn('user_id'))
+		;
+	}
+	
+	protected function _buildQueryColumns(&$query)
+	{
+		$db = $this->getDbo();
+
+		$query->select(array(
+			$db->qn('tbl').'.*',
+			$db->qn('s').'.'.$db->qn('user_id'),
+			$db->qn('u').'.'.$db->qn('name'),
+			$db->qn('u').'.'.$db->qn('username'),
+			$db->qn('u').'.'.$db->qn('email'),
+			$db->qn('u').'.'.$db->qn('block'),
+			$db->qn('a').'.'.$db->qn('isbusiness'),
+			$db->qn('a').'.'.$db->qn('businessname'),
+			$db->qn('a').'.'.$db->qn('occupation'),
+			$db->qn('a').'.'.$db->qn('vatnumber'),
+			$db->qn('a').'.'.$db->qn('viesregistered'),
+			$db->qn('a').'.'.$db->qn('taxauthority'),
+			$db->qn('a').'.'.$db->qn('address1'),
+			$db->qn('a').'.'.$db->qn('address2'),
+			$db->qn('a').'.'.$db->qn('city'),
+			$db->qn('a').'.'.$db->qn('state').' AS '.$db->qn('userstate'),
+			$db->qn('a').'.'.$db->qn('zip'),
+			$db->qn('a').'.'.$db->qn('country'),
+			$db->qn('a').'.'.$db->qn('params').' AS '.$db->qn('userparams'),
+			$db->qn('a').'.'.$db->qn('notes').' AS '.$db->qn('usernotes'),
+		));
+
+		$order = $this->getState('filter_order', 'akeebasubs_subscription_id', 'cmd');
+		if(!in_array($order, array_keys($this->getTable()->getData()))) $order = 'akeebasubs_subscription_id';
+		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
+		$query->order($order.' '.$dir);
+	}
+	
+	protected function _buildQueryWhere($query)
+	{
+		$db = $this->getDbo();
+		$state = $this->getFilterValues();
+		
+		jimport('joomla.utilities.date');
+		
+		if (is_numeric($state->akeebasubs_subscription_id) && ($state->akeebasubs_subscription_id > 0))
+		{
+			$query->where(
+				$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id').' = '.
+					$db->q((int)$state->akeebasubs_subscription_id)
+			);
+		}
+		
+		if (!empty($state->extension))
+		{
+			$query->where(
+				$db->qn('tbl').'.'.$db->qn('extension').' = '.
+					$db->q($state->extension)
+			);
+		}
+		
+		if (!empty($state->invoice_number))
+		{
+			// Unified invoice / display number search
+			$query->where(
+					'(('.
+					$db->qn('tbl').'.'.$db->qn('invoice_no').' = '.
+						$db->q((int)$state->invoice_number)
+					. ') OR (' .
+					$db->qn('tbl').'.'.$db->qn('display_number').' = '.
+						$db->q('%'.$state->invoice_number.'%')
+					. '))'
+				);
+		}
+		else
+		{
+			// Separate searches for invoice number and dispay number
+			if (is_numeric($state->invoice_no) && $state->invoice_no)
+			{
+				$query->where(
+					$db->qn('tbl').'.'.$db->qn('invoice_no').' = '.
+						$db->q((int)$state->invoice_no)
+				);
+			}
+			if (!empty($state->display_number))
+			{
+				$query->where(
+					$db->qn('tbl').'.'.$db->qn('display_number').' LIKE '.
+						$db->q('%'.$state->display_number.'%')
+				);
+			}
+		}
+
+		if (!empty($state->html))
+		{
+			$query->where(
+				$db->qn('tbl').'.'.$db->qn('html').' LIKE '.
+					$db->q('%'.$state->html.'%')
+			);
+		}
+		
+		if (!empty($state->atxt))
+		{
+			$query->where(
+				$db->qn('tbl').'.'.$db->qn('atxt').' LIKE '.
+					$db->q('%'.$state->atxt.'%')
+			);
+		}
+		
+		if (!empty($state->btxt))
+		{
+			$query->where(
+				$db->qn('tbl').'.'.$db->qn('btxt').' LIKE '.
+					$db->q('%'.$state->btxt.'%')
+			);
+		}
+		
+		if (!empty($state->filename))
+		{
+			$query->where(
+				$db->qn('tbl').'.'.$db->qn('filename').' LIKE '.
+					$db->q('%'.$state->filename.'%')
+			);
+		}
+		
+		if (is_numeric($state->user_id) && $state->user_id)
+		{
+			$query->where(
+				$db->qn('s').'.'.$db->qn('user_id').' = '.
+					$db->q((int)$state->user_id)
+			);
+		}
+		
+		if (!empty($state->user))
+		{
+			$search = '%'.$state->user.'%';
+			$query->where(
+				'CONCAT(IF(u.name IS NULL,"",u.name),IF(u.username IS NULL,"",u.username),IF(u.email IS NULL, "", u.email),IF(a.businessname IS NULL, "", a.businessname), IF(a.vatnumber IS NULL,"",a.vatnumber)) LIKE '.
+					$db->q($search)
+			);
+		}
+		
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+		if (!empty($state->invoice_date) && preg_match($regex, $state->invoice_date))
+		{
+			$jFrom = JFactory::getDate($state->invoice_date);
+			$jFrom->setTime(0, 0, 0);
+			$jTo = clone $jFrom;
+			$jTo->setTime(23,59,59);
+			
+			$query->where(
+				$db->qn('invoice_date') . ' BETWEEN ' . $db->q($jFrom->toSql()) .
+				' AND ' . $db->q($jTo->toSql())
+			);
+		}
+		elseif(!empty($state->invoice_date_before) || !empty($state->invoice_date_after))
+		{
+			if(!empty($state->invoice_date_before) && preg_match($date_regex, $state->invoice_date_before))
+			{
+				$jDate = JFactory::getDate($state->invoice_date_before);
+				$query->where($db->qn('invoice_date') . ' <= ' . $db->q($jDate->toSql()));
+			}
+			if(!empty($state->invoice_date_after) && preg_match($date_regex, $state->invoice_date_after))
+			{
+				$jDate = JFactory::getDate($state->invoice_date_after);
+				$query->where($db->qn('invoice_date') . ' >= ' . $db->q($jDate->toSql()));
+			}
+		}
+		
+		if (!empty($state->sent_on) && preg_match($regex, $state->sent_on))
+		{
+			$jFrom = JFactory::getDate($state->sent_on);
+			$jFrom->setTime(0, 0, 0);
+			$jTo = clone $jFrom;
+			$jTo->setTime(23,59,59);
+			
+			$query->where(
+				$db->qn('sent_on') . ' BETWEEN ' . $db->q($jFrom->toSql()) .
+				' AND ' . $db->q($jTo->toSql())
+			);
+		}
+		elseif(!empty($state->sent_on_before) || !empty($state->sent_on_after))
+		{
+			if(!empty($state->sent_on_before) && preg_match($date_regex, $state->sent_on_before))
+			{
+				$jDate = JFactory::getDate($state->sent_on_before);
+				$query->where($db->qn('sent_on') . ' <= ' . $db->q($jDate->toSql()));
+			}
+			if(!empty($state->sent_on_after) && preg_match($date_regex, $state->sent_on_after))
+			{
+				$jDate = JFactory::getDate($state->sent_on_after);
+				$query->where($db->qn('sent_on') . ' >= ' . $db->q($jDate->toSql()));
+			}
+		}
+	}
+	
+	public function buildQuery($overrideLimits = false)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true)
+			->from($db->qn('#__akeebasubs_invoices').' AS '.$db->qn('tbl'));
+		
+		$this->_buildQueryColumns($query);
+		$this->_buildQueryJoins($query);
+		$this->_buildQueryWhere($query);
+		
+		return $query;
+	}
+	
 	/**
 	 * Create or update an invoice from a subscription
 	 * 
@@ -505,7 +753,7 @@ class AkeebasubsModelInvoices extends FOFModel
 	/**
 	 * Returns a list of known invoicing extensions
 	 * 
-	 * @param   integer  $style  0 = raw sections list, 1 = grouped list options, 2 = key/description array
+	 * @param   integer  $style  0 = raw sections list, 1 = list options, 2 = key/description array
 	 * 
 	 * @return array_string
 	 */
