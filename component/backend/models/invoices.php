@@ -505,10 +505,60 @@ class AkeebasubsModelInvoices extends FOFModel
 	/**
 	 * Returns a list of known invoicing extensions
 	 * 
-	 * @param   boolean  $htmlSelect  When true it returns options for JHtml selection lists
+	 * @param   integer  $style  0 = raw sections list, 1 = grouped list options, 2 = key/description array
+	 * 
+	 * @return array_string
 	 */
-	public function getExtensions($htmlSelect = false)
+	public function getExtensions($style = 0)
 	{
-		// @todo
+		static $rawOptions = null;
+		static $htmlOptions = null;
+		static $shortlist = null;
+		
+		if (is_null($rawOptions))
+		{
+			$rawOptions = array();
+			
+			jimport('joomla.plugin.helper');
+			JPluginHelper::importPlugin('akeebasubs');
+			JPluginHelper::importPlugin('system');
+			$app = JFactory::getApplication();
+			$jResponse = $app->triggerEvent('onAKGetInvoicingOptions', array());
+			if (is_array($jResponse) && !empty($jResponse))
+			{
+				foreach ($jResponse as $pResponse)
+				{
+					if(!is_array($pResponse)) continue;
+					if(empty($pResponse)) continue;
+					
+					$rawOptions[$pResponse['extension']] = $pResponse;
+				}
+			}
+		}
+		
+		if ($style == 0)
+		{
+			return $rawOptions;
+		}
+		
+		if (is_null($htmlOptions))
+		{
+			$htmlOptions = array();
+			
+			foreach ($rawOptions as $def)
+			{
+				$htmlOptions[] = JHTML::_('select.option', $def['extension'], $def['title']);
+				$shortlist[$def['extension']] = $def['title'];
+			}
+		}
+		
+		if ($style == 1)
+		{
+			return $htmlOptions;
+		}
+		else
+		{
+			return $shortlist;
+		}
 	}
 }
