@@ -345,7 +345,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			if ($invoiceRecord->extension != 'akeebasubs')
 			{
 				$this->setId(0);
-				return 0;
+				return false;
 			}
 			$invoice_no = $invoiceRecord->invoice_no;
 			$formated_invoice_no = $invoiceRecord->display_number;
@@ -354,6 +354,8 @@ class AkeebasubsModelInvoices extends FOFModel
 				$formated_invoice_no = $invoice_no;
 			}
 			$jInvoiceDate = JFactory::getDate($invoiceRecord->invoice_date);
+			
+			$invoiceData = (array)$invoiceRecord;
 		}
 		
 		// Get the template
@@ -418,7 +420,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			$this->emailPDF();
 		}
 		
-		return $ret;
+		return true;
 	}
 	
 	/**

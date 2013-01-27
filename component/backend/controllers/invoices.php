@@ -113,4 +113,33 @@ class AkeebasubsControllerInvoices extends FOFController
 			$this->setRedirect($url, JText::_('COM_AKEEBASUBS_INVOICES_MSG_SENT') );
 		}
 	}
+	
+	public function generate($cachable = false, $urlparams = false)
+	{
+		// Load the model
+		$model = $this->getThisModel();
+		if(!$model->getId()) $model->setIDsFromRequest();
+		
+		// Make sure we have a valid item
+		$item = $model->getItem();
+		if (!is_object($item) || empty($item->akeebasubs_subscription_id))
+		{
+			return false;
+		}
+		
+		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			->getItem($item->akeebasubs_subscription_id);
+		
+		$status = ($model->createInvoice($sub) === true);
+		
+		if($customURL = $this->input->get('returnurl','','string')) $customURL = base64_decode($customURL);
+		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
+
+		if($status === false)
+		{
+			$this->setRedirect($url, JText::_('COM_AKEEBASUBS_INVOICES_MSG_NOTGENERATED'), 'error');
+		} else {
+			$this->setRedirect($url, JText::_('COM_AKEEBASUBS_INVOICES_MSG_GENERATED') );
+		}
+	}
 }
