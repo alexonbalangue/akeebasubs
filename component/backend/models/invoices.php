@@ -400,7 +400,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		
 		// Set up the return value
 		$ret = $invoice_no;
-		$this->setId($invoice_no);
+		$this->setId($sub->akeebasubs_subscription_id);
 		
 		// Create PDF
 		$this->createPDF();
@@ -557,7 +557,7 @@ class AkeebasubsModelInvoices extends FOFModel
 	public function createPDF()
 	{
 		// Get the invoice number from the model's state
-		$invoice_no = $this->getId();
+		$akeebasubs_subscription_id = $this->getId();
 		
 		// Fetch the HTML from the database using the invoice number in $this->getId()
 		$db = $this->getDbo();
@@ -565,9 +565,11 @@ class AkeebasubsModelInvoices extends FOFModel
 			->select('*')
 			->from($db->qn('#__akeebasubs_invoices'))
 			->where($db->qn('extension') . ' = ' . $db->q('akeebasubs'))
-			->where($db->qn('invoice_no') . ' = ' . $db->q($invoice_no));
+			->where($db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($akeebasubs_subscription_id));
 		$db->setQuery($query, 0, 1);
 		$invoiceRecord = $db->loadObject();
+		
+		$invoice_no = $invoiceRecord->invoice_no;
 		
 		// Create the PDF
 		$pdf = $this->getTCPDF();
@@ -652,16 +654,19 @@ class AkeebasubsModelInvoices extends FOFModel
 			->select('*')
 			->from($db->qn('#__akeebasubs_invoices'))
 			->where($db->qn('extension') . ' = ' . $db->q('akeebasubs'))
-			->where($db->qn('invoice_no') . ' = ' . $db->q($invoice_no));
+			->where($db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($invoice_no));
 		$db->setQuery($query, 0, 1);
 		$invoiceRecord = $db->loadObject();
 		
-		if (empty($invoiceRecord->filename))
+		jimport('joomla.filesystem.file');
+		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
+
+		if (empty($invoiceRecord->filename) || !JFile::exists($path.$invoiceRecord->filename))
 		{
 			$invoiceRecord->filename = $this->createPDF();
 		}
 		
-		if (empty($invoiceRecord->filename))
+		if (empty($invoiceRecord->filename) || !JFile::exists($path.$invoiceRecord->filename))
 		{
 			return false;
 		}
@@ -678,14 +683,21 @@ class AkeebasubsModelInvoices extends FOFModel
 		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($sub, 'PLG_AKEEBASUBS_INVOICING_EMAIL');
 		
 		// Attach the PDF invoice
-		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/' . $invoiceRecord->filename;
-		$mailer->AddAttachment($path, 'invoice.pdf', 'base64', 'application/pdf');
+		$mailer->AddAttachment($path . $invoiceRecord->filename, 'invoice.pdf', 'base64', 'application/pdf');
 		
 		// Set the recipient
 		$mailer->addRecipient(JFactory::getUser($sub->user_id)->email);
 		
 		// Send it
-		return $mailer->Send();
+		$result = $mailer->Send();
+		
+		if ($result == true)
+		{
+			$invoiceRecord->sent_on = JFactory::getDate()->toSql();
+			$db->updateObject('#__akeebasubs_invoices', $invoiceRecord, 'akeebasubs_subscription_id');
+		}
+		
+		return $result;
 	}
 	
 	public function &getTCPDF()
