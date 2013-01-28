@@ -70,6 +70,7 @@ class AkeebasubsHelperMessage
 				$custom = array();
 			}
 			if(!empty($custom)) foreach($custom as $k => $v) {
+				if(is_object($v)) continue;
 				if(substr($k,0,1) == '_') continue;
 				$tag = '[SUBCUSTOM:'.strtoupper($k).']';
 				if(is_array($v)) continue;
