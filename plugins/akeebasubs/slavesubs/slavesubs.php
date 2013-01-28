@@ -296,6 +296,10 @@ ENDJS;
 		}
 		
 		// Create new slave subscriptions if the subscription level allows us to
+		if(!isset($this->maxSlaves[$row->akeebasubs_level_id]))
+		{
+			$this->maxSlaves[$row->akeebasubs_level_id] = 0;
+		}
 		if(!isset($params['slavesubs_ids']) && ($this->maxSlaves[$row->akeebasubs_level_id]))
 		{
 			// Do we have slave users at all?
@@ -322,7 +326,14 @@ ENDJS;
 			$slavesubs_ids = array();
 			
 			$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
-			$data = $row->getData();
+			if ($row instanceof FOFTable)
+			{
+				$data = $row->getData();
+			}
+			else
+			{
+				$data = (array)$row;
+			}
 			
 			foreach($slaveusers as $slaveUsername)
 			{
@@ -372,7 +383,14 @@ ENDJS;
 		// We already have slave subscriptions, let's refresh them
 		elseif (isset($params['slavesubs_ids']))
 		{
-			$original_row = (object)($row->getData());
+			if($row instanceof FOFTable)
+			{
+				$original_row = (object)($row->getData());
+			}
+			else
+			{
+				$original_row = clone $row;
+			}
 			$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
 			
 			foreach ($params['slavesubs_ids'] as $sid)
