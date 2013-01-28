@@ -534,6 +534,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'couponid'	=> $couponid,
 				'upgradeid'	=> $upgradeid,
 				'oldsub'	=> $discountStructure['oldsub'],
+				'allsubs'	=> $discountStructure['allsubs'],
 				'expiration'=> $discountStructure['expiration'],
 			);
 		}

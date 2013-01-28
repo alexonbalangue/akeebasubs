@@ -39,10 +39,9 @@ class plgAkeebasubsK2 extends plgAkeebasubsAbstract
 		
 		if(!empty($addGroups)) {
 			// Case 1: Add to groups
+			$group = array_pop($addGroups);
 			if($numRecords) {
 				// Case 1a. Update an existing record
-				$group = array_pop($addGroups);
-				
 				$query = $db->getQuery(true)
 					->update($db->qn('#__k2_users'))
 					->set($db->qn('group').' = '.$db->q($group))
