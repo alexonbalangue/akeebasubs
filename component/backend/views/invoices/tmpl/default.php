@@ -16,7 +16,33 @@ $this->loadHelper('cparams');
 JHTML::_('behavior.modal');
 
 $nullDate = JFactory::getDbo()->getNullDate();
+
+$extensions = $this->getModel()->getExtensions();
 ?>
+
+<?php if(empty($extensions)): ?>
+<div class="alert alert-error">
+	<p>
+	<?php echo JText::_('COM_AKEEBASUBS_INVOICES_MSG_EXTENSIONS_NONE'); ?>
+	</p>
+</div>
+<?php else: ?>
+<div class="alert alert-info">
+	<p>
+	<?php echo JText::_('COM_AKEEBASUBS_INVOICES_MSG_EXTENSIONS_SOME'); ?>
+	<ul>
+	<?php foreach ($extensions as $key => $extension): ?>
+		<li><?php echo $extension['title'] ?></li>
+	<?php endforeach; ?>
+	</ul>
+	</p>
+<?php if(count($extensions) > 1): ?>
+	<p><strong>
+		<?php echo JText::_('COM_AKEEBASUBS_INVOICES_MSG_EXTENSIONS_MULTIPLE'); ?>
+	</strong></p>
+<?php endif; ?>
+</div>
+<?php endif; ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
@@ -210,7 +236,16 @@ $nullDate = JFactory::getDbo()->getNullDate();
 					<span class="icon icon-retweet icon-white"></span>
 				</a>
 				<?php else: ?>
-				
+				<?php if(array_key_exists($invoice->extension, $extensions)): ?>
+				<a class="btn" href="<?php echo sprintf($extensions[$invoice->extension]['backendurl'], $invoice->invoice_no) ?>">
+					<span class="icon icon-share-alt"></span>
+					<?php echo JText::_('COM_AKEEBASUBS_INVOICES_LBL_OPENEXTERNAL') ?>
+				</a>
+				<?php else: ?>
+				<span class="label">
+					<?php echo JText::_('COM_AKEEBASUBS_INVOICES_LBL_NOACTIONS') ?>
+				</span>
+				<?php endif; ?>
 				<?php endif; ?>
 			</td>
 		</tr>
