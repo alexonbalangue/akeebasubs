@@ -23,6 +23,14 @@ class AkeebasubsControllerInvoices extends FOFController
 			return false;
 		}
 		
+		// Check that this is the item's owner or an administrator
+		$user = JFactory::getUser();
+		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($item->akeebasubs_subscription_id);
+		if (!$user->authorise('core.manage', 'com_akeebasubs') || ($sub->user_id == $user->id))
+		{
+			return false;
+		}
+		
 		// Make sure we have a PDF file or try to generate one
 		jimport('joomla.filesystem.file');
 		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
@@ -101,8 +109,16 @@ class AkeebasubsControllerInvoices extends FOFController
 			return false;
 		}
 		
+		// Check that this is an administrator
+		if (!$this->checkACL('core.manage'))
+		{
+			return false;
+		}
+		
+		// Email the PDF file
 		$status = ($model->emailPDF() === true);
 		
+		// Post-action redirection
 		if($customURL = $this->input->get('returnurl','','string')) $customURL = base64_decode($customURL);
 		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
 
@@ -127,11 +143,19 @@ class AkeebasubsControllerInvoices extends FOFController
 			return false;
 		}
 		
+		// Check that this is an administrator
+		if (!$this->checkACL('core.manage'))
+		{
+			return false;
+		}
+		
+		// (Re-)generate the invoice
 		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->getItem($item->akeebasubs_subscription_id);
 		
 		$status = ($model->createInvoice($sub) === true);
 		
+		// Post-action redirection
 		if($customURL = $this->input->get('returnurl','','string')) $customURL = base64_decode($customURL);
 		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
 
