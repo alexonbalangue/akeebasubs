@@ -39,6 +39,7 @@
 		<exclude name="backend/assets/tcpdf/**" />
 		<exclude name="backend/controllers/invoices.php" />
 		<exclude name="backend/models/invoices.php" />
+		<exclude name="backend/tables/invoice.php" />
 		<exclude name="backend/views/invoices/**" />
 		<exclude name="backend/views/invoice/**" />
 		<exclude name="backend/views/emailtemplates/**" />
