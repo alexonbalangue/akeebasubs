@@ -6,7 +6,7 @@
 				<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_ADDRANKS_TITLE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->getSelectField($level, 'add', 'RANKS') ?>
+				<?php echo $this->getSelectField($level, 'add-RANKS') ?>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_ADDRANKS_DESCRIPTION2') ?>
 				</span>
@@ -19,7 +19,7 @@
 				<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_REMOVERANKS_TITLE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->getSelectField($level, 'remove', 'RANKS') ?>
+				<?php echo $this->getSelectField($level, 'remove-RANKS') ?>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_REMOVERANKS_DESCRIPTION2') ?>
 				</span>
@@ -34,7 +34,7 @@
 				<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_ADDBADGES_TITLE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->getSelectField($level, 'add', 'BADGES') ?>
+				<?php echo $this->getSelectField($level, 'add-BADGES') ?>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_ADDBADGES_DESCRIPTION2') ?>
 				</span>
@@ -47,7 +47,7 @@
 				<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_REMOVEBADGES_TITLE'); ?>
 			</label>
 			<div class="controls">
-				<?php echo $this->getSelectField($level, 'remove', 'BADGES') ?>
+				<?php echo $this->getSelectField($level, 'remove-BADGES') ?>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_EASYDISCUSS_REMOVEBADGES_DESCRIPTION2') ?>
 				</span>

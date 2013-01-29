@@ -32,7 +32,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 		parent::__construct($subject, $name, $config, $templatePath, false);
 		
 		// Do we have values from the Olden Days?
-		if(isset($config['params'])) {
+		if(isset($config['params']) && false) {
 			$configParams = @json_decode($config['params']);
 			// Ranks
 			if(property_exists($configParams, 'addranks'))
@@ -112,20 +112,20 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 				// Ranks
 				if(property_exists($level->params, $addranksKey))
 				{
-					$this->addGroups[$level->akeebasubs_level_id] = array_filter($level->params->$addranksKey);
+					$this->addRanks[$level->akeebasubs_level_id] = array_filter($level->params->$addranksKey);
 				}
 				if(property_exists($level->params, $removeranksKey))
 				{
-					$this->removeGroups[$level->akeebasubs_level_id] = array_filter($level->params->$removeranksKey);
+					$this->removeRanks[$level->akeebasubs_level_id] = array_filter($level->params->$removeranksKey);
 				}
 				// Badges
 				if(property_exists($level->params, $addbadgesKey))
 				{
-					$this->addGroups[$level->akeebasubs_level_id] = array_filter($level->params->$addbadgesKey);
+					$this->addBadges[$level->akeebasubs_level_id] = array_filter($level->params->$addbadgesKey);
 				}
 				if(property_exists($level->params, $removebadgesKey))
 				{
-					$this->removeGroups[$level->akeebasubs_level_id] = array_filter($level->params->$removebadgesKey);
+					$this->removeBadges[$level->akeebasubs_level_id] = array_filter($level->params->$removebadgesKey);
 				}
 			}
 		}
@@ -205,7 +205,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 		// Get DB connection
 		$db = JFactory::getDBO();
 		
-		$time = date('Y-m-d G:i:s');
+		$time = JFactory::getDate()->toSql();
 		// Add rank
 		if(! empty($addRanks)) {
 			// Use the last rank if there are several, because the user can only have one rank
@@ -238,7 +238,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 					))
 					->values($db->q($rank_id) . ', '
 						. $db->q($user_id) . ', '
-						. $db->q($date)
+						. $db->q($time)
 					);
 				$db->setQuery($query);
 				$db->query();
@@ -298,6 +298,71 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			$db->query();
 		}
 		
+	}
+	
+	/**
+	 * Not used in this plugin
+	 */
+	protected function getGroups() {
+		return array();
+	}
+	
+	protected function getSelectField($level, $type)
+	{
+		static $ranks = null;
+		static $badges = null;
+		
+		$parts = explode('-', $type, 2);
+		$type = $parts[0];
+		$group = $parts[1];
+		
+		if(! in_array($type, array('add', 'remove'))) return '';
+		if(! in_array($group, array('RANKS', 'BADGES'))) return '';
+		$options = array();
+		$options[] = JHTML::_('select.option','',JText::_('PLG_AKEEBASUBS_' . strtoupper($this->name) . '_NONE'));
+		if($group == 'RANKS') {
+			// Get ranks
+			if(is_null($ranks)) {
+				$this->ListToId('#__discuss_ranks', 'title', 'id', $ranks);
+			}
+			foreach($ranks as $title => $id) {
+				$options[] = JHTML::_('select.option',$id,$title);
+			}
+			// Set pre-selected values
+			$selected = array();
+			if($type == 'add') {
+				if(! empty($this->addRanks[$level->akeebasubs_level_id])) {
+					$selected = $this->addRanks[$level->akeebasubs_level_id];
+				}
+			} else {
+				if(! empty($this->removeRanks[$level->akeebasubs_level_id])) {
+					$selected = $this->removeRanks[$level->akeebasubs_level_id];
+				}
+			}
+			// Create the select field
+			return JHtmlSelect::genericlist($options, 'params[easydiscuss_' . $type . 'ranks][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
+		} else {
+			// Get badges
+			if(is_null($badges)) {
+				$this->ListToId('#__discuss_badges', 'title', 'id', $badges);
+			}
+			foreach($badges as $title => $id) {
+				$options[] = JHTML::_('select.option',$id,$title);
+			}
+			// Set pre-selected values
+			$selected = array();
+			if($type == 'add') {
+				if(! empty($this->addBadges[$level->akeebasubs_level_id])) {
+					$selected = $this->addBadges[$level->akeebasubs_level_id];
+				}
+			} else {
+				if(! empty($this->removeBadges[$level->akeebasubs_level_id])) {
+					$selected = $this->removeBadges[$level->akeebasubs_level_id];
+				}
+			}
+			// Create the select field
+			return JHtmlSelect::genericlist($options, 'params[easydiscuss_' . $type . strtolower($group) . '][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
+		}
 	}
 	
 	/**
@@ -495,65 +560,5 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 		}
 		
 		return $ret;
-	}
-
-	/**
-	 * Not used in this plugin
-	 */
-	protected function getGroups() {
-		return array();
-	}
-	
-	protected function getSelectField($level, $type, $group)
-	{
-		static $ranks = null;
-		static $badges = null;
-		if(! in_array($type, array('add', 'remove'))) return '';
-		if(! in_array($group, array('RANKS', 'BADGES'))) return '';
-		$options = array();
-		$options[] = JHTML::_('select.option','',JText::_('PLG_AKEEBASUBS_' . strtoupper($this->name) . '_NONE'));
-		if($group == 'RANKS') {
-			// Get ranks
-			if(is_null($ranks)) {
-				$this->ListToId('#__discuss_ranks', 'title', 'id', $ranks);
-			}
-			foreach($ranks as $title => $id) {
-				$options[] = JHTML::_('select.option',$id,$title);
-			}
-			// Set pre-selected values
-			$selected = array();
-			if($type == 'add') {
-				if(! empty($this->addRanks[$level->akeebasubs_level_id])) {
-					$selected = $this->removeRanks[$level->akeebasubs_level_id];
-				}
-			} else {
-				if(! empty($this->removeBadges[$level->akeebasubs_level_id])) {
-					$selected = $this->removeBadges[$level->akeebasubs_level_id];
-				}
-			}
-			// Create the select field
-			return JHtmlSelect::genericlist($options, 'params[easydiscuss_' . $type . 'ranks][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
-		} else {
-			// Get badges
-			if(is_null($badges)) {
-				$this->ListToId('#__discuss_badges', 'title', 'id', $badges);
-			}
-			foreach($badges as $title => $id) {
-				$options[] = JHTML::_('select.option',$id,$title);
-			}
-			// Set pre-selected values
-			$selected = array();
-			if($type == 'add') {
-				if(! empty($this->addBadges[$level->akeebasubs_level_id])) {
-					$selected = $this->addBadges[$level->akeebasubs_level_id];
-				}
-			} else {
-				if(! empty($this->removeBadges[$level->akeebasubs_level_id])) {
-					$selected = $this->removeBadges[$level->akeebasubs_level_id];
-				}
-			}
-			// Create the select field
-			return JHtmlSelect::genericlist($options, 'params[easydiscuss_' . $type . 'ranks][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
-		}
 	}
 }
