@@ -26,7 +26,7 @@ class AkeebasubsControllerInvoices extends FOFController
 		// Check that this is the item's owner or an administrator
 		$user = JFactory::getUser();
 		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($item->akeebasubs_subscription_id);
-		if (!$user->authorise('core.manage', 'com_akeebasubs') || ($sub->user_id == $user->id))
+		if (!$this->checkACL('core.manage') || ($sub->user_id != $user->id))
 		{
 			return false;
 		}
