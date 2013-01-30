@@ -558,39 +558,4 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			'frontendurl'	=> 'index.php?option=com_ccinvoices&task=download&id=%s',
 		);
 	}
-	
-	public function onAKGetInvoiceNumber($extension, $id)
-	{
-		if ($extension != 'ccinvoices')
-		{
-			return null;
-		}
-		
-		$db = JFactory::getDBO();
-		$query = $db->getQuery(true)
-			->select('*')
-			->from($db->qn('#__ccinvoices_configuration'))
-			->where($db->qn('id').' = '.$db->q('1'));
-		$db->setQuery($query, 0, 1);
-		$config = $db->loadObject();
-		
-		require_once JPATH_ADMINISTRATOR.'/components/com_ccinvoices/models/invoices.php';
-        $model = new ccInvoicesModelInvoices;
-		
-		$query = $db->getQuery(true)
-			->select('*')
-			->from($db->qn('#__ccinvoices_invoices'))
-			->where($db->qn('id').' = '.$db->q($id));
-		$db->setQuery($query, 0, 1);
-		$invRow = $db->loadObject();
-		
-		if($config->invoice_format != "")
-		{
-			$ret = $model->getInvoiceNumberFormat($invRow->number);
-		} else {
-			$ret = $invRow->number;
-		}
-		
-		return $ret;
-	}
 }

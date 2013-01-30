@@ -381,15 +381,4 @@ class plgAkeebasubsTracktime extends JPlugin
 			'frontendurl'	=> null, // @todo Davide must provide this
 		);
 	}
-	
-	public function onAKGetInvoiceNumber($extension, $id)
-	{
-		if ($extension != 'tracktime')
-		{
-			return null;
-		}
-		
-		return $id;
-	}
 }
-

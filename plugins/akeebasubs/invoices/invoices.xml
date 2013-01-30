@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>PLG_AKEEBASUBS_INVOICES_XML_TITLE</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>January 2013</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_INVOICES_DESCRIPTION</description>
+	<files>
+		<filename plugin="invoices">invoices.php</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_invoices.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_invoices.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="generatewhen" type="radio" default="0"
+					label="PLG_AKEEBASUBS_INVOICES_GENERATEWHEN_TITLE"
+					description="PLG_AKEEBASUBS_INVOICES_GENERATEWHEN_DESC">
+					<option value="0">PLG_AKEEBASUBS_INVOICES_GENERATEWHEN_OPT_COMPLETED</option>
+					<option value="1">PLG_AKEEBASUBS_INVOICES_GENERATEWHEN_OPT_NEW</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
