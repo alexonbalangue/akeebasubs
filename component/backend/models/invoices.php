@@ -682,7 +682,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		{
 			require_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
 		}
-		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($sub, 'PLG_AKEEBASUBS_INVOICING_EMAIL');
+		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($sub, 'PLG_AKEEBASUBS_INVOICES_EMAIL');
 		
 		// Attach the PDF invoice
 		$mailer->AddAttachment($path . $invoiceRecord->filename, 'invoice.pdf', 'base64', 'application/pdf');

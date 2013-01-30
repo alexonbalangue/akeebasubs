@@ -95,4 +95,23 @@ class plgAkeebasubsInvoices extends JPlugin
 			'frontendurl'	=> 'index.php?option=com_akeebasubs&view=invoice&task=read&id=%s',
 		);
 	}
+	
+	/**
+	 * Notifies the component of the supported email keys by this plugin.
+	 * 
+	 * @return  array
+	 * 
+	 * @since 3.0
+	 */
+	public function onAKGetEmailKeys()
+	{
+		$this->loadLanguage();
+		return array(
+			'section'		=> $this->_name,
+			'title'			=> JText::_('PLG_AKEEBASUBS_INVOICES_EMAILSECTION'),
+			'keys'			=> array(
+				'email'					=> JText::_('PLG_AKEEBASUBS_INVOICES_EMAIL_TITLE'),
+			)
+		);
+	}
 }
