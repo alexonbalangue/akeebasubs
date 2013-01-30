@@ -45,6 +45,10 @@ class AkeebasubsHelperMessage
 			if(substr($k,0,1) == '_') continue;
 			if($k == 'akeebasubs_subscription_id') $k = 'id';
 			$tag = '[SUB:'.strtoupper($k).']';
+			if(in_array($k, array('net_amount', 'gross_amount', 'tax_amount', 'prediscount_amount', 'discount_amount', 'affiliate_comission')))
+			{
+				$v = sprintf('%.2f', $v);
+			}
 			$text = str_replace($tag, $v, $text);
 		}
 		
