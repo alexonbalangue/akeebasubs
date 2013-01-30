@@ -1411,6 +1411,97 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
       </variablelist>
 
+      <para><guilabel>Integrated invoicing</guilabel></para>
+
+      <important>
+        <para>These options only apply to Akeeba Subscriptions Professional
+        and only if you are using the integrated invoicing feature of the
+        component, by enabling the Akeeba Subscriptions - Integrated Invoicing
+        plugin</para>
+      </important>
+
+      <variablelist>
+        <varlistentry>
+          <term>Invoice number format</term>
+
+          <listitem>
+            <para>Normally, invoice numbers are monotonically increasing
+            integers (1, 2, 3, 4, ...). Sometimes you need to be able to
+            customise the format of the invoice number to match your
+            preferences or requirements imposed by your local tax authorities.
+            This setting allows you to define how the invoice numbers will be
+            formatted. You can use a mix of text and "variables". The
+            available variables are:</para>
+
+            <variablelist>
+              <varlistentry>
+                <term>[D:<replaceable>x</replaceable>]</term>
+
+                <listitem>
+                  <para>Returns a specific part of the current date and time.
+                  The exact part of the date/time that will be returned is
+                  defined by <replaceable>x</replaceable>. This can take a
+                  single letter used by <link
+                  xlink:href="http://www.php.net/manual/en/function.date.php">PHP's
+                  date() function</link>. For example, [D:y] will return the
+                  year (four digits), [D:m] will return the month and so
+                  on.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>[N:<replaceable>x</replaceable>]</term>
+
+                <listitem>
+                  <para>Returns the invoice number.
+                  <replaceable>x</replaceable> is the minimum length of the
+                  invoice number. If the invoice number has a shorter length
+                  it will be zero padded. For example, let's consider invoice
+                  #12. [N:1] will return 12. [N:5] will return 00012
+                  (zero-padded to five digits length).</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+
+            <para>If you are unsure, use [N:1] as your invoice number
+            format.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Auto-send invoices</term>
+
+          <listitem>
+            <para>When enabled the invoice will be sent by email to the user
+            as soon as it's generated. Otherwise you will have to go to your
+            site's back-end, Components, Akeeba Subscriptions, Invoices and
+            click the envelope icon to send the invoice to the subscriber as a
+            PDF file.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Override numbering</term>
+
+          <listitem>
+            <para>If this is non-zero, invoice numbering will restart with
+            this number. Once the first invoice with this number is generated,
+            this option will revert back to 0 automatically.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>VIES VAT notice</term>
+
+          <listitem>
+            <para>If you a VIES-registered merchant in the EU and you are
+            selling to an VIES registered EU client no VAT will be charged and
+            this note will be available in the [VAT_NOTICE] variable for your
+            invoice template.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
       <para><guilabel>Live Update</guilabel></para>
 
       <para>These options control how the integrated Live Update which allows
