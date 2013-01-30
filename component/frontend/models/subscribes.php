@@ -503,7 +503,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$discount = $useCoupon ? $couponDiscount : $autoDiscount;
 			$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
 			$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
-
+			
 			// If we are not using the automatic discount, make sure the oldsub
 			// and expiration fields are reset
 			if (!$useAuto)
@@ -517,6 +517,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 			// Calculate the base price minimising rounding errors
 			$basePrice = 0.01 * (100*$netPrice - 100*$discount);
+			if ($basePrice < 0.01)
+			{
+				$basePrice = 0;
+			}
 			// Calculate the tax amount minimising rounding errors
 			$taxAmount = 0.01 * ($taxRule->taxrate * $basePrice);
 			// Calculate the gross amount minimising rounding errors
