@@ -48,6 +48,8 @@
 		<exclude name="backend/views/invoicetemplate/**" />
 		<exclude name="backend/views/relations/**" />
 		<exclude name="backend/views/relation/**" />
+
+		<exclude name="invoices/*.pdf" />
 	</fileset>
 
 	<fileset dir="${dirs.component}" id="component">
@@ -59,6 +61,8 @@
 		<include name="media/**" />
 		<include name="strapper/**" />
 		<include name="*" />
+
+		<exclude name="invoices/*.pdf" />
 	</fileset>
 
 	<!--

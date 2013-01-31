@@ -83,6 +83,7 @@
 			<folder>fields</folder>
 			<folder>fof</folder>
 			<folder>helpers</folder>
+			<folder>invoices</folder>
 			<folder>liveupdate</folder>
 			<folder>models</folder>
 			<folder>sql</folder>
