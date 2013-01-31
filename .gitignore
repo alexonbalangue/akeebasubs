@@ -40,3 +40,5 @@ modules/admin/akeebasubs/language/en-GB
 /build/templates/release.json
 
 component/backend/invoices/*.pdf
+
+_test

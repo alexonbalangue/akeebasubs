@@ -20,6 +20,9 @@ Akeeba Subscriptions 3.0.0
 ~ Renewed but not yet active subscription are shown with light green instead of pink background in the back-end Subscriptions page
 ~ Show the applied tax rate in back-end subscription editor page
 ~ Many more subscription level message/email variables and improvements in date formatting in messages/emails
+~ PayMill: we are now updating the user record with the user's name and email (easier transaction tracing)
+~ PayMill: we are now sending the subscription ID in the description (easier transaction tracing)
+! PayMill: the CC number would be sent back to the server but it shouldn't, for security reasons
 # [HIGH] K2 Integration wouldn't add users to K2 groups
 # [MEDIUM] Regression: PayPal recurring payments wouldn't work
 # [MEDIUM] Missing files from the updated K2 integration plugin

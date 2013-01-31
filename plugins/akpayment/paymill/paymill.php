@@ -40,18 +40,18 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		if($paymentmethod != $this->ppName) return false;
 		
 		$doc = JFactory::getDocument();
-		$doc->addCustomTag(
-			'<script type="text/javascript">
-				var PAYMILL_PUBLIC_KEY = \'' . $this->getPublicKey() . '\';
-			</script>');
+		$doc->addScriptDeclaration(
+			"\nvar PAYMILL_PUBLIC_KEY = \'" . $this->getPublicKey() . "\';\n");
 		$doc->addScript("https://bridge.paymill.de/");
-		$doc->addCustomTag(
-			'<script type="text/javascript">
+		$doc->addScriptDeclaration(
+			'
 				window.addEvent(\'domready\', function(){
 					function PaymillResponseHandler(error, result) {
 						$$(\'.control-group\').removeClass(\'error\');
 						if (error) {
 							if(error.apierror == \'3internal_server_error\') {
+								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3INTERNAL_SERVER_ERROR') . '\');
+							}else if(error.apierror == \'internal_server_error\') {
 								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3INTERNAL_SERVER_ERROR') . '\');
 							}else if(error.apierror == \'invalid_public_key\') {
 								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_PUBLIC_KEY') . '\');
@@ -94,22 +94,23 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 								exp_month:$(\'card-expiry-month\').value,
 								exp_year:$(\'card-expiry-year\').value,
 								cvc:$(\'card-cvc\').value,
-								amount:$(\'amount\').value,
-								currency:$(\'currency\').value
+								amount_int:$(\'amount\').value,
+								currency:$(\'currency\').value,
+								cardholder:$(\'card-holder\').value
 							}, PaymillResponseHandler);
 							$(\'payment-button\').set(\'disabled\', true);
 							return false;
 						}
 					});
-				});
-			</script>');
+				});'."\n");
 		
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paymill&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(
 			'url'			=> $callbackUrl,
 			'amount'		=> (int)($subscription->gross_amount * 100),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
-			'description'	=> $level->title
+			'description'	=> $level->title . ' #' . $subscription->akeebasubs_subscription_id,
+			'carholder'		=> $user->name,
 		);
 
 		@ob_start();
@@ -144,6 +145,11 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
 		
 		if($isValid) {
+			// Initialise common variables
+			$apiKey = $this->getPrivateKey();
+			$apiEndpoint = 'https://api.paymill.de/v2/';
+			$client = '';
+			
 			try {
 				$params = array(
 					'amount'		=> $data['amount'],
@@ -151,15 +157,30 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 					'token'			=> $data['token'],
 					'description'	=> $data['description']
 				);
-				$apiKey = $this->getPrivateKey();
-				$apiEndpoint = 'https://api.paymill.de/v2/';
+				
 				$transactionsObject = new Services_Paymill_Transactions(
 					$apiKey, $apiEndpoint
 				);
 				$transaction = $transactionsObject->create($params);	
-			}catch(Exception $e) {
+			} catch(Exception $e) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
+			}
+		}
+		
+		// Update the client record
+		if($isValid) {
+			$user = JFactory::getUser($subscription->user_id);
+			try {
+				$clientsObject = new Services_Paymill_Clients($apiKey, $apiEndpoint);
+				$clientRecord = $transaction['client'];
+				$clientparams = array(
+					'id'			=> $clientRecord['id'],
+					'email'			=> $user->email,
+					'description'	=> $user->name . '(subscription #' . $subscription->akeebasubs_subscription_id . ')',
+				);
+			} catch (Exception $exc) {
+				
 			}
 		}
         
@@ -195,6 +216,13 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			}
 		}
 		
+		// 2013-01-31 nicholas: I removed those checks because the credit card
+		// information MUST NOT be sent back to the site. That's the whole point
+		// of using the bridge Javascript to get a token: we send the CC info
+		// directly to PayMill and let them return us a secure piece of data
+		// (token) that we can use to charge our users. This allows secure
+		// transactions even on servers not certified for PCI compliance.
+		/*
 		if($isValid) {
 			if(substr($data['card-number'], -4) != $transaction['payment']['last4']) {
 				$isValid = false;
@@ -209,6 +237,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Expiry date doesn't match.";
 			}
 		}
+		*/
 			
 		// Log the IPN data
 		$this->logIPN($transaction, $isValid);
