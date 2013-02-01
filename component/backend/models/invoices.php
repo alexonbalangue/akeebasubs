@@ -576,6 +576,12 @@ class AkeebasubsModelInvoices extends FOFModel
 		// Create the PDF
 		$pdf = $this->getTCPDF();
 		$pdf->AddPage();
+		
+		if (function_exists('tidy_repair_string'))
+		{
+			$invoiceRecord->html = tidy_repair_string($invoiceRecord->html, null, 'utf8');
+		}
+		
 		$pdf->writeHTML($invoiceRecord->html, true, false, true, false, '');
 		$pdf->lastPage();
 		$pdfData = $pdf->Output('', 'S');
@@ -704,6 +710,48 @@ class AkeebasubsModelInvoices extends FOFModel
 	
 	public function &getTCPDF()
 	{
+		// Load PDF signing certificates
+		if (!class_exists('AkeebasubsHelperCparams'))
+		{
+			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
+		}
+		
+		$certificateFile = AkeebasubsHelperCparams::getParam('invoice_certificatefile', 'certificate.cer');
+		$secretKeyFile = AkeebasubsHelperCparams::getParam('invoice_secretkeyfile', 'secret.cer');
+		$secretKeyPass = AkeebasubsHelperCparams::getParam('invoice_secretkeypass', '');
+		$extraCertFile = AkeebasubsHelperCparams::getParam('invoice_extracert', 'extra.cer');
+		
+		$certificate = '';
+		$secretkey = '';
+		$extracerts = '';
+		
+		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/tcpdf/certificates/';
+		if (JFile::exists($path.$certificateFile))
+		{
+			$certificate = JFile::read($path.$certificateFile);
+		}
+		if (!empty($certificate))
+		{
+			if (JFile::exists($path.$secretKeyFile))
+			{
+				$secretkey = JFile::read($path.$secretKeyFile);
+			}
+			if (empty($secretkey))
+			{
+				$secretkey = $certificate;
+			}
+			
+			if (JFile::exists($path.$extraCertFile))
+			{
+				$extracerts = JFile::read($path.$extraCertFile);
+			}
+			if (empty($extracerts))
+			{
+				$extracerts = '';
+			}
+		}
+		
+		// Set up TCPDF
 		$jreg = JFactory::getConfig();
 		$tmpdir = $jreg->get('tmp_path');
 		$siteName = $jreg->get('sitename');
@@ -758,6 +806,11 @@ class AkeebasubsModelInvoices extends FOFModel
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+		
+		if (!empty($certificate))
+		{
+			$pdf->setSignature($certificate, $secretkey, $secretKeyPass, $extracerts);
+		}
 		
 		$pdf->SetFont('helvetica', '', 10);
 

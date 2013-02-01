@@ -137,6 +137,30 @@
 				label="COM_AKEEBASUBS_CONFIG_INVOICE_VATNOTE_TITLE"
 				description="COM_AKEEBASUBS_CONFIG_INVOICE_VATNOTE_DESC"
 		/>
+		<field name="invoice_certificatefile" type="text"
+				default="certificate.cer"
+				size="30"
+				label="COM_AKEEBASUBS_CONFIG_INVOICE_CERTIFICATEFILE_TITLE"
+				description="COM_AKEEBASUBS_CONFIG_INVOICE_CERTIFICATEFILE_DESC"
+		/>
+		<field name="invoice_secretkeyfile" type="text"
+				default="secret.cer"
+				size="30"
+				label="COM_AKEEBASUBS_CONFIG_INVOICE_SECRETKEYFILE_TITLE"
+				description="COM_AKEEBASUBS_CONFIG_INVOICE_SECRETKEYFILE_DESC"
+		/>
+		<field name="invoice_secretkeypass" type="password"
+				default=""
+				size="20"
+				label="COM_AKEEBASUBS_CONFIG_INVOICE_SECRETKEYPASS_TITLE"
+				description="COM_AKEEBASUBS_CONFIG_INVOICE_SECRETKEYPASS_DESC"
+		/>
+		<field name="invoice_extracert" type="text"
+				default="extra.cer"
+				size="30"
+				label="COM_AKEEBASUBS_CONFIG_INVOICE_EXTRACERT_TITLE"
+				description="COM_AKEEBASUBS_CONFIG_INVOICE_EXTRACERT_DESC"
+		/>
 	</fieldset>
 
 	<fieldset

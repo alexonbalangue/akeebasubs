@@ -40,5 +40,6 @@ modules/admin/akeebasubs/language/en-GB
 /build/templates/release.json
 
 component/backend/invoices/*.pdf
+component/backend/assets/tcpdf/certificates/*.cer
 
 _test

@@ -63,6 +63,7 @@
 		<include name="*" />
 
 		<exclude name="invoices/*.pdf" />
+		<exclude name="backend/assets/tcpdf/certificates/*.cer" />
 	</fileset>
 
 	<!--
