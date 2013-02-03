@@ -1,4 +1,7 @@
 <?php defined('_JEXEC') or die(); ?>
+<?php
+$type = $level->recurring ? 'customer' : 'transaction';
+?>
 
 <h3><?php echo JText::_('PLG_AKPAYMENT_BRAINTREE_FORM_HEADER') ?></h3>
 <form id="payment-form" action="<?php echo Braintree_TransparentRedirect::url() ?>" method="post" class="form form-horizontal">
@@ -8,7 +11,7 @@
 			<?php echo JText::_('PLG_AKPAYMENT_BRAINTREE_FORM_CC') ?>
 		</label>
 		<div class="controls">
-			<input type="text" name="transaction[credit_card][number]" id="braintree_credit_card_number" class="input-large" />
+			<input type="text" name="<?php echo $type ?>[credit_card][number]" id="braintree_credit_card_number" class="input-large" />
 		</div>
 	</div>
 	<div class="control-group" id="control-group-card-expiry">
@@ -16,7 +19,7 @@
 			<?php echo JText::_('PLG_AKPAYMENT_BRAINTREE_FORM_EXPDATE') ?>
 		</label>
 		<div class="controls">
-			<?php echo $this->selectExpirationDate() ?>
+			<?php echo $this->selectExpirationDate($type) ?>
 		</div>
 	</div>
 	<div class="control-group">
