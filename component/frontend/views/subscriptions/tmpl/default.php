@@ -13,22 +13,6 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 
-$rawActiveLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-	->enabled(1)
-	->getList();
-$activeLevels = array();
-$allLevels = array();
-if(!empty($rawActiveLevels)) foreach($rawActiveLevels as $l) {
-	$activeLevels[] = $l->akeebasubs_level_id;
-	$allLevels[$l->akeebasubs_level_id] = $l;
-}
-
-$subIDs = array();
-if(count($this->items)) foreach($this->items as $sub) {
-	$subIDs[] = $sub->akeebasubs_level_id;
-}
-$subIDs = array_unique($subIDs);
-
 jimport('joomla.utilities.date');
 ?>
 
@@ -40,19 +24,19 @@ jimport('joomla.utilities.date');
 	<table class="table table-striped" width="100%">
 		<thead>
 			<tr>
-				<th width="60px">
+				<th width="40px">
 					<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?>
 				</th>
-				<th>
+				<th width="100px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?>
 				</th>
-				<th width="100px">
+				<th width="60px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_STATE')?>
 				</th>
-				<th width="120px">
+				<th width="80px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP')?>
 				</th>
-				<th width="120px">
+				<th width="80px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN')?>
 				</th>
 				<th width="40px">
@@ -83,9 +67,9 @@ jimport('joomla.utilities.date');
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
 				
 				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
-				$level = $allLevels[$subscription->akeebasubs_level_id];
+				$level = $this->allLevels[$subscription->akeebasubs_level_id];
 				if($level->only_once) {
-					if(in_array($subscription->akeebasubs_level_id,$subIDs)) {
+					if(in_array($subscription->akeebasubs_level_id,$this->subIDs)) {
 						$canRenew = false;
 					}
 				}
@@ -130,7 +114,29 @@ jimport('joomla.utilities.date');
 						<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_VIEW')?>
 					</a>
 
-	            	<?php if(($subscription->state == 'C') && (in_array($subscription->akeebasubs_level_id, $activeLevels))):?>
+					<?php if(array_key_exists($subscription->akeebasubs_subscription_id, $this->invoices)):
+					$invoice = $this->invoices[$subscription->akeebasubs_subscription_id];
+					if($invoice->extension == 'akeebasubs')
+					{
+						$url = JRoute::_('index.php?option=com_akeebasubs&view=invoices&task=download&id='.$invoice->akeebasubs_subscription_id);
+					}
+					elseif(array_key_exists($invoice->extension, $this->extensions))
+					{
+						$url = JRoute::_(sprintf($extensions[$invoice->extension]['backendurl'], $invoice->invoice_no));
+					}
+					else
+					{
+						$url = '';
+					}
+					if(!empty($url)):
+					?>
+					<a class="btn btn-mini" href="<?php echo $url; ?>">
+	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_INVOICE')?>
+	            	</a>
+					<?php endif; ?>
+					<?php endif; ?>
+
+	            	<?php if(($subscription->state == 'C') && (in_array($subscription->akeebasubs_level_id, $this->activeLevels))):?>
 					<?php if($canRenew): ?>
 	            	<?php $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 						->setId($subscription->akeebasubs_level_id)

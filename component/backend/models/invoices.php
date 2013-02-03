@@ -17,6 +17,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		return (object)array(
 			// Default filters
 			'akeebasubs_subscription_id'	=> $this->getState('akeebasubs_subscription_id', null, 'int'),
+			'subids'		=> $this->getState('subids', null, 'array'),
 			'extension'		=> $this->getState('extension', null, 'cmd'),
 			'invoice_no'	=> $this->getState('invoice_no', null, 'int'),
 			'invoice_date'	=> $this->getState('invoice_date', null, 'string'),
@@ -100,6 +101,27 @@ class AkeebasubsModelInvoices extends FOFModel
 				$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id').' = '.
 					$db->q((int)$state->akeebasubs_subscription_id)
 			);
+		}
+		elseif (!empty($state->subids))
+		{
+			$state->subids = array_unique($state->subids);
+			$ids = array();
+			foreach ($state->subids as $id)
+			{
+				$id = (int)$id;
+				if ($id == 0)
+				{
+					continue;
+				}
+				$ids[] = $db->q($id);
+			}
+			if (!empty($ids))
+			{
+				$query->where(
+					$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id').' IN ('.
+						implode(',', $ids) . ')'
+				);
+			}
 		}
 		
 		if (!empty($state->extension))

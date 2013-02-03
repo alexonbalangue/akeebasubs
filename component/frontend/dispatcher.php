@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 class AkeebasubsDispatcher extends FOFDispatcher
 {
 	private $allowedViews = array(
-		'levels','messages','subscribes','subscriptions','validates','callbacks','userinfos'
+		'levels','messages','subscribes','subscriptions','validates','callbacks','userinfos','invoices','invoice'
 	);
 	
 	public function __construct($config = array()) {
@@ -57,9 +57,12 @@ class AkeebasubsDispatcher extends FOFDispatcher
 			
 			// Set the view, if it's allowed
 			FOFInput::setVar('view',$view,$this->input);
-			if(!in_array(FOFInflector::pluralize($view), $this->allowedViews)) $result = false;
+			if(!in_array(FOFInflector::pluralize($view), $this->allowedViews))
+			{
+				$result = false;
+			}
 		}
-		
+
 		return $result;
 	}
 	

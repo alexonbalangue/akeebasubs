@@ -64,7 +64,7 @@ function AkeebasubsBuildRoute(&$query)
 function AkeebasubsParseRoute($segments)
 {
 	// accepted views:
-	$views = array('new','thankyou','cancelled', 'level', 'levels', 'message', 'subscribe', 'subscription', 'subscriptions', 'callback', 'validate', 'userinfo');
+	$views = array('new','thankyou','cancelled', 'level', 'levels', 'message', 'subscribe', 'subscription', 'subscriptions', 'callback', 'validate', 'userinfo', 'invoices');
 	
 	// accepted layouts:
 	$layoutsAccepted = array(
