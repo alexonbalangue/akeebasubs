@@ -1500,6 +1500,68 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             invoice template.</para>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Certificate file</term>
+
+          <listitem>
+            <para>The name of the X.509 certificate file which will be used
+            for PDF invoice signing. The file must be in PEM format and
+            located in the
+            administrator/components/com_akeebasubs/assets/tcpdf/certificates
+            directory of your site. Only required if you NEED to produce
+            signed PDF documents.</para>
+
+            <para>For more information on signed invoice PDF files please read
+            the <link linkend="signed-pdfs">Invoices as signed PDF
+            files</link> section of the documentation.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Certificate secret key (optional)</term>
+
+          <listitem>
+            <para>The name of the X.509 certificate file containing the secret
+            key for PDF signing. The file must be in PEM format and located in
+            the
+            administrator/components/com_akeebasubs/assets/tcpdf/certificates
+            directory of your site.</para>
+
+            <para>For more information on signed invoice PDF files please read
+            the <link linkend="signed-pdfs">Invoices as signed PDF
+            files</link> section of the documentation.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Certificate secret key password (optional)</term>
+
+          <listitem>
+            <para>The password for your secret key, used in PDF signing</para>
+
+            <para>For more information on signed invoice PDF files please read
+            the <link linkend="signed-pdfs">Invoices as signed PDF
+            files</link> section of the documentation.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Extra certificates (optional)</term>
+
+          <listitem>
+            <para>The name of the X.509 certificate file containing additional
+            certificates to attach to the signed PDF file, e.g. the root
+            (public key) certificates of your Certificate Authority. The file
+            must be in PEM format and located in the
+            administrator/components/com_akeebasubs/assets/tcpdf/certificates
+            directory of your site.</para>
+
+            <para>For more information on signed invoice PDF files please read
+            the <link linkend="signed-pdfs">Invoices as signed PDF
+            files</link> section of the documentation.</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Live Update</guilabel></para>
@@ -3961,6 +4023,30 @@ Rule C gives $ 30 discount</programlisting>
       </section>
     </section>
 
+    <section xml:id="integrated-invoicing">
+      <title>Integrated invoicing</title>
+
+      <para/>
+
+      <section xml:id="invoice-templates">
+        <title>Invoice Templates</title>
+
+        <para/>
+      </section>
+
+      <section xml:id="invoices">
+        <title>Invoice management</title>
+
+        <para/>
+      </section>
+
+      <section xml:id="signed-pdfs">
+        <title>Invoices as signed PDF files</title>
+
+        <para/>
+      </section>
+    </section>
+
     <section xml:id="customising-akeeba-subs">
       <title>Customising Akeeba Subscriptions</title>
 
@@ -5280,10 +5366,10 @@ LEVEL2=11111:22222:33333</programlisting>
         <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
         Subscriptions Payment - BrainTree</guilabel></para>
 
-        <para>Available since Akeeba Subscriptions 2.6.0.</para>
+        <para>Available since Akeeba Subscriptions 3.0.0.</para>
 
-        <para>This plugin <emphasis role="bold">does not support</emphasis>
-        recurring payments.</para>
+        <para>This plugin <emphasis role="bold">does support</emphasis>
+        recurring payments. Please read the integration notes below.</para>
 
         <para>This is a payment plugin which allows you to use the low cost
         payment processor BrainTree.</para>
@@ -5349,13 +5435,36 @@ LEVEL2=11111:22222:33333</programlisting>
           </varlistentry>
         </variablelist>
 
-        <bridgehead>Integration notes</bridgehead>
+        <bridgehead>Integration notes for recurring payemnts</bridgehead>
 
-        <para>You will need to enter the following IPN URL in your BrainTree
-        configuration page:
-        <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=cashu</uri>
+        <para>In order to get recurring payments work with BrainTree, the
+        merchant has to create a "plan" in the braintree account, that matches
+        the Akeeba Subscriptions' Subscription Level. When ones create a plan
+        (in the BrainTree account under <guimenu>Recurring Billing</guimenu>,
+        <guimenuitem>Plans</guimenuitem>) there are a few fields to fill in.
+        The first field is called <guilabel>Plan ID</guilabel> and the
+        merchant has to enter the "slug" of the corresponding Subscription
+        Level of Akeeba Subscriptions. There are also the fields
+        <guilabel>Price</guilabel> which will be overwritten by the amount
+        sent by Akeeba Subscriptions and <guilabel>First Bill Date</guilabel>
+        will always be set to <option>Immediately</option> by the plugin. One
+        can only choose the billing cycle in months, so that has to match the
+        <guilabel>Subscription Length</guilabel> in Akeeba
+        Subscriptions.</para>
+
+        <para>In order to get recurring payments to work one secondly has to
+        create a "webhook" (under <guimenu>Account</guimenu>,
+        <guimenuitem>Webhooks</guimenuitem> which notifies Akeeba
+        Subscriptions about changes (e.g. new payment) of a recurring
+        subscription. The URL that needs to be used for the webhook is:
+        </para>
+
+        <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=cashu</uri>
         after replacing <uri>www.example.com</uri> with your site's domain
         name.</para>
+
+        <para>and one has to select to get a notification for
+        <option>Subscription charged successfully</option>.</para>
       </section>
 
       <section xml:id="payment-cashu">
@@ -6130,6 +6239,17 @@ LEVEL2=11111:22222:33333</programlisting>
         needn't have an SSL certificate, as your users are not entering their
         credit card information directly on your site, but on a Moneris-hosted
         page.</para>
+
+        <warning>
+          <para>This plugin allows your clients to enter their Credit Card
+          information in a page on your site and then it submits this form to
+          your server. You have to make sure that you are always presenting
+          the subscription page in HTTPS, using an SSL certificate signed by a
+          reputable Certificate Authority. Failure to do so might hold you
+          liable in case your client's credit card information is stolen.
+          Please note that no credit card information is ever stored on your
+          site's database.</para>
+        </warning>
 
         <important>
           <para>Moneris does not allow us to communicate the transaction
@@ -7787,6 +7907,17 @@ LEVEL2=11111:22222:33333</programlisting>
         <note>
           <para>This plugin implements the Direct Payment method.</para>
         </note>
+
+        <warning>
+          <para>This plugin allows your clients to enter their Credit Card
+          information in a page on your site and then it submits this form to
+          your server. You have to make sure that you are always presenting
+          the subscription page in HTTPS, using an SSL certificate signed by a
+          reputable Certificate Authority. Failure to do so might hold you
+          liable in case your client's credit card information is stolen.
+          Please note that no credit card information is ever stored on your
+          site's database.</para>
+        </warning>
 
         <para>This payment method integrates the PayPal Payments Pro, a.k.a.
         PayPal Website Payments Pro service, available with a monthly fee to
