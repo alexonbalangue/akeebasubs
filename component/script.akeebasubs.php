@@ -57,6 +57,7 @@ class Com_AkeebasubsInstallerScript
 				'autocity'				=> 0,
 				'canalyticscommerce'	=> 0,
 				'cb'					=> 0,
+				'cbsync'				=> 0,
 				'ccinvoices'			=> 0,
 				'contentpublish'		=> 0,
 				'customfields'			=> 1,

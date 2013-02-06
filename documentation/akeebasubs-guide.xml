@@ -10896,6 +10896,153 @@ LEVEL3=Group 1</programlisting>
       subscription).</para>
     </section>
 
+    <section xml:id="integration-cbsync">
+      <title>Community Builder fields sync</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - Community Builder Field Sync</guilabel>. Available since
+      Akeeba Subscriptions 3.0.0.</para>
+
+      <para>This plugin provides two-way synchronisation between the user data
+      stored in Community Builder's custom fields and Akeeba Subscriptions.
+      Such data include the address data, business name, VAT number and any
+      custom fields you have defined in Akeeba Subscriptions. When enabled,
+      two things will happen:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>When a user enters the subscription page, the form will be
+          pre-filled with his Community Builder address details, as long as
+          he's logged in</para>
+        </listitem>
+
+        <listitem>
+          <para>When the user submits the subscription form, the Community
+          Builder extra fields for this user will be updated with the
+          information he entered in the subscription form</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This plugin WILL NOT magically synchronise data when it changes in
+      Community Builder. The synchronisation occurs ONLY when the user is
+      visiting the subscription page to make a new subscription or "renew" an
+      existing one (subscription renewal in Akeeba Subscriptions is the same
+      thing as a new subscription).</para>
+
+      <para>Community Builder doesn't come with out of the box fields to hold
+      all the information collected by Akeeba Subscriptions. You will have to
+      create them yourself. The names you have to use are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>cb_isbusiness</term>
+
+          <listitem>
+            <para>Checkbox. Is this a business registration?</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_businessname</term>
+
+          <listitem>
+            <para>Text. The name of the business.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_occupation</term>
+
+          <listitem>
+            <para>Text. The business activity.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_vatnumber</term>
+
+          <listitem>
+            <para>Text. The VAT number, without the country prefix.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_viesregistered</term>
+
+          <listitem>
+            <para>Checkbox. Is the VAT number of the user registered in VIES?
+            (only makes sense for EU customers when you are an EU
+            merchant)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_taxauthority</term>
+
+          <listitem>
+            <para>Text. Not currently used.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_address1</term>
+
+          <listitem>
+            <para>Text. Address.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_address2</term>
+
+          <listitem>
+            <para>Text. Address, continued.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_city</term>
+
+          <listitem>
+            <para>Text. The user's city.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_state</term>
+
+          <listitem>
+            <para>Text. The user's state, province or administrative
+            area.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>cb_zip</term>
+
+          <listitem>
+            <para>Text. User's ZIP / postal code</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>country</term>
+
+          <listitem>
+            <para>Text. User's country, in human readable form.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>You can create all, some or none of those fields, but the names
+      MUST match for the sync to work! Moreover, Akeeba Subscriptions will
+      synchronise its extra fields with CB. In order to do that you will have
+      to create CB fields with their name being cb_ followed by the Akeeba
+      Subscription's field slug. For example, if you have defined an Akeeba
+      Subscriptions fields whose slug is mobile you need to create a CB field
+      whose slug is cb_mobile for the sync to work.</para>
+    </section>
+
     <section xml:id="integration-kunena">
       <title>Kunena Integration</title>
 

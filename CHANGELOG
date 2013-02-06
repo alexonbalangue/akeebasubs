@@ -17,6 +17,7 @@ Akeeba Subscriptions 3.0.0
 + MijoShop integration
 + Integration with Frontend User Access (third party plugin)
 + Synchronise user information with Joomla! User Profiles (#__user_profiles table)
++ CB user profile synchronisation
 ~ Subscriptions which are paid but inactive, due to a future Valid From date, are now shown differently than expired or unpaid subscriptions in the front-end
 ~ Display the payment processor of each subscription in the back-end Subscriptions page
 ~ Renewed but not yet active subscription are shown with light green instead of pink background in the back-end Subscriptions page
