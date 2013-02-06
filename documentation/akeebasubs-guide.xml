@@ -10526,6 +10526,24 @@ LEVEL3=Group 1</programlisting>
       to add the user to Group A.</para>
     </section>
 
+    <section xml:id="ntegration-joomlaprofilesync">
+      <title>Joomla! User Profile Sync</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - Joomla! user Profiles Sync</guilabel></para>
+
+      <para>This plugin allows you to synchronise the information stored for
+      each user with the information Joomla! keeps in its #__user_profiles
+      page. The first corollary of this kind of integration is that the basic
+      address information of your subscribers are now visible –and
+      <emphasis>editable</emphasis>– on their Joomla! profile page if you
+      enable Joomla!'s optional User Profiles plugin. The second and most
+      important corollary is that all information kept by Akeeba Subscriptions
+      for your subscribers, including custom fields, are automatically
+      synchronised with the #__user_profiles table, making the accessible to
+      third party extensions in a very easy to process form.</para>
+    </section>
+
     <section xml:id="integration-k2">
       <title>K2 Integration</title>
 
