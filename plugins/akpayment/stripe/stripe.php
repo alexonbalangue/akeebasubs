@@ -40,14 +40,9 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 		if($paymentmethod != $this->ppName) return false;
 		
 		$doc = JFactory::getDocument();
-		$doc->addCustomTag(
-			'<script type="text/javascript">
-				Stripe.setPublishableKey(\'' . $this->getPublicKey() . '\');
-			</script>');
+		$doc->addScriptDeclaration("\nStripe.setPublishableKey('" . $this->getPublicKey() . "');\n");
 		$doc->addScript("https://js.stripe.com/v1/");
-		$doc->addCustomTag(
-			'<script type="text/javascript">
-				window.addEvent(\'domready\', function(){
+		$doc->addScriptDeclaration("\n" . 'window.addEvent(\'domready\', function(){
 					function StripeResponseHandler(status, response) {
 						$$(\'.control-group\').removeClass(\'error\');
 						if (response.error) {
@@ -112,15 +107,15 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 							return false;
 						}
 					});
-				});
-			</script>');
+				});' . "\n");
 		
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=stripe&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(
 			'url'			=> $callbackUrl,
 			'amount'		=> (int)($subscription->gross_amount * 100),
 			'currency'		=> strtolower(AkeebasubsHelperCparams::getParam('currency','usd')),
-			'description'	=> $level->title
+			'description'	=> $level->title . ' #' . $subscription->akeebasubs_subscription_id,
+			'cardholder'	=> $user->name
 		);
 
 		@ob_start();
@@ -213,21 +208,6 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 			if($sandbox == $transaction['livemode']) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Transaction done in wrong mode.";
-			}
-		}
-		
-		if($isValid) {
-			if(substr($data['card-number'], -4) != $transaction['card']['last4']) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Creditcard number doesn't match.";
-			}
-		}
-		
-		if($isValid) {
-			if($data['card-expiry-month'] != $transaction['card']['exp_month']
-					|| $data['card-expiry-year'] != $transaction['card']['exp_year']) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Expiry date doesn't match.";
 			}
 		}
 			
