@@ -10,6 +10,7 @@ Akeeba Subscriptions 3.0.0
 + Akeeba Subscriptions - Affiliates system plugin, allows you to use Akeeba Subscriptions' affid URL parameter with any page on your Joomla! site (thank you Chill Creations!)
 + BrainTree payments integration
 + GoCardless payments integration
++ VivaPayments payments integration
 + Slave subscriptions: you can allow a subscriber to add up to 10 extra users (this is configurable per subscription level) to his subscription
 + Post-expiration notification email, sent a preset number of days after a subscription expires if it's not already renewed
 + Professional version: Subscription level relations, allows for fine-tuned subscription upgrades with flexible discounts

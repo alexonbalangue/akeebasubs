@@ -296,17 +296,6 @@
           controls the development of MySQL).</para>
         </listitem>
       </itemizedlist>
-
-      <para>Since version 2.0.a1, Akeeba Subscriptions no longer uses the
-      Nooku Framework which extends its compatibility with more server
-      environments and third-party software.</para>
-
-      <important>
-        <para>If you installed Akeeba Subscriptions 1.0.b4 or earlier on your
-        site and your site displays a blank page, please remove the
-        <filename>index.html</filename> files from your site's root and your
-        site's administrator directories.</para>
-      </important>
     </section>
 
     <section xml:id="installation-instructions">
@@ -9828,6 +9817,110 @@ LEVEL2=11111:22222:33333</programlisting>
       Verotel doesn't allow for Akeeba Subscriptions' customised per-level
       success messages. You will have to direct all your customers to a
       generic page on your site, e.g. an article created in Joomla!.</para>
+    </section>
+
+    <section xml:id="payment-vivapayments">
+      <title>VivaPayments</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - VivaPayments</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the Greek payments service
+      VivaPayments (http://www.vivapayments.com). It is a low cost payments
+      processor available only for businesses in Greece.</para>
+
+      <para>The options you have with this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "VivaPayments" or type in a custom name
+            to show to your customer's, e.g. "Credit Card / Pay with
+            ΔΙΑ.Σ."</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Merchant ID</term>
+
+          <listitem>
+            <para>The Merchant ID assigned to you by VivaPayments, accessible
+            from your Viva profile.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Password</term>
+
+          <listitem>
+            <para>Your transaction password (<emphasis role="bold">NOT your
+            login password!!!</emphasis>), as defined in your Viva profile.
+            Please keep in mind that this must be different than the password
+            you use to login to your Viva profile for security reasons.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, Akeeba Subscriptions will perform transactions
+            against the test servers. This is designed for integration tests,
+            BEFORE going live with your site. <emphasis role="bold">NEVER,
+            EVER, NO MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION
+            SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR
+            CUSTOMERS.</emphasis></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>Integration notes</bridgehead>
+
+      <para>In order to use this payment plugin you will have to do some
+      configuration in your VivaPayments profile. Log in to VivaPayments and
+      go to <guilabel>Sources</guilabel>. Change the settings of
+      <guilabel>Default</guilabel> and enter the following callback
+      URLs:</para>
+
+      <procedure>
+        <step>
+          <para>Set the domain name to <uri>http://www.example.com</uri> (if
+          you are not using HTTPS / SSL on your site) or
+          <uri>https://www.example.com</uri> where <uri>www.example.com</uri>
+          must be replaced with the domain name of your site.</para>
+        </step>
+
+        <step>
+          <para>Set <guilabel>SUCCESSFUL TRANSACTION</guilabel> to
+          <uri>index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=viva</uri>
+          (the domain will be automatically put in front of this URL)</para>
+        </step>
+
+        <step>
+          <para>Set <guilabel>FAILED TRANSACTION</guilabel> to
+          <uri>index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=viva&amp;type=cancel</uri>
+          (the domain will be automatically put in front of this URL)</para>
+        </step>
+      </procedure>
+
+      <para>Please remember that unless you do that Akeeba Subscriptions will
+      not be able to "see" the payments and will not activate subscriptions
+      automatically when they are paid.</para>
     </section>
 
     <section xml:id="payment-worldpay">
