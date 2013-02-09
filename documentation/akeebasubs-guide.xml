@@ -11706,8 +11706,8 @@ LEVEL3=Group 1</programlisting>
       </variablelist>
     </section>
 
-    <section xml:id="integration-acymailing">
-      <title>AcyMailing integration</title>
+    <section xml:id="integration-ganalytics-commerce">
+      <title>Google Analytics Commerce integration</title>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Analytics commerce</guilabel></para>
@@ -11742,8 +11742,8 @@ LEVEL3=Group 1</programlisting>
       </variablelist>
     </section>
 
-    <section xml:id="integration-ganalytics-commerce">
-      <title>Google Analytics Commerce integration</title>
+    <section xml:id="integration-acymailing">
+      <title>AcyMailing integration</title>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - AcyMailing Integration</guilabel></para>
