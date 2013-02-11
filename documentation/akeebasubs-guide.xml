@@ -10922,6 +10922,13 @@ LEVEL3=Group 1</programlisting>
       service and populate the country and city fields, unless the user has
       overridden them, i.e. he has bought another subscription in the
       past.</para>
+
+      <important>
+        <para>The hostip.info service usually returns only the Country for a
+        particular IP. It will very rarely be able to provide the City. If you
+        only see the Country being filled in do not worry; it's how the
+        service works.</para>
+      </important>
     </section>
 
     <section xml:id="integration-sql">
