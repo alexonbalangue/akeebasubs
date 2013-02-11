@@ -37,7 +37,7 @@ class plgAkeebasubsAutocity extends JPlugin
 		
 		// No point continuing if we can't get an address, right?
 		if(empty($ip)) return false;
-		
+				
 		// Get the GeoLocation information
 		$url = 'http://api.hostip.info/?ip='.urlencode($ip);
 		$ch = curl_init($url);

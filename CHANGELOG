@@ -10,12 +10,15 @@ Akeeba Subscriptions 3.0.0
 + Akeeba Subscriptions - Affiliates system plugin, allows you to use Akeeba Subscriptions' affid URL parameter with any page on your Joomla! site (thank you Chill Creations!)
 + BrainTree payments integration
 + GoCardless payments integration
++ VivaPayments payments integration
 + Slave subscriptions: you can allow a subscriber to add up to 10 extra users (this is configurable per subscription level) to his subscription
 + Post-expiration notification email, sent a preset number of days after a subscription expires if it's not already renewed
 + Professional version: Subscription level relations, allows for fine-tuned subscription upgrades with flexible discounts
 + Professional version: easy to edit HTML email templates
 + MijoShop integration
 + Integration with Frontend User Access (third party plugin)
++ Synchronise user information with Joomla! User Profiles (#__user_profiles table)
++ CB user profile synchronisation
 ~ Subscriptions which are paid but inactive, due to a future Valid From date, are now shown differently than expired or unpaid subscriptions in the front-end
 ~ Display the payment processor of each subscription in the back-end Subscriptions page
 ~ Renewed but not yet active subscription are shown with light green instead of pink background in the back-end Subscriptions page
@@ -23,6 +26,7 @@ Akeeba Subscriptions 3.0.0
 ~ Many more subscription level message/email variables and improvements in date formatting in messages/emails
 ~ PayMill: we are now updating the user record with the user's name and email (easier transaction tracing)
 ~ PayMill: we are now sending the subscription ID in the description (easier transaction tracing)
+~ Improved transparent database update checks when you visit the component's Control Panel page
 ! PayMill: the CC number would be sent back to the server but it shouldn't, for security reasons
 # [HIGH] K2 Integration wouldn't add users to K2 groups
 # [MEDIUM] Regression: PayPal recurring payments wouldn't work
@@ -30,6 +34,7 @@ Akeeba Subscriptions 3.0.0
 # [LOW] Timed release plugin had issues determining the elapsed / remaining time per level in timed content expressions
 # [LOW] The login redirection URL could end up being invalid on some site configurations
 # [LOW] The content publishing plugin would cause Joomla! to throw database if K2 and/or Zoo were no installed and Debug System was enabled
+# [LOW] The automatic city & country plugin wouldn't work for guest (non-logged-in) users
 
 Akeeba Subscriptions 2.5.1
 ================================================================================

@@ -12,36 +12,38 @@
  * certified for PCI Compliance. This is a matter of transaction security.
  */
 ?>
-<div class="control-group" id="control-group-card-number">
-	<label for="card-holder" class="control-label" style="width:190px; margin-right:20px;">
-		<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CARDHOLDER') ?>
-	</label>
-	<div class="controls">
-		<input type="text" name="card-holder" id="card-holder" class="input-large" value="<?php echo $data->carholder ?>" />
+<div class="form-horizontal">
+	<div class="control-group" id="control-group-card-holder">
+		<label for="card-holder" class="control-label" style="width:190px; margin-right:20px;">
+			<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CARDHOLDER') ?>
+		</label>
+		<div class="controls">
+			<input type="text" name="card-holder" id="card-holder" class="input-large" value="<?php echo $data->carholder ?>" />
+		</div>
 	</div>
-</div>
-<div class="control-group" id="control-group-card-number">
-	<label for="card-number" class="control-label" style="width:190px; margin-right:20px;">
-		<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CC') ?>
-	</label>
-	<div class="controls">
-		<input type="text" name="card-number" id="card-number" class="input-large" />
+	<div class="control-group" id="control-group-card-number">
+		<label for="card-number" class="control-label" style="width:190px; margin-right:20px;">
+			<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CC') ?>
+		</label>
+		<div class="controls">
+			<input type="text" name="card-number" id="card-number" class="input-large" />
+		</div>
 	</div>
-</div>
-<div class="control-group" id="control-group-card-expiry">
-	<label for="card-expiry" class="control-label" style="width:190px; margin-right:20px;">
-		<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_EXPDATE') ?>
-	</label>
-	<div class="controls">
-		<?php echo $this->selectMonth() ?><span> / </span><?php echo $this->selectYear() ?>
+	<div class="control-group" id="control-group-card-expiry">
+		<label for="card-expiry" class="control-label" style="width:190px; margin-right:20px;">
+			<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_EXPDATE') ?>
+		</label>
+		<div class="controls">
+			<?php echo $this->selectMonth() ?><span> / </span><?php echo $this->selectYear() ?>
+		</div>
 	</div>
-</div>
-<div class="control-group" id="control-group-card-cvc">
-	<label for="card-cvc" class="control-label" style="width:190px; margin-right:20px;">
-		<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CVC') ?>
-	</label>
-	<div class="controls">
-		<input type="text" name="card-cvc" id="card-cvc" class="input-mini" />
+	<div class="control-group" id="control-group-card-cvc">
+		<label for="card-cvc" class="control-label" style="width:190px; margin-right:20px;">
+			<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_CVC') ?>
+		</label>
+		<div class="controls">
+			<input type="text" name="card-cvc" id="card-cvc" class="input-mini" />
+		</div>
 	</div>
 </div>
 

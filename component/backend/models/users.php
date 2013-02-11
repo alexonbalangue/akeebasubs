@@ -238,25 +238,27 @@ class AkeebasubsModelUsers extends FOFModel
 					if(is_null($myData['params'])) $myData['params'] = array();
 				}
 			}
-			
-			// Finally, merge data coming from the plugins. Note that the
-			// plugins only run when a new subscription is in progress, not
-			// every time the user data loads.
-			jimport('joomla.plugin.helper');
-			JPluginHelper::importPlugin('akeebasubs');
-			$app = JFactory::getApplication();
-			$jResponse = $app->triggerEvent('onAKUserGetData', array((object)$myData));
-			if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $pResponse) {
-				if(!is_array($pResponse)) continue;
-				if(empty($pResponse)) continue;
-				if(array_key_exists('params', $pResponse)) {
-					if(!empty($pResponse['params'])) foreach($pResponse['params'] as $k => $v) {
-						$myData['params'][$k] = $v;
-					}
-					unset($pResponse['params']);
+		} else {
+			$myData = array();
+		}
+		
+		// Finally, merge data coming from the plugins. Note that the
+		// plugins only run when a new subscription is in progress, not
+		// every time the user data loads.
+		jimport('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKUserGetData', array((object)$myData));
+		if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $pResponse) {
+			if(!is_array($pResponse)) continue;
+			if(empty($pResponse)) continue;
+			if(array_key_exists('params', $pResponse)) {
+				if(!empty($pResponse['params'])) foreach($pResponse['params'] as $k => $v) {
+					$myData['params'][$k] = $v;
 				}
-				$myData = array_merge($myData, $pResponse);
+				unset($pResponse['params']);
 			}
+			$myData = array_merge($myData, $pResponse);
 		}
 		$myData['params'] = (object)$myData['params'];
 
