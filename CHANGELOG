@@ -35,6 +35,7 @@ Akeeba Subscriptions 3.0.0
 # [LOW] The login redirection URL could end up being invalid on some site configurations
 # [LOW] The content publishing plugin would cause Joomla! to throw database if K2 and/or Zoo were no installed and Debug System was enabled
 # [LOW] The automatic city & country plugin wouldn't work for guest (non-logged-in) users
+# [LOW] ePay integration plugin: the payment form would not auto-submit
 
 Akeeba Subscriptions 2.5.1
 ================================================================================
