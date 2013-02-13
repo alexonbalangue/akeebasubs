@@ -150,7 +150,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 		$eWayURL->setVar('UserName', urlencode($this->params->get('username','')));
 		$eWayURL->setVar('Amount', urlencode(sprintf('%0.2f',$subscription->gross_amount)));
 		$eWayURL->setVar('Currency', urlencode(strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'))));
-		$eWayURL->setVar('ReturnURL', urlencode(JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal'));
+		$eWayURL->setVar('ReturnURL', urlencode(JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=eway'));
 		$eWayURL->setVar('CancelURL', urlencode($rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel'))));
 		if($this->params->get('companylogo','')) $eWayURL->setVar('CompanyLogo', urlencode($this->params->get('companylogo','')));
 		if($this->params->get('pagebanner','')) $eWayURL->setVar('Pagebanner', urlencode($this->params->get('pagebanner','')));
