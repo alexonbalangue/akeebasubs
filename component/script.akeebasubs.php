@@ -309,6 +309,12 @@ class Com_AkeebasubsInstallerScript
 		// Install subextensions
 		$status = $this->_installSubextensions($parent);
 		
+		// Install FOF
+		$fofStatus = $this->_installFOF($parent);
+		
+		// Install Akeeba Straper
+		$straperStatus = $this->_installStraper($parent);
+		
 		// Remove obsolete files and folders
 		$akeebaRemoveFiles = $this->akeebaRemoveFiles;
 		$this->_removeObsoleteFilesAndFolders($akeebaRemoveFiles);
@@ -317,12 +323,6 @@ class Com_AkeebasubsInstallerScript
 		
 		// Remove Professional version plugins from Akeeba Backup Core
 		$this->_removeObsoletePlugins($parent);
-		
-		// Install FOF
-		$fofStatus = $this->_installFOF($parent);
-		
-		// Install Akeeba Straper
-		$straperStatus = $this->_installStraper($parent);
 		
 		// Show the post-installation page
 		$this->_renderPostInstallation($status, $fofStatus, $straperStatus, $parent);
