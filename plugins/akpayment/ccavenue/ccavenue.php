@@ -54,7 +54,7 @@ class plgAkpaymentCcavenue extends plgAkpaymentAbstract
 		$merchant = $this->params->get('merchant','');
 		$WorkingKey = $this->params->get('workingkey','');
 		$redirectURL = $rootURL.str_replace('&amp;','&',JRoute::_('/index.php?option=com_akeebasubs&view=callback&paymentmethod=ccavenue'));
-		$checksum = $this->getCheckSum($merchant, $subscription->net_amount, $subscription->akeebasubs_subscription_id,
+		$checksum = $this->getCheckSum($merchant, $subscription->gross_amount, $subscription->akeebasubs_subscription_id,
 			$redirectURL, $WorkingKey);
 		
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')

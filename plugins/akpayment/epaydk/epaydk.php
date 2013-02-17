@@ -67,7 +67,7 @@ class plgAkpaymentEpaydk extends plgAkpaymentAbstract
 			'postback'			=> JURI::base() . 'index.php?option=com_akeebasubs&view=callback&paymentmethod=epaydk',
 			'orderid'			=> $subscription->akeebasubs_subscription_id,
 			'currency'			=> strtoupper(AkeebasubsHelperCparams::getParam('currency', 'EUR')),
-			'amount'			=> (($subscription->net_amount + $subscription->tax_amount) * 100),		// Epay calculates in minor amounts, and doesn't support tax differentation
+			'amount'			=> ($subscription->gross_amount * 100),		// Epay calculates in minor amounts, and doesn't support tax differentation
 			'cardtypes'			=> implode(',', $this->params->get('cardtypes', array())),
 			'instantcapture'	=> '1',
 			'instantcallback'	=> '1',
