@@ -120,6 +120,7 @@ class Com_AkeebasubsInstallerScript
 				'postfinancech'			=> 0,
 				'przelewy24'			=> 0,
 				'rbkmoney'				=> 0,
+				'realex'				=> 0,
 				'robokassa'				=> 0,
 				'scnet'					=> 0,
 				'scnetintegrated'		=> 0,
