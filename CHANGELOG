@@ -28,6 +28,7 @@ Akeeba Subscriptions 3.0.0
 ~ PayMill: we are now updating the user record with the user's name and email (easier transaction tracing)
 ~ PayMill: we are now sending the subscription ID in the description (easier transaction tracing)
 ~ Improved transparent database update checks when you visit the component's Control Panel page
+~ Changed the validation error message for the "Agree to ToS" plugin
 ! PayMill: the CC number would be sent back to the server but it shouldn't, for security reasons
 # [HIGH] K2 Integration wouldn't add users to K2 groups
 # [MEDIUM] Regression: PayPal recurring payments wouldn't work
