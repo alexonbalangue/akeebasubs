@@ -173,7 +173,7 @@
 		</copy>
 		
 		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
-			<fileset refid="componentcore" />
+			<fileset refid="component" />
 		</zipme>
 		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
 			<fileset dir="${dirs.modules}">
