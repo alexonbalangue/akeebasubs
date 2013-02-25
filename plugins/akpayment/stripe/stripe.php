@@ -229,11 +229,7 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 		
 		// Payment status
 		if($transaction['paid']) {
-			if($transaction['refunded'] || $sandbox) {
-				$newStatus = 'C';
-			} else {
-				$newStatus = 'P';
-			}
+			$newStatus = 'C';
 		} else {
 			$newStatus = 'X';
 		}
