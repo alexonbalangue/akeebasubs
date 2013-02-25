@@ -102,7 +102,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		$request->Payment->InvoiceNumber = $subscription->akeebasubs_subscription_id;
 		$request->Payment->InvoiceDescription = $level->title . ' #' . $subscription->akeebasubs_subscription_id;
 		$request->Payment->InvoiceReference = $subscription->akeebasubs_subscription_id;
-		$request->Payment->CurrencyCode = 'AUD';//strtoupper(AkeebasubsHelperCparams::getParam('currency','AUD'));
+		$request->Payment->CurrencyCode = strtoupper(AkeebasubsHelperCparams::getParam('currency','AUD'));
 		// Url to the page for getting the result with an AccessCode
 		$request->RedirectUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=ewayrapid3&sid=' . $subscription->akeebasubs_subscription_id;
 		// Method for this request. e.g. ProcessPayment, Create TokenCustomer, Update TokenCustomer & TokenPayment
