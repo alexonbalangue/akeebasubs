@@ -266,7 +266,7 @@ class plgAkeebasubsProjectfork4 extends plgAkeebasubsAbstract
 		// Set alias
 		$alias = strtolower($title);
 		$alias = preg_replace('/\s+/', '-', $alias);
-		$alias = preg_replace('/[^a-z0-9]+/', '', $alias);
+		$alias = preg_replace('/[^a-z0-9-]+/', '', $alias);
 		$newAlias = $alias;
 		$i = 0;
 		while(true) {
