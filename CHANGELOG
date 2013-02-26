@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.0.1
+================================================================================
+# [LOW] The automatic database schema fixer doesn't work
+
 Akeeba Subscriptions 3.0.0
 ================================================================================
 ! THIS VERSION REQUIRES PHP 5.3 OR LATER

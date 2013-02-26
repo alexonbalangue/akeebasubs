@@ -12,7 +12,7 @@ class AkeebasubsModelCpanels extends FOFModel
 {
 	/** @var string The root of the database installation files */
 	private $dbFilesRoot = '/components/com_akeebasubs/sql/';
-	
+
 	/** @var array If any of these tables is missing we run the install SQL file and ignore the $dbChecks array */
 	private $dbBaseCheck = array(
 		'tables' => array(
@@ -24,49 +24,58 @@ class AkeebasubsModelCpanels extends FOFModel
 		),
 		'file' => 'install/mysql/install.sql'
 	);
-	
+
 	/** @var array Database update checks */
 	private $dbChecks = array(
-		// check for update 2.3.0-2013-06-15
+		// check for update 2.3.0-2012-06-15
 		array(
 			'table' => 'akeebasubs_levels',
 			'field' => 'akeebasubs_levelgroup_id',
 			'files' =>array(
-				'updates/mysql/2.3.0-2013-06-15.sql',
+				'updates/mysql/2.3.0-2012-06-15.sql',
 			)
 		),
-		// check for update 2.3.0-2013-06-22
+		// check for update 2.3.0-2012-06-22
 		array(
 			'table' => 'akeebasubs_invoicetemplates',
 			'field' => null,
 			'files' =>array(
-				'updates/mysql/2.3.0-2013-06-18.sql',
-				'updates/mysql/2.3.0-2013-06-22.sql',
+				'updates/mysql/2.3.0-2012-06-18.sql',
+				'updates/mysql/2.3.0-2012-06-22.sql',
+				'updates/mysql/3.0.0-2013-01-29.sql',
 			)
 		),
-		// check for update 2.3.0-2013-07-13
+		// check for update 2.3.0-2012-07-13
 		array(
 			'table' => 'akeebasubs_upgrades',
 			'field' => 'combine',
 			'files' =>array(
-				'updates/mysql/2.3.0-2013-07-13.sql',
+				'updates/mysql/2.3.0-2012-07-13.sql',
 			)
 		),
-		// check for update 2.4.0-2013-08-14
+		// check for update 2.4.0-2012-08-14
 		array(
 			'table' => 'akeebasubs_customfields',
 			'field' => null,
 			'files' =>array(
-				'updates/mysql/2.4.0-2013-08-14.sql',
+				'updates/mysql/2.4.0-2012-08-14.sql',
 			)
 		),
-		// check for update 2.4.5-2013-11-02
+		// check for update 2.4.5-2012-11-02
 		array(
 			'table' => 'akeebasubs_levels',
 			'field' => 'params',
 			'files' =>array(
-				'updates/mysql/2.4.4-2013-10-08.sql',
-				'updates/mysql/2.4.5-2013-11-02.sql',
+				'updates/mysql/2.4.4-2012-10-08.sql',
+				'updates/mysql/2.4.5-2012-11-02.sql',
+			)
+		),
+		// check for update 2.5.0-2012-11-07
+		array(
+			'table' => 'akeebasubs_levels',
+			'field' => 'forever',
+			'files' =>array(
+				'updates/mysql/2.5.0-2012-11-07.sql',
 			)
 		),
 		// check for update 2.6.0-2012-12-29.sql
@@ -77,21 +86,21 @@ class AkeebasubsModelCpanels extends FOFModel
 				'updates/mysql/2.6.0-2012-12-29.sql',
 			)
 		),
-		// check for update 2.6.0-2013-01-15.sql
+		// check for update 3.0.0-2013-01-15.sql
 		array(
 			'table' => 'akeebasubs_relations',
 			'field' => '',
 			'files' =>array(
-				'updates/mysql/2.6.0-2013-01-15.sql',
+				'updates/mysql/3.0.0-2013-01-15.sql',
 			)
 		),
-		// check for update 2.6.0-2013-01-23
+		// check for update 3.0.0-2013-01-22
 		array(
 			'table' => 'akeebasubs_emailtemplates',
 			'field' => '',
 			'files' =>array(
-				'updates/mysql/2.6.0-2013-01-20.sql',
-				'updates/mysql/2.6.0-2013-01-23.sql',
+				'updates/mysql/3.0.0-2013-01-20.sql',
+				'updates/mysql/3.0.0-2013-01-22.sql',
 			)
 		),
 		// check for update 3.0.0-2013-01-23
@@ -127,25 +136,25 @@ class AkeebasubsModelCpanels extends FOFModel
 			)
 		),
 	);
-	
+
 	/**
 	 * Checks the database for missing / outdated tables using the $dbChecks
 	 * data and runs the appropriate SQL scripts if necessary.
-	 * 
+	 *
 	 * @return AkeebasubsModelCpanels
 	 */
 	public function checkAndFixDatabase()
 	{
 		$db = $this->getDbo();
-		
+
 		// Initialise
 		$tableFields = array();
 		$sqlFiles = array();
-		
+
 		// Get a listing of database tables known to Joomla!
 		$allTables = $db->getTableList();
 		$dbprefix = JFactory::getConfig()->get('dbprefix', '');
-		
+
 		// Perform the base check. If any of these tables is missing we have to run the installation SQL file
 		if(!empty($this->dbBaseCheck)) {
 			foreach($this->dbBaseCheck['tables'] as $table)
@@ -154,20 +163,20 @@ class AkeebasubsModelCpanels extends FOFModel
 				$check = in_array($tableName, $allTables);
 				if (!$check) break;
 			}
-			
+
 			if (!$check)
 			{
 				$sqlFiles[] = JPATH_ADMINISTRATOR . $this->dbFilesRoot . $this->dbBaseCheck['file'];
 			}
 		}
-		
+
 		// If the base check was successful and we have further database checks run them
 		if (empty($sqlFiles) && !empty($this->dbChecks)) foreach($this->dbChecks as $dbCheck)
 		{
 			// Always check that the table exists
 			$tableName = $dbprefix . $dbCheck['table'];
 			$check = in_array($tableName, $allTables);
-			
+
 			// If the table exists and we have a field, check that the field exists too
 			if (!empty($dbCheck['field']) && $check)
 			{
@@ -175,7 +184,7 @@ class AkeebasubsModelCpanels extends FOFModel
 				{
 					$tableFields[$tableName] = $db->getTableColumns('#__' . $dbCheck['table'], true);
 				}
-				
+
 				if (is_array($tableFields[$tableName]))
 				{
 					$check = array_key_exists($dbCheck['field'], $tableFields[$tableName]);
@@ -185,7 +194,7 @@ class AkeebasubsModelCpanels extends FOFModel
 					$check = false;
 				}
 			}
-			
+
 			// Something's missing. Add the file to the list of SQL files to run
 			if (!$check)
 			{
@@ -195,7 +204,7 @@ class AkeebasubsModelCpanels extends FOFModel
 				}
 			}
 		}
-		
+
 		// If we have SQL files to run, well, RUN THEM!
 		if (!empty($sqlFiles))
 		{
@@ -212,13 +221,13 @@ class AkeebasubsModelCpanels extends FOFModel
 				}
 			}
 		}
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Save some magic variables we need
-	 * 
+	 *
 	 * @return AkeebasubsModelCpanels
 	 */
 	public function saveMagicVariables()
@@ -248,7 +257,7 @@ class AkeebasubsModelCpanels extends FOFModel
 			$db->setQuery($query);
 			$db->query();
 		}
-		
+
 		return $this;
 	}
 }
