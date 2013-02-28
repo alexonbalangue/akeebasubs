@@ -14,6 +14,11 @@ $this->loadHelper('modules');
 $this->loadHelper('format');
 
 jimport('joomla.utilities.date');
+
+if (!isset($this->extensions))
+{
+	$this->extensions = array();
+}
 ?>
 
 <div id="akeebasubs" class="subscriptions">
@@ -47,7 +52,7 @@ jimport('joomla.utilities.date');
 				</th>
 			</tr>
 		</thead>
-		
+
 		<tfoot>
 			<tr>
 				<td colspan="20">
@@ -65,7 +70,7 @@ jimport('joomla.utilities.date');
 				$email = trim($subscription->email);
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
-				
+
 				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
 				if($level->only_once) {
@@ -73,7 +78,7 @@ jimport('joomla.utilities.date');
 						$canRenew = false;
 					}
 				}
-				
+
 				$jPublishUp = new JDate($subscription->publish_up);
 			?>
 			<tr class="row<?php echo $m?> <?php echo $rowClass?>">
@@ -157,8 +162,8 @@ jimport('joomla.utilities.date');
 				</td>
 			</tr>
 			<?php endif; ?>
-		</tbody>		
-		
+		</tbody>
+
 	</table>
-	</form>	
+	</form>
 </div>

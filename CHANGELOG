@@ -15,6 +15,7 @@ Akeeba Subscriptions 3.0.1
 # [LOW] The automatic database schema fixer doesn't work
 # [LOW] The 2Checkout logo was served over HTTP instead of HTTPS
 # [LOW] PHP notice: Undefined index params in users.php
+# [LOW] PHP notice: Undefined variable extensions in default.php
 
 Akeeba Subscriptions 3.0.0
 ================================================================================
