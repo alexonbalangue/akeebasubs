@@ -14,6 +14,7 @@ Akeeba Subscriptions 3.0.1
 # [MEDIUM] The reason why the installation was aborted is not shown due to a Joomla! bug; worked around
 # [LOW] The automatic database schema fixer doesn't work
 # [LOW] The 2Checkout logo was served over HTTP instead of HTTPS
+# [LOW] PHP notice: Undefined index params in users.php
 
 Akeeba Subscriptions 3.0.0
 ================================================================================
