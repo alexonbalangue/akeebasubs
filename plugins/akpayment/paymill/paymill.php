@@ -43,7 +43,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 
 		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration(
-			"\nvar PAYMILL_PUBLIC_KEY = \'" . $this->getPublicKey() . "\';\n");
+			"\nvar PAYMILL_PUBLIC_KEY = '" . $this->getPublicKey() . "';\n");
 		$doc->addScript("https://bridge.paymill.de/");
 		$doc->addScriptDeclaration(
 			'
