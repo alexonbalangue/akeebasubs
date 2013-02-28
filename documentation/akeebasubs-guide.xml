@@ -11963,23 +11963,6 @@ LEVEL3=Badge 1</programlisting>
       </variablelist>
     </section>
 
-    <section xml:id="integration-frontenduseraccess">
-      <title>Front-end User Access</title>
-
-      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-      Subscriptions - Front-end User Access Integration</guilabel></para>
-
-      <para>Adds users to Frontend-User-Access groups when their subscription
-      is enabled and removes them from Frontend-User-Access groups when their
-      subscription expires in Akeeba Subscriptions. Frontend-User-Access is a
-      component developed by http://www.pages-and-items.com</para>
-
-      <warning>
-        <para>This plugin is developed and maintained by pages-and-items.com.
-        AkeebaBackup.com cannot provide any support for it.</para>
-      </warning>
-    </section>
-
     <section xml:id="integration-tracktime">
       <title>TrackTime integration</title>
 
