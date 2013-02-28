@@ -9,6 +9,7 @@ Akeeba Subscriptions 3.0.1
 # [HIGH] After a failed installation, even if the subsequent installation is reported successful Joomla! does not install the database tables causing a broken installation
 # [HIGH] RealEx integration didn't work
 # [HIGH] You couldn't download generated PDF invoices from the back- or front-end
+# [HIGH] PayMill: fatal PHP error prevents payment completion
 # [MEDIUM] The reason why the installation was aborted is not shown due to a Joomla! bug; worked around
 # [LOW] The automatic database schema fixer doesn't work
 # [LOW] The 2Checkout logo was served over HTTP instead of HTTPS

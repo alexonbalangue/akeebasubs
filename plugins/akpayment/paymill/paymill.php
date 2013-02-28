@@ -19,16 +19,18 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_PAYMILL_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/paymill.png',
 		));
-		
+
 		parent::__construct($subject, $config);
-		
-		require_once dirname(__FILE__).'/paymill/lib/Services/Paymill/Transactions.php';
+
+		require_once __DIR__.'/paymill/lib/Services/Paymill/Base.php';
+		require_once __DIR__.'/paymill/lib/Services/Paymill/Transactions.php';
+		require_once __DIR__.'/paymill/lib/Services/Paymill/Clients.php';
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -38,7 +40,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration(
 			"\nvar PAYMILL_PUBLIC_KEY = \'" . $this->getPublicKey() . "\';\n");
@@ -103,7 +105,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 						}
 					});
 				});'."\n");
-		
+
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paymill&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(
 			'url'			=> $callbackUrl,
@@ -116,18 +118,18 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/paymill/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		jimport('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		$isValid = true;
-		
+
 		// Load the relevant subscription row
 		$id = $data['sid'];
 		$subscription = null;
@@ -143,13 +145,13 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			$isValid = false;
 		}
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
-		
+
 		if($isValid) {
 			// Initialise common variables
 			$apiKey = $this->getPrivateKey();
 			$apiEndpoint = 'https://api.paymill.de/v2/';
 			$client = '';
-			
+
 			try {
 				$params = array(
 					'amount'		=> $data['amount'],
@@ -157,17 +159,17 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 					'token'			=> $data['token'],
 					'description'	=> $data['description']
 				);
-				
+
 				$transactionsObject = new Services_Paymill_Transactions(
 					$apiKey, $apiEndpoint
 				);
-				$transaction = $transactionsObject->create($params);	
+				$transaction = $transactionsObject->create($params);
 			} catch(Exception $e) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
 			}
 		}
-		
+
 		// Update the client record
 		if($isValid) {
 			$user = JFactory::getUser($subscription->user_id);
@@ -180,10 +182,10 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 					'description'	=> $user->name . '(subscription #' . $subscription->akeebasubs_subscription_id . ')',
 				);
 			} catch (Exception $exc) {
-				
+
 			}
 		}
-        
+
 		// Check that transaction has not been previously processed
 		if($isValid) {
 			if($transaction['payment']['id'] == $subscription->processor_key) {
@@ -208,14 +210,14 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		if($isValid) {
 			if($this->params->get('sandbox') == $transaction['livemode']) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Transaction done in wrong mode.";
 			}
 		}
-		
+
 		// 2013-01-31 nicholas: I removed those checks because the credit card
 		// information MUST NOT be sent back to the site. That's the whole point
 		// of using the bridge Javascript to get a token: we send the CC info
@@ -229,7 +231,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Creditcard number doesn't match.";
 			}
 		}
-		
+
 		if($isValid) {
 			if($data['card-expiry-month'] != $transaction['payment']['expire_month']
 					|| $data['card-expiry-year'] != $transaction['payment']['expire_year']) {
@@ -238,7 +240,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			}
 		}
 		*/
-			
+
 		// Log the IPN data
 		$this->logIPN($transaction, $isValid);
 
@@ -254,7 +256,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Payment status
 		// Check the payment_status
 		switch($transaction['status'])
@@ -294,13 +296,13 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page
 		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	private function getPublicKey()
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -310,7 +312,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			return trim($this->params->get('public_key',''));
 		}
 	}
-	
+
 	private function getPrivateKey()
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -320,7 +322,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			return trim($this->params->get('private_key',''));
 		}
 	}
-	
+
 	public function selectMonth()
 	{
 		$options = array();
@@ -329,21 +331,21 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			$m = sprintf('%02u', $i);
 			$options[] = JHTML::_('select.option',$m,$m);
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, 'card-expiry-month', 'class="input-small"', 'value', 'text', '', 'card-expiry-month');
 	}
-	
+
 	public function selectYear()
 	{
 		$year = gmdate('Y');
-		
+
 		$options = array();
 		$options[] = JHTML::_('select.option',0,'--');
 		for($i = 0; $i <= 10; $i++) {
 			$y = sprintf('%04u', $i+$year);
 			$options[] = JHTML::_('select.option',$y,$y);
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, 'card-expiry-year', 'class="input-small"', 'value', 'text', '', 'card-expiry-year');
 	}
 }
