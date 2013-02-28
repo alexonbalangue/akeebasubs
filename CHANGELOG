@@ -10,6 +10,7 @@ Akeeba Subscriptions 3.0.1
 # [HIGH] RealEx integration didn't work
 # [HIGH] You couldn't download generated PDF invoices from the back- or front-end
 # [HIGH] PayMill: fatal PHP error prevents payment completion
+# [HIGH] Integrated invoice numbering did not advance
 # [MEDIUM] The reason why the installation was aborted is not shown due to a Joomla! bug; worked around
 # [LOW] The automatic database schema fixer doesn't work
 # [LOW] The 2Checkout logo was served over HTTP instead of HTTPS
