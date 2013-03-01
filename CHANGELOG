@@ -2,6 +2,7 @@
 Akeeba Subscriptions 3.0.1
 ================================================================================
 # [HIGH] Bad SQL query killing Core release on Joomla! 3.0
+# [LOW] Notice thrown by the autocity plugin
 
 Akeeba Subscriptions 3.0.1
 ================================================================================
