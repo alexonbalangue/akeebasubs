@@ -2,6 +2,7 @@
 Akeeba Subscriptions 3.0.1
 ================================================================================
 # [HIGH] Bad SQL query killing Core release on Joomla! 3.0
+# [HIGH] Some TCPDF folders are not getting installed, causing inability to generate invoice PDF files
 # [LOW] Notice thrown by the autocity plugin
 
 Akeeba Subscriptions 3.0.1
