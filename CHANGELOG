@@ -1,6 +1,10 @@
 <?php die(); ?>
 Akeeba Subscriptions 3.0.1
 ================================================================================
+# [HIGH] Bad SQL query killing Core release on Joomla! 3.0
+
+Akeeba Subscriptions 3.0.1
+================================================================================
 + ConstantContact integration
 + ProjectFork 4 integration
 + eWay Rapid3 integration

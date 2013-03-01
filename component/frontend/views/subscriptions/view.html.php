@@ -23,7 +23,7 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 				$activeLevels[] = $l->akeebasubs_level_id;
 				$allLevels[$l->akeebasubs_level_id] = $l;
 			}
-			
+
 			// Get subscription level IDs
 			$subIDs = array();
 			$subscription_ids = array();
@@ -35,17 +35,20 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 
 			// Get invoices data
 			$invoices = array();
-			$rawInvoices = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
-				->subids($subscription_ids)
-				->getList();
-			if (!empty($rawInvoices))
+			if (AKEEBASUBS_PRO)
 			{
-				foreach ($rawInvoices as $rawInvoice)
+				$rawInvoices = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+					->subids($subscription_ids)
+					->getList();
+				if (!empty($rawInvoices))
 				{
-					$invoices[$rawInvoice->akeebasubs_subscription_id] = $rawInvoice;
+					foreach ($rawInvoices as $rawInvoice)
+					{
+						$invoices[$rawInvoice->akeebasubs_subscription_id] = $rawInvoice;
+					}
 				}
 			}
-			
+
 			$extensions = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')->getExtensions();
 
 			// Assign variables

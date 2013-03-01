@@ -5889,7 +5889,7 @@ LEVEL2=11111:22222:33333</programlisting>
       about changes (e.g. new payment) of a recurring subscription. The URL
       that needs to be used for the webhook is:</para>
 
-      <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=cashu</uri>
+      <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=braintree&amp;type=webhook&amp;marker=000</uri>
       after replacing <uri>www.example.com</uri> with your site's domain
       name.</para>
 
