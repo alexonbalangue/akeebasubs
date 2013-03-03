@@ -8,7 +8,7 @@
 defined('_JEXEC') or die();
 
 // Make sure ATS is installed and activated
-jimport('joomla.application.component.helper');
+JLoader::import('joomla.application.component.helper');
 if(!JComponentHelper::isEnabled('com_ats', true)) return;
 
 class plgAkeebasubsAtscredits extends JPlugin
@@ -27,7 +27,7 @@ class plgAkeebasubsAtscredits extends JPlugin
 	public function __construct(& $subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
+			JLoader::import('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
 
@@ -76,7 +76,7 @@ class plgAkeebasubsAtscredits extends JPlugin
 	 */
 	public function onSubscriptionLevelFormRender(AkeebasubsTableLevel $level)
 	{
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$filename = dirname(__FILE__).'/override/default.php';
 		if(!JFile::exists($filename)) {
 			$filename = dirname(__FILE__).'/tmpl/default.php';

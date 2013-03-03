@@ -199,7 +199,7 @@ class AkeebasubsModelUsers extends FOFModel
 		$userRow = FOFTable::getAnInstance('Juser','AkeebasubsTable');
 		$userRow->load($state->user_id);
 		if(!($userRow->params instanceof JRegistry)) {
-			jimport('joomla.registry.registry');
+			JLoader::import('joomla.registry.registry');
 			$params = new JRegistry($userRow->params);
 		} else {
 			$params = $userRow->params;
@@ -245,7 +245,7 @@ class AkeebasubsModelUsers extends FOFModel
 		// Finally, merge data coming from the plugins. Note that the
 		// plugins only run when a new subscription is in progress, not
 		// every time the user data loads.
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKUserGetData', array((object)$myData));

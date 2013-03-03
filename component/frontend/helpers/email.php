@@ -26,7 +26,7 @@ class AkeebasubsHelperEmail
 		{
 			$rawOptions = array();
 			
-			jimport('joomla.plugin.helper');
+			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			JPluginHelper::importPlugin('system');
 			$app = JFactory::getApplication();
@@ -99,7 +99,7 @@ class AkeebasubsHelperEmail
 		$jlang->load($extension, JPATH_ADMINISTRATOR, null, true);
 		$jlang->load($extension.'.override', JPATH_ADMINISTRATOR, null, true);
 		// -- User's preferred language
-		jimport('joomla.registry.registry');
+		JLoader::import('joomla.registry.registry');
 		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
 		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$userlang = $uparams->get('language','');

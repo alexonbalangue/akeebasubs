@@ -122,7 +122,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 	
 	private function formCallback($data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$isValid = true;
 		
 		// Load the relevant subscription row
@@ -375,14 +375,14 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 				'state'							=> $newStatus,
 				'enabled'						=> 0
 		);
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
@@ -397,7 +397,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 	
 	private function IPNCallback($data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
@@ -514,7 +514,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			'state'							=> $newStatus,
 			'enabled'						=> 0
 		);
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 		}
@@ -566,7 +566,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		$subscription->save($updates);
 		
 		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(

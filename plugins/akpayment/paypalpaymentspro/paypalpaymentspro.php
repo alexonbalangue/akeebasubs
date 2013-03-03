@@ -105,7 +105,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 	
 	private function formCallback($data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		$isRecurring = ($data['METHOD'] == 'CreateRecurringPaymentsProfile');
 		$jNow = new JDate();
@@ -259,7 +259,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 	
 	private function IPNCallback($data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
@@ -376,7 +376,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			'state'							=> $newStatus,
 			'enabled'						=> 0
 		);
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 		}
@@ -428,7 +428,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		$subscription->save($updates);
 		
 		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(

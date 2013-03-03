@@ -176,7 +176,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// Get the results from the custom validation
 				$response->custom_validation = array();
 				$response->custom_valid = true;
-				jimport('joomla.plugin.helper');
+				JLoader::import('joomla.plugin.helper');
 				JPluginHelper::importPlugin('akeebasubs');
 				$app = JFactory::getApplication();
 				$jResponse = $app->triggerEvent('onValidate', array($state));
@@ -196,7 +196,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// Get the results from the per-subscription custom validation
 				$response->subscription_custom_validation = array();
 				$response->subscription_custom_valid = true;
-				jimport('joomla.plugin.helper');
+				JLoader::import('joomla.plugin.helper');
 				JPluginHelper::importPlugin('akeebasubs');
 				$app = JFactory::getApplication();
 				$jResponse = $app->triggerEvent('onValidatePerSubscription', array($state));
@@ -434,7 +434,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 			// Net price modifiers (via plugins)
 			$price_modifier = 0;
-			jimport('joomla.plugin.helper');
+			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			$app = JFactory::getApplication();
 			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array($state));
@@ -580,7 +580,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$valid = false;
 				if($coupon->enabled && (strtoupper($coupon->coupon) == strtoupper($couponCode)) ) {
 					// Check validity period
-					jimport('joomla.utilities.date');
+					JLoader::import('joomla.utilities.date');
 					$jFrom = new JDate($coupon->publish_up);
 					$jTo = new JDate($coupon->publish_down);
 					$jNow = new JDate();
@@ -1031,7 +1031,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		
 		$subs = array();
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
 		
@@ -1234,7 +1234,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 */
 	public function getPaymentPlugins()
 	{
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akpayment');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKPaymentGetIdentity');
@@ -1374,7 +1374,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			
 			$user = JFactory::getUser(0);
 
-			jimport('joomla.application.component.helper');
+			JLoader::import('joomla.application.component.helper');
 			$usersConfig = JComponentHelper::getParams( 'com_users' );
 			$newUsertype = $usersConfig->get( 'new_usertype' );
 			
@@ -1406,7 +1406,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// We always block the user, so that only a successful payment or
 			// clicking on the email link activates his account. This is to
 			// prevent spam registrations when the subscription form is abused.
-			jimport('joomla.user.helper');
+			JLoader::import('joomla.user.helper');
 			$params['block'] = 1;
 			$params['activation'] = JFactory::getApplication()->getHash( JUserHelper::genRandomPassword() );
 			
@@ -1436,7 +1436,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'email'			=> $state->email
 			);
 			if(!empty($state->password) && ($state->password = $state->password2)) {
-				jimport('joomla.user.helper');
+				JLoader::import('joomla.user.helper');
 				$salt = JUserHelper::genRandomPassword(32);
 				$pass = JUserHelper::getCryptedPassword($state->password, $salt);
 				$updates['password'] = $pass.':'.$salt;
@@ -1515,7 +1515,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		);
 		
 		// Allow plugins to post-process the fields
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKSignupUserSave', array((object)$data));

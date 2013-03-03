@@ -300,7 +300,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 	{
 		$this->fieldTypes = array();
 		
-		jimport('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.folder');
 		$basepath = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/customfields';
 		$files = JFolder::files($basepath, '.php');
 		foreach($files as $file)

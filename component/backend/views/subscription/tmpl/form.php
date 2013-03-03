@@ -196,7 +196,7 @@ $this->loadHelper('format');
 	<div class="row-fluid">
 		<?php
 		$hasShownCustomParamsHeader = false;
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onSubscriptionFormRenderPerSubFields', array(array('subscriptionlevel' => $this->item->akeebasubs_level_id,  'subcustom'=>$this->item->params)));

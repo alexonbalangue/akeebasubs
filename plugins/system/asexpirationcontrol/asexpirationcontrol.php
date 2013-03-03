@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-jimport('joomla.plugin.plugin');
+JLoader::import('joomla.plugin.plugin');
 
 // PHP version check
 if(defined('PHP_VERSION')) {
@@ -31,7 +31,7 @@ if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
 }
 
 // Do not run if Akeeba Subscriptions is not enabled
-jimport('joomla.application.component.helper');
+JLoader::import('joomla.application.component.helper');
 if(!JComponentHelper::isEnabled('com_akeebasubs', true)) return;
 
 class plgSystemAsexpirationcontrol extends JPlugin
@@ -42,7 +42,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	public function __construct(& $subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
+			JLoader::import('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
 		parent::__construct($subject, $config);
@@ -80,7 +80,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		if(!$this->doIHaveToRun()) return;
 	
 		// Get today's date
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
 		
@@ -101,7 +101,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	private function getComponentParameters()
 	{
-		jimport('joomla.registry.registry');
+		JLoader::import('joomla.registry.registry');
 		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
 		if($component->params instanceof JRegistry) {
 			$cparams = $component->params;

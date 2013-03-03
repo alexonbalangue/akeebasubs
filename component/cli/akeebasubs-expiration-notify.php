@@ -47,8 +47,8 @@ if(file_exists(JPATH_BASE.'/includes/version.php')) {
 	require_once JPATH_LIBRARIES.'/cms.php';
 }
 
-jimport('joomla.application.cli');
-jimport('joomla.application.component.helper');
+JLoader::import('joomla.application.cli');
+JLoader::import('joomla.application.component.helper');
 
 class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 {
@@ -65,7 +65,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		JError::setErrorHandling(E_NOTICE, 'echo');
 		
 		// Required by Joomla!
-		jimport('joomla.environment.request');
+		JLoader::import('joomla.environment.request');
 		
 		// Set the root path to Akeeba Subscriptions
 		define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR.'/components/com_akeebasubs');
@@ -74,7 +74,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		if(!defined('_JEXEC')) define('_JEXEC', 1 );
 		
 		// Load FOF
-		jimport('fof.include');
+		JLoader::import('fof.include');
 		
 		// Load the version.php file
 		include_once JPATH_COMPONENT_ADMINISTRATOR.'/version.php';
@@ -115,7 +115,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		}
 		
 		// Get today's date
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
 		

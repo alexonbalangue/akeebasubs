@@ -29,7 +29,7 @@ class plgAkeebasubsSlavesubs extends JPlugin
 	 */
 	public function onSubscriptionLevelFormRender(AkeebasubsTableLevel $level)
 	{
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$filename = dirname(__FILE__).'/override/default.php';
 		if(!JFile::exists($filename)) {
 			$filename = dirname(__FILE__).'/tmpl/default.php';
@@ -82,7 +82,7 @@ class plgAkeebasubsSlavesubs extends JPlugin
 			return $fields;
 		}
 		
-		jimport('joomla.user.helper');
+		JLoader::import('joomla.user.helper');
 		
 		$javascript_fetch = '';
 		$javascript_validate = '';
@@ -219,7 +219,7 @@ ENDJS;
 			return $response;
 		}
 
-		jimport('joomla.user.helper');
+		JLoader::import('joomla.user.helper');
 		
 		for($i = 0; $i < $maxSlaves; $i++)
 		{
@@ -322,7 +322,7 @@ ENDJS;
 			unset($newParams['slaveusers']);
 			
 			// Create new slave subscriptions
-			jimport('joomla.user.helper');
+			JLoader::import('joomla.user.helper');
 			$slavesubs_ids = array();
 			
 			$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');

@@ -194,7 +194,7 @@ $this->loadHelper('cparams');
 
 
 <?php
-	jimport('joomla.plugin.helper');
+	JLoader::import('joomla.plugin.helper');
 	JPluginHelper::importPlugin('akeebasubs');
 	$app = JFactory::getApplication();
 	$params = $this->item->params;

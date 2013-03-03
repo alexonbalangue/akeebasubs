@@ -15,7 +15,7 @@ $this->loadHelper('format');
 
 $subs = array();
 $expired = array();
-jimport('joomla.utilities.date');
+JLoader::import('joomla.utilities.date');
 $jNow = new JDate();
 
 if(count($this->items)) foreach($this->items as $subscription){

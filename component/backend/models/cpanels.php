@@ -208,7 +208,7 @@ class AkeebasubsModelCpanels extends FOFModel
 		// If we have SQL files to run, well, RUN THEM!
 		if (!empty($sqlFiles))
 		{
-			jimport('joomla.filesystem.file');
+			JLoader::import('joomla.filesystem.file');
 			foreach($sqlFiles as $file)
 			{
 				$sql = JFile::read($file);

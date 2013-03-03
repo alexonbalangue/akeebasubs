@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die();
 
-jimport('joomla.utilities.date');
+JLoader::import('joomla.utilities.date');
 $jRelDate = new JDate(AKEEBASUBS_DATE);
 
 // IMPORTANT!!! DO NOT TRANSLATE THESE MESSAGES!!!

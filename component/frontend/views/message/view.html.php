@@ -27,7 +27,7 @@ class AkeebasubsViewMessage extends FOFViewHtml
 		
 		$pluginHtml = '';
 		
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent($event, array($this->subscription));

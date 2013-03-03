@@ -164,7 +164,7 @@ if(JFactory::getUser()->guest) {
 
 <?php
 // Render per-user custom fields
-jimport('joomla.plugin.helper');
+JLoader::import('joomla.plugin.helper');
 JPluginHelper::importPlugin('akeebasubs');
 $app = JFactory::getApplication();
 $jResponse = $app->triggerEvent('onSubscriptionFormRender', array($this->userparams, array_merge($this->cache,array('subscriptionlevel' => $akeebasubs_subscription_level))));
@@ -343,7 +343,7 @@ if(array_key_exists('isValid', $field)) {
 <?php
 // Render per-subscription fields, only when we have a valid subscription level!
 if(!is_null($akeebasubs_subscription_level)):
-	jimport('joomla.plugin.helper');
+	JLoader::import('joomla.plugin.helper');
 	JPluginHelper::importPlugin('akeebasubs');
 	$app = JFactory::getApplication();
 	$jResponse = $app->triggerEvent('onSubscriptionFormRenderPerSubFields', array(array_merge($this->cache,array('subscriptionlevel' => $akeebasubs_subscription_level))));

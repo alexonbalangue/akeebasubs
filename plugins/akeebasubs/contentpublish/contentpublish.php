@@ -12,7 +12,7 @@ if (!include_once(JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebas
 	return;
 }
 
-jimport('joomla.application.component.helper');
+JLoader::import('joomla.application.component.helper');
 
 class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 {
@@ -54,7 +54,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	 */
 	public function onSubscriptionLevelFormRender(AkeebasubsTableLevel $level)
 	{
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$filename = dirname(__FILE__).'/override/default.php';
 		if(!JFile::exists($filename)) {
 			$filename = dirname(__FILE__).'/tmpl/default.php';
@@ -93,7 +93,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 			$level->params->contentpublish_unpublishzoo = false;
 		}
 		
-		jimport('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.folder');
 		if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo'))
 		{
 			$db = JFactory::getDbo();
@@ -144,7 +144,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		
 		if(is_null($hasZoo) || is_null($hasK2))
 		{
-			jimport('joomla.filesystem.folder');
+			JLoader::import('joomla.filesystem.folder');
 			$hasZoo = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo');
 			$hasK2 = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_k2');
 		}

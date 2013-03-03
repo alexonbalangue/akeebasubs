@@ -137,7 +137,7 @@ class AkeebasubsHelperMessage
 		// -- Site URL
 		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
 		if($isCli) {
-			jimport('joomla.application.component.helper');
+			JLoader::import('joomla.application.component.helper');
 			$baseURL = JComponentHelper::getParams('com_akeebasubs')->get('siteurl','http://www.example.com');
 			$temp = str_replace('http://', '', $baseURL);
 			$temp = str_replace('https://', '', $temp);
@@ -172,7 +172,7 @@ class AkeebasubsHelperMessage
 		}
 
 		// Dates
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jFrom = new JDate($sub->publish_up);
 		$jTo = new JDate($sub->publish_down);
 
@@ -249,7 +249,7 @@ class AkeebasubsHelperMessage
 				} else {
 					$params = $user->params;
 					if(!is_object($params)) {
-						jimport('joomla.registry.registry');
+						JLoader::import('joomla.registry.registry');
 						$params = new JRegistry($params);
 					}
 					if(version_compare(JVERSION, '3.0', 'ge')) {

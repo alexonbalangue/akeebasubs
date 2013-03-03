@@ -35,7 +35,7 @@ class AkeebasubsTableSubscription extends FOFTable
 			$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_UP'));
 			$result = false;
 		} else {
-			jimport('joomla.utilities.date');
+			JLoader::import('joomla.utilities.date');
 			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 			if(!preg_match($regex, $this->publish_up)) {
 				$this->publish_up = '2000-01-01';
@@ -53,7 +53,7 @@ class AkeebasubsTableSubscription extends FOFTable
 			$this->setError(JText::_('COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN'));
 			$result = false;
 		} else {
-			jimport('joomla.utilities.date');
+			JLoader::import('joomla.utilities.date');
 			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 			if(!preg_match($regex, $this->publish_down)) {
 				$this->publish_down = '2038-01-01';
@@ -69,7 +69,7 @@ class AkeebasubsTableSubscription extends FOFTable
 		
 		// If the current date is outside the publish_up / publish_down range
 		// then disable the subscription. Otherwise make sure it's enabled.
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
 		$jDown = new JDate($this->publish_down);
@@ -201,7 +201,7 @@ class AkeebasubsTableSubscription extends FOFTable
 	private function subNotifiable()
 	{
 		// Load the "akeebasubs" plugins
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		

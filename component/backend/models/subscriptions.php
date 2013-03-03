@@ -190,7 +190,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			return;
 		}
 		
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		if($state->paystate) {
 			$states_temp = explode(',', $state->paystate);
@@ -482,7 +482,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		}
 		
 		// Expiration control queries
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$from = trim($state->expires_from);
 		if(empty($from)) {
 			$from = '';
@@ -569,7 +569,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 
 		if($this->getState('skipOnProcessList',0)) return;
 
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
 

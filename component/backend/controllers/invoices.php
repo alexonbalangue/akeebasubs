@@ -32,7 +32,7 @@ class AkeebasubsControllerInvoices extends FOFController
 		}
 
 		// Make sure we have a PDF file or try to generate one
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
 		$filename = $item->filename;
 

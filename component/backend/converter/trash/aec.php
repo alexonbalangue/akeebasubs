@@ -196,7 +196,7 @@ class AkeebasubsConverterAec extends AkeebasubsConverterAbstract
 		}
 		
 		if(isset($this->data['subscriptions'])) {
-			jimport('joomla.utilities.date');
+			JLoader::import('joomla.utilities.date');
 			$jNow = new JDate();
 			$jForever = new JDate('2038-01-01 00:00:00');
 			$tsNow = $jNow->toUnix();

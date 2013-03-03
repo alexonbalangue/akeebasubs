@@ -45,7 +45,7 @@ class plgAkeebasubsInvoices extends JPlugin
 		// If the payment is over a week old do not generate an invoice. This
 		// prevents accidentally creating an invoice for pas subscriptions not
 		// handled by ccInvoices
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jCreated = new JDate($row->created_on);
 		$jNow = new JDate();
 		$dateDiff = $jNow->toUnix() - $jCreated->toUnix();
@@ -85,7 +85,7 @@ class plgAkeebasubsInvoices extends JPlugin
 	
 	public function onAKGetInvoicingOptions()
 	{
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$enabled = JFile::exists(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/controllers/invoices.php');
 		return array(
 			'extension'		=> 'akeebasubs',

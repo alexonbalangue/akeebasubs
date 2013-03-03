@@ -20,7 +20,7 @@ class AkeebasubsControllerSubrefreshes extends FOFController
 			->refresh(1)->getList();
 		
 		if(count($list)) {
-			jimport('joomla.plugin.helper');
+			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			foreach($list as $item) {
 				$user_id = $item->user_id;

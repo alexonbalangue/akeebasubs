@@ -33,7 +33,7 @@ $this->loadHelper('format');
 <div class="span6">
 	<h3><?php echo JText::_('COM_AKEEBASUBS_AFFILIATE_BASIC_TITLE')?></h3>
 	
-	<?php jimport('joomla.user.user'); ?>
+	<?php JLoader::import('joomla.user.user'); ?>
 	<div class="control-group">
 		<label for="userid_visible" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_AFFILIATES_USER_ID')?></label>
 		<div class="controls">

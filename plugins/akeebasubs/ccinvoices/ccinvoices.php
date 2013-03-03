@@ -45,7 +45,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		// If the payment is over a week old do not generate an invoice. This
 		// prevents accidentally creating an invoice for pas subscriptions not
 		// handled by ccInvoices
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jCreated = new JDate($row->created_on);
 		$jNow = new JDate();
 		$dateDiff = $jNow->toUnix() - $jCreated->toUnix();
@@ -157,7 +157,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 					$taxrate = 100*($row->tax_amount/$row->net_amount);
 				}
 
-				jimport('joomla.utilities.date');
+				JLoader::import('joomla.utilities.date');
 				$jNow = new JDate();
 
 				$note = "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>";
@@ -261,7 +261,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 			// Try to send the invoice
 			if(!class_exists('ccInvoicesControllerInvoices')) {
-				jimport('joomla.filesystem.file');
+				JLoader::import('joomla.filesystem.file');
 				$path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/controllers/invoices.php';
 				if(JFile::exists($path)) {
 					require_once $path;
@@ -548,7 +548,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 	
 	public function onAKGetInvoicingOptions()
 	{
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$enabled = JFile::exists(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/controllers/invoices.php');
 		return array(
 			'extension'		=> 'ccinvoices',

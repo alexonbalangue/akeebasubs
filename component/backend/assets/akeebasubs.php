@@ -29,7 +29,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 			$config['params'] = new JRegistry('');
 		}
 		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
+			JLoader::import('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
 
@@ -84,7 +84,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	 */
 	public function onSubscriptionLevelFormRender(AkeebasubsTableLevel $level)
 	{
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$filename = $this->templatePath.'/override/default.php';
 		if(!JFile::exists($filename)) {
 			$filename = $this->templatePath.'/tmpl/default.php';

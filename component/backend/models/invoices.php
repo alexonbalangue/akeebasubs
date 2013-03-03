@@ -93,7 +93,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
 
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 
 		if (is_numeric($state->akeebasubs_subscription_id) && ($state->akeebasubs_subscription_id > 0))
 		{
@@ -613,7 +613,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		unset($pdf);
 
 		// Write the PDF data to disk using JFile::write();
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		if (function_exists('openssl_random_pseudo_bytes'))
 		{
 			$rand = openssl_random_pseudo_bytes(16);
@@ -690,7 +690,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		$db->setQuery($query, 0, 1);
 		$invoiceRecord = $db->loadObject();
 
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
 
 		if (empty($invoiceRecord->filename) || !JFile::exists($path.$invoiceRecord->filename))
@@ -858,7 +858,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		{
 			$rawOptions = array();
 
-			jimport('joomla.plugin.helper');
+			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			JPluginHelper::importPlugin('system');
 			$app = JFactory::getApplication();

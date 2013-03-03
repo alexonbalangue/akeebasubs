@@ -12,7 +12,7 @@ class AkeebasubsHelperCparams
 	public static function getParam($key, $default = null)
 	{
 		if(!is_object(self::$params)) {
-			jimport('joomla.application.component.helper');
+			JLoader::import('joomla.application.component.helper');
 			self::$params = JComponentHelper::getParams('com_akeebasubs');
 		}
 		return self::$params->get($key, $default);
@@ -21,7 +21,7 @@ class AkeebasubsHelperCparams
 	public static function setParam($key, $value)
 	{
 		if(!is_object(self::$params)) {
-			jimport('joomla.application.component.helper');
+			JLoader::import('joomla.application.component.helper');
 			self::$params = JComponentHelper::getParams('com_akeebasubs');
 		}
 		

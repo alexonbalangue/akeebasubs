@@ -99,7 +99,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 	
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
@@ -227,14 +227,14 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 				'state'							=> $newStatus,
 				'enabled'						=> 0
 		);
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
