@@ -64,6 +64,7 @@ class Com_AkeebasubsInstallerScript
 				'customfields'			=> 1,
 				'docman'				=> 0,
 				'easydiscuss'			=> 0,
+				'frontenduseraccess'	=> 0,
 				'invoices'				=> 0,
 				'iplogger'				=> 0,
 				'iproperty'				=> 0,
