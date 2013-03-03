@@ -301,7 +301,7 @@ class plgAkeebasubsTracktime extends JPlugin
 				$query->set($db->qn($k).' = '.$db->q($v));
 			}
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 
 			return $contact_id;
 		}

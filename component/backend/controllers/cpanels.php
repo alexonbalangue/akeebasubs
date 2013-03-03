@@ -55,7 +55,7 @@ class AkeebasubsControllerCpanels extends FOFController
 			->where($db->qn('element').' = '.$db->q('com_akeebasubs'));
 
 		$db->setQuery($sql);
-		$db->query();
+		$db->execute();
 		
 		// Redirect back to the control panel
 		$url = '';

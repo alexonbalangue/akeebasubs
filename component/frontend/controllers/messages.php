@@ -89,7 +89,7 @@ class AkeebasubsControllerMessages extends FOFController
 					'	`userid` = '.(int) $newUserObject->get('id') .
 					' WHERE `session_id` = '.$db->q($session->getId())
 				);
-				$db->query();
+				$db->execute();
 				// Hit the user last visit field
 				$newUserObject->setLastVisit();
 			} elseif(($newUserObject->id == $userid) && $newUserObject->block) {
@@ -109,7 +109,7 @@ class AkeebasubsControllerMessages extends FOFController
 					'	`userid` = '.(int) $newUserObject->get('id') .
 					' WHERE `session_id` = '.$db->q($session->getId())
 				);
-				$db->query();
+				$db->execute();
 			}
 		}
 		
@@ -131,7 +131,7 @@ class AkeebasubsControllerMessages extends FOFController
 				->delete($db->qn('#__session'))
 				->where( $db->qn('session_id') .' = '.$db->q($session->getId()) );
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 				
 		return true;

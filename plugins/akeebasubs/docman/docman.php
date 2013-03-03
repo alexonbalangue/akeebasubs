@@ -56,7 +56,7 @@ class plgAkeebasubsDocman extends plgAkeebasubsAbstract
 					->set($db->qn('groups_members').' = '.$db->q($users))
 					->where($db->qn('groups_id').' = '.$db->q($gid));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -88,7 +88,7 @@ class plgAkeebasubsDocman extends plgAkeebasubsAbstract
 					->set($db->qn('groups_members').' = '.$db->q($users))
 					->where($db->qn('groups_id').' = '.$db->q($gid));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 		

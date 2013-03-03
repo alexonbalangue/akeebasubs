@@ -37,7 +37,7 @@ class plgAkeebasubsKunena extends plgAkeebasubsAbstract
 				->set($db->qn('rank').' = '.$db->q($gid))
 				->where($db->qn('userid').' = '.$db->q($user_id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		foreach($removeGroups as $gid) {
@@ -46,7 +46,7 @@ class plgAkeebasubsKunena extends plgAkeebasubsAbstract
 				->set($db->qn('rank').' = '.$db->q($gid))
 				->where($db->qn('userid').' = '.$db->q($user_id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 		
 	}

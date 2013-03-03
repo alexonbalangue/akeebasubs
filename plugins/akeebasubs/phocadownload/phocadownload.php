@@ -56,7 +56,7 @@ class plgAkeebasubsPhocadownload extends plgAkeebasubsAbstract
 					->set($db->qn('accessuserid').' = '.$db->q($users))
 					->where($db->qn('id').' = '.$db->q($gid));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -91,7 +91,7 @@ class plgAkeebasubsPhocadownload extends plgAkeebasubsAbstract
 					->set($db->qn('accessuserid').' = '.$db->q($users))
 					->where($db->qn('id').' = '.$db->q($gid));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 		

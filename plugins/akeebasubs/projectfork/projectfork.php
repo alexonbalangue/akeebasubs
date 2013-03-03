@@ -189,7 +189,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 				->delete($db->qn('#__akeebasubs_pf_projects'))
 				->where($db->qn('pf_projects_id') . ' = ' . $db->q($proj_id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 			return null;
 		}
 		
@@ -247,7 +247,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 					. $db->q(time())
 			);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		$proj_id = $db->insertid();
 
 		// Save the reference about the project
@@ -263,7 +263,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 					. $db->q($proj_id)
 			);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		
 		// Make user a project member
 		$query = $db->getQuery(true)
@@ -278,7 +278,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 					. $db->q('1')
 			);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		
 		return $proj_id;
 	}
@@ -295,7 +295,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 			->where($db->qn('id')  .' = '. $db->q($project_id))
 			->where($db->qn('title') . ' != '. $db->q($project_title));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 	
 	/**
@@ -309,7 +309,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 			->set($db->qn('archived') . ' = ' . $db->q('1'))
 			->where($db->qn('id') .' = '. $db->q($project_id));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		if($db->getError()) die($db->getError());
 	}
 	
@@ -325,7 +325,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 			->where($db->qn('id') .' = '. $db->q($project_id))
 			->where($db->qn('archived') . ' != ' . $db->q('0'));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		if($db->getError()) die($db->getError());
 	}
 	
@@ -369,7 +369,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 				. $db->q('a:2:{s:8:"sections";a:1:{i:0;s:8:"projects";}s:8:"projects";a:1:{i:0;s:15:"display_details";}}')
 			);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		$group_id = $db->insertid();
 		
 		// Add user to the group
@@ -383,7 +383,7 @@ class plgAkeebasubsProjectfork extends JPlugin
 					.$db->q($user_id)
 			);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		
 		return $group_id;
 	}

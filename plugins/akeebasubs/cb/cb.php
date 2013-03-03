@@ -147,7 +147,7 @@ class plgAkeebasubsCb extends plgAkeebasubsAbstract
 				->where($db->qn('folder').'='.$db->q('akeebasubs'))
 				->set($db->qn('params').' = '.$db->q($param_string));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 	
@@ -255,7 +255,7 @@ class plgAkeebasubsCb extends plgAkeebasubsAbstract
 		$values .= $db->q('').', '.$db->q('0').', '.$db->q('1');
 		$query->values($values);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 
 	private function setCBAuth($user_id, $auth)
@@ -270,7 +270,7 @@ class plgAkeebasubsCb extends plgAkeebasubsAbstract
 			->set($db->qn('acceptedterms').' = '.$db->q($auth))
 			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		if($db->getError()) die($db->getError());
 	}
 

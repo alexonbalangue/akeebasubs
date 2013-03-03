@@ -220,7 +220,7 @@ class plgAkeebasubsProjectfork4 extends plgAkeebasubsAbstract
 				->delete($db->qn('#__akeebasubs_pf4_projects'))
 				->where($db->qn('pf_projects_id') . ' = ' . $db->q($proj_id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 			return null;
 		}
 		
@@ -298,7 +298,7 @@ class plgAkeebasubsProjectfork4 extends plgAkeebasubsAbstract
 					. $db->q('1')
 			);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		$proj_id = $db->insertid();
 
 		// Save the reference about the project
@@ -314,7 +314,7 @@ class plgAkeebasubsProjectfork4 extends plgAkeebasubsAbstract
 					. $db->q($proj_id)
 			);
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		
 		return $proj_id;
 	}
@@ -331,7 +331,7 @@ class plgAkeebasubsProjectfork4 extends plgAkeebasubsAbstract
 			->where($db->qn('id')  .' = '. $db->q($project_id))
 			->where($db->qn('title') . ' != '. $db->q($project_title));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 	
 	/**
@@ -345,7 +345,7 @@ class plgAkeebasubsProjectfork4 extends plgAkeebasubsAbstract
 			->set($db->qn('state') . ' = ' . $db->q('2'))
 			->where($db->qn('id') .' = '. $db->q($project_id));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		if($db->getError()) die($db->getError());
 	}
 	
@@ -361,7 +361,7 @@ class plgAkeebasubsProjectfork4 extends plgAkeebasubsAbstract
 			->where($db->qn('id') .' = '. $db->q($project_id))
 			->where($db->qn('state') . ' != ' . $db->q('1'));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		if($db->getError()) die($db->getError());
 	}
 	

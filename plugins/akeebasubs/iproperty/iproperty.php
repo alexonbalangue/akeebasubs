@@ -185,7 +185,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				->set($db->qn('state').' = '.$db->q(1))
 				->where($db->qn('user_id').' = '.$db->q($user_id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 			
 			// b. Update the company parameters
 			$company_ids_raw = array();
@@ -235,7 +235,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			->set($db->qn('state').' = '.$db->q(0))
 			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 		
 		// b. Unpublish the companies of the user
 		$company_ids_raw = array();
@@ -253,7 +253,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			->set($db->qn('state').' = '.$db->q('0'))
 			->where($db->qn('id').' IN ('.implode(',', $company_ids).')');
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 	
 	private function parseAddGroups()

@@ -56,7 +56,7 @@ class plgAkeebasubsJce extends plgAkeebasubsAbstract
 					->set($db->qn('users').' = '.$db->q($users))
 					->where($db->qn('id').' = '.$db->q($gid));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -88,7 +88,7 @@ class plgAkeebasubsJce extends plgAkeebasubsAbstract
 					->set($db->qn('users').' = '.$db->q($users))
 					->where($db->qn('id').' = '.$db->q($gid));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 		

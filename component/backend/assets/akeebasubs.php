@@ -288,7 +288,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 				->where($db->qn('folder').'='.$db->q('akeebasubs'))
 				->set($db->qn('params').' = '.$db->q($param_string));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 	

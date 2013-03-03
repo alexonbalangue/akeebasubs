@@ -220,7 +220,7 @@ class plgAkeebasubsAgora extends plgAkeebasubsAbstract
 				}
 
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 
 				//if admins should be ignored, check to see if the user is already an admin for this group to prevent duplicate entries
 				if ($this->ignoreAdmins && $rid == '4') {

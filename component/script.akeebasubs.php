@@ -582,7 +582,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__assets')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		// Fix broken #__extensions records
@@ -597,7 +597,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__extensions')
 				->where($db->qn('extension_id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		// Fix broken #__menu records
@@ -614,7 +614,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__menu')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 
@@ -641,7 +641,7 @@ class Com_AkeebasubsInstallerScript
 				$query->delete('#__extensions')
 					->where($db->qn('extension_id').' = '.$db->q($id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -663,7 +663,7 @@ class Com_AkeebasubsInstallerScript
 				$query->delete('#__assets')
 					->where($db->qn('id').' = '.$db->q($id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -692,7 +692,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__menu')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 
@@ -758,7 +758,7 @@ class Com_AkeebasubsInstallerScript
 							$sql->set($db->qn('published').' = '.$db->q('1'));
 						}
 						$db->setQuery($sql);
-						$db->query();
+						$db->execute();
 
 						// B. Change the ordering of back-end modules to 1 + max ordering
 						if($folder == 'admin') {
@@ -775,7 +775,7 @@ class Com_AkeebasubsInstallerScript
 								->set($db->qn('ordering').' = '.$db->q($position))
 								->where($db->qn('module').' = '.$db->q('mod_'.$module));
 							$db->setQuery($query);
-							$db->query();
+							$db->execute();
 						}
 
 						// C. Link to all pages
@@ -840,7 +840,7 @@ class Com_AkeebasubsInstallerScript
 							->where($db->qn('element').' = '.$db->q($plugin))
 							->where($db->qn('folder').' = '.$db->q($folder));
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 			}
@@ -1158,7 +1158,7 @@ class Com_AkeebasubsInstallerScript
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}
@@ -1169,7 +1169,7 @@ class Com_AkeebasubsInstallerScript
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}
@@ -1180,7 +1180,7 @@ class Com_AkeebasubsInstallerScript
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}

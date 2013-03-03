@@ -211,7 +211,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							->where($db->qn('created_by').' = '.$db->q($user_id))
 							->where($db->qn('state').' <= '.$db->q('1'));
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 
@@ -225,7 +225,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							->set($db->qn('published').' = '.$db->q('0'))
 							->where($db->qn('created_by').' = '.$db->q($user_id));
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 
@@ -249,7 +249,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 								->where($db->qn('state').' <= '.$db->q('1'))
 								->where($db->qn('application_id').' IN ('.implode(',', $temp).')');
 							$db->setQuery($query);
-							$db->query();
+							$db->execute();
 						}
 					}
 				}
@@ -272,7 +272,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							->where($db->qn('created_by').' = '.$db->q($user_id))
 							->where($db->qn('state').' = '.$db->q('0'));
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 
@@ -287,7 +287,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							->where($db->qn('created_by').' = '.$db->q($user_id))
 							->where($db->qn('published').' = '.$db->q('0'));
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 
@@ -311,7 +311,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 								->where($db->qn('state').' = '.$db->q('0'))
 								->where($db->qn('application_id').' IN ('.implode(',', $temp).')');
 							$db->setQuery($query);
-							$db->query();
+							$db->execute();
 						}
 					}
 				}

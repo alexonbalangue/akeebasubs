@@ -216,7 +216,7 @@ class AkeebasubsModelCpanels extends FOFModel
 					$commands = explode(';', $sql);
 					foreach($commands as $query) {
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 			}
@@ -255,7 +255,7 @@ class AkeebasubsModelCpanels extends FOFModel
 				->where($db->qn('element').'='.$db->q('com_akeebasubs'))
 				->where($db->qn('type').'='.$db->q('component'));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		return $this;

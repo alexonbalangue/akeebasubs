@@ -188,7 +188,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				->where($db->qn('folder').'='.$db->q('akeebasubs'))
 				->set($db->qn('params').' = '.$db->q($param_string));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 

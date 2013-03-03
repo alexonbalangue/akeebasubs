@@ -386,7 +386,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				->delete($db->qn('#__ccinvoices_users'))
 				->where($db->qn('user_id').' = '.$db->q($userid));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 
 			$query = $db->getQuery(true)
 				->insert($db->qn('#__ccinvoices_users'))
@@ -397,7 +397,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 					$db->q($userid).', '.$db->q($id)
 				);
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 
 			return $id;
 		} else {
@@ -409,7 +409,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				$query->set($db->qn($k).' = '.$db->q($v));
 			}
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 			
 			return $contact_id;
 		}

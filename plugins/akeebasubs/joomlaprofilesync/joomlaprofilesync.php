@@ -234,7 +234,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 						->where($db->qn('user_id') . '=' . $db->q($user_id))
 						->where($db->qn('profile_key') . '=' . $db->q($k));
 					$db->setQuery($query);
-					$db->query();
+					$db->execute();
 				}
 				
 				// Insert the new record

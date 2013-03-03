@@ -75,7 +75,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 						->where($db->qn('listid') .'='. $db->q($group))
 						->where($db->qn('subid') .'='. $db->q($amsubid));
 					$db->setQuery($query);
-					$db->query();
+					$db->execute();
 				}
 				
 				// Insert new record
@@ -92,7 +92,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 					));
 				;
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 		
@@ -104,7 +104,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 					->where($db->qn('listid') .'='. $db->q($group))
 					->where($db->qn('subid') .'='. $db->q($amsubid));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 	}

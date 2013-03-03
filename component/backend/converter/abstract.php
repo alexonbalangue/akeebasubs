@@ -183,7 +183,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				// Only run a query every 256Kb of data (makes import pimpin' fast!)
 				if($runningSum > 262144) {
 					$db->setQuery($q);
-					$status = $db->query();
+					$status = $db->execute();
 					$q = null;
 					
 					// DEBUG
@@ -200,7 +200,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				// Leftover data not commited to db. What are you waiting for,
 				// commit them alright!
 				$db->setQuery($q);
-				$status = $db->query();
+				$status = $db->execute();
 				// DEBUG
 				if(!$status && $this->debug) {
 					echo "<h1>INSERT error</h1>";
@@ -317,7 +317,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 
 		//Execute the query
 		$db->setQuery($sql);
-		$db->query();
+		$db->execute();
 		
 		//Update the truncated array
 		$this->truncated[$name] = true;

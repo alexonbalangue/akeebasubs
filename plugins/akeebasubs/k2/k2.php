@@ -47,7 +47,7 @@ class plgAkeebasubsK2 extends plgAkeebasubsAbstract
 					->set($db->qn('group').' = '.$db->q($group))
 					->where($db->qn('userID').' = '.$db->q($user_id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			} else {
 				// Case 1b. Add a new record
 				$user = JFactory::getUser($user_id);
@@ -63,7 +63,7 @@ class plgAkeebasubsK2 extends plgAkeebasubsAbstract
 						$db->q($user_id).', '.$db->q($group).', '.$db->q($user->name).', '.$db->q('')
 					);
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		} elseif(!empty($removeGroups)) {
 			// Case 2: Don't add to groups, remove from groups
@@ -81,7 +81,7 @@ class plgAkeebasubsK2 extends plgAkeebasubsAbstract
 						->set($db->qn('group').' = '.$db->q('0'))
 						->where($db->qn('userID').' = '.$db->q($user_id));
 					$db->setQuery($query);
-					$db->query();
+					$db->execute();
 				}
 			} else {
 				

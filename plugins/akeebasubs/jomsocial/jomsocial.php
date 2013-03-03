@@ -67,7 +67,7 @@ class plgAkeebasubsJomsocial extends plgAkeebasubsAbstract
 				}
 				
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 		
@@ -81,7 +81,7 @@ class plgAkeebasubsJomsocial extends plgAkeebasubsAbstract
 				$query = clone $protoQuery;
 				$query->where($db->qn('groupid').' = '.$db->q($group));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 	}

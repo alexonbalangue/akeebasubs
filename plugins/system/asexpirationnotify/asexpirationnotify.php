@@ -294,7 +294,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			->where($db->qn('element').' = '.$db->q('com_akeebasubs'))
 			->where($db->qn('type').' = '.$db->q('component'));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 	
 	/**
