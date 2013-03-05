@@ -603,7 +603,11 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		if (function_exists('tidy_repair_string'))
 		{
-			$invoiceRecord->html = tidy_repair_string($invoiceRecord->html, null, 'utf8');
+			$repaired = tidy_repair_string($invoiceRecord->html, null, 'utf8');
+			if ($repaired !== false)
+			{
+				$invoiceRecord->html = $repaired;
+			}
 		}
 
 		$pdf->writeHTML($invoiceRecord->html, true, false, true, false, '');
