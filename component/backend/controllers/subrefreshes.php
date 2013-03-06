@@ -13,12 +13,12 @@ class AkeebasubsControllerSubrefreshes extends FOFController
 	public function process()
 	{
 		$model = $this->getModel('Subscriptions', 'AkeebasubsModel');
-		$model->setState('limitstart', FOFInput::getInt('forceoffset',0,$this->input));
-		$model->setState('limit', FOFInput::getInt('forcelimit',100,$this->input));
-		
+		$model->setState('limitstart', $this->input->getInt('forceoffset',0));
+		$model->setState('limit', $this->input->getInt('forcelimit',100));
+
 		$list = $model
 			->refresh(1)->getList();
-		
+
 		if(count($list)) {
 			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
@@ -32,9 +32,9 @@ class AkeebasubsControllerSubrefreshes extends FOFController
 			'total'	=> $model->getTotal(),
 			'processed'	=> count($list)
 		);
-		
+
 		echo json_encode($response);
-		
+
 		// Return
 		JFactory::getApplication()->close();
 	}

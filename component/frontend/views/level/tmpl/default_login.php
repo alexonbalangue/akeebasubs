@@ -18,7 +18,7 @@ if(!empty($subpathURL) && ($subpathURL != '/')) {
 }
 
 $redirectURL = $rootURL. str_replace('&amp;','&',
-	JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.FOFInput::getString('slug','',$this->input)))
+	JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.$this->input->getString('slug','')))
 */
 ?>
 
@@ -28,7 +28,7 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?></legend>
-		
+
 		<div class="control-group">
 			<label for="username" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_USERNAME')?>
@@ -37,7 +37,7 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 				<input type="text" name="username" value="" />
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="password" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_PASSWORD')?>
@@ -53,8 +53,8 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_ORCONTINUE')?>
 			</span>
 		</div>
-		
-		
-		
+
+
+
 	</fieldset>
 </form>

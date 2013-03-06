@@ -16,25 +16,25 @@ class AkeebasubsControllerTaxconfigs extends FOFController
 		}
 		parent::execute($task);
 	}
-	
+
 	public function main($cachable = false, $urlparams = false)
 	{
 		parent::display($cachable, $urlparams);
 	}
-	
+
 	public function apply()
 	{
 		// CSRF protection
 		$this->_csrfProtection();
-		
+
 		$model = $this->getThisModel();
 		$model->clearTaxRules();
 		$model->createTaxRules();
 		$model->applyComponentConfiguration();
-		
+
 		// Redirect back to the control panel
 		$url = '';
-		$returnurl = FOFInput::getBase64('returnurl', '', $this->input);
+		$returnurl = $this->input->getBase64('returnurl', '');
 		if(!empty($returnurl)) {
 			$url = base64_decode($returnurl);
 		}

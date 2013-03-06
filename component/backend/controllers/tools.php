@@ -12,9 +12,9 @@ class AkeebasubsControllerTools extends FOFController
 {
 	public function import($cacheable = false)
 	{
-		$converter = FOFInput::getCmd('converter','',$this->input);
-		$print_r = FOFInput::getBool('print_r',false,$this->input);
-		
+		$converter = $this->input->getCmd('converter','');
+		$print_r = $this->input->getBool('print_r',false);
+
 		$ret = $this->getThisModel()->getItem($converter)->convert();
 
 		if($print_r) {

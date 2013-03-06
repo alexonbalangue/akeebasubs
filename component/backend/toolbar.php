@@ -49,7 +49,7 @@ class AkeebasubsToolbar extends FOFToolbar
 			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
 			unset($views['COM_AKEEBASUBS_MAINMENU_INVOICES']);
 		}
-		
+
 		foreach($views as $label => $view) {
 			if(!is_array($view)) {
 				$this->addSubmenuLink($view);
@@ -62,14 +62,14 @@ class AkeebasubsToolbar extends FOFToolbar
 			}
 		}
 	}
-	
+
 	private function addSubmenuLink($view, $parent = null)
 	{
 		static $activeView = null;
 		if(empty($activeView)) {
-			$activeView = FOFInput::getCmd('view','cpanel',$this->input);
+			$activeView = $this->input->getCmd('view','cpanel');
 		}
-		
+
 		$key = strtoupper($this->component).'_TITLE_'.strtoupper($view);
 		if(strtoupper(JText::_($key)) == $key) {
 			$altview = FOFInflector::isPlural($view) ? FOFInflector::singularize($view) : FOFInflector::pluralize($view);
@@ -89,27 +89,27 @@ class AkeebasubsToolbar extends FOFToolbar
 
 		$this->appendLink($name, $link, $active, null, $parent);
 	}
-	
+
 	protected function getMyViews()
 	{
 		$views = array('cpanel');
-		
+
 		$allViews = parent::getMyViews();
 		foreach($allViews as $view) {
 			if(!in_array($view, $views)) {
 				$views[] = $view;
 			}
 		}
-		
+
 		return $views;
 	}
-	
+
 	public function onSubscriptionsBrowse()
 	{
 		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input));
-		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
-		
+		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
+
 		// Add toolbar buttons
 		if($this->perms->delete) {
 			JToolBarHelper::deleteList();
@@ -120,15 +120,15 @@ class AkeebasubsToolbar extends FOFToolbar
 		if($this->perms->create) {
 			JToolBarHelper::addNew();
 		}
-		
+
 		$this->renderSubmenu();
-		
+
 		$bar = JToolBar::getInstance('toolbar');
-		
+
 		// Add "Subscription Refresh"Run Integrations"
 		JToolBarHelper::divider();
 		$bar->appendButton('Link', 'subrefresh', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
-		
+
 		// Add "Export to CSV"
 		$link = JURI::getInstance();
 		$query = $link->getQuery(true);
@@ -137,26 +137,26 @@ class AkeebasubsToolbar extends FOFToolbar
 		$query['view'] = 'subscriptions';
 		$query['task'] = 'browse';
 		$link->setQuery($query);
-		
+
 		JToolBarHelper::divider();
 		$icon = version_compare(JVERSION, '3.0', 'lt') ? 'export' : 'download';
 		$bar->appendButton('Link', $icon, JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
 	}
-	
+
 	public function onLevelsBrowse()
 	{
 		$this->onBrowse();
-		
+
 		JToolBarHelper::divider();
 		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
 	}
-	
+
 	public function onUsersBrowse()
 	{
 		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input));
-		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
-		
+		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
+
 		// Add toolbar buttons
 		if($this->perms->delete) {
 			JToolBarHelper::deleteList();
@@ -167,16 +167,16 @@ class AkeebasubsToolbar extends FOFToolbar
 		if($this->perms->create) {
 			JToolBarHelper::addNew();
 		}
-		
+
 		$this->renderSubmenu();
 	}
-	
+
 	public function onAffpaymentsBrowse()
 	{
 		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input));
-		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
-		
+		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
+
 		// Add toolbar buttons
 		if($this->perms->delete) {
 			JToolBarHelper::deleteList();
@@ -187,18 +187,18 @@ class AkeebasubsToolbar extends FOFToolbar
 		if($this->perms->create) {
 			JToolBarHelper::addNew();
 		}
-		
+
 		$this->renderSubmenu();
 	}
-	
+
 	public function onMakecouponsOverview()
 	{
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input));
-		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
-		
+		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
+
 		$this->renderSubmenu();
 	}
-	
+
 	/**
 	 * Renders the toolbar for the component's Control Panel page
 	 */
@@ -206,36 +206,36 @@ class AkeebasubsToolbar extends FOFToolbar
 	{
 		//on frontend, buttons must be added specifically
 		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
-		
+
 		if($isAdmin || $this->renderFrontendSubmenu) {
 			$this->renderSubmenu();
 		}
-		
+
 		if(!$isAdmin && !$this->renderFrontendButtons) return;
-		
+
 		// Set toolbar title
-		$option = FOFInput::getCmd('option','com_foobar',$this->input);
-		$subtitle_key = strtoupper($option.'_TITLE_'.FOFInput::getCmd('view','cpanel',$this->input));
+		$option = $this->input->getCmd('option','com_foobar');
+		$subtitle_key = strtoupper($option.'_TITLE_'.$this->input->getCmd('view','cpanel'));
 		JToolBarHelper::title(JText::_( strtoupper($option)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $option));
-		
+
 		JToolBarHelper::save();
 	}
-	
+
 	public function onInvoicesBrowse()
 	{
 		//on frontend, buttons must be added specifically
 		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
-		
+
 		if($isAdmin || $this->renderFrontendSubmenu) {
 			$this->renderSubmenu();
 		}
-		
+
 		if(!$isAdmin && !$this->renderFrontendButtons) return;
-		
+
 		// Set toolbar title
-		$subtitle_key = FOFInput::getCmd('option','com_foobar',$this->input).'_TITLE_'.strtoupper(FOFInput::getCmd('view','cpanel',$this->input));
-		JToolBarHelper::title(JText::_( FOFInput::getCmd('option','com_foobar',$this->input)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', FOFInput::getCmd('option','com_foobar',$this->input)));
-		
+		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
+
 		// Add toolbar buttons
 		if($this->perms->delete) {
 			JToolBarHelper::deleteList();

@@ -9,7 +9,7 @@ defined('_JEXEC') or die('');
 
 /**
  * Converter abstract code for Akeeba Subscriptions
- * 
+ *
  * Very losely based on NinjaBoard importer. Thank you, Stian, for your awesome code!
  *
  * @author Nicholas K. Dionysopoulos
@@ -23,67 +23,67 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	 * @var array
 	 */
 	public $data = array();
-	
+
 	/**
 	 * If set to true, then this converter is able to run in steps
 	 *
 	 * @var bool
 	 */
 	public $splittable = false;
-	
+
 	/**
 	 * Array over tructated tables to prevent tables from trunctate twice
 	 *
 	 * @var array
 	 */
 	public $truncated = array();
-	
+
 	/**
 	 * The name of this converter. If not specified, it is the name of the
 	 * file.
-	 * 
+	 *
 	 * @var string|null
 	 */
 	protected $convertername = null;
-	
+
 	/**
 	 * A hash array of input variables, used by FOFInput
-	 * 
+	 *
 	 * @var array
 	 */
 	private $input = null;
-	
+
 	/**
 	 * The result to send back to the browser (remember to JSON-encode it!)
-	 * 
+	 *
 	 * @var array
 	 */
 	public $result = array();
-	
+
 	/**
 	 * Enable Debug Mode; this will cause DB errors on INSERT to halt the import.
 	 * Used only when debugging new import classes.
-	 * 
+	 *
 	 * @var bool
 	 */
 	public $debug = false;
-	
+
 	/**
 	 * Public constructor. Makes sure that the name of the converter is set at
 	 * all times.
-	 * 
-	 * @param array|null $properties 
+	 *
+	 * @param array|null $properties
 	 */
 	public function __construct($properties = null) {
 		parent::__construct($properties);
-		
+
 		if(is_null($this->convertername)) {
 			$this->convertername = basename(__FILE__, '.php');
 		}
-		
+
 		$this->debug = JRequest::getBool('debug', false);
 	}
-	
+
 	/**
 	 * Checks if the converter can convert
 	 *
@@ -96,7 +96,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Gets the name of the converter
 	 *
@@ -108,7 +108,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	{
 		return $this->convertername;
 	}
-	
+
 	/**
 	 * Sets the name of the converter
 	 *
@@ -120,7 +120,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	{
 		$this->convertername = $newName;
 	}
-	
+
 	/**
 	 * Execute the convertion
 	 *
@@ -129,7 +129,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	public function convert()
 	{
 		$db = JFactory::getDbo();
-		
+
 		// Pump data one table at a time
 		foreach($this->data as $table => $rows)
 		{
@@ -138,7 +138,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 			$query = $db->getQuery(true);
 			$query->insert($tableName);
 			$columns = array();
-			
+
 			// Make sure we will only be using valid column names
 			$validColumns = array();
 			if(version_compare(JVERSION, '3.0', 'ge')) {
@@ -149,7 +149,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 			foreach($allFields[$tableName] as $fn => $fv) {
 				$validColumns[] = $fn;
 			}
-			
+
 			// Loop through all data columns for this table
 			$q = null;
 			$runningSum = 0;
@@ -166,7 +166,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 					}
 					$query->columns($columns);
 				}
-				
+
 				if(is_null($q)) {
 					$q = clone $query;
 					$runningSum = 0;
@@ -179,13 +179,13 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				$values = implode(',',$values);
 				$runningSum += strlen($values);
 				$q->values($values);
-				
+
 				// Only run a query every 256Kb of data (makes import pimpin' fast!)
 				if($runningSum > 262144) {
 					$db->setQuery($q);
 					$status = $db->execute();
 					$q = null;
-					
+
 					// DEBUG
 					if(!$status && $this->debug) {
 						echo "<h1>INSERT error</h1>";
@@ -195,7 +195,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 					}
 				}
 			}
-			
+
 			if(!is_null($q)) {
 				// Leftover data not commited to db. What are you waiting for,
 				// commit them alright!
@@ -221,13 +221,13 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	public function importData(array $tables)
 	{
 		$db = JFactory::getDbo();
-		
-		$offset = FOFInput::getInt('coffset', -999, $this->input);
-		$limit = FOFInput::getInt('climit', -999, $this->input);
-		
+
+		$offset = $this->input->getInt('coffset', -999);
+		$limit = $this->input->getInt('climit', -999);
+
 		if($offset == -999) $offset = false;
 		if($limit == -999) $limit = 200;
-		
+
 		// Loop through the tables and load the data count or data
 		foreach ( $tables as $table )
 		{
@@ -244,7 +244,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				$db->setQuery($query);
 				$count = $db->loadResult();
 				$this->_truncateTable('#__akeebasubs_'.$name);
-				
+
 				if(!isset($this->data[$name]) || $this->data[$name] == array()) {
 					$this->data[$name] = $count;
 				} else {
@@ -269,7 +269,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 		if($offset === false) {
 			$total = array_reduce($this->data, 'max');
 			$steps = ceil($total / $limit);
-			if($steps > 1) 
+			if($steps > 1)
 			{
 				return array('splittable' => true, 'total' => $total, 'steps' => $steps, 'limit' => $limit);
 			}
@@ -279,7 +279,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 				{
 					$name = $table['name'];
 					$query = clone $table['query'];
-					
+
 					$query->from($db->qn($table['foreign']).' AS '.$db->qn('tbl'));
 					$db->setQuery($query, $offset, $limit);
 
@@ -287,14 +287,14 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 						$this->data[$name] = $db->loadAssocList($table['foreignkey']);
 					} else {
 						$rows = $db->loadAssocList($table['foreignkey']);
-		
+
 						if(!empty($rows)) foreach($rows as $row)
 						{
 							$this->data[$name][] = $row;
 						}
 					}
 				}
-				
+
 				return array('splittable' => false);
 			}
 		} else {
@@ -310,7 +310,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	{
 		//If this table have been truncated ebfore, don't truncate it again
 		if(isset($this->truncated[$name])) return $this;
-		
+
 		$db = JFactory::getDbo();
 
 		$sql = 'TRUNCATE TABLE '.$db->qn($name);
@@ -318,7 +318,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 		//Execute the query
 		$db->setQuery($sql);
 		$db->execute();
-		
+
 		//Update the truncated array
 		$this->truncated[$name] = true;
 
