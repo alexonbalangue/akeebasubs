@@ -18,37 +18,37 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 {
 	/** @var bool Should I re-publish core Joomla! articles? */
 	protected $publishCore = array();
-	
+
 	/** @var bool Should I re-publish K2 items? */
 	protected $publishK2 = array();
-	
+
 	/** @var bool Should I re-publish ZOO items? */
 	protected $publishZOO = array();
 
 	/** @var bool Should I unpublish core Joomla! articles? */
 	protected $unpublishCore = array();
-	
+
 	/** @var bool Should I unpublish K2 items? */
 	protected $unpublishK2 = array();
-	
+
 	/** @var bool Should I unpublish ZOO items? */
 	protected $unpublishZOO = array();
-	
+
 	/** @var array ZOO apps to republish items */
 	protected $addGroups = array();
-	
+
 	/** @var array ZOO apps to unpublish items */
 	protected $removeGroups = array();
-	
+
 	public function __construct(&$subject, $name, $config = array(), $templatePath = null) {
 		parent::__construct($subject, $name, $config, $templatePath);
-		
+
 		$this->loadLanguage();
 	}
-	
+
 	/**
 	 * Renders the configuration page in the component's back-end
-	 * 
+	 *
 	 * @param AkeebasubsTableLevel $level
 	 * @return object
 	 */
@@ -59,7 +59,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		if(!JFile::exists($filename)) {
 			$filename = dirname(__FILE__).'/tmpl/default.php';
 		}
-		
+
 		if (!property_exists($level->params, 'contentpublish_addgroups'))
 		{
 			$level->params->contentpublish_addgroups = array();
@@ -92,7 +92,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		{
 			$level->params->contentpublish_unpublishzoo = false;
 		}
-		
+
 		JLoader::import('joomla.filesystem.folder');
 		if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo'))
 		{
@@ -119,53 +119,47 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				$zooApps[] = JHtml::_('select.option', $app->id, $app->name);
 			}
 		}
-		
+
 		@ob_start();
 		include_once $filename;
 		$html = @ob_get_clean();
-		
+
 		$ret = (object)array(
 			'title'	=> JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_TAB_TITLE'),
 			'html'	=> $html
 		);
-		
+
 		return $ret;
 	}
 
 	/**
 	 * Called whenever the administrator asks to refresh integration status.
-	 * 
+	 *
 	 * @param $user_id int The Joomla! user ID to refresh information for.
 	 */
 	public function onAKUserRefresh($user_id)
 	{
 		static $hasZoo = null;
 		static $hasK2 = null;
-		
+
 		if(is_null($hasZoo) || is_null($hasK2))
 		{
 			JLoader::import('joomla.filesystem.folder');
 			$hasZoo = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo');
 			$hasK2 = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_k2');
 		}
-		
-		// Make sure we're configured
-		if (empty($this->addGroups) && empty($this->removeGroups))
-		{
-			return;
-		}
-	
+
 		// Get all of the user's subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
-			
+
 		// Make sure there are subscriptions set for the user
 		if (!count($subscriptions))
 		{
 			return;
 		}
-		
+
 		// Get active/inactive subscription level IDs
 		$active = array();
 		foreach ($subscriptions as $subscription)
@@ -192,7 +186,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				$inactive[] = $subscription->akeebasubs_level_id;
 			}
 		}
-		
+
 		$db = JFactory::getDbo();
 
 		// Unpublish articles for inactive subscriptions
@@ -255,7 +249,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		// Publish articles for active subscriptions
 		if (!empty($active))
 		{
@@ -318,12 +312,12 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 			}
 		}
 	}
-	
+
 	protected function loadGroupAssignments()
 	{
 		$this->addGroups = array();
 		$this->removeGroups = array();
-		
+
 		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		if(!empty($levels))
@@ -339,12 +333,12 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				} elseif(empty($level->params)) {
 					continue;
 				}
-				
+
 				if (property_exists($level->params, 'contentpublish_addgroups'))
 				{
 					$this->addGroups[$level->akeebasubs_level_id] = $level->params->contentpublish_addgroups;
 				}
-				
+
 				if (property_exists($level->params, 'contentpublish_removegroups'))
 				{
 					$this->removeGroups[$level->akeebasubs_level_id] = $level->params->contentpublish_removegroups;
@@ -354,35 +348,35 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				{
 					$this->publishCore[$level->akeebasubs_level_id] = $level->params->contentpublish_publishcore;
 				}
-				
+
 				if (property_exists($level->params, 'contentpublish_publishk2'))
 				{
 					$this->publishK2[$level->akeebasubs_level_id] = $level->params->contentpublish_publishk2;
 				}
-				
+
 				if (property_exists($level->params, 'contentpublish_publishzoo'))
 				{
 					$this->publishZOO[$level->akeebasubs_level_id] = $level->params->contentpublish_publishzoo;
 				}
-				
+
 				if (property_exists($level->params, 'contentpublish_unpublishcore'))
 				{
 					$this->unpublishCore[$level->akeebasubs_level_id] = $level->params->contentpublish_unpublishcore;
 				}
-				
+
 				if (property_exists($level->params, 'contentpublish_unpublishk2'))
 				{
 					$this->unpublishK2[$level->akeebasubs_level_id] = $level->params->contentpublish_unpublishk2;
 				}
-				
+
 				if (property_exists($level->params, 'contentpublish_unpublishzoo'))
 				{
 					$this->unpublishZOO[$level->akeebasubs_level_id] = $level->params->contentpublish_unpublishzoo;
-				}				
+				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Not used in this plugin
 	 */
@@ -390,7 +384,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Not used in this plugin
 	 */
