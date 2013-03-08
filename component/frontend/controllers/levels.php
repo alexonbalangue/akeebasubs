@@ -95,7 +95,22 @@ class AkeebasubsControllerLevels extends FOFController
 			}
 		}
 
+		// Get the current level
 		$level = $this->getThisModel()->getItem();
+
+		// Make sure the level exists
+		if ($level->akeebasubs_level_id == 0)
+		{
+			return false;
+		}
+
+		// Make sure the level is published
+		if (!$level->enabled)
+		{
+			return false;
+		}
+
+		// Check for "Forbid renewal" conditions
 		if($level->only_once) {
 			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->slug($level->slug)

@@ -4,6 +4,7 @@ Akeeba Subscriptions 3.0.2
 # [HIGH] Internal server error on ancient versions of PHP 5.3 with broken late static binding implementations
 # [HIGH] The content publish plugin wouldn't work
 # [LOW] Forgotten echo statement in the cbsync plugin (thank you, Reese)
+# [LOW] You could see the subscription page of unpublished levels, resulting in a misleading error message when you tried submitting the subscription form
 
 Akeeba Subscriptions 3.0.1
 ================================================================================
