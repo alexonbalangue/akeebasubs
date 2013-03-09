@@ -260,4 +260,34 @@ class AkeebasubsModelCpanels extends FOFModel
 
 		return $this;
 	}
+
+	/**
+	 * Does the user needs to enter a Download ID?
+	 *
+	 * @return boolean
+	 */
+	public function needsDownloadID()
+	{
+		JLoader::import('joomla.application.component.helper');
+
+		// Do I need a Download ID?
+		$ret = false;
+		$isPro = AKEEBASUBS_PRO;
+		if(!$isPro) {
+			$ret = false;
+		} else {
+			$ret = false;
+			$params = JComponentHelper::getParams('com_akeebasubs');
+			if(version_compare(JVERSION, '3.0', 'ge')) {
+				$dlid = $params->get('downloadid', '');
+			} else {
+				$dlid = $params->getValue('downloadid', '');
+			}
+			if(!preg_match('/^([0-9]{1,}:)?[0-9a-f]{32}$/i', $dlid)) {
+				$ret = true;
+			}
+		}
+
+		return $ret;
+	}
 }

@@ -24,6 +24,8 @@ class AkeebasubsControllerCpanels extends FOFController
 			FOFModel::getTmpInstance('Cpanels', 'AkeebasubsModel')
 				->checkAndFixDatabase()
 				->saveMagicVariables();
+
+			$this->getThisView()->needsdlid = FOFModel::getTmpInstance('Cpanels', 'AkeebasubsModel')->needsDownloadID();
 		}
 
 		return $result;

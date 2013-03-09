@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 3.0.2
 ================================================================================
++ Warn Professional users when their Download ID is missing
 # [HIGH] Bad SQL query killing Core release on Joomla! 3.0
 # [HIGH] Some TCPDF folders are not getting installed, causing inability to generate invoice PDF files
 # [HIGH] Blank PDF if tidy_repair_string returns false
