@@ -98,8 +98,30 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			$rows['profile.region'][1] = json_encode($state);
 		}
 
+		// Special case: state
+		if (isset($rows['profile.region']))
+		{
+			if (isset($rows['profile.country']))
+			{
+				$country = json_decode($rows['profile.country'][1]);
+			}
+			else
+			{
+				$country = 'US';
+			}
+			$state = json_decode($rows['profile.state'][1], true);
+			$cname = AkeebasubsHelperSelect::$countries[$country];
+			$states = AkeebasubsHelperSelect::$states[$cname];
+
+			if(in_array($state, $states))
+			{
+				$state = array_search($state, $states);
+				$ret['state'] = $state;
+			}
+		}
+
 		// Check for basic information
-		$basic_keys = array('isbusiness', 'businessname', 'occupation', 'vatnumber', 'viesregistered', 'taxauthority', 'address1', 'address2', 'city', 'state', 'zip', 'country');
+		$basic_keys = array('isbusiness', 'businessname', 'occupation', 'vatnumber', 'viesregistered', 'taxauthority', 'address1', 'address2', 'city', 'zip', 'country');
 		foreach($basic_keys as $key)
 		{
 			if(isset($rows['profile.'.$key]))

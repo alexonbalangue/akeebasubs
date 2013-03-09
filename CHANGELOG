@@ -6,6 +6,7 @@ Akeeba Subscriptions 3.0.2
 # [HIGH] Blank PDF if tidy_repair_string returns false
 # [HIGH] Internal server error on ancient versions of PHP 5.3 with broken late static binding implementations
 # [HIGH] The content publish plugin wouldn't work
+# [MEDIUM] Joomla! User Profile Sync plugin would cause the state to be "forgotten" when a client is resubscribing
 # [LOW] Notice thrown by the autocity plugin
 # [LOW] Forgotten echo statement in the cbsync plugin (thank you, Reese)
 # [LOW] You could see the subscription page of unpublished levels, resulting in a misleading error message when you tried submitting the subscription form
