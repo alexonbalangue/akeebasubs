@@ -10,6 +10,7 @@ Akeeba Subscriptions 3.0.2
 # [LOW] Forgotten echo statement in the cbsync plugin (thank you, Reese)
 # [LOW] You could see the subscription page of unpublished levels, resulting in a misleading error message when you tried submitting the subscription form
 # [LOW] Misplaced translation string in the Options page
+# [LOW] Notice thrown by the Joomla! User Profile Sync plugin
 
 Akeeba Subscriptions 3.0.1
 ================================================================================
