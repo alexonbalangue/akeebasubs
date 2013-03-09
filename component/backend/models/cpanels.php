@@ -78,12 +78,12 @@ class AkeebasubsModelCpanels extends FOFModel
 				'updates/mysql/2.5.0-2012-11-07.sql',
 			)
 		),
-		// check for update 2.6.0-2012-12-29.sql
+		// check for update 3.0.0-2012-12-29.sql
 		array(
 			'table' => 'akeebasubs_states',
 			'field' => '',
 			'files' =>array(
-				'updates/mysql/2.6.0-2012-12-29.sql',
+				'updates/mysql/3.0.0-2012-12-29.sql',
 			)
 		),
 		// check for update 3.0.0-2013-01-15.sql
