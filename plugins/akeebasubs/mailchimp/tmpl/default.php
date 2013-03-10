@@ -27,6 +27,21 @@
 		</div>
 	</div>
 </div>
+<div class="row-fluid">
+	<div class="span6">
+		<div class="control-group">
+			<label for="params_mailchimp_customfields" class="control-label">
+				<?php echo JText::_('PLG_AKEEBASUBS_MAILCHIMP_MERGETAG_TITLE'); ?>
+			</label>
+			<div class="controls">
+				<?php echo $this->getMergeTagSelectField($level) ?>
+				<span class="help-block">
+					<?php echo JText::_('PLG_AKEEBASUBS_MAILCHIMP_MERGETAG_DESCRIPTION2') ?>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="alert alert-warning">
 	<p><?php echo JText::_('PLG_AKEEBASUBS_MAILCHIMP_USAGENOTE'); ?></p>
 </div>
