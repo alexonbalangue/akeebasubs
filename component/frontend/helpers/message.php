@@ -218,6 +218,11 @@ class AkeebasubsHelperMessage
 			'[$]'					=> $currency,
 			'[DLID]'				=> $dlid,
 			'[USER:STATE_FORMATTED]'=> $formatted_state,
+			// Legacy keys
+			'[NAME]'				=> $firstname,
+			'[STATE]'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$sub->state),
+			'[FROM]'				=> $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
+			'[TO]'			=> $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
 		), $extras);
 		foreach ($extras as $key => $value)
 		{

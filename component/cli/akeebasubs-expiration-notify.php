@@ -16,9 +16,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  *  --
- * 
+ *
  *  Command-line script to schedule the expiration notification emails
  */
 
@@ -63,28 +63,31 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		JError::setErrorHandling(E_ERROR, 'die');
 		JError::setErrorHandling(E_WARNING, 'echo');
 		JError::setErrorHandling(E_NOTICE, 'echo');
-		
+
 		// Required by Joomla!
 		JLoader::import('joomla.environment.request');
-		
+
 		// Set the root path to Akeeba Subscriptions
 		define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR.'/components/com_akeebasubs');
-		
+
 		// Allow inclusion of Joomla! files
 		if(!defined('_JEXEC')) define('_JEXEC', 1 );
-		
+
 		// Load FOF
 		JLoader::import('fof.include');
-		
+
 		// Load the version.php file
 		include_once JPATH_COMPONENT_ADMINISTRATOR.'/version.php';
+
+		// Load language strings
+		JFactory::getLanguage()->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true, true);
 
 		// Display banner
 		$year = gmdate('Y');
 		$phpversion = PHP_VERSION;
 		$phpenvironment = PHP_SAPI;
 		$phpos = PHP_OS;
-		
+
 		$this->out("Akeeba Subscriptions Expiration Notification Emails CLI ".AKEEBASUBS_VERSION." (".AKEEBASUBS_DATE.")");
 		$this->out("Copyright (C) 2010-$year Nicholas K. Dionysopoulos");
 		$this->out(str_repeat('-', 79));
@@ -95,7 +98,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		$this->out(str_repeat('-', 79));
 		$this->out("You are using PHP $phpversion ($phpenvironment)");
 		$this->out("");
-		
+
 		// Unset time limits
 		$safe_mode = true;
 		if(function_exists('ini_get')) {
@@ -105,20 +108,20 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 			$this->out("Unsetting time limit restrictions");
 			@set_time_limit(0);
 		}
-		
+
 		// ===== START
-		
+
 		// Preload the helper
 		if (!class_exists('AkeebasubsHelperEmail'))
 		{
 			@include_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
 		}
-		
+
 		// Get today's date
 		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
-		
+
 		// Get and loop all subscription levels
 		$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->enabled(1)
@@ -127,28 +130,28 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		foreach($levels as $level)
 		{
 			$this->out("Checking for subscriptions in the \"{$level->title}\" subscription level");
-			
+
 			// Load the notification thresholds and make sure they are sorted correctly!
 			$notify1 = $level->notify1;
 			$notify2 = $level->notify2;
-			
+
 			if($notify2 > $notify1) {
 				$tmp = $notify2;
 				$notify2 = $notify1;
 				$notify1 = $tmp;
 			}
-			
+
 			// Make sure we are asked to notify users, at all!
 			if( ($notify1 <= 0) && ($notify2 <= 0) ) {
 				$this->out("\t!! This level specifies the users should not be notified");
 				continue;
 			}
-			
+
 			// Get the subscriptions expiring within the next $notify1 days for
 			// users which we have not contacted yet.
 			$jFrom = new JDate($now + 1);
 			$jTo = new JDate($now + $notify1 * 24 * 3600);
-			
+
 			$subs1 = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->contact_flag(0)
 				->level($level->akeebasubs_level_id)
@@ -160,7 +163,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 			// Get the subscriptions expiring within the next $notify2 days for
 			// users which we have contacted only once
 			$subs2 = array();
-			
+
 			if($notify2 > 0) {
 				$jFrom = new JDate($now + 1);
 				$jTo = new JDate($now + $notify2 * 24 * 3600);
@@ -173,13 +176,13 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 					->expires_to($jTo->toSql())
 					->getList();
 			}
-				
+
 			// If there are no subscriptions, bail out
 			if( (count($subs1) + count($subs2)) == 0 ) {
 				$this->out("\tNo subscriptions to notify were found in this level");
 				continue;
 			}
-			
+
 			// Check is some of those subscriptions have been renewed. If so, set their contactFlag to 2
 			$realSubs = array();
 			$this->out("\tGetting list of subscriptions");
@@ -210,13 +213,13 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 					}
 				}
 			}
-			
+
 			// If there are no subscriptions, bail out
 			if(empty($realSubs)) {
 				$this->out("\tNo subscriptions to be notified in this level");
 				continue;
 			}
-			
+
 			// Loop through subscriptions and send out emails
 			$jNow = new JDate();
 			$mNow = $jNow->toSql();
@@ -249,15 +252,15 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 				}
 			}
 		}
-		
+
 		// ===== END
-		
+
 		$this->out("Peak memory usage: ".$this->peakMemUsage());
     }
-	
+
 	/**
 	 * Sends a notification email to the user
-	 * 
+	 *
 	 * @param AkeebasubsTableSubscription $row The subscription row
 	 * @param bool $firstContact  Is this the first time we contact the user?
 	 */
@@ -265,23 +268,23 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 	{
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
-		
+
 		$type = $firstContact ? 'first' : 'second';
-		
+
 		// Get a preloaded mailer
-		$key = $this->_name . '_' . $type;
+		$key = 'plg_system_asexpirationnotify_' . $type;
 		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
-		
+
 		if ($mailer === false)
 		{
 			$this->out(" FAILED");
 			return false;
 		}
-		
+
 		$mailer->addRecipient($user->email);
-		
+
 		$result = $mailer->Send();
-		
+
 		if (($result instanceof Exception) || ($result === false))
 		{
 			$this->out(" FAILED");
@@ -293,7 +296,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 			return true;
 		}
 	}
-    
+
     function memUsage()
 	{
 		if(function_exists('memory_get_usage')) {
@@ -304,7 +307,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 			return "(unknown)";
 		}
 	}
-	
+
 	function peakMemUsage()
 	{
 		if(function_exists('memory_get_peak_usage')) {
@@ -316,5 +319,5 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		}
 	}
 }
- 
+
 JCli::getInstance( 'AkeebaSubscriptionsExpirationNotifyApp' )->execute( );
