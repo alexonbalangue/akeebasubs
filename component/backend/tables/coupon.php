@@ -27,7 +27,7 @@ class AkeebasubsTableCoupon extends FOFTable
 		$this->coupon = strtoupper($this->coupon);
 		
 		// Assign sensible publish_up and publish_down settings
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if(empty($this->publish_up) || ($this->publish_up == '0000-00-00 00:00:00')) {
 			$jUp = new JDate();
 			$this->publish_up = $jUp->toSql();

@@ -54,7 +54,7 @@ class plgAkeebasubsTracktime extends JPlugin
 		// If the payment is over a week old do not generate an invoice. This
 		// prevents accidentally creating an invoice for past subscriptions not
 		// handled by TrackTime
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jCreated = new JDate($row->created_on);
 		$jNow = new JDate();
 		$dateDiff = $jNow->toUnix() - $jCreated->toUnix();
@@ -301,7 +301,7 @@ class plgAkeebasubsTracktime extends JPlugin
 				$query->set($db->qn($k).' = '.$db->q($v));
 			}
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 
 			return $contact_id;
 		}
@@ -371,7 +371,7 @@ class plgAkeebasubsTracktime extends JPlugin
 	
 	public function onAKGetInvoicingOptions()
 	{
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		$enabled = JFile::exists(JPATH_ROOT.'/administrator/components/com_tracktime/views/invoices/tmpl/default.php');
 		return array(
 			'extension'		=> 'tracktime',

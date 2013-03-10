@@ -33,7 +33,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		$user = JFactory::getUser();
 		
 		if($user->guest && !empty($username) && !empty($password)) {
-			jimport( 'joomla.user.authentication');
+			JLoader::import( 'joomla.user.authentication');
 			$credentials = array(
 				'username'	=> $username,
 				'password'	=> $password
@@ -45,7 +45,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			if ($response->status == JAUTHENTICATE_STATUS_SUCCESS) {
 				JPluginHelper::importPlugin('user');
 				$results = $app->triggerEvent('onLoginUser', array((array)$response, $options));
-				jimport('joomla.user.helper');
+				JLoader::import('joomla.user.helper');
 				$userid = JUserHelper::getUserId($response->username);
 				$user = JFactory::getUser($userid);
 				$parameters['username']	= $user->get('username');

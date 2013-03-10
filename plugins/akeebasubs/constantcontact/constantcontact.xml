@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - Constant Contact Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>February 2013</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_CONSTANTCONTACT_DESCRIPTION</description>
+	<files>
+		<filename plugin="constantcontact">constantcontact.php</filename>
+		<folder>library</folder>
+		<folder>override</folder>
+		<folder>tmpl</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_constantcontact.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_constantcontact.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="user" type="text" size="32" default="" label="PLG_AKEEBASUBS_CONSTANTCONTACT_USER_TITLE" description="PLG_AKEEBASUBS_CONSTANTCONTACT_USER_DESC"/>
+				<field name="password" type="text" size="32" default="" label="PLG_AKEEBASUBS_CONSTANTCONTACT_PASSWORD_TITLE" description="PLG_AKEEBASUBS_CONSTANTCONTACT_PASSWORD_DESC"/>
+				<field name="key" type="text" size="32" default="" label="PLG_AKEEBASUBS_CONSTANTCONTACT_KEY_TITLE" description="PLG_AKEEBASUBS_CONSTANTCONTACT_KEY_DESC"/>
+				<field name="email_type" type="radio" default="HTML" label="PLG_AKEEBASUBS_CONSTANTCONTACT_EMAILTYPE_LABEL" description="PLG_AKEEBASUBS_CONSTANTCONTACT_EMAILTYPE_DESC">
+					<option value="HTML">PLG_AKEEBASUBS_CONSTANTCONTACT_EMAILTYPE_HTML</option>
+					<option value="Text">PLG_AKEEBASUBS_CONSTANTCONTACT_EMAILTYPE_TEXT</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

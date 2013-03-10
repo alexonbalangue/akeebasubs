@@ -11,7 +11,7 @@ class AkeebasubsHelperFormat
 {
 	public static function date($date, $format = null)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jDate = new JDate($date);
 		
 		if(empty($format)) {

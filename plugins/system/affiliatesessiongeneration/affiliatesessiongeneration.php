@@ -1,7 +1,7 @@
 <?php
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-jimport('joomla.plugin.plugin');
+JLoader::import('joomla.plugin.plugin');
 
 class plgSystemaffiliatesessiongeneration extends JPlugin
 {

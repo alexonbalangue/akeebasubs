@@ -129,7 +129,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			->getFirstItem();
 		
 		// Construct the transaction key request URL
-		jimport('joomla.environment.uri');
+		JLoader::import('joomla.environment.uri');
 		
 		switch($this->params->get('site', 0))
 		{
@@ -150,7 +150,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 		$eWayURL->setVar('UserName', urlencode($this->params->get('username','')));
 		$eWayURL->setVar('Amount', urlencode(sprintf('%0.2f',$subscription->gross_amount)));
 		$eWayURL->setVar('Currency', urlencode(strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'))));
-		$eWayURL->setVar('ReturnURL', urlencode(JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal'));
+		$eWayURL->setVar('ReturnURL', urlencode(JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=eway'));
 		$eWayURL->setVar('CancelURL', urlencode($rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel'))));
 		if($this->params->get('companylogo','')) $eWayURL->setVar('CompanyLogo', urlencode($this->params->get('companylogo','')));
 		if($this->params->get('pagebanner','')) $eWayURL->setVar('Pagebanner', urlencode($this->params->get('pagebanner','')));
@@ -203,12 +203,12 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 	
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
-		jimport('joomla.environment.uri');
+		JLoader::import('joomla.environment.uri');
 		
 		switch($this->params->get('site', 0))
 		{
@@ -320,14 +320,14 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			'state'				=> $newStatus,
 			'enabled'			=> 0
 		);
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
 		
 		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(

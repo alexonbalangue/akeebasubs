@@ -201,5 +201,183 @@ class plgAkeebasubsFrontenduseraccess extends JPlugin{
 		}		
 		return $return;
 	}	
+	
+	/**
+	 * =========================================================================
+	 * !!! CRUFT WARNING !!!
+	 * =========================================================================
+	 * 
+	 * The following methods are leftovers from the Olden Days (before 2.4.5).
+	 * At some point (most likely 2.6) they will be removed. For now they will
+	 * stay here so that we can do a transparent migration.
+	 */
+	
+	/**
+	 * Moves this plugin's settings from the plugin into each subscription
+	 * level's configuration parameters.
+	 */
+	private function upgradeSettings(){
+	
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				$save = false;
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					$level->params = new stdClass();
+				}
+				if(array_key_exists($level->akeebasubs_level_id, $this->addGroups)) {
+					if(empty($level->params->frontenduseraccess_addgroups)) {
+						$level->params->frontenduseraccess_addgroups = $this->addGroups[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				if(array_key_exists($level->akeebasubs_level_id, $this->removeGroups)) {
+					if(empty($level->params->frontenduseraccess_removegroups)) {
+						$level->params->frontenduseraccess_removegroups = $this->removeGroups[$level->akeebasubs_level_id];
+						$save = true;
+					}
+				}
+				if($save) {
+					$level->params = json_encode($level->params);
+					$result = $model->setId($level->akeebasubs_level_id)->save( $level );
+				}
+			}
+		}
+		
+		// Remove the plugin parameters
+		$this->params->set('addgroups', '');
+		$this->params->set('removegroups', '');
+		$param_string = $this->params->toString();
+		
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->where($db->qn('type').'='.$db->q('plugin'))
+			->where($db->qn('element').'='.$db->q('frontenduseraccess'))
+			->where($db->qn('folder').'='.$db->q('akeebasubs'))
+			->set($db->qn('params').' = '.$db->q($param_string));
+		$db->setQuery($query);
+		$db->query();
+	}
+	
+	/**
+	 * Converts an Akeeba Subscriptions level to a numeric ID
+	 * 
+	 * @param $title string The level's name to be converted to an ID
+	 *
+	 * @return int The subscription level's ID or -1 if no match is found
+	 */
+	private function ASLevelToId($title){
+	
+		static $levels = null;
+		
+		// Don't process invalid titles
+		if(empty($title)) return -1;
+		
+		// Fetch a list of subscription levels if we haven't done so already
+		if(is_null($levels)) {
+			$levels = array();
+			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->getList();
+			if(count($list)) foreach($list as $level) {
+				$thisTitle = strtoupper($level->title);
+				$levels[$thisTitle] = $level->akeebasubs_level_id;
+			}
+		}
+		
+		$title = strtoupper($title);
+		if(array_key_exists($title, $levels)) {
+			// Mapping found
+			return($levels[$title]);
+		} elseif( (int)$title == $title ) {
+			// Numeric ID passed
+			return (int)$title;
+		} else {
+			// No match!
+			return -1;
+		}
+	}
+	
+	private function frontenduseraccessGroupToId($title){
+	
+		static $groups = null;
+		
+		if(empty($title)) return -1;
+		
+		if(is_null($groups)) {
+			$groups = array();
+			
+			$db = JFactory::getDBO();
+			$query = $db->getQuery(true)
+				->select(array(
+					$db->qn('name'),
+					$db->qn('id'),
+				))->from($db->qn('#__fua_usergroups'));
+			$db->setQuery($query);
+			$res = $db->loadObjectList();
+			
+			if(!empty($res)) {
+				foreach($res as $item) {
+					$t = strtoupper(trim($item->name));
+					$groups[$t] = $item->id;
+				}
+			}
+		}
 
+		$title = strtoupper(trim($title));
+		if(array_key_exists($title, $groups)) {
+			// Mapping found
+			return($groups[$title]);
+		} elseif( (int)$title == $title ) {
+			// Numeric ID passed
+			return (int)$title;
+		} else {
+			// No match!
+			return -1;
+		}
+	}	
+
+	private function parseGroups($rawData){
+	
+		if(empty($rawData)) return array();
+		
+		$ret = array();
+		
+		// Just in case something funky happened...
+		$rawData = str_replace("\\n", "\n", $rawData);
+		$rawData = str_replace("\r", "\n", $rawData);
+		$rawData = str_replace("\n\n", "\n", $rawData);
+		
+		$lines = explode("\n", $rawData);
+		
+		foreach($lines as $line) {
+			$line = trim($line);
+			$parts = explode('=', $line, 2);
+			if(count($parts) != 2) continue;
+			
+			$level = $parts[0];
+			$rawGroups = $parts[1];
+			
+			$groups = explode(',', $rawGroups);
+			if(empty($groups)) continue;
+			if(!is_array($groups)) $groups = array($groups);
+			
+			$levelId = $this->ASLevelToId($level);
+			$groupIds = array();
+			foreach($groups as $groupTitle) {
+				$groupIds[] = $this->frontenduseraccessGroupToId($groupTitle);
+			}
+			
+			$ret[$levelId] = $groupIds;
+		}
+		
+		return $ret;
+	}
 }

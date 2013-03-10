@@ -16,10 +16,10 @@ class AkeebasubsControllerUserinfos extends FOFController
 			'modelName'	=> 'AkeebasubsModelSubscribes'
 		);
 		$config = array_merge($config, $configOverride);
-		
+
 		parent::__construct($config);
 	}
-	
+
 	public function execute($task) {
 		// Only task browse and save are valid
 		$allowedTasks = array('browse', 'save');
@@ -27,19 +27,19 @@ class AkeebasubsControllerUserinfos extends FOFController
 		if(! in_array($task,$allowedTasks)) {
 			$task = 'browse';
 		}
-		
-		FOFInput::setVar('task',$task,$this->input);
-		
+
+		$this->input->set('task',$task,$this->input);
+
 		parent::execute($task);
 	}
 
 	/**
 	 * Initialize the user data
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function onBeforeBrowse()
-	{	
+	{
 		// Make sure there's a logged in user, or ask him to log in
 		if(JFactory::getUser()->guest) {
 			$returnURL = base64_encode(JFactory::getURI()->toString());
@@ -47,16 +47,16 @@ class AkeebasubsControllerUserinfos extends FOFController
 			$url = JRoute::_('index.php?option='.$comUsers.'&view=login&return='.$returnURL);
 			JFactory::getApplication()->redirect($url);
 		}
-		
+
 		$view = $this->getThisView();
 		$model = $this->getThisModel();
-		
+
 		// Get the user model and load the user data
 		$userparams = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id(JFactory::getUser()->id)
 				->getMergedData();
 		$view->assign('userparams', $userparams);
-		
+
 		$cache = (array)($model->getData());
 		if($cache['firstrun']) {
 			foreach($cache as $k => $v) {
@@ -69,13 +69,13 @@ class AkeebasubsControllerUserinfos extends FOFController
 		}
 		$view->assign('cache', (array)$cache);
 		$view->assign('validation', $model->getValidation());
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Always allow the currently logged in user to save his user data
-	 * 
+	 *
 	 * @return bool
 	 */
 	protected function onBeforeSave()
@@ -86,17 +86,17 @@ class AkeebasubsControllerUserinfos extends FOFController
 			return true;
 		}
 	}
-	
+
 	public function save() {
 		// CSRF prevention
 		if($this->csrfProtection) {
 			$this->_csrfProtection();
 		}
-		
+
 		// Set error message in case data won't be updated below
 		$msgType = 'error';
 		$msg = JText::_('COM_AKEEBASUBS_LBL_USERINFO_ERROR');
-		
+
 		// Is this a valid form?
 		$isValid = $this->getThisModel()->isValid();
 		if($isValid) {
@@ -110,13 +110,13 @@ class AkeebasubsControllerUserinfos extends FOFController
 				$msg = JText::_('COM_AKEEBASUBS_LBL_USERINFO_SAVED');
 			}
 		}
-		
+
 		// Try saving the user data
 		$result = $this->getThisModel()->updateUserInfo(false);
-		
+
 		// Redirect to the display task
 		$url = 'index.php?option=com_akeebasubs&view=userinfo';
 		$this->setRedirect($url, $msg, $msgType);
 	}
-	
+
 }

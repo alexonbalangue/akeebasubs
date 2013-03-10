@@ -19,16 +19,16 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, null, true);
-		
+
 		if(version_compare(JVERSION, '3.0', 'ge')) {
 			$cachechoice = $this->params->get('cachechoice', 0);
-		} else {	
+		} else {
 			$cachechoice = $this->params->getValue('cachechoice', 0);
 		}
-	
+
 		// Init the fields array which will be returned
 		$fields = array();
-		
+
 		// ----- AGREE TO TOS FIELD -----
 		// Get the current setting (or 0 if none)
 		if(array_key_exists('agreetotos', $cache['custom'])) {
@@ -71,12 +71,12 @@ class plgAkeebasubsAgreetotos extends JPlugin
 			'id'			=> 'agreetotos',
 			'label'			=> '* '.JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_AGREE_LABEL', $urlField),
 			'elementHTML'	=> $html,
-			'invalidLabel'	=> JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED'),
+			'invalidLabel'	=> JText::_('PLG_AKEEBASUBS_AGREETOTOS_ERR_REQUIRED'),
 			'isValid'		=> $current != 0
 		);
 		// Add the field to the return output
 		$fields[] = $field;
-		
+
 		// ----- ADD THE JAVASCRIPT -----
 		$javascript = <<<ENDJS
 (function($) {
@@ -99,11 +99,11 @@ class plgAkeebasubsAgreetotos extends JPlugin
 function plg_akeebasubs_agreetotos_fetch()
 {
 	var result = {};
-	
+
 	(function($) {
 		result.agreetotos = $('#agreetotos').val();
 	})(akeeba.jQuery);
-	
+
 	return result;
 }
 
@@ -126,25 +126,25 @@ function plg_akeebasubs_agreetotos_validate(response)
 ENDJS;
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
-		
+
 		// ----- RETURN THE FIELDS -----
 		return $fields;
 	}
-	
+
 	function onValidate($data)
 	{
 		$response = array(
 			'isValid'			=> true,
 			'custom_validation'	=> array()
 		);
-		
+
 		$custom = $data->custom;
-		
+
 		if(!array_key_exists('agreetotos',$custom)) $custom['agreetotos'] = 0;
-		
+
 		$response['custom_validation']['agreetotos'] = $custom['agreetotos'] != 0;
-		$response['valid'] = $response['custom_validation']['agreetotos']; 
-		
+		$response['valid'] = $response['custom_validation']['agreetotos'];
+
 		return $response;
 	}
 }

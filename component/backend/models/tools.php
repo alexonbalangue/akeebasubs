@@ -41,7 +41,7 @@ class AkeebasubsModelTools extends FOFModel
 	
 	private function scanConverters()
 	{
-		jimport('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.folder');
 		$folder = JPATH_COMPONENT_ADMINISTRATOR.'/converter';
 		$files = JFolder::files($folder, '.php', false, true, array('abstract.php','interface.php'));
 		

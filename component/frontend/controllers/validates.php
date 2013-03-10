@@ -14,22 +14,22 @@ class AkeebasubsControllerValidates extends FOFController
 		parent::__construct($config);
 		$this->setThisModelName('AkeebasubsModelSubscribes');
 		$this->csrfProtection = false;
-		
+
 		$this->cacheableTasks = array();
 	}
-	
+
 	public function execute($task) {
-		FOFInput::setVar('task','read',$this->input);
+		$this->input->set('task','read',$this->input);
 		$task = 'read';
 		parent::execute($task);
 	}
-	
+
 	public function read($cachable = false) {
 		$data = $this->getThisModel()
 			->action('validate')
 			->getValidation();
 		echo json_encode($data);
-		
+
 		JFactory::getApplication()->close();
 	}
 }

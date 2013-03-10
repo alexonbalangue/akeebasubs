@@ -47,7 +47,7 @@ $this->loadHelper('format');
 <div class="span6">
 	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_TITLE')?></h3>
 	
-	<?php jimport('joomla.user.user'); ?>
+	<?php JLoader::import('joomla.user.user'); ?>
 	
 	<div class="control-group">
 		<label for="userid_visible" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
@@ -157,7 +157,7 @@ $this->loadHelper('format');
 	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_CUSTOMPARAMS_TITLE')?></h3>
 
 	<?php
-	jimport('joomla.plugin.helper');
+	JLoader::import('joomla.plugin.helper');
 	JPluginHelper::importPlugin('akeebasubs');
 	$app = JFactory::getApplication();
 	$params = @json_decode($this->item->params);

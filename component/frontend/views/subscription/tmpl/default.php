@@ -13,7 +13,7 @@ $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
 
-jimport('joomla.utilities.date');
+JLoader::import('joomla.utilities.date');
 
 $jPublishUp = new JDate($this->item->publish_up);
 ?>

@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-jimport('joomla.plugin.plugin');
+JLoader::import('joomla.plugin.plugin');
 
 // PHP version check
 if(defined('PHP_VERSION')) {
@@ -31,7 +31,7 @@ if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
 }
 
 // Do not run if Akeeba Subscriptions is not enabled
-jimport('joomla.application.component.helper');
+JLoader::import('joomla.application.component.helper');
 if(!JComponentHelper::isEnabled('com_akeebasubs', true)) return;
 
 class plgContentAstimedrelease extends JPlugin
@@ -90,7 +90,7 @@ class plgContentAstimedrelease extends JPlugin
 			->paystate('C')
 			->getList(true);
 		if(empty($subs) || !count($subs)) return;
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$levelElapsed = array();
 		$levelDuration = array();
 		$now = new JDate();

@@ -10,6 +10,13 @@ defined('_JEXEC') or die();
 
 $this->loadHelper('cparams');
 ?>
+	<?php if ($this->needsdlid && AKEEBASUBS_PRO): ?>
+	<div class="alert alert-error">
+		<a class="close" data-dismiss="alert" href="#">×</a>
+		<?php echo JText::sprintf('COM_AKEEBASUBS_CPANEL_MSG_NEEDSDLID','https://www.akeebabackup.com/instructions/1518-akeeba-subscriptions-download-id.html'); ?>
+	</div>
+	<?php endif;?>
+
 	<?php if(JComponentHelper::getParams('com_akeebasubs')->get('show2copromo',1)): ?>
 	<div class="row-fluid">
 		<div class="well">
@@ -49,12 +56,12 @@ $this->loadHelper('cparams');
 	<?php endif; ?>
 
 	<div class="row-fluid">
-		
+
 		<div id="cpanel" class="span6">
-		<?php echo $this->loadTemplate('graphs'); ?>	
+		<?php echo $this->loadTemplate('graphs'); ?>
 		</div>
 
-		<div id="cpanel" class="span6">			
+		<div id="cpanel" class="span6">
 			<h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS')?></h3>
 			<table width="100%" class="table table-striped">
 				<tbody>

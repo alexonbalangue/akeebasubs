@@ -173,7 +173,7 @@
 		</copy>
 		
 		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
-			<fileset refid="componentcore" />
+			<fileset refid="component" />
 		</zipme>
 		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
 			<fileset dir="${dirs.modules}">
@@ -232,18 +232,35 @@
 
 	<target name="ftpdeploy" depends="git">
 		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
-		<echo>Uploading release</echo>
+		<echo>Uploading Core release</echo>
 		<ftpdeploy
 			host="${ftp.host}"
 			port="${ftp.port}"
 			username="${ftp.username}"
 			password="${ftp.password}"
-			dir="${ftp.dir}/akeebasubs/${git.lastrevision}"
+			dir="${ftp.dir}/dev/akeebasubs/${git.lastrevision}"
 			mode="${ftp.mode}"
 			passive="true"
 			level="debug">
 			<fileset dir="${dirs.release}">
 				<include name="com_akeebasubs-*-core.zip"/>
+			</fileset>			
+			<fileset dir="${dirs.root}">
+				<include name="CHANGELOG"/>
+			</fileset>			
+		</ftpdeploy>
+		<echo>Uploading Professional release</echo>
+		<ftpdeploy
+			host="${ftp.host}"
+			port="${ftp.port}"
+			username="${ftp.username}"
+			password="${ftp.password}"
+			dir="${ftp.dir}/dev/aksubspro/${git.lastrevision}"
+			mode="${ftp.mode}"
+			passive="true"
+			level="debug">
+			<fileset dir="${dirs.release}">
+				<include name="com_akeebasubs-*-pro.zip"/>
 			</fileset>			
 			<fileset dir="${dirs.root}">
 				<include name="CHANGELOG"/>

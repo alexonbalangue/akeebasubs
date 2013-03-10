@@ -11,22 +11,22 @@ class AkeebasubsControllerSubscribes extends FOFController
 {
 	public function __construct($config = array()) {
 		parent::__construct($config);
-		
+
 		$this->csrfProtection = false;
-		
+
 		$this->cacheableTasks = array();
 	}
-	
+
 	public function execute($task) {
 		$task = 'add';
-		
-		FOFInput::setVar('task',$task,$this->input);
+
+		$this->input->set('task',$task);
 		parent::execute($task);
 	}
-	
+
 	public function add() {
 		$id = $this->getThisModel()->getState('id',0,'int');
-		$slug = FOFInput::getString('slug',null,$this->input);
+		$slug = $this->input->getString('slug',null);
 		if(!$id && $slug) {
 			$item = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($slug)
@@ -35,7 +35,7 @@ class AkeebasubsControllerSubscribes extends FOFController
 				$id = $item->akeebasubs_level_id;
 			}
 		}
-		
+
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($id)->getItem();
 		if($level->only_once) {
 			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
@@ -48,7 +48,7 @@ class AkeebasubsControllerSubscribes extends FOFController
 			}
 		}
 		$this->getThisModel()->setState('id',$id);
-		
+
 		$result = $this->getThisModel()->createNewSubscription();
 		if($result) {
 			$view = $this->getThisView();
@@ -64,10 +64,10 @@ class AkeebasubsControllerSubscribes extends FOFController
 			return false;
 		}
 	}
-	
+
 	/**
 	 * I don't want an ACL check when creating a new subscription
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function onBeforeAdd() {

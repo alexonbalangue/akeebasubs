@@ -19,6 +19,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 	private $email_type = 'html';
 	private $double_optin = true;
 	private $send_welcome = false;
+	protected $customFields = array();
 	
 	public function __construct(& $subject, $config = array())
 	{
@@ -43,13 +44,39 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		// Do we have values from the Olden Days?
 		$strAddGroups = $configParams->addlists;
 		$strRemoveGroups = $configParams->removelists;
-
 		if(!empty($strAddGroups) || !empty($strAddGroups)) {
 			// Load level to group mapping from plugin parameters		
 			$this->addGroups = $this->parseGroups($strAddGroups);
 			$this->removeGroups = $this->parseGroups($strRemoveGroups);
 			// Do a transparent upgrade
 			$this->upgradeSettings($config);
+		}
+		
+		// Load custom fields
+		$this->loadCustomFieldsAssignments();
+	}
+	
+	protected function loadCustomFieldsAssignments()
+	{
+		$this->customFields = array();
+
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		$customFieldsKey = strtolower($this->name).'_customfields';
+		if(!empty($levels)) {
+			foreach($levels as $level) {
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					continue;
+				}
+				if(property_exists($level->params, $customFieldsKey)) {
+					$this->customFields[$level->akeebasubs_level_id] = array_filter($level->params->$customFieldsKey);
+				}
+			}
 		}
 	}
 	
@@ -60,6 +87,37 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		$removeLists = array();
 		$this->loadUserGroups($user_id, $addLists, $removeLists);
 		if(empty($addLists) && empty($removeLists)) return;
+		
+		// Find all custom fields to add
+		foreach($this->addGroups as $level => $lists) {
+			$customFields = $this->getCustomFields($level);
+			foreach($customFields as $fieldTitle => $fieldId) {
+				$customField = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+					->enabled(1)
+					->setId($fieldId)
+					->getItem();
+				// Loop through the lists in order to check if custom field exists as merge tag
+				foreach($lists as $list) {
+					$currentMergeTags = $this->mcApi->listMergeVars($list);
+					$mergeTagExists = false;
+					$customFieldSlug = strtoupper($customField->slug);
+					foreach($currentMergeTags as $currentMergeTag) {
+						$tag = strtoupper($currentMergeTag['tag']);
+						if($customFieldSlug == $tag) {
+							$mergeTagExists = true;
+							break;
+						}
+					}
+					// Create new merge tag
+					if(! $mergeTagExists) {
+						$this->mcApi->listMergeVarAdd(
+								$list,
+								$customFieldSlug,
+								$customField->title);
+					}
+				}
+			}
+		}
 		
 		// Get the user's name and email
 		$user = JUser::getInstance($user_id);
@@ -97,16 +155,52 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		
 		// Add to MailChimp list
 		if(!empty($addLists)) {
+			// Get custom field values of last subscription
+			$subs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				->user_id($user_id)
+				->getList();
+			$lastSubscription = $subs[0];
+			$params = json_decode($lastSubscription->userparams);
+			$customFieldsLastSub = $this->customFields[$lastSubscription->akeebasubs_level_id];
+			$subscriptionMergeVals = array();
+			foreach($customFieldsLastSub as $customFieldId) {
+				$customField = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+					->enabled(1)
+					->setId($customFieldId)
+					->getItem();
+				$customFieldSlug = $customField->slug;
+				$val = $params->$customFieldSlug;
+				if(! empty($val)) {
+					$subscriptionMergeVals[strtoupper($customFieldSlug)] = $val;
+				}
+			}
+		
+			// Add subscriber to lists
 			foreach($addLists as $mcListToAdd) {
 				if(! (is_array($currentLists) && in_array($mcListToAdd, $currentLists))) {
 					$mcSubscribeId = $user_id . ':' . $mcListToAdd;
 					if($session->get('mailchimp.' . $mcSubscribeId, '', 'com_akeebasubs') != 'new') {
 						// Subscribe if email is not already in the MailChimp list and
 						// if the subscription is not already sent for that user (but not confirmed yet)
+						$mergeVals = array(
+									'FNAME'		=> $firstName,
+									'LNAME'		=> $lastName
+									);
+						if(! empty($subscriptionMergeVals)) {
+							// Only add custom field values if it's for the same subscription level
+							$lists = $this->addGroups[$lastSubscription->akeebasubs_level_id];
+							foreach($lists as $list) {
+								if($list == $mcListToAdd) {
+									$mergeVals = array_merge($mergeVals, $subscriptionMergeVals);
+									break;
+								}
+							}	
+						}
+						// Subscribe to MC list
 						if($this->mcApi->listSubscribe(
 								$mcListToAdd,
 								$email,
-								array('FNAME' => $firstName, 'LNAME' => $lastName),
+								$mergeVals,
 								$this->email_type,
 								$this->double_optin,
 								true,
@@ -188,7 +282,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				->where($db->qn('folder').'='.$db->q('akeebasubs'))
 				->set($db->qn('params').' = '.$db->q($param_string));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 
@@ -218,5 +312,43 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		}
 		
 		return $groups;
+	}
+
+	protected function getCustomFields($level_id)
+	{
+		static $customFields = array();
+		
+		if(empty($customFields[$level_id])) {
+			$customFields[$level_id] = array();
+			$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+				->enabled(1)
+				->getItemList(true);
+			
+			// Loop through the items
+			foreach($items as $item) {
+				if($item->show == 'all' || $item->akeebasubs_level_id == $level_id) {
+					$customFields[$level_id][$item->title] = $item->akeebasubs_customfield_id;
+				}
+			}
+		}
+		
+		return $customFields[$level_id];
+	}
+
+	protected function getMergeTagSelectField($level)
+	{
+		$customFields = $this->getCustomFields($level->akeebasubs_level_id);
+		$options = array();
+		$options[] = JHTML::_('select.option','',JText::_('PLG_AKEEBASUBS_' . strtoupper($this->name) . '_NONE'));
+		foreach($customFields as $title => $id) {
+			$options[] = JHTML::_('select.option',$id,$title);
+		}
+		// Set pre-selected values
+		$selected = array();
+		if(! empty($this->customFields[$level->akeebasubs_level_id])) {
+			$selected = $this->customFields[$level->akeebasubs_level_id];
+		}
+		// Create the select field
+		return JHtmlSelect::genericlist($options, 'params[' . strtolower($this->name) . '_customfields][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
 	}
 }

@@ -67,7 +67,7 @@ class plgAkpaymentEpaydk extends plgAkpaymentAbstract
 			'postback'			=> JURI::base() . 'index.php?option=com_akeebasubs&view=callback&paymentmethod=epaydk',
 			'orderid'			=> $subscription->akeebasubs_subscription_id,
 			'currency'			=> strtoupper(AkeebasubsHelperCparams::getParam('currency', 'EUR')),
-			'amount'			=> (($subscription->net_amount + $subscription->tax_amount) * 100),		// Epay calculates in minor amounts, and doesn't support tax differentation
+			'amount'			=> ($subscription->gross_amount * 100),		// Epay calculates in minor amounts, and doesn't support tax differentation
 			'cardtypes'			=> implode(',', $this->params->get('cardtypes', array())),
 			'instantcapture'	=> '1',
 			'instantcallback'	=> '1',
@@ -104,7 +104,7 @@ class plgAkpaymentEpaydk extends plgAkpaymentAbstract
 	
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		// Check if we're supposed to handle this
 		if ($paymentmethod != $this->ppName) return false;
@@ -273,7 +273,7 @@ if (isset($_GET["error"])) {
 			'enabled'						=> 0
 		);
 		
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if ($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 		}
@@ -304,7 +304,7 @@ if (isset($_GET["error"])) {
 		*/
 		
 		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(

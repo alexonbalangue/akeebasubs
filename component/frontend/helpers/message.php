@@ -15,31 +15,35 @@ class AkeebasubsHelperMessage
 	/**
 	 * Pre-processes the message text in $text, replacing merge tags with those
 	 * fetched based on subscription $sub
-	 * 
+	 *
 	 * @param   string  $text    The message to process
 	 * @param   AkeebasubsTableSubscription  $sub  A subscription object
-	 * 
+	 *
 	 * @return  string  The processed string
 	 */
 	public static function processSubscriptionTags($text, $sub, $extras = array())
 	{
 		// Get the user object for this subscription
 		$user = JFactory::getUser($sub->user_id);
-		
+
 		// Get the extra user parameters object for the subscription
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($sub->user_id)
 			->getFirstItem();
-		
+
 		// Get the subscription level
 		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->getItem($sub->akeebasubs_level_id);
-		
+
 		// Merge the user objects
 		$userdata = array_merge((array)$user, (array)($kuser->getData()));
-		
+
 		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
-		$subData = (array)($sub->getData());
+		if($sub instanceof AkeebasubsTableSubscription) {
+			$subData = (array)($sub->getData());
+		} else {
+			$subData = (array)$sub;
+		}
 		foreach($subData as $k => $v) {
 			if(is_array($v) || is_object($v)) continue;
 			if(substr($k,0,1) == '_') continue;
@@ -51,7 +55,7 @@ class AkeebasubsHelperMessage
 			}
 			$text = str_replace($tag, $v, $text);
 		}
-		
+
 		// Create and replace merge tags for the subscription level. Format [LEVEL:KEYNAME]
 		$levelData = (array)($level->getData());
 		foreach($levelData as $k => $v) {
@@ -81,7 +85,7 @@ class AkeebasubsHelperMessage
 				$text = str_replace($tag, $v, $text);
 			}
 		}
-		
+
 		// Create and replace merge tags for user data. Format [USER:KEYNAME]
 		foreach($userdata as $k => $v) {
 			if(is_object($v) || is_array($v)) continue;
@@ -90,7 +94,7 @@ class AkeebasubsHelperMessage
 			$tag = '[USER:'.strtoupper($k).']';
 			$text = str_replace($tag, $v, $text);
 		}
-		
+
 		// Create and replace merge tags for custom fields data. Format [CUSTOM:KEYNAME]
 		if(array_key_exists('params', $userdata)) {
 			if(is_string($userdata['params'])) {
@@ -109,7 +113,7 @@ class AkeebasubsHelperMessage
 				$text = str_replace($tag, $v, $text);
 			}
 		}
-		
+
 		// Extra variables replacement
 		// -- Get the site name
 		$config = JFactory::getConfig();
@@ -118,22 +122,22 @@ class AkeebasubsHelperMessage
 		} else {
 			$sitename = $config->getValue('config.sitename');
 		}
-		
+
 		// -- First/last name
 		$fullname = $user->name;
 		$nameParts = explode(' ',$fullname, 2);
 		$firstname = array_shift($nameParts);
 		$lastname = !empty($nameParts) ? array_shift($nameParts) : '';
-		
+
 		// -- Get the subscription level
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($sub->akeebasubs_level_id)
 			->getItem();
-		
+
 		// -- Site URL
 		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
 		if($isCli) {
-			jimport('joomla.application.component.helper');
+			JLoader::import('joomla.application.component.helper');
 			$baseURL = JComponentHelper::getParams('com_akeebasubs')->get('siteurl','http://www.example.com');
 			$temp = str_replace('http://', '', $baseURL);
 			$temp = str_replace('https://', '', $temp);
@@ -145,7 +149,7 @@ class AkeebasubsHelperMessage
 		}
 		$baseURL = str_replace('/administrator', '', $baseURL);
 		$subpathURL = str_replace('/administrator', '', $subpathURL);
-		
+
 		// -- My Subscriptions URL
 		if($isAdmin || $isCli) {
 			$url = 'index.php?option=com_akeebasubs&view=subscriptions&layout=default';
@@ -156,7 +160,7 @@ class AkeebasubsHelperMessage
 		$subpathURL = ltrim($subpathURL, '/');
 		if(substr($url,0,strlen($subpathURL)+1) == "$subpathURL/") $url = substr($url,strlen($subpathURL)+1);
 		$mysubsurl = rtrim($baseURL,'/').'/'.ltrim($url,'/');
-		
+
 		$currency = '';
 		if (!class_exists('AkeebasubsHelperCparams'))
 		{
@@ -166,15 +170,15 @@ class AkeebasubsHelperMessage
 		{
 			$currency = AkeebasubsHelperCparams::getParam('currencysymbol','€');
 		}
-		
+
 		// Dates
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jFrom = new JDate($sub->publish_up);
 		$jTo = new JDate($sub->publish_down);
-		
+
 		// Download ID
 		$dlid = md5($user->id . $user->username . $user->password);
-		
+
 		// User's state, human readable
 		$formatted_state = '';
 		$state = $kuser->state;
@@ -186,7 +190,7 @@ class AkeebasubsHelperMessage
 			}
 			$formatted_state = AkeebasubsHelperSelect::formatState($state);
 		}
-		
+
 		// -- The actual replacement
 		$extras = array_merge(array(
 			"\\n"					=> "\n",
@@ -214,19 +218,24 @@ class AkeebasubsHelperMessage
 			'[$]'					=> $currency,
 			'[DLID]'				=> $dlid,
 			'[USER:STATE_FORMATTED]'=> $formatted_state,
+			// Legacy keys
+			'[NAME]'				=> $firstname,
+			'[STATE]'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$sub->state),
+			'[FROM]'				=> $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
+			'[TO]'			=> $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
 		), $extras);
 		foreach ($extras as $key => $value)
 		{
 			$text = str_replace($key, $value, $text);
 		}
-		
+
 		return $text;
 	}
-	
+
 	/**
 	 * Processes the language merge tags ([IFLANG langCode], [/IFLANG]) in some
 	 * block of text.
-	 * 
+	 *
 	 * @param string $text The text to process
 	 * @param string $lang Which language to keep. Null means the default language.
 	 */
@@ -235,7 +244,7 @@ class AkeebasubsHelperMessage
 		// Get the default language
 		if(empty($lang)) {
 			$enableTranslation = JFactory::getApplication()->getLanguageFilter();
-			
+
 			if($enableTranslation) {
 				$lang = JFactory::getLanguage()->getTag();
 			} else {
@@ -245,7 +254,7 @@ class AkeebasubsHelperMessage
 				} else {
 					$params = $user->params;
 					if(!is_object($params)) {
-						jimport('joomla.registry.registry');
+						JLoader::import('joomla.registry.registry');
 						$params = new JRegistry($params);
 					}
 					if(version_compare(JVERSION, '3.0', 'ge')) {
@@ -259,7 +268,7 @@ class AkeebasubsHelperMessage
 				}
 			}
 		}
-		
+
 		// Find languages
 		$translations = array();
 		while(strpos($text, '[IFLANG ') !== false)
@@ -270,7 +279,7 @@ class AkeebasubsHelperMessage
 			$langCode = substr($text,$start+8,$langEnd-$start-8);
 			$langText = substr($text, $langEnd+1, $end-$langEnd-1);
 			$translations[$langCode] = $langText;
-			
+
 			if($start > 0) {
 				$temp = substr($text, 0, $start-1);
 			} else {
@@ -284,9 +293,9 @@ class AkeebasubsHelperMessage
 				$translations['*'] = $text;
 			}
 		}
-		
+
 		$siteLang = JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
-		
+
 		if(array_key_exists($lang, $translations)) {
 			return $translations[$lang];
 		} elseif(array_key_exists($siteLang, $translations)) {
@@ -296,6 +305,6 @@ class AkeebasubsHelperMessage
 		} else {
 			return $text;
 		}
-		
+
 	}
 }

@@ -44,7 +44,7 @@ class plgAkeebasubsVm2 extends plgAkeebasubsAbstract
 				->where($db->qn('virtuemart_user_id').' = '.$db->q($user_id))
 				->where($db->qn('virtuemart_shoppergroup_id').' IN ('.implode(', ', $groupSet).')');
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 			
 			// 2. Add new assignments with a big INSERT query
 			$query = $db->getQuery(true)
@@ -59,7 +59,7 @@ class plgAkeebasubsVm2 extends plgAkeebasubsAbstract
 			}
 			
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 		
 		// Remove from VM shopper groups
@@ -74,7 +74,7 @@ class plgAkeebasubsVm2 extends plgAkeebasubsAbstract
 			
 			$query->where($db->qn('virtuemart_shoppergroup_id').' IN ('.implode(', ', $groupSet).')');
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 	

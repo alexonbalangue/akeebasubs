@@ -19,18 +19,18 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 	 * user information from additional sources and return them in an array.
 	 * The values in the array will replace the values stored in the user's
 	 * profile.
-	 * 
+	 *
 	 * @param object $userData The already fetched user information
-	 * 
+	 *
 	 * @return array A key/value array with user information overrides
 	 */
 	public function onAKUserGetData($userData)
 	{
 		if(empty($userData->username)) return array();
 		$user_id = JFactory::getUser($userData->username)->id;
-		
+
 		$db = JFactory::getDbo();
-		
+
 		// Load existing #__user_profiles records
 		$query = $db->getQuery(true)
 			->select(array(
@@ -41,22 +41,22 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			->where($db->qn('user_id') . '=' . $db->q($user_id));
 		$db->setQuery($query);
 		$rows = $db->loadRowList(0);
-		
+
 		// If we don't have profile records just quit
 		if (empty($rows))
 		{
 			return array();
 		}
-		
+
 		// Initialise return value
 		$ret = array();
-		
+
 		// Make sure the select helper is loaded
 		if(!class_exists('AkeebasubsHelperSelect'))
 		{
 			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
 		}
-		
+
 		// Special case: country
 		if (isset($rows['profile.country']))
 		{
@@ -71,7 +71,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			}
 			$rows['profile.country'][1] = json_encode($country);
 		}
-		
+
 		// Special case: region
 		if (isset($rows['profile.region']))
 		{
@@ -84,8 +84,9 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				$country = 'US';
 			}
 			$state = json_decode($rows['profile.region'][1]);
-			$states = AkeebasubsHelperSelect::$countries[$country];
-			
+			$cname = AkeebasubsHelperSelect::$countries[$country];
+			$states = AkeebasubsHelperSelect::$states[$cname];
+
 			if(in_array($state, $states))
 			{
 				$state = array_search($state, $states);
@@ -96,9 +97,31 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			}
 			$rows['profile.region'][1] = json_encode($state);
 		}
-		
+
+		// Special case: state
+		if (isset($rows['profile.region']))
+		{
+			if (isset($rows['profile.country']))
+			{
+				$country = json_decode($rows['profile.country'][1]);
+			}
+			else
+			{
+				$country = 'US';
+			}
+			$state = json_decode($rows['profile.state'][1], true);
+			$cname = AkeebasubsHelperSelect::$countries[$country];
+			$states = AkeebasubsHelperSelect::$states[$cname];
+
+			if(in_array($state, $states))
+			{
+				$state = array_search($state, $states);
+				$ret['state'] = $state;
+			}
+		}
+
 		// Check for basic information
-		$basic_keys = array('isbusiness', 'businessname', 'occupation', 'vatnumber', 'viesregistered', 'taxauthority', 'address1', 'address2', 'city', 'state', 'zip', 'country');
+		$basic_keys = array('isbusiness', 'businessname', 'occupation', 'vatnumber', 'viesregistered', 'taxauthority', 'address1', 'address2', 'city', 'zip', 'country');
 		foreach($basic_keys as $key)
 		{
 			if(isset($rows['profile.'.$key]))
@@ -107,14 +130,14 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				unset($rows['profile.'.$key]);
 			}
 		}
-		
+
 		// Special case: tos must be renamed to agreetotos
 		if (isset($rows['profile.tos']))
 		{
 			$rows['akeebasubs.agreetotos'] = $rows['profile.tos'];
 			unset($rows['tos']);
 		}
-		
+
 		// The rest of the records is treated as extra fields
 		$params = array();
 		if (!empty($rows))
@@ -130,30 +153,30 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			}
 		}
 		$ret['params'] = $params;
-		
+
 		// Return result
 		return $ret;
 	}
-	
+
 	/**
 	 * This method is called whenever Akeeba Subscriptions is updating the user
 	 * record with new information, either during sign-up or when you manually
 	 * update this information in the back-end.
-	 * 
+	 *
 	 * In this plugin, it does nothing, but it serves as an example for any
 	 * developer interested in creating, for example, a "bridge" with a social
 	 * component like Community Builder or JomSocial.
-	 * 
+	 *
 	 * @param AkeebasubsTableUser $userData The user data
 	 */
 	public function onAKUserSaveData($userData)
 	{
 		// Get the user ID
 		$user_id = $userData->user_id;
-		
+
 		// Initialise the data array
 		$data = $userData->getData();
-		
+
 		// Remove the params field
 		$params = array();
 		if (isset($data['params']))
@@ -169,7 +192,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			}
 			unset($data['params']);
 		}
-		
+
 		// Remove some fields which must not be saved
 		foreach (array('akeebasubs_user_id', 'user_id', 'notes') as $key)
 		{
@@ -178,7 +201,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				unset($data[$key]);
 			}
 		}
-		
+
 		// Transalte country and state
 		if(!class_exists('AkeebasubsHelperSelect'))
 		{
@@ -192,14 +215,14 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		{
 			$data['country'] = AkeebasubsHelperSelect::formatCountry($data['country']);
 		}
-		
+
 		// Convert basic data
 		foreach(array_keys($data) as $key)
 		{
 			$data['profile.'.$key] = json_encode($data[$key]);
 			unset($data[$key]);
 		}
-				
+
 		// Explode the params field (unless it's an array or object)
 		if (!empty($params))
 		{
@@ -208,10 +231,10 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				$data['akeebasubs.'.$k] = json_encode($v);
 			}
 		}
-		
+
 		$db = JFactory::getDbo();
 		$result = true;
-		
+
 		// Loop through all keys, check if they already exist and create/replace them
 		if (count($data))
 		{
@@ -225,7 +248,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 					->where($db->qn('profile_key') . '=' . $db->q($k));
 				$db->setQuery($query);
 				$existing = $db->loadObject();
-				
+
 				if (is_object($existing))
 				{
 					// The record exists. Delete it.
@@ -234,9 +257,9 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 						->where($db->qn('user_id') . '=' . $db->q($user_id))
 						->where($db->qn('profile_key') . '=' . $db->q($k));
 					$db->setQuery($query);
-					$db->query();
+					$db->execute();
 				}
-				
+
 				// Insert the new record
 				$o = array(
 					'user_id'		=> $user_id,
@@ -245,11 +268,11 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 					'ordering'		=> 1
 				);
 				$o = (object)$o;
-				
+
 				$result = $result && $db->insertObject('#__user_profiles', $o);
 			}
 		}
-		
+
 		return $result;
 	}
 }

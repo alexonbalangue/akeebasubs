@@ -226,7 +226,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 					->where($db->qn('user_id').' = '.$db->q($user_id))
 					->where($db->qn('rank_id').' != '.$db->q($rank_id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			} else {
 				// Insert new rank
 				$query = $db->getQuery(true)
@@ -241,7 +241,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 						. $db->q($time)
 					);
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -253,7 +253,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 					->where($db->qn('rank_id') . ' = ' . $db->q($rank_id))
 					->where($db->qn('user_id') . ' = ' . $db->q($user_id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}	
 		}
 		
@@ -283,7 +283,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 						. $db->q('1')
 					);
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -295,7 +295,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 				->where($db->qn('badge_id') . ' = ' . $db->q($badge_id))
 				->where($db->qn('user_id') . ' = ' . $db->q($user_id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 		
 	}
@@ -449,7 +449,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 				->where($db->qn('folder').'='.$db->q('akeebasubs'))
 				->set($db->qn('params').' = '.$db->q($param_string));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 	

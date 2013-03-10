@@ -22,8 +22,8 @@
 // no direct access
 defined('_JEXEC') or die();
 
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+JLoader::import('joomla.filesystem.folder');
+JLoader::import('joomla.filesystem.file');
 
 class Com_AkeebasubsInstallerScript
 {
@@ -336,8 +336,8 @@ class Com_AkeebasubsInstallerScript
 	{
 		$src = $parent->getParent()->getPath('source');
 		
-		jimport("joomla.filesystem.file");
-		jimport("joomla.filesystem.folder");
+		JLoader::import("joomla.filesystem.file");
+		JLoader::import("joomla.filesystem.folder");
 		
 		if(empty($this->akeebaCliScripts)) {
 			return;
@@ -520,7 +520,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__assets')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		// Fix broken #__extensions records
@@ -535,7 +535,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__extensions')
 				->where($db->qn('extension_id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		// Fix broken #__menu records
@@ -552,7 +552,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__menu')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 	
@@ -579,7 +579,7 @@ class Com_AkeebasubsInstallerScript
 				$query->delete('#__extensions')
 					->where($db->qn('extension_id').' = '.$db->q($id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 		
@@ -601,7 +601,7 @@ class Com_AkeebasubsInstallerScript
 				$query->delete('#__assets')
 					->where($db->qn('id').' = '.$db->q($id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -630,7 +630,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__menu')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 
@@ -696,7 +696,7 @@ class Com_AkeebasubsInstallerScript
 							$sql->set($db->qn('published').' = '.$db->q('1'));
 						}
 						$db->setQuery($sql);
-						$db->query();
+						$db->execute();
 						
 						// B. Change the ordering of back-end modules to 1 + max ordering
 						if($folder == 'admin') {
@@ -713,7 +713,7 @@ class Com_AkeebasubsInstallerScript
 								->set($db->qn('ordering').' = '.$db->q($position))
 								->where($db->qn('module').' = '.$db->q('mod_'.$module));
 							$db->setQuery($query);
-							$db->query();
+							$db->execute();
 						}
 						
 						// C. Link to all pages
@@ -778,7 +778,7 @@ class Com_AkeebasubsInstallerScript
 							->where($db->qn('element').' = '.$db->q($plugin))
 							->where($db->qn('folder').' = '.$db->q($folder));
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 			}
@@ -795,7 +795,7 @@ class Com_AkeebasubsInstallerScript
 	 */
 	private function _uninstallSubextensions($parent)
 	{
-		jimport('joomla.installer.installer');
+		JLoader::import('joomla.installer.installer');
 		
 		$db = JFactory::getDBO();
 		
@@ -869,7 +869,7 @@ class Com_AkeebasubsInstallerScript
 	private function _removeObsoleteFilesAndFolders($akeebaRemoveFiles)
 	{
 		// Remove files
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		if(!empty($akeebaRemoveFiles['files'])) foreach($akeebaRemoveFiles['files'] as $file) {
 			$f = JPATH_ROOT.'/'.$file;
 			if(!JFile::exists($f)) continue;
@@ -877,7 +877,7 @@ class Com_AkeebasubsInstallerScript
 		}
 
 		// Remove folders
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		if(!empty($akeebaRemoveFiles['folders'])) foreach($akeebaRemoveFiles['folders'] as $folder) {
 			$f = JPATH_ROOT.'/'.$folder;
 			if(!JFolder::exists($f)) continue;
@@ -890,9 +890,9 @@ class Com_AkeebasubsInstallerScript
 		$src = $parent->getParent()->getPath('source');
 		
 		// Install the FOF framework
-		jimport('joomla.filesystem.folder');
-		jimport('joomla.filesystem.file');
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.file');
+		JLoader::import('joomla.utilities.date');
 		$source = $src.'/fof';
 		if(!defined('JPATH_LIBRARIES')) {
 			$target = JPATH_ROOT.'/libraries/fof';
@@ -977,9 +977,9 @@ class Com_AkeebasubsInstallerScript
 		$src = $parent->getParent()->getPath('source');
 		
 		// Install the FOF framework
-		jimport('joomla.filesystem.folder');
-		jimport('joomla.filesystem.file');
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.file');
+		JLoader::import('joomla.utilities.date');
 		$source = $src.'/strapper';
 		$target = JPATH_ROOT.'/media/akeeba_strapper';
 
@@ -1096,7 +1096,7 @@ class Com_AkeebasubsInstallerScript
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}
@@ -1107,7 +1107,7 @@ class Com_AkeebasubsInstallerScript
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}
@@ -1118,7 +1118,7 @@ class Com_AkeebasubsInstallerScript
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}

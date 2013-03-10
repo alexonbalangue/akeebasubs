@@ -13,7 +13,7 @@ class AkeebasubsModelInvoices extends FOFModel
 	private function getFilterValues()
 	{
 		$enabled = $this->getState('enabled','','cmd');
-		
+
 		return (object)array(
 			// Default filters
 			'akeebasubs_subscription_id'	=> $this->getState('akeebasubs_subscription_id', null, 'int'),
@@ -27,7 +27,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			'btxt'			=> $this->getState('btxt', null, 'string'),
 			'filename'		=> $this->getState('filename', null, 'string'),
 			'sent_on'		=> $this->getState('sent_on', null, 'string'),
-			
+
 			// Custom filters
 			'user_id'		=> $this->getState('user_id', null, 'int'),
 			'user'			=> $this->getState('user', null, 'string'),
@@ -38,7 +38,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			'invoice_date_after' => $this->getState('invoice_date_after', null, 'string'),
 		);
 	}
-	
+
 	protected function _buildQueryJoins(&$query)
 	{
 		$db = $this->getDbo();
@@ -54,7 +54,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->qn('s').'.'.$db->qn('user_id'))
 		;
 	}
-	
+
 	protected function _buildQueryColumns(&$query)
 	{
 		$db = $this->getDbo();
@@ -87,14 +87,14 @@ class AkeebasubsModelInvoices extends FOFModel
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 		$query->order($order.' '.$dir);
 	}
-	
+
 	protected function _buildQueryWhere($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
-		
-		jimport('joomla.utilities.date');
-		
+
+		JLoader::import('joomla.utilities.date');
+
 		if (is_numeric($state->akeebasubs_subscription_id) && ($state->akeebasubs_subscription_id > 0))
 		{
 			$query->where(
@@ -123,7 +123,7 @@ class AkeebasubsModelInvoices extends FOFModel
 				);
 			}
 		}
-		
+
 		if (!empty($state->extension))
 		{
 			$query->where(
@@ -131,7 +131,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->q($state->extension)
 			);
 		}
-		
+
 		if (!empty($state->invoice_number))
 		{
 			// Unified invoice / display number search
@@ -171,7 +171,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->q('%'.$state->html.'%')
 			);
 		}
-		
+
 		if (!empty($state->atxt))
 		{
 			$query->where(
@@ -179,7 +179,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->q('%'.$state->atxt.'%')
 			);
 		}
-		
+
 		if (!empty($state->btxt))
 		{
 			$query->where(
@@ -187,7 +187,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->q('%'.$state->btxt.'%')
 			);
 		}
-		
+
 		if (!empty($state->filename))
 		{
 			$query->where(
@@ -195,7 +195,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->q('%'.$state->filename.'%')
 			);
 		}
-		
+
 		if (is_numeric($state->user_id) && $state->user_id)
 		{
 			$query->where(
@@ -203,7 +203,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->q((int)$state->user_id)
 			);
 		}
-		
+
 		if (!empty($state->user))
 		{
 			$search = '%'.$state->user.'%';
@@ -212,7 +212,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					$db->q($search)
 			);
 		}
-		
+
 		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 		if (!empty($state->invoice_date) && preg_match($regex, $state->invoice_date))
 		{
@@ -220,7 +220,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			$jFrom->setTime(0, 0, 0);
 			$jTo = clone $jFrom;
 			$jTo->setTime(23,59,59);
-			
+
 			$query->where(
 				$db->qn('invoice_date') . ' BETWEEN ' . $db->q($jFrom->toSql()) .
 				' AND ' . $db->q($jTo->toSql())
@@ -239,14 +239,14 @@ class AkeebasubsModelInvoices extends FOFModel
 				$query->where($db->qn('invoice_date') . ' >= ' . $db->q($jDate->toSql()));
 			}
 		}
-		
+
 		if (!empty($state->sent_on) && preg_match($regex, $state->sent_on))
 		{
 			$jFrom = JFactory::getDate($state->sent_on);
 			$jFrom->setTime(0, 0, 0);
 			$jTo = clone $jFrom;
 			$jTo->setTime(23,59,59);
-			
+
 			$query->where(
 				$db->qn('sent_on') . ' BETWEEN ' . $db->q($jFrom->toSql()) .
 				' AND ' . $db->q($jTo->toSql())
@@ -266,23 +266,23 @@ class AkeebasubsModelInvoices extends FOFModel
 			}
 		}
 	}
-	
+
 	public function buildQuery($overrideLimits = false)
 	{
 		$db = $this->getDbo();
 		$query = $db->getQuery(true)
 			->from($db->qn('#__akeebasubs_invoices').' AS '.$db->qn('tbl'));
-		
+
 		$this->_buildQueryColumns($query);
 		$this->_buildQueryJoins($query);
 		$this->_buildQueryWhere($query);
-		
+
 		return $query;
 	}
-	
+
 	/**
 	 * Create or update an invoice from a subscription
-	 * 
+	 *
 	 * @param   object  $sub  The subscription record
 	 */
 	public function createInvoice($sub)
@@ -295,9 +295,9 @@ class AkeebasubsModelInvoices extends FOFModel
 			->where($db->qn('akeebasubs_subscription_id').' = '.$db->q($sub->akeebasubs_subscription_id));
 		$db->setQuery($query);
 		$invoiceRecord = $db->loadObject();
-		
+
 		$existingRecord = is_object($invoiceRecord);
-		
+
 		$invoiceData = array();
 
 		// Preload helper classes
@@ -313,8 +313,8 @@ class AkeebasubsModelInvoices extends FOFModel
 		{
 			require_once JPATH_ROOT . '/components/com_akeebasubs/helpers/message.php';
 		}
-		
-		
+
+
 		// Get the configuration variables
 		if (!$existingRecord)
 		{
@@ -323,9 +323,11 @@ class AkeebasubsModelInvoices extends FOFModel
 				'akeebasubs_subscription_id'	=> $sub->akeebasubs_subscription_id,
 				'extension'						=> 'akeebasubs',
 				'invoice_date'					=> $jInvoiceDate->toSql(),
-				'enabled'						=> 1
+				'enabled'						=> 1,
+				'created_on'					=> $jInvoiceDate->toSql(),
+				'created_by'					=> $sub->user_id,
 			);
-			
+
 			$numberFormat = AkeebasubsHelperCparams::getParam('invoice_number_format', '[N:5]');
 			$numberOverride = AkeebasubsHelperCparams::getParam('invoice_override', 0);
 
@@ -339,24 +341,24 @@ class AkeebasubsModelInvoices extends FOFModel
 			{
 				// Get the new invoice number by adding one to the previous number
 				$query = $db->getQuery(true)
-					->select('invoice_no')
+					->select($db->qn('invoice_no'))
 					->from($db->qn('#__akeebasubs_invoices'))
 					->where($db->qn('extension').' = '.$db->q('akeebasubs'))
-					->order($db->q('created_on').' DESC');
+					->order($db->qn('created_on').' DESC');
 				$db->setQuery($query, 0, 1);
-				$invoice_no = $db->loadResult();
-				
+				$invoice_no = (int) $db->loadResult();
+
 				if (empty($invoice_no))
 				{
 					$invoice_no = 0;
 				}
-				
+
 				$invoice_no++;
 			}
-			
+
 			// Parse the invoice number
 			$formated_invoice_no = $this->formatInvoiceNumber($numberFormat, $invoice_no, $jInvoiceDate->toUnix());
-			
+
 			// Add the invoice number (plain and formatted) to the record
 			$invoiceData['invoice_no'] = $invoice_no;
 			$invoiceData['display_number'] = $formated_invoice_no;
@@ -376,13 +378,13 @@ class AkeebasubsModelInvoices extends FOFModel
 				$formated_invoice_no = $invoice_no;
 			}
 			$jInvoiceDate = JFactory::getDate($invoiceRecord->invoice_date);
-			
+
 			$invoiceData = (array)$invoiceRecord;
 		}
-		
+
 		// Get the template
 		$template = $this->findTemplate($sub->akeebasubs_level_id);
-		
+
 		// Get the custom variables
 		$vat_notice = '';
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
@@ -404,12 +406,12 @@ class AkeebasubsModelInvoices extends FOFModel
 			'[INV:INVOICE_DATE_EU]'		=> $jInvoiceDate->format('d/m/Y', true),
 			'[INV:INVOICE_DATE_USA]'	=> $jInvoiceDate->format('m/d/Y', true),
 			'[INV:INVOICE_DATE_JAPAN]'	=> $jInvoiceDate->format('Y/m/d', true),
-			'[VAT_NOTICE]'				=> $vat_notice,			
+			'[VAT_NOTICE]'				=> $vat_notice,
 		);
-		
+
 		// Render the template into HTML
 		$invoiceData['html'] = AkeebasubsHelperMessage::processSubscriptionTags($template, $sub, $extras);
-		
+
 		// Save the record
 		if($existingRecord)
 		{
@@ -421,37 +423,37 @@ class AkeebasubsModelInvoices extends FOFModel
 			$o = (object)$invoiceData;
 			$db->insertObject('#__akeebasubs_invoices', $o);
 		}
-		
+
 		// Set up the return value
 		$ret = $invoice_no;
 		$this->setId($sub->akeebasubs_subscription_id);
-		
+
 		// Create PDF
 		$this->createPDF();
-		
+
 		// Update subscription record with the invoice number
 		$updates = array(
 			'akeebasubs_invoice_id'	=> $invoice_no
 		);
 		$sub->save($updates);
-		
+
 		// If auto-send is enabled, send the invoice by email
 		$autoSend = AkeebasubsHelperCparams::getParam('invoice_autosend', 1);
 		if ($autoSend)
 		{
 			$this->emailPDF();
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Formats an invoice number
-	 * 
+	 *
 	 * @param   string   $numberFormat  The invoice number format
 	 * @param   integer  $invoice_no    The plain invoice number
 	 * @param   integer  $timestamp     Optional timestamp, otherwise uses current timestamp
-	 * 
+	 *
 	 * @return  string  The formatted invoice number
 	 */
 	public function formatInvoiceNumber($numberFormat, $invoice_no, $timestamp = null)
@@ -466,7 +468,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			{
 				$tokens[] = array('s', substr($formatstring, 0, $start));
 			}
-			
+
 			$end = strpos($formatstring, ']', $start);
 			if ($end == false)
 			{
@@ -481,10 +483,10 @@ class AkeebasubsModelInvoices extends FOFModel
 				$parts = explode(':', $innerContent, 2);
 				$tokens[] = array(strtolower($parts[0]), $parts[1]);
 			}
-			
+
 			$start = strpos($formatstring, "[");
 		}
-		
+
 		// Parse the tokens
 		if (empty($timestamp))
 		{
@@ -511,21 +513,21 @@ class AkeebasubsModelInvoices extends FOFModel
 					break;
 			}
 		}
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Find and return an invoice template based on the subscription level ID
-	 * 
+	 *
 	 * @param   integer  $level_id  The susbcription level ID
-	 * 
+	 *
 	 * @return  object  The invoice template record
 	 */
 	private function findTemplate($level_id)
 	{
 		$ret = '';
-		
+
 		// Load all enabled templates and check their levels
 		$db = $this->getDbo();
 		$query = $db->getQuery(true)
@@ -538,7 +540,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			->order($db->qn('ordering').' DESC');
 		$db->setQuery($query);
 		$templates = $db->loadObjectList();
-		
+
 		if (!empty($templates))
 		{
 			foreach ($templates as $template)
@@ -560,29 +562,29 @@ class AkeebasubsModelInvoices extends FOFModel
 					// Check if our level is included
 					$found = in_array($level_id, $levels);
 				}
-				
+
 				if (!$found)
 				{
 					continue;
 				}
-				
+
 				$ret = $template->template;
 			}
 		}
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Create a PDF representation of an invoice.
-	 * 
+	 *
 	 * @return  string  The (mangled) filename of the PDF file
 	 */
 	public function createPDF()
 	{
 		// Get the invoice number from the model's state
 		$akeebasubs_subscription_id = $this->getId();
-		
+
 		// Fetch the HTML from the database using the invoice number in $this->getId()
 		$db = $this->getDbo();
 		$query = $db->getQuery(true)
@@ -592,26 +594,30 @@ class AkeebasubsModelInvoices extends FOFModel
 			->where($db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($akeebasubs_subscription_id));
 		$db->setQuery($query, 0, 1);
 		$invoiceRecord = $db->loadObject();
-		
+
 		$invoice_no = $invoiceRecord->invoice_no;
-		
+
 		// Create the PDF
 		$pdf = $this->getTCPDF();
 		$pdf->AddPage();
-		
+
 		if (function_exists('tidy_repair_string'))
 		{
-			$invoiceRecord->html = tidy_repair_string($invoiceRecord->html, null, 'utf8');
+			$repaired = tidy_repair_string($invoiceRecord->html, null, 'utf8');
+			if ($repaired !== false)
+			{
+				$invoiceRecord->html = $repaired;
+			}
 		}
-		
+
 		$pdf->writeHTML($invoiceRecord->html, true, false, true, false, '');
 		$pdf->lastPage();
 		$pdfData = $pdf->Output('', 'S');
-		
+
 		unset($pdf);
-		
+
 		// Write the PDF data to disk using JFile::write();
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		if (function_exists('openssl_random_pseudo_bytes'))
 		{
 			$rand = openssl_random_pseudo_bytes(16);
@@ -639,11 +645,11 @@ class AkeebasubsModelInvoices extends FOFModel
 			$hash = md5($hashThis);
 		}
 		$name = $hash . '_' . $invoiceRecord->invoice_no . '.pdf';
-		
+
 		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
-		
+
 		$ret = JFile::write($path . $name, $pdfData);
-		
+
 		if ($ret)
 		{
 			// Delete the old invoice file
@@ -652,11 +658,11 @@ class AkeebasubsModelInvoices extends FOFModel
 			{
 				JFile::delete($path . $oldName);
 			}
-			
+
 			// Update the invoice record
 			$invoiceRecord->filename = $name;
 			$db->updateObject('#__akeebasubs_invoices', $invoiceRecord, 'akeebasubs_subscription_id');
-			
+
 			// return the name of the file
 			return $name;
 		}
@@ -665,19 +671,19 @@ class AkeebasubsModelInvoices extends FOFModel
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Send an invoice by email. If the invoice's PDF doesn't exist it will
 	 * attempt to create it. If the extension != akeebasubs it will return
 	 * false.
-	 * 
+	 *
 	 * @return  string  The filename of the PDF or false if the creation failed.
 	 */
 	public function emailPDF()
 	{
 		// Get the invoice number from the model's state
 		$invoice_no = $this->getId();
-		
+
 		// Fetch the HTML from the database using the invoice number in $this->getId()
 		$db = $this->getDbo();
 		$query = $db->getQuery(true)
@@ -687,49 +693,49 @@ class AkeebasubsModelInvoices extends FOFModel
 			->where($db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($invoice_no));
 		$db->setQuery($query, 0, 1);
 		$invoiceRecord = $db->loadObject();
-		
-		jimport('joomla.filesystem.file');
+
+		JLoader::import('joomla.filesystem.file');
 		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
 
 		if (empty($invoiceRecord->filename) || !JFile::exists($path.$invoiceRecord->filename))
 		{
 			$invoiceRecord->filename = $this->createPDF();
 		}
-		
+
 		if (empty($invoiceRecord->filename) || !JFile::exists($path.$invoiceRecord->filename))
 		{
 			return false;
 		}
-		
+
 		// Get the subscription record
 		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->getItem($invoiceRecord->akeebasubs_subscription_id);
-		
+
 		// Get the mailer
 		if (!class_exists('AkeebasubsHelperEmail'))
 		{
 			require_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
 		}
 		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($sub, 'PLG_AKEEBASUBS_INVOICES_EMAIL');
-		
+
 		// Attach the PDF invoice
 		$mailer->AddAttachment($path . $invoiceRecord->filename, 'invoice.pdf', 'base64', 'application/pdf');
-		
+
 		// Set the recipient
 		$mailer->addRecipient(JFactory::getUser($sub->user_id)->email);
-		
+
 		// Send it
 		$result = $mailer->Send();
-		
+
 		if ($result == true)
 		{
 			$invoiceRecord->sent_on = JFactory::getDate()->toSql();
 			$db->updateObject('#__akeebasubs_invoices', $invoiceRecord, 'akeebasubs_subscription_id');
 		}
-		
+
 		return $result;
 	}
-	
+
 	public function &getTCPDF()
 	{
 		// Load PDF signing certificates
@@ -737,16 +743,16 @@ class AkeebasubsModelInvoices extends FOFModel
 		{
 			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
 		}
-		
+
 		$certificateFile = AkeebasubsHelperCparams::getParam('invoice_certificatefile', 'certificate.cer');
 		$secretKeyFile = AkeebasubsHelperCparams::getParam('invoice_secretkeyfile', 'secret.cer');
 		$secretKeyPass = AkeebasubsHelperCparams::getParam('invoice_secretkeypass', '');
 		$extraCertFile = AkeebasubsHelperCparams::getParam('invoice_extracert', 'extra.cer');
-		
+
 		$certificate = '';
 		$secretkey = '';
 		$extracerts = '';
-		
+
 		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/tcpdf/certificates/';
 		if (JFile::exists($path.$certificateFile))
 		{
@@ -762,7 +768,7 @@ class AkeebasubsModelInvoices extends FOFModel
 			{
 				$secretkey = $certificate;
 			}
-			
+
 			if (JFile::exists($path.$extraCertFile))
 			{
 				$extracerts = JFile::read($path.$extraCertFile);
@@ -772,14 +778,14 @@ class AkeebasubsModelInvoices extends FOFModel
 				$extracerts = '';
 			}
 		}
-		
+
 		// Set up TCPDF
 		$jreg = JFactory::getConfig();
 		$tmpdir = $jreg->get('tmp_path');
 		$siteName = $jreg->get('sitename');
-		
+
 		define('K_TCPDF_EXTERNAL_CONFIG', 1);
-		
+
 		define ('K_PATH_MAIN', __DIR__);
 		define ('K_PATH_URL', JURI::base());
 		define ('K_PATH_FONTS', JPATH_ROOT.'/media/com_akeebasubs/tcpdf/fonts/');
@@ -810,11 +816,11 @@ class AkeebasubsModelInvoices extends FOFModel
 		define('K_SMALL_RATIO', 2/3);
 		define('K_THAI_TOPCHARS', true);
 		define('K_TCPDF_CALLS_IN_HTML', false);
-		
+
 		require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/tcpdf/tcpdf.php';
-		
+
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		
+
 		$pdf->SetCreator(PDF_CREATOR);
 		$pdf->SetAuthor(PDF_AUTHOR);
 		$pdf->SetTitle('Invoice');
@@ -828,22 +834,22 @@ class AkeebasubsModelInvoices extends FOFModel
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-		
+
 		if (!empty($certificate))
 		{
 			$pdf->setSignature($certificate, $secretkey, $secretKeyPass, $extracerts);
 		}
-		
+
 		$pdf->SetFont('helvetica', '', 10);
 
 		return $pdf;
 	}
-	
+
 	/**
 	 * Returns a list of known invoicing extensions
-	 * 
+	 *
 	 * @param   integer  $style  0 = raw sections list, 1 = list options, 2 = key/description array
-	 * 
+	 *
 	 * @return array_string
 	 */
 	public function getExtensions($style = 0)
@@ -851,12 +857,12 @@ class AkeebasubsModelInvoices extends FOFModel
 		static $rawOptions = null;
 		static $htmlOptions = null;
 		static $shortlist = null;
-		
+
 		if (is_null($rawOptions))
 		{
 			$rawOptions = array();
-			
-			jimport('joomla.plugin.helper');
+
+			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			JPluginHelper::importPlugin('system');
 			$app = JFactory::getApplication();
@@ -867,28 +873,28 @@ class AkeebasubsModelInvoices extends FOFModel
 				{
 					if(!is_array($pResponse)) continue;
 					if(empty($pResponse)) continue;
-					
+
 					$rawOptions[$pResponse['extension']] = $pResponse;
 				}
 			}
 		}
-		
+
 		if ($style == 0)
 		{
 			return $rawOptions;
 		}
-		
+
 		if (is_null($htmlOptions))
 		{
 			$htmlOptions = array();
-			
+
 			foreach ($rawOptions as $def)
 			{
 				$htmlOptions[] = JHTML::_('select.option', $def['extension'], $def['title']);
 				$shortlist[$def['extension']] = $def['title'];
 			}
 		}
-		
+
 		if ($style == 1)
 		{
 			return $htmlOptions;

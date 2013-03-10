@@ -30,7 +30,7 @@ class AkeebasubsModelTaxconfigs extends FOFModel
 		$query = $db->getQuery(true)
 			->delete($db->qn('#__akeebasubs_taxrules'));
 		$db->setQuery($query);
-		$db->query();
+		$db->execute();
 	}
 	
 	/**
@@ -158,6 +158,6 @@ class AkeebasubsModelTaxconfigs extends FOFModel
 			->where($db->qn('element').' = '.$db->q('com_akeebasubs'));
 
 		$db->setQuery($sql);
-		$db->query();
+		$db->execute();
 	}
 }

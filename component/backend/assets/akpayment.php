@@ -7,8 +7,8 @@
 
 defined('_JEXEC') or die();
 
-jimport('joomla.plugin.plugin');
-jimport('joomla.html.parameter');
+JLoader::import('joomla.plugin.plugin');
+JLoader::import('joomla.html.parameter');
 
 /**
  * Akeeba Subscriptions payment plugin abstract class
@@ -27,7 +27,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	public function __construct(&$subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
+			JLoader::import('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
 		
@@ -300,7 +300,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$logFilenameBase = $logpath.'/akpayment_'.strtolower($this->ppName).'_ipn';
 		
 		$logFile = $logFilenameBase.'.php';
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		if(!JFile::exists($logFile)) {
 			$dummy = "<?php die(); ?>\n";
 			JFile::write($logFile, $dummy);

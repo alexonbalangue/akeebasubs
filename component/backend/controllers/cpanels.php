@@ -16,19 +16,21 @@ class AkeebasubsControllerCpanels extends FOFController
 		}
 		parent::execute($task);
 	}
-	
+
 	protected function onBeforeBrowse() {
 		$result = parent::onBeforeBrowse();
-		
+
 		if($result) {
 			FOFModel::getTmpInstance('Cpanels', 'AkeebasubsModel')
 				->checkAndFixDatabase()
 				->saveMagicVariables();
+
+			$this->getThisView()->needsdlid = FOFModel::getTmpInstance('Cpanels', 'AkeebasubsModel')->needsDownloadID();
 		}
-		
+
 		return $result;
 	}
-	
+
 	public function hide2copromo()
 	{
 		// Fetch the component parameters
@@ -55,11 +57,11 @@ class AkeebasubsControllerCpanels extends FOFController
 			->where($db->qn('element').' = '.$db->q('com_akeebasubs'));
 
 		$db->setQuery($sql);
-		$db->query();
-		
+		$db->execute();
+
 		// Redirect back to the control panel
 		$url = '';
-		$returnurl = FOFInput::getBase64('returnurl', '', $this->input);
+		$returnurl = $this->input->getBase64('returnurl', '');
 		if(!empty($returnurl)) {
 			$url = base64_decode($returnurl);
 		}

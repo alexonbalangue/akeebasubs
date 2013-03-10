@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - ProjectFork 4+ integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>February 2013</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_PROJECTFORK4_DESCRIPTION</description>
+	<files>
+		<filename plugin="projectfork4">projectfork4.php</filename>
+		<folder>projectfork4</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_projectfork4.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_projectfork4.sys.ini</language>
+	</languages>
+	
+	<!-- SQL query files to execute on installation -->
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">projectfork4/install.sql</file>
+			<file charset="utf8" driver="mysqli">projectfork4/install.sql</file>
+			<file driver="mysql">projectfork4/install.sql</file>
+			<file driver="mysqli">projectfork4/install.sql</file>
+		</sql>
+	</install>
+	<!-- SQL query files to execute on uninstallation -->
+	<uninstall>
+		<sql>
+			<file charset="utf8" driver="mysql">projectfork4/uninstall.sql</file>
+			<file charset="utf8" driver="mysqli">projectfork4/uninstall.sql</file>
+			<file driver="mysql">projectfork4/uninstall.sql</file>
+			<file driver="mysqli">projectfork4/uninstall.sql</file>
+		</sql>
+	</uninstall>
+	
+	<config addfieldpath="/plugins/akeebasubs/projectfork4/projectfork4">
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="category" type="categories" default="" label="PLG_AKEEBASUBS_PROJECTFORK4_CATEGORY_TITLE" description="PLG_AKEEBASUBS_PROJECTFORK4_CATEGORY_DESC" />
+				<field name="author" type="text" size="25" default="" label="PLG_AKEEBASUBS_PROJECTFORK4_AUTHOR_TITLE" description="PLG_AKEEBASUBS_PROJECTFORK4_AUTHOR_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

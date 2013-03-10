@@ -5889,7 +5889,7 @@ LEVEL2=11111:22222:33333</programlisting>
       about changes (e.g. new payment) of a recurring subscription. The URL
       that needs to be used for the webhook is:</para>
 
-      <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=cashu</uri>
+      <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=braintree&amp;type=webhook&amp;marker=000</uri>
       after replacing <uri>www.example.com</uri> with your site's domain
       name.</para>
 
@@ -10922,6 +10922,13 @@ LEVEL3=Group 1</programlisting>
       service and populate the country and city fields, unless the user has
       overridden them, i.e. he has bought another subscription in the
       past.</para>
+
+      <important>
+        <para>The hostip.info service usually returns only the Country for a
+        particular IP. It will very rarely be able to provide the City. If you
+        only see the Country being filled in do not worry; it's how the
+        service works.</para>
+      </important>
     </section>
 
     <section xml:id="integration-sql">
@@ -11954,23 +11961,6 @@ LEVEL3=Badge 1</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
-    </section>
-
-    <section xml:id="integration-frontenduseraccess">
-      <title>Front-end User Access</title>
-
-      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-      Subscriptions - Front-end User Access Integration</guilabel></para>
-
-      <para>Adds users to Frontend-User-Access groups when their subscription
-      is enabled and removes them from Frontend-User-Access groups when their
-      subscription expires in Akeeba Subscriptions. Frontend-User-Access is a
-      component developed by http://www.pages-and-items.com</para>
-
-      <warning>
-        <para>This plugin is developed and maintained by pages-and-items.com.
-        AkeebaBackup.com cannot provide any support for it.</para>
-      </warning>
     </section>
 
     <section xml:id="integration-tracktime">

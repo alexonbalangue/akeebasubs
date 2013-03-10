@@ -22,14 +22,14 @@
 // no direct access
 defined('_JEXEC') or die();
 
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
+JLoader::import('joomla.filesystem.folder');
+JLoader::import('joomla.filesystem.file');
 
 class Com_AkeebasubsInstallerScript
 {
 	/** @var string The component's name */
 	protected $_akeeba_extension = 'com_akeebasubs';
-	
+
 	/** @var array The list of extra modules and plugins to install */
 	private $installation_queue = array(
 		// modules => { (folder) => { (module) => { (position), (published) } }* }*
@@ -59,6 +59,7 @@ class Com_AkeebasubsInstallerScript
 				'cb'					=> 0,
 				'cbsync'				=> 0,
 				'ccinvoices'			=> 0,
+				'constantcontact'		=> 0,
 				'contentpublish'		=> 0,
 				'customfields'			=> 1,
 				'docman'				=> 0,
@@ -77,6 +78,7 @@ class Com_AkeebasubsInstallerScript
 				'mijoshop'				=> 0,
 				'phocadownload'			=> 0,
 				'projectfork'			=> 0,
+				'projectfork4'			=> 0,
 				'recaptcha'				=> 0,
 				'redshop'				=> 0,
 				'redshopusersync'		=> 0,
@@ -102,6 +104,7 @@ class Com_AkeebasubsInstallerScript
 				'epaydk'				=> 0,
 				'eselectplus'			=> 0,
 				'eway'					=> 0,
+				'ewayrapid3'			=> 0,
 				'gocardless'			=> 0,
 				'googlecheckout'		=> 0,
 				'ifthen'				=> 0,
@@ -120,6 +123,7 @@ class Com_AkeebasubsInstallerScript
 				'postfinancech'			=> 0,
 				'przelewy24'			=> 0,
 				'rbkmoney'				=> 0,
+				'realex'				=> 0,
 				'robokassa'				=> 0,
 				'scnet'					=> 0,
 				'scnetintegrated'		=> 0,
@@ -150,7 +154,7 @@ class Com_AkeebasubsInstallerScript
 			)
 		)
 	);
-	
+
 	private $akeebaRemovePlugins = array(
 		'akeebasubs' => array(
 			'communityacl',
@@ -160,7 +164,7 @@ class Com_AkeebasubsInstallerScript
 			'vm',
 		)
 	);
-	
+
 	/** @var array Obsolete files and folders to remove */
 	private $akeebaRemoveFiles = array(
 		'files'	=> array(
@@ -218,7 +222,7 @@ class Com_AkeebasubsInstallerScript
 			'administrator/components/com_akeebasubs/fof/view.html.php',
 			'administrator/components/com_akeebasubs/fof/view.json.php',
 			'administrator/components/com_akeebasubs/fof/view.php',
-			
+
 			// FOF 1.x files
 			'libraries/fof/controller.php',
 			'libraries/fof/dispatcher.php',
@@ -243,7 +247,7 @@ class Com_AkeebasubsInstallerScript
 			'libraries/fof/view.html.php',
 			'libraries/fof/view.json.php',
 			'libraries/fof/view.php',
-			
+
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
@@ -260,26 +264,19 @@ class Com_AkeebasubsInstallerScript
 			'components/com_akeebasubs/controllers/behaviors',
 		)
 	);
-	
+
 	private $akeebaCliScripts = array(
 		'akeebasubs-expiration-notify.php',
 	);
-	
+
 	/**
 	 * Joomla! pre-flight event
-	 * 
+	 *
 	 * @param string $type Installation type (install, update, discover_install)
 	 * @param JInstaller $parent Parent object
 	 */
 	public function preflight($type, $parent)
 	{
-		// Bugfix for "Can not build admin menus"
-		if(in_array($type, array('install','discover_install'))) {
-			$this->_bugfixDBFunctionReturnedNoError();
-		} else {
-			$this->_bugfixCantBuildAdminMenus();
-		}
-		
 		// Only allow to install on Joomla! 2.5.0 or later with PHP 5.3.0 or later
 		if(defined('PHP_VERSION')) {
 			$version = PHP_VERSION;
@@ -288,73 +285,92 @@ class Com_AkeebasubsInstallerScript
 		} else {
 			$version = '5.0.0'; // all bets are off!
 		}
-		if(!version_compare(JVERSION, '2.5.0', 'ge')) {
-			echo "<p>You need Joomla! 2.5 or later to install this component</p>";
+		if(!version_compare(JVERSION, '2.5.6', 'ge')) {
+			$msg = "<p>You need Joomla! 2.5.6 or later to install this component</p>";
+			JError::raiseWarning(100, $msg);
 			return false;
 		}
-		if(!version_compare($version, '5.3.0', 'ge')) {
-			echo "<p>You need PHP 5.3 or later to install this component</p>";
+		if(!version_compare($version, '5.3.1', 'ge')) {
+			$msg = "<p>You need PHP 5.3.1 or later to install this component</p>";
+			if(version_compare(JVERSION, '3.0', 'gt'))
+			{
+				JLog::add($msg, JLog::WARNING, 'jerror');
+			}
+			else
+			{
+				JError::raiseWarning(100, $msg);
+			}
 			return false;
 		}
+
+		// Bugfix for "Can not build admin menus"
+		if(in_array($type, array('install','discover_install'))) {
+			$this->_bugfixDBFunctionReturnedNoError();
+		} else {
+			$this->_bugfixCantBuildAdminMenus();
+			$this->_fixBrokenSQLUpdates($parent);
+			$this->_fixSchemaVersion();
+		}
+
 		return true;
 	}
-	
+
 	/**
 	 * Runs after install, update or discover_update
 	 * @param string $type install, update or discover_update
-	 * @param JInstaller $parent 
+	 * @param JInstaller $parent
 	 */
 	function postflight( $type, $parent )
 	{
 		// Install subextensions
 		$status = $this->_installSubextensions($parent);
-		
+
+		// Install FOF
+		$fofStatus = $this->_installFOF($parent);
+
+		// Install Akeeba Straper
+		$straperStatus = $this->_installStraper($parent);
+
 		// Remove obsolete files and folders
 		$akeebaRemoveFiles = $this->akeebaRemoveFiles;
 		$this->_removeObsoleteFilesAndFolders($akeebaRemoveFiles);
-		
+
 		$this->_copyCliFiles($parent);
-		
+
 		// Remove Professional version plugins from Akeeba Backup Core
 		$this->_removeObsoletePlugins($parent);
-		
-		// Install FOF
-		$fofStatus = $this->_installFOF($parent);
-		
-		// Install Akeeba Straper
-		$straperStatus = $this->_installStraper($parent);
-		
+
 		// Show the post-installation page
 		$this->_renderPostInstallation($status, $fofStatus, $straperStatus, $parent);
-		
+
 		// Kill update site
 		$this->_killUpdateSite();
 	}
-	
+
 	/**
 	 * Runs on uninstallation
-	 * 
-	 * @param JInstaller $parent 
+	 *
+	 * @param JInstaller $parent
 	 */
 	function uninstall($parent)
 	{
 		// Uninstall subextensions
 		$status = $this->_uninstallSubextensions($parent);
-		
+
 		// Show the post-uninstallation page
 		$this->_renderPostUninstallation($status, $parent);
 	}
-	
+
 	/**
 	 * Removes the plugins which have been discontinued
-	 * 
-	 * @param JInstaller $parent 
+	 *
+	 * @param JInstaller $parent
 	 */
 	private function _removeObsoletePlugins($parent)
 	{
 		$src = $parent->getParent()->getPath('source');
 		$db = JFactory::getDbo();
-		
+
 		foreach($this->akeebaRemovePlugins as $folder => $plugins) {
 			foreach($plugins as $plugin) {
 				$sql = $db->getQuery(true)
@@ -373,23 +389,23 @@ class Com_AkeebasubsInstallerScript
 			}
 		}
 	}
-	
+
 	/**
 	 * Copies the CLI scripts into Joomla!'s cli directory
-	 * 
-	 * @param JInstaller $parent 
+	 *
+	 * @param JInstaller $parent
 	 */
 	private function _copyCliFiles($parent)
 	{
 		$src = $parent->getParent()->getPath('source');
-		
-		jimport("joomla.filesystem.file");
-		jimport("joomla.filesystem.folder");
-		
+
+		JLoader::import("joomla.filesystem.file");
+		JLoader::import("joomla.filesystem.folder");
+
 		if(empty($this->akeebaCliScripts)) {
 			return;
 		}
-		
+
 		foreach($this->akeebaCliScripts as $script) {
 			if(JFile::exists(JPATH_ROOT.'/cli/'.$script)) {
 				JFile::delete(JPATH_ROOT.'/cli/'.$script);
@@ -399,9 +415,9 @@ class Com_AkeebasubsInstallerScript
 			}
 		}
 	}
-	
+
 	/**
-	 * Renders the post-installation message 
+	 * Renders the post-installation message
 	 */
 	private function _renderPostInstallation($status, $fofStatus, $straperStatus, $parent)
 	{
@@ -446,7 +462,7 @@ class Com_AkeebasubsInstallerScript
 			<td><strong>
 				<span style="color: <?php echo $fofStatus['required'] ? ($fofStatus['installed']?'green':'red') : '#660' ?>; font-weight: bold;">
 					<?php echo $fofStatus['required'] ? ($fofStatus['installed'] ?'Installed':'Not Installed') : 'Already up-to-date'; ?>
-				</span>	
+				</span>
 			</strong></td>
 		</tr>
 		<tr class="row0">
@@ -456,7 +472,7 @@ class Com_AkeebasubsInstallerScript
 			<td><strong>
 				<span style="color: <?php echo $straperStatus['required'] ? ($straperStatus['installed']?'green':'red') : '#660' ?>; font-weight: bold;">
 					<?php echo $straperStatus['required'] ? ($straperStatus['installed'] ?'Installed':'Not Installed') : 'Already up-to-date'; ?>
-				</span>	
+				</span>
 			</strong></td>
 		</tr>
 		<?php if (count($status->modules)) : ?>
@@ -491,7 +507,7 @@ class Com_AkeebasubsInstallerScript
 </table>
 <?php
 	}
-	
+
 	private function _renderPostUninstallation($status, $parent) {
 ?>
 <?php $rows = 0;?>
@@ -547,14 +563,14 @@ class Com_AkeebasubsInstallerScript
 </table>
 <?php
 	}
-	
+
 	/**
 	 * Joomla! 1.6+ bugfix for "DB function returned no error"
 	 */
 	private function _bugfixDBFunctionReturnedNoError()
 	{
 		$db = JFactory::getDbo();
-			
+
 		// Fix broken #__assets records
 		$query = $db->getQuery(true);
 		$query->select('id')
@@ -567,7 +583,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__assets')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		// Fix broken #__extensions records
@@ -582,7 +598,7 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__extensions')
 				->where($db->qn('extension_id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 
 		// Fix broken #__menu records
@@ -599,17 +615,17 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__menu')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
-	
+
 	/**
 	 * Joomla! 1.6+ bugfix for "Can not build admin menus"
 	 */
 	private function _bugfixCantBuildAdminMenus()
 	{
 		$db = JFactory::getDbo();
-		
+
 		// If there are multiple #__extensions record, keep one of them
 		$query = $db->getQuery(true);
 		$query->select('extension_id')
@@ -620,18 +636,18 @@ class Com_AkeebasubsInstallerScript
 		if(count($ids) > 1) {
 			asort($ids);
 			$extension_id = array_shift($ids); // Keep the oldest id
-			
+
 			foreach($ids as $id) {
 				$query = $db->getQuery(true);
 				$query->delete('#__extensions')
 					->where($db->qn('extension_id').' = '.$db->q($id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
-		
+
 		// @todo
-		
+
 		// If there are multiple assets records, delete all except the oldest one
 		$query = $db->getQuery(true);
 		$query->select('id')
@@ -642,13 +658,13 @@ class Com_AkeebasubsInstallerScript
 		if(count($ids) > 1) {
 			asort($ids);
 			$asset_id = array_shift($ids); // Keep the oldest id
-			
+
 			foreach($ids as $id) {
 				$query = $db->getQuery(true);
 				$query->delete('#__assets')
 					->where($db->qn('id').' = '.$db->q($id));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 
@@ -677,26 +693,26 @@ class Com_AkeebasubsInstallerScript
 			$query->delete('#__menu')
 				->where($db->qn('id').' = '.$db->q($id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 
 	/**
 	 * Installs subextensions (modules, plugins) bundled with the main extension
-	 * 
-	 * @param JInstaller $parent 
+	 *
+	 * @param JInstaller $parent
 	 * @return JObject The subextension installation status
 	 */
 	private function _installSubextensions($parent)
 	{
 		$src = $parent->getParent()->getPath('source');
-		
+
 		$db = JFactory::getDbo();
-		
+
 		$status = new JObject();
 		$status->modules = array();
 		$status->plugins = array();
-		
+
 		// Modules installation
 		if(count($this->installation_queue['modules'])) {
 			foreach($this->installation_queue['modules'] as $folder => $modules) {
@@ -743,8 +759,8 @@ class Com_AkeebasubsInstallerScript
 							$sql->set($db->qn('published').' = '.$db->q('1'));
 						}
 						$db->setQuery($sql);
-						$db->query();
-						
+						$db->execute();
+
 						// B. Change the ordering of back-end modules to 1 + max ordering
 						if($folder == 'admin') {
 							$query = $db->getQuery(true);
@@ -760,9 +776,9 @@ class Com_AkeebasubsInstallerScript
 								->set($db->qn('ordering').' = '.$db->q($position))
 								->where($db->qn('module').' = '.$db->q('mod_'.$module));
 							$db->setQuery($query);
-							$db->query();
+							$db->execute();
 						}
-						
+
 						// C. Link to all pages
 						$query = $db->getQuery(true);
 						$query->select('id')->from($db->qn('#__modules'))
@@ -815,7 +831,7 @@ class Com_AkeebasubsInstallerScript
 
 					$installer = new JInstaller;
 					$result = $installer->install($path);
-					
+
 					$status->plugins[] = array('name'=>'plg_'.$plugin,'group'=>$folder, 'result'=>$result);
 
 					if($published && !$count) {
@@ -825,31 +841,31 @@ class Com_AkeebasubsInstallerScript
 							->where($db->qn('element').' = '.$db->q($plugin))
 							->where($db->qn('folder').' = '.$db->q($folder));
 						$db->setQuery($query);
-						$db->query();
+						$db->execute();
 					}
 				}
 			}
 		}
-		
+
 		return $status;
 	}
-	
+
 	/**
 	 * Uninstalls subextensions (modules, plugins) bundled with the main extension
-	 * 
-	 * @param JInstaller $parent 
+	 *
+	 * @param JInstaller $parent
 	 * @return JObject The subextension uninstallation status
 	 */
 	private function _uninstallSubextensions($parent)
 	{
-		jimport('joomla.installer.installer');
-		
+		JLoader::import('joomla.installer.installer');
+
 		$db = JFactory::getDBO();
-		
+
 		$status = new JObject();
 		$status->modules = array();
 		$status->plugins = array();
-		
+
 		$src = $parent->getParent()->getPath('source');
 
 		// Modules uninstallation
@@ -900,23 +916,23 @@ class Com_AkeebasubsInstallerScript
 							'group'=>$folder,
 							'result'=>$result
 						);
-					}			
+					}
 				}
 			}
 		}
-		
+
 		return $status;
 	}
-	
+
 	/**
 	 * Removes obsolete files and folders
-	 * 
-	 * @param array $akeebaRemoveFiles 
+	 *
+	 * @param array $akeebaRemoveFiles
 	 */
 	private function _removeObsoleteFilesAndFolders($akeebaRemoveFiles)
 	{
 		// Remove files
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		if(!empty($akeebaRemoveFiles['files'])) foreach($akeebaRemoveFiles['files'] as $file) {
 			$f = JPATH_ROOT.'/'.$file;
 			if(!JFile::exists($f)) continue;
@@ -924,22 +940,22 @@ class Com_AkeebasubsInstallerScript
 		}
 
 		// Remove folders
-		jimport('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.file');
 		if(!empty($akeebaRemoveFiles['folders'])) foreach($akeebaRemoveFiles['folders'] as $folder) {
 			$f = JPATH_ROOT.'/'.$folder;
 			if(!JFolder::exists($f)) continue;
 			JFolder::delete($f);
 		}
 	}
-	
+
 	private function _installFOF($parent)
 	{
 		$src = $parent->getParent()->getPath('source');
-		
+
 		// Install the FOF framework
-		jimport('joomla.filesystem.folder');
-		jimport('joomla.filesystem.file');
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.file');
+		JLoader::import('joomla.utilities.date');
 		$source = $src.'/fof';
 		if(!defined('JPATH_LIBRARIES')) {
 			$target = JPATH_ROOT.'/libraries/fof';
@@ -982,7 +998,7 @@ class Com_AkeebasubsInstallerScript
 		} else {
 			$versionSource = 'installed';
 		}
-		
+
 		if(!isset($fofVersion)) {
 			$fofVersion = array();
 			if(JFile::exists($target.'/version.txt')) {
@@ -1006,11 +1022,11 @@ class Com_AkeebasubsInstallerScript
 			);
 			$versionSource = 'installed';
 		}
-		
+
 		if(!($fofVersion[$versionSource]['date'] instanceof JDate)) {
 			$fofVersion[$versionSource]['date'] = new JDate();
 		}
-		
+
 		return array(
 			'required'	=> $haveToInstallFOF,
 			'installed'	=> $installedFOF,
@@ -1018,15 +1034,15 @@ class Com_AkeebasubsInstallerScript
 			'date'		=> $fofVersion[$versionSource]['date']->format('Y-m-d'),
 		);
 	}
-	
+
 	private function _installStraper($parent)
 	{
 		$src = $parent->getParent()->getPath('source');
-		
+
 		// Install the FOF framework
-		jimport('joomla.filesystem.folder');
-		jimport('joomla.filesystem.file');
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.file');
+		JLoader::import('joomla.utilities.date');
 		$source = $src.'/strapper';
 		$target = JPATH_ROOT.'/media/akeeba_strapper';
 
@@ -1066,7 +1082,7 @@ class Com_AkeebasubsInstallerScript
 		} else {
 			$versionSource = 'installed';
 		}
-		
+
 		if(!isset($straperVersion)) {
 			$straperVersion = array();
 			if(JFile::exists($target.'/version.txt')) {
@@ -1090,11 +1106,11 @@ class Com_AkeebasubsInstallerScript
 			);
 			$versionSource = 'installed';
 		}
-		
+
 		if(!($straperVersion[$versionSource]['date'] instanceof JDate)) {
 			$straperVersion[$versionSource]['date'] = new JDate();
 		}
-		
+
 		return array(
 			'required'	=> $haveToInstallStraper,
 			'installed'	=> $installedStraper,
@@ -1102,7 +1118,7 @@ class Com_AkeebasubsInstallerScript
 			'date'		=> $straperVersion[$versionSource]['date']->format('Y-m-d'),
 		);
 	}
-	
+
 	/**
 	 * Remove the update site specification from Joomla! – we no longer support
 	 * that misbehaving crap, thank you very much...
@@ -1133,17 +1149,17 @@ class Com_AkeebasubsInstallerScript
 		;
 		$db->setQuery($query);
 		$oResult = $db->loadObject();
-		
+
 		// If no record is found, do nothing. We've already killed the monster!
 		if(is_null($oResult)) return;
-		
+
 		// Delete the #__update_sites record
 		$query = $db->getQuery(true)
 			->delete($db->qn('#__update_sites'))
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}
@@ -1154,20 +1170,174 @@ class Com_AkeebasubsInstallerScript
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}
-		
+
 		// Delete the #__updates records
 		$query = $db->getQuery(true)
 			->delete($db->qn('#__updates'))
 			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
 		$db->setQuery($query);
 		try {
-			$db->query();
+			$db->execute();
 		} catch (Exception $exc) {
 			// If the query fails, don't sweat about it
 		}
+	}
+
+	/**
+	 * When you are upgrading from an old version of the component or when your
+	 * site is upgraded from Joomla! 1.5 there is no "schema version" for our
+	 * component's tables. As a result Joomla! doesn't run the database queries
+	 * and you get a broken installation.
+	 *
+	 * This method detects this situation, forces a fake schema version "0.0.1"
+	 * and lets the crufty mess Joomla!'s extensions installer is to bloody work
+	 * as anyone would have expected it to do!
+	 */
+	private function _fixSchemaVersion()
+	{
+		// Get the extension ID
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true);
+		$query->select('extension_id')
+			->from('#__extensions')
+			->where($db->qn('element').' = '.$db->q($this->_akeeba_extension));
+		$db->setQuery($query);
+		$eid = $db->loadResult();
+
+		$query = $db->getQuery(true);
+		$query->select('version_id')
+			->from('#__schemas')
+			->where('extension_id = ' . $eid);
+		$db->setQuery($query);
+		$version = $db->loadResult();
+
+		if (!$version)
+		{
+			// No schema version found. Fix it.
+			$o = (object)array(
+				'version_id'	=> '0.0.1-2007-08-15',
+				'extension_id'	=> $eid,
+			);
+			$db->insertObject('#__schemas', $o);
+		}
+	}
+
+	/**
+	 * Let's say that a user tries to install a component and it somehow fails
+	 * in a non-graceful manner, e.g. a server timeout error, going over the
+	 * quota etc. In this case the component's administrator directory is
+	 * created and not removed (because the installer died an untimely death).
+	 * When the user retries installing the component JInstaller sees that and
+	 * thinks it's an update. This causes it to neither run the installation SQL
+	 * file (because it's not supposed to run on extension update) nor the
+	 * update files (because there is no schema version defined). As a result
+	 * the files are installed, the database tables are not, the component is
+	 * broken and I have to explain to non-technical users how to edit their
+	 * database with phpMyAdmin.
+	 *
+	 * This method detects this stupid situation and attempts to execute the
+	 * installation file instead.
+	 */
+	private function _fixBrokenSQLUpdates($parent)
+	{
+		// Get the extension ID
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true);
+		$query->select('extension_id')
+			->from('#__extensions')
+			->where($db->qn('element').' = '.$db->q($this->_akeeba_extension));
+		$db->setQuery($query);
+		$eid = $db->loadResult();
+
+		// Get the schema version
+		$query = $db->getQuery(true);
+		$query->select('version_id')
+			->from('#__schemas')
+			->where('extension_id = ' . $eid);
+		$db->setQuery($query);
+		$version = $db->loadResult();
+
+		// If there is a schema version it's not a false update
+		if ($version)
+		{
+			return;
+		}
+
+		// Execute the installation SQL file. Since I don't have access to
+		// the manifest, I will improvise (again!)
+		$dbDriver = strtolower($db->name);
+
+		if ($dbDriver == 'mysqli')
+		{
+			$dbDriver = 'mysql';
+		}
+		elseif($dbDriver == 'sqlsrv')
+		{
+			$dbDriver = 'sqlazure';
+		}
+
+		// Get the name of the sql file to process
+		$sqlfile = $parent->getParent()->getPath('extension_root') . '/sql/install/' . $dbDriver . '/install.sql';
+		if (file_exists($sqlfile))
+		{
+			$buffer = file_get_contents($sqlfile);
+			if ($buffer === false)
+			{
+				return;
+			}
+
+			$queries = JInstallerHelper::splitSql($buffer);
+
+			if (count($queries) == 0)
+			{
+				// No queries to process
+				return;
+			}
+
+			// Process each query in the $queries array (split out of sql file).
+			foreach ($queries as $query)
+			{
+				$query = trim($query);
+
+				if ($query != '' && $query{0} != '#')
+				{
+					$db->setQuery($query);
+
+					if (!$db->execute())
+					{
+						JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
+
+						return false;
+					}
+				}
+			}
+		}
+
+		// Update #__schemas to the latest version. Again, since I don't have
+		// access to the manifest I have to improvise...
+		$path = $parent->getParent()->getPath('extension_root') . '/sql/update/' . $dbDriver;
+		$files = str_replace('.sql', '', JFolder::files($path, '\.sql$'));
+		if(count($files) > 0)
+		{
+			usort($files, 'version_compare');
+			$version = array_pop($files);
+		}
+		else
+		{
+			$version = '0.0.1-2007-08-15';
+		}
+
+		$query = $db->getQuery(true);
+		$query->insert($db->quoteName('#__schemas'));
+		$query->columns(array($db->quoteName('extension_id'), $db->quoteName('version_id')));
+		$query->values($eid . ', ' . $db->quote($version));
+		$db->setQuery($query);
+		$db->execute();
 	}
 }

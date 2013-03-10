@@ -49,12 +49,21 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 			return JError::raiseError(500, 'Cannot proceed with the payment. No alloPass information are definied for this subscription.');
 		}
 		
+		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+			->user_id($user->id)
+			->getFirstItem();
+		
 		// Payment url
 		$rawPricingInfo = file_get_contents('https://payment.allopass.com/api/onetime/pricing.apu?'
 				.'site_id=' . $alloPass['site_id'] . '&product_id=' . $alloPass['product_id']);
-		$url = $this->getPaymentURL($rawPricingInfo, $alloPass['pp_id']);
+		$countryCode = trim($kuser->country);
+		$url = $this->getPaymentURL($rawPricingInfo, $countryCode);
 		if(empty($url)) {
-			return JError::raiseError(500, 'Cannot proceed with the payment. No URL found for this pricepoint.');
+			$error_url = 'index.php?option='.JRequest::getCmd('option').
+				'&view=level&slug='.$level->slug.
+				'&layout='.JRequest::getCmd('layout','default');
+			$error_url = JRoute::_($error_url,false);
+			JFactory::getApplication()->redirect($error_url, 'This payment method is not configured for your country.' ,'error');
 		}
 		$url .= '&merchant_transaction_id=' . $subscription->akeebasubs_subscription_id;
 		
@@ -87,7 +96,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 	
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
@@ -190,7 +199,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 				'state'							=> $newStatus,
 				'enabled'						=> 0
 		);
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		if($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 
@@ -198,7 +207,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
-		jimport('joomla.plugin.helper');
+		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
@@ -238,7 +247,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 	}
  
 	
-	private function getPaymentURL($rawPricingInfo, $pricePointId){
+	private function getPaymentURL($rawPricingInfo, $countryCode){
 		// Load XML
 		$pricingDoc = new DOMDocument();
 		$pricingDoc->loadXML($rawPricingInfo);
@@ -247,15 +256,18 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		if($responseElem->getAttribute('code') != 0) {
 			return null;
 		}
-		// Find the pricepoint
-		$ppElems = $pricingDoc->getElementsByTagName('pricepoint');
-		foreach ($ppElems as $ppElem) {
-			$ppId = $ppElem->getAttribute('id');
-			if($ppId == $pricePointId) {
-				$urlElem = $ppElem->getElementsByTagName('buy_url')->item(0);
-				$url = $urlElem->nodeValue;
-				if(! empty($url)) {
-					return $url;
+		// Find market by country code
+		$marketElems = $pricingDoc->getElementsByTagName('market');
+		foreach ($marketElems as $marketElem) {
+			$marketCC = $marketElem->getAttribute('country_code');
+			if(strtoupper($marketCC) == strtoupper($countryCode)) {
+				$ppElem = $marketElem->getElementsByTagName('pricepoint')->item(0);
+				if(! empty($ppElem)) {
+					$urlElem = $ppElem->getElementsByTagName('buy_url')->item(0);
+					$url = $urlElem->nodeValue;
+					if(! empty($url)) {
+						return $url;
+					}
 				}
 			}
 		}
@@ -287,19 +299,16 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 			$rawAlloPass = $parts[1];
 			$alloPass = explode(':', $rawAlloPass);
 			if(empty($alloPass)) continue;
-			if(count($alloPass) != 3) continue;
+			if(count($alloPass) < 2) continue;
 			
 			$siteId = trim($alloPass[0]);
 			if(empty($siteId)) continue;
 			$productId = trim($alloPass[1]);
 			if(empty($productId)) continue;
-			$ppId = trim($alloPass[2]);
-			if(empty($ppId)) continue;
 		
 			$pricePoint = array(
 				'site_id'		=> $siteId,
-				'product_id'	=> $productId,
-				'pp_id'			=> $ppId
+				'product_id'	=> $productId
 			);
 			
 			$ret[$levelId] = $pricePoint;

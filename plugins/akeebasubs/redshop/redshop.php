@@ -41,7 +41,7 @@ class plgAkeebasubsRedshop extends plgAkeebasubsAbstract
 				$query = clone $protoQuery;
 				$query->where($db->qn('shopper_group_id').' = '.$db->q($group));
 				$db->setQuery($query);
-				$db->query();
+				$db->execute();
 			}
 		}
 		
@@ -54,7 +54,7 @@ class plgAkeebasubsRedshop extends plgAkeebasubsAbstract
 				->set($db->qn('shopper_group_id').' = '.$db->q($group))
 				->where($db->qn('user_id').' = '.$db->q($user_id));
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 	

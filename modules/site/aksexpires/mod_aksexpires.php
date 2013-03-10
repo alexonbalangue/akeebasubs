@@ -65,7 +65,7 @@ if(JFactory::getUser()->guest) {
 		return;
 	}
 
-	jimport('joomla.utilities.date');
+	JLoader::import('joomla.utilities.date');
 
 	$expires = 0;
 	$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';

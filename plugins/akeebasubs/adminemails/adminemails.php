@@ -18,7 +18,7 @@ class plgAkeebasubsAdminemails extends JPlugin
 	public function __construct(& $subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
-			jimport('joomla.registry.registry');
+			JLoader::import('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
 

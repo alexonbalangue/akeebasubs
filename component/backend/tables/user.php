@@ -22,7 +22,7 @@ class AkeebasubsTableUser extends FOFTable
 	 */
 	function onBeforeStore($updateNulls) {
 		if($result = parent::onBeforeStore($updateNulls)) {
-			jimport('joomla.plugin.helper');
+			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			$app = JFactory::getApplication();
 			$jResponse = $app->triggerEvent('onAKUserSaveData', array($this));

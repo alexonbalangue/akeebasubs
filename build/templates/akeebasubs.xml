@@ -61,7 +61,9 @@
 	<media destination="com_akeebasubs" folder="media">
 		<folder>css</folder>
 		<folder>images</folder>
+		<folder>invoices</folder>
 		<folder>js</folder>
+		<folder>tcpdf</folder>
 	</media>
 
 	<!-- Administrator back-end section -->

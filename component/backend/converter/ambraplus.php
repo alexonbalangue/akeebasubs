@@ -150,7 +150,7 @@ class AkeebasubsConverterAmbraplus extends AkeebasubsConverterAbstract
 		}
 		
 		if(isset($this->data['subscriptions'])) {
-			jimport('joomla.utilities.date');
+			JLoader::import('joomla.utilities.date');
 			$jNow = new JDate();
 			$tsNow = $jNow->toUnix();
 			if(!empty($this->data['subscriptions'])) foreach($this->data['subscriptions'] as $id => $subscription) {

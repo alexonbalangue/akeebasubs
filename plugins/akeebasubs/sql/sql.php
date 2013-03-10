@@ -74,7 +74,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 				$db->setQuery($sql);
 				if(version_compare(JVERSION, '3.0', 'ge')) {
 					// Joomla! 3.0... Whatever!!!!
-					$db->query();
+					$db->execute();
 				} else {
 					$db->queryBatch(false);
 				}
@@ -89,7 +89,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 				$db->setQuery($sql);
 				if(version_compare(JVERSION, '3.0', 'ge')) {
 					// Joomla! 3.0... Whatever!!!!
-					$db->query();
+					$db->execute();
 				} else {
 					$db->queryBatch(false);
 				}

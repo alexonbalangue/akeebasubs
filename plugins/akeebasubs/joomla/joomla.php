@@ -43,7 +43,7 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 				->where($db->qn('user_id').' = '.$user_id)
 				->where($db->qn('group_id').' IN ('.implode(', ', $groupSet).')');
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 			
 			// 2. Add new assignments
 			$query = $db->getQuery(true)
@@ -58,7 +58,7 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 			}
 			
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 		
 		// Remove from Joomla! 1.6 groups
@@ -72,7 +72,7 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 			}
 			$query->where($db->qn('group_id').' IN ('.implode(', ', $groupSet).')');
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		}
 	}
 

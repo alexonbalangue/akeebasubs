@@ -14,8 +14,8 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		// When groupbydate is set to 1 we force a JSON view which returns the
 		// sales info (subscriptions, net amount) grouped by date. You can use
 		// the since/until or other filter in the URL to filter the whole lot
-		$groupbydate = FOFInput::getInt('groupbydate',0,$this->input);
-		$groupbylevel = FOFInput::getInt('groupbylevel',0,$this->input);
+		$groupbydate = $this->input->getInt('groupbydate',0);
+		$groupbylevel = $this->input->getInt('groupbylevel',0);
 		if(($groupbydate == 1) || ($groupbylevel == 1)) {
 			if(JFactory::getUser()->guest) {
 				return false;
@@ -36,34 +36,34 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			if(JFactory::getUser()->guest) {
 				return false;
 			} else {
-				FOFInput::setVar('user_id',JFactory::getUser()->id,$this->input);
+				$this->input->set('user_id',JFactory::getUser()->id);
 			}
 		}
-		
+
 		// If it's the back-end CSV view, force no limits
-		if(JFactory::getApplication()->isAdmin() && (FOFInput::getCmd('format','html',$this->input) == 'csv')) {
+		if(JFactory::getApplication()->isAdmin() && ($this->input->getCmd('format','html') == 'csv')) {
 			$this->getThisModel()
 				->savestate(0)
 				->limit(0)
 				->limitstart(0);
 		}
-		
+
 		return parent::browse($cachable);
 	}
-	
+
 	public function publish()
 	{
 		$this->noop();
 	}
-	
+
 	public function unpublish()
 	{
 		$this->noop();
 	}
-	
+
 	public function noop()
 	{
-		if($customURL = FOFInput::getString('returnurl','',$this->input)) $customURL = base64_decode($customURL);
+		if($customURL = $this->input->getString('returnurl','')) $customURL = base64_decode($customURL);
 		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
 		$this->setRedirect($url);
 	}

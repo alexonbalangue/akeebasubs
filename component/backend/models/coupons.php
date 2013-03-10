@@ -59,7 +59,7 @@ class AkeebasubsModelCoupons extends FOFModel
 		
 		if($this->getState('skipOnProcessList',0)) return;
 		
-		jimport('joomla.utilities.date');
+		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
 
