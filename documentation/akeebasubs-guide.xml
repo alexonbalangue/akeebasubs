@@ -11522,83 +11522,9 @@ LEVEL3=entry1</programlisting>
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Phoca Download Integration</guilabel></para>
 
-      <para>This integration plugin allows you to add and remove users from
-      Phoca Download categories based on their subscription status. This
-      allows you to control who can access the downloads based on a user's
-      subscription status.</para>
-
-      <para>Please note that this is a smart integration; instead of adding
-      users when a subscription goes active and removing them when a
-      subscription goes inactive, Akeeba Subscriptions plugins take a look at
-      all of the user's active and inactive subscriptions and decide which
-      groups the user should be added to or removed from.</para>
-
-      <para>The plugin has these options:</para>
-
-      <variablelist>
-        <varlistentry>
-          <term>Add to Phoca Download groups</term>
-
-          <listitem>
-            <para>This is a list for assigning subscription levels to Phoca
-            Download categories. When a user has an active subscription to the
-            specified level, he'll be added to the Phoca Download categories
-            mentioned on the right hand of the equal sign. Each assignment is
-            done like this:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Group 1, Group 2 and Group 3 are the names of the Phoca Download
-            categories you want to add a user to when he subscribes. If you
-            want to assign multiple subscription levels to multiple
-            categories, you have to do something like that (separate multiple
-            lines with a single press of the ENTER key on your
-            keyboard):</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-            <para>You can also use the numeric IDs of subscription levels or
-            Phoca Download categories instead of their titles. However, we
-            consider working with numeric IDs very counter-intuitive.</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Remove from Phoca Download groups</term>
-
-          <listitem>
-            <para>Likewise, this is the list of the Phoca Download categories
-            to remove a user from when his subscription to the specified level
-            is no longer active. Do note that you can specify a different set
-            of categories to remove the user from than the ones you are adding
-            him to. For example:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-
-      <para>In this example, together with the rules displayed in "Add to
-      Phoca Download groups", when a subscription to the LEVEL1 level expires,
-      the user will still belong to Phoca Download category Group 3, as it's
-      not removed from his account; only categories Group 1 and Group 2 are
-      removed. Likewise, if the user has an expired LEVEL1 subscription and an
-      active LEVEL2 subscription he'll now belong to categories Group 2 and
-      Group 3: category Group 3 because it's not removed when his subscription
-      expires and category Group 2 because his active LEVEL2 subscription
-      suggests that he should be granted Group 2 access despite his expired
-      LEVEL1 subscription.</para>
-
-      <para>If you find this hard to understand, join the club. ACLs are not
-      meant to be easy to setup or understand. It's a power feature and, as
-      such, poses a great difficulty to even the most seasoned web site
-      integrators. Take your time and experiment on a dev copy of your site
-      before going live.</para>
+      <para>This was a third party plugin, distributed with Akeeba
+      Subscriptions. Its developer ceased supporting the plugin and as of
+      Akeeba Subscriptions 3.0.3 it has been removed.</para>
     </section>
 
     <section xml:id="integration-mailchimp">
