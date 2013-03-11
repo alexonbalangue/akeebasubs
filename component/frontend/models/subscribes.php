@@ -506,11 +506,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 			// If we are not using the automatic discount, make sure the oldsub
 			// and expiration fields are reset
+			// -- NO! Subscription level relations must not be bound to the
+			// discount.
+			/**
 			if (!$useAuto)
 			{
 				$discountStructure['oldsub'] = null;
 				$discountStructure['expiration'] = 'overlap';
 			}
+			/**/
 
 			// Get the applicable tax rule
 			$taxRule = $this->_getTaxRule();
