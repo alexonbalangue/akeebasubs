@@ -15,41 +15,41 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 * @var array
 	 */
 	private $european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK');
-	
+
 	/**
 	 * Raw HTML source of the payment form, as returned by the payment plugin
 	 *
 	 * @var string
 	 */
 	private $paymentForm = '';
-	
+
 	/**
 	 * File handle
 	 *
 	 * @var resource
 	 */
 	protected $_urand;
-	
+
 	/**
 	 * @var int|null Coupon ID used in the price calculation
 	 */
 	protected $_coupon_id = null;
-	
+
 	/**
 	 * @var int|null Upgrade ID used in the price calculation
 	 */
 	protected $_upgrade_id = null;
-	
+
 	/**
 	 * We cache the results of all time-consuming operations, e.g. vat validation, subscription membership calculation,
 	 * tax calculations, etc into this array, saved in the user's session.
 	 * @var array
 	 */
 	private $_cache = array();
-	
+
 	public function __construct($config = array()) {
 		parent::__construct($config);
-		
+
 		$session = JFactory::getSession();
 		$encodedCacheData = $session->get('validation_cache_data', null, 'com_akeebasubs');
 		if(!is_null($encodedCacheData)) {
@@ -57,7 +57,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		} else {
 			$this->_cache = array();
 		}
-		
+
 		// Load the state from cache, GET or POST variables
 		if(!array_key_exists('state',$this->_cache)) {
 			$this->_cache['state'] = array(
@@ -83,12 +83,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'subcustom'		=> array(),
 			);
 		}
-		
+
 		// Otherwise we always see the same level over and over again
 		if(array_key_exists('id',$this->_cache['state'])) {
 			unset($this->_cache['state']['id']);
 		}
-		
+
 		$rawDataCache = $this->_cache['state'];
 		$rawDataPost = JRequest::get('POST', 2);
 		$rawDataGet = JRequest::get('GET', 2);
@@ -97,13 +97,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 			if(substr($k,0,1) == chr(0)) continue; // Don't ask...
 			$this->setState($k, $v);
 		}
-		
+
 		// Save the new state data in the cache
 		$this->_cache['state'] = (array)($this->getState());
 		$encodedCacheData = json_encode($this->_cache);
 		$session->set('validation_cache_data', $encodedCacheData, 'com_akeebasubs');
 	}
-	
+
 	private function getStateVariables()
 	{
 		$session = JFactory::getSession();
@@ -111,7 +111,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		if($firstRun) {
 			$session->set('firstrun', false, 'com_akeebasubs');
 		}
-		
+
 		return (object)array(
 			'firstrun'			=> $firstRun,
 			'slug'				=> $this->getState('slug','','string'),
@@ -140,16 +140,16 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'opt'				=> $this->getState('opt','','cmd')
 		);
 	}
-	
+
 	/**
 	 * Performs a validation
 	 */
 	public function getValidation()
 	{
 		$response = new stdClass();
-		
+
 		$state = $this->getStateVariables();
-		
+
 		if($state->slug && empty($state->id)) {
 			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($state->slug)
@@ -161,18 +161,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$state->id = 0;
 			 }
 		}
-		
+
 		switch($state->opt)
 		{
 			case 'username':
 				$response->validation = $this->_validateUsername();
 				break;
-				
+
 			default:
 				$response->validation = $this->_validateState();
 				$response->validation->username = $this->_validateUsername()->username;
 				$response->price = $this->_validatePrice();
-				
+
 				// Get the results from the custom validation
 				$response->custom_validation = array();
 				$response->custom_valid = true;
@@ -192,7 +192,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						}
 					}
 				}
-				
+
 				// Get the results from the per-subscription custom validation
 				$response->subscription_custom_validation = array();
 				$response->subscription_custom_valid = true;
@@ -216,14 +216,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		return $response;
 	}
-	
+
 	/**
 	 * Validates the username for uniqueness
 	 */
 	private function _validateUsername()
 	{
 		$state = $this->getStateVariables();
-		
+
 		$ret = (object)array('username' => false);
 		$username = $state->username;
 		if(empty($username)) return $ret;
@@ -231,7 +231,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$user = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
 			->username($username)
 			->getFirstItem();
-		
+
 		if($myUser->guest) {
 			if(empty($user->username)) {
 				$ret->username = true;
@@ -251,25 +251,25 @@ class AkeebasubsModelSubscribes extends FOFModel
 					$ret->username = false;
 				}
 			}
-			
+
 		} else {
 			$ret->username = ($user->username == $myUser->username);
 		}
 		return $ret;
 	}
-	
+
 	/**
 	 * Validates the state data for completeness
 	 */
 	private function _validateState()
 	{
 		$state = $this->getStateVariables();
-		
+
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		$noPersonalInfo = !AkeebasubsHelperCparams::getParam('personalinfo',1);
 		$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
 		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
-		
+
 		// 1. Basic checks
 		$ret = array(
 			'name'			=> !empty($state->name),
@@ -284,9 +284,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'vatnumber'		=> $noPersonalInfo ? true : !empty($state->vatnumber),
 			'coupon'		=> $noPersonalInfo ? true : !empty($state->coupon)
 		);
-		
+
 		$ret['rawDataForDebug'] = (array)$state;
-		
+
 		// Name validation; must contain AT LEAST two parts (name/surname)
 		// separated by a space
 		if(!empty($state->name)) {
@@ -294,7 +294,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$nameParts = explode(" ", $name);
 			if(count($nameParts) < 2) $ret['name'] = false;
 		}
-		
+
 		// Email validation
 		if(!empty($state->email)) {
 			$list = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
@@ -324,15 +324,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 					}
 				}
 			}
-			
+
 			// Double check that it's a valid email
 			if($validEmail) $validEmail = $this->validEmail($state->email);
-			
+
 			$ret['email'] = $validEmail;
 		} else {
 			$ret['email'] = false;
 		}
-		
+
 		// 2. Country validation
 		if($ret['country'] && !$noPersonalInfo) {
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
@@ -340,7 +340,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		} else {
 			$ret['country'] = !empty($state->country);
 		}
-		
+
 		// 3. State validation
 		if($noPersonalInfo) {
 			$ret['state'] = true;
@@ -355,7 +355,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$ret['state'] = true;
 			}
 		}
-		
+
 		// 4. Business validation
 		// Fix the VAT number's format
 		$vat_check = $this->_checkVATFormat($state->country, $state->vatnumber);
@@ -365,7 +365,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$state->vatnumber = '';
 		}
 		$this->setState('vatnumber', $state->vatnumber);
-		
+
 		if(!$state->isbusiness || $noPersonalInfo) {
 			$ret['businessname'] = true;
 			$ret['vatnumber'] = false;
@@ -393,7 +393,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					}
 				}
 				$mustCheck = ($catchRules < 2) && ($catchRules > 0);
-			
+
 				if($mustCheck) {
 					$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
 					$ret['novatrequired'] = false;
@@ -406,13 +406,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
 			}
 		}
-		
+
 		// 5. Coupon validation
 		$ret['coupon'] = $this->_validateCoupon(!$requireCoupon);
-		
+
 		return (object)$ret;
 	}
-	
+
 	/**
 	 * Calculates the level's price applicable to the specific user and the
 	 * actual state information
@@ -420,7 +420,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	private function _validatePrice()
 	{
 		static $result = null;
-		
+
 		if(is_null($result))
 		{
 
@@ -493,7 +493,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					$discount = $couponDiscount;
 					$useCoupon = true;
 					$this->_upgrade_id = null;
-				}	
+				}
 			} else {
 				$this->_coupon_id = null;
 				$discount = $autoDiscount;
@@ -503,7 +503,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$discount = $useCoupon ? $couponDiscount : $autoDiscount;
 			$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
 			$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
-			
+
 			// If we are not using the automatic discount, make sure the oldsub
 			// and expiration fields are reset
 			if (!$useAuto)
@@ -542,10 +542,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'expiration'=> $discountStructure['expiration'],
 			);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Validates a coupon code, making sure it exists, it's activated, it's not expired,
 	 * it applies to the specific subscription and user.
@@ -555,10 +555,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 		static $couponCode = null;
 		static $valid = false;
 		static $couponid = null;
-		
+
 		$state = $this->getStateVariables();
 		$this->_coupon_id = null;
-	
+
 		if($state->coupon) {
 			if($state->coupon == $couponCode) {
 				$this->_coupon_id = $valid ? $couponid : null;
@@ -566,16 +566,16 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 		}
 
-		$valid = $validIfNotExists;		
+		$valid = $validIfNotExists;
 		if($state->coupon) {
 			$couponCode = $state->coupon;
 			$valid = false;
-			
+
 			$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
 				->coupon(strtoupper($state->coupon))
 				->getFirstItem();
 			if(empty($coupon->akeebasubs_coupon_id)) $coupon = null;
-				
+
 			if(is_object($coupon)) {
 				$valid = false;
 				if($coupon->enabled && (strtoupper($coupon->coupon) == strtoupper($couponCode)) ) {
@@ -584,21 +584,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 					$jFrom = new JDate($coupon->publish_up);
 					$jTo = new JDate($coupon->publish_down);
 					$jNow = new JDate();
-					
+
 					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
-					
+
 					// Check levels list
 					if($valid && !empty($coupon->subscriptions)) {
 						$levels = explode(',', $coupon->subscriptions);
 						$valid = in_array($state->id, $levels);
 					}
-					
+
 					// Check user
 					if($valid && $coupon->user) {
 						$user_id = JFactory::getUser()->id;
 						$valid = $user_id == $coupon->user;
 					}
-					
+
 					// Check user group levels
 					if ($valid && !empty($coupon->usergroups)) {
 						$groups = explode(',', $coupon->usergroups);
@@ -631,7 +631,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 							}
 						}
 					}
-					
+
 					// Check user hits limit
 					if($valid && $coupon->userhits && !JFactory::getUser()->guest) {
 						$user_id = JFactory::getUser()->id;
@@ -652,11 +652,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 			}
 		}
-		
+
 		$this->_coupon_id = $valid ? $couponid : null;
 		return $valid;
 	}
-	
+
 	/**
 	 * Loads any relevant auto discount (upgrade rules or discount) and returns
 	 * the max discount possible under those rules, as well as related
@@ -668,7 +668,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		// Get the automatic discount based on upgrade rules
 		$autoDiscount = $this->_getUpgradeRule();
-		
+
 		// Initialise the return value
 		$ret = array(
 			'discount'		=> $autoDiscount,	// discount amount
@@ -676,7 +676,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'allsubs'		=> null,			// all old subscription ids
 			'oldsub'		=> null,			// old subscription id
 		);
-		
+
 		// Check if we have a valid subscription level and user
 		if (!JFactory::getUser()->guest)
 		{
@@ -684,6 +684,17 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// Check that a relation row is relevant
 			if (!is_null($relationData['relation']))
 			{
+				// As long as we have an expiration method other than "overlap"
+				// pass along the subscriptions which will be replaced / used
+				// to extend the subscription time
+				if ($relationData['relation']->expiration != 'overlap')
+				{
+					$ret['expiration'] = $relationData['relation']->expiration;
+					$ret['oldsub'] = $relationData['oldsub'];
+					$ret['allsubs'] = $relationData['allsubs'];
+					$this->_upgrade_id = null;
+				}
+
 				// Non-rule-based relation discount
 				if($relationData['relation']->mode != 'rules')
 				{
@@ -693,32 +704,25 @@ class AkeebasubsModelSubscribes extends FOFModel
 					{
 						// yes, it's greated than the upgrade rule-based discount. Use it.
 						$ret['discount'] = $relDiscount;
-						$ret['expiration'] = $relationData['relation']->expiration;
-						$ret['oldsub'] = $relationData['oldsub'];
-						$ret['allsubs'] = $relationData['allsubs'];
-						$this->_upgrade_id = null;
 					}
+
 				}
 				// Rule-based relation discount
 				else
 				{
 					$ret['discount'] = $relDiscount;
-					$ret['expiration'] = $relationData['relation']->expiration;
-					$ret['oldsub'] = $relationData['oldsub'];
-					$ret['allsubs'] = $relationData['allsubs'];
-					$this->_upgrade_id = null;
 				}
 			}
 		}
-		
+
 		// Finally, return the structure
 		return $ret;
 	}
-	
+
 	/**
-	 * Gets the applicable subscription level relation rule applicable for this 
+	 * Gets the applicable subscription level relation rule applicable for this
 	 * subscription attempt.
-	 * 
+	 *
 	 * @return  array  Hash array. discount is the value of the discount,
 	 *                 relation is a copy of the relation row, oldsub is the id
 	 *                 of the old subscription on which the relation row was
@@ -727,7 +731,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	private function _getLevelRelation($autoDiscount)
 	{
 		$state = $this->getStateVariables();
-		
+
 		// Get the id from the slug if it's not present
 		if($state->slug && empty($state->id)) {
 			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
@@ -740,7 +744,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$state->id = 0;
 			 }
 		}
-		
+
 		// Initialise the return array
 		$ret = array(
 			'discount'		=> 0,
@@ -748,14 +752,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'oldsub'		=> null,
 			'allsubs'		=> null,
 		);
-		
+
 		$combineret = array(
 			'discount'		=> 0,
 			'relation'		=> null,
 			'oldsub'		=> null,
 			'allsubs'		=> array(),
 		);
-		
+
 		// Get applicable relation rules
 		$autoRules = FOFModel::getTmpInstance('Relations','AkeebasubsModel')
 			->savestate(0)
@@ -764,25 +768,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 			->limit(0)
 			->limitstart(0)
 			->getItemList();
-		
+
 		if (empty($autoRules))
 		{
 			// No point continuing if we don't have any rules, right?
 			return $ret;
 		}
-		
+
 		// Get the current subscription level's net worth
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
 		$net = (float)$level->price;
-		
-		// Make sure this is not a free subscription
-		if(abs($net) < 0.01)
-		{
-			return $ret;
-		}
-		
+
 		foreach($autoRules as $rule)
 		{
 			// Get all of the user's paid subscriptions with an expiration date
@@ -804,14 +802,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// If there are no subscriptions on this level don't bother.
 				continue;
 			}
-			
+
 			$allsubs = array();
 			foreach($subscriptions as $sub)
 			{
 				$allsubs[] = $sub->akeebasubs_level_id;
 			}
 			reset($allsubs);
-			
+
 			switch($rule->mode)
 			{
 				// Rules-based discount.
@@ -839,23 +837,23 @@ class AkeebasubsModelSubscribes extends FOFModel
 						case 'd':
 							$modifier = 1;
 							break;
-						
+
 						case 'w':
 							$modifier = 7;
 							break;
-						
+
 						case 'm':
 							$modifier = 30;
 							break;
-						
+
 						case 'y':
 							$modifier = 365;
 							break;
 					}
 					$modifier = $modifier * 86400; // translate to seconds
-					
+
 					$period = $rule->flex_period;
-					
+
 					// Calculate presence
 					$remaining_seconds = 0;
 					$jNow = new JDate();
@@ -866,7 +864,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						{
 							continue;
 						}
-						
+
 						$jFrom = new JDate($sub->publish_up);
 						$jTo = new JDate($sub->publish_down);
 						$from = $jFrom->toUnix();
@@ -881,7 +879,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						}
 					}
 					$remaining = $remaining_seconds / $modifier;
-					
+
 					// Check for low threshold
 					if (($rule->low_threshold > 0) && ($remaining <= $rule->low_threshold))
 					{
@@ -918,10 +916,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 					{
 						$discount = $net * (float)$rule->amount / 100;
 					}
-					
+
 					break;
 			}
-			
+
 			// Combined rule. Add to, um, the combined rules return array
 			if($rule->combine)
 			{
@@ -960,17 +958,20 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 			}
 		}
-		
+
 		// Finally, check if the combined rule trumps the currently selected
 		// rule. If it does, use it instead of the regular return array.
-		if($combineret['discount'] > $ret['discount'])
+		if (
+			($combineret['discount'] > $ret['discount']) ||
+			(($ret['discount'] <= 0.01) && !is_null($combineret['relation']))
+		)
 		{
 			$ret = $combineret;
 		}
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Loads any relevant upgrade rules and returns the max discount possible
 	 * under those rules.
@@ -980,7 +981,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	private function _getUpgradeRule()
 	{
 		$state = $this->getStateVariables();
-		
+
 		// Get the id from the slug if it's not present
 		if($state->slug && empty($state->id)) {
 			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
@@ -993,7 +994,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$state->id = 0;
 			 }
 		}
-		
+
 		// Check that we do have a user (if there's no logged in user, we have
 		// no subscription information, ergo upgrades are not applicable!)
 		$user_id = JFactory::getUser()->id;
@@ -1001,7 +1002,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$this->_upgrade_id = null;
 			return 0;
 		}
-		
+
 		// Get applicable auto-rules
 		$autoRules = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
 			->savestate(0)
@@ -1010,12 +1011,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 			->limit(0)
 			->limitstart(0)
 			->getItemList();
-			
+
 		if(empty($autoRules)) {
 			$this->_upgrade_id = null;
 			return 0;
 		}
-		
+
 		// Get the user's list of subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->savestate(0)
@@ -1024,25 +1025,25 @@ class AkeebasubsModelSubscribes extends FOFModel
 			->limit(0)
 			->limitstart(0)
 			->getList();
-			
+
 		if(empty($subscriptions)) {
 			$this->_upgrade_id = null;
 			return 0;
 		}
-		
+
 		$subs = array();
 		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
-		
+
 		$subPayments = array();
-		
+
 		foreach($subscriptions as $subscription) {
 			$jFrom = new JDate($subscription->publish_up);
 			$uFrom = $jFrom->toUnix();
 			$presence = $uNow - $uFrom;
 			$subs[$subscription->akeebasubs_level_id] = $presence;
-			
+
 			$jOn = new JDate($subscription->created_on);
 			if(!array_key_exists($subscription->akeebasubs_level_id, $subPayments)) {
 				$subPayments[$subscription->akeebasubs_level_id] = array(
@@ -1070,7 +1071,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$this->_upgrade_id = null;
 			return 0;
 		}
-		
+
 		$discount = 0;
 		$this->_upgrade_id = null;
 
@@ -1123,7 +1124,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Then check all non-combined rules if they give a higher discount
 		foreach($autoRules as $rule) {
 			if ($rule->combine) continue;
-			
+
 			switch($rule->type) {
 				case 'value':
 					if($rule->value > $discount) {
@@ -1131,7 +1132,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
 					}
 					break;
-					
+
 				case 'percent':
 					$newDiscount = $net * (float)$rule->value / 100.00;
 					if($newDiscount > $discount) {
@@ -1139,7 +1140,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
 					}
 					break;
-				
+
 				case 'lastpercent':
 					if(!array_key_exists($rule->from_id, $subPayments)) {
 						$lastNet = 0.00;
@@ -1157,7 +1158,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		return $discount;
 	}
-	
+
 	/**
 	 * Gets the applicable tax rule based on the state variables
 	 */
@@ -1167,7 +1168,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$validation = $this->_validateState();
 		$state = $this->getStateVariables();
 		$isVIES = $validation->vatnumber && in_array($state->country, $this->european_states);
-		
+
 		// Load the tax rules
 		$taxrules = FOFModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
 			->savestate(0)
@@ -1183,38 +1184,38 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'fuzzy'		=> 0,
 			'taxrate'	=> 0
 		);
-			
+
 		foreach($taxrules as $rule)
 		{
 			// For each rule, get the match and fuzziness rating. The best, least fuzzy and last match wins.
 			$match = 0;
 			$fuzzy = 0;
-			
+
 			if(empty($rule->country)) {
 				$match++;
 				$fuzzy++;
 			} elseif($rule->country == $state->country) {
 				$match++;
 			}
-			
+
 			if(empty($rule->state)) {
 				$match++;
 				$fuzzy++;
 			} elseif($rule->state == $state->state) {
 				$match++;
 			}
-			
+
 			if(empty($rule->city)) {
 				$match++;
 				$fuzzy++;
 			} elseif(strtolower(trim($rule->city)) == strtolower(trim($state->city))) {
 				$match++;
 			}
-			
+
 			if( ($rule->vies && $isVIES) || (!$rule->vies && !$isVIES)) {
 				$match++;
 			}
-			
+
 			if(
 				($bestTaxRule->match < $match) ||
 				( ($bestTaxRule->match == $match) && ($bestTaxRule->fuzzy > $fuzzy) )
@@ -1228,7 +1229,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		return $bestTaxRule;
 	}
-	
+
 	/**
 	 * Gets a list of payment plugins and their titles
 	 */
@@ -1241,10 +1242,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		return $jResponse; // name, title
 	}
-	
+
 	/**
 	 * Checks that the current state passes the validation
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function isValid()
@@ -1253,11 +1254,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// ----------------------------------------------------------------------
 		$validation = $this->getValidation();
 		$state = $this->getStateVariables();
-		
+
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
 
-		
+
 		// Iterate the core validation rules
 		$isValid = true;
 		foreach($validation->validation as $key => $validData)
@@ -1274,7 +1275,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			if($key == 'occupation') continue;
 			// This is a dummy key which must be ignored
 			if($key == 'novatrequired') continue;
-			
+
 			$isValid = $isValid && $validData;
 			if(!$isValid) {
 				if($key == 'username') {
@@ -1290,27 +1291,27 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		// Make sure custom fields also validate
 		$isValid = $isValid && $validation->custom_valid && $validation->subscription_custom_valid;
-		
+
 		return $isValid;
 	}
-	
+
 	/**
-	 * Updates the user info based on the state data 
-	 * 
+	 * Updates the user info based on the state data
+	 *
 	 * @param bool $allowNewUser When true, we can create a new user. False, only update an existing user's data.
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function updateUserInfo($allowNewUser = true, $level = null)
 	{
 		$state = $this->getStateVariables();
 		$user = JFactory::getUser();
 		$user = $this->getState('user', $user);
-		
+
 		if(($user->id == 0) && !$allowNewUser) {
 			// New user creation is not allowed. Sorry.
 			return false;
 		}
-		
+
 		if($user->id == 0) {
 			// Check for an existing, blocked, unactivated user with the same
 			// username or email address.
@@ -1334,7 +1335,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					// We have both the same username and same email, but in two
 					// different users. In order to avoid confusion we will remove
 					// user 2 and change user 1's email into the email address provided
-					
+
 					// Remove the last subscription for $user2 (it will be an unpaid one)
 					$submodel = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel');
 					$substodelete = $submodel
@@ -1344,7 +1345,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						$subtable = $submodel->getTable();
 						$subtable->delete($subtodelete->akeebasubs_subscription_id);
 					}
-					
+
 					// Remove $user2 and set $user to $user1 so that it gets updated
 					$user2->delete($id2);
 					$user = JFactory::getUser($user1->id);
@@ -1361,7 +1362,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 			}
 		}
-		
+
 		if(is_null($user->id) || ($user->id == 0)) {
 			// CREATE A NEW USER
 			$params = array(
@@ -1371,13 +1372,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'password'		=> $state->password,
 				'password2'		=> $state->password2
 			);
-			
+
 			$user = JFactory::getUser(0);
 
 			JLoader::import('joomla.application.component.helper');
 			$usersConfig = JComponentHelper::getParams( 'com_users' );
 			$newUsertype = $usersConfig->get( 'new_usertype' );
-			
+
 			if(version_compare(JVERSION, '1.6.0', 'ge')) {
 				// get the New User Group from com_users' settings
 				if(empty($newUsertype)) $newUsertype = 2;
@@ -1389,9 +1390,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$acl = JFactory::getACL();
 				$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
 			}
-			
+
 			$params['sendEmail'] = 0;
-			
+
 			// Set the user's default language to whatever the site's current language is
 			if(version_compare(JVERSION, '3.0', 'ge')) {
 				$params['params'] = array(
@@ -1402,14 +1403,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 					'language'	=> JFactory::getConfig()->getValue('config.language')
 				);
 			}
-			
+
 			// We always block the user, so that only a successful payment or
 			// clicking on the email link activates his account. This is to
 			// prevent spam registrations when the subscription form is abused.
 			JLoader::import('joomla.user.helper');
 			$params['block'] = 1;
 			$params['activation'] = JFactory::getApplication()->getHash( JUserHelper::genRandomPassword() );
-			
+
 			$userIsSaved = false;
 			$user->bind($params);
 			$userIsSaved = $user->save();
@@ -1425,12 +1426,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$table = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')->getTable();
 				$table->delete($unpaidSub->akeebasubs_subscription_id);
 			}
-			
+
 			// Update existing user's details
 			$userRecord = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
 				->setId($user->id)
 				->getItem();
-			
+
 			$updates = array(
 				'name'			=> $state->name,
 				'email'			=> $state->email
@@ -1444,9 +1445,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 			if(!empty($state->username)) {
 				$updates['username'] = $state->username;
 			}
-			$userIsSaved = $userRecord->save($updates);			
+			$userIsSaved = $userRecord->save($updates);
 		}
-		
+
 		// Send activation email for free subscriptions if confirmfree is enabled
 		if($user->block && ($level->price < 0.01)) {
 			if(!class_exists('AkeebasubsHelperCparams')) {
@@ -1459,27 +1460,27 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$this->sendActivationEmail($user, $params);
 			}
 		}
-		
+
 		if(!$userIsSaved) {
 			JError::raiseWarning('', JText::_( $user->getError())); // ...raise a Warning
 			return false;
 		} else {
 			$this->setState('user', $user);
 		}
-		
+
 		return $userIsSaved;
 	}
-	
+
 	/**
 	 * Saves the custom fields of a user record
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function saveCustomFields()
 	{
 		$state = $this->getStateVariables();
 		$validation = $this->getValidation();
-		
+
 		$user = JFactory::getUser();
 		$user = $this->getState('user', $user);
 
@@ -1494,7 +1495,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$thisUser = array_pop($list);
 			$id = $thisUser->akeebasubs_user_id;
 		}
-		
+
 		$data = array(
 			'akeebasubs_user_id' => $id,
 			'user_id'		=> $user->id,
@@ -1513,7 +1514,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'country'		=> $state->country,
 			'params'		=> $state->custom
 		);
-		
+
 		// Allow plugins to post-process the fields
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -1530,18 +1531,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 			$data = array_merge($data, $pResponse);
 		}
-		
+
 		// Serialize custom fields
 		$data['params'] = json_encode($data['params']);
-		
+
 		$status = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->setId($id)
 			->getItem()
 			->save($data);
-		
+
 		return $status;
 	}
-	
+
 	/**
 	 * Processes the form data and creates a new subscription
 	 */
@@ -1550,16 +1551,16 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Fetch state and validation variables
 		$state = $this->getStateVariables();
 		$validation = $this->getValidation();
-		
+
 		// Step #1.a. Check that the form is valid
 		// ----------------------------------------------------------------------
 		$isValid = $this->isValid();
-		
+
 		if(!$isValid) return false;
-		
+
 		// Step #1.b. Check that the subscription level is allowed
 		// ----------------------------------------------------------------------
-		
+
 		// Is this actually an allowed subscription level?
 		$allowedLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->only_once(1)
@@ -1572,11 +1573,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 				break;
 			}
 		}
-		
+
 		if(!$allowed) {
 			return false;
 		}
-		
+
 		// Fetch the level's object, used later on
 		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->getItem($state->id);
@@ -1594,7 +1595,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 		}
 		if(!$found) return false;
-		
+
 		// Reset the session flag, so that future registrations will merge the
 		// data from the database
 		JFactory::getSession()->set('firstrun', true, 'com_akeebasubs');
@@ -1604,18 +1605,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$user = JFactory::getUser();
 		$this->setState('user', $user);
 		$userIsSaved = $this->updateUserInfo(true, $level);
-		
+
 		if(!$userIsSaved) {
 			return false;
 		} else {
 			$user = $this->getState('user', $user);
 		}
-		
+
 		// Step #4. Create or add user extra fields
 		// ----------------------------------------------------------------------
 		// Find an existing record
 		$dummy = $this->saveCustomFields();
-		
+
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------
 		// First, the question: is this level part of a group?
@@ -1628,7 +1629,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$haveLevelGroup = $levelGroup->enabled;
 			}
 		}
-		
+
 		if($haveLevelGroup) {
 			// We have a level group. Get all subscriptions for all levels in
 			// the group.
@@ -1654,13 +1655,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 				->enabled(1)
 				->getList(true);
 		}
-		
-		
-			
+
+
+
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
 		$mNow = $jNow->toSql();
-		
+
 		if(empty($subscriptions)) {
 			$startDate = $now;
 		} else {
@@ -1689,7 +1690,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					));
 			}
 		}
-		
+
 		// Step #6. Create a new subscription record
 		// ----------------------------------------------------------------------
 		$nullDate = JFactory::getDbo()->getNullDate();
@@ -1716,7 +1717,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$mStartDate = $jStartDate->toSql();
 		$jEndDate = new JDate($endDate);
 		$mEndDate = $jEndDate->toSql();
-		
+
 		// Get the affiliate ID and make sure it exists and that it's enabled
 		$session = JFactory::getSession();
 		$affid = $session->get('affid', 0, 'com_akeebasubs');
@@ -1730,12 +1731,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$affid = 0;
 			}
 		}
-		
+
 		$aff_comission = 0;
 		if($affid > 0) {
 			$aff_comission = $validation->price->net * $affiliate->comission / 100;
 		}
-		
+
 		// Store the price validation's "oldsub" and "expiration" keys in
 		// the subscriptions subcustom array
 		$subcustom = $state->subcustom;
@@ -1753,10 +1754,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'allsubs'		=> $priceValidation->allsubs,
 			'expiration'	=> $priceValidation->expiration,
 		);
-		
+
 		// Serialise custom subscription parameters
 		$custom_subscription_params = json_encode($subcustom);
-		
+
 		// Setup the new subscription
 		$data = array(
 			'akeebasubs_subscription_id' => null,
@@ -1785,7 +1786,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'akeebasubs_affiliate_id' => $affid,
 			'affiliate_comission'	=> $aff_comission
 		);
-				
+
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->getTable();
 		$subscription->reset();
@@ -1802,11 +1803,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 				->getItem()
 				->hit();
 		}
-		
+
 		// Step #8. Clear the session
 		// ----------------------------------------------------------------------
 		$session = JFactory::getSession();
-		$session->set('validation_cache_data', null, 'com_akeebasubs');		
+		$session->set('validation_cache_data', null, 'com_akeebasubs');
 
 		// Step #9. Call the specific plugin's onAKPaymentNew() method and get the redirection URL,
 		//          or redirect immediately on auto-activated subscriptions
@@ -1821,10 +1822,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$subscription
 			));
 			if(empty($jResponse)) return false;
-			
+
 			foreach($jResponse as $response) {
 				if($response === false) continue;
-				
+
 				$this->paymentForm = $response;
 			}
 		} else {
@@ -1837,42 +1838,42 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$app->redirect( str_replace('&amp;','&', JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)) );
 			return false;
 		}
-		
+
 		// Return true
 		// ----------------------------------------------------------------------
 		return true;
 	}
-	
+
 	/**
 	 * Runs a payment callback
 	 */
 	public function runCallback()
 	{
 		$state = $this->getStateVariables();
-		
+
 		$rawDataPost = JRequest::get('POST', 2);
 		$rawDataGet = JRequest::get('GET', 2);
 		$data = array_merge($rawDataGet, $rawDataPost);
-		
+
 		$dummy = $this->getPaymentPlugins();
-		
+
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKPaymentCallback',array(
 			$state->paymentmethod,
 			$data
 		));
 		if(empty($jResponse)) return false;
-		
+
 		$status = false;
-		
+
 		foreach($jResponse as $response)
 		{
 			$status = $status || $response;
 		}
-		
+
 		return $status;
 	}
-	
+
 	/**
 	 * Get the form set by the active payment plugin
 	 */
@@ -1880,7 +1881,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		return $this->paymentForm;
 	}
-	
+
 	/**
 	 * Returns the state data.
 	 */
@@ -1888,7 +1889,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		return $this->getStateVariables();
 	}
-	
+
 	/**
 	 * Generates a Universally Unique IDentifier, version 4.
 	 *
@@ -1899,22 +1900,22 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 * @see http://en.wikipedia.org/wiki/UUID
 	 * @return string A UUID, made up of 36 characters or 16 hex digits.
 	 */
-	protected function _uuid($hex = false) 
+	protected function _uuid($hex = false)
 	{
 	    $pr_bits = false;
 	 	if (is_resource ( $this->_urand )) {
 	     	$pr_bits .= @fread ( $this->_urand, 16 );
 	   	}
-	    
-	    if (! $pr_bits) 
+
+	    if (! $pr_bits)
 	    {
 	        $fp = @fopen ( '/dev/urandom', 'rb' );
-	        if ($fp !== false) 
+	        if ($fp !== false)
 	        {
 	            $pr_bits .= @fread ( $fp, 16 );
 	            @fclose ( $fp );
-	        } 
-	        else 
+	        }
+	        else
 	        {
 	            // If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
 	            $pr_bits = "";
@@ -1923,13 +1924,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 	            }
 	        }
 	    }
-	    
+
 	    $time_low = bin2hex ( substr ( $pr_bits, 0, 4 ) );
 	    $time_mid = bin2hex ( substr ( $pr_bits, 4, 2 ) );
 	    $time_hi_and_version = bin2hex ( substr ( $pr_bits, 6, 2 ) );
 	    $clock_seq_hi_and_reserved = bin2hex ( substr ( $pr_bits, 8, 2 ) );
 	    $node = bin2hex ( substr ( $pr_bits, 10, 6 ) );
-	   
+
 	    /**
 	     * Set the four most significant bits (bits 12 through 15) of the
 	     * time_hi_and_version field to the 4-bit version number from
@@ -1939,7 +1940,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	    $time_hi_and_version = hexdec ( $time_hi_and_version );
 	    $time_hi_and_version = $time_hi_and_version >> 4;
 	    $time_hi_and_version = $time_hi_and_version | 0x4000;
-	   
+
 	    /**
 	     * Set the two most significant bits (bits 6 and 7) of the
 	     * clock_seq_hi_and_reserved to zero and one, respectively.
@@ -1947,13 +1948,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 	    $clock_seq_hi_and_reserved = hexdec ( $clock_seq_hi_and_reserved );
 	    $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved >> 2;
 	    $clock_seq_hi_and_reserved = $clock_seq_hi_and_reserved | 0x8000;
-	   
+
 	    //Either return as hex or as string
 	    $format = $hex ? '%08s%04s%04x%04x%012s' : '%08s-%04s-%04x-%04x-%012s';
-	    
+
 	    return sprintf ( $format, $time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node );
 	}
-	
+
 	private function validEmail($email)
 	{
 		$isValid = true;
@@ -1986,19 +1987,19 @@ class AkeebasubsModelSubscribes extends FOFModel
 			} else if
 				(!preg_match('/^(\\\\.|[A-Za-z0-9!#%&`_=\\/$\'*+?^{}|~.-])+$/',
 				str_replace("\\\\","",$local))) {
-				// character not valid in local part unless 
+				// character not valid in local part unless
 				// local part is quoted
 				if (!preg_match('/^"(\\\\"|[^"])+"$/',
 				str_replace("\\\\","",$local))) {
 					$isValid = false;
 				}
 			}
-			
+
 			// Check the domain name
 			if($isValid && !$this->is_valid_domain_name($domain)) {
 				return false;
 			}
-			
+
 			// Uncomment below to have PHP run a proper DNS check (risky on shared hosts!)
 			/**
 			if ($isValid && !(checkdnsrr($domain,"MX") || checkdnsrr($domain,"A"))) {
@@ -2009,7 +2010,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		return $isValid;
 	}
-	
+
 	function is_valid_domain_name($domain_name)
 	{
 		$pieces = explode(".",$domain_name);
@@ -2021,7 +2022,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		return true;
 	}
-	
+
 	private function isVIESValidVAT($country, $vat)
 	{
 		// Validate VAT number
@@ -2038,9 +2039,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$ret = $this->_cache['vat'][$key];
 			}
 		}
-		
+
 		if(!is_null($ret)) return $ret;
-		
+
 		if(empty($vat)) {
 			$ret = false;
 		} else {
@@ -2073,18 +2074,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		$session = JFactory::getSession();
 		$session->set('validation_cache_data', $encodedCacheData, 'com_akeebasubs');
-		
+
 		// Return the result
 		return $ret;
 	}
-	
+
 	/**
 	 * Sanitizes the VAT number and checks if it's valid for a specific country.
 	 * Ref: http://ec.europa.eu/taxation_customs/vies/faq.html#item_8
-	 * 
+	 *
 	 * @param string $country Country code
 	 * @param string $vatnumber VAT number to check
-	 * 
+	 *
 	 * @return array The VAT number and the validity check
 	 */
 	private function _checkVATFormat($country, $vatnumber)
@@ -2384,10 +2385,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		return $ret;
 	}
-	
+
 	/**
 	 * Send an activation email to the user
-	 * 
+	 *
 	 * @param JUser $user
 	 */
 	private function sendActivationEmail($user, $data)
@@ -2396,21 +2397,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$config		= JFactory::getConfig();
 		$uparams	= JComponentHelper::getParams('com_users');
 		$db			= JFactory::getDbo();
-		
+
 		$data = array_merge((array)$user->getProperties(), $data);
-		
+
 		$useractivation = $uparams->get('useractivation');
 
 		// Load the users plugin group.
 		JPluginHelper::importPlugin('user');
-		
+
 		if (($useractivation == 1) || ($useractivation == 2)) {
 			$params = array();
 			$params['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
 			$user->bind($params);
 			$userIsSaved = $user->save();
 		}
-		
+
 		// Set up data
 		$data = $user->getProperties();
 		$data['fromname']	= $config->get('fromname');
@@ -2423,7 +2424,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$jlang->load('com_users', JPATH_SITE, 'en-GB', true); // Load English (British)
 		$jlang->load('com_users', JPATH_SITE, $jlang->getDefault(), true); // Load the site's default language
 		$jlang->load('com_users', JPATH_SITE, null, true); // Load the currently selected language
-		
+
 		// Handle account activation/confirmation emails.
 		if ($useractivation == 2)
 		{
@@ -2485,7 +2486,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$data['siteurl']
 			);
 		}
-		
+
 		// Send the registration email.
 		$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody);
 
@@ -2518,7 +2519,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $row->email, $emailSubject, $emailBodyAdmin);
 			}
 		}
-		
+
 		return $return;
 	}
 }
