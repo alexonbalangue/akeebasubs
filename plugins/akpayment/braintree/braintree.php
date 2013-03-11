@@ -124,9 +124,14 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				$confirmationResult = Braintree_TransparentRedirect::confirm($queryString);
 				if(! $confirmationResult->success) {
 					$isValid = false;
-					$errors = $confirmationResult->errors->deepAll();
-					$data['akeebasubs_failure_reason'] = $errors[0]->message;
-				}
+					if ($confirmationResult->transaction->processorResponseCode >= 2000
+							&& $confirmationResult->transaction->processorResponseCode <= 2062) {
+						$errorMessage = 'Card declined. Please check your details. (code ' . $confirmationResult->transaction->processorResponseCode . ')';
+					} else {
+						$errorMessage = $confirmationResult->message;
+					}
+					$data['akeebasubs_failure_reason'] = $errorMessage;
+}
 			} catch(Exception $e) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
@@ -162,8 +167,13 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 					));
 					if(! $subscriptionResult->success) {
 						$isValid = false;
-						$errors = $subscriptionResult->errors->deepAll();
-						$data['akeebasubs_failure_reason'] = $errors[0]->message;
+						if ($subscriptionResult->transaction->processorResponseCode >= 2000
+								&& $subscriptionResult->transaction->processorResponseCode <= 2062) {
+							$errorMessage = 'Card declined.  Please check your details. (code ' . $subscriptionResult->transaction->processorResponseCode . ')';
+						} else {
+							$errorMessage = $subscriptionResult->message;
+						}
+						$data['akeebasubs_failure_reason'] = $errorMessage;
 					}
 				} catch(Exception $e) {
 					$isValid = false;
