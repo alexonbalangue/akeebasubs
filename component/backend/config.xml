@@ -50,6 +50,13 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field>
+		<field name="businessfields" type="list" default="auto"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_DESC">
+			<option value="auto">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_AUTO</option>
+			<option value="never">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_NEVER</option>
+			<option value="always">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_ALWAYS</option>
+		</field>
 		<field name="allowlogin" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">

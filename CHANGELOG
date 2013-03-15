@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.1.0
+================================================================================
++ You can now select if business registrations are allowed, disallowed or always enforced in the component's options
+
 Akeeba Subscriptions 3.0.2
 ================================================================================
 + Warn Professional users when their Download ID is missing

@@ -63,10 +63,11 @@ if(JFactory::getUser()->guest) {
 	$group_classes['password2'] = (!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'error' : '';
 }
 
+$businessFields = AkeebasubsHelperCparams::getParam('businessfields', 'auto');
 ?>
 
 <div class="form form-horizontal">
-	
+
 <fieldset>
 <?php if(JFactory::getUser()->guest):?>
 	<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></legend>
@@ -85,7 +86,7 @@ if(JFactory::getUser()->guest) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['password'] ?>">
 		<label for="password" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PASSWORD')?>
@@ -137,7 +138,7 @@ if(JFactory::getUser()->guest) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['email'] ?>">
 		<label for="email" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL')?>
@@ -149,7 +150,7 @@ if(JFactory::getUser()->guest) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['email2'] ?>">
 		<label for="email2" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL2')?>
@@ -213,7 +214,7 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="address2" class="control-label">
 			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS2')?>
@@ -223,7 +224,7 @@ if(array_key_exists('isValid', $field)) {
 				   value="<?php echo $this->escape($field_data['address2']);?>" />
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['city'] ?>">
 		<label for="city" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CITY')?>
@@ -236,7 +237,7 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['city'] ?>" id="stateField">
 		<label for="state" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE')?>
@@ -248,7 +249,7 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['zip'] ?>">
 		<label for="zip" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ZIP')?>
@@ -261,7 +262,7 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['country'] ?>">
 		<label for="country" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?>
@@ -273,24 +274,38 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 </fieldset>
 <fieldset>
-	
-<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS')?></legend>
 
-<div class="control-group">
+<?php if ($businessFields != 'never'): ?>
+<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS')?></legend>
+<?php endif; ?>
+
+<?php
+if ($businessFields == 'never') {
+	$isBusiness = 0; $style='display: none';
+} elseif ($businessFields == 'always') {
+	$isBusiness = 1; $style='display: none';
+} else {
+	$isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness : (@array_key_exists('isbusiness',$this->cache) ? $this->cache['isbusiness'] : 0);
+	$style='';
+}
+?>
+
+<div class="control-group" style="<?php echo $style ?>">
 	<label for="isbusiness" class="control-label">
 		* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')?>
 	</label>
 	<div class="controls">
-		<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness : (@array_key_exists('isbusiness',$this->cache) ? $this->cache['isbusiness'] : 0)); ?>
+		<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), $isBusiness); ?>
 	</div>
 </div>
 
-
+<?php if($businessFields == 'none'): ?>
+<div style="display: none;">
+<?php endif; ?>
 <div id="businessfields">
-	
 	<div class="control-group <?php echo $group_classes['businessname'] ?>">
 		<label for="businessname" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME')?>
@@ -303,7 +318,7 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['occupation'] ?>">
 		<label for="occupation" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION')?>
@@ -316,7 +331,7 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
 		<label for="vatnumber" class="control-label" id="vatlabel">
 			* <?php echo AkeebasubsHelperCparams::getParam('noneuvat', 0) ? JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') : JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER')?>
@@ -335,8 +350,11 @@ if(array_key_exists('isValid', $field)) {
 			</span>
 		</div>
 	</div>
-	
+
 </div>
+<?php if($businessFields == 'none'): ?>
+</div>
+<?php endif; ?>
 
 <?php endif;?>
 
@@ -384,7 +402,7 @@ if(!is_null($akeebasubs_subscription_level)):
 	if(!empty($subfieldsHTML)):?>
 </fieldset>
 <fieldset>
-	
+
 <legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')?></legend>
 <?php echo $subfieldsHTML ?>
 <?php

@@ -1256,6 +1256,54 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Business registration</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions normally allows subscribers to register
+            either as individuals or as businesses. Depending on your target
+            audience and local tax laws it is possible that you do not want
+            this at all or, on the contrary, you only want businesses to
+            subscribe to your site. This option allows you to modify the
+            behaviour of Akeeba Subscriptions with regards to business
+            registration handling. The possible options are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Auto</option>. Let the user select if they want
+                to register as an individual or as a business. This is the
+                default behaviour.</para>
+              </listitem>
+            </itemizedlist>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Never</option>. Do no allow the users to
+                register as a business. All of your subscribers will be
+                individuals, not businesses.</para>
+              </listitem>
+            </itemizedlist>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Always</option>. Only allow the users to
+                register as a business. All of your subscribers will be
+                businesses, not individuals.</para>
+              </listitem>
+            </itemizedlist>
+
+            <important>
+              <para>If <guilabel>Allow collection of personal information and
+              business registrations</guilabel> above is set to
+              <option>No</option> the setting of this option will be ignored
+              and the effect will be the same as selecting
+              <option>Never</option>.</para>
+            </important>
+
+            <para>Default: Auto.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Show login box</term>
 
           <listitem>
