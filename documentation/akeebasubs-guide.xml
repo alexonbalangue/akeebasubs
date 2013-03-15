@@ -13197,6 +13197,62 @@ LEVEL3=Badge 1</programlisting>
         </varlistentry>
       </variablelist>
     </section>
+
+    <section xml:id="misc-asuserregredir">
+      <title>User Registration Redirection to Akeeba Subscriptions</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>System - User
+      Registration Redirection to Akeeba Subscriptions</guilabel></para>
+
+      <note>
+        <para>Available only in Akeeba Subscriptions Professional 3.1.0 and
+        later. Not available in Akeeba Subscriptions Core.</para>
+      </note>
+
+      <para>Joomla! normally provides its own page to allow your visitors to
+      become (free) members of the site. Many of our clients have told us that
+      they do not want that and would rather use Akeeba Subscriptions and a
+      free subscription level to do that. Or that they don't want anyone to be
+      able to register for a free user account. The problem is that Joomla!'s
+      login module –and most third party login modules– will display a "Create
+      account" link leading to that Joomla! page if user registration is
+      enabled in Joomla!. At the same time, Akeeba Subscriptions won't work if
+      user registration is disabled in Joomla!. Sounds like a chicken and egg
+      issue.</para>
+
+      <para>Not any more! The <guilabel>System - User Registration Redirection
+      to Akeeba Subscriptions</guilabel> plugin is here to provide the missing
+      feature: automatically redirect anyone trying to access Joomla!'s user
+      registration page to Akeeba Subscriptions. Moreover, this plugin allows
+      you to redirect the visitors to a custom URL, for example a page where
+      you explain that there are no free memberships on your site and provide
+      more information about subscriptions.</para>
+
+      <para>The options of the plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>URL</term>
+
+          <listitem>
+            <para>The URL where people trying to register a free Joomla!
+            account are redirected to. Leave it empty to have them redirected
+            to Akeeba Subscriptions' subscription selection page (default).
+            Otherwise just provide a full URL to the page you want them to be
+            redirected to.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Message</term>
+
+          <listitem>
+            <para>An optional system message to be shown upon redirection.
+            Leave blank to not display any message (default).</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
   </chapter>
 
   <chapter xml:id="modules">
