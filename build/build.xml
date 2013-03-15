@@ -153,6 +153,7 @@
 		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
+				<exclude name="system/asuserregredir/**"/>
 			</fileset>
 		</zipme>
 		

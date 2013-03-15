@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 3.1.0
 ================================================================================
++ PRO: Plugin to redirect Joomla! user registration to Akeeba Subscriptions
 + You can now select if business registrations are allowed, disallowed or always enforced in the component's options
 
 Akeeba Subscriptions 3.0.2

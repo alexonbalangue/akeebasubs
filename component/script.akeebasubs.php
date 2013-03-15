@@ -148,6 +148,7 @@ class Com_AkeebasubsInstallerScript
 				'affiliatesessiongeneration' => 0,
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
+				'asuserregredir'		=> 0,
 				'idevaffiliate'			=> 0,
 				'oneclickaction'		=> 1,
 				'postaffiliatepro'		=> 0,
