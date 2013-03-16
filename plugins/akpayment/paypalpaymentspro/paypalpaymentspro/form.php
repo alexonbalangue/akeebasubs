@@ -25,6 +25,7 @@
 	<input type="hidden" name="COUNTRYCODE" value="<?php echo $data->COUNTRYCODE ?>" />
 	<input type="hidden" name="ZIP" value="<?php echo $data->ZIP ?>" />
 	<input type="hidden" name="AMT" value="<?php echo $data->AMT ?>" />
+	<input type="hidden" name="ITEMAMT" value="<?php echo $data->ITEMAMT ?>" />
 	<input type="hidden" name="TAXAMT" value="<?php echo $data->TAXAMT ?>" />
 	<input type="hidden" name="CURRENCYCODE" value="<?php echo $data->CURRENCYCODE ?>" />
 	<input type="hidden" name="DESC" value="<?php echo $data->DESC ?>" />
