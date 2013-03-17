@@ -22,6 +22,9 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/** @var bool Should I re-publish K2 items? */
 	protected $publishK2 = array();
 
+	/** @var bool Should I re-publish SOBIPro items? */
+	protected $publishSobipro = array();
+
 	/** @var bool Should I re-publish ZOO items? */
 	protected $publishZOO = array();
 
@@ -30,6 +33,9 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 
 	/** @var bool Should I unpublish K2 items? */
 	protected $unpublishK2 = array();
+
+	/** @var bool Should I unpublish SOBIPro items? */
+	protected $unpublishSobipro = array();
 
 	/** @var bool Should I unpublish ZOO items? */
 	protected $unpublishZOO = array();
@@ -76,6 +82,10 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		{
 			$level->params->contentpublish_publishk2 = false;
 		}
+		if (!property_exists($level->params, 'contentpublish_publishsobipro'))
+		{
+			$level->params->contentpublish_publishsobipro = false;
+		}
 		if (!property_exists($level->params, 'contentpublish_publishzoo'))
 		{
 			$level->params->contentpublish_publishzoo = false;
@@ -87,6 +97,10 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		if (!property_exists($level->params, 'contentpublish_unpublishk2'))
 		{
 			$level->params->contentpublish_unpublishk2 = false;
+		}
+		if (!property_exists($level->params, 'contentpublish_unpublishsobipro'))
+		{
+			$level->params->contentpublish_unpublishsobipro = false;
 		}
 		if (!property_exists($level->params, 'contentpublish_unpublishzoo'))
 		{
@@ -141,12 +155,14 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	{
 		static $hasZoo = null;
 		static $hasK2 = null;
+		static $hasSobipro = null;
 
-		if(is_null($hasZoo) || is_null($hasK2))
+		if(is_null($hasZoo) || is_null($hasK2) || is_null($hasSobipro))
 		{
 			JLoader::import('joomla.filesystem.folder');
 			$hasZoo = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo');
 			$hasK2 = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_k2');
+			$hasSobipro = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_sobipro');
 		}
 
 		// Get all of the user's subscriptions
@@ -223,6 +239,36 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					}
 				}
 
+				if (array_key_exists($level_id, $this->unpublishSobipro) && $hasSobipro)
+				{
+					if ($this->unpublishSobipro[$level_id])
+					{
+						if(@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' ))
+						{
+							Sobi::Initialise( );
+
+							// Unpublish SOBI Pro items
+							$query = $db->getQuery(true)
+								->select($db->qn('id'))
+								->from($db->qn('#__sobipro_object'))
+								->where($db->qn('oType').' = '.$db->q('entry'))
+								->where($db->qn('owner').' = '.$db->q($user_id))
+								->where($db->qn('state').' = '.$db->q(1))
+								;
+							$db->setQuery($query);
+							$ids = $db->loadColumn();
+
+							if (count($ids))
+							{
+								foreach($ids as $id)
+								{
+									SPFactory::Entry( $id )->unpublish();
+								}
+							}
+						}
+					}
+				}
+
 				if (array_key_exists($level_id, $this->unpublishZOO) && array_key_exists($level_id, $this->removeGroups) && $hasZoo)
 				{
 					if ($this->unpublishZOO[$level_id])
@@ -282,6 +328,36 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							->where($db->qn('published').' = '.$db->q('0'));
 						$db->setQuery($query);
 						$db->execute();
+					}
+				}
+
+				if (array_key_exists($level_id, $this->publishSobipro) && $hasSobipro)
+				{
+					if ($this->publishSobipro[$level_id])
+					{
+						if(@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' ))
+						{
+							Sobi::Initialise();
+
+							// Publish SOBI Pro items
+							$query = $db->getQuery(true)
+								->select($db->qn('id'))
+								->from($db->qn('#__sobipro_object'))
+								->where($db->qn('oType').' = '.$db->q('entry'))
+								->where($db->qn('owner').' = '.$db->q($user_id))
+								->where($db->qn('state').' = '.$db->q(0))
+								;
+							$db->setQuery($query);
+							$ids = $db->loadColumn();
+
+							if (count($ids))
+							{
+								foreach($ids as $id)
+								{
+									SPFactory::Entry( $id )->publish();
+								}
+							}
+						}
 					}
 				}
 
@@ -354,6 +430,11 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					$this->publishK2[$level->akeebasubs_level_id] = $level->params->contentpublish_publishk2;
 				}
 
+				if (property_exists($level->params, 'contentpublish_publishsobipro'))
+				{
+					$this->publishSobipro[$level->akeebasubs_level_id] = $level->params->contentpublish_publishsobipro;
+				}
+
 				if (property_exists($level->params, 'contentpublish_publishzoo'))
 				{
 					$this->publishZOO[$level->akeebasubs_level_id] = $level->params->contentpublish_publishzoo;
@@ -367,6 +448,11 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				if (property_exists($level->params, 'contentpublish_unpublishk2'))
 				{
 					$this->unpublishK2[$level->akeebasubs_level_id] = $level->params->contentpublish_unpublishk2;
+				}
+
+				if (property_exists($level->params, 'contentpublish_unpublishsobipro'))
+				{
+					$this->unpublishSobipro[$level->akeebasubs_level_id] = $level->params->contentpublish_unpublishsobipro;
 				}
 
 				if (property_exists($level->params, 'contentpublish_unpublishzoo'))
