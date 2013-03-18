@@ -163,6 +163,18 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 			$hasZoo = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo');
 			$hasK2 = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_k2');
 			$hasSobipro = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_sobipro');
+			if(@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' ))
+			{
+				if (!method_exists('Sobi', 'Initialise'))
+				{
+					// We require SOBIPro 1.1 or later
+					$hasSobipro = false;
+				}
+			}
+			else
+			{
+				$hasSobipro = false;
+			}
 		}
 
 		// Get all of the user's subscriptions
@@ -243,7 +255,12 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				{
 					if ($this->unpublishSobipro[$level_id])
 					{
-						if(@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' ))
+						if (!class_exists('Sobi'))
+						{
+							@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' );
+						}
+
+						if (class_exists('Sobi'))
 						{
 							Sobi::Initialise( );
 
@@ -335,7 +352,12 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 				{
 					if ($this->publishSobipro[$level_id])
 					{
-						if(@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' ))
+						if (!class_exists('Sobi'))
+						{
+							@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' );
+						}
+
+						if (class_exists('Sobi'))
 						{
 							Sobi::Initialise();
 
