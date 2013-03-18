@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FUCKMANIFESTROOTFUCK version="2.5" type="component" method="upgrade">
+<extension version="2.5" type="component" method="upgrade">
 	<name>AkeebaSubs</name>
 	<creationDate>##DATE##</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
@@ -63,7 +63,6 @@
 		<folder>images</folder>
 		<folder>invoices</folder>
 		<folder>js</folder>
-		<folder>tcpdf</folder>
 	</media>
 
 	<!-- Administrator back-end section -->
@@ -234,4 +233,4 @@
 		</skiptables>
 	</restorepoint>
 	
-</FUCKMANIFESTROOTFUCK>
+</extension>

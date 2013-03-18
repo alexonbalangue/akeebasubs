@@ -70,7 +70,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 			}
 		}
 
-		if(!empty($strAddGroups) || !empty($strAddGroups)) {
+		if(!empty($strAddGroups) || !empty($strRemoveGroups)) {
 			// Load level to group mapping from plugin parameters
 			$this->addGroups = $this->parseGroups($strAddGroups);
 			$this->removeGroups = $this->parseGroups($strRemoveGroups);

@@ -1256,6 +1256,54 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Business registration</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions normally allows subscribers to register
+            either as individuals or as businesses. Depending on your target
+            audience and local tax laws it is possible that you do not want
+            this at all or, on the contrary, you only want businesses to
+            subscribe to your site. This option allows you to modify the
+            behaviour of Akeeba Subscriptions with regards to business
+            registration handling. The possible options are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Auto</option>. Let the user select if they want
+                to register as an individual or as a business. This is the
+                default behaviour.</para>
+              </listitem>
+            </itemizedlist>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Never</option>. Do no allow the users to
+                register as a business. All of your subscribers will be
+                individuals, not businesses.</para>
+              </listitem>
+            </itemizedlist>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Always</option>. Only allow the users to
+                register as a business. All of your subscribers will be
+                businesses, not individuals.</para>
+              </listitem>
+            </itemizedlist>
+
+            <important>
+              <para>If <guilabel>Allow collection of personal information and
+              business registrations</guilabel> above is set to
+              <option>No</option> the setting of this option will be ignored
+              and the effect will be the same as selecting
+              <option>Never</option>.</para>
+            </important>
+
+            <para>Default: Auto.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Show login box</term>
 
           <listitem>
@@ -11522,83 +11570,9 @@ LEVEL3=entry1</programlisting>
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Phoca Download Integration</guilabel></para>
 
-      <para>This integration plugin allows you to add and remove users from
-      Phoca Download categories based on their subscription status. This
-      allows you to control who can access the downloads based on a user's
-      subscription status.</para>
-
-      <para>Please note that this is a smart integration; instead of adding
-      users when a subscription goes active and removing them when a
-      subscription goes inactive, Akeeba Subscriptions plugins take a look at
-      all of the user's active and inactive subscriptions and decide which
-      groups the user should be added to or removed from.</para>
-
-      <para>The plugin has these options:</para>
-
-      <variablelist>
-        <varlistentry>
-          <term>Add to Phoca Download groups</term>
-
-          <listitem>
-            <para>This is a list for assigning subscription levels to Phoca
-            Download categories. When a user has an active subscription to the
-            specified level, he'll be added to the Phoca Download categories
-            mentioned on the right hand of the equal sign. Each assignment is
-            done like this:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Group 1, Group 2 and Group 3 are the names of the Phoca Download
-            categories you want to add a user to when he subscribes. If you
-            want to assign multiple subscription levels to multiple
-            categories, you have to do something like that (separate multiple
-            lines with a single press of the ENTER key on your
-            keyboard):</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-            <para>You can also use the numeric IDs of subscription levels or
-            Phoca Download categories instead of their titles. However, we
-            consider working with numeric IDs very counter-intuitive.</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Remove from Phoca Download groups</term>
-
-          <listitem>
-            <para>Likewise, this is the list of the Phoca Download categories
-            to remove a user from when his subscription to the specified level
-            is no longer active. Do note that you can specify a different set
-            of categories to remove the user from than the ones you are adding
-            him to. For example:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-
-      <para>In this example, together with the rules displayed in "Add to
-      Phoca Download groups", when a subscription to the LEVEL1 level expires,
-      the user will still belong to Phoca Download category Group 3, as it's
-      not removed from his account; only categories Group 1 and Group 2 are
-      removed. Likewise, if the user has an expired LEVEL1 subscription and an
-      active LEVEL2 subscription he'll now belong to categories Group 2 and
-      Group 3: category Group 3 because it's not removed when his subscription
-      expires and category Group 2 because his active LEVEL2 subscription
-      suggests that he should be granted Group 2 access despite his expired
-      LEVEL1 subscription.</para>
-
-      <para>If you find this hard to understand, join the club. ACLs are not
-      meant to be easy to setup or understand. It's a power feature and, as
-      such, poses a great difficulty to even the most seasoned web site
-      integrators. Take your time and experiment on a dev copy of your site
-      before going live.</para>
+      <para>This was a third party plugin, distributed with Akeeba
+      Subscriptions. Its developer ceased supporting the plugin and as of
+      Akeeba Subscriptions 3.0.3 it has been removed.</para>
     </section>
 
     <section xml:id="integration-mailchimp">
@@ -13219,6 +13193,62 @@ LEVEL3=Badge 1</programlisting>
           <listitem>
             <para>Returns the Download ID for the user. This Download ID is
             for use with Akeeba Release System and Akeeba Live Update.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="misc-asuserregredir">
+      <title>User Registration Redirection to Akeeba Subscriptions</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>System - User
+      Registration Redirection to Akeeba Subscriptions</guilabel></para>
+
+      <note>
+        <para>Available only in Akeeba Subscriptions Professional 3.1.0 and
+        later. Not available in Akeeba Subscriptions Core.</para>
+      </note>
+
+      <para>Joomla! normally provides its own page to allow your visitors to
+      become (free) members of the site. Many of our clients have told us that
+      they do not want that and would rather use Akeeba Subscriptions and a
+      free subscription level to do that. Or that they don't want anyone to be
+      able to register for a free user account. The problem is that Joomla!'s
+      login module –and most third party login modules– will display a "Create
+      account" link leading to that Joomla! page if user registration is
+      enabled in Joomla!. At the same time, Akeeba Subscriptions won't work if
+      user registration is disabled in Joomla!. Sounds like a chicken and egg
+      issue.</para>
+
+      <para>Not any more! The <guilabel>System - User Registration Redirection
+      to Akeeba Subscriptions</guilabel> plugin is here to provide the missing
+      feature: automatically redirect anyone trying to access Joomla!'s user
+      registration page to Akeeba Subscriptions. Moreover, this plugin allows
+      you to redirect the visitors to a custom URL, for example a page where
+      you explain that there are no free memberships on your site and provide
+      more information about subscriptions.</para>
+
+      <para>The options of the plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>URL</term>
+
+          <listitem>
+            <para>The URL where people trying to register a free Joomla!
+            account are redirected to. Leave it empty to have them redirected
+            to Akeeba Subscriptions' subscription selection page (default).
+            Otherwise just provide a full URL to the page you want them to be
+            redirected to.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Message</term>
+
+          <listitem>
+            <para>An optional system message to be shown upon redirection.
+            Leave blank to not display any message (default).</para>
           </listitem>
         </varlistentry>
       </variablelist>

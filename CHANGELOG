@@ -1,12 +1,22 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.1.0
+================================================================================
++ PRO: Plugin to redirect Joomla! user registration to Akeeba Subscriptions
++ You can now select if business registrations are allowed, disallowed or always enforced in the component's options
++ Content Publish plugin: added SOBIPro 1.1 integration. WARNING: It will NOT work with earlier versions of SOBIPro.
+
 Akeeba Subscriptions 3.0.2
 ================================================================================
 + Warn Professional users when their Download ID is missing
+- Removing Phoca Downloads integration (no longer supported by its developer)
+~ Allow subscription level relations to be used even when the discount is zero / they are not used to calculate a discount
+~ Allow subscription level relations to be used even when a coupon code with a greater discount is used
 # [HIGH] Bad SQL query killing Core release on Joomla! 3.0
 # [HIGH] Some TCPDF folders are not getting installed, causing inability to generate invoice PDF files
 # [HIGH] Blank PDF if tidy_repair_string returns false
 # [HIGH] Internal server error on ancient versions of PHP 5.3 with broken late static binding implementations
 # [HIGH] The content publish plugin wouldn't work
+# [HIGH] VIES validation not working on PHP installations lacking a user agent string in php.ini (thanks Jasper)
 # [MEDIUM] Joomla! User Profile Sync plugin would cause the state to be "forgotten" when a client is resubscribing
 # [MEDIUM] Untranslated strings in emails using the CLI expiration notification script
 # [MEDIUM] Non-replaced tags in expiration notification emails when using the default language file

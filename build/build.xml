@@ -113,14 +113,13 @@
 	<target name="component-package" description="Akeeba Subscriptions Professional"
 		depends="new-release,setup-properties">
 		
+		<!-- CORE -->
 		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/aaa_akeebasubs.xml" overwrite="true">
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
-				</replacetokens>
-				<replacetokens begintoken="FUCK" endtoken="FUCK">
-					<token key="MANIFESTROOT" value="extension" />
+					<token key="PRO" value="0" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -129,14 +128,10 @@
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
-				</replacetokens>
-				<replacetokens begintoken="FUCK" endtoken="FUCK">
-					<token key="MANIFESTROOT" value="install" />
+					<token key="PRO" value="0" />
 				</replacetokens>
 			</filterchain>
 		</copy>
-		
-		<!-- CORE -->
 		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
@@ -158,10 +153,29 @@
 		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
+				<exclude name="system/asuserregredir/**"/>
 			</fileset>
 		</zipme>
 		
 		<!-- PRO -->
+		<copy file="./templates/akeebasubs_pro.xml" tofile="${dirs.component}/aaa_akeebasubs.xml" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="PRO" value="1" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+		<copy file="./templates/akeebasubs_pro.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+					<token key="PRO" value="1" />
+				</replacetokens>
+			</filterchain>
+		</copy>
 		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">

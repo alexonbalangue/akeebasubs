@@ -24,6 +24,17 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label for="params_contentpublish_publishsobipro" class="control-label">
+				<?php echo JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_PUBLISHSOBIPRO_TITLE'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHtml::_('select.booleanlist', 'params[contentpublish_publishsobipro]', array(), $level->params->contentpublish_publishsobipro) ?>
+				<span class="help-block">
+					<?php echo JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_PUBLISHSOBIPRO_DESCRIPTION') ?>
+				</span>
+			</div>
+		</div>
+		<div class="control-group">
 			<label for="params_contentpublish_publishzoo" class="control-label">
 				<?php echo JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_PUBLISHZOO_TITLE'); ?>
 			</label>
@@ -46,6 +57,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="span6">
 		<div class="control-group">
 			<label for="params_contentpublish_unpublishcore" class="control-label">
@@ -66,6 +78,17 @@
 				<?php echo JHtml::_('select.booleanlist', 'params[contentpublish_unpublishk2]', array(), $level->params->contentpublish_unpublishk2) ?>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_UNPUBLISHK2_DESCRIPTION') ?>
+				</span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="params_contentpublish_unpublishsobipro" class="control-label">
+				<?php echo JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_UNPUBLISHSOBIPRO_TITLE'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHtml::_('select.booleanlist', 'params[contentpublish_unpublishsobipro]', array(), $level->params->contentpublish_unpublishsobipro) ?>
+				<span class="help-block">
+					<?php echo JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_UNPUBLISHSOBIPRO_DESCRIPTION') ?>
 				</span>
 			</div>
 		</div>

@@ -68,6 +68,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			'COUNTRYCODE'		=> strtoupper(trim($kuser->country)),
 			'ZIP'				=> trim($kuser->zip),
 			'AMT'				=> sprintf('%.2f',$subscription->gross_amount),
+			'ITEMAMT'			=> sprintf('%.2f',$subscription->net_amount),
 			'TAXAMT'			=> sprintf('%.2f',$subscription->tax_amount),
 			'CURRENCYCODE'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'DESC'				=> $level->title . ' - [' . $user->username . ']'
