@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - FreshBooks integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>March 2013</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_FRESHBOOKS_DESCRIPTION</description>
+	<files>
+		<filename plugin="freshbooks">freshbooks.php</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_freshbooks.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_freshbooks.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="url" type="text" default="" label="PLG_AKEEBASUBS_FRESHBOOKS_URL_LABEL" description="PLG_AKEEBASUBS_FRESHBOOKS_URL_DESC" size="40" />
+				<field name="token" type="text" default="" label="PLG_AKEEBASUBS_FRESHBOOKS_TOKEN_LABEL" description="PLG_AKEEBASUBS_FRESHBOOKS_TOKEN_DESC" size="40" />
+				<field name="notes" type="textarea" default="" label="PLG_AKEEBASUBS_FRESHBOOKS_NOTES_LABEL" description="PLG_AKEEBASUBS_FRESHBOOKS_NOTES_DESC" rows="5" cols="35" />
+				<field name="terms" type="textarea" default="" label="PLG_AKEEBASUBS_FRESHBOOKS_TERMS_LABEL" description="PLG_AKEEBASUBS_FRESHBOOKS_TERMS_DESC" rows="5" cols="35" />
+				<field name="message" type="textarea" default="" label="PLG_AKEEBASUBS_FRESHBOOKS_MESSAGE_LABEL" description="PLG_AKEEBASUBS_FRESHBOOKS_MESSAGE_DESC" rows="5" cols="35" />
+				<field type="spacer" />
+				<field name="generatewhen" type="radio" default="0"
+					label="PLG_AKEEBASUBS_FRESHBOOKS_GENERATEWHEN_TITLE"
+					description="PLG_AKEEBASUBS_FRESHBOOKS_GENERATEWHEN_DESC">
+					<option value="0">PLG_AKEEBASUBS_FRESHBOOKS_GENERATEWHEN_OPT_COMPLETED</option>
+					<option value="1">PLG_AKEEBASUBS_FRESHBOOKS_GENERATEWHEN_OPT_NEW</option>
+				</field>
+				<field name="payment" type="radio" default="1"
+					label="PLG_AKEEBASUBS_FRESHBOOKS_PAYMENT_TITLE"
+					description="PLG_AKEEBASUBS_FRESHBOOKS_PAYMENT_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
