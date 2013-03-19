@@ -173,7 +173,7 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 </div>
 
 <?php
-$aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
+$aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1);
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<ENDSCRIPT
 
@@ -185,8 +185,10 @@ window.addEvent('domready', function() {
 			validatePassword();
 			validateName();
 			validateEmail();
-			if($aks_personal_info) {
+			if($aks_personal_info != 0) {
 				validateAddress();
+			}
+			if($aks_personal_info == 1) {
 				validateBusiness();
 			}
 		});

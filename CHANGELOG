@@ -2,6 +2,7 @@
 Akeeba Subscriptions 3.1.0
 ================================================================================
 + PRO: Plugin to redirect Joomla! user registration to Akeeba Subscriptions
++ On popular demand: disable all personal information collection EXCEPT for the country (it's required by some payment processors, like AlloPass)
 + You can now select if business registrations are allowed, disallowed or always enforced in the component's options
 + Content Publish plugin: added SOBIPro 1.1 integration. WARNING: It will NOT work with earlier versions of SOBIPro.
 

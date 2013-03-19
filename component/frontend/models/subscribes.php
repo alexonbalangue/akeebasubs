@@ -266,7 +266,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$state = $this->getStateVariables();
 
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-		$noPersonalInfo = !AkeebasubsHelperCparams::getParam('personalinfo',1);
+		$personalInfo = AkeebasubsHelperCparams::getParam('personalinfo',1);
 		$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
 		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
 
@@ -275,14 +275,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'name'			=> !empty($state->name),
 			'email'			=> !empty($state->email),
 			'email2'		=> !empty($state->email2) && ($state->email == $state->email2),
-			'address1'		=> $noPersonalInfo ? true : !empty($state->address1),
-			'country'		=> $noPersonalInfo ? true : !empty($state->country),
-			'state'			=> $noPersonalInfo ? true : !empty($state->state),
-			'city'			=> $noPersonalInfo ? true : !empty($state->city),
-			'zip'			=> $noPersonalInfo ? true : !empty($state->zip),
-			'businessname'	=> $noPersonalInfo ? true : !empty($state->businessname),
-			'vatnumber'		=> $noPersonalInfo ? true : !empty($state->vatnumber),
-			'coupon'		=> $noPersonalInfo ? true : !empty($state->coupon)
+			'address1'		=> $personalInfo == 1 ? !empty($state->address1) : true,
+			'country'		=> $personalInfo != 0 ? !empty($state->country) : true,
+			'state'			=> $personalInfo == 1 ? !empty($state->state) : true,
+			'city'			=> $personalInfo == 1 ? !empty($state->city) : true,
+			'zip'			=> $personalInfo == 1 ? !empty($state->zip) : true,
+			'businessname'	=> $personalInfo == 1 ? !empty($state->businessname) : true,
+			'vatnumber'		=> $personalInfo == 1 ? !empty($state->vatnumber) : true,
+			'coupon'		=> $personalInfo == 1 ? !empty($state->coupon) : true,
 		);
 
 		$ret['rawDataForDebug'] = (array)$state;
@@ -334,15 +334,17 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		// 2. Country validation
-		if($ret['country'] && !$noPersonalInfo) {
+		if($ret['country'] && ($personalInfo != 0)) {
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 			$ret['country'] = array_key_exists($state->country, AkeebasubsHelperSelect::$countries) && !empty($state->country);
+		} elseif($personalInfo == 0) {
+			$ret['country'] = 0;
 		} else {
 			$ret['country'] = !empty($state->country);
 		}
 
 		// 3. State validation
-		if($noPersonalInfo) {
+		if($personalInfo <= 0) {
 			$ret['state'] = true;
 		} else {
 			if(in_array($state->country,array('US','CA'))) {
@@ -366,7 +368,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 		$this->setState('vatnumber', $state->vatnumber);
 
-		if(!$state->isbusiness || $noPersonalInfo) {
+		if(!$state->isbusiness || ($personalInfo <= 0)) {
 			$ret['businessname'] = true;
 			$ret['vatnumber'] = false;
 		} else {
@@ -1268,8 +1270,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 		foreach($validation->validation as $key => $validData)
 		{
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-			if(!AkeebasubsHelperCparams::getParam('personalinfo',1)) {
+			if(AkeebasubsHelperCparams::getParam('personalinfo',1) == 0) {
 				if(!in_array($key, array('username','email','email2','name'))) continue;
+			} elseif(AkeebasubsHelperCparams::getParam('personalinfo',1) == -1) {
+				if(!in_array($key, array('username','email','email2','name','country'))) continue;
 			}
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if($key == 'vatnumber') continue;

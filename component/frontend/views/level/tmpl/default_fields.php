@@ -200,7 +200,19 @@ if(array_key_exists('isValid', $field)) {
 
 <?php endforeach; endforeach;?>
 
-<?php if(AkeebasubsHelperCparams::getParam('personalinfo',1)):?>
+<?php if(AkeebasubsHelperCparams::getParam('personalinfo',1) == -1):?>
+	<div class="control-group <?php echo $group_classes['country'] ?>">
+		<label for="country" class="control-label">
+			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?>
+		</label>
+		<div class="controls">
+			<?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('id'=>'country')) ?>
+			<span id="country_empty" class="help-inline" <?php if($group_classes['country'] != 'error'):?>style="display:none"<?php endif?>>
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?>
+			</span>
+		</div>
+	</div>
+<?php elseif(AkeebasubsHelperCparams::getParam('personalinfo',1) == 1):?>
 
 	<div class="control-group <?php echo $group_classes['address1'] ?>">
 		<label for="address1" class="control-label">

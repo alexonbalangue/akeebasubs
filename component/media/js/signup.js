@@ -21,7 +21,7 @@ var akeebasubs_blocked_gui = false;
 var akeebasubs_run_validation_after_unblock = false;
 var akeebasubs_cached_response = false;
 var akeebasubs_valid_form = true;
-var akeebasubs_personalinfo = true;
+var akeebasubs_personalinfo = 1;
 var akeebasubs_validation_fetch_queue = [];
 var akeebasubs_validation_queue = [];
 var akeebasubs_sub_validation_fetch_queue = [];
@@ -83,7 +83,7 @@ function validateForm(callback_function)
 	}
 
 	(function($) {
-		if(akeebasubs_personalinfo) {
+		if(akeebasubs_personalinfo == 1) {
 			var data = {
 				'action'	:	'read',
 				'id'		:	akeebasubs_level_id,
@@ -101,6 +101,19 @@ function validateForm(callback_function)
 				'businessname':	$('#businessname').val(),
 				'occupation':	$('#occupation').val(),
 				'vatnumber'	:	$('#vatnumber').val(),
+				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
+				'custom'	:	{},
+				'subcustom'	:	{}
+			};
+		} else if(akeebasubs_personalinfo == 0) {
+			var data = {
+				'action'	:	'read',
+				'id'		:	akeebasubs_level_id,
+				'username'	:	$('#username').val(),
+				'name'		:	$('#name').val(),
+				'email'		:	$('#email').val(),
+				'email2'	:	$('#email2').val(),
+				'country'	:	$('select[name$="country"]').val(),
 				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
 				'custom'	:	{},
 				'subcustom'	:	{}
@@ -300,7 +313,7 @@ function validateEmail()
 
 function validateAddress()
 {
-	if(!akeebasubs_personalinfo) return;
+	if(akeebasubs_personalinfo == 0) return;
 
 	(function($) {
 		var address = $('#address1').val();
@@ -311,79 +324,94 @@ function validateAddress()
 		
 		var hasErrors = false;
 		
-		$('#address1').parent().parent().removeClass('error').removeClass('success');
-		if(address == '') {
-			$('#address1').parent().parent().addClass('error');
-			$('#address1_empty').css('display','inline-block');
-			hasErrors = true;
-		} else {
-			$('#address1').parent().parent().addClass('success');
-			$('#address1_empty').css('display','none');
-		}
+		if(akeebasubs_personalinfo == 1)
+		{
+			$('#address1').parent().parent().removeClass('error').removeClass('success');
+			if(address == '') {
+				$('#address1').parent().parent().addClass('error');
+				$('#address1_empty').css('display','inline-block');
+				hasErrors = true;
+			} else {
+				$('#address1').parent().parent().addClass('success');
+				$('#address1_empty').css('display','none');
+			}
 
-		$('#country').parent().parent().removeClass('error').removeClass('success');
-		if(country == '') {
-			$('#country').parent().parent().addClass('error');
-			$('#country_empty').css('display','inline-block');
-			hasErrors = true;
-		} else {
-			$('#country').parent().parent().addClass('success');
-			$('#country_empty').css('display','none');
-			// If that's an EU country, show and update the VAT field
-			if($('#vatfields')) {
-				$('#vatfields').css('display','none');
-				
-				if(akeebasubs_noneuvat) {
-					$('#vatfields').css('display','block');
-					$('#vatcountry').css('display','none');
-				}
-				for(key in european_union_countries) {
-					if(european_union_countries[key] == country) {
+			$('#country').parent().parent().removeClass('error').removeClass('success');
+			if(country == '') {
+				$('#country').parent().parent().addClass('error');
+				$('#country_empty').css('display','inline-block');
+				hasErrors = true;
+			} else {
+				$('#country').parent().parent().addClass('success');
+				$('#country_empty').css('display','none');
+				// If that's an EU country, show and update the VAT field
+				if($('#vatfields')) {
+					$('#vatfields').css('display','none');
+
+					if(akeebasubs_noneuvat) {
 						$('#vatfields').css('display','block');
-						$('#vatcountry').css('display','inline-block');
-						var ccode = country;
-						if(ccode == 'GR') {ccode = 'EL';}
-						$('#vatcountry').text(ccode);
+						$('#vatcountry').css('display','none');
+					}
+					for(key in european_union_countries) {
+						if(european_union_countries[key] == country) {
+							$('#vatfields').css('display','block');
+							$('#vatcountry').css('display','inline-block');
+							var ccode = country;
+							if(ccode == 'GR') {ccode = 'EL';}
+							$('#vatcountry').text(ccode);
+						}
 					}
 				}
 			}
-		}
-		
-		/*
-		if( (country == 'US') || (country == 'CA') ) {
-			$('#stateField').css('display','block');
-			$('#state').parent().parent().removeClass('error').removeClass('success');
-			if(state == '') {
-				$('#state').parent().parent().addClass('error');
-				$('#state_empty').css('display','inline-block');
+
+			/*
+			if( (country == 'US') || (country == 'CA') ) {
+				$('#stateField').css('display','block');
+				$('#state').parent().parent().removeClass('error').removeClass('success');
+				if(state == '') {
+					$('#state').parent().parent().addClass('error');
+					$('#state_empty').css('display','inline-block');
+					hasErrors = true;
+				} else {
+					$('#state').parent().parent().addClass('success');
+					$('#state_empty').css('display','none');
+				}
+			} else {
+				$('#stateField').css('display','none');
+			}
+			*/
+
+			$('#city').parent().parent().removeClass('error').removeClass('success');
+			if(city == '') {
+				$('#city').parent().parent().addClass('error');
+				$('#city_empty').css('display','inline-block');
 				hasErrors = true;
 			} else {
-				$('#state').parent().parent().addClass('success');
-				$('#state_empty').css('display','none');
+				$('#city').parent().parent().addClass('success');
+				$('#city_empty').css('display','none');
 			}
-		} else {
-			$('#stateField').css('display','none');
-		}
-		*/
-	
-		$('#city').parent().parent().removeClass('error').removeClass('success');
-		if(city == '') {
-			$('#city').parent().parent().addClass('error');
-			$('#city_empty').css('display','inline-block');
-			hasErrors = true;
-		} else {
-			$('#city').parent().parent().addClass('success');
-			$('#city_empty').css('display','none');
-		}
 
-		$('#zip').parent().parent().removeClass('error').removeClass('success');
-		if(zip == '') {
-			$('#zip').parent().parent().addClass('error');
-			$('#zip_empty').css('display','inline-block');
-			hasErrors = true;
-		} else {
-			$('#zip').parent().parent().addClass('success');
-			$('#zip_empty').css('display','none');
+			$('#zip').parent().parent().removeClass('error').removeClass('success');
+			if(zip == '') {
+				$('#zip').parent().parent().addClass('error');
+				$('#zip_empty').css('display','inline-block');
+				hasErrors = true;
+			} else {
+				$('#zip').parent().parent().addClass('success');
+				$('#zip_empty').css('display','none');
+			}
+		}
+		else
+		{
+			$('#country').parent().parent().removeClass('error').removeClass('success');
+			if(country == '') {
+				$('#country').parent().parent().addClass('error');
+				$('#country_empty').css('display','inline-block');
+				hasErrors = true;
+			} else {
+				$('#country').parent().parent().addClass('success');
+				$('#country_empty').css('display','none');
+			}
 		}
 		
 		if(hasErrors) {
@@ -401,7 +429,7 @@ function validateAddress()
 function validateBusiness()
 {
 	(function($) {
-		if(akeebasubs_personalinfo) {
+		if(akeebasubs_personalinfo == 1) {
 			// Do I have to show the business fields?
 			if($('#isbusiness1').is(':checked')) {
 				$('#businessfields').show();
@@ -445,7 +473,7 @@ function validateBusiness()
 			}
 		}
 		
-		if(akeebasubs_personalinfo) {
+		if(akeebasubs_personalinfo == 1) {
 			// Make sure we don't do business validation / price check unless something's changed
 			var vatnumber = '';
 			if($('#vatnumber')) vatnumber = $('#vatnumber').val();
@@ -551,7 +579,19 @@ function applyValidation(response, callback)
 			$('#email2_invalid').css('display','inline-block');
 		}
 		
-		if(akeebasubs_personalinfo) {
+		if(akeebasubs_personalinfo == -1)
+		{
+			$('#country').parent().parent().removeClass('error').removeClass('success');
+			if(response.country) {
+				$('#country').parent().parent().addClass('success');
+				$('#country_empty').css('display','none');
+			} else {
+				akeebasubs_valid_form = false;
+				$('#country').parent().parent().addClass('error');
+				$('#country_empty').css('display','inline-block');
+			}
+		}
+		else if(akeebasubs_personalinfo == 1) {
 			$('#address1').parent().parent().removeClass('error').removeClass('success');
 			if(response.address1) {
 				$('#address1').parent().parent().addClass('success');
