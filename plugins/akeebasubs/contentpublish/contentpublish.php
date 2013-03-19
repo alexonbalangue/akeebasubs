@@ -22,7 +22,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/** @var bool Should I re-publish K2 items? */
 	protected $publishK2 = array();
 
-	/** @var bool Should I re-publish SOBIPro items? */
+	/** @var bool Should I re-publish SobiPro items? */
 	protected $publishSobipro = array();
 
 	/** @var bool Should I re-publish ZOO items? */
@@ -34,7 +34,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/** @var bool Should I unpublish K2 items? */
 	protected $unpublishK2 = array();
 
-	/** @var bool Should I unpublish SOBIPro items? */
+	/** @var bool Should I unpublish SobiPro items? */
 	protected $unpublishSobipro = array();
 
 	/** @var bool Should I unpublish ZOO items? */
