@@ -47,6 +47,7 @@
 		<field name="personalinfo" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_DESC">
+			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_ONLYCOUNTRY</option>
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field>
