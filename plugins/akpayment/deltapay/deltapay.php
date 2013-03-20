@@ -113,7 +113,39 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
+		// Step 1. Call the getGuid page
+		$url = JURI::getInstance('https://www.deltapay.gr/getguid.asp');
+		$reqData = array(
+			'MerchantCode'		=> $data->merchant,
+			'Charge'			=> $data->charge,
+			'CurrencyCode'		=> $data->currency,
+			'Installments'		=> 0,
+			'TransactionType'	=> 1,
+			'Param1'			=> $subscription->akeebasubs_subscription_id,
+			'Param2'			=> $user->id,
+		);
+		$curl = new JHttpTransportCurl();
+		$response = $curl->request('POST', $url, $reqData, null, 30);
+		$guids = explode('<br>', $response->body);
+
+		if (isset($guids[2]))
+		{
+			// An error occurred, use the legacy method
+			$page = 'form.php';
+		}
+		else
+		{
+			// Store the GUIDs in the subscription record
+			$subscription->save(array(
+				'akeebasubs_subscription_id'	=> $subscription->akeebasubs_subscription_id,
+				'processor_key'					=> 'GUID:' . $guids[0] . ':' . $guids[1],
+			));
+			// Use the newform.php page
+			$page = 'newform.php';
+			$data->guid = $guids[0];
+		}
+
 		@ob_start();
 		include dirname(__FILE__).'/deltapay/form.php';
 		$html = @ob_get_clean();
@@ -159,6 +191,21 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount (Charge field) does not match the subscription amount';
 		}
 		
+		// Check the GUID, if it's used
+		if($isValid && !is_null($subscription)) {
+			$guidstring = $subscription->processor_key;
+			if (!empty($guidstring) && (substr($guidstring,0,5) == 'GUID:'))
+			{
+				$guids = explode(':', $guidstring);
+				$guid2 = $data['Guid2'];
+				if ($guid2 != $guids[2])
+				{
+					$isValid = false;
+					$data['akeebasubs_failure_reason'] = 'Unauthorised response (GUID mismatch)';
+				}
+			}
+		}
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 		
