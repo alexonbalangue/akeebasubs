@@ -70,6 +70,11 @@ class AkeebasubsToolbar extends FOFToolbar
 			$activeView = $this->input->getCmd('view','cpanel');
 		}
 
+		if ($activeView == 'cpanels')
+		{
+			$activeView = 'cpanel';
+		}
+
 		$key = strtoupper($this->component).'_TITLE_'.strtoupper($view);
 		if(strtoupper(JText::_($key)) == $key) {
 			$altview = FOFInflector::isPlural($view) ? FOFInflector::singularize($view) : FOFInflector::pluralize($view);

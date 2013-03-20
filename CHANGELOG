@@ -6,6 +6,7 @@ Akeeba Subscriptions 3.1.0
 + You can now select if business registrations are allowed, disallowed or always enforced in the component's options
 + Content Publish plugin: added SOBIPro 1.1 integration. WARNING: It will NOT work with earlier versions of SOBIPro.
 ~ DeltaPay (Alpha Bank Greece) integration: adding support for DeltaPay v2 which supports callback authorisation
+# [LOW] Dashboard tab not showing as active in the backend (thanks Peter)
 
 Akeeba Subscriptions 3.0.2
 ================================================================================
