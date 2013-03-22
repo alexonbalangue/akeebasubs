@@ -1381,7 +1381,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'password2'		=> $state->password2
 			);
 
-			$user = JFactory::getUser(0);
+			$user = new JUser();
 
 			JLoader::import('joomla.application.component.helper');
 			$usersConfig = JComponentHelper::getParams( 'com_users' );
