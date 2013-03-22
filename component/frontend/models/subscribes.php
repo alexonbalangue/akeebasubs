@@ -1444,7 +1444,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'name'			=> $state->name,
 				'email'			=> $state->email
 			);
-			if(!empty($state->password) && ($state->password = $state->password2)) {
+			if(!empty($state->password) && ($state->password == $state->password2)) {
 				JLoader::import('joomla.user.helper');
 				$salt = JUserHelper::genRandomPassword(32);
 				$pass = JUserHelper::getCryptedPassword($state->password, $salt);
