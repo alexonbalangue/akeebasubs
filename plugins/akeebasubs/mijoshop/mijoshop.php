@@ -16,7 +16,7 @@ class plgAkeebasubsMijoshop extends plgAkeebasubsAbstract
 	{
 		$templatePath = dirname(__FILE__);
 		$name = 'mijoshop';
-		
+
 		parent::__construct($subject, $name, $config, $templatePath);
 	}
 
@@ -26,27 +26,27 @@ class plgAkeebasubsMijoshop extends plgAkeebasubsAbstract
 		if (!file_exists($mijoshop)) {
 			return;
 		}
-		
+
 		require_once($mijoshop);
-		
+
 		// Load groups
 		$addGroups = array();
 		$removeGroups = array();
 		$this->loadUserGroups($user_id, $addGroups, $removeGroups);
 		if(empty($addGroups) && empty($removeGroups)) return;
-		
+
 		// Get DB connection
 		$db = JFactory::getDBO();
-		
+
 		$customer_id = MijoShop::get('user')->getOCustomerIdFromJUser($user_id);
-		
+
 		// Remove from MijoShop
 		if(!empty($removeGroups)) {
 			$protoQuery = $db->getQuery(true)
 				->update($db->qn('#__mijoshop_customer'))
 				->set($db->qn('customer_group_id').' = '.$db->q('1'))
 				->where($db->qn('customer_id').' = '.$db->q($customer_id));
-				
+
 			foreach($removeGroups as $group) {
 				$query = clone $protoQuery;
 				$query->where($db->qn('customer_group_id').' = '.$db->q($group));
@@ -54,7 +54,7 @@ class plgAkeebasubsMijoshop extends plgAkeebasubsAbstract
 				$db->execute();
 			}
 		}
-		
+
 		// Add to MijoShop
 		if(!empty($addGroups)) {
 			$group = array_pop($addGroups);
@@ -67,23 +67,24 @@ class plgAkeebasubsMijoshop extends plgAkeebasubsAbstract
 			$db->execute();
 		}
 	}
-	
+
 	protected function getGroups()
 	{
 		static $groups = null;
-		
+
 		if(is_null($groups)) {
 			$groups = array();
-			
+
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(true)
 				->select(array(
 					$db->qn('name').' AS '.$db->qn('title'),
 					$db->qn('customer_group_id').' AS '.$db->qn('id'),
-				))->from($db->qn('#__mijoshop_customer_group'));
+				))->from($db->qn('#__mijoshop_customer_group_description'))
+				->where($db->qn('language_id') . ' = ' . $db->q(1));
 			$db->setQuery($query);
 			$res = $db->loadObjectList();
-			
+
 			if(!empty($res)) {
 				foreach($res as $item) {
 					$t = trim($item->title);
@@ -91,7 +92,7 @@ class plgAkeebasubsMijoshop extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		return $groups;
 	}
 }
