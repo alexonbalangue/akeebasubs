@@ -597,19 +597,39 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		$invoice_no = $invoiceRecord->invoice_no;
 
-		// Create the PDF
-		$pdf = $this->getTCPDF();
-		$pdf->AddPage();
-
+		// Repair the input HTML
 		if (function_exists('tidy_repair_string'))
 		{
-			$repaired = tidy_repair_string($invoiceRecord->html, null, 'utf8');
+			$tidyConfig = array(
+				'bare'							=> 'yes',
+				'clean'							=> 'yes',
+				'drop-proprietary-attributes'	=> 'yes',
+				'clean'							=> 'yes',
+				'output-html'					=> 'yes',
+				'preserve-entities'				=> 'yes',
+				'show-warnings'					=> 'no',
+				'ascii-chars'					=> 'no',
+				'char-encoding'					=> 'utf8',
+				'input-encoding'				=> 'utf8',
+				'output-bom'					=> 'no',
+				'output-encoding'				=> 'utf8',
+				'force-output'					=> 'yes',
+				'tidy-mark'						=> 'no',
+				'wrap'							=> 0,
+			);
+			$repaired = tidy_repair_string($invoiceRecord->html, $tidyConfig, 'utf8');
 			if ($repaired !== false)
 			{
 				$invoiceRecord->html = $repaired;
 			}
 		}
 
+		// Fix any relative URLs in the HTML
+		$invoiceRecord->html = $this->fixURLs($invoiceRecord->html);
+
+		// Create the PDF
+		$pdf = $this->getTCPDF();
+		$pdf->AddPage();
 		$pdf->writeHTML($invoiceRecord->html, true, false, true, false, '');
 		$pdf->lastPage();
 		$pdfData = $pdf->Output('', 'S');
@@ -804,11 +824,11 @@ class AkeebasubsModelInvoices extends FOFModel
 		define ('PDF_MARGIN_BOTTOM', 25);
 		define ('PDF_MARGIN_LEFT', 15);
 		define ('PDF_MARGIN_RIGHT', 15);
-		define ('PDF_FONT_NAME_MAIN', 'helvetica');
-		define ('PDF_FONT_SIZE_MAIN', 10);
-		define ('PDF_FONT_NAME_DATA', 'helvetica');
+		define ('PDF_FONT_NAME_MAIN', 'dejavusans');
+		define ('PDF_FONT_SIZE_MAIN', 8);
+		define ('PDF_FONT_NAME_DATA', 'dejavusans');
 		define ('PDF_FONT_SIZE_DATA', 8);
-		define ('PDF_FONT_MONOSPACED', 'courier');
+		define ('PDF_FONT_MONOSPACED', 'dejavusansmono');
 		define ('PDF_IMAGE_SCALE_RATIO', 1.25);
 		define('HEAD_MAGNIFICATION', 1.1);
 		define('K_CELL_HEIGHT_RATIO', 1.25);
@@ -835,12 +855,14 @@ class AkeebasubsModelInvoices extends FOFModel
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
+		$pdf->setHeaderFont(array('dejavusans', '', 8, '', false));
+		$pdf->setFooterFont(array('dejavusans', '', 8, '', false));
+		$pdf->SetFont('dejavusans', '', 8, '', false);
+
 		if (!empty($certificate))
 		{
 			$pdf->setSignature($certificate, $secretkey, $secretKeyPass, $extracerts);
 		}
-
-		$pdf->SetFont('helvetica', '', 10);
 
 		return $pdf;
 	}
@@ -903,5 +925,63 @@ class AkeebasubsModelInvoices extends FOFModel
 		{
 			return $shortlist;
 		}
+	}
+
+	private function fixURLs($buffer)
+	{
+		$pattern = '/(href|src)=\"([^"]*)\"/i';
+		$number_of_matches = preg_match_all($pattern, $buffer, $matches, PREG_OFFSET_CAPTURE);
+
+		if($number_of_matches > 0) {
+			$substitutions = $matches[2];
+			$last_position = 0;
+			$temp = '';
+
+			// Loop all URLs
+			foreach($substitutions as &$entry)
+			{
+				// Copy unchanged part, if it exists
+				if($entry[1] > 0)
+					$temp .= substr($buffer, $last_position, $entry[1]-$last_position);
+				// Add the new URL
+				$temp .= $this->replaceDomain($entry[0]);
+				// Calculate next starting offset
+				$last_position = $entry[1] + strlen($entry[0]);
+			}
+			// Do we have any remaining part of the string we have to copy?
+			if($last_position < strlen($buffer))
+				$temp .= substr($buffer, $last_position);
+
+			return $temp;
+		}
+
+		return $buffer;
+	}
+
+	private function replaceDomain($url)
+	{
+		static $mydomain = null;
+		static $domainlen = null;
+
+		if(empty($mydomain))
+		{
+			$mydomain = JURI::base(false);
+			if(substr($mydomain,-1) == '/') $mydomain = substr($mydomain,0,-1);
+			if(substr($mydomain,-13) == 'administrator') $mydomain = substr($mydomain,0,-13);
+
+			$domainlen = strlen($mydomain);
+		}
+
+		// Do we have a domain name?
+		if(substr($url, 0, 7) == 'http://')
+		{
+			return $url;
+		}
+		if(substr($url, 0, 8) == 'https://')
+		{
+			return $url;
+		}
+
+		return $mydomain . '/' . ltrim($url, '/');
 	}
 }
