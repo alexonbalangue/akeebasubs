@@ -7,11 +7,12 @@ Akeeba Subscriptions 3.1.0
 + Content Publish plugin: added SOBIPro 1.1 integration. WARNING: It will NOT work with earlier versions of SOBIPro.
 + You can now Copy (duplicate) custom fields
 ~ DeltaPay (Alpha Bank Greece) integration: adding support for DeltaPay v2 which supports callback authorisation
-# [LOW] Dashboard tab not showing as active in the backend (thanks Peter)
-# [LOW] Password and Retype Password matching wasn't checked server-side
 # [MEDIUM] The MijoShop integration plugin would not work with the latest version of MijoShop
 # [MEDIUM] The integrated invoicing didn't properly support UTF-8
 # [MEDIUM] The integrated invoicing didn't properly support relative URLs in images
+# [LOW] Dashboard tab not showing as active in the backend (thanks Peter)
+# [LOW] Password and Retype Password matching wasn't checked server-side
+# [LOW] Custom field ordering was ignored in the front-end
 
 Akeeba Subscriptions 3.0.2
 ================================================================================
