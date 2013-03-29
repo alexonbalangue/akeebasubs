@@ -246,4 +246,12 @@ class AkeebasubsToolbar extends FOFToolbar
 			JToolBarHelper::deleteList();
 		}
 	}
+
+	public function onCustomfieldsBrowse()
+	{
+		$this->onBrowse();
+
+		JToolBarHelper::divider();
+		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
+	}
 }
