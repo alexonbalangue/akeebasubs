@@ -19,14 +19,14 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_VIVA_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/LogoViva.png'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
 
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,7 +36,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$data = (object)array(
 			'Email'					=> trim($user->email),
 			'FullName'				=> trim($user->name),
@@ -45,7 +45,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			'MerchantTrns'			=> $subscription->akeebasubs_subscription_id,
 			'CustomerTrns'			=> $level->title
 		);
-		
+
 		// Create new order by a REST POST
 		$jsonResult = $this->httpRequest(
 				$this->getRESTHost(),
@@ -62,31 +62,31 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			$errorUrl = JRoute::_($errorUrl,false);
 			JFactory::getApplication()->redirect($errorUrl,$errorText,'error');
 		}
-		
+
 		// Get the order-code and save it as processor key
 		$orderCode = $orderResult->OrderCode;
 		$subscription->save(array(
 			'processor_key'		=> $orderCode
 		));
-		
+
 		// Get the payment URL that is used by the form
 		$url = $this->getPaymentURL($orderCode);
 
 		@ob_start();
 		include dirname(__FILE__).'/viva/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		$isValid = true;
-		
+
 		// Load the relevant subscription row
 		$orderCode = $data['s'];
 		$subscription = null;
@@ -105,14 +105,14 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			$isValid = false;
 		}
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The order code is invalid';
-		
+
 		if($isValid && $data['type'] == 'cancel') {
 			// Redirect the user to the "cancel" page
 			$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
 			JFactory::getApplication()->redirect($cancelUrl);
 			return true;
 		}
-		
+
 		// Get all details for transaction by a REST GET
 		if($isValid) {
 			$jsonResult = $this->httpRequest(
@@ -129,7 +129,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 				$transaction = $transactionResult->Transactions[0];
 			}
 		}
-		
+
 		// Check subscription ID
 		if($isValid) {
 			if($transaction->MerchantTrns != $id) {
@@ -137,7 +137,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Subscription ID doesn't match";
 			}
 		}
-		
+
 		// Check order ID
 		if($isValid) {
 			if($transaction->Order->OrderCode != $orderCode) {
@@ -145,7 +145,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Order code doesn't match";
 			}
 		}
-		
+
 		// Check that transaction has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $orderCode && in_array($subscription->state, array('C','X'))) {
@@ -153,7 +153,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not process the same transcation twice";
 			}
 		}
-		
+
 		// Check that amount is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
@@ -183,7 +183,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Payment status
 		switch($transaction->StatusId) {
 			case 'F':
@@ -217,13 +217,13 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-        
+
 		// Redirect the user to the "thank you" page
 		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-    
+
 	private function getRESTHost()
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -233,7 +233,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			return 'www.vivapayments.com';
 		}
 	}
-	
+
 	private function getRESTPort()
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -251,7 +251,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 		}
 		return 'en-US';
 	}
-    
+
 	private function getPaymentURL($orderCode)
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -261,20 +261,20 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			return 'https://www.vivapayments.com/web/newtransaction.aspx?ref=' . $orderCode;
 		}
 	}
-	
+
 	private function getBasicAuthorization()
 	{
 		$sandbox = $this->params->get('sandbox',0);
 		if($sandbox) {
 			return base64_encode(
-					trim($this->params->get('merchant_id','0B586B1C-84AE-4259-8C93-DCDCB0266B86')) . ':'
-					. trim($this->params->get('pw','%^&YHNmju')));
+					trim($this->params->get('merchant_id','')) . ':'
+					. trim($this->params->get('pw','')));
 		}
 		return base64_encode(
 				trim($this->params->get('merchant_id','')) . ':'
 				. trim($this->params->get('pw','')));
 	}
-	
+
 	private function httpRequest($host, $path, $params, $method = 'POST', $port = 80)
 	{
 		// Build the parameter string
@@ -287,7 +287,9 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 		$paramStr = substr($paramStr, 0, -1);
 
 		// Create the connection
-		$sock = fsockopen($host, $port);
+		$sandbox = $this->params->get('sandbox',0);
+		$sockhost = $sandbox ? $host : 'ssl://' . $host;
+		$sock = fsockopen($sockhost, $port);
 		if ($method == 'GET') {
 			$path .= '?' . $paramStr;
 		}
@@ -305,7 +307,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 			$response .= fgets($sock, 1024);
 		}
 		fclose($sock);
-		
+
 		// Get the json part of the response
 		$matches = array();
 		$pattern = '/[^{]*(.+)[^}]*/';
