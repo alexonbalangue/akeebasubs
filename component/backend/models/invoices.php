@@ -606,7 +606,6 @@ class AkeebasubsModelInvoices extends FOFModel
 				'drop-proprietary-attributes'	=> 'yes',
 				'clean'							=> 'yes',
 				'output-html'					=> 'yes',
-				'preserve-entities'				=> 'yes',
 				'show-warnings'					=> 'no',
 				'ascii-chars'					=> 'no',
 				'char-encoding'					=> 'utf8',
@@ -626,6 +625,8 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		// Fix any relative URLs in the HTML
 		$invoiceRecord->html = $this->fixURLs($invoiceRecord->html);
+
+		//echo "<pre>" . htmlentities($invoiceRecord->html) . "</pre>"; die();
 
 		// Create the PDF
 		$pdf = $this->getTCPDF();
@@ -802,12 +803,16 @@ class AkeebasubsModelInvoices extends FOFModel
 		// Set up TCPDF
 		$jreg = JFactory::getConfig();
 		$tmpdir = $jreg->get('tmp_path');
+		$tmpdir = rtrim($tmpdir, '/' . DIRECTORY_SEPARATOR) . '/';
 		$siteName = $jreg->get('sitename');
+
+		$baseurl = JURI::base();
+		$baseurl = rtrim($baseurl, '/');
 
 		define('K_TCPDF_EXTERNAL_CONFIG', 1);
 
-		define ('K_PATH_MAIN', __DIR__);
-		define ('K_PATH_URL', JURI::base());
+		define ('K_PATH_MAIN', JPATH_BASE . '/');
+		define ('K_PATH_URL', $baseurl);
 		define ('K_PATH_FONTS', JPATH_ROOT.'/media/com_akeebasubs/tcpdf/fonts/');
 		define ('K_PATH_CACHE', $tmpdir);
 		define ('K_PATH_URL_CACHE', $tmpdir);
