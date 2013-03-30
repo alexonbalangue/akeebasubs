@@ -135,6 +135,14 @@ class AkeebasubsModelCpanels extends FOFModel
 				'updates/mysql/3.0.0-2013-01-25.sql',
 			)
 		),
+		// check for update 3.1.0-2013-03-30
+		array(
+			'table' => 'akeebasubs_invoicetemplates',
+			'field' => 'globalformat',
+			'files' =>array(
+				'updates/mysql/3.1.0-2013-03-30.sql',
+			)
+		),
 	);
 
 	/**

@@ -164,6 +164,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_configurations` (
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
 	`akeebasubs_subscription_id` BIGINT(20) UNSIGNED NOT NULL,
 	`extension` VARCHAR(50) NOT NULL DEFAULT "misc",
+	`akeebasubs_invoicetemplate_id` BIGINT(20) NOT NULL DEFAULT 0,
 	`invoice_no` BIGINT(20) unsigned NOT NULL,
 	`display_number` VARCHAR(255) NULL,
 	`invoice_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -220,6 +221,12 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoicetemplates` (
 	`title` VARCHAR(255) NOT NULL,
 	`template` TEXT,
 	`levels` VARCHAR(255) NOT NULL DEFAULT '0',
+	`globalformat` tinyint(3) NOT NULL DEFAULT '1',
+	`globalnumbering` tinyint(3) NOT NULL DEFAULT '1',
+	`number_reset` bigint(20) NOT NULL DEFAULT '0',
+	`country` varchar(3) NOT NULL DEFAULT '',
+	`format` varchar(100) NOT NULL DEFAULT '',
+	`isbusiness` tinyint(3) NOT NULL DEFAULT '-1',
 
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
