@@ -254,4 +254,12 @@ class AkeebasubsToolbar extends FOFToolbar
 		JToolBarHelper::divider();
 		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
 	}
+
+	public function onInvoicetemplatesBrowse()
+	{
+		$this->onBrowse();
+
+		JToolBarHelper::divider();
+		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
+	}
 }
