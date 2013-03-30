@@ -397,7 +397,35 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$mustCheck = ($catchRules < 2) && ($catchRules > 0);
 
 				if($mustCheck) {
-					$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
+					// Can I use cached result? In order to do so...
+					$useCachedResult = false;
+					// ...I have to be logged in...
+					if (!JFactory::getUser()->guest)
+					{
+						// ...and I must have my viesregistered flag set to 2
+						// and my VAT number must match the saved record.
+						$userparams = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+							->user_id(JFactory::getUser()->id)
+							->getMergedData();
+						if (($userparams->viesregistered == 2) && ($userparams->vatnumber == $state->vatnumber))
+						{
+							$useCachedResult = true;
+						}
+					}
+
+					if ($useCachedResult)
+					{
+						// Use the cached VIES validation result
+						$ret['vatnumber'] = true;
+						$ret['onlineviescheck'] = 0;
+					}
+					else
+					{
+						// No, check the VAT number against the VIES web service
+						$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
+						$ret['onlineviescheck'] = 1;
+					}
+
 					$ret['novatrequired'] = false;
 				} else {
 					$ret['novatrequired'] = true;

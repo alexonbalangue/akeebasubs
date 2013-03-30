@@ -46,9 +46,9 @@ $this->loadHelper('format');
 
 <div class="span6">
 	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_BASIC_TITLE')?></h3>
-	
+
 	<?php JLoader::import('joomla.user.user'); ?>
-	
+
 	<div class="control-group">
 		<label for="userid_visible" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 		<div class="controls">
@@ -58,28 +58,28 @@ $this->loadHelper('format');
 			<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="address1" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ADDRESS1')?></label>
 		<div class="controls">
 			<input type="text" name="address1" id="address1" value="<?php echo $this->escape($this->item->address1)?>" />
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="address2" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ADDRESS2')?></label>
 		<div class="controls">
 			<input type="text" name="address2" id="address2" value="<?php echo $this->escape($this->item->address2)?>" />
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="city" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_CITY')?></label>
 		<div class="controls">
 			<input type="text" name="city" id="city" value="<?php echo $this->escape($this->item->city)?>" />
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="zip" class="control-label">
 			<?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_ZIP')?>
@@ -88,14 +88,14 @@ $this->loadHelper('format');
 			<input type="text" class="input-small" name="zip" id="zip" value="<?php echo $this->escape($this->item->zip)?>" />
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="state" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_STATE')?></label>
 		<div class="controls">
 			<?php echo AkeebasubsHelperSelect::states($this->item->state, 'state'); ?>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="state" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_COUNTRY')?></label>
 		<div class="controls">
@@ -138,7 +138,7 @@ $this->loadHelper('format');
 	<div class="control-group">
 		<label for="viesregistered" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_USERS_FIELD_VIESREGISTERED')?></label>
 		<div class="controls">
-			<?php echo JHTML::_('select.booleanlist', 'viesregistered', null, $this->item->viesregistered); ?>
+			<?php echo AkeebasubsHelperSelect::viesregistered('viesregistered', $this->item->viesregistered); ?>
 		</div>
 	</div>
 </div>
@@ -146,7 +146,7 @@ $this->loadHelper('format');
 </div>
 
 <div class="row-fluid">
-	
+
 <div class="span6">
 	<h3><?php echo JText::_('COM_AKEEBASUBS_USER_NOTES_TITLE')?></h3>
 
@@ -172,14 +172,14 @@ $this->loadHelper('format');
 			<?php echo $field['elementHTML']?>
 		</div>
 	</div>
-	
+
 	<?php endforeach; endforeach;?>
 </div>
 
 </div>
 
 </form>
-	
+
 
 <script type="text/javascript">
 function jSelectUser_userid(id, username)
@@ -187,7 +187,7 @@ function jSelectUser_userid(id, username)
 	document.getElementById('userid').value = id;
 	document.getElementById('userid_visible').value = username;
 	try {
-		document.getElementById('sbox-window').close();	
+		document.getElementById('sbox-window').close();
 	} catch(err) {
 		SqueezeBox.close();
 	}

@@ -85,7 +85,7 @@ class AkeebasubsHelperSelect
 		'VU' =>'Vanuatu', 'WF' =>'Wallis and Futuna', 'WS' =>'Samoa', 'YE' =>'Yemen',
 		'YT' =>'Mayotte', 'ZA' =>'South Africa', 'ZM' =>'Zambia', 'ZW' =>'Zimbabwe'
 	);
-	
+
 	public static $states = array();
 
 	public static function decodeCountry($cCode)
@@ -159,7 +159,7 @@ class AkeebasubsHelperSelect
 		}
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
-	
+
 	public static function states($selected = null, $id = 'state', $attribs = array())
 	{
 		$options = array();
@@ -218,7 +218,7 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
-	
+
 	public static function languages($selected = null, $id = 'language', $attribs = array() )
 	{
 		JLoader::import('joomla.language.helper');
@@ -229,17 +229,17 @@ class AkeebasubsHelperSelect
 		{
 			$options[] = JHTML::_('select.option',$key,$lang->title);
 		}
-		
+
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
-	
+
 	public static function subscriptionlevels($selected = null, $id = 'akeebasubs_level_id', $attribs = array())
 	{
 		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
-		
+
 		$options = array();
-		
+
 		if(count($items)) foreach($items as $item)
 		{
 			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id, $item->title);
@@ -249,7 +249,7 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
-	
+
 	public static function paystates($selected = null, $id = 'state', $attribs = array())
 	{
 		$options = array();
@@ -270,10 +270,10 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		$options[] = JHTML::_('select.option','value',JText::_('COM_AKEEBASUBS_COUPON_TYPE_VALUE'));
 		$options[] = JHTML::_('select.option','percent',JText::_('COM_AKEEBASUBS_COUPON_TYPE_PERCENT'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	/**
 	 * Shows a listbox with defined subscription levels
 	 */
@@ -286,9 +286,9 @@ class AkeebasubsHelperSelect
 			->limit(0)
 			->offset(0)
 			->getList();
-		
+
 		$options   = array();
-		
+
 		$include_none = false;
 		$include_all = false;
 		if(array_key_exists('include_none', $attribs)) {
@@ -299,7 +299,7 @@ class AkeebasubsHelperSelect
 			$include_all = $attribs['include_all'];
 			unset($attribs['include_all']);
 		}
-		
+
 		if($include_none) {
 			$options[] = JHTML::_('select.option','-1',JText::_('COM_AKEEBASUBS_COMMON_SELECTLEVEL_NONE'));
 		}
@@ -309,14 +309,14 @@ class AkeebasubsHelperSelect
 		if(!$include_none && !$include_all) {
 			$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		}
-		
+
 		foreach($list as $item) {
 			$options[] = JHTML::_('select.option',$item->akeebasubs_level_id,$item->title);
 		}
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	public static function formatCountry($country = '')
 	{
  		if(array_key_exists($country, self::$countries)) {
@@ -324,25 +324,25 @@ class AkeebasubsHelperSelect
  		} else {
  			$name = '&mdash;';
  		}
- 		
- 		return $name; 
+
+ 		return $name;
 	}
-	
+
 	public static function formatState($state)
 	{
 		$name = '&mdash;';
-		
+
 		foreach(self::$states as $country => $states) {
 			if(array_key_exists($state, $states)) $name = $states[$state];
 		}
-		
- 		return $name; 
+
+ 		return $name;
 	}
-	
+
 	public static function formatLevel($id)
 	{
 		static $levels;
-		
+
 		if(empty($levels)) {
 			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->filter_order('ordering')
@@ -351,19 +351,19 @@ class AkeebasubsHelperSelect
 				->offset(0)
 				->getList();
 		}
-		
+
 		if(array_key_exists($id, $levels)) {
 			return $levels[$id]->title;
 		} else {
 			return '&mdash;&mdash;&mdash;';
 		}
 	}
-	
+
 	/**
  	 * Drop down list of payment methods (active payment plugins)
  	 */
  	public static function paymentmethods($name = 'paymentmethod', $selected = '', $attribs = array())
- 	{	
+ 	{
 		// Get the list of payment plugins
  		$plugins = FOFModel::getTmpInstance('Subscribes','AkeebasubsModel')
 			->getPaymentPlugins();
@@ -372,7 +372,7 @@ class AkeebasubsHelperSelect
 		if(!class_exists('AkeebasubsHelperCparams')) {
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		}
-		
+
 		// Determine how to render the payment method (drop-down or radio box)
 		if(AkeebasubsHelperCparams::getParam('useppimages', 1) > 0) {
 			// Show images instead of a drop-down
@@ -421,12 +421,12 @@ class AkeebasubsHelperSelect
 			return self::genericlist($options, $name, $attribs, $selected, $name);
 		}
  	}
-	
+
 	public static function affiliates($selected = null, $id = 'akeebasubs_affiliate_id', $attribs = array())
 	{
 		$model = FOFModel::getTmpInstance('Affiliates','AkeebasubsModel');
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
-		
+
 		$options = array();
 
 		if(count($items)) foreach($items as $item)
@@ -438,7 +438,7 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
-	
+
 	/**
 	 * Drop down list of payment states
 	 */
@@ -449,10 +449,10 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','none',JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_NONE'));
 		$options[] = JHTML::_('select.option','coupon',JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_COUPON'));
 		$options[] = JHTML::_('select.option','upgrade',JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_UPGRADE'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	/**
 	 * Drop down list of upgrade types
 	 */
@@ -463,10 +463,10 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','value',JText::_('COM_AKEEBASUBS_UPGRADE_TYPE_VALUE'));
 		$options[] = JHTML::_('select.option','percent',JText::_('COM_AKEEBASUBS_UPGRADE_TYPE_PERCENT'));
 		$options[] = JHTML::_('select.option','lastpercent',JText::_('COM_AKEEBASUBS_UPGRADE_TYPE_LASTPERCENT'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	/**
 	 * Drop down list of level groups
 	 */
@@ -474,7 +474,7 @@ class AkeebasubsHelperSelect
 	{
 		$model = FOFModel::getTmpInstance('Levelgroups','AkeebasubsModel');
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
-		
+
 		$options = array();
 
 		if(count($items)) foreach($items as $item)
@@ -486,14 +486,14 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
-	
+
 	/**
 	 * Drop down list of custom field types
 	 */
 	public static function fieldtypes($name = 'type', $selected = 'text', $attribs = array())
 	{
 		$fieldTypes = array();
-		
+
 		JLoader::import('joomla.filesystem.folder');
 		$basepath = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/customfields';
 		$files = JFolder::files($basepath, '.php');
@@ -503,7 +503,7 @@ class AkeebasubsHelperSelect
 			{
 				continue;
 			}
-			
+
 			require_once $basepath.'/'.$file;
 			$type = substr($file, 0, -4);
 			$class = 'AkeebasubsCustomField' . ucfirst($type);
@@ -512,17 +512,17 @@ class AkeebasubsHelperSelect
 				$fieldTypes[] = $type;
 			}
 		}
-		
+
 		$options = array();
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		foreach ($fieldTypes as $type)
 		{
 			$options[] = JHTML::_('select.option', $type, JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type)));
 		}
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	/**
 	 * Drop down list of when to show custom fields
 	 */
@@ -532,10 +532,10 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		$options[] = JHTML::_('select.option','all',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_ALL'));
 		$options[] = JHTML::_('select.option','level',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_LEVEL'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	/**
 	 * Drop down list of subscription level relation modes
 	 */
@@ -546,10 +546,10 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','rules',JText::_('COM_AKEEBASUBS_RELATIONS_MODE_RULES'));
 		$options[] = JHTML::_('select.option','fixed',JText::_('COM_AKEEBASUBS_RELATIONS_MODE_FIXED'));
 		$options[] = JHTML::_('select.option','flexi',JText::_('COM_AKEEBASUBS_RELATIONS_MODE_FLEXI'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	public static function flexiperioduoms($name = 'flex_uom', $selected = 'rules', $attribs = array())
 	{
 		$options = array();
@@ -558,20 +558,20 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','w',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_UOM_W'));
 		$options[] = JHTML::_('select.option','m',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_UOM_M'));
 		$options[] = JHTML::_('select.option','y',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_UOM_Y'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	public static function flexitimecalc($name = 'flex_timecalculation', $selected = 'current', $attribs = array())
 	{
 		$options = array();
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		$options[] = JHTML::_('select.option','current',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMECALCULATION_CURRENT'));
 		$options[] = JHTML::_('select.option','future',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMECALCULATION_FUTURE'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	public static function flexirounding($name = 'flex_rounding', $selected = 'round', $attribs = array())
 	{
 		$options = array();
@@ -579,10 +579,10 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','floor',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMEROUNDING_FLOOR'));
 		$options[] = JHTML::_('select.option','ceil',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMEROUNDING_CEIL'));
 		$options[] = JHTML::_('select.option','round',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_TIMEROUNDING_ROUND'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	public static function flexiexpiration($name = 'expiration', $selected = 'replace', $attribs = array())
 	{
 		$options = array();
@@ -590,18 +590,28 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','replace',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_EXPIRATION_REPLACE'));
 		$options[] = JHTML::_('select.option','after',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_EXPIRATION_AFTER'));
 		$options[] = JHTML::_('select.option','overlap',JText::_('COM_AKEEBASUBS_RELATIONS_FIELD_FLEX_EXPIRATION_OVERLAP'));
-		
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-	
+
 	public static function invoiceextensions($name = 'extension', $selected = '', $attribs = array())
 	{
 		$options = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 			->getExtensions(1);
-		
+
 		$option = JHtml::_('select.option', '', '- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		array_unshift($options, $option);
-		
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+
+	public static function viesregistered($name = 'viesregistered', $selected = 0, $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option', '0', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_USER_VIESREGISTERED_NO'));
+		$options[] = JHTML::_('select.option', '1', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_USER_VIESREGISTERED_YES'));
+		$options[] = JHTML::_('select.option', '2', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_USER_VIESREGISTERED_FORCEYES'));
+
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
 }
@@ -626,24 +636,24 @@ function akeebasubsHelperSelect_init()
 				$current_country = '';
 				$current_country_name = '';
 			}
-			
+
 			if (empty($rawstate->country) || empty($rawstate->state) || empty($rawstate->label))
 			{
 				continue;
 			}
-			
+
 			$current_country = $rawstate->country;
 			$current_country_name = AkeebasubsHelperSelect::$countries[$current_country];
 		}
-		
+
 		$current_states[$rawstate->state] = $rawstate->label;
 	}
-	
+
 	if (!empty($current_country_name))
 	{
 		$states[$current_country_name] = $current_states;
 	}
-	
+
 	AkeebasubsHelperSelect::$states = $states;
 }
 
