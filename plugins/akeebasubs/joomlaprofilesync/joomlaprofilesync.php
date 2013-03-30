@@ -86,6 +86,10 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			$state = json_decode($rows['profile.region'][1]);
 			$cname = AkeebasubsHelperSelect::$countries[$country];
 			$states = AkeebasubsHelperSelect::$states[$cname];
+			if (!is_array($states))
+			{
+				$states = array();
+			}
 
 			if(in_array($state, $states))
 			{
@@ -112,6 +116,10 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			$state = json_decode($rows['profile.state'][1], true);
 			$cname = AkeebasubsHelperSelect::$countries[$country];
 			$states = AkeebasubsHelperSelect::$states[$cname];
+			if (!is_array($states))
+			{
+				$states = array();
+			}
 
 			if(in_array($state, $states))
 			{
