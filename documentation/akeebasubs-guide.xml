@@ -3294,6 +3294,23 @@ Rule C gives $ 30 discount</programlisting>
             username, full name and email address of the user. Partial matches
             will also be returned, e.g. searching for "car" will also match
             "Carlos", "Descartes" and, of course, "Car".</para>
+
+            <para>Clicking on the user information will open the Akeeba
+            Subscriptions' user information editor where you can see the
+            values of core and custom fields stored by Akeeba Subscriptions
+            for the specific user's account.</para>
+
+            <tip>
+              <para>If you are an EU merchant you may have observed that the
+              VIES service, used to validate the European VAT numbers, is
+              off-line or malfunctioning more often than not. This can cause a
+              problem with your clients, as they have to pay VAT which they
+              shouldn't. In such cases set the <guilabel>VAT is VIES
+              Registered</guilabel> to <option>Yes, don't check
+              again</option>. Akeeba Subscriptions will consider the VAT
+              number as VIES registered, without consulting the VIES
+              service.</para>
+            </tip>
           </listitem>
         </varlistentry>
 
