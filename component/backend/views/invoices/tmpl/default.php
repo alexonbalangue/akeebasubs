@@ -137,7 +137,7 @@ $extensions = $this->getModel()->getExtensions();
 	<tfoot>
 		<tr>
 			<td colspan="20">
-				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>	
+				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 			</td>
 		</tr>
 	</tfoot>
@@ -179,7 +179,7 @@ $extensions = $this->getModel()->getExtensions();
 							<img src="https://secure.gravatar.com/avatar/<?php echo md5(strtolower($invoice->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
 						<?php endif; ?>
 					<?php endif; ?>
-					<a href="index.php?option=com_akeebasubs&view=user&id=<?php echo $user_id ?>" class="title">	
+					<a href="index.php?option=com_akeebasubs&view=user&id=<?php echo $user_id ?>" class="title">
 					<strong><?php echo $this->escape($invoice->username)?></strong>
 					<span class="small">[<?php echo $invoice->user_id?>]</span>
 					<br/>
@@ -213,15 +213,15 @@ $extensions = $this->getModel()->getExtensions();
 				<a href="index.php?option=com_akeebasubs&view=invoices&task=read&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>&tmpl=component" class="btn btn-info modal" rel="{handler: 'iframe', size: {x: 800, y: 500}}" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_PREVIEW') ?>">
 					<span class="icon icon-file icon-white"></span>
 				</a>
-				
+
 				<a href="index.php?option=com_akeebasubs&view=invoices&task=download&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>" class="btn btn-primary" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_DOWNLOAD') ?>">
 					<span class="icon icon-download-alt icon-white"></span>
 				</a>
-				
+
 				<a href="index.php?option=com_akeebasubs&view=invoices&task=send&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>" class="btn btn-success" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_RESEND') ?>">
 					<span class="icon icon-envelope icon-white"></span>
 				</a>
-				
+
 				<?php if (empty($invoice->sent_on) || ($invoice->sent_on == $nullDate)): ?>
 				<span class="label">
 					<span class="icon icon-white icon-warning-sign"></span> Not sent
@@ -231,10 +231,17 @@ $extensions = $this->getModel()->getExtensions();
 					<span class="icon icon-white icon-ok"></span> Sent
 				</span>
 				<?php endif; ?>
-				
+
 				<a href="index.php?option=com_akeebasubs&view=invoices&task=generate&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>" class="btn btn-mini btn-warning" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_REGENERATE') ?>">
 					<span class="icon icon-retweet icon-white"></span>
 				</a>
+
+				<?php if (array_key_exists($invoice->akeebasubs_invoicetemplate_id, $this->invoicetemplates)): ?>
+				<span class="label label-info">
+					<?php echo $this->invoicetemplates[$invoice->akeebasubs_invoicetemplate_id] ?>
+				</span>
+				<?php endif; ?>
+
 				<?php else: ?>
 				<?php if(array_key_exists($invoice->extension, $extensions)): ?>
 				<a class="btn" href="<?php echo sprintf($extensions[$invoice->extension]['backendurl'], $invoice->invoice_no) ?>">

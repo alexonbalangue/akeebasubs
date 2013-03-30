@@ -989,4 +989,19 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		return $mydomain . '/' . ltrim($url, '/');
 	}
+
+	public function getInvoiceTemplateNames()
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true)
+			->select(array(
+				$db->qn('akeebasubs_invoicetemplate_id'),
+				$db->qn('title'),
+			))
+			->from($db->qn('#__akeebasubs_invoicetemplates'));
+		$db->setQuery($query);
+		$res = $db->loadObjectList('akeebasubs_invoicetemplate_id');
+
+		return $res;
+	}
 }
