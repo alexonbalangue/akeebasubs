@@ -7,6 +7,7 @@ Akeeba Subscriptions 3.1.0
 + Content Publish plugin: added SOBIPro 1.1 integration. WARNING: It will NOT work with earlier versions of SOBIPro.
 + You can now Copy (duplicate) custom fields
 + You can now force a client's VAT number as VIES-validated, even when the VIES service is down or malfunctioning, as it frequently happens on holidays...
++ Finer-grained built-in invoicing, with the ability for independently numbered invoice templates (multiple invoice series by subscription level, business registration status and country)
 ~ DeltaPay (Alpha Bank Greece) integration: adding support for DeltaPay v2 which supports callback authorisation
 # [HIGH] The integrated invoicing automatic generation and sending fails when the invoice includes images
 # [HIGH] The VivaPayments plugin would not work outside of sandbox mode

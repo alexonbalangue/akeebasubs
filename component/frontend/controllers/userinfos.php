@@ -54,7 +54,7 @@ class AkeebasubsControllerUserinfos extends FOFController
 		// Get the user model and load the user data
 		$userparams = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id(JFactory::getUser()->id)
-				->getMergedData();
+				->getMergedData(JFactory::getUser()->id);
 		$view->assign('userparams', $userparams);
 
 		$cache = (array)($model->getData());

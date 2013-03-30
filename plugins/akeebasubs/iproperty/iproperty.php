@@ -11,7 +11,7 @@ class plgAkeebasubsIproperty extends JPlugin
 {
 	/** @var array Subscription levels to company properties */
 	private $addGroups = array();
-	
+
 	public function __construct(& $subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
@@ -23,7 +23,7 @@ class plgAkeebasubsIproperty extends JPlugin
 
 		$this->addGroups = $this->parseAddGroups();
 	}
-	
+
 	/**
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
@@ -35,10 +35,10 @@ class plgAkeebasubsIproperty extends JPlugin
 			$this->onAKUserRefresh($row->user_id);
 		}
 	}
-	
+
 	/**
 	 * Called whenever the administrator asks to refresh integration status.
-	 * 
+	 *
 	 * @param $user_id int The Joomla! user ID to refresh information for.
 	 */
 	public function onAKUserRefresh($user_id)
@@ -70,15 +70,15 @@ class plgAkeebasubsIproperty extends JPlugin
 		if($mustActivate && $mustDeactivate) {
 			$mustDeactivate = false;
 		}
-		
+
 		if($mustActivate) {
 			$this->publishAgent($user_id, $params);
 		} elseif($mustDeactivate) {
 			$this->unpublishAgent($user_id);
 		}
-		
+
 	}
-	
+
 	private function publishAgent($user_id, $params)
 	{
 		// First, check if we already have agents for that user ID
@@ -89,21 +89,21 @@ class plgAkeebasubsIproperty extends JPlugin
 			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($query);
 		$agents = $db->loadObjectList();
-		
+
 		if(empty($agents)) {
 			// If we do not have any existing agents, create a new company and a new agent record
 
 			// Load the user data
 			$user = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id($user_id)
-				->getMergedData();
-			
+				->getMergedData($user_id);
+
 			// Create a company
 			$name = empty($user->businessname) ? $user->name : $user->businessname;
-			
+
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/filter.php';
 			$alias = AkeebasubsHelperFilter::toSlug($name);
-			
+
 			$company = (object)array(
 				'name'			=> $name,
 				'alias'			=> $alias,
@@ -125,11 +125,11 @@ class plgAkeebasubsIproperty extends JPlugin
 				'state'			=> 1,
 				'params'		=> json_encode($params)
 			);
-			
+
 			$db->insertObject('#__iproperty_companies', $company);
-			
+
 			$companyid = $db->insertid();
-			
+
 			// Create an agent
 			$nameParts = explode(' ', $user->name, 2);
 			$firstName = $nameParts[0];
@@ -139,7 +139,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				$lastName = '';
 			}
 			$alias = AkeebasubsHelperFilter::toSlug($user->name);
-			
+
 			$agent = (object)array(
 				'agent_type'	=> 0,
 				'hometeam'		=> 0,
@@ -175,10 +175,10 @@ class plgAkeebasubsIproperty extends JPlugin
 				'params'		=> '',
 			);
 			$db->insertObject('#__iproperty_agents', $agent);
-			
+
 		} else {
 			// If we have existing agents, we need to do two things:
-			
+
 			// a. Make sure all agent records are enabled
 			$query = $db->getQuery(true)
 				->update($db->qn('#__iproperty_agents'))
@@ -186,7 +186,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				->where($db->qn('user_id').' = '.$db->q($user_id));
 			$db->setQuery($query);
 			$db->execute();
-			
+
 			// b. Update the company parameters
 			$company_ids_raw = array();
 			foreach($agents as $agent) {
@@ -197,14 +197,14 @@ class plgAkeebasubsIproperty extends JPlugin
 			foreach($company_ids_raw as $cid) {
 				$company_ids[] = $db->q($cid);
 			}
-			
+
 			$query = $db->getQuery(true)
 				->select('*')
 				->from($db->qn('#__iproperty_companies'))
 				->where($db->qn('id').' IN ('.implode(',', $company_ids).')');
 			$db->setQuery($query);
 			$companies = $db->loadObjectList();
-			
+
 			foreach($companies as $company) {
 				$cparams = json_decode($company->params, true);
 				$cparams = $this->mixParams($cparams, $params);
@@ -214,7 +214,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			}
 		}
 	}
-	
+
 	private function unpublishAgent($user_id)
 	{
 		// First, check if we already have agents for that user ID
@@ -225,9 +225,9 @@ class plgAkeebasubsIproperty extends JPlugin
 			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($query);
 		$agents = $db->loadObjectList();
-		
+
 		if(empty($agents)) return;
-		
+
 		// Unpublish agent records
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
@@ -236,7 +236,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			->where($db->qn('user_id').' = '.$db->q($user_id));
 		$db->setQuery($query);
 		$db->execute();
-		
+
 		// b. Unpublish the companies of the user
 		$company_ids_raw = array();
 		foreach($agents as $agent) {
@@ -255,32 +255,32 @@ class plgAkeebasubsIproperty extends JPlugin
 		$db->setQuery($query);
 		$db->execute();
 	}
-	
+
 	private function parseAddGroups()
 	{
 		$ret = array();
-		
+
 		$rawData = $this->params->get('addgroups', '');
-		
+
 		if(empty($rawData)) return $ret;
-		
+
 		// Just in case something funky happened...
 		$rawData = str_replace("\\n", "\n", $rawData);
 		$rawData = str_replace("\r", "\n", $rawData);
 		$rawData = str_replace("\n\n", "\n", $rawData);
-		
+
 		$lines = explode("\n", $rawData);
-		
+
 		foreach($lines as $line) {
 			$line = trim($line);
 			$parts = explode('=', $line, 2);
 			if(count($parts) != 2) continue;
-			
+
 			$level = $parts[0];
 			$rawParams = $parts[1];
-			
+
 			$levelId = $this->ASLevelToId($level);
-			
+
 			$params = explode(',', $rawParams);
 			$paramsArray = array();
 			if(empty($params)) {
@@ -296,19 +296,19 @@ class plgAkeebasubsIproperty extends JPlugin
 				$ret[$levelId] = $paramsArray;
 			}
 		}
-		
+
 		return $ret;
 	}
-	
+
 	private function mixParams($old, $new)
 	{
 		$oldKeys = count($old) ? array_keys($old) : array();
 		$newKeys = count($new) ? array_keys($new) : array();
 		$allKeys = array_merge($oldKeys, $newKeys);
-		
+
 		if(empty($allKeys)) return array();
 		$ret = array();
-		
+
 		foreach($allKeys as $key) {
 			if(array_key_exists($key, $old) && !array_key_exists($key, $new)) {
 				$ret[$key] = $old[$key];
@@ -318,13 +318,13 @@ class plgAkeebasubsIproperty extends JPlugin
 				$ret[$key] = max($old[$key], $new[$key]);
 			}
 		}
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Converts an Akeeba Subscriptions level to a numeric ID
-	 * 
+	 *
 	 * @param $title string The level's name to be converted to an ID
 	 *
 	 * @return int The subscription level's ID or -1 if no match is found
@@ -332,10 +332,10 @@ class plgAkeebasubsIproperty extends JPlugin
 	private function ASLevelToId($title)
 	{
 		static $levels = null;
-		
+
 		// Don't process invalid titles
 		if(empty($title)) return -1;
-		
+
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
@@ -346,7 +346,7 @@ class plgAkeebasubsIproperty extends JPlugin
 				$levels[$thisTitle] = $level->akeebasubs_level_id;
 			}
 		}
-		
+
 		$title = strtoupper($title);
 		if(array_key_exists($title, $levels)) {
 			// Mapping found

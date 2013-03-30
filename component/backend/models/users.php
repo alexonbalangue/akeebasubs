@@ -192,12 +192,17 @@ class AkeebasubsModelUsers extends FOFModel
 		return $query;
 	}
 
-	public function getMergedData()
+	public function getMergedData($user_id = null)
 	{
+		if (is_null($user_id))
+		{
+			$user_id = $state->user_id;
+		}
+
 		$state = $this->getFilterValues();
 		// Get a legacy data set from the user parameters
 		$userRow = FOFTable::getAnInstance('Juser','AkeebasubsTable');
-		$userRow->load($state->user_id);
+		$userRow->load($user_id);
 		if(!($userRow->params instanceof JRegistry)) {
 			JLoader::import('joomla.registry.registry');
 			$params = new JRegistry($userRow->params);
@@ -227,11 +232,11 @@ class AkeebasubsModelUsers extends FOFModel
 		$myData['email2'] = $userData['email'];
 		unset($userData);
 
-		if($state->user_id > 0) {
+		if($user_id > 0) {
 			$row = FOFModel::getTmpInstance('Users','AkeebasubsModel')
-				->user_id($state->user_id)
+				->user_id($user_id)
 				->getFirstItem();
-			if($row->user_id == $state->user_id) {
+			if($row->user_id == $user_id) {
 				$myData = array_merge($myData, $row->getData());
 				if(is_string($myData['params'])) {
 					$myData['params'] = json_decode($myData['params'], true);

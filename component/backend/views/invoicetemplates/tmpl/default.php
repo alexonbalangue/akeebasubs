@@ -39,6 +39,12 @@ $this->loadHelper('cparams');
 				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_LEVELS', 'levels', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
 			</th>
 			<th width="8%">
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS', 'isbusiness', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
+			</th>
+			<th width="15%">
+				<?php echo JHTML::_('grid.sort', 'COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY', 'country', $this->lists->order_Dir, $this->lists->order, 'browse') ?>
+			</th>
+			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'JFIELD_ORDERING_LABEL', 'ordering', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 				<?php echo JHTML::_('grid.order', $this->items); ?>
 			</th>
@@ -68,6 +74,8 @@ $this->loadHelper('cparams');
 			</td>
 			<td></td>
 			<td></td>
+			<td></td>
+			<td></td>
 			<td>
 				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();','class'=>'input-medium')) ?>
 			</td>
@@ -76,7 +84,7 @@ $this->loadHelper('cparams');
 	<tfoot>
 		<tr>
 			<td colspan="20">
-				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>	
+				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 			</td>
 		</tr>
 	</tfoot>
@@ -104,6 +112,16 @@ $this->loadHelper('cparams');
 			</td>
 			<td>
 				<?php echo AkeebasubsHelperFormat::formatInvTempLevels($item->levels) ?>
+			</td>
+			<td>
+				<?php echo ($item->isbusiness == -1) ? JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS_INDIFFERENT') : JText::_($item->isbusiness ? 'COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS_BUSINESS' : 'COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS_PERSONAL'); ?>
+			</td>
+			<td>
+				<?php if(empty($item->country)): ?>
+				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY_ALL'); ?>
+				<?php else: ?>
+				<?php echo AkeebasubsHelperSelect::decodeCountry($item->country) ?>
+				<?php endif; ?>
 			</td>
 			<td class="order" align="center">
 				<span><?php echo $this->pagination->orderUpIcon( $i, true, 'orderup', 'Move Up', $ordering ); ?></span>

@@ -18,6 +18,7 @@ JHTML::_('behavior.modal');
 $nullDate = JFactory::getDbo()->getNullDate();
 
 $extensions = $this->getModel()->getExtensions();
+
 ?>
 
 <?php if(empty($extensions)): ?>
@@ -199,6 +200,12 @@ $extensions = $this->getModel()->getExtensions();
 				<?php echo AkeebasubsHelperFormat::formatInvoicingExtension($invoice->extension) ?>
 			</td>
 			<td>
+				<?php if (($invoice->extension == 'akeebasubs') && array_key_exists($invoice->akeebasubs_invoicetemplate_id, $this->invoicetemplates)): ?>
+				<span class="label label-info">
+					<?php echo $this->invoicetemplates[$invoice->akeebasubs_invoicetemplate_id]->title ?>
+				</span>
+				<?php endif; ?>
+
 				<?php if (!empty($invoice->display_number)): ?>
 				<?php echo $this->escape($invoice->display_number) ?>
 				<?php else: ?>
@@ -224,23 +231,19 @@ $extensions = $this->getModel()->getExtensions();
 
 				<?php if (empty($invoice->sent_on) || ($invoice->sent_on == $nullDate)): ?>
 				<span class="label">
-					<span class="icon icon-white icon-warning-sign"></span> Not sent
+					<span class="icon icon-white icon-warning-sign"></span>
+					<?php echo JText::_('COM_AKEEBASUBS_INVOICES_LBL_NOTSENT'); ?>
 				</span>
 				<?php else: ?>
 				<span class="label label-success">
-					<span class="icon icon-white icon-ok"></span> Sent
+					<span class="icon icon-white icon-ok"></span>
+					<?php echo JText::_('COM_AKEEBASUBS_INVOICES_LBL_SENT'); ?>
 				</span>
 				<?php endif; ?>
 
 				<a href="index.php?option=com_akeebasubs&view=invoices&task=generate&id=<?php echo $this->escape($invoice->akeebasubs_subscription_id) ?>" class="btn btn-mini btn-warning" title="<?php echo JText::_('COM_AKEEBASUBS_INVOICES_ACTION_REGENERATE') ?>">
 					<span class="icon icon-retweet icon-white"></span>
 				</a>
-
-				<?php if (array_key_exists($invoice->akeebasubs_invoicetemplate_id, $this->invoicetemplates)): ?>
-				<span class="label label-info">
-					<?php echo $this->invoicetemplates[$invoice->akeebasubs_invoicetemplate_id] ?>
-				</span>
-				<?php endif; ?>
 
 				<?php else: ?>
 				<?php if(array_key_exists($invoice->extension, $extensions)): ?>

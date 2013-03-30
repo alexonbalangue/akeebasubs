@@ -314,6 +314,40 @@ class AkeebasubsModelInvoices extends FOFModel
 			require_once JPATH_ROOT . '/components/com_akeebasubs/helpers/message.php';
 		}
 
+		// Get the template
+		$templateRow = $this->findTemplate($sub);
+		if (is_object($templateRow))
+		{
+			$template = $templateRow->template;
+			$templateId = $templateRow->akeebasubs_invoicetemplate_id;
+			$globalFormat = $templateRow->globalformat;
+			$globalNumbering = $templateRow->globalnumbering;
+		}
+		else
+		{
+			$template = '';
+			$templateId = 0;
+			$globalFormat = true;
+			$globalNumbering = true;
+		}
+
+		if ($globalFormat)
+		{
+			$numberFormat = AkeebasubsHelperCparams::getParam('invoice_number_format', '[N:5]');
+		}
+		else
+		{
+			$numberFormat = $templateRow->format;
+		}
+
+		if ($globalNumbering)
+		{
+			$numberOverride = AkeebasubsHelperCparams::getParam('invoice_override', 0);
+		}
+		else
+		{
+			$numberOverride = $templateRow->number_reset;
+		}
 
 		// Get the configuration variables
 		if (!$existingRecord)
@@ -328,14 +362,24 @@ class AkeebasubsModelInvoices extends FOFModel
 				'created_by'					=> $sub->user_id,
 			);
 
-			$numberFormat = AkeebasubsHelperCparams::getParam('invoice_number_format', '[N:5]');
-			$numberOverride = AkeebasubsHelperCparams::getParam('invoice_override', 0);
-
 			if ($numberOverride)
 			{
 				// There's an override set. Use it and reset the override to 0.
 				$invoice_no = $numberOverride;
-				AkeebasubsHelperCparams::setParam('invoice_override', 0);
+				if ($globalNumbering)
+				{
+					// Global number override reset
+					AkeebasubsHelperCparams::setParam('invoice_override', 0);
+				}
+				else
+				{
+					// Invoice template number override reset
+					$template = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
+						->getItem($templateRow->akeebasubs_invoicetemplate_id);
+					$templateRow->save(array(
+						'number_reset'	=> 0
+					));
+				}
 			}
 			else
 			{
@@ -344,6 +388,7 @@ class AkeebasubsModelInvoices extends FOFModel
 					->select($db->qn('invoice_no'))
 					->from($db->qn('#__akeebasubs_invoices'))
 					->where($db->qn('extension').' = '.$db->q('akeebasubs'))
+					->where($db->qn('akeebasubs_invoicetemplate_id') . ' = ' . $db->q($templateId))
 					->order($db->qn('created_on').' DESC');
 				$db->setQuery($query, 0, 1);
 				$invoice_no = (int) $db->loadResult();
@@ -362,6 +407,9 @@ class AkeebasubsModelInvoices extends FOFModel
 			// Add the invoice number (plain and formatted) to the record
 			$invoiceData['invoice_no'] = $invoice_no;
 			$invoiceData['display_number'] = $formated_invoice_no;
+
+			// Add the invoice template ID to the record
+			$invoiceData['akeebasubs_invoicetemplate_id'] = $templateId;
 		}
 		else
 		{
@@ -381,9 +429,6 @@ class AkeebasubsModelInvoices extends FOFModel
 
 			$invoiceData = (array)$invoiceRecord;
 		}
-
-		// Get the template
-		$template = $this->findTemplate($sub->akeebasubs_level_id);
 
 		// Get the custom variables
 		$vat_notice = '';
@@ -518,28 +563,29 @@ class AkeebasubsModelInvoices extends FOFModel
 	}
 
 	/**
-	 * Find and return an invoice template based on the subscription level ID
+	 * Find and return an invoice template based on the subscription
 	 *
-	 * @param   integer  $level_id  The susbcription level ID
+	 * @param   AkeebasubsTableSubscription  $sub  The susbcription record
 	 *
 	 * @return  object  The invoice template record
 	 */
-	private function findTemplate($level_id)
+	private function findTemplate($sub)
 	{
-		$ret = '';
+		$level_id = $sub->akeebasubs_level_id;
 
-		// Load all enabled templates and check their levels
-		$db = $this->getDbo();
-		$query = $db->getQuery(true)
-			->select(array(
-				$db->qn('template'),
-				$db->qn('levels')
-			))
-			->from($db->qn('#__akeebasubs_invoicetemplates'))
-			->where($db->qn('enabled').' = '.$db->q(1))
-			->order($db->qn('ordering').' DESC');
-		$db->setQuery($query);
-		$templates = $db->loadObjectList();
+		$userModel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
+		$mergedData = $userModel->getMergedData($sub->user_id);
+
+		$ret = null;
+
+		// Load all enabled templates and check if they fit
+		$templates = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
+			->enabled(1)
+			->filter_order('enabled')
+			->filter_order_Dir('ASC')
+			->getList();
+
+		$lastscore = 0;
 
 		if (!empty($templates))
 		{
@@ -568,7 +614,42 @@ class AkeebasubsModelInvoices extends FOFModel
 					continue;
 				}
 
-				$ret = $template->template;
+				$score = 0;
+
+				// Calculate a "fitness" score based on:
+				// a. country
+				if (empty($template->country))
+				{
+					$score++;
+				}
+				elseif ($mergedData->country != $template->country)
+				{
+					continue;
+				}
+				else
+				{
+					$score += 3;
+				}
+
+				// b. isbusiness
+				if (empty($template->isbusiness))
+				{
+					$score++;
+				}
+				elseif ($mergedData->isbusiness != $template->isbusiness)
+				{
+					continue;
+				}
+				else
+				{
+					$score += 3;
+				}
+
+				if (($score > 0) && ($score > $lastscore))
+				{
+					$ret = $template;
+					$lastscore = $score;
+				}
 			}
 		}
 

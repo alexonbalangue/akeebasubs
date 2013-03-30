@@ -29,7 +29,7 @@ $editor = JFactory::getEditor();
 <input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 	<h3><?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATE_BASIC_TITLE')?></h3>
-	
+
 	<div class="control-group">
 		<label for="title_field" class="control-label">
 				<?php echo  JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_TITLE'); ?>
@@ -52,7 +52,73 @@ $editor = JFactory::getEditor();
 			<?php echo AkeebasubsHelperSelect::levels('levels[]', empty($this->item->levels) ? '0' : explode(',',$this->item->levels), array('multiple' => 'multiple', 'size' => 4, 'include_all' => true, 'include_none' => true)) ?>
 		</div>
 	</div>
-	
+	<div class="control-group">
+		<label for="globalformat" class="control-label" class="mainlabel">
+			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALFORMAT'); ?>
+		</label>
+		<div class="controls">
+			<?php echo JHTML::_('select.booleanlist', 'globalformat', null, $this->item->globalformat); ?>
+			<span class="help-block">
+				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALFORMAT_HELP'); ?>
+			</span>
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="format" class="control-label" class="mainlabel">
+			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_FORMAT'); ?>
+		</label>
+		<div class="controls">
+			<input type="text" size="30" name="format" value="<?php echo $this->escape($this->item->format) ?>" />
+			<span class="help-block">
+				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_FORMAT_HELP'); ?>
+			</span>
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="globalnumbering" class="control-label" class="mainlabel">
+			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALNUMBERING'); ?>
+		</label>
+		<div class="controls">
+			<?php echo JHTML::_('select.booleanlist', 'globalnumbering', null, $this->item->globalnumbering); ?>
+			<span class="help-block">
+				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALNUMBERING_HELP'); ?>
+			</span>
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="number_reset" class="control-label" class="mainlabel">
+			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_NUMBER_RESET'); ?>
+		</label>
+		<div class="controls">
+			<input type="text" size="30" name="number_reset" value="<?php echo $this->escape($this->item->number_reset) ?>" />
+			<span class="help-block">
+				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_NUMBER_RESET_HELP'); ?>
+			</span>
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="isbusiness" class="control-label" class="mainlabel">
+			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS'); ?>
+		</label>
+		<div class="controls">
+			<?php echo akeebasubsHelperSelect::invoicetemplateisbusines('isbusiness', $this->item->isbusiness); ?>
+			<span class="help-block">
+				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS_HELP'); ?>
+			</span>
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="country" class="control-label" class="mainlabel">
+			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY'); ?>
+		</label>
+		<div class="controls">
+			<?php echo akeebasubsHelperSelect::countries('countries', $this->item->country); ?>
+			<span class="help-block">
+				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY_HELP'); ?>
+			</span>
+		</div>
+	</div>
+
 	<h3><?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_TEMPLATE')?></h3>
 	<?php echo $editor->display( 'template',  $this->item->template, '97%', '500', '50', '20', false ) ; ?>
 

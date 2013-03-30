@@ -406,7 +406,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						// and my VAT number must match the saved record.
 						$userparams = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 							->user_id(JFactory::getUser()->id)
-							->getMergedData();
+							->getMergedData(JFactory::getUser()->id);
 						if (($userparams->viesregistered == 2) && ($userparams->vatnumber == $state->vatnumber))
 						{
 							$useCachedResult = true;
@@ -417,13 +417,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 					{
 						// Use the cached VIES validation result
 						$ret['vatnumber'] = true;
-						$ret['onlineviescheck'] = 0;
+						//$ret['onlineviescheck'] = 0;
 					}
 					else
 					{
 						// No, check the VAT number against the VIES web service
 						$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
-						$ret['onlineviescheck'] = 1;
+						//$ret['onlineviescheck'] = 1;
 					}
 
 					$ret['novatrequired'] = false;
