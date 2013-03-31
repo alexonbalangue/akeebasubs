@@ -15,7 +15,7 @@ $pEnabled = JPluginHelper::getPlugin('akeebasubs','customfields');
 
 $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 ?>
-	
+
 <?php if(!$pEnabled): ?>
 <div class="alert alert-error">
 	<a class="close" data-dismiss="alert" href="#">×</a>
@@ -103,7 +103,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 	<tfoot>
 		<tr>
 			<td colspan="20">
-				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>	
+				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 			</td>
 		</tr>
 	</tfoot>
@@ -149,7 +149,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 						<strong><?php echo $this->escape(JText::_($item->title)) ?></strong>
 					</a>
 					<p class="smallsub">
-						(<span><?php echo $this->escape($item->title) ?></span>)
+						(<span><?php echo $this->escape($item->slug) ?></span>)
 					</p>
 			</td>
 			<td>
