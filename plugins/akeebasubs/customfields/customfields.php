@@ -320,6 +320,63 @@ class plgAkeebasubsCustomfields extends JPlugin
 		return $response;
 	}
 
+	public function onValidateSubscriptionLength($data)
+	{
+		$response = null;
+
+		// Make sure we have a subscription level ID
+		if($data->id <= 0)
+		{
+			return $response;
+		}
+
+		// Load field definitions
+		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+			->enabled(1)
+			->filter_order('ordering')
+			->filter_order_Dir('ASC')
+			->getItemList(true);
+
+		// If there are no custom fields return true (all valid)
+		if(empty($items)) return $response;
+
+		$response = 0;
+
+		// Loop through each custom field
+		foreach($items as $item) {
+			// Make sure it's supposed to be shown in the particular level
+			if($item->show == 'level') {
+				if(is_null($data->id)) continue;
+
+				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+
+				if (!in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
+			}
+
+			// Make sure there is a validation method for this type of field
+			$type = $item->type;
+			$class = 'AkeebasubsCustomField' . ucfirst($type);
+
+			if (!class_exists($class))
+			{
+				continue;
+			}
+			$object = new $class;
+
+			// Get the validation result and save it in the $response array
+			$res = $object->validateLength($item, $data);
+			if(!is_null($res))
+			{
+				$response += $res;
+			}
+		}
+
+		return $response;
+	}
+
 	private function _loadFields()
 	{
 		$this->fieldTypes = array();

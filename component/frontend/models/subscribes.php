@@ -1746,7 +1746,28 @@ class AkeebasubsModelSubscribes extends FOFModel
 		else
 		{
 			$jStartDate = new JDate($startDate);
-			$duration = (int)$level->duration * 3600 * 24;
+
+			// Subscription duration (length) modifiers, via plugins
+			$duration_modifier = 0;
+			JLoader::import('joomla.plugin.helper');
+			JPluginHelper::importPlugin('akeebasubs');
+			$app = JFactory::getApplication();
+			$jResponse = $app->triggerEvent('onValidateSubscriptionLength', array($state));
+			if(is_array($jResponse) && !empty($jResponse)) {
+				foreach($jResponse as $pluginResponse) {
+					if(empty($pluginResponse)) continue;
+					$duration_modifier += $pluginResponse;
+				}
+			}
+
+			// Calculate the effective duration
+			$duration = (int)$level->duration + $duration_modifier;
+			if ($duration <= 0)
+			{
+				$duration = 0;
+			}
+
+			$duration = $duration * 3600 * 24;
 			$endDate = $startDate + $duration;
 		}
 

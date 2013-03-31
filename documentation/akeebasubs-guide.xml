@@ -3808,9 +3808,9 @@ Rule C gives $ 30 discount</programlisting>
               <listitem>
                 <para><emphasis role="bold">Subscription options</emphasis>.
                 This creates a drop-down with subscription options. This works
-                like the "Drop-down" field type, with a very important
+                like the "Drop-down" field type, with two very important
                 difference: each option can increase or decrease the net price
-                of the subscription.</para>
+                and the duration (length in days) of the subscription.</para>
 
                 <para>For example, a local footbal club could offer a
                 "supporter" membership which costs 200 Euros annually. If the
@@ -3823,6 +3823,26 @@ Rule C gives $ 30 discount</programlisting>
                 access to cheaper tickets. The field allows the subscriber to
                 select between no access (no additional charge) or with access
                 (extra charge of 20 Euros).</para>
+
+                <para>Another example is having the same kind of subscription,
+                e.g. access to a local newspaper, with three different
+                subscription lengths: 1 month, 6 months, 1 year. Traditionally
+                you'd need to create three subscription levels, one for each
+                length. Using a Subscription Options custom field you can
+                create only one level with a duration of 180 days (i.e. 6
+                months) and create three entries in the Subscription Options
+                field with duration modifiers of -150 days (180 days minus 150
+                days = 30 days, i.e. one month) and 185 days (180 days plus
+                185 days is 265 days, i.e. a year).</para>
+
+                <important>
+                  <para>This field type is a per-subscription option. Unlike
+                  other custom fields (which are per-user options) it's not
+                  saved in the User profile. It is kept in the subscription
+                  record and you will need to use the [SUBCUSTOM:slug_name]
+                  tag to access its contents in invoices, emails and
+                  messages.</para>
+                </important>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -3881,27 +3901,64 @@ Rule C gives $ 30 discount</programlisting>
                 It works pretty much the same was as "Everything else"
                 described above. The only difference is what comes to the
                 right hand of the equals sign. Each line follows the
-                convention VALUE=LABEL|PRICE. For example:</para>
+                convention VALUE=LABEL|PRICE|DAYS. For example:</para>
 
                 <programlisting>1=Normal price
-2=Cheaper|-9.99
-3=More expensive|9.99
-4=Invalid|foobar</programlisting>
+2=Cheaper, one month shorter|-9.99|-30
+3=More expensive, one month longer|9.99|30
+4=Invalid, same as the normal price|foobar
+5=More expensive, same duration|9.99
+6=Cheaper, but same length|-9.99|foobar
+7=Same price, one month longer|0|30</programlisting>
 
                 <para>That pretty much means that after the label you are
                 expected to put a vertical bar (|) followed by the amount of
                 money you want to add/remove from the subscription's net
-                price. In this example, if someone chooses the "Normal price"
+                price, optionally followed by one more vertical bar (|)
+                followed by the amount of time, in days, you want to
+                add/remove from the subscription's duration.</para>
+
+                <para>In this example, if someone chooses the "Normal price"
                 option the net price will be left unchanged because we did not
-                define an amount for the option. Conversely if the choose
-                "Cheaper" they will be charged 9.99 <emphasis>less</emphasis>
-                because the value after the vertical bar is negative. Finally,
-                if they choose "More expensive" they will be charged 9.99
-                <emphasis>more</emphasis> because the value after the vertical
-                bar is positive. Finally, if they choose "Invalid" the price
-                will not be modified because the value after the vertical bar
-                is not a number and Akeeba Subscriptions has no idea what you
-                want it to do.</para>
+                define an amount for the option.</para>
+
+                <para>Conversely if the choose "Cheaper, one month shorter"
+                they will be charged 9.99 <emphasis>less</emphasis> because
+                the value after the vertical bar is negative. Since this is
+                followed by |-30 the subscription will be shorter by 30
+                days.</para>
+
+                <para>If they choose "More expensive, one month longer" they
+                will be charged 9.99 <emphasis>more</emphasis> because the
+                value after the vertical bar is positive. Moreover, as this is
+                followed by |30 the subscription will also be longer by 30
+                days.</para>
+
+                <para>If they chose "More expensive, same duration" would be
+                charged 9.99 <emphasis>more</emphasis> because the value after
+                the vertical bar is positive. Since this is not followed by a
+                subscription length modifier, the subscription's length would
+                remain intact. This solution is useful e.g. in conferences
+                when you want to allow people to also pay for an add-on event
+                such as a dinner.</para>
+
+                <para>If they chose "Same price, one month longer" they will
+                pay the same price, because the price modifier is 0. However,
+                the subscription length will be longer by 30 days. Honestly,
+                we have no idea why someone would possibly want such a setup,
+                but if you actually do need it it's there for you to
+                use.</para>
+
+                <para>If they choose "Invalid" the price will not be modified
+                because the value after the vertical bar is not a number and
+                Akeeba Subscriptions has no idea what you want it to do. This
+                makes the field equivalent to a regular Drop-Down custom field
+                and doesn't make much sense.</para>
+
+                <para>Finally, the "Cheaper, but same length" has a valid
+                price modified (-9.99) which means that the subscriber will
+                pay less, but the subscription length modifier is not a number
+                and will be totally ignored.</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -4181,7 +4238,7 @@ Rule C gives $ 30 discount</programlisting>
               <para>When enabled, the global invoice number formatting set up
               in Akeeba Subscriptions' Options will be used and the
               <guilabel>Invoice number format</guilabel> field below will be
-              ignored. </para>
+              ignored.</para>
             </listitem>
           </varlistentry>
 
@@ -4203,7 +4260,7 @@ Rule C gives $ 30 discount</programlisting>
             <listitem>
               <para>When enabled, the global invoice numbering in Akeeba
               Subscriptions' Options will be used and the <guilabel>Override
-              numbering</guilabel> field below will be ignored. </para>
+              numbering</guilabel> field below will be ignored.</para>
             </listitem>
           </varlistentry>
 

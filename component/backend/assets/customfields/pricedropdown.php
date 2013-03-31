@@ -11,7 +11,7 @@ require_once __DIR__.'/abstract.php';
 
 /**
  * A dropdown (selection list) field with price modifier options
- * 
+ *
  * @author Nicholas K. Dionysopoulos
  * @since 2.6.0
  */
@@ -19,10 +19,10 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 {
 	public function __construct(array $config = array()) {
 		parent::__construct($config);
-		
+
 		$this->input_type = 'pricedropdown';
 	}
-	
+
 	public function getPerSubscriptionField($item, $cache)
 	{
 		// Get the current value
@@ -31,7 +31,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 		} else {
 			$current = $item->default;
 		}
-		
+
 		// Is this a required field?
 		$required = $item->allow_empty ? '' : '* ';
 
@@ -49,22 +49,30 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 				if(count($data) < 2) continue;
 				$value = trim($data[0]);
 				$price = 0;
+				$daysmod = 0;
 				$label = trim($data[1]);
-				
-				// Break down value and price components
-				$barPos = strrpos($label, '|');
-				if($barPos !== false) {
-					$price = (float)substr($label, $barPos + 1);
-					$label = substr($label, 0, $barPos);
+
+				// Break down value, price and subscription length components
+				$pieces = explode('|', $label);
+				$label = $pieces[0];
+
+				if (isset($pieces[1]))
+				{
+					$price = (float)($pieces[1]);
 				}
-				
+
+				if (isset($pieces[2]))
+				{
+					$daysmod = (int)($pieces[2]);
+				}
+
 				if(abs($price) >= 0.01)
 				{
 					$sign = $price > 0 ? '+' : '-';
 					$addon = $sign . sprintf('%.2f', abs($price));
 					$label .= ' (' . $addon . ')';
 				}
-				
+
 				if(in_array($value, $values)) continue;
 				$options[] = array(
 					'value'	=> $value,
@@ -72,7 +80,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 				);
 				$values[] = $value;
 			}
-			
+
 			if(!in_array('', $values)) {
 				$entry = array(
 					'value'	=> '',
@@ -83,7 +91,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 		} else {
 			return null;
 		}
-		
+
 		if(empty($options)) return null;
 
 		// Set up field's HTML content
@@ -101,7 +109,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 		}
 
 		$html .= "</select>\n";
-		
+
 		// Setup the field
 		$field = array(
 			'id'			=> $item->slug,
@@ -109,17 +117,17 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 			'elementHTML'	=> $html,
 			'isValid'		=> $required ? !empty($current) : true
 		);
-		
+
 		if($item->invalid_label) {
 			$field['invalidLabel'] = JText::_($item->invalid_label);
 		}
 		if($item->valid_label) {
 			$field['validLabel'] = JText::_($item->valid_label);
 		}
-		
+
 		return $field;
 	}
-	
+
 	/**
 	 * Create the necessary Javascript for a textbox
 	 * @param	AkeebasubsTableCustomfield	$item	The item to render the Javascript for
@@ -150,7 +158,7 @@ function plg_akeebasubs_subcustomfields_fetch_$slug()
 }
 
 ENDJS;
-		
+
 		if(!$item->allow_empty):
 			$success_javascript = '';
 			$failure_javascript = '';
@@ -182,11 +190,11 @@ function plg_akeebasubs_subcustomfields_validate_$slug(response)
 
 ENDJS;
 		endif;
-		
+
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
 	}
-	
+
 	/**
 	 * Validate a text field
 	 * @param AkeebasubsTableCustomfield	$item	The custom field to validate
@@ -202,7 +210,7 @@ ENDJS;
 		}
 		return $valid ? 1 : 0;
 	}
-	
+
 	public function validatePrice($item, $data)
 	{
 		$cache = (array)$data;
@@ -213,7 +221,7 @@ ENDJS;
 		} else {
 			$current = $item->default;
 		}
-		
+
 		// Is this a required field?
 		$required = $item->allow_empty ? '' : '* ';
 
@@ -230,32 +238,40 @@ ENDJS;
 				if(count($data) < 2) continue;
 				$value = trim($data[0]);
 				$price = 0;
+				$daysmod = 0;
 				$label = trim($data[1]);
-				
-				// Break down value and price components
-				$barPos = strrpos($label, '|');
-				if($barPos !== false) {
-					$price = (float)substr($label, $barPos + 1);
-					$label = substr($label, 0, $barPos);
+
+				// Break down value, price and subscription length components
+				$pieces = explode('|', $label);
+				$label = $pieces[0];
+
+				if (isset($pieces[1]))
+				{
+					$price = (float)($pieces[1]);
 				}
-				
+
+				if (isset($pieces[2]))
+				{
+					$daysmod = (int)($pieces[2]);
+				}
+
 				if(abs($price) < 0.01)
 				{
 					$price = 0;
 				}
-				
+
 				if(array_key_exists($value, $options)) continue;
-				
+
 				$options[$value] = $price;
 			}
 		} else {
 			return null;
 		}
-		
+
 		if(empty($options)) return null;
-		
+
 		$result = 0;
-		
+
 		foreach($options as $value => $price)
 		{
 			if($current == $value)
@@ -264,7 +280,75 @@ ENDJS;
 				break;
 			}
 		}
-		
+
+		return $result;
+	}
+
+	public function validateLength($item, $data)
+	{
+		$cache = (array)$data;
+
+		// Get the current value
+		if(array_key_exists($item->slug, $cache['subcustom'])) {
+			$current = $cache['subcustom'][$item->slug];
+		} else {
+			$current = $item->default;
+		}
+
+		// Is this a required field?
+		$required = $item->allow_empty ? '' : '* ';
+
+		// Parse options
+		$options = array();
+		if($item->options) {
+			$options_raw = explode("\n", $item->options);
+			$options = array();
+			foreach($options_raw as $optionLine) {
+				$optionLine = trim($optionLine, " \r\t");
+				if(empty($optionLine)) continue;
+				if(!strstr($optionLine, '=')) continue;
+				$data = explode('=', $optionLine, 2);
+				if(count($data) < 2) continue;
+				$value = trim($data[0]);
+				$price = 0;
+				$daysmod = 0;
+				$label = trim($data[1]);
+
+				// Break down value, price and subscription length components
+				$pieces = explode('|', $label);
+				$label = $pieces[0];
+
+				if (isset($pieces[1]))
+				{
+					$price = (float)($pieces[1]);
+				}
+
+				if (isset($pieces[2]))
+				{
+					$daysmod = (int)($pieces[2]);
+				}
+
+				if(array_key_exists($value, $options)) continue;
+
+				$options[$value] = $daysmod;
+			}
+		} else {
+			return null;
+		}
+
+		if(empty($options)) return null;
+
+		$result = 0;
+
+		foreach($options as $value => $daysmod)
+		{
+			if($current == $value)
+			{
+				$result = $daysmod;
+				break;
+			}
+		}
+
 		return $result;
 	}
 }
