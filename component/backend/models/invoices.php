@@ -388,8 +388,14 @@ class AkeebasubsModelInvoices extends FOFModel
 					->select($db->qn('invoice_no'))
 					->from($db->qn('#__akeebasubs_invoices'))
 					->where($db->qn('extension').' = '.$db->q('akeebasubs'))
-					->where($db->qn('akeebasubs_invoicetemplate_id') . ' = ' . $db->q($templateId))
 					->order($db->qn('created_on').' DESC');
+
+				// When not using global numbering search only invoices using this specific invoice template
+				if (!$globalNumbering)
+				{
+					$query->where($db->qn('akeebasubs_invoicetemplate_id') . ' = ' . $db->q($templateId));
+				}
+
 				$db->setQuery($query, 0, 1);
 				$invoice_no = (int) $db->loadResult();
 
