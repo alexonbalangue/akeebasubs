@@ -4125,10 +4125,11 @@ Rule C gives $ 30 discount</programlisting>
         <para>The Invoice Templates allow you to define how the invoices which
         are issued through the integrated invoicing feature will look like.
         You can create a different invoice template for each subscription
-        level, if you want, but remember that all invoices share the same
-        numbering. Each invoice template can be unpublished. An unpublished
-        invoice template will not be taken into account when invoices are
-        being created.</para>
+        level, business registration country and/or country if you want. All
+        invoices share the same numbering unless you explicitly specify
+        otherwise in an invoice template. Each invoice template can be
+        unpublished. An unpublished invoice template will not be taken into
+        account when invoices are being created.</para>
 
         <para>The parameters for each invoice are:</para>
 
@@ -4170,6 +4171,91 @@ Rule C gives $ 30 discount</programlisting>
               other selection and means that this invoice template will be
               used for all invoices issued for subscriptions in any
               subscription level.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Use global formatting</term>
+
+            <listitem>
+              <para>When enabled, the global invoice number formatting set up
+              in Akeeba Subscriptions' Options will be used and the
+              <guilabel>Invoice number format</guilabel> field below will be
+              ignored. </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Invoice number format</term>
+
+            <listitem>
+              <para>Choose how your invoice numbers will be formatted. Only
+              applies to this template and only if <guilabel>Use Global
+              Formatting</guilabel> is set to <option>No</option>. The
+              formatting is the same as the one discussed in the component's
+              Options.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Use global numbering</term>
+
+            <listitem>
+              <para>When enabled, the global invoice numbering in Akeeba
+              Subscriptions' Options will be used and the <guilabel>Override
+              numbering</guilabel> field below will be ignored. </para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Override number</term>
+
+            <listitem>
+              <para>If this is non-zero, invoice numbering will restart with
+              this number only for this particular invoice template. Once the
+              first invoice with this number is generated, this option will
+              revert back to 0 automatically. Only valid when <guilabel>Use
+              global numbering</guilabel> is set to
+              <option>No</option>.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Business / Personal</term>
+
+            <listitem>
+              <para>Should this invoice template be used for business or
+              personal (non-business) subscriptions? This is determined by the
+              user's selection of <guilabel>Subscribe as business</guilabel>
+              in the front-end. When this field is set to Yes (or when you are
+              forcing business-only subscriptions through the component's
+              Options page) Akeeba Subscriptions considers it to be a Business
+              subscription. Otherwise it is a Personal subscription.</para>
+
+              <para>This is useful for certain jurisdictions (like Greece)
+              where a different type of invoice is supposed to be issued for
+              B2B (Business to Business) and B2C (Business to Client)
+              transactions. In the example of Greece, B2B transactions need a
+              Services Invoice to be issued, whereas a B2C transaction needs a
+              Services Receipt to be issued.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Country</term>
+
+            <listitem>
+              <para>This invoice template will only apply to subscribers
+              coming from the specified country. If you want it to apply to
+              all countries, please select the default options (four dashes).
+              This means that no specific country is selected and it will be
+              used for all countries.</para>
+
+              <para>Do remember that invoice templates are selected based on
+              their ordering and relevance to the subscription being invoiced.
+              If you have two invoice templates, let's say one for all
+              countries and one for the USA, then a US client will always be
+              issued an invoice based on your US-specific template.</para>
             </listitem>
           </varlistentry>
 
