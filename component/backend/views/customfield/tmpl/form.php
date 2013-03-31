@@ -23,7 +23,7 @@ $this->loadHelper('cparams');
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_customfield_id" value="<?php echo $this->item->akeebasubs_customfield_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
-	
+
 	<div class="well">
 		<div class="control-group">
 			<label class="control-label" for="title"><?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TITLE') ?></label>
@@ -53,7 +53,7 @@ $this->loadHelper('cparams');
 		<div class="control-group">
 			<label class="control-label" for="akeebasubs_level_id"><?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_LEVEL') ?></label>
 			<div class="controls">
-				<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->item->akeebasubs_level_id) ?>
+				<?php echo AkeebasubsHelperSelect::levels('akeebasubs_level_id[]', empty($this->item->akeebasubs_level_id) ? '-1' : explode(',', $this->item->akeebasubs_level_id), array('multiple' => 'multiple', 'size' => 5)) ?>
 				<p class="help-block"><?php echo JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_HELP_LEVEL') ?></p>
 			</div>
 		</div>
@@ -107,6 +107,6 @@ $this->loadHelper('cparams');
 		</div>
 	</div>
 </form>
-	
+
 </div>
 </div>
