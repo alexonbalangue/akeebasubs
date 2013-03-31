@@ -38,8 +38,12 @@
 		<exclude name="media/tcpdf/**" />
 		<exclude name="backend/assets/tcpdf/**" />
 		<exclude name="backend/controllers/invoices.php" />
+		<exclude name="backend/models/blockrules.php" />
 		<exclude name="backend/models/invoices.php" />
+		<exclude name="backend/tables/blockrules.php" />
 		<exclude name="backend/tables/invoice.php" />
+		<exclude name="backend/views/blockrules/**" />
+		<exclude name="backend/views/blockrule/**" />
 		<exclude name="backend/views/invoices/**" />
 		<exclude name="backend/views/invoice/**" />
 		<exclude name="backend/views/emailtemplates/**" />
