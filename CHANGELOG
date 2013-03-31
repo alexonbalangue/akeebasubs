@@ -10,6 +10,7 @@ Akeeba Subscriptions 3.1.0
 + #150 Finer-grained built-in invoicing, with the ability for independently numbered invoice templates (multiple invoice series by subscription level, business registration status and country)
 + #151 Allow custom fields to be assigned to more than one levels at the same time
 + #152 Subscription Option custom fields can now be used to also modify the subscription length
++ #153 You can now block subscriptions based on username, name, email and IP range of the subscriber
 ~ DeltaPay (Alpha Bank Greece) integration: adding support for DeltaPay v2 which supports callback authorisation
 # [HIGH] The integrated invoicing automatic generation and sending fails when the invoice includes images
 # [HIGH] The VivaPayments plugin would not work outside of sandbox mode

@@ -1636,6 +1636,23 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// data from the database
 		JFactory::getSession()->set('firstrun', true, 'com_akeebasubs');
 
+		// Step #2.b. Apply block rules in the Professional release
+		// ----------------------------------------------------------------------
+		if (AKEEBASUBS_PRO)
+		{
+			if (FOFModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
+			{
+				if (version_compare(JVERSION, '3.0', 'ge'))
+				{
+					throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
+				}
+				else
+				{
+					JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
+				}
+			}
+		}
+
 		// Step #3. Create or update a user record
 		// ----------------------------------------------------------------------
 		$user = JFactory::getUser();
