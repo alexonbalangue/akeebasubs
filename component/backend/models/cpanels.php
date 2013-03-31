@@ -21,6 +21,7 @@ class AkeebasubsModelCpanels extends FOFModel
 			'akeebasubs_upgrades', 'akeebasubs_users',
 			'akeebasubs_configurations', 'akeebasubs_invoices',
 			'akeebasubs_affiliates', 'akeebasubs_affpayments',
+			'akeebasubs_blockrules'
 		),
 		'file' => 'install/mysql/install.sql'
 	);
@@ -141,6 +142,14 @@ class AkeebasubsModelCpanels extends FOFModel
 			'field' => 'globalformat',
 			'files' =>array(
 				'updates/mysql/3.1.0-2013-03-30.sql',
+			)
+		),
+		// check for update 3.1.0-2014-04-01
+		array(
+			'table' => 'akeebasubs_blockrules',
+			'field' => 'username',
+			'files' =>array(
+				'updates/mysql/3.1.0-2013-04-01.sql',
 			)
 		),
 	);
