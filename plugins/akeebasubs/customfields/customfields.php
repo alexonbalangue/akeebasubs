@@ -84,7 +84,11 @@ class plgAkeebasubsCustomfields extends JPlugin
 			// If it's not something shown in this level, skip it
 			if($item->show == 'level') {
 				if(is_null($cache['subscriptionlevel'])) continue;
-				if($cache['subscriptionlevel'] != $item->akeebasubs_level_id) continue;
+				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+				if (!in_array($cache['subscriptionlevel'], $fieldlevels))
+				{
+					continue;
+				}
 			}
 
 			// Get the names of the methods to use
@@ -149,7 +153,13 @@ class plgAkeebasubsCustomfields extends JPlugin
 			// Make sure it's supposed to be shown in the particular level
 			if($item->show == 'level') {
 				if(is_null($data->id)) continue;
-				if($data->id != $item->akeebasubs_level_id) continue;
+
+				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+
+				if (!in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
 			}
 
 			// Make sure there is a validation method for this type of field
@@ -214,7 +224,13 @@ class plgAkeebasubsCustomfields extends JPlugin
 			// Make sure it's supposed to be shown in the particular level
 			if($item->show == 'level') {
 				if(is_null($data->id)) continue;
-				if($data->id != $item->akeebasubs_level_id) continue;
+
+				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+
+				if (!in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
 			}
 
 			// Make sure there is a validation method for this type of field
@@ -274,7 +290,13 @@ class plgAkeebasubsCustomfields extends JPlugin
 			// Make sure it's supposed to be shown in the particular level
 			if($item->show == 'level') {
 				if(is_null($data->id)) continue;
-				if($data->id != $item->akeebasubs_level_id) continue;
+
+				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+
+				if (!in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
 			}
 
 			// Make sure there is a validation method for this type of field
