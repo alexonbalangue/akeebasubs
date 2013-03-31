@@ -24,6 +24,7 @@ class AkeebasubsToolbar extends FOFToolbar
 				'taxrules',
 				'states',
 				'emailtemplates',
+				'blockrules',
 			),
 			'subscriptions',
 			'coupons',
@@ -45,8 +46,13 @@ class AkeebasubsToolbar extends FOFToolbar
 		{
 			$key = array_search('relations', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
 			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
+
 			$key = array_search('emailtemplates', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
 			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
+
+			$key = array_search('blockrules', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
+			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
+
 			unset($views['COM_AKEEBASUBS_MAINMENU_INVOICES']);
 		}
 
