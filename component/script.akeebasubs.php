@@ -88,7 +88,8 @@ class Com_AkeebasubsInstallerScript
 				'subscriptionemails'	=> 1,
 				'tracktime'				=> 0,
 				'userdelete'			=> 0,
-				'vm2'					=> 0
+				'vm2'					=> 0,
+				'zohoinvoice'			=> 0,
 			),
 			'akpayment' => array(
 				'2checkout'				=> 0,

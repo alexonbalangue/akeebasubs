@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="akeebasubs" method="upgrade" version="2.5.6">
+	<name>Akeeba Subscriptions - Zoho Invoice integration</name>
+	<author>ZOOlanders</author>
+	<authorEmail>info@zoolanders.com</authorEmail>
+	<authorUrl>http://www.zoolanders.com</authorUrl>
+	<copyright>Copyright (c)2013 JOOlanders, SL</copyright>
+	<license>GNU General Public License version 2, or later</license>
+	<creationDate>March 2013</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_ZOHOINVOICE_DESCRIPTION</description>
+	<files>
+		<filename plugin="zohoinvoice">zohoinvoice.php</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_zohoinvoice.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_zohoinvoice.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="apikey" type="text" default="" label="PLG_AKEEBASUBS_APIKEY" description="PLG_AKEEBASUBS_APIKEY_DESC" />
+				<field name="authtoken" type="text" default="" label="PLG_AKEEBASUBS_AUTHTOKEN" description="PLG_AKEEBASUBS_AUTHTOKEN_DESC" />
+				<field name="companyid" type="text" default="" label="PLG_AKEEBASUBS_COMPANY_ID" description="PLG_AKEEBASUBS_COMPANY_ID_DESC" />
+				<field name="notes_notax" type="text" default="" label="PLG_AKEEBASUBS_NOTES_NOTAX" description="PLG_AKEEBASUBS_NOTES_NOTAX_DESC" />
+				<field name="notes_notax_private" type="text" default="" label="PLG_AKEEBASUBS_NOTES_NOTAX_PRIVATE" description="PLG_AKEEBASUBS_NOTES_NOTAX_PRIVATE_DESC" />
+				<field name="send" type="list" default="1" label="PLG_AKEEBASUBS_SEND" description="PLG_AKEEBASUBS_NOTES_SEND_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="site_only" type="list" default="0" label="PLG_AKEEBASUBS_SITE_ONLY" description="PLG_AKEEBASUBS_SITE_ONLY_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="generatewhen" type="radio" default="0"
+					label="PLG_AKEEBASUBS_GENERATEWHEN"
+					description="PLG_AKEEBASUBS_GENERATEWHEN_DESC">
+					<option value="0">PLG_AKEEBASUBS_GENERATEWHEN_COMPLETED</option>
+					<option value="1">PLG_AKEEBASUBS_GENERATEWHEN_NEW</option>
+				</field>
+				<field name="download" type="list" default="0" label="PLG_AKEEBASUBS_DOWNLOAD_INVOICES" description="PLG_AKEEBASUBS_DOWNLOAD_INVOICES_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="downloadpath" type="text" default="/media/invoices/" label="PLG_AKEEBASUBS_DOWNLOAD_PATH" description="PLG_AKEEBASUBS_DOWNLOAD_PATH_DESC" />
+				<field name="tax" type="text" default="VAT" label="PLG_AKEEBASUBS_TAX_NAME" description="PLG_AKEEBASUBS_TAX_NAME_DESC" />
+				<field name="currency" type="text" default="EUR" label="PLG_AKEEBASUBS_CURRENCY" description="PLG_AKEEBASUBS_CURRENCY_DESC" />
+				<field name="vat_id" type="text" default="VAT ID" label="PLG_AKEEBASUBS_VAT_ID" description="PLG_AKEEBASUBS_VAT_ID_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>
