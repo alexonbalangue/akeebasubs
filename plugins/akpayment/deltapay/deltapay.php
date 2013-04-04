@@ -53,14 +53,14 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_DELTAPAY_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/alphalogo.gif',
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -70,7 +70,7 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
 		if(count($nameParts) > 1) {
@@ -78,25 +78,25 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
+
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		$currency = strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'));
 		if(array_key_exists($currency, $this->currencyMap)) {
 			$currencyCode = $this->currencyMap[$currency];
 		} else {
 			$currencyCode = 999;
 		}
-		
+
 		$data = (object)array(
 			'url'			=> 'https://www.deltapay.gr/entry.asp',
 			'merchant'		=> $this->params->get('merchant',''),
@@ -109,7 +109,7 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 			'lastname'		=> $lastName,
 			'charge'		=> str_replace('.',',',sprintf('%02.2f',$subscription->gross_amount))
 		);
-		
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
@@ -125,7 +125,8 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 			'Param1'			=> $subscription->akeebasubs_subscription_id,
 			'Param2'			=> $user->id,
 		);
-		$curl = new JHttpTransportCurl();
+		$options = new JRegistry();
+		$curl = new JHttpTransportCurl($options);
 		$response = $curl->request('POST', $url, $reqData, null, 30);
 		$guids = explode('<br>', $response->body);
 
@@ -149,20 +150,20 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/deltapay/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Wow, there is no IPN check whatsoever! Amazing security level...
 		$isValid = true;
-		
+
 		// Load the relevant subscription row
 		if($isValid) {
 			$id = array_key_exists('Param1', $data) ? (int)$data['Param1'] : -1;
@@ -180,7 +181,7 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("Param1" field) is invalid';
 		}
-		
+
 		// Check that the amount is correct
 		if($isValid && !is_null($subscription)) {
 			$charge = str_replace(',','.',$data['Charge']);
@@ -190,7 +191,7 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 			$isValid = ($gross - $mc_gross) < 0.01;
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount (Charge field) does not match the subscription amount';
 		}
-		
+
 		// Check the GUID, if it's used
 		if($isValid && !is_null($subscription)) {
 			$guidstring = $subscription->processor_key;
@@ -208,10 +209,10 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
-		
+
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) die('Hacking attempt; payment processing refused');
-		
+
 		// Load the subscription level and get its slug
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
@@ -219,20 +220,20 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 				->slug;
 
 		// Check the payment_status
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		switch($data['Result'])
 		{
 			case '1': // Success
 				$newStatus = 'C';
 				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
 				break;
-			
+
 			case '2': // Error
 			case '3': // Cancelled
 			default:
@@ -253,7 +254,7 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
-		
+
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -261,10 +262,10 @@ class plgAkpaymentDeltapay extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		$app = JFactory::getApplication();
 		$app->redirect($returnURL);
-		
+
 		return true;
 	}
 }
