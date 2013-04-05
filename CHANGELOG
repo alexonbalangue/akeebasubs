@@ -21,6 +21,7 @@ Akeeba Subscriptions 3.1.0
 # [LOW] Password and Retype Password matching wasn't checked server-side
 # [LOW] Custom field ordering was ignored in the front-end
 # [LOW] Notices thrown by the Joomla! usergroups integration plugin
+# [LOW] Notices thrown by the Custom SQL Scripts plugin
 
 Akeeba Subscriptions 3.0.2
 ================================================================================
