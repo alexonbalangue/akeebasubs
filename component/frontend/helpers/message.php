@@ -191,6 +191,18 @@ class AkeebasubsHelperMessage
 			$formatted_state = AkeebasubsHelperSelect::formatState($state);
 		}
 
+		// User's countru, human readable
+		$formatted_country = '';
+		$country = $kuser->country;
+		if (!empty($country))
+		{
+			if (!class_exists('AkeebasubsHelperSelect'))
+			{
+				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
+			}
+			$formatted_country = AkeebasubsHelperSelect::formatCountry($country);
+		}
+
 		// -- The actual replacement
 		$extras = array_merge(array(
 			"\\n"					=> "\n",
@@ -218,6 +230,7 @@ class AkeebasubsHelperMessage
 			'[$]'					=> $currency,
 			'[DLID]'				=> $dlid,
 			'[USER:STATE_FORMATTED]'=> $formatted_state,
+			'[USER:COUNTRY_FORMATTED]'=> $formatted_country,
 			// Legacy keys
 			'[NAME]'				=> $firstname,
 			'[STATE]'				=> JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$sub->state),

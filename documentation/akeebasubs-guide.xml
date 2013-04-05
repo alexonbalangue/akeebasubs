@@ -5400,6 +5400,15 @@ Rule C gives $ 30 discount</programlisting>
             </varlistentry>
 
             <varlistentry>
+              <term>[USER:COUNTRY_FORMATTED]</term>
+
+              <listitem>
+                <para>Country (the full human-readable name of the
+                country)</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
               <term>[CUSTOM:<replaceable>YourFieldName</replaceable>]</term>
 
               <listitem>
