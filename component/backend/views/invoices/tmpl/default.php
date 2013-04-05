@@ -164,7 +164,7 @@ $extensions = $this->getModel()->getExtensions();
 				}
 			}
 		?>
-		<tr class="row<?php echo $m?> <?php echo $rowClass?>">
+		<tr class="row<?php echo $m?>">
 			<td>
 				<strong><?php echo sprintf('%05u', (int)$invoice->akeebasubs_subscription_id)?></strong>
 			</td>
