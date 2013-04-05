@@ -16,23 +16,23 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 	{
 		$templatePath = dirname(__FILE__);
 		$name = 'sql';
-		
+
 		parent::__construct($subject, $name, $config, $templatePath);
 	}
-	
+
 	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
-	
+
 		// Get all of the user's subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
-			
+
 		// Make sure there are subscriptions set for the user
 		if(!count($subscriptions)) return;
-		
+
 		// Get the initial list of sql commands to run
 		$addGroups = array();
 		$removeGroups = array();
@@ -51,7 +51,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 			}
 		}
 	}
-	
+
 	public function onAKUserRefresh($user_id)
 	{
 		// Load groups
@@ -59,17 +59,19 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		$removeGroups = array();
 		$this->loadUserGroups($user_id, $addGroups, $removeGroups);
 		if(empty($addGroups) && empty($removeGroups)) return;
-		
+
 		// Get DB connection
 		$db = JFactory::getDBO();
-		
+
 		// Get the username
 		$username = JFactory::getUser($user_id)->username;
-		
+
 		// Deactivation SQL
 		if(!empty($removeGroups)) {
 			foreach($removeGroups as $sql) {
+				$sql = implode('; ', $sql);
 				$sql = str_replace('[USERID]', $user_id, $sql);
+				$sql = str_replace('[USER_ID]', $user_id, $sql);
 				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
 				if(version_compare(JVERSION, '3.0', 'ge')) {
@@ -84,7 +86,9 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		// Activation SQL
 		if(!empty($addGroups)) {
 			foreach($addGroups as $sql) {
+				$sql = implode('; ', $sql);
 				$sql = str_replace('[USERID]', $user_id, $sql);
+				$sql = str_replace('[USER_ID]', $user_id, $sql);
 				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
 				if(version_compare(JVERSION, '3.0', 'ge')) {
@@ -100,7 +104,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 	{
 		$this->addGroups = array();
 		$this->removeGroups = array();
-		
+
 		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$addgroupsKey = strtolower($this->name).'_addgroups';
@@ -135,28 +139,28 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 			}
 		}
 	}
-	
+
 	protected function parseGroups($rawData)
 	{
 		if(empty($rawData)) return array();
-		
+
 		$ret = array();
-		
+
 		// Just in case something funky happened...
 		$rawData = str_replace("\\n", "\n", $rawData);
 		$rawData = str_replace("\r", "\n", $rawData);
 		$rawData = str_replace("\n\n", "\n", $rawData);
-		
+
 		$lines = explode("\n", $rawData);
-		
+
 		foreach($lines as $line) {
 			$line = trim($line);
 			$parts = explode('=', $line, 2);
 			if(count($parts) != 2) continue;
-			
+
 			$level = $parts[0];
 			$rawGroups = $parts[1];
-			
+
 			$groups = explode(';', $rawGroups);
 			if(empty($groups)) continue;
 			if(!is_array($groups)) $groups = array($groups);
@@ -166,7 +170,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 			$levelId = $this->ASLevelToId($level);
 			$ret[$levelId] = $groups;
 		}
-		
+
 		return $ret;
 	}
 

@@ -14,6 +14,7 @@ Akeeba Subscriptions 3.1.0
 ~ DeltaPay (Alpha Bank Greece) integration: adding support for DeltaPay v2 which supports callback authorisation
 # [HIGH] The integrated invoicing automatic generation and sending fails when the invoice includes images
 # [HIGH] The VivaPayments plugin would not work outside of sandbox mode
+# [HIGH] The Custom SQL Scripts plugin wouldn't work
 # [MEDIUM] The MijoShop integration plugin would not work with the latest version of MijoShop
 # [MEDIUM] The integrated invoicing didn't properly support UTF-8
 # [MEDIUM] The integrated invoicing didn't properly support relative URLs in images
