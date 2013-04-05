@@ -250,6 +250,22 @@ class Com_AkeebasubsInstallerScript
 			'libraries/fof/view.json.php',
 			'libraries/fof/view.php',
 
+			// Old fonts
+			'media/com_akeebasubs/tcdpf/fonts/courier.php',
+			'media/com_akeebasubs/tcdpf/fonts/courierb.php',
+			'media/com_akeebasubs/tcdpf/fonts/courierbi.php',
+			'media/com_akeebasubs/tcdpf/fonts/courieri.php',
+			'media/com_akeebasubs/tcdpf/fonts/helvetica.php',
+			'media/com_akeebasubs/tcdpf/fonts/helveticab.php',
+			'media/com_akeebasubs/tcdpf/fonts/helveticabi.php',
+			'media/com_akeebasubs/tcdpf/fonts/helveticai.php',
+			'media/com_akeebasubs/tcdpf/fonts/symbol.php',
+			'media/com_akeebasubs/tcdpf/fonts/times.php',
+			'media/com_akeebasubs/tcdpf/fonts/timesbi.php',
+			'media/com_akeebasubs/tcdpf/fonts/timesb.php',
+			'media/com_akeebasubs/tcdpf/fonts/timesi.php',
+			'media/com_akeebasubs/tcdpf/fonts/zapfdingbats.php',
+
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
