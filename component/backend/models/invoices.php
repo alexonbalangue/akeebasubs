@@ -638,7 +638,7 @@ class AkeebasubsModelInvoices extends FOFModel
 				}
 
 				// b. isbusiness
-				if (empty($template->isbusiness))
+				if ($template->isbusiness < 0)
 				{
 					$score++;
 				}
