@@ -16,7 +16,7 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 	{
 		$templatePath = dirname(__FILE__);
 		$name = 'joomla';
-		
+
 		parent::__construct($subject, $name, $config, $templatePath);
 	}
 
@@ -27,10 +27,10 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 		$removeGroups = array();
 		$this->loadUserGroups($user_id, $addGroups, $removeGroups);
 		if(empty($addGroups) && empty($removeGroups)) return;
-		
+
 		// Get DB connection
 		$db = JFactory::getDBO();
-		
+
 		// Add to Joomla! 1.6 groups
 		if(!empty($addGroups)) {
 			// 1. Delete existing assignments
@@ -44,7 +44,7 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 				->where($db->qn('group_id').' IN ('.implode(', ', $groupSet).')');
 			$db->setQuery($query);
 			$db->execute();
-			
+
 			// 2. Add new assignments
 			$query = $db->getQuery(true)
 				->insert($db->qn('#__user_usergroup_map'))
@@ -52,15 +52,15 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 					$db->qn('user_id'),
 					$db->qn('group_id'),
 				));
-			
+
 			foreach($addGroups as $group) {
 				$query->values($db->q($user_id).', '.$db->q($group));
 			}
-			
+
 			$db->setQuery($query);
 			$db->execute();
 		}
-		
+
 		// Remove from Joomla! 1.6 groups
 		if(!empty($removeGroups)) {
 			$query = $db->getQuery(true)
@@ -79,10 +79,10 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 	protected function getGroups()
 	{
 		static $groups = null;
-		
+
 		if(is_null($groups)) {
 			$groups = array();
-			
+
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(true)
 				->select(array(
@@ -91,7 +91,7 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 				))->from($db->qn('#__usergroups'));
 			$db->setQuery($query);
 			$res = $db->loadObjectList();
-			
+
 			if(!empty($res)) {
 				foreach($res as $item) {
 					$t = trim($item->title);
@@ -99,15 +99,31 @@ class plgAkeebasubsJoomla extends plgAkeebasubsAbstract
 				}
 			}
 		}
-	}	
-	
+	}
+
 	protected function getSelectField($level, $type)
 	{
 		if($type == 'add') {
-			return JHtml::_('access.usergroup', 'params[joomla_addgroups][]', $level->params->joomla_addgroups, array('multiple' => 'multiple', 'size' => 8, 'class' => 'input-large'), false);
+			if (isset($level->params->joomla_addgroups))
+			{
+				$addgroups = $level->params->joomla_addgroups;
+			}
+			else
+			{
+				$addgroups = array();
+			}
+			return JHtml::_('access.usergroup', 'params[joomla_addgroups][]', $addgroups, array('multiple' => 'multiple', 'size' => 8, 'class' => 'input-large'), false);
 		}
 		if($type == 'remove') {
-			return JHtml::_('access.usergroup', 'params[joomla_removegroups][]', $level->params->joomla_removegroups, array('multiple' => 'multiple', 'size' => 8, 'class' => 'input-large'), false);
+			if (isset($level->params->joomla_removegroups))
+			{
+				$removegroups = $level->params->joomla_removegroups;
+			}
+			else
+			{
+				$removegroups = array();
+			}
+			return JHtml::_('access.usergroup', 'params[joomla_removegroups][]', $removegroups, array('multiple' => 'multiple', 'size' => 8, 'class' => 'input-large'), false);
 		}
 		return '';
 	}

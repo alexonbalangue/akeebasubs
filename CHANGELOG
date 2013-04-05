@@ -20,6 +20,7 @@ Akeeba Subscriptions 3.1.0
 # [LOW] Dashboard tab not showing as active in the backend (thanks Peter)
 # [LOW] Password and Retype Password matching wasn't checked server-side
 # [LOW] Custom field ordering was ignored in the front-end
+# [LOW] Notices thrown by the Joomla! usergroups integration plugin
 
 Akeeba Subscriptions 3.0.2
 ================================================================================
