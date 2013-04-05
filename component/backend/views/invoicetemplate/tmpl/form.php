@@ -112,7 +112,7 @@ $editor = JFactory::getEditor();
 			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY'); ?>
 		</label>
 		<div class="controls">
-			<?php echo akeebasubsHelperSelect::countries('countries', $this->item->country); ?>
+			<?php echo akeebasubsHelperSelect::countries($this->item->country, 'country'); ?>
 			<span class="help-block">
 				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY_HELP'); ?>
 			</span>
