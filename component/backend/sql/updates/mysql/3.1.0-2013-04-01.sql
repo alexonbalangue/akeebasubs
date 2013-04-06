@@ -1,4 +1,4 @@
-CREATE TABLE `#__akeebasubs_blockrules` (
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_blockrules` (
 	`akeebasubs_blockrule_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`username` VARCHAR(255) NOT NULL DEFAULT '',
 	`name` VARCHAR(255) NOT NULL DEFAULT '',
