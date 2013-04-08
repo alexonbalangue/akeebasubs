@@ -19,14 +19,14 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_MOIP_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/moip_logo.gif'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
 
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,18 +36,18 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		$data = (object)array(
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->params->get('merchant',''),
@@ -55,28 +55,28 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 		);
-		
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		@ob_start();
 		include dirname(__FILE__).'/moip/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Surprisingly, MoIP has no fraud detection whatsoever. WTF!
 		$isValid = true;
-		
+
 		// Load the relevant subscription row
 		if($isValid) {
 			$id = array_key_exists('id_transacao', $data) ? (int)$data['id_transacao'] : -1;
@@ -94,7 +94,7 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("ext_trans_id" field) is invalid';
 		}
-		
+
 		// Check that valor is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_gross = floatval($data['valor']);
@@ -104,7 +104,7 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 			$isValid = ($gross - $mc_gross) < 0.01;
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Check that cod_moip has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $data['cod_moip']) {
@@ -114,10 +114,10 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 				}
 			}
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
-		
+
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
 
@@ -128,13 +128,13 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 			case 6: // Being analyzed (possible fraud)
 				$newStatus = 'P';
 				break;
-			
+
 			case 1: // Authorized
 			case 4: // Completed
 				$newStatus = 'C';
 				break;
-			
-			// Apparently MOIP's instructions translation is a piece of bullshit.
+
+			// Apparently MOIP's instructions translation is waaaay off.
 			// They always send status #2 when the user pays and has to be
 			// ignored...
 			case 2: // Abandoned or in progress
@@ -160,7 +160,7 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
-		
+
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -168,10 +168,10 @@ class plgAkpaymentMoip extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Gets the form action URL for the payment
 	 */
