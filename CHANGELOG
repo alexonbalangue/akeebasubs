@@ -24,6 +24,7 @@ Akeeba Subscriptions 3.1.0
 # [LOW] Custom field ordering was ignored in the front-end
 # [LOW] Notices thrown by the Joomla! usergroups integration plugin
 # [LOW] Notices thrown by the Custom SQL Scripts plugin
+# [LOW] Double update notification emails sent out under certain circumstances
 
 Akeeba Subscriptions 3.0.2
 ================================================================================
