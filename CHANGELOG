@@ -19,6 +19,7 @@ Akeeba Subscriptions 3.1.0
 # [MEDIUM] The MijoShop integration plugin would not work with the latest version of MijoShop
 # [MEDIUM] The integrated invoicing didn't properly support UTF-8
 # [MEDIUM] The integrated invoicing didn't properly support relative URLs in images
+# [MEDIUM] Wrong email template used on multilingual sites under certain conditions
 # [LOW] Dashboard tab not showing as active in the backend (thanks Peter)
 # [LOW] Password and Retype Password matching wasn't checked server-side
 # [LOW] Custom field ordering was ignored in the front-end

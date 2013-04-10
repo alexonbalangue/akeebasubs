@@ -236,7 +236,12 @@ class plgSystemAsexpirationnotify extends JPlugin
 				// Timeout check -- Only if we sent at least one email!
 				$clockNow = microtime(true);
 				$elapsed = $clockNow - $clockStart;
-				if($elapsed > 2) return;
+				if($elapsed > 2)
+				{
+					// Unset last run timestamp and return
+					$this->setLastRunTimestamp(0);
+					return;
+				}
 			}
 		}
 	}
@@ -279,9 +284,9 @@ class plgSystemAsexpirationnotify extends JPlugin
 	/**
 	 * Saves the timestamp of this plugin's last run
 	 */
-	private function setLastRunTimestamp()
+	private function setLastRunTimestamp($timestamp = null)
 	{
-		$lastRun = time();
+		$lastRun = is_null($timestamp) ? time() : $timestamp;
 		$params = $this->getComponentParameters();
 		$params->set('plg_akeebasubs_asexpirationnotify_timestamp', $lastRun);
 
