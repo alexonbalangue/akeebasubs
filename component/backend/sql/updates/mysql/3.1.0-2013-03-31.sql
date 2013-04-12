@@ -9,4 +9,4 @@ ALTER TABLE `#__akeebasubs_invoicetemplates`
 	ADD COLUMN `format` VARCHAR(100) NOT NULL DEFAULT '' AFTER `country`;
 
 ALTER TABLE `#__akeebasubs_invoices`
-	ADD COLUMN `akeebasubs_invoicetemplate_id` BIGINT(20) NOT NULL DEFAULT 0 AFTER `extension`
+	ADD COLUMN `akeebasubs_invoicetemplate_id` BIGINT(20) NOT NULL DEFAULT 0 AFTER `extension`;
