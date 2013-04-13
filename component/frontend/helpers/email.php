@@ -256,7 +256,7 @@ class AkeebasubsHelperEmail
 	 */
 	private static function &getMailer($isHTML = true)
 	{
-		$mailer = JFactory::getMailer();
+		$mailer = clone JFactory::getMailer();
 
 		$mailer->IsHTML($isHTML);
 		// Required in order not to get broken characters

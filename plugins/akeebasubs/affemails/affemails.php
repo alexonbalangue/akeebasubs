@@ -23,14 +23,14 @@ class plgAkeebasubsAffemails extends JPlugin
 		}
 
 		parent::__construct($subject, $config);
-		
+
 		if (!class_exists('AkeebasubsHelperEmail'))
 		{
 			@include_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
 		}
 	}
 
-	
+
 	/**
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
@@ -39,10 +39,10 @@ class plgAkeebasubsAffemails extends JPlugin
 	{
 		// No point running if there is no affiliate
 		if(empty($row->akeebasubs_affiliate_id)) return;
-		
+
 		// The payment is not complete yet; do not contact the affiliate
 		if($row->state != 'C') return;
-		
+
 		// Did the payment status just change to C or P? It's a new subscription
 		if(array_key_exists('state', (array)$info['modified']) && in_array($row->state, array('P','C'))) {
 			if($row->enabled) {
@@ -90,12 +90,12 @@ class plgAkeebasubsAffemails extends JPlugin
 			}
 		}
 	}
-	
+
 	/**
 	 * Notifies the component of the supported email keys by this plugin.
-	 * 
+	 *
 	 * @return  array
-	 * 
+	 *
 	 * @since 3.0
 	 */
 	public function onAKGetEmailKeys()
@@ -116,11 +116,11 @@ class plgAkeebasubsAffemails extends JPlugin
 				'generic'				=> JText::_('PLG_AKEEBASUBS_AFFEMAILS_EMAIL_GENERIC'),
 			)
 		);
-	}	
-	
+	}
+
 	/**
 	 * Sends out the email to the owner of the subscription.
-	 * 
+	 *
 	 * @param $row AkeebasubsTableSubscription The subscription row object
 	 * @param $type string The type of the email to send (generic, new,)
 	 */
@@ -128,31 +128,32 @@ class plgAkeebasubsAffemails extends JPlugin
 	{
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
-		
+
 		// Get a preloaded mailer
 		$key = 'plg_akeebasubs_' . $this->_name . '_' . $type;
 		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
-		
+
 		if ($mailer === false)
 		{
 			return false;
 		}
-		
-		
+
+
 		// Get the affiliate object
 		$affiliate = FOFModel::getTmpInstance('Affiliates','AkeebasubsModel')
 			->setId($row->akeebasubs_affiliate_id)
 			->getItem();
-		
+
 		// Make sure the affiliate exists
 		if($affiliate->akeebasubs_affiliate_id != $row->akeebasubs_affiliate_id) return;
-		
+
 		// Get the affiliate user object
 		$affiliateUser = JFactory::getUser($affiliate->user_id);
-		
+
 		$mailer->addRecipient($affiliateUser->email);
 		$result = $mailer->Send();
-		
+		$mailer = null;
+
 		return $result;
 	}
 }
