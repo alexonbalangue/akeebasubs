@@ -376,6 +376,7 @@ class AkeebasubsHelperSelect
 		// Initialise parameters
 		$level_id = isset($attribs['level_id']) ? $attribs['level_id'] : 0;
 		$always_dropdown = isset($attribs['always_dropdown']) ? 1 : 0;
+		$default_option = isset($attribs['default_option']) ? 1 : 0;
 
 		// Per-level payment option filtering
 		if ($level_id > 0)
@@ -443,8 +444,16 @@ class AkeebasubsHelperSelect
 		} else {
 			// Show drop-down
 			$options = array();
-			foreach($plugins as $plugin) {
-				$options[] = JHTML::_('select.option',$plugin->name,$plugin->title);
+
+			if ($default_option)
+			{
+				$options[] = JHTML::_('select.option', '', JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PAYMENT_PLUGINS_UNSELECT'));
+				$selected = explode(',', $selected);
+			}
+
+			foreach($plugins as $plugin)
+			{
+				$options[] = JHTML::_('select.option', $plugin->name, $plugin->title);
 			}
 
 			return self::genericlist($options, $name, $attribs, $selected, $name);

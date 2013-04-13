@@ -11,13 +11,13 @@ class AkeebasubsTableLevel extends FOFTable
 {
 	public function check() {
 		$result = true;
-		
+
 		// Require a title
 		if(empty($this->title)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_TITLE'));
 			$result = false;
 		}
-		
+
 		// Make sure the title is unique
 		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->title($this->title)
@@ -33,7 +33,7 @@ class AkeebasubsTableLevel extends FOFTable
 				$result = false;
 			}
 		}
-		
+
 		// Create a new or sanitise an existing slug
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/filter.php';
 		if(empty($this->slug)) {
@@ -43,7 +43,7 @@ class AkeebasubsTableLevel extends FOFTable
 			// Make sure nobody adds crap characters to the slug
 			$this->slug = AkeebasubsHelperFilter::toSlug($this->slug);
 		}
-		
+
 		// Look for a similar slug
 		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->slug($this->slug)
@@ -60,26 +60,26 @@ class AkeebasubsTableLevel extends FOFTable
 				$result = false;
 			}
 		}
-		
+
 		// Do we have an image?
 		if(empty($this->image)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_IMAGE'));
 			$result = false;
 		}
-		
+
 		// Check the fixed expiration date and make sure it's in the future
 		$nullDate = JFactory::getDbo()->getNullDate();
 		if(!empty($this->fixed_date) && !($this->fixed_date == $nullDate))
 		{
 			$jNow = JFactory::getDate();
 			$jFixed = JFactory::getDate($this->fixed_date);
-			
+
 			if($jNow->toUnix() > $jFixed->toUnix())
 			{
 				$this->fixed_date = $nullDate;
 			}
 		}
-		
+
 		// Is the duration less than a day and this is not a forever or a fixed date subscription?
 		if($this->forever)
 		{
@@ -98,7 +98,7 @@ class AkeebasubsTableLevel extends FOFTable
 			$this->setError(JText::_('COM_AKEEBASUBS_LEVEL_ERR_LENGTH'));
 			$result = false;
 		}
-		
+
 		// Serialise params
 		if(is_array($this->params)) {
 			if(!empty($this->params)) {
@@ -108,10 +108,36 @@ class AkeebasubsTableLevel extends FOFTable
 		if(is_null($this->params) || empty($this->params)) {
 			$this->params = '';
 		}
-		
+
+		// Normalise plugins
+		if (!empty($this->payment_plugins))
+		{
+			if (is_array($this->payment_plugins))
+			{
+				$payment_plugins = $this->payment_plugins;
+			}
+			else
+			{
+				$payment_plugins = explode(',', $this->payment_plugins);
+			}
+
+			if (in_array('', $payment_plugins))
+			{
+				$this->payment_plugins = '';
+			}
+			else
+			{
+				$this->payment_plugins = implode(',', $payment_plugins);
+			}
+		}
+		else
+		{
+			$this->payment_plugins = '';
+		}
+
 		return $result;
 	}
-	
+
 	function delete( $oid=null )
 	{
 		$joins = array(
@@ -148,7 +174,7 @@ class AkeebasubsTableLevel extends FOFTable
 		if(is_null($this->params) || empty($this->params)) {
 			$this->params = array();
 		}
-		
+
 		return parent::onAfterLoad($result);
 	}
 }
