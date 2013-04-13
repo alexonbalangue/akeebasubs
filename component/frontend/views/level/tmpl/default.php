@@ -154,7 +154,7 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?>
 			</label>
 			<div class="controls">
-				<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod')) ?>
+				<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id)) ?>
 			</div>
 		</div>
 	</div>
