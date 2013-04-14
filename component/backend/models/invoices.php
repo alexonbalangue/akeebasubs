@@ -482,11 +482,17 @@ class AkeebasubsModelInvoices extends FOFModel
 		// Create PDF
 		$this->createPDF();
 
-		// Update subscription record with the invoice number
-		$updates = array(
-			'akeebasubs_invoice_id'	=> $invoice_no
-		);
-		$sub->save($updates);
+		// Update subscription record with the invoice number without saving the
+		// record through the Model, as this triggers the integration plugins,
+		// which in turn causes double emails to be sent out. Baazinga!
+		$query = $db->getQuery(true)
+			->update($db->qn('#__akeebasubs_subscriptions'))
+			->set($db->qn('akeebasubs_invoice_id') . ' = ' . $db->q($invoice_no))
+			->where($db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($sub->akeebasubs_subscription_id));
+		$db->setQuery($query);
+		$db->execute();
+
+		$sub->akeebasubs_invoice_id = $invoice_no;
 
 		// If auto-send is enabled, send the invoice by email
 		$autoSend = AkeebasubsHelperCparams::getParam('invoice_autosend', 1);
@@ -834,6 +840,7 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		// Send it
 		$result = $mailer->Send();
+		$mailer = null;
 
 		if ($result == true)
 		{

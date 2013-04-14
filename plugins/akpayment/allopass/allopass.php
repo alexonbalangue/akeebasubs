@@ -23,16 +23,16 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		));
 
 		parent::__construct($subject, $config);
-		
-		// Load level to alloPass mapping from plugin parameters	
+
+		// Load level to alloPass mapping from plugin parameters
  		$rawApMapping = $this->params->get('apmapping','');
 		$this->apMapping = $this->parseAPMatching($rawApMapping);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -42,17 +42,17 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// AlloPass Info for this level
 		$alloPass = $this->apMapping[$level->akeebasubs_level_id];
 		if(empty($alloPass)) {
 			return JError::raiseError(500, 'Cannot proceed with the payment. No alloPass information are definied for this subscription.');
 		}
-		
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		// Payment url
 		$rawPricingInfo = file_get_contents('https://payment.allopass.com/api/onetime/pricing.apu?'
 				.'site_id=' . $alloPass['site_id'] . '&product_id=' . $alloPass['product_id']);
@@ -66,10 +66,10 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url, 'This payment method is not configured for your country.' ,'error');
 		}
 		$url .= '&merchant_transaction_id=' . $subscription->akeebasubs_subscription_id;
-		
+
 		// Payment button
 		$button = 'https://payment.allopass.com/static/buy/button/en/162x56.png';
-		
+
 		// Language settings
 		try {
 			$lang = strtolower(substr(JFactory::getLanguage()->getTag(), 0, 2));
@@ -81,7 +81,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		} catch(Exception $e) {
 			// Shouldn't happend. But setting the language is optional... so do nothing here.
 		}
-		
+
 		$data = (object)array(
 			'url'			=> $url,
 			'button'		=> $button
@@ -90,17 +90,17 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/allopass/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-        
+
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
@@ -122,7 +122,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The merchant_transaction_id is invalid';
 		}
-        
+
 		// Check that transaction_id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $data['transaction_id']) {
@@ -130,7 +130,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not process the same transaction_id twice";
 			}
 		}
-        
+
 		// Check that currency is correct and set corresponding amount
 		if($isValid && !is_null($subscription)) {
 			$mc_currency = strtoupper($data['currency']);
@@ -143,16 +143,16 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 						$isValid = false;
 						$data['akeebasubs_failure_reason'] = "Invalid currency";
 					} else {
-						$mc_gross = floatval($data['reference_amount']);		
+						$mc_gross = floatval($data['reference_amount']);
 					}
 				} else {
-					$mc_gross = floatval($data['payout_amount']);	
+					$mc_gross = floatval($data['payout_amount']);
 				}
 			} else {
-				$mc_gross = floatval($data['amount']);	
+				$mc_gross = floatval($data['amount']);
 			}
 		}
-		
+
 		// Check that acount is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
@@ -168,14 +168,14 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-                
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
-		
-		
+
+
 		// Check the payment_status
 		switch($data['status'])
 		{
@@ -213,40 +213,53 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-        
+
 		return true;
 	}
-    
+
 	/**
 	 * Validates the incoming data.
 	 */
 	private function isValidIPN($data)
 	{
-		// Init
-		$signature = $data['api_sig'];
-		unset($data['api_sig']);
-		ksort($data);
 		$secretKey = $this->params->get('skey','');
-		$string2compute = '';
-		foreach($data as $name => $val) {
-			$string2compute .= $name . $val;
-		}
 
-		// Check signature
 		$apiHash = 'sha1';
 		if(!empty($data['api_hash'])) {
 			$apiHash = $data['api_hash'];
 		}
-		if($apiHash == 'sha1') {
-			return sha1($string2compute . $secretKey) == $signature;
-		} else if($apiHash == 'md5') {
-			return md5($string2compute . $secretKey) == $signature;
+		$apiSig = $data['api_sig'];
+
+		$ignore = array('api_sig', 'Itemid', 'option', 'view', 'paymentmethod');
+
+		ksort($data);
+		$string2compute = '';
+		foreach($data as $name => $val) {
+			if (in_array($name, $ignore))
+			{
+				continue;
+			}
+
+			$string2compute .= $name . $val;
 		}
 
-		return false;
+		if($apiHash == 'sha1')
+		{
+			$hash = sha1($string2compute . $secretKey);
+		}
+		elseif($apiHash == 'md5')
+		{
+			$hash = md5($string2compute . $secretKey);
+		}
+		else
+		{
+			$hash = '';
+		}
+
+		return $hash == $signature;
 	}
- 
-	
+
+
 	private function getPaymentURL($rawPricingInfo, $countryCode){
 		// Load XML
 		$pricingDoc = new DOMDocument();
@@ -277,49 +290,49 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 	private function parseAPMatching($rawData)
 	{
 		if(empty($rawData)) return array();
-		
+
 		$ret = array();
-		
+
 		// Just in case something funky happened...
 		$rawData = str_replace("\\n", "\n", $rawData);
 		$rawData = str_replace("\r", "\n", $rawData);
 		$rawData = str_replace("\n\n", "\n", $rawData);
-		
+
 		$lines = explode("\n", $rawData);
-		
+
 		foreach($lines as $line) {
 			$line = trim($line);
 			$parts = explode('=', $line, 2);
 			if(count($parts) != 2) continue;
-			
+
 			$level = trim($parts[0]);
 			$levelId = $this->ASLevelToId($level);
 			if($levelId < 0) continue;
-			
+
 			$rawAlloPass = $parts[1];
 			$alloPass = explode(':', $rawAlloPass);
 			if(empty($alloPass)) continue;
 			if(count($alloPass) < 2) continue;
-			
+
 			$siteId = trim($alloPass[0]);
 			if(empty($siteId)) continue;
 			$productId = trim($alloPass[1]);
 			if(empty($productId)) continue;
-		
+
 			$pricePoint = array(
 				'site_id'		=> $siteId,
 				'product_id'	=> $productId
 			);
-			
+
 			$ret[$levelId] = $pricePoint;
 		}
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Converts an Akeeba Subscriptions level to a numeric ID
-	 * 
+	 *
 	 * @param $title string The level's name to be converted to an ID
 	 *
 	 * @return int The subscription level's ID or -1 if no match is found
@@ -327,10 +340,10 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 	private function ASLevelToId($title)
 	{
 		static $levels = null;
-		
+
 		// Don't process invalid titles
 		if(empty($title)) return -1;
-		
+
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
@@ -341,7 +354,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 				$levels[$thisTitle] = $level->akeebasubs_level_id;
 			}
 		}
-		
+
 		$title = strtoupper($title);
 		if(array_key_exists($title, $levels)) {
 			// Mapping found

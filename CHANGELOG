@@ -3,6 +3,7 @@ Akeeba Subscriptions 3.1.0
 ================================================================================
 + PRO: Plugin to redirect Joomla! user registration to Akeeba Subscriptions
 + On popular demand: disable all personal information collection EXCEPT for the country (it's required by some payment processors, like AlloPass)
++ On popular demand: choose different payment methods for each subscription level
 + You can now select if business registrations are allowed, disallowed or always enforced in the component's options
 + Content Publish plugin: added SOBIPro 1.1 integration. WARNING: It will NOT work with earlier versions of SOBIPro.
 + You can now Copy (duplicate) custom fields
@@ -16,14 +17,18 @@ Akeeba Subscriptions 3.1.0
 # [HIGH] The integrated invoicing automatic generation and sending fails when the invoice includes images
 # [HIGH] The VivaPayments plugin would not work outside of sandbox mode
 # [HIGH] The Custom SQL Scripts plugin wouldn't work
+# [HIGH] AlloPass payment callback validation check always failed
 # [MEDIUM] The MijoShop integration plugin would not work with the latest version of MijoShop
 # [MEDIUM] The integrated invoicing didn't properly support UTF-8
 # [MEDIUM] The integrated invoicing didn't properly support relative URLs in images
+# [MEDIUM] Wrong email template used on multilingual sites under certain conditions
+# [MEDIUM] Double emails sent out when the integrated invoicing was being used
 # [LOW] Dashboard tab not showing as active in the backend (thanks Peter)
 # [LOW] Password and Retype Password matching wasn't checked server-side
 # [LOW] Custom field ordering was ignored in the front-end
 # [LOW] Notices thrown by the Joomla! usergroups integration plugin
 # [LOW] Notices thrown by the Custom SQL Scripts plugin
+# [LOW] Double update notification emails sent out under certain circumstances
 
 Akeeba Subscriptions 3.0.2
 ================================================================================

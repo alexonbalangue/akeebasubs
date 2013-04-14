@@ -373,8 +373,38 @@ class AkeebasubsHelperSelect
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		}
 
+		// Initialise parameters
+		$level_id = isset($attribs['level_id']) ? $attribs['level_id'] : 0;
+		$always_dropdown = isset($attribs['always_dropdown']) ? 1 : 0;
+		$default_option = isset($attribs['default_option']) ? 1 : 0;
+
+		// Per-level payment option filtering
+		if ($level_id > 0)
+		{
+			// Load the subscription level
+			$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->getItem($level_id);
+			$payment_plugins = $level->payment_plugins;
+			if (!empty($payment_plugins))
+			{
+				$payment_plugins = explode(',', $payment_plugins);
+				$temp = array();
+				foreach ($plugins as $plugin)
+				{
+					if (in_array($plugin->name, $payment_plugins))
+					{
+						$temp[] = $plugin;
+					}
+				}
+				if (!empty($temp))
+				{
+					$plugins = $temp;
+				}
+			}
+		}
+
 		// Determine how to render the payment method (drop-down or radio box)
-		if(AkeebasubsHelperCparams::getParam('useppimages', 1) > 0) {
+		if((AkeebasubsHelperCparams::getParam('useppimages', 1) > 0) && !$always_dropdown) {
 			// Show images instead of a drop-down
 			$options = array();
 			foreach($plugins as $plugin) {
@@ -414,8 +444,16 @@ class AkeebasubsHelperSelect
 		} else {
 			// Show drop-down
 			$options = array();
-			foreach($plugins as $plugin) {
-				$options[] = JHTML::_('select.option',$plugin->name,$plugin->title);
+
+			if ($default_option)
+			{
+				$options[] = JHTML::_('select.option', '', JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PAYMENT_PLUGINS_UNSELECT'));
+				$selected = explode(',', $selected);
+			}
+
+			foreach($plugins as $plugin)
+			{
+				$options[] = JHTML::_('select.option', $plugin->name, $plugin->title);
 			}
 
 			return self::genericlist($options, $name, $attribs, $selected, $name);

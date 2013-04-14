@@ -20,7 +20,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 		}
 
 		parent::__construct($subject, $config);
-		
+
 		if (!class_exists('AkeebasubsHelperEmail'))
 		{
 			@include_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
@@ -35,7 +35,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	{
 		// No payment has been made yet; do not contact the user
 		if($row->state == 'N') return;
-		
+
 		// Did the payment status just change to C or P? It's a new subscription
 		if(array_key_exists('state', (array)$info['modified']) && in_array($row->state, array('P','C'))) {
 			if($row->enabled) {
@@ -85,12 +85,12 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 			}
 		}
 	}
-	
+
 	/**
 	 * Notifies the component of the supported email keys by this plugin.
-	 * 
+	 *
 	 * @return  array
-	 * 
+	 *
 	 * @since 3.0
 	 */
 	public function onAKGetEmailKeys()
@@ -112,10 +112,10 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 			)
 		);
 	}
-	
+
 	/**
 	 * Sends out the email to the owner of the subscription.
-	 * 
+	 *
 	 * @param $row AkeebasubsTableSubscription The subscription row object
 	 * @param $type string The type of the email to send (generic, new,)
 	 */
@@ -123,19 +123,20 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	{
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
-		
+
 		// Get a preloaded mailer
 		$key = 'plg_akeebasubs_' . $this->_name . '_' . $type;
 		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
-		
+
 		if ($mailer === false)
 		{
 			return false;
 		}
-		
+
 		$mailer->addRecipient($user->email);
 		$result = $mailer->Send();
-		
+		$mailer = null;
+
 		return $result;
 	}
 }

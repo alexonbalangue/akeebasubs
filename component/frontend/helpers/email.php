@@ -11,9 +11,9 @@ class AkeebasubsHelperEmail
 {
 	/**
 	 * Gets the email keys currently known to the component
-	 * 
+	 *
 	 * @param   integer  $style  0 = raw sections list, 1 = grouped list options, 2 = key/description array
-	 * 
+	 *
 	 * @return  array|string
 	 */
 	public static function getEmailKeys($style = 0)
@@ -21,11 +21,11 @@ class AkeebasubsHelperEmail
 		static $rawOptions = null;
 		static $htmlOptions = null;
 		static $shortlist = null;
-		
+
 		if (is_null($rawOptions))
 		{
 			$rawOptions = array();
-			
+
 			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			JPluginHelper::importPlugin('system');
@@ -37,21 +37,21 @@ class AkeebasubsHelperEmail
 				{
 					if(!is_array($pResponse)) continue;
 					if(empty($pResponse)) continue;
-					
+
 					$rawOptions[$pResponse['section']] = $pResponse;
 				}
 			}
 		}
-		
+
 		if ($style == 0)
 		{
 			return $rawOptions;
 		}
-		
+
 		if (is_null($htmlOptions))
 		{
 			$htmlOptions = array();
-			
+
 			foreach ($rawOptions as $section)
 			{
 				$htmlOptions[] = JHTML::_('select.option', '<OPTGROUP>', $section['title']);
@@ -63,7 +63,7 @@ class AkeebasubsHelperEmail
 				$htmlOptions[] = JHTML::_('select.option', '</OPTGROUP>');
 			}
 		}
-		
+
 		if ($style == 1)
 		{
 			return $htmlOptions;
@@ -73,11 +73,11 @@ class AkeebasubsHelperEmail
 			return $shortlist;
 		}
 	}
-	
+
 	/**
 	 * Load language overrides for a specific extension. Used to load the
 	 * custom languages for each plugin, if necessary.
-	 * 
+	 *
 	 * @param type $extension
 	 */
 	private static function loadLanguageOverrides($extension, $user = null)
@@ -86,7 +86,7 @@ class AkeebasubsHelperEmail
 		{
 			$user = JFactory::getUser();
 		}
-		
+
 		// Load the language files and their overrides
 		$jlang = JFactory::getLanguage();
 		// -- English (default fallback)
@@ -111,32 +111,32 @@ class AkeebasubsHelperEmail
 			$jlang->load($extension.'.override', JPATH_ADMINISTRATOR, $userlang, true);
 		}
 	}
-	
+
 	/**
 	 * Loads an email template from the database or, if it doesn't exist, from
 	 * the language file.
-	 * 
+	 *
 	 * @param   string   $key    The language key, in the form PLG_LOCATION_PLUGINNAME_TYPE
 	 * @param   integer  $level  The subscription level we're interested in
-	 * 
+	 *
 	 * @return  array  isHTML: If it's HTML override from the db; text: The unprocessed translation string
 	 */
 	private static function loadEmailTemplate($key, $level = null, $user = null)
 	{
 		static $loadedLanguagesForExtensions = array();
-		
+
 		if (is_null($user))
 		{
 			$user = JFactory::getUser();
 		}
-		
+
 		// Parse the key
 		$key = strtolower($key);
 		$keyParts = explode('_', $key, 4);
-		
+
 		$extension = $keyParts[0] . '_' . $keyParts[1] . '_' . $keyParts[2];
 		$dbkey = $keyParts[2] . '_' . $keyParts[3];
-		
+
 		// Initialise
 		$templateText = '';
 		$subject = '';
@@ -149,7 +149,7 @@ class AkeebasubsHelperEmail
 		$languages = array(
 			$userLang, $jLang->getTag(), $jLang->getDefault(), 'en-GB', '*'
 		);
-		
+
 		// Look for an override in the database
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
@@ -171,7 +171,7 @@ class AkeebasubsHelperEmail
 				// Get the language and level of this template
 				$myLang = $template->language;
 				$myLevel = $template->subscription_level_id;
-				
+
 				// Make sure the language matches one of our desired languages, otherwise skip it
 				$langPos = array_search($myLang, $languages);
 				if ($langPos === false)
@@ -204,7 +204,7 @@ class AkeebasubsHelperEmail
 				{
 					continue;
 				}
-				
+
 				// Calculate the score. If it's winning, use it
 				$score = $langScore + $levelScore;
 				if ($score > $preferredScore)
@@ -212,74 +212,75 @@ class AkeebasubsHelperEmail
 					$loadLanguage = $myLang;
 					$subject = $template->subject;
 					$templateText = $template->body;
+					$preferredScore = $score;
 
 					$isHTML = true;
 				}
 			}
 		}
-		
+
 		// If no match is found in the database (or if this is the Core release)
 		// we fall back to the legacy method of using plain text emails and
 		// translation strings.
 		if(!$isHTML || (AKEEBASUBS_PRO != 1))
 		{
 			$isHTML = false;
-			
+
 			if(!array_key_exists($extension, $loadedLanguagesForExtensions))
 			{
 				self::loadLanguageOverrides($extension, $user);
 			}
-			
+
 			$subjectKey = $extension . '_HEAD_' . $keyParts[3];
 			$subject = JText::_($subjectKey);
 			if($subject == $subjectKey) {
 				$subjectKey = $extension . '_SUBJECT_' . $keyParts[3];
 				$subject = JText::_($subjectKey);
 			}
-			
+
 			$templateTextKey = $extension . '_BODY_' . $keyParts[3];
 			$templateText = JText::_($templateTextKey);
-			
+
 			$loadLanguage = '';
 		}
-		
+
 		return array($isHTML, $subject, $templateText, $loadLanguage);
 	}
-	
+
 	/**
 	 * Creates a PHPMailer instance
-	 * 
+	 *
 	 * @param   boolean  $isHTML
-	 * 
+	 *
 	 * @return  PHPMailer  A mailer instance
 	 */
 	private static function &getMailer($isHTML = true)
 	{
-		$mailer = JFactory::getMailer();
-		
+		$mailer = clone JFactory::getMailer();
+
 		$mailer->IsHTML($isHTML);
 		// Required in order not to get broken characters
 		$mailer->CharSet = 'UTF-8';
-		
+
 		return $mailer;
 	}
-	
+
 	/**
 	 * Creates a mailer instance, preloads its subject and body with your email
 	 * data based on the key and extra substitution parameters and waits for
 	 * you to send a recipient and send the email.
-	 * 
+	 *
 	 * @param   object  $sub     The subscription record against which the email is sent
 	 * @param   string  $key     The email key, in the form PLG_LOCATION_PLUGINNAME_TYPE
 	 * @param   array   $extras  Any optional substitution strings you want to introduce
-	 * 
+	 *
 	 * @return  boolean|PHPMailer False if something bad happened, the PHPMailer instance in any other case
 	 */
 	public static function getPreloadedMailer($sub, $key, array $extras = array())
 	{
 		// Load the template
 		list($isHTML, $subject, $templateText, $loadLanguage) = self::loadEmailTemplate($key, $sub->akeebasubs_level_id, JFactory::getUser($sub->user_id));
-		
+
 		// Substitute variables in $templateText and $subject
 		if(!class_exists('AkeebasubsHelperMessage'))
 		{
@@ -289,14 +290,14 @@ class AkeebasubsHelperEmail
 				return false;
 			}
 		}
-		
+
 		$templateText = AkeebasubsHelperMessage::processSubscriptionTags($templateText, $sub, $extras);
 		$subject = AkeebasubsHelperMessage::processSubscriptionTags($subject, $sub, $extras);
-		
+
 		// Get the mailer
 		$mailer = self::getMailer($isHTML);
 		$mailer->setSubject($subject);
-		
+
 		// Include inline images
 		$pattern = '/(src)=\"([^"]*)\"/i';
 		$number_of_matches = preg_match_all($pattern, $templateText, $matches, PREG_OFFSET_CAPTURE);
@@ -304,7 +305,7 @@ class AkeebasubsHelperEmail
 			$substitutions = $matches[2];
 			$last_position = 0;
 			$temp = '';
-	
+
 			// Loop all URLs
 			$imgidx = 0;
 			$imageSubs = array();
@@ -340,7 +341,7 @@ class AkeebasubsHelperEmail
 						$temp .= 'cid:img'.$imageSubs[$url];
 					}
 				}
-				
+
 				// Calculate next starting offset
 				$last_position = $entry[1] + strlen($entry[0]);
 			}
@@ -350,7 +351,7 @@ class AkeebasubsHelperEmail
 			// Replace content with the processed one
 			$templateText = $temp;
 		}
-		
+
 		$mailer->setBody($templateText);
 
 		return $mailer;

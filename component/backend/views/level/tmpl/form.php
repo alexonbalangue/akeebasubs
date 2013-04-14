@@ -21,21 +21,21 @@ $this->loadHelper('cparams');
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_level_id" value="<?php echo $this->item->akeebasubs_level_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
-	
+
 <div class="row-fluid">
-	
+
 	<div class="span6">
 		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_BASIC_TITLE'); ?></h3>
-		
+
 		<div class="control-group">
 			<label for="title_field" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_TITLE'); ?></label>
 			<div class="controls">
 				<input type="text" size="20" id="title_field" name="title" class="title" value="<?php echo $this->escape($this->item->title) ?>" />
 			</div>
 		</div>
-		
+
 		<div class="control-group">
-			<label for="slug_field" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SLUG'); ?></label>					
+			<label for="slug_field" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SLUG'); ?></label>
 			<div class="controls">
 				<input id="slug_field" type="text" name="slug" class="slug" value="<?php echo  $this->item->slug; ?>" />
 				<p class="help-block">
@@ -43,7 +43,7 @@ $this->loadHelper('cparams');
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="enabled" class="control-label">
 				<?php echo JText::_('JPUBLISHED'); ?>
@@ -52,7 +52,7 @@ $this->loadHelper('cparams');
 				<?php echo JHTML::_('select.booleanlist', 'enabled', null, $this->item->enabled); ?>
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="image_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?>
@@ -73,7 +73,7 @@ $this->loadHelper('cparams');
 				<?php endif; ?>
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="duration_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DURATION'); ?>
@@ -82,7 +82,7 @@ $this->loadHelper('cparams');
 				<input type="text" size="6" id="duration_field" name="duration" value="<?php echo (int)$this->item->duration ?>" />
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="fixed_date" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FIXED_DATE')?></label>
 			<div class="controls">
@@ -92,7 +92,7 @@ $this->loadHelper('cparams');
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="forever" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_FOREVER'); ?>
@@ -101,7 +101,7 @@ $this->loadHelper('cparams');
 				<?php echo JHTML::_('select.booleanlist', 'forever', null, $this->item->forever); ?>
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="price_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?>
@@ -122,7 +122,7 @@ $this->loadHelper('cparams');
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="akeebasubs_level_id" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP'); ?>
@@ -142,7 +142,7 @@ $this->loadHelper('cparams');
 				<?php echo JHTML::_('select.booleanlist', 'only_once', null, $this->item->only_once); ?>
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="recurring" class="control-label" title="<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING_TITLE') ?>">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RECURRING'); ?>
@@ -151,7 +151,16 @@ $this->loadHelper('cparams');
 				<?php echo JHTML::_('select.booleanlist', 'recurring', null, $this->item->recurring); ?>
 			</div>
 		</div>
-		
+
+		<div class="control-group">
+			<label for="" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PAYMENT_PLUGINS'); ?>
+			</label>
+			<div class="controls">
+				<?php echo AkeebasubsHelperSelect::paymentmethods('payment_plugins[]', $this->item->payment_plugins, array('id'=>'payment_plugins', 'multiple' => 'multiple', 'always_dropdown' => 1, 'default_option' => 1)) ?>
+			</div>
+		</div>
+
 		<div class="control-group">
 			<label for="notify1_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY1'); ?>
@@ -160,7 +169,7 @@ $this->loadHelper('cparams');
 				<input type="text" size="6" id="notify1_field" name="notify1" value="<?php echo  (int)$this->item->notify1 ?>" />
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="notify2_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFY2'); ?>
@@ -169,7 +178,7 @@ $this->loadHelper('cparams');
 				<input type="text" size="6" id="notify2_field" name="notify2" value="<?php echo  (int)$this->item->notify2 ?>" />
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="notifyafter_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NOTIFYAFTER'); ?>
@@ -178,7 +187,7 @@ $this->loadHelper('cparams');
 				<input type="text" size="6" id="notifyafter_field" name="notifyafter" value="<?php echo  (int)$this->item->notifyafter ?>" />
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label for="description" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_DESCRIPTION'); ?>
@@ -186,12 +195,11 @@ $this->loadHelper('cparams');
 			<div class="controls">
 			</div>
 		</div>
-		
+
 		<?php echo $editor->display( 'description',  $this->item->description, '97%', '210', '50', '10', false ) ; ?>
 	</div>
-	
-</div>
 
+</div>
 
 <?php
 	JLoader::import('joomla.plugin.helper');
@@ -233,10 +241,10 @@ $this->loadHelper('cparams');
 </div>
 
 <?php endif; ?>
-	
+
 <hr/>
 <div class="row-fluid">
-	
+
 	<div class="span6">
 		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ORDERTEXT') ?></h3>
 		<?php echo $editor->display( 'ordertext',  $this->item->ordertext, '97%', '391', '50', '20', false ) ; ?>
