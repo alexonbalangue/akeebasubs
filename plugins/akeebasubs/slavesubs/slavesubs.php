@@ -10,21 +10,21 @@ defined('_JEXEC') or die();
 class plgAkeebasubsSlavesubs extends JPlugin
 {
 	private $maxSlaves = array();
-	
+
 	public function __construct(&$subject, $name, $config = array())
 	{
 		parent::__construct($subject, $name, $config);
-		
+
 		$this->loadLanguage();
-		
+
 		$this->loadLevelAssignments();
 	}
-	
+
 	/**
 	 * Renders the configuration page in the component's back-end
-	 * 
+	 *
 	 * @param   AkeebasubsTableLevel  $level  The subscription level
-	 * 
+	 *
 	 * @return  object  Definition object, with two properties: 'title' and 'html'
 	 */
 	public function onSubscriptionLevelFormRender(AkeebasubsTableLevel $level)
@@ -39,31 +39,31 @@ class plgAkeebasubsSlavesubs extends JPlugin
 		{
 			$level->params->slavesubs_maxSlaves = 0;
 		}
-		
+
 		@ob_start();
 		include_once $filename;
 		$html = @ob_get_clean();
-		
+
 		$ret = (object)array(
 			'title'	=> JText::_('PLG_AKEEBASUBS_SLAVESUBS_TAB_TITLE'),
 			'html'	=> $html
 		);
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Renders custom fields in the form, allowing the subscriber to enter the
 	 * dependent users
-	 * 
+	 *
 	 * @param  array  $cache
-	 * 
+	 *
 	 * @return  array  The custom fields definitions
 	 */
 	public function onSubscriptionFormRenderPerSubFields($cache)
 	{
 		$fields = array();
-		
+
 		// Make sure we have a level
 		if (!array_key_exists('subscriptionlevel', $cache))
 		{
@@ -76,17 +76,17 @@ class plgAkeebasubsSlavesubs extends JPlugin
 			return $fields;
 		}
 		$maxSlaves = $this->maxSlaves[$level];
-		
+
 		if($maxSlaves <= 0)
 		{
 			return $fields;
 		}
-		
+
 		JLoader::import('joomla.user.helper');
-		
+
 		$javascript_fetch = '';
 		$javascript_validate = '';
-		
+
 		for($i = 0; $i < $maxSlaves; $i++)
 		{
 			if(array_key_exists('slaveusers', $cache['subcustom'])) {
@@ -94,21 +94,21 @@ class plgAkeebasubsSlavesubs extends JPlugin
 			} else {
 				$allSlaves = array();
 			}
-			
+
 			if(array_key_exists($i, $allSlaves)) {
 				$current = $allSlaves[$i];
 			} else {
 				$current = '';
 			}
-			
+
 			$html = '<input type="text" name="subcustom[slaveusers]['.$i.']" id="slaveuser'.$i.'" value="'.htmlentities($current).'" />';
-			
+
 			$userExists = false;
 			if(!empty($current))
 			{
 				$userExists = JUserHelper::getUserId($current) > 0;
 			}
-			
+
 			// Setup the field
 			$field = array(
 				'id'			=> 'slaveuser'.$i,
@@ -119,7 +119,7 @@ class plgAkeebasubsSlavesubs extends JPlugin
 			);
 			// Add the field to the return output
 			$fields[] = $field;
-			
+
 			// Add Javascript
 			$javascript_fetch .= <<<ENDJS
 result.slaveusers[$i] = $('#slaveuser$i').val();
@@ -139,7 +139,7 @@ if(!response.subcustom_validation.slaveuser$i) {
 
 ENDJS;
 		}
-		
+
 		$javascript = <<<ENDJS
 (function($) {
 	$(document).ready(function(){
@@ -157,7 +157,7 @@ function plg_akeebasubs_slavesubs_fetch()
 	(function($) {
 $javascript_fetch
 	})(akeeba.jQuery);
-	
+
 	return result;
 }
 
@@ -166,7 +166,7 @@ function plg_akeebasubs_slavesubs_validate(response)
 	var thisIsValid = true;
 	(function($) {
 $javascript_validate
-		
+
 		return thisIsValid;
 	})(akeeba.jQuery);
 }
@@ -174,16 +174,16 @@ $javascript_validate
 ENDJS;
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
-		
+
 		return $fields;
 	}
-	
+
 	/**
 	 * Performs validation of the custom fields, i.e. check that a valid
 	 * username (or no username) is set on each one of them.
-	 * 
+	 *
 	 * @param   object  $data
-	 * 
+	 *
 	 * @return  array subscription_custom_validation, valid
 	 */
 	public function onValidatePerSubscription($data)
@@ -193,22 +193,22 @@ ENDJS;
 			'valid'								=> true,
 			'subscription_custom_validation'	=> array()
 		);
-		
+
 		// Make sure we have a subscription level ID
 		if($data->id <= 0)
 		{
 			return $response;
 		}
-		
+
 		// Fetch the custom data
 		$subcustom = $data->subcustom;
-		
+
 		if (!array_key_exists($data->id, $this->maxSlaves))
 		{
 			return $response;
 		}
 		$maxSlaves = $this->maxSlaves[$data->id];
-		
+
 		if($maxSlaves <= 0)
 		{
 			return $response;
@@ -220,7 +220,7 @@ ENDJS;
 		}
 
 		JLoader::import('joomla.user.helper');
-		
+
 		for($i = 0; $i < $maxSlaves; $i++)
 		{
 			if(!array_key_exists($i, $subcustom['slaveusers']))
@@ -245,41 +245,41 @@ ENDJS;
 			{
 				$response['subscription_custom_validation']['slaveuser'.$i] = JUserHelper::getUserId($current) > 0;;
 			}
-			
+
 			$response['valid'] = $response['valid'] &&
-				$response['subscription_custom_validation']['slaveuser'.$i]; 
+				$response['subscription_custom_validation']['slaveuser'.$i];
 		}
-		
+
 		return $response;
 	}
-	
+
 	/**
 	 * This is called whenever a new subscription is created or an existing
 	 * subscription is modified. We are using it to create slave subscriptions
 	 * where necessary and "mirror" the parameters of the master subscription
 	 * to the slave subscriptions when slave subscriptions already exist.
-	 * 
+	 *
 	 * @param   AkeebasubsTableSubscription  $row   The subscription which we act upon
 	 * @param   array                        $info  Update information (not used)
 	 */
 	public function onAKSubscriptionChange($row, $info)
 	{
 		static $dontFire = false;
-		
+
 		if ($dontFire)
 		{
 			return;
 		}
-		
+
 		// Get the parameters of the row
 		$params = $row->params;
-		
+
 		// No params? No need to check anything else!
 		if (empty($params))
 		{
 			return;
 		}
-		
+
 		if (!is_object($params) && !is_array($params))
 		{
 			$params = json_decode($params, true);
@@ -288,13 +288,13 @@ ENDJS;
 		{
 			$params = (array) $params;
 		}
-		
+
 		// Nothing in the params array? No need to check anything else!
 		if (empty($params))
 		{
 			return;
 		}
-		
+
 		// Create new slave subscriptions if the subscription level allows us to
 		if(!isset($this->maxSlaves[$row->akeebasubs_level_id]))
 		{
@@ -320,12 +320,11 @@ ENDJS;
 				unset($newParams['slavesubs_ids']);
 			}
 			unset($newParams['slaveusers']);
-			
+
 			// Create new slave subscriptions
 			JLoader::import('joomla.user.helper');
 			$slavesubs_ids = array();
-			
-			$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
+
 			if ($row instanceof FOFTable)
 			{
 				$data = $row->getData();
@@ -334,7 +333,7 @@ ENDJS;
 			{
 				$data = (array)$row;
 			}
-			
+
 			foreach($slaveusers as $slaveUsername)
 			{
 				$user_id = JUserHelper::getUserId($slaveUsername);
@@ -342,7 +341,7 @@ ENDJS;
 				{
 					continue;
 				}
-				
+
 				$newdata = array_merge($data, array(
 					'akeebasubs_subscription_id'	=> 0,
 					'user_id'						=> $user_id,
@@ -359,22 +358,22 @@ ENDJS;
 					'discount_amount'				=> 0,
 					'contact_flag'					=> 0,
 				));
-				
+
 				// Save the new subscription record
-				$table = clone $mastertable;
+				$table = new AkeebasubsTableSubscription('#__akeebasubs_subscriptions', 'akeebasubs_subscription_id', JFactory::getDbo());
 				$table->reset();
 				$dontFire = true;
 				$table->save($newdata);
 				$dontFire = false;
 				$slavesubs_ids[] = $table->akeebasubs_subscription_id;
 			}
-			
+
 			$params['slavesubs_ids'] = $slavesubs_ids;
-			
+
 			$newdata = array_merge($data, array(
 				'params'	=> json_encode($params),
 			));
-			$table = clone $mastertable;
+			$table = new AkeebasubsTableSubscription('#__akeebasubs_subscriptions', 'akeebasubs_subscription_id', JFactory::getDbo());
 			$table->reset();
 			$dontFire = true;
 			$table->save($newdata);
@@ -391,17 +390,16 @@ ENDJS;
 			{
 				$original_row = clone $row;
 			}
-			$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
-			
+
 			foreach ($params['slavesubs_ids'] as $sid)
 			{
 				$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->getItem($sid)->getData();
 				$sub = (object)$sub;
-				
+
 				$this->copySubscriptionInformation($original_row, $sub);
-				
-				$table = clone $mastertable;
+
+				$table = new AkeebasubsTableSubscription('#__akeebasubs_subscriptions', 'akeebasubs_subscription_id', JFactory::getDbo());
 				$table->reset();
 				$dontFire = true;
 				$table->save($sub);
@@ -409,12 +407,12 @@ ENDJS;
 			}
 		}
 	}
-	
+
 	/**
 	 * This is called once per user whenever the admin uses the Run the Integrations
 	 * button in the back-end. We loop the user's subscriptions and run
 	 * onAKSubscriptionChange on them.
-	 * 
+	 *
 	 * @param   int  $user_id  The user ID we're acting upon
 	 */
 	public function onAKUserRefresh($user_id)
@@ -429,11 +427,11 @@ ENDJS;
 		{
 			$this->onAKSubscriptionChange($row, $info);
 		}
-	}	
-	
+	}
+
 	/**
 	 * Copies the subscription information from row $from to $to.
-	 * 
+	 *
 	 * @param   AkeebasubsTableSubscription $from  Row to copy from
 	 * @param   AkeebasubsTableSubscription $to    Row to copy to
 	 */
@@ -445,7 +443,7 @@ ENDJS;
 			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id', 'affiliate_comission',
 			'prediscount_amount', 'discount_amount', 'contact_flag'
 		);
-		
+
 		$properties = get_object_vars($from);
 		foreach($properties as $k => $v)
 		{
@@ -466,12 +464,12 @@ ENDJS;
 				{
 					$params = (array) $params;
 				}
-				
+
 				if (isset($params['slavesubs_ids']))
 				{
 					unset($params['slavesubs_ids']);
 				}
-				
+
 				$to->params = json_encode($params);
 			}
 			// Copy over everything else
@@ -481,7 +479,7 @@ ENDJS;
 			}
 		}
 	}
-	
+
 	/**
 	 * Loads the maximum slave subscriptions assignments for each subscription
 	 * level.
@@ -489,11 +487,11 @@ ENDJS;
 	private function loadLevelAssignments()
 	{
 		$this->maxSlaves = array();
-		
+
 		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$slavesKey = 'slavesubs_maxSlaves';
-		
+
 		if(!empty($levels)) {
 			foreach($levels as $level)
 			{

@@ -18,6 +18,7 @@ Akeeba Subscriptions 3.1.0
 # [HIGH] The VivaPayments plugin would not work outside of sandbox mode
 # [HIGH] The Custom SQL Scripts plugin wouldn't work
 # [HIGH] AlloPass payment callback validation check always failed
+# [HIGH] Using the slave subscriptions feature would result in zero amount to be paid in some cases
 # [MEDIUM] The MijoShop integration plugin would not work with the latest version of MijoShop
 # [MEDIUM] The integrated invoicing didn't properly support UTF-8
 # [MEDIUM] The integrated invoicing didn't properly support relative URLs in images
