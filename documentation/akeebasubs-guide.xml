@@ -251,7 +251,7 @@
         </listitem>
 
         <listitem>
-          <para>Send emails to subscribers upon subscription, when their
+          <para> Send emails to subscribers upon subscription, when their
           subscription/payment status changes and when their subscription is
           about to expire</para>
         </listitem>
@@ -1994,6 +1994,76 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               <para>Not all payment processors support recurring
               subscriptions. Please consult the documentation of your payment
               processor plugin.</para>
+
+              <para>Moreover, recurring subscriptions have some very serious
+              inflexibilities and pitfalls:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>You cannot programmatically cancel recurring
+                  subscriptions.</para>
+                </listitem>
+
+                <listitem>
+                  <para>You cannot modify the price of recurring
+                  subscriptions.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Using coupon codes, tax rules, upgrade rules,
+                  automatic discounts, subscription option custom fields or
+                  any other kind of price modifier will not work as you are
+                  expecting. The recurring payment will always be equal to the
+                  very first payment ever made by the client. If you gave a
+                  50% discount via a coupon, the user will be charged a 50%
+                  discounted price forever and ever.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If you do a price increase or decrease the recurring
+                  subscription will not be affected.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If the tax rules change (e.g. VAT percentage increase
+                  nationwide) or if the subscriber wants to change his
+                  business and/or VIES registration status, which would result
+                  in a change in tax charged, the only way to do so is to
+                  manually cancel his subscription through the payment
+                  processor and re-subscribe to your site, potentially losing
+                  subscription time.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If you remove a subscription level the recurring
+                  subscription will continue to be charged and the only way to
+                  stop robbing your user's money is going manually to the
+                  back-end of the payment processor (e.g. PayPal) and cancel
+                  each and every such subscription manually.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If your site is moved, upgraded, or generally modified
+                  in such a way that the payment notification URL is changed
+                  or invalidated you will have to manually cancel the
+                  recurring subscriptions through the payment processor's
+                  back-end.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If you uninstall Akeeba Subscriptions you will have to
+                  manually cancel the recurring subscriptions through the
+                  payment processor's back-end.</para>
+                </listitem>
+
+                <listitem>
+                  <para>If your site is off-line, inaccessible or otherwise
+                  the payment notification from the payment processor doesn't
+                  reach your site you will have to manually cancel the
+                  recurring subscription through the payment processor's
+                  back-end and ask your user to re-subscribe.</para>
+                </listitem>
+              </itemizedlist>
             </warning>
           </listitem>
         </varlistentry>
@@ -5898,8 +5968,9 @@ Rule C gives $ 30 discount</programlisting>
           for example 11111/22222/33333. Note them down. These are your Site
           ID, Product ID and Price Point ID. Replace the slash with a colon,
           i.e. 11111/22222/33333 becomes <option>11111:22222:33333</option>.
-          Note that down. This is what you need to put in Akeeba
-          Subscriptions' plugin.</para>
+          Remove the last colon and numbers. It becomes
+          <option>11111:22222</option>. Note that down. This is what you need
+          to put in Akeeba Subscriptions' plugin.</para>
         </step>
       </procedure>
 
@@ -5914,18 +5985,18 @@ Rule C gives $ 30 discount</programlisting>
       <para>First create a subscription level and note down its title. For the
       sake of this example let's say it is called LEVEL1. Then perform the
       procedure above to get the product's setup string which contains the
-      site, product and pricepoints ID, e.g. 11111:22222:33333. You need to
-      enter the following line in the Map price-points field in Akeeba
+      site, product and pricepoints ID, e.g. 11111:22222. You need to enter
+      the following line in the Map price-points field in Akeeba
       Subscriptions:</para>
 
-      <programlisting>LEVEL1=11111:22222:33333</programlisting>
+      <programlisting>LEVEL1=11111:22222</programlisting>
 
       <para>If you want to set up multiple levels, you can enter one level per
       line. For example, in order to map a second subscription level called
       LEVEL2 to the same Allopass product enter this:</para>
 
-      <programlisting>LEVEL1=11111:22222:33333
-LEVEL2=11111:22222:33333</programlisting>
+      <programlisting>LEVEL1=11111:22222
+LEVEL2=11111:22222</programlisting>
 
       <para>We are not through yet. We also need to enter the API keys. Go to
       your Allopass My Profile page. On the right hand side you will find the
