@@ -256,7 +256,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 			$hash = '';
 		}
 
-		return $hash == $signature;
+		return $hash == $apiSig;
 	}
 
 
