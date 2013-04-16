@@ -251,7 +251,7 @@
         </listitem>
 
         <listitem>
-          <para> Send emails to subscribers upon subscription, when their
+          <para>Send emails to subscribers upon subscription, when their
           subscription/payment status changes and when their subscription is
           about to expire</para>
         </listitem>
@@ -5815,6 +5815,12 @@ Rule C gives $ 30 discount</programlisting>
         actually pay.</para>
       </warning>
 
+      <important>
+        <para>The plugin was rewritten in Akeeba Subscriptions 3.1.0. The
+        instructions below refer to the version of the plugin found in Akeeba
+        Subscriptions 3.1 and later.</para>
+      </important>
+
       <para>The options you have in this plugin are:</para>
 
       <variablelist>
@@ -5841,7 +5847,10 @@ Rule C gives $ 30 discount</programlisting>
           <term>API Key</term>
 
           <listitem>
-            <para>Provided by Allopass</para>
+            <para>Provided by Allopass. You can find it after logging in to
+            your AlloPass account and then go to My Account, My Profile. Look
+            in the API Account Information block on the right-hand side of the
+            page, under the label API Key.</para>
           </listitem>
         </varlistentry>
 
@@ -5849,7 +5858,10 @@ Rule C gives $ 30 discount</programlisting>
           <term>API Secret Key</term>
 
           <listitem>
-            <para>Provided by Allopass</para>
+            <para>Provided by Allopass. You can find it after logging in to
+            your AlloPass account and then go to My Account, My Profile. Look
+            in the API Account Information block on the right-hand side of the
+            page, under the label API Secret Key.</para>
           </listitem>
         </varlistentry>
 
@@ -5859,18 +5871,17 @@ Rule C gives $ 30 discount</programlisting>
           <listitem>
             <para>This is used to map subscription levels to site IDs, Product
             IDs and Price Point IDs in Allopass. The format is
-            <replaceable>LEVELTITLE</replaceable>=<replaceable>11111</replaceable>:<replaceable>22222</replaceable>:<replaceable>33333</replaceable>
-            where <replaceable>LEVELTITLE</replaceable> is the Title of your
-            subscription level, 11111 is your Site ID, 22222 is your Product
-            ID and 33333 is your Price Point ID. See the Integration Notes
-            below for more information. You can enter multiple subscription
-            levels, one level per line.</para>
+            <replaceable>LEVELTITLE</replaceable>=<replaceable>11111/</replaceable><replaceable>22222/</replaceable><replaceable>33333</replaceable>
+            where <replaceable>LEVELTITLE</replaceable> is the Title (not the
+            slug!) of your subscription level and 11111/22222/33333 is your
+            <guilabel># auth</guilabel> of your AlloPass product. See the
+            Integration Notes below for more information. You can enter
+            multiple subscription levels, one level per line.</para>
 
             <important>
-              <para>If you do not map a subscription level to a site, product
-              and price point ID then you will not be able to sell a
-              subscription to this level using the AlloPass payment
-              plugin.</para>
+              <para>If you do not map a subscription level to a # auth then
+              you will not be able to sell a subscription to this level using
+              the AlloPass payment plugin.</para>
             </important>
           </listitem>
         </varlistentry>
@@ -5939,14 +5950,37 @@ Rule C gives $ 30 discount</programlisting>
         </step>
 
         <step>
-          <para>Enter your product information.</para>
+          <para>Enter your product information. Use the following URLs</para>
 
-          <important>
-            <para>You MUST enter a Notification URL. The URL
-            <uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=allopass</uri>
-            must be used, after replacing <uri>www.example.com</uri> with your
-            site's domain name.</para>
-          </important>
+          <itemizedlist>
+            <listitem>
+              <para>Purchase URL. Enter the URL of your subscription page for
+              this product. This is site-specific.</para>
+            </listitem>
+
+            <listitem>
+              <para>Product Access URL.
+              <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callbacks&amp;paymentmethod=allopass&amp;aksubs_context=success</uri></para>
+            </listitem>
+
+            <listitem>
+              <para>Error URL.
+              <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callbacks&amp;paymentmethod=allopass&amp;aksubs_context=error</uri></para>
+            </listitem>
+
+            <listitem>
+              <para>Notification URL.
+              <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callbacks&amp;paymentmethod=allopass&amp;aksubs_context=callback</uri></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>In all of the URLs above please substitute
+          <uri>http://www.example.com</uri> with the URL to your site.</para>
+
+          <warning>
+            <para>If you do not enter the exact URLs above the subscriptions
+            will NOT be activated automatically!</para>
+          </warning>
 
           <para>Click on <guibutton>Next</guibutton>.</para>
         </step>
@@ -5965,11 +5999,7 @@ Rule C gives $ 30 discount</programlisting>
         <step>
           <para>You now see your product. Under the <guilabel>#
           auth</guilabel> column there are three numbers separated by a slash,
-          for example 11111/22222/33333. Note them down. These are your Site
-          ID, Product ID and Price Point ID. Replace the slash with a colon,
-          i.e. 11111/22222/33333 becomes <option>11111:22222:33333</option>.
-          Remove the last colon and numbers. It becomes
-          <option>11111:22222</option>. Note that down. This is what you need
+          for example 11111/22222/33333. Note this down; it is what you need
           to put in Akeeba Subscriptions' plugin.</para>
         </step>
       </procedure>
@@ -5984,19 +6014,18 @@ Rule C gives $ 30 discount</programlisting>
 
       <para>First create a subscription level and note down its title. For the
       sake of this example let's say it is called LEVEL1. Then perform the
-      procedure above to get the product's setup string which contains the
-      site, product and pricepoints ID, e.g. 11111:22222. You need to enter
-      the following line in the Map price-points field in Akeeba
+      procedure above to get the product's # auth, e.g. 11111/22222/33333. You
+      need to enter the following line in the Map price-points field in Akeeba
       Subscriptions:</para>
 
-      <programlisting>LEVEL1=11111:22222</programlisting>
+      <programlisting>LEVEL1=11111/22222/33333</programlisting>
 
       <para>If you want to set up multiple levels, you can enter one level per
       line. For example, in order to map a second subscription level called
       LEVEL2 to the same Allopass product enter this:</para>
 
-      <programlisting>LEVEL1=11111:22222
-LEVEL2=11111:22222</programlisting>
+      <programlisting>LEVEL1=11111/22222/33333
+LEVEL2=11111/22222/33333</programlisting>
 
       <para>We are not through yet. We also need to enter the API keys. Go to
       your Allopass My Profile page. On the right hand side you will find the

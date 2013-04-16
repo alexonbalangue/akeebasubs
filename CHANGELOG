@@ -14,10 +14,10 @@ Akeeba Subscriptions 3.1.0
 + #153 You can now block subscriptions based on username, name, email and IP range of the subscriber
 + Adding [USER:COUNTRY_FORMATTED] message variable to display the human-readable form of the user's country
 ~ DeltaPay (Alpha Bank Greece) integration: adding support for DeltaPay v2 which supports callback authorisation
+~ Rewritten AlloPass integration plugin
 # [HIGH] The integrated invoicing automatic generation and sending fails when the invoice includes images
 # [HIGH] The VivaPayments plugin would not work outside of sandbox mode
 # [HIGH] The Custom SQL Scripts plugin wouldn't work
-# [HIGH] AlloPass payment callback validation check always failed
 # [HIGH] Using the slave subscriptions feature would result in zero amount to be paid in some cases
 # [MEDIUM] The MijoShop integration plugin would not work with the latest version of MijoShop
 # [MEDIUM] The integrated invoicing didn't properly support UTF-8
