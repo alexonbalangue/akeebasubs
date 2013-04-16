@@ -6416,25 +6416,6 @@ LEVEL2=11111/22222/33333</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
-
-      <bridgehead>Integration notes</bridgehead>
-
-      <note>
-        <para>The following notes were shared with us by our clients. We
-        include them here in hope that it will help you setting up the payment
-        plugin. We have not been able to verify them ourselves in any other
-        way except checking with our users that the payment plugin works for
-        them.</para>
-      </note>
-
-      <para>The ccAvenue documentation can be quite confusing. ccAvenue has
-      three different transaction type options to choose from. In order to use
-      Akeeba Subscriptions with ccAvenue, you have to select the first
-      transaction type option (variable amount) in ccAvenue's
-      interface.</para>
-
-      <para>Moreover, some users report that you have to deactivate the
-      Working Key if it's activated.</para>
     </section>
 
     <section xml:id="payment-clickandbuy">
