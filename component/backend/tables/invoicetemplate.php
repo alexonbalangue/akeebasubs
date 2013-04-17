@@ -9,15 +9,20 @@ defined('_JEXEC') or die();
 
 class AkeebasubsTableInvoicetemplate extends FOFTable
 {
+	public $localformat = null;
+
 	public function check() {
 		$result = true;
-		
+
+		// Work around for format killing the page load
+		$this->format = $this->localformat;
+
 		// Check for title
 		if(empty($this->title)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_INVOICETEMPLATE_ERR_TITLE'));
 			$result = false;
 		}
-		
+
 		// Normalise subscription levels
 		if(!empty($this->levels)) {
 			if(is_array($this->levels)) {
@@ -53,7 +58,7 @@ class AkeebasubsTableInvoicetemplate extends FOFTable
 		} else {
 			$this->levels = '';
 		}
-		
+
 		return $result;
 	}
 }

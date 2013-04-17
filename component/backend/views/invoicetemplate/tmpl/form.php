@@ -68,7 +68,7 @@ $editor = JFactory::getEditor();
 			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_FORMAT'); ?>
 		</label>
 		<div class="controls">
-			<input type="text" size="30" name="format" value="<?php echo $this->escape($this->item->format) ?>" />
+			<input type="text" size="30" name="localformat" value="<?php echo $this->escape($this->item->format) ?>" />
 			<span class="help-block">
 				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_FORMAT_HELP'); ?>
 			</span>
