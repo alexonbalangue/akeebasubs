@@ -13,7 +13,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 	private function getFilterValues()
 	{
 		$enabled = $this->getState('enabled','','cmd');
-		
+
 		return (object)array(
 			'search'		=> $this->getState('search',null,'string'),
 			'title'			=> $this->getState('title',null,'string'),
@@ -40,11 +40,11 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'nozero'		=> $this->getState('nozero',null,'int'),
 		);
 	}
-	
+
 	public function buildCountQuery() {
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
-		
+
 		if($state->refresh == 1) {
 			$query = $db->getQuery(true)
 				->select('COUNT(*)')
@@ -54,34 +54,34 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			$this->_buildQueryJoins($query);
 			$this->_buildQueryWhere($query);
 			$this->_buildQueryGroup($query);
-			
+
 			// $query retruns X rows, where X is the number of users. We need the count of users, so...
 			$query2 =  $db->getQuery(true)
 					->select('COUNT(*)')
 					->from( '('.(string)$query.') AS '.$db->qn('tbl'));
-			
+
 			return $query2;
 		} elseif($state->moneysum == 1) {
 			$query = $db->getQuery(true)
 				->select('SUM('.$db->qn('net_amount').') AS '.$db->qn('x'))
 				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
-			
+
 			//$this->_buildQueryFrom($query);
 			$this->_buildQueryJoins($query);
 			$this->_buildQueryWhere($query);
 			$this->_buildQueryGroup($query);
-			
+
 			return $query;
 		} else {
 			return parent::buildCountQuery();
 		}
 	}
-	
+
 	protected function _buildQueryJoins($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
-		
+
 		if($state->groupbydate == 1) {
 			return;
 		} elseif($state->groupbylevel == 1) {
@@ -103,15 +103,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						$db->qn('tbl').'.'.$db->qn('user_id'))
 			;
 		}
-		
-		
+
+
 	}
-	
+
 	protected function _buildQueryColumns($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
-		
+
 		if($state->refresh == 1) {
 			$query->select(array(
 				$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id'),
@@ -134,6 +134,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$db->qn('tbl').'.*',
 				$db->qn('l').'.'.$db->qn('title'),
 				$db->qn('l').'.'.$db->qn('image'),
+				$db->qn('l').'.'.$db->qn('akeebasubs_levelgroup_id'),
 				$db->qn('u').'.'.$db->qn('name'),
 				$db->qn('u').'.'.$db->qn('username'),
 				$db->qn('u').'.'.$db->qn('email'),
@@ -153,19 +154,19 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$db->qn('a').'.'.$db->qn('params').' AS '.$db->qn('userparams'),
 				$db->qn('a').'.'.$db->qn('notes').' AS '.$db->qn('usernotes'),
 			));
-			
+
 			$order = $this->getState('filter_order', 'akeebasubs_subscription_id', 'cmd');
 			if(!in_array($order, array_keys($this->getTable()->getData()))) $order = 'akeebasubs_subscription_id';
 			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 			$query->order($order.' '.$dir);
 		}
 	}
-	
+
 	protected function _buildQueryGroup($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
-		
+
 		if($state->refresh == 1) {
 			$query->group(array(
 				$db->qn('tbl').'.'.$db->qn('user_id')
@@ -180,18 +181,18 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			));
 		}
 	}
-	
+
 	protected function _buildQueryWhere($query)
 	{
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
-		
+
 		if($state->refresh == 1) {
 			return;
 		}
-		
+
 		JLoader::import('joomla.utilities.date');
-		
+
 		if($state->paystate) {
 			$states_temp = explode(',', $state->paystate);
 			$states = array();
@@ -207,21 +208,21 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				);
 			}
 		}
-		
+
 		if($state->processor) {
 			$query->where(
 				$db->qn('tbl').'.'.$db->qn('processor').' = '.
 					$db->q($state->processor)
 			);
 		}
-		
+
 		if($state->paykey) {
 			$query->where(
 				$db->qn('tbl').'.'.$db->qn('processor_key').' LIKE '.
 					$db->q('%'.$state->paykey.'%')
 			);
 		}
-		
+
 		if(!$state->groupbydate && !$state->groupbylevel)
 		{
 			if(is_numeric($state->enabled)) {
@@ -230,7 +231,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						$db->q($state->enabled)
 				);
 			}
-	
+
 			if($state->title) {
 				$search = '%'.$state->title.'%';
 				$query->where(
@@ -238,7 +239,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						$db->q($search)
 				);
 			}
-			
+
 			if($state->search)
 			{
 				$search = '%'.$state->search.'%';
@@ -248,35 +249,35 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						$db->q($search)
 				);
 			}
-			
+
 			if(is_numeric($state->level) && ($state->level > 0)) {
 				$query->where(
 					$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id').' = '.
 						$db->q($state->level)
 				);
 			}
-			
+
 			if(is_numeric($state->coupon_id) && ($state->coupon_id > 0)) {
 				$query->where(
 					$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' = '.
 						$db->q($state->coupon_id)
 				);
 			}
-			
+
 			if(is_numeric($state->user_id) && ($state->user_id > 0)) {
 				$query->where(
 					$db->qn('tbl').'.'.$db->qn('user_id').' = '.
 						$db->q($state->user_id)
 				);
 			}
-			
+
 			if(is_numeric($state->contact_flag)) {
 				$query->where(
 					$db->qn('tbl').'.'.$db->qn('contact_flag').' = '.
 						$db->q($state->contact_flag)
 				);
 			}
-			
+
 			// Filter the dates
 			$from = trim($state->publish_up);
 			if(empty($from)) {
@@ -294,7 +295,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$from = $jFrom->toSql();
 				}
 			}
-			
+
 			$to = trim($state->publish_down);
 			if(empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00')) {
 				$to = '';
@@ -311,7 +312,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$to = $jTo->toSql();
 				}
 			}
-			
+
 			if(!empty($from) && !empty($to)) {
 				// Filter from-to dates
 				$query->where(
@@ -335,11 +336,11 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						$db->q($to)
 				);
 			}
-			
+
 			// Dicsount mode and code search
 			$coupon_ids = array();
 			$upgrade_ids = array();
-			
+
 			switch($state->filter_discountmode) {
 				case 'none':
 					$query->where(
@@ -352,7 +353,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						.')'
 					);
 					break;
-				
+
 				case 'coupon':
 					$query->where(
 						'('.
@@ -373,7 +374,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						unset($coupons);
 					}
 					break;
-				
+
 				case 'upgrade':
 					$query->where(
 						'('.
@@ -394,7 +395,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						unset($upgrades);
 					}
 					break;
-				
+
 				default:
 					if($state->filter_discountcode) {
 						$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
@@ -416,10 +417,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					}
 					break;
 			}
-			
+
 			if(!empty($coupon_ids) && !empty($upgrade_ids)) {
 				$query->where(
-					'('.	
+					'('.
 					'('.$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' IN ('.
 						$db->q(implode(',', $coupon_ids)).'))'
 					.' OR '.
@@ -435,7 +436,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$db->q(implode(',', $upgrade_ids)).')');
 			}
 		}
-		
+
 		// "Since" queries
 		$since = trim($state->since);
 		if(empty($since) || ($since == '0000-00-00') || ($since == '0000-00-00 00:00:00')) {
@@ -458,7 +459,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$db->q($since)
 			);
 		}
-		
+
 		// "Until" queries
 		$until = trim($state->until);
 		if(empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00')) {
@@ -480,7 +481,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$db->q($until)
 			);
 		}
-		
+
 		// Expiration control queries
 		JLoader::import('joomla.utilities.date');
 		$from = trim($state->expires_from);
@@ -499,7 +500,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$from = $jFrom->toSql();
 			}
 		}
-		
+
 		$to = trim($state->expires_to);
 		if(empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00')) {
 			$to = '';
@@ -516,7 +517,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$to = $jTo->toSql();
 			}
 		}
-		
+
 		if(!empty($from) && !empty($to)) {
 			// Filter from-to dates
 			$query->where(
@@ -540,7 +541,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$db->q($to)
 			);
 		}
-		
+
 		// No-zero toggle
 		if(!empty($state->nozero)) {
 			$query->where(
@@ -549,20 +550,20 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			);
 		}
 	}
-	
+
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
 		$query = $db->getQuery(true)
 				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
-		
+
 		$this->_buildQueryColumns($query);
 		$this->_buildQueryJoins($query);
 		$this->_buildQueryWhere($query);
 		$this->_buildQueryGroup($query);
-		
+
 		return $query;
 	}
-	
+
 	public function onProcessList(&$resultArray) {
 		// Implement the subscription automatic expiration
 		if(empty($resultArray)) return;
@@ -575,10 +576,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 
 		$table = $this->getTable($this->table);
 		$k = $table->getKeyName();
-		
+
 		foreach($resultArray as $index => &$row) {
 			if(!property_exists($row, 'params')) continue;
-			
+
 			if(!is_array($row->params)) {
 				if(!empty($row->params)) {
 					$row->params = json_decode($row->params, true);
@@ -587,12 +588,12 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			if(is_null($row->params) || empty($row->params)) {
 				$row->params = array();
 			}
-			
+
 			$triggered = false;
-			
+
 			if(!property_exists($row, 'publish_down')) continue;
 			if(!property_exists($row, 'publish_up')) continue;
-			
+
 			if($row->state != 'C') {
 				if($row->enabled) {
 					$row->enabled = false;
@@ -602,7 +603,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				}
 				continue;
 			}
-			
+
 			if($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00')) {
 				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 				if(!preg_match($regex, $row->publish_down)) {
@@ -621,15 +622,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 					$triggered = true;
 				}
 			}
-			
+
 			if($triggered) {
 				$table->reset();
 				$table->load($row->$k);
 				$table->save($row);
-			}		
+			}
 		}
 	}
-	
+
 	public function getActiveSubscribers()
 	{
 		$db = $this->getDbo();
@@ -640,7 +641,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		$db->setQuery($query);
 		return $db->loadResult();
 	}
-	
+
 	protected function onBeforeSave(&$data, &$table)
 	{
 		if(array_key_exists('params', $data)) {
@@ -649,7 +650,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$data['params'] = json_encode($data['params']);
 			}
 		}
-		
+
 		return true;
 	}
 }
