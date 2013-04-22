@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.1.1
+================================================================================
+! [HIGH] 403, memory outage errors (all Joomla! versions) and lack of system messages (Joomla! 3.x)
+
 Akeeba Subscriptions 3.1.0
 ================================================================================
 + PRO: Plugin to redirect Joomla! user registration to Akeeba Subscriptions
