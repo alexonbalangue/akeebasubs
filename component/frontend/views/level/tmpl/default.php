@@ -9,7 +9,6 @@ defined('_JEXEC') or die();
 
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_VERSIONHASH);
 
-require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 $this->loadHelper('modules');
 
 $script = <<<ENDSCRIPT
@@ -17,14 +16,14 @@ akeebasubs_level_id = {$this->item->akeebasubs_level_id};
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);
 
-$prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'before' ? 'input-prepend' : 'input-append';
+$prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'input-append';
 ?>
 
 <div id="akeebasubs">
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsheader')?>
 
-<?php if(AkeebasubsHelperCparams::getParam('stepsbar',1) && ($this->validation->price->net > 0.01)):?>
+<?php if ($this->cparams->stepsbar && ($this->validation->price->net > 0.01)):?>
 <?php echo $this->loadAnyTemplate('level/steps',array('step'=>'subscribe', 'akeebasubs_subscription_level' => $this->item->akeebasubs_level_id)); ?>
 <?php endif; ?>
 
@@ -37,7 +36,7 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 <hr/>
 </noscript>
 
-<?php if(JFactory::getUser()->guest && AkeebasubsHelperCparams::getParam('allowlogin',1)):?>
+<?php if (JFactory::getUser()->guest && $this->cparams->allowlogin):?>
 	<?php echo $this->loadTemplate('login') ?>
 <?php endif?>
 
@@ -64,13 +63,13 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 			</label>
 			<div class="controls">
 				<div class="<?php echo $prepend_class?>">
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'before'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 					<input id="akeebasubs-sum-net" type="text" disabled="disabled" class="input-small"
 						value="<?php echo $this->validation->price->net?>" />
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'after'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -82,13 +81,13 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 			</label>
 			<div class="controls">
 				<div class="<?php echo $prepend_class?>">
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'before'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 					<input id="akeebasubs-sum-discount" type="text" disabled="disabled" class="input-small"
 						value="<?php echo $this->validation->price->discount?>" />
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'after'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -100,13 +99,13 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 			</label>
 			<div class="controls">
 				<div class="<?php echo $prepend_class?>">
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'before'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 					<input id="akeebasubs-sum-vat" type="text" disabled="disabled" class="input-small"
 						value="<?php echo $this->validation->price->tax?>" />
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'after'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -118,13 +117,13 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 			</label>
 			<div class="controls">
 				<div class="<?php echo $prepend_class?>">
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'before'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 					<input id="akeebasubs-sum-total" type="text" disabled="disabled" class="input-small"
 						value="<?php echo $this->validation->price->gross?>" />
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-					<span class="add-on"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if ($this->cparams->currencypos == 'after'): ?>
+					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -173,7 +172,7 @@ $prepend_class = AkeebasubsHelperCparams::getParam('currencypos','before') == 'b
 </div>
 
 <?php
-$aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1);
+$aks_personal_info = $this->cparams->currencypos->personalinfo;
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<ENDSCRIPT
 

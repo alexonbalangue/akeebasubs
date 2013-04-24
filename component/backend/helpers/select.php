@@ -150,9 +150,72 @@ class AkeebasubsHelperSelect
 
 	public static function countries($selected = null, $id = 'country', $attribs = array())
 	{
+		// Get the raw list of countries
 		$options = array();
 		$countries = self::$countries;
 		asort($countries);
+
+		// Parse show / hide options
+		// -- Initialisation
+		$show = array();
+		$hide = array();
+		// -- parse the show attrib
+		if (isset($attribs['show']))
+		{
+			$show = trim($attribs['show']);
+			if (!empty($show))
+			{
+				$show = explode(',', $show);
+			}
+			else
+			{
+				$show = array();
+			}
+			unset($attribs['show']);
+		}
+		// -- parse the hide attrib
+		if (isset($attribs['hide']))
+		{
+			$hide = trim($attribs['hide']);
+			if (!empty($hide))
+			{
+				$hide = explode(',', $hide);
+			}
+			else
+			{
+				$hide = array();
+			}
+			unset($attribs['hide']);
+		}
+		// -- If $show is not empty, filter the countries
+		if (count($show))
+		{
+			$temp = array();
+			foreach($show as $key)
+			{
+				if (array_key_exists($key, $countries))
+				{
+					$temp[$key] = $countries[$key];
+				}
+			}
+			asort($temp);
+			$countries = $temp;
+		}
+		// -- If $show is empty but $hide is not, filter the countries
+		elseif (count($hide))
+		{
+			$temp = array();
+			foreach($countries as $key => $v)
+			{
+				if (!in_array($key, $hide))
+				{
+					$temp[$key] = $v;
+				}
+			}
+			asort($temp);
+			$countries = $temp;
+		}
+
 		foreach($countries as $code => $name)
 		{
 			$options[] = JHTML::_('select.option', $code, $name );

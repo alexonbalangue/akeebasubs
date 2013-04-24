@@ -9,10 +9,27 @@
 defined('_JEXEC') or die();
 
 class AkeebasubsViewLevel extends FOFViewHtml
-{	
-	protected function onRead($tpl = null) {
+{
+	protected function onRead($tpl = null)
+	{
 		JRequest::setVar('hidemainmenu', true);
+
 		$model = $this->getModel();
 		$this->assignRef( 'item',		$model->getItem() );
+
+		// Get component parameters and pass them to the view
+		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+		$cparams = (object)array(
+			'currencypos'		=> AkeebasubsHelperCparams::getParam('currencypos', 'before'),
+			'stepsbar'			=> AkeebasubsHelperCparams::getParam('stepsbar', 1),
+			'allowlogin'		=> AkeebasubsHelperCparams::getParam('allowlogin', 1),
+			'currencysymbol'	=> AkeebasubsHelperCparams::getParam('currencysymbol', '€'),
+			'personalinfo'		=> AkeebasubsHelperCparams::getParam('personalinfo', 1),
+			'showdiscountfield'	=> AkeebasubsHelperCparams::getParam('showdiscountfield', 1),
+			'showtaxfield'		=> AkeebasubsHelperCparams::getParam('showtaxfield', 1),
+			'showtotalfield'	=> AkeebasubsHelperCparams::getParam('showtotalfield', 1),
+			'showcouponfield'	=> AkeebasubsHelperCparams::getParam('showcouponfield', 1),
+		);
+		$this->cparams = $cparams;
 	}
 }

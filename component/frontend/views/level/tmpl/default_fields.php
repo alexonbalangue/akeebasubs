@@ -64,6 +64,9 @@ if(JFactory::getUser()->guest) {
 }
 
 $businessFields = AkeebasubsHelperCparams::getParam('businessfields', 'auto');
+
+$cparamShowCountries = AkeebasubsHelperCparams::getParam('showcountries', '');
+$cparamHideCountries = AkeebasubsHelperCparams::getParam('hidecountries', '');
 ?>
 
 <div class="form form-horizontal">
@@ -206,7 +209,7 @@ if(array_key_exists('isValid', $field)) {
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?>
 		</label>
 		<div class="controls">
-			<?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('id'=>'country')) ?>
+			<?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('id'=>'country', 'show' => $cparamShowCountries, 'hide' => $cparamHideCountries)) ?>
 			<span id="country_empty" class="help-inline" <?php if($group_classes['country'] != 'error'):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?>
 			</span>
@@ -280,7 +283,7 @@ if(array_key_exists('isValid', $field)) {
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY')?>
 		</label>
 		<div class="controls">
-			<?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('id'=>'country')) ?>
+			<?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('id'=>'country', 'show' => $cparamShowCountries, 'hide' => $cparamHideCountries)) ?>
 			<span id="country_empty" class="help-inline" <?php if($group_classes['country'] != 'error'):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?>
 			</span>
