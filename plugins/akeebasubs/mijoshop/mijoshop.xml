@@ -10,6 +10,10 @@
 	<version>1.0</version>
 	<description>PLG_AKEEBASUBS_MIJOSHOP_DESCRIPTION</description>
 	<files>
+		<folder>language</folder>
+		<folder>override</folder>
+		<folder>tmpl</folder>
+
 		<filename plugin="mijoshop">mijoshop.php</filename>
 	</files>
 	<languages folder="language">

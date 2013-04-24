@@ -75,13 +75,22 @@ class plgAkeebasubsMijoshop extends plgAkeebasubsAbstract
 		if(is_null($groups)) {
 			$groups = array();
 
+			$mijoshop = JPATH_ROOT.'/components/com_mijoshop/mijoshop/mijoshop.php';
+			if (!file_exists($mijoshop)) {
+				return $groups;
+			}
+
+			require_once($mijoshop);
+
+			$language_id = (int) MijoShop::get('opencart')->get('config')->get('config_language_id');
+
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(true)
 				->select(array(
 					$db->qn('name').' AS '.$db->qn('title'),
 					$db->qn('customer_group_id').' AS '.$db->qn('id'),
 				))->from($db->qn('#__mijoshop_customer_group_description'))
-				->where($db->qn('language_id') . ' = ' . $db->q(1));
+				->where($db->qn('language_id') . ' = ' . $db->q($language_id));
 			$db->setQuery($query);
 			$res = $db->loadObjectList();
 
