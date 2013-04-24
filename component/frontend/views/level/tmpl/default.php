@@ -141,7 +141,7 @@ $styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
 		<legend class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></legend>
 
 		<?php if($this->validation->price->net > 0): ?>
-		<div class="control-group">
+		<div class="control-group" style="<?php echo $styleCoupon ?>">
 			<label for="coupon" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?>
 			</label>
