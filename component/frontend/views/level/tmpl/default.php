@@ -17,6 +17,11 @@ ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);
 
 $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'input-append';
+
+$styleDiscount	= $this->cparams->showdiscountfield <= 0 ? 'display:none' : '';
+$styleTax		= $this->cparams->showtaxfield <= 0 ? 'display:none' : '';
+$styleRegular	= $this->cparams->showregularfield <= 0 ? 'display:none' : '';
+$styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
 ?>
 
 <div id="akeebasubs">
@@ -57,7 +62,7 @@ $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'in
 			</p>
 		</noscript>
 
-		<div class="control-group">
+		<div class="control-group" style="<?php echo $styleRegular ?>" id="akeebasubs-sum-net-container">
 			<label class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NET')?>
 			</label>
@@ -75,7 +80,7 @@ $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'in
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="control-group" style="<?php echo $styleDiscount ?>" id="akeebasubs-sum-discount-container">
 			<label class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')?>
 			</label>
@@ -93,7 +98,7 @@ $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'in
 			</div>
 		</div>
 
-		<div class="control-group">
+		<div class="control-group" style="<?php echo $styleTax ?>" id="akeebasubs-sum-vat-container">
 			<label class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT')?>
 			</label>
@@ -172,9 +177,15 @@ $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'in
 </div>
 
 <?php
-$aks_personal_info = $this->cparams->currencypos->personalinfo;
+$aks_personal_info = $this->cparams->currencypos->personalinfo ? 1 : 0;
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<ENDSCRIPT
+
+akeebasubs_fieldprefs = {
+	'showregularfield'		: {$this->cparams->showregularfield},
+	'showdiscountfield'		: {$this->cparams->showdiscountfield},
+	'showtaxfield'			: {$this->cparams->showtaxfield}
+};
 
 window.addEvent('domready', function() {
 	(function(\$) {
@@ -190,6 +201,7 @@ window.addEvent('domready', function() {
 			if($aks_personal_info == 1) {
 				validateBusiness();
 			}
+			validateForm();
 		});
 	})(akeeba.jQuery);
 });

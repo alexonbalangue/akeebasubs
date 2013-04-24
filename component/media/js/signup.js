@@ -29,6 +29,11 @@ var akeebasubs_sub_validation_queue = [];
 var akeebasubs_level_id = 0;
 var akeebasubs_submit_after_validation = false;
 var akeebasubs_noneuvat = false;
+var akeebasubs_fieldprefs = {
+	'showregularfield'		: 1,
+	'showdiscountfield'		: 1,
+	'showtaxfield'			: 1
+};
 
 function cacheSubmitAction(e)
 {
@@ -706,8 +711,48 @@ function applyPrice(response)
 			$('#akeebasubs-sum-discount').val(response.discount);
 			$('#akeebasubs-sum-vat').val(response.tax);
 			$('#akeebasubs-sum-total').val(response.gross);
-
-			if(response.gross <= 0) {
+			
+			$('#akeebasubs-sum-net-container').css('display', 'none');
+			$('#akeebasubs-sum-discount-container').css('display', 'none');
+			$('#akeebasubs-sum-vat-container').css('display', 'none');
+			
+			if (akeebasubs_fieldprefs.showregularfield == 1)
+			{
+				$('#akeebasubs-sum-net-container').css('display', 'block');
+			}
+			else if (akeebasubs_fieldprefs.showregularfield == -1)
+			{
+				if ((response.discount * 1 + response.tax * 1) >= 0.01)
+				{
+					$('#akeebasubs-sum-net-container').css('display', 'block');
+				}
+			}
+			
+			if (akeebasubs_fieldprefs.showdiscountfield == 1)
+			{
+				$('#akeebasubs-sum-discount-container').css('display', 'block');
+			}
+			else if (akeebasubs_fieldprefs.showdiscountfield == -1)
+			{
+				if (Math.abs(response.discount * 1) >= 0.01)
+				{
+					$('#akeebasubs-sum-discount-container').css('display', 'block');
+				}
+			}
+			
+			if (akeebasubs_fieldprefs.showtaxfield == 1)
+			{
+				$('#akeebasubs-sum-vat-container').css('display', 'block');
+			}
+			else if (akeebasubs_fieldprefs.showtaxfield == -1)
+			{
+				if (Math.abs(response.tax * 1) >= 0.01)
+				{
+					$('#akeebasubs-sum-vat-container').css('display', 'block');
+				}
+			}
+			
+			if(response.gross * 1 <= 0) {
 				$('#paymentmethod-container').css('display','none');
 			} else {
 				$('#paymentmethod-container').css('display','inline');

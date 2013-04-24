@@ -59,6 +59,13 @@
 			<option value="always">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_ALWAYS</option>
 		</field>
 		
+		<field name="showregularfield" type="list" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWREGULARFIELD"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWREGULARFIELD_DESC">
+			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
 		<field name="showdiscountfield" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWDISCOUNTFIELD"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWDISCOUNTFIELD_DESC">
@@ -69,13 +76,6 @@
 		<field name="showtaxfield" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTAXFIELD"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTAXFIELD_DESC">
-			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-		<field name="showtotalfield" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTOTALFIELD"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTOTALFIELD_DESC">
 			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>

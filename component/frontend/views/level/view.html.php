@@ -27,7 +27,7 @@ class AkeebasubsViewLevel extends FOFViewHtml
 			'personalinfo'		=> AkeebasubsHelperCparams::getParam('personalinfo', 1),
 			'showdiscountfield'	=> AkeebasubsHelperCparams::getParam('showdiscountfield', 1),
 			'showtaxfield'		=> AkeebasubsHelperCparams::getParam('showtaxfield', 1),
-			'showtotalfield'	=> AkeebasubsHelperCparams::getParam('showtotalfield', 1),
+			'showregularfield'	=> AkeebasubsHelperCparams::getParam('showregularfield', 1),
 			'showcouponfield'	=> AkeebasubsHelperCparams::getParam('showcouponfield', 1),
 		);
 		$this->cparams = $cparams;
