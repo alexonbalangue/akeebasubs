@@ -58,6 +58,47 @@
 			<option value="never">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_NEVER</option>
 			<option value="always">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_ALWAYS</option>
 		</field>
+		
+		<field name="showdiscountfield" type="list" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWDISCOUNTFIELD"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWDISCOUNTFIELD_DESC">
+			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
+		<field name="showtaxfield" type="list" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTAXFIELD"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTAXFIELD_DESC">
+			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
+		<field name="showtotalfield" type="list" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTOTALFIELD"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTOTALFIELD_DESC">
+			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
+		<field name="showcouponfield" type="list" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUPONFIELD"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUPONFIELD_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
+		<field name="showcountries" type="text"
+			default=""
+			size="40"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUNTRIES"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUNTRIES_DESC"
+		/>
+		<field name="hidecountries" type="text"
+			default=""
+			size="40"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDECOUNTRIES"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDECOUNTRIES_DESC"
+		/>
+		
 		<field name="allowlogin" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">
