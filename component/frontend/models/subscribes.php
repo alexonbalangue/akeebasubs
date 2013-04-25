@@ -1409,7 +1409,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'password2'		=> $state->password2
 			);
 
-			$user = new JUser();
+			$user = JFactory::getUser(0);
 
 			JLoader::import('joomla.application.component.helper');
 			$usersConfig = JComponentHelper::getParams( 'com_users' );
@@ -1502,6 +1502,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			return false;
 		} else {
 			$this->setState('user', $user);
+			#self::getSession()->set('user', $user);
 		}
 
 		return $userIsSaved;
