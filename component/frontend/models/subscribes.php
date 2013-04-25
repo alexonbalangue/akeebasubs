@@ -1425,23 +1425,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'password2'		=> $state->password2
 			);
 
-			$user = JFactory::getUser(0);
+			$user = new JUser(0);
 
 			JLoader::import('joomla.application.component.helper');
 			$usersConfig = JComponentHelper::getParams( 'com_users' );
 			$newUsertype = $usersConfig->get( 'new_usertype' );
 
-			if(version_compare(JVERSION, '1.6.0', 'ge')) {
-				// get the New User Group from com_users' settings
-				if(empty($newUsertype)) $newUsertype = 2;
-				$params['groups'] = array($newUsertype);
-			} else {
-				if (!$newUsertype) {
-					$newUsertype = 'Registered';
-				}
-				$acl = JFactory::getACL();
-				$params['gid'] = $acl->get_group_id( '', $newUsertype, 'ARO' );
+			// get the New User Group from com_users' settings
+			if (empty($newUsertype))
+			{
+				$newUsertype = 2;
 			}
+			$params['groups'] = array($newUsertype);
 
 			$params['sendEmail'] = 0;
 
@@ -1518,7 +1513,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 			return false;
 		} else {
 			$this->setState('user', $user);
-			#self::getSession()->set('user', $user);
 		}
 
 		return $userIsSaved;
