@@ -1304,6 +1304,171 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Display regular price</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions normally displays the regular price,
+            i.e. the price you've set up in the subscription level the user is
+            trying to subscribe to. If you don't intend to have any discounts
+            or taxes you may want to hide this and only show the total amount
+            to be paid. This option allows you to do that. The available
+            settings are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Yes</option>. Always show the regular
+                price.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>No</option>. Never show the regular
+                price.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>Auto</option>. Only show the regular price if
+                there is tax and/or a discount applied to price. Recommended
+                setting.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Display discount amount</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions normally displays the discount price,
+            i.e. the amount deducted from the price as the result of a coupon
+            code, upgrade rule or subscription level relation. If you don't
+            intend to have any discounts you may want to hide this. This
+            option allows you to do that. The available settings are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Yes</option>. Always show the discount, even if
+                it's zero.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>No</option>. Never show the discount. Only use
+                if you're sure no discount will ever be applied.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>Auto</option>. Only show the discount if it's
+                non zero (e.g. a coupon or upgrade rule is applied).
+                Recommended setting.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Display tax amount</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions normally displays the tax amount, i.e.
+            the amount added to the price as the result of a tax rule. If you
+            don't intend to have any tax rules you may want to hide this. This
+            option allows you to do that. The available settings are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Yes</option>. Always show the tax amount, even
+                if it's zero.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>No</option>. Never show the tax amount. Only use
+                if you're sure no tax amount will ever be applied.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>Auto</option>. Only show the tax amount if it's
+                non zero (e.g. a tax rule is applied to this subscription).
+                Recommended setting.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Display coupon field</term>
+
+          <listitem>
+            <para>Akeeba Subscriptions normally displays a field where the
+            user can enter a coupon code. If you do not intend to be using
+            coupon codes you may want to hide this field. This option allows
+            you to do that. The available settings are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Yes</option>. Always show the coupon code
+                field.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>No</option>. Never show the coupon code
+                field.<important>
+                    <para>If you enable Require valid coupon and set Display
+                    coupon field to No your users will never be able to
+                    subscribe!</para>
+                  </important></para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Show countries</term>
+
+          <listitem>
+            <para>This option controls which countries will be shown in the
+            country selection box. If left empty (default) no filtering is
+            applied to the country list. Provide a comma separated list of ISO
+            country codes to limit the countries which will be shown in the
+            subscriptions page. For example entering US,CA,DE will only show
+            USA, Canada and Germany in the list.</para>
+
+            <note>
+              <para>This option, when set, overrides the Hide countries option
+              below.</para>
+            </note>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Hide countries</term>
+
+          <listitem>
+            <para>This option controls which countries will not be shown in
+            the country selection box. If left empty (default) no filtering is
+            applied to the country list. Provide a comma separated list of ISO
+            country codes not to be shown in the subscriptions page. For
+            example entering US,CA,DE will show all countries EXCEPT USA,
+            Canada and Germany in the list.</para>
+
+            <note>
+              <para>This option is overridden by the Show countries options if
+              both options are set.</para>
+            </note>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Display state field</term>
+
+          <listitem>
+            <para>Set to No to hide the State field from the subscription
+            page. Only makes sense if you do not want to collect the state /
+            province of the user, e.g when all of your subscribers only come
+            from a country where no state / provinces are provided or required
+            to be selected to validate an address.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Show login box</term>
 
           <listitem>
