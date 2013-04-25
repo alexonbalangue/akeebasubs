@@ -177,7 +177,7 @@ $styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
 </div>
 
 <?php
-$aks_personal_info = $this->cparams->currencypos->personalinfo ? 1 : 0;
+$aks_personal_info = $this->cparams->personalinfo ? 1 : 0;
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<ENDSCRIPT
 
