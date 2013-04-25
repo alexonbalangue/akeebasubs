@@ -68,12 +68,13 @@ $businessFields = AkeebasubsHelperCparams::getParam('businessfields', 'auto');
 
 $cparamShowCountries = AkeebasubsHelperCparams::getParam('showcountries', '');
 $cparamHideCountries = AkeebasubsHelperCparams::getParam('hidecountries', '');
+$emailasusername = AkeebasubsHelperCparams::getParam('emailasusername', 0);
 ?>
 
 <div class="form form-horizontal">
 
 <fieldset>
-<?php if(JFactory::getUser()->guest):?>
+<?php if(JFactory::getUser()->guest && !$emailasusername):?>
 	<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></legend>
 
 	<div class="control-group <?php echo $group_classes['username'] ?>">
@@ -114,7 +115,9 @@ $cparamHideCountries = AkeebasubsHelperCparams::getParam('hidecountries', '');
 			</span>
 		</div>
 	</div>
-<?php else: ?>
+<?php elseif(JFactory::getUser()->guest && $emailasusername):?>
+	<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')?></legend>
+<?php elseif(!JFactory::getUser()->guest): ?>
 	<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_EXISTINGACCOUNT')?></legend>
 
 	<div class="control-group">
@@ -166,6 +169,32 @@ $cparamHideCountries = AkeebasubsHelperCparams::getParam('hidecountries', '');
 			</span>
 		</div>
 	</div>
+
+<?php if(JFactory::getUser()->guest && $emailasusername):?>
+	<div class="control-group <?php echo $group_classes['password'] ?>">
+		<label for="password" class="control-label">
+			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PASSWORD')?>
+		</label>
+		<div class="controls">
+			<input type="password" name="password" id="password" value="<?php echo $this->escape($this->cache['password'])?>" />
+			<span id="password_invalid" class="help-inline" style="<?php if($group_classes['password'] != 'error'): ?>display:none<?php endif; ?>">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD_EMPTY')?>
+			</span>
+		</div>
+	</div>
+
+	<div class="control-group <?php echo $group_classes['password2'] ?>">
+		<label for="password2" class="control-label">
+			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PASSWORD2')?>
+		</label>
+		<div class="controls">
+			<input type="password" name="password2" id="password2" value="<?php echo $this->escape($this->cache['password2'])?>" />
+			<span id="password2_invalid" class="help-inline" style="<?php if($group_classes['password2'] != 'error'): ?>display:none<?php endif; ?>">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD2')?>
+			</span>
+		</div>
+	</div>
+<?php endif; ?>
 
 <?php
 // Render per-user custom fields

@@ -106,39 +106,55 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 	private function getStateVariables()
 	{
-		$session = JFactory::getSession();
-		$firstRun = $session->get('firstrun', true, 'com_akeebasubs');
-		if($firstRun) {
-			$session->set('firstrun', false, 'com_akeebasubs');
+		static $stateVars = null;
+
+		if (is_null($stateVars))
+		{
+
+			$session = JFactory::getSession();
+			$firstRun = $session->get('firstrun', true, 'com_akeebasubs');
+			if($firstRun) {
+				$session->set('firstrun', false, 'com_akeebasubs');
+			}
+
+			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+			$emailasusername = AkeebasubsHelperCparams::getParam('emailasusername', 0);
+
+			$stateVars = (object)array(
+				'firstrun'			=> $firstRun,
+				'slug'				=> $this->getState('slug','','string'),
+				'id'				=> $this->getState('id',0,'int'),
+				'paymentmethod'		=> $this->getState('paymentmethod','none','cmd'),
+				'processorkey'		=> $this->getState('processorkey','','raw'),
+				'username'			=> $this->getState('username','','string'),
+				'password'			=> $this->getState('password','','raw'),
+				'password2'			=> $this->getState('password2','','raw'),
+				'name'				=> $this->getState('name','','string'),
+				'email'				=> $this->getState('email','','string'),
+				'email2'			=> $this->getState('email2','','string'),
+				'address1'			=> $this->getState('address1','','string'),
+				'address2'			=> $this->getState('address2','','string'),
+				'country'			=> $this->getState('country','','cmd'),
+				'state'				=> $this->getState('state','','cmd'),
+				'city'				=> $this->getState('city','','string'),
+				'zip'				=> $this->getState('zip','','string'),
+				'isbusiness'		=> $this->getState('isbusiness','','int'),
+				'businessname'		=> $this->getState('businessname','','string'),
+				'occupation'		=> $this->getState('occupation','','string'),
+				'vatnumber'			=> $this->getState('vatnumber','','cmd'),
+				'coupon'			=> $this->getState('coupon','','string'),
+				'custom'			=> $this->getState('custom','','raw'),
+				'subcustom'			=> $this->getState('subcustom','','raw'),
+				'opt'				=> $this->getState('opt','','cmd')
+			);
+
+			if ($emailasusername)
+			{
+				$stateVars->username = $stateVars->email;
+			}
 		}
 
-		return (object)array(
-			'firstrun'			=> $firstRun,
-			'slug'				=> $this->getState('slug','','string'),
-			'id'				=> $this->getState('id',0,'int'),
-			'paymentmethod'		=> $this->getState('paymentmethod','none','cmd'),
-			'processorkey'		=> $this->getState('processorkey','','raw'),
-			'username'			=> $this->getState('username','','string'),
-			'password'			=> $this->getState('password','','raw'),
-			'password2'			=> $this->getState('password2','','raw'),
-			'name'				=> $this->getState('name','','string'),
-			'email'				=> $this->getState('email','','string'),
-			'email2'			=> $this->getState('email2','','string'),
-			'address1'			=> $this->getState('address1','','string'),
-			'address2'			=> $this->getState('address2','','string'),
-			'country'			=> $this->getState('country','','cmd'),
-			'state'				=> $this->getState('state','','cmd'),
-			'city'				=> $this->getState('city','','string'),
-			'zip'				=> $this->getState('zip','','string'),
-			'isbusiness'		=> $this->getState('isbusiness','','int'),
-			'businessname'		=> $this->getState('businessname','','string'),
-			'occupation'		=> $this->getState('occupation','','string'),
-			'vatnumber'			=> $this->getState('vatnumber','','cmd'),
-			'coupon'			=> $this->getState('coupon','','string'),
-			'custom'			=> $this->getState('custom','','raw'),
-			'subcustom'			=> $this->getState('subcustom','','raw'),
-			'opt'				=> $this->getState('opt','','cmd')
-		);
+		return $stateVars;
 	}
 
 	/**

@@ -44,6 +44,12 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field>
+		<field name="emailasusername" type="list" default="0"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
 		<field name="personalinfo" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_DESC">
