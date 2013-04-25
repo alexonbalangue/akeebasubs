@@ -98,6 +98,12 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDECOUNTRIES"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDECOUNTRIES_DESC"
 		/>
+		<field name="showstatefield" type="list" default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWSTATEFIELD"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWSTATEFIELD_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field>
 		
 		<field name="allowlogin" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"

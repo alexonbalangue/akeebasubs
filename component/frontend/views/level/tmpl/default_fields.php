@@ -62,6 +62,7 @@ if(JFactory::getUser()->guest) {
 	$group_classes['password'] = !$this->cache['password'] ? 'error' : '';
 	$group_classes['password2'] = (!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'error' : '';
 }
+$styleStateField = AkeebasubsHelperCparams::getParam('showstatefield', 1) ? '' : 'display: none';
 
 $businessFields = AkeebasubsHelperCparams::getParam('businessfields', 'auto');
 
@@ -253,7 +254,7 @@ if(array_key_exists('isValid', $field)) {
 		</div>
 	</div>
 
-	<div class="control-group <?php echo $group_classes['city'] ?>" id="stateField">
+	<div class="control-group <?php echo $group_classes['city'] ?>" style="<?php echo $styleStateField ?>" id="stateField">
 		<label for="state" class="control-label">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE')?>
 		</label>
