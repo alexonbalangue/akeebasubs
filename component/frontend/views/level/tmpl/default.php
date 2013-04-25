@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_VERSIONHASH);
 
 $this->loadHelper('modules');
+$this->loadHelper('select');
 
 $script = <<<ENDSCRIPT
 akeebasubs_level_id = {$this->item->akeebasubs_level_id};
@@ -22,6 +23,8 @@ $styleDiscount	= $this->cparams->showdiscountfield <= 0 ? 'display:none' : '';
 $styleTax		= $this->cparams->showtaxfield <= 0 ? 'display:none' : '';
 $styleRegular	= $this->cparams->showregularfield <= 0 ? 'display:none' : '';
 $styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
+
+$paymentMethodsCount = count(AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id, 'return_raw_list' => 1)));
 ?>
 
 <div id="akeebasubs">
@@ -152,6 +155,9 @@ $styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
 		<?php endif; ?>
 	</fieldset>
 
+	<?php if ($paymentMethodsCount == 1): ?>
+	<div style="display: none">
+	<?php endif; ?>
 	<div id="paymentmethod-container" <?php echo ($this->validation->price->gross < 0.01) ? 'style="display: none;"' : '' ?>>
 		<div class="control-group">
 			<label for="paymentmethod" class="control-label">
@@ -162,6 +168,9 @@ $styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
 			</div>
 		</div>
 	</div>
+	<?php if ($paymentMethodsCount == 1): ?>
+	</div>
+	<?php endif; ?>
 
 	<div class="form-actions">
 		<button id="subscribenow" class="btn btn-large btn-primary" type="submit">

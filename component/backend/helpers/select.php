@@ -466,6 +466,18 @@ class AkeebasubsHelperSelect
 			}
 		}
 
+		$returnRawList = false;
+		if (isset($attribs['return_raw_list']))
+		{
+			$returnRawList = $attribs['return_raw_list'];
+			unset($attribs['return_raw_list']);
+		}
+
+		if ($returnRawList)
+		{
+			return $plugins;
+		}
+
 		// Determine how to render the payment method (drop-down or radio box)
 		if((AkeebasubsHelperCparams::getParam('useppimages', 1) > 0) && !$always_dropdown) {
 			// Show images instead of a drop-down
