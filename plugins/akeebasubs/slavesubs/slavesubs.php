@@ -360,7 +360,10 @@ ENDJS;
 				));
 
 				// Save the new subscription record
-				$table = new AkeebasubsTableSubscription('#__akeebasubs_subscriptions', 'akeebasubs_subscription_id', JFactory::getDbo());
+				$db = JFactory::getDbo();
+				$tableName = '#__akeebasubs_subscriptions';
+				$tableKey = 'akeebasubs_subscription_id';
+				$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
 				$table->reset();
 				$dontFire = true;
 				$table->save($newdata);
@@ -373,7 +376,10 @@ ENDJS;
 			$newdata = array_merge($data, array(
 				'params'	=> json_encode($params),
 			));
-			$table = new AkeebasubsTableSubscription('#__akeebasubs_subscriptions', 'akeebasubs_subscription_id', JFactory::getDbo());
+			$db = JFactory::getDbo();
+			$tableName = '#__akeebasubs_subscriptions';
+			$tableKey = 'akeebasubs_subscription_id';
+			$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
 			$table->reset();
 			$dontFire = true;
 			$table->save($newdata);
@@ -399,7 +405,10 @@ ENDJS;
 
 				$this->copySubscriptionInformation($original_row, $sub);
 
-				$table = new AkeebasubsTableSubscription('#__akeebasubs_subscriptions', 'akeebasubs_subscription_id', JFactory::getDbo());
+				$db = JFactory::getDbo();
+				$tableName = '#__akeebasubs_subscriptions';
+				$tableKey = 'akeebasubs_subscription_id';
+				$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
 				$table->reset();
 				$dontFire = true;
 				$table->save($sub);
