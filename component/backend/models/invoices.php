@@ -383,6 +383,22 @@ class AkeebasubsModelInvoices extends FOFModel
 			}
 			else
 			{
+				if ($globalNumbering)
+				{
+					// Find all the invoice template IDs using Global Numbering and filter by them
+					$q = $db->getQuery(true)
+						->select($db->qn('akeebasubs_invoicetemplate_id'))
+						->from($db->qn('#__akeebasubs_invoicetemplates'))
+						->where($db->qn('globalnumbering') . ' = ' . $db->q(1));
+					$db->setQuery($q);
+					$rawIDs = $db->loadColumn();
+					$gnitIDs = array();
+					foreach ($rawIDs as $id)
+					{
+						$gnitIDs[] = $db->q($id);
+					}
+				}
+
 				// Get the new invoice number by adding one to the previous number
 				$query = $db->getQuery(true)
 					->select($db->qn('invoice_no'))
@@ -394,6 +410,10 @@ class AkeebasubsModelInvoices extends FOFModel
 				if (!$globalNumbering)
 				{
 					$query->where($db->qn('akeebasubs_invoicetemplate_id') . ' = ' . $db->q($templateId));
+				}
+				else
+				{
+					$query->where($db->qn('akeebasubs_invoicetemplate_id') . ' IN(' . implode(',', $gnitIDs) . ')');
 				}
 
 				$db->setQuery($query, 0, 1);
