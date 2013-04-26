@@ -10,6 +10,7 @@ Akeeba Subscriptions 3.1.2
 + #156 Option to use email address as username
 # [MEDIUM] The MijoShop integration plugin would still not work with the latest version of MijoShop (thank you, Denis!)
 # [MEDIUM] Newly subscribed users would not be automatically logged in
+# [MEDIUM] Fatal PHP error when using numbering override in invoice templates
 # [LOW] Notices in the Slave Subscriptions plugin
 
 Akeeba Subscriptions 3.1.1
