@@ -374,9 +374,9 @@ class AkeebasubsModelInvoices extends FOFModel
 				else
 				{
 					// Invoice template number override reset
-					$template = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
+					$templateTable = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
 						->getItem($templateRow->akeebasubs_invoicetemplate_id);
-					$template->save(array(
+					$templateTable->save(array(
 						'number_reset'	=> 0
 					));
 				}
