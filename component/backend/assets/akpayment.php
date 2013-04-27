@@ -17,70 +17,72 @@ abstract class plgAkpaymentAbstract extends JPlugin
 {
 	/** @var string Name of the plugin, returned to the component */
 	protected $ppName = 'abstract';
-	
+
 	/** @var string Translation key of the plugin's title, returned to the component */
 	protected $ppKey = 'PLG_AKPAYMENT_ABSTRACT_TITLE';
-	
+
 	/** @var string Image path, returned to the component */
 	protected $ppImage = '';
-	
+
 	public function __construct(&$subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
 			JLoader::import('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
-		
+
 		parent::__construct($subject, $config);
-		
+
 		if(array_key_exists('ppName', $config)) {
 			$this->ppName = $config['ppName'];
 		}
-		
+
 		if(array_key_exists('ppImage', $config)) {
 			$this->ppImage = $config['ppImage'];
 		}
-		
+
 		$name = $this->ppName;
-		
+
 		if(array_key_exists('ppKey', $config)) {
 			$this->ppKey = $config['ppKey'];
 		} else {
 			$this->ppKey = "PLG_AKPAYMENT_{$name}_TITLE";
 		}
-		
+
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
-		
+
 		// Load the language files
 		$jlang = JFactory::getLanguage();
 		$jlang->load('plg_akpayment_'.$name, JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('plg_akpayment_'.$name, JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		$jlang->load('plg_akpayment_'.$name, JPATH_ADMINISTRATOR, null, true);
 	}
-	
+
 	public final function onAKPaymentGetIdentity()
 	{
 		$title = $this->params->get('title','');
 		if(empty($title)) $title = JText::_($this->ppKey);
-		
+
 		$image = trim($this->params->get('ppimage',''));
 		if(empty($image)) {
 			$image = $this->ppImage;
 		}
-		
+
 		$ret = array(
-			'name'		=> $this->ppName,
-			'title'		=> $title,
-			'image'		=> $image
+			(object)array(
+				'name'		=> $this->ppName,
+				'title'		=> $title,
+				'image'		=> $image
+			)
 		);
-		
-		return (object)$ret;
+
+		return $ret;
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod Check it against $this->ppName
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -88,22 +90,22 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 * @return string
 	 */
 	abstract public function onAKPaymentNew($paymentmethod, $user, $level, $subscription);
-	
+
 	/**
 	 * Processes a callback from the payment processor
-	 * 
+	 *
 	 * @param string $paymentmethod Check it against $this->ppName
 	 * @param array $data Input data
 	 */
 	abstract public function onAKPaymentCallback($paymentmethod, $data);
-	
+
 	/**
 	 * Fixes the starting and end dates when a payment is accepted after the
 	 * subscription's start date. This works around the case where someone pays
 	 * by e-Check on January 1st and the check is cleared on January 5th. He'd
 	 * lose those 4 days without this trick. Or, worse, if it was a one-day pass
 	 * the user would have paid us and we'd never given him a subscription!
-	 * 
+	 *
 	 * @param AkeebasubsTableSubscription $subscription
 	 * @param array $updates
 	 */
@@ -127,9 +129,9 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		{
 			unset($subcustom['fixdates']);
 		}
-		
+
 		$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
-		
+
 		if (is_numeric($oldsub))
 		{
 			$sub = clone $mastertable;
@@ -149,7 +151,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			$oldsub = null;
 			$expiration = 'overlap';
 		}
-		
+
 		// Fix the starting date if the payment was accepted after the subscription's start date. This
 		// works around the case where someone pays by e-Check on January 1st and the check is cleared
 		// on January 5th. He'd lose those 4 days without this trick. Or, worse, if it was a one-day pass
@@ -195,18 +197,18 @@ abstract class plgAkpaymentAbstract extends JPlugin
 				$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 					->getItem($subscription->akeebasubs_level_id);
 				$fixed_date = $level->fixed_date;
-				
+
 				if(!is_null($fixed_date) && !($fixed_date == $nullDate))
 				{
 					// Is the fixed date in the future?
 					$jFixedDate = JFactory::getDate($fixed_date);
-					if($now > $jFixedDate->toUnix()) 
+					if($now > $jFixedDate->toUnix())
 					{
 						// If the fixed date is in the past handle it as a regular subscription
 						$fixed_date = null;
 					}
 				}
-				
+
 				if(is_null($fixed_date) || ($fixed_date == $nullDate))
 				{
 					// Regular subscription
@@ -234,7 +236,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
 		}
-		
+
 		// Expiration = replace => expire old subscription
 		if ($expiration == 'replace')
 		{
@@ -249,7 +251,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			$table = clone $mastertable;
 			$table->reset();
 			$table->save($newdata);
-			
+
 			// Disable all old subscriptions
 			if (!empty($allsubs))
 			{
@@ -257,13 +259,13 @@ abstract class plgAkpaymentAbstract extends JPlugin
 				{
 					$table = clone $mastertable;
 					$table->load($sub_id);
-					
+
 					if ($table->akeebasubs_level_id == $oldsub->akeebasubs_level_id)
 					{
 						// Don't try to disable the same subscription twice
 						continue;
 					}
-					
+
 					$data = $table->getData();
 					$newdata = array_merge($data, array(
 						'publish_down'	=> $jNow->toSql(),
@@ -281,10 +283,10 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$updates['enabled'] = 1;
 		$updates['params'] = json_encode($subcustom);
 	}
-	
+
 	/**
 	 * Logs the received IPN information to file
-	 * 
+	 *
 	 * @param array $data
 	 * @param bool $isValid
 	 */
@@ -296,9 +298,9 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		} else {
 			$logpath = $config->getValue('log_path');
 		}
-		
+
 		$logFilenameBase = $logpath.'/akpayment_'.strtolower($this->ppName).'_ipn';
-		
+
 		$logFile = $logFilenameBase.'.php';
 		JLoader::import('joomla.filesystem.file');
 		if(!JFile::exists($logFile)) {

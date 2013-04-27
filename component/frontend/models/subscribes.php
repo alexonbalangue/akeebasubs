@@ -1322,7 +1322,38 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKPaymentGetIdentity');
 
-		return $jResponse; // name, title
+		$ret = array();
+
+		foreach ($jResponse as $item)
+		{
+			if (is_object($item))
+			{
+				$ret[] = $item;
+			}
+			elseif (is_array($item))
+			{
+				if (array_key_exists('name', $item))
+				{
+					$ret[] = (object)$item;
+				}
+				else
+				{
+					foreach ($item as $anItem)
+					{
+						if (is_object($anItem))
+						{
+							$ret[] = $anItem;
+						}
+						else
+						{
+							$ret[] = (object)$anItem;
+						}
+					}
+				}
+			}
+		}
+
+		return $ret; // name, title
 	}
 
 	/**
