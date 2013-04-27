@@ -472,11 +472,33 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 			$state = $this->getStateVariables();
 
-			// Get the default price value
+			// Get the subscription level
 			$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->setId($state->id)
 				->getItem();
-			$netPrice = (float)$level->price;
+
+			// Get the user's subscription levels and calculate the signup fee
+			$subIDs = array();
+			$signup_fee = 0;
+			$user = JFactory::getUser();
+			if($user->id) {
+				$mysubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					->user_id($user->id)
+					->paystate('C')
+					->getItemList();
+				if(!empty($mysubs)) foreach($mysubs as $sub) {
+					$subIDs[] = $sub->akeebasubs_level_id;
+				}
+				$subIDs = array_unique($subIDs);
+
+				if(!in_array($level->akeebasubs_level_id, $subIDs))
+				{
+					$signup_fee = $level->signupfee;
+				}
+			}
+
+			// Get the default price value
+			$netPrice = (float)$level->price + (float)$signup_fee;
 
 			// Net price modifiers (via plugins)
 			$price_modifier = 0;
@@ -577,11 +599,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$grossAmount = 0.01 * (100*$basePrice + 100*$taxAmount);
 
 			$result = (object)array(
-				'net'		=> sprintf('%1.02F',$netPrice),
-				'discount'	=> sprintf('%1.02F',$discount),
+				'net'		=> sprintf('%1.02F',round($netPrice, 2)),
+				'realnet'	=> sprintf('%1.02F',round($level->price, 2)),
+				'signup'	=> sprintf('%1.02F',round($signup_fee, 2)),
+				'discount'	=> sprintf('%1.02F',round($discount, 2)),
 				'taxrate'	=> sprintf('%1.02F',(float)$taxRule->taxrate),
-				'tax'		=> sprintf('%1.02F',$taxAmount),
-				//'gross'		=> sprintf('%1.02F',$grossAmount),
+				'tax'		=> sprintf('%1.02F',round($taxAmount, 2)),
 				'gross'		=> sprintf('%1.02F', round($grossAmount, 2)),
 				'usecoupon'	=> $useCoupon ? 1 : 0,
 				'useauto'	=> $useAuto ? 1 : 0,
