@@ -44,6 +44,13 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field>
+		<field name="includesignup" type="list" default="2"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_DESC">
+			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_NEVER</option>
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_INPRICE</option>
+			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_SEPARATE</option>
+		</field>
 		<field name="emailasusername" type="list" default="0"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME_DESC">

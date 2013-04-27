@@ -47,7 +47,6 @@ class AkeebasubsControllerLevels extends FOFController
 					->limitstart(0)
 					->enabled(1)
 					->only_once(1)
-					->process_signupfee(1)
 					->filter_order('ordering')
 					->filter_order_Dir('ASC');
 				if(!empty($ids)) {

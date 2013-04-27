@@ -45,7 +45,7 @@ table.asfelist tfoot td { text-align: center; }
 	display: block;
 	margin: 0.5em 0.5%;
 	width: 48%;
-	height: 200px;
+	height: 210px;
 	float: left;
 	background-color: #f0f0f0;
 	border: thin solid #333;
@@ -276,6 +276,16 @@ a.akeebasubs-awesome-level-link {
 	text-shadow: #333 1px 1px 1px;
 }
 
+.akeebasubs-awesome-signup {
+	color: #eee;
+	font-style: italic;
+	font-weight: bold;
+	text-align: center;
+	padding: 0.2em 0;
+	text-shadow: #333 1px 1px 1px;
+	height: 1.2em;
+}
+
 .akeebasubs-awesome-price-currency:after {
 	content: " ";
 }
@@ -349,6 +359,14 @@ td.akeebasubs-strappy-level a {
 
 td.akeebasubs-strappy-price {
 	font-size: 200%;
+	font-style: italic;
+	font-weight: bold;
+	text-align: center !important;
+	padding: 0.2em 0;
+	text-shadow: #aaa 1px 1px 3px;
+	padding: 0.5em 0.25em !important;
+}
+td.akeebasubs-strappy-signupfee {
 	font-style: italic;
 	font-weight: bold;
 	text-align: center !important;

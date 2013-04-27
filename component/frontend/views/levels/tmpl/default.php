@@ -17,6 +17,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
 $vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
+$includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
 $vatMultiplier = (100 + (int)$vatRate) / 100;
 ?>
 
@@ -26,10 +27,27 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 
 <?php if(!empty($this->items)) foreach($this->items as $level):?>
 <?php
-	$formatedPrice = sprintf('%1.02F', $level->price * $vatMultiplier);
-	$dotpos = strpos($formatedPrice, '.');
-	$price_integer = substr($formatedPrice,0,$dotpos);
-	$price_fractional = substr($formatedPrice,$dotpos+1);
+			$signupFee = 0;
+			if (!in_array($level->akeebasubs_level_id, $this->subIDs) && ($includesignup != 0))
+			{
+				$signupFee = (float)$level->signupfee;
+			}
+			if ($includesignup == 1)
+			{
+				$formatedPrice = sprintf('%1.02F', ($level->price + $signupFee) * $vatMultiplier);
+			}
+			else
+			{
+				$formatedPrice = sprintf('%1.02F', ($level->price) * $vatMultiplier);
+			}
+			$dotpos = strpos($formatedPrice, '.');
+			$price_integer = substr($formatedPrice,0,$dotpos);
+			$price_fractional = substr($formatedPrice,$dotpos+1);
+
+			$formatedPriceSU = sprintf('%1.02F', $signupFee * $vatMultiplier);
+			$dotposSU = strpos($formatedPriceSU, '.');
+			$price_integerSU = substr($formatedPriceSU,0,$dotposSU);
+			$price_fractionalSU = substr($formatedPriceSU,$dotposSU+1);
 ?>
 	<div class="level akeebasubs-level-<?php echo $level->akeebasubs_level_id ?>">
 		<p class="level-title">
@@ -58,6 +76,19 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 					<?php if(!empty($level->image)):?>
 					<img class="level-image" src="<?php echo AkeebasubsHelperImage::getURL($level->image)?>" />
 					<?php endif;?>
+
+					<?php if(abs($signupFee) >= 0.01):?>
+					<b><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST'); ?></b>
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+					<span class="level-price-integer"><?php echo $price_integerSU ?></span><?php if((int)$price_fractionalSU > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $price_fractionalSU ?></span><?php endif; ?>
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php endif; ?>
+					<br/>
+					<?php endif; ?>
+
 					<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description));?>
 				</div>
 			</div>
@@ -70,7 +101,7 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 		</div>
 	</div>
 <?php endforeach;?>
-<div class="level-clear"></div>	
+<div class="level-clear"></div>
 
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionslistfooter')?>
 </div>

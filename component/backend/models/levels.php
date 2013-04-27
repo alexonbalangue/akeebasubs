@@ -41,9 +41,8 @@ class AkeebasubsModelLevels extends FOFModel
 		$subIDs = array();
 
 		$only_once = $this->getState('only_once', null);
-		$process_signupfee = $this->getState('process_signupfee', 1);
 		$user = JFactory::getUser();
-		if(($only_once || $process_signupfee) && $user->id) {
+		if($only_once && $user->id) {
 			$mysubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->paystate('C')
@@ -68,15 +67,6 @@ class AkeebasubsModelLevels extends FOFModel
 					.')'.
 				')'
 				);
-			}
-		}
-		if ($process_signupfee)
-		{
-			if(count($subIDs))
-			{
-				$query->select('IF(' . $db->qn('akeebasubs_level_id') . ' IN (' .
-					implode(',', $subIDs) . '), 0, ' . $db->qn('signupfee') .
-					') AS ' . $db->qn('process_signupfee'));
 			}
 		}
 

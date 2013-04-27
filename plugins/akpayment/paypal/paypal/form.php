@@ -19,17 +19,26 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="item_name" value="<?php echo $level->title . ' - [ ' . $user->username . ' ]' ?>" />
 	<input type="hidden" name="currency_code" value="<?php echo $data->currency ?>" />
 
-	<?php if(!$data->recurring): ?>
+	<?php if($data->recurring == 0): ?>
 	<input type="hidden" name="amount" value="<?php echo $subscription->net_amount ?>" />
 	<input type="hidden" name="tax" value="<?php echo $subscription->tax_amount ?>" />
-	<?php else: ?>
+	<?php elseif($data->recurring == 1): ?>
+	<input type="hidden" name="a3" value="<?php echo $subscription->gross_amount ?>" />
+	<input type="hidden" name="p3" value="<?php echo $data->p3 ?>" />
+	<input type="hidden" name="t3" value="<?php echo $data->t3 ?>" />
+	<input type="hidden" name="src" value="1" />
+	<input type="hidden" name="sra" value="1" />
+	<?php elseif($data->recurring == 2): ?>
+	<input type="hidden" name="a1" value="<?php echo $data->a1 ?>" />
+	<input type="hidden" name="p1" value="<?php echo $data->p1 ?>" />
+	<input type="hidden" name="t1" value="<?php echo $data->t1 ?>" />
 	<input type="hidden" name="a3" value="<?php echo $subscription->gross_amount ?>" />
 	<input type="hidden" name="p3" value="<?php echo $data->p3 ?>" />
 	<input type="hidden" name="t3" value="<?php echo $data->t3 ?>" />
 	<input type="hidden" name="src" value="1" />
 	<input type="hidden" name="sra" value="1" />
 	<?php endif; ?>
-	
+
 	<input type="hidden" name="first_name" value="<?php echo $data->firstname ?>" />
 	<input type="hidden" name="last_name" value="<?php echo $data->lastname ?>" />
 
@@ -40,7 +49,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="state" value="<?php echo $kuser->state ?>">
 	<input type="hidden" name="zip" value="<?php echo $kuser->zip ?>">
 	<input type="hidden" name="country" value="<?php echo $kuser->country ?>">
-	
+
 	<?php // Remove the following line if PayPal doing POST to your site causes a problem ?>
 	<input type="hidden" name="rm" value="2">
 

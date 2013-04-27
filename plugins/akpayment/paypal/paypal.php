@@ -19,14 +19,14 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_PAYPAL_TITLE',
 			'ppImage'		=> 'https://www.paypal.com/en_US/i/bnr/horizontal_solution_PPeCheck.gif'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,7 +36,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
 		if(count($nameParts) > 1) {
@@ -44,18 +44,18 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
+
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		$data = (object)array(
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->getMerchantID(),
@@ -67,37 +67,40 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName,
 			'cmd'			=> $level->recurring ? '_xclick-subscriptions' : '_xclick',
-			'recurring'		=> $level->recurring ? true : false
+			// @todo If there's a signup fee set 'recurring' to 2
+			'recurring'		=> $level->recurring ? 1 : 0
 		);
-		
+
 		if($level->recurring) {
 			$ppDuration = $this->_toPPDuration($level->duration);
 			$data->t3 = $ppDuration->unit;
 			$data->p3 = $ppDuration->value;
 		}
-		
+
+		// @todo If there's a signup fee set t1, p1 and a1 to true
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		@ob_start();
 		include dirname(__FILE__).'/paypal/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'PayPal reports transaction as invalid';
-		
+
 		// Check txn_type; we only accept web_accept transactions with this plugin
 		if($isValid) {
 			$validTypes = array('web_accept','recurring_payment','subscr_payment');
@@ -108,7 +111,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				$recurring = ($data['txn_type'] != 'web_accept');
 			}
 		}
-		
+
 		// Load the relevant subscription row
 		if($isValid) {
 			$id = array_key_exists('custom', $data) ? (int)$data['custom'] : -1;
@@ -126,7 +129,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
 		}
-		
+
 		// Check that receiver_email / receiver_id is what the site owner has configured
 		if($isValid) {
 			$receiver_email = $data['receiver_email'];
@@ -140,12 +143,14 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			;
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Merchant ID does not match receiver_email or receiver_id';
 		}
-		
+
 		// Check that mc_gross is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
 			$mc_gross = floatval($data['mc_gross']);
-			
+
+			// @todo On recurring subscriptions recalculate the net, tax and gross price by removing the signup fee
+
 			$gross = $subscription->gross_amount;
 			if($mc_gross > 0) {
 				// A positive value means "payment". The prices MUST match!
@@ -158,7 +163,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Check that txn_id has not been previously processed
 		if($isValid && !is_null($subscription) && !$isPartialRefund) {
 			if($subscription->processor_key == $data['txn_id']) {
@@ -168,7 +173,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				}
 			}
 		}
-		
+
 		// Check that mc_currency is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_currency = strtoupper($data['mc_currency']);
@@ -178,10 +183,10 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Invalid currency; expected $currency, got $mc_currency";
 			}
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
-		
+
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
 
@@ -192,13 +197,13 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			case 'Completed':
 				$newStatus = 'C';
 				break;
-			
+
 			case 'Created':
 			case 'Pending':
 			case 'Processed':
 				$newStatus = 'P';
 				break;
-			
+
 			case 'Denied':
 			case 'Expired':
 			case 'Failed':
@@ -261,15 +266,15 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$now = $jNow->toUnix();
 			$start = $jStart->toUnix();
 			$end = $jEnd->toUnix();
-			
+
 			// Create a new record for the old subscription
 			$oldData = $subscription->getData();
 			$oldData['akeebasubs_subscription_id'] = 0;
 			$oldData['publish_down'] = $jNow->toSql();
 			$oldData['enabled'] = 0;
 			$oldData['contact_flag'] = 3;
-			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();			
-			
+			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();
+
 			// Calculate new start/end time for the subscription
 			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->paystate('C')
@@ -281,16 +286,16 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				$expire = $jExpire->toUnix();
 				if($expire > $max_expire) $max_expire = $expire;
 			}
-			
+
 			$duration = $end - $start;
 			$start = max($now, $max_expire);
 			$end = $start + $duration;
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
-			
+
 			$updates['publish_up'] = $jStart->toSql();
 			$updates['publish_down'] = $jEnd->toSql();
-			
+
 			// Save the record for the old subscription
 			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getTable();
@@ -307,7 +312,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		}
 		// Save the changes
 		$subscription->save($updates);
-		
+
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -315,10 +320,10 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Gets the form action URL for the payment
 	 */
@@ -331,7 +336,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			return 'https://www.paypal.com/cgi-bin/webscr';
 		}
 	}
-	
+
 	/**
 	 * Gets the PayPal Merchant ID (usually the email address)
 	 */
@@ -343,20 +348,20 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		} else {
 			return $this->params->get('merchant','');
 		}
-	}	
+	}
 
 	/**
 	 * Validates the incoming data against PayPal's IPN to make sure this is not a
 	 * fraudelent request.
 	 */
 	private function isValidIPN($data)
-	{		
+	{
 		$sandbox = $this->params->get('sandbox',0);
 		$hostname = $sandbox ? 'www.sandbox.paypal.com' : 'www.paypal.com';
-		
+
 		$url = 'ssl://'.$hostname;
 		$port = 443;
-		
+
 		$req = 'cmd=_notify-validate';
 		foreach($data as $key => $value) {
 			$value = urlencode($value);
@@ -368,10 +373,10 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 		$header .= "Content-Length: " . strlen($req) . "\r\n";
 		$header .= "Connection: Close\r\n\r\n";
-		
-		
+
+
 		$fp = fsockopen ($url, $port, $errno, $errstr, 30);
-		
+
 		if (!$fp) {
 			// HTTP ERROR
 			return false;
@@ -388,7 +393,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			fclose ($fp);
 		}
 	}
-	
+
 	private function _toPPDuration($days)
 	{
 		$ret = (object)array(
