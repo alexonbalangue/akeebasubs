@@ -598,6 +598,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// Calculate the gross amount minimising rounding errors
 			$grossAmount = 0.01 * (100*$basePrice + 100*$taxAmount);
 
+			// Calculate the recurring amount, if necessary
+			$recurringAmount = 0;
+			if ($level->recurring && (abs($signup_fee) >= 0.01))
+			{
+				$rectaxAmount = 0.01 * ($taxRule->taxrate * $level->price);
+				$recurringAmount = 0.01 * (100 * $level->price + 100 * $rectaxAmount);
+			}
+
 			$result = (object)array(
 				'net'		=> sprintf('%1.02F',round($netPrice, 2)),
 				'realnet'	=> sprintf('%1.02F',round($level->price, 2)),
@@ -606,6 +614,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'taxrate'	=> sprintf('%1.02F',(float)$taxRule->taxrate),
 				'tax'		=> sprintf('%1.02F',round($taxAmount, 2)),
 				'gross'		=> sprintf('%1.02F', round($grossAmount, 2)),
+				'recurring'	=> sprintf('%1.02F', round($recurringAmount, 2)),
 				'usecoupon'	=> $useCoupon ? 1 : 0,
 				'useauto'	=> $useAuto ? 1 : 0,
 				'couponid'	=> $couponid,
@@ -1881,6 +1890,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'net_amount'			=> $validation->price->net - $validation->price->discount,
 			'tax_amount'			=> $validation->price->tax,
 			'gross_amount'			=> $validation->price->gross,
+			'recurring_amount'		=> $validation->price->recurring,
 			'tax_percent'			=> $validation->price->taxrate,
 			'created_on'			=> $mNow,
 			'params'				=> $custom_subscription_params,

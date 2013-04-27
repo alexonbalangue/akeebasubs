@@ -29,10 +29,10 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="src" value="1" />
 	<input type="hidden" name="sra" value="1" />
 	<?php elseif($data->recurring == 2): ?>
-	<input type="hidden" name="a1" value="<?php echo $data->a1 ?>" />
+	<input type="hidden" name="a1" value="<?php echo $subscription->gross_amount ?>" />
 	<input type="hidden" name="p1" value="<?php echo $data->p1 ?>" />
 	<input type="hidden" name="t1" value="<?php echo $data->t1 ?>" />
-	<input type="hidden" name="a3" value="<?php echo $subscription->gross_amount ?>" />
+	<input type="hidden" name="a3" value="<?php echo $data->a3 ?>" />
 	<input type="hidden" name="p3" value="<?php echo $data->p3 ?>" />
 	<input type="hidden" name="t3" value="<?php echo $data->t3 ?>" />
 	<input type="hidden" name="src" value="1" />

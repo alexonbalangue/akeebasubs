@@ -67,17 +67,25 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName,
 			'cmd'			=> $level->recurring ? '_xclick-subscriptions' : '_xclick',
-			// @todo If there's a signup fee set 'recurring' to 2
-			'recurring'		=> $level->recurring ? 1 : 0
+			// If there's a signup fee set 'recurring' to 2
+			'recurring'		=> $level->recurring ? ($subscription->recurring_amount >= 0.01 ? 2 : 1) : 0
 		);
 
-		if($level->recurring) {
+		if ($level->recurring == 1)
+		{
 			$ppDuration = $this->_toPPDuration($level->duration);
 			$data->t3 = $ppDuration->unit;
 			$data->p3 = $ppDuration->value;
 		}
-
-		// @todo If there's a signup fee set t1, p1 and a1 to true
+		elseif ($level->recurring == 2)
+		{
+			$ppDuration = $this->_toPPDuration($level->duration);
+			$data->t1 = $ppDuration->unit;
+			$data->p1 = $ppDuration->value;
+			$data->t3 = $ppDuration->unit;
+			$data->p3 = $ppDuration->value;
+			$data->a3 = $subscription->recurring_amount;
+		}
 
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
@@ -150,8 +158,15 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$mc_gross = floatval($data['mc_gross']);
 
 			// @todo On recurring subscriptions recalculate the net, tax and gross price by removing the signup fee
+			if ($recurring && ($subscription->recurring_amount >= 0.01))
+			{
+				$gross = $subscription->recurring_amount;
+			}
+			else
+			{
+				$gross = $subscription->gross_amount;
+			}
 
-			$gross = $subscription->gross_amount;
 			if($mc_gross > 0) {
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
