@@ -1,0 +1,1 @@
+ALTER TABLE `#__akeebasubs_levels` ADD COLUMN `signupfee` FLOAT NULL DEFAULT '0' AFTER `price`

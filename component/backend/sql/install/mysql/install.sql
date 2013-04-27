@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`description` text,
 	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
 	`price` FLOAT NOT NULL,
+	`signupfee` FLOAT NULL DEFAULT '0',
 	`ordertext` text,
 	`canceltext` text,
 	`only_once` TINYINT(3) NOT NULL DEFAULT 0,
