@@ -1234,6 +1234,44 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Display sign-up fee </term>
+
+          <listitem>
+            <para>If you have subscriptions with a sign-up fee defined (which
+            is charged on top of the regular price) you have the following
+            display options:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>Don't display</option>. The sign-up fee will not
+                be displayed, but it will be included in the price the user is
+                called to pay. We strongly recommend against using this option
+                as the price the user sees is different than the price the
+                user is called to pay which may be illegal in some
+                jurisdictions.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>Include in price</option>. The sign-up fee will
+                be added to the price and the total amount will be displayed
+                instead of the price of the subscription. </para>
+              </listitem>
+
+              <listitem>
+                <para><option>Show below the price</option>. The sign-up fee
+                appears in a separate field below the regular price. This is
+                the default option.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>In the latter two cases, the sign-up fee is only included /
+            displayed if the user has to pay it. If the user is already logged
+            in and has already subscribed in the past to the subscription
+            level the sign-up fee will not be included / displayed.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Allow collection of personal information and business
           registrations</term>
 
@@ -2053,6 +2091,63 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Sign-up fee</term>
+
+          <listitem>
+            <para>Sometimes you need to have a one-time sign-up fee.
+            "One-time" means that this fee is only charged once, when a user
+            first subscribes to a subscription level. Just enter the amount of
+            money to be charged above the regular price in this box. If you
+            need to enter a decimal value, use a dot as the decimal separator.
+            For example, 12.30 is valid, whereas 12,30 is INVALID and will be
+            interpreted as 1230. Do NOT use a thousands separator. For example
+            1000 is valid, whereas 1,000 is INVALID.</para>
+
+            <para>There are some things you need to keep in mind when you are
+            using a sign-up fee:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The sign-up fee is only charged to users who have never
+                subscribed to this subscription level before. If the user had
+                already subscribed to this level anytime in the past (even
+                years ago) he will not be charged this fee.</para>
+              </listitem>
+
+              <listitem>
+                <para>The sign-up fee is added to the regular price of the
+                subscription. If you have a tax rule, the tax will be
+                calculated against the total amount of the price plus the
+                sign-up fee.</para>
+              </listitem>
+
+              <listitem>
+                <para>Discounts such as coupons, upgrades and subscription
+                level relations are applied to the sum of the price plus the
+                sign-up fee. If you have a subscription level worth 80 Euros
+                with a 20 Euro sign-up fee, a 20% coupon code will give the
+                user 20% * (80 + 20 Euros) = 20 Euros discount NOT 20% * 80€ =
+                16€.</para>
+              </listitem>
+
+              <listitem>
+                <para>Sign-up fees do not work properly with recurring
+                payments UNLESS you are using PayPal. PayPal will correctly
+                charge the price plus sign-up fee only during the first
+                subscription term, charging only the regular price from the
+                second subscription term onwards (plus any applicable taxes,
+                of course!). All other payment processors that support
+                recurring payments will end up charging the full price plus
+                the sign-up fee on every single payment term. As a result, if
+                you are not using PayPal or if you are using PayPal plus other
+                recurring payment provides we strongly advise AGAINST using
+                sign-up fees with recurring payments.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Group</term>
 
           <listitem>
@@ -2165,7 +2260,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
               <itemizedlist>
                 <listitem>
-                  <para>You cannot programmatically cancel recurring
+                  <para>You cannot pro grammatically cancel recurring
                   subscriptions.</para>
                 </listitem>
 
@@ -8278,7 +8373,8 @@ LEVEL2=11111/22222/33333</programlisting>
       Subscriptions Payment - Paypal</guilabel></para>
 
       <para>This plugin <emphasis role="bold">supports</emphasis> recurring
-      payments.</para>
+      payments. This plugin also supports recurring payments with sign-up
+      fees.</para>
 
       <para>This payment method integrates the standard PayPal Website
       Payments service, available without any setup fee to all verified PayPal
@@ -8925,7 +9021,7 @@ LEVEL2=11111/22222/33333</programlisting>
 
       <important>
         <para>PayPal does not allow cancelling subscriptions / recurring
-        payments programmatically. It's not like we are missing this feature
+        payments pro grammatically. It's not like we are missing this feature
         in Akeeba Subscriptions; it's simply impossible with PayPal because
         PayPal does not support this feature at all.</para>
       </important>
@@ -9118,7 +9214,7 @@ LEVEL2=11111/22222/33333</programlisting>
 
       <important>
         <para>PayPal does not allow cancelling subscriptions / recurring
-        payments programmatically. It's not like we are missing this feature
+        payments pro grammatically. It's not like we are missing this feature
         in Akeeba Subscriptions; it's simply impossible with PayPal because
         PayPal does not support this feature at all.</para>
       </important>

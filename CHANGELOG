@@ -8,6 +8,8 @@ Akeeba Subscriptions 3.1.2
 + #155 You can now hide the coupon field in the subscription page
 + #155 The payment option selection is hidden if you only have one one payment method available on your site
 + #156 Option to use email address as username
++ #158 One time sign-up fees per subscription level
++ On popular demand: PayPal recurring subscriptions now support sign-up fees. WARNING: DO NOT USE ANY OTHER PRICE MODIFYING FEATURES WITH THIS!
 # [HIGH] Joomla! 3.1.0 broke several aspects of the component
 # [HIGH] Global invoice numbering broken if used together with another invoice template which doesn't use global numbering
 # [HIGH] Broken invoice generated when using template number override in an invoice template which doesn't use global numbering
