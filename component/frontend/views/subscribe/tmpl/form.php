@@ -8,7 +8,7 @@
 defined('_JEXEC') or die();
 
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/autosubmit.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/autosubmit.js?'.AKEEBASUBS_VERSIONHASH);
 
 $this->loadHelper('cparams');
 $this->loadHelper('modules');

@@ -7,8 +7,8 @@
 
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/signup.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/autosubmit.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/signup.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/autosubmit.js?'.AKEEBASUBS_VERSIONHASH);
 
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';

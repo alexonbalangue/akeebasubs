@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/blockui.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/blockui.js?'.AKEEBASUBS_VERSIONHASH);
 
 JHTML::_('behavior.tooltip');
 
@@ -112,7 +112,7 @@ unset($upgradesRaw);
 			</td>
 			<td  colspan="2">
 				<?php echo AkeebasubsHelperSelect::paystates($this->getModel()->getState('paystate',''), 'paystate', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
-				
+
 				<input type="text" name="paykey" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('paykey',''));?>"
 					onchange="document.adminForm.submit();"
@@ -120,7 +120,7 @@ unset($upgradesRaw);
 					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?>"
 					placeholder="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?>"
 				/>
-				
+
 				<?php echo AkeebasubsHelperSelect::discountmodes('filter_discountmode', $this->getModel()->getState('filter_discountmode','') , array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 				<input type="text" name="filter_discountcode" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('filter_discountcode',''));?>"
@@ -144,7 +144,7 @@ unset($upgradesRaw);
 	<tfoot>
 		<tr>
 			<td colspan="20">
-				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>	
+				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 			</td>
 		</tr>
 	</tfoot>
@@ -170,9 +170,9 @@ unset($upgradesRaw);
 					$rowClass = 'expired';
 				}
 			}
-			
+
 			$subscription->published = $subscription->enabled;
-			
+
 			$users = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id($subscription->user_id)
 				->getList();
@@ -213,7 +213,7 @@ unset($upgradesRaw);
 							<img src="https://secure.gravatar.com/avatar/<?php echo md5(strtolower($subscription->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
 						<?php endif; ?>
 					<?php endif; ?>
-					<a href="index.php?option=com_akeebasubs&view=user&id=<?php echo $user_id ?>" class="title">	
+					<a href="index.php?option=com_akeebasubs&view=user&id=<?php echo $user_id ?>" class="title">
 					<strong><?php echo $this->escape($subscription->username)?></strong>
 					<span class="small">[<?php echo $subscription->user_id?>]</span>
 					<br/>
@@ -233,7 +233,7 @@ unset($upgradesRaw);
 				<span class="akeebasubs-payment akeebasubs-payment-<?php echo strtolower($subscription->state) ?> hasTip"
 					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>::<?php echo $subscription->processor?> &bull; <?php echo $subscription->processor_key?>">
 				</span>
-				
+
 				<span class="akeebasubs-subscription-processor">
 					<?php echo $this->escape($subscription->processor) ?>
 				</span>
@@ -342,7 +342,7 @@ unset($upgradesRaw);
 	<p><img id="asriSpinner" src="<?php echo JURI::base()?>../media/com_akeebasubs/images/throbber.gif" align="center" /></p>
 	<p><span id="asriPercent">0</span><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_PROGRESS')?></p>
 </div>
-	
+
 </div>
 </div>
 

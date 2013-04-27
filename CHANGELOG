@@ -8,6 +8,7 @@ Akeeba Subscriptions 3.1.2
 + #155 You can now hide the coupon field in the subscription page
 + #155 The payment option selection is hidden if you only have one one payment method available on your site
 + #156 Option to use email address as username
+# [HIGH] Joomla! 3.1.0 broke several aspects of the component
 # [HIGH] Global invoice numbering broken if used together with another invoice template which doesn't use global numbering
 # [HIGH] Broken invoice generated when using template number override in an invoice template which doesn't use global numbering
 # [MEDIUM] The MijoShop integration plugin would still not work with the latest version of MijoShop (thank you, Denis!)

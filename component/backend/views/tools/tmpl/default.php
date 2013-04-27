@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die('');
 
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/blockui.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/blockui.js?'.AKEEBASUBS_VERSIONHASH);
 
 JHTML::_('behavior.tooltip');
 

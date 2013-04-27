@@ -10,14 +10,14 @@ defined('_JEXEC') or die();
 
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jquery.jqplot.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.highlighter.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.pieRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUBS_VERSIONHASH);
-FOFTemplateUtils::addJS('media://com_akeebasubs/js/cpanelgraphs.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jquery.jqplot.min.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.highlighter.min.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.pieRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/cpanelgraphs.js?'.AKEEBASUBS_VERSIONHASH);
 
 if(version_compare(JVERSION, '3.0', 'ge')) {
 	JHTML::_('behavior.framework');
@@ -54,13 +54,13 @@ $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);
 </div>
 
 <script type="text/javascript">
-	
+
 akeebasubs_cpanel_graph_from = "<?php echo $graphDayFrom ?>";
-	
+
 (function($) {
 	$(document).ready(function(){
 		akeebasubs_cpanel_graphs_load();
-		
+
 		$('#akeebasubs_graph_reload').click(function(e){
 			akeebasubs_cpanel_graphs_load();
 		})
