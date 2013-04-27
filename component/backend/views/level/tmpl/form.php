@@ -124,6 +124,27 @@ $this->loadHelper('cparams');
 		</div>
 
 		<div class="control-group">
+			<label for="signupfee_field" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE'); ?>
+			</label>
+			<div class="controls">
+				<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+					<input type="text" size="15" id="signupfee_field" name="signupfee" value="<?php echo  $this->item->signupfee ?>" style="float: none" />
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<span class="add-on">
+						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					</span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="control-group">
 			<label for="akeebasubs_level_id" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP'); ?>
 			</label>

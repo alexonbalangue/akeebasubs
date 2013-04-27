@@ -67,7 +67,7 @@ $nullDate = JFactory::getDbo()->getNullDate();
 			<?php endif; ?>
 			<th width="8%">
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
-			</th>			
+			</th>
 		</tr>
 		<tr>
 			<?php if($hasAjaxOrderingSupport !== false): ?>
@@ -107,7 +107,7 @@ $nullDate = JFactory::getDbo()->getNullDate();
 	<tfoot>
 		<tr>
 			<td colspan="20">
-				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>	
+				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 			</td>
 		</tr>
 	</tfoot>
@@ -187,6 +187,19 @@ $nullDate = JFactory::getDbo()->getNullDate();
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
 				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
+
+				<?php if($item->signupfee >= 0.01): ?>
+					<br /><span class="small">(
+					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST'); ?>
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					<?php endif; ?>
+					<?php echo sprintf('%02.02f', (float)$item->signupfee) ?>
+					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+					<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+					<?php endif; ?>
+					)</span>
+				<?php endif; ?>
 			</td>
 			<?php if($hasAjaxOrderingSupport === false): ?>
 			<td class="order" align="center">
@@ -211,6 +224,6 @@ $nullDate = JFactory::getDbo()->getNullDate();
 	</tbody>
 </table>
 </form>
-	
+
 </div>
 </div>
