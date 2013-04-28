@@ -496,6 +496,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 					$signup_fee = $level->signupfee;
 				}
 			}
+			else
+			{
+				$signup_fee = $level->signupfee;
+			}
 
 			// Get the default price value
 			$netPrice = (float)$level->price + (float)$signup_fee;
