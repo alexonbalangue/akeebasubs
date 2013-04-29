@@ -34,6 +34,9 @@ if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
 JLoader::import('joomla.application.component.helper');
 if(!JComponentHelper::isEnabled('com_akeebasubs', true)) return;
 
+// Require to send the correct emails in the Professional release
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
+
 class plgSystemAsexpirationcontrol extends JPlugin
 {
 	/**
@@ -46,7 +49,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 			$config['params'] = new JRegistry($config['params']);
 		}
 		parent::__construct($subject, $config);
-		
+
 		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)
 		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set')) {
 			if(function_exists('error_reporting')) {
@@ -59,13 +62,13 @@ class plgSystemAsexpirationcontrol extends JPlugin
 			}
 			@date_default_timezone_set( $serverTimezone);
 		}
-		
-		// Load the language files		
+
+		// Load the language files
 		$jlang = JFactory::getLanguage();
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, $jlang->getDefault(), true);
 		$jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
-		
+
 		$jlang->load('com_akeebasubs', JPATH_SITE, 'en-GB', true);
 		$jlang->load('com_akeebasubs', JPATH_SITE, $jlang->getDefault(), true);
 		$jlang->load('com_akeebasubs', JPATH_SITE, null, true);
@@ -78,22 +81,22 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	{
 		// Check if we need to run
 		if(!$this->doIHaveToRun()) return;
-	
+
 		// Get today's date
 		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
-		
+
 		// Load a list of subscriptions which have to expire -- Nooku does the rest magically!
 		$subs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->enabled(1)
 			->expires_to($jNow->toSql())
 			->getList();
-		
+
 		// Update the last run info and quit
 		$this->setLastRunTimestamp();
 	}
-	
+
 	/**
 	 * Fetches the com_akeebasubs component's parameters as a JRegistry instance
 	 *
@@ -112,7 +115,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		}
 		return $cparams;
 	}
-	
+
 	/**
 	 * "Do I have to run?" - the age old question. Let it be answered by checking the
 	 * last execution timestamp, stored in the component's configuration.
@@ -127,7 +130,7 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$now = time();
 		return ($now >= $nextRunUnix);
 	}
-	
+
 	/**
 	 * Saves the timestamp of this plugin's last run
 	 */
@@ -136,10 +139,10 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$lastRun = time();
 		$params = $this->getComponentParameters();
 		$params->set('plg_akeebasubs_asexpirationcontrol_timestamp', $lastRun);
-		
+
 		$db = JFactory::getDBO();
 		$data = $params->toString();
-		
+
 		$query = $db->getQuery(true)
 			->update($db->qn('#__extensions'))
 			->set($db->qn('params').' = '.$db->q($data))
@@ -148,5 +151,5 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$db->setQuery($query);
 		$db->execute();
 	}
-	
+
 }

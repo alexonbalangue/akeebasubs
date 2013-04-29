@@ -34,6 +34,9 @@ if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
 JLoader::import('joomla.application.component.helper');
 if(!JComponentHelper::isEnabled('com_akeebasubs', true)) return;
 
+// Require to send the correct emails in the Professional release
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
+
 class plgSystemAsexpirationnotify extends JPlugin
 {
 	/**
