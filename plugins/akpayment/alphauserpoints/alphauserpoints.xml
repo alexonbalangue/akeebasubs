@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - AlphaUserPoints</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2013-04-29</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_ALPHAUSERPOINTS_DESCRIPTION</description>
+	<files>
+		<filename plugin="alphauserpoints">alphauserpoints.php</filename>
+		<folder>alphauserpoints</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_alphauserpoints.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_alphauserpoints.sys.ini</language>
+	</languages>
+</extension>
