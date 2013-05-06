@@ -1234,7 +1234,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
-          <term>Display sign-up fee </term>
+          <term>Display sign-up fee</term>
 
           <listitem>
             <para>If you have subscriptions with a sign-up fee defined (which
@@ -1254,7 +1254,7 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               <listitem>
                 <para><option>Include in price</option>. The sign-up fee will
                 be added to the price and the total amount will be displayed
-                instead of the price of the subscription. </para>
+                instead of the price of the subscription.</para>
               </listitem>
 
               <listitem>
@@ -6294,6 +6294,20 @@ LEVEL2=11111/22222/33333</programlisting>
       ready to start selling.</para>
     </section>
 
+    <section xml:id="payment-alphauserpoints">
+      <title>AlphaUserPoints</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - AlphaUserPoints</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates with the AlphaUserPoints component
+      for Joomla!. It allows users to consume AlphaUserPoint credits to buys
+      subscriptions on your site.</para>
+    </section>
+
     <section xml:id="payment-beanstream">
       <title>Beanstream</title>
 
@@ -7498,6 +7512,89 @@ LEVEL2=11111/22222/33333</programlisting>
       </variablelist>
     </section>
 
+    <section xml:id="payment-ewayrapid3">
+      <title>eWay Rapid3</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - eWay Rapid 3</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the eWay payments service using the
+      new, unified Rapid 3 method. It can work with all local payment services
+      offered by eWay.</para>
+
+      <para>The options you have with this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "eWay" or type in a custom name to show
+            to your customer's, e.g. "Credit Card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>API Key</term>
+
+          <listitem>
+            <para>Enter the API key. Please login to the Live business centre,
+            create a user and view API key.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Password</term>
+
+          <listitem>
+            <para>The password set for the user in the Live business
+            centre.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox API key</term>
+
+          <listitem>
+            <para>Enter the API key. Please login to the Sandbox business
+            centre, create a user and view API key.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox Password</term>
+
+          <listitem>
+            <para>The password set for the user in the Sandbox business
+            centre.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>Enables the testing mode. When enabled NO MONEY CHANGES
+            HANDS and should only be used for testing BEFORE your site goes
+            live.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
     <section xml:id="payment-gocardless">
       <title>GoCardless</title>
 
@@ -8361,6 +8458,89 @@ LEVEL2=11111/22222/33333</programlisting>
               can be found in the integration guide
               (https://www.payfast.co.za/s/std/integration-guide).</para>
             </important>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="payment-paymill">
+      <title>PayMill</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - PayMill</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the low cost payment processor
+      PayMill.</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "PayMill" or type in a custom name to
+            show to your customer's, e.g. "Pay by credit card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Private Key</term>
+
+          <listitem>
+            <para>That's the private key given to you by PayMill.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Pubic Key</term>
+
+          <listitem>
+            <para>That's the public key given to you by PayMill.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Private test key</term>
+
+          <listitem>
+            <para>That's the private test key given to you by PayMill. It's
+            only used in Sandbox (test) mode.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Public test key</term>
+
+          <listitem>
+            <para>That's the public test key given to you by PayMill. It's
+            only used in Sandbox (test) mode.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, all transactions will be performed against the
+            sandbox (testing server). This is designed for integration tests,
+            BEFORE going live with your site. <emphasis role="bold">NEVER,
+            EVER, NO MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION
+            SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR
+            CUSTOMERS.</emphasis></para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -9742,6 +9922,67 @@ LEVEL2=11111/22222/33333</programlisting>
       your site.</para>
     </section>
 
+    <section xml:id="payment-realex">
+      <title>RealEx</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - RealEx</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the RealEx payments service.</para>
+
+      <para>The options you have with this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "RealEx" or type in a custom name to show
+            to your customer's, e.g. "Credit Card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Merchant ID</term>
+
+          <listitem>
+            <para>The merchant ID as give to you by RealEx</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Shared Secret</term>
+
+          <listitem>
+            <para>The shared secret as given by RealEx</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Account</term>
+
+          <listitem>
+            <para>The sub-account of your RealEx account which will be used
+            for the transactions. If none is specified, the default
+            sub-account called 'internet' will be used.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
     <section xml:id="payment-robokassa">
       <title>Robokassa</title>
 
@@ -10130,6 +10371,87 @@ LEVEL2=11111/22222/33333</programlisting>
             specifically ask Skrill to also enable that feature on your
             account and provide you with a test merchant and a test user to
             use during your testing.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="payment-stripe">
+      <title>Stripe</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - Stripe</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the low cost Stripe payment
+      processor.The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "Stripe" or type in a custom name to show
+            to your customer's, e.g. "Pay with credit card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Private Key</term>
+
+          <listitem>
+            <para>That's the private key given to you by Stripe.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Pubic Key</term>
+
+          <listitem>
+            <para>That's the public key given to you by Stripe.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Private test key</term>
+
+          <listitem>
+            <para>That's the private test key given to you by Stripe. It's
+            only used in Sandbox (test) mode.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Public test key</term>
+
+          <listitem>
+            <para>That's the public test key given to you by Stripe. It's only
+            used in Sandbox (test) mode.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, all transactions will be performed against the
+            sandbox (testing server). This is designed for integration tests,
+            BEFORE going live with your site. <emphasis role="bold">NEVER,
+            EVER, NO MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION
+            SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR
+            CUSTOMERS.</emphasis></para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -11375,6 +11697,51 @@ LEVEL3=Group 1</programlisting>
       </variablelist>
     </section>
 
+    <section xml:id="integration-mijoshop">
+      <title>MijoShop Integration</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - MijoShop Integration</guilabel></para>
+
+      <para>This integration plugin allows you to add and remove users from
+      MijoShop shopper groups based on their subscription status. This allows
+      you to set special discounts to subscribers (e.g. a discount club) or
+      other MijoShop tricks which are based on the shopper groups a user
+      belongs to.</para>
+
+      <para>Please note that this is a smart integration; instead of adding
+      users when a subscription goes active and removing them when a
+      subscription goes inactive, Akeeba Subscriptions plugins take a look at
+      all of the user's active and inactive subscriptions and decide which
+      groups the user should be added to or removed from.</para>
+
+      <para>The plugin renders these options in each subscription
+      level:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Add to MijoShop groups</term>
+
+          <listitem>
+            <para>When a subscription to this level becomes active, the user
+            will be added to the MijoShop groups you have selected here. You
+            can select multiple groups.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Remove from MijoShop groups</term>
+
+          <listitem>
+            <para>When a subscription to this level becomes inactive (e.g. it
+            expires or the payment is cancelled), the user will be removed
+            from the MijoShop groups you have selected here. You can select
+            multiple groups.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
     <section xml:id="integration-redshop">
       <title>RedShop Integration</title>
 
@@ -12274,11 +12641,21 @@ LEVEL3=entry1</programlisting>
       <title>ProjectFork integration</title>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-      Subscriptions - ProjectFork Integration</guilabel></para>
+      Subscriptions - ProjectFork Integration</guilabel> (for ProjectFork
+      3.x)</para>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - ProjectFork 4 Integration</guilabel> (for ProjectFork
+      4.x)</para>
 
       <para>This integration plugin allows you to automatically add
       ProjectFork projects when someone subscribes on your site, depending on
       their subscription level.</para>
+
+      <important>
+        <para>Remember to use the correct plugin depending on your version of
+        ProjectFork!</para>
+      </important>
 
       <para>The plugin has these options:</para>
 
@@ -12453,13 +12830,405 @@ LEVEL3=Badge 1</programlisting>
 
       <note>
         <para>This is a third party plugin. It is not created or maintained by
-        Akeeba Ltd.</para>
+        Akeeba Ltd. No support is provided for third party plugins.</para>
       </note>
 
       <para>This plugin allows Akeeba Subscriptions to create invoices using
       the third party TrackTime invoicing component for Joomla!. For more
       information about the plugin and its documentation please visit <link
       xlink:href="http://www.fabbricabinaria.it/en/docs/tracktime-docs/tracktime-akeeba-subscription-integration">http://www.fabbricabinaria.it/en/docs/tracktime-docs/tracktime-akeeba-subscription-integration</link></para>
+    </section>
+
+    <section xml:id="integration-zohoinvoice">
+      <title>ZohoInvoice integration</title>
+
+      <note>
+        <para>This is a third party plugin. It is not created or maintained by
+        Akeeba Ltd. No support is provided for third party plugins.</para>
+      </note>
+
+      <para>This plugin allows Akeeba Subscriptions to create invoices using
+      the third party ZohoInvoice service.</para>
+    </section>
+
+    <section xml:id="integration-frontenduseraccess">
+      <title>FrontendUserAccess integration</title>
+
+      <note>
+        <para>This is a third party plugin. It is not created or maintained by
+        Akeeba Ltd. No support is provided for third party plugins.</para>
+      </note>
+
+      <para>This plugin allows Akeeba Subscriptions to integrate with the
+      third party FrontendUserAccess component.</para>
+    </section>
+
+    <section xml:id="integration-atscredits">
+      <title>Akeeba Ticket System credits integration</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - Akeeba Ticket System credits
+      integration</guilabel></para>
+
+      <para>This integration plugin allows you to add credits to a user's
+      Akeeba Ticket System credits account as soon as his subscription is
+      enabled and expire those credits as soon as his subscription
+      expires.</para>
+
+      <para>The plugin renders the following options in the subscription level
+      page, inside the tab labelled <guilabel>ATS credits</guilabel>:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Credits</term>
+
+          <listitem>
+            <para>How many credits to add to the user's account as soon as his
+            subscription is enabled</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="integration-constantcontact">
+      <title>Constant Contact integration</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - Constant Contact integration</guilabel></para>
+
+      <para>This integration plugin allows you to add users to Constant
+      Contact lists when their subscription is enabled and remove them from
+      Constant Contact lists when their subscription expires. </para>
+
+      <para>The plugin provides the following options in the Basic Options
+      tab, found in the Plug-in Manager's edit page, which have to be filled
+      in before you attempt to edit any subscription levels:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Username</term>
+
+          <listitem>
+            <para>Your Constant Contact username. Usually that's your email
+            address.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Password</term>
+
+          <listitem>
+            <para>Your Constant Contact password. It's what you use to log in
+            to Constant Contact.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>API Key</term>
+
+          <listitem>
+            <para>The API key given to you by Constant Contact. You will have
+            to generate it in your Constant Contact account.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Email type</term>
+
+          <listitem>
+            <para>The preference for the emails which will be sent out by
+            Constant Contact. <option>HTML</option> means that your users will
+            receive rich formatted text emails. <option>Text</option> means
+            that they will be receiving text-only emails.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>The plugin renders the following options in the subscription level
+      page:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Add to Constant Contact lists</term>
+
+          <listitem>
+            <para>Select one or more Constant Contact lists that the user will
+            be added to when his subscription becomes active.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Remove from Constant Contact lists (optional)</term>
+
+          <listitem>
+            <para>This is optional. You can select one or more Constant
+            Contact lists that the user will be removed from when his
+            subscription becomes inactive (expires).</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="integration-freshbooks">
+      <title>Freshbooks integration</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - FreshBooks integration</guilabel></para>
+
+      <para>This integration plugin allows you to automatically issue invoices
+      for subscriptions using the FreshBooks web-based accounting
+      service.</para>
+
+      <para>The plugin provides the following options in the Basic Options
+      tab, found in the Plug-in Manager's edit page:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>API URL</term>
+
+          <listitem>
+            <para>The API URL of your FreshBooks account. You can find it
+            under My Account, FreshBooks API in Freshbooks.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Authentication Token</term>
+
+          <listitem>
+            <para>The authentication token given to you by FreshBooks. You can
+            find it under My Account, FreshBooks API in Freshbooks.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notes</term>
+
+          <listitem>
+            <para>Notes that will appear on the invoice.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Terms</term>
+
+          <listitem>
+            <para>Terms that will appear on the invoice. If you leave this
+            empty the default terms defined in FreshBooks will be used</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Email message</term>
+
+          <listitem>
+            <para>The contents of the email sent to the user with his invoice.
+            If you leave this empty the default message defined in FreshBooks
+            will be used.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Generate invoice</term>
+
+          <listitem>
+            <para>Determines when to generate an invoice. The available
+            options are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><option>After the payment</option>. This is the default
+                option. An invoice will be generated once the subscription is
+                paid for, i.e. the payment status is set to Completed and the
+                subscription is enabled.</para>
+              </listitem>
+
+              <listitem>
+                <para><option>Before the payment</option>. When this option is
+                selected, an invoice will be generated as soon as a new
+                subscription with a pending payment is generated. You will
+                have to issue a payment receipt manually when the subscription
+                is paid. This option is usually useful when used together with
+                the Offline payment plugin as many companies require the
+                receipt of an invoice before paying for a subscription.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Auto Payment</term>
+
+          <listitem>
+            <para>If this option is enabled, this plugin will automatically
+            create the FreshBooks payment, after the subscription is paid.
+            This means that the invoice will be marked as paid. This is done
+            by creating a credit at FreshBooks for the customer and use this
+            credit to put the paid amount on the invoice. If you manage the
+            credits and payments at FreshBooks yourself and/or have your
+            specific settings in place, you may want to disable this
+            option.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="integration-contentpublish">
+      <title>Automatic content publishing</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - Content Publishing</guilabel></para>
+
+      <para>This integration plugin allows you to automatically publish
+      content owned by a user when his subscription is activated and unpublish
+      it when his subscription expires. The plugin works with Joomla!
+      articles, K2 items, SobiPro 1.1+ entries and ZOO items. The idea is that
+      when a subscription becomes enabled all items owned (authored) by the
+      user are published. When the subscription expires, all of those items
+      are automatically unpublished.</para>
+
+      <note>
+        <para>If you plan on using this plugin to control the publishing of
+        SobiPro items you must use SobiPro 1.1 or later. SobiPro 1.0.x will
+        NOT work.</para>
+      </note>
+
+      <para>The plugin renders the following options in the subscription level
+      page:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Publish Joomla! articles</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will publish all Joomla!
+            articles created by the user when his subscription is
+            activated.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Publish K2 items</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will publish all K2 items
+            created by the user when his subscription is activated.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Publish SobiPro entries</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will publish all SobiPro
+            entries created by the user when his subscription is
+            activated.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Publish ZOO items</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will publish all ZOO
+            items created by the user when his subscription is activated. Only
+            items belonging to the ZOO applications selected below will be
+            published.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>ZOO applications for item publishing</term>
+
+          <listitem>
+            <para>Only items belonging to the selected ZOO applications will
+            participate in the automatic ZOO item publishing when the option
+            above is selected.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Unpublish Joomla! articles</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will unpublish all
+            Joomla! articles created by the user when his subscription
+            expires.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Unpublish K2 items</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will unpublish all K2
+            items created by the user when his subscription expires.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Unpublish SobiPro entries</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will unpublish all
+            SobiPro items created by the user when his subscription
+            expires.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Unpublish ZOO items</term>
+
+          <listitem>
+            <para>When checked, Akeeba Subscriptions will unpublish all ZOO
+            items created by the user when his subscription expires. Only
+            items belonging to the ZOO applications selected below will be
+            unpublished.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>ZOO applications for item unpublishing</term>
+
+          <listitem>
+            <para>Only items belonging to the selected ZOO applications will
+            participate in the automatic ZOO item unpublishing when the option
+            above is selected.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="integration-slavesubs">
+      <title>Slave subscriptions</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions - Slave subscriptions support</guilabel></para>
+
+      <para>When a user subscribers he can choose up to ten different existing
+      users who will also get the same subscription he subscribes into. Those
+      extra subscriptions are called slaves. The changes to this user's
+      subscription will be automatically applied to the slave subscriptions.
+      The limits of slave subscriptions is defined per subscription level for
+      maximum flexibility. This allows you to implement something like 'family
+      subscriptions' which allow several members of the same family to share a
+      single subscription, without having to subscribe each family member
+      individually.</para>
+
+      <para>The plugin renders the following options in the subscription level
+      page:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Maximum slaves</term>
+
+          <listitem>
+            <para>The maximum number of slave subscriptions allowed when a
+            user subscribes to this subscription level. Enter 0 or leave blank
+            to prevent the generation of slave subscriptions.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
     </section>
   </chapter>
 
