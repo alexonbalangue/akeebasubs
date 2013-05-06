@@ -105,7 +105,12 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 		}
 		
 		// Do the payment
-		$priceInPoints = $subscription->gross_amount;
+		$exchangeRate = trim($this->params->get('rate', 1));
+		if(! is_numeric($exchangeRate)) {
+			$exchangeRate = 1;
+		}
+		// Apply the exchange rate
+		$priceInPoints = round(($subscription->gross_amount / $exchangeRate), 2);
 		$errorMessage = '';
 		if($this->getAUPPoints($currentUser->id) < $priceInPoints) {
 			$errorMessage = JText::_('PLG_AKPAYMENT_ALPHAUSERPOINTS_MSG_NOT_ENOUGH_POINTS');
