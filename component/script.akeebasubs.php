@@ -64,6 +64,7 @@ class Com_AkeebasubsInstallerScript
 				'customfields'			=> 1,
 				'docman'				=> 0,
 				'easydiscuss'			=> 0,
+				'freshbooks'			=> 0,
 				'frontenduseraccess'	=> 0,
 				'invoices'				=> 0,
 				'iplogger'				=> 0,
@@ -94,6 +95,7 @@ class Com_AkeebasubsInstallerScript
 			'akpayment' => array(
 				'2checkout'				=> 0,
 				'allopass'				=> 0,
+				'alphauserpoints'		=> 0,
 				'beanstream'			=> 0,
 				'braintree'				=> 0,
 				'cashu'					=> 0,
