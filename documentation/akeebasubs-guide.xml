@@ -6306,6 +6306,51 @@ LEVEL2=11111/22222/33333</programlisting>
       <para>This payment method integrates with the AlphaUserPoints component
       for Joomla!. It allows users to consume AlphaUserPoint credits to buys
       subscriptions on your site.</para>
+
+      <para>The options of this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "AlphaUserPoints" or type in a custom
+            name to show to your customer's, e.g. "Pay with points earned on
+            this site"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Exchange rate</term>
+
+          <listitem>
+            <para>Unless otherwise told, Akeeba Subscriptions will assume that
+            AlphaUserPoint has a one to one exchange rate with your currency.
+            This option tells Akeeba Subscriptions how much one AlphaUserPoint
+            is worth in your defined currency.</para>
+
+            <para>This is easier to understand with an example. Let's say that
+            the currency you have set up in Akeeba Subscriptions is Euros. If
+            you have a subscription level which costs 12 Euros then Akeeba
+            Subscriptions will normally consume 12 AlphaUserPoints for the
+            subscription purchase. Now let's change the exchange rate to
+            <option>10</option>. In this case Akeeba Subscriptions will
+            consume 1.2 AlphaUserPoints. If the exchange rate was set to 20
+            then Akeeba Subscriptions would consume only 0.6 AlphaUserPoints
+            for this transaction.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
     </section>
 
     <section xml:id="payment-beanstream">
