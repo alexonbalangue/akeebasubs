@@ -5402,6 +5402,15 @@ Rule C gives $ 30 discount</programlisting>
             </varlistentry>
 
             <varlistentry>
+              <term>[COUPONCODE]</term>
+
+              <listitem>
+                <para>The coupon code used in the subscription. That's the
+                coupon code text, not the numeric ID.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
               <term>[CURRENCY] or [$]</term>
 
               <listitem>
@@ -12943,7 +12952,7 @@ LEVEL3=Badge 1</programlisting>
 
       <para>This integration plugin allows you to add users to Constant
       Contact lists when their subscription is enabled and remove them from
-      Constant Contact lists when their subscription expires. </para>
+      Constant Contact lists when their subscription expires.</para>
 
       <para>The plugin provides the following options in the Basic Options
       tab, found in the Plug-in Manager's edit page, which have to be filled

@@ -115,6 +115,16 @@ class AkeebasubsHelperMessage
 		}
 
 		// Extra variables replacement
+		// -- Coupon code
+		$couponcode = '';
+		if ($sub->akeebasubs_coupon_id)
+		{
+			$couponData = FOFModel::getTmpInstance('Coupons', 'AkeebasubsModel')
+				->savestate(0)
+				->getItem($sub->akeebasubs_coupon_id);
+			$couponcode = $couponData->coupon;
+		}
+
 		// -- Get the site name
 		$config = JFactory::getConfig();
 		if(version_compare(JVERSION, '3.0', 'ge')) {
@@ -191,7 +201,7 @@ class AkeebasubsHelperMessage
 			$formatted_state = AkeebasubsHelperSelect::formatState($state);
 		}
 
-		// User's countru, human readable
+		// User's country, human readable
 		$formatted_country = '';
 		$country = $kuser->country;
 		if (!empty($country))
@@ -229,6 +239,7 @@ class AkeebasubsHelperMessage
 			'[CURRENCY]'			=> $currency,
 			'[$]'					=> $currency,
 			'[DLID]'				=> $dlid,
+			'[COUPONCODE]'			=> $couponcode,
 			'[USER:STATE_FORMATTED]'=> $formatted_state,
 			'[USER:COUNTRY_FORMATTED]'=> $formatted_country,
 			// Legacy keys
