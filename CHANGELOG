@@ -20,6 +20,7 @@ Akeeba Subscriptions 3.1.2
 # [MEDIUM] Fatal PHP error when using numbering override in invoice templates
 # [MEDIUM] Expiration notification e-mails sent with the text-only template in the Professional release
 # [LOW] Notices in the Slave Subscriptions plugin
+# [LOW] The Run the Integrations button had no icon in Joomla! 3.x
 
 Akeeba Subscriptions 3.1.1
 ================================================================================

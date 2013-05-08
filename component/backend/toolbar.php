@@ -138,7 +138,14 @@ class AkeebasubsToolbar extends FOFToolbar
 
 		// Add "Subscription Refresh"Run Integrations"
 		JToolBarHelper::divider();
-		$bar->appendButton('Link', 'subrefresh', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
+		if (version_compare(JVERSION, '3.0', 'lt'))
+		{
+			$bar->appendButton('Link', 'subrefresh', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
+		}
+		else
+		{
+			$bar->appendButton('Link', 'play', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
+		}
 
 		// Add "Export to CSV"
 		$link = JURI::getInstance();
