@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_taxrules` (
 	`city` VARCHAR(100) NULL,
 	`vies` TINYINT(1) NOT NULL DEFAULT '1',
 	`taxrate` FLOAT NOT NULL DEFAULT '23.0',
+	`akeebasubs_level_id` BIGINT(20) NOT NULL DEFAULT '0',
 	
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
