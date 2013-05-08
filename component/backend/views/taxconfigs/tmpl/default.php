@@ -27,7 +27,18 @@ $this->loadHelper('select');
 			</span>
 		</div>
 	</div>
-	
+
+	<div class="control-group">
+		<label class="control-label" for="akeebasubs_level_id">
+			<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_LEVEL') ?></label>
+		<div class="controls">
+			<?php echo AkeebasubsHelperSelect::levels('akeebasubs_level_id', 0, array('class'=>'input-medium', 'include_all' => 1)); ?>
+			<span class="help-block">
+				<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_LEVEL_INFO'); ?>
+			</span>
+		</div>
+	</div>
+
 	<div class="control-group">
 		<label class="control-label" for="country">
 			<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_COUNTRY') ?></label>
@@ -38,7 +49,7 @@ $this->loadHelper('select');
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label class="control-label" for="taxrate">
 			<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_TAXRATE') ?></label>
@@ -47,13 +58,13 @@ $this->loadHelper('select');
 				<input type="text" name="taxrate" id="taxrate" class="input-small" value="0" />
 				<span class="add-on">%</span>
 			</div>
-			
+
 			<span class="help-block">
 				<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_TAXRATE_INFO'); ?>
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label class="control-label" for="viesreg">
 			<?php echo JText::_('COM_AKEEBASUBS_TAXCONFIGS_LBL_VIESREG') ?></label>
@@ -75,7 +86,7 @@ $this->loadHelper('select');
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="form-actions">
 		<button class="btn btn-primary btn-large">
 			<i class="icon-white icon-check"></i>
