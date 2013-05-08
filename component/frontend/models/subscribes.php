@@ -281,6 +281,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		$state = $this->getStateVariables();
 
+		if($state->slug && empty($state->id)) {
+			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			 if(!empty($list)) {
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			 } else {
+				$state->id = 0;
+			 }
+		}
+
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		$personalInfo = AkeebasubsHelperCparams::getParam('personalinfo',1);
 		$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
@@ -393,15 +405,34 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// If the country has two rules with VIES enabled/disabled and a non-zero VAT,
 				// we will skip VIES validation. We'll also skip validation if there are no
 				// rules for this country (the default tax rate will be applied)
+
+				// First try loading the rules for this level
 				$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
 					->savestate(0)
 					->enabled(1)
+					->akeebasubs_level_id($state->id)
 					->country($state->country)
 					->filter_order('ordering')
 					->filter_order_Dir('ASC')
 					->limit(0)
 					->limitstart(0)
 					->getList();
+
+				// If this level has no rules try the "All levels" rules
+				if (empty($taxrules))
+				{
+					$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
+						->savestate(0)
+						->enabled(1)
+						->akeebasubs_level_id(0)
+						->country($state->country)
+						->filter_order('ordering')
+						->filter_order_Dir('ASC')
+						->limit(0)
+						->limitstart(0)
+						->getList();
+				}
+
 				$catchRules = 0;
 				$lastVies = null;
 				if(!empty($taxrules)) foreach($taxrules as $rule) {
@@ -1255,15 +1286,42 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$state = $this->getStateVariables();
 		$isVIES = $validation->vatnumber && in_array($state->country, $this->european_states);
 
-		// Load the tax rules
-		$taxrules = FOFModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
+		if($state->slug && empty($state->id)) {
+			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			 if(!empty($list)) {
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			 } else {
+				$state->id = 0;
+			 }
+		}
+
+		// First try loading the rules for this level
+		$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
 			->savestate(0)
 			->enabled(1)
+			->akeebasubs_level_id($state->id)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
 			->limit(0)
 			->limitstart(0)
 			->getItemList();
+
+		// If this level has no rules try the "All levels" rules
+		if (empty($taxrules))
+		{
+			$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
+				->savestate(0)
+				->enabled(1)
+				->akeebasubs_level_id(0)
+				->filter_order('ordering')
+				->filter_order_Dir('ASC')
+				->limit(0)
+				->limitstart(0)
+				->getItemList();
+		}
 
 		$bestTaxRule = (object)array(
 			'match'		=> 0,
