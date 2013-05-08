@@ -26,40 +26,46 @@ $this->loadHelper('select');
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 	<div class="control-group">
-		<label for="country" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_TAXRULES_COUNTRY'); ?></label>
+		<label for="akeebasubs_level_id" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_TAXRULES_LEVEL'); ?></label>
 		<div class="controls">
-			<?php echo AkeebasubsHelperSelect::countries($this->item->country,' country') ?>
+			<?php echo AkeebasubsHelperSelect::levels('akeebasubs_level_id', $this->item->akeebasubs_level_id, array('class'=>'input-medium', 'include_all' => 1)); ?>
 		</div>
 	</div>
-	
+	<div class="control-group">
+		<label for="country" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_TAXRULES_COUNTRY'); ?></label>
+		<div class="controls">
+			<?php echo AkeebasubsHelperSelect::countries($this->item->country, 'country') ?>
+		</div>
+	</div>
+
 	<div class="control-group">
 		<label for="state" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_TAXRULES_STATE'); ?></label>
 		<div class="controls">
-			<?php echo AkeebasubsHelperSelect::states($this->item->state,' state') ?>
+			<?php echo AkeebasubsHelperSelect::states($this->item->state, 'state') ?>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="city" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_TAXRULES_CITY'); ?></label>
 		<div class="controls">
 			<input type="text" name="city" id="city" value="<?php echo $this->item->city?>" />
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="vies" class="control-label" class="main"><?php echo JText::_('COM_AKEEBASUBS_TAXRULES_VIES'); ?></label>
 		<div class="controls">
 			<?php echo JHTML::_('select.booleanlist', 'vies', null, $this->item->vies); ?>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="taxrate" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_TAXRULES_TAXRATE'); ?></label>
 		<div class="controls">
 			<input type="text" name="taxrate" id="taxrate" value="<?php echo$this->item->taxrate?>" /> <strong>%</strong>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="enabled" class="control-label" class="main">
 			<?php echo JText::_('JPUBLISHED'); ?>
@@ -69,6 +75,6 @@ $this->loadHelper('select');
 		</div>
 	</div>
 </form>
-	
+
 </div>
 </div>

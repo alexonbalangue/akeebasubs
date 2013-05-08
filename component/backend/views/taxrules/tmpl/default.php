@@ -51,6 +51,9 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 			<th width="10px"><?php echo  JText::_('Num'); ?></th>
 			<th width="16px"></th>
 			<th>
+				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_LEVEL', 'country', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
+			</th>
+			<th>
 				<?php echo  JHTML::_('grid.sort', 'COM_AKEEBASUBS_TAXRULES_COUNTRY', 'country', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
 			</th>
 			<th>
@@ -73,7 +76,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 			<?php endif; ?>
 			<th width="100px">
 				<?php echo JHTML::_('grid.sort', 'JPUBLISHED', 'enabled', $this->lists->order_Dir, $this->lists->order, 'browse'); ?>
-			</th>			
+			</th>
 		</tr>
 		<tr>
 			<?php if($hasAjaxOrderingSupport !== false): ?>
@@ -82,6 +85,9 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 			<td></td>
 			<td>
 				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />
+			</td>
+			<td>
+				<?php echo AkeebasubsHelperSelect::levels('akeebasubs_level_id', $this->getModel()->getState('akeebasubs_level_id',''), array('onchange'=>'this.form.submit();', 'class'=>'input-medium', 'include_all' => 1, 'include_clear' => 1)); ?>
 			</td>
 			<td>
 				<?php echo AkeebasubsHelperSelect::countries($this->getModel()->getState('country',''), 'country', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')); ?>
@@ -114,12 +120,12 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 			</td>
 		</tr>
-		
+
 	</thead>
 	<tfoot>
 		<tr>
 			<td colspan="20">
-				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>	
+				<?php if($this->pagination->total > 0) echo $this->pagination->getListFooter() ?>
 			</td>
 		</tr>
 	</tfoot>
@@ -163,6 +169,15 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 			</td>
 			<td>
 				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
+					<?php if ($taxrule->akeebasubs_level_id == 0): ?>
+					<?php echo JText::_('COM_AKEEBASUBS_TAXRULES_LEVEL_ALL'); ?>
+					<?php else: ?>
+					<?php echo AkeebasubsHelperSelect::formatLevel($taxrule->akeebasubs_level_id); ?>
+					<?php endif; ?>
+				</a>
+			</td>
+			<td>
+				<a href="index.php?option=com_akeebasubs&view=taxrule&id=<?php echo $taxrule->akeebasubs_taxrule_id; ?>">
 					<?php echo AkeebasubsHelperSelect::formatCountry($taxrule->country) ?>
 					<?php echo $taxrule->country ? ' ('.$this->escape($taxrule->country).')' : ''?>
 				</a>
@@ -197,7 +212,7 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 			<td align="center">
 				<?php echo JHTML::_('grid.published', $taxrule, $i); ?>
 			</td>
-		</tr>			
+		</tr>
 		<?php endforeach; ?>
 		<?php else: ?>
 		<tr>
@@ -209,6 +224,6 @@ $hasAjaxOrderingSupport = $this->hasAjaxOrderingSupport();
 	</tbody>
 </table>
 </form>
-	
+
 </div>
 </div>

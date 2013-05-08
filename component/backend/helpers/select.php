@@ -354,6 +354,7 @@ class AkeebasubsHelperSelect
 
 		$include_none = false;
 		$include_all = false;
+		$include_clear = false;
 		if(array_key_exists('include_none', $attribs)) {
 			$include_none = $attribs['include_none'];
 			unset($attribs['include_none']);
@@ -362,6 +363,10 @@ class AkeebasubsHelperSelect
 			$include_all = $attribs['include_all'];
 			unset($attribs['include_all']);
 		}
+		if(array_key_exists('include_clear', $attribs)) {
+			$include_clear = $attribs['include_clear'];
+			unset($attribs['include_clear']);
+		}
 
 		if($include_none) {
 			$options[] = JHTML::_('select.option','-1',JText::_('COM_AKEEBASUBS_COMMON_SELECTLEVEL_NONE'));
@@ -369,7 +374,7 @@ class AkeebasubsHelperSelect
 		if($include_all) {
 			$options[] = JHTML::_('select.option','0',JText::_('COM_AKEEBASUBS_COMMON_SELECTLEVEL_ALL'));
 		}
-		if(!$include_none && !$include_all) {
+		if($include_clear || (!$include_none && !$include_all)) {
 			$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		}
 
