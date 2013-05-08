@@ -21,6 +21,7 @@ Akeeba Subscriptions 3.1.2
 # [MEDIUM] Expiration notification e-mails sent with the text-only template in the Professional release
 # [LOW] Notices in the Slave Subscriptions plugin
 # [LOW] The Run the Integrations button had no icon in Joomla! 3.x
+# [LOW] The Joomla! Profile Synchronisation plugin would not sync the postal code and region
 
 Akeeba Subscriptions 3.1.1
 ================================================================================

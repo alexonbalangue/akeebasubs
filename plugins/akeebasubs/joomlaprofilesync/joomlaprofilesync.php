@@ -85,7 +85,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			}
 			$state = json_decode($rows['profile.region'][1]);
 			$cname = AkeebasubsHelperSelect::$countries[$country];
-			$states = AkeebasubsHelperSelect::$states[$cname];
+			$states = isset(AkeebasubsHelperSelect::$states[$country]) ? AkeebasubsHelperSelect::$states[$country] : null;
 			if (!is_array($states))
 			{
 				$states = array();
@@ -113,9 +113,9 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			{
 				$country = 'US';
 			}
-			$state = json_decode($rows['profile.state'][1], true);
+			$state = json_decode($rows['profile.region'][1], true);
 			$cname = AkeebasubsHelperSelect::$countries[$country];
-			$states = AkeebasubsHelperSelect::$states[$cname];
+			$states = isset(AkeebasubsHelperSelect::$states[$country]) ? AkeebasubsHelperSelect::$states[$country] : null;
 			if (!is_array($states))
 			{
 				$states = array();
@@ -126,6 +126,12 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				$state = array_search($state, $states);
 				$ret['state'] = $state;
 			}
+		}
+
+		// Rename the postal_code field to zip
+		if (isset($rows['profile.postal_code']))
+		{
+			$rows['profile.zip'] = $rows['profile.postal_code'];
 		}
 
 		// Check for basic information
@@ -202,7 +208,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		}
 
 		// Remove some fields which must not be saved
-		foreach (array('akeebasubs_user_id', 'user_id', 'notes') as $key)
+		foreach (array('akeebasubs_user_id', 'user_id', 'notes', 'input') as $key)
 		{
 			if (isset($data[$key]))
 			{
@@ -210,7 +216,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			}
 		}
 
-		// Transalte country and state
+		// Translate country and state
 		if(!class_exists('AkeebasubsHelperSelect'))
 		{
 			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
@@ -222,6 +228,20 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		if (isset($data['country']))
 		{
 			$data['country'] = AkeebasubsHelperSelect::formatCountry($data['country']);
+		}
+
+		// Rename the ZIP field
+		if (isset($data['zip']))
+		{
+			$data['postal_code'] = $data['zip'];
+			unset($data['zip']);
+		}
+
+		// Rename the state field
+		if (isset($data['state']))
+		{
+			$data['region'] = $data['state'];
+			unset($data['state']);
 		}
 
 		// Convert basic data
@@ -282,5 +302,15 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		}
 
 		return $result;
+	}
+
+	public function onAKUserRefresh($user_id)
+	{
+		$mergedData = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+			->getMergedData($user_id);
+		$akeebasubs_user_id = $mergedData->akeebasubs_user_id;
+		$userData = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+			->getItem($akeebasubs_user_id);
+		$this->onAKUserSaveData($userData);
 	}
 }
