@@ -412,16 +412,26 @@ class AkeebasubsHelperSelect
 		static $levels;
 
 		if(empty($levels)) {
-			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$rawlevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->filter_order('ordering')
 				->filter_order_Dir('ASC')
 				->limit(0)
 				->offset(0)
 				->getList();
+
+			$levels = array();
+
+			if (!empty($rawlevels))
+			{
+				foreach ($rawlevels as $rawlevel)
+				{
+					$levels[$rawlevel->akeebasubs_level_id] = $rawlevel->title;
+				}
+			}
 		}
 
 		if(array_key_exists($id, $levels)) {
-			return $levels[$id]->title;
+			return $levels[$id];
 		} else {
 			return '&mdash;&mdash;&mdash;';
 		}
