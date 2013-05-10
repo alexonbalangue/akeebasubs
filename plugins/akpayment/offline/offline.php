@@ -18,14 +18,14 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 			'ppName'		=> 'offline',
 			'ppKey'			=> 'PLG_AKPAYMENT_OFFLINE_TITLE',
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -35,7 +35,7 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Set the payment status to Pending
 		$oSub = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->setId($subscription->akeebasubs_subscription_id)
@@ -46,7 +46,7 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 			'processor_key'		=> md5(time()),
 		);
 		$oSub->save($updates);
-		
+
 		// Activate the user account, if the option is selected
 		$activate = $this->params->get('activate', 0);
 		if($activate && $user->block) {
@@ -57,7 +57,7 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 			$user->bind($updates);
 			$user->save($updates);
 		}
-		
+
 		// Render the HTML form
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
@@ -66,7 +66,7 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
+
 		$html = $this->params->get('instructions','');
 		if(empty($html)) {
 			$html = <<<ENDTEMPLATE
@@ -85,17 +85,18 @@ ENDTEMPLATE;
 		$html = str_replace('{SUBSCRIPTION}', sprintf('%06u', $subscription->akeebasubs_subscription_id), $html);
 		$html = str_replace('{FIRSTNAME}', $firstName, $html);
 		$html = str_replace('{LASTNAME}', $lastName, $html);
-		
+		$html = str_replace('{LEVEL}', $level->title, $html);
+
 		@include_once JPATH_SITE.'/components/com_akeebasubs/helpers/message.php';
 		if(class_exists('AkeebasubsHelperMessage')) {
 			$html = AkeebasubsHelperMessage::processLanguage($html);
 		}
-		
+
 		$html = '<div>'.$html.'</div>';
 
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		return false;
