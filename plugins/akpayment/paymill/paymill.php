@@ -133,18 +133,27 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		// Load the relevant subscription row
 		$id = $data['sid'];
 		$subscription = null;
-		if($id > 0) {
+
+		if ($id > 0)
+		{
 			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->setId($id)
 				->getItem();
-			if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
+			if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) )
+			{
 				$subscription = null;
 				$isValid = false;
 			}
-		} else {
+		}
+		else
+		{
 			$isValid = false;
 		}
-		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
+
+		if (!$isValid)
+		{
+			$data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
+		}
 
 		if($isValid) {
 			// Initialise common variables
@@ -152,7 +161,8 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			$apiEndpoint = 'https://api.paymill.de/v2/';
 			$client = '';
 
-			try {
+			try
+			{
 				$params = array(
 					'amount'		=> $data['amount'],
 					'currency'		=> $data['currency'],
@@ -164,16 +174,21 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 					$apiKey, $apiEndpoint
 				);
 				$transaction = $transactionsObject->create($params);
-			} catch(Exception $e) {
+			}
+			catch(Exception $e)
+			{
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
 			}
 		}
 
 		// Update the client record
-		if($isValid) {
+		if($isValid)
+		{
 			$user = JFactory::getUser($subscription->user_id);
-			try {
+
+			try
+			{
 				$clientsObject = new Services_Paymill_Clients($apiKey, $apiEndpoint);
 				$clientRecord = $transaction['client'];
 				$clientparams = array(
@@ -181,38 +196,57 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 					'email'			=> $user->email,
 					'description'	=> $user->name . '(subscription #' . $subscription->akeebasubs_subscription_id . ')',
 				);
-			} catch (Exception $exc) {
+			}
+			catch (Exception $exc)
+			{
 
 			}
 		}
 
 		// Check that transaction has not been previously processed
-		if($isValid) {
-			if($transaction['payment']['id'] == $subscription->processor_key) {
+		// Nicholas 2013-05-13: This does not seem to work with PayMill
+		/**
+		if ($isValid)
+		{
+			if($transaction['payment']['id'] == $subscription->processor_key)
+			{
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "I will not processe this transaction twice";
 			}
 		}
+		**/
 
 		// Check that amount is correct
 		$isPartialRefund = false;
-		if($isValid && !is_null($subscription)) {
+
+		if($isValid && !is_null($subscription))
+		{
 			$mc_gross = $transaction['amount'];
 			$gross = (int)($subscription->gross_amount * 100);
-			if($mc_gross > 0) {
+
+			if ($mc_gross > 0)
+			{
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
 				$isValid = ($gross - $mc_gross) < 0.01;
-			} else {
+			}
+			else
+			{
 				$isPartialRefund = false;
 				$temp_mc_gross = -1 * $mc_gross;
 				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+
+			if (!$isValid)
+			{
+				$data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+			}
 		}
 
-		if($isValid) {
-			if($this->params->get('sandbox') == $transaction['livemode']) {
+		if ($isValid)
+		{
+			if($this->params->get('sandbox') == $transaction['livemode'])
+			{
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Transaction done in wrong mode.";
 			}
@@ -245,7 +279,8 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		$this->logIPN($transaction, $isValid);
 
 		// Fraud attempt? Do nothing more!
-		if(!$isValid) {
+		if (!$isValid)
+		{
 			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
@@ -262,21 +297,23 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		switch($transaction['status'])
 		{
 			case 'closed':
+			case 'partial_refunded':
 				$newStatus = 'C';
 				break;
+
 			case 'open':
 			case 'pending':
-			case 'partial_refunded':
-			case 'refunded':
 			case 'preauthorize':
 				$newStatus = 'P';
 				break;
-			default:
+
+			case 'failed':
+			case 'refunded':
 				$newStatus = 'X';
 				break;
 		}
 
-		// Update subscription status (this+ also automatically calls the plugins)
+		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
 				'akeebasubs_subscription_id'	=> $id,
 				'processor_key'					=> $transaction['payment']['id'],
