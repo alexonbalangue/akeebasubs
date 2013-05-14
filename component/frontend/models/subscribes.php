@@ -148,7 +148,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				'opt'				=> $this->getState('opt','','cmd')
 			);
 
-			if ($emailasusername)
+			if ($emailasusername && (JFactory::getUser()->guest))
 			{
 				$stateVars->username = $stateVars->email;
 			}
