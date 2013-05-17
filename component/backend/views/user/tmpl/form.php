@@ -163,7 +163,7 @@ $this->loadHelper('format');
 	$params = @json_decode($this->item->params);
 	if(empty($params)) $params = new stdClass();
 	$userparams = (object)array('params' => $params);
-	$jResponse = $app->triggerEvent('onSubscriptionFormRender', array($userparams, array('subscriptionlevel'=>null, 'custom'=>array())));
+	$jResponse = $app->triggerEvent('onSubscriptionFormRender', array($userparams, array('subscriptionlevel'=>-1, 'custom'=>array())));
 	if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
 	if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):?>
 	<div class="control-group">
