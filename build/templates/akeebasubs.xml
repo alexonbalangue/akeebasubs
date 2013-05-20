@@ -15,6 +15,7 @@
 		<filename>akeebasubs.php</filename>
 		<filename>dispatcher.php</filename>
 		<filename>router.php</filename>
+		<filename>toolbar.php</filename>
 		
 		<folder>controllers</folder>
 		<folder>elements</folder>

@@ -3,6 +3,7 @@ Akeeba Subscriptions 3.1.3
 ================================================================================
 ~ Custom fields restricted to specific subscription levels are now shown in the back-end user profile page
 # [LOW] Existing users could not renew subscriptions if the use email as username option was enabled and the username of the user was not his email address
+# [LOW] Front-end page titles include escaped HTML
 
 Akeeba Subscriptions 3.1.2
 ================================================================================
