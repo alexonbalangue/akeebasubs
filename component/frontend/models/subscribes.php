@@ -1830,7 +1830,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$someSubscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->user_id($user->id)
 					->level($l->akeebasubs_level_id)
-					->enabled(1)
+					->paystate('C')
 					->getList(true);
 				if(count($someSubscriptions)) {
 					$subscriptions = array_merge($subscriptions, $someSubscriptions);
@@ -1841,7 +1841,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->level($state->id)
-				->enabled(1)
+				->paystate('C')
 				->getList(true);
 		}
 
@@ -1856,8 +1856,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 		} else {
 			$startDate = $now;
 			foreach($subscriptions as $row) {
-				// Only take into account active subscriptions
-				if(!$row->enabled) continue;
+				// Only take into account paid-for subscriptions
+				if($row->state != 'C') continue;
 				// Calculate the expiration date
 				$jDate = new JDate($row->publish_down);
 				$expiryDate = $jDate->toUnix();
