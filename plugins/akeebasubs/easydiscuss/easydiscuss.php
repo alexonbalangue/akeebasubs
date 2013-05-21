@@ -14,23 +14,23 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 {
 	/** @var array Levels to Ranks to Add mapping */
 	private $addRanks = array();
-	
+
 	/** @var array Levels to Ranks to Remove mapping */
 	private $removeRanks = array();
-	
+
 	/** @var array Levels to Badges to Add mapping */
 	private $addBadges = array();
-	
+
 	/** @var array Levels to Badges to Remove mapping */
 	private $removeBadges = array();
-	
+
 	public function __construct(& $subject, $config = array())
 	{
 		$templatePath = dirname(__FILE__);
 		$name = 'easydiscuss';
-		
+
 		parent::__construct($subject, $name, $config, $templatePath, false);
-		
+
 		// Do we have values from the Olden Days?
 		if(isset($config['params']) && false) {
 			$configParams = @json_decode($config['params']);
@@ -72,10 +72,10 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 
 		if(!empty($strAddRanks) || !empty($strRemoveRanks)
 				|| !empty($strAddRanks) || !empty($strRemoveRanks)) {
-			// Load level to ranks mapping from plugin parameters	
+			// Load level to ranks mapping from plugin parameters
 			$this->addRanks = $this->parseMapping($strAddRanks, 'RANKS');
 			$this->removeRanks = $this->parseMapping($strRemoveRanks, 'RANKS');
-			// Load level to badges mapping from plugin parameters	
+			// Load level to badges mapping from plugin parameters
 			$this->addBadges = $this->parseMapping($strAddBadges, 'BADGES');
 			$this->removeBadges = $this->parseMapping($strRemoveBadges, 'BADGES');
 			// Do a transparent upgrade
@@ -84,14 +84,14 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			$this->loadGroupAssignments();
 		}
 	}
-	
+
 	protected function loadGroupAssignments()
 	{
 		$this->addRanks = array();
 		$this->removeRanks = array();
 		$this->addBadges = array();
 		$this->removeBadges = array();
-		
+
 		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$addranksKey = 'easydiscuss_addranks';
@@ -130,20 +130,24 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			}
 		}
 	}
-	
+
 	public function onAKUserRefresh($user_id)
 	{
 		// Make sure we're configured
-		if(empty($this->addRanks) && empty($this->removeRanks)) return;
-	
+		if(empty($this->addRanks)  && empty($this->removeRanks) &&
+		   empty($this->addBadges) && empty($this->removeBadges)   )
+		{
+			return;
+		}
+
 		// Get all of the user's subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
-			
+
 		// Make sure there are subscriptions set for the user
 		if(!count($subscriptions)) return;
-		
+
 		// Get the initial list of ranks to add/remove from
 		$addRanks = array();
 		$removeRanks = array();
@@ -195,16 +199,16 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		// Sort the lists
 		asort($addRanks);
 		asort($removeRanks);
 		asort($addBadges);
 		asort($removeBadges);
-		
+
 		// Get DB connection
 		$db = JFactory::getDBO();
-		
+
 		$time = JFactory::getDate()->toSql();
 		// Add rank
 		if(! empty($addRanks)) {
@@ -254,9 +258,9 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 					->where($db->qn('user_id') . ' = ' . $db->q($user_id));
 				$db->setQuery($query);
 				$db->execute();
-			}	
+			}
 		}
-		
+
 		// Add badges
 		foreach($addBadges as $badge_id) {
 			$db = JFactory::getDBO();
@@ -297,25 +301,25 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			$db->setQuery($query);
 			$db->execute();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Not used in this plugin
 	 */
 	protected function getGroups() {
 		return array();
 	}
-	
+
 	protected function getSelectField($level, $type)
 	{
 		static $ranks = null;
 		static $badges = null;
-		
+
 		$parts = explode('-', $type, 2);
 		$type = $parts[0];
 		$group = $parts[1];
-		
+
 		if(! in_array($type, array('add', 'remove'))) return '';
 		if(! in_array($group, array('RANKS', 'BADGES'))) return '';
 		$options = array();
@@ -364,17 +368,17 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			return JHtmlSelect::genericlist($options, 'params[easydiscuss_' . $type . strtolower($group) . '][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
 		}
 	}
-	
+
 	/**
 	 * =========================================================================
 	 * !!! CRUFT WARNING !!!
 	 * =========================================================================
-	 * 
+	 *
 	 * The following methods are leftovers from the Olden Days (before 2.4.5).
 	 * At some point (most likely 2.6) they will be removed. For now they will
 	 * stay here so that we can do a transparent migration.
 	 */
-	
+
 	/**
 	 * Moves this plugin's settings from the plugin into each subscription
 	 * level's configuration parameters.
@@ -431,7 +435,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		// Remove the plugin parameters
 		if(isset($config['params'])) {
 			$configParams = @json_decode($config['params']);
@@ -440,7 +444,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			unset($configParams->addbadges);
 			unset($configParams->removebadges);
 			$param_string = @json_encode($configParams);
-			
+
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true)
 				->update($db->qn('#__extensions'))
@@ -452,17 +456,17 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			$db->execute();
 		}
 	}
-	
+
 	private function EasyDiscussRankToId($title)
 	{
 		static $ranks = null;
-		
+
 		if(empty($title)) return -1;
-		
+
 		if(is_null($ranks)) {
 			$this->ListToId('#__discuss_ranks', 'title', 'id', $ranks);
 		}
-		
+
 		$title = strtoupper(trim($title));
 		if(array_key_exists($title, $ranks)) {
 			// Mapping found
@@ -475,17 +479,17 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			return -1;
 		}
 	}
-	
+
 	private function EasyDiscussBadgeToId($title)
 	{
 		static $badges = null;
-		
+
 		if(empty($title)) return -1;
-		
+
 		if(is_null($badges)) {
 			$this->ListToId('#__discuss_badges', 'title', 'id', $badges);
 		}
-		
+
 		$title = strtoupper(trim($title));
 		if(array_key_exists($title, $badges)) {
 			// Mapping found
@@ -498,7 +502,7 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 			return -1;
 		}
 	}
-	
+
 	private function ListToId($table, $title_col, $id_col, &$lists)
 	{
 		$lists = array();
@@ -524,41 +528,41 @@ class plgAkeebasubsEasyDiscuss extends plgAkeebasubsAbstract
 	private function parseMapping($rawData, $type)
 	{
 		if(empty($rawData)) return array();
-		
+
 		$ret = array();
-		
+
 		// Just in case something funky happened...
 		$rawData = str_replace("\\n", "\n", $rawData);
 		$rawData = str_replace("\r", "\n", $rawData);
 		$rawData = str_replace("\n\n", "\n", $rawData);
-		
+
 		$lines = explode("\n", $rawData);
-		
+
 		foreach($lines as $line) {
 			$line = trim($line);
 			$parts = explode('=', $line, 2);
 			if(count($parts) != 2) continue;
-			
+
 			$level = $parts[0];
 			$rawItems = $parts[1];
-			
+
 			$items = explode(',', $rawItems);
 			if(empty($items)) continue;
 			if(!is_array($items)) $items = array($items);
-			
+
 			$levelId = $this->ASLevelToId($level);
 			$itemIds = array();
 			foreach($items as $itemTitle) {
 				if($type == 'RANKS') {
-					$itemIds[] = $this->EasyDiscussRankToId($itemTitle);	
+					$itemIds[] = $this->EasyDiscussRankToId($itemTitle);
 				} elseif ($type == 'BADGES') {
 					$itemIds[] = $this->EasyDiscussBadgeToId($itemTitle);
 				}
 			}
-			
+
 			$ret[$levelId] = $itemIds;
 		}
-		
+
 		return $ret;
 	}
 }
