@@ -83,7 +83,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 		foreach($items as $item) {
 			// If it's not something shown in this level, skip it
 			if($item->show == 'level') {
-				if ($cache['subscriptionlevel'] == -1)
+				if ($cache['subscriptionlevel'] != -1)
 				{
 					$fieldlevels = explode(',', $item->akeebasubs_level_id);
 					if (!in_array($cache['subscriptionlevel'], $fieldlevels))
