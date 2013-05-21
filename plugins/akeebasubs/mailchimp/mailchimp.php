@@ -11,7 +11,7 @@ $akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasub
 if(!$akeebasubsinclude) { unset($akeebasubsinclude); return; } else { unset($akeebasubsinclude); }
 
 class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
-{	
+{
 	private $mcApi;
 	private $delete_member = false;
 	private $send_goodbye = true;
@@ -20,17 +20,17 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 	private $double_optin = true;
 	private $send_welcome = false;
 	protected $customFields = array();
-	
+
 	public function __construct(& $subject, $config = array())
 	{
 		$templatePath = dirname(__FILE__);
 		$name = 'mailchimp';
-		
+
 		parent::__construct($subject, $name, $config, $templatePath);
-		
+
 		// Load the MailChimp library
 		require_once dirname(__FILE__).'/library/MCAPI.class.php';
-		
+
 		$configParams = @json_decode($config['params']);
 		$apiKey = $configParams->mailchimp_key;
 		$this->mcApi = new MCAPI($apiKey);
@@ -40,22 +40,22 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		$this->email_type = $configParams->email_type;
 		$this->double_optin = $configParams->double_optin;
 		$this->send_welcome = $configParams->send_welcome;
-		
+
 		// Do we have values from the Olden Days?
 		$strAddGroups = $configParams->addlists;
 		$strRemoveGroups = $configParams->removelists;
 		if(!empty($strAddGroups) || !empty($strAddGroups)) {
-			// Load level to group mapping from plugin parameters		
+			// Load level to group mapping from plugin parameters
 			$this->addGroups = $this->parseGroups($strAddGroups);
 			$this->removeGroups = $this->parseGroups($strRemoveGroups);
 			// Do a transparent upgrade
 			$this->upgradeSettings($config);
 		}
-		
+
 		// Load custom fields
 		$this->loadCustomFieldsAssignments();
 	}
-	
+
 	protected function loadCustomFieldsAssignments()
 	{
 		$this->customFields = array();
@@ -79,7 +79,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 			}
 		}
 	}
-	
+
 	public function onAKUserRefresh($user_id)
 	{
 		// Load groups
@@ -87,7 +87,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		$removeLists = array();
 		$this->loadUserGroups($user_id, $addLists, $removeLists);
 		if(empty($addLists) && empty($removeLists)) return;
-		
+
 		// Find all custom fields to add
 		foreach($this->addGroups as $level => $lists) {
 			$customFields = $this->getCustomFields($level);
@@ -118,7 +118,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		// Get the user's name and email
 		$user = JUser::getInstance($user_id);
 		$nameParts = explode(' ', trim($user->name), 2);
@@ -129,13 +129,13 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 			$lastName = '';
 		}
 		$email = $user->email;
-		
+
 		// Get the user's MailChimp lists
 		$currentLists = $this->mcApi->listsForEmail($email);
-		
+
 		// Get the session
 		$session = JFactory::getSession();
-		
+
 		// Remove from MailChimp list
 		if(!empty($removeLists)) {
 			foreach($removeLists as $mcListToRemove) {
@@ -152,7 +152,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				$session->clear('mailchimp.' . $mcSubscribeId, 'com_akeebasubs');
 			}
 		}
-		
+
 		// Add to MailChimp list
 		if(!empty($addLists)) {
 			// Get custom field values of last subscription
@@ -161,7 +161,16 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				->getList();
 			$lastSubscription = $subs[0];
 			$params = json_decode($lastSubscription->userparams);
-			$customFieldsLastSub = $this->customFields[$lastSubscription->akeebasubs_level_id];
+
+			if(isset($this->customFields[$lastSubscription->akeebasubs_level_id]))
+			{
+				$customFieldsLastSub = $this->customFields[$lastSubscription->akeebasubs_level_id];
+			}
+			else
+			{
+				$customFieldsLastSub = array();
+			}
+
 			$subscriptionMergeVals = array();
 			foreach($customFieldsLastSub as $customFieldId) {
 				$customField = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
@@ -174,7 +183,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 					$subscriptionMergeVals[strtoupper($customFieldSlug)] = $val;
 				}
 			}
-		
+
 			// Add subscriber to lists
 			foreach($addLists as $mcListToAdd) {
 				if(! (is_array($currentLists) && in_array($mcListToAdd, $currentLists))) {
@@ -194,7 +203,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 									$mergeVals = array_merge($mergeVals, $subscriptionMergeVals);
 									break;
 								}
-							}	
+							}
 						}
 						// Subscribe to MC list
 						if($this->mcApi->listSubscribe(
@@ -209,23 +218,23 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 							// Add new MailChimp subscription to session to avoid that MailChimp sends multiple
 							// emails for one subscription (before subscription is confirmed by the user)
 							$session->set('mailchimp.' . $mcSubscribeId , 'new', 'com_akeebasubs');
-						}	
-					}	
+						}
+					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * =========================================================================
 	 * !!! CRUFT WARNING !!!
 	 * =========================================================================
-	 * 
+	 *
 	 * The following methods are leftovers from the Olden Days (before 2.4.5).
 	 * At some point (most likely 2.6) they will be removed. For now they will
 	 * stay here so that we can do a transparent migration.
 	 */
-	
+
 	/**
 	 * Moves this plugin's settings from the plugin into each subscription
 	 * level's configuration parameters.
@@ -266,14 +275,14 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		// Remove the plugin parameters
 		if(isset($config['params'])) {
 			$configParams = @json_decode($config['params']);
 			unset($configParams->addlists);
 			unset($configParams->removelists);
 			$param_string = @json_encode($configParams);
-			
+
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true)
 				->update($db->qn('#__extensions'))
@@ -288,10 +297,10 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 
 	protected function getGroups() {
 		static $groups = null;
-		
+
 		if(is_null($groups)) {
 			$groups = array();
-			
+
 			$start = 0;
 			$limit = 100;
 			$mcLists = $this->mcApi->lists(array(), $start, $limit);
@@ -310,20 +319,20 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		return $groups;
 	}
 
 	protected function getCustomFields($level_id)
 	{
 		static $customFields = array();
-		
+
 		if(empty($customFields[$level_id])) {
 			$customFields[$level_id] = array();
 			$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
 				->enabled(1)
 				->getItemList(true);
-			
+
 			// Loop through the items
 			foreach($items as $item) {
 				if($item->show == 'all' || $item->akeebasubs_level_id == $level_id) {
@@ -331,7 +340,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		return $customFields[$level_id];
 	}
 
