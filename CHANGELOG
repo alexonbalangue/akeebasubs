@@ -8,6 +8,7 @@ Akeeba Subscriptions 3.1.3
 # [MEDIUM] Fixed bug on EasyDiscussion plugin
 # [LOW] Existing users could not renew subscriptions if the use email as username option was enabled and the username of the user was not his email address
 # [LOW] Front-end page titles include escaped HTML
+# [LOW] Pre-installation script would run the wrong SQL files on upgrade (normally not causing a problem, but still it's not the intended behaviour)
 
 Akeeba Subscriptions 3.1.2
 ================================================================================
