@@ -141,7 +141,7 @@ class plgAkeebasubsIproperty extends JPlugin
 			$alias = AkeebasubsHelperFilter::toSlug($user->name);
 
 			$agent = (object)array(
-				'agent_type'	=> 0,
+				'agent_type'	=> 1,
 				'hometeam'		=> 0,
 				'fname'			=> $firstName,
 				'lname'			=> $lastName,
