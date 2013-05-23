@@ -25,6 +25,8 @@ $styleRegular	= $this->cparams->showregularfield <= 0 ? 'display:none' : '';
 $styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
 
 $paymentMethodsCount = count(AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id, 'return_raw_list' => 1)));
+
+$hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepaymentoption) || ($this->validation->price->gross < 0.01);
 ?>
 
 <div id="akeebasubs">
@@ -155,10 +157,7 @@ $paymentMethodsCount = count(AkeebasubsHelperSelect::paymentmethods('paymentmeth
 		<?php endif; ?>
 	</fieldset>
 
-	<?php if ($paymentMethodsCount == 1): ?>
-	<div style="display: none">
-	<?php endif; ?>
-	<div id="paymentmethod-container" <?php echo ($this->validation->price->gross < 0.01) ? 'style="display: none;"' : '' ?>>
+	<div id="paymentmethod-container" <?php echo $hidePaymentMethod ? 'style="display: none;"' : '' ?>>
 		<div class="control-group">
 			<label for="paymentmethod" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?>
@@ -168,9 +167,6 @@ $paymentMethodsCount = count(AkeebasubsHelperSelect::paymentmethods('paymentmeth
 			</div>
 		</div>
 	</div>
-	<?php if ($paymentMethodsCount == 1): ?>
-	</div>
-	<?php endif; ?>
 
 	<div class="form-actions">
 		<button id="subscribenow" class="btn btn-large btn-primary" type="submit">
