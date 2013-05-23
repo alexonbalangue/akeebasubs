@@ -157,7 +157,10 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 		<?php endif; ?>
 	</fieldset>
 
-	<div id="paymentmethod-container" <?php echo $hidePaymentMethod ? 'style="display: none;"' : '' ?>>
+	<?php if($hidePaymentMethod): ?>
+	<div style="display: none;">
+	<?php endif; ?>
+	<div id="paymentmethod-container">
 		<div class="control-group">
 			<label for="paymentmethod" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?>
@@ -167,6 +170,9 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 			</div>
 		</div>
 	</div>
+	<?php if($hidePaymentMethod): ?>
+	</div>
+	<?php endif; ?>
 
 	<div class="form-actions">
 		<button id="subscribenow" class="btn btn-large btn-primary" type="submit">
