@@ -19,10 +19,10 @@ class plgAkeebasubsAgeverification extends JPlugin
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_akeebasubs_ageverification', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$lang->load('plg_akeebasubs_ageverification', JPATH_ADMINISTRATOR, null, true);
-	
+
 		// Init the fields array which will be returned
 		$fields = array();
-		
+
 		// ----- AGREE TO TOS FIELD -----
 		// Get the current setting (or 0 if none)
 		if(array_key_exists('ageverification', $cache['custom'])) {
@@ -56,7 +56,7 @@ class plgAkeebasubsAgeverification extends JPlugin
 		);
 		// Add the field to the return output
 		$fields[] = $field;
-		
+
 		// ----- ADD THE JAVASCRIPT -----
 		$javascript = <<<ENDJS
 (function($) {
@@ -71,11 +71,11 @@ class plgAkeebasubsAgeverification extends JPlugin
 function plg_akeebasubs_ageverification_fetch()
 {
 	var result = {};
-	
+
 	(function($) {
 		result.ageverification = $('#ageverification').val();
 	})(akeeba.jQuery);
-	
+
 	return result;
 }
 
@@ -83,6 +83,13 @@ function plg_akeebasubs_ageverification_validate(response)
 {
 	(function($) {
 		$('#ageverification').parent().parent().removeClass('error').removeClass('success');
+		$('#ageverification_invalid').css('display','none');
+
+		if (!akeebasubs_apply_validation)
+		{
+			return true;
+		}
+
 		if(response.custom_validation.ageverification) {
 			$('#ageverification').parent().parent().addClass('success');
 			$('#ageverification_invalid').css('display','none');
@@ -98,25 +105,25 @@ function plg_akeebasubs_ageverification_validate(response)
 ENDJS;
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
-		
+
 		// ----- RETURN THE FIELDS -----
 		return $fields;
 	}
-	
+
 	function onValidate($data)
 	{
 		$response = array(
 			'isValid'			=> true,
 			'custom_validation'	=> array()
 		);
-		
+
 		$custom = $data->custom;
-		
+
 		if(!array_key_exists('ageverification',$custom)) $custom['ageverification'] = 0;
-		
+
 		$response['custom_validation']['ageverification'] = $custom['ageverification'] != 0;
-		$response['valid'] = $response['custom_validation']['ageverification']; 
-		
+		$response['valid'] = $response['custom_validation']['ageverification'];
+
 		return $response;
 	}
 }

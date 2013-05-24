@@ -1724,6 +1724,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$state = $this->getStateVariables();
 		$validation = $this->getValidation();
 
+		// Mark this subscription attempt in the session
+		JFactory::getSession()->set('apply_validation.' . $state->id, 1, 'com_akeebasubs');
+
 		// Step #1.a. Check that the form is valid
 		// ----------------------------------------------------------------------
 		$isValid = $this->isValid();
@@ -2019,6 +2022,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// ----------------------------------------------------------------------
 		$session = JFactory::getSession();
 		$session->set('validation_cache_data', null, 'com_akeebasubs');
+		$session->set('apply_validation.' . $state->id, null, 'com_akeebasubs');
 
 		// Step #9. Call the specific plugin's onAKPaymentNew() method and get the redirection URL,
 		//          or redirect immediately on auto-activated subscriptions

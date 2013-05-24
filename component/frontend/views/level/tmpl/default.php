@@ -197,6 +197,7 @@ akeebasubs_fieldprefs = {
 	'showdiscountfield'		: {$this->cparams->showdiscountfield},
 	'showtaxfield'			: {$this->cparams->showtaxfield}
 };
+akeebasubs_apply_validation = {$this->apply_validation};
 
 window.addEvent('domready', function() {
 	(function(\$) {

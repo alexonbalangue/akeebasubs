@@ -12,7 +12,7 @@ require_once __DIR__.'/dropdown.php';
 
 /**
  * A radio selection list field
- * 
+ *
  * @author Nicholas K. Dionysopoulos
  * @since 2.6.0
  */
@@ -20,10 +20,10 @@ class AkeebasubsCustomFieldRadio extends AkeebasubsCustomFieldDropdown
 {
 	public function __construct(array $config = array()) {
 		parent::__construct($config);
-		
+
 		$this->input_type = 'radio';
 	}
-	
+
 	public function getJavascript($item)
 	{
 		$slug = $item->slug;
@@ -50,7 +50,7 @@ function plg_akeebasubs_customfields_fetch_$slug()
 }
 
 ENDJS;
-		
+
 		if(!$item->allow_empty):
 			$success_javascript = '';
 			$failure_javascript = '';
@@ -63,11 +63,19 @@ ENDJS;
 				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
 			}
 			$javascript .= <<<ENDJS
+
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
 	var thisIsValid = true;
 	(function($) {
 		$('#$slug').parent().parent().removeClass('error').removeClass('success');
+		$('#{$slug}_invalid').css('display','none');
+		$('#{$slug}_valid').css('display','none');
+		if (!akeebasubs_apply_validation)
+		{
+			return true;
+		}
+
 		if(response.custom_validation.$slug) {
 			$('#$slug').parent().parent().addClass('success');
 			$success_javascript
@@ -82,7 +90,7 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 
 ENDJS;
 		endif;
-		
+
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
 	}

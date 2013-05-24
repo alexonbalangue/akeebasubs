@@ -85,14 +85,17 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		addToValidationFetchQueue(plg_akeebasubs_agreetotos_fetch);
 		// Tell Akeeba Subscriptions how to validate the extra field data
 		addToValidationQueue(plg_akeebasubs_agreetotos_validate);
-		// Immadiate validation of the field
-		$('#agreetotos').change(function(e){
-			if($('#agreetotos').val() == 1) {
-				$('#agreetotos_invalid').css('display','none');
-			} else {
-				$('#agreetotos_invalid').css('display','inline-block');
-			}
-		});
+		// Immediate validation of the field
+		if (akeebasubs_apply_validation)
+		{
+			$('#agreetotos').change(function(e){
+				if($('#agreetotos').val() == 1) {
+					$('#agreetotos_invalid').css('display','none');
+				} else {
+					$('#agreetotos_invalid').css('display','inline-block');
+				}
+			});
+		}
 	});
 })(akeeba.jQuery);
 
@@ -111,6 +114,13 @@ function plg_akeebasubs_agreetotos_validate(response)
 {
 	(function($) {
 		$('#agreetotos').parent().parent().removeClass('error').removeClass('success');
+		$('#agreetotos_invalid').css('display','none');
+
+		if (!akeebasubs_apply_validation)
+		{
+			return true;
+		}
+
 		if(response.custom_validation.agreetotos) {
 			$('#agreetotos').parent().parent().addClass('success');
 			$('#agreetotos_invalid').css('display','none');

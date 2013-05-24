@@ -19,10 +19,10 @@ class plgAkeebasubsSamplefields extends JPlugin
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_akeebasubs_samplefields', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$lang->load('plg_akeebasubs_samplefields', JPATH_ADMINISTRATOR, null, true);
-	
+
 		// Init the fields array which will be returned
 		$fields = array();
-		
+
 		// ----- TELEPHONE FIELD -----
 		if(array_key_exists('phonenumber', $cache['custom'])) {
 			$current = $cache['custom']['phonenumber'];
@@ -45,7 +45,7 @@ class plgAkeebasubsSamplefields extends JPlugin
 		);
 		// Add the field to the return output
 		$fields[] = $field;
-		
+
 		// ----- AGE GROUP FIELD -----
 		// Get the current setting (or 0 if none)
 		if(array_key_exists('agegroup', $cache['custom'])) {
@@ -79,7 +79,7 @@ class plgAkeebasubsSamplefields extends JPlugin
 		);
 		// Add the field to the return output
 		$fields[] = $field;
-		
+
 		// ----- GENDER FIELD -----
 		// Get the current setting (or 0 if none)
 		if(array_key_exists('gender', $cache['custom'])) {
@@ -106,7 +106,7 @@ class plgAkeebasubsSamplefields extends JPlugin
 		);
 		// Add the field to the return output
 		$fields[] = $field;
-		
+
 		// ----- ADD THE JAVASCRIPT -----
 		$javascript = <<<ENDJS
 (function($) {
@@ -121,13 +121,13 @@ class plgAkeebasubsSamplefields extends JPlugin
 function plg_akeebasubs_samplefields_fetch()
 {
 	var result = {};
-	
+
 	(function($) {
 		result.agegroup = $('#agegroup').val();
 		result.gender = $('#gender').val();
 		result.phonenumber = $('#phonenumber').val();
 	})(akeeba.jQuery);
-	
+
 	return result;
 }
 
@@ -136,6 +136,15 @@ function plg_akeebasubs_samplefields_validate(response)
 	var thisIsValid = true;
 	(function($) {
 		$('#agegroup').parent().parent().removeClass('error').removeClass('success');
+		$('#phonenumber').parent().parent().removeClass('error').removeClass('success');
+		$('#agegroup_invalid').css('display','none');
+		$('#phonenumber_invalid').css('display','none');
+
+		if (!akeebasubs_apply_validation)
+		{
+			return true;
+		}
+
 		if(response.custom_validation.agegroup) {
 			$('#agegroup').parent().parent().addClass('success');
 			$('#agegroup_invalid').css('display','none');
@@ -144,8 +153,7 @@ function plg_akeebasubs_samplefields_validate(response)
 			$('#agegroup_invalid').css('display','inline-block');
 			thisIsValid = false;
 		}
-		
-		$('#phonenumber').parent().parent().removeClass('error').removeClass('success');
+
 		if(response.custom_validation.phonenumber) {
 			$('#phonenumber').parent().parent().addClass('success');
 			$('#phonenumber_invalid').css('display','none');
@@ -154,7 +162,7 @@ function plg_akeebasubs_samplefields_validate(response)
 			$('#phonenumber_invalid').css('display','inline-block');
 			thisIsValid = false
 		}
-		
+
 		return thisIsValid;
 	})(akeeba.jQuery);
 }
@@ -162,11 +170,11 @@ function plg_akeebasubs_samplefields_validate(response)
 ENDJS;
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
-		
+
 		// ----- RETURN THE FIELDS -----
 		return $fields;
 	}
-	
+
 	function onValidate($data)
 	{
 		// Initialise the validation respone
@@ -174,7 +182,7 @@ ENDJS;
 			'isValid'			=> true,
 			'custom_validation'	=> array()
 		);
-		
+
 		// Fetch the custom data
 		$custom = $data->custom;
 
@@ -185,11 +193,11 @@ ENDJS;
 		// Validate the phone number
 		if(!array_key_exists('phonenumber',$custom)) $custom['phonenumber'] = 0;
 		$response['custom_validation']['phonenumber'] = !empty($custom['phonenumber']);
-		
+
 		// The overall validation response is based on both validatable fields
 		$response['valid'] = $response['custom_validation']['agegroup'] &&
-			$response['custom_validation']['phonenumber']; 
-		
+			$response['custom_validation']['phonenumber'];
+
 		return $response;
 	}
 }

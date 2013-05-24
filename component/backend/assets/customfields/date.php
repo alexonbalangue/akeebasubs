@@ -11,7 +11,7 @@ require_once __DIR__.'/abstract.php';
 
 /**
  * A date input field
- * 
+ *
  * @author Nicholas K. Dionysopoulos
  * @since 2.6.0
  */
@@ -30,13 +30,13 @@ class AkeebasubsCustomFieldDate extends AkeebasubsCustomFieldAbstract
 				$current = property_exists($userparams->params, $item->slug) ? $userparams->params->$slug : $item->default;
 			}
 		}
-		
+
 		// Is this a required field?
 		$required = $item->allow_empty ? '' : '* ';
 
 		// Set up field's HTML content
 		$html = JHTML::_('calendar', $current, 'custom['.$item->slug.']', $item->slug);
-		
+
 		// Setup the field
 		$field = array(
 			'id'			=> $item->slug,
@@ -44,17 +44,17 @@ class AkeebasubsCustomFieldDate extends AkeebasubsCustomFieldAbstract
 			'elementHTML'	=> $html,
 			'isValid'		=> $required ? (!empty($current) && $current != '0000-00-00 00:00:00') : true
 		);
-		
+
 		if($item->invalid_label) {
 			$field['invalidLabel'] = JText::_($item->invalid_label);
 		}
 		if($item->valid_label) {
 			$field['validLabel'] = JText::_($item->valid_label);
 		}
-		
+
 		return $field;
 	}
-	
+
 	public function getJavascript($item)
 	{
 		$slug = $item->slug;
@@ -81,7 +81,7 @@ function plg_akeebasubs_customfields_fetch_$slug()
 }
 
 ENDJS;
-		
+
 		if(!$item->allow_empty):
 			$success_javascript = '';
 			$failure_javascript = '';
@@ -94,11 +94,19 @@ ENDJS;
 				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
 			}
 			$javascript .= <<<ENDJS
+
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
 	var thisIsValid = true;
 	(function($) {
 		$('#$slug').parent().parent().removeClass('error').removeClass('success');
+		$('#{$slug}_invalid').css('display','none');
+		$('#{$slug}_valid').css('display','none');
+		if (!akeebasubs_apply_validation)
+		{
+			return true;
+		}
+
 		if(response.custom_validation.$slug) {
 			$('#$slug').parent().parent().addClass('success');
 			$success_javascript
@@ -113,20 +121,20 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 
 ENDJS;
 		endif;
-		
+
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
 	}
-	
+
 	public function validate($item, $custom)
 	{
 		if (!array_key_exists($item->slug, $custom))
 		{
 			$custom[$item->slug] = '';
 		}
-		
+
 		$valid = true;
-		
+
 		if (!$item->allow_empty)
 		{
 			$valid = !empty($custom[$item->slug]);

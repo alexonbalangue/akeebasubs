@@ -11,14 +11,14 @@ require_once __DIR__.'/abstract.php';
 
 /**
  * A text input (editbox) field
- * 
+ *
  * @author Nicholas K. Dionysopoulos
  * @since 2.6.0
  */
 class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 {
 	protected $input_type = 'text';
-	
+
 	/**
 	 * Creates a custom field of the "text" type
 	 * @param	AkeebasubsTableCustomfield	$item	     A custom field definition
@@ -38,7 +38,7 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 				$current = property_exists($userparams->params, $item->slug) ? $userparams->params->$slug : $item->default;
 			}
 		}
-		
+
 		// Is this a required field?
 		$required = $item->allow_empty ? '' : '* ';
 
@@ -48,10 +48,10 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 		} else {
 			$placeholder = '';
 		}
-		
+
 		// Set up field's HTML content
 		$html = '<input type="'.$this->input_type.'" name="custom['.$item->slug.']" id="'.$item->slug.'" value="'.htmlentities($current, ENT_COMPAT, 'UTF-8').'" placeholder="'.$placeholder.'" />';
-		
+
 		// Setup the field
 		$field = array(
 			'id'			=> $item->slug,
@@ -59,17 +59,17 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 			'elementHTML'	=> $html,
 			'isValid'		=> $required ? !empty($current) : true
 		);
-		
+
 		if($item->invalid_label) {
 			$field['invalidLabel'] = JText::_($item->invalid_label);
 		}
 		if($item->valid_label) {
 			$field['validLabel'] = JText::_($item->valid_label);
 		}
-		
+
 		return $field;
 	}
-	
+
 	/**
 	 * Create the necessary Javascript for a textbox
 	 * @param	AkeebasubsTableCustomfield	$item	The item to render the Javascript for
@@ -100,7 +100,7 @@ function plg_akeebasubs_customfields_fetch_$slug()
 }
 
 ENDJS;
-		
+
 		if(!$item->allow_empty):
 			$success_javascript = '';
 			$failure_javascript = '';
@@ -113,11 +113,19 @@ ENDJS;
 				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
 			}
 			$javascript .= <<<ENDJS
+
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
 	var thisIsValid = true;
 	(function($) {
 		$('#$slug').parent().parent().removeClass('error').removeClass('success');
+		$('#{$slug}_invalid').css('display','none');
+		$('#{$slug}_valid').css('display','none');
+		if (!akeebasubs_apply_validation)
+		{
+			return true;
+		}
+
 		if(response.custom_validation.$slug) {
 			$('#$slug').parent().parent().addClass('success');
 			$success_javascript
@@ -132,11 +140,11 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 
 ENDJS;
 		endif;
-		
+
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
 	}
-	
+
 	/**
 	 * Validate a text field
 	 * @param AkeebasubsTableCustomfield	$item	The custom field to validate

@@ -32,5 +32,7 @@ class AkeebasubsViewLevel extends FOFViewHtml
 			'hidelonepaymentoption'	=> AkeebasubsHelperCparams::getParam('hidelonepaymentoption', 1),
 		);
 		$this->cparams = $cparams;
+
+		$this->apply_validation = JFactory::getSession()->get('apply_validation.' . $this->item->akeebasubs_level_id, 0, 'com_akeebasubs') ? 'true' : 'false';
 	}
 }

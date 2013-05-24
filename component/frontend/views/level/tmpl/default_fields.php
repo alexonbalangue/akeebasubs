@@ -26,6 +26,12 @@ if(isset($this->item)) {
 	$akeebasubs_subscription_level = null;
 }
 
+$apply_validation = true;
+if (property_exists($this, 'apply_validation'))
+{
+	$apply_validation = $this->apply_validation == 'true';
+}
+
 $field_data = array(
 	'name'				=> !empty($this->userparams->name) ? $this->userparams->name : $this->cache['name'],
 	'email'				=> !empty($this->userparams->email) ? $this->userparams->email : $this->cache['email'],
@@ -204,7 +210,7 @@ $app = JFactory::getApplication();
 $jResponse = $app->triggerEvent('onSubscriptionFormRender', array($this->userparams, array_merge($this->cache,array('subscriptionlevel' => $akeebasubs_subscription_level))));
 if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
 if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):
-if(array_key_exists('isValid', $field)) {
+if($apply_validation && array_key_exists('isValid', $field)) {
 	$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success' : '') : 'error';
 } else {
 	$customField_class = '';
@@ -218,13 +224,13 @@ if(array_key_exists('isValid', $field)) {
 			<?php echo $field['elementHTML']?>
 			<?php if(array_key_exists('validLabel', $field)):?>
 			<span id="<?php echo $field['id']?>_valid" class="help-inline"
-				  style="<?php if(!$field['isValid']):?>display:none<?php endif?>">
+				  style="<?php if(!$field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
 					  <?php echo $field['validLabel']?>
 			</span>
 			<?php endif;?>
 			<?php if(array_key_exists('invalidLabel', $field)):?>
 			<span id="<?php echo $field['id']?>_invalid" class="help-inline"
-				  style="<?php if($field['isValid']):?>display:none<?php endif?>">
+				  style="<?php if($field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
 					  <?php echo $field['invalidLabel']?>
 			</span>
 			<?php endif;?>
@@ -413,7 +419,7 @@ if(!is_null($akeebasubs_subscription_level)):
 	@ob_start();
 	if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
 		if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):
-			if(array_key_exists('isValid', $field)) {
+			if($apply_validation && array_key_exists('isValid', $field)) {
 				$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success' : '') : 'error';
 			} else {
 				$customField_class = '';
@@ -427,13 +433,13 @@ if(!is_null($akeebasubs_subscription_level)):
 			<?php echo $field['elementHTML']?>
 			<?php if(array_key_exists('validLabel', $field)):?>
 			<span id="<?php echo $field['id']?>_valid" class="help-inline"
-				  style="<?php if(!$field['isValid']):?>display:none<?php endif?>">
+				  style="<?php if(!$field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
 					  <?php echo $field['validLabel']?>
 			</span>
 			<?php endif;?>
 			<?php if(array_key_exists('invalidLabel', $field)):?>
 			<span id="<?php echo $field['id']?>_invalid" class="help-inline"
-				  style="<?php if($field['isValid']):?>display:none<?php endif?>">
+				  style="<?php if($field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
 					  <?php echo $field['invalidLabel']?>
 			</span>
 			<?php endif;?>
