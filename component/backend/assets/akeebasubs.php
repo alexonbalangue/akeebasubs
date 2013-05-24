@@ -135,10 +135,10 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	 */
 	abstract public function onAKUserRefresh($user_id);
 
-	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
+	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups, $addGroupsVarName = 'addGroups', $removeGroupsVarName = 'removeGroups')
 	{
 		// Make sure we're configured
-		if(empty($this->addGroups) && empty($this->removeGroups)) return;
+		if(empty($this->$addGroupsVarName) && empty($this->$removeGroupsVarName)) return;
 
 		// Get all of the user's subscriptions
 		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -153,22 +153,26 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 			$level = $sub->akeebasubs_level_id;
 			if($sub->enabled) {
 				// Enabled subscription, add groups
-				if(empty($this->addGroups)) continue;
-				if(!array_key_exists($level, $this->addGroups)) continue;
-				$groups = $this->addGroups[$level];
+				if(empty($this->$addGroupsVarName)) continue;
+				if(!array_key_exists($level, $this->$addGroupsVarName)) continue;
+				$addGroupsVar = $this->$addGroupsVarName;
+				$groups = $addGroupsVar[$level];
 				foreach($groups as $group) {
-					if(!in_array($group, $addGroups) && ($group > 0)) {
+					if(!in_array($group, $addGroups)) {
+						if(is_numeric($group) && !($group > 0)) continue;
 						$addGroups[] = $group;
 					}
 				}
 			} else {
 				// Disabled subscription, remove groups
-				if(empty($this->removeGroups)) continue;
-				if(!array_key_exists($level, $this->removeGroups)) continue;
-				$groups = $this->removeGroups[$level];
+				if(empty($this->$removeGroupsVarName)) continue;
+				if(!array_key_exists($level, $this->$removeGroupsVarName)) continue;
+				$removeGroupsVar = $this->$removeGroupsVarName;
+				$groups = $removeGroupsVar[$level];
 
 				foreach($groups as $group) {
-					if(!in_array($group, $removeGroups) && ($group > 0)) {
+					if(!in_array($group, $removeGroups)) {
+						if(is_numeric($group) && !($group > 0)) continue;
 						$removeGroups[] = $group;
 					}
 				}
