@@ -1,10 +1,10 @@
-<? 
+<?
 /**
  * @package		mod_akeebasubs
  * @copyright 	Copyright (c) 2011-2013 Sander Potjer
  * @license 	GNU General Public License version 3 or later
  */
- 
+
 defined('_JEXEC') or die();
 
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
@@ -36,8 +36,19 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VE
 		<?php foreach ($items as $subscription) : ?>
 		<?php
 			$m = 1 - $m;
-			$rowClass = ($subscription->enabled) ? '' : 'expired';
-				
+			$rowClass = '';
+			if (!$subscription->enabled)
+			{
+				if($subscription->state == 'C')
+				{
+					$rowClass = 'pending-renewal';
+				}
+				else
+				{
+					$rowClass = 'expired';
+				}
+			}
+
 			$users = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id($subscription->user_id)
 				->getList();
