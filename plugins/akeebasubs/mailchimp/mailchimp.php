@@ -20,7 +20,13 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 	private $double_optin = true;
 	private $send_welcome = false;
 	protected $customFields = array();
-
+	// MC groups
+	protected $addMCGroups = array();
+	protected $removeMCGroups = array();
+	protected $groupingsGroupMap = array();
+	protected $groupingsListMap = array();
+	protected $groupingsGroupName = array();
+	
 	public function __construct(& $subject, $config = array())
 	{
 		$templatePath = dirname(__FILE__);
@@ -54,8 +60,43 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 
 		// Load custom fields
 		$this->loadCustomFieldsAssignments();
+		
+		// Load MC group assignments
+		$this->loadMCGroupAssignments();
 	}
 
+	protected function loadMCGroupAssignments()
+	{
+		$this->addMCGroups = array();
+		$this->removeMCGroups = array();
+
+		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$levels = $model->getList(true);
+		$addMCGroupsKey = strtolower($this->name).'_addmcgroups';
+		$removeMCGroupsKey = strtolower($this->name).'_removemcgroups';
+		if(!empty($levels)) {
+			foreach($levels as $level)
+			{
+				if(is_string($level->params)) {
+					$level->params = @json_decode($level->params);
+					if(empty($level->params)) {
+						$level->params = new stdClass();
+					}
+				} elseif(empty($level->params)) {
+					continue;
+				}
+				if(property_exists($level->params, $addMCGroupsKey))
+				{
+					$this->addMCGroups[$level->akeebasubs_level_id] = array_filter($level->params->$addMCGroupsKey);
+				}
+				if(property_exists($level->params, $removeMCGroupsKey))
+				{
+					$this->removeMCGroups[$level->akeebasubs_level_id] = array_filter($level->params->$removeMCGroupsKey);
+				}
+			}
+		}
+	}
+	
 	protected function loadCustomFieldsAssignments()
 	{
 		$this->customFields = array();
@@ -82,11 +123,16 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 
 	public function onAKUserRefresh($user_id)
 	{
+		// Load lists
+		$addMCLists = array();
+		$removeMCLists = array();
+		$this->loadUserGroups($user_id, $addMCLists, $removeMCLists);
+		
 		// Load groups
-		$addLists = array();
-		$removeLists = array();
-		$this->loadUserGroups($user_id, $addLists, $removeLists);
-		if(empty($addLists) && empty($removeLists)) return;
+		$addMCGroups = array();
+		$removeMCGroups = array();
+		$this->loadUserGroups($user_id, $addMCGroups, $removeMCGroups, 'addMCGroups', 'removeMCGroups');
+		$this->initMCGroups();
 
 		// Find all custom fields to add
 		foreach($this->addGroups as $level => $lists) {
@@ -137,8 +183,8 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		$session = JFactory::getSession();
 
 		// Remove from MailChimp list
-		if(!empty($removeLists)) {
-			foreach($removeLists as $mcListToRemove) {
+		if(!empty($removeMCLists)) {
+			foreach($removeMCLists as $mcListToRemove) {
 				if(is_array($currentLists) && in_array($mcListToRemove, $currentLists)) {
 					$mcSubscribeId = $user_id . ':' . $mcListToRemove;
 					$this->mcApi->listUnsubscribe(
@@ -154,7 +200,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		}
 
 		// Add to MailChimp list
-		if(!empty($addLists)) {
+		if(!empty($addMCLists)) {
 			// Get custom field values of last subscription
 			$subs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user_id)
@@ -185,7 +231,7 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 			}
 
 			// Add subscriber to lists
-			foreach($addLists as $mcListToAdd) {
+			foreach($addMCLists as $mcListToAdd) {
 				if(! (is_array($currentLists) && in_array($mcListToAdd, $currentLists))) {
 					$mcSubscribeId = $user_id . ':' . $mcListToAdd;
 					if($session->get('mailchimp.' . $mcSubscribeId, '', 'com_akeebasubs') != 'new') {
@@ -195,16 +241,50 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 									'FNAME'		=> $firstName,
 									'LNAME'		=> $lastName
 									);
+						
+						// Add custom field values
 						if(! empty($subscriptionMergeVals)) {
-							// Only add custom field values if it's for the same subscription level
 							$lists = $this->addGroups[$lastSubscription->akeebasubs_level_id];
 							foreach($lists as $list) {
 								if($list == $mcListToAdd) {
 									$mergeVals = array_merge($mergeVals, $subscriptionMergeVals);
 									break;
 								}
+							}	
+						}
+						
+						// Add MC groups to new subscription
+						$groupings = array();
+						if(!empty($addMCGroups)) {
+							foreach($addMCGroups as $mcGroupId) {
+								$groupName = str_replace(',', '\,', $this->groupingsGroupName[$mcGroupId]);
+								// No group name
+								if(empty($groupName)) continue;
+								$groupingId = $this->groupingsGroupMap[$mcGroupId];
+								// No correspnding grouping
+								if(empty($groupingId)) continue;
+								$listId = $this->groupingsListMap[$groupingId];
+								// No correspnding list
+								if(empty($listId)) continue;
+								// Group not related to this list
+								if($listId != $mcListToAdd) continue;
+								// We passed all checks: Add the group to the array
+								if(!array_key_exists($groupingId, $groupings)) {
+									$groupings[$groupingId] = array();
+								}
+								$groupings[$groupingId][] = $groupName;
 							}
 						}
+						// Add the new groups to the $mergeVals
+						if(!empty($groupings)) {
+							foreach($groupings as $groupingId => $newGroups) {
+								$newGrouping = array();
+								$newGrouping['id'] = $groupingId;
+								$newGrouping['groups'] = implode(",", $newGroups);
+								$mergeVals['GROUPINGS'][] = $newGrouping;
+							}
+						}
+						
 						// Subscribe to MC list
 						if($this->mcApi->listSubscribe(
 								$mcListToAdd,
@@ -221,6 +301,47 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 						}
 					}
 				}
+			}
+		}
+		
+		// Get the user's MailChimp lists
+		$currentLists = $this->mcApi->listsForEmail($email);
+		
+		// Remove MC group from existing list subscription
+		if(!empty($removeMCGroups) && is_array($currentLists)) {
+			foreach($removeMCGroups as $mcGroupId) {
+				$groupName = str_replace(',', '\,', $this->groupingsGroupName[$mcGroupId]);
+				// No group name
+				if(empty($groupName)) continue;
+				$groupingId = $this->groupingsGroupMap[$mcGroupId];
+				// No correspnding grouping
+				if(empty($groupingId)) continue;
+				$listId = $this->groupingsListMap[$groupingId];
+				// No correspnding list
+				if(empty($listId)) continue;
+				// User is not subscribed to this list
+				if(!in_array($listId, $currentLists)) continue;
+				// We passed all checks: Remove the group
+				$this->removeMCGroup($email, $listId, $groupingId, $groupName);
+			}
+		}
+		
+		// Add MC group to existing list subscription
+		if(!empty($addMCGroups) && is_array($currentLists)) {
+			foreach($addMCGroups as $mcGroupId) {
+				$groupName = str_replace(',', '\,', $this->groupingsGroupName[$mcGroupId]);
+				// No group name
+				if(empty($groupName)) continue;
+				$groupingId = $this->groupingsGroupMap[$mcGroupId];
+				// No correspnding grouping
+				if(empty($groupingId)) continue;
+				$listId = $this->groupingsListMap[$groupingId];
+				// No correspnding list
+				if(empty($listId)) continue;
+				// User is not subscribed to this list
+				if(!in_array($listId, $currentLists)) continue;
+				// We passed all checks: Add the group
+				$this->addMCGroup($email, $listId, $groupingId, $groupName);
 			}
 		}
 	}
@@ -294,7 +415,109 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 			$db->execute();
 		}
 	}
+	
+	/*
+	 * Removes a MailChimp user to a MailChimp group.
+	 */
+	private function removeMCGroup($userEmail, $listId, $groupingId, $groupName)
+	{
+		$userMCInfo = $this->mcApi->listMemberInfo($listId, $userEmail);
+		$userMCData = $userMCInfo['data'][0];
+		$userMergeVars = $userMCData['merges'];
+		if(isset($userMergeVars['GROUPINGS']) && is_array($userMergeVars['GROUPINGS'])) {
+			$groupings = $userMergeVars['GROUPINGS'];
+			foreach($groupings as $key => $grouping) {
+				if($groupingId == $grouping['id']) {
+					$newGroups = array();
+					$groupsChanged = false;
+					$existingGroupsString = $grouping['groups'];
+					$existingGroupsArray = $this->mcGroupsToArray($existingGroupsString);
+					foreach($existingGroupsArray as $existingGroup) {
+						$existingGroup = trim($existingGroup);
+						if($existingGroup != $groupName) {
+							// If this is not the group to be removed, add it again
+							$newGroups[] = $existingGroup;
+						} else {
+							// The group that needs to be removed is there
+							$groupsChanged = true;
+						}
+					}
+					if($groupsChanged) {
+						// Update MailChimp using the new groups
+						if(empty($newGroups)) {
+							$newGroupsString = '';
+						} else {
+							$newGroupsString = implode(",", $newGroups);	
+						}
+						$userMergeVars['GROUPINGS'][$key]['groups'] = $newGroupsString;
+						$this->mcApi->listUpdateMember($listId, $userEmail, $userMergeVars);
+					}
+				}
+			}
+		}
+	}
+	
+	/*
+	 * Adds a MailChimp user to a MailChimp group.
+	 */
+	private function addMCGroup($userEmail, $listId, $groupingId, $groupName)
+	{
+		$userMCInfo = $this->mcApi->listMemberInfo($listId, $userEmail);
+		$userMCData = $userMCInfo['data'][0];
+		$userMergeVars = $userMCData['merges'];
+		if(isset($userMergeVars['GROUPINGS']) && is_array($userMergeVars['GROUPINGS'])) {
+			$groupings = $userMergeVars['GROUPINGS'];
+			foreach($groupings as $key => $grouping) {
+				if($groupingId == $grouping['id']) {
+					$newGroups = array();
+					$groupsChanged = true;
+					$existingGroupsString = $grouping['groups'];
+					$existingGroupsArray = $this->mcGroupsToArray($existingGroupsString);
+					$newGroups = $groupsArray;
+					foreach($existingGroupsArray as $existingGroup) {
+						$existingGroup = trim($existingGroup);
+						if($existingGroup == $groupName) {
+							// The group that needs to be added is already there - nothing to do
+							$groupsChanged = false;
+							break;
+						}
+					}
+					if($groupsChanged) {
+						// Use the existing groups, add the new one, and update MailChimp
+						$newGroups = $existingGroupsArray;
+						$newGroups[] = $groupName;
+						$newGroupsString = implode(",", $newGroups);
+						$userMergeVars['GROUPINGS'][$key]['groups'] = $newGroupsString;
+						$this->mcApi->listUpdateMember($listId, $userEmail, $userMergeVars);
+					}
+				}
+			}
+		}
+	}
+	
+	private function mcGroupsToArray($groupsString)
+	{
+		$groupsArray = array();
+		$groupStringToBeParsed = $groupsString;
+		while(true) {
+			$pos = strpos($groupStringToBeParsed, ',');
+			if(! $pos) break;
+			$charBeforeComma = substr($groupStringToBeParsed, ($pos - 1), 1);
+			// Check for '\,'
+			if($charBeforeComma != '\\') {
+				$groupsArray[] = trim(substr($groupStringToBeParsed, 0, $pos));
+				$groupStringToBeParsed = trim(substr($groupStringToBeParsed, ($pos + 1)));
+			}
+		}
+		if(!empty($groupStringToBeParsed)) {
+			$groupsArray[] = $groupStringToBeParsed;	
+		}
+		return $groupsArray;
+	}
 
+	/*
+	 * Returns the MailChimp lists that exist at the MC account.
+	 */
 	protected function getGroups() {
 		static $groups = null;
 
@@ -322,28 +545,87 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 
 		return $groups;
 	}
-
-	protected function getCustomFields($level_id)
+	
+	private function initMCGroups()
 	{
-		static $customFields = array();
+		$addLevels = array_keys($this->addMCGroups);
+		$removeLevels = array_keys($this->removeMCGroups);
+		$addAndRemoveLevels = array_merge($addLevels, $removeLevels);
+		$allLevels = array_unique($addAndRemoveLevels);
+		foreach($allLevels as $levelId) {
+			$this->getMCGroups($levelId);
+		}
+	}
 
-		if(empty($customFields[$level_id])) {
-			$customFields[$level_id] = array();
-			$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
-				->enabled(1)
-				->getItemList(true);
-
-			// Loop through the items
-			foreach($items as $item) {
-				if($item->show == 'all' || $item->akeebasubs_level_id == $level_id) {
-					$customFields[$level_id][$item->title] = $item->akeebasubs_customfield_id;
+	/*
+	 * Returns the MailChimp groups that exist at the MC account.
+	 */
+	private function getMCGroups($levelId)
+	{
+		static $mcGroups = array();
+		
+		if(! array_key_exists($levelId, $mcGroups)) {
+			$mcGroups[$levelId] = array();
+		}
+		
+		if(empty($mcGroups[$levelId])) {
+			$mcLists = $this->getGroups();
+			foreach($mcLists as $listTitle => $listId) {
+				if(array_key_exists($levelId, $this->addGroups) && in_array($listId, $this->addGroups[$levelId])) {
+					$interestGroupings = $this->mcApi->listInterestGroupings($listId);
+					if($interestGroupings) {
+						foreach($interestGroupings as $groupings) {
+							$groupingsId = $groupings['id'];
+							$groupingsName = trim($groupings['name']);
+							// Add to grouping-list map
+							$this->groupingsListMap[$groupingsId] = $listId;
+							foreach($groupings['groups'] as $g) {
+								$groupName = trim($g['name']);
+								$groupName = trim(preg_replace('/<[^>]+>/', "", $groupName));
+								$title =  $groupName . ' ( ' . $groupingsName . ' - ' . $listTitle . ' )';
+								$id = md5($title);
+								$mcGroups[$levelId][$title] = $id;
+								// Add to grouping-group map
+								$this->groupingsGroupMap[$id] = $groupingsId;
+								// Add group name
+								$this->groupingsGroupName[$id] = $g['name'];
+							}	
+						}
+					}	
 				}
 			}
 		}
-
-		return $customFields[$level_id];
+		
+		return $mcGroups[$levelId];
 	}
 
+	/*
+	 * Return the custom fields for this subscription level.
+	 */
+	protected function getCustomFields($levelId)
+	{
+		static $customFields = array();
+		
+		if(empty($customFields[$levelId])) {
+			$customFields[$levelId] = array();
+			$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+				->enabled(1)
+				->getItemList(true);
+			
+			// Loop through the items
+			foreach($items as $item) {
+				if($item->show == 'all' || $item->akeebasubs_level_id == $levelId) {
+					$customFields[$levelId][$item->title] = $item->akeebasubs_customfield_id;
+				}
+			}
+		}
+		
+		return $customFields[$levelId];
+	}
+
+	/*
+	 * Return the custom fields as a HTML select field.
+	 */
 	protected function getMergeTagSelectField($level)
 	{
 		$customFields = $this->getCustomFields($level->akeebasubs_level_id);
@@ -359,5 +641,33 @@ class plgAkeebasubsMailchimp extends plgAkeebasubsAbstract
 		}
 		// Create the select field
 		return JHtmlSelect::genericlist($options, 'params[' . strtolower($this->name) . '_customfields][]', 'multiple="multiple" size="8" class="input-large"', 'value', 'text', $selected);
+	}
+
+	/*
+	 * Return the MailChimp lists as a HTML select field.
+	 */
+	protected function getMCGroupSelectField($level, $type)
+	{
+		if(! in_array($type, array('add', 'remove'))) return '';
+		// Put groups in select field
+		$groups = $this->getMCGroups($level->akeebasubs_level_id);
+		$options = array();
+		$options[] = JHTML::_('select.option','',JText::_('PLG_AKEEBASUBS_' . strtoupper($this->name) . '_NONE'));
+		foreach($groups as $title => $id) {
+			$options[] = JHTML::_('select.option',$id,$title);
+		}
+		// Set pre-selected values
+		$selected = array();
+		if($type == 'add') {
+			if(! empty($this->addMCGroups[$level->akeebasubs_level_id])) {
+				$selected = $this->addMCGroups[$level->akeebasubs_level_id];
+			}
+		} else {
+			if(! empty($this->removeMCGroups[$level->akeebasubs_level_id])) {
+				$selected = $this->removeMCGroups[$level->akeebasubs_level_id];
+			}
+		}
+		// Create the select field
+		return JHtmlSelect::genericlist($options, 'params[' . strtolower($this->name) . '_' . $type . 'mcgroups][]', 'multiple="multiple" size="8" class="input-xxlarge"', 'value', 'text', $selected);
 	}
 }
