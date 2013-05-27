@@ -71,13 +71,13 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			'recurring'		=> $level->recurring ? ($subscription->recurring_amount >= 0.01 ? 2 : 1) : 0
 		);
 
-		if ($level->recurring == 1)
+		if ($data->recurring == 1)
 		{
 			$ppDuration = $this->_toPPDuration($level->duration);
 			$data->t3 = $ppDuration->unit;
 			$data->p3 = $ppDuration->value;
 		}
-		elseif ($level->recurring == 2)
+		elseif ($data->recurring == 2)
 		{
 			$ppDuration = $this->_toPPDuration($level->duration);
 			$data->t1 = $ppDuration->unit;
