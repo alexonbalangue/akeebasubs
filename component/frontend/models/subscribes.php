@@ -2595,6 +2595,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 				break;
 
+			case 'SI':
+				// SLOVENIA
+				// I have no clue :(
+				$ret->valid = true;
+				break;
+
 			default:
 				$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
 				$ret->valid = $allowNonEUVAT ? true : false;
