@@ -2421,6 +2421,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 			case 'MT':
 				// MALTA
 				// Format: 8 digits
+			case 'SI':
+				// SLOVENIA
+				// Format: 8 digits
 				if(strlen($vatnumber) != 8) $ret->valid = false;
 				if($ret->valid) {
 					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
@@ -2593,12 +2596,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 				if($ret->valid) {
 					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
 				}
-				break;
-
-			case 'SI':
-				// SLOVENIA
-				// I have no clue :(
-				$ret->valid = true;
 				break;
 
 			default:
