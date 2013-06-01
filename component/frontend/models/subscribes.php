@@ -317,11 +317,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Name validation; must contain AT LEAST two parts (name/surname)
 		// separated by a space
+		/*
 		if(!empty($state->name)) {
 			$name = trim($state->name);
 			$nameParts = explode(" ", $name);
 			if(count($nameParts) < 2) $ret['name'] = false;
 		}
+		*/
 
 		// Email validation
 		if(!empty($state->email)) {

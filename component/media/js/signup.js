@@ -251,11 +251,14 @@ function validateName()
 		var invalidName = false;
 		if(name == '') {
 			invalidName = true;
-		} else {
+		}
+		/**
+		else {
 			name = ltrim(rtrim(name, " "), " ");
 			var nameParts = name.split(' ');
 			if(nameParts.length < 2) invalidName = true;
 		}
+		**/
 		
 		if(invalidName) {
 			$('#name').parent().parent().addClass('error').removeClass('success');
