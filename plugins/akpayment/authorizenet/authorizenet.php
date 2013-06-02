@@ -87,7 +87,7 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 			'x_relay_url'			=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=authorizenet&sid='.$subscription->akeebasubs_subscription_id
 		);
 		
-		$state = trim($kuser->city);
+		$state = trim($kuser->state);
 		if(!empty($state)) {
 			$data->x_state = $state;
 		}
