@@ -7,6 +7,7 @@ Akeeba Subscriptions 3.1.3
 ~ Hide the decimals in the Awesome and Strappy layouts if the price doesn't have a decimal part
 ~ Latest Akeeba Subscriptions module: apply different styling to paid but not yet active renewals, just like the component does
 ~ Removed restriction on full name requiring two words separatede by space
+- Removed the DOCman and JCE plugins. They are no longer required; use Joomla! user groups for a direct integration.
 # [HIGH] One time fees not working properly with PayPal recurring subscriptions
 # [HIGH] Renewing an already renewed subscription results in the same valid from/to dates to be used
 # [MEDIUM] IProperty integration: the agent generated is not a Super Agent by default

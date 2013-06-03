@@ -211,14 +211,14 @@
         </listitem>
 
         <listitem>
-          <para>Integration with Joomla! 1.6 and later user group
-          mapping</para>
+          <para>Integration with Joomla! user groups. This allows direct
+          integration with several popular components such as JCE, DOCman, K2
+          etc.</para>
         </listitem>
 
         <listitem>
-          <para>Integration with third party components: K2, DOCman, JCE,
-          VirtueMart, Tienda, JomSocial, Community Builder, ccInvoices, and
-          much more! Check out our documentation for more information.</para>
+          <para>Special integrations for third party components. Check out our
+          documentation for more information.</para>
         </listitem>
 
         <listitem>
@@ -11321,174 +11321,22 @@ LEVEL2=11111/22222/33333</programlisting>
     <section xml:id="integration-docman">
       <title>DOCman Integration</title>
 
-      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-      Subscriptions - DOCman Integration</guilabel></para>
-
-      <warning>
-        <para>This integration has only been tested against DOCman 1.5. DOCman
-        2.0 and later uses Joomla! 1.6 and later's user groups and ACLs to
-        control who can download what. You are advised to use the Joomla! 1.6
-        user group integration plugin instead of the DOCman integration plugin
-        with DOCman 2.0 and later.</para>
-      </warning>
-
-      <para>This integration plugin allows you to add and remove users from
-      DOCman groups based on their subscription status. This allows you to
-      control downloads/uploads to your DOCman downloads based on a user's
-      subscription status and can form the basis of a commercial file
-      distribution system.</para>
-
-      <para>Please note that this is a smart integration; instead of adding
-      users when a subscription goes active and removing them when a
-      subscription goes inactive, Akeeba Subscriptions plugins take a look at
-      all of the user's active and inactive subscriptions and decide which
-      groups the user should be added to or removed from.</para>
-
-      <para>The plugin has these options:</para>
-
-      <variablelist>
-        <varlistentry>
-          <term>Add to DOCman groups</term>
-
-          <listitem>
-            <para>This is a list for assigning subscription levels to DOCman
-            groups. When a user has an active subscription to the specified
-            level, he'll be added to the DOCman group mentioned on the right
-            hand of the equal sign. Each assignment is done like this:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Group 1, Group 2 and Group 3 are the names of the DOCman groups
-            you want to add a user to when he subscribes. If you want to
-            assign multiple subscription levels to multiple groups, you have
-            to do something like that (separate multiple lines with a single
-            press of the ENTER key on your keyboard):</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-            <para>You can also use the numeric IDs of subscription levels or
-            DOCman groups instead of their titles. However, we consider
-            working with numeric IDs very counter-intuitive.</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Remove from DOCman groups</term>
-
-          <listitem>
-            <para>Likewise, this is the list of the DOCman groups to remove a
-            user from when his subscription to the specified level is no
-            longer active. Do note that you can specify a different set of
-            groups to remove the user from than the ones you are adding him
-            to. For example:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-
-      <para>In this example, together with the rules displayed in "Add to
-      DOCman groups", when a subscription to the LEVEL1 level expires, the
-      user will still belong to DOCman Group 3, as it's not removed from his
-      account; only Group 1 and Group 2 are removed. Likewise, if the user has
-      an expired LEVEL1 subscription and an active LEVEL2 subscription he'll
-      now belong to Group 2 and Group 3: Group 3 because it's not removed when
-      his subscription expires and Group 2 because his active LEVEL2
-      subscription suggests that he should be granted Group 2 access despite
-      his expired LEVEL1 subscription.</para>
-
-      <para>If you find this hard to understand, join the club. ACLs are not
-      meant to be easy to setup or understand. It's a power feature and, as
-      such, poses a great difficulty to even the most seasoned web site
-      integrators. Take your time and experiment on a dev copy of your site
-      before going live.</para>
+      <para>This integration plugin is no longer required, therefore no longer
+      available. Integration with DOCman is performed through the Joomla! User
+      Groups integration. Akeeba Subscriptions can add/remove your users to
+      Joomla! User Groups. Joomla! View Access Levels can be assigned one or
+      more Joomla! User Groups. DOCman controls access based on Joomla! View
+      Access Levels. That's it! Piece of cake.</para>
     </section>
 
     <section xml:id="integration-jce">
       <title>JCE Integration</title>
 
-      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-      Subscriptions - JCE Integration</guilabel></para>
-
-      <para>This integration plugin allows you to add and remove users from
-      JCE (Joomla! Content Editor) groups based on their subscription status.
-      This allows you to control the editing permissions of individual users
-      based on their subscription status.</para>
-
-      <para>Please note that this is a smart integration; instead of adding
-      users when a subscription goes active and removing them when a
-      subscription goes inactive, Akeeba Subscriptions plugins take a look at
-      all of the user's active and inactive subscriptions and decide which
-      groups the user should be added to or removed from.</para>
-
-      <para>The plugin has these options:</para>
-
-      <variablelist>
-        <varlistentry>
-          <term>Add to JCE groups</term>
-
-          <listitem>
-            <para>This is a list for assigning subscription levels to JCE
-            groups. When a user has an active subscription to the specified
-            level, he'll be added to the JCE group mentioned on the right hand
-            of the equal sign. Each assignment is done like this:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Group 1, Group 2 and Group 3 are the names of the JCE groups you
-            want to add a user to when he subscribes. If you want to assign
-            multiple subscription levels to multiple groups, you have to do
-            something like that (separate multiple lines with a single press
-            of the ENTER key on your keyboard):</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-            <para>You can also use the numeric IDs of subscription levels or
-            JCE groups instead of their titles. However, we consider working
-            with numeric IDs very counter-intuitive.</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Remove from JCE groups</term>
-
-          <listitem>
-            <para>Likewise, this is the list of the JCE groups to remove a
-            user from when his subscription to the specified level is no
-            longer active. Do note that you can specify a different set of
-            groups to remove the user from than the ones you are adding him
-            to. For example:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-
-      <para>In this example, together with the rules displayed in "Add to JCE
-      groups", when a subscription to the LEVEL1 level expires, the user will
-      still belong to JCE Group 3, as it's not removed from his account; only
-      Group 1 and Group 2 are removed. Likewise, if the user has an expired
-      LEVEL1 subscription and an active LEVEL2 subscription he'll now belong
-      to Group 2 and Group 3: Group 3 because it's not removed when his
-      subscription expires and Group 2 because his active LEVEL2 subscription
-      suggests that he should be granted Group 2 access despite his expired
-      LEVEL1 subscription.</para>
-
-      <para>If you find this hard to understand, join the club. ACLs are not
-      meant to be easy to setup or understand. It's a power feature and, as
-      such, poses a great difficulty to even the most seasoned web site
-      integrators. Take your time and experiment on a dev copy of your site
-      before going live.</para>
+      <para>This integration plugin is no longer required, therefore no longer
+      available. Integration with JCE is performed through the Joomla! User
+      Groups integration. Akeeba Subscriptions can add/remove your users to
+      Joomla! User Groups. JCE assigns profiles to Joomla! User Groups. That's
+      it! Piece of cake.</para>
     </section>
 
     <section xml:id="integration-jomsocial">
