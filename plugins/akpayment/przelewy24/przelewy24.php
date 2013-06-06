@@ -201,12 +201,11 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 					'https://secure.przelewy24.pl/transakcja.php',
 					false,
 					$requestContext);
-			$matches = array();
-			preg_match('/RESULT\s+(\S+)\s+(\S+)\s+(\S+)/', $response, $matches);
-			if(trim(strtoupper($matches[1])) != 'TRUE') {
+			// Check response
+			if(! preg_match('/^RESULT.+TRUE$/s', trim($response))) {
 				$isValid = false;
-				$data['akeebasubs_failure_response'] = $response;
-				$data['akeebasubs_failure_reason'] = $matches[2] . ", " . $matches[3];
+				$errorMessage = preg_replace('/[\s]+/', ': ', trim($response));
+				$data['akeebasubs_failure_reason'] = $errorMessage;
 			}
 		}
 
