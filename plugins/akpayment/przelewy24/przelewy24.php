@@ -119,20 +119,6 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 		} else {
 			$isValid = false;
 		}
-			
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
-		$rootURL = rtrim(JURI::base(),'/');
-		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
-		}
-
-		$app = JFactory::getApplication();
-		$successUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
-		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
 		
 		// Error response
 		if($isValid && isset($data['p24_error_code'])) {
@@ -144,8 +130,12 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 					'state'							=> 'X',
 					'enabled'						=> 0
 			);
-			$subscription->save($updates);
-			$app->redirect($cancelUrl);
+			
+			$error_url = 'index.php?option='.JRequest::getCmd('option').
+				'&view=level&slug='.$subscription->slug.
+				'&layout='.JRequest::getCmd('layout','default');
+			$error_url = JRoute::_($error_url,false);
+			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
 		
@@ -214,7 +204,11 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
-			$app->redirect($cancelUrl);
+			$error_url = 'index.php?option='.JRequest::getCmd('option').
+				'&view=level&slug='.$subscription->slug.
+				'&layout='.JRequest::getCmd('layout','default');
+			$error_url = JRoute::_($error_url,false);
+			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
 
@@ -242,7 +236,9 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 			$subscription
 		));
 		
-		$app->redirect($successUrl);
+		// Redirect the user to the "thank you" page
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
 	
