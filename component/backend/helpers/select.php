@@ -660,6 +660,7 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
 		$options[] = JHTML::_('select.option','all',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_ALL'));
 		$options[] = JHTML::_('select.option','level',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_LEVEL'));
+		$options[] = JHTML::_('select.option','notlevel',JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_NOTLEVEL'));
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
