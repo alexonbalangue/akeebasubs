@@ -82,11 +82,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		// Loop through the items
 		foreach($items as $item) {
 			// If it's not something shown in this level, skip it
-			if($item->show == 'level') {
+			if (in_array($item->show, array('level', 'notlevel')))
+			{
 				if ($cache['subscriptionlevel'] != -1)
 				{
 					$fieldlevels = explode(',', $item->akeebasubs_level_id);
-					if (!in_array($cache['subscriptionlevel'], $fieldlevels))
+
+					if (($item->show == 'level') && !in_array($cache['subscriptionlevel'], $fieldlevels))
+					{
+						continue;
+					}
+					elseif (($item->show == 'notlevel') && in_array($cache['subscriptionlevel'], $fieldlevels))
 					{
 						continue;
 					}
@@ -153,12 +159,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		// Loop through each custom field
 		foreach($items as $item) {
 			// Make sure it's supposed to be shown in the particular level
-			if($item->show == 'level') {
+			if (in_array($item->show, array('level','notlevel')))
+			{
 				if(is_null($data->id)) continue;
 
 				$fieldlevels = explode(',', $item->akeebasubs_level_id);
 
-				if (!in_array($data->id, $fieldlevels))
+				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
+				elseif (($item->show == 'notlevel') && in_array($data->id, $fieldlevels))
 				{
 					continue;
 				}
@@ -224,12 +235,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		// Loop through each custom field
 		foreach($items as $item) {
 			// Make sure it's supposed to be shown in the particular level
-			if($item->show == 'level') {
+			if (in_array($item->show, array('level','notlevel')))
+			{
 				if(is_null($data->id)) continue;
 
 				$fieldlevels = explode(',', $item->akeebasubs_level_id);
 
-				if (!in_array($data->id, $fieldlevels))
+				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
+				elseif (($item->show == 'notlevel') && in_array($data->id, $fieldlevels))
 				{
 					continue;
 				}
@@ -290,12 +306,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		// Loop through each custom field
 		foreach($items as $item) {
 			// Make sure it's supposed to be shown in the particular level
-			if($item->show == 'level') {
+			if (in_array($item->show, array('level','notlevel')))
+			{
 				if(is_null($data->id)) continue;
 
 				$fieldlevels = explode(',', $item->akeebasubs_level_id);
 
-				if (!in_array($data->id, $fieldlevels))
+				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
+				elseif (($item->show == 'notlevel') && in_array($data->id, $fieldlevels))
 				{
 					continue;
 				}
@@ -347,12 +368,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		// Loop through each custom field
 		foreach($items as $item) {
 			// Make sure it's supposed to be shown in the particular level
-			if($item->show == 'level') {
+			if (in_array($item->show, array('level','notlevel')))
+			{
 				if(is_null($data->id)) continue;
 
 				$fieldlevels = explode(',', $item->akeebasubs_level_id);
 
-				if (!in_array($data->id, $fieldlevels))
+				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
+				{
+					continue;
+				}
+				elseif (($item->show == 'notelevel') && in_array($data->id, $fieldlevels))
 				{
 					continue;
 				}
