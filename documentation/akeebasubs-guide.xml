@@ -4076,9 +4076,10 @@ Rule C gives $ 30 discount</programlisting>
 
           <listitem>
             <para>If you set the option above to <option>Specific
-            level</option> this defines for which level the field will be
-            displayed. When the <guilabel>When to show</guilabel> option is
-            set to <option>All levels</option> this will be ignored.</para>
+            level</option> or <option>All levels except selected</option> this
+            defines for which level the field will be displayed. When the
+            <guilabel>When to show</guilabel> option is set to <option>All
+            levels</option> this will be ignored.</para>
           </listitem>
         </varlistentry>
 

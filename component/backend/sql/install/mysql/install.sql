@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_customfields` (
 	`akeebasubs_customfield_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 	`title` varchar(255) NOT NULL DEFAULT '',
 	`slug` varchar(255) NOT NULL DEFAULT '',
-	`show` enum('all','level') NOT NULL DEFAULT 'all',
+	`show` enum('all','level','notlevel') NOT NULL DEFAULT 'all',
 	`akeebasubs_level_id` VARCHAR(255) NOT NULL DEFAULT '0',
 	`type` varchar(100) NOT NULL DEFAULT 'text',
 	`options` mediumtext,
