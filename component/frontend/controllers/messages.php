@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerMessages extends FOFController
 {
-	private static $loggedinUser = false;
+	private static $loggedinUser = true;
 
 	public function __construct($config = array()) {
 		parent::__construct($config);
@@ -36,11 +36,15 @@ class AkeebasubsControllerMessages extends FOFController
 		$this->getThisModel()->setIDsFromRequest();
 		$id = $this->getThisModel()->getId();
 		$slug = $this->input->getString('slug',null);
-		if(!$id && $slug) {
+
+		if (!$id && $slug)
+		{
 			$records = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($slug)
 				->getItemList();
-			if(!empty($records)) {
+
+			if (!empty($records))
+			{
 				$item = array_pop($records);
 				$this->getThisModel()->setId($item->akeebasubs_level_id);
 			}
@@ -50,68 +54,63 @@ class AkeebasubsControllerMessages extends FOFController
 		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->setId($subid)
 			->getItem();
+
 		$this->getThisView()->assign('subscription',$subscription);
 
 		// Joomla! 1.6 and later - we have to effectively "re-login" the user,
 		// otherwise his ACL privileges are stale.
 		$userid = JFactory::getUser()->id;
-		if(empty($userid)) {
-			self::$loggedinUser = true;
+
+		if (empty($userid))
+		{
 			$userid = $subscription->user_id;
-		} else {
+		}
+		elseif ($userid != $subscription->user_id)
+		{
+			// The logged in user doesn't match the subscription's user; deny access
 			self::$loggedinUser = false;
-			$session = JFactory::getSession();
-			$session->set('loggedin', null, 'com_akeebasubs');
+			return false;
 		}
 
-		if($userid) {
-			// This line returns an empty JUser object
-			$newUserObject = new JUser();
-			// This line FORCE RELOADS the user record.
-			$newUserObject->load($userid);
+		// This line returns an empty JUser object
+		$newUserObject = new JUser();
+		// This line FORCE RELOADS the user record.
+		$newUserObject->load($userid);
 
-			if(($newUserObject->id == $userid) && !$newUserObject->block)
-			{
-				// Mark the user as logged in
-				$newUserObject->set('guest', 0);
-				// Register the needed session variables
-				$session = JFactory::getSession();
-				$session->set('user', $newUserObject);
-				$db = JFactory::getDBO();
-				// Check to see the the session already exists.
-				$app = JFactory::getApplication();
-				$app->checkSession();
-				// Update the user related fields for the Joomla sessions table.
-				$db->setQuery(
-					'UPDATE `#__session`' .
-					' SET `guest` = '.$db->q($newUserObject->get('guest')).',' .
-					'	`username` = '.$db->q($newUserObject->get('username')).',' .
-					'	`userid` = '.(int) $newUserObject->get('id') .
-					' WHERE `session_id` = '.$db->q($session->getId())
-				);
-				$db->execute();
-				// Hit the user last visit field
-				$newUserObject->setLastVisit();
-			} elseif(($newUserObject->id == $userid) && $newUserObject->block) {
-				// Register the needed session variables
-				$session = JFactory::getSession();
-				$newUserObject = new JUser();
-				$session->set('user', $newUserObject);
-				$db = JFactory::getDBO();
-				// Check to see the the session already exists.
-				$app = JFactory::getApplication();
-				$app->checkSession();
-				// Update the user related fields for the Joomla sessions table.
-				$db->setQuery(
-					'UPDATE `#__session`' .
-					' SET `guest` = '.$db->q($newUserObject->get('guest')).',' .
-					'	`username` = '.$db->q($newUserObject->get('username')).',' .
-					'	`userid` = '.(int) $newUserObject->get('id') .
-					' WHERE `session_id` = '.$db->q($session->getId())
-				);
-				$db->execute();
-			}
+		// Maybe the user cannot be found?
+		if (($newUserObject->id != $userid))
+		{
+			self::$loggedinUser = false;
+			return false;
 		}
+
+		// Mark the user as logged in
+		$newUserObject->block = 0;
+		$newUserObject->set('guest', 0);
+
+		// Register the needed session variables
+		$session = JFactory::getSession();
+		$session->set('user', $newUserObject);
+
+		$db = JFactory::getDBO();
+
+		// Check to see the the session already exists.
+		$app = JFactory::getApplication();
+		$app->checkSession();
+
+		// Update the user related fields for the Joomla sessions table.
+		$query = $db->getQuery(true)
+			->update($db->qn('#__session'))
+			->set(array(
+				$db->qn('guest').' = ' . $db->q($newUserObject->get('guest')),
+				$db->qn('username').' = ' . $db->q($newUserObject->get('username')),
+				$db->qn('userid').' = ' . (int) $newUserObject->get('id')
+			))->where($db->qn('session_id').' = '.$db->q($session->getId()));
+		$db->setQuery($query);
+		$db->execute();
+
+		// Hit the user last visit field
+		$newUserObject->setLastVisit();
 
 		return true;
 	}
@@ -119,17 +118,28 @@ class AkeebasubsControllerMessages extends FOFController
 	public function onAfterRead()
 	{
 		if(self::$loggedinUser) {
-			$newUserObject = new JUser();
-			$newUserObject->set('guest', 0);
+			// Log out the logged in user
+			$my 		= JFactory::getUser();
+			$session 	= JFactory::getSession();
+			$app 		= JFactory::getApplication();
 
-			$session = JFactory::getSession();
-			$session->set('user', $newUserObject);
+			// Make sure we're a valid user first
+			if (!$my->get('tmp_user')) {
+				return true;
+			}
+
+			// Hit the user last visit field
+			$my->setLastVisit();
+
+			// Destroy the php session for this user
+			$session->destroy();
+
+			// Force logout all users with that userid
 			$db = JFactory::getDBO();
-			$app = JFactory::getApplication();
-			$app->checkSession();
 			$query = $db->getQuery(true)
 				->delete($db->qn('#__session'))
-				->where( $db->qn('session_id') .' = '.$db->q($session->getId()) );
+				->where($db->qn('userid').' = '.(int) $my->id)
+				->where($db->qn('client_id').' = '.(int) $app->getClientId());
 			$db->setQuery($query);
 			$db->execute();
 		}
