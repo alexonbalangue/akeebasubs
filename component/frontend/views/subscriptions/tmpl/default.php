@@ -15,7 +15,7 @@ $this->loadHelper('format');
 
 JLoader::import('joomla.utilities.date');
 
-if (!isset($this->extensions))
+if (!property_exists($this, 'extensions'))
 {
 	$this->extensions = array();
 }
@@ -127,7 +127,7 @@ if (!isset($this->extensions))
 					}
 					elseif(array_key_exists($invoice->extension, $this->extensions))
 					{
-						$url = JRoute::_(sprintf($extensions[$invoice->extension]['backendurl'], $invoice->invoice_no));
+						$url = JRoute::_(sprintf($this->extensions[$invoice->extension]['backendurl'], $invoice->invoice_no));
 					}
 					else
 					{
