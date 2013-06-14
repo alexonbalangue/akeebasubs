@@ -321,6 +321,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			'keys'			=> array(
 				'first'					=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_FIRST'),
 				'second'				=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_SECOND'),
+				'after'					=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_AFTER'),
 			)
 		);
 	}
