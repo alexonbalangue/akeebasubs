@@ -8606,6 +8606,19 @@ LEVEL2=11111/22222/33333</programlisting>
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - PayMill</guilabel></para>
 
+      <warning>
+        <para>We strongly recommend <emphasis role="bold">NOT USING</emphasis>
+        this payment processor because they are sometimes doing double charges
+        to your clients. We were using them to process transactions on our own
+        site and had this problem during the first 15 days of May 2013. We
+        filed a support request with them regarding this issue and we were
+        told that they would look into it. A full month after us filing the
+        support request they have not replied back to us. As a result we
+        consider them an untrustworthy payment processor and have to warn our
+        clients about the risks of using this payment processor, according to
+        our bitter experience.</para>
+      </warning>
+
       <para>This plugin <emphasis role="bold">does not support</emphasis>
       recurring payments.</para>
 
