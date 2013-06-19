@@ -11,27 +11,27 @@ class AkeebasubsControllerSubscriptions extends FOFController
 {
 	public function __construct($config = array()) {
 		parent::__construct($config);
-		
+
 		$this->cacheableTasks = array('read');
 	}
-	
+
 	public function execute($task) {
 		$allowedTasks = array('browse', 'read');
 		if(in_array($task,array('edit','add'))) $task = 'read';
 		if(!in_array($task,$allowedTasks)) return false;
-		
+
 		$this->input->set('task',$task);
-		
+
 		parent::execute($task);
 	}
-	
+
 	public function onBeforeBrowse()
 	{
 		// If we have a username/password pair, log in the user if he's a guest
 		$username = $this->input->getString('username','');
 		$password = $this->input->getString('password','');
 		$user = JFactory::getUser();
-		
+
 		if($user->guest && !empty($username) && !empty($password)) {
 			JLoader::import( 'joomla.user.authentication');
 			$credentials = array(
@@ -42,7 +42,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			$options = array('remember' => false);
 			$authenticate = JAuthentication::getInstance();
 			$response	  = $authenticate->authenticate($credentials, $options);
-			if ($response->status == JAUTHENTICATE_STATUS_SUCCESS) {
+			if ($response->status == JAuthentication::STATUS_SUCCESS) {
 				JPluginHelper::importPlugin('user');
 				$results = $app->triggerEvent('onLoginUser', array((array)$response, $options));
 				JLoader::import('joomla.user.helper');
@@ -52,7 +52,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 				$parameters['id']		= $user->get('id');
 			}
 		}
-		
+
 		// If we still have a guest user, show the login page
 		if($user->guest) {
 			// Show login page
@@ -62,10 +62,10 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			JFactory::getApplication()->redirect(JURI::base().'index.php?option=com_'.$com.'&view=login&return='.$myURI);
 			return false;
 		}
-		
+
 		// Does the user have core.manage access or belongs to SA group?
 		$isAdmin = $user->authorise('core.manage','com_akeebasubs');
-		
+
 		if($this->input->getInt('allUsers',0) && $isAdmin) {
 			$this->getThisModel()->user_id(null);
 		} else {
@@ -77,7 +77,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		} else {
 			$this->getThisModel()->paystate('C,P');
 		}
-		
+
 		// Let me cheat. If the request doesn't specify how many records to show, show them all!
 		if($this->input->getCmd('format','html') != 'html') {
 			if(!$this->input->getInt('limit',0) && !$this->input->getInt('limitstart',0)) {
@@ -85,16 +85,16 @@ class AkeebasubsControllerSubscriptions extends FOFController
 				$this->getThisModel()->limitstart(0);
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public function onBeforeRead()
 	{
 		// Force the item layout
 		$this->layout = 'default';
 		$this->getThisView()->setLayout('default');
-		
+
 		// Do we have a user?
 		if(JFactory::getUser()->guest) {
 			// Show login page
@@ -118,12 +118,12 @@ class AkeebasubsControllerSubscriptions extends FOFController
 				break;
 			}
 		}
-		
+
 		if(!$found) {
 			JError::raiseError('403',JText::_('ACCESS DENIED'));
 			return false;
 		}
-		
+
 		return true;
 	}
-} 
+}
