@@ -119,7 +119,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 * @param $row AkeebasubsTableSubscription The subscription row object
 	 * @param $type string The type of the email to send (generic, new,)
 	 */
-	private function sendEmail($row, $type = '')
+	private function    sendEmail($row, $type = '')
 	{
 		// Get the user object
 		$user = JFactory::getUser($row->user_id);
