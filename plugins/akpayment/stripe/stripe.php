@@ -47,6 +47,7 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 		if(version_compare(JVERSION, '3.0', 'ge')) {
 			// jQuery
 			$doc->addScriptDeclaration("
+				jQuery(function($){
 					var stripeResponseHandler = function(status, response) {
 						$('.control-group').removeClass('error');
 						if (response.error) {
@@ -99,24 +100,23 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 						}
 					};
 
-					$(document).ready(function(){
-						$('#payment-form').submit(function(){
-							var token = $('#token').val();
-							if(!!token) {
-								return true;
-							}else{							
-								$('#payment-button').attr('disabled', 'disabled');
-								Stripe.createToken({
-									number:$('#card-number').val(),
-									exp_month:$('#card-expiry-month').val(),
-									exp_year:$('#card-expiry-year').val(),
-									cvc:$('#card-cvc').val()
-								}, stripeResponseHandler);
-								return false;
-							}
-						});
+					$('#payment-form').submit(function(e){
+						var token = $('#token').val();
+						if(!!token) {
+							return true;
+						}else{							
+							$('#payment-button').attr('disabled', 'disabled');
+							Stripe.createToken({
+								number:$('#card-number').val(),
+								exp_month:$('#card-expiry-month').val(),
+								exp_year:$('#card-expiry-year').val(),
+								cvc:$('#card-cvc').val()
+							}, stripeResponseHandler);
+							return false;
+						}
 					});
-				");
+				});
+			");
 		} else {
 			// Mootools
 			$doc->addScriptDeclaration("\n" . 'window.addEvent(\'domready\', function(){
