@@ -110,6 +110,7 @@ class Com_AkeebasubsInstallerScript
 				'googlecheckout'		=> 0,
 				'ifthen'				=> 0,
 				'moip'					=> 0,
+				'moipassinaturas'		=> 0,
 				'moneris'				=> 0,
 				'nochex'				=> 0,
 				'none'					=> 0,

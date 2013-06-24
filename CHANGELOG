@@ -3,6 +3,9 @@ Akeeba Subscriptions 3.2.0
 ================================================================================
 + On popular demand: do not show validation status (red text) on the fields before the user submits the subscription form for the first time
 + You can now configure whether the payment option selection will be hidden if you only have one one payment method available on a subscription level
++ #159 Authorize.net integration
++ #161 Mailchimp plugin: you can add people to specific MailChimp groups
++ #164 Payment menthod: MoIP subscriptions
 + #167 New option to show a custom field on all levels except the selected ones
 ~ Custom fields restricted to specific subscription levels are now shown in the back-end user profile page
 ~ Hide the decimals in the Awesome and Strappy layouts if the price doesn't have a decimal part
