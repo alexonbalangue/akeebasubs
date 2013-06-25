@@ -17,11 +17,16 @@ class LiveUpdateConfig extends LiveUpdateAbstractConfig
 	var $_versionStrategy		= 'vcompare';
 	var $_updateURL				= 'http://cdn.akeebabackup.com/updates/akeebasubs.ini';
 	var $_requiresAuthorization = false;
-	
+	var $_storageAdapter		= 'component';
+	var $_storageConfig			= array(
+		'extensionName'	=> 'com_akeebasubs',
+		'key'			=> 'liveupdate'
+	);
+
 	public function __construct() {
 		JLoader::import('joomla.filesystem.file');
 		$isPro = defined('AKEEBASUBS_PRO') ? (AKEEBASUBS_PRO == 1) : false;
-		
+
 		// Load the component parameters, not using JComponentHelper to avoid conflicts ;)
 		JLoader::import('joomla.html.parameter');
 		JLoader::import('joomla.application.component.helper');
@@ -39,7 +44,7 @@ class LiveUpdateConfig extends LiveUpdateAbstractConfig
 		} else {
 			$params->loadJSON($rawparams);
 		}
-		
+
 		// Determine the appropriate update URL based on whether we're on Core or Professional edition
 		if($isPro)
 		{
@@ -51,25 +56,25 @@ class LiveUpdateConfig extends LiveUpdateAbstractConfig
 			$this->_updateURL = 'http://cdn.akeebabackup.com/updates/akeebasubs.ini';
 			$this->_extensionTitle = defined('AKEEBASUBS_PRO') ? 'Akeeba Subscriptions Core' : 'Akeeba Subscriptions';
 		}
-		
+
 		// Dev releases use the "newest" strategy
 		if(substr($this->_currentVersion,1,2) == 'ev') {
 			$this->_versionStrategy = 'newest';
 		} else {
 			$this->_versionStrategy = 'vcompare';
 		}
-		
+
 		// Get the minimum stability level for updates
 		$this->_minStability = $params->get('minstability', 'stable');
-		
+
 		// Do we need authorized URLs?
 		$this->_requiresAuthorization = $isPro;
-		
+
 		// Should I use our private CA store?
 		if(@file_exists(dirname(__FILE__).'/../assets/cacert.pem')) {
 			$this->_cacerts = dirname(__FILE__).'/../assets/cacert.pem';
 		}
-		
+
 		parent::__construct();
 	}
 }

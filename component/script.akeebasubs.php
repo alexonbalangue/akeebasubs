@@ -171,6 +171,11 @@ class Com_AkeebasubsInstallerScript
 	/** @var array Obsolete files and folders to remove */
 	private $akeebaRemoveFiles = array(
 		'files'	=> array(
+			'cache/com_akeebasubs.updates.php',
+			'cache/com_akeebasubs.updates.ini',
+			'administrator/cache/com_akeebasubs.updates.php',
+			'administrator/cache/com_akeebasubs.updates.ini',
+
 			'administrator/components/com_akeebasubs/akeebasubs.xml',
 			'administrator/components/com_akeebasubs/install.akeebasubs.php',
 			'administrator/components/com_akeebasubs/uninstall.akeebasubs.php',
@@ -329,6 +334,7 @@ class Com_AkeebasubsInstallerScript
 			$this->_bugfixCantBuildAdminMenus();
 			$this->_fixBrokenSQLUpdates($parent);
 			$this->_fixSchemaVersion();
+			$this->_resetLiveUpdate();
 		}
 
 		return true;
@@ -1367,6 +1373,46 @@ class Com_AkeebasubsInstallerScript
 		$query->columns(array($db->quoteName('extension_id'), $db->quoteName('version_id')));
 		$query->values($eid . ', ' . $db->quote($version));
 		$db->setQuery($query);
+		$db->execute();
+	}
+
+	/**
+	 * Deletes the Live Update information, forcing its reload during the first
+	 * run of the component. This makes sure that the Live Update doesn't show
+	 * an update available right after installing the component.
+	 */
+	private function _resetLiveUpdate()
+	{
+		// Load the component parameters, not using JComponentHelper to avoid conflicts ;)
+		JLoader::import('joomla.html.parameter');
+		JLoader::import('joomla.application.component.helper');
+		$db = JFactory::getDbo();
+		$sql = $db->getQuery(true)
+			->select($db->qn('params'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type').' = '.$db->q('component'))
+			->where($db->qn('element').' = '.$db->q($this->_akeeba_extension));
+		$db->setQuery($sql);
+		$rawparams = $db->loadResult();
+		$params = new JRegistry();
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$params->loadString($rawparams, 'JSON');
+		} else {
+			$params->loadJSON($rawparams);
+		}
+
+		// Reset the liveupdate key
+		$params->set('liveupdate', null);
+
+		// Save the modified component parameters
+		$data = $params->toString();
+		$sql = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params').' = '.$db->q($data))
+			->where($db->qn('type').' = '.$db->q('component'))
+			->where($db->qn('element').' = '.$db->q($this->_akeeba_extension));
+
+		$db->setQuery($sql);
 		$db->execute();
 	}
 }
