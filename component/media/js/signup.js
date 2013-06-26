@@ -325,17 +325,14 @@ function validateEmail()
 		var email = $('#email').val();
 		var email2 = $('#email2').val();
 		
-		if (!akeebasubs_apply_validation)
+		if ((email == '') && (email2 == ''))
 		{
-			if ((email == '') && (email2 == ''))
-			{
-				$('#email').parent().parent().removeClass('error').removeClass('success');
-				$('#email2').parent().parent().removeClass('error').removeClass('success');
-				$('#email_empty').css('display','none');
-				$('#email_invalid').css('display','none');
-				$('#email2_invalid').css('display','none');
-				return;
-			}
+			$('#email').parent().parent().removeClass('error').removeClass('success');
+			$('#email2').parent().parent().removeClass('error').removeClass('success');
+			$('#email_empty').css('display','none');
+			$('#email_invalid').css('display','none');
+			$('#email2_invalid').css('display','none');
+			return;
 		}
 		
 		if(email == '') {
