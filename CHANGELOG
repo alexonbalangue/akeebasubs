@@ -24,6 +24,7 @@ Akeeba Subscriptions 3.2.0
 # [LOW] Pre-installation script would run the wrong SQL files on upgrade (normally not causing a problem, but still it's not the intended behaviour)
 # [LOW] Slovenian VAT numbers would always be reported as non VIES registered
 # [LOW] mod_akexpires doesn't respect the locale date settings
+# [LOW] Missing "Thank you" page with the AlphaUserPoints payment method
 
 Akeeba Subscriptions 3.1.2
 ================================================================================
