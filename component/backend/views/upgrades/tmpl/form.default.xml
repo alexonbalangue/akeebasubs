@@ -32,7 +32,10 @@
 		
 		<header name="value" type="field" sortable="true" />
 		
-		<header name="combine" type="published" sortable="true" tdwidth="8%" prefix="combine" />
+		<header name="combine" type="fieldselectable" sortable="true" tdwidth="8%" prefix="combine">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</header>
 
 		<header name="ordering" type="ordering" sortable="true" tdwidth="20px" />
 
@@ -68,7 +71,7 @@
 		
 		<field name="value" type="akeebasubsdiscount" />
 		
-		<field name="combined" type="published"/>
+		<field name="combine" type="published"/>
 		
 		<field name="ordering" type="ordering" labelclass="order"/>
 
