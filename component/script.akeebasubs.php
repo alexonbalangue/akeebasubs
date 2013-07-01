@@ -273,6 +273,7 @@ class Com_AkeebasubsInstallerScript
 			'media/com_akeebasubs/tcdpf/fonts/zapfdingbats.php',
 
 			// Old PHP views, replaced with XML views
+			'administrator/components/com_akeebasubs/view/customfields/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/levels/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/levels/tmpl/form.php',
 

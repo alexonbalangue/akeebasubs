@@ -615,10 +615,7 @@ class AkeebasubsHelperSelect
 		return self::genericlist($options, $id, $attribs, $selected, $id);
 	}
 
-	/**
-	 * Drop down list of custom field types
-	 */
-	public static function fieldtypes($name = 'type', $selected = 'text', $attribs = array())
+	public static function getFieldTypes()
 	{
 		$fieldTypes = array();
 
@@ -637,15 +634,26 @@ class AkeebasubsHelperSelect
 			$class = 'AkeebasubsCustomField' . ucfirst($type);
 			if (class_exists($class))
 			{
-				$fieldTypes[] = $type;
+				$desc = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type));
+				$fieldTypes[$type] = $desc;
 			}
 		}
 
+		return $fieldTypes;
+	}
+
+	/**
+	 * Drop down list of custom field types
+	 */
+	public static function fieldtypes($name = 'type', $selected = 'text', $attribs = array())
+	{
+		$fieldTypes = self::getFieldTypes();
+
 		$options = array();
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
-		foreach ($fieldTypes as $type)
+		foreach ($fieldTypes as $type => $desc)
 		{
-			$options[] = JHTML::_('select.option', $type, JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type)));
+			$options[] = JHTML::_('select.option', $type, $desc);
 		}
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
