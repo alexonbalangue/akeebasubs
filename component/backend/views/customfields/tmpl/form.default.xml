@@ -32,9 +32,10 @@
 		
 		<field name="akeebasubs_customfield_id" type="text" id="num" />
 		
-		<field name="title" type="text"
+		<field name="title" type="title"
 			show_link="true"
 			url="index.php?option=com_akeebasubs&amp;view=customfield&amp;id=[ITEM:ID]"
+			slug_format="COM_AKEEBASUBS_LBL_CUSTOMFIELDS_SLUGFORMAT"
 		/>
 		
 		<field name="type" type="list"
