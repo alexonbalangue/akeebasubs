@@ -272,6 +272,10 @@ class Com_AkeebasubsInstallerScript
 			'media/com_akeebasubs/tcdpf/fonts/timesi.php',
 			'media/com_akeebasubs/tcdpf/fonts/zapfdingbats.php',
 
+			// Old PHP views, replaced with XML views
+			'administrator/components/com_akeebasubs/view/levels/tmpl/default.php',
+			'administrator/components/com_akeebasubs/view/levels/tmpl/form.php',
+
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
