@@ -277,6 +277,7 @@ class Com_AkeebasubsInstallerScript
 			'administrator/components/com_akeebasubs/view/levelgroups/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/levels/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/levels/tmpl/form.php',
+			'administrator/components/com_akeebasubs/view/upgrades/tmpl/default.php',
 
 		),
 		'folders' => array(
