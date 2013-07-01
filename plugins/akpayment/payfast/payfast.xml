@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYFAST_TITLE_LABEL" description="PLG_AKPAYMENT_PAYFAST_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYFAST_PPIMAGE_LABEL" description="PLG_AKPAYMENT_PAYFAST_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYFAST_MERCHANTID_LABEL" description="PLG_AKPAYMENT_PAYFAST_MERCHANTID_DESC"/>
 				<field name="merchant_key" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYFAST_MERCHANTKEY_LABEL" description="PLG_AKPAYMENT_PAYFAST_MERCHANTKEY_DESC"/>	
 				<field type="spacer" />

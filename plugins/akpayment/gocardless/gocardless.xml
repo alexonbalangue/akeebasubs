@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_TITLE_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="app_id" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_APPID_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_APPID_DESC"/>
 				<field name="app_secret" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_APPSECRET_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_APPSECRET_DESC"/>
 				<field name="merchant_token" type="text" size="50" default="" label="PLG_AKPAYMENT_GOCARDLESS_MERCHANTTOKEN_LABEL" description="PLG_AKPAYMENT_GOCARDLESS_MERCHANTTOKEN_DESC"/>

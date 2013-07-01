@@ -24,6 +24,8 @@
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_MOIP_PPIMAGE_LABEL" description="PLG_AKPAYMENT_MOIP_PPIMAGE_DESC" />
 				<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_MOIP_MERCHANT_LABEL" description="PLG_AKPAYMENT_MOIP_MERCHANT_DESC"/>
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_MOIP_SANDBOX_LABEL" description="PLG_AKPAYMENT_MOIP_SANDBOX_DESC">
 				  <option value="0">JNo</option>
 				  <option value="1">JYes</option>

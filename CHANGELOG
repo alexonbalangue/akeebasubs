@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.2.1
+================================================================================
++ #169 Surcharge per payment method
+
 Akeeba Subscriptions 3.2.0
 ================================================================================
 + On popular demand: do not show validation status (red text) on the fields before the user submits the subscription form for the first time

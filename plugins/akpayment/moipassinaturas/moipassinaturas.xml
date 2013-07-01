@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_MOIPASSINATURAS_TITLE_LABEL" description="PLG_AKPAYMENT_MOIPASSINATURAS_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_MOIPASSINATURAS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_MOIPASSINATURAS_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="token" type="text" size="50" default="" label="PLG_AKPAYMENT_MOIPASSINATURAS_APITOKEN_LABEL" description="PLG_AKPAYMENT_MOIPASSINATURAS_APITOKEN_DESC"/>
 				<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_MOIPASSINATURAS_APIKEY_LABEL" description="PLG_AKPAYMENT_MOIPASSINATURAS_APIKEY_DESC"/>
 				<field name="notification_token" type="text" size="50" default="" label="PLG_AKPAYMENT_MOIPASSINATURAS_NOTIFICATIONTOKEN_LABEL" description="PLG_AKPAYMENT_MOIPASSINATURAS_NOTIFICATIONTOKEN_DESC"/>

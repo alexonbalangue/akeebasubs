@@ -24,6 +24,14 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	/** @var string Image path, returned to the component */
 	protected $ppImage = '';
 
+	/**
+	 * Public constructor for the plugin
+	 *
+	 * @param   object  $subject  The object to observe
+	 * @param   array   $config   An optional associative array of configuration settings.
+	 *
+	 * @return  void
+	 */
 	public function __construct(&$subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
@@ -58,6 +66,17 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$jlang->load('plg_akpayment_'.$name, JPATH_ADMINISTRATOR, null, true);
 	}
 
+	/**
+	 * Plugin event which returns the identity information of this payment
+	 * method. The result is an array containing one or more associative arrays.
+	 * If the plugin only provides a single payment method you should only
+	 * return an array containing just one associateive array. The assoc array
+	 * has the keys 'name' (the name of the payment method), 'title'
+	 * (translation key for the payment method's name) and 'image' (the URL to
+	 * the image used for this payment method).
+	 *
+	 * @return  array
+	 */
 	public final function onAKPaymentGetIdentity()
 	{
 		$title = $this->params->get('title','');
@@ -80,22 +99,49 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	}
 
 	/**
+	 * Plugin event to modify the subscription's net price. This is used in
+	 * payment plugins to implement an optional surcharge per payment
+	 * method.
+	 *
+	 * @param   object  $data  The input data
+	 *
+	 * @return  float  The surcharge for this subscription level
+	 */
+	public function onValidateSubscriptionPrice($data)
+	{
+		$surcharge = 0;
+
+		if ($data->paymentmethod == $this->ppName)
+		{
+			$surcharge = (float)$this->params->get('surcharge', '0');
+		}
+
+		return $surcharge;
+	}
+
+	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
 	 *
-	 * @param string $paymentmethod Check it against $this->ppName
-	 * @param JUser $user
-	 * @param AkeebasubsTableLevel $level
-	 * @param AkeebasubsTableSubscription $subscription
-	 * @return string
+	 * @param   string                        $paymentmethod  The currently used payment method.
+	 *                                                        Check it against $this->ppName
+	 * @param   JUser                         $user           User buying the subscription
+	 * @param   AkeebasubsTableLevel          $level          Subscription level
+	 * @param   AkeebasubsTableSubscription   $subscription   The new subscription's object
+	 *
+	 * @return  string  The payment form to render on the page. Use the special
+	 *                  id 'paymentForm' to have it automatically submitted after
+	 *                  5 seconds.
 	 */
 	abstract public function onAKPaymentNew($paymentmethod, $user, $level, $subscription);
 
 	/**
 	 * Processes a callback from the payment processor
 	 *
-	 * @param string $paymentmethod Check it against $this->ppName
-	 * @param array $data Input data
+	 * @param   string  $paymentmethod  The currently used payment method. Check it against $this->ppName
+	 * @param   array   $data           Input (request) data
+	 *
+	 * @return  boolean  True if the callback was handled, false otherwise
 	 */
 	abstract public function onAKPaymentCallback($paymentmethod, $data);
 
@@ -106,8 +152,10 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 * lose those 4 days without this trick. Or, worse, if it was a one-day pass
 	 * the user would have paid us and we'd never given him a subscription!
 	 *
-	 * @param AkeebasubsTableSubscription $subscription
-	 * @param array $updates
+	 * @param   AkeebasubsTableSubscription  $subscription  The subscritpion record
+	 * @param   array                        $updates       By-ref array to the updates being applied to $subscription
+	 *
+	 * @return  void
 	 */
 	protected function fixDates($subscription, &$updates)
 	{
@@ -287,8 +335,10 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	/**
 	 * Logs the received IPN information to file
 	 *
-	 * @param array $data
-	 * @param bool $isValid
+	 * @param   array    $data     Request data
+	 * @param   boolean  $isValid  Is it a valid payment?
+	 *
+	 * @return  void
 	 */
 	protected final function logIPN($data, $isValid)
 	{
@@ -330,11 +380,13 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$logData .= "\n";
 		JFile::write($logFile, $logData);
 	}
-	
+
 	/**
 	 * Translates the given 2-digit country code into the 3-digit country code.
 	 *
-	 * @param string $country
+	 * @param   string  $country  The 2 digit country code
+	 *
+	 * @return  string  The 3 digit country code
 	 */
 	protected function translateCountry($country)
 	{
@@ -388,7 +440,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			'VA' => 'VAT','VE' => 'VEN','VN' => 'VNM','VG' => 'VGB','VI' => 'VIR',
 			'WF' => 'WLF','EH' => 'ESH','YE' => 'YEM','ZM' => 'ZMB','ZW' => 'ZWE'
 		);
-		
+
 		if(array_key_exists($country, $countryMap)) {
 			return $countryMap[$country];
 		} else {

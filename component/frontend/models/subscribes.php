@@ -541,6 +541,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$price_modifier = 0;
 			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
+			JPluginHelper::importPlugin('akpayment');
 			$app = JFactory::getApplication();
 			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array($state));
 			if(is_array($jResponse) && !empty($jResponse)) {
