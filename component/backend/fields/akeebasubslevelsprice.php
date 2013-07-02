@@ -51,7 +51,7 @@ class FOFFormFieldAkeebasubslevelsprice extends FOFFormFieldText
 		}
 
 		// Second line: sign-up fee
-		if ($this->item->signupfee >= 0.01)
+		if (property_exists($this->item, 'signupfee') && ($this->item->signupfee >= 0.01))
 		{
 			$html .= '<br /><span class="small">( ';
 			$html .= JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST');
