@@ -284,6 +284,7 @@ class Com_AkeebasubsInstallerScript
 			'administrator/components/com_akeebasubs/view/users/tmpl/default.php',
 
 			// Do not delete (used to render custom form page elements):
+			// 'administrator/components/com_akeebasubs/view/coupons/tmpl/default.php',
 			// 'administrator/components/com_akeebasubs/view/invoices/tmpl/default.php',
 			// 'administrator/components/com_akeebasubs/view/taxrules/tmpl/default.php',
 
