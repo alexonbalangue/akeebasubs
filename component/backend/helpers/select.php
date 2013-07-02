@@ -150,6 +150,30 @@ class AkeebasubsHelperSelect
 		return $states;
 	}
 
+	public static function getInvoiceExtensions()
+	{
+		static $invoiceExtensions = null;
+
+		if (is_null($invoiceExtensions))
+		{
+			$source = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+				->getExtensions(0);
+			$invoiceExtensions = array();
+
+			if (!empty($source))
+			{
+				foreach ($source as $item)
+				{
+					$invoiceExtensions[$item['extension']] = $item['title'];
+				}
+			}
+		}
+
+		return $invoiceExtensions;
+	}
+
+
+
 	public static function decodeCountry($cCode)
 	{
 		if(array_key_exists($cCode, self::$countries))
