@@ -1,5 +1,6 @@
 /.buildpath
 /.settings
+.idea/*
 /Akeeba Subscriptions.esproj
 /relink.sh
 /release
