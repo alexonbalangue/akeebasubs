@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_TITLE_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_PPIMAGE_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTID_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTID_DESC"/>
 				<field name="merchant_pass" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTPASS_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_MERCHANTPASS_DESC"/>
 				<field name="adminemail" type="text" size="50" default="" label="PLG_AKPAYMENT_SCNETINTEGRATED_EMAIL_LABEL" description="PLG_AKPAYMENT_SCNETINTEGRATED_EMAIL_DESC"/>

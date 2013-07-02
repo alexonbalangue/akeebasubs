@@ -10,16 +10,16 @@
 	<headerset>
 		<header name="akeebasubs_relation_id" type="rowselect" tdwidth="20" />
 		
-		<header name="source_level_id" type="fieldsql"
+		<header name="source_level_id" type="model"
 			sortable="true" key_field="akeebasubs_level_id" value_field="title"
-			query="SELECT akeebasubs_level_id, title FROM #__akeebasubs_levels"
-			translate="true"
+			model="AkeebasubsModelLevels"
+			translate="false"
 		/>
 
-		<header name="target_level_id" type="fieldsql"
+		<header name="target_level_id" type="model"
 			sortable="true" key_field="akeebasubs_level_id" value_field="title"
-			query="SELECT akeebasubs_level_id, title FROM #__akeebasubs_levels"
-			translate="true"
+			model="AkeebasubsModelLevels"
+			translate="false"
 		/>
 
 		<header name="mode" type="fieldselectable"

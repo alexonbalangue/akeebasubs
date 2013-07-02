@@ -8169,6 +8169,134 @@ LEVEL2=11111/22222/33333</programlisting>
       </important>
     </section>
 
+    <section xml:id="payment-moipassinaturas">
+      <title>MoIP Assinaturas</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - MoIP Assinaturas</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">supports</emphasis> recurring
+      payments.</para>
+
+      <para>This payment method integrates the MoIP payments service
+      (https://www.moip.com.br), a popular Brazilian payment processor. This
+      payment method only works for recurring payments.</para>
+
+      <para>The options you have with this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "MoIP" or type in a custom name to show
+            to your customer's, e.g. "Credit Card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>API Token</term>
+
+          <listitem>
+            <para>Please enter the API token given by MoIP Assinaturas</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>API key</term>
+
+          <listitem>
+            <para>Please enter the API key given by MoIP Assinaturas</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notification token</term>
+
+          <listitem>
+            <para>Please enter your notification token given by MoIP
+            Assinaturas (<guilabel>Congurações</guilabel>, <guilabel>Token de
+            notificação</guilabel>)</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, all transactions will be performed against the
+            testing server. No money will change hands. This is supposed to be
+            used ONLY for testing the integration with MoIP before launching
+            your site. Please consult MoIP for further instructions on using
+            their Sandbox – you have to create special Sandbox users to use
+            it!</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>Integration notes</bridgehead>
+
+      <para>You will have to setup an instant payment notification URL in your
+      MoIP back-end before Akeeba Subscriptions can handle transactions
+      processed by MoIP. In order to do this, go to
+      <guilabel>Configurações</guilabel> and find the <guilabel>URL de
+      notificação</guilabel> option. In there, enter a URL like this:</para>
+
+      <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=moipassinaturas&amp;mode=webhook</uri></para>
+
+      <para>where www.example.com must be replaced with the domain name of
+      your site.</para>
+
+      <important>
+        <para>The developers of Akeeba Subscriptions do not speak Portuguese.
+        The above instructions and the Portuguese labels of MoIP's interface
+        were kindly provided by MoIP's staff. If you want to seek support with
+        us, please place your request in English. Otherwise we will have to
+        use Google Translate and we might be lost in translation.
+        Thanks!</para>
+      </important>
+
+      <para>This payment method requires a few more input fields that need to
+      be added as custom fields. The following 4 custom fields need to be
+      created with the corresponding "Slugs" and the "Field types":</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>slug: cpf, type: text box (portuguese name of the field:
+          "CPF")</para>
+        </listitem>
+
+        <listitem>
+          <para>slug: birthday, type: calendar (date picker) (portuguese name
+          of the field: "Nascimento")</para>
+        </listitem>
+
+        <listitem>
+          <para>slug: phone, type: text box (portuguese name of the field:
+          "DDD / Telefone")</para>
+        </listitem>
+
+        <listitem>
+          <para>slug: district, type: text box (portuguese name of the field:
+          "Bairro")</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Please note that the payment plugin will NOT work unless these
+      fields are created and published for the subscription levels you want to
+      use with this payment processor.</para>
+    </section>
+
     <section xml:id="payment-moneris">
       <title>Moneris</title>
 

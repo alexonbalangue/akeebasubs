@@ -89,6 +89,8 @@ function validateForm(callback_function)
 	}
 
 	(function($) {
+		var paymentMethod = $('input[name=paymentmethod]:checked').val();
+		
 		if(akeebasubs_personalinfo == 1) {
 			var data = {
 				'action'	:	'read',
@@ -108,6 +110,7 @@ function validateForm(callback_function)
 				'occupation':	$('#occupation').val(),
 				'vatnumber'	:	$('#vatnumber').val(),
 				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
+				'paymentmethod'	: paymentMethod,
 				'custom'	:	{},
 				'subcustom'	:	{}
 			};
@@ -121,6 +124,7 @@ function validateForm(callback_function)
 				'email2'	:	$('#email2').val(),
 				'country'	:	$('select[name$="country"]').val(),
 				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
+				'paymentmethod'	: paymentMethod,
 				'custom'	:	{},
 				'subcustom'	:	{}
 			};
@@ -133,6 +137,7 @@ function validateForm(callback_function)
 				'email'		:	$('#email').val(),
 				'email2'	:	$('#email2').val(),
 				'coupon'	:	($("#coupon").length > 0) ? $('#coupon').val() : '',
+				'paymentmethod'	: paymentMethod,
 				'custom'	:	{},
 				'subcustom'	:	{}
 			};
@@ -325,17 +330,14 @@ function validateEmail()
 		var email = $('#email').val();
 		var email2 = $('#email2').val();
 		
-		if (!akeebasubs_apply_validation)
+		if ((email == '') && (email2 == ''))
 		{
-			if ((email == '') && (email2 == ''))
-			{
-				$('#email').parent().parent().removeClass('error').removeClass('success');
-				$('#email2').parent().parent().removeClass('error').removeClass('success');
-				$('#email_empty').css('display','none');
-				$('#email_invalid').css('display','none');
-				$('#email2_invalid').css('display','none');
-				return;
-			}
+			$('#email').parent().parent().removeClass('error').removeClass('success');
+			$('#email2').parent().parent().removeClass('error').removeClass('success');
+			$('#email_empty').css('display','none');
+			$('#email_invalid').css('display','none');
+			$('#email2_invalid').css('display','none');
+			return;
 		}
 		
 		if(email == '') {

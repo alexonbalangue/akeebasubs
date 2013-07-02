@@ -275,4 +275,84 @@ class AkeebasubsToolbar extends FOFToolbar
 		JToolBarHelper::divider();
 		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
 	}
+
+    public function onEmailtemplatesAdd()
+    {
+        // Quick hack to mark this record as new
+        $this->_isNew = true;
+
+        parent::onAdd();
+    }
+
+    public function onEmailtemplatesEdit()
+    {
+        if(!isset($this->_isNew))
+        {
+            $options['class']   = 'preview';
+            $options['a.task']  = 'testtemplate';
+            $options['a.href']  = '#';
+            $options['text']    = JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_TESTTEMPLATE');
+
+            $this->addCustomBtn('test-template', $options);
+            JToolBarHelper::divider();
+        }
+        parent::onEdit();
+    }
+
+    protected function addCustomBtn($id, $options = array())
+    {
+        $options = (array) $options;
+        $a_class = 'toolbar';
+        $href	 = '';
+        $task	 = '';
+        $text    = '';
+        $rel	 = '';
+        $target  = '';
+        $other   = '';
+
+        if(isset($options['a.class']))	$a_class .= $options['a.class'];
+        if(isset($options['a.href']))	$href     = $options['a.href'];
+        if(isset($options['a.task']))	$task     = $options['a.task'];
+        if(isset($options['a.target']))	$target   = $options['a.target'];
+        if(isset($options['a.other']))	$other    = $options['a.other'];
+        if(isset($options['text']))		$text	  = $options['text'];
+        if(isset($options['class']))
+        {
+            $class = $options['class'];
+        }
+        else
+        {
+            $class = 'default';
+        }
+
+        if(isset($options['modal']))
+        {
+            JHTML::_('behavior.modal');
+            $a_class .= ' modal';
+            $rel	  = "'handler':'iframe'";
+            if(is_array($options['modal']))
+            {
+                if(isset($options['modal']['size']['x']) && isset($options['modal']['size']['y']))
+                {
+                    $rel .= ", 'size' : {'x' : ".$options['modal']['size']['x'].", 'y' : ".$options['modal']['size']['y']."}";
+                }
+            }
+        }
+
+        $html = '<a id="'.$id.'" class="'.$a_class.'" alt="'.$text.'"';
+
+        if($rel)	$html .= ' rel="{'.$rel.'}"';
+        if($href)	$html .= ' href="'.$href.'"';
+        if($task)	$html .= " onclick=\"javascript:submitbutton('".$task."')\"";
+        if($target) $html .= ' target="'.$target.'"';
+        if($other)  $html .= ' '.$other;
+        $html .= ' >';
+
+        $html .= '<span class="icon-32-'.$class.'" title="'.$text.'" > </span>';
+        $html .= $text;
+        $html .= '</a>';
+
+        $bar = JToolBar::getInstance();
+        $bar->appendButton('Custom', $html, $id);
+    }
 }

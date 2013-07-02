@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAYRAPID3_TITLE_LABEL" description="PLG_AKPAYMENT_EWAYRAPID3_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAYRAPID3_PPIMAGE_LABEL" description="PLG_AKPAYMENT_EWAYRAPID3_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAYRAPID3_KEY_LABEL" description="PLG_AKPAYMENT_EWAYRAPID3_KEY_DESC"/>
 				<field name="password" type="text" size="50" default="" label="PLG_AKPAYMENT_EWAYRAPID3_PASSWORD_LABEL" description="PLG_AKPAYMENT_EWAYRAPID3_PASSWORD_DESC"/>
 				<field type="spacer" />

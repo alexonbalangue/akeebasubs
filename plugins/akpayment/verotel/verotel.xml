@@ -22,6 +22,8 @@
 			<fieldset name="basic">
         		<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_TITLE_LABEL" description="PLG_AKPAYMENT_VEROTEL_TITLE_DESC"/>
         		<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_PPIMAGE_LABEL" description="PLG_AKPAYMENT_VEROTEL_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
         		<field type="spacer" />
                 <field name="shopid" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_SHOPID_LABEL" description="PLG_AKPAYMENT_VEROTEL_SHOPID_DESC"/>
         		<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_VEROTEL_KEY_LABEL" description="PLG_AKPAYMENT_VEROTEL_KEY_DESC"/>

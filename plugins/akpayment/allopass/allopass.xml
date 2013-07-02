@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_ALLOPASS_TITLE_LABEL" description="PLG_AKPAYMENT_ALLOPASS_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_ALLOPASS_PPIMAGE_LABEL" description="PLG_AKPAYMENT_ALLOPASS_PPIMAGE_DESC" />	
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_ALLOPASS_APIKEY_LABEL" description="PLG_AKPAYMENT_ALLOPASS_APIKEY_DESC"/>
 				<field name="skey" type="text" size="50" default="" label="PLG_AKPAYMENT_ALLOPASS_APISECRETKEY_LABEL" description="PLG_AKPAYMENT_ALLOPASS_APISECRETKEY_DESC"/>
 				<field type="spacer" />

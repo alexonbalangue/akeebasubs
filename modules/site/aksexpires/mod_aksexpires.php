@@ -79,5 +79,5 @@ if(JFactory::getUser()->guest) {
 	}
 
 	$ed = new JDate($expires);
-	echo JText::sprintf('MOD_AKSEXPIRES_EXPIRESON', $ed->format('d/m/Y', true));
+	echo JText::sprintf('MOD_AKSEXPIRES_EXPIRESON', $ed->format(JText::_('DATE_FORMAT_LC1'), true));
 }

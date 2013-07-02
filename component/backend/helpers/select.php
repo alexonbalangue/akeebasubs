@@ -88,6 +88,50 @@ class AkeebasubsHelperSelect
 
 	public static $states = array();
 
+	public static function getFieldTypes()
+	{
+		$fieldTypes = array();
+
+		JLoader::import('joomla.filesystem.folder');
+		$basepath = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/customfields';
+		$files = JFolder::files($basepath, '.php');
+		foreach($files as $file)
+		{
+			if ($file === 'abstract.php')
+			{
+				continue;
+			}
+
+			require_once $basepath.'/'.$file;
+			$type = substr($file, 0, -4);
+			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			if (class_exists($class))
+			{
+				$desc = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type));
+				$fieldTypes[$type] = $desc;
+			}
+		}
+
+		return $fieldTypes;
+	}
+
+	public static function getCountries()
+	{
+		return self::$countries;
+	}
+
+	public static function getStates()
+	{
+		$ret = array();
+
+		foreach(self::$states as $country => $states)
+		{
+			$ret = array_merge($ret, $states);
+		}
+
+		return $ret;
+	}
+
 	public static function decodeCountry($cCode)
 	{
 		if(array_key_exists($cCode, self::$countries))
@@ -620,32 +664,13 @@ class AkeebasubsHelperSelect
 	 */
 	public static function fieldtypes($name = 'type', $selected = 'text', $attribs = array())
 	{
-		$fieldTypes = array();
-
-		JLoader::import('joomla.filesystem.folder');
-		$basepath = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/customfields';
-		$files = JFolder::files($basepath, '.php');
-		foreach($files as $file)
-		{
-			if ($file === 'abstract.php')
-			{
-				continue;
-			}
-
-			require_once $basepath.'/'.$file;
-			$type = substr($file, 0, -4);
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
-			if (class_exists($class))
-			{
-				$fieldTypes[] = $type;
-			}
-		}
+		$fieldTypes = self::getFieldTypes();
 
 		$options = array();
 		$options[] = JHTML::_('select.option','','- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
-		foreach ($fieldTypes as $type)
+		foreach ($fieldTypes as $type => $desc)
 		{
-			$options[] = JHTML::_('select.option', $type, JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type)));
+			$options[] = JHTML::_('select.option', $type, $desc);
 		}
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);

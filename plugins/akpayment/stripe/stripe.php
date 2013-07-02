@@ -40,74 +40,152 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 		if($paymentmethod != $this->ppName) return false;
 		
 		$doc = JFactory::getDocument();
-		$doc->addScriptDeclaration("\nStripe.setPublishableKey('" . $this->getPublicKey() . "');\n");
-		$doc->addScript("https://js.stripe.com/v1/");
-		$doc->addScriptDeclaration("\n" . 'window.addEvent(\'domready\', function(){
-					function StripeResponseHandler(status, response) {
-						$$(\'.control-group\').removeClass(\'error\');
+		$doc->addScriptDeclaration("
+			Stripe.setPublishableKey('" . $this->getPublicKey() . "');
+			");
+		$doc->addScript("https://js.stripe.com/v2/");
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			// jQuery
+			$doc->addScriptDeclaration("
+				jQuery(function($){
+					var stripeResponseHandler = function(status, response) {
+						$('.control-group').removeClass('error');
 						if (response.error) {
-							if(response.error.code == \'incorrect_number\') {
-								$(\'control-group-card-number\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INCORRECT_NUMBER') . '");
-							}else if(response.error.code == \'invalid_number\') {
-								$(\'control-group-card-number\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_NUMBER') . '");
-							}else if(response.error.code == \'invalid_expiry_month\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_EXP_MONTH') . '");
-							}else if(response.error.code == \'invalid_expiry_year\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_EXP_YEAR') . '");
-							}else if(response.error.code == \'invalid_cvc\') {
-								$(\'control-group-card-cvc\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_CVC') . '");
-							}else if(response.error.code == \'expired_card\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_EXPIRED_CARD') . '");
-							}else if(response.error.code == \'incorrect_cvc\') {
-								$(\'control-group-card-cvc\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INCORRECT_CVC') . '");
-							}else if(response.error.code == \'card_declined\') {
-								$(\'control-group-card-number\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_CARD_DECLINED') . '");
-							}else if(response.error.code == \'missing\') {
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_MISSING') . '");
-							}else if(response.error.code == \'processing_error\') {
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_PROCESSING_ERROR') . '");
+							if(response.error.code == 'incorrect_number') {
+								$('#control-group-card-number').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INCORRECT_NUMBER') . "\");
+							}else if(response.error.code == 'invalid_number') {
+								$('#control-group-card-number').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_NUMBER') . "\");
+							}else if(response.error.code == 'invalid_expiry_month') {
+								$('#control-group-card-expiry').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_EXP_MONTH') . "\");
+							}else if(response.error.code == 'invalid_expiry_year') {
+								$('#control-group-card-expiry').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_EXP_YEAR') . "\");
+							}else if(response.error.code == 'invalid_cvc') {
+								$('#control-group-card-cvc').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_CVC') . "\");
+							}else if(response.error.code == 'expired_card') {
+								$('#control-group-card-expiry').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_EXPIRED_CARD') . "\");
+							}else if(response.error.code == 'incorrect_cvc') {
+								$('#control-group-card-cvc').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INCORRECT_CVC') . "\");
+							}else if(response.error.code == 'card_declined') {
+								$('#control-group-card-number').addClass('error');
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_CARD_DECLINED') . "\");
+							}else if(response.error.code == 'missing') {
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_MISSING') . "\");
+							}else if(response.error.code == 'processing_error') {
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_PROCESSING_ERROR') . "\");
 							}else if(status == 401) {
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_UNAUTHORIZED') . '");
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_UNAUTHORIZED') . "\");
 							}else if(status == 402) {
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_REQUEST_FAILED') . '");
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_REQUEST_FAILED') . "\");
 							}else if(status == 404) {
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_NOT_FOUND') . '");
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_NOT_FOUND') . "\");
 							}else if(status >= 500) {
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_SERVER_ERROR') . '");
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_SERVER_ERROR') . "\");
 							}else {
-								$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_UNKNOWN_ERROR') . '");
+								$('#payment-errors').text(\"" . JText::_('PLG_AKPAYMENT_STRIPE_FORM_UNKNOWN_ERROR') . "\");
 							}
-							$(\'payment-errors\').setStyle(\'display\',\'\');
-							$(\'payment-button\').set(\'disabled\', false);
+							$('#payment-errors').show();
+							$('#payment-button').removeAttr('disabled');
 						} else {
-							$(\'payment-errors\').setStyle(\'display\',\'none\');
+							$('#payment-errors').hide();
 							var token = response.id;
-							$(\'token\').set(\'value\', token);
-							$(\'payment-form\').submit();
+							$('#token').val(token);
+							$('#payment-form').submit();
 						}
-					}
+					};
 
-					$(\'payment-form\').addEvents({
-						submit: function(){
+					$('#payment-form').submit(function(e){
+						var token = $('#token').val();
+						if(!!token) {
+							return true;
+						}else{							
+							$('#payment-button').attr('disabled', 'disabled');
 							Stripe.createToken({
-								number:$(\'card-number\').value,
-								exp_month:$(\'card-expiry-month\').value,
-								exp_year:$(\'card-expiry-year\').value,
-								cvc:$(\'card-cvc\').value
-							}, StripeResponseHandler);
-							$(\'payment-button\').set(\'disabled\', true);
+								number:$('#card-number').val(),
+								exp_month:$('#card-expiry-month').val(),
+								exp_year:$('#card-expiry-year').val(),
+								cvc:$('#card-cvc').val()
+							}, stripeResponseHandler);
 							return false;
 						}
 					});
-				});' . "\n");
+				});
+			");
+		} else {
+			// Mootools
+			$doc->addScriptDeclaration("\n" . 'window.addEvent(\'domready\', function(){
+						function StripeResponseHandler(status, response) {
+							$$(\'.control-group\').removeClass(\'error\');
+							if (response.error) {
+								if(response.error.code == \'incorrect_number\') {
+									$(\'control-group-card-number\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INCORRECT_NUMBER') . '");
+								}else if(response.error.code == \'invalid_number\') {
+									$(\'control-group-card-number\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_NUMBER') . '");
+								}else if(response.error.code == \'invalid_expiry_month\') {
+									$(\'control-group-card-expiry\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_EXP_MONTH') . '");
+								}else if(response.error.code == \'invalid_expiry_year\') {
+									$(\'control-group-card-expiry\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_EXP_YEAR') . '");
+								}else if(response.error.code == \'invalid_cvc\') {
+									$(\'control-group-card-cvc\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INVALID_CVC') . '");
+								}else if(response.error.code == \'expired_card\') {
+									$(\'control-group-card-expiry\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_EXPIRED_CARD') . '");
+								}else if(response.error.code == \'incorrect_cvc\') {
+									$(\'control-group-card-cvc\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_INCORRECT_CVC') . '");
+								}else if(response.error.code == \'card_declined\') {
+									$(\'control-group-card-number\').addClass(\'error\');
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_CARD_DECLINED') . '");
+								}else if(response.error.code == \'missing\') {
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_MISSING') . '");
+								}else if(response.error.code == \'processing_error\') {
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_PROCESSING_ERROR') . '");
+								}else if(status == 401) {
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_UNAUTHORIZED') . '");
+								}else if(status == 402) {
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_REQUEST_FAILED') . '");
+								}else if(status == 404) {
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_NOT_FOUND') . '");
+								}else if(status >= 500) {
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_SERVER_ERROR') . '");
+								}else {
+									$(\'payment-errors\').set(\'html\', "' . JText::_('PLG_AKPAYMENT_STRIPE_FORM_UNKNOWN_ERROR') . '");
+								}
+								$(\'payment-errors\').setStyle(\'display\',\'\');
+								$(\'payment-button\').set(\'disabled\', false);
+							} else {
+								$(\'payment-errors\').setStyle(\'display\',\'none\');
+								var token = response.id;
+								$(\'token\').set(\'value\', token);
+								$(\'payment-form\').submit();
+							}
+						}
+
+						$(\'payment-form\').addEvents({
+							submit: function(){
+								Stripe.createToken({
+									number:$(\'card-number\').value,
+									exp_month:$(\'card-expiry-month\').value,
+									exp_year:$(\'card-expiry-year\').value,
+									cvc:$(\'card-cvc\').value
+								}, StripeResponseHandler);
+								$(\'payment-button\').set(\'disabled\', true);
+								return false;
+							}
+						});
+					});' . "\n");
+		}
 		
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=stripe&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(

@@ -19,14 +19,14 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_ALPHAUSERPOINTS_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/alphauserpoints.png'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
 
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -46,18 +46,18 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/alphauserpoints/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		$isValid = true;
-        
+
 		// Load the relevant subscription row
 		$id = $data['SID'];
 		$subscription = null;
@@ -77,20 +77,20 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 			$isValid = false;
 		}
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription id is invalid';
-        
+
 		// At this point the payment should be new (N)
 		if($isValid && $subscription->state != 'N') {
 			$isValid = false;
 			$data['akeebasubs_failure_reason'] = "Invalid subscription state";
 		}
-		
+
 		// Check user
 		$currentUser = JFactory::getUser();
 		if($isValid && $currentUser->id != $data['UID']) {
 			$isValid = false;
 			$data['akeebasubs_failure_reason'] = "Invalid user";
 		}
-			
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
@@ -103,7 +103,7 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($errorUrl, $data['error_description'], 'error');
 			return false;
 		}
-		
+
 		// Do the payment
 		$exchangeRate = trim($this->params->get('rate', 1));
 		if(! is_numeric($exchangeRate)) {
@@ -120,7 +120,7 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 			$this->bookAUPPoints($currentUser->id, -$priceInPoints, $description);
 			$newStatus = 'C';
 		}
-		
+
 		// Update subscription status (this also automatically calls the plugins)
 		$processorKey = md5($currentUser->id . ':' . $subscription->akeebasubs_subscription_id . ':' . time());
 		$updates = array(
@@ -142,18 +142,18 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page or show error message
 		if(empty($errorMessage)) {
-			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
-			JFactory::getApplication()->redirect($thankyouUrl);	
+			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+			JFactory::getApplication()->redirect($thankyouUrl);
 		} else {
 			JFactory::getApplication()->redirect($errorUrl, $errorMessage, 'error');
 		}
-        
+
 		return true;
 	}
-	
+
 	private function getAUPPoints($userId)
 	{
 		$db = JFactory::getDBO();
@@ -165,12 +165,12 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 		$points = $db->loadResult();
 		return $points;
 	}
-	
+
 	private function bookAUPPoints($userId, $points, $description)
 	{
 		$db = JFactory::getDBO();
 		$now = strftime("%Y-%m-%d %H:%M:%S");
-		
+
 		// Get user info
 		$getUserInfoQuery = $db->getQuery(true)
 			->select($db->qn('referreid'))
@@ -181,7 +181,7 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 		$userInfo = $db->loadObject();
 		$referreId = $userInfo->referreid;
 		$currentPoints = $userInfo->points;
-		
+
 		// Update user points
 		$newPoints = $currentPoints + $points;
 		$setUserPointsQuery = $db->getQuery(true)
@@ -191,7 +191,7 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 			->where($db->qn('userid')  .' = '. $db->q($userId));
 		$db->setQuery($setUserPointsQuery);
 		$db->execute();
-		
+
 		// Add details
 		$addDetailsQuery = $db->getQuery(true)
 			->insert($db->qn('#__alpha_userpoints_details'))

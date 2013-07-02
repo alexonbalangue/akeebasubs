@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_TITLE_LABEL" description="PLG_AKPAYMENT_WORLDPAY_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_WORLDPAY_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="instid" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_INSTID_LABEL" description="PLG_AKPAYMENT_WORLDPAY_INSTID_DESC"/>
 				<field name="callbackpw" type="text" size="50" default="" label="PLG_AKPAYMENT_WORLDPAY_CALLBACKPW_LABEL" description="PLG_AKPAYMENT_WORLDPAY_CALLBACKPW_DESC"/>
 				<field type="spacer" />

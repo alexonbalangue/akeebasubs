@@ -23,6 +23,8 @@
                 <field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_TITLE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_TITLE_DESC"/>
                 <field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_LABEL" description="PLG_AKPAYMENT_RBKMONEY_PPIMAGE_DESC" />
                 <field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="eshopid" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_ESHOPID_LABEL" description="PLG_AKPAYMENT_RBKMONEY_ESHOPID_DESC"/>
                 <field name="key" type="text" size="50" default="" label="PLG_AKPAYMENT_RBKMONEY_KEY_LABEL" description="PLG_AKPAYMENT_RBKMONEY_KEY_DESC"/>
                 <field type="spacer" />

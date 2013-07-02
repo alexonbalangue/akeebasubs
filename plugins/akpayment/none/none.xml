@@ -16,4 +16,14 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_none.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_none.sys.ini</language>
 	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_NONE_TITLE_LABEL" description="PLG_AKPAYMENT_NONE_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_NONE_PPIMAGE_LABEL" description="PLG_AKPAYMENT_NONE_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
 </extension>

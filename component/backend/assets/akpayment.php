@@ -24,6 +24,14 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	/** @var string Image path, returned to the component */
 	protected $ppImage = '';
 
+	/**
+	 * Public constructor for the plugin
+	 *
+	 * @param   object  $subject  The object to observe
+	 * @param   array   $config   An optional associative array of configuration settings.
+	 *
+	 * @return  void
+	 */
 	public function __construct(&$subject, $config = array())
 	{
 		if(!is_object($config['params'])) {
@@ -58,6 +66,17 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$jlang->load('plg_akpayment_'.$name, JPATH_ADMINISTRATOR, null, true);
 	}
 
+	/**
+	 * Plugin event which returns the identity information of this payment
+	 * method. The result is an array containing one or more associative arrays.
+	 * If the plugin only provides a single payment method you should only
+	 * return an array containing just one associateive array. The assoc array
+	 * has the keys 'name' (the name of the payment method), 'title'
+	 * (translation key for the payment method's name) and 'image' (the URL to
+	 * the image used for this payment method).
+	 *
+	 * @return  array
+	 */
 	public final function onAKPaymentGetIdentity()
 	{
 		$title = $this->params->get('title','');
@@ -80,22 +99,49 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	}
 
 	/**
+	 * Plugin event to modify the subscription's net price. This is used in
+	 * payment plugins to implement an optional surcharge per payment
+	 * method.
+	 *
+	 * @param   object  $data  The input data
+	 *
+	 * @return  float  The surcharge for this subscription level
+	 */
+	public function onValidateSubscriptionPrice($data)
+	{
+		$surcharge = 0;
+
+		if ($data->paymentmethod == $this->ppName)
+		{
+			$surcharge = (float)$this->params->get('surcharge', '0');
+		}
+
+		return $surcharge;
+	}
+
+	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
 	 *
-	 * @param string $paymentmethod Check it against $this->ppName
-	 * @param JUser $user
-	 * @param AkeebasubsTableLevel $level
-	 * @param AkeebasubsTableSubscription $subscription
-	 * @return string
+	 * @param   string                        $paymentmethod  The currently used payment method.
+	 *                                                        Check it against $this->ppName
+	 * @param   JUser                         $user           User buying the subscription
+	 * @param   AkeebasubsTableLevel          $level          Subscription level
+	 * @param   AkeebasubsTableSubscription   $subscription   The new subscription's object
+	 *
+	 * @return  string  The payment form to render on the page. Use the special
+	 *                  id 'paymentForm' to have it automatically submitted after
+	 *                  5 seconds.
 	 */
 	abstract public function onAKPaymentNew($paymentmethod, $user, $level, $subscription);
 
 	/**
 	 * Processes a callback from the payment processor
 	 *
-	 * @param string $paymentmethod Check it against $this->ppName
-	 * @param array $data Input data
+	 * @param   string  $paymentmethod  The currently used payment method. Check it against $this->ppName
+	 * @param   array   $data           Input (request) data
+	 *
+	 * @return  boolean  True if the callback was handled, false otherwise
 	 */
 	abstract public function onAKPaymentCallback($paymentmethod, $data);
 
@@ -106,8 +152,10 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 * lose those 4 days without this trick. Or, worse, if it was a one-day pass
 	 * the user would have paid us and we'd never given him a subscription!
 	 *
-	 * @param AkeebasubsTableSubscription $subscription
-	 * @param array $updates
+	 * @param   AkeebasubsTableSubscription  $subscription  The subscritpion record
+	 * @param   array                        $updates       By-ref array to the updates being applied to $subscription
+	 *
+	 * @return  void
 	 */
 	protected function fixDates($subscription, &$updates)
 	{
@@ -287,8 +335,10 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	/**
 	 * Logs the received IPN information to file
 	 *
-	 * @param array $data
-	 * @param bool $isValid
+	 * @param   array    $data     Request data
+	 * @param   boolean  $isValid  Is it a valid payment?
+	 *
+	 * @return  void
 	 */
 	protected final function logIPN($data, $isValid)
 	{
@@ -329,5 +379,72 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		}
 		$logData .= "\n";
 		JFile::write($logFile, $logData);
+	}
+
+	/**
+	 * Translates the given 2-digit country code into the 3-digit country code.
+	 *
+	 * @param   string  $country  The 2 digit country code
+	 *
+	 * @return  string  The 3 digit country code
+	 */
+	protected function translateCountry($country)
+	{
+		$countryMap = array(
+			'AX' => 'ALA', 'AF' => 'AFG', 'AL' => 'ALB', 'DZ' => 'DZA', 'AS' => 'ASM',
+			'AD' => 'AND', 'AO' => 'AGO', 'AI' => 'AIA', 'AQ' => 'ATA', 'AG' => 'ATG',
+			'AR' => 'ARG', 'AM' => 'ARM', 'AW' => 'ABW', 'AU' => 'AUS', 'AT' => 'AUT',
+			'AZ' => 'AZE', 'BS' => 'BHS', 'BH' => 'BHR', 'BD' => 'BGD', 'BB' => 'BRB',
+			'BY' => 'BLR', 'BE' => 'BEL', 'BZ' => 'BLZ', 'BJ' => 'BEN', 'BM' => 'BMU',
+			'BT' => 'BTN', 'BO' => 'BOL', 'BA' => 'BIH', 'BW' => 'BWA', 'BV' => 'BVT',
+			'BR' => 'BRA', 'IO' => 'IOT', 'BN' => 'BRN', 'BG' => 'BGR', 'BF' => 'BFA',
+			'BI' => 'BDI', 'KH' => 'KHM', 'CM' => 'CMR', 'CA' => 'CAN', 'CV' => 'CPV',
+			'KY' => 'CYM', 'CF' => 'CAF', 'TD' => 'TCD', 'CL' => 'CHL', 'CN' => 'CHN',
+			'CX' => 'CXR', 'CC' => 'CCK', 'CO' => 'COL', 'KM' => 'COM', 'CD' => 'COD',
+			'CG' => 'COG', 'CK' => 'COK', 'CR' => 'CRI', 'CI' => 'CIV', 'HR' => 'HRV',
+			'CU' => 'CUB', 'CY' => 'CYP', 'CZ' => 'CZE', 'DK' => 'DNK', 'DJ' => 'DJI',
+			'DM' => 'DMA', 'DO' => 'DOM', 'EC' => 'ECU', 'EG' => 'EGY', 'SV' => 'SLV',
+			'GQ' => 'GNQ', 'ER' => 'ERI', 'EE' => 'EST', 'ET' => 'ETH', 'FK' => 'FLK',
+			'FO' => 'FRO', 'FJ' => 'FJI', 'FI' => 'FIN', 'FR' => 'FRA', 'GF' => 'GUF',
+			'PF' => 'PYF', 'TF' => 'ATF', 'GA' => 'GAB', 'GM' => 'GMB', 'GE' => 'GEO',
+			'DE' => 'DEU', 'GH' => 'GHA', 'GI' => 'GIB', 'GR' => 'GRC', 'GL' => 'GRL',
+			'GD' => 'GRD', 'GP' => 'GLP', 'GU' => 'GUM', 'GT' => 'GTM', 'GN' => 'GIN',
+			'GW' => 'GNB', 'GY' => 'GUY', 'HT' => 'HTI', 'HM' => 'HMD', 'HN' => 'HND',
+			'HK' => 'HKG', 'HU' => 'HUN', 'IS' => 'ISL', 'IN' => 'IND', 'ID' => 'IDN',
+			'IR' => 'IRN', 'IQ' => 'IRQ', 'IE' => 'IRL', 'IL' => 'ISR', 'IT' => 'ITA',
+			'JM' => 'JAM', 'JP' => 'JPN', 'JO' => 'JOR', 'KZ' => 'KAZ', 'KE' => 'KEN',
+			'KI' => 'KIR', 'KP' => 'PRK', 'KR' => 'KOR', 'KW' => 'KWT', 'KG' => 'KGZ',
+			'LA' => 'LAO', 'LV' => 'LVA', 'LB' => 'LBN', 'LS' => 'LSO', 'LR' => 'LBR',
+			'LY' => 'LBY', 'LI' => 'LIE', 'LT' => 'LTU', 'LU' => 'LUX', 'MO' => 'MAC',
+			'MK' => 'MKD', 'MG' => 'MDG', 'MW' => 'MWI', 'MY' => 'MYS', 'MV' => 'MDV',
+			'ML' => 'MLI', 'MT' => 'MLT', 'MH' => 'MHL', 'MQ' => 'MTQ', 'MR' => 'MRT',
+			'MU' => 'MUS', 'YT' => 'MYT', 'MX' => 'MEX', 'FM' => 'FSM', 'MD' => 'MDA',
+			'MC' => 'MCO', 'MN' => 'MNG', 'MS' => 'MSR', 'MA' => 'MAR',	'MZ' => 'MOZ',
+			'MM' => 'MMR', 'NA' => 'NAM', 'NR' => 'NRU', 'NP' => 'NPL', 'NL' => 'NLD',
+			'AN' => 'ANT', 'NC' => 'NCL', 'NZ' => 'NZL', 'NI' => 'NIC',	'NE' => 'NER',
+			'NG' => 'NGA', 'NU' => 'NIU','NF' => 'NFK',	'MP' => 'MNP',	'NO' => 'NOR',
+			'OM' => 'OMN','PK' => 'PAK','PW' => 'PLW',	'PS' => 'PSE',	'PA' => 'PAN',
+			'PG' => 'PNG','PY' => 'PRY','PE' => 'PER','PH' => 'PHL','PN' => 'PCN',
+			'PL' => 'POL','PT' => 'PRT','PR' => 'PRI','QA' => 'QAT','RE' => 'REU',
+			'RO' => 'ROU','RU' => 'RUS','RW' => 'RWA','SH' => 'SHN','KN' => 'KNA',
+			'LC' => 'LCA','PM' => 'SPM','VC' => 'VCT','WS' => 'WSM','SM' => 'SMR',
+			'ST' => 'STP','SA' => 'SAU','SN' => 'SEN','CS' => 'SCG','SC' => 'SYC',
+			'SL' => 'SLE','SG' => 'SGP','SK' => 'SVK','SI' => 'SVN','SB' => 'SLB',
+			'SO' => 'SOM','ZA' => 'ZAF','GS' => 'SGS','ES' => 'ESP','LK' => 'LKA',
+			'SD' => 'SDN','SR' => 'SUR','SJ' => 'SJM','SZ' => 'SWZ','SE' => 'SWE',
+			'CH' => 'CHE','SY' => 'SYR','TW' => 'TWN','TJ' => 'TJK','TZ' => 'TZA',
+			'TH' => 'THA','TL' => 'TLS','TG' => 'TGO','TK' => 'TKL','TO' => 'TON',
+			'TT' => 'TTO','TN' => 'TUN','TR' => 'TUR','TM' => 'TKM','TC' => 'TCA',
+			'TV' => 'TUV','UG' => 'UGA','UA' => 'UKR','AE' => 'ARE','GB' => 'GBR',
+			'US' => 'USA','UM' => 'UMI','UY' => 'URY','UZ' => 'UZB','VU' => 'VUT',
+			'VA' => 'VAT','VE' => 'VEN','VN' => 'VNM','VG' => 'VGB','VI' => 'VIR',
+			'WF' => 'WLF','EH' => 'ESH','YE' => 'YEM','ZM' => 'ZMB','ZW' => 'ZWE'
+		);
+
+		if(array_key_exists($country, $countryMap)) {
+			return $countryMap[$country];
+		} else {
+			return '';
+		}
 	}
 }

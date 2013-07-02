@@ -1,14 +1,22 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.2.1
+================================================================================
++ #169 Surcharge per payment method
+
 Akeeba Subscriptions 3.2.0
 ================================================================================
 + On popular demand: do not show validation status (red text) on the fields before the user submits the subscription form for the first time
 + You can now configure whether the payment option selection will be hidden if you only have one one payment method available on a subscription level
++ #159 Authorize.net integration
++ #161 Mailchimp plugin: you can add people to specific MailChimp groups
++ #164 Payment menthod: MoIP subscriptions
 + #167 New option to show a custom field on all levels except the selected ones
 ~ Custom fields restricted to specific subscription levels are now shown in the back-end user profile page
 ~ Hide the decimals in the Awesome and Strappy layouts if the price doesn't have a decimal part
 ~ Latest Akeeba Subscriptions module: apply different styling to paid but not yet active renewals, just like the component does
 ~ Removed restriction on full name requiring two words separatede by space
 ~ Add an email template for the email sent after the subscription expiration
+~ The subscribe button is now centered in the Awesome layout (thank you, Denise!)
 - Removed the DOCman and JCE plugins. They are no longer required; use Joomla! user groups for a direct integration.
 # [HIGH] One time fees not working properly with PayPal recurring subscriptions
 # [HIGH] Renewing an already renewed subscription results in the same valid from/to dates to be used
@@ -20,6 +28,8 @@ Akeeba Subscriptions 3.2.0
 # [LOW] Front-end page titles include escaped HTML
 # [LOW] Pre-installation script would run the wrong SQL files on upgrade (normally not causing a problem, but still it's not the intended behaviour)
 # [LOW] Slovenian VAT numbers would always be reported as non VIES registered
+# [LOW] mod_akexpires doesn't respect the locale date settings
+# [LOW] Missing "Thank you" page with the AlphaUserPoints payment method
 
 Akeeba Subscriptions 3.1.2
 ================================================================================

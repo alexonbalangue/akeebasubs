@@ -23,6 +23,8 @@
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_CASHU_TITLE_LABEL" description="PLG_AKPAYMENT_CASHU_TITLE_DESC"/>
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_CASHU_PPIMAGE_LABEL" description="PLG_AKPAYMENT_CASHU_PPIMAGE_DESC" />
 				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
 				<field name="merchant_id" type="text" size="50" default="" label="PLG_AKPAYMENT_CASHU_MERCHANTID_LABEL" description="PLG_AKPAYMENT_CASHU_MERCHANTID_DESC"/>
 				<field name="merchant_keyword" type="text" size="50" default="" label="PLG_AKPAYMENT_CASHU_MERCHANTKEYWORD_LABEL" description="PLG_AKPAYMENT_CASHU_MERCHANTKEYWORD_DESC"/>
 				<field name="service_name" type="text" size="50" default="" label="PLG_AKPAYMENT_CASHU_MERCHANTSERVICE_LABEL" description="PLG_AKPAYMENT_CASHU_MERCHANTSERVICE_DESC"/>
