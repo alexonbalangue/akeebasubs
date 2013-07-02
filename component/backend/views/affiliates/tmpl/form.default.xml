@@ -12,7 +12,8 @@
 		
 		<header name="akeebasubs_affiliate_id" type="field" tdwidth="20px" label="#" id="num" />
 		
-		<header name="user_id" type="field"
+		<header name="user_id" type="fieldsearchable"
+			searchfieldname="search"
 			label="COM_AKEEBASUBS_AFFILIATES_USER_ID"
 			sortable="true"
 		/>
