@@ -291,6 +291,7 @@ class Com_AkeebasubsInstallerScript
 			'administrator/components/com_akeebasubs/controllers/behaviours',
 			'administrator/components/com_akeebasubs/controllers/toolbars',
 			'administrator/components/com_akeebasubs/databases',
+			'administrator/components/com_akeebasubs/invoicetemplates',
 			'administrator/components/com_akeebasubs/simpleforms',
 			'administrator/components/com_akeebasubs/templates',
 			'administrator/components/com_akeebasubs/toolbars',
