@@ -88,6 +88,50 @@ class AkeebasubsHelperSelect
 
 	public static $states = array();
 
+	public static function getFieldTypes()
+	{
+		$fieldTypes = array();
+
+		JLoader::import('joomla.filesystem.folder');
+		$basepath = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/customfields';
+		$files = JFolder::files($basepath, '.php');
+		foreach($files as $file)
+		{
+			if ($file === 'abstract.php')
+			{
+				continue;
+			}
+
+			require_once $basepath.'/'.$file;
+			$type = substr($file, 0, -4);
+			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			if (class_exists($class))
+			{
+				$desc = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type));
+				$fieldTypes[$type] = $desc;
+			}
+		}
+
+		return $fieldTypes;
+	}
+
+	public static function getCountries()
+	{
+		return self::$countries;
+	}
+
+	public static function getStates()
+	{
+		$ret = array();
+
+		foreach(self::$states as $country => $states)
+		{
+			$ret = array_merge($ret, $states);
+		}
+
+		return $ret;
+	}
+
 	public static function decodeCountry($cCode)
 	{
 		if(array_key_exists($cCode, self::$countries))
@@ -613,33 +657,6 @@ class AkeebasubsHelperSelect
 	   array_unshift($options, JHTML::_('select.option',0,JText::_('COM_AKEEBASUBS_SELECT_LEVELGROUP')));
 
 		return self::genericlist($options, $id, $attribs, $selected, $id);
-	}
-
-	public static function getFieldTypes()
-	{
-		$fieldTypes = array();
-
-		JLoader::import('joomla.filesystem.folder');
-		$basepath = JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/customfields';
-		$files = JFolder::files($basepath, '.php');
-		foreach($files as $file)
-		{
-			if ($file === 'abstract.php')
-			{
-				continue;
-			}
-
-			require_once $basepath.'/'.$file;
-			$type = substr($file, 0, -4);
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
-			if (class_exists($class))
-			{
-				$desc = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_'.strtoupper($type));
-				$fieldTypes[$type] = $desc;
-			}
-		}
-
-		return $fieldTypes;
 	}
 
 	/**

@@ -279,6 +279,9 @@ class Com_AkeebasubsInstallerScript
 			'administrator/components/com_akeebasubs/view/levels/tmpl/form.php',
 			'administrator/components/com_akeebasubs/view/upgrades/tmpl/default.php',
 
+			// Do not delete (used to render custom form page elements):
+			// 'administrator/components/com_akeebasubs/view/taxrules/tmpl/default.php',
+
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
