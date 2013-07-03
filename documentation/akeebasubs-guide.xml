@@ -3356,6 +3356,11 @@ Rule C gives $ 30 discount</programlisting>
             in the user's preferred language, then the site's default
             language, then English, then load the entries marked as
             All.</para>
+
+            <para>If you have a single language website (e.g. only Dutch) you
+            first need to make an email template in your own language e.g.
+            Dutch or set it to All Languages. Furthermore you need to
+            unpublish the original English versions.</para>
           </listitem>
         </varlistentry>
 
