@@ -272,7 +272,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		}
 		$layout = ($action == 'cancel') ? 'cancel' : 'order';
 
-		$url = 'index.php?option=com_akeebasubs&view=message&layout=default&slug=' . $slug . '&layout=' . $layout . '&subid=' . $subscription->akeebasubs_subscription_id;
+		$url = 'index.php?option=com_akeebasubs&view=message&slug=' . $slug . '&layout=' . $layout . '&subid=' . $subscription->akeebasubs_subscription_id;
 		$app = JFactory::getApplication();
 		$app->redirect($url);
 

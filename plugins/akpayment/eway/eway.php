@@ -74,7 +74,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 		'94'	=> 'Duplicate Transaction',
 		'96'	=> 'System Error'
 	);
-	
+
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
@@ -82,14 +82,14 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_EWAY_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/eway.gif',
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -100,7 +100,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 	{
 		// Check that this is the requested payment plugin
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Split the name in first and last name
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
@@ -109,28 +109,28 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
+
 		// Get the base URL without the path
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		// Get the level's slug
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		// Fetch our extended user information
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		// Construct the transaction key request URL
 		JLoader::import('joomla.environment.uri');
-		
+
 		switch($this->params->get('site', 0))
 		{
 			case '0':
@@ -144,7 +144,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 				$apiURL = 'https://nz.ewaygateway.com/Request';
 				break;
 		}
-		
+
 		$eWayURL = new JURI($apiURL);
 		$eWayURL->setVar('CustomerID', urlencode($this->params->get('customerid','')));
 		$eWayURL->setVar('UserName', urlencode($this->params->get('username','')));
@@ -170,29 +170,29 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 		if($this->params->get('pagetitle','')) $eWayURL->setVar('PageTitle', urlencode($this->params->get('pagetitle','')));
 		if($this->params->get('pagedescription','')) $eWayURL->setVar('PageDescription', urlencode($this->params->get('pagedescription','')));
 		if($this->params->get('pagefooter','')) $eWayURL->setVar('PageFooter', urlencode($this->params->get('pagefooter','')));
-		
+
 		$postURL = $eWayURL->toString();
 		$postURL = str_replace('Request?', 'Request/?', $postURL);
-		
+
 		// Send the transaction key request
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $postURL);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		if(defined('CURL_PROXY_REQUIRED')) if (CURL_PROXY_REQUIRED == 'True') 
+		if(defined('CURL_PROXY_REQUIRED')) if (CURL_PROXY_REQUIRED == 'True')
 		{
 			$proxy_tunnel_flag = (defined('CURL_PROXY_TUNNEL_FLAG') && strtoupper(CURL_PROXY_TUNNEL_FLAG) == 'FALSE') ? false : true;
 			curl_setopt ($ch, CURLOPT_HTTPPROXYTUNNEL, $proxy_tunnel_flag);
 			curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
 			curl_setopt ($ch, CURLOPT_PROXY, CURL_PROXY_SERVER_DETAILS);
 		}
-		
+
 		$response = curl_exec($ch);
-		
+
 		$responsemode = $this->fetch_data($response, '<result>', '</result>');
 	    $responseurl = $this->fetch_data($response, '<uri>', '</uri>');
-		
+
 		if($responsemode=="True") {
 			JFactory::getApplication()->redirect($responseurl);
 			return;
@@ -200,16 +200,16 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			JError::raiseError(500, 'You have an error in your eWay setup: '.$response);
 		}
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		JLoader::import('joomla.environment.uri');
-		
+
 		switch($this->params->get('site', 0))
 		{
 			case '0':
@@ -223,15 +223,15 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 				$apiURL = 'https://nz.ewaygateway.com/Result';
 				break;
 		}
-		
+
 		$eWayURL = new JURI($apiURL);
 		$eWayURL->setVar('CustomerID', urlencode($this->params->get('customerid','')));
 		$eWayURL->setVar('UserName', urlencode($this->params->get('username','')));
 		$eWayURL->setVar('AccessPaymentCode', urlencode($data['AccessPaymentCode']));
-		
+
 		$posturl=$eWayURL->toString();
 		$posturl = str_replace('Result?', 'Result/?', $posturl);
-		
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $posturl);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -244,7 +244,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
 			curl_setopt ($ch, CURLOPT_PROXY, CURL_PROXY_SERVER_DETAILS);
 		}
-		
+
 		$response = curl_exec($ch);
 		$authecode = $this->fetch_data($response, '<authCode>', '</authCode>');
 		$responsecode = $this->fetch_data($response, '<responsecode>', '</responsecode>');
@@ -253,7 +253,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 		$trxnstatus = $this->fetch_data($response, '<trxnstatus>', '</trxnstatus>');
 		$trxnresponsemessage = $this->fetch_data($response, '<trxnresponsemessage>', '</trxnresponsemessage>');
 		$merchantreference = $this->fetch_data($response, '<merchantreference>', '</merchantreference>');
-		
+
 		$isValid = true;
 
 		// Load the relevant subscription row
@@ -273,7 +273,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("MerchantReference" field) is invalid';
 		}
-		
+
 		// Check that the amount is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_gross = floatval($retrunamount);
@@ -282,37 +282,37 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			$isValid = ($gross - $mc_gross) < 0.01;
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($response . "\n" . ($isValid ? '' : $data['akeebasubs_failure_reason']."\n"), $isValid);
-		
+
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) die('Hacking attempt; payment processing refused');
-		
+
 		// Load the subscription level and get its slug
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		switch($trxnstatus) {
 			case 'true':
 				$newStatus = 'C';
-				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
+				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
 				break;
-			
+
 			default:
 				$newStatus = 'X';
-				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
+				$returnURL = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
 				break;
 		}
-		
+
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
 			'akeebasubs_subscription_id'				=> $id,
@@ -325,7 +325,7 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
-		
+
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -333,24 +333,24 @@ class plgAkpaymentEway extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		$app = JFactory::getApplication();
 		$app->redirect($returnURL);
-		
+
 		return true;
 	}
-	
+
 	private function fetch_data($string, $start_tag, $end_tag)
 	{
-		$position = stripos($string, $start_tag);  
-		$str = substr($string, $position);  		
-		$str_second = substr($str, strlen($start_tag));  		
-		$second_positon = stripos($str_second, $end_tag);  		
-		$str_third = substr($str_second, 0, $second_positon);  		
-		$fetch_data = trim($str_third);		
-		return $fetch_data; 
+		$position = stripos($string, $start_tag);
+		$str = substr($string, $position);
+		$str_second = substr($str, strlen($start_tag));
+		$second_positon = stripos($str_second, $end_tag);
+		$str_third = substr($str_second, 0, $second_positon);
+		$fetch_data = trim($str_third);
+		return $fetch_data;
 	}
-	
+
 	private function getPaymentReason($responsecode)
 	{
 		if($responsecode == 0) return "Successful transaction";

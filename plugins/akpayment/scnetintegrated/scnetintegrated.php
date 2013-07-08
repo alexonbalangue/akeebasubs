@@ -19,14 +19,14 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_SCNETINTEGRATED_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/scnet.jpg'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
 
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,7 +36,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Force HTTPS
 		$app = JFactory::getApplication();
         $uri = JFactory::getURI();
@@ -45,7 +45,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			$app->redirect($uri->toString());
 			return $app->close();
 		}
-		
+
 		$data = (object)array(
 			'callback'	=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=scnetintegrated',
 			'arg0'		=> $this->getMerchantID(),
@@ -66,18 +66,18 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/scnetintegrated/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		$isValid = true;
-		
+
 		// Get subscription
 		if($isValid) {
 			$id = $data['arg8'];
@@ -101,19 +101,19 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 				$isValid = false;
 			}
 		}
-		
+
 		// Check credit card number
 		if($isValid && empty($data['arg2'])) {
 			JFactory::getApplication()->redirect($error_url,'You need to enter your credit card number.','error');
 			return false;
 		}
-		
+
 		// Check expiration date
 		if($isValid && $data['arg3'] == '0') {
 			JFactory::getApplication()->redirect($error_url,'You need to select the expiration date of your credit card.','error');
 			return false;
 		}
-		
+
 		// Perform the transaction
 		if($isValid) {
 			try {
@@ -121,19 +121,19 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 				$response = $soap->performTransaction($data);
 				if($this->params->get('antifraud',1)) {
 					$isValid = $this->isValidIPN($response, $data);
-					if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';	
+					if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
 				}
 			}catch(Exception $e) {
 				JFactory::getApplication()->redirect($error_url,$e->getMessage(),'error');
 				return false;
-			}	
+			}
 		}
-		
+
 		if($isValid && strtoupper($response->return->summaryResponseCode) == 'ERROR') {
 			JFactory::getApplication()->redirect($error_url,$response->return->responseText,'error');
 			return false;
 		}
-        
+
 		// Check that bank_id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $response->return->orderNumber && $subscription->state == 'C') {
@@ -141,7 +141,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not process the same order twice";
 			}
 		}
-		
+
 		// Check that amount_gross is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
@@ -158,7 +158,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-			
+
 		// Log the IPN data
 		$this->logIPN($response->return, $isValid);
 
@@ -167,7 +167,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Payment status
 		if(strtoupper($response->return->summaryResponseCode) == 'APPROVED') {
 			$newStatus = 'C';
@@ -195,18 +195,18 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-        
+
 		if($newStatus == 'C') {
 			// Redirect the user to the "thank you" page if payment is complete
-			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 			$app->redirect($thankyouUrl);
 		} else {
 			$app->redirect($error_url,$response->return->responseText,'error');
 		}
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Gets the form action URL for the payment
 	 */
@@ -219,7 +219,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			return trim($this->params->get('url',''));
 		}
 	}
-	
+
 	private function getQueryURL()
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -230,7 +230,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		}
 	}
 
-	
+
 	/**
 	 * Gets the SCNet Merchant ID
 	 */
@@ -243,7 +243,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			return trim($this->params->get('merchant_id',''));
 		}
 	}
-	
+
 	/**
 	 * Gets the SCNet Merchant ID
 	 */
@@ -256,7 +256,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			return trim($this->params->get('merchant_pass',''));
 		}
 	}
-	
+
 	private function isValidIPN($response, $data)
 	{
 		try {
@@ -301,11 +301,11 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		}
 		return true;
 	}
-	
+
 	private function selectExpirationDate()
 	{
 		$year = gmdate('Y');
-		
+
 		$options = array();
 		$options[] = JHTML::_('select.option',0,'--');
 		for($i = 0; $i <= 10; $i++) {
@@ -315,7 +315,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 				$options[] = JHTML::_('select.option', ($m.substr($y, -2)), ($m.'/'.$y));
 			}
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, 'arg3', 'class="input-medium"', 'value', 'text', '', 'arg3');
 	}
 }

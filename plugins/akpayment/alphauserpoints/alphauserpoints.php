@@ -145,7 +145,7 @@ class plgAkpaymentAlphaUserPoints extends plgAkpaymentAbstract
 
 		// Redirect the user to the "thank you" page or show error message
 		if(empty($errorMessage)) {
-			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 			JFactory::getApplication()->redirect($thankyouUrl);
 		} else {
 			JFactory::getApplication()->redirect($errorUrl, $errorMessage, 'error');

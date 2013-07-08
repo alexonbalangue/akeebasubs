@@ -19,24 +19,24 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_GOCARDLESS_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/gocardless_logo.png',
 		));
-		
+
 		parent::__construct($subject, $config);
-		
+
 		// Load the GoCardless library
 		require_once dirname(__FILE__).'/gocardless/lib/GoCardless.php';
-		
+
 		// Get the config settings
 		$appId = trim($this->params->get('app_id',''));
 		$appSecret = trim($this->params->get('app_secret',''));
 		$merchantToken = trim($this->params->get('merchant_token',''));
 		$merchantId = trim($this->params->get('merchant_id',''));
 		$sandbox = $this->params->get('sandbox',0);
-		
+
 		// Use sandbox if setting enables it
 		if($sandbox) {
 			GoCardless::$environment = 'sandbox';
 		}
-		
+
 		// Use the GoCardless settings to set the account details
 		$account_details = array(
 			'app_id'        => $appId,
@@ -46,11 +46,11 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		);
 		GoCardless::set_account_details($account_details);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -60,18 +60,18 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		$nameParts = explode(' ', trim($user->name), 2);
 		$firstName = $nameParts[0];
 		if(count($nameParts) > 1) {
@@ -79,7 +79,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
+
 		$payment_details = array(
 			'redirect_uri'	=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=gocardless',
 			'cancel_uri'	=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
@@ -92,42 +92,42 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 				'email'			=> trim($user->email)
 			)
 		);
-		
+
 		$url = GoCardless::new_bill_url($payment_details);
 
 		@ob_start();
 		include dirname(__FILE__).'/gocardless/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		if(isset($data['state'])) {
 			return $this->processGCRedirect($data);
 		} else {
 			return $this->processGCWebhook($data);
 		}
 	}
-	
+
 	/**
 	 * Processes the GoCardless redirect. This callback is received right after the customer
 	 * finished the payment process via the GoCardless payment form. In this function the payment
 	 * will be confirmed and the payment has usually the status 'pending' at this stage.
-	 * 
+	 *
 	 * The next step, when the payment is 'paid', GoCardless will send a 'webhook' that
 	 * will be handled by the next function 'processGCWebhook'.
 	 */
 	private function processGCRedirect($data)
 	{
 		$isValid = true;
-		
+
 		// Load the relevant subscription row
 		$id = $data['state'];
 		$subscription = null;
@@ -143,13 +143,13 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 			$isValid = false;
 		}
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
-		
+
 		if($isValid) {
 			// Check IPN data for validity (i.e. protect against fraud attempt)
 			$isValid = $this->isValidIPN($data['resource_id'], $subscription);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
 		}
-		
+
 		if($isValid) {
 			try {
 				$confirm_params = array(
@@ -172,13 +172,13 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = $errorMessage;
 			}
 		}
-		
+
 		// Check that transaction id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			$isValid = $this->isValidProccessId($confirm->id, $subscription);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = "I will not process the same order twice";
 		}
-        
+
 		// Check transaction type
 		if($isValid) {
 			$type = strtoupper($data['resource_type']);
@@ -193,7 +193,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 			$isValid = $this->isValidAmount($confirm->amount, $subscription);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
@@ -209,7 +209,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Payment status
 		$newStatus = $this->getPaymentStatus($confirm->status);
 
@@ -233,18 +233,18 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	/**
 	 * Processes the GoCardless webhook. This callback is received when CoCardless sends an update
 	 * of the payment by a webhook. Usually the payment is 'pending' in the first place and we are
 	 * waiting with this function to receive an updated that the payment is 'paid'.
-	 * 
+	 *
 	 * See https://gocardless.com/docs/php/merchant_tutorial_webhook.
 	 */
 	private function processGCWebhook()
@@ -254,11 +254,11 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		$decodedWebhook = json_decode($webhook, true);
 		$data['webhook'] = $decodedWebhook;
 		$data = $decodedWebhook['payload'];
-		
+
 		// Validate webhook
 		$isValid = GoCardless::validate_webhook($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = "Invalid signature";
-		        
+
 		// Check transaction type
 		if($isValid) {
 			$type = strtoupper($data['resource_type']);
@@ -268,7 +268,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Wrong type " . $type;
 			}
 		}
-		
+
 		// Load the relevant subscription row
 		$resourceId = $data['bills'][0]['id'];
 		$data['resourceId'] = $resourceId;
@@ -285,7 +285,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 			}
 		}
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
-		
+
 		// Get the bill
 		if($isValid) {
 			try {
@@ -299,7 +299,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
 			}
 		}
-		
+
 		// Check that transaction id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			$data['billid'] = $bill->id;
@@ -313,16 +313,16 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 			$isValid = $this->isValidAmount($bill->amount, $subscription);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Log the IPN data
 		$data['billstatus'] = $bill->status;
 		$this->logIPN($data, $isValid);
-		
+
 		if (!$isValid) {
 			header('HTTP/1.1 403 ' . $data['akeebasubs_failure_reason']);
 			return false;
 		}
-		
+
 		// Payment status
 		$newStatus = $this->getPaymentStatus($bill->status);
 
@@ -338,7 +338,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
-		
+
 		// Update subscription status (this+ also automatically calls the plugins)
 		$updates = array(
 				'akeebasubs_subscription_id'	=> $id,
@@ -359,11 +359,11 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		header('HTTP/1.1 200 OK');
 		return true;
 	}
-	
+
 	private function getPaymentStatus($status)
 	{
 		$status = strtoupper($status);
@@ -378,7 +378,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		}
 		return 'X';
 	}
-	
+
 	private function isValidProccessId($id, $subscription)
 	{
 		if($id == $subscription->processor_key &&
@@ -387,7 +387,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		}
 		return true;
 	}
-	
+
 	private function isValidAmount($mc_gross, $subscription)
 	{
 		$gross = $subscription->gross_amount;
@@ -398,7 +398,7 @@ class plgAkpaymentGocardless extends plgAkpaymentAbstract
 		}
 		return false;
 	}
-    
+
 	/**
 	 * Validates the incoming data.
 	 */

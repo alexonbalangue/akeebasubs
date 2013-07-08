@@ -19,14 +19,14 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_PRZELEWY24_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/przelewy24.png'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
 
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,19 +36,19 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=przelewy24';
-		
+
 		$data = (object)array(
 			'url'					=> 'https://secure.przelewy24.pl/index.php',
 			'p24_session_id'		=> str_replace(' ', '', $level->title) . '-' . $subscription->akeebasubs_subscription_id,
@@ -65,7 +65,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 			'p24_return_url_ok'		=> $callbackUrl,
 			'p24_return_url_error'	=> $callbackUrl
 		);
-		
+
 		// Language settings PL/EN/DE/ES/IT
 		try {
 			$lang = strtolower(substr(JFactory::getLanguage()->getTag(), 0, 2));
@@ -83,7 +83,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 		} catch(Exception $e) {
 			$data->p24_language = 'pl';
 		}
-		
+
 		$crc = md5($data->p24_session_id .
 				'|'	. $data->p24_id_sprzedawcy .
 				'|' . $data->p24_kwota .
@@ -93,17 +93,17 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/przelewy24/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Load the relevant subscription row
 		$sessionId = $data['p24_session_id'];
 		$id = substr(strrchr($sessionId, '-'), 1);
@@ -119,7 +119,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 		} else {
 			$isValid = false;
 		}
-		
+
 		// Error response
 		if($isValid && isset($data['p24_error_code'])) {
 			$data['akeebasubs_failure_reason'] = "Error code " . $data['p24_error_code'];
@@ -130,7 +130,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 					'state'							=> 'X',
 					'enabled'						=> 0
 			);
-			
+
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
 				'&view=level&slug='.$subscription->slug.
 				'&layout='.JRequest::getCmd('layout','default');
@@ -138,11 +138,11 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
-        
+
 		// Check that p24_order_id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $data['p24_order_id']) {
@@ -167,7 +167,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		if($isValid) {
 			$verificationRequest = array();
 			$verificationRequest['p24_id_sprzedawcy'] = trim($this->params->get('seller_id',''));
@@ -235,13 +235,13 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	private function isValidIPN($data)
 	{
 		$crc = md5($data['p24_session_id'] .

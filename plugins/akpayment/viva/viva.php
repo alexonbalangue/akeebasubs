@@ -108,7 +108,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 
 		if($isValid && $data['type'] == 'cancel') {
 			// Redirect the user to the "cancel" page
-			$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
+			$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
 			JFactory::getApplication()->redirect($cancelUrl);
 			return true;
 		}
@@ -219,7 +219,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
