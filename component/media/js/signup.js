@@ -324,6 +324,8 @@ function validateEmail()
 		$('#email_empty').css('display','none');
 		$('#email_invalid').css('display','none');
 		$('#email2_invalid').css('display','none');
+		$('#email').parent().parent().removeClass('error').removeClass('success');
+		$('#email2').parent().parent().removeClass('error').removeClass('success');
 		var email = $('#email').val();
 		var email2 = $('#email2').val();
 		
