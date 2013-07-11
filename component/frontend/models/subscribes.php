@@ -2073,6 +2073,17 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$rawDataGet = JRequest::get('GET', 2);
 		$data = array_merge($rawDataGet, $rawDataPost);
 
+		// Some plugins result in an empty Itemid being added to the request
+		// data, screwing up the payment callback validation in some cases (e.g.
+		// PayPal).
+		if (array_key_exists('Itemid', $data))
+		{
+			if (empty($data['Itemid']))
+			{
+				unset($data['Itemid']);
+			}
+		}
+
 		$dummy = $this->getPaymentPlugins();
 
 		$app = JFactory::getApplication();
