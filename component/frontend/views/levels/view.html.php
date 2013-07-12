@@ -26,6 +26,9 @@ class AkeebasubsViewLevels extends FOFViewHtml
 		}
 		$this->subIDs = $subIDs;
 
+		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
+		JResponse::setHeader('X-Cache-Control', 'False', true);
+
 		parent::onDisplay($tpl);
 	}
 }

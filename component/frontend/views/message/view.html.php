@@ -12,21 +12,21 @@ class AkeebasubsViewMessage extends FOFViewHtml
 {
 	protected function onRead($tpl = null) {
 		$ret = parent::onRead($tpl);
-		
+
 		switch($this->getLayout())
 		{
 			case 'cancel':
 				$event = 'onCancelMessage';
 				break;
-			
+
 			case 'order':
 			default:
 				$event = 'onOrderMessage';
 				break;
 		}
-		
+
 		$pluginHtml = '';
-		
+
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
@@ -38,9 +38,12 @@ class AkeebasubsViewMessage extends FOFViewHtml
 				}
 			}
 		}
-		
+
 		$this->assignRef('pluginHTML', $pluginHtml);
-		
+
+		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
+		JResponse::setHeader('X-Cache-Control', 'False', true);
+
 		return $ret;
 	}
 }
