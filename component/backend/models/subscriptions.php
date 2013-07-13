@@ -38,6 +38,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'filter_discountmode' => $this->getState('filter_discountmode',null,'cmd'),
 			'filter_discountcode' => $this->getState('filter_discountcode',null,'cmd'),
 			'nozero'		=> $this->getState('nozero',null,'int'),
+			'nojoins'		=> $this->getState('nojoins',null,'int'),
 		);
 	}
 
@@ -73,7 +74,15 @@ class AkeebasubsModelSubscriptions extends FOFModel
 
 			return $query;
 		} else {
-			return parent::buildCountQuery();
+			$query = $db->getQuery(true)
+				->select('COUNT(*)')
+				->from($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('tbl'));
+
+			$this->_buildQueryJoins($query);
+			$this->_buildQueryWhere($query);
+			$this->_buildQueryGroup($query);
+
+			return $query;
 		}
 	}
 
@@ -82,15 +91,24 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		$db = $this->getDbo();
 		$state = $this->getFilterValues();
 
-		if($state->groupbydate == 1) {
+		if (!empty($state->nojoins))
+		{
 			return;
-		} elseif($state->groupbylevel == 1) {
+		}
+		elseif ($state->groupbydate == 1)
+		{
+			return;
+		}
+		elseif ($state->groupbylevel == 1)
+		{
 			$query
 				->join('INNER', $db->qn('#__akeebasubs_levels').' AS '.$db->qn('l').' ON '.
 						$db->qn('l').'.'.$db->qn('akeebasubs_level_id').' = '.
 						$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id'))
 				;
-		} else {
+		}
+		else
+		{
 			$query
 				->join('INNER', $db->qn('#__akeebasubs_levels').' AS '.$db->qn('l').' ON '.
 						$db->qn('l').'.'.$db->qn('akeebasubs_level_id').' = '.
@@ -128,6 +146,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$db->qn('l').'.'.$db->qn('title'),
 				'SUM('.$db->qn('tbl').'.'.$db->qn('net_amount').') AS '.$db->qn('net'),
 				'COUNT('.$db->qn('tbl').'.'.$db->qn('akeebasubs_subscription_id').') AS '.$db->qn('subs'),
+			));
+		} elseif (!empty($state->nojoins)) {
+			$query->select(array(
+				$db->qn('tbl').'.*',
 			));
 		} else {
 			$query->select(array(
