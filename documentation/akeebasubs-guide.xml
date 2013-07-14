@@ -6028,6 +6028,11 @@ Rule C gives $ 30 discount</programlisting>
 
       <bridgehead>Integration Notes</bridgehead>
 
+      <warning>
+        <para>You cannot have this plugin and the other 2Checkout integration
+        plugin enabled at the same time on the same site.</para>
+      </warning>
+
       <para>2Checkout requires you to supply a <guilabel>Notification
       URL</guilabel> before you can accept payments to your site. In order to
       do that, please follow this procedure:</para>
@@ -6047,6 +6052,215 @@ Rule C gives $ 30 discount</programlisting>
           <para>In the <guilabel>Global URL</guilabel> field enter:</para>
 
           <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=2checkout</uri></para>
+
+          <para>where <uri>www.example.com</uri> must be replaced with the
+          domain name of your site. Then click on
+          <guibutton>Apply</guibutton>, <guibutton>Enable All
+          Notifications</guibutton> and <guibutton>Save Settings</guibutton>
+          buttons, in this order.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>If you skip this step, or make a typo, no subscription will be
+      activated in Akeeba Subscriptions and the payment status will always
+      appear as "New".</para>
+    </section>
+
+    <section xml:id="payment-2conew">
+      <title>2Checkout Standard Purchase Routine (with recurring
+      support)</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - 2Checkout Standard Purchase Routine (with
+      recurring support)</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the 2Checkout Standard Purchase
+      Routine payments service (commonly simply referred to as 2checkout or
+      2CO). This plugin uses the "pass-through-products" parameters set for
+      communicating with 2Checkout, allowing it to support recurring and
+      non-recurring payments. Moreover, unlike the other 2Checkout
+      integration, it does automatically pass the currency to
+      2Checkout.</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "2Checkout (recurring)" or type in a
+            custom name to show to your customer's, e.g. "Visa, MasterCard or
+            American Express cards"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Seller ID</term>
+
+          <listitem>
+            <para>Your 2Checkout seller numeric ID, as communicated to you by
+            2Checkout.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Secret word</term>
+
+          <listitem>
+            <para>The secret word you have specified in your 2Checkout
+            account, used to verify that the payment notification come,
+            indeed, from 2Checkout and avoid fraudulent requests. It is case
+            sensitive, i.e. ABC, abc and Abc are three different secret
+            words.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Demo mode</term>
+
+          <listitem>
+            <para>When enabled, transactions are processed by 2Checkout's as
+            test payments. This is designed for integration tests, BEFORE
+            going live with your site. <emphasis role="bold">NEVER, EVER, NO
+            MATTER WHAT YOU DO, SHOULD YOU NOT ENABLE THIS ON PRODUCTION
+            SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR CUSTOMERS.</emphasis>
+            This option should be used only in the integration testing phase
+            during your initial setup. When you're ready to go live with your
+            site, disable this feature.</para>
+
+            <warning>
+              <para>Demo transactions DO NOT send an Instant Notification
+              System (INS) message. Therefore, all subscriptions processed
+              with a demo transaction will have a payment status of New and
+              will not be enabled.</para>
+            </warning>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Language</term>
+
+          <listitem>
+            <para>Select the language the 2Checkout interface will be
+            displayed in.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Default payment method</term>
+
+          <listitem>
+            <para>2Checkout allows different payment methods. Select which one
+            will be pre-selected in the checkout page.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Checkout Process</term>
+
+          <listitem>
+            <para>You can select between the Multi Page Checkout and Single
+            Page Checkout modes. Single page checkout is likely to give you a
+            much better conversion rate as the client just fills in his
+            information and clicks on a button. The less steps to performing
+            the payment, the more likely a user is to actually pay.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>Recurring payments support notes</bridgehead>
+
+      <para>2Checkout has some restrictions regarding the renewal period of
+      subscription. A subscription may recur in a period measured in weeks,
+      months or years. Akeeba Subscriptions will automatically convert the
+      subscription duration to the closest match. This may not always be what
+      you expect. For example, 180 days is converted to 6 months and 15 days
+      is converted to 2 weeks. Due to the fuzziness of the conversion and the
+      way 2Checkout handles renewals, it is possible that a subscription will
+      expire before it is automatically renewed. If a subscription expires, an
+      expiration email will be sent to your client.</para>
+
+      <para>For example, a 90 days subscription will recur every 3 months. If
+      a subscription was made on June 1st, 2Checkout will renew it on
+      September 1st. That's 92 days. This means that the 90 days subscription
+      period ends on August 30th. Between that and September 1st the
+      subscription will be expired. As a result we recommend setting up
+      subscriptions as multiples of 31 days to get the correct number of
+      months, or multiples of 366 days to get the correct number of years,
+      e.g. 62 days for a 2 month subscription or 732 days for a 2 year
+      subscription.</para>
+
+      <para>Payments will recur till the end of the world unless you cancel
+      your 2Checkout account, your client manually unsubscribes through
+      2Checkout or your client does not have funds when his renewal is due. In
+      all of the above cases, your client's subscription may expire before it
+      is renewed. If a subscription expires, an expiration email will be sent
+      to your client.</para>
+
+      <para>You can not cancel recurring payments through Akeeba
+      Subscriptions. You have to do so manually, from 2Checkout's
+      back-end.</para>
+
+      <important>
+        <para>Not all payment processors allow programmatic cancellation of
+        subscriptions, e.g. PayPal. As a result we cannot implement a feature
+        that doesn't actually work with all recurring payment providers,
+        especially if it doesn't work with the most popular one. That would
+        cause a lot of frustration to our users and their clients, as well as
+        increase our support load for no good reason. Please do not request
+        such a feature; we are not considering implementing it.</para>
+      </important>
+
+      <para>When a subscription payment recurs, the original subscription
+      record is overwritten. In order for you not to lose statistics
+      information, a new <emphasis role="bold">expired</emphasis> subscription
+      record is created with the old subscription record's information. This
+      means that the subscription with the biggest subscription ID (appearing
+      towards the top of the front- and back-end lists) will show as expired.
+      This is not a bug. 2Checkout sends us the original subscription's ID as
+      a reference, which is why only the original subscription can be
+      updated.</para>
+
+      <bridgehead>Integration Notes</bridgehead>
+
+      <warning>
+        <para>You cannot have this plugin and the other 2Checkout integration
+        plugin enabled at the same time on the same site.</para>
+      </warning>
+
+      <para>2Checkout requires you to supply a <guilabel>Notification
+      URL</guilabel> before you can accept payments to your site. In order to
+      do that, please follow this procedure:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Login to your 2Checkout management page, <link
+          xlink:href="https://www.2checkout.com/va">https://www.2checkout.com/va</link></para>
+        </listitem>
+
+        <listitem>
+          <para>Click on <guimenu>Notifications</guimenu>,
+          <guimenuitem>Settings</guimenuitem> from the top menu</para>
+        </listitem>
+
+        <listitem>
+          <para>In the <guilabel>Global URL</guilabel> field enter:</para>
+
+          <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=2conew</uri></para>
 
           <para>where <uri>www.example.com</uri> must be replaced with the
           domain name of your site. Then click on
@@ -7038,6 +7252,13 @@ LEVEL2=11111/22222/33333</programlisting>
 
     <section xml:id="payment-deltapay">
       <title>DeltaPay (Alpha Bank, Greece)</title>
+
+      <important>
+        <para>We are told that since early 2013 this payment method no longer
+        works due to changes made by the bank. Due to the nature of those
+        changes we cannot provide a newer integration plugin and we will drop
+        this payment plugin in the near future.</para>
+      </important>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - DeltaPay (Alpha Bank, Greece)</guilabel>.
@@ -8745,11 +8966,10 @@ LEVEL2=11111/22222/33333</programlisting>
         to your clients. We were using them to process transactions on our own
         site and had this problem during the first 15 days of May 2013. We
         filed a support request with them regarding this issue and we were
-        told that they would look into it. A full month after us filing the
-        support request they have not replied back to us. As a result we
-        consider them an untrustworthy payment processor and have to warn our
-        clients about the risks of using this payment processor, according to
-        our bitter experience.</para>
+        told that they would look into it. Two months after us filing the
+        support request they have not replied back to us. Based on our
+        experience, we recommend avoiding using this payment processor until
+        we hear back from them (if ever?).</para>
       </warning>
 
       <para>This plugin <emphasis role="bold">does not support</emphasis>

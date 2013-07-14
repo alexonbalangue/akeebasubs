@@ -91,6 +91,7 @@ class Com_AkeebasubsInstallerScript
 			),
 			'akpayment' => array(
 				'2checkout'				=> 0,
+				'2conew'				=> 0,
 				'allopass'				=> 0,
 				'alphauserpoints'		=> 0,
 				'authorizenet'			=> 0,
