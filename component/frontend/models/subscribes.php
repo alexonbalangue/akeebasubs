@@ -1807,6 +1807,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$user = $this->getState('user', $user);
 		}
 
+		// Store the user's ID in the session
+		$session = JFactory::getSession();
+		$session->set('subscribes.user_id', $user->id, 'com_akeebasubs');
+
 		// Step #4. Create or add user extra fields
 		// ----------------------------------------------------------------------
 		// Find an existing record
