@@ -32,6 +32,8 @@
 		
 		<header name="price" type="field" sortable="true" />
 
+		<header name="access" type="accesslevel" sortable="true" tdwidth="8%" />
+		
 		<header name="enabled" type="published" sortable="true" tdwidth="8%" />		
 	</headerset>
 
@@ -62,6 +64,8 @@
 		
 		<field name="price" type="akeebasubslevelsprice" />
 
+		<field name="access" type="accesslevel"/>
+		
 		<field name="enabled" type="published"/>
 	</fieldset>
 </form>
