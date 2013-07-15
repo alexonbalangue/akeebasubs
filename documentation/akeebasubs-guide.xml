@@ -2222,6 +2222,33 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Access</term>
+
+          <listitem>
+            <para>Since Akeeba Subscriptions 3.2.1 you can define which users
+            can see which subscriptions. The default option (Public) means
+            that all users, logged in or not, can see the subscription level
+            and subscribe to it.</para>
+
+            <important>
+              <para>This feature is VERY powerful. Just like Joomla!'s ACLs it
+              will obediently allow someone to create the most pointless
+              setups possible. Remember that a user must ALREADY belong to a
+              group contained in this access level to be able to subscribe to
+              this subscription level. For instance, let's say have a user
+              group called Subscribers and a viewing access level called
+              Subscriber Access containing only the Subscribers group. If you
+              set a subscription level to the Subscribers access level then a
+              user must already be a subscriber (belong to the Subscribers
+              user group) before they can subscribe to your site. If this is
+              your only subscription level you have just shot yourself in the
+              feet. Think about it. If I need to be a subscriber before I can
+              subscribe, how can I ever subscribe to your site?</para>
+            </important>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Forbid renewals</term>
 
           <listitem>
