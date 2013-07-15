@@ -38,7 +38,9 @@ class AkeebasubsControllerLevels extends FOFController
 
 		if(parent::onBeforeBrowse()) {
 			$noClear = $this->input->getBool('no_clear',false);
-			if(!$noClear) {
+
+			if (!$noClear)
+			{
 				$model = $this->getThisModel()
 					->clearState()
 					->clearInput()
@@ -49,12 +51,19 @@ class AkeebasubsControllerLevels extends FOFController
 					->only_once(1)
 					->filter_order('ordering')
 					->filter_order_Dir('ASC');
-				if(!empty($ids)) {
+
+				if (!empty($ids))
+				{
 					$model->id($ids);
 				}
 			}
+
+			$model->access_user_id(JFactory::getUser()->id);
+
 			return true;
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
@@ -84,6 +93,7 @@ class AkeebasubsControllerLevels extends FOFController
 		}
 
 		$this->getThisModel()->setIDsFromRequest();
+		$this->getThisModel()->access_user_id(JFactory::getUser()->id);
 		$id = $this->getThisModel()->getId();
 		if(!$id && $slug) {
 			$item = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')

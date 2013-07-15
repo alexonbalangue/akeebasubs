@@ -37,6 +37,7 @@ class AkeebasubsControllerSubscribes extends FOFController
 		}
 
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($id)->getItem();
+
 		if($level->only_once) {
 			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->slug($level->slug)
@@ -47,6 +48,15 @@ class AkeebasubsControllerSubscribes extends FOFController
 				return false;
 			}
 		}
+
+		$accessLevels = JFactory::getUser()->getAuthorisedViewLevels();
+
+		if (!in_array($level->access, $accessLevels))
+		{
+			// User trying to subscribe to a level he doesn't have access to
+			return false;
+		}
+
 		$this->getThisModel()->setState('id',$id);
 
 		$result = $this->getThisModel()->createNewSubscription();
