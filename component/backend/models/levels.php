@@ -28,6 +28,19 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->qn('enabled').' = '.(int)$enabled);
 		}
 
+		$access_user_id = $this->getState('access_user_id', null);
+
+		if (!is_null($access_user_id))
+		{
+			$levels = JFactory::getUser($access_user_id)->getAuthorisedViewLevels();
+
+			if (!empty($levels))
+			{
+				$levels = array_map(array($this->_db, 'quote'), $levels);
+				$query->where($db->qn('access').' IN ('. implode(',', $levels) . ')');
+			}
+		}
+
 		$slug = $this->getState('slug',null);
 		if($slug) {
 			$query->where($db->qn('slug').' = '.$db->q($slug));
