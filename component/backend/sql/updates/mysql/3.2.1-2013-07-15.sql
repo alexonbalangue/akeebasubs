@@ -1,1 +1,2 @@
+ALTER TABLE `#__akeebasubs_invoicetemplates` ADD `noinvoice` TINYINT NOT NULL DEFAULT '0' AFTER `ordering`;
 ALTER TABLE `#__akeebasubs_levels` ADD COLUMN `access` int(11) NOT NULL DEFAULT '1' AFTER `akeebasubs_levelgroup_id`;
