@@ -1,0 +1,1 @@
+ALTER TABLE `#__akeebasubs_invoicetemplates` ADD `noinvoice` TINYINT NOT NULL DEFAULT '0' AFTER `ordering`;

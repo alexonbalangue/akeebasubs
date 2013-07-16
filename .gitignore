@@ -43,3 +43,5 @@ component/backend/invoices/*.pdf
 component/backend/assets/tcpdf/certificates/*.cer
 
 _test
+
+/.idea

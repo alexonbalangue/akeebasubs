@@ -284,6 +284,8 @@ class AkeebasubsModelInvoices extends FOFModel
 	 * Create or update an invoice from a subscription
 	 *
 	 * @param   object  $sub  The subscription record
+	 *
+	 * @return  bool
 	 */
 	public function createInvoice($sub)
 	{
@@ -298,7 +300,9 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		$existingRecord = is_object($invoiceRecord);
 
-		$invoiceData = array();
+		// Flag to know if the template allows me to create an invoice
+		$preventInvoice  = false;
+		$invoiceData     = array();
 
 		// Preload helper classes
 		if (!class_exists('AkeebasubsHelperCparams'))
@@ -318,17 +322,36 @@ class AkeebasubsModelInvoices extends FOFModel
 		$templateRow = $this->findTemplate($sub);
 		if (is_object($templateRow))
 		{
-			$template = $templateRow->template;
-			$templateId = $templateRow->akeebasubs_invoicetemplate_id;
-			$globalFormat = $templateRow->globalformat;
+			$template        = $templateRow->template;
+			$templateId      = $templateRow->akeebasubs_invoicetemplate_id;
+			$globalFormat    = $templateRow->globalformat;
 			$globalNumbering = $templateRow->globalnumbering;
+
+			// Do I have a "no invoice" flag?
+			$preventInvoice = (bool) $templateRow->noinvoice;
 		}
 		else
 		{
-			$template = '';
-			$templateId = 0;
-			$globalFormat = true;
+			$template        = '';
+			$templateId      = 0;
+			$globalFormat    = true;
 			$globalNumbering = true;
+		}
+
+		// Do I have a "no invoice" flag on template or subscription?
+		$sub_params = new JRegistry($sub->params);
+		if($preventInvoice || $sub_params->get('noinvoice', false))
+		{
+			$sub_params->set('noinvoice', true);
+
+			// I have to manually update the db, using the table object will cause an endless loop
+			$query = $db->getQuery(true)
+						->update('#__akeebasubs_subscriptions')
+						->set($db->qn('params').' = '.$db->quote((string) $sub_params))
+						->where($db->qn('akeebasubs_subscription_id').' = '.$sub->akeebasubs_subscription_id);
+			$db->setQuery($query)->query();
+
+			return false;
 		}
 
 		if ($globalFormat)
