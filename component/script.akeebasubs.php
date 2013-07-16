@@ -91,6 +91,7 @@ class Com_AkeebasubsInstallerScript
 			),
 			'akpayment' => array(
 				'2checkout'				=> 0,
+				'2conew'				=> 0,
 				'allopass'				=> 0,
 				'alphauserpoints'		=> 0,
 				'authorizenet'			=> 0,
@@ -273,14 +274,19 @@ class Com_AkeebasubsInstallerScript
 			'media/com_akeebasubs/tcdpf/fonts/zapfdingbats.php',
 
 			// Old PHP views, replaced with XML views
+			'administrator/components/com_akeebasubs/view/affiliates/tmpl/default.php',
+			'administrator/components/com_akeebasubs/view/affpayments/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/customfields/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/levelgroups/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/levels/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/levels/tmpl/form.php',
 			'administrator/components/com_akeebasubs/view/states/tmpl/default.php',
 			'administrator/components/com_akeebasubs/view/upgrades/tmpl/default.php',
+			'administrator/components/com_akeebasubs/view/users/tmpl/default.php',
 
 			// Do not delete (used to render custom form page elements):
+			// 'administrator/components/com_akeebasubs/view/coupons/tmpl/default.php',
+			// 'administrator/components/com_akeebasubs/view/invoices/tmpl/default.php',
 			// 'administrator/components/com_akeebasubs/view/taxrules/tmpl/default.php',
 
 		),
@@ -289,6 +295,7 @@ class Com_AkeebasubsInstallerScript
 			'administrator/components/com_akeebasubs/controllers/behaviours',
 			'administrator/components/com_akeebasubs/controllers/toolbars',
 			'administrator/components/com_akeebasubs/databases',
+			'administrator/components/com_akeebasubs/invoicetemplates',
 			'administrator/components/com_akeebasubs/simpleforms',
 			'administrator/components/com_akeebasubs/templates',
 			'administrator/components/com_akeebasubs/toolbars',

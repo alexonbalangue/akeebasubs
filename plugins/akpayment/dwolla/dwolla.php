@@ -19,14 +19,14 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_DWOLLA_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/dwolla.png',
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,9 +36,9 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=dwolla&sid=' . $subscription->akeebasubs_subscription_id;
-		
+
 		$data = (object)array(
 			'url'			=> 'https://www.dwolla.com/payment/pay',
 			'key'			=> $this->params->get('key',''),
@@ -53,7 +53,7 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 			'orderid'		=> $subscription->akeebasubs_subscription_id,
 			'timestamp'		=> time()
 		);
-		
+
 		$data->signature = hash_hmac('sha1',
 				$data->key.'&'.$data->timestamp.'&'.$data->orderid,
 				trim($this->params->get('secret','')));
@@ -61,23 +61,23 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/dwolla/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		if($data['error'] == 'failure') {
 			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($data['sid'])
 					->getItem();
 			if($data['error_description'] == 'User Cancelled') {
-				$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
+				$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
 				JFactory::getApplication()->redirect($cancelUrl);
 			} else {
 				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
@@ -91,7 +91,7 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 			}
 			return false;
 		}
-        
+
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
@@ -113,7 +113,7 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The reference is invalid';
 		}
-        
+
 		// Check that transaction has not been previously processed
 		if($isValid) {
 			if($data['transaction'] == $subscription->processor_key && $subscription->state == 'C') {
@@ -138,7 +138,7 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-			
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
@@ -151,12 +151,12 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Payment status
 		if($data['postback'] == 'success' && $data['status'] == 'Completed') {
 			$newStatus = 'C';
 		} else {
-			$newStatus = 'X';	
+			$newStatus = 'X';
 		}
 
 		// Update subscription status (this+ also automatically calls the plugins)
@@ -179,13 +179,13 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	/**
 	 * Validates the incoming data.
 	 */

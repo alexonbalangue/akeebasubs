@@ -22,7 +22,7 @@
 		<header name="country" type="fieldselectable"
 			label="COM_AKEEBASUBS_TAXRULES_COUNTRY"
 			source_file="admin://components/com_akeebasubs/helpers/select.php"
-			source_class="AkeebasubsHelperSelect" source_method="getCountries"
+			source_class="AkeebasubsHelperSelect" source_method="getCountriesForHeader"
 			sortable="true" tdwidth="15%"
 		/>
 		

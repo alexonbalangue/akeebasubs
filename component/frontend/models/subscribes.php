@@ -1807,6 +1807,10 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$user = $this->getState('user', $user);
 		}
 
+		// Store the user's ID in the session
+		$session = JFactory::getSession();
+		$session->set('subscribes.user_id', $user->id, 'com_akeebasubs');
+
 		// Step #4. Create or add user extra fields
 		// ----------------------------------------------------------------------
 		// Find an existing record
@@ -2072,6 +2076,17 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$rawDataPost = JRequest::get('POST', 2);
 		$rawDataGet = JRequest::get('GET', 2);
 		$data = array_merge($rawDataGet, $rawDataPost);
+
+		// Some plugins result in an empty Itemid being added to the request
+		// data, screwing up the payment callback validation in some cases (e.g.
+		// PayPal).
+		if (array_key_exists('Itemid', $data))
+		{
+			if (empty($data['Itemid']))
+			{
+				unset($data['Itemid']);
+			}
+		}
 
 		$dummy = $this->getPaymentPlugins();
 

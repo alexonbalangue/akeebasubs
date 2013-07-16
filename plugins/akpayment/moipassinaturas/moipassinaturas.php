@@ -19,14 +19,14 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_MOIPASSINATURAS_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/moip_logo.gif'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,25 +36,25 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$error_url = 'index.php?option='.JRequest::getCmd('option').
 			'&view=level&slug='.$level->slug.
 			'&layout='.JRequest::getCmd('layout','default');
 		$error_url = JRoute::_($error_url,false);
-				
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		// Check state
 		if(empty($kuser->state)) {
 			JFactory::getApplication()->redirect($error_url, JText::_('PLG_AKPAYMENT_MOIPASSINATURAS_NO_STATE'), 'error');
 			return false;
-		}	
-		
+		}
+
 		// Custom params
 		$customParams = json_decode($kuser->params);
-		
+
 		// Split birthday in year-month-day
 		$birthday = trim($customParams->birthday);
 		$birthdayMatches = array();
@@ -62,7 +62,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 		$birthdateYear = $birthdayMatches[1];
 		$birthdateMonth = $birthdayMatches[2];
 		$birthdateDay = $birthdayMatches[3];
-		
+
 		// Try to find street number
 		$address1 = trim($kuser->address1);
 		$address2 = trim($kuser->address2);
@@ -94,7 +94,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url, JText::_('PLG_AKPAYMENT_MOIPASSINATURAS_NO_STREET_NR'), 'error');
 			return false;
 		}
-		
+
 		// Split phone in area-code and phone-number
 		$phone = trim($customParams->phone);
 		$phoneAreaCode = '';
@@ -112,7 +112,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			$phoneAreaCode = substr($phoneOnlyWithNumbers, 0, 2);
 			$phoneNumber = substr($phoneOnlyWithNumbers, 2);
 		}
-		
+
 		// MoIP customer details
 		$customer = array(
 			'fullname' => trim($user->name),
@@ -135,14 +135,14 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				'country' => $this->translateCountry($kuser->country)
 			)
 		);
-		
+
 		// Check if customer exists
 		$jsonExistingCustomer = $this->httpRequest(
 				$this->getMoipServerHost(),
 				'customers/' . $customer['code'],
 				'GET');
 		$existingCustomer = json_decode($jsonExistingCustomer);
-	
+
 		if(!empty($existingCustomer)) {
 			// Customer exists. So, check if details match
 			if($existingCustomer->fullname != $customer['fullname']
@@ -186,7 +186,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 						return false;
 			}
 		}
-		
+
 		// Set the customers credit-card
 		$doc = JFactory::getDocument();
 		$doc->addScript($this->getMoipJSUrl());
@@ -196,10 +196,10 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 					var sid = $('#sid').val();
 					if(!!sid) {
 						return true;
-					} else {	
+					} else {
 						$('#payment-button').attr('disabled', 'disabled');
 						var token = '" . trim($this->params->get('token','')) . "';
-						var moip = new MoipAssinaturas(token); 
+						var moip = new MoipAssinaturas(token);
 						var customer = new Customer();
 						customer.code = '" . $customer['code'] . "';
 						customer.billing_info = build_billing_info();
@@ -225,7 +225,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 
 			var build_billing_info = function() {
 				var billing_info_params = {
-					fullname : $('#card-holder').val(), 
+					fullname : $('#card-holder').val(),
 					expiration_month: $('#card-expiry-month').val(),
 					expiration_year: $('#card-expiry-year').val(),
 					credit_card_number: $('#card-number').val()
@@ -233,22 +233,22 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				return new BillingInfo(billing_info_params);
 			};
 		");
-		
+
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=moipassinaturas&mode=subscribe';
 
 		@ob_start();
 		include dirname(__FILE__).'/moipassinaturas/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
-	
+
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$mode = $data['mode'];
 		if(strtolower($mode) == 'webhook') {
 			return $this->processWebhook();
@@ -256,11 +256,11 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			return $this->processSubscription($data);
 		}
 	}
-	
+
 	private function processSubscription($data)
 	{
 		$isValid = true;
-		
+
 		// Load the relevant subscription row
 		$id = $data['sid'];
 		$subscription = null;
@@ -275,12 +275,12 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 		} else {
 			$isValid = false;
 		}
-		
+
 		if(!$isValid) {
 			$data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
 			return false;
 		}
-		
+
 		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($subscription->akeebasubs_level_id)
 			->getItem();
@@ -288,7 +288,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			'&view=level&slug='.$level->slug.
 			'&layout='.JRequest::getCmd('layout','default');
 		$error_url = JRoute::_($error_url,false);
-		
+
 		// MoIP plan details
 		$plan = array(
 			'code' => 'ak_' . substr($level->slug, 0, 62),
@@ -339,7 +339,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 						return false;
 			}
 		}
-				
+
 		// MoIP subscription details
 		$moipSubscription = array(
 			'code' => 'ak_' . $id,
@@ -350,7 +350,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				'code' => 'ak_' . $subscription->user_id
 			)
 		);
-		
+
 		// Create the subscription
 		if(!$this->httpRequest(
 				$this->getMoipServerHost(),
@@ -360,27 +360,27 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 					JFactory::getApplication()->redirect($error_url, 'The MoIP subscription could not be created.', 'error');
 					return false;
 		}
-		
+
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	private function processWebhook()
 	{
 		$isValid = true;
-		
+
 		// Get the response data
 		$jsonResponse = file_get_contents("php://input");
 		$data = json_decode($jsonResponse, true);
-		
+
 		// Check notification token
 		if($_SERVER['HTTP_AUTHORIZATION'] != trim($this->params->get('notification_token',''))) {
 			$isValid = false;
 			$data['akeebasubs_failure_reason'] = 'Http authorization does not match. Please make sure you entered the correct notification token.';
 		}
-		
+
 		// Check event
 		if($isValid) {
 			$event = $data['event'];
@@ -389,7 +389,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				return true;
 			}
 		}
-		
+
 		// Get the subscription
 		if($isValid) {
 			$invoiceId = $data['resource']['id'];
@@ -424,13 +424,13 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				}
 			}
 		}
-		
+
 		// Check if this payment is already completed
 		if($isValid && ($subscription->processor_key == $invoiceId) && ($subscription->state == 'C')) {
 			$isValid = false;
 			$data['akeebasubs_failure_reason'] = "I will not processe this invoice twice";
 		}
-		
+
 		// Get the invoice details
 		if($isValid) {
 			$jsonInvoiceDetails = $this->httpRequest(
@@ -443,24 +443,24 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Cannot get the details for the invoice " . $invoiceId;
 			}
 		}
-		
+
 		// Check customer
 		if($isValid && ($invoiceDetails->customer->code != 'ak_' . $subscription->user_id)) {
 			$isValid = false;
 			$data['akeebasubs_failure_reason'] = "Customer code does not match";
 		}
-		
+
 		// Check plan
-		if($isValid) {			
+		if($isValid) {
 			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
 			if($isValid && ($invoiceDetails->plan->code !=  'ak_' . substr($level->slug, 0, 62))) {
 				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Plan code does not match";	
+				$data['akeebasubs_failure_reason'] = "Plan code does not match";
 			}
 		}
-		
+
 		// Check that amount is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_gross = $data['amount'];
@@ -472,13 +472,13 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
-		
+
 		// Check the payment status
 		switch($data['status']['code']) {
 			case 1: // Open
@@ -494,7 +494,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				$newStatus = 'X';
 				break;
 		}
-		
+
 
 		// Update subscription status (this+ also automatically calls the plugins)
 		$updates = array(
@@ -516,7 +516,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// If subscription is not recurring suspend it
 		if(! $level->recurring) {
 			$this->httpRequest(
@@ -524,7 +524,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 				'subscriptions/ak_' . $subscription->akeebasubs_subscription_id . '/suspend',
 				'PUT');
 		}
-		
+
 		return true;
 	}
 
@@ -550,7 +550,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			$response .= fgets($sock, 1024);
 		}
 		fclose($sock);
-		
+
 		if (in_array($method, array('POST', 'PUT'))) {
 			// Check if our post was successful
 			$pattern = '/HTTP[^ ]+ 20[01]/';
@@ -567,7 +567,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			return $json;
 		}
 	}
-	
+
 
 	private function getBasicAuthorization()
 	{
@@ -576,7 +576,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 		$authB64String =  base64_encode($authString);
 		return $authB64String;
 	}
-	
+
 	private function getMoipServerHost()
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -586,7 +586,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			return 'api.moip.com.br';
 		}
 	}
-	
+
 	private function getMoipJSUrl()
 	{
 		$sandbox = $this->params->get('sandbox',0);
@@ -596,7 +596,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			return 'https://api.moip.com.br/moip-assinaturas.min.js';
 		}
 	}
-	
+
 	public function selectMonth()
 	{
 		$options = array();
@@ -605,21 +605,21 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 			$m = sprintf('%02u', $i);
 			$options[] = JHTML::_('select.option',$m,$m);
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, 'card-expiry-month', 'class="input-small"', 'value', 'text', '', 'card-expiry-month');
 	}
-	
+
 	public function selectYear()
 	{
 		$year = gmdate('Y');
-		
+
 		$options = array();
 		$options[] = JHTML::_('select.option','00','--');
 		for($i = 0; $i <= 10; $i++) {
 			$y = sprintf('%04u', $i+$year);
 			$options[] = JHTML::_('select.option',substr($y, -2),$y);
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, 'card-expiry-year', 'class="input-small"', 'value', 'text', '', 'card-expiry-year');
 	}
 }

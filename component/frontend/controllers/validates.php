@@ -18,16 +18,22 @@ class AkeebasubsControllerValidates extends FOFController
 		$this->cacheableTasks = array();
 	}
 
-	public function execute($task) {
+	public function execute($task)
+	{
 		$this->input->set('task','read',$this->input);
 		$task = 'read';
 		parent::execute($task);
 	}
 
-	public function read($cachable = false) {
+	public function read($cachable = false)
+	{
+		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
+		JResponse::setHeader('X-Cache-Control', 'False', true);
+
 		$data = $this->getThisModel()
 			->action('validate')
 			->getValidation();
+
 		echo json_encode($data);
 
 		JFactory::getApplication()->close();

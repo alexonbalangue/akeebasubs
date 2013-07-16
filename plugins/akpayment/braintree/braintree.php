@@ -19,11 +19,11 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_BRAINTREE_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/braintree-logo.jpg',
 		));
-		
+
 		parent::__construct($subject, $config);
-		
+
 		require_once dirname(__FILE__).'/braintree/lib/Braintree.php';
-		
+
 		$sandbox = $this->params->get('sandbox',0);
 		$merchantId = trim($this->params->get('merchant_id',''));
 		$pubKey = trim($this->params->get('pub_key',''));
@@ -34,11 +34,11 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		Braintree_Configuration::publicKey($pubKey);
 		Braintree_Configuration::privateKey($privKey);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -75,30 +75,30 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/braintree/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
 
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this TEST
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		if($data['type'] == 'webhook') {
 			// Clean up second question mark in response
 			$matches = array();
 			preg_match('/000\?([^=]+)=([^&]+)/', $data['marker'], $matches);
 			if(sizeof($matches) > 2) {
-				$data[$matches[1]] = $matches[2];	
+				$data[$matches[1]] = $matches[2];
 			}
 			return $this->processWebhook($data);
 		} else {
 			return $this->processCallback($data);
 		}
 	}
-	
+
 	/**
 	 * This function will be called after the customer sends the form and
 	 * the callback from braintree is received.
@@ -116,7 +116,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
 		}
-		
+
 		// Confirm our request to braintree
 		if($isValid) {
 			try {
@@ -137,7 +137,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
 			}
 		}
-		
+
 		// Create the braintree-subscription for recurring payments
 		if($level->recurring) {
 			if($isValid) {
@@ -181,20 +181,20 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				}
 			}
 		}
-		
+
 		// Get transaction
 		if($isValid) {
 			if($level->recurring) {
 				$transaction = $subscriptionResult->subscription->transactions[0];
 			} else {
-				$transaction = $confirmationResult->transaction;	
+				$transaction = $confirmationResult->transaction;
 			}
 			if(! isset($transaction)) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Can\'t get the transaction";
 			}
 		}
-		
+
 		// Check that transaction id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $transaction->id && $subscription->state == 'C') {
@@ -202,7 +202,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not process the same order twice";
 			}
 		}
-        
+
 		// Check transaction type
 		if($isValid) {
 			if($transaction->type != 'sale') {
@@ -216,7 +216,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 			$isValid = $this->isValidAmount($transaction->amount, $subscription);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-			
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
@@ -229,7 +229,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Payment status
 		if($transaction->status == 'submitted_for_settlement') {
 			$newStatus = 'C';
@@ -257,13 +257,13 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	/**
 	 * This function will be called when a webhook from braintree is received
 	 * which gives update about recurring payments.
@@ -271,28 +271,28 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 	private function processWebhook($data)
 	{
 		$isValid = true;
-		
+
 		// This verification is done when the merchant defines
 		// a new webhook that uses this plugin:
 		// http://example.com/index.php?option=com_akeebasubs&view=callback&paymentmethod=braintree&type=webhook&marker=000
 		if(isset($data['bt_challenge'])) {
 			$app = JFactory::getApplication();
 			@ob_end_clean();
-			echo Braintree_WebhookNotification::verify($data['bt_challenge']);	
-			$app->close();	
+			echo Braintree_WebhookNotification::verify($data['bt_challenge']);
+			$app->close();
 			return true;
 		}
-		
+
 		// Parse the notification
 		try {
 			$webhookNotification = Braintree_WebhookNotification::parse(
 				$data['bt_signature'], $data['bt_payload']
-			);	
+			);
 		} catch(Exception $e) {
 			$isValid = false;
 			$data['akeebasubs_failure_reason'] = $e->getMessage();
 		}
-		
+
 		// Check kind of notification
 		if($isValid) {
 			$data['kind'] = $webhookNotification->kind;
@@ -301,7 +301,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = 'This notification type is not supported: ' . $notificationType;
 			}
 		}
-		
+
 		// Load the subscription
 		if($isValid) {
 			$subscription = null;
@@ -310,7 +310,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 			$isValid = $this->isSubscriptionValid($subcriptionId, $subscription);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
 		}
-		
+
 		// Check that transaction id has not been previously processed
 		if($isValid) {
 			$transaction = end($webhookNotification->subscription->transactions);
@@ -320,23 +320,23 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not process the same order twice";
 			}
 		}
-		
+
 		// Check that amount is correct
 		if($isValid) {
 			$data['transactionAmount'] = $transaction->amount;
 			$isValid = $this->isValidAmount($transaction->amount, $subscription);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
-		
+
 		// Leave this function if the request is invalid
 		if (!$isValid) {
 			header('HTTP/1.1 403 ' . $data['akeebasubs_failure_reason']);
 			return false;
 		}
-		
+
 		// Update subscription status (this also automatically calls the plugins)
 		$newStatus = 'C';
 		$updates = array(
@@ -363,8 +363,8 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 			$oldData['publish_down'] = $jNow->toSql();
 			$oldData['enabled'] = 0;
 			$oldData['contact_flag'] = 3;
-			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();			
-			
+			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();
+
 			// Calculate new start/end time for the subscription
 			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->paystate('C')
@@ -376,16 +376,16 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				$expire = $jExpire->toUnix();
 				if($expire > $max_expire) $max_expire = $expire;
 			}
-			
+
 			$duration = $end - $start;
 			$start = max($now, $max_expire);
 			$end = $start + $duration;
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
-			
+
 			$updates['publish_up'] = $jStart->toSql();
 			$updates['publish_down'] = $jEnd->toSql();
-			
+
 			// Save the record for the old subscription
 			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getTable();
@@ -395,7 +395,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		}
 		// Save the changes
 		$subscription->save($updates);
-		
+
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -403,11 +403,11 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		header('HTTP/1.1 200');
 		return true;
 	}
-	
+
 	private function isSubscriptionValid($id, &$subscription = null)
 	{
 		if($id > 0) {
@@ -423,7 +423,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		}
 		return true;
 	}
-	
+
 	private function isValidAmount($mc_gross, $subscription)
 	{
 		$gross = $subscription->gross_amount;
@@ -434,7 +434,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 		}
 		return false;
 	}
-	
+
 	private function selectExpirationDate($type)
 	{
 		$year = gmdate('Y');
@@ -447,7 +447,7 @@ class plgAkpaymentBraintree extends plgAkpaymentAbstract
 				$options[] = JHTML::_('select.option', ($m.'/'.$y), ($m.'/'.$y));
 			}
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, $type . '[credit_card][expiration_date]', 'class="input-medium"', 'value', 'text', '', 'braintree_credit_card_exp');
 	}
 }

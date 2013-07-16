@@ -115,6 +115,19 @@ class AkeebasubsHelperSelect
 		return $fieldTypes;
 	}
 
+	public static function getCountriesForHeader()
+	{
+		static $countries = array();
+
+		if (empty($countries))
+		{
+			$countries = self::$countries;
+			unset($countries['']);
+		}
+
+		return $countries;
+	}
+
 	public static function getCountries()
 	{
 		return self::$countries;
@@ -122,15 +135,44 @@ class AkeebasubsHelperSelect
 
 	public static function getStates()
 	{
-		$ret = array();
+		static $states = array();
 
-		foreach(self::$states as $country => $states)
+		if (empty($states))
 		{
-			$ret = array_merge($ret, $states);
+			$states = array();
+
+			foreach(self::$states as $country => $s)
+			{
+				$states = array_merge($states, $s);
+			}
 		}
 
-		return $ret;
+		return $states;
 	}
+
+	public static function getInvoiceExtensions()
+	{
+		static $invoiceExtensions = null;
+
+		if (is_null($invoiceExtensions))
+		{
+			$source = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+				->getExtensions(0);
+			$invoiceExtensions = array();
+
+			if (!empty($source))
+			{
+				foreach ($source as $item)
+				{
+					$invoiceExtensions[$item['extension']] = $item['title'];
+				}
+			}
+		}
+
+		return $invoiceExtensions;
+	}
+
+
 
 	public static function decodeCountry($cCode)
 	{

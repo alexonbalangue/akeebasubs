@@ -10,7 +10,17 @@ defined('_JEXEC') or die();
 
 class AkeebasubsViewSubscribe extends FOFViewHtml
 {
+	protected function onDisplay($tpl = null)
+	{
+		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
+		JResponse::setHeader('X-Cache-Control', 'False', true);
+
+		parent::onDisplay($tpl);
+	}
+
 	protected function onAdd($tpl = null)
 	{
+		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
+		JResponse::setHeader('X-Cache-Control', 'False', true);
 	}
 }

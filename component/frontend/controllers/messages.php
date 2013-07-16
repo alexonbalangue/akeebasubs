@@ -57,18 +57,52 @@ class AkeebasubsControllerMessages extends FOFController
 
 		$this->getThisView()->assign('subscription',$subscription);
 
-		// Joomla! 1.6 and later - we have to effectively "re-login" the user,
-		// otherwise his ACL privileges are stale.
+		/**
+		 * Joomla! 1.6 and later - we have to effectively "re-login" the user,
+		 * otherwise his ACL privileges are stale.
+		 */
+
+		// Get the current user's ID
 		$userid = JFactory::getUser()->id;
+
+		// Get a reference to Joomla!'s session object
+		$session = JFactory::getSession();
 
 		if (empty($userid))
 		{
+			// Guest user; we'll have to log him in
 			$userid = $subscription->user_id;
+
+			// Is it the same user who initiated the subscription payment?
+			$subscriber_user_id = $session->get('subscribes.user_id', null, 'com_akeebasubs');
+
+			if ($subscriber_user_id == $subscription->user_id)
+			{
+				// Do not log him out; he's the user who initiated this subcsription
+				self::$loggedinUser = false;
+
+				// Unset the subscriber user ID value
+				$session->set('subscribes.user_id', null, 'com_akeebasubs');
+			}
+			else
+			{
+				// This is just someone who knows the URL. Let's log him out
+				// after we're done showing the page.
+				self::$loggedinUser = true;
+			}
+		}
+		elseif ($userid != $subscription->user_id)
+		{
+			// User already logged in. We'll log him back in (due to Joomla!
+			// ACLs not being applied otherwise) but we are not going to log him
+			// back out.
+			self::$loggedinUser = false;
 		}
 		elseif ($userid != $subscription->user_id)
 		{
 			// The logged in user doesn't match the subscription's user; deny access
 			self::$loggedinUser = false;
+
 			return false;
 		}
 
@@ -77,9 +111,9 @@ class AkeebasubsControllerMessages extends FOFController
 		// This line FORCE RELOADS the user record.
 		$newUserObject->load($userid);
 
-		// Maybe the user cannot be found?
 		if (($newUserObject->id != $userid))
 		{
+			// The user cannot be found. Abort.
 			self::$loggedinUser = false;
 			return false;
 		}
@@ -89,7 +123,6 @@ class AkeebasubsControllerMessages extends FOFController
 		$newUserObject->set('guest', 0);
 
 		// Register the needed session variables
-		$session = JFactory::getSession();
 		$session->set('user', $newUserObject);
 
 		$db = JFactory::getDBO();
@@ -117,16 +150,12 @@ class AkeebasubsControllerMessages extends FOFController
 
 	public function onAfterRead()
 	{
-		if(self::$loggedinUser) {
-			// Log out the logged in user
+		// Log out the logged in user
+		if (self::$loggedinUser)
+		{
 			$my 		= JFactory::getUser();
 			$session 	= JFactory::getSession();
 			$app 		= JFactory::getApplication();
-
-			// Make sure we're a valid user first
-			if (!$my->get('tmp_user')) {
-				return true;
-			}
 
 			// Hit the user last visit field
 			$my->setLastVisit();
