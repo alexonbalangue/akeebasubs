@@ -79,13 +79,14 @@
 				$objPmReqCard->signature 			= $this->params->get('signature', '');
 				$objPmReqCard->orderId 				= md5(uniqid(rand()));
 				$objPmReqCard->returnUrl 			= $rootURL.JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
-				$objPmReqCard->confirmUrl 			= JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=mobilpaycc';
+				$objPmReqCard->confirmUrl 			= $rootURL.JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=mobilpaycc', false);
 
 				$objPmReqCard->invoice              = new Mobilpay_Payment_Invoice();
 				// Only RON currency is supported by this payment method...
 				$objPmReqCard->invoice->currency	= 'RON';
 				$objPmReqCard->invoice->amount		= $subscription->net_amount;
 				$objPmReqCard->invoice->details		= $level->title . ' - [ ' . $user->username . ' ]';
+				$objPmReqCard->params['custom']		= $subscription->akeebasubs_subscription_id;
 
 				$billingAddress 				= new Mobilpay_Payment_Address();
 				if($kuser->isbusiness)
@@ -146,7 +147,7 @@
 
 			// Load the relevant subscription row
 			if($isValid) {
-				$id = array_key_exists('custom', $data) ? (int)$data['custom'] : -1;
+				$id = array_key_exists('custom', $transInfo) ? (int)$transInfo['custom'] : -1;
 				$subscription = null;
 				if($id > 0) {
 					$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -162,6 +163,15 @@
 				if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
 			}
 
+			$mc_gross = floatval($transInfo['amount']);
+			$gross    = $subscription->gross_amount;
+			if($mc_gross > 0) {
+				// A positive value means "payment". The prices MUST match!
+				// Important: NEVER, EVER compare two floating point values for equality.
+				$isValid = ($gross - $mc_gross) < 0.01;
+				if(!$isValid) $data['akeebasubs_failure_reason'] = "The amounts don't match";
+			}
+
 			// Log the IPN data
 			$this->logIPN($data, $isValid);
 
@@ -169,14 +179,14 @@
 			if(!$isValid)
 			{
 				//Let's inform MobilPro we've done
-				//$this->echoXML($transInfo['xml']);
+				$this->echoXML($transInfo['xml']);
 				return false;
 			}
 
 			// Update subscription status (this also automatically calls the plugins)
 			$updates = array(
 				'akeebasubs_subscription_id'	=> $id,
-				'processor_key'					=> $data['orderId'],
+				'processor_key'					=> $transInfo['orderId'],
 				'state'							=> $transInfo['state'],
 				'enabled'						=> 0
 			);
@@ -195,7 +205,8 @@
 			}
 
 			JLoader::import('joomla.utilities.date');
-			if($transInfo['state'] == 'C') {
+			if($transInfo['state'] == 'C')
+			{
 				$this->fixDates($subscription, $updates);
 			}
 
@@ -206,9 +217,11 @@
 			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
 			$app = JFactory::getApplication();
-			$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
-				$subscription
-			));
+			$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array($subscription));
+
+			// Let's echo the result XML.
+			// PLEASE NOTE!!! THe execution stops here, since we have to shutdown Joomla (JFactory::getApplication()->close())
+			$this->echoXML($transInfo['xml']);
 
 			return true;
 		}
@@ -243,11 +256,12 @@
 
 			if(isset($data['env_key']) && isset($data['data']))
 			{
-				$privateKeyFilePath = JPATH_ROOT.'/plugins/akpayment/mobilpaycc/mobilpaycc/private/public.cer';
+				$privateKeyFilePath = JPATH_ROOT.'/plugins/akpayment/mobilpaycc/mobilpaycc/private/private.key';
 
 				try
 				{
 					$objPmReq = Mobilpay_Payment_Request_Abstract::factoryFromEncrypted($data['env_key'], $data['data'], $privateKeyFilePath);
+
 					switch($objPmReq->objPmNotify->action)
 					{
 						case 'confirmed':
@@ -270,7 +284,10 @@
 							break;
 					}
 
-					$result['valid'] = true;
+					$return['amount']  = $objPmReq->objPmNotify->processedAmount;
+					$return['orderId'] = $objPmReq->orderId;
+					$return['custom']  = $objPmReq->params['custom'];
+					$return['valid']   = true;
 				}
 				catch(Exception $e)
 				{
@@ -278,7 +295,7 @@
 					$errorCode	= $e->getCode();
 					$message 	= $e->getMessage();
 
-					$result['valid'] = false;
+					$return['valid'] = false;
 				}
 			}
 			else
@@ -287,7 +304,7 @@
 				$errorCode	= Mobilpay_Payment_Request_Abstract::ERROR_CONFIRM_INVALID_POST_PARAMETERS;
 				$message 	= 'mobilpay.ro posted invalid parameters';
 
-				$result['valid'] = false;
+				$return['valid'] = false;
 			}
 
 			$return['xml'] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
@@ -301,5 +318,19 @@
 			}
 
 			return $return;
+		}
+
+		private function echoXML($string)
+		{
+			header('Content-type: application/xml');
+			echo $string;
+			JFactory::getApplication()->close();
+		}
+
+		private function debug($string)
+		{
+			$handle = fopen(JPATH_ROOT.'/log.txt', 'a+');
+			fwrite($handle, date('Y-m-d H:i:s').' --- '.$string.PHP_EOL);
+			fclose($handle);
 		}
 	}

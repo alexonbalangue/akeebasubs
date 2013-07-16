@@ -20,19 +20,16 @@
 	<config addfieldpath="/plugins/akpayment/mobilprocc/fields">
 		<fields name="params">
 			<fieldset name="basic">
-				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_TITLE_LABEL" description="PLG_AKPAYMENT_PAYPAL_TITLE_DESC"/>
-				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_PPIMAGE_LABEL" description="PLG_AKPAYMENT_PAYPAL_PPIMAGE_DESC" />
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_MOBILPAY_TITLE_LABEL" description="PLG_AKPAYMENT_MOBILPAY_TITLE_DESC"/>
 				<field type="spacer" />
 				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
 				<field type="spacer" />
-				<field name="signature" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_MERCHANT_LABEL" description="PLG_AKPAYMENT_PAYPAL_MERCHANT_DESC"/>
+				<field name="signature" type="text" size="50" default="" label="PLG_AKPAYMENT_MOBILPAY_MERCHANT_LABEL" description="PLG_AKPAYMENT_MOBILPAY_MERCHANT_DESC"/>
 				<field type="spacer" />
-				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_PAYPAL_SANDBOX_LABEL" description="PLG_AKPAYMENT_PAYPAL_SANDBOX_DESC">
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_MOBILPAY_SANDBOX_LABEL" description="PLG_AKPAYMENT_MOBILPAY_SANDBOX_DESC">
 				  <option value="0">JNo</option>
 				  <option value="1">JYes</option>
 				</field>
-				<field name="sandbox_merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_SANDBOX_MERCHANT_LABEL" description="PLG_AKPAYMENT_PAYPAL_SANDBOX_MERCHANT_LABEL"/>
-				<field type="spacer" />
 			</fieldset>
 		</fields>
 	</config>
