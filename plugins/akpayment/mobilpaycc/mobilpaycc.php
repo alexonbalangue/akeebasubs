@@ -16,7 +16,7 @@
 		{
 			$config = array_merge($config, array(
 				'ppName'		=> 'mobilpaycc',
-				'ppKey'			=> 'PLG_AKPAYMENT_MOBILPROCC_TITLE',
+				'ppKey'			=> 'PLG_AKPAYMENT_MOBILPAYCC_TITLE',
 				'ppImage'		=> JURI::root().'plugins/akpayment/mobilpaycc/mobilpaycc/logo.png'
 			));
 
