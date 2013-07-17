@@ -11,6 +11,7 @@
 	<description>PLG_AKEEBASUBS_FRESHBOOKS_DESCRIPTION</description>
 	<files>
 		<filename plugin="freshbooks">freshbooks.php</filename>
+		<folder>freshbooks</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_freshbooks.ini</language>
