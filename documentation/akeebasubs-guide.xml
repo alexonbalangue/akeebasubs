@@ -11612,6 +11612,159 @@ LEVEL2=11111/22222/33333</programlisting>
     standard Joomla! plugins, published in the <option>akeebasubs</option>
     group.</para>
 
+    <bridgehead>Frequently asked question: I want to be able to add users to
+    groups when their subscription expires</bridgehead>
+
+    <para>Executive summary: this feature will never be implemented. It
+    signifies a wrong ACL setup on your site and will mathematically lead to
+    unintuitive behaviour that you will consider as a bug (even though the
+    component will actually do exactly what you tell it to do). And now for
+    the details.</para>
+
+    <para>Joomla! ACLs are modelled after the Microsoft Windows ACL system. In
+    this model the default behaviour is having no access to anything unless
+    explicitly given. In essence, Joomla! user groups act as <emphasis>keys to
+    doors</emphasis>. You can either have a key or you don't. If you have a
+    key you can unlock the door. If you don't you can't go through that door.
+    This is an oversimplified analogy but holds true for pretty much every
+    correctly set up site.</para>
+
+    <para>Some people don't understand that and end up with something like
+    this. A group, let's call it Subscribers, which grants access privileges.
+    Another group, let's call it Non Subscribers, denying access privileges.
+    The second group is redundant and means that the ACL setup on that site is
+    incorrect.</para>
+
+    <para>Further to that, implementing a feature which would allow you to add
+    users to groups when their subscription expires and remove users from
+    groups when their subscription becomes active will lead to unintuitive
+    behaviour. Remember that integration plugins run per user, not per
+    subscription. All active and inactive subscriptions of the user are
+    considered and the sum of all changes is applied to her account. This is
+    what allows you to, say, change the user group assignments per
+    subscription level and click on the Run Integrations button to apply them
+    to all subscribers without having to manually edit each and every user
+    account manually. Let's illustrate this with an example. Consider a site
+    with the following subscription setup.</para>
+
+    <para>SILVER:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on subscription: Silver Group</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on subscription: Non-subscriber</para>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on expiration: Non-subscriber</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on expiration: Silver Group</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>GOLD:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on subscription: Silver Group, Gold Group</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on subscription: Non-subscriber</para>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on expiration: Non-subscriber</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on expiration: Silver Group, Gold Group</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This looks like a pretty straightforward setup, right?</para>
+
+    <para>Let's consider a client named Alice. She buys a SILVER subscription.
+    She is added to the Silver Group. Then her subscription expires. She is
+    removed from the Silver Group and added to the Non-subscriber
+    group.</para>
+
+    <para>Two months later, Alice comes back to the site and buys a Gold
+    subscription. You'd expect that she would be added to the Silver and Gold
+    groups and removed from the Non-subscriber group, right? Well, wrong.
+    Here's what happens. The add/remove groups being considered are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Remove from groups:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Silver Group (because of the expired SILVER
+            subscription)</para>
+          </listitem>
+
+          <listitem>
+            <para>Non-subscriber (because of the new GOLD subscription)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Add to groups:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Silver Group (because of the new GOLD subscription)</para>
+          </listitem>
+
+          <listitem>
+            <para>Gold Group (because of the new GOLD subscription)</para>
+          </listitem>
+
+          <listitem>
+            <para>Non-subscriber (because of the expired SILVER
+            subscription)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>You obviously can't add and remove a user to the same group. If a
+    group is both in the add and remove lists it is removed from both. If you
+    have to give and remove a key at the same time, you get to do nothing. It
+    makes sense, doesn't it? So what changes are we going to do to Alice's
+    account? Simple: add her to the Gold Group. This means that she's now a
+    member of the Gold Group and the Non-subscribers group (she was added to
+    it when her SILVER subscription expires). The end result is that Alice
+    paid for a subscription but she has no access.</para>
+
+    <para>In so many words, software will do what you tell it to do, not what
+    you meant it to do. Considering that the Non-subscribers group was a bad
+    idea to begin with, we have summed up the exact reason such a feature will
+    never, ever be implemented so please stop asking for it. Instead of asking
+    us to give you a big gun to shoot your feet with please do try fixing your
+    site's ACL setup. Just keep in mind the key analogy: user groups are keys;
+    they are used to unlock doors; like keys, you can have them or you don't.
+    It will take you probably an extra half a day in planning and save you
+    months or years of frustration.</para>
+
+    <para>For what is worth, yours truly (the lead developer of this
+    component), had to design the user groups for our own site
+    <emphasis>twice</emphasis>. My first try was a failed attempt using the
+    "Non-subscriber" user group idea. It only took me a day to realise how bad
+    and how nonsensical this ACL setup was. Learn from my mistakes and heed my
+    advice.</para>
+
     <section xml:id="integration-cb">
       <title>Community Builder integration</title>
 
