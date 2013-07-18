@@ -58,7 +58,7 @@ class AkeebasubsControllerLevels extends FOFController
 				}
 			}
 
-			$model->access_user_id(JFactory::getUser()->id);
+			$this->getThisModel()->access_user_id(JFactory::getUser()->id);
 
 			return true;
 		}
