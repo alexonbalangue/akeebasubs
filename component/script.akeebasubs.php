@@ -122,6 +122,7 @@ class Com_AkeebasubsInstallerScript
 				'paypal'				=> 1,
 				'paypalpaymentspro'		=> 0,
 				'paypalproexpress'		=> 0,
+				'paysafe'				=> 0,
 				'payu'					=> 0,
 				'postfinancech'			=> 0,
 				'przelewy24'			=> 0,
