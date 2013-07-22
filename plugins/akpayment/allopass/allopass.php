@@ -334,8 +334,6 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 	 */
 	private function isValidIPN($data)
 	{
-		var_dump($data);die();
-
 		$secretKey = $this->params->get('skey','');
 
 		$apiHash = 'sha1';
