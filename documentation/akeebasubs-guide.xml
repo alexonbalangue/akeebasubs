@@ -17,89 +17,7 @@
       </affiliation>
     </author>
 
-    <pubdate>September 2012</pubdate>
-
-    <revhistory>
-      <revision>
-        <revnumber>1.0.b1</revnumber>
-
-        <date>April 2011</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-
-      <revision>
-        <revnumber>1.0.b4</revnumber>
-
-        <date>July 2011</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-
-      <revision>
-        <revnumber>1.0.0</revnumber>
-
-        <date>September 2011</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-
-      <revision>
-        <revnumber>2.0.a2</revnumber>
-
-        <date>October 2011</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-
-      <revision>
-        <revnumber>2.0.b2</revnumber>
-
-        <date>December 2011</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-
-      <revision>
-        <revnumber>2.0.RC1</revnumber>
-
-        <date>January 2012</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-
-      <revision>
-        <revnumber>2.2</revnumber>
-
-        <date>April 2012</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-
-      <revision>
-        <revnumber>2.4</revnumber>
-
-        <date>September 2012</date>
-
-        <author>
-          <personname><firstname>Nicholas</firstname><othername>K.</othername><surname>Dionysopoulos</surname></personname>
-        </author>
-      </revision>
-    </revhistory>
+    <pubdate>July 2013</pubdate>
 
     <legalnotice>
       <para>Permission is granted to copy, distribute and/or modify this
@@ -7686,6 +7604,61 @@ LEVEL2=11111/22222/33333</programlisting>
       </variablelist>
     </section>
 
+    <section xml:id="payment-mobilpay">
+      <title>MobilPay (Credit Card)</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - MobilPay (Credit Card)</guilabel>. Available
+      since Akeeba Subscriptions 3.2.1.</para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the Romanian MobilPay payments
+      service. There are two plugins for MobilPay; one for credit cards and
+      one for payments via SMS. This is the credit card version.</para>
+
+      <para>The options you have with this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "MobilPay" or type in a custom name to
+            show to your customer's, e.g. "Pay with credit card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Merchant ID</term>
+
+          <listitem>
+            <para>The Merchant ID given to you by MobilPay.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, the transactions will be performed against the
+            test server. DO NOT USE THIS ON A LIVE SITE!</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
     <section xml:id="payment-eselectplus">
       <title>Moneris eSelect Plus</title>
 
@@ -10046,6 +10019,79 @@ LEVEL2=11111/22222/33333</programlisting>
       <option>UTF-8</option> and click on <guibutton>Save</guibutton>.</para>
     </section>
 
+    <section xml:id="payment-paysafe">
+      <title>PaySafe Card</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - PaySafe Card</guilabel></para>
+
+      <para>Available since Akeeba Subscriptions 3.2.1.</para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This is a payment plugin which allows you to use the payment
+      processor PaySafe Card. This payment method only accepts prepaid cards
+      which are bought using cash at local stores in various countries.</para>
+
+      <note>
+        <para>The maximum charge acceptable by PaySafe Card is 1000
+        Euros.</para>
+      </note>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "PaySafe Card" or type in a custom name
+            to show to your customer's, e.g. "Pay with PaySafe Card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Username</term>
+
+          <listitem>
+            <para>Your PaySafe Card merchant username.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Password</term>
+
+          <listitem>
+            <para>Your PaySafe Card merchant password.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, all transactions will be performed against the
+            sandbox (testing server). This is designed for integration tests,
+            BEFORE going live with your site. <emphasis role="bold">NEVER,
+            EVER, NO MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION
+            SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR
+            CUSTOMERS.</emphasis></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
     <section xml:id="payment-payu">
       <title>PayU</title>
 
@@ -10741,6 +10787,54 @@ LEVEL2=11111/22222/33333</programlisting>
         processors. As a result you cannot have Robokassa and any other
         payment plugin enabled at the same time.</para>
       </important>
+    </section>
+
+    <section xml:id="payment-saferpay">
+      <title>SaferPay</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - Saferpay</guilabel></para>
+
+      <para>Available since Akeeba Subscriptions 2.4.5.</para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This is a payment plugin which allows you to use the payment
+      processor <link
+      xlink:href="http://saferpay.com/index.html">Saferpay</link> by SIX
+      Payment Services.</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "Saferpay" or type in a custom name to
+            show to your customer's, e.g. "Pay with credit card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Account ID</term>
+
+          <listitem>
+            <para>The account ID give to you by SaferPay</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
     </section>
 
     <section xml:id="payment-scnet">

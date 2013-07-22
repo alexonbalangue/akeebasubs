@@ -129,6 +129,7 @@ class Com_AkeebasubsInstallerScript
 				'rbkmoney'				=> 0,
 				'realex'				=> 0,
 				'robokassa'				=> 0,
+				'saferpay'				=> 0,
 				'scnet'					=> 0,
 				'scnetintegrated'		=> 0,
 				'skrill'				=> 0,
