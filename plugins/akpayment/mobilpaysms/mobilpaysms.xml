@@ -31,7 +31,7 @@
 				  <option value="0">JNo</option>
 				  <option value="1">JYes</option>
 				</field>
-                <field name="mpmapping" type="textarea" default="" label="PLG_AKPAYMENT_MOBILPAY_MAPPRICEPOINTS_TITLE" description="PLG_AKPAYMENT_ALLOPASS_MAPPRICEPOINTS_DESCRIPTION" rows="5" cols="30" />
+                <field name="mpmapping" type="textarea" default="" label="PLG_AKPAYMENT_MOBILPAY_MAPPRICEPOINTS_TITLE" description="PLG_AKPAYMENT_MOBILPAY_MAPPRICEPOINTS_DESCRIPTION" rows="5" cols="30" />
 			</fieldset>
 		</fields>
 	</config>

@@ -19,7 +19,7 @@ class plgAkpaymentMobilpaysms extends plgAkpaymentAbstract
 		$config = array_merge($config, array(
 			'ppName'		=> 'mobilpaysms',
 			'ppKey'			=> 'PLG_AKPAYMENT_MOBILPAYSMS_TITLE',
-			'ppImage'		=> JURI::root().'plugins/akpayment/mobilpaycc/mobilpaysms/logo.gif'
+			'ppImage'		=> JURI::root().'plugins/akpayment/mobilpaysms/mobilpaysms/logo.gif'
 		));
 
 		parent::__construct($subject, $config);
@@ -67,7 +67,7 @@ class plgAkpaymentMobilpaysms extends plgAkpaymentAbstract
 		require_once 'mobilpaysms/library/Invoice.php';
 		require_once 'mobilpaysms/library/Address.php';
 
-		$x509FilePath = JPATH_ROOT.'/plugins/akpayment/mobilpaysms/mobilpaycc/private/public.cer';
+		$x509FilePath = JPATH_ROOT.'/plugins/akpayment/mobilpaysms/mobilpaysms/private/public.cer';
 
 		srand((double) microtime() * 1000000);
 
