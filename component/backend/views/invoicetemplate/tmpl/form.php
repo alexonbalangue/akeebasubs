@@ -118,6 +118,17 @@ $editor = JFactory::getEditor();
 			</span>
 		</div>
 	</div>
+	<div class="control-group">
+		<label for="country" class="control-label" class="mainlabel">
+			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_NOINVOICE'); ?>
+		</label>
+		<div class="controls">
+			<?php echo JHTML::_('select.booleanlist', 'noinvoice', null, $this->item->noinvoice); ?>
+			<span class="help-block">
+				<?php //echo JText::_(''); ?>
+			</span>
+		</div>
+	</div>
 
 	<h3><?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_TEMPLATE')?></h3>
 	<?php echo $editor->display( 'template',  $this->item->template, '97%', '500', '50', '20', false ) ; ?>

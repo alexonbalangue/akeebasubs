@@ -2222,6 +2222,33 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Access</term>
+
+          <listitem>
+            <para>Since Akeeba Subscriptions 3.2.1 you can define which users
+            can see which subscriptions. The default option (Public) means
+            that all users, logged in or not, can see the subscription level
+            and subscribe to it.</para>
+
+            <important>
+              <para>This feature is VERY powerful. Just like Joomla!'s ACLs it
+              will obediently allow someone to create the most pointless
+              setups possible. Remember that a user must ALREADY belong to a
+              group contained in this access level to be able to subscribe to
+              this subscription level. For instance, let's say have a user
+              group called Subscribers and a viewing access level called
+              Subscriber Access containing only the Subscribers group. If you
+              set a subscription level to the Subscribers access level then a
+              user must already be a subscriber (belong to the Subscribers
+              user group) before they can subscribe to your site. If this is
+              your only subscription level you have just shot yourself in the
+              feet. Think about it. If I need to be a subscriber before I can
+              subscribe, how can I ever subscribe to your site?</para>
+            </important>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Forbid renewals</term>
 
           <listitem>
@@ -5893,6 +5920,84 @@ Rule C gives $ 30 discount</programlisting>
       self-induced problem. <emphasis role="bold">YOU MUST NEVER, EVER CHANGE
       THE ACCESS OF THE PLUGINS</emphasis>!</para>
     </warning>
+
+    <bridgehead>Can I request a custom payment plugin?</bridgehead>
+
+    <para>Generally yes, you can request the creation of a custom payment
+    plugin. In order for us to do that there has to be an API for the payment
+    processor available. If the API is not available to the general public you
+    will have to provide it to us. You must also be willing to test it on a
+    site of yours where we can also have access for debugging purposes.
+    Usually a test or staging site will do just fine.</para>
+
+    <para>The regular base price for creating a custom payment plugin is 100
+    Euros. If you are a subscriber, you are eligible for a discount on this
+    base price:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Deluxe and Commerce subscribers get a 100% discount on the base
+        price</para>
+      </listitem>
+
+      <listitem>
+        <para>Subscribers to AkeebaSubsc get a 75% discount on the base
+        price</para>
+      </listitem>
+
+      <listitem>
+        <para>All other subscribers get a 25% discount on the base
+        price</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Discounts are only applied to the base price of the first custom
+    payment plugin each subscriber requests per subscription term (year).
+    Additional plugins are charged at full price. Payment processors with
+    multiple payment workflows that differ significantly as far as the
+    implementation goes (e.g. by credit card and by SMS) are considered
+    multiple payment plugins as far as billing is concerned.</para>
+
+    <para>The creation of a custom plugin takes between 2 and 8 weeks,
+    depending on our workload. Please try to contact us at least two and a
+    half months before your site is scheduled to go live to allow for adequate
+    time to create and test the payment plugin. If you are in a rush we can
+    create the plugin in a guaranteed period of 2 weeks for a rush fee of 200
+    Euros. Discounts do not apply on the rush fee and we reserve the right to
+    decline rush development if our workload doesn't allow us honouring the 2
+    weeks deadline.</para>
+
+    <para>All integration plugins created are included in the next release of
+    Akeeba Subscriptions. This is why our prices are significantly lower than
+    the actual cost for creating these plugins. If you want a private plugin,
+    i.e. a plugin that will not be included in the next release of Akeeba
+    Subscriptions, there is a surcharge of 500 Euros to cover our actual
+    development costs. Discounts do not apply to the privacy surcharge.
+    Updates to your private plugin are quoted per case, with a minimum fee of
+    100 Euros. Bugfixes are provided free of charge for the first three (3)
+    months.</para>
+
+    <para>If you are not a subscriber you have to pay 40% in advance. If you
+    are a subscriber you only need to pay 40% of the rush fee and privacy
+    surcharge (if applicable) in advance. When we have the plugin in a usable
+    state we will ask you to test it, using our latest development build ("dev
+    release"). If you do not find any issues or do not reply at all within a
+    week we will send you a proforma invoice. Upon payment of the balance of
+    your account via bank transfer we will issue the final invoice.</para>
+
+    <para>The prices above do not include VAT 18%. If you are outside the
+    European Union you do not have to pay VAT. If you have an EU business with
+    a VIES-registered VAT number you do not have to pay any VAT due to the
+    reverse charge VAT system in the Eurozone. This exemption does not apply
+    to residents and businesses of the Republic of Cyprus; all Cypriot
+    residents and businesses are charged VAT.</para>
+
+    <para>We reserve the right to decline the creation of a custom payment
+    plugin due to technical reasons; high workload which would make it
+    impossible to deliver on time; or force majeur. We try our best to let you
+    know as soon as you contact us with your request. In the unlikely event
+    that we have to cancel the plugin creation after accepting the work order
+    we will refund any downpayment you made in full.</para>
 
     <section xml:id="payment-2checkout">
       <title>2Checkout Standard Purchase Routine</title>
@@ -11507,6 +11612,159 @@ LEVEL2=11111/22222/33333</programlisting>
     standard Joomla! plugins, published in the <option>akeebasubs</option>
     group.</para>
 
+    <bridgehead>Frequently asked question: I want to be able to add users to
+    groups when their subscription expires</bridgehead>
+
+    <para>Executive summary: this feature will never be implemented. It
+    signifies a wrong ACL setup on your site and will mathematically lead to
+    unintuitive behaviour that you will consider as a bug (even though the
+    component will actually do exactly what you tell it to do). And now for
+    the details.</para>
+
+    <para>Joomla! ACLs are modelled after the Microsoft Windows ACL system. In
+    this model the default behaviour is having no access to anything unless
+    explicitly given. In essence, Joomla! user groups act as <emphasis>keys to
+    doors</emphasis>. You can either have a key or you don't. If you have a
+    key you can unlock the door. If you don't you can't go through that door.
+    This is an oversimplified analogy but holds true for pretty much every
+    correctly set up site.</para>
+
+    <para>Some people don't understand that and end up with something like
+    this. A group, let's call it Subscribers, which grants access privileges.
+    Another group, let's call it Non Subscribers, denying access privileges.
+    The second group is redundant and means that the ACL setup on that site is
+    incorrect.</para>
+
+    <para>Further to that, implementing a feature which would allow you to add
+    users to groups when their subscription expires and remove users from
+    groups when their subscription becomes active will lead to unintuitive
+    behaviour. Remember that integration plugins run per user, not per
+    subscription. All active and inactive subscriptions of the user are
+    considered and the sum of all changes is applied to her account. This is
+    what allows you to, say, change the user group assignments per
+    subscription level and click on the Run Integrations button to apply them
+    to all subscribers without having to manually edit each and every user
+    account manually. Let's illustrate this with an example. Consider a site
+    with the following subscription setup.</para>
+
+    <para>SILVER:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on subscription: Silver Group</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on subscription: Non-subscriber</para>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on expiration: Non-subscriber</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on expiration: Silver Group</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>GOLD:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on subscription: Silver Group, Gold Group</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on subscription: Non-subscriber</para>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para>Add on expiration: Non-subscriber</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove on expiration: Silver Group, Gold Group</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This looks like a pretty straightforward setup, right?</para>
+
+    <para>Let's consider a client named Alice. She buys a SILVER subscription.
+    She is added to the Silver Group. Then her subscription expires. She is
+    removed from the Silver Group and added to the Non-subscriber
+    group.</para>
+
+    <para>Two months later, Alice comes back to the site and buys a Gold
+    subscription. You'd expect that she would be added to the Silver and Gold
+    groups and removed from the Non-subscriber group, right? Well, wrong.
+    Here's what happens. The add/remove groups being considered are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Remove from groups:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Silver Group (because of the expired SILVER
+            subscription)</para>
+          </listitem>
+
+          <listitem>
+            <para>Non-subscriber (because of the new GOLD subscription)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Add to groups:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Silver Group (because of the new GOLD subscription)</para>
+          </listitem>
+
+          <listitem>
+            <para>Gold Group (because of the new GOLD subscription)</para>
+          </listitem>
+
+          <listitem>
+            <para>Non-subscriber (because of the expired SILVER
+            subscription)</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+
+    <para>You obviously can't add and remove a user to the same group. If a
+    group is both in the add and remove lists it is removed from both. If you
+    have to give and remove a key at the same time, you get to do nothing. It
+    makes sense, doesn't it? So what changes are we going to do to Alice's
+    account? Simple: add her to the Gold Group. This means that she's now a
+    member of the Gold Group and the Non-subscribers group (she was added to
+    it when her SILVER subscription expires). The end result is that Alice
+    paid for a subscription but she has no access.</para>
+
+    <para>In so many words, software will do what you tell it to do, not what
+    you meant it to do. Considering that the Non-subscribers group was a bad
+    idea to begin with, we have summed up the exact reason such a feature will
+    never, ever be implemented so please stop asking for it. Instead of asking
+    us to give you a big gun to shoot your feet with please do try fixing your
+    site's ACL setup. Just keep in mind the key analogy: user groups are keys;
+    they are used to unlock doors; like keys, you can have them or you don't.
+    It will take you probably an extra half a day in planning and save you
+    months or years of frustration.</para>
+
+    <para>For what is worth, yours truly (the lead developer of this
+    component), had to design the user groups for our own site
+    <emphasis>twice</emphasis>. My first try was a failed attempt using the
+    "Non-subscriber" user group idea. It only took me a day to realise how bad
+    and how nonsensical this ACL setup was. Learn from my mistakes and heed my
+    advice.</para>
+
     <section xml:id="integration-cb">
       <title>Community Builder integration</title>
 
@@ -13078,19 +13336,8 @@ LEVEL3=entry1</programlisting>
           <listitem>
             <para>This is a list for assigning ranks to users when their
             subscription becomes active. When a user has an active
-            subscription to the specified level, he'll be assigned to the rank
-            mentioned on the right hand of the equal sign. Each assignment is
-            done like this:</para>
-
-            <programlisting>LEVEL1=Rank 1</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and Rank
-            1 is the name of the EasyDiscuss rank you want to add a user to
-            when he subscribes.</para>
-
-            <para>You can also use the numeric IDs of subscription levels
-            and/or ranks instead of their titles. However, we consider working
-            with numeric IDs very counter-intuitive.</para>
+            subscription to the specified level, he'll be assigned to the
+            rank.</para>
 
             <important>
               <para>Please note that EasyDiscuss only allows one rank per
@@ -13107,8 +13354,7 @@ LEVEL3=entry1</programlisting>
             <para>This is the list for removing ranks from users when their
             subscription becomes inactive. When a user's subscription to the
             specified level expires, he'll be removed from the rank mentioned
-            on the right hand of the equal sign. Each assignment is done as in
-            Active Rank above.</para>
+            here. Each assignment is done as in Active Rank above.</para>
           </listitem>
         </varlistentry>
 
@@ -13118,26 +13364,8 @@ LEVEL3=entry1</programlisting>
           <listitem>
             <para>This is a list for assigning subscription levels to
             EasyDiscuss badges. When a user has an active subscription to the
-            specified level, he'll be given the EasyDiscuss badge mentioned on
-            the right hand of the equal sign. Each assignment is done like
-            this:</para>
-
-            <programlisting>LEVEL1=Badge 1,Badge 2,Badge 3</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Badge 1, Badge 2 and Badge 3 are the names of the EasyDiscuss
-            badges you want to add a user to when he subscribes. If you want
-            to assign multiple subscription levels to multiple badges, you
-            have to do something like that (separate multiple lines with a
-            single press of the ENTER key on your keyboard):</para>
-
-            <programlisting>LEVEL1=Badge 1,Badge 2,Badge 3
-LEVEL2=Badge 2
-LEVEL3=Badge 4,Badge 1</programlisting>
-
-            <para>You can also use the numeric IDs of subscription levels and
-            badges instead of their titles. However, we consider working with
-            numeric IDs very counter-intuitive.</para>
+            specified level, he'll be given the EasyDiscuss badge mentioned
+            here.</para>
           </listitem>
         </varlistentry>
 
@@ -13147,30 +13375,7 @@ LEVEL3=Badge 4,Badge 1</programlisting>
           <listitem>
             <para>Likewise, this is the list of the EasyDiscuss badges to
             remove a user from when his subscription to the specified level is
-            no longer active. Do note that you can specify a different set of
-            badges to remove the user from than the ones you are adding him
-            to. For example:</para>
-
-            <programlisting>LEVEL1=Badge 1,Badge 2
-LEVEL2=Badge 2
-LEVEL3=Badge 1</programlisting>
-
-            <para>In this example, together with the rules displayed in
-            "Active Badge", when a subscription to the LEVEL1 level expires,
-            the user will still belong to EasyDiscuss badgeBadgeList 3, as
-            he's not removed from it; he's only removed only from the badges
-            Badge 1 and Badge 2. Likewise, if the user has an expired LEVEL1
-            subscription and an active LEVEL2 subscription he'll now belong to
-            badges Badge 2 and Badge 3: Badge 3 because it's not removed when
-            his subscription expires and badge Badge 2 because his active
-            LEVEL2 subscription suggests that he should be added to Badge 2
-            despite his expired LEVEL1 subscription.</para>
-
-            <para>If you find this hard to understand, join the club. ACLs are
-            not meant to be easy to setup or understand. It's a power feature
-            and, as such, poses a great difficulty to even the most seasoned
-            web site integrators. Take your time and experiment on a dev copy
-            of your site before going live.</para>
+            no longer active.</para>
           </listitem>
         </varlistentry>
       </variablelist>

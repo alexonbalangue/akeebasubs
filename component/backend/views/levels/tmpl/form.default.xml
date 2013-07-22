@@ -31,6 +31,8 @@
 		<header name="price" type="field" sortable="true" />
 
 		<header name="ordering" type="ordering" sortable="true" tdwidth="20px" />
+		
+		<header name="access" type="accesslevel" sortable="true" tdwidth="8%" />
 
 		<header name="enabled" type="published" sortable="true" tdwidth="8%" />		
 	</headerset>
@@ -61,6 +63,8 @@
 		<field name="price" type="akeebasubslevelsprice" />
 
 		<field name="ordering" type="ordering" labelclass="order"/>
+		
+		<field name="access" type="accesslevel"/>
 
 		<field name="enabled" type="published"/>
 	</fieldset>

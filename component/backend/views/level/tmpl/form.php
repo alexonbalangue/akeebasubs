@@ -54,6 +54,24 @@ $this->loadHelper('cparams');
 		</div>
 
 		<div class="control-group">
+			<label for="access" class="control-label">
+				<?php echo JText::_('JFIELD_ACCESS_LABEL'); ?>
+			</label>
+			<div class="controls">
+				<?php
+				if(version_compare(JVERSION, '3.0', 'gt'))
+				{
+					echo JHTML::_('access.level', 'access', $this->item->access);
+				}
+				else
+				{
+					echo JHTML::_('list.accesslevel', $this->item);
+				}
+				?>
+			</div>
+		</div>
+
+		<div class="control-group">
 			<label for="image_field" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_IMAGE'); ?>
 			</label>
