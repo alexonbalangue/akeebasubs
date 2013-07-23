@@ -12,6 +12,8 @@
 	<files>
 		<filename plugin="projectfork4">projectfork4.php</filename>
 		<folder>projectfork4</folder>
+		<folder>override</folder>
+		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_projectfork4.ini</language>
