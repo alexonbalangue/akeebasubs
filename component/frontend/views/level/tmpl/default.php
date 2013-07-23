@@ -23,6 +23,7 @@ $styleDiscount	= $this->cparams->showdiscountfield <= 0 ? 'display:none' : '';
 $styleTax		= $this->cparams->showtaxfield <= 0 ? 'display:none' : '';
 $styleRegular	= $this->cparams->showregularfield <= 0 ? 'display:none' : '';
 $styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
+$requireCoupon  = $this->cparams->reqcoupon;
 
 $paymentMethodsCount = count(AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id, 'return_raw_list' => 1)));
 
@@ -145,7 +146,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 	<fieldset>
 		<legend class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></legend>
 
-		<?php if($this->validation->price->net > 0): ?>
+		<?php if($requireCoupon || ($this->validation->price->net > 0)): ?>
 		<div class="control-group" style="<?php echo $styleCoupon ?>">
 			<label for="coupon" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?>

@@ -9,6 +9,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] The name and email should not display validation information the first time you load the subscription page
 # [LOW] Some third party plugins add an empty Itemid to the request data, screwing up the payment notification validation with some payment processors (e.g. PayPal)
 # [LOW] Custom fields should only allow specific characters in their slugs
+# [LOW] Coupon code field not shown  for free subscriptions when require valid coupon code is on
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
