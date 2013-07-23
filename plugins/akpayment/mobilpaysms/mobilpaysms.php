@@ -65,9 +65,22 @@ class plgAkpaymentMobilpaysms extends plgAkpaymentAbstract
 		require_once 'mobilpaysms/library/Request/Abstract.php';
 		require_once 'mobilpaysms/library/Request/Sms.php';
 		require_once 'mobilpaysms/library/Invoice.php';
-		require_once 'mobilpaysms/library/Address.php';
 
 		$x509FilePath = JPATH_ROOT.'/plugins/akpayment/mobilpaysms/mobilpaysms/private/public.cer';
+
+		if(!file_exists($x509FilePath))
+		{
+			if(version_compare(JVERSION, '3.0', 'ge'))
+			{
+				throw new Exception('Public certificate is needed in order to elaborate requested data', 500);
+			}
+			else
+			{
+				JError::raiseError(500, 'Public certificate is needed in order to elaborate requested data');
+			}
+
+			return false;
+		}
 
 		srand((double) microtime() * 1000000);
 
@@ -229,6 +242,20 @@ class plgAkpaymentMobilpaysms extends plgAkpaymentAbstract
 		{
 			$privateKeyFilePath = JPATH_ROOT.'/plugins/akpayment/mobilpaysms/mobilpaysms/private/private.key';
 
+			if(!file_exists($privateKeyFilePath))
+			{
+				if(version_compare(JVERSION, '3.0', 'ge'))
+				{
+					throw new Exception('Private key is needed in order to elaborate requested data', 500);
+				}
+				else
+				{
+					JError::raiseError(500, 'Private key is needed in order to elaborate requested data');
+				}
+
+				return false;
+			}
+
 			try
 			{
 				$objPmReq = Mobilpay_Payment_Request_Abstract::factoryFromEncrypted($data['env_key'], $data['data'], $privateKeyFilePath);
@@ -327,20 +354,7 @@ class plgAkpaymentMobilpaysms extends plgAkpaymentAbstract
 			$levelId = $this->ASLevelToId($level);
 			if($levelId < 0) continue;
 
-			$rawService = $parts[1];
-			if(stristr($parts[1], ':'))
-			{
-				// Legacy parameter handling
-				$service = explode(':', $rawService);
-			}
-			else
-			{
-				$service = explode('/', $rawService);
-			}
-			if(empty($service)) continue;
-			if(count($service) < 2) continue;
-
-			$serviceId = trim($service[0]);
+			$serviceId = $parts[1];
 			if (empty($serviceId))
 			{
 				continue;
