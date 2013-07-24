@@ -7,6 +7,7 @@ Akeeba Subscriptions 3.2.1
 # [MEDIUM] #175 The re-login feature of the post-purchase message page didn't work reliably
 # [MEDIUM] Freshbooks integration would not install correctly
 # [MEDIUM] Projectfork4 integration would not install correctly
+# [MEDIUM] The PayMill plugin would allow a user to perform the charge twice if they were fast enough clicking the payment button
 # [LOW] The name and email should not display validation information the first time you load the subscription page
 # [LOW] Some third party plugins add an empty Itemid to the request data, screwing up the payment notification validation with some payment processors (e.g. PayPal)
 # [LOW] Custom fields should only allow specific characters in their slugs
