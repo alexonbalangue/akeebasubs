@@ -112,6 +112,8 @@ class Com_AkeebasubsInstallerScript
 				'ifthen'				=> 0,
 				'moip'					=> 0,
 				'moipassinaturas'		=> 0,
+				'mobilpaycc'			=> 0,
+				'mobilpaysms'			=> 0,
 				'moneris'				=> 0,
 				'nochex'				=> 0,
 				'none'					=> 0,
