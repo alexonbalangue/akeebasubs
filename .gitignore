@@ -46,3 +46,5 @@ component/backend/assets/tcpdf/certificates/*.cer
 _test
 
 /.idea
+plugins/akpayment/mobilpaycc/mobilpaycc/private/*.cer
+plugins/akpayment/mobilpaysms/mobilpaysms/private/*.cer
