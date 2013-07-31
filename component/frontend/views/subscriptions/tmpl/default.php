@@ -64,8 +64,21 @@ if (!property_exists($this, 'extensions'))
 		<tbody>
 			<?php if(count($this->items)): ?>
 			<?php $m = 1; $i = 0; ?>
+
+			<?php foreach(array('active', 'waiting', 'pending', 'expired') as $area): ?>
+			<?php if (!count($this->sortTable[$area])) continue; ?>
+			<tr>
+				<td colspan="7">
+					<h4><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_AREAHEADING_' . $area) ?></h4>
+				</td>
+			</tr>
 			<?php foreach($this->items as $subscription):?>
 			<?php
+				if (!in_array($subscription->akeebasubs_subscription_id, $this->sortTable[$area]))
+				{
+					continue;
+				}
+
 				$m = 1 - $m;
 				$email = trim($subscription->email);
 				$email = strtolower($email);
@@ -141,8 +154,7 @@ if (!property_exists($this, 'extensions'))
 					<?php endif; ?>
 					<?php endif; ?>
 
-	            	<?php if(($subscription->state == 'C') && (in_array($subscription->akeebasubs_level_id, $this->activeLevels))):?>
-					<?php if($canRenew): ?>
+					<?php if(in_array($area, array('active','expired')) && $canRenew): ?>
 	            	<?php $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 						->setId($subscription->akeebasubs_level_id)
 						->getItem()
@@ -151,9 +163,9 @@ if (!property_exists($this, 'extensions'))
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
 	            	<?php endif;?>
-	            	<?php endif;?>
 	            </td>
 			</tr>
+			<?php endforeach; ?>
 			<?php endforeach; ?>
 			<?php else: ?>
 			<tr>

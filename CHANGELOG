@@ -4,6 +4,7 @@ Akeeba Subscriptions 3.2.1
 + 2Checkout plugin with recurring payments support
 + #176 PaySafe Card payment method
 + #169 Surcharge per payment method
++ #177 Sort "My Subscriptions" page by active / waiting / expired status
 # [MEDIUM] #175 The re-login feature of the post-purchase message page didn't work reliably
 # [MEDIUM] Freshbooks integration would not install correctly
 # [MEDIUM] Projectfork4 integration would not install correctly
