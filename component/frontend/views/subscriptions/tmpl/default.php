@@ -86,7 +86,11 @@ if (!property_exists($this, 'extensions'))
 
 				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
-				if($level->only_once)
+				if ($level->only_once)
+				{
+					$canRenew = false;
+				}
+				elseif (!$level->enabled)
 				{
 					$canRenew = false;
 				}
