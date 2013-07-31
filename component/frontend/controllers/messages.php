@@ -91,7 +91,7 @@ class AkeebasubsControllerMessages extends FOFController
 				self::$loggedinUser = true;
 			}
 		}
-		elseif ($userid != $subscription->user_id)
+		elseif ($userid == $subscription->user_id)
 		{
 			// User already logged in. We'll log him back in (due to Joomla!
 			// ACLs not being applied otherwise) but we are not going to log him
