@@ -86,10 +86,13 @@ if (!property_exists($this, 'extensions'))
 
 				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
-				if($level->only_once) {
-					if(in_array($subscription->akeebasubs_level_id,$this->subIDs)) {
-						$canRenew = false;
-					}
+				if ($level->only_once)
+				{
+					$canRenew = false;
+				}
+				elseif (!$level->enabled)
+				{
+					$canRenew = false;
 				}
 
 				$jPublishUp = new JDate($subscription->publish_up);
@@ -99,7 +102,13 @@ if (!property_exists($this, 'extensions'))
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
 				<td>
+					<?php if ($level->content_url): ?>
+					<a href="<?php echo $this->escape($level->content_url) ?>">
+					<?php endif; ?>
 					<?php echo $this->escape($subscription->title)?>
+					<?php if ($level->content_url): ?>
+					</a>
+					<?php endif; ?>
 				</td>
 				<td>
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>
@@ -154,12 +163,25 @@ if (!property_exists($this, 'extensions'))
 					<?php endif; ?>
 					<?php endif; ?>
 
-					<?php if(in_array($area, array('active','expired')) && $canRenew): ?>
-	            	<?php $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-						->setId($subscription->akeebasubs_level_id)
-						->getItem()
-						->slug;?>
-	            	<a class="btn btn-mini btn-inverse" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$slug)?>">
+					<?php if(in_array($area, array('active','expired'))
+						&& ($canRenew || ($level->only_once && !empty($level->renew_url))
+					)): ?>
+	            	<?php
+						if ($canRenew)
+						{
+							$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+								->setId($subscription->akeebasubs_level_id)
+								->getItem()
+								->slug;
+							$renewURL = JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$slug);
+						}
+						else
+						{
+							$renewURL = $this->escape($level->renew_url);
+						}
+
+					?>
+	            	<a class="btn btn-mini btn-inverse" href="<?php echo $renewURL?>">
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
 	            	<?php endif;?>

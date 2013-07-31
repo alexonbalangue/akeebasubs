@@ -128,6 +128,10 @@ class AkeebasubsControllerLevels extends FOFController
 				->getItemList();
 			if(!count($levels)) {
 				// User trying to renew a level which is marked as only_once
+				if ($level->renew_url)
+				{
+					JFactory::getApplication()->redirect($level->renew_url);
+				}
 				return false;
 			}
 			$this->getThisModel()->setId($id);

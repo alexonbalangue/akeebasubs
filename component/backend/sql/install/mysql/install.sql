@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`access` int(11) NOT NULL DEFAULT '1',
 	`fixed_date` DATETIME NULL,
 	`payment_plugins` VARCHAR(2096) NOT NULL DEFAULT '',
+	`renew_url` VARCHAR(2048) NULL DEFAULT '',
+	`content_url` VARCHAR(2048) NULL DEFAULT '',
 	`params` TEXT,
 
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',

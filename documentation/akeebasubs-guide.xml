@@ -2274,6 +2274,76 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Payment methods</term>
+
+          <listitem>
+            <para>Select one or more payment methods to be shown for this
+            subscription level. If you select the <option>- No selection
+            -</option> option all enabled payment methods are shown
+            (default).</para>
+
+            <para>Pro tip: This feature is especially useful when you want to
+            limit which subscription levels will allow off-line or mobile
+            (SMS) payment. Of course you can choose between any of the payment
+            plugins you have activated.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Custom renewal URL</term>
+
+          <listitem>
+            <para>Normally Akeeba Subscriptions will determine the renewal
+            page's URL automatically, sending the user to re-subscribe to the
+            same subscription level he's renewing. This is not desirable in
+            some cases. You can enter a custom renewal URL here. A few things
+            to notice:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>When you enter a custom renewal URL the Renew button
+                will be shown in the front-end of your site even when the
+                subscription level has Forbid renewals set to Yes. In this
+                case the renewal URL will be the custom URL you've entered
+                here.</para>
+              </listitem>
+
+              <listitem>
+                <para>If a user tries to manually access the subscription URL
+                of a subscription level which has Forbid renewals set to Yes
+                he will normally be shown a 403 Forbidden error page if he
+                already has a subscription to this level. When the
+                subscription level, however, has a custom renewal URL he will
+                not be shown an error page; he will be redirected to the
+                custom renewal URL.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>These features allow you to have a free (trial) subscription
+            which automatically directs the user to renew it with a paid
+            subscription when it expires. All you need to do is enter the
+            subscription page URL for the paid subscription in the Custom
+            renewal URL field.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Content URL</term>
+
+          <listitem>
+            <para>If you have a front-end menu item of the <option>All of my
+            subscriptions</option> type, the title of the subscription level
+            will be linked to this URL. This URL can point to anything. We
+            recommend giving the URL of a page on your site which explains the
+            privileges the subscriber of this subscription level has on your
+            site, e.g. linking to premium content categories, restricted
+            downloads and so on. If you leave it blank no link will be
+            generated (default behaviour before Akeeba Subscriptions
+            3.2.1).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>First expiration notification (days)</term>
 
           <listitem>
@@ -5587,6 +5657,24 @@ Rule C gives $ 30 discount</programlisting>
 
               <listitem>
                 <para>The description of the subscription level.</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[LEVEL:RENEWAL_URL]</term>
+
+              <listitem>
+                <para>The custom renewal URL, if one is entered in the
+                subscription level</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[LEVEL:CONTENT_URL]</term>
+
+              <listitem>
+                <para>The content URL, if one is entered in the subscription
+                level</para>
               </listitem>
             </varlistentry>
 
