@@ -98,7 +98,13 @@ if (!property_exists($this, 'extensions'))
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
 				<td>
+					<?php if ($level->content_url): ?>
+					<a href="<?php echo $this->escape($level->content_url) ?>">
+					<?php endif; ?>
 					<?php echo $this->escape($subscription->title)?>
+					<?php if ($level->content_url): ?>
+					</a>
+					<?php endif; ?>
 				</td>
 				<td>
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>
