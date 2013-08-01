@@ -76,10 +76,12 @@ class AkeebasubsModelImports extends FOFModel
 		static $cache = array();
 
 		// No email? Get out
-		if($data[1])
+		if(!$data[1])
 		{
 			return false;
 		}
+
+		$usermodel = FOFModel::getTmpInstance('Jusers', 'AkeebasubsModel');
 
 		// Let's cache the users
 		if(!$cache)
@@ -99,11 +101,26 @@ class AkeebasubsModelImports extends FOFModel
 				return false;
 			}
 
-			$user = JUser::getInstance();
-			$user->username = $data[0];
-			$user->email    = $data[1];
+			$params = array(
+				'name'			=> $data[3],
+				'username'		=> $data[0],
+				'email'			=> $data[1],
+				'password'		=> $data[2],
+				'password2'		=> $data[2]
+			);
 
+			// Error while creating the user
+			if(!($userid = $usermodel->createNewUser($params)))
+			{
+				return false;
+			}
 		}
+		else
+		{
+			$userid = $cache['email'][$data[1]]->id;
+		}
+
+		return true;
 	}
 
 	/**
@@ -138,12 +155,30 @@ class AkeebasubsModelImports extends FOFModel
 	 */
 	protected function performImportChecks(array $data)
 	{
+		static $cache = array();
+
+		// Do I have all the columns?
 		if(count($data) != 32)
 		{
 			return false;
 		}
 
+		// Required fields as: username, email, password, name, subscription_level, publish_up
 		if(!$data[0] || !$data[1] || !$data[2] || !$data[3] || !$data[15] || !$data[16])
+		{
+			return false;
+		}
+
+		if(!$cache)
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)->select('title')->from('#__akeebasubs_levels');
+			$rows  = $db->setQuery($query)->loadObjectList('title');
+			$cache = array_change_key_case($rows, CASE_UPPER);
+		}
+
+		// Is the subscrption level existing?
+		if(!isset($cache[strtoupper($data[15])]))
 		{
 			return false;
 		}
