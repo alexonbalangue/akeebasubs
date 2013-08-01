@@ -2051,7 +2051,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$this->paymentForm = $response;
 			}
 		} else {
-			// Zero charges; just redirect
+			// Zero charges. First apply subscription replacement
+			if (!class_exists('plgAkpaymentAbstract'))
+			{
+				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akpayment.php';
+			}
+			$updates = array();
+			plgAkpaymentAbstract::fixSubscriptionDates($subscription, $updates);
+
+			if (!empty($updates))
+			{
+				$result = $subscription->save($updates);
+				$this->_item = $subscription;
+			}
+
+			// and then just redirect
 			$app = JFactory::getApplication();
 			$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
