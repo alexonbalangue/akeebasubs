@@ -13,7 +13,7 @@ class AkeebasubsControllerImports extends FOFController
 	public function import()
 	{
 		$app       = JFactory::getApplication();
-		$model     = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
+		$model     = FOFModel::getTmpInstance('Imports', 'AkeebasubsModel');
 		$file      = JRequest::getVar('csvfile', '', 'FILES');
 		$delimiter = $this->input->getInt('csvdelimiters', 0);
 		$skipfirst = $this->input->getInt('skipfirst', 0);
