@@ -16,10 +16,17 @@ class AkeebasubsControllerImports extends FOFController
 		$model     = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
 		$file      = JRequest::getVar('csvfile', '', 'FILES');
 		$delimiter = $this->input->getInt('csvdelimiters', 0);
+		$skipfirst = $this->input->getInt('skipfirst', 0);
+
+		if($file['error'])
+		{
+			$this->setRedirect('index.php?option=com_akeebasubs&view=import', JText::_('COM_AKEEBASUBS_IMPORT_ERR_UPLOAD'), 'error');
+			return true;
+		}
 
 		// Import ok, but maybe I have warnings (ie skipped lines)
-		$result = $model->import($file, $delimiter);
-		if($result)
+		$result = $model->import($file['tmp_name'], $delimiter, $skipfirst);
+		if($result !== false)
 		{
 			$errors = $model->getErrors();
 			if($errors)

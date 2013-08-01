@@ -22,13 +22,19 @@ $this->loadHelper('select');
 			<h3><?php echo JText::_('COM_AKEEBASUBS_IMPORT_DETAILS')?></h3>
 
 			<div class="control-group">
-				<label for="levelid" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_DELIMITERS')?></label>
+				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_DELIMITERS')?></label>
 				<div class="controls">
 					<?php echo AkeebasubsHelperSelect::csvdelimiters('csvdelimiters', 1, array('class'=>'minwidth')) ?>
 				</div>
 			</div>
 			<div class="control-group">
-				<label for="levelid" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_FILE')?></label>
+				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_FIRSTLINE')?></label>
+				<div class="controls">
+					<?php echo JHTML::_('select.booleanlist', 'skipfirst')?>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_FILE')?></label>
 				<div class="controls">
 					<input type="file" name="csvfile" />
 				</div>
