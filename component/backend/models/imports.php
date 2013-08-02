@@ -79,6 +79,13 @@ class AkeebasubsModelImports extends FOFModel
 		return $result;
 	}
 
+	/**
+	 * Imports the user, creating if there isn't and updating the AS user table.
+	 *
+	 * @param   array   $data   Array coming from parsing a CSV file
+	 *
+	 * @return  bool|int        Joomla user_id if successful, otherwise false
+	 */
 	protected function importCustomer($data)
 	{
 		static $cache = array();
