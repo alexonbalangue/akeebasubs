@@ -71,6 +71,7 @@ class AkeebasubsModelImports extends FOFModel
 				continue;
 			}
 
+			$result++;
 		}
 
 		fclose($handle);
@@ -153,9 +154,88 @@ class AkeebasubsModelImports extends FOFModel
 		return $userid;
 	}
 
-	protected function importSubscription($userid, $data)
+	/**
+	 * Imports a subscription for a given user, using data coming from a CSV file
+	 *
+	 * @param   int     $userid     Joomla user_id of the imported user
+	 * @param   array   $data       Array coming from parsing a CSV file
+	 *
+	 * @return  bool    True if successful
+	 */
+	protected function importSubscription($userid, array $data)
 	{
-		return true;
+		static $levelCache = array();
+
+		JLoader::import('joomla.application.component.helper');
+
+		if(!class_exists('AkeebasubsHelperFormat')){
+			require_once JPATH_ROOT.'/administrator/components/com_akeebasubs/helpers/format.php';
+		}
+
+		if(!$levelCache)
+		{
+			$levelCache = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
+		}
+
+		$app        = JFactory::getApplication();
+		$level      = $levelCache[strtoupper($data[15])];
+		$publish_up = AkeebasubsHelperFormat::checkDateFormat($data[16]);
+
+		if(!$publish_up)
+		{
+			return false;
+		}
+
+		// Publish down
+		if($data[17])
+		{
+			$publish_down = AkeebasubsHelperFormat::checkDateFormat($data[17]);
+			if(!$publish_down)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			$temp = strtotime('+'.$level->duration.' days', $publish_up->toUnix());
+			$publish_down = new JDate($temp);
+		}
+
+		// Created on
+		if($data[27])
+		{
+			$created_on = AkeebasubsHelperFormat::checkDateFormat($data[27]);
+			if(!$created_on)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			$created_on = clone $publish_up;
+		}
+
+		$sub = FOFTable::getAnInstance('Subscription', 'AkeebasubsTable');
+
+		$bind['user_id']             = $userid;
+		$bind['akeebasubs_level_id'] = $level->akeebasubs_level_id;
+		$bind['publish_up']          = $publish_up->toSql();
+		$bind['publish_down']        = $publish_down->toSql();
+		$bind['enabled']             = $data[18] != '' ? $data[18] : 1;
+		$bind['processor']           = $data[19] ? $data[19] : 'import';
+		$bind['processor_key']       = $data[20] ? $data[20] : md5(microtime().$app->getHash(JUserHelper::genRandomPassword()));
+		$bind['state']               = $data[21] ? $data[21] : 'C';
+		$bind['net_amount']          = $data[22] ? $data[22] : 0;
+		$bind['tax_amount']          = $data[23] ? $data[23] : 0;
+		$bind['gross_amount']        = $data[24] ? $data[24] : $bind['net_amount'] + $bind['tax_amount'];
+		$bind['recurring_amount']    = $data[25] ? $data[25] : $bind['gross_amount'];
+		$bind['tax_percent']         = $data[26] ? $data[26] : (100 * $bind['tax_amount'] / $bind['net_amount']);
+		$bind['created_on']          = $created_on->toSql();
+		$bind['prediscount_amount']  = $data[28] ? $data[28] : $bind['gross_amount'];
+		$bind['discount_amount']     = $data[29] ? $data[29] : 0;
+		$bind['contact_flag']        = $data[30] ? $data[30] : 0;
+
+		return $sub->save($bind);
 	}
 
 	/**
