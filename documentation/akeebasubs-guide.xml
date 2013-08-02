@@ -5936,60 +5936,26 @@ Rule C gives $ 30 discount</programlisting>
     site of yours where we can also have access for debugging purposes.
     Usually a test or staging site will do just fine.</para>
 
-    <para>The regular base price for creating a custom payment plugin is 100
-    Euros. If you are a subscriber, you are eligible for a discount on this
-    base price:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Deluxe and Commerce subscribers get a 100% discount on the base
-        price</para>
-      </listitem>
-
-      <listitem>
-        <para>Subscribers to AkeebaSubsc get a 75% discount on the base
-        price</para>
-      </listitem>
-
-      <listitem>
-        <para>All other subscribers get a 25% discount on the base
-        price</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>Discounts are only applied to the base price of the first custom
-    payment plugin each subscriber requests per subscription term (year).
-    Additional plugins are charged at full price. Payment processors with
-    multiple payment workflows that differ significantly as far as the
-    implementation goes (e.g. by credit card and by SMS) are considered
-    multiple payment plugins as far as billing is concerned.</para>
-
-    <para>The creation of a custom plugin takes between 2 and 8 weeks,
-    depending on our workload. Please try to contact us at least two and a
-    half months before your site is scheduled to go live to allow for adequate
-    time to create and test the payment plugin. If you are in a rush we can
-    create the plugin in a guaranteed period of 2 weeks for a rush fee of 200
-    Euros. Discounts do not apply on the rush fee and we reserve the right to
-    decline rush development if our workload doesn't allow us honouring the 2
-    weeks deadline.</para>
+    <para>The base price for creating a custom payment plugin is 600 Euros
+    with a 50% deposit before we start working on it. The creation of a custom
+    plugin takes between 2 and 8 weeks, depending on our workload. Please try
+    to contact us at least two and a half months before your site is scheduled
+    to go live to allow for adequate time to create and test the payment
+    plugin.</para>
 
     <para>All integration plugins created are included in the next release of
-    Akeeba Subscriptions. This is why our prices are significantly lower than
-    the actual cost for creating these plugins. If you want a private plugin,
-    i.e. a plugin that will not be included in the next release of Akeeba
-    Subscriptions, there is a surcharge of 500 Euros to cover our actual
-    development costs. Discounts do not apply to the privacy surcharge.
-    Updates to your private plugin are quoted per case, with a minimum fee of
-    100 Euros. Bugfixes are provided free of charge for the first three (3)
-    months.</para>
+    Akeeba Subscriptions. If you want a private plugin, i.e. a plugin that
+    will not be included in the next release of Akeeba Subscriptions, there is
+    an additional charge of 1000 Euros. Updates to your private plugin are
+    quoted per case, with a minimum fee of 300 Euros. The private surcharge
+    and update fee are paid in advance, before we start doing any work. Bug
+    fixes are provided free of charge for the first three (3) months.</para>
 
-    <para>If you are not a subscriber you have to pay 40% in advance. If you
-    are a subscriber you only need to pay 40% of the rush fee and privacy
-    surcharge (if applicable) in advance. When we have the plugin in a usable
-    state we will ask you to test it, using our latest development build ("dev
-    release"). If you do not find any issues or do not reply at all within a
-    week we will send you a proforma invoice. Upon payment of the balance of
-    your account via bank transfer we will issue the final invoice.</para>
+    <para>When we have the plugin in a usable state we will ask you to test
+    it, using our latest development build ("dev release"). If you do not find
+    any issues or do not reply at all within a week we will send you a
+    proforma invoice. Upon payment of the balance of your account via bank
+    transfer we will issue the final invoice.</para>
 
     <para>The prices above do not include VAT 18%. If you are outside the
     European Union you do not have to pay VAT. If you have an EU business with
@@ -6003,7 +5969,7 @@ Rule C gives $ 30 discount</programlisting>
     impossible to deliver on time; or force majeur. We try our best to let you
     know as soon as you contact us with your request. In the unlikely event
     that we have to cancel the plugin creation after accepting the work order
-    we will refund any downpayment you made in full.</para>
+    we will refund in full any deposit you made with us.</para>
 
     <section xml:id="payment-2checkout">
       <title>2Checkout Standard Purchase Routine</title>
