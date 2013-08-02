@@ -59,11 +59,18 @@ class AkeebasubsModelImports extends FOFModel
 				continue;
 			}
 
-			if(!$this->checkCustomer($data))
+			if(!($userid = $this->importCustomer($data)))
 			{
 				$this->setError(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
 				continue;
 			}
+
+			if(!$this->importSubscription($userid, $data))
+			{
+				$this->setError(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
+				continue;
+			}
+
 		}
 
 		fclose($handle);
@@ -71,7 +78,7 @@ class AkeebasubsModelImports extends FOFModel
 		return $result;
 	}
 
-	protected function checkCustomer($data)
+	protected function importCustomer($data)
 	{
 		static $cache = array();
 
@@ -120,6 +127,34 @@ class AkeebasubsModelImports extends FOFModel
 			$userid = $cache['email'][$data[1]]->id;
 		}
 
+		// Ok, in a way or in another I have the Joomla user. Now it's time to update AS user
+		$ASuser = FOFTable::getAnInstance('User', 'AkeebasubsTable');
+
+		// Let's try loading it using Joomla id. Using the table object will assure me that I'll automatically update/create the user
+		$ASuser->load(array('user_id' => $userid));
+
+		$ASuser->isbusiness     = (int)$data[4];
+		$ASuser->businessname   = $data[5];
+		$ASuser->occupation     = $data[6];
+		$ASuser->vatnumber      = $data[7];
+		$ASuser->viesregistered = (int)$data[8];
+		$ASuser->address1       = $data[9];
+		$ASuser->address2       = $data[10];
+		$ASuser->city           = $data[11];
+		$ASuser->state          = $data[12];
+		$ASuser->zip            = $data[13];
+		$ASuser->country        = $data[14];
+
+		if(!$ASuser->store())
+		{
+			return false;
+		}
+
+		return $userid;
+	}
+
+	protected function importSubscription($userid, $data)
+	{
 		return true;
 	}
 
@@ -128,7 +163,7 @@ class AkeebasubsModelImports extends FOFModel
 	 *
 	 * @param   int     $delimiter
 	 *
-	 * @return  array    [0] => field delimiter, [1] => enclosure char
+	 * @return  array   [0] => field delimiter, [1] => enclosure char
 	 */
 	protected function decodeDelimiterOptions($delimiter)
 	{
@@ -171,10 +206,7 @@ class AkeebasubsModelImports extends FOFModel
 
 		if(!$cache)
 		{
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true)->select('title')->from('#__akeebasubs_levels');
-			$rows  = $db->setQuery($query)->loadObjectList('title');
-			$cache = array_change_key_case($rows, CASE_UPPER);
+			$cache = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
 		}
 
 		// Is the subscrption level existing?
