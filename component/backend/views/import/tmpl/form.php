@@ -17,6 +17,14 @@ $this->loadHelper('select');
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
+	<div class="alert alert-info">
+		<p><?php echo JText::_('COM_AKEEBASUBS_IMPORT_INFO') ?></p>
+	</div>
+
+	<div class="alert alert-warning">
+		<p><?php echo JText::_('COM_AKEEBASUBS_IMPORT_WARNING') ?></p>
+	</div>
+
 	<div class="row-fluid">
 		<div class="span6">
 			<h3><?php echo JText::_('COM_AKEEBASUBS_IMPORT_DETAILS')?></h3>
@@ -25,18 +33,27 @@ $this->loadHelper('select');
 				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_DELIMITERS')?></label>
 				<div class="controls">
 					<?php echo AkeebasubsHelperSelect::csvdelimiters('csvdelimiters', 1, array('class'=>'minwidth')) ?>
+					<div class="help-block">
+						<?php echo JText::_('COM_AKEEBASUBS_IMPORT_DELIMITERS_DESC'); ?>
+					</div>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_FIRSTLINE')?></label>
 				<div class="controls">
 					<?php echo JHTML::_('select.booleanlist', 'skipfirst')?>
+					<div class="help-block">
+						<?php echo JText::_('COM_AKEEBASUBS_IMPORT_FIRSTLINE_DESC'); ?>
+					</div>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_FILE')?></label>
 				<div class="controls">
 					<input type="file" name="csvfile" />
+					<div class="help-block">
+						<?php echo JText::_('COM_AKEEBASUBS_IMPORT_FILE_DESC'); ?>
+					</div>
 				</div>
 			</div>
 		</div>
