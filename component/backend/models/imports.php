@@ -98,19 +98,25 @@ class AkeebasubsModelImports extends FOFModel
 				{
 					$searchCharacter = "\r";
 				}
-				else
+				elseif ($posLF !== false)
 				{
 					$searchCharacter = "\n";
 				}
+				else
+				{
+					$searchCharacter = null;
+				}
 
 				// Roll back the file
-				$pos = strpos($line, $searchCharacter);
-				$rollback = strlen($line) - strpos($line, $searchCharacter);
-				fseek($handle, -$rollback + strlen($searchCharacter), SEEK_CUR);
-				// And chop the line
-				$line = substr($line, 0, $pos);
+				if (!is_null($searchCharacter))
+				{
+					$pos = strpos($line, $searchCharacter);
+					$rollback = strlen($line) - strpos($line, $searchCharacter);
+					fseek($handle, -$rollback + strlen($searchCharacter), SEEK_CUR);
+					// And chop the line
+					$line = substr($line, 0, $pos);
+				}
 			}
-
 
 			// Handle DOS and Mac OS classic linebreaks
 			$line = str_replace("\r\n", "\n", $line);
@@ -199,6 +205,7 @@ class AkeebasubsModelImports extends FOFModel
 
 		$userid = 0;
 		$email = $this->getCsvData('email');
+		$username = $this->getCsvData('username');
 
 		if (!empty($cache['email']))
 		{
@@ -208,22 +215,36 @@ class AkeebasubsModelImports extends FOFModel
 			}
 		}
 
+		if(($userid == 0) && !empty($cache['user']))
+		{
+			if (array_key_exists($username, $cache['user']))
+			{
+				$userid = $cache['user'][$username]->id;
+			}
+		}
+
 		// No user? Let's create it
 		if($userid == 0)
 		{
 			$params = array(
 				'name'			=> $this->getCsvData('name'),
-				'username'		=> $this->getCsvData('username'),
-				'email'			=> $this->getCsvData('email'),
+				'username'		=> $username,
+				'email'			=> $email,
 				'password'		=> $this->getCsvData('password'),
 				'password2'		=> $this->getCsvData('password')
 			);
 
 			// Error while creating the user
-			if(!($userid = $usermodel->createNewUser($params)))
+			$userid = $usermodel->createNewUser($params);
+
+			if(!$userid)
 			{
 				return false;
 			}
+
+			// Cache this user
+			$cache['email'][$email] = $userid;
+			$cache['user'][$username] = $userid;
 		}
 
 		// Ok, in a way or in another I have the Joomla user. Now it's time to update AS user
