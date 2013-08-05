@@ -16,7 +16,6 @@ class AkeebasubsControllerImports extends FOFController
 		$model     = FOFModel::getTmpInstance('Imports', 'AkeebasubsModel');
 		$file      = JRequest::getVar('csvfile', '', 'FILES');
 		$delimiter = $this->input->getInt('csvdelimiters', 0);
-		$skipfirst = $this->input->getInt('skipfirst', 0);
 
 		if($file['error'])
 		{
@@ -25,7 +24,7 @@ class AkeebasubsControllerImports extends FOFController
 		}
 
 		// Import ok, but maybe I have warnings (ie skipped lines)
-		$result = $model->import($file['tmp_name'], $delimiter, $skipfirst);
+		$result = $model->import($file['tmp_name'], $delimiter);
 		if($result !== false)
 		{
 			$errors = $model->getErrors();

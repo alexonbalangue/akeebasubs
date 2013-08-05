@@ -38,15 +38,15 @@ $this->loadHelper('select');
 					</div>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_FIRSTLINE')?></label>
+			<!--<div class="control-group">
+				<label class="control-label"><?php /*echo JText::_('COM_AKEEBASUBS_IMPORT_FIRSTLINE')*/?></label>
 				<div class="controls">
-					<?php echo JHTML::_('select.booleanlist', 'skipfirst')?>
+					<?php /*echo JHTML::_('select.booleanlist', 'skipfirst')*/?>
 					<div class="help-block">
-						<?php echo JText::_('COM_AKEEBASUBS_IMPORT_FIRSTLINE_DESC'); ?>
+						<?php /*echo JText::_('COM_AKEEBASUBS_IMPORT_FIRSTLINE_DESC'); */?>
 					</div>
 				</div>
-			</div>
+			</div>-->
 			<div class="control-group">
 				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_FILE')?></label>
 				<div class="controls">
