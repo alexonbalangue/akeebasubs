@@ -184,7 +184,10 @@ class AkeebasubsModelImports extends FOFModel
 	 */
 	protected function importCustomer()
 	{
-		static $cache = array();
+		static $cache = array(
+			'email'	=> array(),
+			'user'	=> array(),
+		);
 
 		// No email? Get out
 		if(!$this->getCsvData('email'))
@@ -194,24 +197,20 @@ class AkeebasubsModelImports extends FOFModel
 
 		$usermodel = FOFModel::getTmpInstance('Jusers', 'AkeebasubsModel');
 
-		// Let's cache the users
-		if(!$cache)
+		$userid = 0;
+		$email = $this->getCsvData('email');
+
+		if (!empty($cache['email']))
 		{
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true)->select('*')->from('#__users');
-			$cache['email'] = $db->setQuery($query)->loadObjectList('email');
-			$cache['user']  = $db->setQuery($query)->loadObjectList('username');
+			if (array_key_exists($email, $cache['email']))
+			{
+				$userid = $cache['email'][$email]->id;
+			}
 		}
 
 		// No user? Let's create it
-		if(!isset($cache['email'][$this->getCsvData('email')]))
+		if($userid == 0)
 		{
-			// Username already used... let's stop here
-			if(isset($cache['user'][$this->getCsvData('username')]))
-			{
-				return false;
-			}
-
 			$params = array(
 				'name'			=> $this->getCsvData('name'),
 				'username'		=> $this->getCsvData('username'),
@@ -226,17 +225,14 @@ class AkeebasubsModelImports extends FOFModel
 				return false;
 			}
 		}
-		else
-		{
-			$userid = $cache['email'][$this->getCsvData('email')]->id;
-		}
 
 		// Ok, in a way or in another I have the Joomla user. Now it's time to update AS user
-		$ASuser = FOFTable::getAnInstance('User', 'AkeebasubsTable');
+		$ASuser = clone $usermodel->getTable();
 
 		// Let's try loading it using Joomla id. Using the table object will assure me that I'll automatically update/create the user
 		$ASuser->load(array('user_id' => $userid));
 
+		$ASuser->user_id        = (int) $userid;
 		$ASuser->isbusiness     = (int) $this->getCsvData('isbusiness');
 		$ASuser->businessname   = $this->getCsvData('businessname');
 		$ASuser->occupation     = $this->getCsvData('occupation');
@@ -317,7 +313,7 @@ class AkeebasubsModelImports extends FOFModel
 			$created_on = clone $publish_up;
 		}
 
-		$sub = FOFTable::getAnInstance('Subscription', 'AkeebasubsTable');
+		$sub = clone FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 
 		$bind['user_id']             = $userid;
 		$bind['akeebasubs_level_id'] = $level->akeebasubs_level_id;
