@@ -202,6 +202,7 @@ class AkeebasubsModelImports extends FOFModel
 		}
 
 		$usermodel = FOFModel::getTmpInstance('Jusers', 'AkeebasubsModel');
+		$subusermodel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
 
 		$userid = 0;
 		$email = $this->getCsvData('email');
@@ -220,6 +221,29 @@ class AkeebasubsModelImports extends FOFModel
 			if (array_key_exists($username, $cache['user']))
 			{
 				$userid = $cache['user'][$username]->id;
+			}
+		}
+
+		if($userid == 0)
+		{
+			// Maybe the user does exist?
+			$db = $this->getDbo();
+			$query = $db->getQuery(true)
+				->select('id')
+				->from($db->qn('#__users'))
+				->where($db->qn('email') . ' = ' . $db->q($email), 'OR')
+				->where($db->qn('username') . ' = ' . $db->q($username), 'OR');
+			$db->setQuery($query);
+			$userid = $db->loadResult();
+
+			if (empty($userid))
+			{
+				$userid = 0;
+			}
+			else
+			{
+				$cache['email'][$email] = $userid;
+				$cache['user'][$username] = $userid;
 			}
 		}
 
@@ -248,25 +272,27 @@ class AkeebasubsModelImports extends FOFModel
 		}
 
 		// Ok, in a way or in another I have the Joomla user. Now it's time to update AS user
-		$ASuser = clone $usermodel->getTable();
+		$ASuser = clone $subusermodel->getTable();
 
 		// Let's try loading it using Joomla id. Using the table object will assure me that I'll automatically update/create the user
 		$ASuser->load(array('user_id' => $userid));
 
-		$ASuser->user_id        = (int) $userid;
-		$ASuser->isbusiness     = (int) $this->getCsvData('isbusiness');
-		$ASuser->businessname   = $this->getCsvData('businessname');
-		$ASuser->occupation     = $this->getCsvData('occupation');
-		$ASuser->vatnumber      = $this->getCsvData('vatnumber');
-		$ASuser->viesregistered = (int) $this->getCsvData('viesregistered');
-		$ASuser->address1       = $this->getCsvData('address1');
-		$ASuser->address2       = $this->getCsvData('address2');
-		$ASuser->city           = $this->getCsvData('city');
-		$ASuser->state          = $this->getCsvData('state');
-		$ASuser->zip            = $this->getCsvData('zip');
-		$ASuser->country        = $this->getCsvData('country');
+		$updates = array(
+			'user_id'			=> (int) $userid,
+			'isbusiness'		=> (int) $this->getCsvData('isbusiness'),
+			'businessname'		=> $this->getCsvData('businessname'),
+			'occupation'		=> $this->getCsvData('occupation'),
+			'vatnumber'			=> $this->getCsvData('vatnumber'),
+			'viesregistered'	=> (int) $this->getCsvData('viesregistered'),
+			'address1'			=> $this->getCsvData('address1'),
+			'address2'			=> $this->getCsvData('address2'),
+			'city'				=> $this->getCsvData('city'),
+			'state'				=> $this->getCsvData('state'),
+			'zip'				=> $this->getCsvData('zip'),
+			'country'			=> $this->getCsvData('country'),
+		);
 
-		if(!$ASuser->store())
+		if(!$ASuser->save($updates))
 		{
 			return false;
 		}
