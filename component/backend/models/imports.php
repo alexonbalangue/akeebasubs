@@ -50,20 +50,93 @@ class AkeebasubsModelImports extends FOFModel
 		$handle = fopen($file, 'r');
 		while (true)
 		{
-			// I have to use this weird structure because if an user passes an empty char as field enclosure
-			// fgetcsv will return false, so I have to omit it, forcing PHP to use the function default one
-			if($fieldEnlosure){
-				$this->currentData = fgetcsv($handle, 0, $fieldDelimiter, $fieldEnlosure);
+			// Read the next line
+			$line = '';
+			while (!feof($handle) && (strpos($line, "\n") === false) && (strpos($line, "\r") === false))
+			{
+				$line .= fgets($handle, 65536);
 			}
-			else{
-				$this->currentData = fgetcsv($handle, 0, $fieldDelimiter);
+
+			// Past EOF and no data read? Break.
+			if (empty($line) && feof($handle))
+			{
+				break;
+			}
+
+			// Did we read more than one line?
+			if (!in_array(substr($line, -1), array("\r", "\n")))
+			{
+				// Get the position of linefeed and carriage return characters in the line read
+				$posLF = strpos($line, "\n");
+				$posCR = strpos($line, "\r");
+
+				// Determine line ending
+				if (($posCR !== false) && ($posLF !== false))
+				{
+					// We have both \r and \n. Are they strung together?
+					if ($posLF - $posCR == 1)
+					{
+						// Yes. Windows/DOS line termination.
+						$searchCharacter = "\r\n";
+					}
+					else
+					{
+						// Nope. It's either Mac OS Classic or UNIX. Which one?
+						if ($posCR < $posLF)
+						{
+							// Mac OS Classic
+							$searchCharacter = "\r";
+						}
+						else
+						{
+							// UNIX
+							$searchCharacter = "\n";
+						}
+					}
+				}
+				elseif ($posCR !== false)
+				{
+					$searchCharacter = "\r";
+				}
+				else
+				{
+					$searchCharacter = "\n";
+				}
+
+				// Roll back the file
+				$pos = strpos($line, $searchCharacter);
+				$rollback = strlen($line) - strpos($line, $searchCharacter);
+				fseek($handle, -$rollback + strlen($searchCharacter), SEEK_CUR);
+				// And chop the line
+				$line = substr($line, 0, $pos);
+			}
+
+
+			// Handle DOS and Mac OS classic linebreaks
+			$line = str_replace("\r\n", "\n", $line);
+			$line = str_replace("\r", "\n", $line);
+			$line = trim($line);
+
+			if (empty($line))
+			{
+				continue;
+			}
+
+			// I have to use this weird structure because if an user passes an empty char as field enclosure
+			// str_getcsv will return false, so I have to omit it, forcing PHP to use the function default one
+			if($fieldEnlosure)
+			{
+				$this->currentData = str_getcsv($line, $fieldDelimiter, $fieldEnlosure);
+			}
+			else
+			{
+				$this->currentData = str_getcsv($line, $fieldDelimiter);
 			}
 
 			if($this->currentData === false)
 			{
 				break;
 			}
-
 
 			$i++;
 
@@ -253,7 +326,7 @@ class AkeebasubsModelImports extends FOFModel
 		$bind['enabled']             = $this->getCsvData('enabled', 1);
 		$bind['processor']           = $this->getCsvData('processor', 'import');
 		$bind['processor_key']       = $this->getCsvData('processor_key', md5(microtime().$app->getHash(JUserHelper::genRandomPassword())));
-		$bind['state']               = $this->getCsvData('subscription_state', 'C');
+		$bind['state']               = $this->getCsvData('status', 'C');
 		$bind['net_amount']          = $this->getCsvData('net_amount', 0);
 		$bind['tax_amount']          = $this->getCsvData('tax_amount', 0);
 		$bind['gross_amount']        = $this->getCsvData('gross_amount', $bind['net_amount'] + $bind['tax_amount']);
