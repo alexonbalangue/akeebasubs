@@ -27,14 +27,14 @@ class AkeebasubsModelImports extends FOFModel
 	/**
 	 * Parses a CSV file, importing every row as a new user
 	 *
-	 * @param   string  $file           Uploaded file
-	 * @param   int     $delimiter      Delimiter index, chosen by the user
+	 * @param   string  $file               Uploaded file
+	 * @param   string  $fieldDelimiter     Fields separator, such as ";" or ","
+	 * @param   string  $fieldEnlosure      Field enclosurem such as " or '
 	 *
 	 * @return bool|int     False if there is an error, otherwise the number of imported users.
 	 */
-	public function import($file, $delimiter)
+	public function import($file, $fieldDelimiter, $fieldEnlosure)
 	{
-		$delimiters = array(1,2,3);
 		$result     = 0;
 		$i          = 0;
 
@@ -44,18 +44,27 @@ class AkeebasubsModelImports extends FOFModel
 			return false;
 		}
 
-		if(!$delimiter || !in_array($delimiter, $delimiters))
-		{
-			$this->setError(JText::_('COM_AKEEBASUBS_USERS_IMPORT_ERR_DELIMITER'));
-			return false;
-		}
-
 		// At the moment I don't need the enclosure, it seems that fgetcsv works with or without it
-		list($field, ) = $this->decodeDelimiterOptions($delimiter);
+		//list($field, ) = $this->decodeDelimiterOptions($delimiter);
 
 		$handle = fopen($file, 'r');
-		while (($this->currentData = fgetcsv($handle, 0, $field)) !== false)
+		while (true)
 		{
+			// I have to use this weird structure because if an user passes an empty char as field enclosure
+			// fgetcsv will return false, so I have to omit it, forcing PHP to use the function default one
+			if($fieldEnlosure){
+				$this->currentData = fgetcsv($handle, 0, $fieldDelimiter, $fieldEnlosure);
+			}
+			else{
+				$this->currentData = fgetcsv($handle, 0, $fieldDelimiter);
+			}
+
+			if($this->currentData === false)
+			{
+				break;
+			}
+
+
 			$i++;
 
 			// Skip first line, there are headers in the file, so let's map them and then continue
@@ -244,7 +253,7 @@ class AkeebasubsModelImports extends FOFModel
 		$bind['enabled']             = $this->getCsvData('enabled', 1);
 		$bind['processor']           = $this->getCsvData('processor', 'import');
 		$bind['processor_key']       = $this->getCsvData('processor_key', md5(microtime().$app->getHash(JUserHelper::genRandomPassword())));
-		$bind['state']               = $this->getCsvData('state', 'C');
+		$bind['state']               = $this->getCsvData('subscription_state', 'C');
 		$bind['net_amount']          = $this->getCsvData('net_amount', 0);
 		$bind['tax_amount']          = $this->getCsvData('tax_amount', 0);
 		$bind['gross_amount']        = $this->getCsvData('gross_amount', $bind['net_amount'] + $bind['tax_amount']);
@@ -265,7 +274,7 @@ class AkeebasubsModelImports extends FOFModel
 	 *
 	 * @return  array   [0] => field delimiter, [1] => enclosure char
 	 */
-	protected function decodeDelimiterOptions($delimiter)
+	public function decodeDelimiterOptions($delimiter)
 	{
 		if($delimiter == 1)
 		{
@@ -337,7 +346,7 @@ class AkeebasubsModelImports extends FOFModel
 	{
 		if(isset($this->currentData[$key]))
 		{
-			return $key;
+			return $this->currentData[$key];
 		}
 
 		return $default;

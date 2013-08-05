@@ -16,6 +16,8 @@ class AkeebasubsControllerImports extends FOFController
 		$model     = FOFModel::getTmpInstance('Imports', 'AkeebasubsModel');
 		$file      = JRequest::getVar('csvfile', '', 'FILES');
 		$delimiter = $this->input->getInt('csvdelimiters', 0);
+		$field     = $this->input->getString('field_delimiter', '');
+		$enclosure = $this->input->getString('field_enclosure', '');
 
 		if($file['error'])
 		{
@@ -23,8 +25,13 @@ class AkeebasubsControllerImports extends FOFController
 			return true;
 		}
 
+		if($delimiter != -99)
+		{
+			list($field, $enclosure) = $model->decodeDelimiterOptions($delimiter);
+		}
+
 		// Import ok, but maybe I have warnings (ie skipped lines)
-		$result = $model->import($file['tmp_name'], $delimiter);
+		$result = $model->import($file['tmp_name'], $field, $enclosure);
 		if($result !== false)
 		{
 			$errors = $model->getErrors();
