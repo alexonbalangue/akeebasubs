@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - E-xact (Chase Paymentech)</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2013-07-22</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_EXACT_DESCRIPTION</description>
+	<files>
+		<filename plugin="exact">exact.php</filename>
+		<folder>exact</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_exact.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_exact.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_EXACT_TITLE_LABEL" description="PLG_AKPAYMENT_EXACT_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_EXACT_PPIMAGE_LABEL" description="PLG_AKPAYMENT_EXACT_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
+				<field name="culture" type="radio" default="en" label="PLG_AKPAYMENT_EXACT_DEFAULTLANG_LABEL" description="PLG_AKPAYMENT_EXACT_DEFAULTLANG_DESC">
+					<option value="en">PLG_AKPAYMENT_EXACT_LANG_EN</option>
+					<option value="fr">PLG_AKPAYMENT_EXACT_LANG_FR</option>
+				</field>
+				<field name="page_id_en" type="text" size="50" default="" label="PLG_AKPAYMENT_EXACT_PAGEID_EN_LABEL" description="PLG_AKPAYMENT_EXACT_PAGEID_EN_DESC"/>
+				<field name="page_id_fr" type="text" size="50" default="" label="PLG_AKPAYMENT_EXACT_PAGEID_FR_LABEL" description="PLG_AKPAYMENT_EXACT_PAGEID_FR_DESC"/>
+				<field type="spacer" />
+				<field name="transaction_key" type="text" size="50" default="" label="PLG_AKPAYMENT_EXACT_TRANSKEY_LABEL" description="PLG_AKPAYMENT_EXACT_TRANSKEY_DESC"/>
+				<field name="response_key" type="text" size="50" default="" label="PLG_AKPAYMENT_EXACT_RESPONSEKEY_LABEL" description="PLG_AKPAYMENT_EXACT_RESPONSEKEY_DESC"/>
+				<field type="spacer" />
+				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_EXACT_SANDBOX_LABEL" description="PLG_AKPAYMENT_EXACT_SANDBOX_DESC">
+					<option value="0">JNo</option>
+					<option value="1">JYes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
