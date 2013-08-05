@@ -56,6 +56,6 @@ class AkeebasubsControllerImports extends FOFController
 			$app->enqueueMessage(JText::sprintf('COM_AKEEBASUBS_IMPORT_FAIL', $model->getError()), 'error');
 		}
 
-		$this->setRedirect('index.php?option=com_akeebasubs&view=users');
+		$this->setRedirect('index.php?option=com_akeebasubs&view=import');
 	}
 }
