@@ -27,7 +27,10 @@ class AkeebasubsToolbar extends FOFToolbar
 				'blockrules',
 			),
 			'subscriptions',
-			'coupons',
+			'COM_AKEEBASUBS_MAINMENU_COUPONS' => array(
+				'coupons',
+				'couponsapis'
+			),
 			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array(
 				'affiliates',
 				'affpayments'
