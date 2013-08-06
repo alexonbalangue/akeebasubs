@@ -820,6 +820,17 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
+
+	public static function csvdelimiters($name = 'csvdelimiters', $selected = 1, $attribs = array())
+	{
+		$options   = array();
+		$options[] = JHTML::_('select.option', '1', 'abc, def');
+		$options[] = JHTML::_('select.option', '2', 'abc; def');
+		$options[] = JHTML::_('select.option', '3', '"abc"; "def"');
+		$options[] = JHTML::_('select.option', '-99', JText::_('COM_AKEEBASUBS_IMPORT_DELIMITERS_CUSTOM'));
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 }
 
 // Load the states from the database
