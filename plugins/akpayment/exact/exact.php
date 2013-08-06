@@ -48,32 +48,11 @@ class plgAkpaymentExact extends plgAkpaymentAbstract
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
-		$lang = strtolower(substr(JFactory::getLanguage()->getTag(), 0, 2));
-		$pageId = '';
-		if(in_array($lang, array('en', 'fr'))) {
-			$pageId = trim($this->params->get('page_id_' . $lang, ''));
-		}
-		if(empty($pageId)) {
-			$defaultLang = trim($this->params->get('default_lang', 'en'));
-			$pageIdEn = trim($this->params->get('page_id_en', ''));
-			$pageIdFr = trim($this->params->get('page_id_fr', ''));
-			if(empty($pageIdEn)) {
-				$defaultLang = 'fr';
-			}else if(empty($pageIdEn)) {
-				$defaultLang = 'en';
-			}
-			if($defaultLang == 'fr') {
-				$pageId = $pageIdFr;
-			} else {
-				$pageId = $pageIdEn;
-			}
-		}
 
 		$taxable = ($subscription->tax_amount > 0) ? 'YES' : 'NO';
 		$data = (object)array(
 			'url'				=> $this->getPaymentURL(),
-			'x_login'			=> $pageId,
+			'x_login'			=> $this->getPageId(),
 			'x_fp_sequence'		=> rand(1, 60000),
 			'x_fp_timestamp'	=> time(),
 			'x_currency_code'	=> strtoupper(AkeebasubsHelperCparams::getParam('currency', 'CAD')),
@@ -113,13 +92,14 @@ class plgAkpaymentExact extends plgAkpaymentAbstract
 			$data->x_test_request = 'FALSE';
 		}
 		// Hash code
+		$key = $this->getTransactionKey();
 		$hash = hash_hmac("md5",
 				$data->x_login. "^" .
 				$data->x_fp_sequence . "^" .
 				$data->x_fp_timestamp . "^" .
 				$data->x_amount . "^" .
 				$data->x_currency_code,
-				trim($this->params->get('transaction_key', '')));
+				$key);
 		$data->x_fp_hash = $hash;
 
 		@ob_start();
@@ -259,10 +239,47 @@ class plgAkpaymentExact extends plgAkpaymentAbstract
 	 */
 	private function isValidIPN($data)
 	{
-		$hashCode = md5(trim($this->params->get('response_key','')) .
+		$key = $this->getResponseKey();
+		$hashCode = md5($key .
 				$data['x_login'] .
 				$data['x_trans_id'] .
 				$data['x_amount']);
 		return $hashCode == $data['x_MD5_Hash'];
+	}
+	
+	private function getPageId() {
+		return $this->getSettingByLang('page_id');
+	}
+	
+	private function getTransactionKey() {
+		return $this->getSettingByLang('transaction_key');
+	}
+	
+	private function getResponseKey() {
+		return $this->getSettingByLang('response_key');
+	}
+	
+	private function getSettingByLang($field) {
+		$lang = strtolower(substr(JFactory::getLanguage()->getTag(), 0, 2));
+		$setting = '';
+		if(in_array($lang, array('en', 'fr'))) {
+			$setting = trim($this->params->get($field . '_' . $lang, ''));
+		}
+		if(empty($setting)) {
+			$defaultLang = trim($this->params->get('default_lang', 'en'));
+			$valEn = trim($this->params->get($field . '_en', ''));
+			$valFr = trim($this->params->get($field . '_fr', ''));
+			if(empty($valEn)) {
+				$defaultLang = 'fr';
+			} else if(empty($valFr)) {
+				$defaultLang = 'en';
+			}
+			if($defaultLang == 'fr') {
+				$setting = $valFr;
+			} else {
+				$setting = $valEn;
+			}
+		}
+		return $setting;
 	}
 }
