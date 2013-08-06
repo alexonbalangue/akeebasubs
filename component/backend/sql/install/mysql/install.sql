@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_apicoupons` (
   `subscription_limit` int(11) NOT NULL,
   `type` enum('value','percent') NOT NULL DEFAULT 'value',
   `value` float NOT NULL DEFAULT '0',
+  `value_limit` INT NOT NULL,
   PRIMARY KEY (`akeebasubs_apicoupon_id`)
 ) DEFAULT CHARSET=utf8;
 

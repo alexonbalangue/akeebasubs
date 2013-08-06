@@ -18,12 +18,12 @@
 			label="COM_AKEEBASUBS_COUPONS_FTITLE"
 		/>
 
-		<header name="key" type="field" sortable="false" tdwidth="12%"
+		<header name="key" type="field" sortable="false" tdwidth="15%"
 		filterclass="input-small"
 			label="COM_AKEEBASUBS_APICOUPONS_KEY"
 		/>
 
-		<header name="password" type="field" sortable="false" tdwidth="12%"
+		<header name="password" type="field" sortable="false" tdwidth="15%"
 			label="COM_AKEEBASUBS_APICOUPONS_PWD"
 		/>
 
