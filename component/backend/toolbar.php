@@ -29,7 +29,7 @@ class AkeebasubsToolbar extends FOFToolbar
 			'subscriptions',
 			'COM_AKEEBASUBS_MAINMENU_COUPONS' => array(
 				'coupons',
-				'couponsapis'
+				'apicoupons'
 			),
 			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array(
 				'affiliates',

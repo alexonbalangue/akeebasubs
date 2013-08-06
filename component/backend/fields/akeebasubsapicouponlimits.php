@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 /**
  * Renders the price of a subscription level and its optional sign-up fee
  */
-class FOFFormFieldAkeebasubscouponsapilimits extends FOFFormFieldText
+class FOFFormFieldAkeebasubsapicouponlimits extends FOFFormFieldText
 {
 	/**
 	 * Get the rendering of this field type for a repeatable (grid) display,
@@ -25,8 +25,8 @@ class FOFFormFieldAkeebasubscouponsapilimits extends FOFFormFieldText
 	{
 		$limits = array();
 
-		if($this->item->akeebasubs_level_id) $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_LEVELS');
-		if($this->item->creation_limit)      $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_HITS');
+		if($this->item->subscriptions)  $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_LEVELS');
+		if($this->item->creation_limit) $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_HITS');
 
 		$strLimits = implode(', ', $limits);
 

@@ -16,9 +16,9 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
-	<input type="hidden" name="view" value="couponsapi" />
+	<input type="hidden" name="view" value="apicoupon" />
 	<input type="hidden" name="task" value="" />
-	<input type="hidden" name="akeebasubs_couponsapi_id" value="<?php echo $this->item->akeebasubs_couponsapi_id ?>" />
+	<input type="hidden" name="akeebasubs_apicoupon_id" value="<?php echo $this->item->akeebasubs_apicoupon_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 	<div class="row-fluid">
@@ -35,7 +35,7 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 			</div>
 			<div class="control-group">
 				<label for="key_field" class="control-label">
-					<?php echo  JText::_('COM_AKEEBASUBS_COUPONSAPIS_KEY'); ?>
+					<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_KEY'); ?>
 				</label>
 				<div class="controls">
 					<input type="text" size="25" id="key_field" name="key" value="<?php echo  $this->escape($this->item->key) ?>" />
@@ -43,7 +43,7 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 			</div>
 			<div class="control-group">
 				<label for="password_field" class="control-label">
-					<?php echo  JText::_('COM_AKEEBASUBS_COUPONSAPIS_PWD'); ?>
+					<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_PWD'); ?>
 				</label>
 				<div class="controls">
 					<input type="text" size="20" id="password_field" name="value" value="<?php echo  $this->escape($this->item->password) ?>" />
