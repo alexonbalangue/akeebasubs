@@ -3971,55 +3971,558 @@ Rule C gives $ 30 discount</programlisting>
       appear right after the end of the subscription levels list.</para>
     </section>
 
-    <section xml:id="importing-from-other-components">
-      <title>Importing from other components</title>
+    <section xml:id="importing">
+      <title>Importing data</title>
 
-      <para>Most likely you are already using a subscriptions system and
-      wouldn't like to have to manually import all of your subscriptions to
-      Akeeba Subscriptions. That's why we are offering an automated import
-      feature. You can access it from Akeeba Subscription's dashboard page, by
-      clicking on the Operations tab, and then on
-      <guibutton>Import</guibutton>.</para>
+      <para>Akeeba Subscriptions allows you to import data from other
+      subscription components and from other sources. This allows you to move
+      data from an old subscriptions system into Akeeba Subscriptions.</para>
 
       <warning>
-        <para>Importing from other components will DELETE AND REPLACE ANY AND
-        ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING BACK.
-        Do NOT use this option after you have been using Akeeba Subscriptions
-        and have new subscribers on your site.</para>
+        <para>If you have recurring payments set up in your old system you
+        must not import them to Akeeba Subscriptions. Recurring payments use a
+        component-specific payment notification URL and integration code.
+        Importing recurring subscriptions will lead to your customers being
+        charged but their subscriptions not renewing. This is not a bug; it is
+        how recurring payments work in all payment processors we know of. You
+        will need to cancel existing recurring payments and instruct your
+        users to resubscribe.</para>
       </warning>
 
-      <important>
-        <para>Please remember to review your Subscription Levels after import.
-        Most notably, the text of the subscription completion and subscription
-        cancellation pages will be missing from all subscription
-        levels.</para>
-      </important>
+      <section xml:id="importing-from-other-components">
+        <title>Importing from other components</title>
 
-      <para>The options are:</para>
+        <para>Most likely you are already using a subscriptions system and
+        wouldn't like to have to manually import all of your subscriptions to
+        Akeeba Subscriptions. That's why we are offering an automated import
+        feature. You can access it from Akeeba Subscription's dashboard page,
+        by clicking on the Operations tab, and then on <guibutton>Import
+        Data</guibutton>.</para>
 
-      <variablelist>
-        <varlistentry>
-          <term>AMBRA.Subscriptions</term>
+        <warning>
+          <para>Importing from other components will DELETE AND REPLACE ANY
+          AND ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING
+          BACK. Do NOT use this option after you have been using Akeeba
+          Subscriptions and have new subscribers on your site.</para>
+        </warning>
 
-          <listitem>
-            <para>Imports subscription levels and subscriptions from
-            Dioscouri's AMBRA Subscriptions (a.k.a. AMBRA.subs)</para>
-          </listitem>
-        </varlistentry>
+        <important>
+          <para>Please remember to review your Subscription Levels after
+          import. Most notably, the text of the subscription completion and
+          subscription cancellation pages will be missing from all
+          subscription levels.</para>
+        </important>
 
-        <varlistentry>
-          <term>AMBRA.Subscriptions with PayPal with VAT plugin</term>
+        <para>The options are:</para>
 
-          <listitem>
-            <para>If you are using AMBRA.subs with my modified "PayPal with
-            VAT" payment plugin and the customizations for integrating coupons
-            into AMBRA.subs, you can click on this option. It will import
-            subscription levels, subscriptions and any coupon codes defined.
-            Moreover, it will also import the extra data stored per user, e.g.
-            their address and VAT number.</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
+        <variablelist>
+          <varlistentry>
+            <term>AMBRA.Subscriptions</term>
+
+            <listitem>
+              <para>Imports subscription levels and subscriptions from
+              Dioscouri's AMBRA Subscriptions (a.k.a. AMBRA.subs)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>AMBRA.Subscriptions with PayPal with VAT plugin</term>
+
+            <listitem>
+              <para>If you are using AMBRA.subs with my modified "PayPal with
+              VAT" payment plugin and the customizations for integrating
+              coupons into AMBRA.subs, you can click on this option. It will
+              import subscription levels, subscriptions and any coupon codes
+              defined. Moreover, it will also import the extra data stored per
+              user, e.g. their address and VAT number.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="importing-from-csv">
+        <title>Importing from CSV</title>
+
+        <para>If you are using a Joomla! subscriptions component not supported
+        for direct import or a non-Joomla! system you need a way to quickly
+        import your existing subscriptions to Akeeba Subscriptions. The
+        fastest way is using the CSV import feature. CSV files can be
+        generated by most subscription systems, spreadsheet applications (e.g.
+        Microsoft Office Excel, OpenOffice/LibreOffice Calc, Apple Numbers,
+        Google Docs etc) and database tools (e.g. phpMyAdmin). You can access
+        the CSV import from Akeeba Subscription's dashboard page, by clicking
+        on the Operations tab, and then on <guibutton>Import
+        users</guibutton>.</para>
+
+        <important>
+          <para>You need to manually create the subscription levels before
+          importing any data.</para>
+
+          <para>Imported data will NOT overwrite existing subscriptions; it
+          will simply append new subscriptions.</para>
+
+          <para>All Akeeba Subscriptions integration plugins and Joomla! user
+          plugins run when a new subscription or user (respectively) is
+          created. In order to avoid emails being sent you must disable the
+          Akeeba Subscriptions - Subscription e-mails plugin. To avoid
+          invoices being created (which might lead to import failure) you have
+          to disable all invoice related plugins, e.g. Akeeba Subscriptions -
+          Integrated Invoicing. To avoid new user emails being generated you
+          must edit the User - Joomla! plugin and disable sending emails from
+          its basic options.</para>
+
+          <para>The import can lead to timeout issues. Please try importing a
+          few records (depending on your server, 10 to 100) at a time.
+          Importing hundreds or thousands of records will probably lead to a
+          white page, Internal Server Error 500 or a timeout error
+          page.</para>
+
+          <para>The first line of the CSV file MUST contain the column
+          names.</para>
+        </important>
+
+        <para>In the interface you have the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>CSV delimiters</term>
+
+            <listitem>
+              <para>CSV files can have their fields separated and enclosed in
+              different ways. You will have to open your CSV file with a plain
+              text editor such as Notepad, gEdit or TextEdit to determine
+              which format your file is using. Even different versions of the
+              same software may be using different delimiters. The options you
+              have are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><option>abc, def</option> Fields separated by commas,
+                  not enclosed in any character</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>abc; def</option> Fields separated by
+                  semicolons, not enclosed in any character</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>"abc"; "def"</option> Fields separated by
+                  semicolons, enclosed in double quotes</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>Custom delimiters</option> is used to show the
+                  following two options which allows better
+                  customisation</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Field delimiter</term>
+
+            <listitem>
+              <para>Enter the character used to separate fields from each
+              other such as a comma, a semicolon, a pipe character etc. If you
+              leave it blank hell will break loose. You've been warned!</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Field enclosure</term>
+
+            <listitem>
+              <para>Enter the character used to enclose fields such as quote
+              or double quote. You may leave that blank if none is used in
+              your file</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>File</term>
+
+            <listitem>
+              <para>Choose the CSV file to upload</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Akeeba Subscriptions tries to guess the line ending of your
+        file. It supports all known line endings: CR (Mac OS classic and all
+        versions of Microsoft Office for Mac, even on Mac OS X), LF (Linux,
+        UNIX, Mac OS X), CR and LF (Windows, DOS).</para>
+
+        <para>Your CSV file MUST contain all of the following fields:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>username</term>
+
+            <listitem>
+              <para>The username of the user account linked with this
+              subscription. If the user account doesn't exist it will be
+              created.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>email</term>
+
+            <listitem>
+              <para>The email of the user account linked with this
+              subscription. If the user account doesn't exist it will be
+              created.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>password</term>
+
+            <listitem>
+              <para>Only used if the user account doesn't already exist. In
+              this case, this is the password that will be used for the new
+              user account. You may leave it blank if the user account already
+              exists.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>name</term>
+
+            <listitem>
+              <para>The full (real) name of the user account linked with this
+              subscription. Only used if the user account doesn't already
+              exist.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>subscription_level</term>
+
+            <listitem>
+              <para>The title of the subscription level for this subscription.
+              The subscription level must already exist.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>publish_up</term>
+
+            <listitem>
+              <para>The starting date of the subscription. The format MUST be
+              yyyy-mm-dd HH:MM:SS (four digits for the year, dash, two digits
+              for the month, dash, two digits for the day of the week, space,
+              two digits for the hour in 24-hour format, colon, two digits for
+              the minutes, colon, two digits for the seconds), e.g.
+              <parameter>2013-08-15 22:10:55</parameter>. The date and time
+              must be in GMT timezone.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Your CSV file MAY contain one or more of the following
+        fields:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>isbusiness</term>
+
+            <listitem>
+              <para>1 if this user is a business entity, 0 if it's a
+              person.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>businessname</term>
+
+            <listitem>
+              <para>The name of the business entity</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>occupation</term>
+
+            <listitem>
+              <para>The profession/occupation of the business entity</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>vatnumber</term>
+
+            <listitem>
+              <para>The VAT number of the user without the country prefix. For
+              example, if a user's VAT number is DE1234567890 you MUST set it
+              to 1234567890 without the DE prefix (which denotes Germany as
+              the country of the VAT number).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>viesregistered</term>
+
+            <listitem>
+              <para>1 is the user is registered with the VIES system, 0
+              otherwise. Only makes sense for EU citizens and
+              businesses.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>address1</term>
+
+            <listitem>
+              <para>The first line of the user's mail address, usually street
+              name and number</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>address2</term>
+
+            <listitem>
+              <para>The second line of the user's mail address, usually name
+              of house or floor / apartment number.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>city</term>
+
+            <listitem>
+              <para>The city of the user</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>state</term>
+
+            <listitem>
+              <para>The state of the user. Please note that you have to type
+              the State Code as defined in Tools, States in the component. For
+              example, the state code for California (as shipped with the
+              component) is CA. If the user lives in California you have to
+              type CA in this field, NOT California.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>zip</term>
+
+            <listitem>
+              <para>The zip / postal code</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>country</term>
+
+            <listitem>
+              <para>The user's country code. Please note that you must use the
+              two letter <link
+              xlink:href="http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">ISO
+              3166 country code</link>. For example, the country code for the
+              United States of America is US whereas the country code for
+              Germany is DE. If you look at the ISO 3166 table linked above,
+              the two letter country code is under the "A 2" column.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>publish_down</term>
+
+            <listitem>
+              <para>The expiration date of the subscription. The format MUST
+              be yyyy-mm-dd HH:MM:SS (four digits for the year, dash, two
+              digits for the month, dash, two digits for the day of the week,
+              space, two digits for the hour in 24-hour format, colon, two
+              digits for the minutes, colon, two digits for the seconds), e.g.
+              <parameter>2013-08-15 22:10:55</parameter>. The date and time
+              must be in GMT timezone. If not defined Akeeba Subscriptions
+              will guess it based on the publish_up date/time and the
+              subscription level's length.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>enabled</term>
+
+            <listitem>
+              <para>0 if the subscription is not active, 1 if it is active. If
+              not defined it will be determined automatically.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>processor</term>
+
+            <listitem>
+              <para>The name of the payment processor, all lowercase without
+              spaces. If unsure, do not define this field at all.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>processor_key</term>
+
+            <listitem>
+              <para>The transaction number as recorded by the payment
+              processor. If unsure, do not define this field at all.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>status</term>
+
+            <listitem>
+              <para>The payment status. Can be one of:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><option>N</option> means New. The subscription is not
+                  paid for and will be automatically disabled.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>P</option> means Pending. The payment is
+                  pending. For example waiting for a bank transfer or cheque
+                  to clear and the subscription will be automatically
+                  disabled.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>C</option> means Completed. The payment is
+                  complete and the subscription is enabled.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>X</option> means Cancelled. The payment was
+                  cancelled / reversed / refunded and the subscription will be
+                  automatically disabled.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>net_amount</term>
+
+            <listitem>
+              <para>The net (before tax) amount paid for the subscription. You
+              MUST use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>tax_amount</term>
+
+            <listitem>
+              <para>The tax amount paid for the subscription. You MUST use a
+              dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>gross_amount</term>
+
+            <listitem>
+              <para>The gross (net plus tax) amount paid for the subscription.
+              You MUST use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>recurring_amount</term>
+
+            <listitem>
+              <para>The gross amount charged for auto-recurring subscriptions.
+              You MUST use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>tax_percent</term>
+
+            <listitem>
+              <para>The percentage of the tax on the net price. This must be a
+              number from 0.0 to 100.0. You MUST use a dot as the decimal
+              separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>created_on</term>
+
+            <listitem>
+              <para>The date and time when the subscription was created. The
+              format MUST be yyyy-mm-dd HH:MM:SS (four digits for the year,
+              dash, two digits for the month, dash, two digits for the day of
+              the week, space, two digits for the hour in 24-hour format,
+              colon, two digits for the minutes, colon, two digits for the
+              seconds), e.g. <parameter>2013-08-15 22:10:55</parameter>. The
+              date and time must be in GMT timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>prediscount_amount</term>
+
+            <listitem>
+              <para>The net amount before any discount was applied. You MUST
+              use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>discount_amount</term>
+
+            <listitem>
+              <para>The discount amount deducted from the net price. You MUST
+              use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>contact_flag</term>
+
+            <listitem>
+              <para>This field determines if the user will be contacted about
+              imminent subscription expiration. The possible values
+              are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><option>0</option> means that both first and second
+                  reminders (and the post-expiration reminder) will be
+                  sent</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>1</option> means that the first reminder is
+                  already sent. Only the second and post-expiration reminder
+                  will be sent.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>2</option> means that the second reminder is
+                  already sent. Only the post-expiration reminder will be
+                  sent.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>3</option> means that we should not send any
+                  reminders to the user at all; he has already renewed his
+                  subscription.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="custom-fields">
