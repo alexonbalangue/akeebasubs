@@ -90,7 +90,8 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_taxrules` (
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`akeebasubs_coupon_id` bigint(20) unsigned NOT NULL auto_increment,
-	`title` varchar(255) NOT NULL,
+  `akeebasubs_couponsapi_id` INT NOT NULL,
+  `title` varchar(255) NOT NULL,
 	`coupon` varchar(255) NOT NULL,
 	`publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -114,6 +115,16 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`hits` BIGINT(20) unsigned NOT NULL default 0,
 	PRIMARY KEY ( `akeebasubs_coupon_id` ),
 	UNIQUE KEY `coupon` (`coupon`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_couponsapis` (
+  `akeebasubs_couponsapi_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(30) NOT NULL,
+  `key` varchar(32) NOT NULL,
+  `password` varchar(15) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `params` text NOT NULL,
+  PRIMARY KEY (`akeebasubs_couponsapi_id`)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_upgrades` (
