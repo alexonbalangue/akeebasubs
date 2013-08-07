@@ -7,14 +7,29 @@
 
 defined('_JEXEC') or die();
 
-JHtml::_('behavior.tooltip');
-if(version_compare(JVERSION, '3.0', 'ge')) {
-	JHTML::_('behavior.framework');
-} else {
-	JHTML::_('behavior.mootools');
-}
-
 $this->loadHelper('select');
+JFactory::getDocument()->addScriptDeclaration('
+akeeba.jQuery(document).ready(function(){
+	akeeba.jQuery("#usage_limits").change(function(){
+		var value = akeeba.jQuery(this).val();
+		if(value == 1){
+			akeeba.jQuery("#creation_limit_field").show();
+			akeeba.jQuery("#subscription_limit_field").hide().val("0");
+			akeeba.jQuery("#value_limit_field").hide().val("0");
+		}
+		else if(value == 2){
+			akeeba.jQuery("#creation_limit_field").hide().val("0");
+			akeeba.jQuery("#subscription_limit_field").show();
+			akeeba.jQuery("#value_limit_field").hide().val("0");
+		}
+		else{
+			akeeba.jQuery("#creation_limit_field").hide().val("0");
+			akeeba.jQuery("#subscription_limit_field").hide().val("0");
+			akeeba.jQuery("#value_limit_field").show();
+		}
+	}).change();
+})
+');
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
@@ -78,7 +93,7 @@ $this->loadHelper('select');
 		</div>
 
 		<div class="span6">
-			<h3><?php echo JText::_('COM_AKEEBASUBS_COUPON_FINETUNING_TITLE')?></h3>
+			<h3><?php echo JText::_('COM_AKEEBASUBS_COUPONS_LIMITS')?></h3>
 
 			<div class="control-group">
 				<label for="subscriptions_field" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_SUBSCRIPTIONS'); ?></label>
@@ -88,23 +103,16 @@ $this->loadHelper('select');
 			</div>
 
 			<div class="control-group">
-				<label for="creation_limit_field" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_CREATION_LIMIT'); ?></label>
+				<label for="usage_limits" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_USAGE_LIMITS'); ?></label>
 				<div class="controls">
-					<input type="text" size="5" id="creation_limit_field" name="creation_limit" value="<?php echo  $this->escape($this->item->creation_limit) ?>" />
-				</div>
-			</div>
+					<?php
+						$selected = $this->item->creation_limit ? 1 : ($this->item->subscription_limit ? 2 : 3);
+						echo AkeebasubsHelperSelect::apicouponLimits('usage_limits', $selected)?>
 
-			<div class="control-group">
-				<label for="subscription_limit_field" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_SUB_LIMIT'); ?></label>
-				<div class="controls">
-					<input type="text" size="5" id="subscription_limit_field" name="subscription_limit" value="<?php echo  $this->escape($this->item->subscription_limit ) ?>" />
-				</div>
-			</div>
+						<input type="text" style="width: 50px; display:none" id="creation_limit_field" name="creation_limit" value="<?php echo  $this->escape($this->item->creation_limit) ?>" />
+						<input type="text" style="width: 50px; display:none" id="subscription_limit_field" name="subscription_limit" value="<?php echo  $this->escape($this->item->subscription_limit ) ?>" />
+						<input type="text" style="width: 50px; display:none" id="value_limit_field" name="value_limit" value="<?php echo  $this->escape($this->item->value_limit ) ?>" />
 
-			<div class="control-group">
-				<label for="value_limit_field" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_VALUE_LIMIT'); ?></label>
-				<div class="controls">
-					<input type="text" size="5" id="value_limit_field" name="value_limit" value="<?php echo  $this->escape($this->item->value_limit ) ?>" />
 				</div>
 			</div>
 		</div>

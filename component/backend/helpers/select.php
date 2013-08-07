@@ -820,6 +820,16 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
+
+	public static function apicouponLimits($name, $selected, $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option', '1', JText::_('COM_AKEEBASUBS_APICOUPONS_CREATION_LIMIT'));
+		$options[] = JHTML::_('select.option', '2',  JText::_('COM_AKEEBASUBS_APICOUPONS_SUBSCRIPTION_LIMIT'));
+		$options[] = JHTML::_('select.option', '3',  JText::_('COM_AKEEBASUBS_APICOUPONS_VALUE_LIMIT'));
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 }
 
 // Load the states from the database
