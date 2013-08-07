@@ -16,6 +16,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] Custom fields should only allow specific characters in their slugs
 # [LOW] Coupon code field not shown  for free subscriptions when require valid coupon code is on
 # [LOW] Users with blocked access (payment not complete, free users needing to be verified by admins) were logged in automatically
+# [LOW] Users added to MijoShop were not automatically approved
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
