@@ -43,7 +43,7 @@ $this->loadHelper('cparams');
 				of this special offer today!
 			</p>
 			<div class="form-actions">
-				<a class="btn btn-success btn-large" href="http://www.2checkout.com">
+				<a class="btn btn-success btn-large" href="https://www.2checkout.com/referral?r=akeebaloves2co">
 					<i class="icon-shopping-cart icon-white"></i> Take me to www.2checkout.com
 				</a>
 				<a class="btn btn-danger" href="index.php?option=com_akeebasubs&view=cpanel&task=hide2copromo">
