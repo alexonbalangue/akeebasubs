@@ -62,6 +62,7 @@ class plgAkeebasubsMijoshop extends plgAkeebasubsAbstract
 			$query = $db->getQuery(true)
 				->update($db->qn('#__mijoshop_customer'))
 				->set($db->qn('customer_group_id').' = '.$db->q($group))
+				->set($db->qn('status').' = '.$db->q('1'))
 				->set($db->qn('approved').' = '.$db->q('1'))
 				->where($db->qn('customer_id').' = '.$db->q($customer_id));
 			$db->setQuery($query);
