@@ -119,7 +119,7 @@ class AkeebasubsModelApicoupons extends FOFModel
 				else
 				{
 					// Did I hit the limit using % discount value (ie 15% off)?
-					if(($sub->total_amount * 100 / $table->value) >= $table->value_limit)
+					if(($sub->total_amount * $table->value / 100) >= $table->value_limit)
 					{
 						return false;
 					}
