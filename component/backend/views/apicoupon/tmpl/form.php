@@ -48,22 +48,31 @@ akeeba.jQuery(document).ready(function(){
 				</label>
 				<div class="controls">
 					<input type="text" size="30" id="title_field" name="title" value="<?php echo  $this->escape($this->item->title) ?>" />
+					<div class="help-block">
+						<?php echo JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_TITLE_DESC'); ?>
+					</div>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="key_field" class="control-label">
-					<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_KEY'); ?>
+					<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_KEY'); ?>
 				</label>
 				<div class="controls">
 					<input type="text" size="25" id="key_field" name="key" value="<?php echo  $this->escape($this->item->key) ?>" />
+					<div class="help-block">
+						<?php echo JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_KEY_DESC'); ?>
+					</div>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="password_field" class="control-label">
-					<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_PWD'); ?>
+					<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_PWD'); ?>
 				</label>
 				<div class="controls">
 					<input type="text" size="20" id="password_field" name="password" value="<?php echo  $this->escape($this->item->password) ?>" />
+					<div class="help-block">
+						<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_PWD_DESC'); ?>
+					</div>
 				</div>
 			</div>
 			<div class="control-group">
@@ -113,6 +122,9 @@ akeeba.jQuery(document).ready(function(){
 						<input type="text" style="width: 50px; display:none" id="subscription_limit_field" name="subscription_limit" value="<?php echo  $this->escape($this->item->subscription_limit ) ?>" />
 						<input type="text" style="width: 50px; display:none" id="value_limit_field" name="value_limit" value="<?php echo  $this->escape($this->item->value_limit ) ?>" />
 
+						<div class="help-block">
+							<?php echo JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_USAGE_LIMITS_DESC'); ?>
+						</div>
 				</div>
 			</div>
 		</div>
