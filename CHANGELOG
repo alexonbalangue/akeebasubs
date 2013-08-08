@@ -17,6 +17,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] Coupon code field not shown  for free subscriptions when require valid coupon code is on
 # [LOW] Users with blocked access (payment not complete, free users needing to be verified by admins) were logged in automatically
 # [LOW] Users added to MijoShop were not automatically approved
+# [LOW] Sometimes the "Thank you" page's message would be empty, depending on your menu structure
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
