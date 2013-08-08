@@ -63,7 +63,7 @@ akeeba.jQuery(document).ready(function(){
 					<?php echo  JText::_('COM_AKEEBASUBS_APICOUPONS_PWD'); ?>
 				</label>
 				<div class="controls">
-					<input type="text" size="20" id="password_field" name="value" value="<?php echo  $this->escape($this->item->password) ?>" />
+					<input type="text" size="20" id="password_field" name="password" value="<?php echo  $this->escape($this->item->password) ?>" />
 				</div>
 			</div>
 			<div class="control-group">
