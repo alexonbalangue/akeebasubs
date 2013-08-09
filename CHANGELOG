@@ -7,6 +7,7 @@ Akeeba Subscriptions 3.2.1
 + #177 Sort "My Subscriptions" page by active / waiting / expired status
 + #179 Import users from CSV
 + #163 Payment: ChasePaymentTech
++ #171 Coupons API, allows your trusted associates to create coupon codes for your site
 # [MEDIUM] #175 The re-login feature of the post-purchase message page didn't work reliably
 # [MEDIUM] Freshbooks integration would not install correctly
 # [MEDIUM] Projectfork4 integration would not install correctly
