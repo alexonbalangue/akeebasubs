@@ -831,7 +831,6 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-}
 
 	public static function apicouponLimits($name, $selected, $attribs = array())
 	{
