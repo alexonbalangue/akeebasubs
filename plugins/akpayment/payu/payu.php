@@ -62,7 +62,7 @@ class plgAkpaymentPayu extends plgAkpaymentAbstract
 		$merchant = $this->params->get('merchant','');
 		$WorkingKey = $this->params->get('workingkey','');
 		$redirectURL = $rootURL.str_replace('&amp;','&',JRoute::_('/joomla/index.php?option=com_akeebasubs&view=callback&paymentmethod=payu'));
-		$surl	= $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
+		$surl	= $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
 
 		$pos = array(
 			'key'			=> $merchant,
@@ -75,42 +75,45 @@ class plgAkpaymentPayu extends plgAkpaymentAbstract
 		);
 		$hash = '';
 
-// Begin of addition by IML - Hash Sequence as per Payu (Should be handled in getchecksum function ideally)
-$hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
-if(empty($pos['hash']) && sizeof($pos) > 0) {
-  if(
-          empty($merchant)
-          || empty($subscription->akeebasubs_subscription_id)
-          || empty($subscription->gross_amount)
-          || empty($firstName)
-          || empty($user->email)
-          || empty($phone)
-          || empty($level->title)
-          || empty($surl)
-          || empty($surl)
-  ) {
-    $formError = 1;
-  } else {
-    $hashVarsSeq = explode('|', $hashSequence);
-    $hash_string = '';
-    foreach($hashVarsSeq as $hash_var) {
-      $hash_string .= isset($pos[$hash_var]) ? $pos[$hash_var] : '';
-      $hash_string .= '|';
-    }
-    $hash_string .= $WorkingKey;
-    $hash = strtolower(hash('sha512', $hash_string));
-    $action = $PAYU_BASE_URL . '/_payment';
-  }
-} elseif(!empty($posted['hash'])) {
-  $hash = $pos['hash'];
-  $action = $PAYU_BASE_URL . '/_payment';
-}
+        // Begin of addition by IML - Hash Sequence as per Payu (Should be handled in getchecksum function ideally)
+        $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+        if(empty($pos['hash']) && sizeof($pos) > 0) {
+          if(
+                  empty($merchant)
+                  || empty($subscription->akeebasubs_subscription_id)
+                  || empty($subscription->gross_amount)
+                  || empty($firstName)
+                  || empty($user->email)
+                  || empty($phone)
+                  || empty($level->title)
+                  || empty($surl)
+                  || empty($surl)
+          ) {
+            $formError = 1;
+          } else {
+            $hashVarsSeq = explode('|', $hashSequence);
+            $hash_string = '';
+            foreach($hashVarsSeq as $hash_var) {
+              $hash_string .= isset($pos[$hash_var]) ? $pos[$hash_var] : '';
+              $hash_string .= '|';
+            }
+            $hash_string .= $WorkingKey;
+            $hash = strtolower(hash('sha512', $hash_string));
+            $action = $PAYU_BASE_URL . '/_payment';
+          }
+        } elseif(!empty($posted['hash'])) {
+          $hash = $pos['hash'];
+          $action = $PAYU_BASE_URL . '/_payment';
+        }
+        
 		$checksum = $hash;
-		// End of addition by IML
+		
+        // End of addition by IML
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem()
+            ->slug;
+
 		$data = (object)array(
 			'url'			=> 'https://secure.payu.in/_payment',
 			'merchant'		=> $merchant,
@@ -191,9 +194,9 @@ if(empty($pos['hash']) && sizeof($pos) > 0) {
 
 		// Load the subscription level and get its slug
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem()
+            ->slug;
 
 		// Check the payment_status
 

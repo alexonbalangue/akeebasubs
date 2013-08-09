@@ -198,7 +198,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 
 		if($newStatus == 'C') {
 			// Redirect the user to the "thank you" page if payment is complete
-			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 			$app->redirect($thankyouUrl);
 		} else {
 			$app->redirect($error_url,$response->return->responseText,'error');

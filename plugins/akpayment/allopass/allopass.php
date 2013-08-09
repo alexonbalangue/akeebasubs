@@ -48,6 +48,10 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		if(empty($alloPass)) {
 			return JError::raiseError(500, 'Cannot proceed with the payment. No alloPass information are definied for this subscription.');
 		}
+        
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem();
 
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
