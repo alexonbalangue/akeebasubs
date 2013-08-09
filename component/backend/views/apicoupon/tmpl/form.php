@@ -31,6 +31,21 @@ akeeba.jQuery(document).ready(function(){
 })
 ');
 ?>
+<?php if ($this->item->akeebasubs_apicoupon_id > 0):
+	$rootURL = rtrim(JURI::base(),'/');
+	$subpathURL = JURI::base(true);
+	if(!empty($subpathURL) && ($subpathURL != '/')) {
+		$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+	}
+	$apiURL = $rootURL . '/index.php?option=com_akeebasubs&view=apicoupon&task=create&key=' .
+		urlencode($this->item->key) . '&pwd=' . urlencode($this->item->password) .
+		'&format=json';
+?>
+<div class="alert alert-info">
+	<?php echo JText::sprintf('COM_AKEEBASUBS_APICOUPONS_INFO_URL', $apiURL); ?>
+</div>
+<?php endif; ?>
+
 <form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
 	<input type="hidden" name="view" value="apicoupon" />
