@@ -464,7 +464,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if(empty($since) || ($since == '0000-00-00') || ($since == '0000-00-00 00:00:00')) {
 			$since = '';
 		} else {
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{1,2}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 			if(!preg_match($regex, $since)) {
 				$since = '2001-01-01';
 			}
@@ -487,7 +487,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		if(empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00')) {
 			$until = '';
 		} else {
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{1,2}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 			if(!preg_match($regex, $until)) {
 				$until = '2037-01-01';
 			}
