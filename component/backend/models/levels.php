@@ -130,4 +130,19 @@ class AkeebasubsModelLevels extends FOFModel
 
 		return $query;
 	}
+
+	/**
+	 * Load all the levels inside an associative array, where the index is the
+	 * title in upper case
+	 *
+	 * @return array|bool   array('DUMMY TITLE' => <subscription row>)
+	 */
+	public function createTitleLookup()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)->select('*')->from('#__akeebasubs_levels');
+		$rows  = $db->setQuery($query)->loadObjectList('title');
+
+		return array_change_key_case($rows, CASE_UPPER);
+	}
 }

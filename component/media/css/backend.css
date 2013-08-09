@@ -250,3 +250,14 @@ tr.pending-renewal td .akeebasubs-subscription-grossamount { color: gray; }
 .fof-usersfield-name {
 	display: block;
 }
+
+/** Joomla! 3 workaround for calendar fields */
+input#publish_up {
+	width: 90px;
+}
+input#publish_down {
+	width: 90px;
+}
+input#since {
+	width: 90px;
+}

@@ -57,6 +57,11 @@ class AkeebasubsControllerMessages extends FOFController
 
 		$this->getThisView()->assign('subscription',$subscription);
 
+		if ($subscription->akeebasubs_level_id)
+		{
+			$this->getThisModel()->setId($subscription->akeebasubs_level_id);
+		}
+
 		/**
 		 * Joomla! 1.6 and later - we have to effectively "re-login" the user,
 		 * otherwise his ACL privileges are stale.

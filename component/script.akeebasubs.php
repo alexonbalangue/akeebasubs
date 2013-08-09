@@ -105,6 +105,7 @@ class Com_AkeebasubsInstallerScript
 				'dwolla'				=> 0,
 				'epaydk'				=> 0,
 				'eselectplus'			=> 0,
+				'exact'					=> 0,
 				'eway'					=> 0,
 				'ewayrapid3'			=> 0,
 				'gocardless'			=> 0,
