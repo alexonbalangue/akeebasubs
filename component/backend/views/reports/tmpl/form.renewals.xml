@@ -13,40 +13,44 @@
 		<header name="username" type="fieldsearchable" sortable="true" filterclass="input-small" />
 
 		<header name="name" type="fieldsearchable" sortable="true" filterclass="input-small" />
-		
+
 		<header name="email" type="fieldsearchable" sortable="true" filterclass="input-small" />
-		
+
 		<header name="businessname" type="fieldsearchable" sortable="true" filterclass="input-small" />
-		
+
 		<header name="vatnumber" type="fieldsearchable" sortable="true" filterclass="input-small" />
 	</headerset>
 
 	<fieldset name="items">
 		<field name="akeebasubs_user_id" type="selectrow" />
-		
+
 		<field name="user_id" type="user"
 			avatar_size="32" show_email="false" show_name="false"
 			show_link="true"
 		/>
-		
+
 		<field name="name" type="text" empty_replacement="–––"
 			show_link="true"
-			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"		
+			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
 		/>
-		
+
 		<field name="email" type="text" empty_replacement="–––"
 			show_link="true"
-			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"		
+			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
 		/>
-		
+
 		<field name="businessname" type="text" empty_replacement="–––"
 			show_link="true"
 			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
 		/>
-		
+
 		<field name="vatnumber" type="text" format="[ITEM:COUNTRY] %s" format_if_not_empty="true" empty_replacement="–––"
 			show_link="true"
 			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
 		/>
 	</fieldset>
+
+    <footerset>
+        <footer name="layout" type="hidden" default="renewals" />
+    </footerset>
 </form>
