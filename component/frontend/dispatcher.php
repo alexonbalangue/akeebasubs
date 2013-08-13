@@ -13,7 +13,7 @@ class AkeebasubsDispatcher extends FOFDispatcher
 	private $allowedViews = array(
 		'apicoupons', 'levels', 'messages', 'subscribes', 'subscriptions',
 		'validates', 'callbacks', 'userinfos', 'invoices', 'invoice',
-		'cron'
+		'cron', 'crons'
 	);
 
 	public function __construct($config = array())
