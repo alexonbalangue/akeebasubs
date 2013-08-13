@@ -23,6 +23,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] Sometimes the "Thank you" page's message would be empty, depending on your menu structure
 # [LOW] Reloading graphs from a past date would show all data from that date until today, not just 30 days after that date as it is supposed to
 # [LOW] Double processing of the "Thank you" and order cancellation page's text
+# [LOW] Notices thrown by 2Checkout integration plugin
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
