@@ -1629,9 +1629,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 				require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 			}
 			$confirmfree = AkeebasubsHelperCparams::getParam('confirmfree', 0);
-			if($confirmfree) {
+			if($confirmfree)
+			{
 				// Send the activation email
-				if(!isset($params)) $params = array();
+				if (!isset($params))
+				{
+					$params = array();
+				}
+
 				$this->sendActivationEmail($user, $params);
 			}
 		}
@@ -2648,24 +2653,41 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		$app		= JFactory::getApplication();
 		$config		= JFactory::getConfig();
-		$uparams	= JComponentHelper::getParams('com_users');
 		$db			= JFactory::getDbo();
+		$params		= JComponentHelper::getParams('com_users');
 
 		$data = array_merge((array)$user->getProperties(), $data);
 
-		$useractivation = $uparams->get('useractivation');
+		$useractivation	= $params->get('useractivation');
+		$sendpassword	= $params->get('sendpassword', 1);
+
+		// Check if the user needs to activate their account.
+		if (($useractivation == 1) || ($useractivation == 2))
+		{
+			$data['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
+			$data['block'] = 1;
+		}
+		else
+		{
+			$data['block'] = 0;
+		}
+
+		// Bind the data.
+		if (!$user->bind($data))
+		{
+			return false;
+		}
 
 		// Load the users plugin group.
 		JPluginHelper::importPlugin('user');
 
-		if (($useractivation == 1) || ($useractivation == 2)) {
-			$params = array();
-			$params['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
-			$user->bind($params);
-			$userIsSaved = $user->save();
+		// Store the data.
+		if (!$user->save())
+		{
+			return false;
 		}
 
-		// Set up data
+		// Compile the notification mail values.
 		$data = $user->getProperties();
 		$data['fromname']	= $config->get('fromname');
 		$data['mailfrom']	= $config->get('mailfrom');
@@ -2681,10 +2703,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Handle account activation/confirmation emails.
 		if ($useractivation == 2)
 		{
-			// Set the link to confirm the user email.
 			$uri = JURI::getInstance();
 			$base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
-			$data['activate'] = $base.JRoute::_('index.php?option=com_users&task=registration.activate&token='.$data['activation'], false);
+			$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
 
 			$emailSubject	= JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
@@ -2692,22 +2713,36 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$data['sitename']
 			);
 
-			$emailBody = JText::sprintf(
-				'COM_USERS_EMAIL_REGISTERED_WITH_ADMIN_ACTIVATION_BODY',
-				$data['name'],
-				$data['sitename'],
-				$data['siteurl'].'index.php?option=com_users&task=registration.activate&token='.$data['activation'],
-				$data['siteurl'],
-				$data['username'],
-				$data['password_clear']
-			);
+			if ($sendpassword)
+			{
+				$emailBody = JText::sprintf(
+					'COM_USERS_EMAIL_REGISTERED_WITH_ADMIN_ACTIVATION_BODY',
+					$data['name'],
+					$data['sitename'],
+					$data['activate'],
+					$data['siteurl'],
+					$data['username'],
+					$data['password_clear']
+				);
+			}
+			else
+			{
+				$emailBody = JText::sprintf(
+					'COM_USERS_EMAIL_REGISTERED_WITH_ADMIN_ACTIVATION_BODY_NOPW',
+					$data['name'],
+					$data['sitename'],
+					$data['activate'],
+					$data['siteurl'],
+					$data['username']
+				);
+			}
 		}
 		elseif ($useractivation == 1)
 		{
 			// Set the link to activate the user account.
 			$uri = JURI::getInstance();
 			$base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
-			$data['activate'] = $base.JRoute::_('index.php?option=com_users&task=registration.activate&token='.$data['activation'], false);
+			$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
 
 			$emailSubject	= JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
@@ -2715,15 +2750,29 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$data['sitename']
 			);
 
-			$emailBody = JText::sprintf(
-				'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY',
-				$data['name'],
-				$data['sitename'],
-				$data['siteurl'].'index.php?option=com_users&task=registration.activate&token='.$data['activation'],
-				$data['siteurl'],
-				$data['username'],
-				$data['password_clear']
-			);
+			if ($sendpassword)
+			{
+				$emailBody = JText::sprintf(
+					'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY',
+					$data['name'],
+					$data['sitename'],
+					$data['activate'],
+					$data['siteurl'],
+					$data['username'],
+					$data['password_clear']
+				);
+			}
+			else
+			{
+				$emailBody = JText::sprintf(
+					'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY_NOPW',
+					$data['name'],
+					$data['sitename'],
+					$data['activate'],
+					$data['siteurl'],
+					$data['username']
+				);
+			}
 		} else {
 
 			$emailSubject	= JText::sprintf(
@@ -2732,19 +2781,46 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$data['sitename']
 			);
 
-			$emailBody = JText::sprintf(
-				'COM_USERS_EMAIL_REGISTERED_BODY',
-				$data['name'],
-				$data['sitename'],
-				$data['siteurl']
-			);
+			if (version_compare(JVERSION, '3.0', 'lt'))
+			{
+				$emailBody = JText::sprintf(
+					'COM_USERS_EMAIL_REGISTERED_BODY',
+					$data['name'],
+					$data['sitename'],
+					$data['siteurl']
+				);
+			}
+			else
+			{
+				if ($sendpassword)
+				{
+					$emailBody = JText::sprintf(
+						'COM_USERS_EMAIL_REGISTERED_BODY',
+						$data['name'],
+						$data['sitename'],
+						$data['siteurl'],
+						$data['username'],
+						$data['password_clear']
+					);
+				}
+				else
+				{
+					$emailBody = JText::sprintf(
+						'COM_USERS_EMAIL_REGISTERED_BODY_NOPW',
+						$data['name'],
+						$data['sitename'],
+						$data['siteurl']
+					);
+				}
+			}
 		}
 
 		// Send the registration email.
 		$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody);
 
 		//Send Notification mail to administrators
-		if (($uparams->get('useractivation') < 2) && ($uparams->get('mail_to_admin') == 1)) {
+		if (($params->get('useractivation') < 2) && ($params->get('mail_to_admin') == 1))
+		{
 			$emailSubject = JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
 				$data['name'],
@@ -2759,12 +2835,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 			);
 
 			// get all admin users
-			$query = 'SELECT name, email, sendEmail' .
-					' FROM #__users' .
-					' WHERE sendEmail=1';
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('name', 'email', 'sendEmail', 'id')))
+				->from($db->quoteName('#__users')
+				->where($db->quoteName('sendEmail') . ' = ' . 1));
 
-			$db->setQuery( $query );
-			$rows = $db->loadObjectList();
+			$db->setQuery($query);
+
+			try
+			{
+				$rows = $db->loadObjectList();
+			}
+			catch (RuntimeException $e)
+			{
+				return false;
+			}
 
 			// Send mail to all superadministrators id
 			foreach( $rows as $row )
