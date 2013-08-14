@@ -1,4 +1,4 @@
 # Prevent directory listing (Apache web server)
-order deny, allow
+order deny,allow
 deny from all
 allow from none
