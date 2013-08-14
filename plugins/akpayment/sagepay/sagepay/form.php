@@ -51,8 +51,6 @@
 	<input type="hidden" name="currency" id="currency" value="<?php echo $data->currency ?>" />
 	<input type="hidden" name="amount" id="amount" value="<?php echo $data->amount ?>" />
 	<input type="hidden" name="description" id="description" value="<?php echo $data->description ?>" />
-	<input type="hidden" name="callback" value="<?php echo $data->callback ?>" />
-	<input type="hidden" name="callback" value="<?php echo $data->callback ?>" />
 
 	<div class="control-group">
 		<label for="pay" class="control-label" style="width:190px; margin-right:20px;">

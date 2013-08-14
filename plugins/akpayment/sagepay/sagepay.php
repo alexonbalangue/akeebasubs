@@ -16,7 +16,7 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 	{
 		$config = array_merge($config, array(
 			'ppName'		=> 'sagepay',
-			'ppKey'			=> 'PLG_AKPAYMENT_PAYMILL_TITLE',
+			'ppKey'			=> 'PLG_AKPAYMENT_SAGEPAY_TITLE',
 			'ppImage'		=> JURI::root().'plugins/akpayment/sagepay/sagepay/logo.png'
 		));
 
@@ -49,14 +49,16 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 	{
 		if($paymentmethod != $this->ppName) return false;
 
+		// SagePay handles the transaction in a different way: we don't send the customer to its site and then
+		// get the result; we ask the customer for more details, then POST SagePay. If everything is ok, we
+		// authorize the subscription
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=sagepay&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(
-			'url'			=> $callbackUrl.'&step=1',
+			'url'			=> $callbackUrl,
 			'amount'		=> (int)($subscription->gross_amount * 100),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'description'	=> $level->title . ' #' . $subscription->akeebasubs_subscription_id,
-			'cardholder'	=> $user->name,
-			'callback'      => base64_encode($callbackUrl)
+			'cardholder'	=> $user->name
 		);
 
 		@ob_start();
@@ -73,52 +75,9 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 
-		// We have to get credit card info and submit a request to sagepay servers, so
-		if(isset($data['step']) && $data['step'] == 1)
-		{
-			$sagePostUrl = $this->buildSageUrl($data, $data['sid']);
+		$sagePostUrl = $this->buildSageUrl($data, $data['sid']);
 
-			$this->debug($sagePostUrl);
-
-			$curlSession = curl_init();
-
-			// Set the URL
-			curl_setopt ($curlSession, CURLOPT_URL, $this->getPaymentURL());
-			curl_setopt ($curlSession, CURLOPT_HEADER, 0);
-			curl_setopt ($curlSession, CURLOPT_POST, 1);
-			curl_setopt ($curlSession, CURLOPT_POSTFIELDS, $sagePostUrl);
-			curl_setopt ($curlSession, CURLOPT_RETURNTRANSFER,1);
-			curl_setopt ($curlSession, CURLOPT_TIMEOUT, 30);
-			//The next two lines must be present for the kit to work with newer version of cURL
-			//You should remove them if you have any problems in earlier versions of cURL
-			curl_setopt ($curlSession, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt ($curlSession, CURLOPT_SSL_VERIFYHOST, 1);
-
-			$rawresponse = curl_exec($curlSession);
-
-			//Split response into name=value pairs
-			$response = explode('=', $rawresponse);
-			// Check that a connection was made
-			if (curl_error($curlSession))
-			{
-				// If it wasn't...
-				$output['Status'] = "FAIL";
-				$output['StatusDetail'] = curl_error($curlSession);
-			}
-
-			curl_close ($curlSession);
-
-			// Tokenise the response
-			for ($i=0; $i<count($response); $i++)
-			{
-				// Find position of first "=" character
-				$splitAt = strpos($response[$i], "=");
-				// Create an associative (hash) array with key/value pairs ('trim' strips excess whitespace)
-				$output[trim(substr($response[$i], 0, $splitAt))] = trim(substr($response[$i], ($splitAt+1)));
-			}
-
-			$this->debug(print_r($output, true));
-		}
+		$this->validateSubscription($sagePostUrl);
 
 		return true;
 	}
@@ -237,6 +196,50 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 		$string .= '&AccountType=E';
 
 		return $string;
+	}
+
+	private function validateSubscription($url)
+	{
+		$this->debug($url);
+
+		$curlSession = curl_init();
+
+		// Set the URL
+		curl_setopt ($curlSession, CURLOPT_URL, $this->getPaymentURL());
+		curl_setopt ($curlSession, CURLOPT_HEADER, 0);
+		curl_setopt ($curlSession, CURLOPT_POST, 1);
+		curl_setopt ($curlSession, CURLOPT_POSTFIELDS, $url);
+		curl_setopt ($curlSession, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt ($curlSession, CURLOPT_TIMEOUT, 30);
+		//The next two lines must be present for the kit to work with newer version of cURL
+		//You should remove them if you have any problems in earlier versions of cURL
+		curl_setopt ($curlSession, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt ($curlSession, CURLOPT_SSL_VERIFYHOST, 1);
+
+		$rawresponse = curl_exec($curlSession);
+
+		//Split response into name=value pairs
+		$response = explode('=', $rawresponse);
+		// Check that a connection was made
+		if (curl_error($curlSession))
+		{
+			// If it wasn't...
+			$output['Status'] = "FAIL";
+			$output['StatusDetail'] = curl_error($curlSession);
+		}
+
+		curl_close ($curlSession);
+
+		// Tokenise the response
+		for ($i=0; $i<count($response); $i++)
+		{
+			// Find position of first "=" character
+			$splitAt = strpos($response[$i], "=");
+			// Create an associative (hash) array with key/value pairs ('trim' strips excess whitespace)
+			$output[trim(substr($response[$i], 0, $splitAt))] = trim(substr($response[$i], ($splitAt+1)));
+		}
+
+		$this->debug(print_r($output, true));
 	}
 
 	private function debug($string)
