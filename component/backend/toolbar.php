@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 class AkeebasubsToolbar extends FOFToolbar
 {
-	protected function renderSubmenu()
+	public function renderSubmenu()
 	{
 		$views = array(
 			'cpanel',
