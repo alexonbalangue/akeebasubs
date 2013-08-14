@@ -116,10 +116,13 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 				$subscription = null;
 				$isValid = false;
 			}
+            $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                ->setId($subscription->akeebasubs_level_id)
+                ->getItem();
 		} else {
 			$isValid = false;
 		}
-
+        
 		// Error response
 		if($isValid && isset($data['p24_error_code'])) {
 			$data['akeebasubs_failure_reason'] = "Error code " . $data['p24_error_code'];
@@ -132,7 +135,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 			);
 
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$subscription->slug.
+				'&view=level&slug='.$level->slug.
 				'&layout='.JRequest::getCmd('layout','default');
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
@@ -205,7 +208,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$subscription->slug.
+				'&view=level&slug='.$level->slug.
 				'&layout='.JRequest::getCmd('layout','default');
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
@@ -237,7 +240,7 @@ class plgAkpaymentPrzelewy24 extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}

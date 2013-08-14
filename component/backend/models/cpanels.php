@@ -160,6 +160,46 @@ class AkeebasubsModelCpanels extends FOFModel
 				'updates/mysql/3.1.0-2013-04-13.sql',
 			)
 		),
+
+		array(
+			'table' => 'akeebasubs_levels',
+			'field' => 'signupfee',
+			'files' =>array(
+				'updates/mysql/3.1.2-2013-04-27.sql',
+			)
+		),
+
+		array(
+			'table' => 'akeebasubs_taxrules',
+			'field' => 'akeebasubs_level_id',
+			'files' =>array(
+				'updates/mysql/3.1.2-2013-05-08.sql',
+			)
+		),
+
+		array(
+			'table' => 'akeebasubs_customfields',
+			'field' => 'show',
+			'files' =>array(
+				'updates/mysql/3.2.0-2013-06-08.sql',
+			)
+		),
+
+		array(
+			'table' => 'akeebasubs_invoicetemplates',
+			'field' => 'noinvoice',
+			'files' =>array(
+				'updates/mysql/3.2.1-2013-07-15.sql',
+			)
+		),
+
+		array(
+			'table' => 'akeebasubs_coupons',
+			'field' => 'akeebasubs_apicoupon_id',
+			'files' =>array(
+				'updates/mysql/3.2.1-2013-08-06.sql',
+			)
+		),
 	);
 
 	/**

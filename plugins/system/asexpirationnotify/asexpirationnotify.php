@@ -1,50 +1,65 @@
 <?php
+
 /**
  * @package		akeebasubs
  * @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
-
 defined('_JEXEC') or die();
 
 JLoader::import('joomla.plugin.plugin');
 
 // PHP version check
-if(defined('PHP_VERSION')) {
+if (defined('PHP_VERSION'))
+{
 	$version = PHP_VERSION;
-} elseif(function_exists('phpversion')) {
+}
+elseif (function_exists('phpversion'))
+{
 	$version = phpversion();
-} else {
+}
+else
+{
 	// No version info. I'll lie and hope for the best.
 	$version = '5.0.0';
 }
+
 // Old PHP version detected. EJECT! EJECT! EJECT!
-if(!version_compare($version, '5.3.0', '>=')) return;
+if (!version_compare($version, '5.3.0', '>='))
+	return;
 
 // Make sure FOF is loaded, otherwise do not run
-if(!defined('FOF_INCLUDED')) {
-	include_once JPATH_LIBRARIES.'/fof/include.php';
+if (!defined('FOF_INCLUDED'))
+{
+	include_once JPATH_LIBRARIES . '/fof/include.php';
 }
-if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
+
+if (!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
 {
 	return;
 }
 
 // Do not run if Akeeba Subscriptions is not enabled
 JLoader::import('joomla.application.component.helper');
-if(!JComponentHelper::isEnabled('com_akeebasubs', true)) return;
+
+if (!JComponentHelper::isEnabled('com_akeebasubs', true))
+{
+	return;
+}
 
 // Require to send the correct emails in the Professional release
-require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
+require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/version.php';
 
 class plgSystemAsexpirationnotify extends JPlugin
 {
+
 	/**
 	 * Public constructor. Overridden to load the language strings.
 	 */
 	public function __construct(& $subject, $config = array())
 	{
-		if(!is_object($config['params'])) {
+		if (!is_object($config['params']))
+		{
 			JLoader::import('joomla.registry.registry');
 			$config['params'] = new JRegistry($config['params']);
 		}
@@ -52,16 +67,26 @@ class plgSystemAsexpirationnotify extends JPlugin
 		parent::__construct($subject, $config);
 
 		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)
-		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set')) {
-			if(function_exists('error_reporting')) {
+		if (function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set'))
+		{
+			if (function_exists('error_reporting'))
+			{
 				$oldLevel = error_reporting(0);
 			}
-			$serverTimezone = @date_default_timezone_get();
-			if(empty($serverTimezone) || !is_string($serverTimezone)) $serverTimezone = 'UTC';
-			if(function_exists('error_reporting')) {
+
+			$serverTimezone	 = @date_default_timezone_get();
+
+			if (empty($serverTimezone) || !is_string($serverTimezone))
+			{
+				$serverTimezone	 = 'UTC';
+			}
+
+			if (function_exists('error_reporting'))
+			{
 				error_reporting($oldLevel);
 			}
-			@date_default_timezone_set( $serverTimezone);
+
+			@date_default_timezone_set($serverTimezone);
 		}
 
 		if (!class_exists('AkeebasubsHelperEmail'))
@@ -77,48 +102,69 @@ class plgSystemAsexpirationnotify extends JPlugin
 	public function onAfterInitialise()
 	{
 		// Check if we need to run
-		if(!$this->doIHaveToRun()) return;
+		if (!$this->doIHaveToRun())
+		{
+			return;
+		}
+
+		$this->onAkeebasubsCronTask('expirationnotify');
+	}
+
+	public function onAkeebasubsCronTask($task, $options = array())
+	{
+		if ($task != 'expirationnotify')
+		{
+			return;
+		}
+
+		$defaultOptions = array(
+			'time_limit' => 2,
+		);
+
+		$options = array_merge($defaultOptions, $options);
 
 		// Get today's date
 		JLoader::import('joomla.utilities.date');
-		$jNow = new JDate();
-		$now = $jNow->toUnix();
+		$jNow	 = new JDate();
+		$now	 = $jNow->toUnix();
 
 		// Start the clock!
 		$clockStart = microtime(true);
 
 		// Get and loop all subscription levels
-		$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->enabled(1)
 			->getList();
 
 		// Update the last run info before sending any emails
 		$this->setLastRunTimestamp();
 
-		foreach($levels as $level)
+		foreach ($levels as $level)
 		{
 			// Load the notification thresholds and make sure they are sorted correctly!
-			$notify1 = $level->notify1;
-			$notify2 = $level->notify2;
+			$notify1	 = $level->notify1;
+			$notify2	 = $level->notify2;
 			$notifyAfter = $level->notifyafter;
 
-			if($notify2 > $notify1) {
-				$tmp = $notify2;
+			if ($notify2 > $notify1)
+			{
+				$tmp	 = $notify2;
 				$notify2 = $notify1;
 				$notify1 = $tmp;
 			}
 
 			// Make sure we are asked to notify users, at all!
-			if( ($notify1 <= 0) && ($notify2 <= 0) ) {
+			if (($notify1 <= 0) && ($notify2 <= 0))
+			{
 				continue;
 			}
 
 			// Get the subscriptions expiring within the next $notify1 days for
 			// users which we have not contacted yet.
-			$jFrom = new JDate($now + 1);
-			$jTo = new JDate($now + $notify1 * 24 * 3600);
+			$jFrom	 = new JDate($now + 1);
+			$jTo	 = new JDate($now + $notify1 * 24 * 3600);
 
-			$subs1 = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$subs1 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->contact_flag(0)
 				->level($level->akeebasubs_level_id)
 				->enabled(1)
@@ -130,11 +176,12 @@ class plgSystemAsexpirationnotify extends JPlugin
 			// users which we have contacted only once
 			$subs2 = array();
 
-			if($notify2 > 0) {
-				$jFrom = new JDate($now + 1);
-				$jTo = new JDate($now + $notify2 * 24 * 3600);
+			if ($notify2 > 0)
+			{
+				$jFrom	 = new JDate($now + 1);
+				$jTo	 = new JDate($now + $notify2 * 24 * 3600);
 
-				$subs2 = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subs2 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->contact_flag(1)
 					->level($level->akeebasubs_level_id)
 					->enabled(1)
@@ -145,11 +192,13 @@ class plgSystemAsexpirationnotify extends JPlugin
 
 			// Get the subscriptions expired within the last $notifyAfter days
 			$subs3 = array();
-			if($notifyAfter > 0) {
-				$jFrom = new JDate($now - ($notifyAfter + 1) * 24 * 3600);
-				$jTo = new JDate($now - 1);
 
-				$subs3 = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			if ($notifyAfter > 0)
+			{
+				$jFrom	 = new JDate($now - ($notifyAfter + 1) * 24 * 3600);
+				$jTo	 = new JDate($now - 1);
+
+				$subs3 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->level($level->akeebasubs_level_id)
 					->enabled(0)
 					->expires_from($jFrom->toSql())
@@ -158,15 +207,17 @@ class plgSystemAsexpirationnotify extends JPlugin
 			}
 
 			// If there are no subscriptions, bail out
-			if( (count($subs1) + count($subs2) + count($subs3)) == 0 ) {
+			if ((count($subs1) + count($subs2) + count($subs3)) == 0)
+			{
 				continue;
 			}
 
 			// Check is some of those subscriptions have been renewed. If so, set their contactFlag to 2
 			$realSubs = array();
-			foreach(array($subs1, $subs2, $subs3) as $subs)
+
+			foreach (array($subs1, $subs2, $subs3) as $subs)
 			{
-				foreach($subs as $sub)
+				foreach ($subs as $sub)
 				{
 					// Skip the subscription if the contact_flag is already 3
 					if ($sub->contact_flag == 3)
@@ -175,26 +226,34 @@ class plgSystemAsexpirationnotify extends JPlugin
 					}
 
 					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
-					$renewals = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+					$renewals = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 						->enabled(1)
 						->user_id($sub->user_id)
 						->level($sub->akeebasubs_level_id)
 						->publish_up($sub->publish_down)
 						->getList();
-					if(count($renewals)) {
+
+					if (count($renewals))
+					{
 						// The user has already renewed. Don't send him an email; just update the row
-						FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 							->setId($sub->akeebasubs_subscription_id)
 							->getItem()
 							->save(array(
-								'contact_flag'	=> 3
-							));
+								'contact_flag' => 3
+						));
 
 						// Timeout check -- Only if we did make a modification!
-						$clockNow = microtime(true);
-						$elapsed = $clockNow - $clockStart;
-						if($elapsed > 2) return;
-					} else {
+						$clockNow	 = microtime(true);
+						$elapsed	 = $clockNow - $clockStart;
+
+						if (($options['time_limit'] > 0) && ($elapsed > $options['time_limit']))
+						{
+							return;
+						}
+					}
+					else
+					{
 						// No renewals found. Let's nag our user.
 						$realSubs[] = $sub;
 					}
@@ -202,44 +261,55 @@ class plgSystemAsexpirationnotify extends JPlugin
 			}
 
 			// If there are no subscriptions, bail out
-			if(empty($realSubs)) {
+			if (empty($realSubs))
+			{
 				continue;
 			}
 
 			// Loop through subscriptions and send out emails, checking for timeout
-			$jNow = new JDate();
-			$mNow = $jNow->toSql();
-			foreach($realSubs as $sub) {
+			$jNow	 = new JDate();
+			$mNow	 = $jNow->toSql();
+
+			foreach ($realSubs as $sub)
+			{
 				// Is it the first or the second contact?
-				if($sub->enabled && ($sub->contact_flag == 0)) {
+				if ($sub->enabled && ($sub->contact_flag == 0))
+				{
 					// First contact
 					$data = array(
-						'contact_flag'		=> 1,
-						'first_contact'		=> $mNow
+						'contact_flag'	 => 1,
+						'first_contact'	 => $mNow
 					);
 					$this->sendEmail($sub, 'first');
-				} elseif($sub->enabled && ($sub->contact_flag == 1)) {
+				}
+				elseif ($sub->enabled && ($sub->contact_flag == 1))
+				{
 					// Second and final contact
 					$data = array(
-						'contact_flag'		=> 2,
-						'second_contact'	=> $mNow
+						'contact_flag'	 => 2,
+						'second_contact' => $mNow
 					);
 					$this->sendEmail($sub, 'second');
-				} elseif(!$sub->enabled) {
+				}
+				elseif (!$sub->enabled)
+				{
 					$data = array(
-						'contact_flag'		=> 3,
-						'after_contact'		=> $mNow
+						'contact_flag'	 => 3,
+						'after_contact'	 => $mNow
 					);
 					$this->sendEmail($sub, 'after');
 				}
-				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+
+				FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->setId($sub->akeebasubs_subscription_id)
 					->getItem()
 					->save($data);
+
 				// Timeout check -- Only if we sent at least one email!
-				$clockNow = microtime(true);
-				$elapsed = $clockNow - $clockStart;
-				if($elapsed > 2)
+				$clockNow	 = microtime(true);
+				$elapsed	 = $clockNow - $clockStart;
+
+				if (($options['time_limit'] > 0) && ($elapsed > $options['time_limit']))
 				{
 					// Unset last run timestamp and return
 					$this->setLastRunTimestamp(0);
@@ -257,15 +327,21 @@ class plgSystemAsexpirationnotify extends JPlugin
 	private function getComponentParameters()
 	{
 		JLoader::import('joomla.registry.registry');
-		$component = JComponentHelper::getComponent( 'com_akeebasubs' );
+		$component = JComponentHelper::getComponent('com_akeebasubs');
 
-		if($component->params instanceof JRegistry) {
+		if ($component->params instanceof JRegistry)
+		{
 			$cparams = $component->params;
-		} elseif(!empty($component->params)) {
+		}
+		elseif (!empty($component->params))
+		{
 			$cparams = new JRegistry($component->params);
-		} else {
+		}
+		else
+		{
 			$cparams = new JRegistry('{}');
 		}
+
 		return $cparams;
 	}
 
@@ -275,12 +351,13 @@ class plgSystemAsexpirationnotify extends JPlugin
 	 */
 	private function doIHaveToRun()
 	{
-		$params = $this->getComponentParameters();
-		$lastRunUnix = $params->get('plg_akeebasubs_asexpirationnotify_timestamp',0);
-		$dateInfo = getdate($lastRunUnix);
+		$params		 = $this->getComponentParameters();
+		$lastRunUnix = $params->get('plg_akeebasubs_asexpirationnotify_timestamp', 0);
+		$dateInfo	 = getdate($lastRunUnix);
 		$nextRunUnix = mktime(0, 0, 0, $dateInfo['mon'], $dateInfo['mday'], $dateInfo['year']);
 		$nextRunUnix += 24 * 3600;
-		$now = time();
+		$now		 = time();
+
 		return ($now >= $nextRunUnix);
 	}
 
@@ -290,17 +367,17 @@ class plgSystemAsexpirationnotify extends JPlugin
 	private function setLastRunTimestamp($timestamp = null)
 	{
 		$lastRun = is_null($timestamp) ? time() : $timestamp;
-		$params = $this->getComponentParameters();
+		$params	 = $this->getComponentParameters();
 		$params->set('plg_akeebasubs_asexpirationnotify_timestamp', $lastRun);
 
 		$db = JFactory::getDBO();
 
-		$data = $params->toString('JSON');
-		$query = $db->getQuery(true)
+		$data	 = $params->toString('JSON');
+		$query	 = $db->getQuery(true)
 			->update($db->qn('#__extensions'))
-			->set($db->qn('params').' = '.$db->q($data))
-			->where($db->qn('element').' = '.$db->q('com_akeebasubs'))
-			->where($db->qn('type').' = '.$db->q('component'));
+			->set($db->qn('params') . ' = ' . $db->q($data))
+			->where($db->qn('element') . ' = ' . $db->q('com_akeebasubs'))
+			->where($db->qn('type') . ' = ' . $db->q('component'));
 		$db->setQuery($query);
 		$db->execute();
 	}
@@ -315,13 +392,14 @@ class plgSystemAsexpirationnotify extends JPlugin
 	public function onAKGetEmailKeys()
 	{
 		$this->loadLanguage();
+
 		return array(
-			'section'		=> $this->_name,
-			'title'			=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAILSECTION'),
-			'keys'			=> array(
-				'first'					=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_FIRST'),
-				'second'				=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_SECOND'),
-				'after'					=> JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_AFTER'),
+			'section'	 => $this->_name,
+			'title'		 => JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAILSECTION'),
+			'keys'		 => array(
+				'first'	 => JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_FIRST'),
+				'second' => JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_SECOND'),
+				'after'	 => JText::_('PLG_SYSTEM_ASEXPIRATIONNOTIFY_EMAIL_AFTER'),
 			)
 		);
 	}
@@ -338,8 +416,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$user = JFactory::getUser($row->user_id);
 
 		// Get a preloaded mailer
-		$key = 'plg_system_' . $this->_name . '_' . $type;
-		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
+		$key	 = 'plg_system_' . $this->_name . '_' . $type;
+		$mailer	 = AkeebasubsHelperEmail::getPreloadedMailer($row, $key);
 
 		if ($mailer === false)
 		{
@@ -352,4 +430,5 @@ class plgSystemAsexpirationnotify extends JPlugin
 
 		return $result;
 	}
+
 }

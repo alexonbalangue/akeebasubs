@@ -151,6 +151,10 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 				$subscription = null;
 				$isValid = false;
 			}
+            $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                ->setId($subscription->akeebasubs_level_id)
+                ->getItem()
+                ->slug;
 		} else {
 			$isValid = false;
 		}
@@ -218,7 +222,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$subscription->slug.
+				'&view=level&slug='.$slug.
 				'&layout='.JRequest::getCmd('layout','default');
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
@@ -254,7 +258,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}

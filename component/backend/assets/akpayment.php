@@ -157,7 +157,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 *
 	 * @return  void
 	 */
-	protected function fixDates($subscription, &$updates)
+	public static function fixSubscriptionDates($subscription, &$updates)
 	{
 		// Take into account the params->fixdates data to determine when
 		// the new subscription should start and/or expire the old subscription
@@ -330,6 +330,25 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		$updates['publish_down'] = $jEnd->toSql();
 		$updates['enabled'] = 1;
 		$updates['params'] = json_encode($subcustom);
+	}
+
+	/**
+	 * Fixes the starting and end dates when a payment is accepted after the
+	 * subscription's start date. This works around the case where someone pays
+	 * by e-Check on January 1st and the check is cleared on January 5th. He'd
+	 * lose those 4 days without this trick. Or, worse, if it was a one-day pass
+	 * the user would have paid us and we'd never given him a subscription!
+	 *
+	 * @deprecated since version 3.2.1
+	 *
+	 * @param   AkeebasubsTableSubscription  $subscription  The subscritpion record
+	 * @param   array                        $updates       By-ref array to the updates being applied to $subscription
+	 *
+	 * @return  void
+	 */
+	protected function fixDates($subscription, &$updates)
+	{
+		self::fixSubscriptionDates($subscription, $updates);
 	}
 
 	/**

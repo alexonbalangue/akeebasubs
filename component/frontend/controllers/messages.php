@@ -57,6 +57,11 @@ class AkeebasubsControllerMessages extends FOFController
 
 		$this->getThisView()->assign('subscription',$subscription);
 
+		if ($subscription->akeebasubs_level_id)
+		{
+			$this->getThisModel()->setId($subscription->akeebasubs_level_id);
+		}
+
 		/**
 		 * Joomla! 1.6 and later - we have to effectively "re-login" the user,
 		 * otherwise his ACL privileges are stale.
@@ -78,7 +83,7 @@ class AkeebasubsControllerMessages extends FOFController
 
 			if ($subscriber_user_id == $subscription->user_id)
 			{
-				// Do not log him out; he's the user who initiated this subcsription
+				// Do not log him out; he's the user who initiated this subscription
 				self::$loggedinUser = false;
 
 				// Unset the subscriber user ID value
@@ -91,7 +96,7 @@ class AkeebasubsControllerMessages extends FOFController
 				self::$loggedinUser = true;
 			}
 		}
-		elseif ($userid != $subscription->user_id)
+		elseif ($userid == $subscription->user_id)
 		{
 			// User already logged in. We'll log him back in (due to Joomla!
 			// ACLs not being applied otherwise) but we are not going to log him
@@ -116,6 +121,14 @@ class AkeebasubsControllerMessages extends FOFController
 			// The user cannot be found. Abort.
 			self::$loggedinUser = false;
 			return false;
+		}
+
+		// If it is a blocked user let's log him out after loading this page.
+		// This decision is made no matter how we ended up deciding to log in
+		// this user.
+		if ($newUserObject->block)
+		{
+			self::$loggedinUser = true;
 		}
 
 		// Mark the user as logged in
@@ -153,24 +166,10 @@ class AkeebasubsControllerMessages extends FOFController
 		// Log out the logged in user
 		if (self::$loggedinUser)
 		{
-			$my 		= JFactory::getUser();
-			$session 	= JFactory::getSession();
-			$app 		= JFactory::getApplication();
+			$app = JFactory::getApplication();
 
-			// Hit the user last visit field
-			$my->setLastVisit();
-
-			// Destroy the php session for this user
-			$session->destroy();
-
-			// Force logout all users with that userid
-			$db = JFactory::getDBO();
-			$query = $db->getQuery(true)
-				->delete($db->qn('#__session'))
-				->where($db->qn('userid').' = '.(int) $my->id)
-				->where($db->qn('client_id').' = '.(int) $app->getClientId());
-			$db->setQuery($query);
-			$db->execute();
+			// Perform the log in.
+			$error = $app->logout();
 		}
 
 		return true;

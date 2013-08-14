@@ -36,7 +36,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 
 	<input type="hidden" name="currency_code" value="<?php echo $data->currency ?>" />
 	<input type="hidden" name="lang" value="<?php echo $data->params->get('lang','en') ?>" />
-	<input type="hidden" name="merchant_order_id" value="<?php echo $subscription->id ?>" />
+	<input type="hidden" name="merchant_order_id" value="<?php echo $subscription->akeebasubs_subscription_id ?>" />
 	<input type="hidden" name="pay_method" value="<?php echo strtoupper($data->params->get('pay_method','cc')) ?>" />
 	<input type="hidden" name="x_receipt_link_url" value="<?php echo $data->x_receipt_link_url ?>" />
 

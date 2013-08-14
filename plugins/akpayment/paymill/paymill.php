@@ -45,66 +45,6 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		$doc->addScriptDeclaration(
 			"\nvar PAYMILL_PUBLIC_KEY = '" . $this->getPublicKey() . "';\n");
 		$doc->addScript("https://bridge.paymill.de/");
-		$doc->addScriptDeclaration(
-			'
-				window.addEvent(\'domready\', function(){
-					function PaymillResponseHandler(error, result) {
-						$$(\'.control-group\').removeClass(\'error\');
-						if (error) {
-							if(error.apierror == \'3internal_server_error\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3INTERNAL_SERVER_ERROR') . '\');
-							}else if(error.apierror == \'internal_server_error\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3INTERNAL_SERVER_ERROR') . '\');
-							}else if(error.apierror == \'invalid_public_key\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_PUBLIC_KEY') . '\');
-							}else if(error.apierror == \'3ds_cancelled\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3DS_CANCELLED') . '\');
-							}else if(error.apierror == \'field_invalid_card_number\') {
-								$(\'control-group-card-number\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_NUMBER') . '\');
-							}else if(error.apierror == \'field_invalid_card_exp_year\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_EXP_YEAR') . '\');
-							}else if(error.apierror == \'field_invalid_card_exp_month\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_EXP_MONTH') . '\');
-							}else if(error.apierror == \'field_invalid_card_exp\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_EXP') . '\');
-							}else if(error.apierror == \'field_invalid_card_cvc\') {
-								$(\'control-group-card-cvc\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_CVC') . '\');
-							}else if(error.apierror == \'field_invalid_card_holder\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_HOLDER') . '\');
-							}else {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_UNKNOWN_ERROR') . '\');
-							}
-							$(\'payment-errors\').setStyle(\'display\',\'\');
-							$(\'payment-button\').set(\'disabled\', false);
-						} else {
-							$(\'payment-errors\').setStyle(\'display\',\'none\');
-							var token = result.token;
-							$(\'token\').set(\'value\', token);
-							$(\'payment-form\').submit();
-						}
-					}
-
-					$(\'payment-form\').addEvents({
-						submit: function(){
-							paymill.createToken({
-								number:$(\'card-number\').value,
-								exp_month:$(\'card-expiry-month\').value,
-								exp_year:$(\'card-expiry-year\').value,
-								cvc:$(\'card-cvc\').value,
-								amount_int:$(\'amount\').value,
-								currency:$(\'currency\').value,
-								cardholder:$(\'card-holder\').value
-							}, PaymillResponseHandler);
-							$(\'payment-button\').set(\'disabled\', true);
-							return false;
-						}
-					});
-				});'."\n");
 
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paymill&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(
@@ -335,7 +275,10 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+        $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem();
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}

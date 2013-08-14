@@ -170,9 +170,7 @@ $this->loadHelper('cparams');
 				<?php echo AkeebasubsHelperSelect::levelgroups($this->item->akeebasubs_levelgroup_id); ?>
 			</div>
 		</div>
-	</div>
 
-	<div class="span6">
 		<div class="control-group">
 			<label for="only_once" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_ONLY_ONCE'); ?>
@@ -190,13 +188,39 @@ $this->loadHelper('cparams');
 				<?php echo JHTML::_('select.booleanlist', 'recurring', null, $this->item->recurring); ?>
 			</div>
 		</div>
+	</div>
 
+	<div class="span6">
 		<div class="control-group">
 			<label for="" class="control-label">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PAYMENT_PLUGINS'); ?>
 			</label>
 			<div class="controls">
 				<?php echo AkeebasubsHelperSelect::paymentmethods('payment_plugins[]', $this->item->payment_plugins, array('id'=>'payment_plugins', 'multiple' => 'multiple', 'always_dropdown' => 1, 'default_option' => 1)) ?>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="renew_url" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RENEW_URL'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="20" id="renew_url" name="renew_url" class="input-large" value="<?php echo $this->escape($this->item->renew_url) ?>" />
+				<div class="help">
+					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_RENEW_URL_DESC'); ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="content_url" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_CONTENT_URL'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="20" id="content_url" name="content_url" class="input-large" value="<?php echo $this->escape($this->item->content_url) ?>" />
+				<div class="help">
+					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_CONTENT_URL_DESC'); ?>
+				</div>
 			</div>
 		</div>
 

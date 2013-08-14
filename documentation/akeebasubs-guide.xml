@@ -2274,6 +2274,76 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Payment methods</term>
+
+          <listitem>
+            <para>Select one or more payment methods to be shown for this
+            subscription level. If you select the <option>- No selection
+            -</option> option all enabled payment methods are shown
+            (default).</para>
+
+            <para>Pro tip: This feature is especially useful when you want to
+            limit which subscription levels will allow off-line or mobile
+            (SMS) payment. Of course you can choose between any of the payment
+            plugins you have activated.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Custom renewal URL</term>
+
+          <listitem>
+            <para>Normally Akeeba Subscriptions will determine the renewal
+            page's URL automatically, sending the user to re-subscribe to the
+            same subscription level he's renewing. This is not desirable in
+            some cases. You can enter a custom renewal URL here. A few things
+            to notice:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>When you enter a custom renewal URL the Renew button
+                will be shown in the front-end of your site even when the
+                subscription level has Forbid renewals set to Yes. In this
+                case the renewal URL will be the custom URL you've entered
+                here.</para>
+              </listitem>
+
+              <listitem>
+                <para>If a user tries to manually access the subscription URL
+                of a subscription level which has Forbid renewals set to Yes
+                he will normally be shown a 403 Forbidden error page if he
+                already has a subscription to this level. When the
+                subscription level, however, has a custom renewal URL he will
+                not be shown an error page; he will be redirected to the
+                custom renewal URL.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>These features allow you to have a free (trial) subscription
+            which automatically directs the user to renew it with a paid
+            subscription when it expires. All you need to do is enter the
+            subscription page URL for the paid subscription in the Custom
+            renewal URL field.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Content URL</term>
+
+          <listitem>
+            <para>If you have a front-end menu item of the <option>All of my
+            subscriptions</option> type, the title of the subscription level
+            will be linked to this URL. This URL can point to anything. We
+            recommend giving the URL of a page on your site which explains the
+            privileges the subscriber of this subscription level has on your
+            site, e.g. linking to premium content categories, restricted
+            downloads and so on. If you leave it blank no link will be
+            generated (default behaviour before Akeeba Subscriptions
+            3.2.1).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>First expiration notification (days)</term>
 
           <listitem>
@@ -3355,7 +3425,8 @@ Rule C gives $ 30 discount</programlisting>
       <title>Coupons</title>
 
       <para>You can access this feature by clicking on
-      <guilabel>Coupons</guilabel> in the toolbar links area.</para>
+      <guilabel>Coupons</guilabel>, <guilabel>Coupons</guilabel> in the
+      toolbar links area.</para>
 
       <para>This feature allows you to create discount coupon codes. When a
       user enters a valid coupon code during registration, it's subtracted
@@ -3520,6 +3591,151 @@ Rule C gives $ 30 discount</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
+
+      <section xml:id="coupons-api">
+        <title>Coupons API</title>
+
+        <para>You can access this feature by clicking on
+        <guilabel>Coupons</guilabel>, <guilabel>API Coupons</guilabel> in the
+        toolbar links area.</para>
+
+        <para>There are many cases when you want to allow third parties to
+        create coupon codes on your site automatically. For example a reseller
+        who processes the transactions on their end might need to create 100%
+        discount coupon codes for your site that his clients can redeem to
+        subscribe to your site. Or you may have an ongoing deal with a third
+        party to offer a discount on your subscriptions but do not wish to let
+        them publish a coupon code common for every one of their clients, in
+        fear of abuse (someone sharing the coupon code). In this case you need
+        to use the Coupons API which allows on-demand generation of single use
+        coupon codes.</para>
+
+        <para>First you need to create at least one API entry for each one of
+        your associates. The settings you can define for each API entry
+        are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>Title</term>
+
+            <listitem>
+              <para>Just a reminder for you to know what this API entry is
+              supposed to do, e.g. "20% off LEVEL1 coupons for XYZ
+              Corp."</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Key</term>
+
+            <listitem>
+              <para>The API key. You can use anything you like as long as it
+              consists only of lowercase letters a-z and numbers 0-9. You will
+              be giving that to your associate.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Password</term>
+
+            <listitem>
+              <para>The API password. You can use anything you like as long as
+              it consists only of lowercase letters a-z and numbers 0-9. You
+              will be giving that to your associate. This password is used to
+              guard against unauthorised access to the API key.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Discount type</term>
+
+            <listitem>
+              <para>The discount type of the coupon, percent or value. Please
+              see the coupons feature for more information.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Discount value</term>
+
+            <listitem>
+              <para>The value of the coupon. Please see the coupons feature
+              for more information.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Published</term>
+
+            <listitem>
+              <para>Is this API key published? Unpublished API keys cannot be
+              used.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Subscription levels</term>
+
+            <listitem>
+              <para>Which subscription levels the coupon generated by the API
+              key will apply to. If you make no selection it applies to all
+              subscription levels.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Usage limits</term>
+
+            <listitem>
+              <para>You can have one of three usage limit types:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para>Create up to this many coupons. Only up to this many
+                  coupons can be created with the API key.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Allow up to this many subscriptions to be created.
+                  Similar to the above, but it actually counts how many
+                  subscription have been created, i.e. how many of the coupon
+                  codes have actually been used.</para>
+                </listitem>
+
+                <listitem>
+                  <para>This is not an exact science! Let's say that this
+                  limit is set to 10. Let's say that your associate has
+                  created 10 coupon codes but only 9 of them have been used.
+                  He can now create an 11th coupon code. Let's assume that
+                  this coupon code is immediately used. We are left with one
+                  coupon code which has not been used. This coupon code CAN be
+                  used by the user, so you'll end up with 11 used coupon codes
+                  generated by this API key.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Maximum value of discount given. Similar to the above,
+                  but instead of counting how many coupon codes have been used
+                  it counts how much money has been given as a discount.
+                  Again, this is not an exact science so be warned.</para>
+                </listitem>
+              </itemizedlist>
+
+              <para>You can set the value of the limit in the box to the right
+              of the drop-down list.</para>
+
+              <para>If you want no limits, select "Create up to this many
+              coupons" and either leave the field blank or set it to 0. This
+              tells Akeeba Subscriptions to ignore the limits
+              altogether.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>The exact URL for each API key is shown when you edit an API key
+        entry. It only shows when you edit an existing API key. It doesn't
+        show when you create a new API key until you click on Save.</para>
+      </section>
     </section>
 
     <section xml:id="subscriptions-management">
@@ -3901,55 +4117,558 @@ Rule C gives $ 30 discount</programlisting>
       appear right after the end of the subscription levels list.</para>
     </section>
 
-    <section xml:id="importing-from-other-components">
-      <title>Importing from other components</title>
+    <section xml:id="importing">
+      <title>Importing data</title>
 
-      <para>Most likely you are already using a subscriptions system and
-      wouldn't like to have to manually import all of your subscriptions to
-      Akeeba Subscriptions. That's why we are offering an automated import
-      feature. You can access it from Akeeba Subscription's dashboard page, by
-      clicking on the Operations tab, and then on
-      <guibutton>Import</guibutton>.</para>
+      <para>Akeeba Subscriptions allows you to import data from other
+      subscription components and from other sources. This allows you to move
+      data from an old subscriptions system into Akeeba Subscriptions.</para>
 
       <warning>
-        <para>Importing from other components will DELETE AND REPLACE ANY AND
-        ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING BACK.
-        Do NOT use this option after you have been using Akeeba Subscriptions
-        and have new subscribers on your site.</para>
+        <para>If you have recurring payments set up in your old system you
+        must not import them to Akeeba Subscriptions. Recurring payments use a
+        component-specific payment notification URL and integration code.
+        Importing recurring subscriptions will lead to your customers being
+        charged but their subscriptions not renewing. This is not a bug; it is
+        how recurring payments work in all payment processors we know of. You
+        will need to cancel existing recurring payments and instruct your
+        users to resubscribe.</para>
       </warning>
 
-      <important>
-        <para>Please remember to review your Subscription Levels after import.
-        Most notably, the text of the subscription completion and subscription
-        cancellation pages will be missing from all subscription
-        levels.</para>
-      </important>
+      <section xml:id="importing-from-other-components">
+        <title>Importing from other components</title>
 
-      <para>The options are:</para>
+        <para>Most likely you are already using a subscriptions system and
+        wouldn't like to have to manually import all of your subscriptions to
+        Akeeba Subscriptions. That's why we are offering an automated import
+        feature. You can access it from Akeeba Subscription's dashboard page,
+        by clicking on the Operations tab, and then on <guibutton>Import
+        Data</guibutton>.</para>
 
-      <variablelist>
-        <varlistentry>
-          <term>AMBRA.Subscriptions</term>
+        <warning>
+          <para>Importing from other components will DELETE AND REPLACE ANY
+          AND ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING
+          BACK. Do NOT use this option after you have been using Akeeba
+          Subscriptions and have new subscribers on your site.</para>
+        </warning>
 
-          <listitem>
-            <para>Imports subscription levels and subscriptions from
-            Dioscouri's AMBRA Subscriptions (a.k.a. AMBRA.subs)</para>
-          </listitem>
-        </varlistentry>
+        <important>
+          <para>Please remember to review your Subscription Levels after
+          import. Most notably, the text of the subscription completion and
+          subscription cancellation pages will be missing from all
+          subscription levels.</para>
+        </important>
 
-        <varlistentry>
-          <term>AMBRA.Subscriptions with PayPal with VAT plugin</term>
+        <para>The options are:</para>
 
-          <listitem>
-            <para>If you are using AMBRA.subs with my modified "PayPal with
-            VAT" payment plugin and the customizations for integrating coupons
-            into AMBRA.subs, you can click on this option. It will import
-            subscription levels, subscriptions and any coupon codes defined.
-            Moreover, it will also import the extra data stored per user, e.g.
-            their address and VAT number.</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
+        <variablelist>
+          <varlistentry>
+            <term>AMBRA.Subscriptions</term>
+
+            <listitem>
+              <para>Imports subscription levels and subscriptions from
+              Dioscouri's AMBRA Subscriptions (a.k.a. AMBRA.subs)</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>AMBRA.Subscriptions with PayPal with VAT plugin</term>
+
+            <listitem>
+              <para>If you are using AMBRA.subs with my modified "PayPal with
+              VAT" payment plugin and the customizations for integrating
+              coupons into AMBRA.subs, you can click on this option. It will
+              import subscription levels, subscriptions and any coupon codes
+              defined. Moreover, it will also import the extra data stored per
+              user, e.g. their address and VAT number.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="importing-from-csv">
+        <title>Importing from CSV</title>
+
+        <para>If you are using a Joomla! subscriptions component not supported
+        for direct import or a non-Joomla! system you need a way to quickly
+        import your existing subscriptions to Akeeba Subscriptions. The
+        fastest way is using the CSV import feature. CSV files can be
+        generated by most subscription systems, spreadsheet applications (e.g.
+        Microsoft Office Excel, OpenOffice/LibreOffice Calc, Apple Numbers,
+        Google Docs etc) and database tools (e.g. phpMyAdmin). You can access
+        the CSV import from Akeeba Subscription's dashboard page, by clicking
+        on the Operations tab, and then on <guibutton>Import
+        users</guibutton>.</para>
+
+        <important>
+          <para>You need to manually create the subscription levels before
+          importing any data.</para>
+
+          <para>Imported data will NOT overwrite existing subscriptions; it
+          will simply append new subscriptions.</para>
+
+          <para>All Akeeba Subscriptions integration plugins and Joomla! user
+          plugins run when a new subscription or user (respectively) is
+          created. In order to avoid emails being sent you must disable the
+          Akeeba Subscriptions - Subscription e-mails plugin. To avoid
+          invoices being created (which might lead to import failure) you have
+          to disable all invoice related plugins, e.g. Akeeba Subscriptions -
+          Integrated Invoicing. To avoid new user emails being generated you
+          must edit the User - Joomla! plugin and disable sending emails from
+          its basic options.</para>
+
+          <para>The import can lead to timeout issues. Please try importing a
+          few records (depending on your server, 10 to 100) at a time.
+          Importing hundreds or thousands of records will probably lead to a
+          white page, Internal Server Error 500 or a timeout error
+          page.</para>
+
+          <para>The first line of the CSV file MUST contain the column
+          names.</para>
+        </important>
+
+        <para>In the interface you have the following options:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>CSV delimiters</term>
+
+            <listitem>
+              <para>CSV files can have their fields separated and enclosed in
+              different ways. You will have to open your CSV file with a plain
+              text editor such as Notepad, gEdit or TextEdit to determine
+              which format your file is using. Even different versions of the
+              same software may be using different delimiters. The options you
+              have are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><option>abc, def</option> Fields separated by commas,
+                  not enclosed in any character</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>abc; def</option> Fields separated by
+                  semicolons, not enclosed in any character</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>"abc"; "def"</option> Fields separated by
+                  semicolons, enclosed in double quotes</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>Custom delimiters</option> is used to show the
+                  following two options which allows better
+                  customisation</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Field delimiter</term>
+
+            <listitem>
+              <para>Enter the character used to separate fields from each
+              other such as a comma, a semicolon, a pipe character etc. If you
+              leave it blank hell will break loose. You've been warned!</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>Field enclosure</term>
+
+            <listitem>
+              <para>Enter the character used to enclose fields such as quote
+              or double quote. You may leave that blank if none is used in
+              your file</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>File</term>
+
+            <listitem>
+              <para>Choose the CSV file to upload</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Akeeba Subscriptions tries to guess the line ending of your
+        file. It supports all known line endings: CR (Mac OS classic and all
+        versions of Microsoft Office for Mac, even on Mac OS X), LF (Linux,
+        UNIX, Mac OS X), CR and LF (Windows, DOS).</para>
+
+        <para>Your CSV file MUST contain all of the following fields:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>username</term>
+
+            <listitem>
+              <para>The username of the user account linked with this
+              subscription. If the user account doesn't exist it will be
+              created.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>email</term>
+
+            <listitem>
+              <para>The email of the user account linked with this
+              subscription. If the user account doesn't exist it will be
+              created.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>password</term>
+
+            <listitem>
+              <para>Only used if the user account doesn't already exist. In
+              this case, this is the password that will be used for the new
+              user account. You may leave it blank if the user account already
+              exists.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>name</term>
+
+            <listitem>
+              <para>The full (real) name of the user account linked with this
+              subscription. Only used if the user account doesn't already
+              exist.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>subscription_level</term>
+
+            <listitem>
+              <para>The title of the subscription level for this subscription.
+              The subscription level must already exist.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>publish_up</term>
+
+            <listitem>
+              <para>The starting date of the subscription. The format MUST be
+              yyyy-mm-dd HH:MM:SS (four digits for the year, dash, two digits
+              for the month, dash, two digits for the day of the week, space,
+              two digits for the hour in 24-hour format, colon, two digits for
+              the minutes, colon, two digits for the seconds), e.g.
+              <parameter>2013-08-15 22:10:55</parameter>. The date and time
+              must be in GMT timezone.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>Your CSV file MAY contain one or more of the following
+        fields:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>isbusiness</term>
+
+            <listitem>
+              <para>1 if this user is a business entity, 0 if it's a
+              person.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>businessname</term>
+
+            <listitem>
+              <para>The name of the business entity</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>occupation</term>
+
+            <listitem>
+              <para>The profession/occupation of the business entity</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>vatnumber</term>
+
+            <listitem>
+              <para>The VAT number of the user without the country prefix. For
+              example, if a user's VAT number is DE1234567890 you MUST set it
+              to 1234567890 without the DE prefix (which denotes Germany as
+              the country of the VAT number).</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>viesregistered</term>
+
+            <listitem>
+              <para>1 is the user is registered with the VIES system, 0
+              otherwise. Only makes sense for EU citizens and
+              businesses.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>address1</term>
+
+            <listitem>
+              <para>The first line of the user's mail address, usually street
+              name and number</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>address2</term>
+
+            <listitem>
+              <para>The second line of the user's mail address, usually name
+              of house or floor / apartment number.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>city</term>
+
+            <listitem>
+              <para>The city of the user</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>state</term>
+
+            <listitem>
+              <para>The state of the user. Please note that you have to type
+              the State Code as defined in Tools, States in the component. For
+              example, the state code for California (as shipped with the
+              component) is CA. If the user lives in California you have to
+              type CA in this field, NOT California.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>zip</term>
+
+            <listitem>
+              <para>The zip / postal code</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>country</term>
+
+            <listitem>
+              <para>The user's country code. Please note that you must use the
+              two letter <link
+              xlink:href="http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">ISO
+              3166 country code</link>. For example, the country code for the
+              United States of America is US whereas the country code for
+              Germany is DE. If you look at the ISO 3166 table linked above,
+              the two letter country code is under the "A 2" column.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>publish_down</term>
+
+            <listitem>
+              <para>The expiration date of the subscription. The format MUST
+              be yyyy-mm-dd HH:MM:SS (four digits for the year, dash, two
+              digits for the month, dash, two digits for the day of the week,
+              space, two digits for the hour in 24-hour format, colon, two
+              digits for the minutes, colon, two digits for the seconds), e.g.
+              <parameter>2013-08-15 22:10:55</parameter>. The date and time
+              must be in GMT timezone. If not defined Akeeba Subscriptions
+              will guess it based on the publish_up date/time and the
+              subscription level's length.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>enabled</term>
+
+            <listitem>
+              <para>0 if the subscription is not active, 1 if it is active. If
+              not defined it will be determined automatically.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>processor</term>
+
+            <listitem>
+              <para>The name of the payment processor, all lowercase without
+              spaces. If unsure, do not define this field at all.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>processor_key</term>
+
+            <listitem>
+              <para>The transaction number as recorded by the payment
+              processor. If unsure, do not define this field at all.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>status</term>
+
+            <listitem>
+              <para>The payment status. Can be one of:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><option>N</option> means New. The subscription is not
+                  paid for and will be automatically disabled.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>P</option> means Pending. The payment is
+                  pending. For example waiting for a bank transfer or cheque
+                  to clear and the subscription will be automatically
+                  disabled.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>C</option> means Completed. The payment is
+                  complete and the subscription is enabled.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>X</option> means Cancelled. The payment was
+                  cancelled / reversed / refunded and the subscription will be
+                  automatically disabled.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>net_amount</term>
+
+            <listitem>
+              <para>The net (before tax) amount paid for the subscription. You
+              MUST use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>tax_amount</term>
+
+            <listitem>
+              <para>The tax amount paid for the subscription. You MUST use a
+              dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>gross_amount</term>
+
+            <listitem>
+              <para>The gross (net plus tax) amount paid for the subscription.
+              You MUST use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>recurring_amount</term>
+
+            <listitem>
+              <para>The gross amount charged for auto-recurring subscriptions.
+              You MUST use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>tax_percent</term>
+
+            <listitem>
+              <para>The percentage of the tax on the net price. This must be a
+              number from 0.0 to 100.0. You MUST use a dot as the decimal
+              separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>created_on</term>
+
+            <listitem>
+              <para>The date and time when the subscription was created. The
+              format MUST be yyyy-mm-dd HH:MM:SS (four digits for the year,
+              dash, two digits for the month, dash, two digits for the day of
+              the week, space, two digits for the hour in 24-hour format,
+              colon, two digits for the minutes, colon, two digits for the
+              seconds), e.g. <parameter>2013-08-15 22:10:55</parameter>. The
+              date and time must be in GMT timezone.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>prediscount_amount</term>
+
+            <listitem>
+              <para>The net amount before any discount was applied. You MUST
+              use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>discount_amount</term>
+
+            <listitem>
+              <para>The discount amount deducted from the net price. You MUST
+              use a dot as the decimal separator.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>contact_flag</term>
+
+            <listitem>
+              <para>This field determines if the user will be contacted about
+              imminent subscription expiration. The possible values
+              are:</para>
+
+              <itemizedlist>
+                <listitem>
+                  <para><option>0</option> means that both first and second
+                  reminders (and the post-expiration reminder) will be
+                  sent</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>1</option> means that the first reminder is
+                  already sent. Only the second and post-expiration reminder
+                  will be sent.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>2</option> means that the second reminder is
+                  already sent. Only the post-expiration reminder will be
+                  sent.</para>
+                </listitem>
+
+                <listitem>
+                  <para><option>3</option> means that we should not send any
+                  reminders to the user at all; he has already renewed his
+                  subscription.</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
     </section>
 
     <section xml:id="custom-fields">
@@ -5591,6 +6310,24 @@ Rule C gives $ 30 discount</programlisting>
             </varlistentry>
 
             <varlistentry>
+              <term>[LEVEL:RENEWAL_URL]</term>
+
+              <listitem>
+                <para>The custom renewal URL, if one is entered in the
+                subscription level</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term>[LEVEL:CONTENT_URL]</term>
+
+              <listitem>
+                <para>The content URL, if one is entered in the subscription
+                level</para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
               <term>[USER:ISBUSINESS]</term>
 
               <listitem>
@@ -5848,60 +6585,26 @@ Rule C gives $ 30 discount</programlisting>
     site of yours where we can also have access for debugging purposes.
     Usually a test or staging site will do just fine.</para>
 
-    <para>The regular base price for creating a custom payment plugin is 100
-    Euros. If you are a subscriber, you are eligible for a discount on this
-    base price:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Deluxe and Commerce subscribers get a 100% discount on the base
-        price</para>
-      </listitem>
-
-      <listitem>
-        <para>Subscribers to AkeebaSubsc get a 75% discount on the base
-        price</para>
-      </listitem>
-
-      <listitem>
-        <para>All other subscribers get a 25% discount on the base
-        price</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>Discounts are only applied to the base price of the first custom
-    payment plugin each subscriber requests per subscription term (year).
-    Additional plugins are charged at full price. Payment processors with
-    multiple payment workflows that differ significantly as far as the
-    implementation goes (e.g. by credit card and by SMS) are considered
-    multiple payment plugins as far as billing is concerned.</para>
-
-    <para>The creation of a custom plugin takes between 2 and 8 weeks,
-    depending on our workload. Please try to contact us at least two and a
-    half months before your site is scheduled to go live to allow for adequate
-    time to create and test the payment plugin. If you are in a rush we can
-    create the plugin in a guaranteed period of 2 weeks for a rush fee of 200
-    Euros. Discounts do not apply on the rush fee and we reserve the right to
-    decline rush development if our workload doesn't allow us honouring the 2
-    weeks deadline.</para>
+    <para>The base price for creating a custom payment plugin is 600 Euros
+    with a 50% deposit before we start working on it. The creation of a custom
+    plugin takes between 2 and 8 weeks, depending on our workload. Please try
+    to contact us at least two and a half months before your site is scheduled
+    to go live to allow for adequate time to create and test the payment
+    plugin.</para>
 
     <para>All integration plugins created are included in the next release of
-    Akeeba Subscriptions. This is why our prices are significantly lower than
-    the actual cost for creating these plugins. If you want a private plugin,
-    i.e. a plugin that will not be included in the next release of Akeeba
-    Subscriptions, there is a surcharge of 500 Euros to cover our actual
-    development costs. Discounts do not apply to the privacy surcharge.
-    Updates to your private plugin are quoted per case, with a minimum fee of
-    100 Euros. Bugfixes are provided free of charge for the first three (3)
-    months.</para>
+    Akeeba Subscriptions. If you want a private plugin, i.e. a plugin that
+    will not be included in the next release of Akeeba Subscriptions, there is
+    an additional charge of 1000 Euros. Updates to your private plugin are
+    quoted per case, with a minimum fee of 300 Euros. The private surcharge
+    and update fee are paid in advance, before we start doing any work. Bug
+    fixes are provided free of charge for the first three (3) months.</para>
 
-    <para>If you are not a subscriber you have to pay 40% in advance. If you
-    are a subscriber you only need to pay 40% of the rush fee and privacy
-    surcharge (if applicable) in advance. When we have the plugin in a usable
-    state we will ask you to test it, using our latest development build ("dev
-    release"). If you do not find any issues or do not reply at all within a
-    week we will send you a proforma invoice. Upon payment of the balance of
-    your account via bank transfer we will issue the final invoice.</para>
+    <para>When we have the plugin in a usable state we will ask you to test
+    it, using our latest development build ("dev release"). If you do not find
+    any issues or do not reply at all within a week we will send you a
+    proforma invoice. Upon payment of the balance of your account via bank
+    transfer we will issue the final invoice.</para>
 
     <para>The prices above do not include VAT 18%. If you are outside the
     European Union you do not have to pay VAT. If you have an EU business with
@@ -5915,7 +6618,7 @@ Rule C gives $ 30 discount</programlisting>
     impossible to deliver on time; or force majeur. We try our best to let you
     know as soon as you contact us with your request. In the unlikely event
     that we have to cancel the plugin creation after accepting the work order
-    we will refund any downpayment you made in full.</para>
+    we will refund in full any deposit you made with us.</para>
 
     <section xml:id="payment-2checkout">
       <title>2Checkout Standard Purchase Routine</title>
@@ -7807,6 +8510,146 @@ LEVEL2=11111/22222/33333</programlisting>
           the Moneris integration plugin for Akeeba Subscriptions.</para>
         </listitem>
       </itemizedlist>
+    </section>
+
+    <section xml:id="payment-exact">
+      <title>E-Xact (Chase PaymentTech)</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - e-xact (Chase PaymentTech)</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>Available since Akeeba Subscriptions 3.2.1.</para>
+
+      <para>This payment method integrates the e-xact payments service by
+      Chase.</para>
+
+      <para>The options you have with this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "E-Xact" or type in a custom name to show
+            to your customer's, e.g. "Credit Card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Surcharge</term>
+
+          <listitem>
+            <para>A fixed amount to charge on top of the net amount of the
+            subscription when this payment option is selected.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Default language</term>
+
+          <listitem>
+            <para>The default language of the payment page</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Page ID (English)</term>
+
+          <listitem>
+            <para>Enter the page ID for the English version of your payment
+            page. You can leave this field empty but you must enter a value
+            for the French page ID.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Transaction key (English)</term>
+
+          <listitem>
+            <para>Please enter the transaction key, of your English payment
+            page, generated by E-xact (in the Security section of your payment
+            page settings).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Response key (English)</term>
+
+          <listitem>
+            <para>Please enter the response key, of your English payment page,
+            generated by E-xact (in the Security section of your payment page
+            settings).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Page ID (French)</term>
+
+          <listitem>
+            <para>Enter the page ID for the French version of your payment
+            page. You can leave this field empty but you must enter a value
+            for the English page ID.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Transaction key (English)</term>
+
+          <listitem>
+            <para>Please enter the transaction key, of your French payment
+            page, generated by E-xact (in the Security section of your payment
+            page settings).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Response key (English)</term>
+
+          <listitem>
+            <para>Please enter the response key, of your French payment page,
+            generated by E-xact (in the Security section of your payment page
+            settings).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>Enables the testing mode. When enabled NO MONEY CHANGES
+            HANDS and should only be used for testing BEFORE your site goes
+            live.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>Integration notes</bridgehead>
+
+      <para>You must generate a "Transaction Key" and "Response Key" at your
+      e-xact account (in the section "Security" of the corresponding payment
+      page).</para>
+
+      <para>You must enable the option "Allow Relay Response" and enter the
+      following "Relay Response URL":</para>
+
+      <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=exact</uri></para>
+
+      <para>after replacing <uri>www.example.com</uri> with your site's domain
+      name. You have to wait until this URL is approved by e-xact before being
+      able to take payments.</para>
     </section>
 
     <section xml:id="payment-eway">
@@ -13906,6 +14749,12 @@ LEVEL3=entry1</programlisting>
       <para>Displayed in the Plugins Manager as: <emphasis role="bold">System
       - Akeeba Subscriptions Expiration Control</emphasis></para>
 
+      <tip>
+        <para>This plugin also supports scheduling with a CRON job. Please
+        consult the <link linkend="scheduling">Scheduling Information</link>
+        chapter of this documentation.</para>
+      </tip>
+
       <para>Akeeba Subscriptions will automatically expire your users'
       subscriptions when they visit a page with an Akeeba Subscriptions module
       on your site after their subscription expiration date. However, if you
@@ -13925,6 +14774,36 @@ LEVEL3=entry1</programlisting>
       that this plugin does get activated and does process expired
       subscriptions. The subscriber whose subscription has expired does not
       need to visit your site.</para>
+    </section>
+
+    <section xml:id="plugin-asexpirationnotify">
+      <title>Subscription expiration notification</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>System - Akeeba
+      Subscriptions Expiration Notification</guilabel></para>
+
+      <tip>
+        <para>This plugin also supports scheduling with a CRON job. Please
+        consult the <link linkend="scheduling">Scheduling Information</link>
+        chapter of this documentation.</para>
+      </tip>
+
+      <para>This plugin will notify a user before his subscription's
+      expiration, based on the notification settings of each subscription
+      level.</para>
+
+      <note>
+        <para>This plugin uses Joomla!'s mail system. You have to ensure that
+        your site can send out emails (e.g. use the Mass Mail feature to send
+        a test email to Super Administrators) before activating this
+        plugin.</para>
+      </note>
+
+      <para>We strongly recommend publishing this plugin at all times.</para>
+
+      <para>For email customisation instructions, please take a look at the
+      <link linkend="customising-emails">Customising emails</link> section of
+      our documentation.</para>
     </section>
 
     <section xml:id="plugin-subscriptionemails">
@@ -14008,30 +14887,6 @@ LEVEL3=entry1</programlisting>
         a test email to Super Administrators) before activating this
         plugin.</para>
       </note>
-
-      <para>For email customisation instructions, please take a look at the
-      <link linkend="customising-emails">Customising emails</link> section of
-      our documentation.</para>
-    </section>
-
-    <section xml:id="plugin-asexpirationnotify">
-      <title>Subscription expiration notification</title>
-
-      <para>Displayed in the Plugins Manager as: <guilabel>System - Akeeba
-      Subscriptions Expiration Notification</guilabel></para>
-
-      <para>This plugin will notify a user before his subscription's
-      expiration, based on the notification settings of each subscription
-      level.</para>
-
-      <note>
-        <para>This plugin uses Joomla!'s mail system. You have to ensure that
-        your site can send out emails (e.g. use the Mass Mail feature to send
-        a test email to Super Administrators) before activating this
-        plugin.</para>
-      </note>
-
-      <para>We strongly recommend publishing this plugin at all times.</para>
 
       <para>For email customisation instructions, please take a look at the
       <link linkend="customising-emails">Customising emails</link> section of
@@ -15182,6 +16037,254 @@ LEVEL3=entry1</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
+    </section>
+  </chapter>
+
+  <chapter xml:id="scheduling">
+    <title>Scheduling information</title>
+
+    <para>Akeeba Subscriptions needs to run some housekeeping tasks, such as
+    checking subscriptions for expiration, in regular intervals. As you've
+    read earlier on, this can be performed by means of system plugins. These
+    plugins have the downside of increasing the page load time of your site.
+    That's why since Akeeba Subscriptions 3.2.1 we've added CRON
+    support.</para>
+
+    <para>The CRON jobs are designed to make use of the same housekeeping
+    plugins. Instead of having the plugins activate in random page loads,
+    making your site appear slow to some of your visitors, the CRON support
+    consists of a special URL which immediately triggers those plugins. This
+    means that for the next 24 hours these housekeeping plugins won't run
+    during regular site traffic and your site won't appear any slower. We
+    strongly recommend setting up CRON jobs which run at least twice daily
+    (every 12 hours) or more often (ideally: every 30 minutes) to maximise the
+    performance benefits for your site.</para>
+
+    <section xml:id="scheduling-activate">
+      <title>Activating the scheduling URL</title>
+
+      <para>The scheduling URL comes deactivated by default. This is a
+      security setting: having this feature activated out of the box would
+      allow a malicious user to hit it repeatedly, slowing down your server
+      and adversely impacting your site. The first thing you have to do is to
+      activate it, by providing a secret key in the components Options
+      page.</para>
+
+      <para>Log in to your site's back-end. Go to
+      <guimenu>Components</guimenu>, <guimenuitem>Akeeba
+      Subscriptions</guimenuitem>. Click on the <guibutton>Options</guibutton>
+      button. Click on the <guilabel>Front-end Display</guilabel> tab. You
+      will now see the option called <guilabel>CRON secret key</guilabel>
+      towards the top. Enter a secret word that you only know and is different
+      than the passwords you use for logging in to your site, your hosting
+      account and so on. The key must consist only of the lowercase letters
+      a-z and numbers 0-9. Note that down; you will need to use it in the
+      scheduling URL. Now click on the <guibutton>Save &amp; Close</guibutton>
+      button.</para>
+
+      <para>The CRON URL will now only work when the correct secret key is
+      present in the URL. This prevents malicious users from hitting this URL
+      repeatedly. We recommend keeping the secret key to yourself, for
+      security reasons.</para>
+
+      <para>If you ever want to disable that feature again just repeat the
+      previous steps but leave the box empty. Having it empty automatically
+      disables the CRON URL.</para>
+    </section>
+
+    <section xml:id="scheduling-using">
+      <title>Using the scheduling URL with CRON jobs</title>
+
+      <para>Akeeba Subscriptions automates housekeeping tasks using a special
+      URL which has to be called from a CRON job.</para>
+
+      <section xml:id="scheduling-url">
+        <title>The CRON URL</title>
+
+        <para>The URL you have to use for your CRON jobs looks like
+        this:</para>
+
+        <para><uri><replaceable>http://www.example.com</replaceable>/index.php?option=com_akeebasubs&amp;view=cron&amp;secret=<replaceable>YourSecret</replaceable>&amp;command=<replaceable>YourCommand</replaceable></uri></para>
+
+        <para>where:</para>
+
+        <para><uri>http://www.example.com</uri> is the URL to your site.
+        Remember to change that!</para>
+
+        <para><option>YourSecret</option> is the secret key you defined in the
+        component's Options, as per the previous section of the
+        documentation</para>
+
+        <para><option>YourCommand</option> is the CRON command you want to
+        execute. The available commands are:</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>expirationcontrol</term>
+
+            <listitem>
+              <para>Find out the subscriptions which are past their expiration
+              (Valid To) date and disables (expires) them, running all
+              necessary integration plugins. In order to use this command the
+              <guilabel>System - Akeeba Subscriptions Expiration
+              Control</guilabel> plugin must be enabled.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>expirationnotify</term>
+
+            <listitem>
+              <para>Sends out the notification e-mails to users regarding the
+              imminent expiration of subscriptions, as well as the e-mail sent
+              after a subscription has expired and not been renewed in the
+              meantime. In order to use this command the <guilabel>System -
+              Akeeba Subscriptions Expiration Notification</guilabel> plugin
+              must be enabled.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </section>
+
+      <section xml:id="scheduling-implementation">
+        <title>Scheduling the housekeeping</title>
+
+        <para>The exact method of scheduling depends on your host.</para>
+
+        <bridgehead>The host allows you to enter URLs to be called
+        periodically</bridgehead>
+
+        <para>This is the most straightforward implementation. Just enter the
+        CRON URL and make sure it's called at least twice per day
+        (recommended: every 30 minutes).</para>
+
+        <bridgehead>Scheduling using your hosting control panel</bridgehead>
+
+        <para>Most hosts offer a CPanel of some kind. There has to be a
+        section for something like "<guilabel>CRON Jobs</guilabel>",
+        "<guilabel>scheduled tasks</guilabel>" and the like. The help screen
+        in there describes how to set up a scheduled job. One missing part for
+        you would be the command to issue. Simply putting the URL in there is
+        not going to work.</para>
+
+        <para>If you are on a UNIX-style OS host (usually, a Linux host) you
+        most probably have access to a command line utility called
+        <command>wget</command>. It's almost trivial to use:</para>
+
+        <para><command>wget
+        "http://www.example.com/index.php?option=com_akeebasubs&amp;view=cron&amp;secret=YourSecret&amp;command=YourCommand"</command></para>
+
+        <warning>
+          <para>Do not forget to put the URL inside double quotes. If you
+          don't the CRON job will fail! The reason is that the ampersand is
+          also used to separate multiple commands in a single command line. If
+          you don't use the double quotes at the start and end of the CRON
+          URL, your host will think that you tried to run multiple commands
+          and load your site's homepage instead of Akeeba Subscriptions' CRON
+          URL.</para>
+        </warning>
+
+        <para>If you're unsure, check with your host. Sometimes you have to
+        get from them the full path to wget in order for CRON to work, thus
+        turning the above command line to something like:</para>
+
+        <para><command>/usr/bin/wget
+        "http://www.example.com/index.php?option=com_akeebasubs&amp;view=cron&amp;secret=YourSecret&amp;command=YourCommand"</command></para>
+
+        <para>Contact your host; they usually have a nifty help page for all
+        this stuff.</para>
+
+        <para><systemitem>wget</systemitem> is multi-platform command line
+        utility program which is not included with all operating systems. If
+        your system does not include the <systemitem>wget</systemitem>
+        command, it can be downloaded at this address: <link
+        xlink:href="http://wget.addictivecode.org/FrequentlyAskedQuestions#download">http://wget.addictivecode.org/FrequentlyAskedQuestions#download</link>.
+        The <systemitem>wget</systemitem> homepage is here: <link
+        xlink:href="http://www.gnu.org/software/wget/wget.html">http://www.gnu.org/software/wget/wget.html</link>.</para>
+
+        <warning>
+          <para>The ampersands above should be written as a single ampersand,
+          not as an HTML entity (&amp;amp;). Failure to do so will result in a
+          403: Forbidden error message and the CRON job won't run. This is not
+          a bug, it's the way wget works.</para>
+        </warning>
+
+        <bridgehead>Using the front-end backup in SiteGround and other hosts
+        using cURL instead of wget</bridgehead>
+
+        <para>As one of our users pointed out in the support forum, finding
+        the correct command to issue for the CRON job is tricky. What he
+        writes applies not only to his host, SiteGround, but many other
+        commercial hosts as well. We'll simply quote our user, bzcoder.</para>
+
+        <para>In the CPanel for SiteGround there is a cronjob option, you
+        create a cronjob using that and use:</para>
+
+        <para><command>curl -b /tmp/cookies.txt -c /tmp/cookies.txt -L
+        --max-redirs 1000 -v "<replaceable>url</replaceable>"</command></para>
+
+        <para>as your command.</para>
+
+        <para>Replace <replaceable>url</replaceable> with your CRON
+        URL.</para>
+
+        <bridgehead>Scheduling using WebCron.org</bridgehead>
+
+        <para>We consider using WebCron.org the simplest method. The cost
+        depends on how often you run the Akeeba Subscriptions CRON jobs. With
+        twice daily runs the cost is between one to two Euros <emphasis>per
+        year</emphasis>. Considering that you need to use CRON jobs for
+        performance reasons only when you sell hundreds of subscriptions per
+        year we consider that to be extremely cost effective.</para>
+
+        <para>Assuming that you have already bought some credits on
+        webcron.org, here's how to automate your Akeeba Subscriptions CRON
+        jobs using their service.</para>
+
+        <para>Log in to webcron.org. In the CRON area, click on the
+        <guibutton>New Cron</guibutton> button. Here's what you have to enter
+        at webcron.org's interface:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis role="bold">Name of cronjob</emphasis>: anything
+            you like, e.g. "Subscription expiration www.example.com"</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">Timeout</emphasis>: 30sec</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">Url you want to execute</emphasis>:
+            your CRON URL, e.g.
+            <uri><replaceable>http://www.example.com</replaceable>/index.php?option=com_akeebasubs&amp;view=cron&amp;secret=<replaceable>YourSecret</replaceable>&amp;command=<replaceable>YourCommand</replaceable></uri></para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">Login</emphasis> and <emphasis
+            role="bold">Password</emphasis>: Leave them blank</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">Execution time</emphasis> (the grid
+            below the other settings): Select when you want your CRON job to
+            run. It should be at least once every 12 hours. Ideally, it should
+            be once every 30 minutes.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis role="bold">Alerts</emphasis>: If you have already
+            set up alert methods in webcron.org's interface, we recommend
+            choosing an alert method here and checking the "Only on error" so
+            that you get a notification only when the CRON job fails to
+            run.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Now click on <guibutton>Submit</guibutton> and you're all set
+        up!</para>
+      </section>
     </section>
   </chapter>
 

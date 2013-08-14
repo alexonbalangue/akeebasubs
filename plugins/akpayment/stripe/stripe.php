@@ -222,6 +222,9 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 				$subscription = null;
 				$isValid = false;
 			}
+            $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                ->setId($subscription->akeebasubs_level_id)
+                ->getItem();
 		} else {
 			$isValid = false;
 		}
@@ -334,7 +337,7 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
