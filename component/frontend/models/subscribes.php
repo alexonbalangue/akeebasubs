@@ -2649,14 +2649,14 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 *
 	 * @param JUser $user
 	 */
-	private function sendActivationEmail($user, $data)
+	private function sendActivationEmail($user, $indata)
 	{
 		$app		= JFactory::getApplication();
 		$config		= JFactory::getConfig();
 		$db			= JFactory::getDbo();
 		$params		= JComponentHelper::getParams('com_users');
 
-		$data = array_merge((array)$user->getProperties(), $data);
+		$data = array_merge((array)$user->getProperties(), $indata);
 
 		$useractivation	= $params->get('useractivation');
 		$sendpassword	= $params->get('sendpassword', 1);
@@ -2664,18 +2664,13 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Check if the user needs to activate their account.
 		if (($useractivation == 1) || ($useractivation == 2))
 		{
-			$data['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
-			$data['block'] = 1;
+			$user->activation = JApplication::getHash(JUserHelper::genRandomPassword());
+			$user->block = 1;
+			$user->lastvisitDate = JFactory::getDbo()->getNullDate();
 		}
 		else
 		{
-			$data['block'] = 0;
-		}
-
-		// Bind the data.
-		if (!$user->bind($data))
-		{
-			return false;
+			$user->block = 0;
 		}
 
 		// Load the users plugin group.
@@ -2689,6 +2684,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Compile the notification mail values.
 		$data = $user->getProperties();
+		$data['password_clear'] = $indata['password2'];
 		$data['fromname']	= $config->get('fromname');
 		$data['mailfrom']	= $config->get('mailfrom');
 		$data['sitename']	= $config->get('sitename');
