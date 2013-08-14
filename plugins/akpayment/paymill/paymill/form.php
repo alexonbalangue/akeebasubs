@@ -59,6 +59,9 @@
 			<input type="submit" id="payment-button" class="btn" value="<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_PAYBUTTON') ?>" />
 		</div>
 	</div>
+	<div class="alert alert-warning" id="paymill-warn-noreload" style="display: none;">
+		<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_WARN_NORELOAD') ?>
+	</div>
 </form>
 
 <script type="text/javascript">
@@ -122,6 +125,7 @@ function PaymillResponseHandler(error, result)
 
 			$('#payment-errors').css('display', 'block');
 			$('#payment-button').removeAttr('disabled');
+			$('#paymill-warn-noreload').hide('fast');
 			$('#token').val('');
 
 			akeebasubs_paymill_clicked = false;
@@ -153,6 +157,7 @@ window.addEvent('domready', function()
 
 				// Disable the button
 				$('#payment-button').attr('disabled', 'disabled');
+				$('#paymill-warn-noreload').show('fast');
 
 				// Ask PayMill to create a token
 				paymill.createToken({
