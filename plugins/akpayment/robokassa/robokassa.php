@@ -19,14 +19,14 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_ROBOKASSA_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/robokassa.jpg',
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,40 +36,39 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Language settings en or ru)
 		$lang = strtolower(substr(JFactory::getLanguage()->getTag(), 0, 2));
 		if($lang != 'en' && $lang != 'ru') {
 			$lang = 'en';
 		}
-		
+
 		$data = (object)array(
 			'url'				=> $this->getURL(),
 			'MrchLogin'			=> $this->params->get('merchant',''),
 			'InvId'				=> $subscription->akeebasubs_subscription_id,
 			'OutSum'			=> sprintf('%.2f',$subscription->gross_amount),
-			'IncCurrLabel'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'Desc'				=> $level->title,
 			'Culture'			=> $lang,
 		);
-		
+
 		$data->SignatureValue = md5(
 				$data->MrchLogin
 				 . ':' . $data->OutSum
 				 . ':' . $data->InvId
-				 . ':' . $this->params->get('pass1','')); 
+				 . ':' . $this->params->get('pass1',''));
 
 		@ob_start();
 		include dirname(__FILE__).'/robokassa/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		$isValid = true;
@@ -91,7 +90,7 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The reference is invalid';
 		}
-		
+
 		if($isValid && isset($data['mode'])) {
 			$mode = $data['mode'];
 			$app = JFactory::getApplication();
@@ -114,13 +113,13 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 				return true;
 			}
 		}
-		
+
 		if($isValid) {
 			// Check IPN data for validity (i.e. protect against fraud attempt)
 			$isValid = $this->isValidIPN($data);
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
 		}
-        
+
 		// Check that bank_id has not been previously processed
 		if($isValid) {
 			if($data['SignatureValue'] == $subscription->processor_key && $subscription->state == 'C') {
@@ -145,7 +144,7 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-			
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
@@ -153,7 +152,7 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 		if(!$isValid) {
 			return false;
 		}
-		
+
 		// Payment status
 		$newStatus = 'C';
 
@@ -181,11 +180,11 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 		@ob_end_clean();
 		echo 'OK' . $subscription->akeebasubs_subscription_id;
 		$app->close();
-		
+
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Gets the form action URL
 	 */
@@ -198,7 +197,7 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 			return 'https://merchant.roboxchange.com/Index.aspx';
 		}
 	}
-	
+
 	/**
 	 * Validates the incoming data.
 	 */

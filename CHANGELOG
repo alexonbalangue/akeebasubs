@@ -27,6 +27,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] Double processing of the "Thank you" and order cancellation page's text
 # [LOW] Notices thrown by 2Checkout integration plugin
 # [LOW] Do not set password setting in com_users was not respected when free account activation was enabled
+# [LOW] RoboKassa: sending the "currency" (actually: payment method) limits the payment options of the end user
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
