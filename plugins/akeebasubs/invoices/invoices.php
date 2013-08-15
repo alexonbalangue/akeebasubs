@@ -41,7 +41,7 @@ class plgAkeebasubsInvoices extends JPlugin
 			$specialCasePending = in_array($row->state, array('P','C')) && !$row->enabled;
 			$generateAnInvoice = $generateAnInvoice || $specialCasePending;
 		}
-		
+
 		// If the payment is over a week old do not generate an invoice. This
 		// prevents accidentally creating an invoice for pas subscriptions not
 		// handled by ccInvoices
@@ -50,9 +50,10 @@ class plgAkeebasubsInvoices extends JPlugin
 		$jNow = new JDate();
 		$dateDiff = $jNow->toUnix() - $jCreated->toUnix();
 		if($dateDiff > 604800) return;
-		
+
 		// Only handle not expired subscriptions
-		if( $generateAnInvoice ) {
+		if( $generateAnInvoice && !defined('AKEEBA_INVOICE_GENERATED') ) {
+			define('AKEEBA_INVOICE_GENERATED', 1);
 			$db = JFactory::getDBO();
 
 			// Check if there is an invoice for this subscription already
@@ -62,7 +63,7 @@ class plgAkeebasubsInvoices extends JPlugin
 				->where($db->qn('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));
 			$db->setQuery($query);
 			$oldInvoices = $db->loadObjectList('akeebasubs_subscription_id');
-			
+
 			if(count($oldInvoices) > 0) {
 				return;
 			}
@@ -82,7 +83,7 @@ class plgAkeebasubsInvoices extends JPlugin
 	{
 		// Do nothing
 	}
-	
+
 	public function onAKGetInvoicingOptions()
 	{
 		JLoader::import('joomla.filesystem.file');
@@ -95,12 +96,12 @@ class plgAkeebasubsInvoices extends JPlugin
 			'frontendurl'	=> 'index.php?option=com_akeebasubs&view=invoice&task=read&id=%s',
 		);
 	}
-	
+
 	/**
 	 * Notifies the component of the supported email keys by this plugin.
-	 * 
+	 *
 	 * @return  array
-	 * 
+	 *
 	 * @since 3.0
 	 */
 	public function onAKGetEmailKeys()
