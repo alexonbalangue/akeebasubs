@@ -60,6 +60,96 @@ JLoader::import('joomla.application.component.helper');
  */
 class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 {
+	/**
+	 * JApplicationCli didn't want to run on PHP CGI. I have my way of becoming
+	 * VERY convincing. Now obey your true master, you petty class!
+	 *
+	 * @param JInputCli $input
+	 * @param JRegistry $config
+	 * @param JDispatcher $dispatcher
+	 */
+	public function __construct(JInputCli $input = null, JRegistry $config = null, JDispatcher $dispatcher = null)
+	{
+		// Close the application if we are not executed from the command line, Akeeba style (allow for PHP CGI)
+		if (array_key_exists('REQUEST_METHOD', $_SERVER))
+		{
+			die('You are not supposed to access this script from the web. You have to run it from the command line. If you don\'t understand what this means, you must not try to use this file before reading the documentation. Thank you.');
+		}
+
+		$cgiMode = false;
+
+		if (!defined('STDOUT') || !defined('STDIN') || !isset($_SERVER['argv']))
+		{
+			$cgiMode = true;
+		}
+
+		// If a input object is given use it.
+		if ($input instanceof JInput)
+		{
+			$this->input = $input;
+		}
+		// Create the input based on the application logic.
+		else
+		{
+			if (class_exists('JInput'))
+			{
+				if ($cgiMode)
+				{
+					$query = "";
+					if (!empty($_GET))
+					{
+						foreach ($_GET as $k => $v)
+						{
+							$query .= " $k";
+							if ($v != "")
+							{
+								$query .= "=$v";
+							}
+						}
+					}
+					$query	 = ltrim($query);
+					$argv	 = explode(' ', $query);
+					$argc	 = count($argv);
+
+					$_SERVER['argv'] = $argv;
+				}
+
+				$this->input = new JInputCLI();
+			}
+		}
+
+		// If a config object is given use it.
+		if ($config instanceof JRegistry)
+		{
+			$this->config = $config;
+		}
+		// Instantiate a new configuration object.
+		else
+		{
+			$this->config = new JRegistry;
+		}
+
+		// If a dispatcher object is given use it.
+		if ($dispatcher instanceof JDispatcher)
+		{
+			$this->dispatcher = $dispatcher;
+		}
+		// Create the dispatcher based on the application logic.
+		else
+		{
+			$this->loadDispatcher();
+		}
+
+		// Load the configuration object.
+		$this->loadConfiguration($this->fetchConfigurationData());
+
+		// Set the execution datetime and timestamp;
+		$this->set('execution.datetime', gmdate('Y-m-d H:i:s'));
+		$this->set('execution.timestamp', time());
+
+		// Set the current directory.
+		$this->set('cwd', getcwd());
+	}
 
 	/**
 	 * The main entry point of the application
