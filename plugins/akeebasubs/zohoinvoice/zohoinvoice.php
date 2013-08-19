@@ -48,8 +48,9 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 		if(!$site_only ||(JFactory::getApplication()->isSite() && $site_only))
 		{
 			// Did the payment status just change to C or P? It's a new subscription
-			if(array_key_exists('state', (array)$info['modified']) && in_array($row->state, array('P','C')) && $row->enabled && !$row->akeebasubs_invoice_id)
+			if(array_key_exists('state', (array)$info['modified']) && in_array($row->state, array('P','C')) && $row->enabled && !$row->akeebasubs_invoice_id && !defined('AKEEBA_INVOICE_GENERATED'))
 			{
+				define('AKEEBA_INVOICE_GENERATED', 1);
 				$level = FOFModel::getTmpInstance('Level', 'AkeebasubsModel')->setId($row->akeebasubs_level_id)->getItem();
 				$this->createInvoice($row, $level);
 			}
@@ -144,21 +145,21 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 	{
 		// Search Customer
 		$data = $this->data;
-		
+
 		if($user->isbusiness)
 		{
-			$data['searchtext'] = $user->businessname;	
+			$data['searchtext'] = $user->businessname;
 		}
 		else
 		{
-			$data['searchtext'] = JUser::getInstance( $user->user_id )->name;	
+			$data['searchtext'] = JUser::getInstance( $user->user_id )->name;
 		}
 
 		$url = 'https://invoice.zoho.com/api/view/search/customers/';
 
 		$answer = $this->sendRequest($url, $data, 'GET');
 		$customer_id = $this->processCustomer( $answer, $data['searchtext'] );
-		
+
 		if (!$customer_id)
 		{
 			$customer_id = $this->createCustomer( $user );
@@ -192,19 +193,19 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 
 		return 0;
 	}
-	
+
 	/**
 	 * Creates a Customer on ZOHO Invoice
 	 */
 	protected function createCustomer( $user )
 	{
 		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><Customer></Customer>');
-		
+
 		$user_name = JUser::getInstance( $user->user_id )->name;
 		$aname = explode(' ', $user_name);
 		$name = @$aname[0];
 		$surname = @$aname[1];
-		
+
 		$xml->Name = $user_name;
 		$xml->CurrencyCode = $this->params->get('currency', 'EUR');
 		$xml->BillingAddress = $user->address1 . ' ' . $user->address2;
@@ -214,7 +215,7 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 		$xml->Contacts->Contact->FirstName = $name;
 		$xml->Contacts->Contact->LastName = $surname;
 		$xml->Contacts->Contact->EMail = trim( JUser::getInstance( $user->user_id )->email );
-		
+
 		if( $user->isbusiness )
 		{
 			$xml->Name = $user->businessname;
@@ -224,16 +225,16 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 				$xml->CustomFields->CustomFieldValue1 = $user->vatnumber;
 			}
 		}
-		
+
 		$data = $this->data;
 		$data['XMLString'] = $xml->asXML();
-		
+
 		$url = 'https://invoice.zoho.com/api/customers/create/';
-		
+
 		$answer = $this->sendRequest($url, $data, 'POST');
-		
+
 		$answer = new SimpleXMLElement($answer);
-		
+
 		return $answer->Customer->CustomerID;
 	}
 
@@ -243,17 +244,17 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 	protected function createPayment($invoice_id, $sub)
 	{
 		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><Payment></Payment>');
-		
+
 		$xml->InvoiceID = $invoice_id;
 		$xml->Mode = '4'; // PayPal
 		$xml->Amount = $sub->gross_amount;
 		$xml->Description = $sub->processor_key;
-		
+
 		$data = $this->data;
 		$data['XMLString'] = $xml->asXML();
-		
+
 		$url = 'https://invoice.zoho.com/api/payments/create';
-		
+
 		$answer = $this->sendRequest($url, $data, 'POST');
 		$answer = new SimpleXMLElement($answer);
 	}
@@ -269,14 +270,14 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 		// Should we handle this subscription?
 		$generateAnInvoice 	= ($row->state == "C");
 		$whenToGenerate 	= $this->params->get('generatewhen','0');
-		
-		if ($whenToGenerate == 1) 
+
+		if ($whenToGenerate == 1)
 		{
 			// Handle new subscription, even if they are not yet enabled
 			$specialCasePending = in_array($row->state, array('P','C')) && !$row->enabled;
 			$generateAnInvoice = $generateAnInvoice || $specialCasePending;
 		}
-		
+
 		// If the payment is over a week old do not generate an invoice. This
 		// prevents accidentally creating an invoice for pas subscriptions not
 		// handled by ZohoInvoice
@@ -284,11 +285,11 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 		$jCreated 	= new JDate($row->created_on);
 		$jNow 		= new JDate();
 		$dateDiff 	= $jNow->toUnix() - $jCreated->toUnix();
-		
+
 		if ( $dateDiff > 604800) return;
 
 		// Only handle not expired subscriptions
-		if ( $generateAnInvoice ) 
+		if ( $generateAnInvoice )
 		{
 			$db = JFactory::getDBO();
 
@@ -299,7 +300,7 @@ class plgAkeebasubsZohoinvoice extends JPlugin
 				->where($db->qn('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));
 			$db->setQuery($query);
 			$oldInvoices = $db->loadObjectList('akeebasubs_subscription_id');
-			
+
 			if (count($oldInvoices) > 0) {
 				return;
 			}

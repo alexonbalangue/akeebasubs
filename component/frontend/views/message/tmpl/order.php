@@ -31,7 +31,7 @@ $message = JHTML::_('content.prepare', $message);
 	<?php echo $this->escape(JText::_('COM_AKEEBASUBS_MESSAGE_THANKYOU')) ?>
 </h1>
 
-<?php echo JHTML::_('content.prepare', $message) ?>
+<?php echo $message ?>
 
 <div class="akeebasubs-goback">
 	<p><a href="<?php echo JURI::base()?>"><?php echo JText::_('COM_AKEEBASUBS_MESSAGE_BACK')?></a></p>

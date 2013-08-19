@@ -76,8 +76,12 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($data['sid'])
 					->getItem();
+            $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                    ->setId($subscription->akeebasubs_level_id)
+                    ->getItem()
+                    ->slug;
 			if($data['error_description'] == 'User Cancelled') {
-				$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
+				$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
 				JFactory::getApplication()->redirect($cancelUrl);
 			} else {
 				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
@@ -104,6 +108,9 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
+                $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                    ->setId($subscription->akeebasubs_level_id)
+                    ->getItem();
 				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
 					$subscription = null;
 					$isValid = false;
@@ -181,7 +188,7 @@ class plgAkpaymentDwolla extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}

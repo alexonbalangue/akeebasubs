@@ -1,63 +1,74 @@
 <?php
+
 /**
  * @package AkeebaSubs
  * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
-
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
 class AkeebasubsDispatcher extends FOFDispatcher
 {
 	private $allowedViews = array(
-		'levels','messages','subscribes','subscriptions','validates','callbacks','userinfos','invoices','invoice'
+		'apicoupons', 'levels', 'messages', 'subscribes', 'subscriptions',
+		'validates', 'callbacks', 'userinfos', 'invoices', 'invoice',
+		'cron', 'crons'
 	);
 
-	public function __construct($config = array()) {
+	public function __construct($config = array())
+	{
 		parent::__construct($config);
 
 		$this->defaultView = 'levels';
 	}
 
-	public function onBeforeDispatch() {
-		if($result = parent::onBeforeDispatch()) {
+	public function onBeforeDispatch()
+	{
+		if ($result = parent::onBeforeDispatch())
+		{
 			// Merge the language overrides
-			$paths = array(JPATH_ADMINISTRATOR, JPATH_ROOT);
-			$jlang = JFactory::getLanguage();
+			$paths	 = array(JPATH_ADMINISTRATOR, JPATH_ROOT);
+			$jlang	 = JFactory::getLanguage();
 			$jlang->load($this->component, $paths[0], 'en-GB', true);
 			$jlang->load($this->component, $paths[0], null, true);
 			$jlang->load($this->component, $paths[1], 'en-GB', true);
 			$jlang->load($this->component, $paths[1], null, true);
 
-			$jlang->load($this->component.'.override', $paths[0], 'en-GB', true);
-			$jlang->load($this->component.'.override', $paths[0], null, true);
-			$jlang->load($this->component.'.override', $paths[1], 'en-GB', true);
-			$jlang->load($this->component.'.override', $paths[1], null, true);
+			$jlang->load($this->component . '.override', $paths[0], 'en-GB', true);
+			$jlang->load($this->component . '.override', $paths[0], null, true);
+			$jlang->load($this->component . '.override', $paths[1], 'en-GB', true);
+			$jlang->load($this->component . '.override', $paths[1], null, true);
 
 			// Load Akeeba Strapper
-			if(!defined('AKEEBASUBSMEDIATAG')) {
-				$staticFilesVersioningTag = md5(AKEEBASUBS_VERSION.AKEEBASUBS_DATE);
+			if (!defined('AKEEBASUBSMEDIATAG'))
+			{
+				$staticFilesVersioningTag = md5(AKEEBASUBS_VERSION . AKEEBASUBS_DATE);
 				define('AKEEBASUBSMEDIATAG', $staticFilesVersioningTag);
 			}
-			include_once JPATH_ROOT.'/media/akeeba_strapper/strapper.php';
+
+			include_once JPATH_ROOT . '/media/akeeba_strapper/strapper.php';
+
 			AkeebaStrapper::$tag = AKEEBASUBSMEDIATAG;
 			AkeebaStrapper::bootstrap();
 			AkeebaStrapper::jQueryUI();
 			AkeebaStrapper::addCSSfile('media://com_akeebasubs/css/frontend.css');
 
 			// Load helpers
-			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
 
 			// Default to the "levels" view
-			$view = $this->input->getCmd('view',$this->defaultView);
-			if(empty($view) || ($view == 'cpanel')) {
+			$view = $this->input->getCmd('view', $this->defaultView);
+
+			if (empty($view) || ($view == 'cpanel'))
+			{
 				$view = 'levels';
 			}
 
 			// Set the view, if it's allowed
-			$this->input->set('view',$view);
-			if(!in_array(FOFInflector::pluralize($view), $this->allowedViews))
+			$this->input->set('view', $view);
+
+			if (!in_array(FOFInflector::pluralize($view), $this->allowedViews))
 			{
 				$result = false;
 			}
@@ -66,14 +77,18 @@ class AkeebasubsDispatcher extends FOFDispatcher
 		return $result;
 	}
 
-	public function getTask($view) {
+	public function getTask($view)
+	{
 		$task = parent::getTask($view);
 
-		switch($view) {
+		switch ($view)
+		{
 			case 'level':
-				if($task == 'add') $task = 'read';
+				if ($task == 'add')
+					$task = 'read';
 		}
 
 		return $task;
 	}
+
 }

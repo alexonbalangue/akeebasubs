@@ -13,6 +13,8 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		parent::__construct($config);
 
 		$this->cacheableTasks = array('read');
+
+		$this->cacheableTasks = array();
 	}
 
 	public function execute($task) {

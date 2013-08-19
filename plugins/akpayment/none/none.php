@@ -94,9 +94,9 @@ ENDFORM;
 
 		// This plugin is a tricky one; it will redirect you to the thank you page
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem()
+            ->slug;
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {

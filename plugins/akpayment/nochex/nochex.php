@@ -36,6 +36,10 @@ class plgAkpaymentNochex extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
+        
+        $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem();
 		
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
@@ -50,19 +54,17 @@ class plgAkpaymentNochex extends plgAkpaymentAbstract
 			'order_id'				=> $subscription->akeebasubs_subscription_id,
 			'description'			=> $level->title . ' - [ ' . $user->username . ' ]',
 			'billing_fullname'		=> trim($user->name),
-			'billing_address'		=> trim($kuser->address1) . '
-' . trim($kuser->city) . '
-' . AkeebasubsHelperSelect::decodeCountry(trim($kuser->country)),
+			'billing_address'		=> trim($kuser->address1) . ' ' . trim($kuser->city) . ' ' . AkeebasubsHelperSelect::decodeCountry(trim($kuser->country)),
 			'billing_postcode'		=> trim($kuser->zip),
 			'email_address'			=> trim($user->email),
 			'callback_url'			=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=nochex',
-			'success_url'			=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
-			'cancel_url'			=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id))
+			'success_url'			=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
+			'cancel_url'			=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id))
 		);
 		
 		if($this->params->get('sandbox',0)) {
 			$data->test_transaction = '100';
-			$data->test_success_url = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
+			$data->test_success_url = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
 		}
 
 		@ob_start();

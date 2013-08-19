@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 class AkeebasubsToolbar extends FOFToolbar
 {
-	protected function renderSubmenu()
+	public function renderSubmenu()
 	{
 		$views = array(
 			'cpanel',
@@ -27,7 +27,10 @@ class AkeebasubsToolbar extends FOFToolbar
 				'blockrules',
 			),
 			'subscriptions',
-			'coupons',
+			'COM_AKEEBASUBS_MAINMENU_COUPONS' => array(
+				'coupons',
+				'apicoupons'
+			),
 			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array(
 				'affiliates',
 				'affpayments'

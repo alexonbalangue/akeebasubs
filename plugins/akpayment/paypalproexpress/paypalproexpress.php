@@ -177,6 +177,9 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			parse_str($responseQuery, $responseData);
 			if(! preg_match('/^SUCCESS/', strtoupper($responseData['ACK']))) {
 				$isValid = false;
+                $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                    ->setId($subscription->akeebasubs_level_id)
+                    ->getItem();
 				$error_url = 'index.php?option='.JRequest::getCmd('option').
 					'&view=level&slug='.$level->slug.
 					'&layout='.JRequest::getCmd('layout','default');
@@ -188,8 +191,9 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			}
 
 			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-                                ->setId($subscription->akeebasubs_level_id)
-                                ->getItem();
+                ->setId($subscription->akeebasubs_level_id)
+                ->getItem();
+            
 			if($level->recurring) {
 				// Create recurring payment profile
 				$nextPayment = new JDate("+$level->duration day");
@@ -390,7 +394,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}

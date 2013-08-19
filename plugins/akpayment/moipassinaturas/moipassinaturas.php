@@ -37,6 +37,10 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 	{
 		if($paymentmethod != $this->ppName) return false;
 
+        $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem();
+        
 		$error_url = 'index.php?option='.JRequest::getCmd('option').
 			'&view=level&slug='.$level->slug.
 			'&layout='.JRequest::getCmd('layout','default');
@@ -362,7 +366,7 @@ class plgAkpaymentMoipAssinaturas extends plgAkpaymentAbstract
 		}
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
