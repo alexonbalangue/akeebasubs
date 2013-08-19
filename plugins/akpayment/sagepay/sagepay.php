@@ -12,6 +12,9 @@ if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpay
 
 class plgAkpaymentSagepay extends plgAkpaymentAbstract
 {
+	protected $sageError   = '';
+	protected $sageProcKey = '';
+
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
@@ -55,9 +58,9 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=sagepay&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(
 			'url'			=> $callbackUrl,
-			'amount'		=> (int)($subscription->gross_amount * 100),
+			'amount'		=> number_format($subscription->gross_amount, 2),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
-			'description'	=> $level->title . ' #' . $subscription->akeebasubs_subscription_id,
+			'description'	=> $level->title . ' - [ ' . $user->username . ' ]',
 			'cardholder'	=> $user->name
 		);
 
@@ -74,10 +77,89 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
+		$isValid = true;
 
-		$sagePostUrl = $this->buildSageUrl($data, $data['sid']);
+		// Load the relevant subscription row
+		$id           = $data['sid'];
+		$log          = $data;
+		$subscription = null;
 
-		$this->validateSubscription($sagePostUrl);
+		if ($id > 0)
+		{
+			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				->setId($id)
+				->getItem();
+			if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) )
+			{
+				$subscription = null;
+				$isValid = false;
+			}
+		}
+		else
+		{
+			$isValid = false;
+		}
+
+		if (!$isValid)
+		{
+			$log['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
+		}
+
+		if($isValid)
+		{
+			$sagePostUrl = $this->buildSageUrl($data, $id);
+			$isValid 	 = $this->validateSubscription($sagePostUrl);
+			if(!$isValid)
+			{
+				$log['akeebasubs_failure_reason'] = $this->sageError;
+			}
+		}
+
+		// No need to check if the amount is the correct one, since I'm passing it to SagePay, I'm not receiving it
+		// Let's remove any sensible data from logs
+		unset($log['card-holder']);
+		unset($log['card-type']);
+		unset($log['card-number']);
+		unset($log['card-expiry-month']);
+		unset($log['card-expiry-year']);
+		unset($log['card-cvc']);
+		$this->logIPN($log, $isValid);
+
+		if (!$isValid)
+		{
+			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem();
+			$error_url = 'index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&layout='.JRequest::getCmd('layout','default');
+			$error_url = JRoute::_($error_url, false);
+			JFactory::getApplication()->redirect($error_url, $log['akeebasubs_failure_reason'], 'error');
+			return false;
+		}
+
+		// Update subscription status (this also automatically calls the plugins)
+		$updates = array(
+			'akeebasubs_subscription_id'	=> $id,
+			'processor_key'					=> $this->sageProcKey,
+			'state'							=> 'C',
+			'enabled'						=> 0
+		);
+		JLoader::import('joomla.utilities.date');
+		$this->fixDates($subscription, $updates);
+		$subscription->save($updates);
+
+		// Run the onAKAfterPaymentCallback events
+		JLoader::import('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array($subscription));
+
+		// Redirect the user to the "thank you" page
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			->setId($subscription->akeebasubs_level_id)
+			->getItem();
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+
+		JFactory::getApplication()->redirect($thankyouUrl);
 
 		return true;
 	}
@@ -141,15 +223,15 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 	private function buildSageUrl($data, $subsid)
 	{
 		$subscription = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-							->getItem($subsid);
+			->getItem($subsid);
 
 		$user  = JFactory::getUser($subscription->user_id);
 		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
-					->getItem($subscription->akeebasubs_level_id);
+			->getItem($subscription->akeebasubs_level_id);
 
 		$kuser = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
-					->user_id($subscription->user_id)
-					->getFirstItem();
+			->user_id($subscription->user_id)
+			->getFirstItem();
 
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
@@ -159,13 +241,15 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 			$lastName = '';
 		}
 
+		$this->sageProcKey = md5(time());
+
 		$string  = 'VPSProtocol=3.00';
 		$string .= '&TxType=PAYMENT';
 		$string .= '&Vendor='.$this->params->get('vendor');
-		$string .= '&VendorTxCode='.md5(time());
+		$string .= '&VendorTxCode='.$this->sageProcKey;
 
 		// Subscription info
-		$string .= '&Amount='.number_format($subscription->gross_amount, 2);
+		$string .= '&Amount='.urlencode(number_format($subscription->gross_amount, 2));
 		$string .= '&Currency='.urlencode(strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')));
 		$string .= '&Description='.urlencode($level->title . ' - [ ' . $user->username . ' ]');
 
@@ -200,8 +284,6 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 
 	private function validateSubscription($url)
 	{
-		$this->debug($url);
-
 		$curlSession = curl_init();
 
 		// Set the URL
@@ -218,28 +300,38 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 
 		$rawresponse = curl_exec($curlSession);
 
-		//Split response into name=value pairs
-		$response = explode('=', $rawresponse);
 		// Check that a connection was made
 		if (curl_error($curlSession))
 		{
 			// If it wasn't...
-			$output['Status'] = "FAIL";
-			$output['StatusDetail'] = curl_error($curlSession);
+			$output['status'] = "FAIL";
+			$output['statusdetail'] = curl_error($curlSession);
 		}
 
 		curl_close ($curlSession);
 
-		// Tokenise the response
-		for ($i=0; $i<count($response); $i++)
+		$response = explode("\n", $rawresponse);
+
+		foreach($response as $line)
 		{
-			// Find position of first "=" character
-			$splitAt = strpos($response[$i], "=");
-			// Create an associative (hash) array with key/value pairs ('trim' strips excess whitespace)
-			$output[trim(substr($response[$i], 0, $splitAt))] = trim(substr($response[$i], ($splitAt+1)));
+			$parts = explode('=', $line);
+
+			// I should always have two parts per line, but let's avoid errors...
+			if(count($parts) < 2)
+			{
+				continue;
+			}
+
+			$output[strtolower(trim($parts[0]))] = trim($parts[1]);
 		}
 
-		$this->debug(print_r($output, true));
+		// Guess what? SagePay puts here all kind of error: vendor's one (ie wrong account setup) and customer's one (wrong CC number)
+		if($output['status'] != 'OK')
+		{
+			$this->sageError = $output['statusdetail'];
+		}
+
+		return ($output['status'] == 'OK');
 	}
 
 	private function debug($string)
