@@ -10036,11 +10036,11 @@ LEVEL2=11111/22222/33333</programlisting>
             <warning>
               <para>Using the Sandbox is not as straightforward as it sounds.
               It is actually a long, complicated process. We have documented
-              the entire 43 step process for your convenience. It can be found
-              further down this documentation page. If it sounds overly
-              technical and complicated to you, you can simply use the live
-              (normal) PayPal and a credit card not associated with your
-              PayPal account to test the purchase of a subscription.</para>
+              the entire process for your convenience. It can be found further
+              down this documentation page. If it sounds overly technical and
+              complicated to you, you can simply use the live (normal) PayPal
+              and a credit card not associated with your PayPal account to
+              test the purchase of a subscription.</para>
             </warning>
           </listitem>
         </varlistentry>
@@ -10175,7 +10175,7 @@ LEVEL2=11111/22222/33333</programlisting>
       to <guilabel>Instant Payment Notifications</guilabel>. Click on
       <guibutton>Choose IPN Settings</guibutton>. In the
       <guibutton>Notification URL</guibutton> enter
-      <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=paypalpaymentspro</uri>
+      <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=paypal</uri>
       where http://www.example.com is the URL to your site. Under
       <guilabel>IPN Messages</guilabel> select <option>Receive IPN Messages
       (Enabled)</option> and click on <guibutton>Save</guibutton>. This step
@@ -10200,18 +10200,9 @@ LEVEL2=11111/22222/33333</programlisting>
         </step>
 
         <step>
-          <para>Click on Sign Up. Important: do not use your regular PayPal
-          email address to subscribe!</para>
-        </step>
-
-        <step>
-          <para>You get an email. Click on the link to activate your Sandbox
-          access.</para>
-        </step>
-
-        <step>
-          <para>Log in to the Sandbox using the email and password you
-          created</para>
+          <para>Click on Log In and log in with your PayPal username and
+          password. Important: You need to allow popups on your
+          browser.</para>
         </step>
       </procedure>
 
@@ -10219,14 +10210,11 @@ LEVEL2=11111/22222/33333</programlisting>
 
       <procedure>
         <step>
-          <para>Go to the <link
-          xlink:href="https://developer.paypal.com/cgi-bin/devscr?cmd=home/main">main
-          Sandbox page</link></para>
+          <para>Go to the Applications, Sandbox accounts</para>
         </step>
 
         <step>
-          <para>Click on <guilabel>Create a preconfigured
-          account</guilabel></para>
+          <para>Click on <guilabel>Create account</guilabel></para>
 
           <warning>
             <para>MAJOR SUPER DUPER IMPORTANT PITFALL WARNING!!! Choose a
@@ -10236,40 +10224,22 @@ LEVEL2=11111/22222/33333</programlisting>
         </step>
 
         <step>
-          <para>Set the account type to <option>Seller</option></para>
+          <para>Set the account type to <option>Business</option></para>
         </step>
 
         <step>
-          <para>Optional: set the login email to "seller". It will make it
-          easier for you to remember what you're doing</para>
+          <para>Setup an email and password. Make sure these are different
+          than your regular PayPal account.</para>
         </step>
 
         <step>
-          <para>Note down your password. This will not be visible anywhere
-          else.</para>
-        </step>
-
-        <step>
-          <para>Set <guilabel>Add Bank Account</guilabel> to Yes and set the
-          <guilabel>Account Balance</guilabel> to something like 100.00
-          USD</para>
+          <para>Set the <guilabel>Account Balance</guilabel> to something like
+          100.00 USD and <guilabel>Bank verified account</guilabel> to
+          Yes.</para>
         </step>
 
         <step>
           <para>Click on <guibutton>Create account</guibutton></para>
-
-          <important>
-            <para>Make sure that <guilabel>Payment Review</guilabel> and
-            <guilabel>Negative Test Mode</guilabel> are set to Disabled
-            (that's the default)</para>
-          </important>
-        </step>
-
-        <step>
-          <para>PITFALL: PayPal will modify your email address, appending a
-          random number and _biz to it. Please verify it at the Test Accounts
-          section of your Sandbox Account. Note down your email and password,
-          you will need them!</para>
         </step>
       </procedure>
 
@@ -10277,14 +10247,11 @@ LEVEL2=11111/22222/33333</programlisting>
 
       <procedure>
         <step>
-          <para>Go to the <link
-          xlink:href="https://developer.paypal.com/cgi-bin/devscr?cmd=home/main">main
-          Sandbox page</link></para>
+          <para>Go to the Applications, Sandbox accounts</para>
         </step>
 
         <step>
-          <para>Click on <guilabel>Create a preconfigured
-          account</guilabel></para>
+          <para>Click on <guilabel>Create account</guilabel></para>
 
           <warning>
             <para>MAJOR SUPER DUPER IMPORTANT PITFALL WARNING!!! Choose a
@@ -10294,39 +10261,23 @@ LEVEL2=11111/22222/33333</programlisting>
         </step>
 
         <step>
-          <para>Set the account type to <option>Buyer</option> (not "Buyer
-          In-Store")</para>
+          <para>Set the account type to <option>Personal</option></para>
         </step>
 
         <step>
-          <para>Optional: set the login email to "buyer". It will make it
-          easier for you to remember what you're doing</para>
+          <para>Setup an email and password. Make sure these are different
+          than your regular PayPal account and the seller account's details
+          that you used above.</para>
         </step>
 
         <step>
-          <para>Note down your password. This will not be visible anywhere
-          else.</para>
-        </step>
-
-        <step>
-          <para>Set <guilabel>Add Bank Account</guilabel> to Yes and set the
-          <guilabel>Account Balance</guilabel> to something like 1000.00
-          USD</para>
+          <para>Set the <guilabel>Account Balance</guilabel> to something like
+          1000.00 USD and <guilabel>Bank verified account</guilabel> to
+          Yes.</para>
         </step>
 
         <step>
           <para>Click on <guibutton>Create account</guibutton></para>
-
-          <important>
-            <para>Make sure that <guilabel>Payment Review</guilabel> is set to
-            Disabled (that's the default)</para>
-          </important>
-        </step>
-
-        <step>
-          <para>PITFALL: PayPal will modify your email address. Please verify
-          it at the Test Accounts section of your Sandbox Account. Note down
-          your email and password, you will need them!</para>
         </step>
       </procedure>
 
@@ -10388,7 +10339,8 @@ LEVEL2=11111/22222/33333</programlisting>
 
         <step>
           <para>Login using the Sandbox buyer email and password and go
-          through with the payment.</para>
+          through with the payment. Remember to click the Pay Now
+          button!</para>
         </step>
 
         <step>
@@ -10397,63 +10349,13 @@ LEVEL2=11111/22222/33333</programlisting>
         </step>
 
         <step>
-          <para>The subscription will be disabled and Payment column will
-          display a dollar sign with an excalamation mark inside a solid red
-          circle. This means that the payment is pending. That's good! It
-          actually means that PayPal did communicate with your site!</para>
-        </step>
-
-        <step>
-          <para>Go back to the PayPal Sandbox site</para>
-        </step>
-
-        <step>
-          <para>Go to Test Accounts</para>
-        </step>
-
-        <step>
-          <para>Click on the orange "Enter Sandbox Test Site" button; a new
-          popup window displays</para>
-        </step>
-
-        <step>
-          <para>Click on Logout. Not the one on the top right, the one right
-          below it.</para>
-        </step>
-
-        <step>
-          <para>Now click on Log In</para>
-        </step>
-
-        <step>
-          <para>Log in with your Sandbox seller's email and password</para>
-        </step>
-
-        <step>
-          <para>You will see the transaction with a "Payment status" of
-          Unclaimed. Click on the Accept button to its right.</para>
-        </step>
-
-        <step>
-          <para>It may ask you what to do. If it does, choose the first Accept
-          option and then click on Submit.</para>
-        </step>
-
-        <step>
-          <para>Wait for 1-5 minutes for the payment notification to be sent
-          to your site</para>
-        </step>
-
-        <step>
-          <para>Go to your site's back-end, Components, Akeeba Subscriptions,
-          Subscriptions</para>
-        </step>
-
-        <step>
-          <para>The subscription will be enabled now and the Payment will
-          display as a green dollar sign. Awesome! You're ready to start
-          selling! Remember to set the plugin's Sandbox to Off and enter your
-          real email address to the Merchant ID field of the plugin.</para>
+          <para>The subscription will be enabled. If it is not enabled please
+          make sure that you are running the test from a live server which is
+          accessible from the Internet (NOT your local machine; this will NOT
+          work), your site is NOT set to Off-line Mode, the PayPal plugin is
+          published and its access set to Public (any other access will NOT
+          work) and that there is no firewall / security extension blocking
+          incoming connections from PayPal.</para>
         </step>
       </procedure>
     </section>
