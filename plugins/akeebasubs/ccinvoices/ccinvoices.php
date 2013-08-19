@@ -41,7 +41,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$specialCasePending = in_array($row->state, array('P','C')) && !$row->enabled;
 			$generateAnInvoice = $generateAnInvoice || $specialCasePending;
 		}
-		
+
 		// If the payment is over a week old do not generate an invoice. This
 		// prevents accidentally creating an invoice for pas subscriptions not
 		// handled by ccInvoices
@@ -50,9 +50,10 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		$jNow = new JDate();
 		$dateDiff = $jNow->toUnix() - $jCreated->toUnix();
 		if($dateDiff > 604800) return;
-		
+
 		// Only handle not expired subscriptions
-		if( $generateAnInvoice ) {
+		if( $generateAnInvoice && !defined('AKEEBA_INVOICE_GENERATED') ) {
+			define('AKEEBA_INVOICE_GENERATED', 1);
 			$db = JFactory::getDBO();
 
 			// Get or create ccInvoices contact for user
@@ -86,7 +87,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				->where($db->qn('akeebasubs_subscription_id').' = '.$db->q($row->akeebasubs_subscription_id));
 			$db->setQuery($query);
 			$oldInvoices = $db->loadObjectList('akeebasubs_subscription_id');
-			
+
 			$updateInvoice = false;
 			if(count($oldInvoices) > 0) {
 				// Is it a paid invoice?
@@ -115,7 +116,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 			if(!$updateInvoice) {
 				// CREATE A BRAND NEW INVOICE
-				
+
 				// Create new invoice
 				$query = $db->getQuery(true)
 					->select('MAX('.$db->qn('number').')')
@@ -234,7 +235,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 				$db->insertObject('#__akeebasubs_invoices', $object, 'akeebasubs_subscription_id');
 			} elseif($row->state == 'C') {
 				// UPDATE EXISTING INVOICE on payment
-				
+
 				// Update the invoice record
 				$note = "<p>Subscription ID: {$row->akeebasubs_subscription_id}<br/>Paid with {$row->processor}, ref nr {$row->processor_key}</p>";
 				$invoice = (object)array(
@@ -244,7 +245,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 					'note'			=> $note,
 				);
 				$db->updateObject('#__ccinvoices_invoices', $invoice, 'id');
-				
+
 				// Create an invoice payment
 				$invoicePayment = (object)array(
 					'inv_id'		=> $id,
@@ -366,7 +367,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			$contact = $name;
 			$vatnumber = '';
 		}
-		
+
 		$contact = array(
 			'name'				=> $name,
 			'contact'			=> $contact,
@@ -375,7 +376,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			'email'				=> $email,
 			'tax_id'			=> $vatnumber,
 		);
-		
+
 		if(is_null($contact_id)) {
 			// CREATE NEW CONTACT
 			$contact = (object)$contact;
@@ -410,7 +411,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			}
 			$db->setQuery($query);
 			$db->execute();
-			
+
 			return $contact_id;
 		}
 	}
@@ -424,10 +425,10 @@ class plgAkeebasubsCcinvoices extends JPlugin
 			->where($db->qn('id').' = '.$db->q('1'));
 		$db->setQuery($query, 0, 1);
 		$config = $db->loadObject();
-		
+
         require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/tcpdf.php');
         require_once(JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/tcpdf/config/lang/eng.php');
-		
+
 		if(class_exists('TCPDF')) {
 			$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		} else {
@@ -457,19 +458,19 @@ class plgAkeebasubsCcinvoices extends JPlugin
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->SetFont('times', '', 8);
         $pdf->AddPage();
-		
+
 		require_once JPATH_ADMINISTRATOR.'/components/com_ccinvoices/models/invoices.php';
         $model = new ccInvoicesModelInvoices;
 		$template=$model->gettemplatelayout($id);
         $v=$pdf->writeHTML($template, true, false, false, false, '');
-		
+
 		$query = $db->getQuery(true)
 			->select('*')
 			->from($db->qn('#__ccinvoices_invoices'))
 			->where($db->qn('id').' = '.$db->q($id));
 		$db->setQuery($query, 0, 1);
 		$invRow = $db->loadObject();
-		
+
 		if($config->invoice_format != "")
 		{
 			$file_name = $model->getInvoiceNumberFormat($invRow->number);
@@ -478,7 +479,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 		}
 		$charfound=strpos($_SERVER['SERVER_NAME'],".");
 		$file_name .= "_".strtotime($invRow->invoice_date).ord(base64_encode("pdf")).ord(substr($_SERVER['SERVER_NAME'],$charfound+1,1)).ord(substr($_SERVER['SERVER_NAME'],$charfound+2,1)).".pdf";
-		
+
         $file_path = JPATH_ADMINISTRATOR.'/components/com_ccinvoices/assets/files/pdf/'.$file_name;
         $pdf->Output($file_path, 'F');
 		return $file_path;
@@ -545,7 +546,7 @@ class plgAkeebasubsCcinvoices extends JPlugin
 
 		return $text;
 	}
-	
+
 	public function onAKGetInvoicingOptions()
 	{
 		JLoader::import('joomla.filesystem.file');

@@ -9,12 +9,16 @@ Akeeba Subscriptions 3.2.1
 + #163 Payment: ChasePaymentTech
 + #171 Coupons API, allows your trusted associates to create coupon codes for your site
 + #181 CRON URL for subscription expiration and expiration notification
+~ When free account activation is enabled send out a SEF activation URL (like Joomla! 3 does by default), working around severely broken mail clients (Microsoft Office Outlook)
+~ Reworked PayMill integration: more stable and with double charging prevention built in
 # [MEDIUM] #175 The re-login feature of the post-purchase message page didn't work reliably
 # [MEDIUM] Freshbooks integration would not install correctly
 # [MEDIUM] Projectfork4 integration would not install correctly
 # [MEDIUM] Using 100% coupon codes caused the subscription relations to be ignored
 # [MEDIUM] Users seeing other user's info / list of subscriptions when caching is being used (thank you Peter @ NoNumber.nl)
 # [MEDIUM] The "Thank You" page's message would be empty due to a bug in several payment plugins
+# [MEDIUM] Activation of free subscriptions not working on latest Joomla! versions due to changes in user account activation handling
+# [MEDIUM] Fatal error after subscription when you have multiple invoicing plugins enabled at the same time that both use the TCPDF library (e.g. ccInvoices and integrated invoicing)
 # [LOW] The name and email should not display validation information the first time you load the subscription page
 # [LOW] Some third party plugins add an empty Itemid to the request data, screwing up the payment notification validation with some payment processors (e.g. PayPal)
 # [LOW] Custom fields should only allow specific characters in their slugs
@@ -25,6 +29,9 @@ Akeeba Subscriptions 3.2.1
 # [LOW] Reloading graphs from a past date would show all data from that date until today, not just 30 days after that date as it is supposed to
 # [LOW] Double processing of the "Thank you" and order cancellation page's text
 # [LOW] Notices thrown by 2Checkout integration plugin
+# [LOW] Do not set password setting in com_users was not respected when free account activation was enabled
+# [LOW] RoboKassa: sending the "currency" (actually: payment method) limits the payment options of the end user
+# [LOW] CLI CRON scripts not fully compatible with PHP CGI
 
 Akeeba Subscriptions 3.2.0
 ================================================================================

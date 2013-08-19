@@ -359,7 +359,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 *
 	 * @return  void
 	 */
-	protected final function logIPN($data, $isValid)
+	protected function logIPN($data, $isValid)
 	{
 		$config = JFactory::getConfig();
 		if(version_compare(JVERSION, '3.0', 'ge')) {

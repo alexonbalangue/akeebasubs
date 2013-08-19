@@ -42,14 +42,14 @@ class plgSystemPostaffiliatepro extends JPlugin
 	public function __construct(& $subject, $config = array())
 	{
 		parent::__construct($subject, $config);
-		
+
 		if($this->isTrackingCodeRelevant()) {
 			$papUrl = rtrim(trim($this->params->get('url', '')), '/');
 			$document = JFactory::getDocument();
 			$document->addCustomTag('<script id="pap_x2s6df8d" src="' . $papUrl . '/scripts/trackjs.js" type="text/javascript"></script>');
 		}
 	}
-	
+
 	/**
 	 * Adds the javascript code that tracks the clicks (referrals).
 	 */
@@ -68,7 +68,7 @@ class plgSystemPostaffiliatepro extends JPlugin
   </script>');
 		}
 	}
-	
+
 	/**
 	 * Adds the javascript code that tracks the sales.
 	 */
@@ -78,41 +78,54 @@ class plgSystemPostaffiliatepro extends JPlugin
 		if($subscription->akeebasubs_subscription_id <= 0) {
 			return;
 		}
-		
-		// If the Affiliate ID is set to -1 do not issue a second sale 
+
+		// If the Affiliate ID is set to -1 do not issue a second sale
 		if($subscription->akeebasubs_affiliate_id < 0) {
 			return;
 		}
-		
-		if($this->isTrackingCodeRelevant()) {
-			// Load the subscription level
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->getItem($subscription->akeebasubs_level_id);
-			
-			// Set up the sale
-			$price = $subscription->gross_amount;
-			$orderId = $subscription->akeebasubs_subscription_id;
-			$productTitle = $level->title;
-			
-			$document = JFactory::getDocument();
-			$document->addCustomTag(
-'<script type="text/javascript">
-  PostAffTracker.setAccountId(\'default1\');
-  var sale = PostAffTracker.createSale();
-  sale.setTotalCost(\'' . $price . '\');
-  sale.setOrderID(\'' . $orderId . '\');
-  sale.setProductID(\'' . $productTitle . '\');
-  PostAffTracker.register();
-  </script>');
-			
-			// Update the subscription record
-			$updates = array(
-				'akeebasubs_affiliate_id'	=> -1
-			);
-			$subscription->save($updates);
+
+		if(!$this->isTrackingCodeRelevant()) {
+			return;
 		}
+
+		// Load the subscription level
+		$level  = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+					->getItem($subscription->akeebasubs_level_id);
+
+		$couponCode = '';
+		if($subscription->akeebasubs_coupon_id)
+		{
+			$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+				->getItem($subscription->akeebasubs_coupon_id);
+			$couponCode   = $coupon->coupon;
+		}
+
+		// Set up the sale
+		$price        = $subscription->gross_amount;
+		$orderId      = $subscription->akeebasubs_subscription_id;
+		$productTitle = $level->title;
+
+		$script  = '<script type="text/javascript">';
+		$script .= 'PostAffTracker.setAccountId(\'default1\');
+					  var sale = PostAffTracker.createSale();
+					  sale.setTotalCost(\'' . $price . '\');
+					  sale.setOrderID(\'' . $orderId . '\');
+					  sale.setProductID(\'' . $productTitle . '\');';
+		if($couponCode)
+		{
+			$script .= 'sale.setCoupon(\''.$couponCode.'\');';
+		}
+		$script .= 'PostAffTracker.register();</script>';
+
+		JFactory::getDocument()->addCustomTag($script);
+
+		// Update the subscription record
+		$updates = array(
+			'akeebasubs_affiliate_id'	=> -1
+		);
+		$subscription->save($updates);
 	}
-	
+
 	/**
 	 * Is it neccessary to add the tracking code in this context?
 	 */
