@@ -11,11 +11,13 @@
 	$app       = JFactory::getApplication();
 	$userModel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
 
+	$newInput = $this->input;
+	$newInput->set('getRenewals', $this->input->getInt('getRenewals', 1));
 	// Injects the new input, so I can use all FOF built-in function without messing up other views
-	$userModel->setInput($this->input);
+	$userModel->setInput($newInput);
 
 	// First of all, let's call model functions to get some relevant info
-	$expiredUser = $userModel->getRenewals(1);
+	//$userModel->getRenewals(1);
 
 	// Then modify the model in order to get a nice page
 	$userModel->limit($this->input->getInt('limit', $app->getCfg('list_limit')))

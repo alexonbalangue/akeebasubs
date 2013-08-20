@@ -16,7 +16,12 @@
 
 		<header name="email" type="fieldsearchable" sortable="true" filterclass="input-small" />
 
-		<header name="businessname" type="fieldsearchable" sortable="true" filterclass="input-small" />
+        <header name="levelid" label="COM_AKEEBASUBS_TITLE_LEVELS" type="akeebasubslevels" sortable="false"/>
+
+        <header name="getRenewals" type="fieldselectable" label="COM_AKEEBASUBS_REPORTS_USER_RENEWAL">
+            <option value="1">COM_AKEEBASUBS_RENEWALS_USERSWITHRENEWALS</option>
+            <option value="-1">COM_AKEEBASUBS_RENEWALS_USERSWITHOUTRENEWALS</option>
+        </header>
 	</headerset>
 
 	<fieldset name="items">
@@ -37,12 +42,8 @@
 			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
 		/>
 
-		<field name="businessname" type="text" empty_replacement="–––"
-			show_link="true"
-			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
-		/>
+        <field name="raw_subs" type="akeebasubslevellist" empty_replacement="–––" />
 
-        <field name="raw_subs" type="akeebasubsgroupedlevels" empty_replacement="–––" />
         <field name="count_renewals" type="test" empty_replacement="–––" />
 	</fieldset>
 </form>

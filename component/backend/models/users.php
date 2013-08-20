@@ -33,7 +33,8 @@ class AkeebasubsModelUsers extends FOFModel
 			'state'			=> $this->getState('state',null,'string'),
 			'zip'			=> $this->getState('zip',null,'string'),
 			'country'		=> $this->getState('country',null,'string'),
-			'getRenewals'   => $this->getState('getRenewals', null, 'int')
+			'getRenewals'   => $this->getState('getRenewals', null, 'int'),
+			'levelid'       => $this->getState('levelid', null, 'int')
 		);
 	}
 
@@ -229,8 +230,9 @@ class AkeebasubsModelUsers extends FOFModel
 	{
 		static $return = array();
 
-		$jDate = new JDate();
 		$db    = JFactory::getDbo();
+		$jDate = new JDate();
+		$state = $this->getFilterValues();
 
 		if(isset($return[$type]))
 		{
@@ -241,6 +243,11 @@ class AkeebasubsModelUsers extends FOFModel
 						->select('DISTINCT user_id')
 						->from('#__akeebasubs_subscriptions')
 						->where('publish_down < '.$db->q($jDate->toSql()));
+		if($state->levelid)
+		{
+			$subquery->where($db->qn('akeebasubs_level_id').' = '.$state->levelid);
+		}
+
 		$expired = $db->setQuery($subquery)->loadColumn();
 
 		if($expired)
@@ -249,15 +256,28 @@ class AkeebasubsModelUsers extends FOFModel
 			if($type == 1)
 			{
 				$subquery = $db->getQuery(true)
-					->select('user_id')
-					->from('#__akeebasubs_subscriptions')
-					->where('publish_down > '.$db->q($jDate->toSql()))
-					->where('user_id IN('.implode(',', $expired).')');
+							   ->select('user_id')
+							   ->from('#__akeebasubs_subscriptions')
+							   ->where('publish_down > '.$db->q($jDate->toSql()))
+							   ->where('user_id IN('.implode(',', $expired).')');
 				$return[$type] = $db->setQuery($subquery)->loadColumn();
 			}
 			elseif($type == -1)
 			{
+				// I want users without a renewal, so let's get the people who renewed and then exclude them
+				$subquery = $db->getQuery(true)
+							   ->select('user_id')
+							   ->from('#__akeebasubs_subscriptions')
+							   ->where('publish_down > '.$db->q($jDate->toSql()))
+							   ->where('user_id IN('.implode(',', $expired).')');
+				$renewed = $db->setQuery($subquery)->loadColumn();
 
+				$subquery = $db->getQuery(true)
+							   ->select('user_id')
+							   ->from('#__akeebasubs_subscriptions')
+							   ->where('publish_down < '.$db->q($jDate->toSql()))
+							   ->where('user_id NOT IN('.implode(',', $renewed).')');
+				$return[$type] = $db->setQuery($subquery)->loadColumn();
 			}
 		}
 
