@@ -67,8 +67,7 @@ class plgAkpaymentExact extends plgAkpaymentAbstract
 			'x_zip'				=> trim($kuser->zip),
 			'x_country'			=> AkeebasubsHelperSelect::decodeCountry(trim($kuser->country)),
 			'x_email'			=> trim($user->email),
-			'x_relay_response'	=> 'TRUE',
-			'x_relay_url'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=exact'
+			'x_relay_response'	=> 'TRUE'
 		);
 		
 		// Company
