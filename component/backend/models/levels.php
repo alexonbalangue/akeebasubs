@@ -139,10 +139,19 @@ class AkeebasubsModelLevels extends FOFModel
 	 */
 	public function createTitleLookup()
 	{
-		$db = JFactory::getDbo();
+		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true)->select('*')->from('#__akeebasubs_levels');
 		$rows  = $db->setQuery($query)->loadObjectList('title');
 
 		return array_change_key_case($rows, CASE_UPPER);
+	}
+
+	public function createIdLookup()
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true)->select('*')->from('#__akeebasubs_levels');
+		$rows  = $db->setQuery($query)->loadObjectList('akeebasubs_level_id');
+
+		return $rows;
 	}
 }

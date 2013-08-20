@@ -38,7 +38,8 @@ class AkeebasubsToolbar extends FOFToolbar
 			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array(
 				'tools',
 				'import',
-				'users'
+				'users',
+				'reports'
 			),
 			'COM_AKEEBASUBS_MAINMENU_INVOICES' => array(
 				'invoices',
@@ -316,10 +317,15 @@ class AkeebasubsToolbar extends FOFToolbar
 
 	public function onToolsBrowse()
 	{
-		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
-		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
+		$subtitle_key = 'COM_AKEEBASUBS_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_('COM_AKEEBASUBS').' &ndash; <small>'.JText::_($subtitle_key).'</small>', 'akeebasubs');
 
 		JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
+	}
+
+	public function onReports()
+	{
+		$this->onToolsBrowse();
 	}
 
     protected function addCustomBtn($id, $options = array())
