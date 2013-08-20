@@ -1564,6 +1564,36 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             the user with the free subscription. If you select
             <option>None</option> then no email is sent and the free
             subscribers will never get activated!</para>
+
+            <para>The following warnings are about self-understood facts that
+            are normally covered by common sense. Judging by a number of "bug
+            reports" we have received common sense is nowhere near as common
+            as we thought. So here we are:</para>
+
+            <warning>
+              <para>THE <guilabel>Allow User Registration</guilabel> OPTION
+              MUST BE ENABLED IN THE JOOMLA! USER MANAGER. If this option is
+              disabled you CANNOT create new users in Joomla!. No new users =
+              no new subscribers.</para>
+            </warning>
+
+            <warning>
+              <para>This option of course has effect only on subscription
+              levels which are free. Free means that the price is zero
+              (0).</para>
+            </warning>
+
+            <warning>
+              <para>This option of course has effect only on NEW USERS. An
+              existing user is already logged in, which means that he is
+              already activated, which means that he doesn't need to receive
+              an activation email.</para>
+            </warning>
+
+            <warning>
+              <para>Your site must be able to send emails for your new users
+              to receive the activation email.</para>
+            </warning>
           </listitem>
         </varlistentry>
       </variablelist>
