@@ -17,8 +17,6 @@
 		<header name="email" type="fieldsearchable" sortable="true" filterclass="input-small" />
 
 		<header name="businessname" type="fieldsearchable" sortable="true" filterclass="input-small" />
-
-		<header name="vatnumber" type="fieldsearchable" sortable="true" filterclass="input-small" />
 	</headerset>
 
 	<fieldset name="items">
@@ -44,13 +42,7 @@
 			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
 		/>
 
-		<field name="vatnumber" type="text" format="[ITEM:COUNTRY] %s" format_if_not_empty="true" empty_replacement="–––"
-			show_link="true"
-			url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[ITEM:ID]"
-		/>
+        <field name="raw_subs" type="akeebasubsgroupedlevels" empty_replacement="–––" />
+        <field name="count_renewals" type="test" empty_replacement="–––" />
 	</fieldset>
-
-    <footerset>
-        <footer name="layout" type="hidden" default="renewals" />
-    </footerset>
 </form>

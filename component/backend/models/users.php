@@ -32,7 +32,8 @@ class AkeebasubsModelUsers extends FOFModel
 			'city'			=> $this->getState('city',null,'string'),
 			'state'			=> $this->getState('state',null,'string'),
 			'zip'			=> $this->getState('zip',null,'string'),
-			'country'		=> $this->getState('country',null,'string')
+			'country'		=> $this->getState('country',null,'string'),
+			'getRenewals'   => $this->getState('getRenewals', null, 'int')
 		);
 	}
 
@@ -64,6 +65,12 @@ class AkeebasubsModelUsers extends FOFModel
 			$db->qn('u').'.'.$db->qn('username'),
 			$db->qn('u').'.'.$db->qn('email'),
 		));
+
+		if(!is_null($state->getRenewals))
+		{
+			$query->select('GROUP_CONCAT(DISTINCT '.$db->qn('subs').'.'.$db->qn('akeebasubs_level_id').' SEPARATOR ",") as raw_subs');
+			$query->select('COUNT('.$db->qn('subs').'.'.$db->qn('akeebasubs_level_id').') as count_renewals');
+		}
 
 	}
 
@@ -170,16 +177,39 @@ class AkeebasubsModelUsers extends FOFModel
 				.')'
 			);
 		}
+
+		// Ok I asked to get all the users with/without at least a renewal. So first of all let's get the expired ones
+		if(!is_null($state->getRenewals))
+		{
+			$renewals = $this->getRenewals($state->getRenewals);
+			if($renewals)
+			{
+				$query->where($db->qn('tbl').'.'.$db->qn('user_id').' IN('.implode(',', $renewals).')');
+			}
+		}
 	}
 
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
+
+		$state = $this->getFilterValues();
+
 		$query = $db->getQuery(true)
 				->from($db->qn('#__akeebasubs_users').' AS '.$db->qn('tbl'))
 				->join('INNER', $db->qn('#__users').' AS '.$db->qn('u').' ON '.
 					$db->qn('u').'.'.$db->qn('id').' = '.
 					$db->qn('tbl').'.'.$db->qn('user_id')
 				);
+
+		// If I only want renewals I have to link the subscriptions table, so I can get the subscription
+		// (decode from level_id to title is done with an array lookup, to avoid another join)
+		if(!is_null($state->getRenewals))
+		{
+			$query->innerJoin($db->qn('#__akeebasubs_subscriptions').' AS '.$db->qn('subs').' ON '.
+					$db->qn('subs').'.'.$db->qn('user_id').' = '.$db->qn('tbl').'.'.$db->qn('user_id'));
+
+			$query->group($db->qn('tbl').'.'.$db->qn('user_id'));
+		}
 
 		$this->_buildQueryColumns($query);
 		$this->_buildQueryWhere($query);
@@ -193,6 +223,45 @@ class AkeebasubsModelUsers extends FOFModel
 		$query->order($order.' '.$dir);
 
 		return $query;
+	}
+
+	private function getRenewals($type)
+	{
+		static $return = array();
+
+		$jDate = new JDate();
+		$db    = JFactory::getDbo();
+
+		if(isset($return[$type]))
+		{
+			return $return[$type];
+		}
+
+		$subquery = $db->getQuery(true)
+						->select('DISTINCT user_id')
+						->from('#__akeebasubs_subscriptions')
+						->where('publish_down < '.$db->q($jDate->toSql()));
+		$expired = $db->setQuery($subquery)->loadColumn();
+
+		if($expired)
+		{
+			// I want users with a renewal, so let's search for users that once expired, they bought a new sub
+			if($type == 1)
+			{
+				$subquery = $db->getQuery(true)
+					->select('user_id')
+					->from('#__akeebasubs_subscriptions')
+					->where('publish_down > '.$db->q($jDate->toSql()))
+					->where('user_id IN('.implode(',', $expired).')');
+				$return[$type] = $db->setQuery($subquery)->loadColumn();
+			}
+			elseif($type == -1)
+			{
+
+			}
+		}
+
+		return $return[$type];
 	}
 
 	public function getMergedData($user_id = null)

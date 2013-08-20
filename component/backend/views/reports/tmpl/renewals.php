@@ -15,7 +15,7 @@
 	$userModel->setInput($this->input);
 
 	// First of all, let's call model functions to get some relevant info
-	//$expiredUser = $userModel->getExpired();
+	$expiredUser = $userModel->getRenewals(1);
 
 	// Then modify the model in order to get a nice page
 	$userModel->limit($this->input->getInt('limit', $app->getCfg('list_limit')))
