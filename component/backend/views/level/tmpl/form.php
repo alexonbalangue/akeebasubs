@@ -310,11 +310,33 @@ $this->loadHelper('cparams');
 
 	<div class="span6">
 		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ORDERTEXT') ?></h3>
+		<div class="control-group">
+			<label for="orderurl" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_ORDERURL'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="20" id="orderurl" name="orderurl" class="input-large" value="<?php echo $this->escape($this->item->orderurl) ?>" />
+				<div class="help">
+					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_ORDERURL_DESC'); ?>
+				</div>
+			</div>
+		</div>
 		<?php echo $editor->display( 'ordertext',  $this->item->ordertext, '97%', '391', '50', '20', false ) ; ?>
 	</div>
 
 	<div class="span6">
 		<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CANCELTEXT') ?></h3>
+		<div class="control-group">
+			<label for="cancelurl" class="control-label">
+				<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_CANCELURL'); ?>
+			</label>
+			<div class="controls">
+				<input type="text" size="20" id="cancelurl" name="cancelurl" class="input-large" value="<?php echo $this->escape($this->item->cancelurl) ?>" />
+				<div class="help">
+					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_CANCELURL_DESC'); ?>
+				</div>
+			</div>
+		</div>
 		<?php echo $editor->display( 'canceltext',  $this->item->canceltext, '97%', '391', '50', '20', false ) ; ?>
 	</div>
 </div>
