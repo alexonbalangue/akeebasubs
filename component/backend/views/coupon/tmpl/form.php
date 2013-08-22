@@ -30,7 +30,7 @@ $this->loadHelper('params');
 <div class="row-fluid">
 <div class="span6">
 	<h3><?php echo JText::_('COM_AKEEBASUBS_COUPON_BASIC_TITLE')?></h3>
-	
+
 	<div class="control-group">
 		<label for="title_field" class="control-label">
 			<?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_TITLE'); ?>
@@ -52,7 +52,7 @@ $this->loadHelper('params');
 			<?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_TYPE'); ?>
 		</label>
 		<div class="controls">
-			<?php echo AkeebasubsHelperSelect::coupontypes('type',$this->item->type) ?>			
+			<?php echo AkeebasubsHelperSelect::coupontypes('type',$this->item->type) ?>
 		</div>
 	</div>
 	<div class="control-group">
@@ -79,12 +79,12 @@ $this->loadHelper('params');
 			<input type="text" size="5" id="hits_field" name="hits" value="<?php echo  $this->escape($this->item->hits) ?>" />
 		</div>
 	</div>
-	
+
 </div>
 
 <div class="span6">
 	<h3><?php echo JText::_('COM_AKEEBASUBS_COUPON_FINETUNING_TITLE')?></h3>
-	
+
 	<div class="control-group">
 		<label for="publish_up" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_COUPON_PUBLISH_UP')?></label>
 		<div class="controls">
@@ -93,16 +93,16 @@ $this->loadHelper('params');
 			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="publish_down" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_COUPON_PUBLISH_DOWN')?></label>
 		<div class="controls">
 			<span class="akeebasubs-nofloat-input">
 				<?php echo JHTML::_('calendar', $this->item->publish_down, 'publish_down', 'publish_down'); ?>
-			</span>			
+			</span>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="userid_visible" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER')?></label>
 		<div class="controls">
@@ -112,28 +112,35 @@ $this->loadHelper('params');
 			<a class="modal" style="display: none" id="userselect" href="index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=userid" rel="{handler: 'iframe', size: {x: 800, y: 500}}">Select</a>
 		</div>
 	</div>
-	
+
+	<div class="control-group">
+		<label for="email" class="control-label"><?php echo JText::_('COM_UNITE_JUSER_EMAIL')?></label>
+		<div class="controls">
+			<input type="text" name="email" id="email" value="<?php echo $this->item->email?>" />
+		</div>
+	</div>
+
 	<div class="control-group">
 		<label for="usergroups_field" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_COUPON_FIELD_USERGROUPS'); ?></label>
 		<div class="controls">
 			<?php echo AkeebasubsHelperSelect::usergroups('usergroups[]', empty($this->item->usergroups) ? '-1' : explode(',', $this->item->usergroups), array('multiple' => 'multiple', 'size' => 3)); ?>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="subscriptions_field" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_SUBSCRIPTIONS'); ?></label>
 		<div class="controls">
 			<?php echo AkeebasubsHelperSelect::levels('subscriptions[]', empty($this->item->subscriptions) ? '-1' : explode(',',$this->item->subscriptions), array('multiple' => 'multiple', 'size' => 3)) ?>
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="hitslimit_field" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_HITSLIMIT'); ?></label>
 		<div class="controls">
 			<input type="text" size="5" id="hitslimit_field" name="hitslimit" value="<?php echo  $this->escape($this->item->hitslimit) ?>" />
 		</div>
 	</div>
-	
+
 	<div class="control-group">
 		<label for="userhits_field" class="control-label">
 			<?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_USERHITSLIMIT'); ?>
@@ -145,14 +152,14 @@ $this->loadHelper('params');
 </div>
 </div>
 </form>
-	
+
 <script type="text/javascript">
 function jSelectUser_userid(id, username)
 {
 	document.getElementById('userid').value = id;
 	document.getElementById('userid_visible').value = username;
 	try {
-		document.getElementById('sbox-window').close();	
+		document.getElementById('sbox-window').close();
 	} catch(err) {
 		SqueezeBox.close();
 	}
