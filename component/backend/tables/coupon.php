@@ -99,7 +99,7 @@ class AkeebasubsTableCoupon extends FOFTable
 
 		if(!empty($this->email))
 		{
-			if(!filter_var($this->email, FILTER_VALIDATE_EMAIL) || preg_match('/@.+\./', $this->email))
+			if(!filter_var($this->email, FILTER_VALIDATE_EMAIL) || !preg_match('/@.+\./', $this->email))
 			{
 				$this->setError(JText::_('COM_AKEEBASUBS_COUPON_ERR_EMAIL'));
 				$result = false;

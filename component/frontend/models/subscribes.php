@@ -672,9 +672,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 */
 	private function _validateCoupon($validIfNotExists = true)
 	{
-		static $couponCode = null;
-		static $valid = false;
-		static $couponid = null;
+		static $couponCode  = null;
+		static $valid       = false;
+		static $couponid    = null;
 
 		$state = $this->getStateVariables();
 		$this->_coupon_id = null;
@@ -701,29 +701,35 @@ class AkeebasubsModelSubscribes extends FOFModel
 				if($coupon->enabled && (strtoupper($coupon->coupon) == strtoupper($couponCode)) ) {
 					// Check validity period
 					JLoader::import('joomla.utilities.date');
-					$jFrom = new JDate($coupon->publish_up);
-					$jTo = new JDate($coupon->publish_down);
-					$jNow = new JDate();
+					$jFrom  = new JDate($coupon->publish_up);
+					$jTo    = new JDate($coupon->publish_down);
+					$jNow   = new JDate();
 
 					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
 
 					// Check levels list
 					if($valid && !empty($coupon->subscriptions)) {
 						$levels = explode(',', $coupon->subscriptions);
-						$valid = in_array($state->id, $levels);
+						$valid  = in_array($state->id, $levels);
 					}
 
 					// Check user
 					if($valid && $coupon->user) {
 						$user_id = JFactory::getUser()->id;
-						$valid = $user_id == $coupon->user;
+						$valid   = $user_id == $coupon->user;
+					}
+
+					// Check email
+					if($valid && $coupon->email)
+					{
+						$valid = $state->email == $coupon->email;
 					}
 
 					// Check user group levels
 					if ($valid && !empty($coupon->usergroups)) {
-						$groups = explode(',', $coupon->usergroups);
+						$groups  = explode(',', $coupon->usergroups);
 						$ugroups = JFactory::getUser()->getAuthorisedGroups();
-						$valid = 0;
+						$valid   = 0;
 						foreach($ugroups as $ugroup) {
 							if(in_array($ugroup, $groups)){
 								$valid = 1;
