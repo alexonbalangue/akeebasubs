@@ -25,18 +25,13 @@
 				<field type="spacer" />
 				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
 				<field type="spacer" />
-				<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_MERCHANT_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_MERCHANT_DESC"/>
-				<field type="spacer" />
-				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_MERCADOPAGO_SANDBOX_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_SANDBOX_DESC">
-				  <option value="0">JNo</option>
-				  <option value="1">JYes</option>
-				</field>
-				<field name="sandbox_merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_SANDBOX_MERCHANT_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_SANDBOX_MERCHANT_LABEL"/>
-				<field type="spacer" />
-				<field name="cbt" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_CBT_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_CBT_DESC" />
-				<field name="cpp_header_image" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_HEADER_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_HEADER_DESC" />
-				<field name="cpp_headerback_color" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_HEADERBACK_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_HEADERBACK_DESC" />
-				<field name="cpp_headerborder_color" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_HEADERBORDER_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_HEADERBORDER_DESC" />
+				<field name="client_id" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_CLIENT_ID_LABEL" />
+				<field name="client_secret" type="text" size="50" default="" label="PLG_AKPAYMENT_MERCADOPAGO_CLIENT_SECRET_LABEL" />
+                <field type="spacer" />
+                <field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_MERCADOPAGO_SANDBOX_LABEL" description="PLG_AKPAYMENT_MERCADOPAGO_SANDBOX_DESC">
+                    <option value="0">JNo</option>
+                    <option value="1">JYes</option>
+                </field>
 			</fieldset>
 		</fields>
 	</config>
