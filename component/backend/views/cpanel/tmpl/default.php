@@ -17,6 +17,8 @@ $this->loadHelper('cparams');
 	</div>
 	<?php endif;?>
 
+	<?php echo $this->loadTemplate('wizard'); ?>
+
 	<?php if(JComponentHelper::getParams('com_akeebasubs')->get('show2copromo',1)): ?>
 	<div class="row-fluid">
 		<div class="well">

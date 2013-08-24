@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 class AkeebasubsControllerCpanels extends FOFController
 {
 	public function execute($task) {
-		if(!in_array($task, array('browse','hide2copromo'))) {
+		if(!in_array($task, array('browse','hide2copromo', 'wizardstep'))) {
 			$task = 'browse';
 		}
 		parent::execute($task);
