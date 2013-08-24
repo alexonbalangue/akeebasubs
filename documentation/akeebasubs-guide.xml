@@ -1882,8 +1882,10 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <guimenu>Setup</guimenu>, <guimenuitem>Subscription Levels</guimenuitem>
       in the toolbar links area.</para>
 
-      <para>Creating or editing a Subscription Level, you have these
-      options:</para>
+      <para>Creating or editing a Subscription Level, you have five tabs with
+      the different options per subscription level.</para>
+
+      <bridgehead>The Details tab</bridgehead>
 
       <variablelist>
         <varlistentry>
@@ -1898,11 +1900,144 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
+          <term>Slug / Alias</term>
+
+          <listitem>
+            <para>The alias, used to construct the URL. Use only lowercase
+            Latin characters without diacritics and accents, dashes and
+            underscores. For example <option>uber-sub</option> is valid,
+            whereas <option>über SUB</option> is INVALID.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Access</term>
+
+          <listitem>
+            <para>Since Akeeba Subscriptions 3.2.1 you can define which users
+            can see which subscriptions. The default option (Public) means
+            that all users, logged in or not, can see the subscription level
+            and subscribe to it.</para>
+
+            <important>
+              <para>This feature is VERY powerful. Just like Joomla!'s ACLs it
+              will obediently allow someone to create the most pointless
+              setups possible. Remember that a user must ALREADY belong to a
+              group contained in this access level to be able to subscribe to
+              this subscription level. For instance, let's say have a user
+              group called Subscribers and a viewing access level called
+              Subscriber Access containing only the Subscribers group. If you
+              set a subscription level to the Subscribers access level then a
+              user must already be a subscriber (belong to the Subscribers
+              user group) before they can subscribe to your site. If this is
+              your only subscription level you have just shot yourself in the
+              feet. Think about it. If I need to be a subscriber before I can
+              subscribe, how can I ever subscribe to your site?</para>
+            </important>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Image</term>
 
           <listitem>
             <para>Select a picture to represent your subscription. The image
             must be located in your site's images directory.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Published</term>
+
+          <listitem>
+            <para>Should it be shown to your users?</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Short Description</term>
+
+          <listitem>
+            <para>A description of the subscription to show to your users.
+            Keep it short (ca. 30 words or less) or it will overflow the
+            boundaries of the subscription presentation areas in the
+            front-end.</para>
+
+            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
+            codes (like our own aslink plugin) in the description.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>The Price and Duration tab</bridgehead>
+
+      <variablelist>
+        <varlistentry>
+          <term>Price</term>
+
+          <listitem>
+            <para>The price of a subscription in this level. If you need to
+            enter a decimal value, use a dot as the decimal separator. For
+            example, 12.30 is valid, whereas 12,30 is INVALID and will be
+            interpreted as 1230. Do NOT use a thousands separator. For example
+            1000 is valid, whereas 1,000 is INVALID.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sign-up fee</term>
+
+          <listitem>
+            <para>Sometimes you need to have a one-time sign-up fee.
+            "One-time" means that this fee is only charged once, when a user
+            first subscribes to a subscription level. Just enter the amount of
+            money to be charged above the regular price in this box. If you
+            need to enter a decimal value, use a dot as the decimal separator.
+            For example, 12.30 is valid, whereas 12,30 is INVALID and will be
+            interpreted as 1230. Do NOT use a thousands separator. For example
+            1000 is valid, whereas 1,000 is INVALID.</para>
+
+            <para>There are some things you need to keep in mind when you are
+            using a sign-up fee:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The sign-up fee is only charged to users who have never
+                subscribed to this subscription level before. If the user had
+                already subscribed to this level anytime in the past (even
+                years ago) he will not be charged this fee.</para>
+              </listitem>
+
+              <listitem>
+                <para>The sign-up fee is added to the regular price of the
+                subscription. If you have a tax rule, the tax will be
+                calculated against the total amount of the price plus the
+                sign-up fee.</para>
+              </listitem>
+
+              <listitem>
+                <para>Discounts such as coupons, upgrades and subscription
+                level relations are applied to the sum of the price plus the
+                sign-up fee. If you have a subscription level worth 80 Euros
+                with a 20 Euro sign-up fee, a 20% coupon code will give the
+                user 20% * (80 + 20 Euros) = 20 Euros discount NOT 20% * 80€ =
+                16€.</para>
+              </listitem>
+
+              <listitem>
+                <para>Sign-up fees do not work properly with recurring
+                payments UNLESS you are using PayPal. PayPal will correctly
+                charge the price plus sign-up fee only during the first
+                subscription term, charging only the regular price from the
+                second subscription term onwards (plus any applicable taxes,
+                of course!). All other payment processors that support
+                recurring payments will end up charging the full price plus
+                the sign-up fee on every single payment term. As a result, if
+                you are not using PayPal or if you are using PayPal plus other
+                recurring payment provides we strongly advise AGAINST using
+                sign-up fees with recurring payments.</para>
+              </listitem>
+            </itemizedlist>
           </listitem>
         </varlistentry>
 
@@ -2027,76 +2162,23 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
-          <term>Price</term>
+          <term>Payment methods</term>
 
           <listitem>
-            <para>The price of a subscription in this level. If you need to
-            enter a decimal value, use a dot as the decimal separator. For
-            example, 12.30 is valid, whereas 12,30 is INVALID and will be
-            interpreted as 1230. Do NOT use a thousands separator. For example
-            1000 is valid, whereas 1,000 is INVALID.</para>
+            <para>Select one or more payment methods to be shown for this
+            subscription level. If you select the <option>- No selection
+            -</option> option all enabled payment methods are shown
+            (default).</para>
+
+            <para>Pro tip: This feature is especially useful when you want to
+            limit which subscription levels will allow off-line or mobile
+            (SMS) payment. Of course you can choose between any of the payment
+            plugins you have activated.</para>
           </listitem>
         </varlistentry>
 
         <varlistentry>
-          <term>Sign-up fee</term>
-
-          <listitem>
-            <para>Sometimes you need to have a one-time sign-up fee.
-            "One-time" means that this fee is only charged once, when a user
-            first subscribes to a subscription level. Just enter the amount of
-            money to be charged above the regular price in this box. If you
-            need to enter a decimal value, use a dot as the decimal separator.
-            For example, 12.30 is valid, whereas 12,30 is INVALID and will be
-            interpreted as 1230. Do NOT use a thousands separator. For example
-            1000 is valid, whereas 1,000 is INVALID.</para>
-
-            <para>There are some things you need to keep in mind when you are
-            using a sign-up fee:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>The sign-up fee is only charged to users who have never
-                subscribed to this subscription level before. If the user had
-                already subscribed to this level anytime in the past (even
-                years ago) he will not be charged this fee.</para>
-              </listitem>
-
-              <listitem>
-                <para>The sign-up fee is added to the regular price of the
-                subscription. If you have a tax rule, the tax will be
-                calculated against the total amount of the price plus the
-                sign-up fee.</para>
-              </listitem>
-
-              <listitem>
-                <para>Discounts such as coupons, upgrades and subscription
-                level relations are applied to the sum of the price plus the
-                sign-up fee. If you have a subscription level worth 80 Euros
-                with a 20 Euro sign-up fee, a 20% coupon code will give the
-                user 20% * (80 + 20 Euros) = 20 Euros discount NOT 20% * 80€ =
-                16€.</para>
-              </listitem>
-
-              <listitem>
-                <para>Sign-up fees do not work properly with recurring
-                payments UNLESS you are using PayPal. PayPal will correctly
-                charge the price plus sign-up fee only during the first
-                subscription term, charging only the regular price from the
-                second subscription term onwards (plus any applicable taxes,
-                of course!). All other payment processors that support
-                recurring payments will end up charging the full price plus
-                the sign-up fee on every single payment term. As a result, if
-                you are not using PayPal or if you are using PayPal plus other
-                recurring payment provides we strongly advise AGAINST using
-                sign-up fees with recurring payments.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Group</term>
+          <term>Level Group</term>
 
           <listitem>
             <para>When a subscription is not part of a group, the Valid From
@@ -2149,68 +2231,83 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             Groups</guilabel> page of the component.</para>
           </listitem>
         </varlistentry>
+      </variablelist>
 
+      <bridgehead>The Actions tab</bridgehead>
+
+      <variablelist>
         <varlistentry>
-          <term>Slug</term>
+          <term>Integration</term>
 
           <listitem>
-            <para>The alias, used to construct the URL. Use only lowercase
-            Latin characters without diacritics and accents, dashes and
-            underscores. For example <option>uber-sub</option> is valid,
-            whereas <option>über SUB</option> is INVALID.</para>
+            <para>Since Akeeba Subscriptions 2.4.5 you may see a section in
+            the page called Integration. Here you can configure the parameters
+            for second-generation integration plugins, e.g. the "Akeeba
+            Subscriptions - Joomla! Usergroups Integration" plugin. Each
+            integration plugin renders a tab in this area. The parameters
+            under each tab are detailed in the respective plugin's
+            documentation page. You can enable integration plugins from your
+            site's Extensions, Plugin Manager page.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>The Messages tab</bridgehead>
+
+      <variablelist>
+        <varlistentry>
+          <term>Message to show after successful sign-up</term>
+
+          <listitem>
+            <para>The text in this area will be presented to the users after
+            they successfully complete their payment. Use it to thank them for
+            giving you their money and show them important information about
+            their subscription, e.g. links to your support method, download
+            links etc.</para>
+
+            <warning>
+              <para>Do not include any sensitive information (such as "secret"
+              download links) as the content of this page can be directly
+              accessed by a knowledgeable user by manipulating the URL. If you
+              want to include such information, please use the Restricted
+              Content plugin bundled with Akeeba Subscriptions to make sure
+              that the information will only be shown to users holding a valid
+              subscription.</para>
+            </warning>
+
+            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
+            codes (like our own aslink plugin) in the message.</para>
+
+            <para>Alternatively you can enter a URL in the Custom redirect
+            URL. If it is not empty, Akeeba Subscriptions will redirect your
+            client to that URL instead of showing the message.</para>
           </listitem>
         </varlistentry>
 
         <varlistentry>
-          <term>Published</term>
+          <term>Message to show after sign-up cancellation</term>
 
           <listitem>
-            <para>Should it be shown to your users?</para>
+            <para>The text in this area will be presented to the users after
+            they cancel their payment (if your payment gateway supports this
+            feature). This is your last attempt to changing your user's mind
+            or have them give you feedback on the reasons they decided to not
+            move forward with their subscription. Use it wisely and do not
+            insult your users, please :)</para>
+
+            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
+            codes (like our own aslink plugin) in the message.</para>
+
+            <para>Alternatively you can enter a URL in the Custom redirect
+            URL. If it is not empty, Akeeba Subscriptions will redirect your
+            client to that URL instead of showing the message.</para>
           </listitem>
         </varlistentry>
+      </variablelist>
 
-        <varlistentry>
-          <term>Access</term>
+      <bridgehead>The Renewals and notifications tab</bridgehead>
 
-          <listitem>
-            <para>Since Akeeba Subscriptions 3.2.1 you can define which users
-            can see which subscriptions. The default option (Public) means
-            that all users, logged in or not, can see the subscription level
-            and subscribe to it.</para>
-
-            <important>
-              <para>This feature is VERY powerful. Just like Joomla!'s ACLs it
-              will obediently allow someone to create the most pointless
-              setups possible. Remember that a user must ALREADY belong to a
-              group contained in this access level to be able to subscribe to
-              this subscription level. For instance, let's say have a user
-              group called Subscribers and a viewing access level called
-              Subscriber Access containing only the Subscribers group. If you
-              set a subscription level to the Subscribers access level then a
-              user must already be a subscriber (belong to the Subscribers
-              user group) before they can subscribe to your site. If this is
-              your only subscription level you have just shot yourself in the
-              feet. Think about it. If I need to be a subscriber before I can
-              subscribe, how can I ever subscribe to your site?</para>
-            </important>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Forbid renewals</term>
-
-          <listitem>
-            <para>This feature is available since Akeeba Subscriptions
-            2.1</para>
-
-            <para>Is set to Yes, a user can subscribe to this level only ONCE.
-            He won't be able to renew his subscription. Useful in setting up
-            "trial subscriptions", i.e. cheap or even free subscription levels
-            with very limited duration which a user can subscribe to only
-            once.</para>
-          </listitem>
-        </varlistentry>
-
+      <variablelist>
         <varlistentry>
           <term>Recurring</term>
 
@@ -2304,18 +2401,17 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
         </varlistentry>
 
         <varlistentry>
-          <term>Payment methods</term>
+          <term>Forbid renewals</term>
 
           <listitem>
-            <para>Select one or more payment methods to be shown for this
-            subscription level. If you select the <option>- No selection
-            -</option> option all enabled payment methods are shown
-            (default).</para>
+            <para>This feature is available since Akeeba Subscriptions
+            2.1</para>
 
-            <para>Pro tip: This feature is especially useful when you want to
-            limit which subscription levels will allow off-line or mobile
-            (SMS) payment. Of course you can choose between any of the payment
-            plugins you have activated.</para>
+            <para>Is set to Yes, a user can subscribe to this level only ONCE.
+            He won't be able to renew his subscription. Useful in setting up
+            "trial subscriptions", i.e. cheap or even free subscription levels
+            with very limited duration which a user can subscribe to only
+            once.</para>
           </listitem>
         </varlistentry>
 
@@ -2412,76 +2508,6 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               of an offer to the psychology of the prospective buyer, even if
               the value of the coupon code is only in the 10-20% area.</para>
             </tip>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Short Description</term>
-
-          <listitem>
-            <para>A description of the subscription to show to your users.
-            Keep it short (ca. 30 words or less) or it will overflow the
-            boundaries of the subscription presentation areas in the
-            front-end.</para>
-
-            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
-            codes (like our own aslink plugin) in the description.</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Integration</term>
-
-          <listitem>
-            <para>Since Akeeba Subscriptions 2.4.5 you may see a section in
-            the page called Integration. Here you can configure the parameters
-            for second-generation integration plugins, e.g. the "Akeeba
-            Subscriptions - Joomla! Usergroups Integration" plugin. Each
-            integration plugin renders a tab in this area. The parameters
-            under each tab are detailed in the respective plugin's
-            documentation page. You can enable integration plugins from your
-            site's Extensions, Plugin Manager page.</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Message to show after successful sign-up</term>
-
-          <listitem>
-            <para>The text in this area will be presented to the users after
-            they successfully complete their payment. Use it to thank them for
-            giving you their money and show them important information about
-            their subscription, e.g. links to your support method, download
-            links etc.</para>
-
-            <warning>
-              <para>Do not include any sensitive information (such as "secret"
-              download links) as the content of this page can be directly
-              accessed by a knowledgeable user by manipulating the URL. If you
-              want to include such information, please use the Restricted
-              Content plugin bundled with Akeeba Subscriptions to make sure
-              that the information will only be shown to users holding a valid
-              subscription.</para>
-            </warning>
-
-            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
-            codes (like our own aslink plugin) in the message.</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Message to show after sign-up cancellation</term>
-
-          <listitem>
-            <para>The text in this area will be presented to the users after
-            they cancel their payment (if your payment gateway supports this
-            feature). This is your last attempt to changing your user's mind
-            or have them give you feedback on the reasons they decided to not
-            move forward with their subscription. Use it wisely and do not
-            insult your users, please :)</para>
-
-            <para>Since Akeeba Subscription 1.0.b4 you can use content plugin
-            codes (like our own aslink plugin) in the message.</para>
           </listitem>
         </varlistentry>
       </variablelist>
