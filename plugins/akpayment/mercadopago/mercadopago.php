@@ -10,89 +10,103 @@ defined('_JEXEC') or die();
 $akpaymentinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akpayment.php';
 if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpaymentinclude); }
 
-class plgAkpaymentPaypal extends plgAkpaymentAbstract
+class plgAkpaymentMercadopago extends plgAkpaymentAbstract
 {
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
-			'ppName'		=> 'paypal',
-			'ppKey'			=> 'PLG_AKPAYMENT_PAYPAL_TITLE',
-			'ppImage'		=> 'https://www.paypal.com/en_US/i/bnr/horizontal_solution_PPeCheck.gif'
+			'ppName'		=> 'mercadopago',
+			'ppKey'			=> 'PLG_AKPAYMENT_MERCADOPAGO_TITLE',
+			'ppImage'		=> JURI::root().'plugins/akpayment/mercadopago/mercadopago/logo.png'
 		));
 
 		parent::__construct($subject, $config);
+
+		// No cURL? Well, that's no point on continuing...
+		if(!function_exists('curl_init'))
+		{
+			if(version_compare(JVERISON, '3.0', 'ge'))
+			{
+				throw new Exception('Mercadopago payment plugin needs cURL extension in order to work', 500);
+			}
+			else
+			{
+				JError::raiseError(500, 'Mercadopago payment plugin needs cURL extension in order to work');
+			}
+		}
 	}
 
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
 	 *
-	 * @param string $paymentmethod
-	 * @param JUser $user
-	 * @param AkeebasubsTableLevel $level
-	 * @param AkeebasubsTableSubscription $subscription
-	 * @return string
+	 * @param   string                      $paymentmethod
+	 * @param   JUser                       $user
+	 * @param   AkeebasubsTableLevel        $level
+	 * @param   AkeebasubsTableSubscription $subscription
+	 *
+	 * @throws  Exception|JError
+	 * @return  string
 	 */
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
 
-		$nameParts = explode(' ', $user->name, 2);
-		$firstName = $nameParts[0];
-		if(count($nameParts) > 1) {
-			$lastName = $nameParts[1];
-		} else {
-			$lastName = '';
+		require_once JPATH_ROOT.'/plugins/akpayment/mercadopago/mercadopago/lib/mercadopago.php';
+
+		// Required info are missing
+		if(!$this->params->get('client_id') || !$this->params->get('client_secret'))
+		{
+			if(version_compare(JVERSION, '3.0', 'ge'))
+			{
+				throw new Exception('Mercadopago Payment Processor: Please supply a ClientID and a Client Secret info before continuing', 500);
+			}
+			else
+			{
+				JError::raiseError(500, 'Mercadopago Payment Processor: Please supply a ClientID and a Client Secret info before continuing');
+			}
 		}
 
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
+		$mp = new MP($this->params->get('client_id'), $this->params->get('client_secret'));
+		$mp->sandbox_mode((bool)$this->params->get('sandbox'));
 
-		$rootURL = rtrim(JURI::base(),'/');
-		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
-			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+		$preference = array(
+			'external_reference' => $subscription->akeebasubs_subscription_id,
+			'back_urls' => array(
+				'success' => JRoute::_(JURI::root().'index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false),
+				'failure' => JRoute::_(JURI::root().'index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false)
+			),
+			"items" => array(
+				array(
+					"title" => $level->title,
+					"quantity" => 1,
+					"currency_id" => strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
+					"unit_price" => floatval($subscription->gross_amount)
+				)
+			)
+		);
+
+		$preferenceResult = $mp->create_preference($preference);
+
+		// No success on getting remote data? Stop here!
+		if(!in_array($preferenceResult['status'], array(201, 200)))
+		{
+			if(version_compare(JVERISON, '3.0', 'ge'))
+			{
+				throw new Exception('There was an error while contacting the payment processor. Status code: '.$preferenceResult['status'], 500);
+			}
+			else
+			{
+				JError::raiseError(500, 'There was an error while contacting the payment processor. Status code: '.$preferenceResult['status']);
+			}
 		}
 
 		$data = (object)array(
-			'url'			=> $this->getPaymentURL(),
-			'merchant'		=> $this->getMerchantID(),
-			//'postback'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal')),
-			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal',
-			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
-			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
-			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
-			'firstname'		=> $firstName,
-			'lastname'		=> $lastName,
-			'cmd'			=> $level->recurring ? '_xclick-subscriptions' : '_xclick',
-			// If there's a signup fee set 'recurring' to 2
-			'recurring'		=> $level->recurring ? ($subscription->recurring_amount >= 0.01 ? 2 : 1) : 0
+			'url'			=> $this->params->get('sandbox') ? $preferenceResult["response"]["sandbox_init_point"] : $preferenceResult["response"]["init_point"]
 		);
 
-		if ($data->recurring == 1)
-		{
-			$ppDuration = $this->_toPPDuration($level->duration);
-			$data->t3 = $ppDuration->unit;
-			$data->p3 = $ppDuration->value;
-		}
-		elseif ($data->recurring == 2)
-		{
-			$ppDuration = $this->_toPPDuration($level->duration);
-			$data->t1 = $ppDuration->unit;
-			$data->p1 = $ppDuration->value;
-			$data->t3 = $ppDuration->unit;
-			$data->p3 = $ppDuration->value;
-			$data->a3 = $subscription->recurring_amount;
-		}
-
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
-			->user_id($user->id)
-			->getFirstItem();
-
 		@ob_start();
-		include dirname(__FILE__).'/paypal/form.php';
+		include dirname(__FILE__).'/mercadopago/form.php';
 		$html = @ob_get_clean();
 
 		return $html;
@@ -104,6 +118,12 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
+
+		$data['time'] = date('Y-m-d H:i:s');
+
+		file_put_contents(JPATH_ROOT.'/log.txt', print_r($data, true));
+
+		return true;
 
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
