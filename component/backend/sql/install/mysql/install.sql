@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`image` varchar(1024) NOT NULL,
 	`description` text,
 	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
-	`price` FLOAT NOT NULL,
+	`price` FLOAT NOT NULL DEFAULT '0',
 	`signupfee` FLOAT NULL DEFAULT '0',
 	`ordertext` text,
   `orderurl` VARCHAR( 255 ) NULL,
