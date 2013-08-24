@@ -35,6 +35,7 @@
 			description="COM_AKEEBASUBS_CONFIG_BACKEND_IMAGEDIR_DESC"
 		/>
 		<field name="show2copromo" type="hidden" default="1" />
+		<field name="wizardstep" type="hidden" default="1" />
 	</fieldset>
 	
 	<fieldset name="frontend" label="COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE">
