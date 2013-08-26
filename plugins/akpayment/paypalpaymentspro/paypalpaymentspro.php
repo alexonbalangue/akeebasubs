@@ -271,7 +271,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 
 		// Check txn_type; we only accept web_accept transactions with this plugin
 		if($isValid) {
-			$validTypes = array('web_accept','recurring_payment','subscr_payment','express_checkout');
+			$validTypes = array('web_accept','recurring_payment','subscr_payment','express_checkout','pro_api');
 			$isValid = in_array($data['txn_type'], $validTypes);
 			if(!$isValid) {
 				$data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
