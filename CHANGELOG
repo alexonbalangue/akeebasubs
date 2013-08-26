@@ -35,6 +35,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] Do not set password setting in com_users was not respected when free account activation was enabled
 # [LOW] RoboKassa: sending the "currency" (actually: payment method) limits the payment options of the end user
 # [LOW] CLI CRON scripts not fully compatible with PHP CGI
+# [LOW] Community Builder synchronisation would result in extra fields' data stored as raw JSON in the Community Builder field
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
