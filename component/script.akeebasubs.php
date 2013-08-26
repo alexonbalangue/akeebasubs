@@ -111,6 +111,7 @@ class Com_AkeebasubsInstallerScript
 				'gocardless'			=> 0,
 				'googlecheckout'		=> 0,
 				'ifthen'				=> 0,
+				'mercadopago'			=> 0,
 				'moip'					=> 0,
 				'moipassinaturas'		=> 0,
 				'mobilpaycc'			=> 0,
