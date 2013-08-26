@@ -1034,7 +1034,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					// Translate percentages to net values
 					if($rule->type == 'percent')
 					{
-						$discount = $net * (float)$rule->amount / 100;
+						$discount = $net * (float)$discount / 100;
 					}
 
 					break;
