@@ -1549,7 +1549,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <para>When this option is enabled, the subscription to a
             subscription level with a price of 0 will be activated
             automatically, but the new user account will not. Instead, the
-            standard Joomla! user activation email will be sent out.</para>
+            standard Joomla! user activation email will be sent out, using
+            Joomla!'s own code. The activation link is handled by Joomla!
+            itself, NOT Akeeba Subscriptions.</para>
 
             <para>The email which is sent by this feature depends on your
             Joomla! User Manager setup. Go to Joomla!'s <guilabel>User
@@ -1563,7 +1565,9 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             will receive an email which will allow them to manually activate
             the user with the free subscription. If you select
             <option>None</option> then no email is sent and the free
-            subscribers will never get activated!</para>
+            subscribers will never get activated! Please remember that the
+            user activation is handled by Joomla! itself and NOT Akeeba
+            Subscriptions.</para>
 
             <para>The following warnings are about self-understood facts that
             are normally covered by common sense. Judging by a number of "bug
@@ -1574,7 +1578,8 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
               <para>THE <guilabel>Allow User Registration</guilabel> OPTION
               MUST BE ENABLED IN THE JOOMLA! USER MANAGER. If this option is
               disabled you CANNOT create new users in Joomla!. No new users =
-              no new subscribers.</para>
+              no new subscribers. Please remember that the user activation is
+              handled by Joomla! itself and NOT Akeeba Subscriptions.</para>
             </warning>
 
             <warning>
@@ -1593,6 +1598,15 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
             <warning>
               <para>Your site must be able to send emails for your new users
               to receive the activation email.</para>
+            </warning>
+
+            <warning>
+              <para>If you cannot get this feature to work we cannot provide
+              any support for you. The code used to generate this email is
+              copied directly from Joomla! itself. Please remember that the
+              link for the user activation is handled by Joomla! itself and
+              NOT Akeeba Subscriptions. If it doesn't work we cannot obviously
+              debug Joomla!, therefore no support can be given.</para>
             </warning>
           </listitem>
         </varlistentry>
