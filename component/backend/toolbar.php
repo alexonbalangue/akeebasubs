@@ -302,17 +302,26 @@ class AkeebasubsToolbar extends FOFToolbar
 
     public function onEmailtemplatesEdit()
     {
+		parent::onEdit();
+
         if(!isset($this->_isNew))
         {
-            $options['class']   = 'preview';
+			JToolBarHelper::divider();
+
+			if (version_compare(JVERSION, '3.0', 'ge'))
+			{
+				$options['class']   = 'envelope';
+			}
+			else
+			{
+				$options['class']   = 'preview';
+			}
             $options['a.task']  = 'testtemplate';
             $options['a.href']  = '#';
             $options['text']    = JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_TESTTEMPLATE');
 
             $this->addCustomBtn('test-template', $options);
-            JToolBarHelper::divider();
         }
-        parent::onEdit();
     }
 
 	public function onToolsBrowse()
@@ -331,7 +340,14 @@ class AkeebasubsToolbar extends FOFToolbar
     protected function addCustomBtn($id, $options = array())
     {
         $options = (array) $options;
-        $a_class = 'toolbar';
+		if (version_compare(JVERSION, '3.0', 'ge'))
+		{
+			$a_class = 'btn btn-small';
+		}
+		else
+		{
+			$a_class = 'toolbar';
+		}
         $href	 = '';
         $task	 = '';
         $text    = '';
@@ -377,9 +393,18 @@ class AkeebasubsToolbar extends FOFToolbar
         if($other)  $html .= ' '.$other;
         $html .= ' >';
 
-        $html .= '<span class="icon-32-'.$class.'" title="'.$text.'" > </span>';
-        $html .= $text;
-        $html .= '</a>';
+		if (version_compare(JVERSION, '3.0', 'ge'))
+		{
+			$html .= '<span class="icon icon-'.$class.'" title="'.$text.'" > </span>';
+		}
+		else
+		{
+			$html .= '<span class="icon-32-'.$class.'" title="'.$text.'" > </span>';
+		}
+
+		$html .= $text;
+
+		$html .= '</a>';
 
         $bar = JToolBar::getInstance();
         $bar->appendButton('Custom', $html, $id);
