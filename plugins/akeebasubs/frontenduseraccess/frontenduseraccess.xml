@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
-	<name>Akeeba Subscriptions - Frontend User Access Integration</name>
+	<name>Akeeba Subscriptions - FUA Integration</name>
 	<author>Carsten Engel</author>
 	<authorEmail>-</authorEmail>
 	<authorUrl>http://www.pages-and-items.com</authorUrl>
@@ -8,7 +8,7 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>March 2013</creationDate>
 	<version>1.0.1</version>
-	<description>Adds users to Frontend-User-Access groups when their subscription is enabled and removes them from Frontend-User-Access groups when their subscription expires in Akeeba Subscriptions. IMPORTANT: This is a third party plugin, not supported by Akeeba Ltd (AkeebaBackup.com). If you need support please contact its developer at http://www.pages-and-items.com</description>
+	<description>Adds users to groups of the third party component called "Frontend-User-Access" when their subscription is enabled and removes them from Frontend-User-Access groups when their subscription expires in Akeeba Subscriptions. IMPORTANT: This is a third party plugin, not supported by Akeeba Ltd (AkeebaBackup.com). If you need support please contact its developer at http://www.pages-and-items.com</description>
 	<files>
 		<filename plugin="frontenduseraccess">frontenduseraccess.php</filename>		
 	</files>
