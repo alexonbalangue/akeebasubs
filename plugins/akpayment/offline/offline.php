@@ -17,6 +17,7 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 		$config = array_merge($config, array(
 			'ppName'		=> 'offline',
 			'ppKey'			=> 'PLG_AKPAYMENT_OFFLINE_TITLE',
+			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/offline.png',
 		));
 
 		parent::__construct($subject, $config);
