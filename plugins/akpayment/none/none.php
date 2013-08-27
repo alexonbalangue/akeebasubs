@@ -17,6 +17,7 @@ class plgAkpaymentNone extends plgAkpaymentAbstract
 		$config = array_merge($config, array(
 			'ppName'		=> 'none',
 			'ppKey'			=> 'PLG_AKPAYMENT_NONE_TITLE',
+			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/none.png',
 		));
 
 		parent::__construct($subject, $config);

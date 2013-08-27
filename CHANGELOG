@@ -13,6 +13,7 @@ Akeeba Subscriptions 3.2.1
 ~ When free account activation is enabled send out a SEF activation URL (like Joomla! 3 does by default), working around severely broken mail clients (Microsoft Office Outlook)
 ~ Reworked PayMill integration: more stable and with double charging prevention built in
 ~ Changed the layout of the subscription level editor page to be newbie-friendly
+~ Added a "TEST" image for the None payment plugin to make it more obvious
 # [MEDIUM] #175 The re-login feature of the post-purchase message page didn't work reliably
 # [MEDIUM] Freshbooks integration would not install correctly
 # [MEDIUM] Projectfork4 integration would not install correctly
