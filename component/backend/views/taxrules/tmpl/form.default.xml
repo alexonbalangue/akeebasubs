@@ -61,7 +61,9 @@
 			model="AkeebasubsModelLevels"
 			show_link="true"
 			url="index.php?option=com_akeebasubs&amp;view=taxrule&amp;id=[ITEM:ID]"
-		/>
+		>
+			<option value="">COM_AKEEBASUBS_TAXRULES_LEVEL_ALL</option>
+		</field>
 
 		<field name="country" type="list"
 			label="COM_AKEEBASUBS_TAXRULES_COUNTRY"
