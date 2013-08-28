@@ -64,6 +64,10 @@ class AkeebasubsControllerInvoices extends FOFController
 		{
 			$basename = $item->display_number;
 		}
+
+		// Add extension
+		$basename .= '.pdf';
+
 		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 			$header_file = preg_replace('/\./', '%2e', $filename, substr_count($basename, '.') - 1);
 
