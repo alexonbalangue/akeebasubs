@@ -187,6 +187,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			default:
 				$response->validation = $this->_validateState();
 				$response->validation->username = $this->_validateUsername()->username;
+				$response->validation->password = $this->_validateUsername()->password;
 				$response->price = $this->_validatePrice();
 
 				// Get the results from the custom validation
@@ -240,7 +241,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	{
 		$state = $this->getStateVariables();
 
-		$ret = (object)array('username' => false);
+		$ret = (object)array('username' => false, 'password' => true);
 		$username = $state->username;
 		if(empty($username)) return $ret;
 		$myUser = JFactory::getUser();
@@ -248,29 +249,50 @@ class AkeebasubsModelSubscribes extends FOFModel
 			->username($username)
 			->getFirstItem();
 
-		if($myUser->guest) {
-			if(empty($user->username)) {
+		if($myUser->guest)
+		{
+			if (empty($state->password) || empty($state->password2))
+			{
+				$ret->password = false;
+			}
+			elseif ($state->password != $state->password2)
+			{
+				$ret->password = false;
+			}
+
+			if(empty($user->username))
+			{
 				$ret->username = true;
-			} else {
+			}
+			else
+			{
 				// If it's a blocked user, we should allow reusing the username;
 				// this would be a user who tried to subscribe, closed the payment
 				// window and came back to re-register. However, if the validation
 				// field is non-empty, this is a manually blocked user and should
 				// not be allowed to subscribe again.
-				if($user->block) {
-					if(!empty($user->activation)) {
+				if($user->block)
+				{
+					if(!empty($user->activation))
+					{
 						$ret->username = true;
-					} else {
+					}
+					else
+					{
 						$ret->username = false;
 					}
-				} else {
+				}
+				else
+				{
 					$ret->username = false;
 				}
 			}
-
-		} else {
+		}
+		else
+		{
 			$ret->username = ($user->username == $myUser->username);
 		}
+
 		return $ret;
 	}
 
@@ -1735,6 +1757,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	public function createNewSubscription()
 	{
 		// Fetch state and validation variables
+		$this->setState('opt', '');
 		$state = $this->getStateVariables();
 		$validation = $this->getValidation();
 
