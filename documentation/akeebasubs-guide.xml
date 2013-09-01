@@ -12878,35 +12878,18 @@ LEVEL2=11111/22222/33333</programlisting>
       all of the user's active and inactive subscriptions and decide which
       groups the user should be added to or removed from.</para>
 
-      <para>The plugin has these options:</para>
+      <para>The plugin renders the following options in the subscription level
+      editor page:</para>
 
       <variablelist>
         <varlistentry>
           <term>Add to JomSocial groups</term>
 
           <listitem>
-            <para>This is a list for assigning subscription levels to
-            JomSocial groups. When a user has an active subscription to the
-            specified level, he'll be added to the JomSocial group mentioned
-            on the right hand of the equal sign. Each assignment is done like
-            this:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Group 1, Group 2 and Group 3 are the names of the JomSocial groups
-            you want to add a user to when he subscribes. If you want to
-            assign multiple subscription levels to multiple groups, you have
-            to do something like that (separate multiple lines with a single
-            press of the ENTER key on your keyboard):</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2,Group 3
-LEVEL2=Group 2
-LEVEL3=Group 4,Group 1</programlisting>
-
-            <para>You can also use the numeric IDs of subscription levels or
-            JomSocial groups instead of their titles. However, we consider
-            working with numeric IDs very counter-intuitive.</para>
+            <para>Users will be added to these JomSocial groups when their
+            subscription to this level is enabled. You can select multiple
+            groups by holding down the CTRL (Windows, Linux) or CMD (Mac OS X)
+            key while clicking on the list.</para>
           </listitem>
         </varlistentry>
 
@@ -12914,34 +12897,31 @@ LEVEL3=Group 4,Group 1</programlisting>
           <term>Remove from JomSocial groups</term>
 
           <listitem>
-            <para>Likewise, this is the list of the JomSocial groups to remove
-            a user from when his subscription to the specified level is no
-            longer active. Do note that you can specify a different set of
-            groups to remove the user from than the ones you are adding him
-            to. For example:</para>
-
-            <programlisting>LEVEL1=Group 1,Group 2
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
+            <para>Users will be removed from these JomSocial groups when their
+            subscription to this level is disabled. You can select multiple
+            groups by holding down the CTRL (Windows, Linux) or CMD (Mac OS X)
+            key while clicking on the list.</para>
           </listitem>
         </varlistentry>
       </variablelist>
 
-      <para>In this example, together with the rules displayed in "Add to
-      JomSocial groups", when a subscription to the LEVEL1 level expires, the
-      user will still belong to JomSocial Group 3, as it's not removed from
-      his account; only Group 1 and Group 2 are removed. Likewise, if the user
-      has an expired LEVEL1 subscription and an active LEVEL2 subscription
-      he'll now belong to Group 2 and Group 3: Group 3 because it's not
-      removed when his subscription expires and Group 2 because his active
-      LEVEL2 subscription suggests that he should be granted Group 2 access
-      despite his expired LEVEL1 subscription.</para>
+      <bridgehead>Can I limit which groups the subscribers can see / post or
+      in any other way limit what they can do with JomSocial? Can you create
+      something like that? Pretty please?</bridgehead>
 
-      <para>If you find this hard to understand, join the club. ACLs are not
-      meant to be easy to setup or understand. It's a power feature and, as
-      such, poses a great difficulty to even the most seasoned web site
-      integrators. Take your time and experiment on a dev copy of your site
-      before going live.</para>
+      <para><emphasis role="bold">Executive summary: No. It is not possible.
+      You must ask JomSocial's developers for such a
+      feature.</emphasis></para>
+
+      <para>Long explanation: Akeeba Subscriptions is a subscriptions
+      management component. It is NOT an access control component. We can only
+      add/remove subscribers to Joomla! and extension-specific groups. The
+      actual access control is supposed to be performed by Joomla! and/or the
+      third party components. As long as JomSocial does not allow you to limit
+      viewing/posting depending on a user's groups assignment you cannot apply
+      any limits. Please do contact JomSocial and ask them to add such a
+      feature. Do not ask us to develop such a feature: we can't, we won't and
+      we will no longer answer this kind of questions. Thank you.</para>
     </section>
 
     <section xml:id="integration-joomla">
@@ -12968,13 +12948,13 @@ LEVEL3=Group 1</programlisting>
       </note>
 
       <para>The plugin has no options. Its configuration is integrated to each
-      subscription level. In each subscription level, under the Integrations
-      area, you will see a "User Groups" tab when this plugin is enabled. The
+      subscription level. In each subscription level, under the Actions area,
+      you will see a "User Groups" tab when this plugin is enabled. The
       options given are:</para>
 
       <variablelist>
         <varlistentry>
-          <term>Add to Joomla! 1.6 groups</term>
+          <term>Add to Joomla! user groups</term>
 
           <listitem>
             <para>This is a list for assigning subscription levels to Joomla!
@@ -12985,7 +12965,7 @@ LEVEL3=Group 1</programlisting>
         </varlistentry>
 
         <varlistentry>
-          <term>Remove from Joomla! 1.6 groups</term>
+          <term>Remove from Joomla! user groups</term>
 
           <listitem>
             <para>Likewise, this is the list of the Joomla! groups to remove a
@@ -13048,8 +13028,8 @@ LEVEL3=Group 1</programlisting>
       </note>
 
       <para>The plugin has no options. Its configuration is integrated to each
-      subscription level. In each subscription level, under the Integrations
-      area, you will see a "User Groups" tab when this plugin is enabled. The
+      subscription level. In each subscription level, under the Actions area,
+      you will see a "User Groups" tab when this plugin is enabled. The
       options given are:</para>
 
       <variablelist>
@@ -13095,6 +13075,13 @@ LEVEL3=Group 1</programlisting>
         ONCE A USER IS DELETED, ALL INFORMATION ASSOCIATED WITH HIM (INCLUDING
         SUBSCRIPTIONS INFORMATION) IS GONE. FOREVER. YOU WILL NOT BE ABLE TO
         RETRIEVE THEM EVER AGAIN.</emphasis></para>
+
+        <para>WE STRONGLY RECOMMEND NOT USING THIS PLUGIN UNLESS YOU ARE A
+        DEVELOPER (CODER) WHO UNDERSTANDS HOW JOOMLA! USER HANDLING
+        WORKS!</para>
+
+        <para>Was that clear enough? This plugin is EXTREMELY
+        DANGEROUS.</para>
 
         <para>This is how this feature is supposed to work. When every
         information pertaining to a user with an expired subscription vanishes
@@ -13271,29 +13258,18 @@ LEVEL3=Group 1</programlisting>
         group.</para>
       </important>
 
-      <para>The plugin has these options:</para>
+      <para>The plugin renders these options in each subscription level's
+      editor page:</para>
 
       <variablelist>
         <varlistentry>
           <term>Add to RedShop groups</term>
 
           <listitem>
-            <para>This is a list for assigning subscription levels to RedShop
-            groups. When a user has an active subscription to the specified
-            level, he'll be added to the RedShop group mentioned on the right
-            hand of the equal sign. Each assignment is done like this:</para>
-
-            <programlisting>LEVEL1=Group 1
-LEVEL2=Group 2
-LEVEL3=Group 3</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Group 1 is the name of the RedShop group you want to add a user to
-            when he subscribes.</para>
-
-            <para>You can also use the numeric IDs of subscription levels or
-            RedShop groups instead of their titles. However, we consider
-            working with numeric IDs very counter-intuitive.</para>
+            <para>Users will be added to these RedShop shopper groups when
+            their subscription to this level is enabled. You can select
+            multiple groups by holding down the CTRL (Windows, Linux) or CMD
+            (Mac OS X) key while clicking on the list.</para>
           </listitem>
         </varlistentry>
 
@@ -13301,15 +13277,10 @@ LEVEL3=Group 3</programlisting>
           <term>Remove from RedShop groups</term>
 
           <listitem>
-            <para>Likewise, this is the list of the RedShop groups to remove a
-            user from when his subscription to the specified level is no
-            longer active. Do note that you can specify a different set of
-            groups to remove the user from than the ones you are adding him
-            to. For example:</para>
-
-            <programlisting>LEVEL1=Group 1
-LEVEL2=Group 2
-LEVEL3=Group 1</programlisting>
+            <para>Users will be removed from these RedShop shopper groups when
+            their subscription to this level is disabled. You can select
+            multiple groups by holding down the CTRL (Windows, Linux) or CMD
+            (Mac OS X) key while clicking on the list.</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -13381,18 +13352,16 @@ LEVEL3=Group 1</programlisting>
       dates being reached) and when you click on the Run Integration
       button.</para>
 
-      <para>In the plugin's parameters you can define the SQL commands to run.
-      In all cases, you can do something like this:</para>
+      <para>In each subscription level's editor page you can define the SQL
+      commands to run. In all cases, you can do something like this:</para>
 
-      <programlisting>LEVEL1=INSERT INTO #__foobar (`user_id`,`something`) VALUES( '<replaceable>[USERID]</replaceable>', 'myvalue' );</programlisting>
+      <programlisting>INSERT INTO #__foobar (`user_id`,`something`) VALUES( '<replaceable>[USERID]</replaceable>', 'myvalue' );</programlisting>
 
-      <para>The leftmost part is the subscription level for which the SQL
-      command will run. The rightmost part is the list of SQL commands,
-      separated by semicolons. The <replaceable>[USERID]</replaceable>
-      variable will be replaced with the user's numeric ID for the user whose
-      subscription Akeeba Subscriptions is currently processing. The
-      [USERNAME] variable will be replaced with the user's username (available
-      since Akeeba Subscriptions 2.1).</para>
+      <para>It is the list of SQL commands, separated by semicolons. The
+      <replaceable>[USERID]</replaceable> variable will be replaced with the
+      user's numeric ID for the user whose subscription Akeeba Subscriptions
+      is currently processing. The [USERNAME] variable will be replaced with
+      the user's username (available since Akeeba Subscriptions 2.1).</para>
     </section>
 
     <section xml:id="integration-redshopusersync">
@@ -13586,51 +13555,29 @@ LEVEL3=Group 1</programlisting>
       Kunena groups based on their subscription status. This allows you to
       fully utilize Kunena's built-in ACL capabilities.</para>
 
-      <para>The plugin has these options:</para>
+      <para>The plugin renders the following options in the subscription level
+      editor page:</para>
 
       <variablelist>
         <varlistentry>
-          <term>Add to Kunena groups</term>
+          <term>Active rank</term>
 
           <listitem>
-            <para>This is a list for assigning subscription levels to Kunena
-            groups. When a user has an active subscription to the specified
-            level, he'll be added to the Kunena group mentioned on the right
-            hand of the equal sign. Each assignment is done like this:</para>
-
-            <programlisting>LEVEL1=Group 1, Group 2</programlisting>
-
-            <para>Where LEVEL1 is the Title of the subscription level and
-            Group 1 and Group 2 are the names of the Kunena groups you want to
-            add a user to when he subscribes (separate multiple groups with a
-            comma). If you want to assign multiple subscription levels to
-            multiple groups, you have to do something like that (separate
-            multiple lines with a single press of the ENTER key on your
-            keyboard):</para>
-
-            <programlisting>LEVEL1=Group 1, Group 2
-LEVEL2=Group 2
-LEVEL3=Group 3, Group 4, Group 5</programlisting>
-
-            <para>You can also use the numeric IDs of subscription levels or
-            Kunena groups instead of their titles. However, we consider
-            working with numeric IDs very counter-intuitive.</para>
+            <para>Specify the rank that the user gets when the subscription
+            becomes active. You can select multiple groups by holding down the
+            CTRL (Windows, Linux) or CMD (Mac OS X) key while clicking on the
+            list.</para>
           </listitem>
         </varlistentry>
 
         <varlistentry>
-          <term>Remove from Kunena groups</term>
+          <term>Inactive rank</term>
 
           <listitem>
-            <para>Likewise, this is the list of the Kunena groups to remove a
-            user from when his subscription to the specified level is no
-            longer active. Do note that you can specify a different set of
-            groups to remove the user from than the ones you are adding him
-            to. For example:</para>
-
-            <programlisting>LEVEL1=Group 1
-LEVEL2=Group 2
-LEVEL3=Group 3, Group 4</programlisting>
+            <para>Specify the rank that the user gets when the subscription
+            becomes inactive. You can select multiple groups by holding down
+            the CTRL (Windows, Linux) or CMD (Mac OS X) key while clicking on
+            the list.</para>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -13662,7 +13609,7 @@ LEVEL3=Group 3, Group 4</programlisting>
 
       <variablelist>
         <varlistentry>
-          <term>Property listings </term>
+          <term>Property listings</term>
 
           <listitem>
             <para>The maximum number of property listings per company.</para>
@@ -13670,7 +13617,7 @@ LEVEL3=Group 3, Group 4</programlisting>
         </varlistentry>
 
         <varlistentry>
-          <term>Featured property listings </term>
+          <term>Featured property listings</term>
 
           <listitem>
             <para>The maximum number of featured property listings per
@@ -13697,7 +13644,7 @@ LEVEL3=Group 3, Group 4</programlisting>
         </varlistentry>
 
         <varlistentry>
-          <term>Images per listing </term>
+          <term>Images per listing</term>
 
           <listitem>
             <para>The maximum number of images for each property
@@ -13755,99 +13702,19 @@ LEVEL3=Group 3, Group 4</programlisting>
       all of the user's active and inactive subscriptions and decide which
       groups the user should be added to or removed from.</para>
 
-      <para>Before we begin taking a look at the plugin options, please note
-      that Agora defines Groups and Role. Each user can belong to one or more
-      groups with a different Role, e.g. belong to Group One as a Guest, Group
-      Two as a Member, Group Three as a Moderator and Group Four as an
-      Administrator. Are you confused yet? Tell me about it... Unfortunately,
-      we have to follow the same inconvenient structure for the plugin
-      parameters. Each entry which can be assigned or removed from the user's
-      record can therefore consist of a Group, or a Group and a Role. For
-      example:</para>
-
-      <para><programlisting>My Group</programlisting>defines an entry which
-      only mentions a Group. The Role assigned to the user will be Member
-      (it's a hardcoded default).</para>
-
-      <programlisting>My Group/<replaceable>My Role</replaceable></programlisting>
-
-      <para>defines an entry which defines a Group and a Role. <replaceable>My
-      Role</replaceable> can be one of:</para>
-
-      <variablelist>
-        <varlistentry>
-          <term>None</term>
-
-          <listitem>
-            <para>The user will be removed from that Group</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Guest</term>
-
-          <listitem>
-            <para>The user will become a Guest in that Group</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Member</term>
-
-          <listitem>
-            <para>The user will become a Member in that Group</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Moderator</term>
-
-          <listitem>
-            <para>The user will become a Moderator in that Group</para>
-          </listitem>
-        </varlistentry>
-
-        <varlistentry>
-          <term>Admin</term>
-
-          <listitem>
-            <para>The user will become an Admin in that Group</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-
-      <para>Sometimes you will have a conflict. For example, a user may have
-      two subscriptions. One subscriptions says that he should belong to Group
-      One as a Member. The other says he should belong to Group One as a
-      Moderator. In case of conflict, the highest Role wins. In our example,
-      the user would become a Moderator in that group.</para>
-
-      <para>The plugin has these options:</para>
+      <para>The plugin renders the following parameters in each subscription
+      level's edit page:</para>
 
       <variablelist>
         <varlistentry>
           <term>Add to Agora groups</term>
 
           <listitem>
-            <para>This is a list for assigning subscription levels to Agora
-            groups. When a user has an active subscription to the specified
-            level, he'll be added to the Agora group/role mentioned on the
-            right hand of the equal sign. Each assignment is done like
-            this:</para>
-
-            <programlisting>LEVEL1=entry1,entry2,entry3</programlisting>
-
-            <para>Where entry1, entry2 and entry3 is a Group/Role entry as
-            described above.</para>
-
-            <para>If you want to assign multiple subscription levels to
-            multiple entries, you have to do something like that (separate
-            multiple lines with a single press of the ENTER key on your
-            keyboard):</para>
-
-            <programlisting>LEVEL1=entry1,entry2,entry3
-LEVEL2=entry2
-LEVEL3=entry4,entry1</programlisting>
+            <para>Users will be added to the Agora groups and/or the role will
+            be modified when their subscription to this level is enabled. Each
+            entry consists of the Agora group and the role in brackets. You
+            can select multiple entries by holding down the CTRL (Windows,
+            Linux) or CMD (Mac OS X) key while clicking on the list.</para>
           </listitem>
         </varlistentry>
 
@@ -13855,18 +13722,20 @@ LEVEL3=entry4,entry1</programlisting>
           <term>Remove from Agora groups</term>
 
           <listitem>
-            <para>Likewise, this is the list of the Agora groups to remove a
-            user from when his subscription to the specified level is no
-            longer active. Do note that you can specify a different set of
-            groups to remove the user from than the ones you are adding him
-            to. For example:</para>
-
-            <programlisting>LEVEL1=entry1,entry2
-LEVEL2=entry2
-LEVEL3=entry1</programlisting>
+            <para>Users will be removed from the Agora groups and/or the role
+            will be modified when their subscription to this level is
+            disabled. Each entry consists of the Agora group and the role in
+            brackets. You can select multiple entries by holding down the CTRL
+            (Windows, Linux) or CMD (Mac OS X) key while clicking on the
+            list.</para>
           </listitem>
         </varlistentry>
+      </variablelist>
 
+      <para>The plugin itself has these options (found in the Plugin
+      Manager):</para>
+
+      <variablelist>
         <varlistentry>
           <term>Spare admins from removal?</term>
 
@@ -13889,17 +13758,6 @@ LEVEL3=entry1</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
-    </section>
-
-    <section xml:id="integration-phocadownload">
-      <title>Phoca Download Integration</title>
-
-      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
-      Subscriptions - Phoca Download Integration</guilabel></para>
-
-      <para>This was a third party plugin, distributed with Akeeba
-      Subscriptions. Its developer ceased supporting the plugin and as of
-      Akeeba Subscriptions 3.0.3 it has been removed.</para>
     </section>
 
     <section xml:id="integration-mailchimp">
@@ -14257,6 +14115,15 @@ LEVEL3=entry1</programlisting>
 
       <para>This plugin allows Akeeba Subscriptions to integrate with the
       third party FrontendUserAccess component.</para>
+
+      <warning>
+        <para>This is an integration with a (paid) third party plugin called
+        "Frontend User Access". The name of the component is a little
+        misleading. It IS NOT required for handling access control in the
+        front-end. Joomla! can handle it itself. This component gives extra
+        features ON TOP of what Joomla! already provides. What you most likely
+        are looking for is the Joomla! User Groups integration plugin.</para>
+      </warning>
     </section>
 
     <section xml:id="integration-atscredits">
