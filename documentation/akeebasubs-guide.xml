@@ -13649,119 +13649,62 @@ LEVEL3=Group 3, Group 4</programlisting>
       as Agents in Intellectual Property. This allows you to create a real
       estate portal with self-registering real estate agents.</para>
 
-      <para>The plugin has only one options:</para>
+      <para>You get to specify certain limits per subscription level. When a
+      user subscribes to such a subscription level an Intellectual Property
+      Company is created for this user and he becomes a Super Agent in that
+      Company. He can then assign more Agents, create Property Listings and so
+      forth. When his subscription expires the Company is unpublished and the
+      user is no longer a Super Agent for that Company.</para>
+
+      <para>The plugin renders these options in each subscription level's
+      editor page, under the <guilabel>Intellectual Property</guilabel> tab
+      (you can find it under <guilabel>Actions</guilabel>):</para>
 
       <variablelist>
         <varlistentry>
-          <term>Add to Intellectual Property</term>
+          <term>Property listings </term>
 
           <listitem>
-            <para>This can be used to map subscription levels to Intellectual
-            Property company parameters. It uses the following format:</para>
+            <para>The maximum number of property listings per company.</para>
+          </listitem>
+        </varlistentry>
 
-            <programlisting>LEVEL1=maxlistings=50,maxflistings=10,maxagents=25,maxfagents=10
-LEVEL2=
-LEVEL3=maxlistings=20,maxflistings=1,maxagents=5,maxfagents=1</programlisting>
+        <varlistentry>
+          <term>Featured property listings </term>
 
-            <para>The left hand side is the title of the Subscription Level.
-            The right hand side is a comma separated list of Company
-            parameters. The available parameters are:</para>
+          <listitem>
+            <para>The maximum number of featured property listings per
+            company.</para>
+          </listitem>
+        </varlistentry>
 
-            <variablelist>
-              <varlistentry>
-                <term>maxlistings</term>
+        <varlistentry>
+          <term>Agents</term>
 
-                <listitem>
-                  <para>The maximum number of property listings for that
-                  company</para>
-                </listitem>
-              </varlistentry>
+          <listitem>
+            <para>The maximum number of agents per company. The agents needn't
+            be subscribers; the company owner can assign any user of your site
+            as an agent for his company.</para>
+          </listitem>
+        </varlistentry>
 
-              <varlistentry>
-                <term>maxflistings</term>
+        <varlistentry>
+          <term>Featured agents</term>
 
-                <listitem>
-                  <para>The maximum number of featured property listings for
-                  that company</para>
-                </listitem>
-              </varlistentry>
+          <listitem>
+            <para>The maximum number of feature agents per company.</para>
+          </listitem>
+        </varlistentry>
 
-              <varlistentry>
-                <term>maxagents</term>
+        <varlistentry>
+          <term>Images per listing </term>
 
-                <listitem>
-                  <para>The maximum number of agents for that company</para>
-                </listitem>
-              </varlistentry>
-
-              <varlistentry>
-                <term>maxfagents</term>
-
-                <listitem>
-                  <para>The maximum number of featured agents for that
-                  company</para>
-                </listitem>
-              </varlistentry>
-
-              <varlistentry>
-                <term>maximgs</term>
-
-                <listitem>
-                  <para>The maximum number of images per listing</para>
-                </listitem>
-              </varlistentry>
-            </variablelist>
+          <listitem>
+            <para>The maximum number of images for each property
+            listing.</para>
           </listitem>
         </varlistentry>
       </variablelist>
-
-      <para>In order to understand how this works, you have to consider the
-      following cases:</para>
-
-      <orderedlist>
-        <listitem>
-          <para><emphasis role="bold">The user has active subscriptions to one
-          or more subscription levels listed in the plugin parameters (left
-          hand side)</emphasis></para>
-
-          <para>If the user does not have any Agent records, a new Company is
-          created and the user becomes an Agent for that Company. The Company
-          parameters are those defined in the right hand side of the plugin
-          parameters (e.g. maxlistings=50,maxflistings=10 and so on). If you
-          leave them blank, like in the LEVEL2 example above, Intellectual
-          Property will use the default company parameters.</para>
-
-          <para>If the user is already listed as an Agent to one or more
-          companies, the company is published and the user's Agent record
-          becomes published. This allows someone with an expired subscription
-          to re-subscribe in order to regain access to his company.
-          Furthermore, the parameters for each company for which he is listed
-          as an agent are modified. The value chosen for each parameter is the
-          maximum of the current parameter and the parameter value defined in
-          the right hand part of the plugin's configuration. For example, if
-          the company is configured with maxlistings=100 and the plugin
-          configuration defines maxlistings=20, the company will continue to
-          have maxlistings=100 (maximum value wins). On the contrary, if the
-          company is configured with maxlistings=10 and the plugin
-          configuration defines maxlistings=20, the company will now have
-          maxlistings=20 (maximum value wins). Likewise, if the user is a
-          subscriber to multiple subscription levels, the maximum value will
-          be used.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis role="bold">The user does not have active
-          subscriptions to any of the subscription levels listed in the plugin
-          parameters (left hand side)</emphasis></para>
-
-          <para>All Agent records for this user become unpublished. This
-          essentially revokes any administrative rights the user may have had
-          on any of the companies for which he was listed as an Agent.</para>
-
-          <para>Moreover, all of the companies the user was listed as an Agent
-          are unpublished.</para>
-        </listitem>
-      </orderedlist>
 
       <bridgehead>How is this all supposed to work in real life?</bridgehead>
 
