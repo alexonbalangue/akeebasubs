@@ -15,26 +15,60 @@ if(typeof(akeeba.jQuery) == 'undefined') {
 }
 
 akeeba.jQuery(document).ready(function(){
-	// The url for our json data
+	var expireChart = akeeba.jQuery.jqplot('akexpirationschart', [[[]]] ,{
+		title: "Expirations by week"
+	});
+
 	var jsonurl = 'index.php?option=com_akeebasubs&view=reports&task=getexpirations&format=json&layout=expirations';
 
-	akeeba.jQuery.jqplot('akexpirationschart', jsonurl,
-		{
-			title: "AJAX JSON Data Renderer",
-			dataRenderer: function(url, plot, options) {
-				var ret = null;
-				akeeba.jQuery.ajax({
-					// have to use synchronous here, else the function
-					// will return before the data is fetched
-					async: false,
-					url: url,
-					dataType:"json",
-					success: function(data) {
-						ret = data;
+	akeeba.jQuery.ajax(jsonurl, {
+		dataType: 'json',
+		success : function(json, status, jqXH){
+
+			var ymax = 0;
+			var labels = [];
+
+			akeeba.jQuery.each(json[0], function(key, value){
+				labels.push(value[0]);
+				if(value[1] > ymax){
+					ymax = value[1];
+				}
+			});
+
+			ymax = Math.ceil(ymax * 1.2);
+
+			var options = {
+				data : json,
+				highlighter: { show: true, showMarker: false },
+				series:[
+					{
+						renderer: akeeba.jQuery.jqplot.BarRenderer,
+						rendererOptions: {
+							barPadding : 10,
+							barMargin : 10,
+							barWidth : 40
+						}
 					}
-				});
-				return ret;
-			}
+				],
+				axes:{
+					yaxis : {max : ymax},
+					xaxis:{
+						renderer: akeeba.jQuery.jqplot.DateAxisRenderer,
+						tickRenderer: akeeba.jQuery.jqplot.CanvasAxisTickRenderer ,
+						ticks : labels,
+						tickOptions: {
+							angle: -90,
+							fontSize: '10pt',
+							formatString:'%Y-%m-%d',
+							labelPosition: 'middle'
+						}
+					}
+				}
+			};
+			akeeba.jQuery('#akexpirationschart').width('100%');
+			akeeba.jQuery('#akexpirationschart').height(300);
+			expireChart.replot(options)
 		}
-	);
+	});
+
 });

@@ -32,6 +32,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			'expires_to'	=> $this->getState('expires_to',null,'string'),
 			'refresh'		=> $this->getState('refresh',null,'int'),
 			'groupbydate'	=> $this->getState('groupbydate',null,'int'),
+			'groupbyweek'	=> $this->getState('groupbyweek',null,'int'),
 			'groupbylevel'	=> $this->getState('groupbylevel',null,'int'),
 			'moneysum'		=> $this->getState('moneysum',null,'int'),
 			'coupon_id'		=> $this->getState('coupon_id',null,'int'),
@@ -141,6 +142,12 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				'SUM('.$db->qn('net_amount').') AS '.$db->qn('net'),
 				'COUNT('.$db->qn('akeebasubs_subscription_id').') AS '.$db->qn('subs')
 			));
+		} elseif($state->groupbyweek == 1) {
+			$query->select(array(
+				'YEARWEEK('.$db->qn('tbl').'.'.$db->qn('publish_down').', 2) as yearweek',
+				'publish_down',
+				'COUNT('.$db->qn('akeebasubs_subscription_id').') AS '.$db->qn('subs')
+			));
 		} elseif($state->groupbylevel == 1) {
 			$query->select(array(
 				$db->qn('l').'.'.$db->qn('title'),
@@ -196,6 +203,10 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		} elseif($state->groupbydate == 1) {
 			$query->group(array(
 				'DATE('.$db->qn('tbl').'.'.$db->qn('created_on').')'
+			));
+		} elseif($state->groupbyweek == 1) {
+			$query->group(array(
+				'YEARWEEK('.$db->qn('tbl').'.'.$db->qn('publish_down').', 2)'
 			));
 		} elseif($state->groupbylevel == 1) {
 			$query->group(array(
