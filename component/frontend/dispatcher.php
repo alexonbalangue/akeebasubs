@@ -25,7 +25,15 @@ class AkeebasubsDispatcher extends FOFDispatcher
 
 	public function onBeforeDispatch()
 	{
-		if ($result = parent::onBeforeDispatch())
+		// You can't fix stupid… but you can try working around it
+		if ((!function_exists('json_encode')) || (!function_exists('json_decode')))
+		{
+			require_once JPATH_ADMINISTRATOR . '/components/' . $this->component . '/helpers/jsonlib.php';
+		}
+
+		$result = parent::onBeforeDispatch();
+
+		if ($result)
 		{
 			// Merge the language overrides
 			$paths	 = array(JPATH_ADMINISTRATOR, JPATH_ROOT);
