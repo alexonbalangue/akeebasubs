@@ -20,8 +20,18 @@ AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.categoryAxisRenderer
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/expirations.js?'.AKEEBASUBS_VERSIONHASH);
 
+$exp_start = date('Y-m-d', strtotime('-2 months', strtotime('last monday')));
+
 ?>
 <div style="padding-bottom: 80px;padding-left: 15px">
+	<h3><?php echo JText::_('COM_AKEEBASUBS_REPORTS_EXPIRATIONS_WEEK_CHART') ?></h3>
+	<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_FROMDATE') ?>
+	<?php echo JHTML::calendar($exp_start, 'exp_start', 'exp_start'); ?>
+	<button class="btn btn-mini" id="exp_graph_reload" onclick="return false">
+		<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_RELOADGRAPHS') ?>
+	</button>
+	<em><?php echo JText::_('COM_AKEEBASUBS_EXP_START_HELP') ?></em>
+
 	<div id="akexpirationschart">
 		<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber" />
 		<p id="akexpirationschart-nodata" style="display:none">
