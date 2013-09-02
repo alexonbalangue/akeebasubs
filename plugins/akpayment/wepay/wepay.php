@@ -52,29 +52,73 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		$accessToken = trim($this->params->get('access_token', ''));
 		$wepay = new WePay($accessToken);
 
-		// Create the checkout
-		try {
-			$wpResponse = $wepay->request('checkout/create', array(
-				'account_id'        => $accountId,
-				'amount'            => sprintf('%.2f', $subscription->gross_amount),
-				'short_description' => $level->title,
-				'type'              => 'SERVICE',
-				'redirect_uri'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=wepay&sid=' . $subscription->akeebasubs_subscription_id
-			));	
-		}catch(Exception $e) {
+		if($level->recurring) {
+			// End time needs to be specified.
+			// If it's not specified take 10 years from now as default.
+			$endTime = new JDate('+10 years');
+			/*if(!empty($level->fixed_date) && substr($level->fixed_date, 0, 4) != '0000') {
+				$endTime = new JDate($level->fixed_date);
+			}*/
+			try {
+				$wpResponse = $wepay->request('preapproval/create', array(
+					'account_id'		=> $accountId,
+					'period'			=> $this->getRecurringPeriod($level),
+					'end_time'			=> $endTime->format('Y-m-d'),
+					'amount'			=> sprintf('%.2f', $subscription->gross_amount),
+					'mode'				=> 'regular',
+					'short_description'	=> $level->title,
+					'redirect_uri'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=wepay&sid=' . $subscription->akeebasubs_subscription_id,
+					'callback_uri'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=wepay&sid=' . $subscription->akeebasubs_subscription_id . '&cbtype=ipn',
+					'auto_recur'		=> 'true'
+				));
+			}catch(Exception $e) {
+				$error_url = 'index.php?option='.JRequest::getCmd('option').
+					'&view=level&slug='.$level->slug.
+					'&layout='.JRequest::getCmd('layout','default');
+				$error_url = JRoute::_($error_url,false);
+				JFactory::getApplication()->redirect($error_url, $e->getMessage(), 'error');
+			}
+		
+			// Get the response
+			$checkoutId = $wpResponse->preapproval_id;
+			$checkoutUri = $wpResponse->preapproval_uri;
+			$subscription->save(array(
+				'processor_key'	=> $checkoutId
+			));		
+		} else {
+			// Create the checkout
+			try {
+				$wpResponse = $wepay->request('checkout/create', array(
+					'account_id'		=> $accountId,
+					'amount'			=> sprintf('%.2f', $subscription->gross_amount),
+					'short_description'	=> $level->title,
+					'type'				=> 'SERVICE',
+					'redirect_uri'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=wepay&sid=' . $subscription->akeebasubs_subscription_id
+				));	
+			}catch(Exception $e) {
+				$error_url = 'index.php?option='.JRequest::getCmd('option').
+					'&view=level&slug='.$level->slug.
+					'&layout='.JRequest::getCmd('layout','default');
+				$error_url = JRoute::_($error_url,false);
+				JFactory::getApplication()->redirect($error_url, $e->getMessage(), 'error');
+			}
+		
+			// Get the response
+			$checkoutId = $wpResponse->checkout_id;
+			$checkoutUri = $wpResponse->checkout_uri;
+			$subscription->save(array(
+				'processor_key'	=> $checkoutId
+			));
+		}
+		
+		// Error handling
+		if(empty($checkoutId) || empty($checkoutUri)) {
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
 				'&view=level&slug='.$level->slug.
 				'&layout='.JRequest::getCmd('layout','default');
 			$error_url = JRoute::_($error_url,false);
-			JFactory::getApplication()->redirect($error_url, $e->getMessage(), 'error');
+			JFactory::getApplication()->redirect($error_url, $wpResponse, 'error');
 		}
-		
-		// Check the response
-		$checkoutId = $wpResponse->checkout_id;
-		$checkoutUri = $wpResponse->checkout_uri;
-		$subscription->save(array(
-			'processor_key'	=> $checkoutId
-		));
 
 		@ob_start();
 		include dirname(__FILE__).'/wepay/form.php';
@@ -91,6 +135,7 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		
+		$isIPN = ($data['cbtype'] == 'ipn');
 		$isValid = true;
 
 		// Load the relevant subscription row
@@ -105,22 +150,40 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 					$subscription = null;
 					$isValid = false;
 				}
-                $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-                    ->setId($subscription->akeebasubs_level_id)
-                    ->getItem()
-                    ->slug;
+				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+						->setId($subscription->akeebasubs_level_id)
+						->getItem();
 			} else {
 				$isValid = false;
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'There is no valid subscription ID';
 		}
 		
-		// Check checkout ID
+		// Check callback type
 		if($isValid) {
-			if($subscription->state == 'N' && $data['checkout_id'] != $subscription->processor_key) {
+			// New subscriptions (state: N) are always handled by the redirect-uri. We can ignore IPNs
+			// in this case, which is only used for recurring payments after a new subscription is accepted.
+			if($subscription->state == 'N' && $isIPN) {
 				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Checkout ID is not correct.";
+				$data['akeebasubs_failure_reason'] = "Ignore IPN callbacks for new subscriptions.";
 			}
+		}
+		
+		// Check checkout ID
+		if($level->recurring) {
+			if($isValid) {
+				if($subscription->state == 'N' && $data['preapproval_id'] != $subscription->processor_key) {
+					$isValid = false;
+					$data['akeebasubs_failure_reason'] = "Pre-approval ID is not correct.";
+				}
+			}
+		} else {
+			if($isValid) {
+				if($subscription->state == 'N' && $data['checkout_id'] != $subscription->processor_key) {
+					$isValid = false;
+					$data['akeebasubs_failure_reason'] = "Checkout ID is not correct.";
+				}
+			}	
 		}
 		
 		// Get more details by asking WePay
@@ -128,16 +191,32 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 			try {
 				$accessToken = trim($this->params->get('access_token', ''));
 				$wepay = new WePay($accessToken);
-				$wpResponse = $wepay->request('checkout', array(
-					'checkout_id'	=> $data['checkout_id']
-				));
+				if($level->recurring) {
+					$wpResponse = $wepay->request('preapproval', array(
+						'preapproval_id'	=> $data['preapproval_id']
+					));
+					$data['period'] = $wpResponse->period;
+					$data['key'] = $wpResponse->next_due_time;
+				} else {
+					$wpResponse = $wepay->request('checkout', array(
+						'checkout_id'	=> $data['checkout_id']
+					));
+					$data['key'] = $wpResponse->create_time;
+				}
 				$data['account_id'] = $wpResponse->account_id;
 				$data['state'] = $wpResponse->state;
 				$data['amount'] = $wpResponse->amount;
-				$data['create_time'] = $wpResponse->create_time;
 			} catch(Exception $e) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
+			}
+		}
+		
+		// Check recurring period
+		if($isValid && $level->recurring) {
+			if($data['period'] != $this->getRecurringPeriod($level)) {
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = "The period of the recurring subscription is not correct.";
 			}
 		}
 		
@@ -151,7 +230,7 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		
 		// Check that transaction has not been previously processed
 		if($isValid) {
-			if($subscription->state == 'C' && $data['create_time'] == $subscription->processor_key) {
+			if($subscription->state == 'C' && $data['key'] == $subscription->processor_key) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "I will not processe this transaction twice";
 			}
@@ -176,25 +255,35 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
-			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$slug.
-				'&layout='.JRequest::getCmd('layout','default');
-			$error_url = JRoute::_($error_url,false);
-			JFactory::getApplication()->redirect($error_url, $data['akeebasubs_failure_reason'], 'error');
+			if(!$isIPN) {
+				$error_url = 'index.php?option='.JRequest::getCmd('option').
+					'&view=level&slug=' . $level->slug .
+					'&layout='.JRequest::getCmd('layout','default');
+				$error_url = JRoute::_($error_url,false);
+				JFactory::getApplication()->redirect($error_url, $data['akeebasubs_failure_reason'], 'error');	
+			}
 			return false;
 		}
 		
 		// Is payment successful?
-		if(in_array($data['state'], array('authorized', 'reserved', 'captured', 'settled'))) {
-			$newStatus = 'C';
+		if($level->recurring) {
+			if(in_array($data['state'], array('approved', 'completed'))) {
+				$newStatus = 'C';
+			} else {
+				$newStatus = 'X';
+			}			
 		} else {
-			$newStatus = 'X';
+			if(in_array($data['state'], array('authorized', 'reserved', 'captured', 'settled'))) {
+				$newStatus = 'C';
+			} else {
+				$newStatus = 'X';
+			}	
 		}
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
 				'akeebasubs_subscription_id'	=> $id,
-				'processor_key'					=> $data['create_time'],
+				'processor_key'					=> $data['key'],
 				'state'							=> $newStatus,
 				'enabled'						=> 0
 		);
@@ -202,6 +291,51 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		if($newStatus == 'C') {
 			$this->fixDates($subscription, $updates);
 		}
+		// In the case of a successful recurring payment, fetch the old subscription's data
+		if($level->recurring && ($newStatus == 'C') && ($subscription->state == 'C')) {
+			$jNow = new JDate();
+			$jStart = new JDate($subscription->publish_up);
+			$jEnd = new JDate($subscription->publish_down);
+			$now = $jNow->toUnix();
+			$start = $jStart->toUnix();
+			$end = $jEnd->toUnix();
+			// Create a new record for the old subscription
+			$oldData = $subscription->getData();
+			$oldData['akeebasubs_subscription_id'] = 0;
+			$oldData['publish_down'] = $jNow->toSql();
+			$oldData['enabled'] = 0;
+			$oldData['contact_flag'] = 3;
+			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();
+
+			// Calculate new start/end time for the subscription
+			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->paystate('C')
+				->level($subscription->akeebasubs_level_id)
+				->user_id($subscription->user_id);
+			$max_expire = 0;
+			if(count($allSubs)) foreach($allSubs as $aSub) {
+				$jExpire = new JDate($aSub->publish_down);
+				$expire = $jExpire->toUnix();
+				if($expire > $max_expire) $max_expire = $expire;
+			}
+
+			$duration = $end - $start;
+			$start = max($now, $max_expire);
+			$end = $start + $duration;
+			$jStart = new JDate($start);
+			$jEnd = new JDate($end);
+
+			$updates['publish_up'] = $jStart->toSql();
+			$updates['publish_down'] = $jEnd->toSql();
+
+			// Save the record for the old subscription
+			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->getTable();
+			$table->reset();
+			$table->bind($oldData);
+			$table->store();
+		}
+		// Save the changes
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
@@ -212,8 +346,31 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 			$subscription
 		));
 		
-		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug=' . $slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id, false);
-		JFactory::getApplication()->redirect($thankyouUrl);
+		if(!$isIPN) {
+			// Redirect the user to the "thank you" page
+			$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug=' . $level->slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id, false);
+			JFactory::getApplication()->redirect($thankyouUrl);
+		}
+		return true;
+	}
+	
+	private function getRecurringPeriod($level) {
+		// Supported durations by WePay:
+		// every day (daily), every week (weekly), every month, every year (yearly)
+		// 
+		// The akeeba duration (in days) will be translated as follows:
+		// WePay daily: Less then 7 days (recommended setting daily = 1 day)
+		// WePay weekly: Less then 28 days (recommended setting weeky = 7 days)
+		// WePay mothly: Less then 365 days (recommended setting monthly = 31 days)
+		// WePay yearly: everything else (recommended setting yearly = 365 days)
+		$period = 'yearly';
+		if($level->duration < 7) {
+			$period = 'daily';
+		} else if($level->duration < 28) {
+			$period = 'weekly';
+		} else if($level->duration < 365) {
+			$period = 'monthly';
+		}
+		return $period;
 	}
 }
