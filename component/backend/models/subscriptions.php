@@ -145,7 +145,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 		} elseif($state->groupbyweek == 1) {
 			$query->select(array(
 				$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id'),
-				'YEARWEEK('.$db->qn('tbl').'.'.$db->qn('publish_down').', 2) as yearweek',
+				'YEARWEEK('.$db->qn('tbl').'.'.$db->qn('publish_down').', 6) as yearweek',
 				'publish_down',
 				'COUNT('.$db->qn('akeebasubs_subscription_id').') AS '.$db->qn('subs')
 			));
@@ -207,7 +207,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 			));
 		} elseif($state->groupbyweek == 1) {
 			$query->group(array(
-				'YEARWEEK('.$db->qn('tbl').'.'.$db->qn('publish_down').', 2)',
+				'YEARWEEK('.$db->qn('tbl').'.'.$db->qn('publish_down').', 6)',
 				$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id')
 			));
 		} elseif($state->groupbylevel == 1) {

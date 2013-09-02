@@ -10,17 +10,23 @@ defined('_JEXEC') or die;
 	$data     = array();
 	$response = array();
 	$levels   = array();
+	$labels   = array();
 
-	$start = $this->input->getString('start', date('Y-m-d', strtotime('-2 months', strtotime('last monday'))));
+	$start  = $this->input->getString('start', date('Y-m-d', strtotime('last monday')));
 	$jStart = new JDate($start);
-	$end   = date('Y-m-d' , strtotime('+4 months', $jStart->toUnix()));
-	//$end   = $this->input->getString('end', date('Y-m-d' , strtotime('+2 months', strtotime('last monday'))));
+	$start  = date('Y-m-d', strtotime('last monday', $jStart->toUnix()));
+	$jStart = new JDate($start);
+
+	$end     = date('Y-m-d' , strtotime('+16 weeks', $jStart->toUnix()));
+	$jEnd    = new JDate($end);
+	$endUnix = $jEnd->toUnix();
 
 	$subs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->expires_from($start)
 				->expires_to($end)
 				->groupbyweek(1)
 				->nojoins(1)
+				->paystate('C')
 				->getList(true);
 
 	$titles = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
@@ -35,11 +41,21 @@ defined('_JEXEC') or die;
 		}
 	}
 
-	foreach($subs as $sub)
+	// Inject a dummy level, so I won't have errors on empty sets
+	if(!$levels)
 	{
-		$time = mktime(0, 0, 0, 1, 1, substr($sub->yearweek, 0, 4));
-		$t    = date('Y-m-d', $time);
-		$date = date('Y-m-d', strtotime('+'.substr($sub->yearweek, -2, 2).' weeks', $time));
+		$levels[0] = 1;
+		$response['hideLegend'] = true;
+	}
+
+	// Let's create empty weeks, for next 16 weeks, so I can have a nice chart
+	$loopWeek = $jStart->toUnix();
+	$response['labels'][] = date('Y-m-d', $loopWeek);
+	while($loopWeek <= $endUnix)
+	{
+		$loopWeek = strtotime('+1 week', $loopWeek);
+		$date     = date('Y-m-d', $loopWeek);
+		$response['labels'][] = $date;
 
 		// Initialize the array with empty data, so I can have same length array for stacking
 		foreach($levels as $serie => $dummy)
@@ -49,6 +65,13 @@ defined('_JEXEC') or die;
 				$data[$serie][$date] = array($date, 0);
 			}
 		}
+	}
+
+	foreach($subs as $sub)
+	{
+		$year = substr($sub->yearweek, 0, 4);
+		$week = substr($sub->yearweek, -2, 2);
+		$date = date('Y-m-d', strtotime($year.'W'.$week));
 
 		$data[$sub->akeebasubs_level_id][$date] = array($date, (int) $sub->subs);
 	}
@@ -56,9 +79,12 @@ defined('_JEXEC') or die;
 	ksort($data);
 	ksort($levels);
 
-	foreach($levels as $level => $dummy)
+	if($subs)
 	{
-		$response['seriesLabel'][] = array('label' => $titles[$level]->title);
+		foreach($levels as $level => $dummy)
+		{
+			$response['seriesLabel'][] = array('label' => $titles[$level]->title);
+		}
 	}
 
 	// jqplot doesn't like associative arrays

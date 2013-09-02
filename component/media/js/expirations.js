@@ -27,11 +27,6 @@ function loadExpGraph()
 		dataType: 'json',
 		cache   : false,
 		success : function(json, status, jqXH){
-			var labels = [];
-
-			akeeba.jQuery.each(json.data[0], function(key, value){
-				labels.push(value[0]);
-			});
 
 			var options = {
 				data : json.data,
@@ -55,7 +50,7 @@ function loadExpGraph()
 					xaxis:{
 						renderer: akeeba.jQuery.jqplot.DateAxisRenderer,
 						tickRenderer: akeeba.jQuery.jqplot.CanvasAxisTickRenderer ,
-						ticks : labels,
+						ticks : json.labels,
 						tickOptions: {
 							angle: -90,
 							fontSize: '10pt',
@@ -65,8 +60,11 @@ function loadExpGraph()
 					}
 				}
 			};
-			akeeba.jQuery('#akexpirationschart').width('100%');
-			akeeba.jQuery('#akexpirationschart').height(300);
+
+			if(json.hideLegend){
+				options.legend.show = false;
+			}
+
 			expireChart.replot(options)
 		}
 	});

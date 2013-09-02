@@ -7,6 +7,12 @@
 
 defined('_JEXEC') or die;
 
+if(version_compare(JVERSION, '3.0', 'ge')){
+	JHTML::_('behavior.framework');
+}else{
+	JHTML::_('behavior.mootools');
+}
+
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);
@@ -32,10 +38,7 @@ $exp_start = date('Y-m-d', strtotime('-2 months', strtotime('last monday')));
 	</button>
 	<em><?php echo JText::_('COM_AKEEBASUBS_EXP_START_HELP') ?></em>
 
-	<div id="akexpirationschart">
-		<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber" />
-		<p id="akexpirationschart-nodata" style="display:none">
-			<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_NODATA')?>
-		</p>
+	<div id="akexpirationschart" style="height:300px">
+				
 	</div>
 </div>
