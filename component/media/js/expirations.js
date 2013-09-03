@@ -14,12 +14,11 @@ if(typeof(akeeba.jQuery) == 'undefined') {
 	akeeba.jQuery = jQuery.noConflict();
 }
 
+var jsonurl = 'index.php?option=com_akeebasubs&view=reports&task=getexpirations&format=json&layout=expirations';
+var expireChart;
+
 function loadExpGraph()
 {
-	var expireChart = akeeba.jQuery.jqplot('akexpirationschart', [[[]]] ,{});
-
-	var jsonurl = 'index.php?option=com_akeebasubs&view=reports&task=getexpirations&format=json&layout=expirations';
-
 	akeeba.jQuery.ajax(jsonurl, {
 		data    : {
 			'start' : akeeba.jQuery('#exp_start').val()
@@ -27,9 +26,11 @@ function loadExpGraph()
 		dataType: 'json',
 		cache   : false,
 		success : function(json, status, jqXH){
-
+			
+			expireChart.destroy();
+			
 			var options = {
-				data : json.data,
+				//data : json.data,
 				highlighter: { show: true, showMarker: false },
 				stackSeries: true,
 				seriesDefaults : {
@@ -65,12 +66,14 @@ function loadExpGraph()
 				options.legend.show = false;
 			}
 
-			expireChart.replot(options)
+			expireChart = akeeba.jQuery.jqplot('akexpirationschart', json.data, options);
 		}
 	});
 }
 
 akeeba.jQuery(document).ready(function(){
+	expireChart = akeeba.jQuery.jqplot('akexpirationschart', [[[]]] ,{});
+	
 	akeeba.jQuery('#exp_graph_reload').click(function(){
 		loadExpGraph();
 	});

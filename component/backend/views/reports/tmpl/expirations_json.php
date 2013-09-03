@@ -51,6 +51,16 @@ defined('_JEXEC') or die;
 	// Let's create empty weeks, for next 16 weeks, so I can have a nice chart
 	$loopWeek = $jStart->toUnix();
 	$response['labels'][] = date('Y-m-d', $loopWeek);
+
+	foreach($levels as $serie => $dummy)
+	{
+		if(!isset($data[$serie][date('Y-m-d', $loopWeek)]))
+		{
+			$data[$serie][date('Y-m-d', $loopWeek)] = array(date('Y-m-d', $loopWeek), 0);
+		}
+	}
+
+
 	while($loopWeek <= $endUnix)
 	{
 		$loopWeek = strtotime('+1 week', $loopWeek);

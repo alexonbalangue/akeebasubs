@@ -15,6 +15,7 @@ if(version_compare(JVERSION, '3.0', 'ge')){
 
 FOFTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/expirations.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jquery.jqplot.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.json2.min.js?'.AKEEBASUBS_VERSIONHASH);
@@ -22,9 +23,7 @@ AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.highlighter.min.js?'
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.dateAxisRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.canvasAxisTickRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.canvasTextRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.categoryAxisRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
-AkeebaStrapper::addJSfile('media://com_akeebasubs/js/expirations.js?'.AKEEBASUBS_VERSIONHASH);
 
 $exp_start = date('Y-m-d', strtotime('-2 months', strtotime('last monday')));
 
@@ -39,6 +38,6 @@ $exp_start = date('Y-m-d', strtotime('-2 months', strtotime('last monday')));
 	<em><?php echo JText::_('COM_AKEEBASUBS_EXP_START_HELP') ?></em>
 
 	<div id="akexpirationschart" style="height:300px">
-				
+
 	</div>
 </div>
