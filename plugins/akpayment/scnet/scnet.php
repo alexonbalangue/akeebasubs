@@ -19,14 +19,14 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_SCNET_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/scnet.jpg'
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
 
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,11 +36,11 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-                        
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		$data = (object)array(
 			'url'					=> $this->getPaymentURL(),
 			'gate'					=> $this->getMerchantID(),
@@ -64,31 +64,26 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/scnet/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Prepare success- & cancel-URL
+		$slug = '';
 		$app = JFactory::getApplication();
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		$successUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
-		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
-		
+
 		$isValid = true;
 
 		// Load the relevant subscription row
@@ -108,7 +103,19 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The invoice_id is invalid';
 		}
-        
+
+		if ($isValid)
+		{
+			// Prepare success- & cancel-URL
+			$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem()
+				->slug;
+		}
+
+		$successUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
+		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
+
 		// Check that bank_id has not been previously processed
 		if($isValid && !is_null($subscription)) {
 			if($subscription->processor_key == $data['bank_id']) {
@@ -116,7 +123,7 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not process the same bank_id twice";
 			}
 		}
-			
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
@@ -125,12 +132,19 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 			$app->redirect($cancelUrl);
 			return false;
 		}
-		
+
 		// Payment status
-		if($data['summarycode'] == '0' && $data['responsecode'] == '00') {
-			$newStatus = 'C';
-		} else {
-			$newStatus = 'X';
+		switch ($data['summaryresponse'])
+		{
+			case 0:
+				$newStatus = 'C';
+				break;
+
+			case 1:
+			case 2:
+			default:
+				$newStatus = 'X';
+				break;
 		}
 
 		// Update subscription status (this+ also automatically calls the plugins)
@@ -153,12 +167,12 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-        
+
 		$app->redirect($successUrl);
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Gets the form action URL for the payment
 	 */
@@ -171,7 +185,7 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 			return 'https://secure.ipayby.com.au/ipayby/hostedccbuy';
 		}
 	}
-	
+
 	/**
 	 * Gets the SCNet Merchant ID
 	 */

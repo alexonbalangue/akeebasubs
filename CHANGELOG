@@ -42,6 +42,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] RoboKassa: sending the "currency" (actually: payment method) limits the payment options of the end user
 # [LOW] CLI CRON scripts not fully compatible with PHP CGI
 # [LOW] Community Builder synchronisation would result in extra fields' data stored as raw JSON in the Community Builder field
+# [LOW] SCnet integration would not pick up successful transactions with rare response codes
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
