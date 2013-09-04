@@ -1,23 +1,32 @@
 <?php
+
 /**
  * @package		akeebasubs
  * @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
-
 defined('_JEXEC') or die();
 
-$akpaymentinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akpayment.php';
-if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpaymentinclude); }
+$akpaymentinclude = include_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akpayment.php';
+if (!$akpaymentinclude)
+{
+	unset($akpaymentinclude);
+	return;
+}
+else
+{
+	unset($akpaymentinclude);
+}
 
 class plgAkpaymentScnet extends plgAkpaymentAbstract
 {
+
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
-			'ppName'		=> 'scnet',
-			'ppKey'			=> 'PLG_AKPAYMENT_SCNET_TITLE',
-			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/scnet.jpg'
+			'ppName'	 => 'scnet',
+			'ppKey'		 => 'PLG_AKPAYMENT_SCNET_TITLE',
+			'ppImage'	 => rtrim(JURI::base(), '/') . '/media/com_akeebasubs/images/frontend/scnet.jpg'
 		));
 
 		parent::__construct($subject, $config);
@@ -35,34 +44,35 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 	 */
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
-		if($paymentmethod != $this->ppName) return false;
+		if ($paymentmethod != $this->ppName)
+			return false;
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
 
-		$data = (object)array(
-			'url'					=> $this->getPaymentURL(),
-			'gate'					=> $this->getMerchantID(),
-			'adminemail'			=> trim($this->params->get('adminemail','')),
-			'process'				=> 'process',
-			'amount'				=> sprintf('%.2f',$subscription->gross_amount),
-			'returl'				=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=scnet',
-			'invoice_id'			=> $subscription->akeebasubs_subscription_id,
-			'items'					=> $level->title,
-			'cust'					=> trim($user->name),
-			'street'				=> trim($kuser->address1),
-			'city'					=> trim($kuser->city),
-			'country'				=> AkeebasubsHelperSelect::decodeCountry(trim($kuser->country)),
-			'postcode'				=> trim($kuser->zip),
-			'currency'				=> strtoupper(AkeebasubsHelperCparams::getParam('currency','AUD')),
-			'image'					=> trim($this->params->get('image','')),
-			'backgroundimage'		=> trim($this->params->get('backgroundimage','')),
-			'tablebgcolour'			=> ltrim(trim($this->params->get('tablebgcolour','')),'#')
+		$data = (object) array(
+				'url'				 => $this->getPaymentURL(),
+				'gate'				 => $this->getMerchantID(),
+				'adminemail'		 => trim($this->params->get('adminemail', '')),
+				'process'			 => 'process',
+				'amount'			 => sprintf('%.2f', $subscription->gross_amount),
+				'returl'			 => JURI::base() . 'index.php?option=com_akeebasubs&view=callback&paymentmethod=scnet',
+				'invoice_id'		 => $subscription->akeebasubs_subscription_id,
+				'items'				 => $level->title,
+				'cust'				 => trim($user->name),
+				'street'			 => trim($kuser->address1),
+				'city'				 => trim($kuser->city),
+				'country'			 => AkeebasubsHelperSelect::decodeCountry(trim($kuser->country)),
+				'postcode'			 => trim($kuser->zip),
+				'currency'			 => strtoupper(AkeebasubsHelperCparams::getParam('currency', 'AUD')),
+				'image'				 => trim($this->params->get('image', '')),
+				'backgroundimage'	 => trim($this->params->get('backgroundimage', '')),
+				'tablebgcolour'		 => ltrim(trim($this->params->get('tablebgcolour', '')), '#')
 		);
 
 		@ob_start();
-		include dirname(__FILE__).'/scnet/form.php';
+		include dirname(__FILE__) . '/scnet/form.php';
 		$html = @ob_get_clean();
 
 		return $html;
@@ -73,54 +83,72 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 		JLoader::import('joomla.utilities.date');
 
 		// Check if we're supposed to handle this
-		if($paymentmethod != $this->ppName) return false;
+		if ($paymentmethod != $this->ppName)
+		{
+			return false;
+		}
 
 		// Prepare success- & cancel-URL
-		$slug = '';
-		$app = JFactory::getApplication();
-		$rootURL = rtrim(JURI::base(),'/');
-		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
+		$slug		 = '';
+		$app		 = JFactory::getApplication();
+		$rootURL	 = rtrim(JURI::base(), '/');
+		$subpathURL	 = JURI::base(true);
+
+		if (!empty($subpathURL) && ($subpathURL != '/'))
+		{
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
 		$isValid = true;
 
 		// Load the relevant subscription row
-		if($isValid) {
-			$id = $data['invoice_id'];
-			$subscription = null;
-			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		if ($isValid)
+		{
+			$id				 = $data['invoice_id'];
+			$subscription	 = null;
+
+			if ($id > 0)
+			{
+				$subscription = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->setId($id)
 					->getItem();
-				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
-					$subscription = null;
-					$isValid = false;
+
+				if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
+				{
+					$subscription	 = null;
+					$isValid		 = false;
 				}
-			} else {
+			}
+			else
+			{
 				$isValid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The invoice_id is invalid';
+
+			if (!$isValid)
+			{
+				$data['akeebasubs_failure_reason'] = 'The invoice_id is invalid';
+			}
 		}
 
 		if ($isValid)
 		{
 			// Prepare success- & cancel-URL
-			$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$slug = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
 		}
 
-		$successUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id));
-		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
+		$successUrl	 = $rootURL . str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=message&slug=' . $slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id));
+		$cancelUrl	 = $rootURL . str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=message&slug=' . $slug . '&layout=cancel&subid=' . $subscription->akeebasubs_subscription_id));
 
 		// Check that bank_id has not been previously processed
-		if($isValid && !is_null($subscription)) {
-			if($subscription->processor_key == $data['bank_id']) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "I will not process the same bank_id twice";
+		if ($isValid && !is_null($subscription))
+		{
+			if ($subscription->processor_key == $data['bank_id'])
+			{
+				$isValid							 = false;
+				$data['akeebasubs_failure_reason']	 = "I will not process the same bank_id twice";
 			}
 		}
 
@@ -128,13 +156,15 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
-		if(!$isValid) {
+		if (!$isValid)
+		{
 			$app->redirect($cancelUrl);
+
 			return false;
 		}
 
 		// Payment status
-		switch ($data['summaryresponse'])
+		switch ($data['summarycode'])
 		{
 			case 0:
 				$newStatus = 'C';
@@ -149,39 +179,47 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 
 		// Update subscription status (this+ also automatically calls the plugins)
 		$updates = array(
-				'akeebasubs_subscription_id'	=> $id,
-				'processor_key'					=> $data['bank_id'],
-				'state'							=> $newStatus,
-				'enabled'						=> 0
+			'akeebasubs_subscription_id' => $id,
+			'processor_key'				 => $data['bank_id'],
+			'state'						 => $newStatus,
+			'enabled'					 => 0
 		);
+
 		JLoader::import('joomla.utilities.date');
-		if($newStatus == 'C') {
+
+		if ($newStatus == 'C')
+		{
 			$this->fixDates($subscription, $updates);
 		}
+
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
+		$app		 = JFactory::getApplication();
+		$jResponse	 = $app->triggerEvent('onAKAfterPaymentCallback', array(
 			$subscription
 		));
 
 		$app->redirect($successUrl);
+
 		return true;
 	}
-
 
 	/**
 	 * Gets the form action URL for the payment
 	 */
 	private function getPaymentURL()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
+		$sandbox = $this->params->get('sandbox', 0);
+
+		if ($sandbox)
+		{
 			return 'https://www.scnet.com.au/ipayby/hostedccbuy';
-		} else {
+		}
+		else
+		{
 			return 'https://secure.ipayby.com.au/ipayby/hostedccbuy';
 		}
 	}
@@ -191,11 +229,16 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 	 */
 	private function getMerchantID()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
+		$sandbox = $this->params->get('sandbox', 0);
+
+		if ($sandbox)
+		{
 			return 'SCNet_Cert6';
-		} else {
-			return trim($this->params->get('merchant_id',''));
+		}
+		else
+		{
+			return trim($this->params->get('merchant_id', ''));
 		}
 	}
+
 }
