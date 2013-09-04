@@ -142,6 +142,7 @@ class Com_AkeebasubsInstallerScript
 				'upay'					=> 0,
 				'verotel'				=> 0,
 				'viva'					=> 0,
+				'wepay'					=> 0,
 				'worldpay'				=> 0,
 				'zarinpal'				=> 0,
 			),

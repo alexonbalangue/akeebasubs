@@ -12436,6 +12436,156 @@ LEVEL2=11111/22222/33333</programlisting>
       </variablelist>
     </section>
 
+    <section xml:id="payment-wepay">
+      <title>WePay</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - WePay</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">supports</emphasis> recurring
+      payments.</para>
+
+      <para>This payment method integrates the <link
+      xlink:href="https://www.wepay.com/">WePay</link> low cost payments
+      service.</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "WePay" or type in a custom name to show
+            to your customer's, e.g. "Visa, MasterCard or American Express
+            cards"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Surcharge</term>
+
+          <listitem>
+            <para>A fixed amount to add to the subscription's base (net) price
+            when this payment method is selected.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Client ID</term>
+
+          <listitem>
+            <para>Your WePay client ID. You can find this and the following
+            three items in your WePay account. First go to API Applications
+            and create a new application. This will give you the Client ID,
+            Client Secret, Account ID and Access Token you need to enter in
+            this plugin.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Client Secret</term>
+
+          <listitem>
+            <para>The Client Secret given to you by WePay</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Account ID</term>
+
+          <listitem>
+            <para>The Account ID given to you by WePay</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Access Token</term>
+
+          <listitem>
+            <para>The Access Token given to you by WePay</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, transactions are processed by WePay'ss test
+            server. This is designed for integration tests, BEFORE going live
+            with your site. <emphasis role="bold">NEVER, EVER, NO MATTER WHAT
+            YOU DO, SHOULD YOU NOT ENABLE THIS ON PRODUCTION SITES! IF YOU DO,
+            YOU WILL LOSE MONEY AND/OR CUSTOMERS.</emphasis> This option
+            should be used only in the integration testing phase during your
+            initial setup. When you're ready to go live with your site,
+            disable this feature.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>Integration notes for recurring payments</bridgehead>
+
+      <para>WePay only supports daily, weekly, monthly and yearly recurring
+      payments. Akeeba Subscriptions allows you to enter any subscription
+      length in days. Therefore the following Akeeba Subscriptions' length to
+      WePay recurring step mapping takes place:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>0 days; or Forever option is set; or a Fixed Expiration date
+          is set: No recursion takes place (one-time payment)</para>
+        </listitem>
+
+        <listitem>
+          <para>1-6 days: The payment recurs daily</para>
+        </listitem>
+
+        <listitem>
+          <para>7-27 days: The payment recurs weekly</para>
+        </listitem>
+
+        <listitem>
+          <para>28-359 days: The payment recurs monthly</para>
+        </listitem>
+
+        <listitem>
+          <para>Over 359 days: The payment recurs yearly</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We strongly recommend using the following number of days for
+      recurring payments to avoid your clients' subscriptions expiring before
+      the recurring payment is completed by WePay:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Daily recurring payments: 1 day</para>
+        </listitem>
+
+        <listitem>
+          <para>Weekly recurring payments: 7 days</para>
+        </listitem>
+
+        <listitem>
+          <para>Monthly recurring payments: 31 days (NOT 30!)</para>
+        </listitem>
+
+        <listitem>
+          <para>Yearly recurring payments: 366 days (NOT 365!)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
     <section xml:id="payment-zarinpal">
       <title>ZarinPal</title>
 
