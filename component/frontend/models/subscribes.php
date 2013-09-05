@@ -184,54 +184,72 @@ class AkeebasubsModelSubscribes extends FOFModel
 				$response->validation = $this->_validateUsername();
 				break;
 
+			// Perform validations on plugins only
+			case 'plugins':
+				$this->pluginValidation($response, $state);
+				break;
+
 			default:
 				$response->validation = $this->_validateState();
 				$response->validation->username = $this->_validateUsername()->username;
 				$response->validation->password = $this->_validateUsername()->password;
 				$response->price = $this->_validatePrice();
 
-				// Get the results from the custom validation
-				$response->custom_validation = array();
-				$response->custom_valid = true;
-				JLoader::import('joomla.plugin.helper');
-				JPluginHelper::importPlugin('akeebasubs');
-				$app = JFactory::getApplication();
-				$jResponse = $app->triggerEvent('onValidate', array($state));
-				if(is_array($jResponse) && !empty($jResponse)) {
-					foreach($jResponse as $pluginResponse) {
-						if(!is_array($pluginResponse)) continue;
-						if(!array_key_exists('valid', $pluginResponse)) continue;
-						if(!array_key_exists('custom_validation', $pluginResponse)) continue;
-						$response->custom_valid = $response->custom_valid && $pluginResponse['valid'];
-						$response->custom_validation = array_merge($response->custom_validation, $pluginResponse['custom_validation']);
-						if(array_key_exists('data', $pluginResponse)) {
-							$state = $pluginResponse['data'];
-						}
-					}
-				}
+				$this->pluginValidation($response, $state);
 
-				// Get the results from the per-subscription custom validation
-				$response->subscription_custom_validation = array();
-				$response->subscription_custom_valid = true;
-				JLoader::import('joomla.plugin.helper');
-				JPluginHelper::importPlugin('akeebasubs');
-				$app = JFactory::getApplication();
-				$jResponse = $app->triggerEvent('onValidatePerSubscription', array($state));
-				if(is_array($jResponse) && !empty($jResponse)) {
-					foreach($jResponse as $pluginResponse) {
-						if(!is_array($pluginResponse)) continue;
-						if(!array_key_exists('valid', $pluginResponse)) continue;
-						if(!array_key_exists('subscription_custom_validation', $pluginResponse)) continue;
-						$response->subscription_custom_valid = $response->subscription_custom_valid && $pluginResponse['valid'];
-						$response->subscription_custom_validation = array_merge($response->subscription_custom_validation, $pluginResponse['subscription_custom_validation']);
-						if(array_key_exists('data', $pluginResponse)) {
-							$state = $pluginResponse['data'];
-						}
-					}
-				}
 				break;
 		}
 		return $response;
+	}
+
+	private function pluginValidation(&$response, &$state)
+	{
+		JLoader::import('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+
+		$app = JFactory::getApplication();
+
+		// Get the results from the custom validation
+		$response->custom_validation = array();
+		$response->custom_valid      = true;
+
+		$jResponse = $app->triggerEvent('onValidate', array($state));
+		if(is_array($jResponse) && !empty($jResponse))
+		{
+			foreach($jResponse as $pluginResponse)
+			{
+				if(!is_array($pluginResponse))                              continue;
+				if(!array_key_exists('valid', $pluginResponse))             continue;
+				if(!array_key_exists('custom_validation', $pluginResponse)) continue;
+
+				$response->custom_valid      = $response->custom_valid && $pluginResponse['valid'];
+				$response->custom_validation = array_merge($response->custom_validation, $pluginResponse['custom_validation']);
+				if(array_key_exists('data', $pluginResponse)) {
+					$state = $pluginResponse['data'];
+				}
+			}
+		}
+
+		// Get the results from the per-subscription custom validation
+		$response->subscription_custom_validation = array();
+		$response->subscription_custom_valid      = true;
+
+		$jResponse = $app->triggerEvent('onValidatePerSubscription', array($state));
+		if(is_array($jResponse) && !empty($jResponse))
+		{
+			foreach($jResponse as $pluginResponse)
+			{
+				if(!is_array($pluginResponse))                                           continue;
+				if(!array_key_exists('valid', $pluginResponse))                          continue;
+				if(!array_key_exists('subscription_custom_validation', $pluginResponse)) continue;
+
+				$response->subscription_custom_valid      = $response->subscription_custom_valid && $pluginResponse['valid'];
+				$response->subscription_custom_validation = array_merge($response->subscription_custom_validation, $pluginResponse['subscription_custom_validation']);
+				if(array_key_exists('data', $pluginResponse)) {
+					$state = $pluginResponse['data'];
+				}
+			}
+		}
 	}
 
 	/**

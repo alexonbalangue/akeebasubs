@@ -84,8 +84,17 @@ class plgAkeebasubsSlavesubs extends JPlugin
 
 		JLoader::import('joomla.user.helper');
 
-		$javascript_fetch = '';
+		$javascript_fetch    = '';
 		$javascript_validate = '';
+
+		if(!isset($cache['useredit']) || !$cache['useredit'])
+		{
+			$useredit = false;
+		}
+		else
+		{
+			$useredit = $cache['useredit'];
+		}
 
 		for($i = 0; $i < $maxSlaves; $i++)
 		{
@@ -138,9 +147,11 @@ if(!response.subcustom_validation.slaveuser$i) {
 }
 
 ENDJS;
-		}
+			}
 
-		$javascript = <<<ENDJS
+		if(!$useredit)
+		{
+			$javascript = <<<ENDJS
 (function($) {
 	$(document).ready(function(){
 		addToSubValidationFetchQueue(plg_akeebasubs_slavesubs_fetch);
@@ -172,8 +183,13 @@ $javascript_validate
 }
 
 ENDJS;
-		$document = JFactory::getDocument();
-		$document->addScriptDeclaration($javascript);
+		}
+		else
+		{
+
+		}
+			$document = JFactory::getDocument();
+			$document->addScriptDeclaration($javascript);
 
 		return $fields;
 	}
