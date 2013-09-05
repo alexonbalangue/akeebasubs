@@ -52,13 +52,10 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		$accessToken = trim($this->params->get('access_token', ''));
 		$wepay = new WePay($accessToken);
 
-		if($level->recurring) {
-			// End time needs to be specified.
-			// If it's not specified take 10 years from now as default.
-			$endTime = new JDate('+10 years');
-			/*if(!empty($level->fixed_date) && substr($level->fixed_date, 0, 4) != '0000') {
-				$endTime = new JDate($level->fixed_date);
-			}*/
+		if($this->isRecurring($level)) {
+			// Set end time to 100 billing cycles
+			$hundretCylesInDays = $level->duration * 100;
+			$endTime = new JDate("+$hundretCylesInDays days");
 			try {
 				$wpResponse = $wepay->request('preapproval/create', array(
 					'account_id'		=> $accountId,
@@ -159,10 +156,12 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'There is no valid subscription ID';
 		}
 		
+		$isFirstRecurringCallback = $this->isRecurring($level) && !$isIPN;
+		
 		// Check callback type
 		if($isValid) {
 			// New subscriptions (state: N) are always handled by the redirect-uri. We can ignore IPNs
-			// in this case, which is only used for recurring payments after a new subscription is accepted.
+			// in this case, which is only used for recurring payments after a new subscription is initially accepted.
 			if($subscription->state == 'N' && $isIPN) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Ignore IPN callbacks for new subscriptions.";
@@ -170,7 +169,7 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		}
 		
 		// Check checkout ID
-		if($level->recurring) {
+		if($isFirstRecurringCallback) {
 			if($isValid) {
 				if($subscription->state == 'N' && $data['preapproval_id'] != $subscription->processor_key) {
 					$isValid = false;
@@ -191,18 +190,17 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 			try {
 				$accessToken = trim($this->params->get('access_token', ''));
 				$wepay = new WePay($accessToken);
-				if($level->recurring) {
+				if($isFirstRecurringCallback) {
 					$wpResponse = $wepay->request('preapproval', array(
 						'preapproval_id'	=> $data['preapproval_id']
 					));
 					$data['period'] = $wpResponse->period;
-					$data['key'] = $wpResponse->next_due_time;
 				} else {
 					$wpResponse = $wepay->request('checkout', array(
 						'checkout_id'	=> $data['checkout_id']
 					));
-					$data['key'] = $wpResponse->create_time;
 				}
+				$data['key'] = $wpResponse->create_time;
 				$data['account_id'] = $wpResponse->account_id;
 				$data['state'] = $wpResponse->state;
 				$data['amount'] = $wpResponse->amount;
@@ -213,7 +211,7 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		}
 		
 		// Check recurring period
-		if($isValid && $level->recurring) {
+		if($isFirstRecurringCallback) {
 			if($data['period'] != $this->getRecurringPeriod($level)) {
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "The period of the recurring subscription is not correct.";
@@ -266,7 +264,7 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 		}
 		
 		// Is payment successful?
-		if($level->recurring) {
+		if($isFirstRecurringCallback) {
 			if(in_array($data['state'], array('approved', 'completed'))) {
 				$newStatus = 'C';
 			} else {
@@ -292,7 +290,7 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 			$this->fixDates($subscription, $updates);
 		}
 		// In the case of a successful recurring payment, fetch the old subscription's data
-		if($level->recurring && ($newStatus == 'C') && ($subscription->state == 'C')) {
+		if($this->isRecurring($level) && ($newStatus == 'C') && ($subscription->state == 'C')) {
 			$jNow = new JDate();
 			$jStart = new JDate($subscription->publish_up);
 			$jEnd = new JDate($subscription->publish_down);
@@ -357,20 +355,19 @@ class plgAkpaymentWePay extends plgAkpaymentAbstract
 	private function getRecurringPeriod($level) {
 		// Supported durations by WePay:
 		// every day (daily), every week (weekly), every month, every year (yearly)
-		// 
-		// The akeeba duration (in days) will be translated as follows:
-		// WePay daily: Less then 7 days (recommended setting daily = 1 day)
-		// WePay weekly: Less then 28 days (recommended setting weeky = 7 days)
-		// WePay mothly: Less then 365 days (recommended setting monthly = 31 days)
-		// WePay yearly: everything else (recommended setting yearly = 365 days)
 		$period = 'yearly';
 		if($level->duration < 7) {
 			$period = 'daily';
 		} else if($level->duration < 28) {
 			$period = 'weekly';
-		} else if($level->duration < 365) {
+		} else if($level->duration < 359) {
 			$period = 'monthly';
 		}
 		return $period;
+	}
+	
+	private function isRecurring($level) {
+		$isFixedExpirationSet = !empty($level->fixed_date) && (substr($level->fixed_date, 0, 10) != '0000-00-00');
+		return $level->recurring && !$level->forever && !$isFixedExpirationSet;
 	}
 }
