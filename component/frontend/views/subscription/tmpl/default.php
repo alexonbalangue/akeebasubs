@@ -104,11 +104,18 @@ $jResponse = $app->triggerEvent('onSubscriptionFormRenderPerSubFields', $args);
 @ob_start();
 if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
 	if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):
+
+		$customField_class = '';
+		$validationClass   = '';
+
 		if(array_key_exists('isValid', $field)) {
 			$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success' : '') : 'error';
-		} else {
-			$customField_class = '';
 		}
+
+		if(array_key_exists('validationClass', $field)){
+			$validationClass = $field['validationClass'];
+		}
+
 		?>
 		<div class="control-group <?php echo $customField_class ?>">
 			<label for="<?php echo $field['id']?>" class="control-label">
@@ -117,16 +124,16 @@ if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFiel
 			<div class="controls">
 				<?php echo $field['elementHTML']?>
 				<?php if(array_key_exists('validLabel', $field)):?>
-					<span id="<?php echo $field['id']?>_valid" class="help-inline"
+					<span id="<?php echo $field['id']?>_valid" class="help-inline <?php echo $validationClass ?>"
 					      style="<?php if(!$field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
 					  <?php echo $field['validLabel']?>
-			</span>
+					</span>
 				<?php endif;?>
 				<?php if(array_key_exists('invalidLabel', $field)):?>
-					<span id="<?php echo $field['id']?>_invalid" class="help-inline"
+					<span id="<?php echo $field['id']?>_invalid" class="help-inline <?php echo $validationClass ?>"
 					      style="<?php if($field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
 					  <?php echo $field['invalidLabel']?>
-			</span>
+					</span>
 				<?php endif;?>
 			</div>
 		</div>
@@ -135,7 +142,11 @@ if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFiel
 	endforeach;
 endforeach;
 $subfieldsHTML = trim(@ob_get_clean());
-if(!empty($subfieldsHTML)):?>
+if(!empty($subfieldsHTML)):
+	// Do I have to inject any plugin validators?
+	require_once JPATH_ROOT.'/components/com_akeebasubs/helpers/js.php';
+	AkeebasubsHelperJs::deployValidator();
+?>
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')?></legend>
 		<form class="form form-horizontal">
@@ -153,4 +164,7 @@ if(!empty($subfieldsHTML)):?>
 	</p>
 </div>
 
+	<?php // Subscription ID, so it's available for JS stuff ?>
+	<input type="hidden" id="akeebasubs_subscription_id" value="<?php echo $this->item->akeebasubs_subscription_id?>"/>
+	<input type="hidden" id="akeebasubs_level_id" value="<?php echo $this->item->akeebasubs_level_id?>"/>
 </div>

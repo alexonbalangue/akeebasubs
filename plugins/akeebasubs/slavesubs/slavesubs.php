@@ -110,7 +110,7 @@ class plgAkeebasubsSlavesubs extends JPlugin
 				$current = '';
 			}
 
-			$html = '<input type="text" name="subcustom[slaveusers]['.$i.']" id="slaveuser'.$i.'" value="'.htmlentities($current).'" />';
+			$html = '<input type="text" class="slaves" name="subcustom[slaveusers]['.$i.']" id="slaveuser'.$i.'" value="'.htmlentities($current).'" />';
 
 			$userExists = false;
 			if(!empty($current))
@@ -120,11 +120,12 @@ class plgAkeebasubsSlavesubs extends JPlugin
 
 			// Setup the field
 			$field = array(
-				'id'			=> 'slaveuser'.$i,
-				'label'			=> JText::sprintf('PLG_AKEEBASUBS_SLAVESUBS_ADDONUSER_LBL', $i + 1),
-				'elementHTML'	=> $html,
-				'invalidLabel'	=> JText::_('PLG_AKEEBASUBS_SLAVESUBS_INVALID_LBL'),
-				'isValid'		=> empty($current) || $userExists
+				'id'			    => 'slaveuser'.$i,
+				'label'			    => JText::sprintf('PLG_AKEEBASUBS_SLAVESUBS_ADDONUSER_LBL', $i + 1),
+				'elementHTML'	    => $html,
+				'invalidLabel'	    => JText::_('PLG_AKEEBASUBS_SLAVESUBS_INVALID_LBL'),
+				'isValid'		    => empty($current) || $userExists,
+				'validationClass'   => 'slavesubsValidation'
 			);
 			// Add the field to the return output
 			$fields[] = $field;
@@ -183,13 +184,14 @@ $javascript_validate
 }
 
 ENDJS;
+			$document = JFactory::getDocument();
+			$document->addScriptDeclaration($javascript);
 		}
 		else
 		{
-
+			require_once JPATH_ROOT.'/components/com_akeebasubs/helpers/js.php';
+			AkeebasubsHelperJs::addSelector('input.slaves');
 		}
-			$document = JFactory::getDocument();
-			$document->addScriptDeclaration($javascript);
 
 		return $fields;
 	}
@@ -259,7 +261,7 @@ ENDJS;
 			}
 			else
 			{
-				$response['subscription_custom_validation']['slaveuser'.$i] = JUserHelper::getUserId($current) > 0;;
+				$response['subscription_custom_validation']['slaveuser'.$i] = JUserHelper::getUserId($current) > 0;
 			}
 
 			$response['valid'] = $response['valid'] &&
