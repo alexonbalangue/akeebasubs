@@ -164,14 +164,12 @@ class plgAkpaymentScnet extends plgAkpaymentAbstract
 		}
 
 		// Payment status
-		switch ($data['summarycode'])
+		switch ($data['summaryResponseCode'])
 		{
-			case 0:
+			case "Approved":
 				$newStatus = 'C';
 				break;
 
-			case 1:
-			case 2:
 			default:
 				$newStatus = 'X';
 				break;
