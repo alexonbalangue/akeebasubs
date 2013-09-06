@@ -46,6 +46,7 @@ Akeeba Subscriptions 3.2.1
 # [LOW] CLI CRON scripts not fully compatible with PHP CGI
 # [LOW] Community Builder synchronisation would result in extra fields' data stored as raw JSON in the Community Builder field
 # [LOW] SCnet integration would not pick up successful transactions with rare response codes
+# [LOW] ReCAPTCHA plugin doesn't recognise SSL correctly
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
