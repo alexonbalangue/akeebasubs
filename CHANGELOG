@@ -30,6 +30,7 @@ Akeeba Subscriptions 3.2.1
 # [MEDIUM] Percentage-based flexible discounts in subscription level relations don't work
 # [MEDIUM] Test email button in e-mail template editor page not shown under Joomla! 3
 # [MEDIUM] No server-side check for empty password was present
+# [MEDIUM] Using Progressive Caching could result in wrong information being displayed
 # [LOW] The name and email should not display validation information the first time you load the subscription page
 # [LOW] Some third party plugins add an empty Itemid to the request data, screwing up the payment notification validation with some payment processors (e.g. PayPal)
 # [LOW] Custom fields should only allow specific characters in their slugs

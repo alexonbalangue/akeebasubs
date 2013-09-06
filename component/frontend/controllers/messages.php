@@ -55,6 +55,12 @@ class AkeebasubsControllerMessages extends FOFController
 			->setId($subid)
 			->getItem();
 
+		// Working around Progressive Caching
+		JFactory::getApplication()->input->set('subid', $subid);
+		$this->registerUrlParams(array(
+			'subid' => 'INT'
+		));
+
 		$this->getThisView()->assign('subscription',$subscription);
 
 		if ($subscription->akeebasubs_level_id)
@@ -183,5 +189,44 @@ class AkeebasubsControllerMessages extends FOFController
 		}
 
 		return true;
+	}
+
+	protected function registerUrlParams($urlparams = array())
+	{
+		$app = JFactory::getApplication();
+
+		$registeredurlparams = null;
+
+		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		{
+			if (property_exists($app, 'registeredurlparams'))
+			{
+				$registeredurlparams = $app->registeredurlparams;
+			}
+		}
+		else
+		{
+			$registeredurlparams = $app->get('registeredurlparams');
+		}
+
+		if (empty($registeredurlparams))
+		{
+			$registeredurlparams = new stdClass;
+		}
+
+		foreach ($urlparams AS $key => $value)
+		{
+			// Add your safe url parameters with variable type as value {@see JFilterInput::clean()}.
+			$registeredurlparams->$key = $value;
+		}
+
+		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		{
+			$app->registeredurlparams = $registeredurlparams;
+		}
+		else
+		{
+			$app->set('registeredurlparams', $registeredurlparams);
+		}
 	}
 }
