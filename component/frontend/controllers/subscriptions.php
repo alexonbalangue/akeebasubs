@@ -160,6 +160,12 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			return false;
 		}
 
+		// No info about custom fields? It's the only thing that user can update, so why continuing?
+		if(!$this->input->get('subcustom', '', 2))
+		{
+			return false;
+		}
+
 		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getItem($subId);
 
@@ -179,5 +185,44 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		{
 			$this->_csrfProtection();
 		}
+
+		// Set error message in case data won't be updated below
+		$msgType = 'error';
+		$msg     = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_UPDATE_ERROR');
+
+		$subcustom = $this->input->get('subcustom', '', 2);
+
+		// Let's setup a new input object, so I can reuse the code without messing up things
+		$subId    = $this->input->getInt('akeebasubs_subscription_id');
+		$newInput = clone $this->input;
+		$newInput->set('opt', 'plugins');
+		$newInput->set('id', $subId);
+
+		$subscribes = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel');
+		$subscribes->setInput($newInput);
+
+		// Subscription validation (plugins only)
+		$data = $subscribes->getValidation();
+
+		if($data->custom_valid && $data->subscription_custom_valid)
+		{
+			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
+
+			// Let's get the info from previous slave subscriptions
+			if(isset($table->params['slavesubs_ids']) && !empty($table->params['slavesubs_ids']))
+			{
+				$subcustom['slavesubs_ids'] = $table->params['slavesubs_ids'];
+			}
+
+			$table->params = json_encode($subcustom);
+			if($table->store())
+			{
+
+				$msgType = 'info';
+				$msg     = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_UPDATE_OK');
+			}
+		}
+
+		$this->setRedirect(JRoute::_('index.php?option=com_akeebasubs&view=subscription&id='.$subId, false), $msg, $msgType);
 	}
 }
