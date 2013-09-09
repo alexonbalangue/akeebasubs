@@ -1,26 +1,33 @@
 <?php
+
 /**
  *  @package AkeebaSubs
  *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
-
 defined('_JEXEC') or die();
 
 class AkeebasubsControllerSubscriptions extends FOFController
 {
-	public function __construct($config = array()) {
+
+	public function __construct($config = array())
+	{
 		parent::__construct($config);
 
 		$this->cacheableTasks = array('read');
+
+		$this->cacheableTasks = array();
 	}
 
-	public function execute($task) {
-		$allowedTasks = array('browse', 'read');
-		if(in_array($task,array('edit','add'))) $task = 'read';
-		if(!in_array($task,$allowedTasks)) return false;
+	public function execute($task)
+	{
+		$allowedTasks	 = array('browse', 'read');
+		if (in_array($task, array('edit', 'add')))
+			$task			 = 'read';
+		if (!in_array($task, $allowedTasks))
+			return false;
 
-		$this->input->set('task',$task);
+		$this->input->set('task', $task);
 
 		parent::execute($task);
 	}
@@ -28,59 +35,70 @@ class AkeebasubsControllerSubscriptions extends FOFController
 	public function onBeforeBrowse()
 	{
 		// If we have a username/password pair, log in the user if he's a guest
-		$username = $this->input->getString('username','');
-		$password = $this->input->getString('password','');
-		$user = JFactory::getUser();
+		$username	 = $this->input->getString('username', '');
+		$password	 = $this->input->getString('password', '');
+		$user		 = JFactory::getUser();
 
-		if($user->guest && !empty($username) && !empty($password)) {
-			JLoader::import( 'joomla.user.authentication');
-			$credentials = array(
-				'username'	=> $username,
-				'password'	=> $password
+		if ($user->guest && !empty($username) && !empty($password))
+		{
+			JLoader::import('joomla.user.authentication');
+			$credentials	 = array(
+				'username'	 => $username,
+				'password'	 => $password
 			);
-			$app = JFactory::getApplication();
-			$options = array('remember' => false);
-			$authenticate = JAuthentication::getInstance();
-			$response	  = $authenticate->authenticate($credentials, $options);
-			if ($response->status == JAuthentication::STATUS_SUCCESS) {
+			$app			 = JFactory::getApplication();
+			$options		 = array('remember' => false);
+			$authenticate	 = JAuthentication::getInstance();
+			$response		 = $authenticate->authenticate($credentials, $options);
+			if ($response->status == JAuthentication::STATUS_SUCCESS)
+			{
 				JPluginHelper::importPlugin('user');
-				$results = $app->triggerEvent('onLoginUser', array((array)$response, $options));
+				$results				 = $app->triggerEvent('onLoginUser', array((array) $response, $options));
 				JLoader::import('joomla.user.helper');
-				$userid = JUserHelper::getUserId($response->username);
-				$user = JFactory::getUser($userid);
-				$parameters['username']	= $user->get('username');
-				$parameters['id']		= $user->get('id');
+				$userid					 = JUserHelper::getUserId($response->username);
+				$user					 = JFactory::getUser($userid);
+				$parameters['username']	 = $user->get('username');
+				$parameters['id']		 = $user->get('id');
 			}
 		}
 
 		// If we still have a guest user, show the login page
-		if($user->guest) {
+		if ($user->guest)
+		{
 			// Show login page
-			$juri = JURI::getInstance();
-			$myURI = base64_encode($juri->toString());
-			$com = version_compare(JVERSION, '1.6.0', 'ge') ? 'users' : 'user';
-			JFactory::getApplication()->redirect(JURI::base().'index.php?option=com_'.$com.'&view=login&return='.$myURI);
+			$juri	 = JURI::getInstance();
+			$myURI	 = base64_encode($juri->toString());
+			$com	 = version_compare(JVERSION, '1.6.0', 'ge') ? 'users' : 'user';
+			JFactory::getApplication()->redirect(JURI::base() . 'index.php?option=com_' . $com . '&view=login&return=' . $myURI);
 			return false;
 		}
 
 		// Does the user have core.manage access or belongs to SA group?
-		$isAdmin = $user->authorise('core.manage','com_akeebasubs');
+		$isAdmin = $user->authorise('core.manage', 'com_akeebasubs');
 
-		if($this->input->getInt('allUsers',0) && $isAdmin) {
+		if ($this->input->getInt('allUsers', 0) && $isAdmin)
+		{
 			$this->getThisModel()->user_id(null);
-		} else {
+		}
+		else
+		{
 			$this->getThisModel()->user_id(JFactory::getUser()->id);
 		}
 
-		if($this->input->getInt('allStates',0) && $isAdmin) {
+		if ($this->input->getInt('allStates', 0) && $isAdmin)
+		{
 			$this->getThisModel()->paystate(null);
-		} else {
+		}
+		else
+		{
 			$this->getThisModel()->paystate('C,P');
 		}
 
 		// Let me cheat. If the request doesn't specify how many records to show, show them all!
-		if($this->input->getCmd('format','html') != 'html') {
-			if(!$this->input->getInt('limit',0) && !$this->input->getInt('limitstart',0)) {
+		if ($this->input->getCmd('format', 'html') != 'html')
+		{
+			if (!$this->input->getInt('limit', 0) && !$this->input->getInt('limitstart', 0))
+			{
 				$this->getThisModel()->limit(0);
 				$this->getThisModel()->limitstart(0);
 			}
@@ -96,12 +114,12 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		$this->getThisView()->setLayout('default');
 
 		// Do we have a user?
-		if(JFactory::getUser()->guest) {
+		if (JFactory::getUser()->guest)
+		{
 			// Show login page
-			$juri = JURI::getInstance();
-			$myURI = base64_encode($juri->toString());
-			$com = version_compare(JVERSION, '1.6.0', 'ge') ? 'users' : 'user';
-			JFactory::getApplication()->redirect(JURI::base().'index.php?option=com_'.$com.'&view=login&return='.$myURI);
+			$juri	 = JURI::getInstance();
+			$myURI	 = base64_encode($juri->toString());
+			JFactory::getApplication()->redirect(JURI::base() . 'index.php?option=com_users&view=login&return=' . $myURI);
 			return false;
 		}
 
@@ -110,20 +128,75 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		$this->getThisModel()->user_id(JFactory::getUser()->id);
 		$this->getThisModel()->paystate('C,P');
 
-		$list = $this->getThisModel()->getItemList();
-		$found = false;
-		if(!empty($list)) foreach($list as $id => $sub) {
-			if($sub->akeebasubs_subscription_id == $this->getThisModel()->getId()) {
-				$found = true;
-				break;
+		// Working around Progressive Caching
+		JFactory::getApplication()->input->set('_x_userid', JFactory::getUser()->id);
+		$this->registerUrlParams(array(
+			'_x_userid'	 => 'INT',
+			'id'		 => 'INT',
+			'cid'		 => 'ARRAY',
+		));
+
+		$list	 = $this->getThisModel()->getItemList();
+		$found	 = false;
+
+		if (!empty($list))
+		{
+			foreach ($list as $id => $sub)
+			{
+				if ($sub->akeebasubs_subscription_id == $this->getThisModel()->getId())
+				{
+					$found = true;
+					break;
+				}
 			}
 		}
 
-		if(!$found) {
-			JError::raiseError('403',JText::_('ACCESS DENIED'));
+		if (!$found)
+		{
+			JError::raiseError('403', JText::_('ACCESS DENIED'));
 			return false;
 		}
 
 		return true;
 	}
+
+	protected function registerUrlParams($urlparams = array())
+	{
+		$app = JFactory::getApplication();
+
+		$registeredurlparams = null;
+
+		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		{
+			if (property_exists($app, 'registeredurlparams'))
+			{
+				$registeredurlparams = $app->registeredurlparams;
+			}
+		}
+		else
+		{
+			$registeredurlparams = $app->get('registeredurlparams');
+		}
+
+		if (empty($registeredurlparams))
+		{
+			$registeredurlparams = new stdClass;
+		}
+
+		foreach ($urlparams AS $key => $value)
+		{
+			// Add your safe url parameters with variable type as value {@see JFilterInput::clean()}.
+			$registeredurlparams->$key = $value;
+		}
+
+		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		{
+			$app->registeredurlparams = $registeredurlparams;
+		}
+		else
+		{
+			$app->set('registeredurlparams', $registeredurlparams);
+		}
+	}
+
 }

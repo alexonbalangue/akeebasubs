@@ -17,6 +17,8 @@ class AkeebasubsControllerUserinfos extends FOFController
 		);
 		$config = array_merge($config, $configOverride);
 
+		$this->cacheableTasks = array();
+
 		parent::__construct($config);
 	}
 

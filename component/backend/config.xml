@@ -35,9 +35,16 @@
 			description="COM_AKEEBASUBS_CONFIG_BACKEND_IMAGEDIR_DESC"
 		/>
 		<field name="show2copromo" type="hidden" default="1" />
+		<field name="wizardstep" type="hidden" default="1" />
 	</fieldset>
 	
 	<fieldset name="frontend" label="COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE">
+		<field name="secret" type="text"
+			default=""
+			size="40"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SECRET"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SECRET_DESC"
+		/>
 		<field name="stepsbar" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR_DESC">

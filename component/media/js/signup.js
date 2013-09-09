@@ -244,13 +244,10 @@ function validateName()
 		$('#name_empty').css('display','none');
 		var name = $('#name').val();
 		
+		$('#name').parent().parent().removeClass('error').removeClass('success');
 		if (!akeebasubs_apply_validation)
 		{
-			if (name == '')
-			{
-				$('#name').parent().parent().removeClass('error').removeClass('success');
-				return;
-			}
+			return;
 		}
 		
 		var invalidName = false;
@@ -327,8 +324,15 @@ function validateEmail()
 		$('#email_empty').css('display','none');
 		$('#email_invalid').css('display','none');
 		$('#email2_invalid').css('display','none');
+		$('#email').parent().parent().removeClass('error').removeClass('success');
+		$('#email2').parent().parent().removeClass('error').removeClass('success');
 		var email = $('#email').val();
 		var email2 = $('#email2').val();
+		
+		if (!akeebasubs_apply_validation)
+		{
+			return;
+		}
 		
 		if ((email == '') && (email2 == ''))
 		{
@@ -948,6 +952,7 @@ function addToSubValidationQueue(myfunction)
 			}
 		});
 		
+		validateEmail();
 		validateForm();
 	});
 })(akeeba.jQuery);

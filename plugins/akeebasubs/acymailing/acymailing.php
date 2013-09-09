@@ -16,106 +16,77 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 	{
 		$templatePath = dirname(__FILE__);
 		$name = 'acymailing';
-		
+
 		parent::__construct($subject, $name, $config, $templatePath);
 	}
 
 	public function onAKUserRefresh($user_id)
 	{
+		// No AcyMailing API? Stop here!
+		if(!include_once(JPATH_ADMINISTRATOR.'/components/com_acymailing/helpers/helper.php'))
+		{
+			return;
+		}
+
 		// Load groups
-		$addGroups = array();
-		$removeGroups = array();
+		$addGroups       = array();
+		$removeGroups    = array();
+		$newSubscription = array();
+
 		$this->loadUserGroups($user_id, $addGroups, $removeGroups);
-		if(empty($addGroups) && empty($removeGroups)) return;
-		
-		// Get DB connection
-		$db = JFactory::getDBO();
-		
-		// Does this user have an AcyMailing user record?
-		$query = $db->getQuery(true)
-			->select($db->qn('subid'))
-			->from('#__acymailing_subscriber')
-			->where($db->qn('userid').' = '.$db->q($user_id));
-		$db->setQuery($query);
-		$amsubid = $db->loadResult();
-		
-		if(empty($amsubid) || is_null($amsubid)) {
-			// Create new AcyMailing subscriber record
-			$user = JFactory::getUser($user_id);
-			$amsubobject = (object)array(
-				'email'		=> $user->email,
-				'userid'	=> $user->id,
-				'name'		=> $user->name,
-				'created'	=> time(),
-				'confirmed'	=> 1,
-				'enabled'	=> 1,
-				'accept'	=> 1,
-				'html'		=> 1,
-			);
-			$db->insertObject('#__acymailing_subscriber', $amsubobject);
-			$amsubid = $db->insertid();
+
+		if(empty($addGroups) && empty($removeGroups))
+		{
+			return;
 		}
-		
-		// Add to AcyMailing
-		if(!empty($addGroups)) {
-			foreach($addGroups as $group) {
-				// Check for old record
-				$query = $db->getQuery(true)
-					->select($db->qn('subid'))
-					->from($db->qn('#__acymailing_listsub'))
-					->where($db->qn('listid') .'='. $db->q($group))
-					->where($db->qn('subid') .'='. $db->q($amsubid));
-				$db->setQuery($query);
-				$test = $db->loadResult();
-				
-				// Remove old record
-				if(!empty($test) && !is_null($test)) {
-					$query = $db->getQuery(true)
-						->delete($db->qn('#__acymailing_listsub'))
-						->where($db->qn('listid') .'='. $db->q($group))
-						->where($db->qn('subid') .'='. $db->q($amsubid));
-					$db->setQuery($query);
-					$db->execute();
-				}
-				
-				// Insert new record
-				$query = $db->getQuery(true)
-					->insert($db->qn('#__acymailing_listsub'))
-					->values(
-						$db->q($group).', '.$db->q($amsubid).', '.
-						$db->q(time()).', '.$db->q(null).', '.
-						$db->q(1)
-					)->columns(array(
-						$db->qn('listid'), $db->qn('subid'),
-						$db->qn('subdate'), $db->qn('unsubdate'),
-						$db->qn('status'),
-					));
-				;
-				$db->setQuery($query);
-				$db->execute();
+
+		$userClass = acymailing_get('class.subscriber');
+
+		if(!empty($addGroups))
+		{
+			foreach($addGroups as $listId)
+			{
+				$newList = array();
+				$newList['status'] = 1;
+				$newSubscription[$listId] = $newList;
 			}
 		}
-		
-		// Remove from AcyMailing
-		if(!empty($removeGroups)) {
-			foreach($removeGroups as $group) {
-				$query = $db->getQuery(true)
-					->delete($db->qn('#__acymailing_listsub'))
-					->where($db->qn('listid') .'='. $db->q($group))
-					->where($db->qn('subid') .'='. $db->q($amsubid));
-				$db->setQuery($query);
-				$db->execute();
+
+		if(!empty($removeGroups))
+		{
+			foreach($removeGroups as $listId)
+			{
+				$newList = array();
+				$newList['status'] = 0;
+				$newSubscription[$listId] = $newList;
 			}
 		}
+
+		if(empty($newSubscription))
+		{
+			return;
+		}
+
+		// this function returns the ID of the user stored in the AcyMailing table from a Joomla User ID
+		// or an e-mail address
+		$subid = $userClass->subid($user_id);
+
+		//we didn't find the user in the AcyMailing tables
+		if(empty($subid))
+		{
+			return;
+		}
+
+		$userClass->saveSubscription($subid,$newSubscription);
 	}
-	
+
 	protected function getGroups()
 	{
 		static $groups = null;
-		
+
 		if(is_null($groups)) {
 			$groups = array();
-			
+
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(true)
 				->select(array(
@@ -125,7 +96,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 			;
 			$db->setQuery($query);
 			$res = $db->loadObjectList();
-			
+
 			if(!empty($res)) {
 				foreach($res as $item) {
 					$t = trim($item->title);
@@ -133,7 +104,7 @@ class plgAkeebasubsAcymailing extends plgAkeebasubsAbstract
 				}
 			}
 		}
-		
+
 		return $groups;
 	}
 }

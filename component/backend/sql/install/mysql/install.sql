@@ -5,18 +5,23 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_levels` (
 	`image` varchar(1024) NOT NULL,
 	`description` text,
 	`duration` INT(10) UNSIGNED NOT NULL DEFAULT 365,
-	`price` FLOAT NOT NULL,
+	`price` FLOAT NOT NULL DEFAULT '0',
 	`signupfee` FLOAT NULL DEFAULT '0',
 	`ordertext` text,
+  `orderurl` VARCHAR( 255 ) NULL,
 	`canceltext` text,
+  `cancelurl` VARCHAR( 255 ) NULL,
 	`only_once` TINYINT(3) NOT NULL DEFAULT 0,
 	`recurring` TINYINT(3) NOT NULL DEFAULT 0,
 	`forever` TINYINT(3) NOT NULL DEFAULT 0,
 	`akeebasubs_levelgroup_id` BIGINT(20) UNSIGNED NULL,
+	`access` int(11) NOT NULL DEFAULT '1',
 	`fixed_date` DATETIME NULL,
 	`payment_plugins` VARCHAR(2096) NOT NULL DEFAULT '',
+	`renew_url` VARCHAR(2048) NULL DEFAULT '',
+	`content_url` VARCHAR(2048) NULL DEFAULT '',
 	`params` TEXT,
-	
+
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -40,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_subscriptions` (
 	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`notes` TEXT,
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
-	
+
 	`processor` varchar(255) NOT NULL,
 	`processor_key` varchar(255) NOT NULL,
 	`state` ENUM('N','P','C','X') not null default 'X',
@@ -75,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_taxrules` (
 	`vies` TINYINT(1) NOT NULL DEFAULT '1',
 	`taxrate` FLOAT NOT NULL DEFAULT '23.0',
 	`akeebasubs_level_id` BIGINT(20) NOT NULL DEFAULT '0',
-	
+
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -89,19 +94,21 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_taxrules` (
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`akeebasubs_coupon_id` bigint(20) unsigned NOT NULL auto_increment,
-	`title` varchar(255) NOT NULL,
+  `akeebasubs_apicoupon_id` INT NOT NULL,
+  `title` varchar(255) NOT NULL,
 	`coupon` varchar(255) NOT NULL,
 	`publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`subscriptions` VARCHAR(255) NULL,
 	`user` int(10) DEFAULT NULL,
+  `email` VARCHAR( 255 ) NULL,
 	`params` TEXT,
 	`hitslimit` BIGINT(20) unsigned NULL,
 	`userhits` BIGINT(20) unsigned NULL,
 	`usergroups` VARCHAR(255) NULL,
 	`type` ENUM('value','percent','lastpercent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT 0.0,
-	
+
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -113,6 +120,21 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_coupons` (
 	`hits` BIGINT(20) unsigned NOT NULL default 0,
 	PRIMARY KEY ( `akeebasubs_coupon_id` ),
 	UNIQUE KEY `coupon` (`coupon`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__akeebasubs_apicoupons` (
+  `akeebasubs_apicoupon_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(30) NOT NULL,
+  `key` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `creation_limit` int(11) NOT NULL,
+  `subscriptions` varchar(255) NOT NULL,
+  `subscription_limit` int(11) NOT NULL,
+  `type` enum('value','percent') NOT NULL DEFAULT 'value',
+  `value` float NOT NULL DEFAULT '0',
+  `value_limit` INT NOT NULL,
+  PRIMARY KEY (`akeebasubs_apicoupon_id`)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__akeebasubs_upgrades` (
@@ -154,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_users` (
 	`zip` VARCHAR(255) NULL,
 	`country` CHAR(2) NOT NULL DEFAULT 'XX',
 	`params` TEXT,
-	`notes` TEXT,	
+	`notes` TEXT,
 	PRIMARY KEY ( `akeebasubs_user_id` ),
 	UNIQUE KEY `joomlauser` (`user_id`)
 ) DEFAULT CHARSET=utf8;
@@ -177,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoices` (
 	`btxt` LONGTEXT,
 	`filename` VARCHAR(255) NULL,
 	`sent_on` DATETIME NULL,
-	
+
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
 	`created_by` int(11) NOT NULL DEFAULT 0,
@@ -234,6 +256,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_invoicetemplates` (
 
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
+  `noinvoice` TINYINT NOT NULL DEFAULT '0',
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
 	`created_by` int(11) NOT NULL DEFAULT 0,
 	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -545,5 +568,5 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_blockrules` (
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` bigint(20) NOT NULL DEFAULT '0',
 
-	PRIMARY KEY (`akeebasubs_blockrule_id`)	
+	PRIMARY KEY (`akeebasubs_blockrule_id`)
 ) DEFAULT CHARSET=utf8;

@@ -13,7 +13,7 @@ if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpay
 class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 {
 	private $ewayService = null;
-	
+
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
@@ -21,9 +21,9 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_EWAYRAPID3_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/eway.gif',
 		));
-		
+
 		parent::__construct($subject, $config);
-		
+
 		// Load libraray and initialize settings
 		require_once dirname(__FILE__).'/ewayrapid3/library/Rapid3.0.php';
 		$service = new RapidAPI();
@@ -43,11 +43,11 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		$service->APIConfig['Request:Method'] = 'SOAP';
 		$this->ewayService = $service;
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -58,7 +58,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 	{
 		// Check that this is the requested payment plugin
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Split the name in first and last name
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
@@ -67,12 +67,12 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
+
 		// Fetch our extended user information
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		// Customer
 		$request = new CreateAccessCodeRequest();
 		$request->Customer->Reference = $subscription->akeebasubs_subscription_id;
@@ -90,9 +90,9 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		$request->Customer->PostalCode = trim($kuser->zip);
 		$request->Customer->Country = strtolower(trim($kuser->country));
 		$request->Customer->Email = trim($user->email);
-		
+
 		// Item/product
-		$item = new LineItem();   
+		$item = new LineItem();
 		$item->SKU = $level->akeebasubs_level_id;
 		$item->Description = $level->title;
 		$request->Items->LineItem[0] = $item;
@@ -128,18 +128,18 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/ewayrapid3/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
 		$isValid = true;
-		
+
 		// Load the relevant subscription row
 		$id = $data['sid'];
 		$subscription = null;
@@ -151,11 +151,15 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 				$subscription = null;
 				$isValid = false;
 			}
+            $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                ->setId($subscription->akeebasubs_level_id)
+                ->getItem()
+                ->slug;
 		} else {
 			$isValid = false;
 		}
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
-		
+
 		if($isValid) {
 			// Build request for getting the result with the access code
 			$request = new GetAccessCodeResultRequest();
@@ -173,7 +177,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = $errorMsg;
 			}
 		}
-		
+
 		// Check response message
 		if($isValid) {
 			$errorMsg = '';
@@ -183,10 +187,10 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 			}
 			if(!$isValid) {
 				$errorMsg = substr($errorMsg, 0, -2);
-				$data['akeebasubs_failure_reason'] = $errorMsg;	
+				$data['akeebasubs_failure_reason'] = $errorMsg;
 			}
 		}
-        
+
 		// Check invoice reference
 		if($isValid) {
 			if($result->InvoiceReference != $subscription->akeebasubs_subscription_id) {
@@ -194,7 +198,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Invoice reference is not correct.";
 			}
 		}
-        
+
 		// Check that transaction has not been previously processed
 		if($isValid) {
 			if($result->TransactionID == $subscription->processor_key) {
@@ -202,7 +206,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not processe this transaction twice";
 			}
 		}
-		
+
 		// Check that the amount is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_gross = $result->TotalAmount;
@@ -211,27 +215,27 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 			$isValid = ($gross - $mc_gross) < 0.01;
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$subscription->slug.
+				'&view=level&slug='.$slug.
 				'&layout='.JRequest::getCmd('layout','default');
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
 		}
-		
+
 		// Payment status
 		if($result->TransactionStatus) {
 			$newStatus = 'C';
 		} else {
 			$newStatus = 'X';
 		}
-		
+
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
 			'akeebasubs_subscription_id'	=> $id,
@@ -244,7 +248,7 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
-		
+
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -252,13 +256,13 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	public function selectMonth()
 	{
 		$options = array();
@@ -267,21 +271,21 @@ class plgAkpaymentEwayrapid3 extends plgAkpaymentAbstract
 			$m = sprintf('%02u', $i);
 			$options[] = JHTML::_('select.option',$m,$m);
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, 'EWAY_CARDEXPIRYMONTH', 'class="input-small"', 'value', 'text', '', 'EWAY_CARDEXPIRYMONTH');
 	}
-	
+
 	public function selectYear()
 	{
 		$year = gmdate('Y');
-		
+
 		$options = array();
 		$options[] = JHTML::_('select.option',0,'--');
 		for($i = 0; $i <= 10; $i++) {
 			$y = sprintf('%04u', $i+$year);
 			$options[] = JHTML::_('select.option',$y,$y);
 		}
-		
+
 		return JHTML::_('select.genericlist', $options, 'EWAY_CARDEXPIRYYEAR', 'class="input-small"', 'value', 'text', '', 'EWAY_CARDEXPIRYYEAR');
 	}
 }

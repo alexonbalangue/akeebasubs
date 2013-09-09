@@ -28,6 +28,19 @@ class AkeebasubsModelLevels extends FOFModel
 			$query->where($db->qn('enabled').' = '.(int)$enabled);
 		}
 
+		$access_user_id = $this->getState('access_user_id', null);
+
+		if (!is_null($access_user_id))
+		{
+			$levels = JFactory::getUser($access_user_id)->getAuthorisedViewLevels();
+
+			if (!empty($levels))
+			{
+				$levels = array_map(array($this->_db, 'quote'), $levels);
+				$query->where($db->qn('access').' IN ('. implode(',', $levels) . ')');
+			}
+		}
+
 		$slug = $this->getState('slug',null);
 		if($slug) {
 			$query->where($db->qn('slug').' = '.$db->q($slug));
@@ -116,5 +129,29 @@ class AkeebasubsModelLevels extends FOFModel
 		$query->order($order.' '.$dir);
 
 		return $query;
+	}
+
+	/**
+	 * Load all the levels inside an associative array, where the index is the
+	 * title in upper case
+	 *
+	 * @return array|bool   array('DUMMY TITLE' => <subscription row>)
+	 */
+	public function createTitleLookup()
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true)->select('*')->from('#__akeebasubs_levels');
+		$rows  = $db->setQuery($query)->loadObjectList('title');
+
+		return array_change_key_case($rows, CASE_UPPER);
+	}
+
+	public function createIdLookup()
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true)->select('*')->from('#__akeebasubs_levels');
+		$rows  = $db->setQuery($query)->loadObjectList('akeebasubs_level_id');
+
+		return $rows;
 	}
 }

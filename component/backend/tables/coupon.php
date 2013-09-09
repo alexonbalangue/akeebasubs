@@ -1,23 +1,23 @@
 <?php
+
 /**
  *  @package AkeebaSubs
  *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
-
 defined('_JEXEC') or die();
 
 class AkeebasubsTableCoupon extends FOFTable
 {
 	public function check() {
 		$result = true;
-		
+
 		// Check for title
 		if(empty($this->title)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_COUPON_ERR_TITLE'));
 			$result = false;
 		}
-		
+
 		// Check for coupon code
 		if(empty($this->coupon)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_COUPON_ERR_COUPON'));
@@ -25,7 +25,7 @@ class AkeebasubsTableCoupon extends FOFTable
 		}
 		// Normalize coupon code to uppercase
 		$this->coupon = strtoupper($this->coupon);
-		
+
 		// Assign sensible publish_up and publish_down settings
 		JLoader::import('joomla.utilities.date');
 		if(empty($this->publish_up) || ($this->publish_up == '0000-00-00 00:00:00')) {
@@ -38,7 +38,7 @@ class AkeebasubsTableCoupon extends FOFTable
 			}
 			$jUp = new JDate($this->publish_up);
 		}
-		
+
 		if(empty($this->publish_down) || ($this->publish_down == '0000-00-00 00:00:00')) {
 			$jDown = new JDate('2030-01-01 00:00:00');
 			$this->publish_down = $jDown->toSql();
@@ -49,7 +49,7 @@ class AkeebasubsTableCoupon extends FOFTable
 			}
 			$jDown = new JDate($this->publish_down);
 		}
-		
+
 		if($jDown->toUnix() < $jUp->toUnix()) {
 			$temp = $this->publish_up;
 			$this->publish_up = $this->publish_down;
@@ -58,7 +58,7 @@ class AkeebasubsTableCoupon extends FOFTable
 			$jDown = new JDate('2030-01-01 00:00:00');
 			$this->publish_down = $jDown->toSql();
 		}
-		
+
 		// Make sure assigned subscriptions really do exist and normalize the list
 		if(!empty($this->subscriptions)) {
 			if(is_array($this->subscriptions)) {
@@ -85,7 +85,7 @@ class AkeebasubsTableCoupon extends FOFTable
 				$this->subscriptions = implode(',', $subscriptions);
 			}
 		}
-		
+
 		// Make sure the specified user (if any) exists
 		if(!empty($this->user)) {
 			$userObject = JFactory::getUser($this->user);
@@ -96,7 +96,7 @@ class AkeebasubsTableCoupon extends FOFTable
 				}
 			}
 		}
-		
+
 		// Make sure assigned usergroups is a string
 		if (!empty($this->usergroups)) {
 			if (is_array($this->usergroups)) {
@@ -108,12 +108,12 @@ class AkeebasubsTableCoupon extends FOFTable
 		if($this->hitslimit <= 0) {
 			$this->hitslimit = 0;
 		}
-		
+
 		// Check the type
 		if(!in_array($this->type, array('value','percent'))) {
 			$this->type = 'value';
 		}
-		
+
 		// Check value
 		if($this->value < 0) {
 			$this->setError(JText::_('COM_AKEEBASUBS_COUPON_ERR_VALUE'));
@@ -121,10 +121,10 @@ class AkeebasubsTableCoupon extends FOFTable
 		} elseif( ($this->value > 100) && ($this->type == 'percent') ) {
 			$this->value = 100;
 		}
-		
+
 		return $result;
 	}
-	
+
 	function delete( $oid=null )
 	{
 		$joins = array(
@@ -145,4 +145,5 @@ class AkeebasubsTableCoupon extends FOFTable
 			return false;
 		}
 	}
+
 }

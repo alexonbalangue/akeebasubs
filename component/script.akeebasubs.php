@@ -91,6 +91,7 @@ class Com_AkeebasubsInstallerScript
 			),
 			'akpayment' => array(
 				'2checkout'				=> 0,
+				'2conew'				=> 0,
 				'allopass'				=> 0,
 				'alphauserpoints'		=> 0,
 				'authorizenet'			=> 0,
@@ -104,13 +105,17 @@ class Com_AkeebasubsInstallerScript
 				'dwolla'				=> 0,
 				'epaydk'				=> 0,
 				'eselectplus'			=> 0,
+				'exact'					=> 0,
 				'eway'					=> 0,
 				'ewayrapid3'			=> 0,
 				'gocardless'			=> 0,
 				'googlecheckout'		=> 0,
 				'ifthen'				=> 0,
+				'mercadopago'			=> 0,
 				'moip'					=> 0,
 				'moipassinaturas'		=> 0,
+				'mobilpaycc'			=> 0,
+				'mobilpaysms'			=> 0,
 				'moneris'				=> 0,
 				'nochex'				=> 0,
 				'none'					=> 0,
@@ -121,12 +126,14 @@ class Com_AkeebasubsInstallerScript
 				'paypal'				=> 1,
 				'paypalpaymentspro'		=> 0,
 				'paypalproexpress'		=> 0,
+				'paysafe'				=> 0,
 				'payu'					=> 0,
 				'postfinancech'			=> 0,
 				'przelewy24'			=> 0,
 				'rbkmoney'				=> 0,
 				'realex'				=> 0,
 				'robokassa'				=> 0,
+				'saferpay'				=> 0,
 				'scnet'					=> 0,
 				'scnetintegrated'		=> 0,
 				'skrill'				=> 0,
@@ -135,6 +142,7 @@ class Com_AkeebasubsInstallerScript
 				'upay'					=> 0,
 				'verotel'				=> 0,
 				'viva'					=> 0,
+				'wepay'					=> 0,
 				'worldpay'				=> 0,
 				'zarinpal'				=> 0,
 			),
@@ -345,9 +353,12 @@ class Com_AkeebasubsInstallerScript
 		}
 
 		// Bugfix for "Can not build admin menus"
-		if(in_array($type, array('install','discover_install'))) {
+		if(in_array($type, array('install')))
+		{
 			$this->_bugfixDBFunctionReturnedNoError();
-		} else {
+		}
+		elseif ($type != 'discover_install')
+		{
 			$this->_bugfixCantBuildAdminMenus();
 			$this->_fixBrokenSQLUpdates($parent);
 			$this->_fixSchemaVersion();
@@ -387,6 +398,17 @@ class Com_AkeebasubsInstallerScript
 
 		// Kill update site
 		$this->_killUpdateSite();
+
+		// Clear FOF's cache
+		if (!defined('FOF_INCLUDED'))
+		{
+			@include_once JPATH_LIBRARIES . '/fof/include.php';
+		}
+
+		if (defined('FOF_INCLUDED'))
+		{
+			FOFPlatform::getInstance()->clearCache();
+		}
 	}
 
 	/**
@@ -998,82 +1020,116 @@ class Com_AkeebasubsInstallerScript
 		JLoader::import('joomla.filesystem.folder');
 		JLoader::import('joomla.filesystem.file');
 		JLoader::import('joomla.utilities.date');
-		$source = $src.'/fof';
-		if(!defined('JPATH_LIBRARIES')) {
-			$target = JPATH_ROOT.'/libraries/fof';
-		} else {
-			$target = JPATH_LIBRARIES.'/fof';
+		$source = $src . '/fof';
+
+		if (!defined('JPATH_LIBRARIES'))
+		{
+			$target = JPATH_ROOT . '/libraries/fof';
 		}
+		else
+		{
+			$target = JPATH_LIBRARIES . '/fof';
+		}
+
 		$haveToInstallFOF = false;
-		if(!JFolder::exists($target)) {
+
+		if (!JFolder::exists($target))
+		{
 			$haveToInstallFOF = true;
-		} else {
+		}
+		else
+		{
 			$fofVersion = array();
-			if(JFile::exists($target.'/version.txt')) {
-				$rawData = JFile::read($target.'/version.txt');
-				$info = explode("\n", $rawData);
+
+			if (JFile::exists($target . '/version.txt'))
+			{
+				$rawData				 = JFile::read($target . '/version.txt');
+				$info					 = explode("\n", $rawData);
 				$fofVersion['installed'] = array(
-					'version'	=> trim($info[0]),
-					'date'		=> new JDate(trim($info[1]))
-				);
-			} else {
-				$fofVersion['installed'] = array(
-					'version'	=> '0.0',
-					'date'		=> new JDate('2011-01-01')
+					'version'	 => trim($info[0]),
+					'date'		 => new JDate(trim($info[1]))
 				);
 			}
-			$rawData = JFile::read($source.'/version.txt');
-			$info = explode("\n", $rawData);
-			$fofVersion['package'] = array(
-				'version'	=> trim($info[0]),
-				'date'		=> new JDate(trim($info[1]))
+			else
+			{
+				$fofVersion['installed'] = array(
+					'version'	 => '0.0',
+					'date'		 => new JDate('2011-01-01')
+				);
+			}
+
+			$rawData				 = JFile::read($source . '/version.txt');
+			$info					 = explode("\n", $rawData);
+
+			$fofVersion['package']	 = array(
+				'version'	 => trim($info[0]),
+				'date'		 => new JDate(trim($info[1]))
 			);
 
 			$haveToInstallFOF = $fofVersion['package']['date']->toUNIX() > $fofVersion['installed']['date']->toUNIX();
+
+			// Do not install FOF on Joomla! 3.2.0 beta 1 or later
+			if (version_compare(JVERSION, '3.1.999', 'gt'))
+			{
+				$haveToInstallFOF = false;
+			}
 		}
 
 		$installedFOF = false;
-		if($haveToInstallFOF) {
-			$versionSource = 'package';
-			$installer = new JInstaller;
-			$installedFOF = $installer->install($source);
-		} else {
+
+		if ($haveToInstallFOF)
+		{
+			$versionSource	 = 'package';
+			$installer		 = new JInstaller;
+			$installedFOF	 = $installer->install($source);
+		}
+		else
+		{
 			$versionSource = 'installed';
 		}
 
-		if(!isset($fofVersion)) {
+		if (!isset($fofVersion))
+		{
 			$fofVersion = array();
-			if(JFile::exists($target.'/version.txt')) {
-				$rawData = JFile::read($target.'/version.txt');
-				$info = explode("\n", $rawData);
+
+			if (JFile::exists($target . '/version.txt'))
+			{
+				$rawData				 = JFile::read($target . '/version.txt');
+				$info					 = explode("\n", $rawData);
 				$fofVersion['installed'] = array(
-					'version'	=> trim($info[0]),
-					'date'		=> new JDate(trim($info[1]))
-				);
-			} else {
-				$fofVersion['installed'] = array(
-					'version'	=> '0.0',
-					'date'		=> new JDate('2011-01-01')
+					'version'	 => trim($info[0]),
+					'date'		 => new JDate(trim($info[1]))
 				);
 			}
-			$rawData = JFile::read($source.'/version.txt');
-			$info = explode("\n", $rawData);
-			$fofVersion['package'] = array(
-				'version'	=> trim($info[0]),
-				'date'		=> new JDate(trim($info[1]))
+			else
+			{
+				$fofVersion['installed'] = array(
+					'version'	 => '0.0',
+					'date'		 => new JDate('2011-01-01')
+				);
+			}
+
+			$rawData				 = JFile::read($source . '/version.txt');
+			$info					 = explode("\n", $rawData);
+
+			$fofVersion['package']	 = array(
+				'version'	 => trim($info[0]),
+				'date'		 => new JDate(trim($info[1]))
 			);
-			$versionSource = 'installed';
+
+			$versionSource			 = 'installed';
 		}
 
-		if(!($fofVersion[$versionSource]['date'] instanceof JDate)) {
+		if (!($fofVersion[$versionSource]['date'] instanceof JDate))
+		{
 			$fofVersion[$versionSource]['date'] = new JDate();
 		}
 
 		return array(
-			'required'	=> $haveToInstallFOF,
-			'installed'	=> $installedFOF,
-			'version'	=> $fofVersion[$versionSource]['version'],
-			'date'		=> $fofVersion[$versionSource]['date']->format('Y-m-d'),
+			'required'	 => $haveToInstallFOF,
+			'installed'	 => $installedFOF,
+			'version'	 => $fofVersion[$versionSource]['version'],
+			'date'		 => $fofVersion[$versionSource]['date']->format('Y-m-d'),
 		);
 	}
 

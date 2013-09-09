@@ -20,17 +20,24 @@ class AkeebasubsControllerCallbacks extends FOFController
 	}
 
 
-	public function execute($task) {
+	public function execute($task)
+	{
 		$task = 'read';
 		$this->input->set('task','read');
 		parent::execute($task);
 	}
 
-	public function read($cachable = false) {
+	public function read($cachable = false)
+	{
+		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
+		JResponse::setHeader('X-Cache-Control', 'False', true);
+
 		$result = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel')
 			->paymentmethod($this->input->getCmd('paymentmethod','none'))
 			->runCallback();
+
 		echo $result ? 'OK' : 'FAILED';
+
 		JFactory::getApplication()->close();
 	}
 

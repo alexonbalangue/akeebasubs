@@ -24,6 +24,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 
 		require_once __DIR__.'/paymill/lib/Services/Paymill/Base.php';
 		require_once __DIR__.'/paymill/lib/Services/Paymill/Transactions.php';
+		require_once __DIR__.'/paymill/lib/Services/Paymill/Payments.php';
 		require_once __DIR__.'/paymill/lib/Services/Paymill/Clients.php';
 	}
 
@@ -45,66 +46,6 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		$doc->addScriptDeclaration(
 			"\nvar PAYMILL_PUBLIC_KEY = '" . $this->getPublicKey() . "';\n");
 		$doc->addScript("https://bridge.paymill.de/");
-		$doc->addScriptDeclaration(
-			'
-				window.addEvent(\'domready\', function(){
-					function PaymillResponseHandler(error, result) {
-						$$(\'.control-group\').removeClass(\'error\');
-						if (error) {
-							if(error.apierror == \'3internal_server_error\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3INTERNAL_SERVER_ERROR') . '\');
-							}else if(error.apierror == \'internal_server_error\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3INTERNAL_SERVER_ERROR') . '\');
-							}else if(error.apierror == \'invalid_public_key\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_PUBLIC_KEY') . '\');
-							}else if(error.apierror == \'3ds_cancelled\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_3DS_CANCELLED') . '\');
-							}else if(error.apierror == \'field_invalid_card_number\') {
-								$(\'control-group-card-number\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_NUMBER') . '\');
-							}else if(error.apierror == \'field_invalid_card_exp_year\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_EXP_YEAR') . '\');
-							}else if(error.apierror == \'field_invalid_card_exp_month\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_EXP_MONTH') . '\');
-							}else if(error.apierror == \'field_invalid_card_exp\') {
-								$(\'control-group-card-expiry\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_EXP') . '\');
-							}else if(error.apierror == \'field_invalid_card_cvc\') {
-								$(\'control-group-card-cvc\').addClass(\'error\');
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_CVC') . '\');
-							}else if(error.apierror == \'field_invalid_card_holder\') {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_INVALID_CARD_HOLDER') . '\');
-							}else {
-								$(\'payment-errors\').set(\'html\', \'' . JText::_('PLG_AKPAYMENT_PAYMILL_FORM_UNKNOWN_ERROR') . '\');
-							}
-							$(\'payment-errors\').setStyle(\'display\',\'\');
-							$(\'payment-button\').set(\'disabled\', false);
-						} else {
-							$(\'payment-errors\').setStyle(\'display\',\'none\');
-							var token = result.token;
-							$(\'token\').set(\'value\', token);
-							$(\'payment-form\').submit();
-						}
-					}
-
-					$(\'payment-form\').addEvents({
-						submit: function(){
-							paymill.createToken({
-								number:$(\'card-number\').value,
-								exp_month:$(\'card-expiry-month\').value,
-								exp_year:$(\'card-expiry-year\').value,
-								cvc:$(\'card-cvc\').value,
-								amount_int:$(\'amount\').value,
-								currency:$(\'currency\').value,
-								cardholder:$(\'card-holder\').value
-							}, PaymillResponseHandler);
-							$(\'payment-button\').set(\'disabled\', true);
-							return false;
-						}
-					});
-				});'."\n");
 
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paymill&sid='.$subscription->akeebasubs_subscription_id;
 		$data = (object)array(
@@ -134,6 +75,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		$id = $data['sid'];
 		$subscription = null;
 
+		// CHECK: Is this a valid subscription record?
 		if ($id > 0)
 		{
 			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
@@ -155,87 +97,17 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			$data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
 		}
 
-		if($isValid) {
-			// Initialise common variables
-			$apiKey = $this->getPrivateKey();
-			$apiEndpoint = 'https://api.paymill.de/v2/';
-			$client = '';
-
-			try
-			{
-				$params = array(
-					'amount'		=> $data['amount'],
-					'currency'		=> $data['currency'],
-					'token'			=> $data['token'],
-					'description'	=> $data['description']
-				);
-
-				$transactionsObject = new Services_Paymill_Transactions(
-					$apiKey, $apiEndpoint
-				);
-				$transaction = $transactionsObject->create($params);
-			}
-			catch(Exception $e)
-			{
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = $e->getMessage();
-			}
-		}
-
-		// Update the client record
-		if($isValid)
-		{
-			$user = JFactory::getUser($subscription->user_id);
-
-			try
-			{
-				$clientsObject = new Services_Paymill_Clients($apiKey, $apiEndpoint);
-				$clientRecord = $transaction['client'];
-				$clientparams = array(
-					'id'			=> $clientRecord['id'],
-					'email'			=> $user->email,
-					'description'	=> $user->name . '(subscription #' . $subscription->akeebasubs_subscription_id . ')',
-				);
-			}
-			catch (Exception $exc)
-			{
-
-			}
-		}
-
-		// Check that transaction has not been previously processed
-		// Nicholas 2013-05-13: This does not seem to work with PayMill
-		/**
-		if ($isValid)
-		{
-			if($transaction['payment']['id'] == $subscription->processor_key)
-			{
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "I will not processe this transaction twice";
-			}
-		}
-		**/
-
-		// Check that amount is correct
+		// CHECK: Is the amount correct?
 		$isPartialRefund = false;
 
-		if($isValid && !is_null($subscription))
+		if($isValid)
 		{
-			$mc_gross = $transaction['amount'];
+			$mc_gross = $data['amount'];
+
+			// Remember: the amount is in cents, e.g. 400 means 4.00 Euros
 			$gross = (int)($subscription->gross_amount * 100);
 
-			if ($mc_gross > 0)
-			{
-				// A positive value means "payment". The prices MUST match!
-				// Important: NEVER, EVER compare two floating point values for equality.
-				$isValid = ($gross - $mc_gross) < 0.01;
-			}
-			else
-			{
-				$isPartialRefund = false;
-				$temp_mc_gross = -1 * $mc_gross;
-				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
-			}
+			$isValid = ($gross - $mc_gross) < 0.01;
 
 			if (!$isValid)
 			{
@@ -243,40 +115,9 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			}
 		}
 
-		if ($isValid)
-		{
-			if($this->params->get('sandbox') == $transaction['livemode'])
-			{
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Transaction done in wrong mode.";
-			}
-		}
-
-		// 2013-01-31 nicholas: I removed those checks because the credit card
-		// information MUST NOT be sent back to the site. That's the whole point
-		// of using the bridge Javascript to get a token: we send the CC info
-		// directly to PayMill and let them return us a secure piece of data
-		// (token) that we can use to charge our users. This allows secure
-		// transactions even on servers not certified for PCI compliance.
-		/*
-		if($isValid) {
-			if(substr($data['card-number'], -4) != $transaction['payment']['last4']) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Creditcard number doesn't match.";
-			}
-		}
-
-		if($isValid) {
-			if($data['card-expiry-month'] != $transaction['payment']['expire_month']
-					|| $data['card-expiry-year'] != $transaction['payment']['expire_year']) {
-				$isValid = false;
-				$data['akeebasubs_failure_reason'] = "Expiry date doesn't match.";
-			}
-		}
-		*/
-
+		// CHECK: Is this transaction valid?
 		// Log the IPN data
-		$this->logIPN($transaction, $isValid);
+		$this->logIPN($data, $isValid, 'CALLBACK');
 
 		// Fraud attempt? Do nothing more!
 		if (!$isValid)
@@ -288,8 +129,239 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 				'&view=level&slug='.$level->slug.
 				'&layout='.JRequest::getCmd('layout','default');
 			$error_url = JRoute::_($error_url,false);
+
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
+
 			return false;
+		}
+
+		// ACTION: Initialise common variables
+		if ($isValid)
+		{
+			$apiKey = $this->getPrivateKey();
+			$apiEndpoint = 'https://api.paymill.de/v2/';
+			$db = JFactory::getDbo();
+		}
+
+		// CHECK: Do we have a user already defined in PayMill?
+		$user = JFactory::getUser($subscription->user_id);
+		$clientsObject = new Services_Paymill_Clients($apiKey, $apiEndpoint);
+		$filters = array(
+			'email'		=> $user->email
+		);
+		$clients = $clientsObject->get($filters);
+
+		// ACTION: Get the client ID or create and save a new user in PayMill if necessary
+		if (count($clients))
+		{
+			$clientRecord = array_pop($clients);
+		}
+		else
+		{
+			$params = array(
+				'email'       => $user->email,
+				'description' => $user->name . ' [' . $user->username . ']'
+			);
+
+			try
+			{
+				$clientRecord = $clientsObject->create($params);
+			}
+			catch (Exception $exc)
+			{
+				$isValid = false;
+				$params['akeebasubs_failure_reason'] = $e->getMessage();
+			}
+
+			// Log the user creation data
+			$this->logIPN($data, $isValid, 'USER');
+
+			// Fraud attempt? Do nothing more!
+			if (!$isValid)
+			{
+				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+					->setId($subscription->akeebasubs_level_id)
+					->getItem();
+				$error_url = 'index.php?option='.JRequest::getCmd('option').
+					'&view=level&slug='.$level->slug.
+					'&layout='.JRequest::getCmd('layout','default');
+				$error_url = JRoute::_($error_url,false);
+
+				JFactory::getApplication()->redirect($error_url,$params['akeebasubs_failure_reason'], 'error');
+
+				return false;
+			}
+		}
+		$client = $clientRecord['id'];
+
+		// CHECK: Do we already have a payment for this subscription?
+		// -- Load the processor key from database. This prevents race conditions.
+		$query = $db->getQuery(true)
+			->select($db->qn('processor_key'))
+			->from('#__akeebasubs_subscriptions')
+			->where($db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($subscription->akeebasubs_subscription_id));
+		$db->setQuery($query);
+		$payment_id = $db->loadResult();
+
+		// ACTION: Create and save a new payment for this subscription if there is no payment or transaction yet
+		if ((substr($payment_id, 0, 4) != 'pay_') && (substr($payment_id, 0, 5) != 'tran_'))
+		{
+			$params = array(
+				'client' => $client,
+				'token'  => $data['token']
+			);
+			$paymentsObject = new Services_Paymill_Payments($apiKey, $apiEndpoint);
+
+			try
+			{
+				$creditcard = $paymentsObject->create($params);
+			}
+			catch (Exception $exc)
+			{
+				$isValid = false;
+				$params['akeebasubs_failure_reason'] = $e->getMessage();
+			}
+
+			// Log the payment creation data
+			$this->logIPN($data, $isValid, 'PAYMENT');
+
+			// Fraud attempt? Do nothing more!
+			if (!$isValid)
+			{
+				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+					->setId($subscription->akeebasubs_level_id)
+					->getItem();
+				$error_url = 'index.php?option='.JRequest::getCmd('option').
+					'&view=level&slug='.$level->slug.
+					'&layout='.JRequest::getCmd('layout','default');
+				$error_url = JRoute::_($error_url,false);
+
+				JFactory::getApplication()->redirect($error_url,$params['akeebasubs_failure_reason'], 'error');
+
+				return false;
+			}
+
+			$subscription->processor_key = $creditcard['id'];
+			$payment_id = $creditcard['id'];
+
+			// Save the payment information WITHOUT using the table (skips the plugins)
+			// This prevents double payments from being recorded
+			$oUpdate = (object)array(
+				'akeebasubs_subscription_id'	=> $subscription->akeebasubs_subscription_id,
+				'processor_key'					=> $subscription->processor_key,
+				'state'							=> 'P',
+			);
+			JFactory::getDbo()->updateObject('#__akeebasubs_subscriptions', $oUpdate, 'akeebasubs_subscription_id');
+		}
+
+		// CHECK: Do we already have a transaction for this subscription?
+		// -- Load the processor key from database. This prevents race conditions.
+		$query = $db->getQuery(true)
+			->select($db->qn('processor_key'))
+			->from('#__akeebasubs_subscriptions')
+			->where($db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($subscription->akeebasubs_subscription_id));
+		$db->setQuery($query);
+		$payment_id = $db->loadResult();
+
+		// ACTION: Create a transaction if necessary
+		if (substr($payment_id, 0, 5) != 'tran_')
+		{
+			// First update the object with a fake transaction
+			$subscription->processor_key = 'tran_in_progress';
+
+			// Save the payment information WITHOUT using the table (skips the plugins)
+			// This prevents double payments from being recorded
+			$oUpdate = (object)array(
+				'akeebasubs_subscription_id'	=> $subscription->akeebasubs_subscription_id,
+				'processor_key'					=> $subscription->processor_key,
+				'state'							=> 'P',
+			);
+			JFactory::getDbo()->updateObject('#__akeebasubs_subscriptions', $oUpdate, 'akeebasubs_subscription_id');
+
+			// Create the transaction
+			$params = array(
+				'amount'		=> $data['amount'],
+				'currency'		=> $data['currency'],
+				'client'		=> $client,
+				'payment'		=> $payment_id,
+				'description'	=> $data['description']
+			);
+
+			try
+			{
+				$transactionsObject = new Services_Paymill_Transactions(
+					$apiKey, $apiEndpoint
+				);
+				$transaction = $transactionsObject->create($params);
+			}
+			catch (Exception $exc)
+			{
+				$isValid = false;
+				$params['akeebasubs_failure_reason'] = $e->getMessage();
+			}
+
+			// Log the payment creation data
+			$this->logIPN($data, $isValid, 'TRANSACTION');
+
+			if (!$isValid)
+			{
+				$transaction_id = $payment_id;
+			}
+			else
+			{
+				$transaction_id = $transaction['id'];
+			}
+
+			// First update the object
+			$subscription->processor_key = $transaction_id;
+
+			// Save the payment information WITHOUT using the table (skips the plugins)
+			// This prevents double payments from being recorded
+			$oUpdate = (object)array(
+				'akeebasubs_subscription_id'	=> $subscription->akeebasubs_subscription_id,
+				'processor_key'					=> $subscription->processor_key,
+			);
+			JFactory::getDbo()->updateObject('#__akeebasubs_subscriptions', $oUpdate, 'akeebasubs_subscription_id');
+
+			// Fraud attempt? Do nothing more!
+			if (!$isValid)
+			{
+				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+					->setId($subscription->akeebasubs_level_id)
+					->getItem();
+				$error_url = 'index.php?option='.JRequest::getCmd('option').
+					'&view=level&slug='.$level->slug.
+					'&layout='.JRequest::getCmd('layout','default');
+				$error_url = JRoute::_($error_url,false);
+
+				JFactory::getApplication()->redirect($error_url,$params['akeebasubs_failure_reason'], 'error');
+
+				return false;
+			}
+		}
+		else
+		{
+			// ACTION: If no transaction is necessary, show an error
+			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem();
+			$error_url = 'index.php?option='.JRequest::getCmd('option').
+				'&view=level&slug='.$level->slug.
+				'&layout='.JRequest::getCmd('layout','default');
+			$error_url = JRoute::_($error_url,false);
+
+			JFactory::getApplication()->redirect($error_url,'Cannot process the transaction twice. Wait to receive your subscription confirmation email and do not retry submitting the payment form again.', 'error');
+
+			return false;
+		}
+
+		if ($isValid)
+		{
+			if($this->params->get('sandbox') == $transaction['livemode'])
+			{
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = "Transaction done in wrong mode.";
+			}
 		}
 
 		// Payment status
@@ -315,10 +387,10 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-				'akeebasubs_subscription_id'	=> $id,
-				'processor_key'					=> $transaction['payment']['id'],
-				'state'							=> $newStatus,
-				'enabled'						=> 0
+			'akeebasubs_subscription_id'	=> $id,
+			'processor_key'					=> $transaction_id,
+			'state'							=> $newStatus,
+			'enabled'						=> 0
 		);
 		JLoader::import('joomla.utilities.date');
 		if($newStatus == 'C') {
@@ -335,7 +407,10 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+        $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem();
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
@@ -384,5 +459,65 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		}
 
 		return JHTML::_('select.genericlist', $options, 'card-expiry-year', 'class="input-small"', 'value', 'text', '', 'card-expiry-year');
+	}
+
+	/**
+	 * Logs the received IPN information to file
+	 *
+	 * @param   array    $data     Request data
+	 * @param   boolean  $isValid  Is it a valid payment?
+	 * @param   string   $type     The type of the record, for the automatic header
+	 * @param   string   $header   The header of this entry (leave null for automatic header)
+	 *
+	 * @return  void
+	 */
+	protected function logIPN($data, $isValid, $type = 'TRANSACTION', $header = null)
+	{
+		$config = JFactory::getConfig();
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$logpath = $config->get('log_path');
+		} else {
+			$logpath = $config->getValue('log_path');
+		}
+
+		$logFilenameBase = $logpath.'/akpayment_'.strtolower($this->ppName).'_ipn';
+
+		$logFile = $logFilenameBase.'.php';
+		JLoader::import('joomla.filesystem.file');
+		if(!JFile::exists($logFile)) {
+			$dummy = "<?php die(); ?>\n";
+			JFile::write($logFile, $dummy);
+		} else {
+			if(@filesize($logFile) > 1048756) {
+				$altLog = $logFilenameBase.'-1.php';
+				if(JFile::exists($altLog)) {
+					JFile::delete($altLog);
+				}
+				JFile::copy($logFile, $altLog);
+				JFile::delete($logFile);
+				$dummy = "<?php die(); ?>\n";
+				JFile::write($logFile, $dummy);
+			}
+		}
+		$logData = JFile::read($logFile);
+		if($logData === false) $logData = '';
+		$logData .= "\n" . str_repeat('-', 80);
+		$pluginName = strtoupper($this->ppName);
+
+		if ($header)
+		{
+			$logData .= $header;
+		}
+		else
+		{
+			$logData .= $isValid ? 'VALID '.$pluginName.' '.$type : 'INVALID '.$pluginName.' '.$type.' *** FRAUD ATTEMPT OR INVALID CALLBACK ***';
+		}
+
+		$logData .= "\nDate/time : ".gmdate('Y-m-d H:i:s')." GMT\n\n";
+		foreach($data as $key => $value) {
+			$logData .= '  ' . str_pad($key, 30, ' ') . $value . "\n";
+		}
+		$logData .= "\n";
+		JFile::write($logFile, $logData);
 	}
 }

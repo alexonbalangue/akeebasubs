@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
+	<name>Akeeba Subscriptions Payment - 2Checkout Standard Purchase Routine (with recurring support)</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2011-06-29</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKPAYMENT_2CONEW_DESCRIPTION</description>
+	<files>
+		<filename plugin="2conew">2conew.php</filename>
+		<folder>2conew</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_2conew.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akpayment_2conew.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="title" type="text" size="50" default=""
+					   label="PLG_AKPAYMENT_2CONEW_TITLE_LABEL"
+					   description="PLG_AKPAYMENT_2CONEW_TITLE_DESC"/>
+				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_2CONEW_PPIMAGE_LABEL" description="PLG_AKPAYMENT_2CONEW_PPIMAGE_DESC" />
+				<field type="spacer" />
+				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field type="spacer" />
+				<field name="sid" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_2CONEW_SID_LABEL"
+					description="PLG_AKPAYMENT_2CONEW_SID_DESC"/>
+				<field name="secret" type="text" size="50" default=""
+					label="PLG_AKPAYMENT_2CONEW_SECRET_LABEL"
+					description="PLG_AKPAYMENT_2CONEW_SECRET_DESC"/>
+				<field name="demo" type="radio" default="0"
+					label="PLG_AKPAYMENT_2CONEW_DEMO_LABEL"
+					description="PLG_AKPAYMENT_2CONEW_DEMO_DESC">
+				  <option value="0">JNO</option>
+				  <option value="1">JYES</option>
+				</field>
+				<field type="spacer" />
+				<field name="lang" type="list" default="en"
+					label="PLG_AKPAYMENT_2CONEW_LANG_LABEL"
+					description="PLG_AKPAYMENT_2CONEW_LANG_DESC">
+				  <option value="en">PLG_AKPAYMENT_2CONEW_LANG_EN</option>
+				  <option value="zh">PLG_AKPAYMENT_2CONEW_LANG_ZH</option>
+				  <option value="da">PLG_AKPAYMENT_2CONEW_LANG_DA</option>
+				  <option value="nl">PLG_AKPAYMENT_2CONEW_LANG_NL</option>
+				  <option value="fr">PLG_AKPAYMENT_2CONEW_LANG_FR</option>
+				  <option value="gr">PLG_AKPAYMENT_2CONEW_LANG_GR</option>
+				  <option value="el">PLG_AKPAYMENT_2CONEW_LANG_EL</option>
+				  <option value="it">PLG_AKPAYMENT_2CONEW_LANG_IT</option>
+				  <option value="jp">PLG_AKPAYMENT_2CONEW_LANG_JP</option>
+				  <option value="no">PLG_AKPAYMENT_2CONEW_LANG_NO</option>
+				  <option value="pt">PLG_AKPAYMENT_2CONEW_LANG_PT</option>
+				  <option value="sl">PLG_AKPAYMENT_2CONEW_LANG_SL</option>
+				  <option value="es_ib">PLG_AKPAYMENT_2CONEW_LANG_ES_IB</option>
+				  <option value="es_la">PLG_AKPAYMENT_2CONEW_LANG_ES_LA</option>
+				  <option value="sv">PLG_AKPAYMENT_2CONEW_LANG_SV</option>
+				</field>
+				<field name="pay_method" type="radio" default="cc"
+					label="PLG_AKPAYMENT_2CONEW_PAY_METHOD_LABEL"
+					description="PLG_AKPAYMENT_2CONEW_PAY_METHOD_DESC">
+				  <option value="cc">PLG_AKPAYMENT_2CONEW_PAY_METHOD_CC</option>
+				  <option value="al">PLG_AKPAYMENT_2CONEW_PAY_METHOD_AL</option>
+				  <option value="ppi">PLG_AKPAYMENT_2CONEW_PAY_METHOD_PPI</option>
+				</field>
+				<field name="checkout" type="radio" default="multi"
+					label="PLG_AKPAYMENT_2CONEW_CHECKOUT_PROCESS_LABEL"
+					description="PLG_AKPAYMENT_2CONEW_CHECKOUT_PROCESS_DESC">
+				  <option value="multi">PLG_AKPAYMENT_2CONEW_CHECKOUT_PROCESS_MULTI</option>
+				  <option value="single">PLG_AKPAYMENT_2CONEW_CHECKOUT_PROCESS_SINGLE</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

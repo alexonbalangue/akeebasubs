@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 class AkeebasubsToolbar extends FOFToolbar
 {
-	protected function renderSubmenu()
+	public function renderSubmenu()
 	{
 		$views = array(
 			'cpanel',
@@ -27,14 +27,19 @@ class AkeebasubsToolbar extends FOFToolbar
 				'blockrules',
 			),
 			'subscriptions',
-			'coupons',
+			'COM_AKEEBASUBS_MAINMENU_COUPONS' => array(
+				'coupons',
+				'apicoupons'
+			),
 			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array(
 				'affiliates',
 				'affpayments'
 			),
 			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array(
 				'tools',
-				'users'
+				'import',
+				'users',
+				'reports'
 			),
 			'COM_AKEEBASUBS_MAINMENU_INVOICES' => array(
 				'invoices',
@@ -276,6 +281,17 @@ class AkeebasubsToolbar extends FOFToolbar
 		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
 	}
 
+	public function onImportsAdd()
+	{
+		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
+
+		$icon = version_compare(JVERSION, '3.0', 'ge') ? 'download' : 'extension';
+		JToolBarHelper::custom('import', $icon, $icon, 'COM_AKEEBASUBS_IMPORT', false);
+		JToolbarHelper::divider();
+		JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
+	}
+
     public function onEmailtemplatesAdd()
     {
         // Quick hack to mark this record as new
@@ -286,23 +302,52 @@ class AkeebasubsToolbar extends FOFToolbar
 
     public function onEmailtemplatesEdit()
     {
+		parent::onEdit();
+
         if(!isset($this->_isNew))
         {
-            $options['class']   = 'preview';
+			JToolBarHelper::divider();
+
+			if (version_compare(JVERSION, '3.0', 'ge'))
+			{
+				$options['class']   = 'envelope';
+			}
+			else
+			{
+				$options['class']   = 'preview';
+			}
             $options['a.task']  = 'testtemplate';
             $options['a.href']  = '#';
             $options['text']    = JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_TESTTEMPLATE');
 
             $this->addCustomBtn('test-template', $options);
-            JToolBarHelper::divider();
         }
-        parent::onEdit();
     }
+
+	public function onToolsBrowse()
+	{
+		$subtitle_key = 'COM_AKEEBASUBS_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
+		JToolBarHelper::title(JText::_('COM_AKEEBASUBS').' &ndash; <small>'.JText::_($subtitle_key).'</small>', 'akeebasubs');
+
+		JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
+	}
+
+	public function onReports()
+	{
+		$this->onToolsBrowse();
+	}
 
     protected function addCustomBtn($id, $options = array())
     {
         $options = (array) $options;
-        $a_class = 'toolbar';
+		if (version_compare(JVERSION, '3.0', 'ge'))
+		{
+			$a_class = 'btn btn-small';
+		}
+		else
+		{
+			$a_class = 'toolbar';
+		}
         $href	 = '';
         $task	 = '';
         $text    = '';
@@ -348,9 +393,18 @@ class AkeebasubsToolbar extends FOFToolbar
         if($other)  $html .= ' '.$other;
         $html .= ' >';
 
-        $html .= '<span class="icon-32-'.$class.'" title="'.$text.'" > </span>';
-        $html .= $text;
-        $html .= '</a>';
+		if (version_compare(JVERSION, '3.0', 'ge'))
+		{
+			$html .= '<span class="icon icon-'.$class.'" title="'.$text.'" > </span>';
+		}
+		else
+		{
+			$html .= '<span class="icon-32-'.$class.'" title="'.$text.'" > </span>';
+		}
+
+		$html .= $text;
+
+		$html .= '</a>';
 
         $bar = JToolBar::getInstance();
         $bar->appendButton('Custom', $html, $id);

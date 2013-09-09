@@ -1,7 +1,52 @@
 <?php die(); ?>
 Akeeba Subscriptions 3.2.1
 ================================================================================
++ 2Checkout plugin with recurring payments support
++ #176 PaySafe Card payment method
 + #169 Surcharge per payment method
++ #177 Sort "My Subscriptions" page by active / waiting / expired status
++ #179 Import users from CSV
++ #163 Payment: ChasePaymentTech
++ #171 Coupons API, allows your trusted associates to create coupon codes for your site
++ #181 CRON URL for subscription expiration and expiration notification
++ Configuration wizard for new users
++ #127 WePay integration
+~ When free account activation is enabled send out a SEF activation URL (like Joomla! 3 does by default), working around severely broken mail clients (Microsoft Office Outlook)
+~ Reworked PayMill integration: more stable and with double charging prevention built in
+~ Changed the layout of the subscription level editor page to be newbie-friendly
+~ Added a "TEST" image for the None payment plugin to make it more obvious
+~ Added a check image for the Off-Line payment plugin to make it more obvious
+~ On popular demand: easier configuration for the Intellectual Property integration
+~ Rewritten AcyMailing integration using the official AcyMailing API for improved stability
+# [MEDIUM] #175 The re-login feature of the post-purchase message page didn't work reliably
+# [MEDIUM] Freshbooks integration would not install correctly
+# [MEDIUM] Projectfork4 integration would not install correctly
+# [MEDIUM] Using 100% coupon codes caused the subscription relations to be ignored
+# [MEDIUM] Users seeing other user's info / list of subscriptions when caching is being used (thank you Peter @ NoNumber.nl)
+# [MEDIUM] The "Thank You" page's message would be empty due to a bug in several payment plugins
+# [MEDIUM] Activation of free subscriptions not working on latest Joomla! versions due to changes in user account activation handling
+# [MEDIUM] Fatal error after subscription when you have multiple invoicing plugins enabled at the same time that both use the TCPDF library (e.g. ccInvoices and integrated invoicing)
+# [MEDIUM] Apparently PayPal Pro sometimes sends txn_type=pro_api in their IPNs, making PayPal Pro payments fail
+# [MEDIUM] Percentage-based flexible discounts in subscription level relations don't work
+# [MEDIUM] Test email button in e-mail template editor page not shown under Joomla! 3
+# [MEDIUM] No server-side check for empty password was present
+# [MEDIUM] Using Progressive Caching could result in wrong information being displayed
+# [LOW] The name and email should not display validation information the first time you load the subscription page
+# [LOW] Some third party plugins add an empty Itemid to the request data, screwing up the payment notification validation with some payment processors (e.g. PayPal)
+# [LOW] Custom fields should only allow specific characters in their slugs
+# [LOW] Coupon code field not shown  for free subscriptions when require valid coupon code is on
+# [LOW] Users with blocked access (payment not complete, free users needing to be verified by admins) were logged in automatically
+# [LOW] Users added to MijoShop were not automatically approved
+# [LOW] Sometimes the "Thank you" page's message would be empty, depending on your menu structure
+# [LOW] Reloading graphs from a past date would show all data from that date until today, not just 30 days after that date as it is supposed to
+# [LOW] Double processing of the "Thank you" and order cancellation page's text
+# [LOW] Notices thrown by 2Checkout integration plugin
+# [LOW] Do not set password setting in com_users was not respected when free account activation was enabled
+# [LOW] RoboKassa: sending the "currency" (actually: payment method) limits the payment options of the end user
+# [LOW] CLI CRON scripts not fully compatible with PHP CGI
+# [LOW] Community Builder synchronisation would result in extra fields' data stored as raw JSON in the Community Builder field
+# [LOW] SCnet integration would not pick up successful transactions with rare response codes
+# [LOW] ReCAPTCHA plugin doesn't recognise SSL correctly
 
 Akeeba Subscriptions 3.2.0
 ================================================================================
@@ -9,7 +54,7 @@ Akeeba Subscriptions 3.2.0
 + You can now configure whether the payment option selection will be hidden if you only have one one payment method available on a subscription level
 + #159 Authorize.net integration
 + #161 Mailchimp plugin: you can add people to specific MailChimp groups
-+ #164 Payment menthod: MoIP subscriptions
++ #164 Payment method: MoIP subscriptions
 + #167 New option to show a custom field on all levels except the selected ones
 ~ Custom fields restricted to specific subscription levels are now shown in the back-end user profile page
 ~ Hide the decimals in the Awesome and Strappy layouts if the price doesn't have a decimal part

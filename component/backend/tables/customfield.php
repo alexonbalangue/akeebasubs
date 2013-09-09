@@ -9,6 +9,28 @@ defined('_JEXEC') or die();
 
 class AkeebasubsTableCustomfield extends FOFTable
 {
+	public function check()
+	{
+		$result = parent::check();
+
+		if (empty($this->slug))
+		{
+			$this->setError(JText::_('COM_AKEEBASUBS_ERR_SLUG_EMPTY'));
+			$result = false;
+		}
+		else
+		{
+			$pattern = '/^[a-z_][a-z0-9_\-]*$/';
+			if (!preg_match($pattern, $this->slug))
+			{
+				$this->setError(JText::_('COM_AKEEBASUBS_ERR_SLUG_INVALID'));
+				$result = false;
+			}
+		}
+
+		return $result;
+	}
+
 	protected function onBeforeStore($updateNulls)
 	{
 		$result = parent::onBeforeStore($updateNulls);

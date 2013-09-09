@@ -369,7 +369,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 	 * Validates the incoming data against PayPal's IPN to make sure this is not a
 	 * fraudelent request.
 	 */
-	private function isValidIPN($data)
+	private function isValidIPN(&$data)
 	{
 		$sandbox = $this->params->get('sandbox',0);
 		$hostname = $sandbox ? 'www.sandbox.paypal.com' : 'www.paypal.com';
@@ -394,6 +394,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 
 		if (!$fp) {
 			// HTTP ERROR
+			$data['akeebasubs_ipncheck_failure'] = 'Could not open SSL connection to ' . $hostname . ':' . $port;
 			return false;
 		} else {
 			fputs ($fp, $header . $req);
@@ -402,6 +403,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				if (stristr($res, "VERIFIED")) {
 					return true;
 				} else if (stristr($res, "INVALID")) {
+					$data['akeebasubs_ipncheck_failure'] = 'Connected to ' . $hostname . ':' . $port . '; returned data was "INVALID"';
 					return false;
 				}
 			}

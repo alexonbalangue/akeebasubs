@@ -10,6 +10,13 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerInvoices extends FOFController
 {
+	public function __construct($config = array())
+	{
+		parent::__construct($config);
+
+		$this->cacheableTasks = array();
+	}
+
 	public function download($cachable = false, $urlparams = false)
 	{
 		// Load the model
@@ -57,6 +64,10 @@ class AkeebasubsControllerInvoices extends FOFController
 		{
 			$basename = $item->display_number;
 		}
+
+		// Add extension
+		$basename .= '.pdf';
+
 		if (isset($_SERVER['HTTP_USER_AGENT']) && strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 			$header_file = preg_replace('/\./', '%2e', $filename, substr_count($basename, '.') - 1);
 

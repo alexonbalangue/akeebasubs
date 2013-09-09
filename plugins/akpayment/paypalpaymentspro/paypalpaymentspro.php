@@ -253,7 +253,10 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		}
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+        $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+            ->setId($subscription->akeebasubs_level_id)
+            ->getItem();
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
@@ -268,7 +271,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 
 		// Check txn_type; we only accept web_accept transactions with this plugin
 		if($isValid) {
-			$validTypes = array('web_accept','recurring_payment','subscr_payment','express_checkout');
+			$validTypes = array('web_accept','recurring_payment','subscr_payment','express_checkout','pro_api');
 			$isValid = in_array($data['txn_type'], $validTypes);
 			if(!$isValid) {
 				$data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";

@@ -14,7 +14,6 @@ $this->loadHelper('modules');
 $this->loadHelper('format');
 $this->loadHelper('message');
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
-if(!class_exists('AkeebasubsHelperImage')) die('SKATA');
 
 // Take display VAT into account
 $vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);

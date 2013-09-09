@@ -48,6 +48,10 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		if(empty($alloPass)) {
 			return JError::raiseError(500, 'Cannot proceed with the payment. No alloPass information are definied for this subscription.');
 		}
+        
+		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem();
 
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
@@ -272,7 +276,7 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 		}
 		$layout = ($action == 'cancel') ? 'cancel' : 'order';
 
-		$url = 'index.php?option=com_akeebasubs&view=message&layout=default&slug=' . $slug . '&layout=' . $layout . '&subid=' . $subscription->akeebasubs_subscription_id;
+		$url = 'index.php?option=com_akeebasubs&view=message&slug=' . $slug . '&layout=' . $layout . '&subid=' . $subscription->akeebasubs_subscription_id;
 		$app = JFactory::getApplication();
 		$app->redirect($url);
 
@@ -334,8 +338,6 @@ class plgAkpaymentAlloPass extends plgAkpaymentAbstract
 	 */
 	private function isValidIPN($data)
 	{
-		var_dump($data);die();
-
 		$secretKey = $this->params->get('skey','');
 
 		$apiHash = 'sha1';

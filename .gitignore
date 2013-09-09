@@ -1,5 +1,6 @@
 /.buildpath
 /.settings
+.idea/*
 /Akeeba Subscriptions.esproj
 /relink.sh
 /release
@@ -43,3 +44,7 @@ component/backend/invoices/*.pdf
 component/backend/assets/tcpdf/certificates/*.cer
 
 _test
+
+/.idea
+plugins/akpayment/mobilpaycc/mobilpaycc/private/*.cer
+plugins/akpayment/mobilpaysms/mobilpaysms/private/*.cer

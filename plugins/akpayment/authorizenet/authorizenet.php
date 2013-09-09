@@ -19,14 +19,14 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 			'ppKey'			=> 'PLG_AKPAYMENT_AUTHORIZENET_TITLE',
 			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/authorizenet-logo.gif',
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -36,7 +36,7 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$nameParts = explode(' ', trim($user->name), 2);
 		$firstName = $nameParts[0];
 		if(count($nameParts) > 1) {
@@ -44,22 +44,22 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
+
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-		
+
 		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
-		
+
 		$data = (object)array(
 			//'url' => 'https://test.authorize.net/gateway/transact.dll',
 			'url'					=> 'https://secure.authorize.net/gateway/transact.dll',
@@ -86,16 +86,16 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 			'x_relay_response'		=> 'TRUE',
 			'x_relay_url'			=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=authorizenet&sid='.$subscription->akeebasubs_subscription_id
 		);
-		
+
 		$state = trim($kuser->state);
 		if(!empty($state)) {
 			$data->x_state = $state;
 		}
-		
+
 		if($kuser->isbusiness) {
 			$data->x_company = trim($kuser->businessname);
 		}
-		
+
 		$transactionKey = trim($this->params->get('key',''));
 		$data->x_fp_hash = $this->getFingerprint(
 				$data->x_login,
@@ -109,17 +109,17 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 		@ob_start();
 		include dirname(__FILE__).'/authorizenet/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'Invalid response received.';
@@ -136,11 +136,16 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 					$subscription = null;
 					$isValid = false;
 				}
+                $slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                    ->setId($subscription->akeebasubs_level_id)
+                    ->getItem()
+                    ->slug;
 			} else {
 				$isValid = false;
+                $slug = '';
 			}
 		}
-        
+
 		// Check that the transaction has not been previously processed
 		$transactionId = $this->getTransactionNumber($data);
 		if($isValid && !is_null($subscription)) {
@@ -150,7 +155,7 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "I will not process the same transaction twice";
 			}
 		}
-		
+
 		// Check that amount_gross is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
@@ -167,14 +172,14 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-			
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$subscription->slug.
+				'&view=level&slug='.$slug.
 				'&layout='.JRequest::getCmd('layout','default');
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
@@ -214,32 +219,32 @@ class plgAkpaymentAuthorizeNet extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&layout=default&slug='.$subscription->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}
-	
+
 	private function getFingerprint($apiLoginId, $transactionKey, $amount, $sequence, $timestamp, $currencyCode)
     {
         if(function_exists('hash_hmac')) {
-            return hash_hmac("md5", $apiLoginId . "^" . $sequence . "^" . $timestamp . "^" . $amount . "^" . $currencyCode, $transactionKey); 
+            return hash_hmac("md5", $apiLoginId . "^" . $sequence . "^" . $timestamp . "^" . $amount . "^" . $currencyCode, $transactionKey);
         }
         return bin2hex(mhash(MHASH_MD5, $apiLoginId . "^" . $sequence . "^" . $timestamp . "^" . $amount . "^" . $currencyCode, $transactionKey));
     }
-	
+
 	private function getTransactionNumber($data)
 	{
 		$testMode = $this->params->get('sandbox',0);
 		if($testMode) {
 			// The param x_trans_id is always 0 in test-mode.
 			// For this case generate another unique id:
-			return md5($data['x_invoice_num'] . time());	
+			return md5($data['x_invoice_num'] . time());
 		}
 		return $data['x_trans_id'];
 	}
-	
+
 	private function isValidIPN($data)
 	{
 		$hashValue = trim($this->params->get('hash',''));

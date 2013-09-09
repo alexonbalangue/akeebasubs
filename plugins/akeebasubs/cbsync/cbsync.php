@@ -33,10 +33,10 @@ class plgAkeebasubsCbsync extends JPlugin
 			->from($db->qn('#__comprofiler'))
 			->where($db->qn('user_id') . '=' . $db->q($user_id));
 		$db->setQuery($query);
-		$record = $db->loadObject();
+		$record = $db->loadAssoc();
 
 		// If we don't have profile records just quit
-		if (!is_object($record))
+		if (!is_array($record) || empty($record))
 		{
 			return array();
 		}
@@ -51,31 +51,31 @@ class plgAkeebasubsCbsync extends JPlugin
 		}
 
 		// Special case: country
-		if (isset($record->cb_country))
+		if (isset($record['cb_country']))
 		{
-			$country = $record->cb_country;
+			$country = $record['cb_country'];
 			if(in_array($country, AkeebasubsHelperSelect::$countries))
 			{
-				$record->cb_country = array_search($country, AkeebasubsHelperSelect::$countries);
+				$record['cb_country'] = array_search($country, AkeebasubsHelperSelect::$countries);
 			}
 			else
 			{
-				$record->cb_country = 'US';
+				$record['cb_country'] = 'US';
 			}
 		}
 
 		// Special case: state
-		if (isset($record->cb_state))
+		if (isset($record['cb_state']))
 		{
-			if (isset($record->cb_country))
+			if (isset($record['cb_country']))
 			{
-				$country = $record->cb_country;
+				$country = $record['cb_country'];
 			}
 			else
 			{
 				$country = 'US';
 			}
-			$state = $record->cb_state;
+			$state = $record['cb_state'];
 			$states = AkeebasubsHelperSelect::$countries[$country];
 
 			if(in_array($state, $states))
@@ -86,7 +86,7 @@ class plgAkeebasubsCbsync extends JPlugin
 			{
 				$state = '';
 			}
-			$record->cb_state = $state;
+			$record['cb_state'] = $state;
 		}
 
 		// Check for basic information
@@ -94,18 +94,18 @@ class plgAkeebasubsCbsync extends JPlugin
 		foreach($basic_keys as $key)
 		{
 			$key = 'cb_' . $key;
-			if(isset($record->$key))
+			if (array_key_exists($key, $record))
 			{
-				$ret[$key] = $record->$key;
-				unset($record->$key);
+				$ret[$key] = $record[$key];
+				unset($record[$key]);
 			}
 		}
 
 		// The rest of the records is treated as extra fields
 		$params = array();
-		if (!empty($rows))
+		if (!empty($record))
 		{
-			foreach($rows as $key => $row)
+			foreach($record as $key => $row)
 			{
 				if(substr($key,0,3) != 'cb_')
 				{
@@ -113,9 +113,10 @@ class plgAkeebasubsCbsync extends JPlugin
 				}
 				$key = substr($key, 3);
 				$ikey ='cb_'.$key;
-				$params[$key] = $record->$ikey;
+				$params[$key] = $record[$ikey];
 			}
 		}
+
 		$ret['params'] = $params;
 
 		// Return result
@@ -208,7 +209,8 @@ class plgAkeebasubsCbsync extends JPlugin
 		{
 			foreach ($params as $k => $v)
 			{
-				$data['cb_'.$k] = json_encode($v);
+				//$data['cb_'.$k] = json_encode($v);
+				$data['cb_'.$k] = $v;
 			}
 		}
 

@@ -17,6 +17,8 @@ $this->loadHelper('cparams');
 	</div>
 	<?php endif;?>
 
+	<?php echo $this->loadTemplate('wizard'); ?>
+
 	<?php if(JComponentHelper::getParams('com_akeebasubs')->get('show2copromo',1)): ?>
 	<div class="row-fluid">
 		<div class="well">
@@ -43,7 +45,7 @@ $this->loadHelper('cparams');
 				of this special offer today!
 			</p>
 			<div class="form-actions">
-				<a class="btn btn-success btn-large" href="http://www.2checkout.com">
+				<a class="btn btn-success btn-large" href="https://www.2checkout.com/referral?r=akeebaloves2co">
 					<i class="icon-shopping-cart icon-white"></i> Take me to www.2checkout.com
 				</a>
 				<a class="btn btn-danger" href="index.php?option=com_akeebasubs&view=cpanel&task=hide2copromo">
@@ -73,6 +75,7 @@ $this->loadHelper('cparams');
 							->since((gmdate('Y')-1).'-01-01 00:00:00')
 							->until((gmdate('Y')-1).'-12-31 23:59:59')
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal();
 					?>
@@ -87,6 +90,7 @@ $this->loadHelper('cparams');
 							->until((gmdate('Y')-1).'-12-31 23:59:59')
 							->moneysum(1)
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal()
 					)?>
@@ -102,6 +106,7 @@ $this->loadHelper('cparams');
 							->since(gmdate('Y').'-01-01')
 							->until(gmdate('Y').'-12-31 23:59:59')
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal()
 						?>
@@ -116,6 +121,7 @@ $this->loadHelper('cparams');
 								->until(gmdate('Y').'-12-31 23:59:59')
 								->moneysum(1)
 								->nozero(1)
+								->nojoins(1)
 								->paystate('C')
 								->getTotal()
 						)?>
@@ -155,6 +161,7 @@ $this->loadHelper('cparams');
 							->since($y.'-'.$m.'-01')
 							->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal()
 						?>
@@ -169,6 +176,7 @@ $this->loadHelper('cparams');
 								->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 								->moneysum(1)
 								->nozero(1)
+								->nojoins(1)
 								->paystate('C')
 								->getTotal()
 						)?>
@@ -200,6 +208,7 @@ $this->loadHelper('cparams');
 							->since(gmdate('Y').'-'.gmdate('m').'-01')
 							->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal()
 						?>
@@ -214,6 +223,7 @@ $this->loadHelper('cparams');
 								->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 								->moneysum(1)
 								->nozero(1)
+								->nojoins(1)
 								->paystate('C')
 								->getTotal()
 						)?>
@@ -229,6 +239,7 @@ $this->loadHelper('cparams');
 							->since( gmdate('Y-m-d', time()-7*24*3600) )
 							->until( gmdate('Y-m-d') )
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal()
 						?>
@@ -243,6 +254,7 @@ $this->loadHelper('cparams');
 								->until( gmdate('Y-m-d') )
 								->moneysum(1)
 								->nozero(1)
+								->nojoins(1)
 								->paystate('C')
 								->getTotal()
 						)?>
@@ -265,6 +277,7 @@ $this->loadHelper('cparams');
 							->since( $yesterday )
 							->until( $date->format("Y-m-d") )
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal()
 						?>
@@ -279,6 +292,7 @@ $this->loadHelper('cparams');
 								->until( $date->format("Y-m-d") )
 								->moneysum(1)
 								->nozero(1)
+								->nojoins(1)
 								->paystate('C')
 								->getTotal()
 						)?>
@@ -299,6 +313,7 @@ $this->loadHelper('cparams');
 							->since( $date->format("Y-m-d") )
 							->until( $expiry->format("Y-m-d") )
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal()
 						?>
@@ -314,6 +329,7 @@ $this->loadHelper('cparams');
 								->since( $date->format("Y-m-d") )
 								->until( $expiry->format("Y-m-d") )
 								->nozero(1)
+								->nojoins(1)
 								->paystate('C')
 								->moneysum(1)
 								->getTotal()
@@ -346,11 +362,13 @@ $this->loadHelper('cparams');
 							->since(gmdate('Y').'-'.gmdate('m').'-01')
 							->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 							->nozero(1)
+							->nojoins(1)
 							->paystate('C')
 							->getTotal();
 						$summoney = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since(gmdate('Y').'-'.gmdate('m').'-01')
 							->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
+							->nojoins(1)
 							->moneysum(1)
 							->paystate('C')
 							->getTotal();
@@ -403,6 +421,8 @@ $this->loadHelper('cparams');
 					<?php
 						echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->paystate('C')
+							->nozero(1)
+							->nojoins(1)
 							->enabled(1)
 							->getTotal();
 					?>
