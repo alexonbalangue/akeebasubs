@@ -11,18 +11,22 @@
 	$app       = JFactory::getApplication();
 	$userModel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
 
+	// I have to do this trick since Joomla select list input always inject a "no value" option
+	// In this way I can force a value even if the user selected the "no value" option
+	if($this->input->getString('getRenewals', 1) == '')
+	{
+		$this->input->set('getRenewals', 1);
+	}
+
 	$newInput = $this->input;
 	$newInput->set('getRenewals', $this->input->getInt('getRenewals', 1));
+
 	// Injects the new input, so I can use all FOF built-in function without messing up other views
 	$userModel->setInput($newInput);
-
-	// First of all, let's call model functions to get some relevant info
-	//$userModel->getRenewals(1);
 
 	// Then modify the model in order to get a nice page
 	$userModel->limit($this->input->getInt('limit', $app->getCfg('list_limit')))
 			  ->limitstart($this->input->getInt('limitstart', 0));
-
 
 	// Since I'm manually handling the model, I have to manually set View params, too
 	$this->lists->set('order', $userModel->getState('filter_order', 'id', 'cmd'));
