@@ -17,14 +17,23 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		$this->cacheableTasks = array();
 	}
 
-	public function execute($task) {
-		$allowedTasks = array('browse', 'read');
-		if(in_array($task,array('edit','add'))) $task = 'read';
-		if(!in_array($task,$allowedTasks)) return false;
+	public function execute($task)
+	{
+		$allowedTasks = array('browse', 'read', 'save');
 
-		$this->input->set('task',$task);
+		if(in_array($task, array('edit','add')))
+		{
+			$task = 'read';
+		}
 
-		parent::execute($task);
+		if(!in_array($task, $allowedTasks))
+		{
+			return false;
+		}
+
+		$this->input->set('task', $task);
+
+		return parent::execute($task);
 	}
 
 	public function onBeforeBrowse()
@@ -127,5 +136,48 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		}
 
 		return true;
+	}
+
+	/**
+	 * Performs auth checks before saving subscription data
+	 *
+	 * @return bool
+	 */
+	protected function onBeforeSave()
+	{
+		$user  = JFactory::getUser();
+		$subId = $this->input->getInt('akeebasubs_subscription_id', 0);
+
+		// Guest user, go away!
+		if($user->guest)
+		{
+			return false;
+		}
+
+		// No subscription info? Go away!
+		if(!$subId)
+		{
+			return false;
+		}
+
+		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->getItem($subId);
+
+		// Editing a subscription of another user? Go away!
+		if($user->id != $sub->user_id)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	public function save()
+	{
+		// CSRF prevention
+		if($this->csrfProtection)
+		{
+			$this->_csrfProtection();
+		}
 	}
 }

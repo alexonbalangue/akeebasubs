@@ -43,6 +43,12 @@ class plgAkeebasubsCustomfields extends JPlugin
 	 */
 	public function onSubscriptionFormRender($userparams, $cache)
 	{
+		// @TODO Handle user edit in custom fields, too
+		if(isset($cache['useredit']))
+		{
+			return array();
+		}
+
 		return $this->_customFieldRender('user', $cache, $userparams);
 	}
 

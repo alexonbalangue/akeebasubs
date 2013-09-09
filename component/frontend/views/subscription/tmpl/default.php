@@ -149,8 +149,13 @@ if(!empty($subfieldsHTML)):
 ?>
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')?></legend>
-		<form class="form form-horizontal">
+		<form class="form form-horizontal" method="post" action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=', false)?>">
 		<?php echo $subfieldsHTML ?>
+			<button type="submit" class="btn btn-primary pull-right">
+				<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_BUTTON_UPDATE') ?>
+			</button>
+
+			<input type="hidden" name="akeebasubs_subscription_id" value="<?php echo $this->item->akeebasubs_subscription_id?>"/>
 		</form>
 	</fieldset>
 <?php endif; ?>
