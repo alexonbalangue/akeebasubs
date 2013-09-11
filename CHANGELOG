@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.2.2
+================================================================================
+! An annoying –but harmless– fatal error was shown on upgrade from older versions
+
 Akeeba Subscriptions 3.2.1
 ================================================================================
 + 2Checkout plugin with recurring payments support

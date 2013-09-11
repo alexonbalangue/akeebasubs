@@ -134,6 +134,7 @@ class Com_AkeebasubsInstallerScript
 				'realex'				=> 0,
 				'robokassa'				=> 0,
 				'saferpay'				=> 0,
+				'sagepay'				=> 0,
 				'scnet'					=> 0,
 				'scnetintegrated'		=> 0,
 				'skrill'				=> 0,
@@ -407,7 +408,11 @@ class Com_AkeebasubsInstallerScript
 
 		if (defined('FOF_INCLUDED'))
 		{
-			FOFPlatform::getInstance()->clearCache();
+			$platform = FOFPlatform::getInstance();
+			if (method_exists($platform, 'clearCache'))
+			{
+				FOFPlatform::getInstance()->clearCache();
+			}
 		}
 	}
 
