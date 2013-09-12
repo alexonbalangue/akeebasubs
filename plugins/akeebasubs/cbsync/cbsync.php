@@ -76,7 +76,7 @@ class plgAkeebasubsCbsync extends JPlugin
 				$country = 'US';
 			}
 			$state = $record['cb_state'];
-			$states = AkeebasubsHelperSelect::$countries[$country];
+			$states = AkeebasubsHelperSelect::$states[$country];
 
 			if(in_array($state, $states))
 			{
