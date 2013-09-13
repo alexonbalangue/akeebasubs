@@ -46,6 +46,10 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 			return $app->close();
 		}
 
+		$kuser = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+			->user_id($user->id)
+			->getFirstItem();
+
 		$data = (object)array(
 			'callback'	=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=scnetintegrated',
 			'arg0'		=> $this->getMerchantID(),
@@ -160,6 +164,30 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		}
 
 		// Log the IPN data
+		$ipnData = array();
+		foreach ($data as $k => $v)
+		{
+			switch ($k)
+			{
+				case 'akeebasubs_failure_reason':
+					$ipnData[$k] = $v;
+					break;
+
+				case 'arg6':
+				case 'arg2':
+				case 'arg3':
+				case 'arg4':
+					$ipnData['FORM ' . $k] = str_repeat('*', strlen($v)) . ' (masked; sensitive information)';
+					break;
+
+				default:
+					$ipnData['FORM ' . $k] = $v;
+			}
+		}
+		foreach ($response->return as $k => $v)
+		{
+			$ipnData['RESP ' . $k] = $v;
+		}
 		$this->logIPN($response->return, $isValid);
 
 		// Fraud attempt? Do nothing more!
