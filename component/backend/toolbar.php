@@ -58,6 +58,8 @@ class AkeebasubsToolbar extends FOFToolbar
 			$key = array_search('blockrules', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
 			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
 
+			unset($views['reports']);
+
 			unset($views['COM_AKEEBASUBS_MAINMENU_INVOICES']);
 		}
 
