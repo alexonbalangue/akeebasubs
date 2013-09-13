@@ -17,4 +17,13 @@ defined('_JEXEC') or die;
 			</a>
 		</div>
 	</div>
+	<div style="float:left;">
+		<div class="icon">
+			<a href="index.php?option=com_akeebasubs&view=reports&layout=expirations">
+				<img alt="<?php echo JText::_('COM_AKEEBASUBS_REPORTS_EXPIRATIONS');?>"
+				     src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/dashboard/expires.png')?>" />
+				<span><?php echo JText::_('COM_AKEEBASUBS_REPORTS_EXPIRATIONS');?></span>
+			</a>
+		</div>
+	</div>
 </div>
