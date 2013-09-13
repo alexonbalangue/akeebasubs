@@ -5755,6 +5755,40 @@ Rule C gives $ 30 discount</programlisting>
       </section>
     </section>
 
+    <section xml:id="reports">
+      <title>Reports</title>
+
+      <important>
+        <para>This feature is only available in Akeeba Subscriptions
+        Professional.</para>
+      </important>
+
+      <para>Akeeba Subscriptions Professional allows you to produce reports
+      which give you deeper insight into your clients purchasing patterns. You
+      can access the reports from the Reports link at the top of each page of
+      the component. The available reports are</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Renewals by user</term>
+
+          <listitem>
+            <para>You can see the renewals per user and subscription level, as
+            well as which users have not renewed their subscriptions</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Expirations</term>
+
+          <listitem>
+            <para>Produces a chart which displays subscription expirations by
+            week, over a 4 month period.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
     <section xml:id="customising-akeeba-subs">
       <title>Customising Akeeba Subscriptions</title>
 
