@@ -21,15 +21,21 @@ class AkeebasubsControllerSubscriptions extends FOFController
 
 	public function execute($task)
 	{
-		$allowedTasks	 = array('browse', 'read');
-		if (in_array($task, array('edit', 'add')))
-			$task			 = 'read';
-		if (!in_array($task, $allowedTasks))
+		$allowedTasks = array('browse', 'read', 'save');
+
+		if(in_array($task, array('edit','add')))
+		{
+			$task = 'read';
+		}
+
+		if(!in_array($task, $allowedTasks))
+		{
 			return false;
+		}
 
 		$this->input->set('task', $task);
 
-		parent::execute($task);
+		return parent::execute($task);
 	}
 
 	public function onBeforeBrowse()
@@ -199,4 +205,91 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		}
 	}
 
+	/**
+	 * Performs auth checks before saving subscription data
+	 *
+	 * @return bool
+	 */
+	protected function onBeforeSave()
+	{
+		$user  = JFactory::getUser();
+		$subId = $this->input->getInt('akeebasubs_subscription_id', 0);
+
+		// Guest user, go away!
+		if($user->guest)
+		{
+			return false;
+		}
+
+		// No subscription info? Go away!
+		if(!$subId)
+		{
+			return false;
+		}
+
+		// No info about custom fields? It's the only thing that user can update, so why continuing?
+		if(!$this->input->get('subcustom', '', 2))
+		{
+			return false;
+		}
+
+		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				->getItem($subId);
+
+		// Editing a subscription of another user? Go away!
+		if($user->id != $sub->user_id)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	public function save()
+	{
+		// CSRF prevention
+		if($this->csrfProtection)
+		{
+			$this->_csrfProtection();
+		}
+
+		// Set error message in case data won't be updated below
+		$msgType = 'error';
+		$msg     = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_UPDATE_ERROR');
+
+		$subcustom = $this->input->get('subcustom', '', 2);
+
+		// Let's setup a new input object, so I can reuse the code without messing up things
+		$subId    = $this->input->getInt('akeebasubs_subscription_id');
+		$newInput = clone $this->input;
+		$newInput->set('opt', 'plugins');
+		$newInput->set('id', $subId);
+
+		$subscribes = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel');
+		$subscribes->setInput($newInput);
+
+		// Subscription validation (plugins only)
+		$data = $subscribes->getValidation();
+
+		if($data->custom_valid && $data->subscription_custom_valid)
+		{
+			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
+
+			// Let's get the info from previous slave subscriptions
+			if(isset($table->params['slavesubs_ids']) && !empty($table->params['slavesubs_ids']))
+			{
+				$subcustom['slavesubs_ids'] = $table->params['slavesubs_ids'];
+			}
+
+			$table->params = json_encode($subcustom);
+			if($table->store())
+			{
+
+				$msgType = 'info';
+				$msg     = JText::_('COM_AKEEBASUBS_SUBSCRIPTION_UPDATE_OK');
+			}
+		}
+
+		$this->setRedirect(JRoute::_('index.php?option=com_akeebasubs&view=subscription&id='.$subId, false), $msg, $msgType);
+	}
 }
