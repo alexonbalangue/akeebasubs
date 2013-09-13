@@ -13,5 +13,6 @@ class AkeebasubsControllerReports extends FOFController
 		parent::__construct($config);
 
 		$this->registerTask('getexpirations', 'browse');
+		$this->registerTask('renewals', 'browse');
 	}
 }

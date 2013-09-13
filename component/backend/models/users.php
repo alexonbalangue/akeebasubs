@@ -182,11 +182,9 @@ class AkeebasubsModelUsers extends FOFModel
 		// Ok I asked to get all the users with/without at least a renewal. So first of all let's get the expired ones
 		if(!is_null($state->getRenewals))
 		{
-			$renewals = $this->getRenewals($state->getRenewals);
-			if($renewals)
-			{
-				$query->where($db->qn('tbl').'.'.$db->qn('user_id').' IN('.implode(',', $renewals).')');
-			}
+			$renewals = array_merge($this->getRenewals($state->getRenewals), array(-1));
+
+			$query->where($db->qn('tbl').'.'.$db->qn('user_id').' IN('.implode(',', $renewals).')');
 		}
 	}
 
@@ -234,6 +232,11 @@ class AkeebasubsModelUsers extends FOFModel
 		$jDate = new JDate();
 		$state = $this->getFilterValues();
 
+		if(!in_array($type, array(1, -1)))
+		{
+			return array();
+		}
+
 		if(isset($return[$type]))
 		{
 			return $return[$type];
@@ -272,12 +275,20 @@ class AkeebasubsModelUsers extends FOFModel
 							   ->where('user_id IN('.implode(',', $expired).')');
 				$renewed = $db->setQuery($subquery)->loadColumn();
 
-				$subquery = $db->getQuery(true)
-							   ->select('user_id')
-							   ->from('#__akeebasubs_subscriptions')
-							   ->where('publish_down < '.$db->q($jDate->toSql()))
-							   ->where('user_id NOT IN('.implode(',', $renewed).')');
-				$return[$type] = $db->setQuery($subquery)->loadColumn();
+				if($renewed)
+				{
+					$subquery = $db->getQuery(true)
+						->select('user_id')
+						->from('#__akeebasubs_subscriptions')
+						->where('publish_down < '.$db->q($jDate->toSql()))
+						->where('user_id NOT IN('.implode(',', $renewed).')');
+					$return[$type] = $db->setQuery($subquery)->loadColumn();
+				}
+				else
+				{
+					$return[$type] = array();
+				}
+
 			}
 		}
 
