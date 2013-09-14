@@ -170,7 +170,14 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			catch (Exception $exc)
 			{
 				$isValid = false;
-				$params['akeebasubs_failure_reason'] = $e->getMessage();
+				$params['akeebasubs_failure_reason'] = $exc->getMessage();
+			}
+
+			if (!array_key_exists('id', $clientRecord) || empty($clientRecord['id']))
+			{
+				// Apparently the client creation failed
+				$isValid = false;
+				$params['akeebasubs_failure_reason'] = JText::_('PLG_AKPAYMENT_PAYMILL_ERROR_CLIENT');
 			}
 
 			// Log the user creation data
@@ -219,7 +226,14 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			catch (Exception $exc)
 			{
 				$isValid = false;
-				$params['akeebasubs_failure_reason'] = $e->getMessage();
+				$params['akeebasubs_failure_reason'] = $exc->getMessage();
+			}
+
+			if (!array_key_exists('id', $creditcard) || empty($creditcard['id']))
+			{
+				// Apparently the credit card capture creation failed
+				$isValid = false;
+				$params['akeebasubs_failure_reason'] = JText::_('PLG_AKPAYMENT_PAYMILL_ERROR_CC');
 			}
 
 			// Log the payment creation data
@@ -297,7 +311,14 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			catch (Exception $exc)
 			{
 				$isValid = false;
-				$params['akeebasubs_failure_reason'] = $e->getMessage();
+				$params['akeebasubs_failure_reason'] = $exc->getMessage();
+			}
+
+			if (!array_key_exists('id', $transaction) || empty($transaction['id']))
+			{
+				// Apparently the transaction creation failed
+				$isValid = false;
+				$params['akeebasubs_failure_reason'] = JText::_('PLG_AKPAYMENT_PAYMILL_ERROR_TRANS');
 			}
 
 			// Log the payment creation data
