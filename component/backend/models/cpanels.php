@@ -202,7 +202,7 @@ class AkeebasubsModelCpanels extends FOFModel
 		),
 
 		array(
-			'table' => 'akeebasubs_level',
+			'table' => 'akeebasubs_levels',
 			'field' => 'orderurl',
 			'files' =>array(
 				'updates/mysql/3.2.1-2013-08-20.sql',
