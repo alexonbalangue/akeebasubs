@@ -200,6 +200,22 @@ class AkeebasubsModelCpanels extends FOFModel
 				'updates/mysql/3.2.1-2013-08-06.sql',
 			)
 		),
+
+		array(
+			'table' => 'akeebasubs_level',
+			'field' => 'orderurl',
+			'files' =>array(
+				'updates/mysql/3.2.1-2013-08-20.sql',
+			)
+		),
+
+		array(
+			'table' => 'akeebasubs_coupons',
+			'field' => 'email',
+			'files' =>array(
+				'updates/mysql/3.2.1-2013-08-22.sql',
+			)
+		),
 	);
 
 	/**
