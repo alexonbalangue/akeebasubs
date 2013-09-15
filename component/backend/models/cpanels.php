@@ -301,8 +301,15 @@ class AkeebasubsModelCpanels extends FOFModel
 					}
 				}
 			}
+            
+            // Finally clear FOF's cache
+            $fof_platform = FOFPlatform::getInstance();
+            if (method_exists($fof_platform, 'clearCache'))
+            {
+                FOFPlatform::getInstance()->clearCache();
+            }
 		}
-
+        
 		return $this;
 	}
 
