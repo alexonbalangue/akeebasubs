@@ -3,6 +3,7 @@ Akeeba Subscriptions 3.2.3
 ================================================================================
 + (PRO) Reports (Renewals by user and Expirations by day)
 # [HIGH] Fatal error when "Validate free subscriptions" is enabled and the site options is to have admins validate new registrations
+# [HIGH] Excessive memory usage when a non-subscriber tries to view the My Subscriptions page and you have several hundreds of invoices generated.
 # [MEDIUM] PayMill: When communication with PayMill's server fails there is no indication that the transaction failed
 # [LOW] Community Builder synchronisation throws a warning message and doesn't sync the state field
 
