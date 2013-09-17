@@ -253,7 +253,8 @@ class AkeebasubsTableSubscription extends FOFTable
 			'gross_amount', 'tax_percent', 'akeebasubs_coupon_id',
 			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id',
 			'affiliate_comission', 'akeebasubs_invoice_id', 'prediscount_amount',
-			'discount_amount', 'contact_flag', 'first_contact', 'second_contact'
+			'discount_amount', 'contact_flag', 'first_contact', 'second_contact',
+			'params'
 		);
 
 		$info = array(

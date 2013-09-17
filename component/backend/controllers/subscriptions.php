@@ -67,4 +67,28 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
 		$this->setRedirect($url);
 	}
+
+	protected function onBeforeApplySave(&$data)
+	{
+		$result = parent::onBeforeSave();
+
+		if ($result)
+		{
+			$subcustom = $this->input->get('subcustom', array(), 'array');
+
+			if (!array_key_exists('params', $data))
+			{
+				$data['params'] = array();
+			}
+
+			if (!array_key_exists('subcustom', $data['params']))
+			{
+				$data['params']['subcustom'] = array();
+			}
+
+			$data['params']['subcustom'] = array_merge($data['params']['subcustom'], $subcustom);
+		}
+
+		return $result;
+	}
 }
