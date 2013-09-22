@@ -50,6 +50,7 @@ class plgAkpaymentRobokassa extends plgAkpaymentAbstract
 			'OutSum'			=> sprintf('%.2f',$subscription->gross_amount),
 			'Desc'				=> $level->title,
 			'Culture'			=> $lang,
+			'Email'				=> $user->email,
 		);
 
 		$data->SignatureValue = md5(

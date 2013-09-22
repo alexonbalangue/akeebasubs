@@ -14,6 +14,7 @@ $t2 = JText::_('COM_AKEEBASUBS_LEVEL_REDIRECTING_BODY');
 	<input type="hidden" name="Desc" value="<?php echo $data->Desc ?>" />
 	<input type="hidden" name="Culture" value="<?php echo $data->Culture ?>" />
 	<input type="hidden" name="SignatureValue" value="<?php echo $data->SignatureValue ?>" />
+	<input type="hidden" name="Email" value="<?php echo $data->Email ?>" />
 	<input type="submit" class="btn" />
 </form>
 </p>
