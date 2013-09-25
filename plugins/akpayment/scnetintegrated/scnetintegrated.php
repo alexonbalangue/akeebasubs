@@ -188,7 +188,7 @@ class plgAkpaymentScnetintegrated extends plgAkpaymentAbstract
 		{
 			$ipnData['RESP ' . $k] = $v;
 		}
-		$this->logIPN($response->return, $isValid);
+		$this->logIPN($ipnData, $isValid);
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
