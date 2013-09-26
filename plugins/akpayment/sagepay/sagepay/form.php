@@ -1,4 +1,20 @@
-<?php defined('_JEXEC') or die(); ?>
+<?php
+defined('_JEXEC') or die();
+
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
+require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
+
+$nameParts = explode(' ', $data->user->name, 2);
+$firstName = $nameParts[0];
+if(count($nameParts) > 1) {
+	$lastName = $nameParts[1];
+} else {
+	$lastName = '';
+}
+
+$cparamShowCountries = AkeebasubsHelperCparams::getParam('showcountries', '');
+$cparamHideCountries = AkeebasubsHelperCparams::getParam('hidecountries', '');
+?>
 
 <h3><?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_HEADER') ?></h3>
 
@@ -44,6 +60,68 @@
 			</label>
 			<div class="controls">
 				<input type="text" name="card-cvc" id="card-cvc" class="input-mini" maxlength="4" />
+			</div>
+		</div>
+
+		<h3><?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING')?></h3>
+
+		<div class="control-group" id="control-group-billing-first-name">
+			<label for="billing-first-name" class="control-label" style="width:190px; margin-right:20px;">
+				<?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING_FIRST_NAME') ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="billing-first-name" id="billing-first-name" class="input-large" value="<?php echo $firstName?>" />
+			</div>
+		</div>
+
+		<div class="control-group" id="control-group-billing-last-name">
+			<label for="billing-last-name" class="control-label" style="width:190px; margin-right:20px;">
+				<?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING_LAST_NAME') ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="billing-last-name" id="billing-last-name" class="input-large" value="<?php echo $lastName?>" />
+			</div>
+		</div>
+
+		<div class="control-group" id="control-group-billing-address1">
+			<label for="billing-address1" class="control-label" style="width:190px; margin-right:20px;">
+				<?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING_ADDRESS1') ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="billing-address1" id="billing-address1" class="input-large" value="<?php echo $data->kuser->address1?>" />
+			</div>
+		</div>
+
+		<div class="control-group" id="control-group-billing-address2">
+			<label for="billing-address2" class="control-label" style="width:190px; margin-right:20px;">
+				<?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING_ADDRESS2') ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="billing-address2" id="billing-address2" class="input-large" value="<?php echo $data->kuser->address2?>" />
+			</div>
+		</div>
+		<div class="control-group" id="control-group-billing-city">
+			<label for="billing-city" class="control-label" style="width:190px; margin-right:20px;">
+				<?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING_CITY') ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="billing-city" id="billing-city" class="input-large" value="<?php echo $data->kuser->city?>" />
+			</div>
+		</div>
+		<div class="control-group" id="control-group-billing-zip">
+			<label for="billing-zip" class="control-label" style="width:190px; margin-right:20px;">
+				<?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING_ZIP') ?>
+			</label>
+			<div class="controls">
+				<input type="text" name="billing-zip" id="billing-zip" class="input-large" value="<?php echo $data->kuser->zip?>" />
+			</div>
+		</div>
+		<div class="control-group" id="control-group-billing-country">
+			<label for="billing-country" class="control-label" style="width:190px; margin-right:20px;">
+				<?php echo JText::_('PLG_AKPAYMENT_SAGEPAY_FORM_BILLING_COUNTRY') ?>
+			</label>
+			<div class="controls">
+				<?php echo AkeebasubsHelperSelect::countries($data->kuser->country, 'billing-country', array('id'=>'billing-country', 'show' => $cparamShowCountries, 'hide' => $cparamHideCountries)) ?>
 			</div>
 		</div>
 	</div>

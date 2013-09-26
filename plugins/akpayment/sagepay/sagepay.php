@@ -56,12 +56,18 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 		// get the result; we ask the customer for more details, then POST SagePay. If everything is ok, we
 		// authorize the subscription
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=sagepay&sid='.$subscription->akeebasubs_subscription_id;
+
+		$kuser = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
+		$kuser->load(array('user_id' => $user->id));
+
 		$data = (object)array(
 			'url'			=> $callbackUrl,
 			'amount'		=> number_format($subscription->gross_amount, 2),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'description'	=> $level->title . ' - [ ' . $user->username . ' ]',
-			'cardholder'	=> $user->name
+			'cardholder'	=> $user->name,
+			'user'          => $user,
+			'kuser'         => $kuser
 		);
 
 		@ob_start();
@@ -227,19 +233,11 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 
 		$user  = JFactory::getUser($subscription->user_id);
 		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->getItem($subscription->akeebasubs_level_id);
+					->getItem($subscription->akeebasubs_level_id);
 
 		$kuser = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->user_id($subscription->user_id)
-			->getFirstItem();
-
-		$nameParts = explode(' ', $user->name, 2);
-		$firstName = $nameParts[0];
-		if(count($nameParts) > 1) {
-			$lastName = $nameParts[1];
-		} else {
-			$lastName = '';
-		}
+					->user_id($subscription->user_id)
+					->getFirstItem();
 
 		$this->sageProcKey = md5(time());
 
@@ -261,18 +259,18 @@ class plgAkpaymentSagepay extends plgAkpaymentAbstract
 		$string .= '&CardType='.$data['card-type'];
 
 		// Billing info
-		$string .= '&BillingFirstnames='.urlencode($firstName);
-		$string .= '&BillingSurname='.urlencode($lastName);
-		$string .= '&BillingAddress1='.urlencode($kuser->address1);
+		$string .= '&BillingFirstnames='.urlencode($data['billing-first-name']);
+		$string .= '&BillingSurname='.urlencode($data['billing-last-name']);
+		$string .= '&BillingAddress1='.urlencode($data['billing-address1']);
 
 		if($kuser->address2)
 		{
-			$string .= '&strBillingAddress2='.urlencode($kuser->address2);
+			$string .= '&strBillingAddress2='.urlencode($data['billing-address2']);
 		}
 
-		$string .= '&BillingCity='.urlencode($kuser->city);
-		$string .= '&BillingPostCode='.urlencode($kuser->zip);
-		$string .= '&BillingCountry='.urlencode($kuser->country);
+		$string .= '&BillingCity='.urlencode($data['billing-city']);
+		$string .= '&BillingPostCode='.urlencode($data['billing-zip']);
+		$string .= '&BillingCountry='.urlencode($data['billing-country']);
 
 		// Other
 		$string .= '&CustomerEMail='.urlencode($user->email);
