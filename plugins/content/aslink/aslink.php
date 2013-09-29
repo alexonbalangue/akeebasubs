@@ -136,12 +136,20 @@ class plgContentAslink extends JPlugin
         return $ret;
     }
 
-    private function getRootUrl() {
-        $root = rtrim(JURI::base(), '/');
-        $subpath = JURI::base(true);
-        if (!empty($subpath) && ($subpath != '/')) {
-            $root = substr($root, 0, -1 * strlen($subpath));
-        }
+    private static function getRootUrl()
+	{
+		static $root = null;
+
+		if (is_null($root))
+		{
+			$root = rtrim(JURI::base(), '/');
+			$subpath = JURI::base(true);
+
+			if (!empty($subpath) && ($subpath != '/'))
+			{
+				$root = substr($root, 0, -1 * strlen($subpath));
+			}
+		}
 
         return $root;
     }
@@ -170,7 +178,7 @@ class plgContentAslink extends JPlugin
     {
 
         $component = JComponentHelper::getComponent('com_akeebasubs');
-        $menus = JApplication::getMenu('site', array());
+        $menus = Factory::getApplication()->getMenu('site', array());
 		$items = $menus->getItems('component_id', $component->id);
         $itemId = null;
 
@@ -186,7 +194,7 @@ class plgContentAslink extends JPlugin
 				} else {
 					$params = $item->params;
 				}
-				
+
                 if (@$item->query['view'] == 'level') {
 					if(version_compare(JVERSION, '3.0', 'ge')) {
 						if ((@$params->get('slug') == $slug)) {
