@@ -7644,7 +7644,7 @@ LEVEL2=11111/22222/33333</programlisting>
         </varlistentry>
       </variablelist>
 
-      <bridgehead>Integration notes for recurring payemnts</bridgehead>
+      <bridgehead>Integration notes for recurring payments</bridgehead>
 
       <para>In order to get recurring payments work with BrainTree, the
       merchant has to create a "plan" in the braintree account, that matches
@@ -7672,6 +7672,66 @@ LEVEL2=11111/22222/33333</programlisting>
 
       <para>and one has to select to get a notification for
       <option>Subscription charged successfully</option>.</para>
+    </section>
+
+    <section xml:id="payment-cardstream">
+      <title>CardStream</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - CardStream</guilabel></para>
+
+      <para>Available since Akeeba Subscriptions 3.2.3.</para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This is a payment plugin which allows you to use the low cost
+      payment processor CardStream.</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "CardStream" or type in a custom name to
+            show to your customer's, e.g. "Pay with credit card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Merchant ID</term>
+
+          <listitem>
+            <para>This is the merchant ID assigned to you by
+            CardStream.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, all transactions will be performed against the
+            sandbox (testing server). This is designed for integration tests,
+            BEFORE going live with your site. <emphasis role="bold">NEVER,
+            EVER, NO MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION
+            SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR
+            CUSTOMERS.</emphasis></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
     </section>
 
     <section xml:id="payment-cashu">
@@ -9337,6 +9397,84 @@ LEVEL2=11111/22222/33333</programlisting>
       </orderedlist>
     </section>
 
+    <section xml:id="payment-mercadopago">
+      <title>MercadoPago</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - MercadoPago</guilabel></para>
+
+      <para>Available since Akeeba Subscriptions 3.2.1.</para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This is a payment plugin which allows your clients to use the
+      MercadoPago payment processor, targeting the Latin America market
+      (Argentina, Brazil, Mexico and Venezuela).</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "MercadoPago" or type in a custom name to
+            show to your customer's, e.g. "Pay with credit card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Client ID</term>
+
+          <listitem>
+            <para>The client ID given to you my MercadoPago</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Client secret key</term>
+
+          <listitem>
+            <para>The client secret key given to you by MercadoPago</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, all transactions will be performed against the
+            testing server. No money will change hands. This is supposed to be
+            used ONLY for testing the integration before launching your
+            site.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <bridgehead>Integration Notes</bridgehead>
+
+      <para>In order to to confirm the payments and have Akeeba Subscriptions
+      activate the subscriptions paid with this method you have to set up the
+      call-back MercadoPago will do to your site. Inside your MercadoPago
+      back-end you have to use the following callback URL:</para>
+
+      <para><uri>https://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=mercadopago</uri></para>
+
+      <para>replacing <uri>www.example.com</uri> with your site's domain
+      name.</para>
+    </section>
+
     <section xml:id="payment-moip">
       <title>MoIP</title>
 
@@ -10856,6 +10994,93 @@ LEVEL2=11111/22222/33333</programlisting>
       <option>UTF-8</option> and click on <guibutton>Save</guibutton>.</para>
     </section>
 
+    <section xml:id="payment-paypoint">
+      <title>PayPoint</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - PayPoint</guilabel></para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This payment method integrates the low cost PayPoint.net payments
+      processor.</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "PayPoint" or type in a custom name to
+            show to your customer's, e.g. "Credit Card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Merchant ID</term>
+
+          <listitem>
+            <para>The merchant ID given to you by PayPoint.net</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Password</term>
+
+          <listitem>
+            <para>The password given to you by PayPoint.net</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Digest Key</term>
+
+          <listitem>
+            <para>You can optionally set this up for an additional validation
+            check of the payment notification we receive from PayPoint. This
+            digest key can be found from withing the PayPoint.net Merchant
+            Extranet.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Custom Logo</term>
+
+          <listitem>
+            <para>If you want to use a custom logo you have to send it to
+            PayPoint.net. According to their documentation: “Your logo must be
+            750 pixels in width by 100 pixels in height and must be sent to
+            support@paypoint.net with your account ID and a message to tell us
+            to add this logo to your payment page.”</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, transactions are processed by the testing
+            server. This is designed for integration tests, BEFORE going live
+            with your site. <emphasis role="bold">NEVER, EVER, NO MATTER WHAT
+            YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION SITES! IF YOU DO, YOU
+            WILL LOSE MONEY AND/OR CUSTOMERS.</emphasis></para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
     <section xml:id="payment-paysafe">
       <title>PaySafe Card</title>
 
@@ -11669,6 +11894,65 @@ LEVEL2=11111/22222/33333</programlisting>
 
           <listitem>
             <para>The account ID give to you by SaferPay</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section xml:id="payment-sagepay">
+      <title>SagePay</title>
+
+      <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
+      Subscriptions Payment - SagePay</guilabel></para>
+
+      <para>Available since Akeeba Subscriptions 3.2.1.</para>
+
+      <para>This plugin <emphasis role="bold">does not support</emphasis>
+      recurring payments.</para>
+
+      <para>This is a payment plugin which allows you to use the payment
+      processor SagePay.</para>
+
+      <para>The options you have in this plugin are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Payment option title</term>
+
+          <listitem>
+            <para>Leave blank to use "SagePay" or type in a custom name to
+            show to your customer's, e.g. "Pay with credit card"</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Payment option image</term>
+
+          <listitem>
+            <para>An image to show in the payment processor selection list
+            when the Image Only or Image and Text option is set in the
+            component's parameters.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Vendor ID</term>
+
+          <listitem>
+            <para>The Vendor ID as given to you by SagePay</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Sandbox</term>
+
+          <listitem>
+            <para>When enabled, all transactions will be performed against the
+            sandbox (testing server). This is designed for integration tests,
+            BEFORE going live with your site. <emphasis role="bold">NEVER,
+            EVER, NO MATTER WHAT YOU DO, SHOULD YOU ENABLE THIS ON PRODUCTION
+            SITES! IF YOU DO, YOU WILL LOSE MONEY AND/OR
+            CUSTOMERS.</emphasis></para>
           </listitem>
         </varlistentry>
       </variablelist>
