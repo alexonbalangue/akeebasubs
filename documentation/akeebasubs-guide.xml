@@ -2625,37 +2625,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
 
       <itemizedlist>
         <listitem>
-          <para>The first published rule must be the catch-all default rule
-          for EU countries: no country selected, VIES Reg set to Yes, tax rate
-          set to 0.</para>
+          <para>Create one rule for each EU country <emphasis>including
+          yours</emphasis> with VIES Reg set to No and the tax rate set to
+          your local VAT rate</para>
         </listitem>
 
         <listitem>
-          <para>The second published rule must be the catch-all default rule
-          for non-EU countries: no country selected, VIES Reg set to No, tax
-          rate set to 0.</para>
+          <para>Create one rule for <emphasis>your country only</emphasis>
+          with VIES Reg set to Yes and the tax rate set to your local VAT
+          rate</para>
         </listitem>
 
         <listitem>
-          <para>The following rules, in any order, are the tax rules for each
-          EU country except yours: VIES Reg set to Yes and tax rate set to
-          0</para>
+          <para>Create one rule with no country selected, VIES Reg set to Yes,
+          tax rate set to 0.</para>
         </listitem>
 
         <listitem>
-          <para>Finally, publish the two rules for your country:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>One rule where VIES Reg is set to Yes and tax set to your
-              local VAT rate</para>
-            </listitem>
-
-            <listitem>
-              <para>One more rule where VIES Reg is set to No and tax set to
-              your local VAT rate</para>
-            </listitem>
-          </itemizedlist>
+          <para>Create one rule with no country selected, VIES Reg set to No,
+          tax rate set to 0.</para>
         </listitem>
       </itemizedlist>
 
@@ -2664,25 +2652,25 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       <itemizedlist>
         <listitem>
           <para>If the customer is extra-EU he will be charged no VAT (the
-          first catch-all rule kicks in)</para>
+          last rule kicks in)</para>
         </listitem>
 
         <listitem>
           <para>If the customer is intra-EU, but not a business with a
-          VIES-registered VAT number, he's paying VAT (the second catch-all
-          rule kicks in).</para>
+          VIES-registered VAT number, he's paying VAT (the first rules kicks
+          in).</para>
         </listitem>
 
         <listitem>
           <para>If the customer is an intra-EU business, he will be charged no
-          VAT (the specific country rule kicks in). He's liable to VAT on his
-          local tax authorities, not your country's tax authorities.</para>
+          VAT. He's liable to VAT on his local tax authorities, not your
+          country's tax authorities.</para>
         </listitem>
 
         <listitem>
           <para>If the customer is from your own country, you are charging him
-          with VAT no matter of the VIES registration status (the final two
-          rules kick in).</para>
+          with VAT no matter of the VIES registration status (the third to
+          last rule kick in).</para>
         </listitem>
       </itemizedlist>
 
