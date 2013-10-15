@@ -7648,6 +7648,22 @@ LEVEL2=11111/22222/33333</programlisting>
       billing cycle in months, so that has to match the <guilabel>Subscription
       Length</guilabel> in Akeeba Subscriptions.</para>
 
+      <important>
+        <para>A calendar month can be up to 31 days. This means that your
+        subscription length in Akeeba Subscriptions should be longer than the
+        number of days equivalent to the number of calendar months of your
+        billing period. The subscription level length should be (31 * n) + 1
+        days, where n is the number of months of the billing period in
+        BrainTree. For example, if you have a 3 month subscription its length
+        should be 3 * 31 + 1 = 93 + 1 = 94 days. If the subscription length is
+        smaller it is possible that the subscription expires before Akeeba
+        Subscriptions receives the recurring payment. In this case your
+        subscribers will receive an email notifying them that their
+        subscription expired and a couple of days later another email telling
+        them that the subscription became active again. This is something you
+        certainly don't want to happen.</para>
+      </important>
+
       <para>In order to get recurring payments to work one secondly has to
       create a "webhook" (under <guimenu>Account</guimenu>,
       <guimenuitem>Webhooks</guimenuitem> which notifies Akeeba Subscriptions
