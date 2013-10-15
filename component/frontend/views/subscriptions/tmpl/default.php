@@ -143,9 +143,13 @@ if (!property_exists($this, 'extensions'))
 
 					<?php if(array_key_exists($subscription->akeebasubs_subscription_id, $this->invoices)):
 					$invoice = $this->invoices[$subscription->akeebasubs_subscription_id];
+					$url2 = '';
+					$target = '';
 					if($invoice->extension == 'akeebasubs')
 					{
-						$url = JRoute::_('index.php?option=com_akeebasubs&view=invoices&task=download&id='.$invoice->akeebasubs_subscription_id);
+						$url2 = JRoute::_('index.php?option=com_akeebasubs&view=invoices&task=download&id='.$invoice->akeebasubs_subscription_id);
+						$url = JRoute::_('index.php?option=com_akeebasubs&view=invoice&task=read&id='.$invoice->akeebasubs_subscription_id.'&tmpl=component');
+						$target = 'target="_blank"';
 					}
 					elseif(array_key_exists($invoice->extension, $this->extensions))
 					{
@@ -157,7 +161,15 @@ if (!property_exists($this, 'extensions'))
 					}
 					if(!empty($url)):
 					?>
-					<a class="btn btn-mini" href="<?php echo $url; ?>">
+					<a class="btn btn-mini" href="<?php echo $url; ?>" <?php echo $target?>>
+						<span class="icon icon-eye-open"></span>
+	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_INVOICE')?>
+	            	</a>
+					<?php endif; ?>
+					<?php if(!empty($url2)):
+					?>
+					<a class="btn btn-mini" href="<?php echo $url2; ?>">
+						<span class="icon icon-file"></span>
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_INVOICE')?>
 	            	</a>
 					<?php endif; ?>
