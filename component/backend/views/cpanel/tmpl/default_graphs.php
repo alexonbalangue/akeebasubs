@@ -26,16 +26,20 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 }
 
 $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);
+$graphDayTo = gmdate('Y-m-d', time());
 ?>
+<div class="well well-small">
+	<div class="form form-inline">
+		<?php echo JHTML::_('calendar', $graphDayFrom, 'akeebasubs_graph_datepicker', 'akeebasubs_graph_datepicker'); ?>
+		<?php echo JHTML::_('calendar', $graphDayTo, 'akeebasubs_graph_todatepicker', 'akeebasubs_graph_todatepicker'); ?>
+		<button class="btn btn-primary btn-mini" id="akeebasubs_graph_reload" onclick="return false">
+			<span class="icon icon-white icon-retweet"></span>
+			<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_RELOADGRAPHS') ?>
+		</button>
+	</div>
+</div>
+
 <h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_SALES') ?></h3>
-<p>
-	<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_FROMDATE') ?>
-	<?php echo JHTML::_('calendar', $graphDayFrom, 'akeebasubs_graph_datepicker', 'akeebasubs_graph_datepicker'); ?>
-	&nbsp;
-	<button class="btn btn-mini" id="akeebasubs_graph_reload" onclick="return false">
-		<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_RELOADGRAPHS') ?>
-	</button>
-</p>
 <div id="aksaleschart">
 	<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber" />
 	<p id="aksaleschart-nodata" style="display:none">

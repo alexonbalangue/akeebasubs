@@ -261,3 +261,10 @@ input#publish_down {
 input#since {
 	width: 90px;
 }
+
+/**
+ * Control panel
+ */
+
+#akeebasubs_graph_datepicker,
+#akeebasubs_graph_todatepicker { width: 80px; }

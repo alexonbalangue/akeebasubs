@@ -28,12 +28,16 @@ function akeebasubs_cpanel_graphs_load()
 {
 	// Get the From date
 	akeebasubs_cpanel_graph_from = document.getElementById('akeebasubs_graph_datepicker').value;
+	akeebasubs_cpanel_graph_to = document.getElementById('akeebasubs_graph_todatepicker').value;
 	
 	// Calculate the To date
-	var thatDay = new Date(akeebasubs_cpanel_graph_from);
-	thatDay = new Date(thatDay.getTime() + 30*86400000);
-	akeebasubs_cpanel_graph_to = thatDay.getUTCFullYear()+'-'+(thatDay.getUTCMonth()+1)+'-'+thatDay.getUTCDate();
-	
+	if (akeebasubs_cpanel_graph_to == '')
+	{
+		var thatDay = new Date(akeebasubs_cpanel_graph_from);
+		thatDay = new Date(thatDay.getTime() + 30*86400000);
+		akeebasubs_cpanel_graph_to = thatDay.getUTCFullYear()+'-'+(thatDay.getUTCMonth()+1)+'-'+thatDay.getUTCDate();
+	}
+
 	// Clear the data arrays
 	akeebasubs_cpanel_graph_salesPoints = [];
 	akeebasubs_cpanel_graph_subsPoints = [];
