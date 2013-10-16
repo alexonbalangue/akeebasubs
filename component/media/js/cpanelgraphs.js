@@ -16,6 +16,7 @@ if(typeof(akeeba.jQuery) == 'undefined') {
 
 var akeebasubs_cpanel_graph_from = "";
 var akeebasubs_cpanel_graph_to = "";
+var akeebasubs_cpanel_graph_level = "";
 
 var akeebasubs_cpanel_graph_salesPoints = [];
 var akeebasubs_cpanel_graph_subsPoints = [];
@@ -29,6 +30,7 @@ function akeebasubs_cpanel_graphs_load()
 	// Get the From date
 	akeebasubs_cpanel_graph_from = document.getElementById('akeebasubs_graph_datepicker').value;
 	akeebasubs_cpanel_graph_to = document.getElementById('akeebasubs_graph_todatepicker').value;
+	akeebasubs_cpanel_graph_level = document.getElementById('akeebasubs_graph_level_id').value * 1;
 	
 	// Calculate the To date
 	if (akeebasubs_cpanel_graph_to == '')
@@ -63,6 +65,10 @@ function akeebasubs_load_sales()
 {
 	(function($) {
 		var url = "index.php?option=com_akeebasubs&view=subscriptions&since="+akeebasubs_cpanel_graph_from+"&until="+akeebasubs_cpanel_graph_to+"&groupbydate=1&paystate=C&nozero=1&savestate=0&format=json";
+		if (akeebasubs_cpanel_graph_level > 0)
+		{
+			url += '&level=' + akeebasubs_cpanel_graph_level;
+		}
 		$.getJSON(url, function(data){
 			$.each(data, function(index, item){
 				akeebasubs_cpanel_graph_salesPoints.push([item.date, parseInt(item.net * 100) * 1 / 100]);
@@ -84,6 +90,10 @@ function akeebasubs_load_levels()
 {
 	(function($) {
 		var url = "index.php?option=com_akeebasubs&view=subscriptions&since="+akeebasubs_cpanel_graph_from+"&until="+akeebasubs_cpanel_graph_to+"&groupbylevel=1&paystate=C&nozero=1&savestate=0&format=json";
+		if (akeebasubs_cpanel_graph_level > 0)
+		{
+			url += '&level=' + akeebasubs_cpanel_graph_level;
+		}
 		$.getJSON(url, function(data){
 			$.each(data, function(index, item){
 				akeebasubs_cpanel_graph_levelsPoints.push([item.title, parseInt(item.net * 100) * 1 / 100]);

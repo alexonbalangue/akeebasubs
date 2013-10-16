@@ -285,13 +285,6 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				);
 			}
 
-			if(is_numeric($state->level) && ($state->level > 0)) {
-				$query->where(
-					$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id').' = '.
-						$db->q($state->level)
-				);
-			}
-
 			if(is_numeric($state->coupon_id) && ($state->coupon_id > 0)) {
 				$query->where(
 					$db->qn('tbl').'.'.$db->qn('akeebasubs_coupon_id').' = '.
@@ -470,6 +463,14 @@ class AkeebasubsModelSubscriptions extends FOFModel
 				$query->where($db->qn('tbl').'.'.$db->qn('akeebasubs_upgrade_id').' IN ('.
 					$db->q(implode(',', $upgrade_ids)).')');
 			}
+		}
+
+		// Subscription level filter
+		if(is_numeric($state->level) && ($state->level > 0)) {
+			$query->where(
+				$db->qn('tbl').'.'.$db->qn('akeebasubs_level_id').' = '.
+					$db->q($state->level)
+			);
 		}
 
 		// "Since" queries

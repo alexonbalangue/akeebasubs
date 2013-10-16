@@ -25,6 +25,8 @@ if(version_compare(JVERSION, '3.0', 'ge')) {
 	JHTML::_('behavior.mootools');
 }
 
+$this->loadHelper('select');
+
 $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);
 $graphDayTo = gmdate('Y-m-d', time());
 ?>
@@ -32,6 +34,7 @@ $graphDayTo = gmdate('Y-m-d', time());
 	<div class="form form-inline">
 		<?php echo JHTML::_('calendar', $graphDayFrom, 'akeebasubs_graph_datepicker', 'akeebasubs_graph_datepicker'); ?>
 		<?php echo JHTML::_('calendar', $graphDayTo, 'akeebasubs_graph_todatepicker', 'akeebasubs_graph_todatepicker'); ?>
+		<?php echo AkeebasubsHelperSelect::subscriptionlevels(0, 'akeebasubs_graph_level_id', array('class'=>'input-small')) ?>
 		<button class="btn btn-primary btn-mini" id="akeebasubs_graph_reload" onclick="return false">
 			<span class="icon icon-white icon-retweet"></span>
 			<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_RELOADGRAPHS') ?>
