@@ -193,7 +193,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
                 ->setId($subscription->akeebasubs_level_id)
                 ->getItem();
-            
+
 			if($level->recurring) {
 				// Create recurring payment profile
 				$nextPayment = new JDate("+$level->duration day");
@@ -409,11 +409,21 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 
 		// Check txn_type; we only accept web_accept transactions with this plugin
 		if($isValid) {
-			$validTypes = array('web_accept','recurring_payment','subscr_payment','express_checkout');
+			// This is required to process some IPNs, such as Reversed and Canceled_Reversal
+			if (!array_key_exists('txn_type', $data))
+			{
+				$data['txn_type'] = 'workaround_to_missing_txn_type';
+			}
+
+			$validTypes = array('workaround_to_missing_txn_type', 'web_accept','recurring_payment','subscr_payment','express_checkout');
 			$isValid = in_array($data['txn_type'], $validTypes);
-			if(!$isValid) {
+
+			if(!$isValid)
+			{
 				$data['akeebasubs_failure_reason'] = "Transaction type ".$data['txn_type']." can't be processed by this payment plugin.";
-			} else {
+			}
+			else
+			{
 				$recurring = ($data['txn_type'] == 'recurring_payment');
 			}
 		}
