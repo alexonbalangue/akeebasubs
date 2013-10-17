@@ -16,6 +16,7 @@ Akeeba Subscriptions 3.2.3
 # [LOW] RoboKassa integration: The email of the user was not sent to RoboKassa (thanks, Arkady!)
 # [LOW] Notices in aslink plugin
 # [LOW] Multiple selection fields could not be used in subscription messages and email templates
+# [LOW] Notice thrown in the Joomla! user profile sync plugin when a user is a subscriber but there is no corresponding user entry in the #__akeebasubs_users table (e.g. manually created subscription)
 
 Akeeba Subscriptions 3.2.2
 ================================================================================

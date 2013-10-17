@@ -308,9 +308,17 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 	{
 		$mergedData = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->getMergedData($user_id);
+
+		if (!property_exists($mergedData, 'akeebasubs_user_id'))
+		{
+			return;
+		}
+
 		$akeebasubs_user_id = $mergedData->akeebasubs_user_id;
+
 		$userData = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->getItem($akeebasubs_user_id);
+
 		$this->onAKUserSaveData($userData);
 	}
 }
