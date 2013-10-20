@@ -8142,6 +8142,18 @@ LEVEL2=11111/22222/33333</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
+
+      <bridgehead>Integration notes</bridgehead>
+
+      <para>CM-CIC requires you to enter the following URL as the CGI2 URL in
+      their back-end interface. If you don't your site won't be notified of
+      incoming payments and subscriptions will not be automatically
+      activated.</para>
+
+      <para><uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=callback&amp;paymentmethod=cmcic</uri></para>
+
+      <para>where www.example.com must be replaced with the domain name of
+      your site.</para>
     </section>
 
     <section xml:id="payment-deltapay">
