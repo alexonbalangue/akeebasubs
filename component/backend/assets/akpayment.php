@@ -24,13 +24,16 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	/** @var string Image path, returned to the component */
 	protected $ppImage = '';
 
+	/** @var bool Does this payment processor supports cancellation of recurring payments? */
+	protected $ppRecurringCancellation = false;
+
 	/**
 	 * Public constructor for the plugin
 	 *
-	 * @param   object  $subject  The object to observe
-	 * @param   array   $config   An optional associative array of configuration settings.
+	 * @param   object $subject  The object to observe
+	 * @param   array  $config   An optional associative array of configuration settings.
 	 *
-	 * @return  void
+	 * @return \plgAkpaymentAbstract
 	 */
 	public function __construct(&$subject, $config = array())
 	{
@@ -55,6 +58,10 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			$this->ppKey = $config['ppKey'];
 		} else {
 			$this->ppKey = "PLG_AKPAYMENT_{$name}_TITLE";
+		}
+
+		if(array_key_exists('ppRecurringCancellation', $config)){
+			$this->ppRecurringCancellation = $config['ppRecurringCancellation'];
 		}
 
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -89,9 +96,10 @@ abstract class plgAkpaymentAbstract extends JPlugin
 
 		$ret = array(
 			(object)array(
-				'name'		=> $this->ppName,
-				'title'		=> $title,
-				'image'		=> $image
+				'name'	                => $this->ppName,
+				'title'	                => $title,
+				'image'                 => $image,
+				'recurringCancellation' => $this->ppRecurringCancellation
 			)
 		);
 
