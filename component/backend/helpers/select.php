@@ -847,7 +847,7 @@ class AkeebasubsHelperSelect
 function akeebasubsHelperSelect_init()
 {
 	$model = FOFModel::getTmpInstance('States', 'AkeebasubsModel');
-	$rawstates = $model->enabled(1)->getItemList(true);
+	$rawstates = $model->enabled(1)->orderByLabels(1)->getItemList(true);
 	$states = array();
 	$current_country = '';
 	$current_country_name = 'N/A';
