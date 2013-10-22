@@ -23,6 +23,18 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 
 			$activeLevels	 = array();
 			$allLevels		 = array();
+			$ppList          = array();
+
+			// Let's get all the enabled plugins
+			JPluginHelper::importPlugin('akpayment');
+			$tempList = JFactory::getApplication()->triggerEvent('onAKPaymentGetIdentity');
+
+			// Remove a level for better handling
+			foreach($tempList as $tempPlugin)
+			{
+				$name = array_pop(array_keys($tempPlugin));
+				$ppList[$name] = array_pop($tempPlugin);
+			}
 
 			if (!empty($rawActiveLevels))
 			{
@@ -54,6 +66,9 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 
 					$subIDs[]			 = $id;
 					$subscription_ids[]	 = $id;
+
+					// Propagate the info the the sub can be cancelled
+					$sub->allow_renew = $ppList[$sub->processor]->recurringCancellation;
 
 					if (!$sub->enabled)
 					{

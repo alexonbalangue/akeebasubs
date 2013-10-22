@@ -197,6 +197,15 @@ if (!property_exists($this, 'extensions'))
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
 	            	<?php endif;?>
+
+		            <?php
+		                if($level->recurring && $subscription->allow_cancel):
+			                $cancelURL = JRoute::_('index.php?option=com_akeebasubs&view=callback&task=cancel&paymentmethod='.$subscription->processor.'&sid='.$subscription->akeebasubs_subscription_id);
+			        ?>
+		            <a class="btn btn-mini btn-danger" href="<?php echo $cancelURL?>">
+			            <?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_CANCEL_RECURRING')?>
+		            </a>
+		            <?php endif; ?>
 	            </td>
 			</tr>
 			<?php endforeach; ?>

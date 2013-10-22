@@ -95,6 +95,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 		}
 
 		$ret = array(
+			$this->ppName =>
 			(object)array(
 				'name'	                => $this->ppName,
 				'title'	                => $title,
