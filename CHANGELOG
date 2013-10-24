@@ -12,11 +12,13 @@ Akeeba Subscriptions 3.2.3
 # [HIGH] You could not save subscription-specific custom fields when editing a subscription in the back-end
 # [MEDIUM] PayMill: When communication with PayMill's server fails there is no indication that the transaction failed
 # [MEDIUM] PayPal: certain IPN messages (such as Reversed and Canceled_Reversal) could not be processed due to missing txn_type in the IPN request sent by PayPal
+# [MEDIUM] Invoices list: the link to the user record was invalid
 # [LOW] Community Builder synchronisation throws a warning message and doesn't sync the state field
 # [LOW] RoboKassa integration: The email of the user was not sent to RoboKassa (thanks, Arkady!)
 # [LOW] Notices in aslink plugin
 # [LOW] Multiple selection fields could not be used in subscription messages and email templates
 # [LOW] Notice thrown in the Joomla! user profile sync plugin when a user is a subscriber but there is no corresponding user entry in the #__akeebasubs_users table (e.g. manually created subscription)
+# [LOW] Notice thrown by the SQL queries plugin
 
 Akeeba Subscriptions 3.2.2
 ================================================================================
