@@ -20,7 +20,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		parent::__construct($subject, $name, $config, $templatePath);
 	}
 
-	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups)
+	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups, $addGroupsVarName = 'addGroups', $removeGroupsVarName = 'removeGroups')
 	{
 		// Make sure we're configured
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
