@@ -15,9 +15,10 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
-			'ppName'		=> '2conew',
-			'ppKey'			=> 'PLG_AKPAYMENT_2CONEW_TITLE',
-			'ppImage'		=> 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
+			'ppName'		          => '2conew',
+			'ppKey'			          => 'PLG_AKPAYMENT_2CONEW_TITLE',
+			'ppImage'		          => 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
+            'ppRecurringCancellation' => true
 		));
 
 		parent::__construct($subject, $config);
@@ -311,6 +312,38 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 
 		return true;
 	}
+
+    public function onAKPaymentCancelRecurring($paymentmethod, $data)
+    {
+        // Check if we're supposed to handle this
+        if($paymentmethod != $this->ppName) return false;
+
+        // No subscription id? Stop here
+        if(!$data['sid'])
+        {
+            return false;
+        }
+
+        // No cURL? Well, that's no point on continuing...
+        if(!function_exists('curl_init'))
+        {
+            if(version_compare(JVERISON, '3.0', 'ge'))
+            {
+                throw new Exception('2CO payment plugin needs cURL extension in order to cancel recurring payments', 500);
+            }
+            else
+            {
+                JError::raiseError(500, '2CO payment plugin needs cURL extension in order to cancel recurring payments');
+            }
+        }
+
+        $sub   = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+        $sub->load($data['sid']);
+
+        list($sale_id, $invoice_id) = explode('/', $sub->processor_key);
+
+        return true;
+    }
 
 	/**
 	 * Validates the incoming data against the md5 posted by 2Checkout to make sure this is not a
