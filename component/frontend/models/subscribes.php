@@ -1482,16 +1482,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
 
-
 		// Iterate the core validation rules
 		$isValid = true;
 		foreach($validation->validation as $key => $validData)
 		{
 			require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
 			if(AkeebasubsHelperCparams::getParam('personalinfo',1) == 0) {
-				if(!in_array($key, array('username','email','email2','name'))) continue;
+				if(!in_array($key, array('username','email','email2','name','coupon'))) continue;
 			} elseif(AkeebasubsHelperCparams::getParam('personalinfo',1) == -1) {
-				if(!in_array($key, array('username','email','email2','name','country'))) continue;
+				if(!in_array($key, array('username','email','email2','name','country','coupon'))) continue;
 			}
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if($key == 'vatnumber') continue;
