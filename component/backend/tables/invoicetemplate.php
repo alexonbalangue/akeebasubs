@@ -11,6 +11,14 @@ class AkeebasubsTableInvoicetemplate extends FOFTable
 {
 	public $localformat = null;
 
+	public function __construct($table, $key, &$db, $config = array())
+	{
+		parent::__construct($table, $key, $db, $config);
+
+		$this->addKnownField('localformat', false);
+	}
+
+
 	public function check() {
 		$result = true;
 

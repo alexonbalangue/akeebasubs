@@ -11,7 +11,18 @@ class AkeebasubsTableSubscription extends FOFTable
 {
 	/** @var object Caches the row data on load for future reference */
 	private $_selfCache          = null;
+
 	public  $_dontCheckPaymentID = false;
+
+	public  $_dontNotify		 = false;
+
+	public function __construct($table, $key, &$db, $config = array())
+	{
+		parent::__construct($table, $key, $db, $config);
+
+		$this->addKnownField('_dontCheckPaymentID', false);
+		$this->addKnownField('_dontNotify', false);
+	}
 
 	/**
 	 * Validates the subscription row
@@ -147,8 +158,16 @@ class AkeebasubsTableSubscription extends FOFTable
 		// Unblock users when their payment is Complete
 		$this->userUnblock();
 
-		// Run the plugins on subscription modification
-		$this->subNotifiable();
+		if ($this->_dontNotify)
+		{
+			// Do not run the plugins on subscription modification and reset the "do not run" flag
+			$this->_dontNotify = false;
+		}
+		else
+		{
+			// Run the plugins on subscription modification
+			$this->subNotifiable();
+		}
 
 		return parent::onAfterStore();
 	}
@@ -246,15 +265,12 @@ class AkeebasubsTableSubscription extends FOFTable
 		$app = JFactory::getApplication();
 
 		// We don't care to trigger plugins when certain fields change
-		// Davide 2013-09-09 Removed `params` from ignore list, so I can run plugins when user updates
-		// his info (ie slave subscriptions)
 		$ignoredFields = array(
 			'notes', 'processor', 'processor_key', 'net_amount', 'tax_amount',
-			'gross_amount', 'tax_percent', 'akeebasubs_coupon_id',
-			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id',
+			'gross_amount', 'recurring_amount', 'tax_percent', 'params',
+			'akeebasubs_coupon_id', 'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id',
 			'affiliate_comission', 'akeebasubs_invoice_id', 'prediscount_amount',
-			'discount_amount', 'contact_flag', 'first_contact', 'second_contact',
-			'params'
+			'discount_amount', 'contact_flag', 'first_contact', 'second_contact', 'after_contact',
 		);
 
 		$info = array(
@@ -264,22 +280,41 @@ class AkeebasubsTableSubscription extends FOFTable
 			'modified'	 => null
 		);
 
+		// New record
 		if (is_null($this->_selfCache) || !is_object($this->_selfCache))
 		{
 			$info['status']		 = 'new';
-			$info['modified']	 = clone $this;
+
+			$data = $this->getData();
+			$modified = array();
+
+			foreach ($data as $key => $value)
+			{
+				// Skip ignored fields
+				if (in_array($key, $ignoredFields))
+				{
+					continue;
+				}
+
+				$modified[$key]	 = $value;
+			}
+
+			$info['modified'] = empty($modified) ? null : (object)$modified;
 		}
+		// Possibly modified record. Let's find out!
 		else
 		{
+			$data = $this->_selfCache->getData();
 			$modified = array();
-			foreach ($this->_selfCache as $key => $value)
+
+			foreach ($data as $key => $value)
 			{
-				// Skip private fields
-				if (substr($key, 0, 1) == '_')
-					continue;
-				// Skip ignored fileds
+				// Skip ignored fields
 				if (in_array($key, $ignoredFields))
+				{
 					continue;
+				}
+
 				// Check if the value has changed
 				if ($this->$key != $value)
 				{
@@ -287,7 +322,8 @@ class AkeebasubsTableSubscription extends FOFTable
 					$modified[$key]	 = $value;
 				}
 			}
-			$info['modified'] = (object) $modified;
+
+			$info['modified'] = empty($modified) ? null : (object)$modified;
 		}
 
 		if ($info['status'] != 'unmodified')

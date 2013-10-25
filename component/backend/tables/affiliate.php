@@ -14,4 +14,12 @@ class AkeebasubsTableAffiliate extends FOFTable
 
 	/** @var   float  Required for the browse view */
 	public $paid = 0;
+
+	public function __construct($table, $key, &$db, $config = array())
+	{
+		parent::__construct($table, $key, $db, $config);
+
+		$this->addKnownField('owed', false);
+		$this->addKnownField('paid', false);
+	}
 }
