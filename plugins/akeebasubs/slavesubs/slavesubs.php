@@ -332,92 +332,8 @@ ENDJS;
 		// Simply create new subscription, the user specified slaves while creating his subscription
 		if($info['status'] == 'new')
 		{
-			// TODO create a new user
-		}
-		// Modified extension, let's figure out what to do with slaves
-		else
-		{
-			$current  = $params;
-			$previous = json_decode($info['previous']->params, true);
-
-			if(!isset($previous['slaveusers']) || empty($previous['slaveusers']))
-			{
-				$previous['slaveusers'];
-			}
-
-			// Let's get the full list of involved people
-			$list = array_merge($current['slaveusers'], $previous['slaveusers']);
-			$i    = 0;
-
-			foreach($list as $slave)
-			{
-				if(!$slave)
-				{
-					continue;
-				}
-
-				$result = false;
-
-				if    (in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
-				{
-					// Slave is still here, just check if his subscription is expired, if so extend it
-					$index = array_search($slave, $current['slaveusers']);
-
-					if(isset($current['slavesubs_ids'][$index]))
-					{
-						$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-									->getItem($current['slavesubs_ids'][$index]);
-
-						if(!$table->enabled)
-						{
-							$table->save(array('publish_down' => $row->publish_down));
-						}
-
-						$result = $table->akeebasubs_subscription_id;
-					}
-				}
-				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
-				{
-					// Added user, create a new subscription for him
-					$result = $this->createSlaveSub($slave, $data, $params);
-				}
-				elseif(!in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
-				{
-					// Before he was active, now it's no more; let's fire this slave (aka expire his subscription)
-					$index = array_search($slave, $previous['slaveusers']);
-
-					if(isset($previous['slavesubs_ids'][$index]))
-					{
-						$this->expireSlaveSub($previous['slavesubs_ids'][$index]);
-					}
-				}
-
-				if($result)
-				{
-					$slavesubs_ids[] = $result;
-				}
-			}
-
-			$params['slavesubs_ids'] = $slavesubs_ids;
-			$newdata = array_merge($data, array('params' => json_encode($params)));
-
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
-			$table->reset();
-			$this->dontFire = true;
-			$table->save($newdata);
-			$this->dontFire = false;
-		}
-
-		return ;
-
-		if(!isset($params['slavesubs_ids']) && ($this->maxSlaves[$row->akeebasubs_level_id]))
-		{
-			// Do we have slave users at all?
-			if (!array_key_exists('slaveusers', $params))
-			{
-				return;
-			}
 			$slaveusers = $params['slaveusers'];
+
 			// Do we have at least one slave user?
 			if (empty($slaveusers))
 			{
@@ -425,10 +341,12 @@ ENDJS;
 			}
 
 			$newParams = $params;
+
 			if (isset($newParams['slavesubs_ids']))
 			{
 				unset($newParams['slavesubs_ids']);
 			}
+
 			unset($newParams['slaveusers']);
 
 			// Create new slave subscriptions
@@ -446,7 +364,13 @@ ENDJS;
 
 			foreach($slaveusers as $slaveUsername)
 			{
+				if (empty($slaveUsername))
+				{
+					continue;
+				}
+
 				$user_id = JUserHelper::getUserId($slaveUsername);
+
 				if ($user_id <= 0)
 				{
 					continue;
@@ -467,7 +391,7 @@ ENDJS;
 					'prediscount_amount'			=> 0,
 					'discount_amount'				=> 0,
 					'contact_flag'					=> 0,
-				));
+				 ));
 
 				// Save the new subscription record
 				$db = JFactory::getDbo();
@@ -475,55 +399,112 @@ ENDJS;
 				$tableKey = 'akeebasubs_subscription_id';
 				$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
 				$table->reset();
-				$dontFire = true;
+				self::$dontFire = true;
 				$table->save($newdata);
-				$dontFire = false;
+				self::$dontFire = false;
 				$slavesubs_ids[] = $table->akeebasubs_subscription_id;
 			}
 
 			$params['slavesubs_ids'] = $slavesubs_ids;
 
 			$newdata = array_merge($data, array(
-				'params'	=> json_encode($params),
+			   'params'	=> json_encode($params),
+			   '_dontNotify' => true,
 			));
+
 			$db = JFactory::getDbo();
 			$tableName = '#__akeebasubs_subscriptions';
 			$tableKey = 'akeebasubs_subscription_id';
 			$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
 			$table->reset();
-			$dontFire = true;
+
+			self::$dontFire = true;
 			$table->save($newdata);
-			$dontFire = false;
+			self::$dontFire = false;
 		}
-		// We already have slave subscriptions, let's refresh them
-		elseif (isset($params['slavesubs_ids']))
+		// Modified subscription, let's figure out what to do with slave subscriptions
+		else
 		{
-			if($row instanceof FOFTable)
+			$current  = $params;
+			$previous = json_decode($info['previous']->params, true);
+
+			if(!isset($previous['slaveusers']) || empty($previous['slaveusers']))
 			{
-				$original_row = (object)($row->getData());
-			}
-			else
-			{
-				$original_row = clone $row;
+				$previous['slaveusers'] = array();
 			}
 
-			foreach ($params['slavesubs_ids'] as $sid)
+			// Let's get the full list of involved people
+			$list = array_merge($current['slaveusers'], $previous['slaveusers']);
+			$i    = 0;
+
+			$dirty = false;
+
+			foreach($list as $slave)
 			{
-				$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-					->getItem($sid)->getData();
-				$sub = (object)$sub;
+				if (empty($slave))
+				{
+					continue;
+				}
 
-				$this->copySubscriptionInformation($original_row, $sub);
+				$result = false;
 
-				$db = JFactory::getDbo();
-				$tableName = '#__akeebasubs_subscriptions';
-				$tableKey = 'akeebasubs_subscription_id';
-				$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
-				$table->reset();
-				$dontFire = true;
-				$table->save($sub);
-				$dontFire = false;
+				if (in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
+				{
+					// Slave is still here, just check if his subscription is expired, if so extend it
+					$index = array_search($slave, $current['slaveusers']);
+
+					if(isset($current['slavesubs_ids'][$index]))
+					{
+						$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+									->getItem($current['slavesubs_ids'][$index]);
+
+						if(!$table->enabled)
+						{
+							$table->save(array('publish_down' => $row->publish_down));
+							$dirty = true;
+						}
+
+						$result = $table->akeebasubs_subscription_id;
+					}
+				}
+				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
+				{
+					// Added user, create a new subscription for him
+					$result = $this->createSlaveSub($slave, $data, $params);
+					$dirty = true;
+				}
+				elseif(!in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
+				{
+					// Before he was active, now it's no more; let's fire this slave (aka expire his subscription)
+					$index = array_search($slave, $previous['slaveusers']);
+
+					if(isset($previous['slavesubs_ids'][$index]))
+					{
+						$this->expireSlaveSub($previous['slavesubs_ids'][$index]);
+						$dirty = true;
+					}
+				}
+
+				if($result)
+				{
+					$slavesubs_ids[] = $result;
+				}
 			}
+
+			// Do not try to save the subscription unless we made a change in slave subscribers
+			if (!$dirty)
+			{
+				//return;
+			}
+
+			$params['slavesubs_ids'] = $slavesubs_ids;
+			$newdata = array_merge($data, array('params' => json_encode($params), '_dontNotify' => true));
+
+			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+			$table->reset();
+			self::$dontFire = true;
+			$table->save($newdata);
+			self::$dontFire = false;
 		}
 	}
 
@@ -591,9 +572,7 @@ ENDJS;
 		$table->akeebasubs_subscription_id = 0;
 
 		self::$dontFire = true;
-
 		$table->save($newdata);
-
 		self::$dontFire = false;
 
 		return $table->akeebasubs_subscription_id;
