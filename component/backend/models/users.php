@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package AkeebaSubs
  * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
@@ -42,7 +41,6 @@ class AkeebasubsModelUsers extends FOFModel
 	public function buildCountQuery()
 	{
 		$db		 = $this->getDbo();
-		$state	 = $this->getFilterValues();
 
 		$query = $db->getQuery(true)
 			->select('COUNT(*)')
@@ -201,7 +199,10 @@ class AkeebasubsModelUsers extends FOFModel
 		{
 			$renewals = array_merge($this->getRenewals($state->getRenewals), array(-1));
 
-			$query->where($db->qn('tbl') . '.' . $db->qn('user_id') . ' IN(' . implode(',', $renewals) . ')');
+			if (!empty($renewals))
+			{
+				$query->where($db->qn('tbl') . '.' . $db->qn('user_id') . ' IN(' . implode(',', $renewals) . ')');
+			}
 		}
 	}
 
@@ -272,7 +273,7 @@ class AkeebasubsModelUsers extends FOFModel
 
 		$expired = $db->setQuery($subquery)->loadColumn();
 
-		if ($expired)
+		if (!empty($expired))
 		{
 			// I want users with a renewal, so let's search for users that once expired, they bought a new sub
 			if ($type == 1)
@@ -282,7 +283,15 @@ class AkeebasubsModelUsers extends FOFModel
 					->from('#__akeebasubs_subscriptions')
 					->where('publish_down > ' . $db->q($jDate->toSql()))
 					->where('user_id IN(' . implode(',', $expired) . ')');
-				$return[$type]	 = $db->setQuery($subquery)->loadColumn();
+
+				if (empty($expired))
+				{
+					$return[$type] = array();
+				}
+				else
+				{
+					$return[$type]	 = $db->setQuery($subquery)->loadColumn();
+				}
 			}
 			elseif ($type == -1)
 			{
@@ -292,9 +301,17 @@ class AkeebasubsModelUsers extends FOFModel
 					->from('#__akeebasubs_subscriptions')
 					->where('publish_down > ' . $db->q($jDate->toSql()))
 					->where('user_id IN(' . implode(',', $expired) . ')');
-				$renewed	 = $db->setQuery($subquery)->loadColumn();
 
-				if ($renewed)
+				if (empty($expired))
+				{
+					$renewed = array();
+				}
+				else
+				{
+					$renewed = $db->setQuery($subquery)->loadColumn();
+				}
+
+				if (!empty($renewed))
 				{
 					$subquery		 = $db->getQuery(true)
 						->select('user_id')
@@ -308,6 +325,11 @@ class AkeebasubsModelUsers extends FOFModel
 					$return[$type] = array();
 				}
 			}
+		}
+
+		if (!isset($return[$type]))
+		{
+			$return[$type] = array();
 		}
 
 		return $return[$type];
