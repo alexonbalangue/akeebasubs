@@ -59,6 +59,8 @@ $sortFields = array(
 	'enabled' => JText::_('JPUBLISHED'),
 );
 
+$now_timestamp = (new JDate())->toUnix();
+
 ?>
 
 <div class="row-fluid">
@@ -228,13 +230,12 @@ $sortFields = array(
 			$rowClass = '';
 			if (!$subscription->enabled)
 			{
-				if($subscription->state == 'C')
+				$rowClass = 'expired';
+				$expires_timestamp = (new JDate($subscription->publish_down))->toUnix();
+
+				if(($subscription->state == 'C') && ($expires_timestamp > $now_timestamp))
 				{
 					$rowClass = 'pending-renewal';
-				}
-				else
-				{
-					$rowClass = 'expired';
 				}
 			}
 

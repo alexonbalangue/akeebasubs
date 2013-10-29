@@ -22,6 +22,7 @@ Akeeba Subscriptions 3.2.3
 # [LOW] Notice thrown in the Joomla! user profile sync plugin when a user is a subscriber but there is no corresponding user entry in the #__akeebasubs_users table (e.g. manually created subscription)
 # [LOW] Notice thrown by the SQL queries plugin
 # [LOW] SQL error thrown when someone tries to access the renewals reports when there are no subscriptions
+# [LOW] Expired subscriptions in the back-end show as pending renewal (green background) instead of expired (red background)
 
 Akeeba Subscriptions 3.2.2
 ================================================================================
