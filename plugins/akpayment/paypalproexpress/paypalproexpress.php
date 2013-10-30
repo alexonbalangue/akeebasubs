@@ -144,6 +144,10 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		}
 
 		if($isValid && isset($data['token']) && isset($data['PayerID'])) {
+			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				->setId($subscription->akeebasubs_level_id)
+				->getItem();
+
 			$requestData = (object)array(
 				'METHOD'							=> 'DoExpressCheckoutPayment',
 				'USER'								=> $this->getMerchantUsername(),
@@ -156,6 +160,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 				'PAYMENTREQUEST_0_AMT'				=> sprintf('%.2f',$subscription->gross_amount),
 				'PAYMENTREQUEST_0_CURRENCYCODE'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 				'PAYMENTREQUEST_0_INVNUM'			=> $subscription->akeebasubs_subscription_id,
+				'PAYMENTREQUEST_0_DESC'				=> '[' . $subscription->akeebasubs_subscription_id . '] ' . $level->title,
 				'IPADDRESS'							=> $_SERVER['REMOTE_ADDR']
 			);
 
@@ -189,10 +194,6 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 				$isValid = false;
 				$responseData['akeebasubs_failure_reason'] = "PayPal error code: " . $responseData['PAYMENTINFO_0_ERRORCODE'];
 			}
-
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-                ->setId($subscription->akeebasubs_level_id)
-                ->getItem();
 
 			if($level->recurring) {
 				// Create recurring payment profile

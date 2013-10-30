@@ -23,6 +23,7 @@ Akeeba Subscriptions 3.2.3
 # [LOW] Notice thrown by the SQL queries plugin
 # [LOW] SQL error thrown when someone tries to access the renewals reports when there are no subscriptions
 # [LOW] Expired subscriptions in the back-end show as pending renewal (green background) instead of expired (red background)
+# [LOW] PayPal Payment Pro (Express Checkout) wouldn't show the subscription level ID and description on the payment page hosted in PayPal's site
 
 Akeeba Subscriptions 3.2.2
 ================================================================================
