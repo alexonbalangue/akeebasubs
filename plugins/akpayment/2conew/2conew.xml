@@ -34,6 +34,15 @@
 				<field name="secret" type="text" size="50" default=""
 					label="PLG_AKPAYMENT_2CONEW_SECRET_LABEL"
 					description="PLG_AKPAYMENT_2CONEW_SECRET_DESC"/>
+
+                <field name="api_username" type="text" size="50"
+                       label="PLG_AKPAYMENT_2CONEW_API_USERNAME_LABEL"
+                       description="PLG_AKPAYMENT_2CONEW_API_USERNAME_DESC"/>
+
+                <field name="api_password" type="text" size="50"
+                       label="PLG_AKPAYMENT_2CONEW_API_PASSWORD_LABEL"
+                       description="PLG_AKPAYMENT_2CONEW_API_PASSWORD_DESC"/>
+
 				<field name="demo" type="radio" default="0"
 					label="PLG_AKPAYMENT_2CONEW_DEMO_LABEL"
 					description="PLG_AKPAYMENT_2CONEW_DEMO_DESC">

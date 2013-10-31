@@ -15,9 +15,10 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
-			'ppName'		=> '2conew',
-			'ppKey'			=> 'PLG_AKPAYMENT_2CONEW_TITLE',
-			'ppImage'		=> 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
+			'ppName'		          => '2conew',
+			'ppKey'			          => 'PLG_AKPAYMENT_2CONEW_TITLE',
+			'ppImage'		          => 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
+            'ppRecurringCancellation' => true
 		));
 
 		parent::__construct($subject, $config);
@@ -311,6 +312,162 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 
 		return true;
 	}
+
+    public function onAKPaymentCancelRecurring($paymentmethod, $data)
+    {
+        // Check if we're supposed to handle this
+        if($paymentmethod != $this->ppName) return false;
+
+        // No subscription id? Stop here
+        if(!$data['sid'])
+        {
+            return false;
+        }
+
+        // No cURL? Well, that's no point on continuing...
+        if(!function_exists('curl_init'))
+        {
+            if(version_compare(JVERISON, '3.0', 'ge'))
+            {
+                throw new Exception('2CO payment plugin needs cURL extension in order to cancel recurring payments', 500);
+            }
+            else
+            {
+                JError::raiseError(500, '2CO payment plugin needs cURL extension in order to cancel recurring payments');
+            }
+        }
+
+        // No API credentials? Let's stop here
+        if(!$this->params->get('api_username') || !$this->params->get('api_password'))
+        {
+            if(version_compare(JVERISON, '3.0', 'ge'))
+            {
+                throw new Exception('You need to provide API username and password in order to cancel recurring payments', 500);
+            }
+            else
+            {
+                JError::raiseError(500, 'You need to provide API username and password in order to cancel recurring payments');
+            }
+        }
+
+        require_once '2conew/lib/Twocheckout.php';
+
+        $sub   = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+        $sub->load($data['sid']);
+
+        list($sale_id, ) = explode('/', $sub->processor_key);
+
+        Twocheckout::setCredentials($this->params->get('api_username'), $this->params->get('api_password'));
+
+        $args = array('sale_id' => $sale_id);
+
+        try{
+            $result = Twocheckout_Sale::stop($args, 'array');
+        }
+        catch (Twocheckout_Error $e)
+        {
+            // Uh oh.. something bad happened. Let's log it
+            $log['subid']   = $data['sid'];
+            $log['sale_id'] = $sale_id;
+            $log['message'] = $e->getMessage();
+
+            $this->logData($log, false, 'CANCEL RECURRING');
+
+            return false;
+        }
+
+        // Request was ok, but there was an error processing it
+        if(strtoupper($result['response_code']) != 'OK')
+        {
+            $log['subid']   = $data['sid'];
+            $log['sale_id'] = $sale_id;
+            $log['result']  = print_r($result, true);
+
+            $this->logData($log, false, 'CANCEL RECURRING');
+
+            return false;
+        }
+
+        // Everything went ok, let's log it
+        $log['subid']   = $data['sid'];
+        $log['sale_id'] = $sale_id;
+        $log['result']  = print_r($result, true);
+
+        $this->logData($log, true, 'CANCEL RECURRING');
+
+        return true;
+    }
+
+    protected function logData($data, $isValid, $type = 'TRANSACTION', $header = null)
+    {
+        $config = JFactory::getConfig();
+
+        if(version_compare(JVERSION, '3.0', 'ge'))
+        {
+            $logpath = $config->get('log_path');
+        }
+        else
+        {
+            $logpath = $config->getValue('log_path');
+        }
+
+        $logFilenameBase = $logpath.'/akpayment_'.strtolower($this->ppName).'_ipn';
+
+        $logFile = $logFilenameBase.'.php';
+        JLoader::import('joomla.filesystem.file');
+
+        if(!JFile::exists($logFile))
+        {
+            $dummy = "<?php die(); ?>\n";
+            JFile::write($logFile, $dummy);
+        }
+        else
+        {
+            if(@filesize($logFile) > 1048756)
+            {
+                $altLog = $logFilenameBase.'-1.php';
+
+                if(JFile::exists($altLog))
+                {
+                    JFile::delete($altLog);
+                }
+
+                JFile::copy($logFile, $altLog);
+                JFile::delete($logFile);
+
+                $dummy = "<?php die(); ?>\n";
+
+                JFile::write($logFile, $dummy);
+            }
+        }
+
+        $logData = JFile::read($logFile);
+
+        if($logData === false) $logData = '';
+
+        $logData .= "\n" . str_repeat('-', 80);
+        $pluginName = strtoupper($this->ppName);
+
+        if ($header)
+        {
+            $logData .= $header;
+        }
+        else
+        {
+            $logData .= $isValid ? 'VALID '.$pluginName.' '.$type : 'INVALID '.$pluginName.' '.$type.' *** FRAUD ATTEMPT OR INVALID CALLBACK ***';
+        }
+
+        $logData .= "\nDate/time : ".gmdate('Y-m-d H:i:s')." GMT\n\n";
+
+        foreach($data as $key => $value)
+        {
+            $logData .= '  ' . str_pad($key, 30, ' ') . $value . "\n";
+        }
+
+        $logData .= "\n";
+
+        JFile::write($logFile, $logData);
+    }
 
 	/**
 	 * Validates the incoming data against the md5 posted by 2Checkout to make sure this is not a

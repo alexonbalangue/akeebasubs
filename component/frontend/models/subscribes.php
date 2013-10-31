@@ -2131,6 +2131,45 @@ class AkeebasubsModelSubscribes extends FOFModel
 		return true;
 	}
 
+	public function runCancelRecurring()
+	{
+		$state = $this->getStateVariables();
+
+		$rawDataPost = JRequest::get('POST', 2);
+		$rawDataGet  = JRequest::get('GET', 2);
+		$data        = array_merge($rawDataGet, $rawDataPost);
+
+		// Some plugins result in an empty Itemid being added to the request
+		// data, screwing up the payment callback validation in some cases (e.g.
+		// PayPal).
+		if (array_key_exists('Itemid', $data))
+		{
+			if (empty($data['Itemid']))
+			{
+				unset($data['Itemid']);
+			}
+		}
+
+		$this->getPaymentPlugins();
+
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onAKPaymentCancelRecurring',array(
+			$state->paymentmethod,
+			$data
+		));
+
+		if(empty($jResponse)) return false;
+
+		$status = false;
+
+		foreach($jResponse as $response)
+		{
+			$status = $status || $response;
+		}
+
+		return $status;
+	}
+
 	/**
 	 * Runs a payment callback
 	 */
