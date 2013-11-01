@@ -8554,23 +8554,12 @@ LEVEL2=11111/22222/33333</programlisting>
 
       <para>This payment method integrates the Canadian Moneris (eSelect)
       credit card processing service, namely their eSelect Plus payment
-      methof. Moneris offers is the largest payment processor in Canada and
+      method. Moneris offers is the largest payment processor in Canada and
       offers its services even to non-Canadian businesses. The eSelect plus
       method is a hosted payments solution, which means that your site needn't
       have an SSL certificate, as your users are not entering their credit
       card information directly on your site, but on a Moneris-hosted
       page.</para>
-
-      <warning>
-        <para>This plugin allows your clients to enter their Credit Card
-        information in a page on your site and then it submits this form to
-        your server. You have to make sure that you are always presenting the
-        subscription page in HTTPS, using an SSL certificate signed by a
-        reputable Certificate Authority. Failure to do so might hold you
-        liable in case your client's credit card information is stolen. Please
-        note that no credit card information is ever stored on your site's
-        database.</para>
-      </warning>
 
       <important>
         <para>Moneris does not allow us to communicate the transaction
