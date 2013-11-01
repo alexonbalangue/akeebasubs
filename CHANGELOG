@@ -8,6 +8,7 @@ Akeeba Subscriptions 3.2.3
 + You can specify a date range for the sales graph in the component's control panel page
 + You can specify a subscription level for the sales graph in the component's control panel page
 + #196 Cancellation button for recurring subscriptions (when allowed – PayPal DOES NOT allow cancellation of recurring payments)
++ #191 Added a textarea custom field type
 ~ #195 Country states are now ordered by name
 ~ Improved back-end subscriptions view display on Joomla! 3
 # [HIGH] Excessive memory usage when a non-subscriber tries to view the My Subscriptions page and you have several hundreds of invoices generated.
