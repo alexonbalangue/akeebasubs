@@ -59,7 +59,8 @@ $sortFields = array(
 	'enabled' => JText::_('JPUBLISHED'),
 );
 
-$now_timestamp = (new JDate())->toUnix();
+$jDate = new JDate();
+$now_timestamp = $jDate->toUnix();
 
 ?>
 
@@ -231,7 +232,8 @@ $now_timestamp = (new JDate())->toUnix();
 			if (!$subscription->enabled)
 			{
 				$rowClass = 'expired';
-				$expires_timestamp = (new JDate($subscription->publish_down))->toUnix();
+				$publishDown = new JDate($subscription->publish_down);
+				$expires_timestamp = $publishDown->toUnix();
 
 				if(($subscription->state == 'C') && ($expires_timestamp > $now_timestamp))
 				{
