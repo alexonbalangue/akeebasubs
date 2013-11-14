@@ -48,5 +48,3 @@ defined('_JEXEC') or die();
 		</a>
 	</div>
 </div>
-
-<?php echo LiveUpdate::getIcon(); ?>
