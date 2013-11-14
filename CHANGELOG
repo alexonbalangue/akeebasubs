@@ -1,6 +1,7 @@
 <?php die(); ?>
-Akeeba Subscriptions 3.2.3
+Akeeba Subscriptions 3.3.0
 ================================================================================
+! This is the last release under the current version scheme and feature set. So long and thanks for all the fish. Please read https://www.akeebabackup.com/home/news/55-general/1534-the-future-of-akeebasubs.html
 + (PRO) Reports (Renewals by user and Expirations by day)
 + #129 CardStream payment processor integration
 + #130 PayPoint payment processor integration
@@ -11,6 +12,7 @@ Akeeba Subscriptions 3.2.3
 + #191 Added a textarea custom field type
 ~ #195 Country states are now ordered by name
 ~ Improved back-end subscriptions view display on Joomla! 3
+~ Working around severely cognitively challenged third party developers who screw up Javascript by omitting trailing semicolons and newlines in their code.
 # [HIGH] Excessive memory usage when a non-subscriber tries to view the My Subscriptions page and you have several hundreds of invoices generated.
 # [HIGH] "Require valid coupon code" is not take into account when "Collect personal information" is turned off
 # [HIGH] You could not save subscription-specific custom fields when editing a subscription in the back-end

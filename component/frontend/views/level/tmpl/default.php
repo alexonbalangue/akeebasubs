@@ -13,7 +13,11 @@ $this->loadHelper('modules');
 $this->loadHelper('select');
 
 $script = <<<ENDSCRIPT
+
+// Akeeba Subscriptions --- START >> >> >>
 akeebasubs_level_id = {$this->item->akeebasubs_level_id};
+// Akeeba Subscriptions --- END << << <<
+
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);
 
@@ -193,6 +197,7 @@ $aks_personal_info = $this->cparams->personalinfo ? 1 : 0;
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<ENDSCRIPT
 
+// Akeeba Subscriptions --- START >> >> >>
 akeebasubs_fieldprefs = {
 	'showregularfield'		: {$this->cparams->showregularfield},
 	'showdiscountfield'		: {$this->cparams->showdiscountfield},
@@ -227,5 +232,7 @@ function onSignupFormSubmit()
 
 	return akeebasubs_valid_form;
 }
+// Akeeba Subscriptions --- END << << <<
+
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);

@@ -469,9 +469,13 @@ $aks_validate_url = JURI::base().'index.php';
 $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
 $aks_noneuvat = AkeebasubsHelperCparams::getParam('noneuvat',0)?'true':'false';
 $script = <<<ENDSCRIPT
+
+// Akeeba Subscriptions --- START >> >> >>
 var akeebasubs_validate_url = "$aks_validate_url";
 var akeebasubs_valid_form = false;
 var akeebasubs_personalinfo = $aks_personal_info;
 var akeebasubs_noneuvat = $aks_noneuvat;
+// Akeeba Subscriptions --- END << << <<
+
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);

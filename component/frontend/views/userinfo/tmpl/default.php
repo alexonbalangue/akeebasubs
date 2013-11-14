@@ -44,6 +44,7 @@ $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1);
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<ENDSCRIPT
 
+// Akeeba Subscriptions --- START >> >> >>
 window.addEvent('domready', function() {
 	(function(\$) {
 		\$(document).ready(function(){
@@ -70,5 +71,7 @@ function onSignupFormSubmit()
 
 	return akeebasubs_valid_form;
 }
+// Akeeba Subscriptions --- END << << <<
+
 ENDSCRIPT;
 JFactory::getDocument()->addScriptDeclaration($script);
