@@ -178,7 +178,7 @@ class plgContentAslink extends JPlugin
     {
 
         $component = JComponentHelper::getComponent('com_akeebasubs');
-        $menus = Factory::getApplication()->getMenu('site', array());
+        $menus = JFactory::getApplication()->getMenu('site', array());
 		$items = $menus->getItems('component_id', $component->id);
         $itemId = null;
 

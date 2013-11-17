@@ -1,4 +1,12 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.3.2
+================================================================================
+! Akeeba Subscriptions link plugin was missing one character in line 181, leading to a fatal error
+
+Akeeba Subscriptions 3.3.1
+================================================================================
+! Broken package
+
 Akeeba Subscriptions 3.3.0
 ================================================================================
 ! This is the last release under the current version scheme and feature set. So long and thanks for all the fish. Please read https://www.akeebabackup.com/home/news/55-general/1534-the-future-of-akeebasubs.html
