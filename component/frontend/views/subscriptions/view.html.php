@@ -32,7 +32,8 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 			// Remove a level for better handling
 			foreach($tempList as $tempPlugin)
 			{
-				$name = array_pop(array_keys($tempPlugin));
+				$keys = array_keys($tempPlugin);
+				$name = array_pop($keys);
 				$ppList[$name] = array_pop($tempPlugin);
 			}
 
