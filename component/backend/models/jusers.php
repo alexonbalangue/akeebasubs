@@ -88,7 +88,16 @@ class AkeebasubsModelJusers extends FOFModel
 
 		JLoader::import('joomla.user.helper');
 		$params['block'] = 0;
-		$params['activation'] = JFactory::getApplication()->getHash( JUserHelper::genRandomPassword() );
+		$randomString = JUserHelper::genRandomPassword();
+		if (version_compare(JVERSION, '3.2', 'ge'))
+		{
+			$hash = JApplication::getHash($randomString);
+		}
+		else
+		{
+			$hash = JFactory::getApplication()->getHash($randomString);
+		}
+		$params['activation'] = $hash;
 
 		$user->bind($params);
 		$userIsSaved = $user->save();
