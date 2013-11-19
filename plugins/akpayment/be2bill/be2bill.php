@@ -232,83 +232,7 @@
 
         private function processTransaction($data)
 		{
-			// Let's load the API classes
-			require_once 'mobilpaycc/library/Request/Abstract.php';
-			require_once 'mobilpaycc/library/Request/Card.php';
-			require_once 'mobilpaycc/library/Request/Notify.php';
-			require_once 'mobilpaycc/library/Invoice.php';
-			require_once 'mobilpaycc/library/Address.php';
 
-			$return 		= array();
-
-			$errorCode 		= 0;
-			$errorType		= Mobilpay_Payment_Request_Abstract::CONFIRM_ERROR_TYPE_NONE;
-			$message		= '';
-
-			if(isset($data['env_key']) && isset($data['data']))
-			{
-				$privateKeyFilePath = JPATH_ROOT.'/plugins/akpayment/mobilpaycc/mobilpaycc/private/private.key';
-
-				try
-				{
-					$objPmReq = Mobilpay_Payment_Request_Abstract::factoryFromEncrypted($data['env_key'], $data['data'], $privateKeyFilePath);
-
-					switch($objPmReq->objPmNotify->action)
-					{
-						case 'confirmed':
-							$return['state'] = 'C';
-							$message = $objPmReq->objPmNotify->getCrc();
-							break;
-						case 'confirmed_pending':
-						case 'paid_pending':
-						case 'paid':
-							$return['state'] = 'P';
-							$message = $objPmReq->objPmNotify->getCrc();
-							break;
-						case 'canceled':
-						case 'credit':
-						default:
-							$return['state'] = 'X';
-							$errorType	= Mobilpay_Payment_Request_Abstract::CONFIRM_ERROR_TYPE_PERMANENT;
-							$errorCode 	= Mobilpay_Payment_Request_Abstract::ERROR_CONFIRM_INVALID_ACTION;
-							$message 	= 'mobilpay_refference_action paramaters is invalid';
-							break;
-					}
-
-					$return['amount']  = $objPmReq->objPmNotify->processedAmount;
-					$return['orderId'] = $objPmReq->orderId;
-					$return['custom']  = $objPmReq->params['custom'];
-					$return['valid']   = true;
-				}
-				catch(Exception $e)
-				{
-					$errorType 	= Mobilpay_Payment_Request_Abstract::CONFIRM_ERROR_TYPE_TEMPORARY;
-					$errorCode	= $e->getCode();
-					$message 	= $e->getMessage();
-
-					$return['valid'] = false;
-				}
-			}
-			else
-			{
-				$errorType 	= Mobilpay_Payment_Request_Abstract::CONFIRM_ERROR_TYPE_PERMANENT;
-				$errorCode	= Mobilpay_Payment_Request_Abstract::ERROR_CONFIRM_INVALID_POST_PARAMETERS;
-				$message 	= 'mobilpay.ro posted invalid parameters';
-
-				$return['valid'] = false;
-			}
-
-			$return['xml'] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-			if($errorCode == 0)
-			{
-				$return['xml'] .= "<crc>{$message}</crc>";
-			}
-			else
-			{
-				$return['xml'] .= "<crc error_type=\"{$errorType}\" error_code=\"{$errorCode}\">{$message}</crc>";
-			}
-
-			return $return;
 		}
 
 		private function echoXML($string)
@@ -316,12 +240,5 @@
 			header('Content-type: application/xml');
 			echo $string;
 			JFactory::getApplication()->close();
-		}
-
-		private function debug($string)
-		{
-			$handle = fopen(JPATH_ROOT.'/log.txt', 'a+');
-			fwrite($handle, date('Y-m-d H:i:s').' --- '.$string.PHP_EOL);
-			fclose($handle);
 		}
 	}
