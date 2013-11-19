@@ -52,6 +52,18 @@
                 }
             }
 
+            if(!$this->params->get('server2server_main') || !$this->params->get('payment_url_main'))
+            {
+                if(version_compare(JVERSION, '3.0', 'ge'))
+                {
+                    throw new Exception('Be2Bill Payment Processor: Please supply the main url for server to server connection and the main url for payments before continuing', 500);
+                }
+                else
+                {
+                    JError::raiseError(500, 'Be2Bill Payment Processor: Please supply the main url for server to server connection and the main url for payments before continuing');
+                }
+            }
+
 			$nameParts = explode(' ', $user->name, 2);
 			$firstName = $nameParts[0];
 			if(count($nameParts) > 1)
@@ -63,17 +75,9 @@
 				$lastName = '';
 			}
 
-			$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-                        ->setId($subscription->akeebasubs_level_id)
-                        ->getItem()
-                        ->slug;
-
-			$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
-                        ->user_id($user->id)
-                        ->getFirstItem();
-
 			$rootURL    = rtrim(JURI::base(),'/');
 			$subpathURL = JURI::base(true);
+
 			if(!empty($subpathURL) && ($subpathURL != '/'))
 			{
 				$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
@@ -83,13 +87,13 @@
             $b2bparams = array(
                 'identifier'        => $this->params->get('client_id'),
                 'operationtype'     => 'payment',
-                'description'       => '',
-                'orderid'           => '',
+                'description'       => $level->title . ' - [ ' . $user->username . ' ]',
+                'orderid'           => $subscription->akeebasubs_subscription_id,
                 'version'           => '2.0',
                 'amount'            => intval($subscription->gross_amount * 100),
-                'clientreferrer'    => '',
-                'CLIENTUSERAGENT'   => '',
-                'CLIENTIP'          => '',
+                'clientreferrer'    => JURI::base(true),
+                'CLIENTUSERAGENT'   => JBrowser::getInstance()->getBrowser(),
+                'CLIENTIP'          => $_SERVER['REMOTE_ADDR'],
                 'CLIENTEMAIL'       => $user->email,
                 'CLIENTIDENT'       => $user->id,
                 'ALIAS'             => '',
@@ -111,8 +115,8 @@
 				'url'			=> $this->getPaymentURL(),
                 'identifier'    => $this->params->get('client_id'),
                 'hash'          => $hash,
-                'clientident'   => '',
-                'orderid'       => '',
+                'clientident'   => $user->id,
+                'orderid'       => $subscription->akeebasubs_subscription_id,
                 'amount'        => intval($subscription->gross_amount * 100)
 			);
 
