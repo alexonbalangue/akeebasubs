@@ -14,7 +14,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 *
 	 * @var array
 	 */
-	private $european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK');
+	private $european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK', 'HR');
 
 	/**
 	 * Raw HTML source of the payment form, as returned by the payment plugin
@@ -2625,7 +2625,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				break;
 
 			case 'LT':
-				// LITUANIA
+				// LITHUANIA
 				// Format: 9 or 12 digits
 				if((strlen($vatnumber) != 9) && (strlen($vatnumber) != 12)) $ret->valid = false;
 				if($ret->valid) {
@@ -2723,6 +2723,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 				if((strlen($vatnumber) != 9) && (strlen($vatnumber) != 12)) $ret->valid = false;
 				if($ret->valid) {
+					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
+				}
+				break;
+
+			case 'HR':
+				// CROATIA
+				// VAT number is called: PDV.
+				// Format: 11 digits
+				if(strlen($vatnumber) != 11)
+				{
+					$ret->valid = false;
+				}
+
+				if($ret->valid)
+				{
 					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
 				}
 				break;

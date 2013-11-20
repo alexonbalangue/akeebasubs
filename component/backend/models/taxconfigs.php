@@ -56,7 +56,7 @@ class AkeebasubsModelTaxconfigs extends FOFModel
 		$euCountries = array(
 			'BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'GR', 'ES', 'FR', 'IE',
 			'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL',
-			'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB'
+			'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'GB', 'HR'
 		);
 		$inEU = in_array($params->country, $euCountries);
 

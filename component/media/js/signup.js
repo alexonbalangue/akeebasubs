@@ -14,7 +14,7 @@ if(typeof(akeeba.jQuery) == 'undefined') {
 	akeeba.jQuery = jQuery.noConflict();
 }
 
-var european_union_countries = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'];
+var european_union_countries = ['AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK', 'HR'];
 var akeebasubs_business_state = '';
 var akeebasubs_isbusiness = false;
 var akeebasubs_blocked_gui = false;
