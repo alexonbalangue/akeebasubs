@@ -2,6 +2,7 @@
 Akeeba Subscriptions 3.3.3
 ================================================================================
 # [HIGH] Fatal error in Joomla! 3.2 if you are using the validate free subscriptions feature
+# [HIGH] Wrong invoice could be sent on new subscription
 
 Akeeba Subscriptions 3.3.2
 ================================================================================

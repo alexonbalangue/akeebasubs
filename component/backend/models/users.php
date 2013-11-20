@@ -450,7 +450,13 @@ class AkeebasubsModelUsers extends FOFModel
 					unset($pResponse['params']);
 				}
 
-				$myData = array_merge($myData, $pResponse);
+				foreach ($pResponse as $k => $v)
+				{
+					if (!empty($v))
+					{
+						$myData[$k] = $v;
+					}
+				}
 			}
 		}
 

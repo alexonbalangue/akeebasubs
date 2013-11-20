@@ -1861,7 +1861,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$user = JFactory::getUser();
 		$this->setState('user', $user);
 		$userIsSaved = $this->updateUserInfo(true, $level);
-
 		if(!$userIsSaved) {
 			return false;
 		} else {
@@ -1915,8 +1914,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 				->paystate('C')
 				->getList(true);
 		}
-
-
 
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
