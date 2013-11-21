@@ -54,8 +54,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 		$time = gettimeofday();
 
 		$data = (object)array(
-			'url'			=> $this->getPaymentURL(),
-			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paysafe',
+			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paysafe&subid=' . $subscription->akeebasubs_subscription_id,
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
@@ -70,28 +69,22 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 			->user_id($user->id)
 			->getFirstItem();
 
+		$sandbox = $this->params->get('sandbox',0);
+		$mode = $sandbox ? 'test' : 'live';
+
 		// Connect to PaySafe's SOAP API
-		$api = new SOPGClassicMerchantClient($data->url->api);
+		$api = new SOPGClassicMerchantClient(false, 'en', false, $mode);
+		$api->merchant($data->username, $data->password);
+		$api->setCustomer($subscription->gross_amount, $data->currency, $data->mtid, $subscription->akeebasubs_subscription_id);
+		$api->setURL($data->success, $data->cancel, $data->postback);
+		$paymentPanel = $api->createDisposition();
 
-		// Create the disposition
-		$response = $api->createDisposition($data->username, $data->password, $data->mtid,
-			null, $subscription->gross_amount, $data->currency, $data->success, $data->cancel,
-			$subscription->akeebasubs_subscription_id, $data->postback, null);
-
-		if (($response->resultCode != 0) || ($response->errorCode ==0))
+		if ($paymentPanel == false)
 		{
-			die("PaySafe error creating disposition -- Result code {$response->resultCode} -- Error code {$response->errorCode}");
+			die("PaySafe error creating disposition");
 		}
 
-		$data->mid = $response->mid;
-		$data->subId = $response->subId;
-
-		// Redirect the user
-		@ob_start();
-		include dirname(__FILE__).'/paysafe/form.php';
-		$html = @ob_get_clean();
-
-		return $html;
+		JFactory::getApplication()->redirect($paymentPanel);
 	}
 
 	public function onAKPaymentCallback($paymentmethod, $data)
@@ -108,76 +101,51 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 			$data['akeebasubs_failure_reason'] = 'Invalid data; this does not look like a PaySafe response';
 		}
 
-		// Extract subscription ID from $data['mtid']
 		if ($isValid) {
-			$mtid = array_key_exists('mtid', $data) ? $data['mtid'] : '0_-1';
-			list($random, $id) = explode('_', $mtid);
-			$id = (int)$id;
+			$sandbox = $this->params->get('sandbox',0);
+			$mode = $sandbox ? 'test' : 'live';
 
-			$subscription = null;
+			// Connect to PaySafe's SOAP API
+			$api = new SOPGClassicMerchantClient(false, 'en', false, $mode);
+			$api->merchant($data->username, $data->password);
 
-			if ($id > 0)
-			{
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-					->setId($id)
-					->getItem();
+			$status = $api->getSerialNumbers($data['mtid'], $data['cur'], $subId = '');
 
-				if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
-				{
-					$subscription = null;
-					$isValid = false;
-				}
-			}
-			else
+			if ($status != 'execute')
 			{
 				$isValid = false;
+
+				$data['akeebasubs_failure_reason'] = 'Expected status: execute. Got status: ' . $status;
 			}
 		}
 
-		if(!$isValid)
+		if ($isValid)
 		{
-			$data['akeebasubs_failure_reason'] = 'The referenced subscription ID in mtid is invalid';
-		}
+			$testexecute = $api->executeDebit( $data['amo'], '1' );
 
-		// Fraud attempt? Do nothing more!
-		if (!$isValid)
-		{
-			$this->logIPN($data, $isValid);
+			if (!$testexecute)
+			{
+				$isValid = false;
 
-			return false;
-		}
-
-		// Get some data
-		$data = (object)array(
-			'url'			=> $this->getPaymentURL(),
-			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
-			'username'		=> $this->params->get('username', ''),
-			'password'		=> $this->params->get('password', ''),
-			'subId'			=> null,
-		);
-
-		// Connect to PaySafe's SOAP API
-		$api = new SOPGClassicMerchantClient($data->url->api);
-
-		// Execute the debit
-		$response = $api->executeDebit($data->username, $data->password, $mtid, $data->subId,
-			$subscription->gross_amount, $data->currency, 1, null);
-
-		if (($response->resultCode != 0) || ($response->errorCode ==0))
-		{
-			$isValid = false;
-			$data['akeebasubs_failure_reason'] = "PaySafe error executing debit -- Result code {$response->resultCode} -- Error code {$response->errorCode}";
+				$data['akeebasubs_failure_reason'] = 'executeDebit failed';
+			}
 		}
 
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
+		// Fraud attempt? Do nothing more!
+		if (!$isValid)
+		{
+			return false;
+		}
+
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-			'akeebasubs_subscription_id' => $id,
-			'processor_key'		=> $mtid,
-			'state'				=> 'C',
-			'enabled'			=> 0
+			'akeebasubs_subscription_id'	=> $data['subid'],
+			'processor_key'					=> $data['mtid'],
+			'state'							=> 'C',
+			'enabled'						=> 0
 		);
 
 		JLoader::import('joomla.utilities.date');
@@ -199,54 +167,21 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 	}
 
 	/**
-	 * Gets the form action URL for the payment
-	 */
-	private function getPaymentURL()
-	{
-		$ret = (object)array(
-			'api'		=> '',
-			'customer'	=> '',
-		);
-
-		$sandbox = $this->params->get('sandbox',0);
-
-		if ($sandbox)
-		{
-			$ret->api = 'https://soatest.paysafecard.com/psc/services/PscService?wsdl';
-			$ret->customer = 'https:// customer.test.at.paysafecard.com/psccustomer/GetCustomerPanelServlet';
-		}
-		else
-		{
-			$ret->api = 'https://soa.paysafecard.com/psc/services/PscService?wsdl';
-			$ret->customer = 'https:// customer.cc.at.paysafecard.com/psccustomer/GetCustomerPanelServlet';
-		}
-
-		return $ret;
-	}
-
-	/**
 	 * Validates the incoming data against PayPal's IPN to make sure this is not a
 	 * fraudelent request.
 	 */
 	private function isValidIPN(&$data)
 	{
-		if (!array_key_exists('serialNumbers', $data))
+		if (!array_key_exists('mtid', $data))
 		{
-			$data['akeebasubs_ipncheck_failure'] = 'No serial numbers in request';
+			$data['akeebasubs_ipncheck_failure'] = 'No mtid in request';
 
 			return false;
 		}
 
-		if (!array_key_exists('eventType', $data))
+		if (!array_key_exists('cur', $data))
 		{
-			$data['akeebasubs_ipncheck_failure'] = 'No eventType in request';
-
-			return false;
-		}
-
-		if ($data['eventType'] != 'ASSIGN_CARDS')
-		{
-			$data['akeebasubs_ipncheck_failure'] = 'Invalid eventType';
+			$data['akeebasubs_ipncheck_failure'] = 'No currency in request';
 
 			return false;
 		}
