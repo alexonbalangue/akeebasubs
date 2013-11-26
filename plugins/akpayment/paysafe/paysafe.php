@@ -54,7 +54,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 		$time = gettimeofday();
 
 		$data = (object)array(
-			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paysafe&subid=' . $subscription->akeebasubs_subscription_id,
+			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paysafe&aksubid=' . $subscription->akeebasubs_subscription_id,
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
@@ -65,18 +65,15 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 			'subId'			=> '',
 		);
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
-			->user_id($user->id)
-			->getFirstItem();
-
 		$sandbox = $this->params->get('sandbox',0);
 		$mode = $sandbox ? 'test' : 'live';
 
 		// Connect to PaySafe's SOAP API
-		$api = new SOPGClassicMerchantClient(false, 'en', false, $mode);
+		$api = new SOPGClassicMerchantClient(false, 'en', true, $mode);
 		$api->merchant($data->username, $data->password);
 		$api->setCustomer($subscription->gross_amount, $data->currency, $data->mtid, $subscription->akeebasubs_subscription_id);
 		$api->setURL($data->success, $data->cancel, $data->postback);
+		$api->data['clientIp'] = $_SERVER['REMOTE_ADDR'];
 		$paymentPanel = $api->createDisposition();
 
 		if ($paymentPanel == false)
@@ -101,27 +98,46 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 			$data['akeebasubs_failure_reason'] = 'Invalid data; this does not look like a PaySafe response';
 		}
 
-		if ($isValid) {
+		// Load the subscription record
+		if ($isValid)
+		{
+			$subid = $data['aksubid'];
+			$subscription = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subid);
+
+			if ($subscription->akeebasubs_subscription_id != $subid)
+			{
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = 'Invalid subscription ID ' . $subid;
+			}
+		}
+
+		// Check if eventType is ASSIGN_CARDS
+		if ($isValid)
+		{
+			$eventType = $data['eventType'];
+			$serialNumbers = $data['serialNumbers'];
+			$mtid = $data['mtid'];
+
+			if (strtoupper($eventType) !== 'ASSIGN_CARDS')
+			{
+				$isValid = false;
+				$data['akeebasubs_failure_reason'] = 'Invalid data; eventType is not ASSIGN_CARDS';
+			}
+		}
+
+		if ($isValid)
+		{
 			$sandbox = $this->params->get('sandbox',0);
 			$mode = $sandbox ? 'test' : 'live';
 
 			// Connect to PaySafe's SOAP API
 			$api = new SOPGClassicMerchantClient(false, 'en', false, $mode);
 			$api->merchant($data->username, $data->password);
+			$api->setMtid($mtid);
+			$api->setSubId('');
+			$api->setCurrency(strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')));
 
-			$status = $api->getSerialNumbers($data['mtid'], $data['cur'], $subId = '');
-
-			if ($status != 'execute')
-			{
-				$isValid = false;
-
-				$data['akeebasubs_failure_reason'] = 'Expected status: execute. Got status: ' . $status;
-			}
-		}
-
-		if ($isValid)
-		{
-			$testexecute = $api->executeDebit( $data['amo'], '1' );
+			$testexecute = $api->executeDebit($subscription->gross_amount, '1');
 
 			if (!$testexecute)
 			{
@@ -142,7 +158,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
-			'akeebasubs_subscription_id'	=> $data['subid'],
+			'akeebasubs_subscription_id'	=> $data['aksubid'],
 			'processor_key'					=> $data['mtid'],
 			'state'							=> 'C',
 			'enabled'						=> 0
@@ -167,21 +183,13 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 	}
 
 	/**
-	 * Validates the incoming data against PayPal's IPN to make sure this is not a
-	 * fraudelent request.
+	 * Validates the incoming data to make sure this is not a fraudulent request.
 	 */
 	private function isValidIPN(&$data)
 	{
 		if (!array_key_exists('mtid', $data))
 		{
-			$data['akeebasubs_ipncheck_failure'] = 'No mtid in request';
-
-			return false;
-		}
-
-		if (!array_key_exists('cur', $data))
-		{
-			$data['akeebasubs_ipncheck_failure'] = 'No currency in request';
+			$data['akeebasubs_failure_reason'] = 'No mtid in request';
 
 			return false;
 		}

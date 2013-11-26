@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5.0" type="plugin" group="akpayment" method="upgrade">
-	<name>Akeeba Subscriptions Payment - PaySafe Card</name>
+	<name>Akeeba Subscriptions Payment - paysafecard</name>
 	<author>Akeeba Ltd</author>
 	<authorUrl>https://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2013 Nicholas K. Dionysopoulos / Akeeba Ltd</copyright>
