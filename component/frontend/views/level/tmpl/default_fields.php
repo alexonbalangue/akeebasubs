@@ -5,6 +5,39 @@
  *  @license GNU General Public License version 3, or later
  */
 
+/*
+ * WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+ *
+ * ##          ##    ####    #######   ####    ##  ##  ####    ##    ######
+ * ##          ##   ##  ##   ##    ##  ## ##   ##  ##  ## ##   ##   ##    ##
+ * ##          ##  ##    ##  ##   ##   ##  ##  ##  ##  ##  ##  ##  ##
+ * ##   ###   ##   ########  ######    ##   ## ##  ##  ##   ## ##  ##  ####
+ *  ##  ###  ##    ##    ##  ##   ##   ##    ####  ##  ##    ####  ##     ##
+ *   #### ####     ##    ##  ##    ##  ##     ###  ##  ##     ###   ##    ##
+ *    ##   ##      ##    ##  ##    ##  ##      ##  ##  ##      ##    ######
+ *
+ * WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+ *
+ *
+ * !!! FAILURE TO ABIDE BY THIS WARNING'S INSTRUCTIONS WILL BREAK THE COMPONENT !!!
+ *
+ *
+ * DO NOT REMOVE ANY OF THE FIELDS IN THIS FILE. ALL OF THEM MUST BE PRESENT IN
+ * THE HTML OF THE PAGE FOR AKEEBA SUBSCRIPTIONS TO WORK. REMOVAL OF ANY OF THE
+ * FIELDS PRESENT IN THIS FILE WILL RESULT IN INABILITY TO SUBSCRIBE, STRANGE
+ * ERROR MESSAGES AND GENERAL MALFUNCTION OF THE COMPONENT.
+ *
+ * YOU ARE SUPPOSED TO HIDE THE FIELDS YOU DO NOT WANT DISPLAYED ON THE PAGE
+ * USING CSS. THIS IS WHY EACH OF THESE FIELDS HAS A UNIQUE ID ATTRIBUTE. IF
+ * YOU ARE IN DOUBT DO NOT TOUCH OR OVERRIDE THIS FILE.
+ *
+ * IF YOU EVER REMOVE FIELDS FROM THIS FILE YOU WILL HAVE TO MODIFY THE ENTIRE
+ * COMPONENT AND ALL PAYMENT PLUGINS.
+ *
+ * IF YOU DECIDE TO IGNORE THIS STRICT WARNING, DO NOT FILE "BUG" REPORTS OR
+ * SEEK ASSISTANCE.
+ */
+
 defined('_JEXEC') or die();
 
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/signup.js?'.AKEEBASUBS_VERSIONHASH);
