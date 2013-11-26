@@ -94,7 +94,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$rawDataGet = JRequest::get('GET', 2);
 		$rawData = array_merge($rawDataCache, $rawDataGet, $rawDataPost);
 		if(!empty($rawData)) foreach($rawData as $k => $v) {
-			if(substr($k,0,1) == chr(0)) continue; // Don't ask...
+			if (substr($k,0,1) == chr(0))
+			{
+				// Some people reported a key starting with a null byte causing a fatal error. Uh?!
+				continue;
+			}
+
+			if (empty($k))
+			{
+				// Some people reported an empty(!!!) key causing a fatal error. WTF?!
+				continue;
+			}
+
 			$this->setState($k, $v);
 		}
 
