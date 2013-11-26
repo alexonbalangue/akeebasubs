@@ -4566,7 +4566,7 @@ Rule C gives $ 30 discount</programlisting>
 
             <listitem>
               <para>The name of the payment processor, all lowercase without
-              spaces. If unsure, do not define this field at all.</para>
+              spaces. If unsure, use the value <option>none</option></para>
             </listitem>
           </varlistentry>
 
@@ -4575,7 +4575,8 @@ Rule C gives $ 30 discount</programlisting>
 
             <listitem>
               <para>The transaction number as recorded by the payment
-              processor. If unsure, do not define this field at all.</para>
+              processor. If unsure, use a random number. Each processor_key
+              must be unique.</para>
             </listitem>
           </varlistentry>
 

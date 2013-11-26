@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 3.3.4
+================================================================================
+# [LOW] The notification after expiration was broken
+
 Akeeba Subscriptions 3.3.3
 ================================================================================
 # [LOW] Croatia is now part of the EU
