@@ -103,7 +103,12 @@
 	</administration>
 	
 	<scriptfile>script.akeebasubs.php</scriptfile>
-	
+
+    <!-- Update servers -->
+    <updateservers>
+        <server type="extension" priority="1" name="Akeeba Subscriptions Core"><![CDATA[http://cdn.akeebabackup.com/updates/akeebasubs.xml]]></server>
+    </updateservers>
+
 	<!-- Akeeba Backup System Restore Points -->
 	<restorepoint>
 		<customdirs>
