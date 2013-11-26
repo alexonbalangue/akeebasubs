@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 3.3.4
 ================================================================================
+# [MEDIUM] The login form in the subscription page did not support two factor authentication in Joomla! 3.2
 # [LOW] The notification after expiration was broken
 
 Akeeba Subscriptions 3.3.3
