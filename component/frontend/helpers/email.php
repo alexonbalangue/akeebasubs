@@ -281,6 +281,11 @@ class AkeebasubsHelperEmail
 		// Load the template
 		list($isHTML, $subject, $templateText, $loadLanguage) = self::loadEmailTemplate($key, $sub->akeebasubs_level_id, JFactory::getUser($sub->user_id));
 
+		if (empty($subject))
+		{
+			return false;
+		}
+
 		// Substitute variables in $templateText and $subject
 		if(!class_exists('AkeebasubsHelperMessage'))
 		{
