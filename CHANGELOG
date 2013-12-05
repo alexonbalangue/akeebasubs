@@ -5,6 +5,7 @@ Akeeba Subscriptions 3.3.4
 # [MEDIUM] The login form in the subscription page did not support two factor authentication in Joomla! 3.2
 # [LOW] The notification after expiration was broken
 # [LOW] Extremely rare case where an empty user information key could cause a fatal error when subscribing
+# [LOW] The user cannot be linked to from the invoices list; link removed
 
 Akeeba Subscriptions 3.3.3
 ================================================================================

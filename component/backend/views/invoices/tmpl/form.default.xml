@@ -49,8 +49,8 @@
 		
 		<field name="user_id" type="user"
 			avatar_size="48"
-			show_link="true"
-			link_url="index.php?option=com_akeebasubs&amp;view=user&amp;id=[USER:ID]"
+			show_link="false"
+			link_url="index.php?option=com_akeebasubs&amp;view=user&amp;user_id=[USER:ID]"
 		/>
 		
 		<field name="extension" type="list"
