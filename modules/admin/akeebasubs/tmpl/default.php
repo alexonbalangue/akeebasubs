@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * @package		mod_akeebasubs
  * @copyright 	Copyright (c) 2011-2013 Sander Potjer
