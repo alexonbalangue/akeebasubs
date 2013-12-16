@@ -246,272 +246,16 @@
       <section xml:id="installation-troubleshooting">
         <title>Installation troubleshooting</title>
 
-        <bridgehead>Joomla! is logging you out during
-        installation</bridgehead>
-
-        <para>The first thing you might observe is that <emphasis
-        role="bold">Joomla! is logging you out when trying to
-        install</emphasis> Akeeba Subscriptions. This is due to a bug in
-        Joomla! session handling (the session storage space is too small).
-        Please <link
-        xlink:href="http://docs.joomla.org/Why_does_the_administrator_logoff_all_of_the_sudden">follow
-        these instructions</link> to fix the database table that causes this
-        issue. After doing that you will have to log in again to your site.
-        You will see that everything is missing from the back-end interface.
-        Don't panic! That's part of the Joomla! bug. Just log out using the
-        link on the top-right of your page, then log back in. Everything is
-        back to normal and you can retry the installation.</para>
-
-        <bridgehead>Joomla! says "can't build admin menu" and fails or Akeeba
-        Subscriptions' entry under the Components menu disappears</bridgehead>
-
-        <note>
-          <para>This problem should be mostly fixed as of Joomla! 2.5.6 and
-          later releases</para>
-        </note>
-
-        <para>On some other occasions, especially when trying to install or
-        update the component after an installation error, Joomla! will
-        complain that it <emphasis role="bold">cannot build admin
-        menus</emphasis>. This is due to another Joomla! bug <link
-        xlink:href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&amp;tracker_item_id=25663">we
-        have sent a patch for</link> to the Joomla! development team.
-        Meanwhile, you will have to run a few SQL statements against your
-        database with a database editor such as phpMyAdmin:</para>
-
-        <programlisting>DELETE FROM jos_assets WHERE `name` = 'com_akeebasubs';
-DELETE FROM jos_menu WHERE `menutype` = 'main' AND `alias` = 'com_akeebasubs';
-DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeebasubs';</programlisting>
-
-        <para>Remember to change <replaceable>jos_</replaceable> with your
-        database tables' name prefix if you changed it during installation!
-        It's easy to find out what it is. Take a look at the database and
-        you'll see that all of your tables begin with the same few letters.
-        That's your prefix. After running those SQL statements you can proceed
-        with the reinstallation of the component.</para>
-
-        <bridgehead>Checking your temporary directory</bridgehead>
-
-        <para>First, we will have to make sure that you are using a valid
-        temporary directory. Many sites are configured to use the system-wide
-        (/tmp) directory or an invalid directory, causing installation
-        problems. In order to change your site's temporary directory setting
-        you have to follow this procedure, depending on your Joomla!
-        version.</para>
-
-        <bridgehead renderas="sect4">Joomla! 2.5 and later</bridgehead>
-
-        <orderedlist>
-          <listitem>
-            <para>Create a file named mynewtmp.php with the following
-            contents:</para>
-
-            <programlisting>&lt;?php echo dirname(__FILE__).'/tmp';</programlisting>
-          </listitem>
-
-          <listitem>
-            <para>Upload the file to your site and access it as
-            http://www.example.com/mynewtmp.php where www.example.com is the
-            domain name to your site.</para>
-          </listitem>
-
-          <listitem>
-            <para>Write down what you see on the screen. That's your new
-            temporary directory path.</para>
-          </listitem>
-
-          <listitem>
-            <para>Remove the mynewtmp.php file from your site.</para>
-          </listitem>
-
-          <listitem>
-            <para>Go to your site's administrator back-end and click on
-            <guimenu>Site</guimenu>, <guimenuitem>Global
-            Configuration</guimenuitem> menu item from the top menu.</para>
-          </listitem>
-
-          <listitem>
-            <para>Click on the <guilabel>Server</guilabel> link</para>
-          </listitem>
-
-          <listitem>
-            <para>Find the "Path to Temp-folder" and replace its contents with
-            the new temp path from step #3.</para>
-          </listitem>
-
-          <listitem>
-            <para>Save your Global Configuration</para>
-          </listitem>
-        </orderedlist>
-
-        <bridgehead>Enable FTP</bridgehead>
-
-        <para>On most shared hosts which do not run suPHP (if you didn't
-        understand anything, most likely the following <emphasis>is applicable
-        to you too</emphasis>) you have to enable Joomla!'s FTP layer.
-        Otherwise Joomla! won't be able to write the files to its directories
-        and installation will fail.</para>
-
-        <orderedlist>
-          <listitem>
-            <para>Go to <guimenu>Site</guimenu>, <guimenuitem>Global
-            Configuration</guimenuitem> menu item from the top menu.</para>
-          </listitem>
-
-          <listitem>
-            <para>Click on the <guilabel>Server</guilabel> tab</para>
-          </listitem>
-
-          <listitem>
-            <para>Set <guilabel>Enable FTP</guilabel> to Yes</para>
-          </listitem>
-
-          <listitem>
-            <para>In the <guilabel>FTP Host</guilabel> try using
-            <option>127.0.0.1</option> or <option>localhost</option> or the
-            FTP hostname assigned by your host</para>
-          </listitem>
-
-          <listitem>
-            <para>In the <guilabel>FTP Username</guilabel> and <guilabel>FTP
-            Password</guilabel> fields provide the FTP username and password
-            assigned by your host</para>
-          </listitem>
-
-          <listitem>
-            <para>In the <guilabel>FTP Root</guilabel> you have to type in the
-            FTP path to your site's root. Here is the easy way to find it
-            using <link
-            xlink:href="http://filezilla-project.org/download.php">FileZilla</link>:</para>
-
-            <para>Connect to your site using FileZilla. Navigate inside the
-            folder Joomla! is installed in. Usually it's a directory named
-            <filename>public_html</filename>, <filename>htdocs</filename>,
-            <filename>www</filename> or something similar. If unsure don't ask
-            us, ask your host. Now, on the right-hand pane you will find the
-            FTP path. Most likely it will look something like
-            <filename>/public_html</filename>. Copy this and paste it into the
-            FTP Root text box in your Joomla!'s Global Configuration
-            page.</para>
-          </listitem>
-
-          <listitem>
-            <para>Save your Global Configuration. If you got everything
-            correctly, you should see a message that your configuration was
-            saved. If you see an error message please seek assistance on the
-            <link xlink:href="http://forum.joomla.org">Joomla!
-            Forum</link>.</para>
-          </listitem>
-        </orderedlist>
-
-        <bridgehead>Manual installation</bridgehead>
-
-        <para>Sometimes <trademark>Joomla!</trademark> is unable to properly
-        extract ZIP archives due to technical limitations on your server. In
-        this case, you can follow a manual installation procedure.</para>
-
-        <para>First, you have to extract the installation ZIP file in a
-        subdirectory named <filename>akeeba</filename> on your local PC. Then,
-        upload the entire subdirectory inside your site's temporary directory.
-        At this point, there should be a subdirectory named
-        <filename>akeeba</filename> inside your site's temporary directory
-        which contains all of the ZIP package's files.</para>
-
-        <para>If you are unsure where your site's temporary directory is
-        located, you can look it up by going to the <guimenuitem>Global
-        Configuration</guimenuitem>, click on the <guilabel>Server</guilabel>
-        tab and take a look at the <guilabel>Path to Temp-folder</guilabel>
-        setting. The default setting is the <filename>tmp</filename> directory
-        under your site's root. Rarely, especially on automated installations
-        using Fantastico, this might have been assigned the system-wide
-        <filename>/tmp</filename> directory. In this case, please consult your
-        host for instructions on how to upload files inside this directory, or
-        read the instructions above about changing your
-        <trademark>Joomla!</trademark> temporary directory back to the default
-        location and making it writable.</para>
-
-        <para>Assuming that you are past this uploading step, click on the
-        <guimenu>Extensions</guimenu>, <guimenuitem>Manage</guimenuitem>
-        (Joomla! 1.6+ users) link on the top menu. In this page, locate the
-        <guibutton>Install Directory</guibutton> edit box in the
-        <guilabel>Install from Directory</guilabel> area. It is already filled
-        in with the absolute path to your temporary directory, for example
-        <filename>/var/www/joomla/tmp</filename>. Please append
-        <filename>/akeeba</filename> to it. As per our example, it should look
-        something like <filename>/var/www/joomla/tmp/akeeba</filename>. Then,
-        click on the <guibutton>Install</guibutton> button.</para>
-
-        <bridgehead>Still problems?</bridgehead>
-
-        <para>If you still can't install Akeeba Subscriptions and you are
-        receiving messages regarding unwritable directories, inability to move
-        files or other similar file system related error messages, please do
-        not ask us for support. These errors stem from your site set up and
-        can best be resolved by asking for help in the <link
-        xlink:href="http://forum.joomla.org">official
-        <trademark>Joomla!</trademark> forums</link>. We can only support
-        software we develop ourselves. Joomla!'s extension installer is
-        certainly not developed by us and –believe us– we have tried to
-        improve it and submitted some still pending patches to the Joomla!
-        project. Therefore we regret that we have to say that, but we can't
-        help you. Thank you for your understanding.</para>
+        <para>Please check out our component <link
+        xlink:href="https://www.akeebabackup.com/documentation/troubleshooter/abinstallation.html">installation
+        troubleshooter</link>.</para>
       </section>
 
       <section xml:id="updating">
         <title>Updating to the latest release</title>
 
-        <para>Akeeba Subscriptions can be updated with two different methods:
-        installing the new version on top of the old one or using the
-        integrated Live Update system.</para>
-
-        <important>
-          <para>Akeeba Subscritpions 2.5.0 and later no longer support using
-          Joomla!'s integrated extensions installer. The problem with
-          Joomla!'s feature is that it does not allow you to select the
-          minimum stability level of the update. This has traditionally led
-          users installing unstable versions on their live sites, ending up in
-          support requests and frustration. Moreover, the integrated Joomla!
-          extensions update is unreliable on many shared hosts. Unless these
-          significant issues are addressed we are going to keep on using our
-          own Akeeba Live Update.</para>
-        </important>
-
-        <bridgehead>Updating directly</bridgehead>
-
-        <para>This is the failsafe approach, but the least convenient.
-        Download the latest Akeeba Subscriptions release from <link
-        xlink:href="https://www.AkeebaBackup.com/latest">https://www.AkeebaBackup.com/latest</link>
-        and save the ZIP file to your hard disk. Log in to your site's
-        backend, click on <guimenuitem>Extensions Manager</guimenuitem>
-        (Joomla! 1.6 and later). Use the <guibutton>Browse...</guibutton>
-        button to locate the ZIP file you downloaded, then click on
-        <guibutton>Upload and Install</guibutton>. All Joomla! versions since
-        1.5.5 are smart enough to understand that you're doing an upgrade
-        instead of installation and adjust the process accordingly.</para>
-
-        <important>
-          <para>Do NOT uninstall Akeeba Subscriptions before updating it!
-          Uninstalling will remove all of your data, including all subscriber
-          information!</para>
-        </important>
-
-        <bridgehead>Using Live Update</bridgehead>
-
-        <para>Since Akeeba Subscriptions 1.0.0 we have integrated our Live
-        Update system inside Akeeba Subscriptions. Log in to your site's
-        backend and go to <guimenu>Components</guimenu>, <guimenuitem>Akeeba
-        Subscriptions</guimenuitem>. Look towards the bottom of the page.
-        There should be an icon which reads "Update found" when there is a new
-        version available. Click on it and then click on "Update now". The new
-        version will be downloaded and installed automatically for you. In
-        case this doesn't work, or if "Live Update not supported" is displayed
-        below the icon, please make sure that your host's firewall allows
-        TCP/IP communications over port 80 and 443 to
-        <uri>akeebabackup.com</uri> and <uri>s3.amazonaws.com</uri>. If your
-        host requests IP addresses instead of domain names, please ask them to
-        trace them from the server as they are multicast hostnames, which
-        means that they resolve to a different IP depending on where in the
-        world you are.</para>
+        <para>Akeeba Subscriptions can be updated by installing the new
+        version on top of the old one.</para>
 
         <bridgehead>Something not working right after the update?</bridgehead>
 
@@ -551,6 +295,13 @@ DELETE FROM jos_extensions WHERE `type` = 'component' AND `element` = 'com_akeeb
       they are removed automatically. Now click on
       <guibutton>Uninstall</guibutton>. This will completely remove Akeeba
       Subscriptions including all subscriber information.</para>
+
+      <warning>
+        <para>UNINSTALLING THE COMPONENT WILL REMOVE ALL SUBSCRIPTION AND
+        SUBSCRIBER INFORMATION FROM YOUR SITE. This process cannot be
+        reversed. Once you uninstall the component you lose this data
+        forever.</para>
+      </warning>
     </section>
   </chapter>
 
@@ -6641,9 +6392,7 @@ Rule C gives $ 30 discount</programlisting>
     configuring the payment plugins. Payment plugins are used to integrate
     payment processor (services which facilitate on-line and off-line
     payments) with Akeeba Subscriptions. Without them you cannot have
-    subscriptions. Akeeba Subscriptions comes with dozens of payment plugins.
-    One of them, which integrates the popular PayPal payments service, is
-    always enabled by default.</para>
+    subscriptions.</para>
 
     <para>All payment methods are standard Joomla! plugins, belonging to the
     <option>akpayment</option> group. If you want to enable a payment method,
@@ -6668,50 +6417,6 @@ Rule C gives $ 30 discount</programlisting>
       self-induced problem. <emphasis role="bold">YOU MUST NEVER, EVER CHANGE
       THE ACCESS OF THE PLUGINS</emphasis>!</para>
     </warning>
-
-    <bridgehead>Can I request a custom payment plugin?</bridgehead>
-
-    <para>Generally yes, you can request the creation of a custom payment
-    plugin. In order for us to do that there has to be an API for the payment
-    processor available. If the API is not available to the general public you
-    will have to provide it to us. You must also be willing to test it on a
-    site of yours where we can also have access for debugging purposes.
-    Usually a test or staging site will do just fine.</para>
-
-    <para>The base price for creating a custom payment plugin is 600 Euros
-    with a 50% deposit before we start working on it. The creation of a custom
-    plugin takes between 2 and 8 weeks, depending on our workload. Please try
-    to contact us at least two and a half months before your site is scheduled
-    to go live to allow for adequate time to create and test the payment
-    plugin.</para>
-
-    <para>All integration plugins created are included in the next release of
-    Akeeba Subscriptions. If you want a private plugin, i.e. a plugin that
-    will not be included in the next release of Akeeba Subscriptions, there is
-    an additional charge of 1000 Euros. Updates to your private plugin are
-    quoted per case, with a minimum fee of 300 Euros. The private surcharge
-    and update fee are paid in advance, before we start doing any work. Bug
-    fixes are provided free of charge for the first three (3) months.</para>
-
-    <para>When we have the plugin in a usable state we will ask you to test
-    it, using our latest development build ("dev release"). If you do not find
-    any issues or do not reply at all within a week we will send you a
-    proforma invoice. Upon payment of the balance of your account via bank
-    transfer we will issue the final invoice.</para>
-
-    <para>The prices above do not include VAT 18%. If you are outside the
-    European Union you do not have to pay VAT. If you have an EU business with
-    a VIES-registered VAT number you do not have to pay any VAT due to the
-    reverse charge VAT system in the Eurozone. This exemption does not apply
-    to residents and businesses of the Republic of Cyprus; all Cypriot
-    residents and businesses are charged VAT.</para>
-
-    <para>We reserve the right to decline the creation of a custom payment
-    plugin due to technical reasons; high workload which would make it
-    impossible to deliver on time; or force majeur. We try our best to let you
-    know as soon as you contact us with your request. In the unlikely event
-    that we have to cancel the plugin creation after accepting the work order
-    we will refund in full any deposit you made with us.</para>
 
     <section xml:id="payment-2checkout">
       <title>2Checkout Standard Purchase Routine</title>
