@@ -788,6 +788,19 @@ function applyValidation(response, callback)
 		{
 			akeebasubs_valid_form = true;
 		}
+
+        if (akeebasubs_apply_validation)
+        {
+            if (akeebasubs_valid_form)
+            {
+                $('#subscribenow').addClass('btn-success').removeClass('btn-warning').removeClass('btn-primary')
+            }
+            else
+            {
+                $('#subscribenow').removeClass('btn-success').addClass('btn-warning').removeClass('btn-primary')
+            }
+        }
+
 	})(akeeba.jQuery);
 }
 
