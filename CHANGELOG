@@ -2,6 +2,7 @@
 Akeeba Subscriptions 3.3.4
 ================================================================================
 ~ Do not send out emails when the subject line is left blank
+~ ui-disable-spinner is now a class, allowing template overrides to place multiple spinners in the subscription page
 # [MEDIUM] The login form in the subscription page did not support two factor authentication in Joomla! 3.2
 # [LOW] The notification after expiration was broken
 # [LOW] Extremely rare case where an empty user information key could cause a fatal error when subscribing

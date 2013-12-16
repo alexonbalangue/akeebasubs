@@ -49,7 +49,7 @@ function blockInterface()
 {
 	(function($) {
 		$('#subscribenow').click(cacheSubmitAction);
-		$('#ui-disable-spinner').css('display','inline-block');
+		$('.ui-disable-spinner').css('display','inline-block');
 		//$('#subscribenow').attr('disabled','disabled');
 		akeebasubs_blocked_gui = true;
 	})(akeeba.jQuery);
@@ -59,7 +59,7 @@ function enableInterface()
 {
 	(function($) {
 		$('#subscribenow').unbind('click');
-		$('#ui-disable-spinner').css('display','none');
+		$('.ui-disable-spinner').css('display','none');
 		$('#subscribenow').removeAttr('disabled');
 		akeebasubs_blocked_gui = false;
 		if(akeebasubs_run_validation_after_unblock) {
