@@ -7,6 +7,7 @@ Akeeba Subscriptions 3.3.4
 # [LOW] The notification after expiration was broken
 # [LOW] Extremely rare case where an empty user information key could cause a fatal error when subscribing
 # [LOW] The user cannot be linked to from the invoices list; link removed
+# [LOW] A Download ID was requested in the Professional version even though it's no longer commercial
 
 Akeeba Subscriptions 3.3.3
 ================================================================================
