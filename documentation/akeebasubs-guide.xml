@@ -5538,7 +5538,7 @@ Rule C gives $ 30 discount</programlisting>
       templates. The following sections will explain how to customise Akeeba
       Subscriptions' front-end display.</para>
 
-      <section>
+      <section xml:id="customising-frontend-layout">
         <title>Customising the front-end layout</title>
 
         <para>Layout customisation usually involves either changing just the
@@ -5548,11 +5548,13 @@ Rule C gives $ 30 discount</programlisting>
 
         <warning>
           <para>Newer versions of the component may introduce changes to the
-          base CSS files and HTML output. We recommend you to review your
-          overridden files every time you upgrade Akeeba Subscriptions. We
-          regret to inform you that we can not accept bug reports and support
-          requests unless the issues you have can be reproduced <emphasis>even
-          after disabling your overrides</emphasis>.</para>
+          base CSS and/or Javascript files or the HTML output. We recommend
+          you to review your overridden files every time you upgrade Akeeba
+          Subscriptions. We will not accept bug reports or provide any help
+          whatsoever if you are using template or media files overrides on
+          your site as you are no longer running our tested code against our
+          tested layout and our tested Javascript. Simply put: use overrides =
+          you're on your own.</para>
         </warning>
 
         <bridgehead>Customising the CSS</bridgehead>
@@ -5560,7 +5562,7 @@ Rule C gives $ 30 discount</programlisting>
         <procedure>
           <step>
             <para>Find your current template's subdirectory in your site's
-            root, under the <filename>tempates</filename> directory. In this
+            root, under the <filename>templates</filename> directory. In this
             example, we will assume it is
             <filename>templates/<replaceable>mytemplate</replaceable></filename></para>
           </step>
@@ -5593,6 +5595,38 @@ Rule C gives $ 30 discount</programlisting>
         developers and horrid designers. You can ask us, however, regarding
         any issues you might experience overriding our CSS files.</para>
 
+        <bridgehead>Customising the Javascript</bridgehead>
+
+        <procedure>
+          <step>
+            <para>Find your current template's subdirectory in your site's
+            root, under the <filename>templates</filename> directory. In this
+            example, we will assume it is
+            <filename>templates/<replaceable>mytemplate</replaceable></filename></para>
+          </step>
+
+          <step>
+            <para>Create a new directory
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/js</filename>
+            This is your media files overrides directory.</para>
+          </step>
+
+          <step>
+            <para>Copy files from <filename>media/com_akeebasubs/js</filename>
+            into the
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/js</filename>
+            directory. From now on, Akeeba Subscription will load these new
+            files instead of the files found under
+            <filename>media/com_akeebasubs/</filename>js.</para>
+          </step>
+
+          <step>
+            <para>Edit the files in
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/com_akeebasubs/js</filename>
+            and adjust the JS code to your liking.</para>
+          </step>
+        </procedure>
+
         <bridgehead>Customising the HTML output</bridgehead>
 
         <para>Sometimes it's not enough modifying the CSS. In order to achieve
@@ -5604,6 +5638,65 @@ Rule C gives $ 30 discount</programlisting>
         the <link
         xlink:href="http://docs.joomla.org/How_to_override_the_output_from_the_Joomla!_core">official
         Joomla! documentation on the subject</link>.</para>
+
+        <bridgehead>Overriding the loading of Bootstrap / jQuery</bridgehead>
+
+        <para>Akeeba Subscriptions uses the Akeeba Strapper library to load
+        its own copies of Bootstrap and jQuery on Joomla! 2.5 or its Bootstrap
+        overrides in Joomla! 3. If you have a Joomla! 2.5 site which uses
+        Bootstrap 2.x or a Joomla! 3 site which doesn't use Bootstrap 2.x
+        (e.g. it uses Foundation Zurb, Bootsrap 3.x or something in the like)
+        or if you are loading jQuery on your own (e.g. from a CDN) you MUST
+        tell Akeeba Strapper what to load and when. You can do this through
+        media overrides.</para>
+
+        <procedure>
+          <step>
+            <para>Find your current template's subdirectory in your site's
+            root, under the <filename>templates</filename> directory. In this
+            example, we will assume it is
+            <filename>templates/<replaceable>mytemplate</replaceable></filename></para>
+          </step>
+
+          <step>
+            <para>Create a new directory
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/akeeba_strapper</filename>
+            This is your Strapper media override directory.</para>
+          </step>
+
+          <step>
+            <para>Copy the file
+            <filename>media/akeeba_strapper/strapper.ini</filename> into the
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/akeeba_strapper</filename>
+            directory. From now on, Akeeba Strapper will consult this new
+            <filename>strapper.ini</filename> file instead of the file found
+            under <filename>media/akeeba_strapper</filename> to decide what to
+            load.</para>
+          </step>
+
+          <step>
+            <para>Edit the
+            <filename>templates/<replaceable>mytemplate</replaceable>/media/akeeba_strapper/strapper.ini</filename>
+            file and change the Bootstrap and jQuery loading rules.</para>
+          </step>
+        </procedure>
+
+        <important>
+          <para>These settings apply for all components using Akeeba Strapper.
+          This includes all components with a front-end part released by
+          Akeeba Ltd (e.g. Akeeba Subscriptions, Akeeba Ticket System or
+          Akeeba DocImport) as well as a few third party components (e.g.
+          Twentronix Cookie Confirm).</para>
+        </important>
+
+        <bridgehead>Overriding the CSS or JS loaded by Akeeba
+        Strapper</bridgehead>
+
+        <para>Akeeba Strapper also loads its own CSS and Javascript files. You
+        can override them as explained in the "Customising the CSS" and
+        "Customising the Javascript" sections above. The source directories
+        for Akeeba Strapper's files can be found under
+        <filename>media/akeeba_strapper</filename>.</para>
       </section>
 
       <section xml:id="customising-emails">
