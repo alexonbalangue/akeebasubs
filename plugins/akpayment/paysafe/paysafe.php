@@ -130,22 +130,40 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 			$sandbox = $this->params->get('sandbox',0);
 			$mode = $sandbox ? 'test' : 'live';
 
+            $subId = '';
+            $cur = strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR'));
+
 			// Connect to PaySafe's SOAP API
-			$api = new SOPGClassicMerchantClient(false, 'en', false, $mode);
+            $debug = true;
+            $autoCorrect = true;
+			$api = new SOPGClassicMerchantClient($debug, 'en', $autoCorrect, $mode);
 			$api->merchant($data->username, $data->password);
 			$api->setMtid($mtid);
 			$api->setSubId('');
-			$api->setCurrency(strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')));
+			$api->setCurrency($cur);
 
-			$testexecute = $api->executeDebit($subscription->gross_amount, '1');
+            $status = $api->getSerialNumbers($mtid, $cur, $subId);
 
-			if (!$testexecute)
-			{
-				$isValid = false;
+            if ($status != 'execute')
+            {
+                $isValid = false;
 
-				$data['akeebasubs_failure_reason'] = 'executeDebit failed';
-			}
+                $data['akeebasubs_failure_reason'] = 'getSerialNumbers returned status ' . $status . ' -- expected: execute';
+            }
 		}
+
+        if ($isValid)
+        {
+            $amt = printf('%.2f', $subscription->gross_amount);
+            $testexecute = $api->executeDebit($amt, '1');
+
+            if (!$testexecute)
+            {
+                $isValid = false;
+
+                $data['akeebasubs_failure_reason'] = 'executeDebit failed -- tech info: ' . print_r($api->debug);
+            }
+        }
 
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
