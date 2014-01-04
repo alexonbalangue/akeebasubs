@@ -46,109 +46,34 @@ class Com_AkeebasubsInstallerScript
 		// plugins => { (folder) => { (element) => (published) }* }*
 		'plugins' => array(
 			'akeebasubs' => array(
-				'aceshop'				=> 0,
-				'acymailing'			=> 0,
 				'adminemails'			=> 0,
-				'affemails'				=> 0,
-				'ageverification'		=> 0,
-				'agora'					=> 0,
 				'agreetotos'			=> 0,
 				'atscredits'			=> 0,
 				'autocity'				=> 0,
 				'canalyticscommerce'	=> 0,
-				'cb'					=> 0,
-				'cbsync'				=> 0,
-				'ccinvoices'			=> 0,
-				'constantcontact'		=> 0,
 				'contentpublish'		=> 0,
 				'customfields'			=> 1,
-				'easydiscuss'			=> 0,
-				'freshbooks'			=> 0,
-				'frontenduseraccess'	=> 0,
 				'invoices'				=> 0,
-				'iplogger'				=> 0,
 				'iproperty'				=> 0,
-				'jomsocial'				=> 0,
 				'joomla'				=> 1,
 				'joomlaprofilesync'		=> 1,
-				'k2'					=> 0,
-				'kunena'				=> 0,
-				'mailchimp'				=> 0,
-				'mijoshop'				=> 0,
-				'projectfork'			=> 0,
-				'projectfork4'			=> 0,
 				'recaptcha'				=> 0,
-				'redshop'				=> 0,
-				'redshopusersync'		=> 0,
-				'samplefields'			=> 0,
 				'slavesubs'				=> 1,
 				'sql'					=> 0,
 				'subscriptionemails'	=> 1,
-				'tracktime'				=> 0,
-				'userdelete'			=> 0,
-				'vm2'					=> 0,
-				'zohoinvoice'			=> 0,
 			),
 			'akpayment' => array(
 				'2checkout'				=> 0,
 				'2conew'				=> 0,
-				'allopass'				=> 0,
-				'alphauserpoints'		=> 0,
-				'authorizenet'			=> 0,
-				'beanstream'			=> 0,
-				'braintree'				=> 0,
-				'cashu'					=> 0,
-				'ccavenue'				=> 0,
-				'clickandbuy'			=> 0,
-				'cmcic'					=> 0,
-				'deltapay'				=> 0,
-				'dwolla'				=> 0,
-				'epaydk'				=> 0,
-				'eselectplus'			=> 0,
-				'exact'					=> 0,
-				'eway'					=> 0,
-				'ewayrapid3'			=> 0,
-				'gocardless'			=> 0,
-				'googlecheckout'		=> 0,
-				'ifthen'				=> 0,
-				'mercadopago'			=> 0,
-				'moip'					=> 0,
-				'moipassinaturas'		=> 0,
-				'mobilpaycc'			=> 0,
-				'mobilpaysms'			=> 0,
-				'moneris'				=> 0,
-				'nochex'				=> 0,
 				'none'					=> 0,
 				'offline'				=> 0,
-				'pagseguro'				=> 0,
-				'payfast'				=> 0,
 				'paymill'				=> 0,
 				'paypal'				=> 1,
 				'paypalpaymentspro'		=> 0,
 				'paypalproexpress'		=> 0,
-				'paysafe'				=> 0,
-				'payu'					=> 0,
-				'postfinancech'			=> 0,
-				'przelewy24'			=> 0,
-				'rbkmoney'				=> 0,
-				'realex'				=> 0,
-				'robokassa'				=> 0,
-				'saferpay'				=> 0,
-				'sagepay'				=> 0,
-				'scnet'					=> 0,
-				'scnetintegrated'		=> 0,
 				'skrill'				=> 0,
 				'stripe'				=> 0,
-				'suomenverkkomaksut'	=> 0,
-				'upay'					=> 0,
-				'verotel'				=> 0,
 				'viva'					=> 0,
-				'wepay'					=> 0,
-				'worldpay'				=> 0,
-				'zarinpal'				=> 0,
-			),
-			'ccinvoicetags' => array(
-				'akeebasubs'			=> 1,
 			),
 			'content' => array(
 				'aslink'				=> 1,
@@ -156,24 +81,10 @@ class Com_AkeebasubsInstallerScript
 				'astimedrelease'		=> 1,
 			),
 			'system' => array(
-				'affiliatesessiongeneration' => 0,
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
 				'asuserregredir'		=> 0,
-				'idevaffiliate'			=> 0,
-				'oneclickaction'		=> 1,
-				'postaffiliatepro'		=> 0,
 			)
-		)
-	);
-
-	private $akeebaRemovePlugins = array(
-		'akeebasubs' => array(
-			'communityacl',
-			'juga',
-			'ninjaboard',
-			'tienda',
-			'vm',
 		)
 	);
 
@@ -390,9 +301,6 @@ class Com_AkeebasubsInstallerScript
 
 		$this->_copyCliFiles($parent);
 
-		// Remove Professional version plugins from Akeeba Backup Core
-		$this->_removeObsoletePlugins($parent);
-
 		// Show the post-installation page
 		$this->_renderPostInstallation($status, $fofStatus, $straperStatus, $parent);
 
@@ -424,35 +332,6 @@ class Com_AkeebasubsInstallerScript
 
 		// Show the post-uninstallation page
 		$this->_renderPostUninstallation($status, $parent);
-	}
-
-	/**
-	 * Removes the plugins which have been discontinued
-	 *
-	 * @param JInstaller $parent
-	 */
-	private function _removeObsoletePlugins($parent)
-	{
-		$src = $parent->getParent()->getPath('source');
-		$db = JFactory::getDbo();
-
-		foreach($this->akeebaRemovePlugins as $folder => $plugins) {
-			foreach($plugins as $plugin) {
-				$sql = $db->getQuery(true)
-					->select($db->qn('extension_id'))
-					->from($db->qn('#__extensions'))
-					->where($db->qn('type').' = '.$db->q('plugin'))
-					->where($db->qn('element').' = '.$db->q($plugin))
-					->where($db->qn('folder').' = '.$db->q($folder));
-				$db->setQuery($sql);
-				$id = $db->loadResult();
-				if($id)
-				{
-					$installer = new JInstaller;
-					$result = $installer->uninstall('plugin',$id,1);
-				}
-			}
-		}
 	}
 
 	/**
