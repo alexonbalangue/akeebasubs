@@ -47,22 +47,6 @@ class AkeebasubsToolbar extends FOFToolbar
 			),
 		);
 
-		if(!AKEEBASUBS_PRO)
-		{
-			$key = array_search('relations', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
-
-			$key = array_search('emailtemplates', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
-
-			$key = array_search('blockrules', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
-
-			unset($views['reports']);
-
-			unset($views['COM_AKEEBASUBS_MAINMENU_INVOICES']);
-		}
-
 		foreach($views as $label => $view) {
 			if(!is_array($view)) {
 				$this->addSubmenuLink($view);

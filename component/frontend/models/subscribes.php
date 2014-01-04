@@ -1852,18 +1852,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Step #2.b. Apply block rules in the Professional release
 		// ----------------------------------------------------------------------
-		if (AKEEBASUBS_PRO)
+		if (FOFModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
 		{
-			if (FOFModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
+			if (version_compare(JVERSION, '3.0', 'ge'))
 			{
-				if (version_compare(JVERSION, '3.0', 'ge'))
-				{
-					throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
-				}
-				else
-				{
-					JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
-				}
+				throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
+			}
+			else
+			{
+				JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
 			}
 		}
 

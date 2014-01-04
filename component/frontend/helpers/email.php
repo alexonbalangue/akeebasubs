@@ -222,7 +222,7 @@ class AkeebasubsHelperEmail
 		// If no match is found in the database (or if this is the Core release)
 		// we fall back to the legacy method of using plain text emails and
 		// translation strings.
-		if(!$isHTML || (AKEEBASUBS_PRO != 1))
+		if(!$isHTML)
 		{
 			$isHTML = false;
 

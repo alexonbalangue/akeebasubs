@@ -99,7 +99,7 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 			// Get invoices data
 			$invoices = array();
 
-			if (AKEEBASUBS_PRO && !empty($subscription_ids))
+			if (!empty($subscription_ids))
 			{
 				$rawInvoices = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 					->subids($subscription_ids)
