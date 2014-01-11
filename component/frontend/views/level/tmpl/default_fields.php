@@ -381,7 +381,13 @@ if ($businessFields == 'never') {
 	<label for="isbusiness" class="control-label">
 		* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')?>
 	</label>
-	<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), $isBusiness); ?>
+	<?php if (version_compare(JVERSION, '3.0', 'ge')): ?>
+		<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), $isBusiness); ?>
+	<?php else: ?>
+		<div class="controls">
+			<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), $isBusiness); ?>
+		</div>
+	<?php endif; ?>
 </div>
 
 <?php if($businessFields == 'none'): ?>

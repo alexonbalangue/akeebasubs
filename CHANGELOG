@@ -1,6 +1,6 @@
 <?php die(); ?>
 # [LOW] Frontend.css was included twice
-# [LOW] Fixed duplicated control div for business field
+# [LOW] Fixed duplicated control div for business field (Joomla! 3.x)
 
 Akeeba Subscriptions 3.3.4
 ================================================================================
