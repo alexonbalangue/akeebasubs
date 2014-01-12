@@ -60,7 +60,7 @@ class AkeebasubsDispatcher extends FOFDispatcher
 			AkeebaStrapper::$tag = AKEEBASUBSMEDIATAG;
 			AkeebaStrapper::bootstrap();
 			AkeebaStrapper::jQueryUI();
-			AkeebaStrapper::addCSSfile('media://com_akeebasubs/css/frontend.css');
+			AkeebaStrapper::addCSSfile('media://com_akeebasubs/css/frontend.css', AKEEBASUBS_VERSIONHASH);
 
 			// Load helpers
 			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';

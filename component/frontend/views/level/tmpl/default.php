@@ -7,8 +7,6 @@
 
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_VERSIONHASH);
-
 $this->loadHelper('modules');
 $this->loadHelper('select');
 

@@ -8,8 +8,6 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_VERSIONHASH);
-
 $this->loadHelper('cparams');
 $this->loadHelper('modules');
 $this->loadHelper('format');
