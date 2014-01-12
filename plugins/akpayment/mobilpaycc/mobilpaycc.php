@@ -326,11 +326,4 @@
 			echo $string;
 			JFactory::getApplication()->close();
 		}
-
-		private function debug($string)
-		{
-			$handle = fopen(JPATH_ROOT.'/log.txt', 'a+');
-			fwrite($handle, date('Y-m-d H:i:s').' --- '.$string.PHP_EOL);
-			fclose($handle);
-		}
 	}
