@@ -68,24 +68,27 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 {
 	var thisIsValid = true;
 	(function($) {
-		$('#$slug').parent().parent().removeClass('error').removeClass('success');
+		$('#$slug').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#{$slug}_invalid').css('display','none');
 		$('#{$slug}_valid').css('display','none');
 		if (!akeebasubs_apply_validation)
 		{
-			return true;
+		    thisIsValid = true;
+			return;
 		}
 
 		if(response.custom_validation.$slug) {
-			$('#$slug').parent().parent().addClass('success');
+			$('#$slug').parents('div.control-group').addClass('success has-success');
 			$success_javascript
+			thisIsValid = trur;
 		} else {
-			$('#$slug').parent().parent().addClass('error');
+			$('#$slug').parents('div.control-group').addClass('error has-error');
 			$failure_javascript
 			thisIsValid = false;
 		}
-		return thisIsValid;
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
 ENDJS;

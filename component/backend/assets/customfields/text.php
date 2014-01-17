@@ -50,7 +50,7 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 		}
 
 		// Set up field's HTML content
-		$html = '<input type="'.$this->input_type.'" name="custom['.$item->slug.']" id="'.$item->slug.'" value="'.htmlentities($current, ENT_COMPAT, 'UTF-8').'" placeholder="'.$placeholder.'" />';
+		$html = '<input type="'.$this->input_type.'" class="form-control" name="custom['.$item->slug.']" id="'.$item->slug.'" value="'.htmlentities($current, ENT_COMPAT, 'UTF-8').'" placeholder="'.$placeholder.'" />';
 
 		// Setup the field
 		$field = array(
@@ -77,16 +77,16 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 	public function getJavascript($item)
 	{
 		$slug = $item->slug;
-		$javascript = <<<ENDJS
+		$javascript = <<<JS
 (function($) {
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
-ENDJS;
-		if(!$item->allow_empty) $javascript .= <<<ENDJS
+JS;
+		if(!$item->allow_empty) $javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-ENDJS;
-		$javascript .= <<<ENDJS
+JS;
+		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
 
@@ -99,7 +99,7 @@ function plg_akeebasubs_customfields_fetch_$slug()
 	return result;
 }
 
-ENDJS;
+JS;
 
 		if(!$item->allow_empty):
 			$success_javascript = '';
@@ -112,33 +112,36 @@ ENDJS;
 				$success_javascript .= "$('#{$slug}_valid').css('display','inline-block');\n";
 				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
 			}
-			$javascript .= <<<ENDJS
+			$javascript .= <<<JS
 
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
 	var thisIsValid = true;
+
 	(function($) {
-		$('#$slug').parent().parent().removeClass('error').removeClass('success');
+		$('#$slug').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#{$slug}_invalid').css('display','none');
 		$('#{$slug}_valid').css('display','none');
 		if (!akeebasubs_apply_validation)
 		{
-			return true;
+			thisIsValid = true;
+			return;
 		}
 
 		if(response.custom_validation.$slug) {
-			$('#$slug').parent().parent().addClass('success');
+			$('#$slug').parents('div.control-group').addClass('success has-success');
 			$success_javascript
 		} else {
-			$('#$slug').parent().parent().addClass('error');
+			$('#$slug').parents('div.control-group').addClass('error has-error');
 			$failure_javascript
 			thisIsValid = false;
 		}
-		return thisIsValid;
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
-ENDJS;
+JS;
 		endif;
 
 		$document = JFactory::getDocument();

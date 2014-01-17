@@ -86,7 +86,7 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 				<div class="akeebasubs-awesome-footer">
 					<td class="akeebasubs-awesome-subscribe">
 						<button
-							class="btn btn-inverse"
+							class="btn btn-inverse btn-default"
 							onclick="window.location='<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
 						</button>

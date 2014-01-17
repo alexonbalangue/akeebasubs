@@ -70,73 +70,73 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 			</p>
 		</noscript>
 
-		<div class="control-group" style="<?php echo $styleRegular ?>" id="akeebasubs-sum-net-container">
-			<label class="control-label">
+		<div class="control-group form-group" style="<?php echo $styleRegular ?>" id="akeebasubs-sum-net-container">
+			<label class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NET')?>
 			</label>
-			<div class="controls">
-				<div class="<?php echo $prepend_class?>">
+			<div class="controls col-sm-2">
+				<div class="input-group <?php echo $prepend_class?>">
 					<?php if ($this->cparams->currencypos == 'before'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
-					<input id="akeebasubs-sum-net" type="text" disabled="disabled" class="input-small"
+					<input id="akeebasubs-sum-net" type="text" disabled="disabled" class="form-control input-small"
 						value="<?php echo $this->validation->price->net?>" />
 					<?php if ($this->cparams->currencypos == 'after'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 
-		<div class="control-group" style="<?php echo $styleDiscount ?>" id="akeebasubs-sum-discount-container">
-			<label class="control-label">
+		<div class="control-group form-group" style="<?php echo $styleDiscount ?>" id="akeebasubs-sum-discount-container">
+			<label class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')?>
 			</label>
-			<div class="controls">
-				<div class="<?php echo $prepend_class?>">
+			<div class="controls col-sm-2">
+				<div class="input-group <?php echo $prepend_class?>">
 					<?php if ($this->cparams->currencypos == 'before'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
-					<input id="akeebasubs-sum-discount" type="text" disabled="disabled" class="input-small"
+					<input id="akeebasubs-sum-discount" type="text" disabled="disabled" class="form-control input-small"
 						value="<?php echo $this->validation->price->discount?>" />
 					<?php if ($this->cparams->currencypos == 'after'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 
-		<div class="control-group" style="<?php echo $styleTax ?>" id="akeebasubs-sum-vat-container">
-			<label class="control-label">
+		<div class="control-group form-group" style="<?php echo $styleTax ?>" id="akeebasubs-sum-vat-container">
+			<label class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT')?>
 			</label>
-			<div class="controls">
-				<div class="<?php echo $prepend_class?>">
+			<div class="controls col-sm-2">
+				<div class="input-group <?php echo $prepend_class?>">
 					<?php if ($this->cparams->currencypos == 'before'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
-					<input id="akeebasubs-sum-vat" type="text" disabled="disabled" class="input-small"
+					<input id="akeebasubs-sum-vat" type="text" disabled="disabled" class="form-control input-small"
 						value="<?php echo $this->validation->price->tax?>" />
 					<?php if ($this->cparams->currencypos == 'after'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 
-		<div class="control-group success">
-			<label class="control-label">
+		<div class="control-group form-group success">
+			<label class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')?>
 			</label>
-			<div class="controls">
-				<div class="<?php echo $prepend_class?>">
+			<div class="controls col-sm-2">
+				<div class="input-group <?php echo $prepend_class?>">
 					<?php if ($this->cparams->currencypos == 'before'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
-					<input id="akeebasubs-sum-total" type="text" disabled="disabled" class="input-small"
+					<input id="akeebasubs-sum-total" type="text" disabled="disabled" class="form-control input-small"
 						value="<?php echo $this->validation->price->gross?>" />
 					<?php if ($this->cparams->currencypos == 'after'): ?>
-					<span class="add-on"><?php echo $this->cparams->currencysymbol ?></span>
+					<span class="input-group-addon add-on"><?php echo $this->cparams->currencysymbol ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -149,12 +149,12 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 		<legend class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></legend>
 
 		<?php if($requireCoupon || ($this->validation->price->net > 0)): ?>
-		<div class="control-group" style="<?php echo $styleCoupon ?>">
-			<label for="coupon" class="control-label">
+		<div class="control-group form-group" style="<?php echo $styleCoupon ?>">
+			<label for="coupon" class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')?>
 			</label>
-			<div class="controls">
-				<input type="text" class="input-medium" name="coupon" id="coupon" value="<?php echo $this->escape($this->cache['coupon'])?>" />
+			<div class="controls col-sm-3">
+				<input type="text" class="form-control input-medium" name="coupon" id="coupon" value="<?php echo $this->escape($this->cache['coupon'])?>" />
 			</div>
 		</div>
 		<?php endif; ?>
@@ -164,11 +164,11 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 	<div style="display: none;">
 	<?php endif; ?>
 	<div id="paymentmethod-container">
-		<div class="control-group">
-			<label for="paymentmethod" class="control-label">
+		<div class="control-group form-group">
+			<label for="paymentmethod" class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')?>
 			</label>
-			<div class="controls">
+			<div class="controls col-sm-3">
 				<?php echo AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id)) ?>
 			</div>
 		</div>
@@ -177,11 +177,11 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 	</div>
 	<?php endif; ?>
 
-	<div class="form-actions">
-		<button id="subscribenow" class="btn btn-large btn-primary" type="submit">
-			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>
-		</button>
-		<img class="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />
+	<div class="well">
+        <button id="subscribenow" class="btn btn-large btn-primary" type="submit" style="display:block;margin:auto">
+            <?php echo JText::_('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')?>
+        </button>
+        <img class="ui-disable-spinner" src="<?php echo JURI::base()?>media/com_akeebasubs/images/throbber.gif" style="display: none" />
 	</div>
 
 </form>
