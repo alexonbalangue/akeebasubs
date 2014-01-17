@@ -121,8 +121,10 @@ $emailasusername     = AkeebasubsHelperCparams::getParam('emailasusername',  0);
 		<label for="username" class="control-label col-sm-2">
 			* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME')?>
 		</label>
-		<div class="controls col-sm-3">
-			<input type="text" class="form-control" name="username" id="username" value="<?php echo $this->escape($this->cache['username'])?>" />
+		<div class="controls">
+            <span class="col-sm-3">
+			    <input type="text" class="form-control" name="username" id="username" value="<?php echo $this->escape($this->cache['username'])?>" />
+            </span>
 			<span id="username_valid" class="help-inline help-block" <?php if(strpos($group_classes['username'], 'success') == false):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME_VALID')?>
 			</span>
