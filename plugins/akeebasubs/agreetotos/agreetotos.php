@@ -78,7 +78,7 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		$fields[] = $field;
 
 		// ----- ADD THE JAVASCRIPT -----
-		$javascript = <<<ENDJS
+		$javascript = <<<JS
 (function($) {
 	$(document).ready(function(){
 		// Tell Akeeba Subscriptions how to fetch the extra field data
@@ -112,28 +112,33 @@ function plg_akeebasubs_agreetotos_fetch()
 
 function plg_akeebasubs_agreetotos_validate(response)
 {
+    var thisIsValid = true;
+
 	(function($) {
 		$('#agreetotos').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#agreetotos_invalid').css('display','none');
 
 		if (!akeebasubs_apply_validation)
 		{
-			return true;
+			thisIsValid = true;
+			return;
 		}
 
 		if(response.custom_validation.agreetotos) {
 			$('#agreetotos').parents('div.control-group').addClass('success has-success');
 			$('#agreetotos_invalid').css('display','none');
-			return true;
+			thisIsValid = true;
 		} else {
 			$('#agreetotos').parents('div.control-group').addClass('error has-error');
 			$('#agreetotos_invalid').css('display','inline-block');
-			return false;
+			thisIsValid = false;
 		}
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
-ENDJS;
+JS;
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
 

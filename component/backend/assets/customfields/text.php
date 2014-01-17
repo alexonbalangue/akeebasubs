@@ -77,16 +77,16 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 	public function getJavascript($item)
 	{
 		$slug = $item->slug;
-		$javascript = <<<ENDJS
+		$javascript = <<<JS
 (function($) {
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
-ENDJS;
-		if(!$item->allow_empty) $javascript .= <<<ENDJS
+JS;
+		if(!$item->allow_empty) $javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-ENDJS;
-		$javascript .= <<<ENDJS
+JS;
+		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
 
@@ -99,7 +99,7 @@ function plg_akeebasubs_customfields_fetch_$slug()
 	return result;
 }
 
-ENDJS;
+JS;
 
 		if(!$item->allow_empty):
 			$success_javascript = '';
@@ -112,18 +112,20 @@ ENDJS;
 				$success_javascript .= "$('#{$slug}_valid').css('display','inline-block');\n";
 				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
 			}
-			$javascript .= <<<ENDJS
+			$javascript .= <<<JS
 
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
 	var thisIsValid = true;
+
 	(function($) {
 		$('#$slug').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#{$slug}_invalid').css('display','none');
 		$('#{$slug}_valid').css('display','none');
 		if (!akeebasubs_apply_validation)
 		{
-			return true;
+			thisIsValid = true;
+			return;
 		}
 
 		if(response.custom_validation.$slug) {
@@ -134,11 +136,12 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 			$failure_javascript
 			thisIsValid = false;
 		}
-		return thisIsValid;
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
-ENDJS;
+JS;
 		endif;
 
 		$document = JFactory::getDocument();

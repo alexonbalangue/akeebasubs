@@ -181,19 +181,22 @@ function plg_akeebasubs_subcustomfields_validate_$slug(response)
 		$('#{$slug}_valid').css('display','none');
 		if (!akeebasubs_apply_validation)
 		{
-			return true;
+		    thisIsValid = true;
+			return;
 		}
 
 		if(response.subcustom_validation.$slug) {
 			$('#$slug').parents('div.control-group').addClass('success has-success');
 			$success_javascript
+			thisIsValid = true;
 		} else {
 			$('#$slug').parents('div.control-group').addClass('error has-error');
 			$failure_javascript
 			thisIsValid = false;
 		}
-		return thisIsValid;
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
 ENDJS;

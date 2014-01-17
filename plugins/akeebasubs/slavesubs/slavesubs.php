@@ -136,7 +136,7 @@ class plgAkeebasubsSlavesubs extends JPlugin
 result.slaveusers[$i] = $('#slaveuser$i').val();
 
 ENDJS;
-			$javascript_validate .= <<<ENDJS
+			$javascript_validate .= <<<JS
 
 $('#slaveuser$i').parents('div.control-group').removeClass('error has-error success has-success');
 if(!response.subcustom_validation.slaveuser$i) {
@@ -145,15 +145,16 @@ if(!response.subcustom_validation.slaveuser$i) {
 	thisIsValid = false;
 } else {
 	$('#slaveuser$i').parents('div.control-group').removeClass('error has-error');
-		$('#slaveuser{$i}_invalid').css('display','none');
+	$('#slaveuser{$i}_invalid').css('display','none');
+	thisIsValid = true;
 }
 
-ENDJS;
+JS;
 			}
 
 		if(!$useredit)
 		{
-			$javascript = <<<ENDJS
+			$javascript = <<<JS
 (function($) {
 	$(document).ready(function(){
 		addToSubValidationFetchQueue(plg_akeebasubs_slavesubs_fetch);
@@ -180,11 +181,12 @@ function plg_akeebasubs_slavesubs_validate(response)
 	(function($) {
 $javascript_validate
 
-		return thisIsValid;
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
-ENDJS;
+JS;
 			$document = JFactory::getDocument();
 			$document->addScriptDeclaration($javascript);
 		}
