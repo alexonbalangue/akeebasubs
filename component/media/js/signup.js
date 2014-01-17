@@ -756,19 +756,19 @@ function applyValidation(response, callback)
 		
 		if(akeebasubs_personalinfo == 1)
 		{
-			$('#vatnumber').parents('div.control-group').parent().removeClass('warning has-warning success has-success');
+			$('#vatnumber').parents('div.control-group').removeClass('warning has-warning success has-success');
 				if(response.vatnumber) {
-					$('#vatnumber').parents('div.control-group').parent().addClass('success has-success');
+					$('#vatnumber').parents('div.control-group').addClass('success has-success');
 					$('#vat-status-invalid').css('display','none');
 					$('#vat-status-valid').css('display','inline-block');
 				} else {
-					$('#vatnumber').parents('div.control-group').parent().addClass('warning has-warning');
+					$('#vatnumber').parents('div.control-group').addClass('warning has-warning');
 					$('#vat-status-invalid').css('display','inline-block');
 					$('#vat-status-valid').css('display','none');
 				}
 
 				if(response.novatrequired) {
-					$('#vatnumber').parent().parent().parent().removeClass('warning has-warning success has-success');
+					$('#vatnumber').parents('div.control-group').removeClass('warning has-warning success has-success');
 					$('#vat-status-invalid').css('display','none');
 					$('#vat-status-valid').css('display','none');
 				}
