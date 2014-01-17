@@ -712,7 +712,7 @@ function applyValidation(response, callback)
 
 				$('#zip').parents('div.control-group').removeClass('error has-error success has-success');
 				if(response.zip) {
-					$('#zip').parents('div.control-group').addClass('success');
+					$('#zip').parents('div.control-group').addClass('success has-success');
 					$('#zip_empty').css('display','none');
 				} else {
 					$('#zip').parents('div.control-group').addClass('error has-error');
