@@ -176,7 +176,7 @@ function plg_akeebasubs_subcustomfields_validate_$slug(response)
 {
 	var thisIsValid = true;
 	(function($) {
-		$('#$slug').parent().parent().removeClass('error').removeClass('success');
+		$('#$slug').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#{$slug}_invalid').css('display','none');
 		$('#{$slug}_valid').css('display','none');
 		if (!akeebasubs_apply_validation)
@@ -185,10 +185,10 @@ function plg_akeebasubs_subcustomfields_validate_$slug(response)
 		}
 
 		if(response.subcustom_validation.$slug) {
-			$('#$slug').parent().parent().addClass('success');
+			$('#$slug').parents('div.control-group').addClass('success has-success');
 			$success_javascript
 		} else {
-			$('#$slug').parent().parent().addClass('error');
+			$('#$slug').parents('div.control-group').addClass('error has-error');
 			$failure_javascript
 			thisIsValid = false;
 		}

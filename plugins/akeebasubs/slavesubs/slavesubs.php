@@ -138,13 +138,13 @@ result.slaveusers[$i] = $('#slaveuser$i').val();
 ENDJS;
 			$javascript_validate .= <<<ENDJS
 
-$('#slaveuser$i').parent().parent().removeClass('error').removeClass('success');
+$('#slaveuser$i').parents('div.control-group').removeClass('error has-error success has-success');
 if(!response.subcustom_validation.slaveuser$i) {
-	$('#slaveuser$i').parent().parent().addClass('error');
+	$('#slaveuser$i').parents('div.control-group').addClass('error has-error');
 	$('#slaveuser{$i}_invalid').css('display','inline-block');
 	thisIsValid = false;
 } else {
-	$('#slaveuser$i').parent().parent().removeClass('error');
+	$('#slaveuser$i').parents('div.control-group').removeClass('error has-error');
 		$('#slaveuser{$i}_invalid').css('display','none');
 }
 

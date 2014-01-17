@@ -113,7 +113,7 @@ function plg_akeebasubs_agreetotos_fetch()
 function plg_akeebasubs_agreetotos_validate(response)
 {
 	(function($) {
-		$('#agreetotos').parent().parent().removeClass('error').removeClass('success');
+		$('#agreetotos').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#agreetotos_invalid').css('display','none');
 
 		if (!akeebasubs_apply_validation)
@@ -122,11 +122,11 @@ function plg_akeebasubs_agreetotos_validate(response)
 		}
 
 		if(response.custom_validation.agreetotos) {
-			$('#agreetotos').parent().parent().addClass('success');
+			$('#agreetotos').parents('div.control-group').addClass('success has-success');
 			$('#agreetotos_invalid').css('display','none');
 			return true;
 		} else {
-			$('#agreetotos').parent().parent().addClass('error');
+			$('#agreetotos').parents('div.control-group').addClass('error has-error');
 			$('#agreetotos_invalid').css('display','inline-block');
 			return false;
 		}
