@@ -38,31 +38,31 @@ if (version_compare(JVERSION, '3.2.0', 'ge'))
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?></legend>
 
-		<div class="control-group">
-			<label for="username" class="control-label">
+		<div class="control-group form-group">
+			<label for="username" class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_USERNAME')?>
 			</label>
-			<div class="controls">
-				<input type="text" name="username" value="" />
+			<div class="controls col-sm-3">
+				<input type="text" class="form-control" name="username" value="" />
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label for="password" class="control-label">
+		<div class="control-group form-group">
+			<label for="password" class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_PASSWORD')?>
 			</label>
-			<div class="controls">
-				<input type="password" name="password" value="" />
+			<div class="controls col-sm-3">
+				<input type="password" class="form-control" name="password" value="" />
 			</div>
 		</div>
 
 		<?php if ($useTwoFactorAuth): ?>
-		<div class="control-group">
-			<label for="secretkey" class="control-label">
+		<div class="control-group form-group">
+			<label for="secretkey" class="control-label col-sm-2">
 				<?php echo JText::_('JGLOBAL_SECRETKEY')?>
 			</label>
-			<div class="controls">
-				<input type="text" name="secretkey" value="" class="input-small" />
+			<div class="controls col-sm-3">
+				<input type="text" name="secretkey" value="" class="input-small form-control" />
 				<span class="btn width-auto hasTooltip" title="<?php echo JText::_('JGLOBAL_SECRETKEY_HELP'); ?>">
 					<span class="icon-help"></span>
 				</span>
@@ -70,7 +70,7 @@ if (version_compare(JVERSION, '3.2.0', 'ge'))
 		</div>
 		<?php endif; ?>
 
-		<div class="form-actions">
+		<div class="form-actions well">
 			<input type="submit" class="btn btn-primary" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?>" />
 			<span>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_ORCONTINUE')?>
