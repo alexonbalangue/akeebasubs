@@ -1,4 +1,7 @@
 <?php die(); ?>
+Akeeba Subscriptions 4.0.0
+================================================================================
++ Added dual support for Boostrap 2 and Boostrap 3 HTML output. You can use the component on Bootstrap 3 templates without overrides.
 # [LOW] Frontend.css was included twice
 # [LOW] Fixed duplicated control div for business field (Joomla! 3.x)
 
