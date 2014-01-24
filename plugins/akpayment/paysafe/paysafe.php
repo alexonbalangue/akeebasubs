@@ -86,6 +86,11 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
+		$userdata = (object)array(
+			'username'		=> $this->params->get('username', ''),
+			'password'		=> $this->params->get('password', ''),
+		);
+
 		JLoader::import('joomla.utilities.date');
 
 		// Check if we're supposed to handle this
@@ -137,7 +142,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
             $debug = true;
             $autoCorrect = true;
 			$api = new SOPGClassicMerchantClient($debug, 'en', $autoCorrect, $mode);
-			$api->merchant($data->username, $data->password);
+			$api->merchant($userdata->username, $userdata->password);
 			$api->setMtid($mtid);
 			$api->setSubId('');
 			$api->setCurrency($cur);
@@ -148,7 +153,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
             {
                 $isValid = false;
 
-                $data['akeebasubs_failure_reason'] = 'getSerialNumbers returned status ' . $status . ' -- expected: execute';
+                $data['akeebasubs_failure_reason'] = 'getSerialNumbers returned status ' . $status . ' -- expected: execute -- tech info: ' . print_r($api->debug, true) . ' -- log: ' . print_r($api->log, true);
             }
 		}
 
@@ -161,7 +166,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
             {
                 $isValid = false;
 
-                $data['akeebasubs_failure_reason'] = 'executeDebit failed -- tech info: ' . print_r($api->debug);
+                $data['akeebasubs_failure_reason'] = 'executeDebit failed -- tech info: ' . print_r($api->debug, true) . ' -- log: ' . print_r($api->log, true);
             }
         }
 
