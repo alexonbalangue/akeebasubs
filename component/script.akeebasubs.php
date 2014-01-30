@@ -299,6 +299,9 @@ class Com_AkeebasubsInstallerScript
 		$akeebaRemoveFiles = $this->akeebaRemoveFiles;
 		$this->_removeObsoleteFilesAndFolders($akeebaRemoveFiles);
 
+		// Remove update site
+		$this->_removeUpdateSite();
+
 		$this->_copyCliFiles($parent);
 
 		// Show the post-installation page
@@ -889,6 +892,36 @@ class Com_AkeebasubsInstallerScript
 			$f = JPATH_ROOT.'/'.$folder;
 			if(!JFolder::exists($f)) continue;
 			JFolder::delete($f);
+		}
+	}
+
+	/**
+	 * Removes obsolete Akeeba Subscriptions update site
+	 */
+	private function _removeUpdateSite()
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+			->select($db->qn('update_site_id'))
+			->from($db->qn('#__update_sites'))
+			->where($db->qn('name').' = '.$db->q('Akeeba Subscriptions Professional'));
+		$db->setQuery($query);
+		$usIds = $db->loadColumn();
+
+		if (!empty($usIds))
+		{
+			$query->clear()
+				->delete($db->qn('#__update_sites_extensions'))
+				->where($db->qn('update_site_id').' IN(' . implode(',', $usIds) . ')');
+			$db->setQuery($query);
+			$db->execute();
+
+			$query->clear()
+				->delete($db->qn('#__update_sites'))
+				->where($db->qn('update_site_id').' IN(' . implode(',', $usIds) . ')');
+			$db->setQuery($query);
+			$db->execute();
 		}
 	}
 

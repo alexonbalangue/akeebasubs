@@ -111,12 +111,6 @@
 
     <scriptfile>script.akeebasubs.php</scriptfile>
 
-    <!-- Update servers -->
-    <updateservers>
-        <server type="extension" priority="1" name="Akeeba Subscriptions Professional"><![CDATA[http://cdn.akeebabackup.com/updates/akeebasubspro.xml]]></server>
-    </updateservers>
-
-
     <!-- Akeeba Backup System Restore Points -->
 		<restorepoint>
 			<customdirs>
