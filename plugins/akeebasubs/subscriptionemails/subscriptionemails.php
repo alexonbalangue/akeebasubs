@@ -109,6 +109,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 				'expired'				=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_EMAIL_EXPIRED'),
 				'published'				=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_EMAIL_PUBLISHED'),
 				'generic'				=> JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_EMAIL_GENERIC'),
+                'offline'               => JText::_('PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_EMAIL_OFFLINE_INSTRUCTIONS'),
 			)
 		);
 	}
