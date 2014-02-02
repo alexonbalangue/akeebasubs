@@ -182,3 +182,19 @@ function addToValidationQueue(myfunction)
 {
 	// Really does nothing, it's here to avoid JS errors
 }
+
+/**
+ * Adds a function to the sub validation fetch queue
+ */
+function addToSubValidationFetchQueue(myfunction)
+{
+	// Really does nothing, it's here to avoid JS errors
+}
+
+/**
+ * Adds a function to the sub validation queue
+ */
+function addToSubValidationQueue(myfunction)
+{
+	// Really does nothing, it's here to avoid JS errors
+}
