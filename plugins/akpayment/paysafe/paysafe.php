@@ -78,7 +78,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 
 		if ($paymentPanel == false)
 		{
-			die("PaySafe error creating disposition");
+			die("Transaction could not be initiated due to connection problems. If the problem persists, please contact our support.");
 		}
 
 		JFactory::getApplication()->redirect($paymentPanel);
