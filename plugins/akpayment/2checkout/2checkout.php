@@ -1,23 +1,32 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
 
-$akpaymentinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akpayment.php';
-if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpaymentinclude); }
+$akpaymentinclude = include_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akpayment.php';
+if (!$akpaymentinclude)
+{
+	unset($akpaymentinclude);
+
+	return;
+}
+else
+{
+	unset($akpaymentinclude);
+}
 
 class plgAkpayment2checkout extends plgAkpaymentAbstract
 {
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
-			'ppName'		=> '2checkout',
-			'ppKey'			=> 'PLG_AKPAYMENT_2CHECKOUT_TITLE',
-			'ppImage'		=> 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
+			'ppName'  => '2checkout',
+			'ppKey'   => 'PLG_AKPAYMENT_2CHECKOUT_TITLE',
+			'ppImage' => 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
 		));
 
 		parent::__construct($subject, $config);
@@ -27,42 +36,47 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
 	 *
-	 * @param string $paymentmethod
-	 * @param JUser $user
-	 * @param AkeebasubsTableLevel $level
+	 * @param string                      $paymentmethod
+	 * @param JUser                       $user
+	 * @param AkeebasubsTableLevel        $level
 	 * @param AkeebasubsTableSubscription $subscription
+	 *
 	 * @return string
 	 */
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
-		if($paymentmethod != $this->ppName) return false;
+		if ($paymentmethod != $this->ppName)
+		{
+			return false;
+		}
 
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
+		$slug = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->setId($subscription->akeebasubs_level_id)
+			->getItem()
+			->slug;
 
-		$rootURL = rtrim(JURI::base(),'/');
+		$rootURL = rtrim(JURI::base(), '/');
 		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
+		if (!empty($subpathURL) && ($subpathURL != '/'))
+		{
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
 		$data = (object)array(
-			'url' => ($this->params->get('checkout') == 'single') ? 'https://www.2checkout.com/checkout/spurchase' : 'https://www.2checkout.com/checkout/purchase',
-			'sid'			=> $this->params->get('sid',''),
-			'x_receipt_link_url'	=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
-			'params'		=> $this->params,
-			'name'			=> $user->name,
-			'email'			=> $user->email
+			'url'                => ($this->params->get('checkout') == 'single') ? 'https://www.2checkout.com/checkout/spurchase' : 'https://www.2checkout.com/checkout/purchase',
+			'sid'                => $this->params->get('sid', ''),
+			'x_receipt_link_url' => $rootURL . str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=message&slug=' . $slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id)),
+			'params'             => $this->params,
+			'name'               => $user->name,
+			'email'              => $user->email
 		);
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
 
 		@ob_start();
-		include dirname(__FILE__).'/2checkout/form.php';
+		include dirname(__FILE__) . '/2checkout/form.php';
 		$html = @ob_get_clean();
 
 		return $html;
@@ -73,43 +87,69 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 		JLoader::import('joomla.utilities.date');
 
 		// Check if we're supposed to handle this
-		if($paymentmethod != $this->ppName) return false;
+		if ($paymentmethod != $this->ppName)
+		{
+			$data['akeebasubs_WARNING'] = "Payment method $paymentmethod does not match {$this->ppName}";
+			$this->logRawIPN($data);
+
+			return false;
+		}
+
+		$this->logRawIPN($data);
 
 		// Check if it's one of the message types supported by this plugin
 		$message_type = $data['message_type'];
 		$isValid = in_array($message_type, array(
 			'ORDER_CREATED', 'REFUND_ISSUED', 'RECURRING_INSTALLMENT_SUCCESS', 'FRAUD_STATUS_CHANGED', 'INVOICE_STATUS_CHANGED'
 		));
-		if(!$isValid) $data['akeebasubs_failure_reason'] = 'INS message type "'.$message_type.'" is not supported.';
+		if (!$isValid)
+		{
+			$data['akeebasubs_failure_reason'] = 'INS message type "' . $message_type . '" is not supported.';
+		}
 
 		// Check IPN data for validity (i.e. protect against fraud attempt)
-		if($isValid) {
+		if ($isValid)
+		{
 			$isValid = $this->isValidIPN($data);
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Transaction MD5 signature is invalid. Fraudulent transaction or testing mode enabled.';
+			if (!$isValid)
+			{
+				$data['akeebasubs_failure_reason'] = 'Transaction MD5 signature is invalid. Fraudulent transaction or testing mode enabled.';
+			}
 		}
 
 		// Load the relevant subscription row
-		if($isValid) {
+		if ($isValid)
+		{
 			$id = array_key_exists('item_id_1', $data) ? (int)$data['item_id_1'] : -1;
 			$subscription = null;
-			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			if ($id > 0)
+			{
+				$subscription = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->setId($id)
 					->getItem();
-				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
+				if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
+				{
 					$subscription = null;
 					$isValid = false;
 				}
-			} else {
+			}
+			else
+			{
 				$isValid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("item_id_1" field) is invalid';
+			if (!$isValid)
+			{
+				$data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("item_id_1" field) is invalid';
+			}
 		}
 
 		// Check that order_number has not been previously processed
-		if($isValid && !is_null($subscription)) {
-			if($subscription->processor_key == $data['sale_id'].'/'.$data['invoice_id']) {
-				if(($subscription->state == 'C') && ($message_type == 'ORDER_CREATED')) {
+		if ($isValid && !is_null($subscription))
+		{
+			if ($subscription->processor_key == $data['sale_id'] . '/' . $data['invoice_id'])
+			{
+				if (($subscription->state == 'C') && ($message_type == 'ORDER_CREATED'))
+				{
 					$isValid = false;
 					$data['akeebasubs_failure_reason'] = "I will not process the same sale_id/invoice_id twice";
 				}
@@ -118,43 +158,55 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 
 		// Check that total is correct
 		$isPartialRefund = false;
-		if($isValid && !is_null($subscription)) {
+		if ($isValid && !is_null($subscription))
+		{
 			$mc_gross = floatval($data['invoice_list_amount']);
 			$gross = $subscription->gross_amount;
-			if($mc_gross > 0) {
+			if ($mc_gross > 0)
+			{
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
 				$isValid = ($gross - $mc_gross) < 0.01;
-			} else {
+			}
+			else
+			{
 				$valid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount (invoice_list_amount) does not match the subscription amount';
+			if (!$isValid)
+			{
+				$data['akeebasubs_failure_reason'] = 'Paid amount (invoice_list_amount) does not match the subscription amount';
+			}
 		}
 
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
 
 		// Fraud attempt? Do nothing more!
-		if(!$isValid) return false;
+		if (!$isValid)
+		{
+			return false;
+		}
 
 		// Load the subscription level and get its slug
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
+		$slug = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->setId($subscription->akeebasubs_level_id)
+			->getItem()
+			->slug;
 
-		$rootURL = rtrim(JURI::base(),'/');
+		$rootURL = rtrim(JURI::base(), '/');
 		$subpathURL = JURI::base(true);
-		if(!empty($subpathURL) && ($subpathURL != '/')) {
+		if (!empty($subpathURL) && ($subpathURL != '/'))
+		{
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
-		switch($message_type) {
+		switch ($message_type)
+		{
 			case 'ORDER_CREATED':
 			case 'FRAUD_STATUS_CHANGED':
 			case 'INVOICE_STATUS_CHANGED':
 				// Let me translate the goofy statuses sent by 2Checkout to English for ya
-				switch($data['invoice_status'])
+				switch ($data['invoice_status'])
 				{
 					case 'approved':
 						// "Approved" means "we're about to request the money" or something like that, dunno
@@ -171,7 +223,8 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 						$newStatus = 'C';
 						// However, if the subscription is CANCELLED then a refund has already
 						// been issued, but 2Checkout sends a "deposited" status. What the hell?!
-						if($subscription->state == 'X') {
+						if ($subscription->state == 'X')
+						{
 							$newStatus = 'X';
 						}
 						break;
@@ -198,12 +251,13 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 		// Update subscription status (this also automatically calls the plugins)
 		$updates = array(
 			'akeebasubs_subscription_id' => $id,
-			'processor_key'		=> $data['sale_id'].'/'.$data['invoice_id'],
-			'state'				=> $newStatus,
-			'enabled'			=> 0
+			'processor_key'              => $data['sale_id'] . '/' . $data['invoice_id'],
+			'state'                      => $newStatus,
+			'enabled'                    => 0
 		);
 		JLoader::import('joomla.utilities.date');
-		if($newStatus == 'C') {
+		if ($newStatus == 'C')
+		{
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
@@ -212,7 +266,7 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
 		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
+		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback', array(
 			$subscription
 		));
 
@@ -228,13 +282,79 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 		// This is the MD5 calculations in 2Checkout's INS guide
 		$incoming_md5 = strtoupper($data['md5_hash']);
 		$calculated_md5 = md5(
-			$data['sale_id'].
-			$data['vendor_id'].
-			$data['invoice_id'].
-			$this->params->get('secret','')
+			$data['sale_id'] .
+			$data['vendor_id'] .
+			$data['invoice_id'] .
+			$this->params->get('secret', '')
 		);
 		$calculated_md5 = strtoupper($calculated_md5);
 
 		return ($calculated_md5 == $incoming_md5);
+	}
+
+	/**
+	 * Logs the received raw IPN information to file
+	 *
+	 * @param   array $data Request data
+	 *
+	 * @return  void
+	 */
+	protected function logRawIPN($data)
+	{
+		$config = JFactory::getConfig();
+		$logpath = $config->get('log_path');
+
+		$logFilenameBase = $logpath . '/akpayment_DEBUG_' . strtolower($this->ppName) . '_ipn';
+		$logFile = $logFilenameBase . '.php';
+
+		JLoader::import('joomla.filesystem.file');
+
+		if (!JFile::exists($logFile))
+		{
+			$dummy = "<?php die(); ?>\n";
+			JFile::write($logFile, $dummy);
+		}
+		else
+		{
+			if (@filesize($logFile) > 1048756)
+			{
+				$altLog = $logFilenameBase . '-1.php';
+
+				if (JFile::exists($altLog))
+				{
+					JFile::delete($altLog);
+				}
+
+				JFile::copy($logFile, $altLog);
+				JFile::delete($logFile);
+
+				$dummy = "<?php die(); ?>\n";
+				JFile::write($logFile, $dummy);
+			}
+		}
+
+		$logData = JFile::read($logFile);
+
+		if ($logData === false)
+		{
+			$logData = '';
+		}
+
+		$logData .= "\n" . str_repeat('-', 80);
+		$pluginName = strtoupper($this->ppName);
+		$logData .= 'RAW ' . $pluginName . ' IPN (FOR DEBUGGING)' . "\n";
+		$logData .= str_repeat('-~', 40) . "\n";
+		$logData .= "\nDate/time : " . gmdate('Y-m-d H:i:s') . " GMT\n";
+
+		$logData .= "\n";
+
+		foreach ($data as $key => $value)
+		{
+			$logData .= '  ' . str_pad($key, 30, ' ') . $value . "\n";
+		}
+
+		$logData .= "\n";
+
+		JFile::write($logFile, $logData);
 	}
 }
