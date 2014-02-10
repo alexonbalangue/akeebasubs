@@ -115,9 +115,16 @@ class plgSystemAslogoutuser extends JPlugin
         }
 
         // No need to logout, let's stop here
-        if(!$user->need_logout)
+        if(!$user->needs_logout)
         {
             return;
         }
+
+        $app = JFactory::getApplication();
+        $returnurl = JURI::getInstance();
+        $returnurl = base64_encode($returnurl->toString());
+
+        $app->logout();
+        $app->redirect(JRoute::_('index.php?option=com_users&view=login&return='.$returnurl, false));
 	}
 }
