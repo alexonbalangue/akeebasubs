@@ -28,6 +28,20 @@ class plgAkeebasubsNeedslogout extends JPlugin
 	 */
 	public function onAKSubscriptionChange($row, $info)
 	{
+        if($info['status'] != 'modified')
+        {
+            return;
+        }
 
+        if(!isset($info['modified']->enabled))
+        {
+            return;
+        }
+
+        $user = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
+        $user->load(array('user_id' => $row->user_id));
+
+        $bind['needs_logout'] = 1;
+        $user->save($bind);
 	}
 }
