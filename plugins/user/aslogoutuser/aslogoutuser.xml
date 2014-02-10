@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5.0" type="plugin" group="system" method="upgrade">
-	<name>System - Akeeba Subscriptions Logout user</name>
+<extension version="2.5.0" type="plugin" group="user" method="upgrade">
+	<name>User - Akeeba Subscriptions Logout user</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
@@ -8,13 +8,13 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>2014-02-10</creationDate>
 	<version>1.0</version>
-	<description>PLG_SYSTEM_ASLOGOUTUSER_DESCRIPTION</description>
+	<description>PLG_USER_ASLOGOUTUSER_DESCRIPTION</description>
 
 	<files>
 		<filename plugin="aslogoutuser">aslogoutuser.php</filename>
 	</files>
 	<languages folder="language">
-		<language tag="en-GB">en-GB/en-GB.plg_system_aslogoutuser.ini</language>
-		<language tag="en-GB">en-GB/en-GB.plg_system_aslogoutuser.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_user_aslogoutuser.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_user_aslogoutuser.sys.ini</language>
 	</languages>
 </extension>
