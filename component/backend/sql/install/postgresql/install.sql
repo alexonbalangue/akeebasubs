@@ -179,6 +179,7 @@ CREATE TABLE IF NOT EXISTS "#__akeebasubs_users" (
 	"country" CHAR(2) NOT NULL DEFAULT 'XX',
 	"params" TEXT,
 	"notes" TEXT,
+  "needs_logout" smallint NOT NULL DEFAULT '0',
 	PRIMARY KEY ( "akeebasubs_user_id" )
 );
 
