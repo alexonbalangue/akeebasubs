@@ -177,6 +177,7 @@ CREATE TABLE IF NOT EXISTS `#__akeebasubs_users` (
 	`country` CHAR(2) NOT NULL DEFAULT 'XX',
 	`params` TEXT,
 	`notes` TEXT,
+  `needs_logout` TINYINT NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `akeebasubs_user_id` ),
 	UNIQUE KEY `joomlauser` (`user_id`)
 ) DEFAULT CHARSET=utf8;
