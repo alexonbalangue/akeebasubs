@@ -35,7 +35,11 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 ?>
 
 <div id="akeebasubs">
-
+<?php if($this->dnt) :?>
+<div class="alert alert-block alert-danger" style="text-align: center;font-weight: bold">
+	<?php echo JText::_('COM_AKEEBASUBS_DNT_WARNING')?>
+</div>
+<?php endif;?>
 <?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsheader')?>
 
 <?php if ($this->cparams->stepsbar && ($this->validation->price->net > 0.01)):?>
