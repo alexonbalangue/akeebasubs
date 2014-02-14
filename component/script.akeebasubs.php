@@ -83,6 +83,7 @@ class Com_AkeebasubsInstallerScript
 			'system' => array(
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
+				'aslogoutuser'			=> 0,
 				'asuserregredir'		=> 0,
 			)
 		)
