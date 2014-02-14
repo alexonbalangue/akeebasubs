@@ -80,6 +80,9 @@ class Com_AkeebasubsInstallerScript
 				'asrestricted'			=> 1,
 				'astimedrelease'		=> 1,
 			),
+            'sh404sefextplugins' => array(
+                'com_akeebasubs'        => 1
+            ),
 			'system' => array(
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
