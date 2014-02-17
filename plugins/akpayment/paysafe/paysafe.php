@@ -71,7 +71,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 		// Connect to PaySafe's SOAP API
 		$api = new SOPGClassicMerchantClient(false, 'en', true, $mode);
 		$api->merchant($data->username, $data->password);
-		$amt = printf('%.2f', $subscription->gross_amount);
+		$amt = sprintf('%.2f', $subscription->gross_amount);
 		$api->setCustomer($amt, $data->currency, $data->mtid, $subscription->akeebasubs_subscription_id);
 		$api->setURL($data->success, $data->cancel, $data->postback);
 		$api->data['clientIp'] = $_SERVER['REMOTE_ADDR'];
@@ -160,7 +160,7 @@ class plgAkpaymentPaysafe extends plgAkpaymentAbstract
 
         if ($isValid)
         {
-            $amt = printf('%.2f', $subscription->gross_amount);
+            $amt = sprintf('%.2f', $subscription->gross_amount);
             $testexecute = $api->executeDebit($amt, '1');
 
             if (!$testexecute)
