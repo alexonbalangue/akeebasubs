@@ -9482,6 +9482,41 @@ Rule C gives $ 30 discount</programlisting>
         </varlistentry>
       </variablelist>
     </section>
+
+    <section>
+      <title>The logout plugins</title>
+
+      <note>
+        <para>Available since Akeeba Subscriptions 4.0</para>
+      </note>
+
+      <para>One of the major problems with the Joomla! CMS is that it caches
+      the user privileges when the user logs in. Any change to the user groups
+      the user belongs to are ignored. This is a big issue when it comes to
+      subscriptions. When a user is logged in and they subscribe they will not
+      get the extra privileges until they log out and back in again. This
+      wouldn't be all that bad, had it not been for the tendency of
+      subscribers to both not read the instruction to log out (even when it's
+      printed in bold, red, 32 pt letters – yes, we've tried) and them finding
+      the need to log out and back in absurd (frankly, they are right). To
+      this end we have created a set of plugins which will force the user to
+      perform the log out / log in after subscribing. You have to enable all
+      of the following plugins:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Akeeba Subscriptions - User needs logout</para>
+        </listitem>
+
+        <listitem>
+          <para>System - Akeeba Subscriptions Logout user</para>
+        </listitem>
+
+        <listitem>
+          <para>User - Akeeba Subscriptions Logout user</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </chapter>
 
   <chapter xml:id="scheduling">
