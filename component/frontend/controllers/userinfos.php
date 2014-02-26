@@ -113,9 +113,6 @@ class AkeebasubsControllerUserinfos extends FOFController
 			}
 		}
 
-		// Try saving the user data
-		$result = $this->getThisModel()->updateUserInfo(false);
-
 		// Redirect to the display task
 		$url = 'index.php?option=com_akeebasubs&view=userinfo';
 		$this->setRedirect($url, $msg, $msgType);
