@@ -2518,6 +2518,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
 					break;
 				}
+				break;
+
 			case 'DE':
 				// GERMANY
 				// VAT number is called: MWST.
