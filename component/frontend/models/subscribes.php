@@ -272,8 +272,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		$ret = (object)array('username' => false, 'password' => true);
 		$username = $state->username;
-		if(empty($username)) return $ret;
 		$myUser = JFactory::getUser();
+		if(empty($username))
+		{
+			if (!$myUser->guest) $ret->username = true;
+			return $ret;
+		}
 		$user = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
 			->username($username)
 			->getFirstItem();
