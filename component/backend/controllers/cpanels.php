@@ -23,7 +23,8 @@ class AkeebasubsControllerCpanels extends FOFController
 		if($result) {
 			FOFModel::getTmpInstance('Cpanels', 'AkeebasubsModel')
 				->checkAndFixDatabase()
-				->saveMagicVariables();
+				->saveMagicVariables()
+				->refreshUpdateSite();
 		}
 
 		return $result;

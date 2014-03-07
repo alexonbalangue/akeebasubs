@@ -5,6 +5,7 @@ Akeeba Subscriptions 4.0.0
 + Added dual support for Boostrap 2 and Boostrap 3 HTML output. You can use the component on Bootstrap 3 templates without overrides.
 + gh-22 Added sh404SEF plugin to create SEF url with that component
 ~ Show a warning in the subscription page when the Do Not Track (DNT) feature is enabled in the user's browser (it kills cookies, therefore kills Joomla! session handling)
+~ Now using the built-in Joomla! extensions updater instead of Live Update to deliver updates
 # [LOW] Frontend.css was included twice
 # [LOW] Fixed duplicated control div for business field (Joomla! 3.x)
 
