@@ -221,93 +221,369 @@
         </listitem>
       </itemizedlist>
     </section>
+  </chapter>
 
-    <section xml:id="installation-instructions">
-      <title>Installation</title>
+  <chapter xml:id="installation-updates-upgrades">
+    <title>Installation, updates and upgrades</title>
 
-      <section xml:id="installation">
-        <title>Installation</title>
+    <section xml:id="installing">
+      <title>Installing Akeeba Subscriptions</title>
 
-        <screenshot>
-          <info>
-            <title>Installing Akeeba Subscriptions through Extension
-            Manager</title>
-          </info>
+      <para>Installing <application>Akeeba Subscriptions</application> is no
+      different than installing any other <trademark>Joomla!</trademark>
+      extension on your site. You can read the complete instructions for
+      installing <trademark>Joomla!</trademark> extensions on the <link
+      xlink:href="http://help.joomla.org/content/view/1476/235/">official help
+      page</link>. Throughout this chapter we assume that you are familiar
+      with these instructions and we will try not to duplicate them.</para>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata depth="50%" fileref="images/1.png" scalefit="1"
-                         width="95%"/>
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+      <note>
+        <para>The language (translation) files are NOT installed
+        automatically. You can download and install them from our <link
+        xlink:href="http://cdn.akeebabackup.com/language/akeebasubs/index.html">language
+        download page</link>. Do note that you will have to install both the
+        component and the language packages for the component to work.</para>
 
-        <para>Installing the package is the same as with any other Joomla!
-        component. Go to your site's back-end Extensions, Manage and click on
-        Browse. Locate the ZIP package and click on Upload and Install. If the
-        installation fails, please refer to the installation troubleshooting
-        section of this guide.</para>
+        <para>As noted on that page, Akeeba Ltd only produces the English and
+        Greek language files. All other languages are contributed by third
+        parties. If you spot an error please do not contact Akeeba Ltd; we
+        will be unable to help you. Instead, please go to the <link
+        xlink:href="https://www.transifex.com/projects/p/akeebasubs/">translation
+        project page</link> to find the contact information of the translator.
+        Abandoned languages will show the maintainer being our staff member
+        "nikosdion". In this case you're out of luck; if you want to fix the
+        language package you will need to volunteer to take over the
+        translation project for that language.</para>
+      </note>
+
+      <section>
+        <title>Installing or manually updating the component and language
+        files</title>
+
+        <para>Just like with most Joomla! extensions there are two ways to
+        install or manually update Akeeba Subscriptions on your site:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Upload and install. That's the typical extension
+            installation method for Joomla! extensions. It rarely
+            fails.</para>
+          </listitem>
+
+          <listitem>
+            <para>Manual installation. This is the hardest, but virtually
+            fail-safe, installation method.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Please note that installing and updating Akeeba Subscriptions
+        (and almost all Joomla! extensions) is actually the same thing. If you
+        want to update Akeeba Subscriptions please remember that you <emphasis
+        role="bold">MUST NOT</emphasis> uninstall it before installing the new
+        version! When you uninstall Akeeba Subscriptions you will lose all
+        your settings. This is definitely something you do not want to happen!
+        Instead, simply install the new version on top of the old one. Joomla!
+        will figure out that you are doing an update and will treat it as
+        such, automatically.</para>
+
+        <tip>
+          <para>If you find that after installing or updating Akeeba
+          Subscriptions it is missing some features or doesn't work, please
+          try installing the same version a second time, without uninstalling
+          the component. The reason is that very few times the Joomla!
+          extensions installer infrastructure gets confused and fails to copy
+          some files or entire folders. By repeating the installation you
+          force it to copy the missing files and folders, solving the
+          problem.</para>
+        </tip>
+
+        <section xml:id="installing-upload">
+          <title>Upload and install.</title>
+
+          <para>You can download the latest installation packages our site's
+          <link
+          xlink:href="https://www.akeebabackup.com/download/official/akeeba-subscriptions.html">download
+          page for Akeeba Subscriptions</link>. Please note that the latest
+          version is always on top. If you have an older version of Joomla! or
+          PHP please consult our <link
+          xlink:href="https://www.akeebabackup.com/compatibility.html">Compatibility
+          page</link> to find the version of Akeeba Subscriptions compatible
+          with your Joomla! and PHP versions. In either case click on the
+          version you want to download and install.</para>
+
+          <para>Click on the Akeeba Subscriptions item to download the ZIP
+          installation package.</para>
+
+          <para>All Akeeba Subscriptions installation packages contain the
+          component and all of its associated extensions. Installing it will
+          install all of these items automatically. It can also be used to
+          upgrade Akeeba Subscriptions; just install it
+          <emphasis>without</emphasis> uninstalling the previous
+          release.</para>
+
+          <para>In any case, do not extract the ZIP files yet!</para>
+
+          <warning>
+            <para><emphasis role="bold">Attention Mac OS X users</emphasis>!
+            Safari, the default web server provided to you by Apple, is
+            automatically extracting the ZIP file into a directory and removes
+            the ZIP file. In order to install the extension through Joomla!'s
+            extensions installer you must select that directory, right-click
+            on it and select Compress to get a ZIP file of its contents. This
+            behaviour was changed in Mac OS X Mountain Lion, but people
+            upgrading from older versions of Mac OS X (Mac OS X Lion and
+            earlier) will witness the old, automatic ZIP extraction,
+            behaviour.</para>
+          </warning>
+
+          <para>Log in to your site's administrator section. Click on
+          <guimenu>Extensions</guimenu>, <guimenuitem>Manage</guimenuitem>
+          link on the top menu. If you are on Joomla! 3.x please click on the
+          <guilabel>Upload Package File</guilabel> tab. Locate the
+          <guibutton>Browse</guibutton> button next to the <guilabel>Package
+          File</guilabel> (Joomla! 2.5, 3.0 and 3.1) or <guilabel>Extension
+          package file</guilabel> (Joomla! 3.2 and later) field. Locate the
+          installation ZIP file you had previously downloaded and select it.
+          Back to the page, click on the <guibutton>Upload &amp;
+          Install</guibutton> button. After a short while,
+          <trademark>Joomla!</trademark> will tell you that the component has
+          been installed.</para>
+
+          <warning>
+            <para>Akeeba Subscriptions is a big extension (over 2Mb). Some
+            servers do not allow you to upload files that big. If this is the
+            case you can try the <link linkend="installation-manual">Manual
+            installation</link> or ask your host to follow <link
+            xlink:href="https://www.akeebabackup.com/documentation/troubleshooter/abinstallation.html">our
+            installation troubleshooting instructions</link> under "You get an
+            error about the package not being uploaded to the server".</para>
+
+            <para>If you have WAMPServer (or any other prepackaged local
+            server), please note that its default configuration does not allow
+            files over 2Mb to be uploaded. To work around that you will need
+            to modify your php.ini and restart the server. On WAMPserver
+            left-click on the WAMP icon (the green W), click on
+            <guimenu>PHP</guimenu>, <guimenuitem>php.ini</guimenuitem>. Find
+            the line beginning with <code>upload_max_filesize</code>. Change
+            it so that it reads:</para>
+
+            <programlisting>upload_max_filesize = 6M</programlisting>
+
+            <para>Save this file. Now, left-click on the WAMP icon, click on
+            <guimenu>Apache</guimenu>, <guisubmenu>Service</guisubmenu>,
+            <guimenuitem>Restart Service</guimenuitem> and you can now install
+            the component. Editing the <filename>php.ini</filename> file
+            should also work on all other servers, local and live
+            alike.</para>
+          </warning>
+
+          <para>If the installation did not work, please take a look at <link
+          xlink:href="https://www.akeebabackup.com/documentation/troubleshooter/abinstallation.html">our
+          installation troubleshooting instructions</link> or try the <link
+          linkend="installation-manual">manual installation</link> described
+          below.</para>
+        </section>
+
+        <section xml:id="installation-manual">
+          <title>Manual installation</title>
+
+          <para>Sometimes <trademark>Joomla!</trademark> is unable to properly
+          extract ZIP archives due to technical limitations on your server. In
+          this case, you can follow a manual installation procedure.</para>
+
+          <para>You can download the latest installation packages our site's
+          <link
+          xlink:href="https://www.akeebabackup.com/download/official/akeeba-subscriptions.html">download
+          page for Akeeba Subscriptions</link>. Please note that the latest
+          version is always on top. If you have an older version of Joomla! or
+          PHP please consult our <link
+          xlink:href="https://www.akeebabackup.com/compatibility.html">Compatibility
+          page</link> to find the version of Akeeba Subscriptions compatible
+          with your Joomla! and PHP versions. In either case click on the
+          version you want to download and install.</para>
+
+          <para>Click on the Akeeba Subscriptions item to download the ZIP
+          installation package.</para>
+
+          <para>All Akeeba Subscriptions installation packages contain the
+          component and all of its associated extensions. Installing it will
+          install all of these items automatically. It can also be used to
+          upgrade Akeeba Subscriptions; just install it
+          <emphasis>without</emphasis> uninstalling the previous
+          release.</para>
+
+          <para>Before doing anything else, you have to extract the
+          installation ZIP file in a subdirectory named
+          <filename>akeeba</filename> on your local PC. Then, upload the
+          entire subdirectory inside your site's temporary directory. At this
+          point, there should be a subdirectory named
+          <filename>akeeba</filename> inside your site's temporary directory
+          which contains all of the ZIP package's files.</para>
+
+          <para>If you are unsure where your site's temporary directory is
+          located, you can look it up by going to the <guimenuitem>Global
+          Configuration</guimenuitem>, click on the
+          <guilabel>Server</guilabel> tab and take a look at the
+          <guilabel>Path to Temp-folder</guilabel> setting. The default
+          setting is the <filename>tmp</filename> directory under your site's
+          root. Rarely, especially on automated installations using
+          Fantastico, this might have been assigned the system-wide
+          <filename>/tmp</filename> directory. In this case, please consult
+          your host for instructions on how to upload files inside this
+          directory, or about changing your <trademark>Joomla!</trademark>
+          temporary directory back to the default location and making it
+          writable.</para>
+
+          <para>Assuming that you are past this uploading step, click on
+          <guimenu>Extensions</guimenu>, <guimenuitem>Manage</guimenuitem>
+          link on the top menu. If you are on Joomla! 3.x please click on the
+          <guilabel>Install from Directory</guilabel> tab. Locate the
+          <guibutton>Install Directory</guibutton> edit box. It is already
+          filled in with the absolute path to your temporary directory, for
+          example <filename>/var/www/joomla/tmp</filename>. Please append
+          <filename>/akeeba</filename> to it. In our example, it should look
+          something like <filename>/var/www/joomla/tmp/akeeba</filename>.
+          Then, click on the <guibutton>Install</guibutton> button.</para>
+
+          <para>If you still can't install Akeeba Subscriptions and you are
+          receiving messages regarding unwritable directories, inability to
+          move files or other similar file system related error messages,
+          please consult <link
+          xlink:href="https://www.akeebabackup.com/documentation/troubleshooter/abinstallation.html">our
+          installation troubleshooting instructions</link>. If these
+          instructions do not help please do not request support from us; we
+          are unlikely to be able to help you. These errors come from your
+          site set up and can best be resolved by asking your host for
+          assistance or by asking other users in the <link
+          xlink:href="http://forum.joomla.org">official
+          <trademark>Joomla!</trademark> forums</link>.</para>
+        </section>
       </section>
+    </section>
 
-      <section xml:id="installation-troubleshooting">
-        <title>Installation troubleshooting</title>
+    <section xml:id="update">
+      <title>Automatic updates</title>
 
-        <para>Please check out our component <link
-        xlink:href="https://www.akeebabackup.com/documentation/troubleshooter/abinstallation.html">installation
-        troubleshooter</link>.</para>
-      </section>
+      <bridgehead>Checking for the latest version and upgrading</bridgehead>
 
-      <section xml:id="updating">
-        <title>Updating to the latest release</title>
+      <para>You can easily check for the latest published version of the
+      Akeeba Backup component by visiting <link os=""
+      xlink:href="http://www.akeebabackup.com/latest">http://www.akeebabackup.com/latest</link>.
+      The page lists the version and release date of the latest Akeeba
+      Subscriptions release. You can check it against the data which appear on
+      the right-hand pane of your Akeeba Subscriptions Control Panel. If your
+      release is out of date, simply click on the Download link to download
+      the install package of the latest release to your PC.</para>
 
-        <para>Akeeba Subscriptions can be updated by installing the new
-        version on top of the old one.</para>
+      <bridgehead>Updating automatically with the Joomla! extensions update
+      feature</bridgehead>
 
-        <bridgehead>Something not working right after the update?</bridgehead>
+      <para>Akeeba Subscriptions can be updated just like any other Joomla!
+      extension, using the Joomla! extensions update feature. Joomla! is
+      responsible for finding the updates, downloading them and installing
+      them on your server. You can access the extensions update feature in two
+      different ways:</para>
 
-        <para>Sometimes Joomla! "forgets" to copy all updated files. This is
-        something that we have seen a few times. In this case, simply follow
-        the instructions in the Updating Directly section above. This will
-        force Joomla! to retry updating the component, copying the missing
-        files and everything will work again.</para>
-      </section>
+      <itemizedlist>
+        <listitem>
+          <para>From the icon your Joomla! administrator control panel page.
+          On Joomla! 3 you will find the icon in the left-hand sidebar, under
+          the <guilabel>Maintenance</guilabel> header. It has an icon which
+          looks like an empty star. On Joomla! 2.5 you will find it in the
+          main area of the control panel page, under <guilabel>Quick
+          Icons</guilabel>. When there are updates found for any of your
+          extensions you will see the <guilabel>Updates are
+          available</guilabel> message. Clicking on it will get you to the
+          Update page of Joomla! Extensions Manager.</para>
+        </listitem>
+
+        <listitem>
+          <para>From the top menu of your Joomla! administrator click on
+          <guimenu>Extensions</guimenu>, <guimenuitem>Extensions
+          Manager</guimenuitem>. From that page click on the
+          <guilabel>Update</guilabel> tab found in the left-hand sidebar on
+          Joomla! 3 and the top navigation bar in Joomla! 2.5. Clicking on it
+          will get you to the Update page of Joomla! Extensions
+          Manager.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If you do not see the updates try clicking on the <guibutton>Find
+      Updates</guibutton> button in the toolbar. If you do not see the updates
+      still you may want to wait up to 24 hours before retrying. This has to
+      do with the way the update CDN works and how Joomla! caches the update
+      information. Unfortunately we can't do anything about it, especially in
+      Joomla! 3 (there is no way to forcibly clean the updates cache).</para>
+
+      <para>If there is an update available for Akeeba Subscriptions tick the
+      box to the left of its row and then click on the
+      <guibutton>Update</guibutton> button in the toolbar. Joomla! will now
+      download and install the update.</para>
+
+      <para>If Joomla! cannot download the package, please use one of the
+      manual update methods described below. If, however you get an error
+      about copying files, folder not found or a cryptic "-1" error please
+      follow <link
+      xlink:href="https://www.akeebabackup.com/documentation/troubleshooter/abinstallation.html">our
+      installation troubleshooting instructions</link>.</para>
+
+      <bridgehead>Updating manually</bridgehead>
+
+      <para>As noted in the <link linkend="installing">installation
+      section</link>, installing and updating Akeeba Subscriptions is actually
+      the same thing. If the automatic update using Joomla!'s extensions
+      update feature does not work, please install the update manually
+      following the instructions in the <link
+      linkend="installing">installation section of this
+      documentation</link>.</para>
+
+      <important>
+        <para>When installing an update manually you MUST NOT uninstall your
+        existing version of Akeeba Subscriptions. Uninstalling Akeeba
+        Subscriptions will always remove all your settings. You definitely not
+        want that to happen!</para>
+      </important>
+
+      <bridgehead>Live update (versions 1.0 up to and including
+      2.3.2)</bridgehead>
+
+      <note>
+        <para>This method was removed in Akeeba Subscriptions 2.3.3</para>
+      </note>
+
+      <para>On older versions of Akeeba Subscriptions there is a different
+      update method, if your server supports it. It is called the "Live
+      Update" feature. Whenever you visit the Akeeba Subscriptions Control
+      Panel, it will automatically check for the existence of an updated
+      version and it will notify you. Clicking on the notification allows you
+      to perform a live update without further interaction. Do note that if
+      your server is protected by a firewall you'll have to enable port 80 and
+      443 TCP traffic to www.akeebabackup.com and cdn.akeebabackup.com for
+      this feature to work properly.</para>
+    </section>
+
+    <section xml:id="requesting-support">
+      <title>Requesting support and reporting bugs</title>
+
+      <para>Akeeba Subscriptions is a product for developers. This means that
+      absolutely no support, free or paid, is offered for Akeeba Subscriptions
+      by our company.</para>
+
+      <para>If you have found a bug please submit the fix as a Pull Request to
+      <link xlink:href="https://github.com/akeeba/akeebasubs">our GitHub
+      project</link>. Please note that requests for support through our GitHub
+      page or any other means will not be answered.</para>
     </section>
 
     <section xml:id="uninstallation">
       <title>Uninstallation</title>
 
-      <screenshot>
-        <info>
-          <title>Uninstalling Akeeba Subscriptions through Extension
-          Manager</title>
-        </info>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata depth="50%" fileref="images/2.png" scalefit="1"
-                       width="95%"/>
-          </imageobject>
-        </mediaobject>
-      </screenshot>
-
       <para>You can uninstall the component just like any other Joomla!
       component. In your site's back-end, just go to <guimenuitem>Extensions
-      Manager</guimenuitem>, click on <guilabel>Uninstall</guilabel>. In the
-      <guilabel>Filter</guilabel> area type
-      <parameter>subscription</parameter> and click on
-      <guibutton>Search</guibutton>. Several entries appear. Select the entry
-      where the <guilabel>Name</guilabel> is Akeeba Susbcriptions and
-      <guilabel>Type</guilabel> is Component. Do not select the other entries;
-      they are removed automatically. Now click on
-      <guibutton>Uninstall</guibutton>. This will completely remove Akeeba
-      Subscriptions including all subscriber information.</para>
-
-      <warning>
-        <para>UNINSTALLING THE COMPONENT WILL REMOVE ALL SUBSCRIPTION AND
-        SUBSCRIBER INFORMATION FROM YOUR SITE. This process cannot be
-        reversed. Once you uninstall the component you lose this data
-        forever.</para>
-      </warning>
+      Manager</guimenuitem>, click on <guilabel>Uninstall</guilabel>, select
+      Akeeba Subscriptions and click on <guibutton>Uninstall</guibutton>. This
+      will completely remove Akeeba Subscriptions including all plugins and
+      modules.</para>
     </section>
   </chapter>
 
