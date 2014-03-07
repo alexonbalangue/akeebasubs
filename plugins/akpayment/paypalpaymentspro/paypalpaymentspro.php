@@ -146,17 +146,54 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 				$requestData['PROFILESTARTDATE'] = $jNow->toISO8601();
 			}
 			$requestQuery = http_build_query($requestData);
-			$requestContext = stream_context_create(array(
-				'http' => array (
-					'method' => 'POST',
-					'header' => "Connection: close\r\n".
-								"Content-Length: " . strlen($requestQuery) . "\r\n",
-					'content'=> $requestQuery)
-				));
-			$responseQuery = file_get_contents(
-					$this->getPaymentURL(),
-					false,
-					$requestContext);
+			if ($this->getApiMethod() == 'file_get_contents')
+			{
+				$requestContext = stream_context_create(array(
+					'http' => array (
+						'method' => 'POST',
+						'header' => "Connection: close\r\n".
+									"Content-Length: " . strlen($requestQuery) . "\r\n",
+						'content'=> $requestQuery)
+					));
+				$responseQuery = file_get_contents(
+						$this->getPaymentURL(),
+						false,
+						$requestContext);
+			}
+			else
+			{
+			
+				$http_header = array(
+					'X-PAYPAL-SECURITY-USERID' => $this->getMerchantUsername(),
+					'X-PAYPAL-SECURITY-PASSWORD' => $this->getMerchantPassword(),
+					'X-PAYPAL-SECURITY-SIGNATURE' => $this->getMerchantSignature()
+				);
+				
+				$curlOptions = array (
+					CURLOPT_HTTPHEADER => $http_header,
+					CURLOPT_URL => $this->getPaymentURL(),
+					CURLOPT_VERBOSE => 1,
+					CURLOPT_SSL_VERIFYPEER => false,
+					CURLOPT_RETURNTRANSFER => 1,
+					CURLOPT_POST => 1,
+					CURLOPT_POSTFIELDS => $requestQuery
+				);
+				
+				$ch = curl_init();
+				curl_setopt_array($ch, $curlOptions);
+				
+				$responseQuery = curl_exec($ch); //make the request
+				
+				if(curl_errno($ch)){
+					$this->_errors = curl_error($ch);
+					curl_close($ch);
+					return false;
+				}else{
+					curl_close($ch);
+					
+				}
+			}
+			
 
 			// Payment Response
 			parse_str($responseQuery, $responseData);
@@ -533,6 +570,19 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			return trim($this->params->get('sb_apisig',''));
 		} else {
 			return trim($this->params->get('apisig',''));
+		}
+	}
+	
+	private function getApiMethod()
+	{
+		$apimethod = $this->params->get('apimethod',0);
+		if ($apimethod)
+		{
+			return 'curl';
+		}
+		else
+		{
+			return 'file_get_contents';
 		}
 	}
 
