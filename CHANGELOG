@@ -4,6 +4,7 @@ Akeeba Subscriptions 4.0.0
 - Removed no longer maintained payment and integration plugins
 + Added dual support for Boostrap 2 and Boostrap 3 HTML output. You can use the component on Bootstrap 3 templates without overrides.
 + gh-22 Added sh404SEF plugin to create SEF url with that component
++ Allow per payment method surcharge as a percentage of the subscription level's base price
 ~ Show a warning in the subscription page when the Do Not Track (DNT) feature is enabled in the user's browser (it kills cookies, therefore kills Joomla! session handling)
 ~ Now using the built-in Joomla! extensions updater instead of Live Update to deliver updates
 # [LOW] Frontend.css was included twice

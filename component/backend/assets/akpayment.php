@@ -122,7 +122,21 @@ abstract class plgAkpaymentAbstract extends JPlugin
 
 		if ($data->paymentmethod == $this->ppName)
 		{
-			$surcharge = (float)$this->params->get('surcharge', '0');
+			$percent = false;
+			$surcharge = $this->params->get('surcharge', '0');
+
+			if (substr($surcharge, -1) == '%')
+			{
+				$percent = true;
+				$surcharge = substr($surcharge, 0, -1);
+			}
+
+			$surcharge = floatval($surcharge);
+
+			if ($percent)
+			{
+				$surcharge = $data['netprice'] * ($surcharge / 100);
+			}
 		}
 
 		return $surcharge;
