@@ -360,7 +360,7 @@ class AkeebasubsModelCpanels extends FOFModel
 		$update_site = array(
 			'name'		=> 'Akeeba Subscriptions',
 			'type'		=> 'extension',
-			'location'	=> 'http://cdn.akeebabackup.com/updates/akeebasubspro.xml',
+			'location'	=> 'http://cdn.akeebabackup.com/updates/akeebasubs.xml',
 			'enabled'	=> 1,
 			'last_check_timestamp'	=> 0,
 			'extra_query'	=> null
