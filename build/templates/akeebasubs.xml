@@ -104,7 +104,6 @@
         <languages folder="language/backend">
             <language tag="en-GB">en-GB/en-GB.com_akeebasubs.ini</language>
             <language tag="en-GB">en-GB/en-GB.com_akeebasubs.sys.ini</language>
-            <language tag="en-GB">en-GB/en-GB.com_akeebasubs.menu.ini</language>
         </languages>
 
     </administration>
