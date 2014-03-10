@@ -1,13 +1,11 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die();
-
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_VERSIONHASH);
 
 $this->loadHelper('cparams');
 $this->loadHelper('modules');
@@ -88,7 +86,7 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 				<div class="akeebasubs-awesome-footer">
 					<td class="akeebasubs-awesome-subscribe">
 						<button
-							class="btn btn-inverse"
+							class="btn btn-inverse btn-default"
 							onclick="window.location='<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
 						</button>

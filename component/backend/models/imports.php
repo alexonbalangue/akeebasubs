@@ -1,7 +1,7 @@
 <?php
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 
@@ -362,13 +362,23 @@ class AkeebasubsModelImports extends FOFModel
 
 		$sub = clone FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 
+		$randomString = JUserHelper::genRandomPassword();
+		if (version_compare(JVERSION, '3.2', 'ge'))
+		{
+			$hash = JApplication::getHash($randomString);
+		}
+		else
+		{
+			$hash = JFactory::getApplication()->getHash($randomString);
+		}
+
 		$bind['user_id']             = $userid;
 		$bind['akeebasubs_level_id'] = $level->akeebasubs_level_id;
 		$bind['publish_up']          = $publish_up->toSql();
 		$bind['publish_down']        = $publish_down->toSql();
 		$bind['enabled']             = $this->getCsvData('enabled', 1);
 		$bind['processor']           = $this->getCsvData('processor', 'import');
-		$bind['processor_key']       = $this->getCsvData('processor_key', md5(microtime().$app->getHash(JUserHelper::genRandomPassword())));
+		$bind['processor_key']       = $this->getCsvData('processor_key', md5(microtime() . $hash));
 		$bind['state']               = $this->getCsvData('status', 'C');
 		$bind['net_amount']          = $this->getCsvData('net_amount', 0);
 		$bind['tax_amount']          = $this->getCsvData('tax_amount', 0);

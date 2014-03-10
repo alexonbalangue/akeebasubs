@@ -1,4 +1,40 @@
 <?php die(); ?>
+Akeeba Subscriptions 4.0.0
+================================================================================
+- Removed no longer maintained payment and integration plugins
++ Added dual support for Boostrap 2 and Boostrap 3 HTML output. You can use the component on Bootstrap 3 templates without overrides.
++ gh-22 Added sh404SEF plugin to create SEF url with that component
++ Allow per payment method surcharge as a percentage of the subscription level's base price
+~ Show a warning in the subscription page when the Do Not Track (DNT) feature is enabled in the user's browser (it kills cookies, therefore kills Joomla! session handling)
+~ Now using the built-in Joomla! extensions updater instead of Live Update to deliver updates
+# [LOW] Frontend.css was included twice
+# [LOW] Fixed duplicated control div for business field (Joomla! 3.x)
+
+Akeeba Subscriptions 3.3.4
+================================================================================
+~ Do not send out emails when the subject line is left blank
+~ ui-disable-spinner is now a class, allowing template overrides to place multiple spinners in the subscription page
+~ Change the "Subscribe now!" button color depending on the form validation status
+# [MEDIUM] The login form in the subscription page did not support two factor authentication in Joomla! 3.2
+# [LOW] The notification after expiration was broken
+# [LOW] Extremely rare case where an empty user information key could cause a fatal error when subscribing
+# [LOW] The user cannot be linked to from the invoices list; link removed
+# [LOW] A Download ID was requested in the Professional version even though it's no longer commercial
+
+Akeeba Subscriptions 3.3.3
+================================================================================
+# [LOW] Croatia is now part of the EU
+# [HIGH] Fatal error in Joomla! 3.2 if you are using the validate free subscriptions feature
+# [HIGH] Wrong invoice could be sent on new subscription
+
+Akeeba Subscriptions 3.3.2
+================================================================================
+! Akeeba Subscriptions link plugin was missing one character in line 181, leading to a fatal error
+
+Akeeba Subscriptions 3.3.1
+================================================================================
+! Broken package
+
 Akeeba Subscriptions 3.3.0
 ================================================================================
 ! This is the last release under the current version scheme and feature set. So long and thanks for all the fish. Please read https://www.akeebabackup.com/home/news/55-general/1534-the-future-of-akeebasubs.html

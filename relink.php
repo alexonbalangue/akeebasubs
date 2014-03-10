@@ -1,7 +1,7 @@
 <?php
 /**
  * @package AkeebaRelink
- * @copyright Copyright ©2010-2012 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright Copyright ©2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license GNU/GPL version 3 or, at your option, any later version
  */
 
@@ -876,7 +876,7 @@ echo <<<ENDBANNER
 Akeeba Relinker 2.0
 No-configuration extension symlinker
 -------------------------------------------------------------------------------
-Copyright ©2010-2012 Nicholas K. Dionysopoulos / AkeebaBackup.com
+Copyright ©2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
 Distributed under the GNU General Public License v3 or later
 -------------------------------------------------------------------------------
 

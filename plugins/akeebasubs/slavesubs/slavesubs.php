@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -136,24 +136,25 @@ class plgAkeebasubsSlavesubs extends JPlugin
 result.slaveusers[$i] = $('#slaveuser$i').val();
 
 ENDJS;
-			$javascript_validate .= <<<ENDJS
+			$javascript_validate .= <<<JS
 
-$('#slaveuser$i').parent().parent().removeClass('error').removeClass('success');
+$('#slaveuser$i').parents('div.control-group').removeClass('error has-error success has-success');
 if(!response.subcustom_validation.slaveuser$i) {
-	$('#slaveuser$i').parent().parent().addClass('error');
+	$('#slaveuser$i').parents('div.control-group').addClass('error has-error');
 	$('#slaveuser{$i}_invalid').css('display','inline-block');
 	thisIsValid = false;
 } else {
-	$('#slaveuser$i').parent().parent().removeClass('error');
-		$('#slaveuser{$i}_invalid').css('display','none');
+	$('#slaveuser$i').parents('div.control-group').removeClass('error has-error');
+	$('#slaveuser{$i}_invalid').css('display','none');
+	thisIsValid = true;
 }
 
-ENDJS;
+JS;
 			}
 
 		if(!$useredit)
 		{
-			$javascript = <<<ENDJS
+			$javascript = <<<JS
 (function($) {
 	$(document).ready(function(){
 		addToSubValidationFetchQueue(plg_akeebasubs_slavesubs_fetch);
@@ -180,11 +181,12 @@ function plg_akeebasubs_slavesubs_validate(response)
 	(function($) {
 $javascript_validate
 
-		return thisIsValid;
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
-ENDJS;
+JS;
 			$document = JFactory::getDocument();
 			$document->addScriptDeclaration($javascript);
 		}

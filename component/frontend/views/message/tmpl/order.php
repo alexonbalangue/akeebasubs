@@ -1,14 +1,12 @@
 <?php
 /**
  *  @package FrameworkOnFramework
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
 // Protect from unauthorized access
 defined('_JEXEC') or die();
-
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/frontend.css?'.AKEEBASUBS_VERSIONHASH);
 
 $this->loadHelper('cparams');
 $this->loadHelper('modules');

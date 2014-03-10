@@ -5,7 +5,7 @@
 
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2012 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -493,9 +493,9 @@ td.akeebasubs-strappy-signupfee {
 	width: 30%;
 }
 
-#akeebasubs select {
+/*#akeebasubs select {
 	width: 30% !important;
-}
+}*/
 
 #akeebasubs input.vat {
 	width: 10em;

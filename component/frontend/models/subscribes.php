@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -14,7 +14,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 	 *
 	 * @var array
 	 */
-	private $european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK');
+	private $european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK', 'HR');
 
 	/**
 	 * Raw HTML source of the payment form, as returned by the payment plugin
@@ -94,7 +94,18 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$rawDataGet = JRequest::get('GET', 2);
 		$rawData = array_merge($rawDataCache, $rawDataGet, $rawDataPost);
 		if(!empty($rawData)) foreach($rawData as $k => $v) {
-			if(substr($k,0,1) == chr(0)) continue; // Don't ask...
+			if (substr($k,0,1) == chr(0))
+			{
+				// Some people reported a key starting with a null byte causing a fatal error. Uh?!
+				continue;
+			}
+
+			if (empty($k))
+			{
+				// Some people reported an empty(!!!) key causing a fatal error. WTF?!
+				continue;
+			}
+
 			$this->setState($k, $v);
 		}
 
@@ -261,8 +272,12 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		$ret = (object)array('username' => false, 'password' => true);
 		$username = $state->username;
-		if(empty($username)) return $ret;
 		$myUser = JFactory::getUser();
+		if(empty($username))
+		{
+			if (!$myUser->guest) $ret->username = true;
+			return $ret;
+		}
 		$user = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
 			->username($username)
 			->getFirstItem();
@@ -583,7 +598,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			JPluginHelper::importPlugin('akeebasubs');
 			JPluginHelper::importPlugin('akpayment');
 			$app = JFactory::getApplication();
-			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array($state));
+			$priceValidationData = array_merge($state, array('level' => $level, 'netprice' => $netPrice));
+			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', $priceValidationData);
 			if(is_array($jResponse) && !empty($jResponse)) {
 				foreach($jResponse as $pluginResponse) {
 					if(empty($pluginResponse)) continue;
@@ -1629,7 +1645,17 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// prevent spam registrations when the subscription form is abused.
 			JLoader::import('joomla.user.helper');
 			$params['block'] = 1;
-			$params['activation'] = JFactory::getApplication()->getHash( JUserHelper::genRandomPassword() );
+
+			$randomString = JUserHelper::genRandomPassword();
+			if (version_compare(JVERSION, '3.2', 'ge'))
+			{
+				$hash = JApplication::getHash($randomString);
+			}
+			else
+			{
+				$hash = JFactory::getApplication()->getHash($randomString);
+			}
+			$params['activation'] = $hash;
 
 			$userIsSaved = false;
 			$user->bind($params);
@@ -1831,18 +1857,15 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Step #2.b. Apply block rules in the Professional release
 		// ----------------------------------------------------------------------
-		if (AKEEBASUBS_PRO)
+		if (FOFModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
 		{
-			if (FOFModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
+			if (version_compare(JVERSION, '3.0', 'ge'))
 			{
-				if (version_compare(JVERSION, '3.0', 'ge'))
-				{
-					throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
-				}
-				else
-				{
-					JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
-				}
+				throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
+			}
+			else
+			{
+				JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
 			}
 		}
 
@@ -1851,7 +1874,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$user = JFactory::getUser();
 		$this->setState('user', $user);
 		$userIsSaved = $this->updateUserInfo(true, $level);
-
 		if(!$userIsSaved) {
 			return false;
 		} else {
@@ -1905,8 +1927,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 				->paystate('C')
 				->getList(true);
 		}
-
-
 
 		$jNow = new JDate();
 		$now = $jNow->toUnix();
@@ -2503,6 +2523,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
 					break;
 				}
+				break;
+
 			case 'DE':
 				// GERMANY
 				// VAT number is called: MWST.
@@ -2618,7 +2640,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				break;
 
 			case 'LT':
-				// LITUANIA
+				// LITHUANIA
 				// Format: 9 or 12 digits
 				if((strlen($vatnumber) != 9) && (strlen($vatnumber) != 12)) $ret->valid = false;
 				if($ret->valid) {
@@ -2716,6 +2738,21 @@ class AkeebasubsModelSubscribes extends FOFModel
 				}
 				if((strlen($vatnumber) != 9) && (strlen($vatnumber) != 12)) $ret->valid = false;
 				if($ret->valid) {
+					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
+				}
+				break;
+
+			case 'HR':
+				// CROATIA
+				// VAT number is called: PDV.
+				// Format: 11 digits
+				if(strlen($vatnumber) != 11)
+				{
+					$ret->valid = false;
+				}
+
+				if($ret->valid)
+				{
 					if(preg_replace('/[0-9]/', '', $vatnumber) != '') $ret->valid = false;
 				}
 				break;

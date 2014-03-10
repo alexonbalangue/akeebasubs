@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -222,7 +222,7 @@ class AkeebasubsHelperEmail
 		// If no match is found in the database (or if this is the Core release)
 		// we fall back to the legacy method of using plain text emails and
 		// translation strings.
-		if(!$isHTML || (AKEEBASUBS_PRO != 1))
+		if(!$isHTML)
 		{
 			$isHTML = false;
 
@@ -280,6 +280,11 @@ class AkeebasubsHelperEmail
 	{
 		// Load the template
 		list($isHTML, $subject, $templateText, $loadLanguage) = self::loadEmailTemplate($key, $sub->akeebasubs_level_id, JFactory::getUser($sub->user_id));
+
+		if (empty($subject))
+		{
+			return false;
+		}
 
 		// Substitute variables in $templateText and $subject
 		if(!class_exists('AkeebasubsHelperMessage'))

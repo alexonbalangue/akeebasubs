@@ -1,7 +1,7 @@
 <?php
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 // Protect from unauthorized access
@@ -450,7 +450,13 @@ class AkeebasubsModelUsers extends FOFModel
 					unset($pResponse['params']);
 				}
 
-				$myData = array_merge($myData, $pResponse);
+				foreach ($pResponse as $k => $v)
+				{
+					if (!empty($v))
+					{
+						$myData[$k] = $v;
+					}
+				}
 			}
 		}
 

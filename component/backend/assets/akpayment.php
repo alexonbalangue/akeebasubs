@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -122,7 +122,21 @@ abstract class plgAkpaymentAbstract extends JPlugin
 
 		if ($data->paymentmethod == $this->ppName)
 		{
-			$surcharge = (float)$this->params->get('surcharge', '0');
+			$percent = false;
+			$surcharge = $this->params->get('surcharge', '0');
+
+			if (substr($surcharge, -1) == '%')
+			{
+				$percent = true;
+				$surcharge = substr($surcharge, 0, -1);
+			}
+
+			$surcharge = floatval($surcharge);
+
+			if ($percent)
+			{
+				$surcharge = $data['netprice'] * ($surcharge / 100);
+			}
 		}
 
 		return $surcharge;

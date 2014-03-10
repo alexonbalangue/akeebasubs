@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -87,6 +87,20 @@ ENDTEMPLATE;
 		$html = str_replace('{FIRSTNAME}', $firstName, $html);
 		$html = str_replace('{LASTNAME}', $lastName, $html);
 		$html = str_replace('{LEVEL}', $level->title, $html);
+
+        // Get a preloaded mailer
+        $mailer = AkeebasubsHelperEmail::getPreloadedMailer($subscription, 'plg_akeebasubs_subscriptionemails_offline');
+
+        // Replace custom [INSTRUCTIONS] tag
+        $body = str_replace('[INSTRUCTIONS]', $html, $mailer->Body);
+        $mailer->setBody($body);
+
+        if ($mailer !== false)
+        {
+            $mailer->addRecipient($user->email);
+            $result = $mailer->Send();
+            $mailer = null;
+        }
 
 		@include_once JPATH_SITE.'/components/com_akeebasubs/helpers/message.php';
 		if(class_exists('AkeebasubsHelperMessage')) {

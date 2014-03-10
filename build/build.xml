@@ -25,39 +25,6 @@
 	File sets
 	====================================================================================================
 	-->
-	
-	<fileset dir="${dirs.component}" id="componentcore">
-		<include name="backend/**" />
-		<include name="fof/**" />
-		<include name="frontend/**" />
-		<include name="language/**" />
-		<include name="media/**" />
-		<include name="strapper/**" />
-		<include name="*" />
-
-		<exclude name="media/tcpdf/**" />
-		<exclude name="backend/assets/tcpdf/**" />
-		<exclude name="backend/controllers/invoices.php" />
-		<exclude name="backend/controllers/reports.php" />
-		<exclude name="backend/models/blockrules.php" />
-		<exclude name="backend/models/invoices.php" />
-		<exclude name="backend/tables/blockrules.php" />
-		<exclude name="backend/tables/invoice.php" />
-		<exclude name="backend/tables/report.php" />
-		<exclude name="backend/views/blockrules/**" />
-		<exclude name="backend/views/blockrule/**" />
-		<exclude name="backend/views/invoices/**" />
-		<exclude name="backend/views/invoice/**" />
-		<exclude name="backend/views/emailtemplates/**" />
-		<exclude name="backend/views/emailtemplate/**" />
-		<exclude name="backend/views/invoicetemplates/**" />
-		<exclude name="backend/views/invoicetemplate/**" />
-		<exclude name="backend/views/relations/**" />
-		<exclude name="backend/views/relation/**" />
-		<exclude name="backend/views/reports/**" />
-
-		<exclude name="backend/invoices/*.pdf" />
-	</fileset>
 
 	<fileset dir="${dirs.component}" id="component">
 		<include name="backend/**" />
@@ -120,13 +87,12 @@
 	<target name="component-package" description="Akeeba Subscriptions Professional"
 		depends="new-release,setup-properties">
 		
-		<!-- CORE -->
 		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/aaa_akeebasubs.xml" overwrite="true">
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="0" />
+					<token key="PRO" value="1" />
 				</replacetokens>
 			</filterchain>
 		</copy>
@@ -135,50 +101,6 @@
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="0" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="0" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-		
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
-			<fileset refid="componentcore" />
-		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
-			<fileset dir="${dirs.modules}">
-				<include name="**"/>
-			</fileset>
-		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-core.zip" includeemptydirs="true">
-			<fileset dir="${dirs.plugins}">
-				<include name="**"/>
-				<exclude name="system/asuserregredir/**"/>
-			</fileset>
-		</zipme>
-		
-		<!-- PRO -->
-		<copy file="./templates/akeebasubs_pro.xml" tofile="${dirs.component}/aaa_akeebasubs.xml" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="1" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-		<copy file="./templates/akeebasubs_pro.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
 					<token key="PRO" value="1" />
 				</replacetokens>
 			</filterchain>
@@ -188,20 +110,19 @@
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="1" />
 				</replacetokens>
 			</filterchain>
 		</copy>
 		
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset refid="component" />
 		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset dir="${dirs.modules}">
 				<include name="**"/>
 			</fileset>
 		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}-pro.zip" includeemptydirs="true">
+		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
 			<fileset dir="${dirs.plugins}">
 				<include name="**"/>
 			</fileset>
@@ -253,7 +174,7 @@
 
 	<target name="ftpdeploy" depends="git">
 		<gitversion workingcopy="${dirs.root}" propertyname="git.lastrevision" />
-		<echo>Uploading Core release</echo>
+		<echo>Uploading dev release</echo>
 		<ftpdeploy
 			host="${ftp.host}"
 			port="${ftp.port}"
@@ -264,24 +185,7 @@
 			passive="true"
 			level="debug">
 			<fileset dir="${dirs.release}">
-				<include name="com_akeebasubs-*-core.zip"/>
-			</fileset>			
-			<fileset dir="${dirs.root}">
-				<include name="CHANGELOG"/>
-			</fileset>			
-		</ftpdeploy>
-		<echo>Uploading Professional release</echo>
-		<ftpdeploy
-			host="${ftp.host}"
-			port="${ftp.port}"
-			username="${ftp.username}"
-			password="${ftp.password}"
-			dir="${ftp.dir}/dev/aksubspro/${git.lastrevision}"
-			mode="${ftp.mode}"
-			passive="true"
-			level="debug">
-			<fileset dir="${dirs.release}">
-				<include name="com_akeebasubs-*-pro.zip"/>
+				<include name="com_akeebasubs-*.zip"/>
 			</fileset>			
 			<fileset dir="${dirs.root}">
 				<include name="CHANGELOG"/>

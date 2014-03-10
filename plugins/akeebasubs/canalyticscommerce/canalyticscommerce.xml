@@ -13,6 +13,7 @@
 		<filename plugin="canalyticscommerce">canalyticscommerce.php</filename>
 	</files>
 	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_canalyticscommerce.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_canalyticscommerce.sys.ini</language>
 	</languages>
 	

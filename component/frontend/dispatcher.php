@@ -2,7 +2,7 @@
 
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 // Protect from unauthorized access
@@ -60,7 +60,7 @@ class AkeebasubsDispatcher extends FOFDispatcher
 			AkeebaStrapper::$tag = AKEEBASUBSMEDIATAG;
 			AkeebaStrapper::bootstrap();
 			AkeebaStrapper::jQueryUI();
-			AkeebaStrapper::addCSSfile('media://com_akeebasubs/css/frontend.css');
+			AkeebaStrapper::addCSSfile('media://com_akeebasubs/css/frontend.css', AKEEBASUBS_VERSIONHASH);
 
 			// Load helpers
 			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';

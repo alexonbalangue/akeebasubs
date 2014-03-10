@@ -2,7 +2,7 @@
 
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 defined('_JEXEC') or die();
@@ -32,7 +32,8 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 			// Remove a level for better handling
 			foreach($tempList as $tempPlugin)
 			{
-				$name = array_pop(array_keys($tempPlugin));
+				$keys = array_keys($tempPlugin);
+				$name = array_pop($keys);
 				$ppList[$name] = array_pop($tempPlugin);
 			}
 
@@ -98,7 +99,7 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 			// Get invoices data
 			$invoices = array();
 
-			if (AKEEBASUBS_PRO && !empty($subscription_ids))
+			if (!empty($subscription_ids))
 			{
 				$rawInvoices = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 					->subids($subscription_ids)

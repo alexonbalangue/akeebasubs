@@ -2,7 +2,7 @@
 
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 defined('_JEXEC') or die();
@@ -190,13 +190,18 @@ class plgSystemAsexpirationnotify extends JPlugin
 					->getList();
 			}
 
-			// Get the subscriptions expired within the last $notifyAfter days
+			// Get the subscriptions expired $notifyAfter days ago
 			$subs3 = array();
 
 			if ($notifyAfter > 0)
 			{
-				$jFrom	 = new JDate($now - ($notifyAfter + 1) * 24 * 3600);
-				$jTo	 = new JDate($now - 1);
+				// Get all subscriptions expired $notifyAfter + 2 to $notifyAfter days ago. So, if $notifyAfter is 30
+				// it will get all subscriptions expired 30 to 32 days ago. This allows us to send emails if the plugin
+				// is triggered at least once every two days. Any site with less traffic than that required for the
+				// plugin to be triggered every 48 hours doesn't need our software, it needs better marketing to get
+				// some users!
+				$jFrom	 = new JDate($now - ($notifyAfter + 2) * 24 * 3600);
+				$jTo	 = new JDate($now - $notifyAfter * 24 * 3600);
 
 				$subs3 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->level($level->akeebasubs_level_id)

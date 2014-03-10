@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -112,9 +112,6 @@ class AkeebasubsControllerUserinfos extends FOFController
 				$msg = JText::_('COM_AKEEBASUBS_LBL_USERINFO_SAVED');
 			}
 		}
-
-		// Try saving the user data
-		$result = $this->getThisModel()->updateUserInfo(false);
 
 		// Redirect to the display task
 		$url = 'index.php?option=com_akeebasubs&view=userinfo';

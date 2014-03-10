@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -350,32 +350,86 @@ class AkeebasubsModelCpanels extends FOFModel
 	}
 
 	/**
-	 * Does the user needs to enter a Download ID?
+	 * Refreshes the Joomla! update sites for this extension as needed
 	 *
-	 * @return boolean
+	 * @return  AkeebasubsModelCpanels
 	 */
-	public function needsDownloadID()
+	public function refreshUpdateSite()
 	{
-		JLoader::import('joomla.application.component.helper');
+		// Create the update site definition we want to store to the database
+		$update_site = array(
+			'name'		=> 'Akeeba Subscriptions',
+			'type'		=> 'extension',
+			'location'	=> 'http://cdn.akeebabackup.com/updates/akeebasubs.xml',
+			'enabled'	=> 1,
+			'last_check_timestamp'	=> 0,
+			'extra_query'	=> null
+		);
 
-		// Do I need a Download ID?
-		$ret = false;
-		$isPro = AKEEBASUBS_PRO;
-		if(!$isPro) {
-			$ret = false;
-		} else {
-			$ret = false;
-			$params = JComponentHelper::getParams('com_akeebasubs');
-			if(version_compare(JVERSION, '3.0', 'ge')) {
-				$dlid = $params->get('downloadid', '');
-			} else {
-				$dlid = $params->getValue('downloadid', '');
-			}
-			if(!preg_match('/^([0-9]{1,}:)?[0-9a-f]{32}$/i', $dlid)) {
-				$ret = true;
+		$db = $this->getDbo();
+
+		// Get the extension ID to ourselves
+		$query = $db->getQuery(true)
+			->select($db->qn('extension_id'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type') . ' = ' . $db->q('component'))
+			->where($db->qn('element') . ' = ' . $db->q('com_akeebasubs'));
+		$db->setQuery($query);
+
+		$extension_id = $db->loadResult();
+
+		if (empty($extension_id))
+		{
+			return $this;
+		}
+
+		// Get the update sites for our extension
+		$query = $db->getQuery(true)
+			->select($db->qn('update_site_id'))
+			->from($db->qn('#__update_sites_extensions'))
+			->where($db->qn('extension_id') . ' = ' . $db->q($extension_id));
+		$db->setQuery($query);
+
+		$updateSiteIDs = $db->loadColumn(0);
+
+		if (!count($updateSiteIDs))
+		{
+			// No update sites defined. Create a new one.
+			$newSite = (object)$update_site;
+			$db->insertObject('#__update_sites', $newSite);
+
+			$id = $db->insertid();
+
+			$updateSiteExtension = (object)array(
+				'update_site_id'	=> $id,
+				'extension_id'		=> $extension_id,
+			);
+			$db->insertObject('#__update_sites_extensions', $updateSiteExtension);
+		}
+		else
+		{
+			// Loop through all update sites
+			foreach ($updateSiteIDs as $id)
+			{
+				$query = $db->getQuery(true)
+					->select('*')
+					->from($db->qn('#__update_sites'))
+					->where($db->qn('update_site_id') . ' = ' . $db->q($id));
+				$db->setQuery($query);
+				$aSite = $db->loadObject();
+
+				// Does the name and location match?
+				if (($aSite->name == $update_site['name']) && ($aSite->location == $update_site['location']))
+				{
+					continue;
+				}
+
+				$update_site['update_site_id'] = $id;
+				$newSite = (object)$update_site;
+				$db->updateObject('#__update_sites', $newSite, 'update_site_id', true);
 			}
 		}
 
-		return $ret;
+		return $this;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        akeebasubs
- * @copyright    Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright    Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -178,7 +178,7 @@ class plgContentAslink extends JPlugin
     {
 
         $component = JComponentHelper::getComponent('com_akeebasubs');
-        $menus = Factory::getApplication()->getMenu('site', array());
+        $menus = JFactory::getApplication()->getMenu('site', array());
 		$items = $menus->getItems('component_id', $component->id);
         $itemId = null;
 

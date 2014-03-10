@@ -1,25 +1,34 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die();
 
+// The form action URL, points to com_users' login task
 $login_url = 'index.php?option=com_users&task=user.login';
 
+// A reference back to ourselves
 $redirectURL = JURI::getInstance()->toString();
-/*
-$rootURL = rtrim(JURI::base(),'/');
-$subpathURL = JURI::base(true);
-if(!empty($subpathURL) && ($subpathURL != '/')) {
-	$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
+
+// Should I use two factor authentication in Joomla! 3.2 and later?
+$useTwoFactorAuth = false;
+
+if (version_compare(JVERSION, '3.2.0', 'ge'))
+{
+	require_once JPATH_ADMINISTRATOR . '/components/com_users/helpers/users.php';
+	$tfaMethods = UsersHelper::getTwoFactorMethods();
+	$useTwoFactorAuth = count($tfaMethods) > 1;
+
+	if ($useTwoFactorAuth)
+	{
+		JHtml::_('behavior.keepalive');
+		JHtml::_('bootstrap.tooltip');
+	}
 }
 
-$redirectURL = $rootURL. str_replace('&amp;','&',
-	JRoute::_('index.php?option=com_akeebasubs&view=level&layout=default&slug='.$this->input->getString('slug','')))
-*/
 ?>
 
 <form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post" class="form form-horizontal">
@@ -29,25 +38,39 @@ $redirectURL = $rootURL. str_replace('&amp;','&',
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?></legend>
 
-		<div class="control-group">
-			<label for="username" class="control-label">
+		<div class="control-group form-group">
+			<label for="username" class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_USERNAME')?>
 			</label>
-			<div class="controls">
-				<input type="text" name="username" value="" />
+			<div class="controls col-sm-3">
+				<input type="text" class="form-control" name="username" value="" />
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label for="password" class="control-label">
+		<div class="control-group form-group">
+			<label for="password" class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_PASSWORD')?>
 			</label>
-			<div class="controls">
-				<input type="password" name="password" value="" />
+			<div class="controls col-sm-3">
+				<input type="password" class="form-control" name="password" value="" />
 			</div>
 		</div>
 
-		<div class="form-actions">
+		<?php if ($useTwoFactorAuth): ?>
+		<div class="control-group form-group">
+			<label for="secretkey" class="control-label col-sm-2">
+				<?php echo JText::_('JGLOBAL_SECRETKEY')?>
+			</label>
+			<div class="controls col-sm-3">
+				<input type="text" name="secretkey" value="" class="input-small form-control" />
+				<span class="btn width-auto hasTooltip" title="<?php echo JText::_('JGLOBAL_SECRETKEY_HELP'); ?>">
+					<span class="icon-help"></span>
+				</span>
+			</div>
+		</div>
+		<?php endif; ?>
+
+		<div class="form-actions well">
 			<input type="submit" class="btn btn-primary" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?>" />
 			<span>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_ORCONTINUE')?>

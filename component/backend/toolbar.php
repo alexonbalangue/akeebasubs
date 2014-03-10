@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -46,22 +46,6 @@ class AkeebasubsToolbar extends FOFToolbar
 				'invoicetemplates'
 			),
 		);
-
-		if(!AKEEBASUBS_PRO)
-		{
-			$key = array_search('relations', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
-
-			$key = array_search('emailtemplates', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
-
-			$key = array_search('blockrules', $views['COM_AKEEBASUBS_MAINMENU_SETUP']);
-			unset($views['COM_AKEEBASUBS_MAINMENU_SETUP'][$key]);
-
-			unset($views['reports']);
-
-			unset($views['COM_AKEEBASUBS_MAINMENU_INVOICES']);
-		}
 
 		foreach($views as $label => $view) {
 			if(!is_array($view)) {

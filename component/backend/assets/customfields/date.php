@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -99,24 +99,27 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 {
 	var thisIsValid = true;
 	(function($) {
-		$('#$slug').parent().parent().removeClass('error').removeClass('success');
+		$('#$slug').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#{$slug}_invalid').css('display','none');
 		$('#{$slug}_valid').css('display','none');
 		if (!akeebasubs_apply_validation)
 		{
-			return true;
+		    thisIsValid = true;
+			return;
 		}
 
 		if(response.custom_validation.$slug) {
-			$('#$slug').parent().parent().addClass('success');
+			$('#$slug').parents('div.control-group').addClass('success has-success');
 			$success_javascript
+			thisIsValid = true;
 		} else {
-			$('#$slug').parent().parent().addClass('error');
+			$('#$slug').parents('div.control-group').addClass('error has-error');
 			$failure_javascript
 			thisIsValid = false;
 		}
-		return thisIsValid;
 	})(akeeba.jQuery);
+
+	return thisIsValid;
 }
 
 ENDJS;

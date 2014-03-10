@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package	akeebasubs
- *  @copyright	Copyright (c)2010-2013 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ *  @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  *  @license	GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  *  @version 	$Id$
  *
@@ -46,134 +46,49 @@ class Com_AkeebasubsInstallerScript
 		// plugins => { (folder) => { (element) => (published) }* }*
 		'plugins' => array(
 			'akeebasubs' => array(
-				'aceshop'				=> 0,
-				'acymailing'			=> 0,
 				'adminemails'			=> 0,
-				'affemails'				=> 0,
-				'ageverification'		=> 0,
-				'agora'					=> 0,
 				'agreetotos'			=> 0,
 				'atscredits'			=> 0,
 				'autocity'				=> 0,
 				'canalyticscommerce'	=> 0,
-				'cb'					=> 0,
-				'cbsync'				=> 0,
-				'ccinvoices'			=> 0,
-				'constantcontact'		=> 0,
 				'contentpublish'		=> 0,
 				'customfields'			=> 1,
-				'easydiscuss'			=> 0,
-				'freshbooks'			=> 0,
-				'frontenduseraccess'	=> 0,
 				'invoices'				=> 0,
-				'iplogger'				=> 0,
 				'iproperty'				=> 0,
-				'jomsocial'				=> 0,
 				'joomla'				=> 1,
 				'joomlaprofilesync'		=> 1,
-				'k2'					=> 0,
-				'kunena'				=> 0,
-				'mailchimp'				=> 0,
-				'mijoshop'				=> 0,
-				'projectfork'			=> 0,
-				'projectfork4'			=> 0,
 				'recaptcha'				=> 0,
-				'redshop'				=> 0,
-				'redshopusersync'		=> 0,
-				'samplefields'			=> 0,
 				'slavesubs'				=> 1,
 				'sql'					=> 0,
 				'subscriptionemails'	=> 1,
-				'tracktime'				=> 0,
-				'userdelete'			=> 0,
-				'vm2'					=> 0,
-				'zohoinvoice'			=> 0,
 			),
 			'akpayment' => array(
 				'2checkout'				=> 0,
 				'2conew'				=> 0,
-				'allopass'				=> 0,
-				'alphauserpoints'		=> 0,
-				'authorizenet'			=> 0,
-				'beanstream'			=> 0,
-				'braintree'				=> 0,
-				'cashu'					=> 0,
-				'ccavenue'				=> 0,
-				'clickandbuy'			=> 0,
-				'cmcic'					=> 0,
-				'deltapay'				=> 0,
-				'dwolla'				=> 0,
-				'epaydk'				=> 0,
-				'eselectplus'			=> 0,
-				'exact'					=> 0,
-				'eway'					=> 0,
-				'ewayrapid3'			=> 0,
-				'gocardless'			=> 0,
-				'googlecheckout'		=> 0,
-				'ifthen'				=> 0,
-				'mercadopago'			=> 0,
-				'moip'					=> 0,
-				'moipassinaturas'		=> 0,
-				'mobilpaycc'			=> 0,
-				'mobilpaysms'			=> 0,
-				'moneris'				=> 0,
-				'nochex'				=> 0,
 				'none'					=> 0,
 				'offline'				=> 0,
-				'pagseguro'				=> 0,
-				'payfast'				=> 0,
 				'paymill'				=> 0,
 				'paypal'				=> 1,
 				'paypalpaymentspro'		=> 0,
 				'paypalproexpress'		=> 0,
-				'paysafe'				=> 0,
-				'payu'					=> 0,
-				'postfinancech'			=> 0,
-				'przelewy24'			=> 0,
-				'rbkmoney'				=> 0,
-				'realex'				=> 0,
-				'robokassa'				=> 0,
-				'saferpay'				=> 0,
-				'sagepay'				=> 0,
-				'scnet'					=> 0,
-				'scnetintegrated'		=> 0,
 				'skrill'				=> 0,
 				'stripe'				=> 0,
-				'suomenverkkomaksut'	=> 0,
-				'upay'					=> 0,
-				'verotel'				=> 0,
 				'viva'					=> 0,
-				'wepay'					=> 0,
-				'worldpay'				=> 0,
-				'zarinpal'				=> 0,
-			),
-			'ccinvoicetags' => array(
-				'akeebasubs'			=> 1,
 			),
 			'content' => array(
 				'aslink'				=> 1,
 				'asrestricted'			=> 1,
 				'astimedrelease'		=> 1,
 			),
+            'sh404sefextplugins' => array(
+                'com_akeebasubs'        => 1
+            ),
 			'system' => array(
-				'affiliatesessiongeneration' => 0,
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
+				'aslogoutuser'			=> 0,
 				'asuserregredir'		=> 0,
-				'idevaffiliate'			=> 0,
-				'oneclickaction'		=> 1,
-				'postaffiliatepro'		=> 0,
 			)
-		)
-	);
-
-	private $akeebaRemovePlugins = array(
-		'akeebasubs' => array(
-			'communityacl',
-			'juga',
-			'ninjaboard',
-			'tienda',
-			'vm',
 		)
 	);
 
@@ -390,14 +305,8 @@ class Com_AkeebasubsInstallerScript
 
 		$this->_copyCliFiles($parent);
 
-		// Remove Professional version plugins from Akeeba Backup Core
-		$this->_removeObsoletePlugins($parent);
-
 		// Show the post-installation page
 		$this->_renderPostInstallation($status, $fofStatus, $straperStatus, $parent);
-
-		// Kill update site
-		$this->_killUpdateSite();
 
 		// Clear FOF's cache
 		if (!defined('FOF_INCLUDED'))
@@ -427,35 +336,6 @@ class Com_AkeebasubsInstallerScript
 
 		// Show the post-uninstallation page
 		$this->_renderPostUninstallation($status, $parent);
-	}
-
-	/**
-	 * Removes the plugins which have been discontinued
-	 *
-	 * @param JInstaller $parent
-	 */
-	private function _removeObsoletePlugins($parent)
-	{
-		$src = $parent->getParent()->getPath('source');
-		$db = JFactory::getDbo();
-
-		foreach($this->akeebaRemovePlugins as $folder => $plugins) {
-			foreach($plugins as $plugin) {
-				$sql = $db->getQuery(true)
-					->select($db->qn('extension_id'))
-					->from($db->qn('#__extensions'))
-					->where($db->qn('type').' = '.$db->q('plugin'))
-					->where($db->qn('element').' = '.$db->q($plugin))
-					->where($db->qn('folder').' = '.$db->q($folder));
-				$db->setQuery($sql);
-				$id = $db->loadResult();
-				if($id)
-				{
-					$installer = new JInstaller;
-					$result = $installer->uninstall('plugin',$id,1);
-				}
-			}
-		}
 	}
 
 	/**
@@ -1219,74 +1099,6 @@ class Com_AkeebasubsInstallerScript
 			'version'	=> $straperVersion[$versionSource]['version'],
 			'date'		=> $straperVersion[$versionSource]['date']->format('Y-m-d'),
 		);
-	}
-
-	/**
-	 * Remove the update site specification from Joomla! – we no longer support
-	 * that misbehaving crap, thank you very much...
-	 */
-	private function _killUpdateSite()
-	{
-		// Get some info on all the stuff we've gotta delete
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true)
-			->select(array(
-				$db->qn('s').'.'.$db->qn('update_site_id'),
-				$db->qn('e').'.'.$db->qn('extension_id'),
-				$db->qn('e').'.'.$db->qn('element'),
-				$db->qn('s').'.'.$db->qn('location'),
-			))
-			->from($db->qn('#__update_sites').' AS '.$db->qn('s'))
-			->join('INNER',$db->qn('#__update_sites_extensions').' AS '.$db->qn('se').' ON('.
-				$db->qn('se').'.'.$db->qn('update_site_id').' = '.
-				$db->qn('s').'.'.$db->qn('update_site_id')
-				.')')
-			->join('INNER',$db->qn('#__extensions').' AS '.$db->qn('e').' ON('.
-				$db->qn('e').'.'.$db->qn('extension_id').' = '.
-				$db->qn('se').'.'.$db->qn('extension_id')
-				.')')
-			->where($db->qn('s').'.'.$db->qn('type').' = '.$db->q('extension'))
-			->where($db->qn('e').'.'.$db->qn('type').' = '.$db->q('component'))
-			->where($db->qn('e').'.'.$db->qn('element').' = '.$db->q($this->_akeeba_extension))
-		;
-		$db->setQuery($query);
-		$oResult = $db->loadObject();
-
-		// If no record is found, do nothing. We've already killed the monster!
-		if(is_null($oResult)) return;
-
-		// Delete the #__update_sites record
-		$query = $db->getQuery(true)
-			->delete($db->qn('#__update_sites'))
-			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
-		$db->setQuery($query);
-		try {
-			$db->execute();
-		} catch (Exception $exc) {
-			// If the query fails, don't sweat about it
-		}
-
-		// Delete the #__update_sites_extensions record
-		$query = $db->getQuery(true)
-			->delete($db->qn('#__update_sites_extensions'))
-			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
-		$db->setQuery($query);
-		try {
-			$db->execute();
-		} catch (Exception $exc) {
-			// If the query fails, don't sweat about it
-		}
-
-		// Delete the #__updates records
-		$query = $db->getQuery(true)
-			->delete($db->qn('#__updates'))
-			->where($db->qn('update_site_id').' = '.$db->q($oResult->update_site_id));
-		$db->setQuery($query);
-		try {
-			$db->execute();
-		} catch (Exception $exc) {
-			// If the query fails, don't sweat about it
-		}
 	}
 
 	/**
