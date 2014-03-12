@@ -10,6 +10,11 @@ $jRelDate = new JDate(AKEEBASUBS_DATE);
 	<strong>
 		Akeeba Subscriptions <?php echo AKEEBASUBS_VERSION ?>
 	</strong>
+
+	<a href="index.php?option=com_akeebasubs&view=update&task=force" class="btn btn-inverse btn-small">
+		<?php echo JText::_('COM_AKEEBASUBS_CPANEL_MSG_RELOADUPDATE'); ?>
+	</a>
+
 	<br/>
 	<span style="font-size: x-small">
 		Copyright &copy;2010&ndash;<?php echo $jRelDate->format('y') ?>

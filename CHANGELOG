@@ -1,4 +1,9 @@
 <?php die(); ?>
+Akeeba Subscriptions 4.0.1
+================================================================================
++ Show update information in the component's control panel page
++ Allow the user to forcibly reload the update information from the component's control panel page
+
 Akeeba Subscriptions 4.0.0
 ================================================================================
 - Removed no longer maintained payment and integration plugins
