@@ -15,7 +15,8 @@ class AkeebasubsViewLevel extends FOFViewHtml
 		JRequest::setVar('hidemainmenu', true);
 
 		$model = $this->getModel();
-		$this->assignRef( 'item',		$model->getItem() );
+		$this->item = $model->getItem();
+		$this->dnt  = $this->do_not_track();
 
 		// Get component parameters and pass them to the view
 		require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php';
@@ -38,5 +39,27 @@ class AkeebasubsViewLevel extends FOFViewHtml
 
 		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
 		JResponse::setHeader('X-Cache-Control', 'False', true);
+	}
+
+	private function do_not_track()
+	{
+		if (isset($_SERVER['HTTP_DNT']))
+		{
+			if ($_SERVER['HTTP_DNT']==1)
+			{
+				return true;
+			}
+		}
+		elseif (function_exists('getallheaders'))
+		{
+			foreach (getallheaders() as $k => $v)
+			{
+				if (strtolower($k) === "dnt" && $v == 1)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
