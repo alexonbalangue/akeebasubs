@@ -93,6 +93,13 @@ class AkeebasubsModelUpdates extends FOFModel
 				->where($db->qn('update_site_id') . ' = ' . $db->q($updateSiteId));
 			$db->setQuery($query);
 			$db->execute();
+
+			// Remove cached component update info from #__updates
+			$query = $db->getQuery(true)
+				->delete($db->qn('#__updates'))
+				->where($db->qn('update_site_id') . ' = ' . $db->q($updateSiteId));
+			$db->setQuery($query);
+			$db->execute();
 		}
 
 		// Use the update cache timeout specified in com_installer
