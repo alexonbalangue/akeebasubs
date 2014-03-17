@@ -2,10 +2,9 @@
 /.settings
 .idea/*
 /Akeeba Subscriptions.esproj
-/relink.sh
 /release
 /nbproject
-/koowa
+/build/tools
 
 /documentation/akeebasubs-guide.xml~
 /TODO
@@ -34,8 +33,8 @@ modules/admin/akeebasubs/language/en-GB
 
 /.tx/
 /tx_config
-
 /tx.sh
+
 /RELEASENOTES.html
 /DESCRIPTION.html
 /build/templates/release.json
