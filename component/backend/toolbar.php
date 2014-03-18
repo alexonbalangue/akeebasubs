@@ -286,6 +286,13 @@ class AkeebasubsToolbar extends FOFToolbar
         parent::onAdd();
     }
 
+	public function onEmailtemplatesBrowse()
+	{
+		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', true);
+
+		parent::onBrowse();
+	}
+
     public function onEmailtemplatesEdit()
     {
 		parent::onEdit();

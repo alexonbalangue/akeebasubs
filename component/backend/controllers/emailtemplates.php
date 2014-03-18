@@ -4,6 +4,18 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerEmailtemplates extends FOFController
 {
+	public function copy()
+	{
+		$result = parent::copy();
+
+		if($result)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_AKEEBASUBS_EMAILTEMPLATE_COPIED'), 'message');
+		}
+
+		return $result;
+	}
+
     public function testtemplate()
     {
         require_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
