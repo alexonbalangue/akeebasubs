@@ -598,8 +598,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			JPluginHelper::importPlugin('akeebasubs');
 			JPluginHelper::importPlugin('akpayment');
 			$app = JFactory::getApplication();
-			$priceValidationData = array_merge($state, array('level' => $level, 'netprice' => $netPrice));
-			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', $priceValidationData);
+			$priceValidationData = array_merge((array)$state, array('level' => $level, 'netprice' => $netPrice));
+			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array((object)$priceValidationData));
 			if(is_array($jResponse) && !empty($jResponse)) {
 				foreach($jResponse as $pluginResponse) {
 					if(empty($pluginResponse)) continue;

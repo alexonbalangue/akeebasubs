@@ -4,6 +4,7 @@ Akeeba Subscriptions 4.0.1
 + Show update information in the component's control panel page
 + Allow the user to forcibly reload the update information from the component's control panel page
 ~ Show a warning in the subscription page when the Do Not Track (DNT) feature is enabled in the user's browser (it kills cookies, therefore kills Joomla! session handling) [patch wasn't applied in 4.0.0]
+# [LOW] Warnings thrown due to faulty price validation code
 
 Akeeba Subscriptions 4.0.0
 ================================================================================
