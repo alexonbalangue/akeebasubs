@@ -481,6 +481,8 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		// Get the custom variables
 		$vat_notice = '';
+		$cyprus_tag = 'TRIANGULAR TRANSACTION';
+		$cyprus_note = 'We are obliged by local tax laws to write the words "triangular transaction" on all invoices issued in Euros. This doesn\'t mean anything in particular about your transaction.';
 		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($sub->user_id)
 			->getFirstItem();
@@ -488,8 +490,11 @@ class AkeebasubsModelInvoices extends FOFModel
 		$isbusiness = $kuser->isbusiness;
 		$viesregistered = $kuser->viesregistered;
 		$inEU = in_array($country, array('AT','BE','BG','CY','CZ','DK','EE','FI','FR','GB','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'));
-		if($inEU && $isbusiness && $viesregistered) {
+		if($inEU && $isbusiness && $viesregistered)
+		{
 			$vat_notice = AkeebasubsHelperCparams::getParam('invoice_vatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+			$cyprus_tag = 'REVERSE CHARGE';
+			$cyprus_note = 'We are obliged by local and European tax laws to write the words "reverse charge" on all invoices issued to EU business when no VAT is charged. This is supposed to serve as a reminder that the recipient of the invoice (you) have to be registered to your local VAT office so as to apply to YOUR business\' VAT form the VAT owed by this transaction on the reverse charge basis, as described above. The words "reverse charge" DO NOT indicate a problem with your transaction, a cancellation or a refund.';
 		}
 
 		$extras = array(
@@ -501,6 +506,8 @@ class AkeebasubsModelInvoices extends FOFModel
 			'[INV:INVOICE_DATE_USA]'	=> $jInvoiceDate->format('m/d/Y', true),
 			'[INV:INVOICE_DATE_JAPAN]'	=> $jInvoiceDate->format('Y/m/d', true),
 			'[VAT_NOTICE]'				=> $vat_notice,
+			'[CYPRUS_TAG]'				=> $cyprus_tag,
+			'[CYPRUS_NOTE]'				=> $cyprus_note,
 		);
 
 		// Render the template into HTML
