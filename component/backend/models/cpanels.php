@@ -226,90 +226,16 @@ class AkeebasubsModelCpanels extends FOFModel
 	 */
 	public function checkAndFixDatabase()
 	{
-		$db = $this->getDbo();
-
-		// Initialise
-		$tableFields = array();
-		$sqlFiles = array();
-
-		// Get a listing of database tables known to Joomla!
-		$allTables = $db->getTableList();
-		$dbprefix = JFactory::getConfig()->get('dbprefix', '');
-
-		// Perform the base check. If any of these tables is missing we have to run the installation SQL file
-		if(!empty($this->dbBaseCheck)) {
-			foreach($this->dbBaseCheck['tables'] as $table)
-			{
-				$tableName = $dbprefix . $table;
-				$check = in_array($tableName, $allTables);
-				if (!$check) break;
-			}
-
-			if (!$check)
-			{
-				$sqlFiles[] = JPATH_ADMINISTRATOR . $this->dbFilesRoot . $this->dbBaseCheck['file'];
-			}
-		}
-
-		// If the base check was successful and we have further database checks run them
-		if (empty($sqlFiles) && !empty($this->dbChecks)) foreach($this->dbChecks as $dbCheck)
+		// Install or update database
+		$dbFilePath = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/sql';
+		if (!class_exists('AkeebaDatabaseInstaller'))
 		{
-			// Always check that the table exists
-			$tableName = $dbprefix . $dbCheck['table'];
-			$check = in_array($tableName, $allTables);
-
-			// If the table exists and we have a field, check that the field exists too
-			if (!empty($dbCheck['field']) && $check)
-			{
-				if (!array_key_exists($tableName, $tableFields))
-				{
-					$tableFields[$tableName] = $db->getTableColumns('#__' . $dbCheck['table'], true);
-				}
-
-				if (is_array($tableFields[$tableName]))
-				{
-					$check = array_key_exists($dbCheck['field'], $tableFields[$tableName]);
-				}
-				else
-				{
-					$check = false;
-				}
-			}
-
-			// Something's missing. Add the file to the list of SQL files to run
-			if (!$check)
-			{
-				foreach ($dbCheck['files'] as $file)
-				{
-					$sqlFiles[] = JPATH_ADMINISTRATOR . $this->dbFilesRoot . $file;
-				}
-			}
+			require_once $dbFilePath . '/dbinstaller.php';
 		}
+		$dbInstaller = new AkeebaDatabaseInstaller(JFactory::getDbo());
+		$dbInstaller->setXmlDirectory($dbFilePath . '/xml');
+		$dbInstaller->updateSchema();
 
-		// If we have SQL files to run, well, RUN THEM!
-		if (!empty($sqlFiles))
-		{
-			JLoader::import('joomla.filesystem.file');
-			foreach($sqlFiles as $file)
-			{
-				$sql = JFile::read($file);
-				if($sql) {
-					$commands = explode(';', $sql);
-					foreach($commands as $query) {
-						$db->setQuery($query);
-						$db->execute();
-					}
-				}
-			}
-            
-            // Finally clear FOF's cache
-            $fof_platform = FOFPlatform::getInstance();
-            if (method_exists($fof_platform, 'clearCache'))
-            {
-                FOFPlatform::getInstance()->clearCache();
-            }
-		}
-        
 		return $this;
 	}
 

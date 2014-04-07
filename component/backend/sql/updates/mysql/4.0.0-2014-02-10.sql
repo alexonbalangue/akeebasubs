@@ -1,1 +1,0 @@
-ALTER TABLE `#__akeebasubs_users` ADD `needs_logout` TINYINT NOT NULL DEFAULT '0';

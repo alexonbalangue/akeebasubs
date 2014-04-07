@@ -1,1 +1,0 @@
-ALTER TABLE `#__akeebasubs_coupons` ADD `email` VARCHAR( 255 ) NULL AFTER `user`;

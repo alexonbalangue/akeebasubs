@@ -242,6 +242,16 @@ class Com_AkeebasubsInstallerScript
 	 */
 	public function preflight($type, $parent)
 	{
+		// Install or update database
+		$dbFilePath = JPATH_ADMINISTRATOR . '/components/' . $this->_akeeba_extension . '/sql';
+		if (!class_exists('AkeebaDatabaseInstaller'))
+		{
+			require_once $dbFilePath . '/dbinstaller.php';
+		}
+		$dbInstaller = new AkeebaDatabaseInstaller(JFactory::getDbo());
+		$dbInstaller->setXmlDirectory($dbFilePath . '/xml');
+		$dbInstaller->updateSchema();
+
 		// Only allow to install on Joomla! 2.5.0 or later with PHP 5.3.0 or later
 		if(defined('PHP_VERSION')) {
 			$version = PHP_VERSION;
@@ -290,6 +300,16 @@ class Com_AkeebasubsInstallerScript
 	 */
 	function postflight( $type, $parent )
 	{
+		// Remove the database tables
+		$dbFilePath = JPATH_ADMINISTRATOR . '/components/' . $this->_akeeba_extension . '/sql';
+		if (!class_exists('AkeebaDatabaseInstaller'))
+		{
+			require_once $dbFilePath . '/dbinstaller.php';
+		}
+		$dbInstaller = new AkeebaDatabaseInstaller(JFactory::getDbo());
+		$dbInstaller->setXmlDirectory($dbFilePath . '/xml');
+		$dbInstaller->removeSchema();
+
 		// Install subextensions
 		$status = $this->_installSubextensions($parent);
 
