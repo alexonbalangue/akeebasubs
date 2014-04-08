@@ -45,7 +45,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			$lastName = '';
 		}
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
 
@@ -118,7 +118,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			$id = $isRecurring ? (int)$data['PROFILEREFERENCE'] : (int)$data['INVNUM'];
 			$subscription = null;
 			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
 				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
@@ -162,13 +162,13 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			}
 			else
 			{
-			
+
 				$http_header = array(
 					'X-PAYPAL-SECURITY-USERID' => $this->getMerchantUsername(),
 					'X-PAYPAL-SECURITY-PASSWORD' => $this->getMerchantPassword(),
 					'X-PAYPAL-SECURITY-SIGNATURE' => $this->getMerchantSignature()
 				);
-				
+
 				$curlOptions = array (
 					CURLOPT_HTTPHEADER => $http_header,
 					CURLOPT_URL => $this->getPaymentURL(),
@@ -178,22 +178,22 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 					CURLOPT_POST => 1,
 					CURLOPT_POSTFIELDS => $requestQuery
 				);
-				
+
 				$ch = curl_init();
 				curl_setopt_array($ch, $curlOptions);
-				
+
 				$responseQuery = curl_exec($ch); //make the request
-				
+
 				if(curl_errno($ch)){
 					$this->_errors = curl_error($ch);
 					curl_close($ch);
 					return false;
 				}else{
 					curl_close($ch);
-					
+
 				}
 			}
-			
+
 
 			// Payment Response
 			parse_str($responseQuery, $responseData);
@@ -278,7 +278,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			);
 			$subscription->save($updates);
 			// Redirect to the subscription form and show the error message
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
@@ -290,7 +290,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		}
 
 		// Redirect the user to the "thank you" page
-        $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+        $level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
             ->setId($subscription->akeebasubs_level_id)
             ->getItem();
 		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
@@ -332,7 +332,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			$id = $recurring ? $data['rp_invoice_id'] : $data['invoice'];
 			$subscription = null;
 			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
 				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
@@ -448,7 +448,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();
 
 			// Calculate new start/end time for the subscription
-			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$allSubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->paystate('C')
 				->level($subscription->akeebasubs_level_id)
 				->user_id($subscription->user_id);
@@ -469,7 +469,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			$updates['publish_down'] = $jEnd->toSql();
 
 			// Save the record for the old subscription
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getTable();
 			$table->reset();
 			$table->bind($oldData);
@@ -572,7 +572,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 			return trim($this->params->get('apisig',''));
 		}
 	}
-	
+
 	private function getApiMethod()
 	{
 		$apimethod = $this->params->get('apimethod',0);

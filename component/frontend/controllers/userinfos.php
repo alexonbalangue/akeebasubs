@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerUserinfos extends FOFController
+class AkeebasubsControllerUserinfos extends F0FController
 {
 	public function __construct($config = array()) {
 		// Setup our configuration overrides
@@ -54,7 +54,7 @@ class AkeebasubsControllerUserinfos extends FOFController
 		$model = $this->getThisModel();
 
 		// Get the user model and load the user data
-		$userparams = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$userparams = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id(JFactory::getUser()->id)
 				->getMergedData(JFactory::getUser()->id);
 		$view->assign('userparams', $userparams);

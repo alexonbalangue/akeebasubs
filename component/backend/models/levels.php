@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelLevels extends FOFModel
+class AkeebasubsModelLevels extends F0FModel
 {
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();
@@ -56,7 +56,7 @@ class AkeebasubsModelLevels extends FOFModel
 		$only_once = $this->getState('only_once', null);
 		$user = JFactory::getUser();
 		if($only_once && $user->id) {
-			$mysubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$mysubs = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->paystate('C')
 				->getItemList();

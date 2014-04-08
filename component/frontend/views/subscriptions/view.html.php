@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-class AkeebasubsViewSubscriptions extends FOFViewHtml
+class AkeebasubsViewSubscriptions extends F0FViewHtml
 {
 
 	public function onDisplay($tpl = null)
@@ -17,7 +17,7 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 		if ($ret)
 		{
 			// Get all levels and all active levels
-			$rawActiveLevels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$rawActiveLevels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->enabled(1)
 				->getList();
 
@@ -101,7 +101,7 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 
 			if (!empty($subscription_ids))
 			{
-				$rawInvoices = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+				$rawInvoices = F0FModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 					->subids($subscription_ids)
 					->getList();
 
@@ -115,7 +115,7 @@ class AkeebasubsViewSubscriptions extends FOFViewHtml
 			}
 
 			// Get incoiving extensions
-			$extensions = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')->getExtensions();
+			$extensions = F0FModel::getTmpInstance('Invoices', 'AkeebasubsModel')->getExtensions();
 
 			// Assign variables
 			$this->activeLevels	 = $activeLevels;

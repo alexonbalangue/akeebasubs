@@ -38,7 +38,7 @@ $jPublishUp = new JDate($this->item->publish_up);
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?></td>
 		<td class="subscription-info">
-			<?php echo FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($this->item->akeebasubs_level_id)->getItem()->title?>
+			<?php echo F0FModel::getTmpInstance('Levels','AkeebasubsModel')->setId($this->item->akeebasubs_level_id)->getItem()->title?>
 		</td>
 	</tr>
 	<tr>

@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 /**
  * Renders the price of a subscription level and its optional sign-up fee
  */
-class FOFFormFieldAkeebasubsinvoiceactions extends FOFFormFieldText
+class F0FFormFieldAkeebasubsinvoiceactions extends F0FFormFieldText
 {
 	/**
 	 * Get the rendering of this field type for a repeatable (grid) display,
@@ -27,7 +27,7 @@ class FOFFormFieldAkeebasubsinvoiceactions extends FOFFormFieldText
 
 		if (is_null($extensions))
 		{
-			$extensions = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+			$extensions = F0FModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 				->getExtensions();
 		}
 

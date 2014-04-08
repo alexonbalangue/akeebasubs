@@ -2,7 +2,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerEmailtemplates extends FOFController
+class AkeebasubsControllerEmailtemplates extends F0FController
 {
 	public function copy()
 	{
@@ -32,7 +32,7 @@ class AkeebasubsControllerEmailtemplates extends FOFController
 
         $url = 'index.php?option=com_akeebasubs&view=emailtemplate&id='.$id;
 
-        $template = FOFTable::getAnInstance('Emailtemplate', 'AkeebasubsTable');
+        $template = F0FTable::getAnInstance('Emailtemplate', 'AkeebasubsTable');
         $template->load($id);
 
         // Let's grab the first published level
@@ -50,7 +50,7 @@ class AkeebasubsControllerEmailtemplates extends FOFController
         }
 
         // Let's get a dummy subscription
-        $sub = FOFTable::getAnInstance('Subscription', 'AkeebasubsTable');
+        $sub = F0FTable::getAnInstance('Subscription', 'AkeebasubsTable');
 
         $sub->akeebasubs_subscription_id = 999999;
         $sub->user_id                    = JFactory::getUser()->id;

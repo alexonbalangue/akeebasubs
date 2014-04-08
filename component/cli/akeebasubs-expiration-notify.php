@@ -229,8 +229,8 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		if (!defined('_JEXEC'))
 			define('_JEXEC', 1);
 
-		// Load FOF
-		JLoader::import('fof.include');
+		// Load F0F
+		JLoader::import('f0f.include');
 
 		// Load the version.php file
 		include_once JPATH_COMPONENT_ADMINISTRATOR . '/version.php';
@@ -280,8 +280,8 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		$now	 = $jNow->toUnix();
 
 		// Get and loop all subscription levels
-		$x = $levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel');
-		$levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		$x = $levels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel');
+		$levels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->enabled(1)
 			->getList();
 
@@ -312,7 +312,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 			$jFrom	 = new JDate($now + 1);
 			$jTo	 = new JDate($now + $notify1 * 24 * 3600);
 
-			$subs1 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$subs1 = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->contact_flag(0)
 				->level($level->akeebasubs_level_id)
 				->enabled(1)
@@ -329,7 +329,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 				$jFrom	 = new JDate($now + 1);
 				$jTo	 = new JDate($now + $notify2 * 24 * 3600);
 
-				$subs2 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				$subs2 = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->contact_flag(1)
 					->level($level->akeebasubs_level_id)
 					->enabled(1)
@@ -353,7 +353,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 				foreach ($subs as $sub)
 				{
 					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
-					$renewals = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+					$renewals = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 						->enabled(1)
 						->user_id($sub->user_id)
 						->level($sub->akeebasubs_level_id)
@@ -363,7 +363,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 					{
 						$this->out("\t\t#{$sub->akeebasubs_subscription_id}: will not be notified (already renewed)");
 						// The user has already renewed. Don't send him an email; just update the row
-						FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+						F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 							->setId($sub->akeebasubs_subscription_id)
 							->getItem()
 							->save(array(

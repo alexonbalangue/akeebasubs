@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerSubscriptions extends FOFController
+class AkeebasubsControllerSubscriptions extends F0FController
 {
 	public function browse($cachable = false) {
 		// When groupbydate is set to 1 we force a JSON view which returns the
@@ -64,7 +64,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 	public function noop()
 	{
 		if($customURL = $this->input->getString('returnurl','')) $customURL = base64_decode($customURL);
-		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
+		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.F0FInflector::pluralize($this->view);
 		$this->setRedirect($url);
 	}
 

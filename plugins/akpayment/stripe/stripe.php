@@ -215,14 +215,14 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 		$id = $data['sid'];
 		$subscription = null;
 		if($id > 0) {
-			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->setId($id)
 				->getItem();
 			if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
 				$subscription = null;
 				$isValid = false;
 			}
-            $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+            $level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
                 ->setId($subscription->akeebasubs_level_id)
                 ->getItem();
 		} else {
@@ -297,7 +297,7 @@ class plgAkpaymentStripe extends plgAkpaymentAbstract
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
 			$error_url = 'index.php?option='.JRequest::getCmd('option').

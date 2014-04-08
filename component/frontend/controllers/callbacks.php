@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerCallbacks extends FOFController
+class AkeebasubsControllerCallbacks extends F0FController
 {
 
 	public function __construct($config = array()) {
@@ -36,7 +36,7 @@ class AkeebasubsControllerCallbacks extends FOFController
 		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
 		JResponse::setHeader('X-Cache-Control', 'False', true);
 
-		$result = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel')
+		$result = F0FModel::getTmpInstance('Subscribes', 'AkeebasubsModel')
 			->paymentmethod($this->input->getCmd('paymentmethod','none'))
 			->runCallback();
 
@@ -64,15 +64,15 @@ class AkeebasubsControllerCallbacks extends FOFController
 		}
 		else
 		{
-			$sub   = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+			$sub   = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 			$sub->load($subid);
 
-			$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')->getTable();
+			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')->getTable();
 			$level->load($sub->akeebasubs_level_id);
 
 			$url = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=cancel&subid='.$subid);
 
-			$result = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel')
+			$result = F0FModel::getTmpInstance('Subscribes', 'AkeebasubsModel')
 						->paymentmethod($this->input->getCmd('paymentmethod','none'))
 						->runCancelRecurring();
 

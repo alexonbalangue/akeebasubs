@@ -8,14 +8,14 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsViewLevels extends FOFViewHtml
+class AkeebasubsViewLevels extends F0FViewHtml
 {
 	protected function onDisplay($tpl = null)
 	{
 		$subIDs = array();
 		$user = JFactory::getUser();
 		if($user->id) {
-			$mysubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$mysubs = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->paystate('C')
 				->getItemList();

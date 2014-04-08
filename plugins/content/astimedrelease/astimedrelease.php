@@ -21,11 +21,11 @@ if(defined('PHP_VERSION')) {
 // Old PHP version detected. EJECT! EJECT! EJECT!
 if(!version_compare($version, '5.3.0', '>=')) return;
 
-// Make sure FOF is loaded, otherwise do not run
-if(!defined('FOF_INCLUDED')) {
-	include_once JPATH_LIBRARIES.'/fof/include.php';
+// Make sure F0F is loaded, otherwise do not run
+if(!defined('F0F_INCLUDED')) {
+	include_once JPATH_LIBRARIES.'/f0f/include.php';
 }
-if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
+if(!defined('F0F_INCLUDED') || !class_exists('F0FLess', true))
 {
 	return;
 }
@@ -37,23 +37,23 @@ if(!JComponentHelper::isEnabled('com_akeebasubs', true)) return;
 class plgContentAstimedrelease extends JPlugin
 {
 	private $levelMap = array();
-	
+
 	private $levelElapsed = array();
-	
+
 	private $levelRemaining = array();
-	
+
 	/**
 	 * Constructor and initialisation
-	 * 
+	 *
 	 * @param type $subject
 	 * @param type $config
 	 */
 	public function __construct(&$subject, $config = array()) {
 		parent::__construct($subject, $config);
-		
+
 		$this->initialiseArrays();
 	}
-	
+
 	/**
 	 * Initialises the subscription arrays
 	 */
@@ -63,9 +63,9 @@ class plgContentAstimedrelease extends JPlugin
 		$this->levelMap = array();
 		$this->levelElapsed = array();
 		$this->levelRemaining = array();
-		
+
 		// get level title to ID map
-		$levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		$levels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->getList(true);
 		if(!empty($levels)) {
 			foreach($levels as $level) {
@@ -76,7 +76,7 @@ class plgContentAstimedrelease extends JPlugin
 		} else {
 			return;
 		}
-		
+
 		// Get the user's subscriptions and calculates how much time has elapsed
 		// and how much is remaining on each subscription level. It is smart.
 		// If you have subscribed for 2 one-month subscriptions over the last
@@ -84,8 +84,8 @@ class plgContentAstimedrelease extends JPlugin
 		// not five years!
 		$user = JFactory::getUser();
 		if($user->guest) return;
-		
-		$subs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+
+		$subs = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user->id)
 			->paystate('C')
 			->getList(true);
@@ -100,7 +100,7 @@ class plgContentAstimedrelease extends JPlugin
 			$up = $up->toUnix();
 			$down = new JDate($sub->publish_down);
 			$down = $down->toUnix();
-			
+
 			$duration = $down - $up;
 			if($now < $up) {
 				$elapsed = 0;
@@ -109,20 +109,20 @@ class plgContentAstimedrelease extends JPlugin
 			} else {
 				$elapsed = $now - $up;
 			}
-			
+
 			$levelid = $sub->akeebasubs_level_id;
-			
+
 			if(!array_key_exists($levelid, $levelDuration)) {
 				$levelDuration[$levelid] = 0;
 			}
 			if(!array_key_exists($levelid, $levelElapsed)) {
 				$levelElapsed[$levelid] = 0;
 			}
-			
+
 			$levelDuration[$levelid] += $duration;
 			$levelElapsed[$levelid] += $elapsed;
 		}
-		
+
 		foreach($levelDuration as $levelid => $duration) {
 			$elapsed = $levelElapsed[$levelid];
 			$this->levelRemaining[$levelid] = ceil(($duration - $elapsed) / 86400);
@@ -153,7 +153,7 @@ class plgContentAstimedrelease extends JPlugin
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * Checks if a time expression is true. The expression syntax is:
 	 * LEVEL[(operand1[, operand2])]
@@ -164,8 +164,8 @@ class plgContentAstimedrelease extends JPlugin
 	 * LEVEL1(10, 20) -- have 10 to 20 days elapsed in LEVEL1
 	 * LEVEL1(-10) -- do we have MORE than 10 days in LEVEL1
 	 * LEVEL1(-5,-10) -- are we in the last 10 to 5 days of LEVEL1
-	 * LEVEL1(X, -10) -- do he have LESS than 10 days in LEVEL1 
-	 * 
+	 * LEVEL1(X, -10) -- do he have LESS than 10 days in LEVEL1
+	 *
 	 * @param string $expr
 	 * @return bool
 	 */
@@ -180,17 +180,17 @@ class plgContentAstimedrelease extends JPlugin
 		} else {
 			$level = $this->getId($expr);
 		}
-		
+
 		// No level? No joy.
 		if($level <= 0) return false;
-		
+
 		// Level not in array? No joy.
 		if(!array_key_exists($level, $this->levelElapsed)) return;
-		
+
 		// Parse the time expression
 		$minConstraint = null;
 		$maxConstraint = null;
-		
+
 		if(!empty($expression)) {
 			$expression = trim($expression,'() ');
 			$expression = str_replace(' ','',$expression);
@@ -209,9 +209,9 @@ class plgContentAstimedrelease extends JPlugin
 				}
 			}
 		}
-		
+
 		$result = true;
-		
+
 		if(is_null($minConstraint)) {
 			// Do nothing
 		} elseif($minConstraint < 0) {
@@ -221,7 +221,7 @@ class plgContentAstimedrelease extends JPlugin
 			// Positive min constraint
 			$result = $result && ($this->levelElapsed[$level] >= $minConstraint);
 		}
-		
+
 		if(is_null($maxConstraint)) {
 			// Do nothing
 		} elseif($maxConstraint < 0) {
@@ -231,36 +231,36 @@ class plgContentAstimedrelease extends JPlugin
 			// Positive max constraint
 			$result = $result && ($this->levelElapsed[$level] <= $maxConstraint);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * preg_match callback to process each match
 	 */
 	private function process($match)
 	{
 		$ret = '';
-		
+
 		if ($this->analyze($match[1])) {
 			$ret = $match[2];
 		}
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * preg_match callback to process each match
 	 */
 	private function processElapsed($match)
 	{
 		$ret = '';
-		
+
 		return $this->analyzeTime($match[1], true);
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	/**
 	 * preg_match callback to process each match
@@ -268,21 +268,21 @@ class plgContentAstimedrelease extends JPlugin
 	private function processRemaining($match)
 	{
 		$ret = '';
-		
+
 		return $this->analyzeTime($match[1], false);
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Analyzes a filter statement and decides if it's true or not
-	 * 
+	 *
 	 * @return boolean
 	 */
 	private function analyze($statement)
 	{
 		$ret = false;
-		
+
 		if ($statement) {
 			// Stupid, stupid crap... ampersands replaced by &amp;...
 			$statement = str_replace('&amp;&amp;', '&&', $statement);
@@ -293,7 +293,7 @@ class plgContentAstimedrelease extends JPlugin
 				$expression = trim($items[$i]);
 				$subitems = explode('&&', $expression);
 				$ret = true;
-				
+
 				foreach($subitems as $item)
 				{
 					$item = trim($item);
@@ -312,7 +312,7 @@ class plgContentAstimedrelease extends JPlugin
 
 		return $ret;
 	}
-	
+
 	private function analyzeTime($expr, $isElapsed = true)
 	{
 		$level = ''; $expression = '';
@@ -323,13 +323,13 @@ class plgContentAstimedrelease extends JPlugin
 		} else {
 			$level = $this->getId($expr);
 		}
-		
+
 		// No level? No joy.
 		if($level <= 0) return 0;
-		
+
 		// Level not in array? No joy.
 		if(!array_key_exists($level, $this->levelElapsed)) 0;
-		
+
 		// Parse the time expression
 		$addRemove = 0;
 		if(!empty($expression)) {
@@ -337,7 +337,7 @@ class plgContentAstimedrelease extends JPlugin
 			$expression = str_replace(' ','',$expression);
 			$addRemove = (int)$expression;
 		}
-		
+
 		if($isElapsed) {
 			if(!array_key_exists($level, $this->levelElapsed)) {
 				$result = 0;
@@ -351,16 +351,16 @@ class plgContentAstimedrelease extends JPlugin
 				$result = $this->levelRemaining[$level];
 			}
 		}
-		
+
 		$result += $addRemove;
-		
+
 		return $result;
 	}
-	
+
 	public function onContentPrepare($context, &$row, &$params, $page = 0)
 	{
 		$text = is_object($row) ? $row->text : $row;
-		
+
 		if ( JString::strpos( $row->text, 'astimedrelease' ) !== false ) {
 			$regex = "#{astimedrelease(.*?)}(.*?){/astimedrelease}#s";
 			$text = preg_replace_callback( $regex, array('self', 'process'), $text );
@@ -373,13 +373,13 @@ class plgContentAstimedrelease extends JPlugin
 			$regex = "#{asdaysremaining(.*?)}#s";
 			$text = preg_replace_callback( $regex, array('self', 'processRemaining'), $text );
 		}
-		
+
 		if(is_object($row)) {
 			$row->text = $text;
 		} else {
 			$row = $text;
 		}
-		
+
 		return true;
 	}
 }

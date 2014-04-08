@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelStates extends FOFModel
+class AkeebasubsModelStates extends F0FModel
 {
 	public function buildQuery($overrideLimits = false)
 	{

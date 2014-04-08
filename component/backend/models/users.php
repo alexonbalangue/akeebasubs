@@ -7,7 +7,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelUsers extends FOFModel
+class AkeebasubsModelUsers extends F0FModel
 {
 
 	private function getFilterValues()
@@ -345,7 +345,7 @@ class AkeebasubsModelUsers extends FOFModel
 		}
 
 		// Get a legacy data set from the user parameters
-		$userRow = FOFTable::getAnInstance('Juser', 'AkeebasubsTable');
+		$userRow = F0FTable::getAnInstance('Juser', 'AkeebasubsTable');
 		$userRow->load($user_id);
 
 		if (!($userRow->params instanceof JRegistry))
@@ -390,7 +390,7 @@ class AkeebasubsModelUsers extends FOFModel
 
 		if ($user_id > 0)
 		{
-			$row = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+			$row = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
 				->user_id($user_id)
 				->getFirstItem();
 

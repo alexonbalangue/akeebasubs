@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsToolbar extends FOFToolbar
+class AkeebasubsToolbar extends F0FToolbar
 {
 	public function renderSubmenu()
 	{
@@ -74,7 +74,7 @@ class AkeebasubsToolbar extends FOFToolbar
 
 		$key = strtoupper($this->component).'_TITLE_'.strtoupper($view);
 		if(strtoupper(JText::_($key)) == $key) {
-			$altview = FOFInflector::isPlural($view) ? FOFInflector::singularize($view) : FOFInflector::pluralize($view);
+			$altview = F0FInflector::isPlural($view) ? F0FInflector::singularize($view) : F0FInflector::pluralize($view);
 			$key2 = strtoupper($this->component).'_TITLE_'.strtoupper($altview);
 			if(strtoupper(JText::_($key2)) == $key2) {
 				$name = ucfirst($view);
@@ -214,7 +214,7 @@ class AkeebasubsToolbar extends FOFToolbar
 	public function onTaxconfigsMain()
 	{
 		//on frontend, buttons must be added specifically
-		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+		list($isCli, $isAdmin) = F0FDispatcher::isCliAdmin();
 
 		if($isAdmin || $this->renderFrontendSubmenu) {
 			$this->renderSubmenu();
@@ -233,7 +233,7 @@ class AkeebasubsToolbar extends FOFToolbar
 	public function onInvoicesBrowse()
 	{
 		//on frontend, buttons must be added specifically
-		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+		list($isCli, $isAdmin) = F0FDispatcher::isCliAdmin();
 
 		if($isAdmin || $this->renderFrontendSubmenu) {
 			$this->renderSubmenu();

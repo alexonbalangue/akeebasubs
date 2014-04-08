@@ -201,7 +201,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 			unset($subcustom['fixdates']);
 		}
 
-		$mastertable = FOFTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
+		$mastertable = F0FTable::getAnInstance('Subscriptions', 'AkeebasubsTable');
 
 		if (is_numeric($oldsub))
 		{
@@ -265,7 +265,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 				// Get the subscription level and determine if this is a Fixed
 				// Expiration subscription
 				$nullDate = JFactory::getDbo()->getNullDate();
-				$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 					->getItem($subscription->akeebasubs_level_id);
 				$fixed_date = $level->fixed_date;
 

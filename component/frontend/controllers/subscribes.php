@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerSubscribes extends FOFController
+class AkeebasubsControllerSubscribes extends F0FController
 {
 	public function __construct($config = array()) {
 		parent::__construct($config);
@@ -28,7 +28,7 @@ class AkeebasubsControllerSubscribes extends FOFController
 		$id = $this->getThisModel()->getState('id',0,'int');
 		$slug = $this->input->getString('slug',null);
 		if(!$id && $slug) {
-			$item = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$item = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($slug)
 				->getFirstItem();
 			if(!empty($item->akeebasubs_level_id)) {
@@ -36,10 +36,10 @@ class AkeebasubsControllerSubscribes extends FOFController
 			}
 		}
 
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($id)->getItem();
+		$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')->setId($id)->getItem();
 
 		if($level->only_once) {
-			$levels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$levels = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->slug($level->slug)
 				->only_once(1)
 				->getItemList();

@@ -21,11 +21,11 @@ if(defined('PHP_VERSION')) {
 // Old PHP version detected. EJECT! EJECT! EJECT!
 if(!version_compare($version, '5.3.0', '>=')) return;
 
-// Make sure FOF is loaded, otherwise do not run
-if(!defined('FOF_INCLUDED')) {
-	include_once JPATH_LIBRARIES.'/fof/include.php';
+// Make sure F0F is loaded, otherwise do not run
+if(!defined('F0F_INCLUDED')) {
+	include_once JPATH_LIBRARIES.'/f0f/include.php';
 }
-if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
+if(!defined('F0F_INCLUDED') || !class_exists('F0FLess', true))
 {
 	return;
 }
@@ -47,21 +47,21 @@ class plgContentAsrestricted extends JPlugin
 	private static function getId($title)
 	{
 		static $levels = null;
-		
+
 		// Don't process invalid titles
 		if(empty($title)) return -1;
-		
+
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
-			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$list = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);
 				$levels[$thisTitle] = $level->akeebasubs_level_id;
 			}
 		}
-		
+
 		$title = strtoupper($title);
 		if(array_key_exists($title, $levels)) {
 			// Mapping found
@@ -74,10 +74,10 @@ class plgContentAsrestricted extends JPlugin
 			return -1;
 		}
 	}
-	
+
 	/**
 	 * Checks if a user has a valid, active subscription by that particular ID
-	 * 
+	 *
 	 * @param $id int The subscription level ID
 	 *
 	 * @return bool True if there is such a subscription
@@ -85,11 +85,11 @@ class plgContentAsrestricted extends JPlugin
 	private static function isTrue($id)
 	{
 		static $subscriptions = null;
-				
+
 		// Don't process empty or invalid IDs
 		$id = trim($id);
 		if(empty($id) || (($id <= 0) && ($id != '*'))) return false;
-		
+
 		// Don't process for guests
 		$user = JFactory::getUser();
 		if($user->guest) {
@@ -98,50 +98,50 @@ class plgContentAsrestricted extends JPlugin
 			$subscriptions = array();
 			JLoader::import('joomla.utilities.date');
 			$jNow = new JDate();
-			$list = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$list = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->expires_from($jNow->toSql())
 				->paystate('C')
 				//->publish_down($jNow->toSql())
 				->getList();
-			
+
 			if(count($list)) foreach($list as $sub) {
 				if($sub->enabled)
 					if(!in_array($sub->akeebasubs_level_id, $subscriptions))
 						$subscriptions[] = $sub->akeebasubs_level_id;
 			}
 		}
-		
+
 		if($id == '*') {
 			return !empty($subscriptions);
 		} else {
 			return in_array($id, $subscriptions);
 		}
 	}
-	
+
 	/**
 	 * preg_match callback to process each match
 	 */
 	private static function process($match)
 	{
 		$ret = '';
-		
+
 		if (self::analyze($match[1])) {
 			$ret = $match[2];
 		}
-		
+
 		return $ret;
 	}
-	
+
 	/**
 	 * Analyzes a filter statement and decides if it's true or not
-	 * 
+	 *
 	 * @return boolean
 	 */
 	private static function analyze($statement)
 	{
 		$ret = false;
-		
+
 		if ($statement) {
 			// Stupid, stupid crap... ampersands replaced by &amp;...
 			$statement = str_replace('&amp;&amp;', '&&', $statement);
@@ -152,7 +152,7 @@ class plgContentAsrestricted extends JPlugin
 				$expression = trim($items[$i]);
 				$subitems = explode('&&', $expression);
 				$ret = true;
-				
+
 				foreach($subitems as $item)
 				{
 					$item = trim($item);
@@ -172,7 +172,7 @@ class plgContentAsrestricted extends JPlugin
 
 		return $ret;
 	}
-	
+
 	public function onContentPrepare($context, &$row, &$params, $page = 0)
 	{
 		if(is_object($row)) {
@@ -181,10 +181,10 @@ class plgContentAsrestricted extends JPlugin
 			{
 				return true;
 			}
-			
+
 			// Search for this tag in the content
 			$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
-			
+
 			$row->text = preg_replace_callback( $regex, array('self', 'process'), $row->text );
 		} else {
 			if ( JString::strpos( $row, 'akeebasubs' ) === false ) {
@@ -193,7 +193,7 @@ class plgContentAsrestricted extends JPlugin
 			$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
 			$row = preg_replace_callback( $regex, array('self', 'process'), $row );
 		}
-		
+
 		return true;
 	}
 }

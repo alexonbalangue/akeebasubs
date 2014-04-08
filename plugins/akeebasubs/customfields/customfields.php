@@ -75,7 +75,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 		if(!array_key_exists('subscriptionlevel', $cache)) $cache['subscriptionlevel'] = null;
 
 		// Load field definitions
-		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+		$items = F0FModel::getTmpInstance('Customfields','AkeebasubsModel')
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
@@ -153,7 +153,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 		$custom = $data->custom;
 
 		// Load field definitions
-		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+		$items = F0FModel::getTmpInstance('Customfields','AkeebasubsModel')
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
@@ -229,7 +229,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 		$subcustom = $data->subcustom;
 
 		// Load field definitions
-		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+		$items = F0FModel::getTmpInstance('Customfields','AkeebasubsModel')
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
@@ -298,7 +298,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 		}
 
 		// Load field definitions
-		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+		$items = F0FModel::getTmpInstance('Customfields','AkeebasubsModel')
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
@@ -360,7 +360,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 		}
 
 		// Load field definitions
-		$items = FOFModel::getTmpInstance('Customfields','AkeebasubsModel')
+		$items = F0FModel::getTmpInstance('Customfields','AkeebasubsModel')
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')

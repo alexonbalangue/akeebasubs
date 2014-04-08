@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelBlockrules extends FOFModel
+class AkeebasubsModelBlockrules extends F0FModel
 {
 	/**
 	 * Checks if the current user is blocked, i.e. he's not allowed to subscribe

@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableLevel extends FOFTable
+class AkeebasubsTableLevel extends F0FTable
 {
 	public function check() {
 		$result = true;
@@ -19,7 +19,7 @@ class AkeebasubsTableLevel extends FOFTable
 		}
 
 		// Make sure the title is unique
-		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$existingItems = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->title($this->title)
 			->getList(true);
 		if(!empty($existingItems)) {
@@ -45,7 +45,7 @@ class AkeebasubsTableLevel extends FOFTable
 		}
 
 		// Look for a similar slug
-		$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$existingItems = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->slug($this->slug)
 			->getList(true);
 

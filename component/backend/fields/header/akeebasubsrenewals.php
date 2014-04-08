@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class FOFFormHeaderAkeebasubsrenewals extends FOFFormHeaderFieldselectable
+class F0FFormHeaderAkeebasubsrenewals extends F0FFormHeaderFieldselectable
 {
 	protected function getOptions()
 	{

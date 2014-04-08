@@ -38,7 +38,7 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 	{
 		if($paymentmethod != $this->ppName) return false;
 
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -67,7 +67,7 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 			$data->p3 = $ppDuration->value;
 		}
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
 
@@ -103,7 +103,7 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 			$id = array_key_exists('merchant_order_id', $data) ? (int)$data['merchant_order_id'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
 				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
@@ -148,7 +148,7 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 		if(!$isValid) return false;
 
 		// Load the subscription level and get its slug
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -264,7 +264,7 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 			$oldData['notes'] = "Automatically renewed subscription on " . $jNow->toSql();
 
 			// Calculate new start/end time for the subscription
-			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$allSubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->paystate('C')
 				->level($subscription->akeebasubs_level_id)
 				->user_id($subscription->user_id);
@@ -285,7 +285,7 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 			$updates['publish_down'] = $jEnd->toSql();
 
 			// Save the record for the old subscription
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getTable();
 			$table->reset();
 			$table->bind($oldData);
@@ -352,7 +352,7 @@ class plgAkpayment2conew extends plgAkpaymentAbstract
 
         require_once '2conew/lib/Twocheckout.php';
 
-        $sub   = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+        $sub   = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
         $sub->load($data['sid']);
 
         list($sale_id, ) = explode('/', $sub->processor_key);

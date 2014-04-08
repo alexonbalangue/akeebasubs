@@ -26,7 +26,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		if(empty($this->addGroups) && empty($this->removeGroups)) return;
 
 		// Get all of the user's subscriptions
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
@@ -105,7 +105,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		$this->addGroups = array();
 		$this->removeGroups = array();
 
-		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$addgroupsKey = strtolower($this->name).'_addgroups';
 		$removegroupsKey = strtolower($this->name).'_removegroups';

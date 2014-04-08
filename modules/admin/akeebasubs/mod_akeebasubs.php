@@ -3,7 +3,7 @@
  * @package		mod_akeebasubs
  * @copyright 	Copyright (c) 2011-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license 	GNU General Public License version 3 or later
- * 
+ *
  * Originally written by Sander Potjer for Akeeba Subscriptions 1.0. Refactored
  * for Akeeba Subscriptions 2.0 by Nicholas K. Dionysopoulos
  */
@@ -23,8 +23,8 @@ if(defined('PHP_VERSION')) {
 if(!version_compare($version, '5.3.0', '>=')) return;
 
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
-include_once JPATH_LIBRARIES.'/fof/include.php';
-if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+include_once JPATH_LIBRARIES.'/f0f/include.php';
+if(!defined('F0F_INCLUDED') || !class_exists('F0FForm', true))
 {
 	return;
 }
@@ -35,7 +35,7 @@ $jlang = JFactory::getLanguage();
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, 'en-GB', true);
 $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 
-$items = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+$items = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 	->filter_order('ordering')
 	->filter_order_Dir('desc')
 	->limit(10)

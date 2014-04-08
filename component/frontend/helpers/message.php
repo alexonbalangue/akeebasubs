@@ -27,12 +27,12 @@ class AkeebasubsHelperMessage
 		$user = JFactory::getUser($sub->user_id);
 
 		// Get the extra user parameters object for the subscription
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($sub->user_id)
 			->getFirstItem();
 
 		// Get the subscription level
-		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->getItem($sub->akeebasubs_level_id);
 
 		// Merge the user objects
@@ -128,7 +128,7 @@ class AkeebasubsHelperMessage
 		$couponcode = '';
 		if ($sub->akeebasubs_coupon_id)
 		{
-			$couponData = FOFModel::getTmpInstance('Coupons', 'AkeebasubsModel')
+			$couponData = F0FModel::getTmpInstance('Coupons', 'AkeebasubsModel')
 				->savestate(0)
 				->getItem($sub->akeebasubs_coupon_id);
 			$couponcode = $couponData->coupon;
@@ -149,12 +149,12 @@ class AkeebasubsHelperMessage
 		$lastname = !empty($nameParts) ? array_shift($nameParts) : '';
 
 		// -- Get the subscription level
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($sub->akeebasubs_level_id)
 			->getItem();
 
 		// -- Site URL
-		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+		list($isCli, $isAdmin) = F0FDispatcher::isCliAdmin();
 		if($isCli) {
 			JLoader::import('joomla.application.component.helper');
 			$baseURL = JComponentHelper::getParams('com_akeebasubs')->get('siteurl','http://www.example.com');

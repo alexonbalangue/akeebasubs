@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerSubscriptions extends FOFController
+class AkeebasubsControllerSubscriptions extends F0FController
 {
 
 	public function __construct($config = array())
@@ -172,7 +172,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 
 		$registeredurlparams = null;
 
-		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
 		{
 			if (property_exists($app, 'registeredurlparams'))
 			{
@@ -195,7 +195,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			$registeredurlparams->$key = $value;
 		}
 
-		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
 		{
 			$app->registeredurlparams = $registeredurlparams;
 		}
@@ -233,7 +233,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 			return false;
 		}
 
-		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+		$sub = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getItem($subId);
 
 		// Editing a subscription of another user? Go away!
@@ -265,7 +265,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 		$newInput->set('opt', 'plugins');
 		$newInput->set('id', $subId);
 
-		$subscribes = FOFModel::getTmpInstance('Subscribes', 'AkeebasubsModel');
+		$subscribes = F0FModel::getTmpInstance('Subscribes', 'AkeebasubsModel');
 		$subscribes->setInput($newInput);
 
 		// Subscription validation (plugins only)
@@ -273,7 +273,7 @@ class AkeebasubsControllerSubscriptions extends FOFController
 
 		if($data->custom_valid && $data->subscription_custom_valid)
 		{
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
 
 			// Let's get the info from previous slave subscriptions
 			if(isset($table->params['slavesubs_ids']) && !empty($table->params['slavesubs_ids']))

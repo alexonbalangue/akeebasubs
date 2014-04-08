@@ -17,7 +17,7 @@ $this->loadHelper('select');
 $this->loadHelper('format');
 $this->loadHelper('image');
 
-$couponsRaw = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+$couponsRaw = F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
 	->savestate(0)
 	->limit(0)
 	->limitstart(0)
@@ -28,7 +28,7 @@ foreach($couponsRaw as $coupon) {
 }
 unset($couponsRaw);
 
-$upgradesRaw = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+$upgradesRaw = F0FModel::getTmpInstance('Upgrades','AkeebasubsModel')
 	->savestate(0)
 	->limit(0)
 	->limitstart(0)
@@ -243,7 +243,7 @@ $now_timestamp = $jDate->toUnix();
 
 			$subscription->published = $subscription->enabled;
 
-			$users = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+			$users = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id($subscription->user_id)
 				->getList();
 			if(empty($users)) {

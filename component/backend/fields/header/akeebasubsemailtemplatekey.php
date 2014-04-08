@@ -8,24 +8,24 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class FOFFormHeaderAkeebasubsemailtemplatekey extends FOFFormHeaderFieldselectable
+class F0FFormHeaderAkeebasubsemailtemplatekey extends F0FFormHeaderFieldselectable
 {
 	protected function getOptions()
 	{
 		static $options = null;
-		
+
 		if (is_null($options))
 		{
 			if (!class_exists('AkeebasubsHelperEmail'))
 			{
 				require_once JPATH_ROOT.'/components/com_akeebasubs/helpers/email.php';
 			}
-			
+
 			$options = AkeebasubsHelperEmail::getEmailKeys(1);
 		}
-		
+
 		reset($options);
-		
+
 		return $options;
 	}
 }

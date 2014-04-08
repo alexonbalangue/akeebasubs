@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
 	$jEnd    = new JDate($end);
 	$endUnix = $jEnd->toUnix();
 
-	$subs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+	$subs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->expires_from($start)
 				->expires_to($end)
 				->groupbyweek(1)
@@ -29,7 +29,7 @@ defined('_JEXEC') or die;
 				->paystate('C')
 				->getList(true);
 
-	$titles = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+	$titles = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->createIdLookup();
 
 	// Get involved levels (aka series)

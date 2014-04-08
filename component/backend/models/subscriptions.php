@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelSubscriptions extends FOFModel
+class AkeebasubsModelSubscriptions extends F0FModel
 {
 	private function getFilterValues()
 	{
@@ -393,7 +393,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						.')'
 					);
 					if($state->filter_discountcode) {
-						$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+						$coupons = F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
 							->search($state->filter_discountcode)
 							->getList();
 						if(!empty($coupons)) foreach($coupons as $coupon) {
@@ -414,7 +414,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						.')'
 					);
 					if($state->filter_discountcode) {
-						$upgrades = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+						$upgrades = F0FModel::getTmpInstance('Upgrades','AkeebasubsModel')
 							->search($state->filter_discountcode)
 							->getList();
 						if(!empty($upgrades)) foreach($upgrades as $upgrade) {
@@ -426,7 +426,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 
 				default:
 					if($state->filter_discountcode) {
-						$coupons = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+						$coupons = F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
 							->search($state->filter_discountcode)
 							->getList();
 						if(!empty($coupons)) foreach($coupons as $coupon) {
@@ -435,7 +435,7 @@ class AkeebasubsModelSubscriptions extends FOFModel
 						unset($coupons);
 					}
 					if($state->filter_discountcode) {
-						$upgrades = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+						$upgrades = F0FModel::getTmpInstance('Upgrades','AkeebasubsModel')
 							->search($state->filter_discountcode)
 							->getList();
 						if(!empty($upgrades)) foreach($upgrades as $upgrade) {

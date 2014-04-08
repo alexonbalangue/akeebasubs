@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerLevels extends FOFController
+class AkeebasubsControllerLevels extends F0FController
 {
 	public function copy($cacheable = false)
 	{
@@ -33,7 +33,7 @@ class AkeebasubsControllerLevels extends FOFController
 				while(!$gotSlug) {
 					$counter++;
 					$slug = $data['slug'].'-'.$counter;
-					$existingItems = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+					$existingItems = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 						->slug($slug)
 						->getList(true);
 					if(empty($existingItems)) $gotSlug = true;
@@ -53,7 +53,7 @@ class AkeebasubsControllerLevels extends FOFController
 
 	public function recurringpublish($cacheable = false)
 	{
-		$url = 'index.php?option=' . $this->component . '&view=' . FOFInflector::pluralize($this->view);
+		$url = 'index.php?option=' . $this->component . '&view=' . F0FInflector::pluralize($this->view);
 
 		$this->setRedirect($url);
 
@@ -62,7 +62,7 @@ class AkeebasubsControllerLevels extends FOFController
 
 	public function recurringunpublish($cacheable = false)
 	{
-		$url = 'index.php?option=' . $this->component . '&view=' . FOFInflector::pluralize($this->view);
+		$url = 'index.php?option=' . $this->component . '&view=' . F0FInflector::pluralize($this->view);
 
 		$this->setRedirect($url);
 

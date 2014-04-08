@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerSubrefreshes extends FOFController
+class AkeebasubsControllerSubrefreshes extends F0FController
 {
 	public function process()
 	{

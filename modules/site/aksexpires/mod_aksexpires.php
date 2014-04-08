@@ -35,8 +35,8 @@ if(defined('PHP_VERSION')) {
 if(!version_compare($version, '5.3.0', '>=')) return;
 
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
-include_once JPATH_LIBRARIES.'/fof/include.php';
-if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+include_once JPATH_LIBRARIES.'/f0f/include.php';
+if(!defined('F0F_INCLUDED') || !class_exists('F0FForm', true))
 {
 	return;
 }
@@ -55,7 +55,7 @@ $jlang->load('com_akeebasubs', JPATH_ADMINISTRATOR, null, true);
 if(JFactory::getUser()->guest) {
 	echo '&nbsp;';
 } else {
-	$list = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+	$list = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 		->user_id(JFactory::getUser()->id)
 		->enabled(1)
 		->getList();
