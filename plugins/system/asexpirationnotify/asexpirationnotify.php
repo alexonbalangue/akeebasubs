@@ -28,13 +28,13 @@ else
 if (!version_compare($version, '5.3.0', '>='))
 	return;
 
-// Make sure FOF is loaded, otherwise do not run
-if (!defined('FOF_INCLUDED'))
+// Make sure F0F is loaded, otherwise do not run
+if (!defined('F0F_INCLUDED'))
 {
-	include_once JPATH_LIBRARIES . '/fof/include.php';
+	include_once JPATH_LIBRARIES . '/f0f/include.php';
 }
 
-if (!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
+if (!defined('F0F_INCLUDED') || !class_exists('F0FLess', true))
 {
 	return;
 }
@@ -132,7 +132,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 		$clockStart = microtime(true);
 
 		// Get and loop all subscription levels
-		$levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		$levels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->enabled(1)
 			->getList();
 
@@ -164,7 +164,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 			$jFrom	 = new JDate($now + 1);
 			$jTo	 = new JDate($now + $notify1 * 24 * 3600);
 
-			$subs1 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$subs1 = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->contact_flag(0)
 				->level($level->akeebasubs_level_id)
 				->enabled(1)
@@ -181,7 +181,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 				$jFrom	 = new JDate($now + 1);
 				$jTo	 = new JDate($now + $notify2 * 24 * 3600);
 
-				$subs2 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				$subs2 = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->contact_flag(1)
 					->level($level->akeebasubs_level_id)
 					->enabled(1)
@@ -203,7 +203,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 				$jFrom	 = new JDate($now - ($notifyAfter + 2) * 24 * 3600);
 				$jTo	 = new JDate($now - $notifyAfter * 24 * 3600);
 
-				$subs3 = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				$subs3 = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->level($level->akeebasubs_level_id)
 					->enabled(0)
 					->expires_from($jFrom->toSql())
@@ -231,7 +231,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 					}
 
 					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
-					$renewals = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+					$renewals = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 						->enabled(1)
 						->user_id($sub->user_id)
 						->level($sub->akeebasubs_level_id)
@@ -241,7 +241,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 					if (count($renewals))
 					{
 						// The user has already renewed. Don't send him an email; just update the row
-						FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+						F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 							->setId($sub->akeebasubs_subscription_id)
 							->getItem()
 							->save(array(
@@ -305,7 +305,7 @@ class plgSystemAsexpirationnotify extends JPlugin
 					$this->sendEmail($sub, 'after');
 				}
 
-				FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->setId($sub->akeebasubs_subscription_id)
 					->getItem()
 					->save($data);

@@ -28,13 +28,13 @@ else
 if (!version_compare($version, '5.3.0', '>='))
 	return;
 
-// Make sure FOF is loaded, otherwise do not run
-if (!defined('FOF_INCLUDED'))
+// Make sure F0F is loaded, otherwise do not run
+if (!defined('F0F_INCLUDED'))
 {
-	include_once JPATH_LIBRARIES . '/fof/include.php';
+	include_once JPATH_LIBRARIES . '/f0f/include.php';
 }
 
-if (!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
+if (!defined('F0F_INCLUDED') || !class_exists('F0FLess', true))
 {
 	return;
 }
@@ -99,7 +99,7 @@ class plgUserAslogoutuser extends JPlugin
         $userid = JUserHelper::getUserId($response['username']);
         $juser  = JFactory::getUser($userid);
 
-        $user = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
+        $user = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
         $user->load(array('user_id' => $juser->id));
 
         // Mhm... the user was not found inside Akeeba Subscription, better stop here

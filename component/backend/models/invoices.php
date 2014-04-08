@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelInvoices extends FOFModel
+class AkeebasubsModelInvoices extends F0FModel
 {
 	private function getFilterValues()
 	{
@@ -397,7 +397,7 @@ class AkeebasubsModelInvoices extends FOFModel
 				else
 				{
 					// Invoice template number override reset
-					$templateTable = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
+					$templateTable = F0FModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
 						->getItem($templateRow->akeebasubs_invoicetemplate_id);
 					$templateTable->save(array(
 						'number_reset'	=> 0
@@ -483,7 +483,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		$vat_notice = '';
 		$cyprus_tag = 'TRIANGULAR TRANSACTION';
 		$cyprus_note = 'We are obliged by local tax laws to write the words "triangular transaction" on all invoices issued in Euros. This doesn\'t mean anything in particular about your transaction.';
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($sub->user_id)
 			->getFirstItem();
 		$country = $kuser->country;
@@ -635,13 +635,13 @@ class AkeebasubsModelInvoices extends FOFModel
 	{
 		$level_id = $sub->akeebasubs_level_id;
 
-		$userModel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
+		$userModel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
 		$mergedData = $userModel->getMergedData($sub->user_id);
 
 		$ret = null;
 
 		// Load all enabled templates and check if they fit
-		$templates = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
+		$templates = F0FModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
 			->enabled(1)
 			->filter_order('enabled')
 			->filter_order_Dir('ASC')
@@ -872,7 +872,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		}
 
 		// Get the subscription record
-		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+		$sub = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->getItem($invoiceRecord->akeebasubs_subscription_id);
 
 		// Get the mailer

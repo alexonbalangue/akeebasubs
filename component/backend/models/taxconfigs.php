@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelTaxconfigs extends FOFModel
+class AkeebasubsModelTaxconfigs extends F0FModel
 {
 	public function getStateVars()
 	{
@@ -79,30 +79,30 @@ class AkeebasubsModelTaxconfigs extends FOFModel
 			// A. All countries, with or without VIES registration, taxrate%
 			$data['taxrate'] = $params->taxrate;
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 		} elseif($params->viesreg) {
 			// EU VIES-registered business, or non-EU business with an EU VAT ID
 
 			// A. All countries, with or without VIES registration, 0%
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 			// B. My country, with or without VIES registration, taxrate%
 			$data['taxrate'] = $params->taxrate;
 			$data['country'] = $params->country;
 
 			$data['vies'] = 0;
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 
 			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 
 			// C. All other EU countries, without VIES registration, taxrate%
 			$data['vies'] = 0;
@@ -110,26 +110,26 @@ class AkeebasubsModelTaxconfigs extends FOFModel
 				if($country == $params->country) continue;
 				$data['country'] = $country;
 				$data['ordering'] = ++$ordering;
-				FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+				F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 			}
 		} else {
 			// EU non-VIES-registered business
 			// A. All countries, with or without VIES registration, 0%
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
-			FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+			F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 			// B. All EU countries, with or without VIES registration, taxrate%
 			$data['taxrate'] = $params->taxrate;
 			foreach($euCountries as $country) {
 				$data['country'] = $country;
 				$data['vies'] = 0;
 				$data['ordering'] = ++$ordering;
-				FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+				F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 				$data['vies'] = 1;
 				$data['ordering'] = ++$ordering;
-				FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
+				F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')->setId(0)->save($data);
 			}
 		}
 	}

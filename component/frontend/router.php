@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-include_once JPATH_LIBRARIES . '/fof/include.php';
+include_once JPATH_LIBRARIES . '/f0f/include.php';
 
 function AkeebasubsBuildRoute(&$query)
 {
@@ -66,7 +66,7 @@ function AkeebasubsBuildRoute(&$query)
 	// Add the slug
 	if ($newView != 'userinfo')
 	{
-		if (array_key_exists('slug', $query) && (FOFInflector::isSingular($segments[0]) || ($segments[0] == 'new')))
+		if (array_key_exists('slug', $query) && (F0FInflector::isSingular($segments[0]) || ($segments[0] == 'new')))
 		{
 			$segments[1] = $query['slug'];
 			unset($query['slug']);
@@ -161,7 +161,7 @@ function AkeebasubsParseRoute($segments)
 		}
 
 		// if we are in a singular view, the next item is the slug, unless we are in the userinfo view
-		if (FOFInflector::isSingular($vars['view']) && ($vars['view'] != 'userinfo'))
+		if (F0FInflector::isSingular($vars['view']) && ($vars['view'] != 'userinfo'))
 		{
 			if (in_array($vars['view'], array('subscription', 'invoice')))
 			{

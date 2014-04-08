@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelImports extends FOFModel
+class AkeebasubsModelImports extends F0FModel
 {
 	/**
 	 * Column mapping for imported data
@@ -201,8 +201,8 @@ class AkeebasubsModelImports extends FOFModel
 			return false;
 		}
 
-		$usermodel = FOFModel::getTmpInstance('Jusers', 'AkeebasubsModel');
-		$subusermodel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
+		$usermodel = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel');
+		$subusermodel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
 
 		$userid = 0;
 		$email = $this->getCsvData('email');
@@ -319,7 +319,7 @@ class AkeebasubsModelImports extends FOFModel
 
 		if(!$levelCache)
 		{
-			$levelCache = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
+			$levelCache = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
 		}
 
 		$app        = JFactory::getApplication();
@@ -360,7 +360,7 @@ class AkeebasubsModelImports extends FOFModel
 			$created_on = clone $publish_up;
 		}
 
-		$sub = clone FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+		$sub = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 
 		$randomString = JUserHelper::genRandomPassword();
 		if (version_compare(JVERSION, '3.2', 'ge'))
@@ -434,7 +434,7 @@ class AkeebasubsModelImports extends FOFModel
 
 		if(!$cache)
 		{
-			$cache = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
+			$cache = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
 		}
 
 		// Is the subscrption level existing?

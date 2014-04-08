@@ -69,7 +69,7 @@ class plgAkeebasubsInvoices extends JPlugin
 			}
 
 			// Create (and, optionally, send) a new invoice
-			FOFModel::getAnInstance('Invoices', 'AkeebasubsModel')
+			F0FModel::getAnInstance('Invoices', 'AkeebasubsModel')
 				->createInvoice($row);
 		}
 	}

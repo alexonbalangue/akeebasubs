@@ -6,7 +6,7 @@
  */
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerCron extends FOFController
+class AkeebasubsControllerCron extends F0FController
 {
 
 	public function __construct($config = array())
@@ -28,7 +28,7 @@ class AkeebasubsControllerCron extends FOFController
 		// Makes sure SiteGround's SuperCache doesn't cache the CRON view
 		JResponse::setHeader('X-Cache-Control', 'False', true);
 
-		require_once FOFTemplateUtils::parsePath('admin://components/com_akeebasubs/helpers/cparams.php', true);
+		require_once F0FTemplateUtils::parsePath('admin://components/com_akeebasubs/helpers/cparams.php', true);
 		$configuredSecret = AkeebasubsHelperCparams::getParam('secret', '');
 
 		if (empty($configuredSecret))
@@ -54,8 +54,8 @@ class AkeebasubsControllerCron extends FOFController
 			JFactory::getApplication()->close();
 		}
 
-		FOFPlatform::getInstance()->importPlugin('system');
-		FOFPlatform::getInstance()->runPlugins('onAkeebasubsCronTask', array(
+		F0FPlatform::getInstance()->importPlugin('system');
+		F0FPlatform::getInstance()->runPlugins('onAkeebasubsCronTask', array(
 			$command,
 			array(
 				'time_limit'	=> 10

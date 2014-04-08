@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelApicoupons extends FOFModel
+class AkeebasubsModelApicoupons extends F0FModel
 {
 	public function createCoupon($key, $pwd)
 	{
@@ -35,7 +35,7 @@ class AkeebasubsModelApicoupons extends FOFModel
 
 		// If I'm here, I'm clear to go
 		JLoader::import('joomla.user.helper');
-		$coupon = FOFTable::getAnInstance('Coupon', 'AkeebasubsTable');
+		$coupon = F0FTable::getAnInstance('Coupon', 'AkeebasubsTable');
 
 		$data['akeebasubs_apicoupon_id'] = $table->akeebasubs_apicoupon_id;
 		$data['title']         = 'API coupon for: '.$table->title;

@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-class AkeebasubsTableSubscription extends FOFTable
+class AkeebasubsTableSubscription extends F0FTable
 {
 	/** @var object Caches the row data on load for future reference */
 	private $_selfCache          = null;
@@ -199,7 +199,7 @@ class AkeebasubsTableSubscription extends FOFTable
 			$confirmfree = AkeebasubsHelperCparams::getParam('confirmfree', 0);
 			if ($confirmfree)
 			{
-				$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 					->getItem($this->akeebasubs_level_id);
 				if ($level->price < 0.01)
 				{

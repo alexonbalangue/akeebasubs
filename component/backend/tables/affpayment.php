@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableAffpayment extends FOFTable
+class AkeebasubsTableAffpayment extends F0FTable
 {
 	/** @var   float  Required for the browse view */
 	public $user_id = 0;

@@ -141,7 +141,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		if(empty($this->$addGroupsVarName) && empty($this->$removeGroupsVarName)) return;
 
 		// Get all of the user's subscriptions
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
@@ -204,7 +204,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		$this->addGroups = array();
 		$this->removeGroups = array();
 
-		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$addgroupsKey = strtolower($this->name).'_addgroups';
 		$removegroupsKey = strtolower($this->name).'_removegroups';
@@ -247,7 +247,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 	 */
 	protected function upgradeSettings($config = array())
 	{
-		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$addgroupsKey = strtolower($this->name).'_addgroups';
 		$removegroupsKey = strtolower($this->name).'_removegroups';
@@ -318,7 +318,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 		// Fetch a list of subscription levels if we haven't done so already
 		if(is_null($levels)) {
 			$levels = array();
-			$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$list = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getList();
 			if(count($list)) foreach($list as $level) {
 				$thisTitle = strtoupper($level->title);

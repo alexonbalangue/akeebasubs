@@ -78,7 +78,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		// CHECK: Is this a valid subscription record?
 		if ($id > 0)
 		{
-			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->setId($id)
 				->getItem();
 			if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) )
@@ -122,7 +122,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		// Fraud attempt? Do nothing more!
 		if (!$isValid)
 		{
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
@@ -186,7 +186,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			// Fraud attempt? Do nothing more!
 			if (!$isValid)
 			{
-				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 					->setId($subscription->akeebasubs_level_id)
 					->getItem();
 				$error_url = 'index.php?option='.JRequest::getCmd('option').
@@ -242,7 +242,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			// Fraud attempt? Do nothing more!
 			if (!$isValid)
 			{
-				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 					->setId($subscription->akeebasubs_level_id)
 					->getItem();
 				$error_url = 'index.php?option='.JRequest::getCmd('option').
@@ -347,7 +347,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			// Fraud attempt? Do nothing more!
 			if (!$isValid)
 			{
-				$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+				$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 					->setId($subscription->akeebasubs_level_id)
 					->getItem();
 				$error_url = 'index.php?option='.JRequest::getCmd('option').
@@ -363,7 +363,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		else
 		{
 			// ACTION: If no transaction is necessary, show an error
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
 			$error_url = 'index.php?option='.JRequest::getCmd('option').
@@ -428,7 +428,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 		));
 
 		// Redirect the user to the "thank you" page
-        $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+        $level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
             ->setId($subscription->akeebasubs_level_id)
             ->getItem();
 		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);

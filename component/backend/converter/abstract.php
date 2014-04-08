@@ -47,7 +47,7 @@ abstract class AkeebasubsConverterAbstract extends JObject implements Akeebasubs
 	protected $convertername = null;
 
 	/**
-	 * A hash array of input variables, used by FOFInput
+	 * A hash array of input variables, used by F0FInput
 	 *
 	 * @var array
 	 */

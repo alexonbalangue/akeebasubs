@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelCpanels extends FOFModel
+class AkeebasubsModelCpanels extends F0FModel
 {
 	/** @var string The root of the database installation files */
 	private $dbFilesRoot = '/components/com_akeebasubs/sql/';

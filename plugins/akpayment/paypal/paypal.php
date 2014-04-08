@@ -45,7 +45,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$lastName = '';
 		}
 
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -87,7 +87,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$data->a3 = $subscription->recurring_amount;
 		}
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
 
@@ -143,7 +143,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 
 			if($id > 0)
             {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
 
@@ -334,7 +334,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();
 
 			// Calculate new start/end time for the subscription
-			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$allSubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->paystate('C')
 				->level($subscription->akeebasubs_level_id)
 				->user_id($subscription->user_id);
@@ -355,7 +355,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$updates['publish_down'] = $jEnd->toSql();
 
 			// Save the record for the old subscription
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getTable();
 			$table->reset();
 			$table->bind($oldData);

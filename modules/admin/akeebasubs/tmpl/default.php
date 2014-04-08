@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
+F0FTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
 ?>
 
 <table class="adminlist">
@@ -49,7 +49,7 @@ FOFTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VE
 				}
 			}
 
-			$users = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+			$users = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 				->user_id($subscription->user_id)
 				->getList();
 			if(empty($users)) {

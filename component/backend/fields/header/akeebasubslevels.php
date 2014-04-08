@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class FOFFormHeaderAkeebasubslevels extends FOFFormHeaderFieldselectable
+class F0FFormHeaderAkeebasubslevels extends F0FFormHeaderFieldselectable
 {
 	protected function getOptions()
 	{
@@ -16,7 +16,7 @@ class FOFFormHeaderAkeebasubslevels extends FOFFormHeaderFieldselectable
 
 		if (is_null($options))
 		{
-			$rows = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$rows = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 						->getList(true);
 			foreach($rows as $row)
 			{

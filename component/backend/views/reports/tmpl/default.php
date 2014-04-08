@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 		<div class="icon">
 			<a href="index.php?option=com_akeebasubs&view=reports&task=renewals&layout=renewals">
 				<img alt="<?php echo JText::_('COM_AKEEBASUBS_REPORTS_USER_RENEWAL');?>"
-				     src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/dashboard/renew.png')?>" />
+				     src="<?php echo F0FTemplateUtils::parsePath('media://com_akeebasubs/images/dashboard/renew.png')?>" />
 				<span><?php echo JText::_('COM_AKEEBASUBS_REPORTS_USER_RENEWAL');?></span>
 			</a>
 		</div>
@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
 		<div class="icon">
 			<a href="index.php?option=com_akeebasubs&view=reports&layout=expirations">
 				<img alt="<?php echo JText::_('COM_AKEEBASUBS_REPORTS_EXPIRATIONS');?>"
-				     src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/dashboard/expires.png')?>" />
+				     src="<?php echo F0FTemplateUtils::parsePath('media://com_akeebasubs/images/dashboard/expires.png')?>" />
 				<span><?php echo JText::_('COM_AKEEBASUBS_REPORTS_EXPIRATIONS');?></span>
 			</a>
 		</div>

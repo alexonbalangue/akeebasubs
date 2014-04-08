@@ -9,7 +9,7 @@
 
 	JHtml::_('behavior.framework');
 	$app       = JFactory::getApplication();
-	$userModel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
+	$userModel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
 
 	// I have to do this trick since Joomla select list input always inject a "no value" option
 	// In this way I can force a value even if the user selected the "no value" option
@@ -21,7 +21,7 @@
 	$newInput = $this->input;
 	$newInput->set('getRenewals', $this->input->getInt('getRenewals', 1));
 
-	// Injects the new input, so I can use all FOF built-in function without messing up other views
+	// Injects the new input, so I can use all F0F built-in function without messing up other views
 	$userModel->setInput($newInput);
 
 	// Then modify the model in order to get a nice page

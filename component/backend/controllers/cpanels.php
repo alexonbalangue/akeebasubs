@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerCpanels extends FOFController
+class AkeebasubsControllerCpanels extends F0FController
 {
 	public function execute($task) {
 		if(!in_array($task, array('browse','hide2copromo', 'wizardstep'))) {
@@ -21,7 +21,7 @@ class AkeebasubsControllerCpanels extends FOFController
 		$result = parent::onBeforeBrowse();
 
 		if($result) {
-			FOFModel::getTmpInstance('Cpanels', 'AkeebasubsModel')
+			F0FModel::getTmpInstance('Cpanels', 'AkeebasubsModel')
 				->checkAndFixDatabase()
 				->saveMagicVariables()
 				->refreshUpdateSite();

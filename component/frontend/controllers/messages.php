@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerMessages extends FOFController
+class AkeebasubsControllerMessages extends F0FController
 {
 	private static $loggedinUser = true;
 
@@ -39,7 +39,7 @@ class AkeebasubsControllerMessages extends FOFController
 
 		if (!$id && $slug)
 		{
-			$records = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$records = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($slug)
 				->getItemList();
 
@@ -51,7 +51,7 @@ class AkeebasubsControllerMessages extends FOFController
 		}
 
 		$subid = $this->input->getInt('subid',0);
-		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->setId($subid)
 			->getItem();
 
@@ -197,7 +197,7 @@ class AkeebasubsControllerMessages extends FOFController
 
 		$registeredurlparams = null;
 
-		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
 		{
 			if (property_exists($app, 'registeredurlparams'))
 			{
@@ -220,7 +220,7 @@ class AkeebasubsControllerMessages extends FOFController
 			$registeredurlparams->$key = $value;
 		}
 
-		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
 		{
 			$app->registeredurlparams = $registeredurlparams;
 		}

@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerMakecoupons extends FOFController
+class AkeebasubsControllerMakecoupons extends F0FController
 {
 	public function execute($task) {
 		if(!in_array($task, array('overview','generate'))) {
@@ -16,16 +16,16 @@ class AkeebasubsControllerMakecoupons extends FOFController
 		}
 		parent::execute($task);
 	}
-	
+
 	public function overview($cacheable = false) {
 		$this->display(false);
 	}
-	
+
 	public function generate($cacheable = false) {
 		$model = $this->getThisModel();
-		
+
 		$model->makeCoupons();
-		
+
 		$this->setRedirect('index.php?option=com_akeebasubs&view=makecoupons');
 	}
 }

@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 /**
  * Renders the price of a subscription level and its optional sign-up fee
  */
-class FOFFormFieldAkeebasubscouponlimits extends FOFFormFieldText
+class F0FFormFieldAkeebasubscouponlimits extends F0FFormFieldText
 {
 	/**
 	 * Get the rendering of this field type for a repeatable (grid) display,

@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelTaxrules extends FOFModel
+class AkeebasubsModelTaxrules extends F0FModel
 {
 	private function getFilterValues()
 	{

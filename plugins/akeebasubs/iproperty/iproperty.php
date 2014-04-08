@@ -54,7 +54,7 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 	public function onAKUserRefresh($user_id)
 	{
 		// Get all of the user's subscriptions
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
@@ -127,7 +127,7 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 		{
 			// If we do not have any existing agents, create a new company and a new agent record
 			// Load the user data
-			$user = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+			$user = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
 				->user_id($user_id)
 				->getMergedData($user_id);
 
@@ -357,7 +357,7 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 		$this->addGroups	 = array();
 		$this->removeGroups	 = array();
 
-		$model	 = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel');
+		$model	 = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel');
 		$levels	 = $model->getList(true);
 
 		if (!empty($levels))
@@ -488,7 +488,7 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 	 */
 	protected function upgradeSettings($config = array())
 	{
-		$model			 = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel');
+		$model			 = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel');
 		$levels			 = $model->getList(true);
 		$addgroupsKey	 = strtolower($this->name) . '_addgroups';
 		$removegroupsKey = strtolower($this->name) . '_removegroups';

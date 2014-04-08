@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 /**
  * The updates provisioning Controller
  */
-class AkeebasubsControllerUpdate extends FOFController
+class AkeebasubsControllerUpdate extends F0FController
 {
 	public function execute($task)
 	{

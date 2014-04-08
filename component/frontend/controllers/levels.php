@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerLevels extends FOFController
+class AkeebasubsControllerLevels extends F0FController
 {
 
 	public function __construct($config = array())
@@ -128,7 +128,7 @@ class AkeebasubsControllerLevels extends FOFController
 
 		if (!$id && $slug)
 		{
-			$item = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$item = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($slug)
 				->getFirstItem();
 
@@ -165,7 +165,7 @@ class AkeebasubsControllerLevels extends FOFController
 		// Check for "Forbid renewal" conditions
 		if ($level->only_once)
 		{
-			$levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$levels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($level->slug)
 				->only_once(1)
 				->getItemList();
@@ -184,13 +184,13 @@ class AkeebasubsControllerLevels extends FOFController
 		$view = $this->getThisView();
 
 		// Get the user model and load the user data
-		$userparams = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+		$userparams = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->user_id(JFactory::getUser()->id)
 			->getMergedData(JFactory::getUser()->id);
 		$view->assign('userparams', $userparams);
 
 		// Load any cached user supplied information
-		$vModel	 = FOFModel::getAnInstance('Subscribes', 'AkeebasubsModel')
+		$vModel	 = F0FModel::getAnInstance('Subscribes', 'AkeebasubsModel')
 			->slug($slug)
 			->id($id);
 		$cache	 = (array) ($vModel->getData());
@@ -235,7 +235,7 @@ class AkeebasubsControllerLevels extends FOFController
 
 		$registeredurlparams = null;
 
-		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
 		{
 			if (property_exists($app, 'registeredurlparams'))
 			{
@@ -258,7 +258,7 @@ class AkeebasubsControllerLevels extends FOFController
 			$registeredurlparams->$key = $value;
 		}
 
-		if (FOFPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
 		{
 			$app->registeredurlparams = $registeredurlparams;
 		}

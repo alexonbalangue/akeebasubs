@@ -7,11 +7,11 @@
 
 defined('_JEXEC') or die;
 
-class AkeebasubsViewReports extends FOFViewJson
+class AkeebasubsViewReports extends F0FViewJson
 {
 	protected function onGetexpirations($tpl = null)
 	{
-		$model = FOFModel::getAnInstance('Subscriptions', 'AkeebasubsModel');
+		$model = F0FModel::getAnInstance('Subscriptions', 'AkeebasubsModel');
 		$this->setModel($model, true);
 
 		return parent::onDisplay($tpl);

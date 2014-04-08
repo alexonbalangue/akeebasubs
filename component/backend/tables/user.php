@@ -12,11 +12,11 @@ if(!class_exists('JTableUser')) {
 	require_once JPATH_LIBRARIES.'/joomla/database/table/user.php';
 }
 
-class AkeebasubsTableUser extends FOFTable
+class AkeebasubsTableUser extends F0FTable
 {
 	/**
 	 * Run the onAKUserSaveData event on the plugins before saving a row
-	 * 
+	 *
 	 * @param boolean $updateNulls
 	 * @return bool
 	 */
@@ -34,7 +34,7 @@ class AkeebasubsTableUser extends FOFTable
 				return false;
 			}
 		}
-		
+
 		return $result;
 	}
 }

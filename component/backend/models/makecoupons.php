@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelMakecoupons extends FOFModel
+class AkeebasubsModelMakecoupons extends F0FModel
 {
 	public function makeCoupons()
 	{
@@ -22,7 +22,7 @@ class AkeebasubsModelMakecoupons extends FOFModel
 		$userhits		= $this->getState('userhits', '1', 'int');
 		$hitslimit		= $this->getState('hits', '0', 'int');
 		$expiration		= $this->getState('expiration', '');
-		
+
 		// Sanitize input data
 		$title = trim($title);
 		if(empty($title)) {
@@ -58,7 +58,7 @@ class AkeebasubsModelMakecoupons extends FOFModel
 		if($hitslimit < 0) {
 			$hitslimit = 0;
 		}
-		
+
 		// Set back the values into the state
 		$this->setState('title',		$title);
 		$this->setState('prefix',		$prefix);
@@ -72,10 +72,10 @@ class AkeebasubsModelMakecoupons extends FOFModel
 
 		// Initialise
 		$ret = array();
-		
+
 		// get a reference to the coupons model
-		$model = FOFModel::getTmpInstance('Coupons', 'AkeebasubsModel');
-		
+		$model = F0FModel::getTmpInstance('Coupons', 'AkeebasubsModel');
+
 		// Get the maximum coupon code
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
@@ -83,17 +83,17 @@ class AkeebasubsModelMakecoupons extends FOFModel
 			->from($db->qn('#__akeebasubs_coupons'));
 		$db->setQuery($query);
 		$maxorder = $db->loadResult();
-		
+
 		// Make sure the coupon code will be big enough for all required coupon
 		// codes.
 		$len = max(6, 2 * ceil($quantity / 32));
-		
+
 		for($i = 0; $i < $quantity; $i++) {
 			$coupon = $prefix . $this->genRandomString($len);
-			
+
 			$table = clone $model->getTable();
 			$table->reset();
-			
+
 			$data = array(
 				'title'				=> $title,
 				'coupon'			=> $coupon,
@@ -107,16 +107,16 @@ class AkeebasubsModelMakecoupons extends FOFModel
 				'ordering'			=> $maxorder + $i,
 				'hits'				=> 0
 			);
-			
+
 			$table->save($data);
-			
+
 			$ret[] = $coupon;
 		}
-		
+
 		$session = JFactory::getSession();
 		$session->set('makecoupons.coupons', $ret, 'com_akeebasubs');
 	}
-	
+
 	private function genRandomString($length = 6)
 	{
 		$pool = "ABCDEFGHJKLMNPQRSTWXYZ0123456789";

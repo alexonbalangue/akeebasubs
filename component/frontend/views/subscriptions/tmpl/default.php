@@ -179,7 +179,7 @@ if (!property_exists($this, 'extensions'))
 	            	<?php
 						if ($canRenew)
 						{
-							$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+							$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 								->setId($subscription->akeebasubs_level_id)
 								->getItem()
 								->slug;

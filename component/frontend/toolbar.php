@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsToolbar extends FOFToolbar
+class AkeebasubsToolbar extends F0FToolbar
 {
 
 }

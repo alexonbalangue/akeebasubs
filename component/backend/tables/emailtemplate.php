@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableEmailtemplate extends FOFTable
+class AkeebasubsTableEmailtemplate extends F0FTable
 {
 	protected function onAfterCopy($oid)
 	{

@@ -50,7 +50,7 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 			return false;
 		}
 
-		$slug = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->setId($subscription->akeebasubs_level_id)
 			->getItem()
 			->slug;
@@ -71,7 +71,7 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 			'email'              => $user->email
 		);
 
-		$kuser = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
 
@@ -124,7 +124,7 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 			$subscription = null;
 			if ($id > 0)
 			{
-				$subscription = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 					->setId($id)
 					->getItem();
 				if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
@@ -188,7 +188,7 @@ class plgAkpayment2checkout extends plgAkpaymentAbstract
 		}
 
 		// Load the subscription level and get its slug
-		$slug = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->setId($subscription->akeebasubs_level_id)
 			->getItem()
 			->slug;

@@ -18,14 +18,14 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 			'ppName'		=> 'skrill',
 			'ppKey'			=> 'PLG_AKPAYMENT_SKRILL_TITLE',
 		));
-		
+
 		parent::__construct($subject, $config);
 	}
-	
+
 	/**
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
-	 * 
+	 *
 	 * @param string $paymentmethod
 	 * @param JUser $user
 	 * @param AkeebasubsTableLevel $level
@@ -35,7 +35,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
 		if(count($nameParts) > 1) {
@@ -43,22 +43,22 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 		} else {
 			$lastName = '';
 		}
-		
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+
+		$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
-		
+
 		$rootURL = rtrim(JURI::base(),'/');
 		$subpathURL = JURI::base(true);
 		if(!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
-				
+
 		$data = (object)array(
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->params->get('merchant',''),
@@ -70,31 +70,31 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 			'lastname'		=> $lastName,
 			'country'		=> $this->translateCountry($kuser->country)
 		);
-		
+
 		@ob_start();
 		include dirname(__FILE__).'/skrill/form.php';
 		$html = @ob_get_clean();
-		
+
 		return $html;
 	}
-	
+
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		JLoader::import('joomla.utilities.date');
-		
+
 		// Check if we're supposed to handle this
 		if($paymentmethod != $this->ppName) return false;
-		
+
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
 		if(!$isValid) $data['akeebasubs_failure_reason'] = 'MD5 hash does not validate';
-		
+
 		// Load the relevant subscription row
 		if($isValid) {
 			$id = array_key_exists('transaction_id', $data) ? (int)$data['custom'] : -1;
 			$subscription = null;
 			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
 				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
@@ -106,7 +106,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("transaction_id" field) is invalid';
 		}
-		
+
 		// Check that receiver is what the site owner has configured
 		if($isValid) {
 			$receiver_email = $data['pay_to_email'];
@@ -116,7 +116,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 				|| (strtolower($receiver_email) == strtolower($receiver_email));
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Merchant ID does not match pay_to_email';
 		}
-		
+
 		// Check that amount is correct
 		$isPartialRefund = false;
 		if($isValid && !is_null($subscription)) {
@@ -133,7 +133,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 			}
 			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
 		}
-		
+
 		// Check that mb_transaction_id has not been previously processed
 		if($isValid && !is_null($subscription) && !$isPartialRefund) {
 			if($subscription->processor_key == $data['mb_transaction_id']) {
@@ -143,7 +143,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 				}
 			}
 		}
-		
+
 		// Check that currency is correct
 		if($isValid && !is_null($subscription)) {
 			$mc_currency = strtoupper($data['currency']);
@@ -153,10 +153,10 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 				$data['akeebasubs_failure_reason'] = "Invalid currency; expected $currency, got $mc_currency";
 			}
 		}
-		
+
 		// Log the IPN data
 		$this->logIPN($data, $isValid);
-		
+
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) return false;
 
@@ -166,7 +166,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 			case '2':
 				$newStatus = 'C';
 				break;
-			
+
 			case '0':
 				$newStatus = 'P';
 				break;
@@ -178,7 +178,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 					$newStatus = 'X';
 				}
 				break;
-			
+
 			case '-1':
 			case '-2':
 			default:
@@ -198,7 +198,7 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 			$this->fixDates($subscription, $updates);
 		}
 		$subscription->save($updates);
-		
+
 		// Run the onAKAfterPaymentCallback events
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akeebasubs');
@@ -206,10 +206,10 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback',array(
 			$subscription
 		));
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Validates the incoming data against PayPal's IPN to make sure this is not a
 	 * fraudelent request.
@@ -218,17 +218,17 @@ class plgAkpaymentSkrill extends plgAkpaymentAbstract
 	{
 		$secret = $this->params->get('secret','');
 		$secret_md5 = strtoupper(md5($secret));
-		
+
 		$signature_string = $data['merchant_id'] . $data['transaction_id'] .
 			$secret_md5 . $data['mb_amount'] . $data['mb_currency'] .
 			$data['status'];
-			
+
 		$calculated = strtoupper(md5($signature_string));
 		$incoming = strtoupper($data['md5sig']);
-		
+
 		return ($calculated == $incoming);
-	}	
-	
+	}
+
 	/**
 	 * Gets the form action URL for the payment
 	 */

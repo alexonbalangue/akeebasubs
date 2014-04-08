@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerTools extends FOFController
+class AkeebasubsControllerTools extends F0FController
 {
 	public function import($cacheable = false)
 	{
