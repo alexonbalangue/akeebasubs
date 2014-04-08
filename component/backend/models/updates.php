@@ -34,8 +34,17 @@ class AkeebasubsModelUpdates extends FOFModel
 		// Get an instance of the updater
 		$this->updater = JUpdater::getInstance();
 
+		// Get the component name
+		if (isset($config['update_component']))
+		{
+			$component = $config['update_component'];
+		}
+		else
+		{
+			$component = $this->input->getCmd('option', '');
+		}
+
 		// Find the extension ID
-		$component = $this->input->getCmd('option', '');
 		$db = $this->getDbo();
 		$query = $db->getQuery(true)
 			->select('*')
@@ -63,11 +72,11 @@ class AkeebasubsModelUpdates extends FOFModel
 
 	/**
 	 * Retrieves the update information of the component, returning an array with the following keys:
-	 * hasUpdate		True if an update is available
-	 * version			The version of the available update
-	 * infoURL			The URL to the download page of the update
+	 * hasUpdate        True if an update is available
+	 * version            The version of the available update
+	 * infoURL            The URL to the download page of the update
 	 *
-	 * @param   bool  $force  Set to true if you want to forcibly reload the update information
+	 * @param   bool $force Set to true if you want to forcibly reload the update information
 	 *
 	 * @return  array  See the method description for more information
 	 */
@@ -75,7 +84,20 @@ class AkeebasubsModelUpdates extends FOFModel
 	{
 		$db = $this->getDbo();
 
-		// If we are forcing the reload, set the last update timestamp to 0 in order to force a reload
+		// Default response (no update)
+		$updateResponse = array(
+			'hasUpdate' => false,
+			'version'   => '',
+			'infoURL'   => ''
+		);
+
+		if (empty($this->extension_id))
+		{
+			return $updateResponse;
+		}
+
+		// If we are forcing the reload, set the last_check_timestamp to 0
+		// and remove cached component update info in order to force a reload
 		if ($force)
 		{
 			// Find the update site ID
@@ -85,6 +107,11 @@ class AkeebasubsModelUpdates extends FOFModel
 				->where($db->qn('extension_id') . ' = ' . $db->q($this->extension_id));
 			$db->setQuery($query);
 			$updateSiteId = $db->loadResult();
+
+			if (empty($updateSiteId))
+			{
+				return $updateResponse;
+			}
 
 			// Set the last_check_timestamp to 0
 			$query = $db->getQuery(true)
@@ -109,13 +136,6 @@ class AkeebasubsModelUpdates extends FOFModel
 		// Load any updates from the network into the #__updates table
 		$this->updater->findUpdates($this->extension_id, $timeout);
 
-		// Default response (no update)
-		$updateResponse = array(
-			'hasUpdate'		=> false,
-			'version'		=> '',
-			'infoURL'		=> ''
-		);
-
 		// Get the update record from the database
 		$query = $db->getQuery(true)
 			->select('*')
@@ -128,9 +148,9 @@ class AkeebasubsModelUpdates extends FOFModel
 		if (is_object($updateRecord))
 		{
 			$updateResponse = array(
-				'hasUpdate'		=> true,
-				'version'		=> $updateRecord->version,
-				'infoURL'		=> $updateRecord->infourl,
+				'hasUpdate' => true,
+				'version'   => $updateRecord->version,
+				'infoURL'   => $updateRecord->infourl,
 			);
 		}
 
