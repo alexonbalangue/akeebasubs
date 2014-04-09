@@ -273,11 +273,21 @@ class AkeebasubsModelSubscribes extends F0FModel
 		$ret = (object)array('username' => false, 'password' => true);
 		$username = $state->username;
 		$myUser = JFactory::getUser();
+
 		if(empty($username))
 		{
 			if (!$myUser->guest) $ret->username = true;
 			return $ret;
 		}
+
+        // Joomla doens't allow spaces in usernames
+        if(strpos($username, ' ') !== false)
+        {
+            $ret->username = false;
+
+            return $ret;
+        }
+
 		$user = F0FModel::getTmpInstance('Jusers','AkeebasubsModel')
 			->username($username)
 			->getFirstItem();
