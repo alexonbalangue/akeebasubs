@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 class AkeebasubsControllerCpanels extends F0FController
 {
 	public function execute($task) {
-		if(!in_array($task, array('browse','hide2copromo', 'wizardstep'))) {
+		if(!in_array($task, array('browse','hide2copromo', 'wizardstep', 'updateinfo'))) {
 			$task = 'browse';
 		}
 		parent::execute($task);
@@ -23,8 +23,12 @@ class AkeebasubsControllerCpanels extends F0FController
 		if($result) {
 			F0FModel::getTmpInstance('Cpanels', 'AkeebasubsModel')
 				->checkAndFixDatabase()
-				->saveMagicVariables()
-				->refreshUpdateSite();
+				->saveMagicVariables();
+
+			// Run the automatic update site refresh
+			/** @var AkeebasubsModelUpdates $updateModel */
+			$updateModel = F0FModel::getTmpInstance('Updates', 'AkeebasubsModel');
+			$updateModel->refreshUpdateSite();
 		}
 
 		return $result;
@@ -110,5 +114,43 @@ class AkeebasubsControllerCpanels extends F0FController
 			$url = JURI::base().'index.php?option=com_akeebasubs';
 		}
 		$this->setRedirect($url);
+	}
+
+	public function updateinfo()
+	{
+		/** @var AkeebasubsModelUpdates $updateModel */
+		$updateModel = F0FModel::getTmpInstance('Updates', 'AkeebasubsModel');
+		$updateInfo = (object)$updateModel->getUpdates();
+
+		$result = '';
+
+		if ($updateInfo->hasUpdate)
+		{
+			$strings = array(
+				'header'		=> JText::sprintf('COM_AKEEBASUBS_CPANEL_MSG_UPDATEFOUND', $updateInfo->version),
+				'button'		=> JText::sprintf('COM_AKEEBASUBS_CPANEL_MSG_UPDATENOW', $updateInfo->version),
+				'infourl'		=> $updateInfo->infoURL,
+				'infolbl'		=> JText::_('COM_AKEEBASUBS_CPANEL_MSG_MOREINFO'),
+			);
+
+			$result = <<<ENDRESULT
+	<div class="alert alert-warning">
+		<h3>
+			<span class="icon icon-exclamation-sign glyphicon glyphicon-exclamation-sign"></span>
+			{$strings['header']}
+		</h3>
+		<p>
+			<a href="index.php?option=com_installer&view=update" class="btn btn-primary">
+				{$strings['button']}
+			</a>
+			<a href="{$strings['infourl']}" target="_blank" class="btn btn-small btn-info">
+				{$strings['infolbl']}
+			</a>
+		</p>
+	</div>
+ENDRESULT;
+		}
+
+		echo $result;
 	}
 }

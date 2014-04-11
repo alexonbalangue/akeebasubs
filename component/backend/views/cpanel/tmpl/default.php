@@ -10,26 +10,8 @@ defined('_JEXEC') or die();
 
 $this->loadHelper('cparams');
 
-/** @var AkeebasubsModelUpdates $updateModel */
-$updateModel = F0FModel::getTmpInstance('Updates', 'AkeebasubsModel');
-$this->updateInfo = (object)$updateModel->getUpdates();
 ?>
-	<?php if ($this->updateInfo->hasUpdate): ?>
-		<div class="alert alert-warning">
-			<h3>
-				<span class="icon icon-exclamation-sign glyphicon glyphicon-exclamation-sign"></span>
-				<?php echo JText::sprintf('COM_AKEEBASUBS_CPANEL_MSG_UPDATEFOUND', $this->updateInfo->version); ?>
-			</h3>
-			<p>
-				<a href="index.php?option=com_installer&view=update" class="btn btn-primary">
-					<?php echo JText::sprintf('COM_AKEEBASUBS_CPANEL_MSG_UPDATENOW', $this->updateInfo->version); ?>
-				</a>
-				<a href="<?php echo $this->updateInfo->infoURL ?>" target="_blank" class="btn btn-small btn-info">
-					<?php echo JText::_('COM_AKEEBASUBS_CPANEL_MSG_MOREINFO'); ?>
-				</a>
-			</p>
-		</div>
-	<?php endif; ?>
+	<div id="updateNotice"></div>
 
 	<?php echo $this->loadTemplate('wizard'); ?>
 
@@ -459,3 +441,19 @@ $this->updateInfo = (object)$updateModel->getUpdates();
 			<?php echo $this->loadTemplate('footer'); ?>
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		(function($) {
+			$(document).ready(function(){
+				$.ajax('index.php?option=com_akeebasubs&view=cpanel&task=updateinfo&tmpl=component', {
+					success: function(data, textStatus, jqXHR)
+					{
+						if (data.length)
+						{
+							$('#updateNotice').html(data);
+						}
+					}
+				})
+			});
+		})(akeeba.jQuery);
+	</script>
