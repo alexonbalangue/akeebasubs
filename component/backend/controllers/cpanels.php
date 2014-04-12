@@ -152,5 +152,8 @@ ENDRESULT;
 		}
 
 		echo $result;
+
+		// Cut the execution short
+		JFactory::getApplication()->close();
 	}
 }
