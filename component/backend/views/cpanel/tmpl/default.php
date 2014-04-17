@@ -446,7 +446,7 @@ $this->loadHelper('cparams');
 		(function($) {
 			$(document).ready(function(){
 				$.ajax('index.php?option=com_akeebasubs&view=cpanel&task=updateinfo&tmpl=component', {
-					success: function(data, textStatus, jqXHR)
+					success: function(msg, textStatus, jqXHR)
 					{
 						// Get rid of junk before and after data
 						var match = msg.match(/###([\s\S]*?)###/);
