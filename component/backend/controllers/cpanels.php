@@ -151,7 +151,7 @@ class AkeebasubsControllerCpanels extends F0FController
 ENDRESULT;
 		}
 
-		echo $result;
+		echo '###' . $result . '###';
 
 		// Cut the execution short
 		JFactory::getApplication()->close();

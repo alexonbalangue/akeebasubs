@@ -448,6 +448,10 @@ $this->loadHelper('cparams');
 				$.ajax('index.php?option=com_akeebasubs&view=cpanel&task=updateinfo&tmpl=component', {
 					success: function(data, textStatus, jqXHR)
 					{
+						// Get rid of junk before and after data
+						var match = msg.match(/###([\s\S]*?)###/);
+						data = match[1];
+
 						if (data.length)
 						{
 							$('#updateNotice').html(data);
