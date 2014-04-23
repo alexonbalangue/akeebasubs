@@ -5,6 +5,9 @@
 /release
 /nbproject
 /build/tools
+/build/bin
+/build/buildlang
+/build/phingext
 
 /documentation/akeebasubs-guide.xml~
 /TODO
