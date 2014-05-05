@@ -4,10 +4,6 @@
 /Akeeba Subscriptions.esproj
 /release
 /nbproject
-/build/tools
-/build/bin
-/build/buildlang
-/build/phingext
 
 /documentation/akeebasubs-guide.xml~
 /TODO
@@ -50,3 +46,10 @@ _test
 /.idea
 plugins/akpayment/mobilpaycc/mobilpaycc/private/*.cer
 plugins/akpayment/mobilpaysms/mobilpaysms/private/*.cer
+
+/build/templates/release*.json
+/build/bin
+/build/phingext
+/build/buildlang
+/build/epub
+/build/tools
