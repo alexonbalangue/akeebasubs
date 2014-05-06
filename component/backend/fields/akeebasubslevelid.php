@@ -8,12 +8,12 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class FOFFormFieldAkeebasubslevelid extends FOFFormFieldList
+class F0FFormFieldAkeebasubslevelid extends F0FFormFieldList
 {
 	protected function getOptions()
 	{
 		static $options = null;
-		
+
 		if (is_null($options))
 		{
 			$noneoption = $this->element['none'] ? $this->element['none'] : null;
@@ -21,13 +21,13 @@ class FOFFormFieldAkeebasubslevelid extends FOFFormFieldList
 			{
 				$options[] = JHtml::_('select.option', '', JText::_($noneoption));
 			}
-			
+
 			$enabled = $this->element['enabled'] ? $this->element['enabled'] : '';
-			
-			$levels = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+
+			$levels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->enabled($enabled)
 				->getList(true);
-			
+
 			if (!empty($levels))
 			{
 				foreach ($levels as $level)
@@ -37,9 +37,9 @@ class FOFFormFieldAkeebasubslevelid extends FOFFormFieldList
 				}
 			}
 		}
-		
+
 		reset($options);
-		
+
 		return $options;
 	}
 }

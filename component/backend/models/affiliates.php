@@ -8,14 +8,14 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelAffiliates extends FOFModel
+class AkeebasubsModelAffiliates extends F0FModel
 {
 	public function buildQuery($overrideLimits = false)
 	{
 		$db = $this->getDbo();
-		
+
 		$affiliate_id = $this->getState('affiliate_id',null,'int');
-		
+
 		// Sub-query 1: total net amount of subscriptions attributed to this affiliate
 		$subquery1 = $db->getQuery(true)
 			->select(array(
@@ -28,7 +28,7 @@ class AkeebasubsModelAffiliates extends FOFModel
 			->group($db->qn('akeebasubs_affiliate_id'))
 		;
 		if($affiliate_id > 0) $subquery1->where ($db->nameQuote ('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
-		
+
 		// Sub-query 2: total payments made to this affiliate
 		$subquery2 = $db->getQuery(true)
 			->select(array(
@@ -41,7 +41,7 @@ class AkeebasubsModelAffiliates extends FOFModel
 		;
 		if($affiliate_id > 0) $subquery2->where ($db->nameQuote ('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
 		$subquery2 = (string)$subquery2;
-		
+
 		// Main query
 		$query = $db->getQuery(true)
 			->select(array(
@@ -57,19 +57,19 @@ class AkeebasubsModelAffiliates extends FOFModel
 			->join('LEFT OUTER', "($subquery2)".' AS '.$db->qn('p').' USING ('.$db->qn('akeebasubs_affiliate_id').')')
 			->join('INNER', $db->qn('#__users').' AS '.$db->qn('u').' ON ('.$db->qn('u').'.'.$db->qn('id').'='.$db->qn('a').'.'.$db->qn('user_id').')')
 		;
-		
+
 		// Filter by User ID
 		$user_id = $this->getState('user_id',null,'int');
 		if(is_numeric($user_id) && ($user_id > 0)) {
 			$query->where($db->qn('a').'.'.$db->qn('user_id').' = '.$db->q($user_id));
 		}
-		
+
 		// Filter by Enabled status
 		$enabled = $this->getState('enabled',null,'cmd');
 		if(is_numeric($enabled)) {
 			$query->where($db->qn('a').'.'.$db->qn('enabled').' = '.$db->q($enabled));
 		}
-		
+
 		// Search for username, fullname and/or email
 		$search = $this->getState('search',null,'string');
 		if(!empty($search)) {
@@ -79,16 +79,16 @@ class AkeebasubsModelAffiliates extends FOFModel
 			$q3 = '('.$db->qn('u').'.'.$db->qn('email').' LIKE '.$db->q($search).')';
 			$query->where("($q1 OR $q2 OR $q3)");
 		}
-		
+
 		// Filter by affiliate ID
 		if($affiliate_id > 0) $query->where ($db->qn('a').'.'.$db->qn('akeebasubs_affiliate_id').' = '.$db->q($affiliate_id));
-		
+
 		// Fix the ordering
 		$order = $this->getState('filter_order', 'akeebasubs_affiliate_id', 'cmd');
 		if(!in_array($order, array_keys($this->getTable()->getData()))) $order = 'akeebasubs_affiliate_id';
 		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 		$query->order($db->qn('a').'.'.$order.' '.$dir);
-		
+
 		return $query;
 	}
 }

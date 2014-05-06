@@ -10,18 +10,18 @@ defined('_JEXEC') or die();
 class plgAkeebasubsCanalyticscommerce extends JPlugin
 {
 	/**
-	* Let's add some analytics code to track the subscription on the order success page! 
+	* Let's add some analytics code to track the subscription on the order success page!
 	* @param row - object
 	*/
 	public function onOrderMessage($row) {
 		$document = JFactory::getDocument();
-		
+
 		// let us get the sub level
-		$akeebasubsLevel = FOFModel::getTmpInstance('Levels','AkeebasubsModel')->setId($row->akeebasubs_level_id)->getItem();
+		$akeebasubsLevel = F0FModel::getTmpInstance('Levels','AkeebasubsModel')->setId($row->akeebasubs_level_id)->getItem();
 
 		/**
 		* doc example: https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingEcommerce
-		* don't change the _addTrans or _addItems parameters! 
+		* don't change the _addTrans or _addItems parameters!
 		* Since we can only purchase 1 subscription at a time -> addItem is called only once.
 		* If this changes in the future we will have to modify the _addItem part...
 		*/
@@ -54,7 +54,7 @@ class plgAkeebasubsCanalyticscommerce extends JPlugin
 					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 				  })();";
-				  
+
 		$document->addScriptDeclaration($script);
 	}
 }

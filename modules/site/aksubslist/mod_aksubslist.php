@@ -35,8 +35,8 @@ if(defined('PHP_VERSION')) {
 if(!version_compare($version, '5.3.0', '>=')) return;
 
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
-include_once JPATH_LIBRARIES.'/fof/include.php';
-if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+include_once JPATH_LIBRARIES.'/f0f/include.php';
+if(!defined('F0F_INCLUDED') || !class_exists('F0FForm', true))
 {
 	return;
 }
@@ -56,7 +56,7 @@ $lang->load('com_akeebasubs',JPATH_SITE,null,true);
 		<?php echo JText::_('COM_AKEEBASUBS_LEVELS_ITEMIZED_NOSUBS')?>
 	</span>
 <?php else: ?>
-<?php FOFDispatcher::getTmpInstance('com_akeebasubs', 'subscriptions', array(
+<?php F0FDispatcher::getTmpInstance('com_akeebasubs', 'subscriptions', array(
 	'input'		=> array(
 		'savestate'	=> 0,
 		'option'	=> 'com_akeebasubs',

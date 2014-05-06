@@ -49,7 +49,7 @@ class AkeebasubsHelperFormat
 		static $levels;
 
 		if(empty($levels)) {
-			$levelsList = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$levelsList = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getItemList(true);
 			if(!empty($levelsList)) foreach($levelsList as $level) {
 				$levels[$level->akeebasubs_level_id] = $level->title;
@@ -68,7 +68,7 @@ class AkeebasubsHelperFormat
 		static $levelgroups;
 
 		if(empty($levelgroups)) {
-			$levelgroupsList = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
+			$levelgroupsList = F0FModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
 				->savestate(0)
 				->getItemList(true);
 			if(!empty($levelgroupsList)) foreach($levelgroupsList as $levelgroup) {
@@ -101,7 +101,7 @@ class AkeebasubsHelperFormat
 		static $levels;
 
 		if(empty($levels)) {
-			$levelsList = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$levelsList = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getItemList(true);
 			if(!empty($levelsList)) foreach($levelsList as $level) {
 				$levels[$level->akeebasubs_level_id] = $level->title;
@@ -129,7 +129,7 @@ class AkeebasubsHelperFormat
 
 		if (is_null($map))
 		{
-			$map = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+			$map = F0FModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 			->getExtensions(2);
 		}
 

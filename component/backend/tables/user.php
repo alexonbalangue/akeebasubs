@@ -12,11 +12,11 @@ if(!class_exists('JTableUser')) {
 	require_once JPATH_LIBRARIES.'/joomla/database/table/user.php';
 }
 
-class AkeebasubsTableUser extends FOFTable
+class AkeebasubsTableUser extends F0FTable
 {
 	/**
 	 * Run the onAKUserSaveData event on the plugins before saving a row
-	 * 
+	 *
 	 * @param boolean $updateNulls
 	 * @return bool
 	 */
@@ -24,10 +24,17 @@ class AkeebasubsTableUser extends FOFTable
 		if($result = parent::onBeforeStore($updateNulls)) {
 			JLoader::import('joomla.plugin.helper');
 			JPluginHelper::importPlugin('akeebasubs');
-			$app = JFactory::getApplication();
-			$jResponse = $app->triggerEvent('onAKUserSaveData', array($this));
+			$dispatcher = JDispatcher::getInstance();
+			$jResponse = $dispatcher->trigger('onAKUserSaveData', array($this));
+
+			if (in_array(false, $jResponse))
+			{
+				$this->setError($dispatcher->getError());
+
+				return false;
+			}
 		}
-		
+
 		return $result;
 	}
 }

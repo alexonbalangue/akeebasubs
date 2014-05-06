@@ -67,7 +67,7 @@ ENDFORM;
 
 		// Enable the subscription
 		$id = (int)$data['subscription'];
-		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->setId($id)
 			->getItem();
 
@@ -94,7 +94,7 @@ ENDFORM;
 		));
 
 		// This plugin is a tricky one; it will redirect you to the thank you page
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
             ->setId($subscription->akeebasubs_level_id)
             ->getItem()
             ->slug;

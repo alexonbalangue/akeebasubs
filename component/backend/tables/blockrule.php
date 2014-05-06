@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableBlockrule extends FOFTable
+class AkeebasubsTableBlockrule extends F0FTable
 {
 	public function check() {
 		$result = true;

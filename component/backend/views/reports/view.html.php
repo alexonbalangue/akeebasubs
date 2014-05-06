@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die;
 
-class AkeebasubsViewReports extends FOFViewHtml
+class AkeebasubsViewReports extends F0FViewHtml
 {
 	public function onDisplay($tpl = null)
 	{

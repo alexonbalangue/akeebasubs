@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableAffiliate extends FOFTable
+class AkeebasubsTableAffiliate extends F0FTable
 {
 	/** @var   float  Required for the browse view */
 	public $owed = 0;

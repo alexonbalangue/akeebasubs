@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelJusers extends FOFModel
+class AkeebasubsModelJusers extends F0FModel
 {
 	public function buildQuery($overrideLimits = false) {
 		$db = $this->getDbo();

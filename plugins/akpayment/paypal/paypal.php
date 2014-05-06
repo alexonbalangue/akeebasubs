@@ -45,7 +45,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$lastName = '';
 		}
 
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -87,7 +87,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$data->a3 = $subscription->recurring_amount;
 		}
 
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getFirstItem();
 
@@ -107,10 +107,15 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
-		if(!$isValid) $data['akeebasubs_failure_reason'] = 'PayPal reports transaction as invalid';
+
+		if(!$isValid)
+        {
+            $data['akeebasubs_failure_reason'] = 'PayPal reports transaction as invalid';
+        }
 
 		// Check txn_type; we only accept web_accept transactions with this plugin
-		if($isValid) {
+		if($isValid)
+        {
 			// This is required to process some IPNs, such as Reversed and Canceled_Reversal
 			if (!array_key_exists('txn_type', $data))
 			{
@@ -126,30 +131,42 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			}
 			else
 			{
-				$recurring = ($data['txn_type'] != 'web_accept');
+				$recurring = (!in_array($data['txn_type'], array('web_accept', 'workaround_to_missing_txn_type')));
 			}
 		}
 
 		// Load the relevant subscription row
-		if($isValid) {
+		if($isValid)
+        {
 			$id = array_key_exists('custom', $data) ? (int)$data['custom'] : -1;
 			$subscription = null;
-			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+
+			if($id > 0)
+            {
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
-				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
+
+				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) )
+                {
 					$subscription = null;
 					$isValid = false;
 				}
-			} else {
+			}
+            else
+            {
 				$isValid = false;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
+
+			if(!$isValid)
+            {
+                $data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
+            }
 		}
 
 		// Check that receiver_email / receiver_id is what the site owner has configured
-		if($isValid) {
+		if($isValid)
+        {
 			$receiver_email = $data['receiver_email'];
 			$receiver_id = $data['receiver_id'];
 			$valid_id = $this->getMerchantID();
@@ -159,12 +176,18 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				|| ($receiver_id == $valid_id)
 				|| (strtolower($receiver_id) == strtolower($receiver_id))
 			;
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Merchant ID does not match receiver_email or receiver_id';
+
+			if(!$isValid)
+            {
+                $data['akeebasubs_failure_reason'] = 'Merchant ID does not match receiver_email or receiver_id';
+            }
 		}
 
 		// Check that mc_gross is correct
 		$isPartialRefund = false;
-		if($isValid && !is_null($subscription)) {
+
+		if($isValid && !is_null($subscription))
+        {
 			$mc_gross = floatval($data['mc_gross']);
 
 			// @todo On recurring subscriptions recalculate the net, tax and gross price by removing the signup fee
@@ -177,24 +200,34 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				$gross = $subscription->gross_amount;
 			}
 
-			if($mc_gross > 0) {
+			if($mc_gross > 0)
+            {
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
 				$isValid = ($gross - $mc_gross) < 0.01;
-			} else {
+			}
+            else
+            {
 				$isPartialRefund = false;
 				$temp_mc_gross = -1 * $mc_gross;
 				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+
+			if(!$isValid)
+            {
+                $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+            }
 		}
 
 		// Check that txn_id has not been previously processed
 		if($isValid && !is_null($subscription) && !$isPartialRefund) {
 			if($subscription->processor_key == $data['txn_id']) {
 				if($subscription->state == 'C') {
-					$isValid = false;
-					$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
+					if(strtolower($data['payment_status']) != 'refunded')
+					{
+						$isValid = false;
+						$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
+					}
 				}
 			}
 		}
@@ -301,7 +334,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();
 
 			// Calculate new start/end time for the subscription
-			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$allSubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->paystate('C')
 				->level($subscription->akeebasubs_level_id)
 				->user_id($subscription->user_id);
@@ -322,7 +355,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$updates['publish_down'] = $jEnd->toSql();
 
 			// Save the record for the old subscription
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getTable();
 			$table->reset();
 			$table->bind($oldData);

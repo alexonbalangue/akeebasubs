@@ -21,11 +21,11 @@ if(defined('PHP_VERSION')) {
 // Old PHP version detected. EJECT! EJECT! EJECT!
 if(!version_compare($version, '5.3.0', '>=')) return;
 
-// Make sure FOF is loaded, otherwise do not run
-if(!defined('FOF_INCLUDED')) {
-	include_once JPATH_LIBRARIES.'/fof/include.php';
+// Make sure F0F is loaded, otherwise do not run
+if(!defined('F0F_INCLUDED')) {
+	include_once JPATH_LIBRARIES.'/f0f/include.php';
 }
-if(!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
+if(!defined('F0F_INCLUDED') || !class_exists('F0FLess', true))
 {
 	return;
 }
@@ -58,7 +58,7 @@ class plgContentAslink extends JPlugin
             $levels = array();
             $slugs = array();
             $upperSlugs = array();
-            $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+            $list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
                 ->getList();
             if (count($list)) foreach ($list as $level) {
                 $thisTitle = strtoupper($level->title);

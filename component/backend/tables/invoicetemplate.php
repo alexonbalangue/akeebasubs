@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableInvoicetemplate extends FOFTable
+class AkeebasubsTableInvoicetemplate extends F0FTable
 {
 	public $localformat = null;
 
@@ -49,7 +49,7 @@ class AkeebasubsTableInvoicetemplate extends FOFTable
 				} else {
 					$masterlevels = array();
 					foreach($levels as $id) {
-						$levelObject = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+						$levelObject = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 							->setId($id)
 							->getItem();
 						$id = null;

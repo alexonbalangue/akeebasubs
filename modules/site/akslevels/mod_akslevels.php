@@ -35,8 +35,8 @@ if(defined('PHP_VERSION')) {
 if(!version_compare($version, '5.3.0', '>=')) return;
 
 include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/version.php';
-include_once JPATH_LIBRARIES.'/fof/include.php';
-if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+include_once JPATH_LIBRARIES.'/f0f/include.php';
+if(!defined('F0F_INCLUDED') || !class_exists('F0FForm', true))
 {
 	return;
 }
@@ -66,5 +66,5 @@ $config = array(
 if(!empty($ids)) $config['input']['id'] = $ids;
 
 //$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('*', 78)."\n\n\n");fclose($fp);
-FOFDispatcher::getTmpInstance('com_akeebasubs', 'levels', $config)->dispatch();
+F0FDispatcher::getTmpInstance('com_akeebasubs', 'levels', $config)->dispatch();
 //$fp = fopen(JPATH_SITE.'/logs/backtrace.txt', 'at');fwrite($fp, "\n\n\n".  str_repeat('~', 78)."\n\n\n");fclose($fp);

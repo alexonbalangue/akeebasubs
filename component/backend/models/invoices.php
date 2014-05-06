@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsModelInvoices extends FOFModel
+class AkeebasubsModelInvoices extends F0FModel
 {
 	private function getFilterValues()
 	{
@@ -397,7 +397,7 @@ class AkeebasubsModelInvoices extends FOFModel
 				else
 				{
 					// Invoice template number override reset
-					$templateTable = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
+					$templateTable = F0FModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
 						->getItem($templateRow->akeebasubs_invoicetemplate_id);
 					$templateTable->save(array(
 						'number_reset'	=> 0
@@ -481,15 +481,20 @@ class AkeebasubsModelInvoices extends FOFModel
 
 		// Get the custom variables
 		$vat_notice = '';
-		$kuser = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$cyprus_tag = 'TRIANGULAR TRANSACTION';
+		$cyprus_note = 'We are obliged by local tax laws to write the words "triangular transaction" on all invoices issued in Euros. This doesn\'t mean anything in particular about your transaction.';
+		$kuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($sub->user_id)
 			->getFirstItem();
 		$country = $kuser->country;
 		$isbusiness = $kuser->isbusiness;
 		$viesregistered = $kuser->viesregistered;
 		$inEU = in_array($country, array('AT','BE','BG','CY','CZ','DK','EE','FI','FR','GB','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'));
-		if($inEU && $isbusiness && $viesregistered) {
+		if($inEU && $isbusiness && $viesregistered)
+		{
 			$vat_notice = AkeebasubsHelperCparams::getParam('invoice_vatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+			$cyprus_tag = 'REVERSE CHARGE';
+			$cyprus_note = 'We are obliged by local and European tax laws to write the words "reverse charge" on all invoices issued to EU business when no VAT is charged. This is supposed to serve as a reminder that the recipient of the invoice (you) have to be registered to your local VAT office so as to apply to YOUR business\' VAT form the VAT owed by this transaction on the reverse charge basis, as described above. The words "reverse charge" DO NOT indicate a problem with your transaction, a cancellation or a refund.';
 		}
 
 		$extras = array(
@@ -501,6 +506,8 @@ class AkeebasubsModelInvoices extends FOFModel
 			'[INV:INVOICE_DATE_USA]'	=> $jInvoiceDate->format('m/d/Y', true),
 			'[INV:INVOICE_DATE_JAPAN]'	=> $jInvoiceDate->format('Y/m/d', true),
 			'[VAT_NOTICE]'				=> $vat_notice,
+			'[CYPRUS_TAG]'				=> $cyprus_tag,
+			'[CYPRUS_NOTE]'				=> $cyprus_note,
 		);
 
 		// Render the template into HTML
@@ -628,13 +635,13 @@ class AkeebasubsModelInvoices extends FOFModel
 	{
 		$level_id = $sub->akeebasubs_level_id;
 
-		$userModel = FOFModel::getTmpInstance('Users', 'AkeebasubsModel');
+		$userModel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
 		$mergedData = $userModel->getMergedData($sub->user_id);
 
 		$ret = null;
 
 		// Load all enabled templates and check if they fit
-		$templates = FOFModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
+		$templates = F0FModel::getTmpInstance('Invoicetemplates', 'AkeebasubsModel')
 			->enabled(1)
 			->filter_order('enabled')
 			->filter_order_Dir('ASC')
@@ -865,7 +872,7 @@ class AkeebasubsModelInvoices extends FOFModel
 		}
 
 		// Get the subscription record
-		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+		$sub = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->getItem($invoiceRecord->akeebasubs_subscription_id);
 
 		// Get the mailer

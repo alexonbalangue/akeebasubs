@@ -9,7 +9,7 @@ defined( '_JEXEC' ) or die( 'Direct Access to this location is not allowed.' );
 
 // ------------------  standard plugin initialize function - don't change ---------------------------
 global $sh_LANG;
-$sefConfig = & shRouter::shGetConfig();  
+$sefConfig = & shRouter::shGetConfig();
 $shLangName = '';
 $shLangIso = '';
 $title = array();
@@ -111,7 +111,7 @@ shRemoveFromGETVarsList('layout');
 // Add the slug
 if ($newView != 'userinfo')
 {
-    if (array_key_exists('slug', $shGETVars) && (FOFInflector::isSingular($title[1]) || ($title[1] == 'new')))
+    if (array_key_exists('slug', $shGETVars) && (F0FInflector::isSingular($title[1]) || ($title[1] == 'new')))
     {
         $title[2] = $shGETVars['slug'];
         shRemoveFromGETVarsList('slug');
@@ -124,11 +124,10 @@ if ($newView != 'userinfo')
 }
 
 $title[] = '/';
-// ------------------  standard plugin finalize function - don't change ---------------------------  
-if ($dosef){
-   $string = shFinalizePlugin( $string, $title, $shAppendString, $shItemidString, 
-      (isset($limit) ? @$limit : null), (isset($limitstart) ? @$limitstart : null), 
-      (isset($shLangName) ? @$shLangName : null));
-}      
 // ------------------  standard plugin finalize function - don't change ---------------------------
-  
+if ($dosef){
+   $string = shFinalizePlugin( $string, $title, $shAppendString, $shItemidString,
+      (isset($limit) ? @$limit : null), (isset($limitstart) ? @$limitstart : null),
+      (isset($shLangName) ? @$shLangName : null));
+}
+// ------------------  standard plugin finalize function - don't change ---------------------------

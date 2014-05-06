@@ -1,2 +1,0 @@
-ALTER TABLE `#__akeebasubs_levels` ADD COLUMN `signupfee` FLOAT NULL DEFAULT '0' AFTER `price`;
-ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `recurring_amount` FLOAT NULL DEFAULT '0' AFTER `gross_amount`;

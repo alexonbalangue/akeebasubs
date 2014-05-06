@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 /**
  * Renders the price of a subscription level and its optional sign-up fee
  */
-class FOFFormFieldAkeebasubsdiscount extends FOFFormFieldText
+class F0FFormFieldAkeebasubsdiscount extends F0FFormFieldText
 {
 	/**
 	 * Get the rendering of this field type for a repeatable (grid) display,
@@ -23,7 +23,7 @@ class FOFFormFieldAkeebasubsdiscount extends FOFFormFieldText
 	 */
 	public function getRepeatable()
 	{
-		include_once FOFTemplateUtils::parsePath('admin://components/com_akeebasubs/helpers/cparams.php', true);
+		include_once F0FTemplateUtils::parsePath('admin://components/com_akeebasubs/helpers/cparams.php', true);
 
 		// Initialise
 		$class				= $this->id;

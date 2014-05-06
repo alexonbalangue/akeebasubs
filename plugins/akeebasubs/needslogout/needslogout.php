@@ -38,7 +38,7 @@ class plgAkeebasubsNeedslogout extends JPlugin
             return;
         }
 
-        $user = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
+        $user = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
         $user->load(array('user_id' => $row->user_id));
 
         $bind['needs_logout'] = 1;

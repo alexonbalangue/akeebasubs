@@ -91,7 +91,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 		$orderCode = $data['s'];
 		$subscription = null;
 		if(! empty($orderCode)) {
-			$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->processor($this->ppName)
 				->paystate('N')
 				->paykey($orderCode)
@@ -101,7 +101,7 @@ class plgAkpaymentViva extends plgAkpaymentAbstract
 				$subscription = null;
 				$isValid = false;
 			}
-            $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+            $level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
                 ->setId($subscription->akeebasubs_level_id)
                 ->getItem();
 		} else {

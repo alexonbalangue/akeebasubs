@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-class AkeebasubsTableCoupon extends FOFTable
+class AkeebasubsTableCoupon extends F0FTable
 {
 	public function check() {
 		$result = true;
@@ -71,7 +71,7 @@ class AkeebasubsTableCoupon extends FOFTable
 			} else {
 				$subscriptions = array();
 				foreach($subs as $id) {
-					$subObject = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+					$subObject = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 						->setId($id)
 						->getItem();
 					$id = null;

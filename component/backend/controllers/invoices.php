@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerInvoices extends FOFController
+class AkeebasubsControllerInvoices extends F0FController
 {
 	public function __construct($config = array())
 	{
@@ -32,7 +32,7 @@ class AkeebasubsControllerInvoices extends FOFController
 
 		// Check that this is the item's owner or an administrator
 		$user = JFactory::getUser();
-		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($item->akeebasubs_subscription_id);
+		$sub = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($item->akeebasubs_subscription_id);
 		if (!$this->checkACL('core.manage') && ($sub->user_id != $user->id))
 		{
 			return false;
@@ -131,7 +131,7 @@ class AkeebasubsControllerInvoices extends FOFController
 
 		// Post-action redirection
 		if($customURL = $this->input->get('returnurl','','string')) $customURL = base64_decode($customURL);
-		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
+		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.F0FInflector::pluralize($this->view);
 
 		if(!$status)
 		{
@@ -161,14 +161,14 @@ class AkeebasubsControllerInvoices extends FOFController
 		}
 
 		// (Re-)generate the invoice
-		$sub = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+		$sub = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->getItem($item->akeebasubs_subscription_id);
 
 		$status = ($model->createInvoice($sub) === true);
 
 		// Post-action redirection
 		if($customURL = $this->input->get('returnurl','','string')) $customURL = base64_decode($customURL);
-		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.FOFInflector::pluralize($this->view);
+		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.F0FInflector::pluralize($this->view);
 
 		if($status === false)
 		{

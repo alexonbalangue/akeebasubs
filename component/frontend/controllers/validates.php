@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerValidates extends FOFController
+class AkeebasubsControllerValidates extends F0FController
 {
 	public function __construct($config = array())
 	{

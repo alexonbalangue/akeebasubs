@@ -6,7 +6,7 @@
  */
 
 
-class AkeebasubsControllerReports extends FOFController
+class AkeebasubsControllerReports extends F0FController
 {
 	public function __construct($config = array())
 	{

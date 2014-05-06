@@ -38,7 +38,7 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 		if($paymentmethod != $this->ppName) return false;
 
 		// Set the payment status to Pending
-		$oSub = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$oSub = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->setId($subscription->akeebasubs_subscription_id)
 			->getItem();
 		$updates = array(

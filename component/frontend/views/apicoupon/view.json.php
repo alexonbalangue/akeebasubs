@@ -8,11 +8,11 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsViewApicoupon extends FOFViewJson
+class AkeebasubsViewApicoupon extends F0FViewJson
 {
 	public function onCreate($tpl = null)
 	{
-		$document = FOFPlatform::getInstance()->getDocument();
+		$document = F0FPlatform::getInstance()->getDocument();
 		if ($document instanceof JDocument)
 		{
 			if ($this->useHypermedia)

@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableReport extends FOFTable
+class AkeebasubsTableReport extends F0FTable
 {
 	protected $_tableExists = false;
 }

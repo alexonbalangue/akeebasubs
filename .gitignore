@@ -2,10 +2,8 @@
 /.settings
 .idea/*
 /Akeeba Subscriptions.esproj
-/relink.sh
 /release
 /nbproject
-/koowa
 
 /documentation/akeebasubs-guide.xml~
 /TODO
@@ -34,8 +32,8 @@ modules/admin/akeebasubs/language/en-GB
 
 /.tx/
 /tx_config
-
 /tx.sh
+
 /RELEASENOTES.html
 /DESCRIPTION.html
 /build/templates/release.json
@@ -48,3 +46,10 @@ _test
 /.idea
 plugins/akpayment/mobilpaycc/mobilpaycc/private/*.cer
 plugins/akpayment/mobilpaysms/mobilpaysms/private/*.cer
+
+/build/templates/release*.json
+/build/bin
+/build/phingext
+/build/buildlang
+/build/epub
+/build/tools

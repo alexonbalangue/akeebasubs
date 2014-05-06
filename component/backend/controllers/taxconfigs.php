@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerTaxconfigs extends FOFController
+class AkeebasubsControllerTaxconfigs extends F0FController
 {
 	public function execute($task) {
 		if(!in_array($task, array('main','apply'))) {

@@ -37,7 +37,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 	{
 		if($paymentmethod != $this->ppName) return false;
 
-		$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;
@@ -130,7 +130,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			$id = $data['sid'];
 			$subscription = null;
 			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
 				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
@@ -144,7 +144,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 		}
 
 		if($isValid && isset($data['token']) && isset($data['PayerID'])) {
-			$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
 
@@ -182,7 +182,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			parse_str($responseQuery, $responseData);
 			if(! preg_match('/^SUCCESS/', strtoupper($responseData['ACK']))) {
 				$isValid = false;
-                $level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+                $level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
                     ->setId($subscription->akeebasubs_level_id)
                     ->getItem();
 				$error_url = 'index.php?option='.JRequest::getCmd('option').
@@ -434,7 +434,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			$id = $recurring ? $data['rp_invoice_id'] : $data['invoice'];
 			$subscription = null;
 			if($id > 0) {
-				$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($id)
 					->getItem();
 				if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
@@ -550,7 +550,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			$oldData['notes'] = "Automatically renewed subscription on ".$jNow->toSql();
 
 			// Calculate new start/end time for the subscription
-			$allSubs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$allSubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->paystate('C')
 				->level($subscription->akeebasubs_level_id)
 				->user_id($subscription->user_id);
@@ -571,7 +571,7 @@ class plgAkpaymentPaypalproexpress extends plgAkpaymentAbstract
 			$updates['publish_down'] = $jEnd->toSql();
 
 			// Save the record for the old subscription
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->getTable();
 			$table->reset();
 			$table->bind($oldData);

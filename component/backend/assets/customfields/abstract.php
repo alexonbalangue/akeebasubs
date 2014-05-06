@@ -29,7 +29,7 @@ abstract class AkeebasubsCustomFieldAbstract
 		{
 			if (empty($this->fieldType))
 			{
-				$parts = FOFInflector::explode(get_called_class());
+				$parts = F0FInflector::explode(get_called_class());
 				$type = strtolower(array_pop($parts));
 				$config['field_type'] = $type;
 			}

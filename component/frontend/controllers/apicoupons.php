@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsControllerApicoupons extends FOFController
+class AkeebasubsControllerApicoupons extends F0FController
 {
 	public function __construct($config = array())
 	{

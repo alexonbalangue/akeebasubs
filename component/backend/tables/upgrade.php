@@ -7,16 +7,16 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableUpgrade extends FOFTable
+class AkeebasubsTableUpgrade extends F0FTable
 {
 	public function check() {
 		$result = true;
-		
+
 		if(empty($this->title)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_UPGRADE_ERR_TITLE'));
 			$result = false;
 		}
-				
+
 		if(empty($this->from_id)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_UPGRADE_ERR_FROM_ID'));
 			$result = false;
@@ -26,7 +26,7 @@ class AkeebasubsTableUpgrade extends FOFTable
 			$this->setError(JText::_('COM_AKEEBASUBS_UPGRADE_ERR_TO_ID'));
 			$result = false;
 		}
-		
+
 		if(empty($this->min_presence)) {
 			$data->min_presence = 0;
 		}
@@ -34,20 +34,20 @@ class AkeebasubsTableUpgrade extends FOFTable
 		if(empty($this->max_presence)) {
 			$data->max_presence = 36500;
 		}
-		
+
 		if(empty($this->type)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_UPGRADE_ERR_TYPE'));
 			$result = false;
 		}
-		
+
 		if(empty($this->value)) {
 			$this->setError(JText::_('COM_AKEEBASUBS_UPGRADE_ERR_VALUE'));
 			$result = false;
 		}
-		
+
 		return $result;
 	}
-	
+
 	function delete( $oid=null )
 	{
 		$joins = array(

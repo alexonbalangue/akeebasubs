@@ -19,7 +19,7 @@ $jNow = new JDate();
 if(count($this->items)) foreach($this->items as $subscription){
 	if(array_key_exists($subscription->akeebasubs_level_id, $subs)) continue;
 	if($subscription->enabled) {
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($subscription->akeebasubs_level_id)
 			->getItem();
 		if(is_object($level)) {

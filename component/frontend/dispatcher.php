@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsDispatcher extends FOFDispatcher
+class AkeebasubsDispatcher extends F0FDispatcher
 {
 	private $allowedViews = array(
 		'apicoupons', 'levels', 'messages', 'subscribes', 'subscriptions',
@@ -76,7 +76,7 @@ class AkeebasubsDispatcher extends FOFDispatcher
 			// Set the view, if it's allowed
 			$this->input->set('view', $view);
 
-			if (!in_array(FOFInflector::pluralize($view), $this->allowedViews))
+			if (!in_array(F0FInflector::pluralize($view), $this->allowedViews))
 			{
 				$result = false;
 			}

@@ -178,7 +178,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		}
 
 		// Get all of the user's subscriptions
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
@@ -416,7 +416,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		$this->addGroups = array();
 		$this->removeGroups = array();
 
-		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		if(!empty($levels))
 		{

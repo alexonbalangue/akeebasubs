@@ -328,7 +328,7 @@ JS;
 
 		JLoader::import('joomla.user.helper');
 		$slavesubs_ids = array();
-		$data          = $row instanceof FOFTable ? $row->getData() : (array)$row;
+		$data          = $row instanceof F0FTable ? $row->getData() : (array)$row;
 
 		// Let's look inside modified fields, is this a new slave, a removed one or I'm just renewing his subscription?
 		// Simply create new subscription, the user specified slaves while creating his subscription
@@ -355,7 +355,7 @@ JS;
 			JLoader::import('joomla.user.helper');
 			$slavesubs_ids = array();
 
-			if ($row instanceof FOFTable)
+			if ($row instanceof F0FTable)
 			{
 				$data = $row->getData();
 			}
@@ -457,7 +457,7 @@ JS;
 
 					if(isset($current['slavesubs_ids'][$index]))
 					{
-						$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 									->getItem($current['slavesubs_ids'][$index]);
 
 						if(!$table->enabled)
@@ -502,7 +502,7 @@ JS;
 			$params['slavesubs_ids'] = $slavesubs_ids;
 			$newdata = array_merge($data, array('params' => json_encode($params), '_dontNotify' => true));
 
-			$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 			$table->reset();
 			self::$dontFire = true;
 			$table->save($newdata);
@@ -520,7 +520,7 @@ JS;
 	public function onAKUserRefresh($user_id)
 	{
 		// Get all of the user's subscriptions
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
@@ -568,7 +568,7 @@ JS;
 		));
 
 		// Save the new subscription record
-		$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 
 		$table->reset();
 		$table->akeebasubs_subscription_id = 0;
@@ -584,7 +584,7 @@ JS;
 	{
 		self::$dontFire = true;
 
-		$table = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
+		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
 
 		// Set expiration one minute before, so it will be automatically unpublished
 		$expire = new JDate('-1 minutes');
@@ -654,7 +654,7 @@ JS;
 	{
 		$this->maxSlaves = array();
 
-		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$slavesKey = 'slavesubs_maxSlaves';
 

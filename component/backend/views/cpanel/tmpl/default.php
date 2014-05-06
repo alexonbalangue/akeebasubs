@@ -9,7 +9,10 @@
 defined('_JEXEC') or die();
 
 $this->loadHelper('cparams');
+
 ?>
+	<div id="updateNotice"></div>
+
 	<?php echo $this->loadTemplate('wizard'); ?>
 
 	<?php if(JComponentHelper::getParams('com_akeebasubs')->get('show2copromo',1)): ?>
@@ -64,7 +67,7 @@ $this->loadHelper('cparams');
 					<td width="50%"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_LASTYEAR')?></td>
 					<td align="right" width="25%">
 					<?php
-						echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since((gmdate('Y')-1).'-01-01 00:00:00')
 							->until((gmdate('Y')-1).'-12-31 23:59:59')
 							->nozero(1)
@@ -78,7 +81,7 @@ $this->loadHelper('cparams');
 					<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 					<?php endif; ?>
 					<?php echo  sprintf('%.02f',
-						FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since((gmdate('Y')-1).'-01-01')
 							->until((gmdate('Y')-1).'-12-31 23:59:59')
 							->moneysum(1)
@@ -95,7 +98,7 @@ $this->loadHelper('cparams');
 				<tr class="row1">
 					<td><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_THISYEAR')?></td>
 					<td align="right">
-						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						<?php echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since(gmdate('Y').'-01-01')
 							->until(gmdate('Y').'-12-31 23:59:59')
 							->nozero(1)
@@ -109,7 +112,7 @@ $this->loadHelper('cparams');
 						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 						<?php endif; ?>
 						<?php echo  sprintf('%.02f',
-							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 								->since(gmdate('Y').'-01-01')
 								->until(gmdate('Y').'-12-31 23:59:59')
 								->moneysum(1)
@@ -150,7 +153,7 @@ $this->loadHelper('cparams');
 							if($m < 1) $m = 1;
 							if($lmday < 1) $lmday = 1;
 						?>
-						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						<?php echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since($y.'-'.$m.'-01')
 							->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 							->nozero(1)
@@ -164,7 +167,7 @@ $this->loadHelper('cparams');
 						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 						<?php endif; ?>
 						<?php echo  sprintf('%.02f',
-							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 								->since($y.'-'.$m.'-01')
 								->until($y.'-'.$m.'-'.$lmday.' 23:59:59')
 								->moneysum(1)
@@ -197,7 +200,7 @@ $this->loadHelper('cparams');
 							}
 							if($lmday < 1) $lmday = 28;
 						?>
-						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						<?php echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since(gmdate('Y').'-'.gmdate('m').'-01')
 							->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 							->nozero(1)
@@ -211,7 +214,7 @@ $this->loadHelper('cparams');
 						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 						<?php endif; ?>
 						<?php echo  sprintf('%.02f',
-							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 								->since(gmdate('Y').'-'.gmdate('m').'-01')
 								->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 								->moneysum(1)
@@ -228,7 +231,7 @@ $this->loadHelper('cparams');
 				<tr class="row0">
 					<td width="50%"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_LAST7DAYS')?></td>
 					<td align="right" width="25%">
-						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						<?php echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since( gmdate('Y-m-d', time()-7*24*3600) )
 							->until( gmdate('Y-m-d') )
 							->nozero(1)
@@ -242,7 +245,7 @@ $this->loadHelper('cparams');
 						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 						<?php endif; ?>
 						<?php echo  sprintf('%.02f',
-							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 								->since( gmdate('Y-m-d', time()-7*24*3600) )
 								->until( gmdate('Y-m-d') )
 								->moneysum(1)
@@ -266,7 +269,7 @@ $this->loadHelper('cparams');
 						$yesterday = $date->format("Y-m-d");
 						$date->modify("+1 day")
 						?>
-						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						<?php echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since( $yesterday )
 							->until( $date->format("Y-m-d") )
 							->nozero(1)
@@ -280,7 +283,7 @@ $this->loadHelper('cparams');
 						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 						<?php endif; ?>
 						<?php echo  sprintf('%.02f',
-							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 								->since( $yesterday )
 								->until( $date->format("Y-m-d") )
 								->moneysum(1)
@@ -302,7 +305,7 @@ $this->loadHelper('cparams');
 							$expiry = clone $date;
 							$expiry->modify('+1 day');
 						?>
-						<?php echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						<?php echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since( $date->format("Y-m-d") )
 							->until( $expiry->format("Y-m-d") )
 							->nozero(1)
@@ -318,7 +321,7 @@ $this->loadHelper('cparams');
 						<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
 						<?php endif; ?>
 						<?php echo  sprintf('%.02f',
-							FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+							F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 								->since( $date->format("Y-m-d") )
 								->until( $expiry->format("Y-m-d") )
 								->nozero(1)
@@ -351,14 +354,14 @@ $this->loadHelper('cparams');
 						if($lmday < 1) $lmday = 28;
 						if($y < 2011) $y = 2011;
 						$daysin = gmdate('d');
-						$numsubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						$numsubs = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since(gmdate('Y').'-'.gmdate('m').'-01')
 							->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 							->nozero(1)
 							->nojoins(1)
 							->paystate('C')
 							->getTotal();
-						$summoney = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						$summoney = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->since(gmdate('Y').'-'.gmdate('m').'-01')
 							->until(gmdate('Y').'-'.gmdate('m').'-'.$lmday.' 23:59:59')
 							->nojoins(1)
@@ -403,7 +406,7 @@ $this->loadHelper('cparams');
 					<td width="70%" colspan="2"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_TOTALACTIVESUBSCRIBERS')?></td>
 					<td width="25%" align="right">
 					<?php
-						echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->getActiveSubscribers();
 					?>
 					</td>
@@ -412,7 +415,7 @@ $this->loadHelper('cparams');
 					<td width="70%" colspan="2"><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_TOTALACTIVESUBSCRIPTIONS')?></td>
 					<td width="25%" align="right">
 					<?php
-						echo FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						echo F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->paystate('C')
 							->nozero(1)
 							->nojoins(1)
@@ -425,7 +428,7 @@ $this->loadHelper('cparams');
 			</table>
 			<div style="clear: both;">&nbsp;</div>
 
-			<?php echo FOFTemplateUtils::loadPosition('akeebasubscriptionsstats') ?>
+			<?php echo F0FTemplateUtils::loadPosition('akeebasubscriptionsstats') ?>
 
 			<h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_OPERATIONS')?></h3>
 			<?php echo $this->loadTemplate('quickicons'); ?>
@@ -438,3 +441,23 @@ $this->loadHelper('cparams');
 			<?php echo $this->loadTemplate('footer'); ?>
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		(function($) {
+			$(document).ready(function(){
+				$.ajax('index.php?option=com_akeebasubs&view=cpanel&task=updateinfo&tmpl=component', {
+					success: function(msg, textStatus, jqXHR)
+					{
+						// Get rid of junk before and after data
+						var match = msg.match(/###([\s\S]*?)###/);
+						data = match[1];
+
+						if (data.length)
+						{
+							$('#updateNotice').html(data);
+						}
+					}
+				})
+			});
+		})(akeeba.jQuery);
+	</script>

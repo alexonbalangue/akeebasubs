@@ -28,13 +28,13 @@ else
 if (!version_compare($version, '5.3.0', '>='))
 	return;
 
-// Make sure FOF is loaded, otherwise do not run
-if (!defined('FOF_INCLUDED'))
+// Make sure F0F is loaded, otherwise do not run
+if (!defined('F0F_INCLUDED'))
 {
-	include_once JPATH_LIBRARIES . '/fof/include.php';
+	include_once JPATH_LIBRARIES . '/f0f/include.php';
 }
 
-if (!defined('FOF_INCLUDED') || !class_exists('FOFLess', true))
+if (!defined('F0F_INCLUDED') || !class_exists('F0FLess', true))
 {
 	return;
 }
@@ -120,8 +120,8 @@ class plgSystemAsexpirationcontrol extends JPlugin
 		$jNow	 = new JDate();
 		$now	 = $jNow->toUnix();
 
-		// Load a list of subscriptions which have to expire -- FOF does the rest magically!
-		$subs = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+		// Load a list of subscriptions which have to expire -- F0F does the rest magically!
+		$subs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->enabled(1)
 			->expires_to($jNow->toSql())
 			->getList();

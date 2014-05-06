@@ -156,7 +156,7 @@ class AkeebasubsHelperSelect
 
 		if (is_null($invoiceExtensions))
 		{
-			$source = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+			$source = F0FModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 				->getExtensions(0);
 			$invoiceExtensions = array();
 
@@ -384,7 +384,7 @@ class AkeebasubsHelperSelect
 
 	public static function subscriptionlevels($selected = null, $id = 'akeebasubs_level_id', $attribs = array())
 	{
-		$model = FOFModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
 
 		$options = array();
@@ -428,7 +428,7 @@ class AkeebasubsHelperSelect
 	 */
 	public static function levels($name = 'level', $selected = '', $attribs = array())
 	{
-		$list = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$list = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->savestate(0)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
@@ -498,7 +498,7 @@ class AkeebasubsHelperSelect
 		static $levels;
 
 		if(empty($levels)) {
-			$rawlevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$rawlevels = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->filter_order('ordering')
 				->filter_order_Dir('ASC')
 				->limit(0)
@@ -529,7 +529,7 @@ class AkeebasubsHelperSelect
  	public static function paymentmethods($name = 'paymentmethod', $selected = '', $attribs = array())
  	{
 		// Get the list of payment plugins
- 		$plugins = FOFModel::getTmpInstance('Subscribes','AkeebasubsModel')
+ 		$plugins = F0FModel::getTmpInstance('Subscribes','AkeebasubsModel')
 			->getPaymentPlugins();
 
 		// Load the component parameters helper
@@ -546,7 +546,7 @@ class AkeebasubsHelperSelect
 		if ($level_id > 0)
 		{
 			// Load the subscription level
-			$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->getItem($level_id);
 			$payment_plugins = $level->payment_plugins;
 			if (!empty($payment_plugins))
@@ -638,7 +638,7 @@ class AkeebasubsHelperSelect
 
 	public static function affiliates($selected = null, $id = 'akeebasubs_affiliate_id', $attribs = array())
 	{
-		$model = FOFModel::getTmpInstance('Affiliates','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Affiliates','AkeebasubsModel');
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
 
 		$options = array();
@@ -686,7 +686,7 @@ class AkeebasubsHelperSelect
 	 */
 	public static function levelgroups($selected = null, $id = 'akeebasubs_levelgroup_id', $attribs = array())
 	{
-		$model = FOFModel::getTmpInstance('Levelgroups','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levelgroups','AkeebasubsModel');
 		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
 
 		$options = array();
@@ -792,7 +792,7 @@ class AkeebasubsHelperSelect
 
 	public static function invoiceextensions($name = 'extension', $selected = '', $attribs = array())
 	{
-		$options = FOFModel::getTmpInstance('Invoices', 'AkeebasubsModel')
+		$options = F0FModel::getTmpInstance('Invoices', 'AkeebasubsModel')
 			->getExtensions(1);
 
 		$option = JHtml::_('select.option', '', '- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -');
@@ -846,7 +846,7 @@ class AkeebasubsHelperSelect
 // Load the states from the database
 function akeebasubsHelperSelect_init()
 {
-	$model = FOFModel::getTmpInstance('States', 'AkeebasubsModel');
+	$model = F0FModel::getTmpInstance('States', 'AkeebasubsModel');
 	$rawstates = $model->enabled(1)->orderByLabels(1)->getItemList(true);
 	$states = array();
 	$current_country = '';

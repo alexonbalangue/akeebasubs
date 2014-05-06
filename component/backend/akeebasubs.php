@@ -11,9 +11,9 @@ defined('_JEXEC') or die();
 // Include the component versioning
 require_once JPATH_COMPONENT_ADMINISTRATOR.'/version.php';
 
-// Include FOF
-include_once JPATH_LIBRARIES.'/fof/include.php';
-if(!defined('FOF_INCLUDED')) {?>
+// Include F0F
+include_once JPATH_LIBRARIES.'/f0f/include.php';
+if(!defined('F0F_INCLUDED')) {?>
 <h1>Akeeba Subscriptions</h1>
 <h2>Incomplete installation detected</h2>
 <p>
@@ -61,4 +61,4 @@ if(version_compare(phpversion(), '5.3.0', 'lt')) {
 <?php return; }
 
 // Dispatch
-FOFDispatcher::getTmpInstance('com_akeebasubs')->dispatch();
+F0FDispatcher::getTmpInstance('com_akeebasubs')->dispatch();

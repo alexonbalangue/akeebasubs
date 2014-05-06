@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsDispatcher extends FOFDispatcher
+class AkeebasubsDispatcher extends F0FDispatcher
 {
 
 	public function onBeforeDispatch()
@@ -18,7 +18,7 @@ class AkeebasubsDispatcher extends FOFDispatcher
 		{
 			require_once JPATH_ADMINISTRATOR . '/components/' . $this->component . '/helpers/jsonlib.php';
 		}
-		
+
 		$result = parent::onBeforeDispatch();
 
 		if ($result)

@@ -306,7 +306,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 
 	public function onAKUserRefresh($user_id)
 	{
-		$mergedData = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+		$mergedData = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->getMergedData($user_id);
 
 		if (!property_exists($mergedData, 'akeebasubs_user_id'))
@@ -316,7 +316,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 
 		$akeebasubs_user_id = $mergedData->akeebasubs_user_id;
 
-		$userData = FOFModel::getTmpInstance('Users', 'AkeebasubsModel')
+		$userData = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
 			->getItem($akeebasubs_user_id);
 
 		$this->onAKUserSaveData($userData);

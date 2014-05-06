@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsViewMessage extends FOFViewHtml
+class AkeebasubsViewMessage extends F0FViewHtml
 {
 	protected function onRead($tpl = null)
 	{

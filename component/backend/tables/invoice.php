@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsTableInvoice extends FOFTable
+class AkeebasubsTableInvoice extends F0FTable
 {
 	function __construct( $table, $key, &$db )
 	{

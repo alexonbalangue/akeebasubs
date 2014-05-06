@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsViewTaxconfigs extends FOFViewHtml
+class AkeebasubsViewTaxconfigs extends F0FViewHtml
 {
 	public function onMain($tpl = null) {
 		return true;

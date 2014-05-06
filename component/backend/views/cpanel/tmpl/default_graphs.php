@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-FOFTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
+F0FTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jquery.jqplot.min.js?'.AKEEBASUBS_VERSIONHASH);
@@ -44,7 +44,7 @@ $graphDayTo = gmdate('Y-m-d', time());
 
 <h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_SALES') ?></h3>
 <div id="aksaleschart">
-	<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber" />
+	<img src="<?php echo F0FTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber" />
 	<p id="aksaleschart-nodata" style="display:none">
 		<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_NODATA')?>
 	</p>
@@ -54,7 +54,7 @@ $graphDayTo = gmdate('Y-m-d', time());
 
 <h3><?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_LEVELSTATS') ?></h3>
 <div id="aklevelschart">
-	<img src="<?php echo FOFTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber2" />
+	<img src="<?php echo F0FTemplateUtils::parsePath('media://com_akeebasubs/images/throbber.gif')?>" id="akthrobber2" />
 	<p id="aklevelschart-nodata" style="display:none">
 		<?php echo JText::_('COM_AKEEBASUBS_DASHBOARD_STATS_NODATA')?>
 	</p>

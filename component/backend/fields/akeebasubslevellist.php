@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 /**
  * Renders the price of a subscription level and its optional sign-up fee
  */
-class FOFFormFieldAkeebasubslevellist extends FOFFormFieldText
+class F0FFormFieldAkeebasubslevellist extends F0FFormFieldText
 {
 	/**
 	 * Get the rendering of this field type for a repeatable (grid) display,
@@ -44,7 +44,7 @@ class FOFFormFieldAkeebasubslevellist extends FOFFormFieldText
 		static $levels;
 
 		if(empty($levels)) {
-			$levelsList = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$levelsList = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->getItemList(true);
 			if(!empty($levelsList)) foreach($levelsList as $level) {
 				$levels[$level->akeebasubs_level_id] = $level->title;

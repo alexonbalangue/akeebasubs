@@ -8,17 +8,17 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-class AkeebasubsViewMakecoupons extends FOFViewHtml
+class AkeebasubsViewMakecoupons extends F0FViewHtml
 {
 	public function onOverview($tpl = null) {
 		$model = $this->getModel();
-		
+
 		$session = JFactory::getSession();
 		$coupons = $session->get('makecoupons.coupons', false, 'com_akeebasubs');
 		$session->set('makecoupons.coupons', null, 'com_akeebasubs');
-		
+
 		$this->assignRef('coupons',		$coupons);
-		
+
 		return true;
 	}
 }

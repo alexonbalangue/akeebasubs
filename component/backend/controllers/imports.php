@@ -8,12 +8,12 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die;
 
-class AkeebasubsControllerImports extends FOFController
+class AkeebasubsControllerImports extends F0FController
 {
 	public function import()
 	{
 		$app       = JFactory::getApplication();
-		$model     = FOFModel::getTmpInstance('Imports', 'AkeebasubsModel');
+		$model     = F0FModel::getTmpInstance('Imports', 'AkeebasubsModel');
 		$file      = JRequest::getVar('csvfile', '', 'FILES');
 		$delimiter = $this->input->getInt('csvdelimiters', 0);
 		$field     = $this->input->getString('field_delimiter', '');
