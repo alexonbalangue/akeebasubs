@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 4.0.2
+================================================================================
++ Added support for automatic update notification and installation
+
 Akeeba Subscriptions 4.0.1
 ================================================================================
 + Show update information in the component's control panel page
