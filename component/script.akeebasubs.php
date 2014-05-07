@@ -265,6 +265,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	 */
 	protected $cliScriptFiles = array(
 		'akeebasubs-expiration-notify.php',
+		'akeebasubs-update.php',
 	);
 
 	/**
