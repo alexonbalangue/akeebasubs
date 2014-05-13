@@ -69,7 +69,7 @@ class AkeebasubsHelperMessage
 		// Create and replace merge tags for custom per-subscription data. Format [SUBCUSTOM:KEYNAME]
 		if(array_key_exists('params', $subData)) {
 			if(is_string($subData['params'])) {
-				$custom = json_decode($subData['params']);
+				$custom = json_decode($subData['params'], true);
 			} elseif(is_array($subData['params'])) {
 				$custom = $subData['params'];
 			} elseif(is_object($subData['params'])) {
