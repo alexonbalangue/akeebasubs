@@ -53,3 +53,5 @@ plugins/akpayment/mobilpaysms/mobilpaysms/private/*.cer
 /build/buildlang
 /build/epub
 /build/tools
+
+/_experiments

@@ -132,6 +132,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
                 'com_akeebasubs'        => 1
             ),
 			'system' => array(
+				'as2cocollation'		=> 0,
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
 				'aslogoutuser'			=> 0,
