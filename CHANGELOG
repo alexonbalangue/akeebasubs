@@ -4,6 +4,7 @@ Akeeba Subscriptions 4.0.2
 + Added support for automatic update notification and installation
 + 2Checkout collation plugin, works around missing / invalid IPNs from 2Checkout
 # [MEDIUM] gh-43 Custom field parsing doesn't work properly when regenerating an invoice
+# [LOW] The PayMill API didn't use our cacert.pem
 
 Akeeba Subscriptions 4.0.1
 ================================================================================
