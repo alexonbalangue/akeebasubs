@@ -161,7 +161,21 @@ $now_timestamp = $jDate->toUnix();
 			<td>
 				<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />
 			</td>
-			<td></td>
+			<td>
+				<input type="text" name="subid" id="subid"
+				   value="<?php echo $this->escape($this->getModel()->getState('subid',''));?>"
+				   class="input-mini" onchange="document.adminForm.submit();"
+				   placeholder="<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID') ?>"
+				/>
+				<br/>
+				<button class="btn btn-mini" onclick="this.form.submit();">
+					<?php echo JText::_('JSEARCH_FILTER'); ?>
+				</button>
+				<br/>
+				<button class="btn btn-mini" onclick="document.adminForm.subid.value='';this.form.submit();">
+					<?php echo JText::_('JSEARCH_RESET'); ?>
+				</button>
+			</td>
 			<td>
 				<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->getModel()->getState('level',''), 'level', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 			</td>
@@ -313,12 +327,12 @@ $now_timestamp = $jDate->toUnix();
 				<?php if($subscription->akeebasubs_coupon_id > 0):?>
 				<span class="akeebasubs-subscription-discount-coupon" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_COUPON') ?>">
 					<span class="discount-icon"></span>
-					<?php echo $this->escape($coupons[$subscription->akeebasubs_coupon_id]) ?>
+					<?php echo isset($coupons[$subscription->akeebasubs_coupon_id]) ? $this->escape($coupons[$subscription->akeebasubs_coupon_id]) : '&mdash;' ?>
 				</span>
 				<?php elseif($subscription->akeebasubs_upgrade_id > 0):?>
 				<span class="akeebasubs-subscription-discount-upgrade" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_UPGRADE') ?>">
 					<span class="discount-icon"></span>
-					<?php echo $this->escape($upgrades[$subscription->akeebasubs_upgrade_id]) ?>
+					<?php echo isset($upgrades[$subscription->akeebasubs_upgrade_id]) ? $this->escape($upgrades[$subscription->akeebasubs_upgrade_id]) : '&mdash;' ?>
 				</span>
 				<?php else: ?>
 				<span class="akeebasubs-subscription-discount-none">

@@ -3,6 +3,7 @@ Akeeba Subscriptions 4.1.0
 ================================================================================
 + Added support for automatic update notification and installation
 + 2Checkout collation plugin, works around missing / invalid IPNs from 2Checkout
++ Option to filter subscriptions list by subscription ID
 - The Affiliates feature is now removed
 - The Import Data feature is now removed
 ~ Replacing legacy mooTools code with jQuery

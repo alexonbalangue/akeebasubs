@@ -15,6 +15,7 @@ class AkeebasubsModelSubscriptions extends F0FModel
 		$enabled = $this->getState('enabled','','cmd');
 
 		return (object)array(
+			'subid'			=> $this->getState('subid', 0, 'int'),
 			'search'		=> $this->getState('search',null,'string'),
 			'title'			=> $this->getState('title',null,'string'),
 			'enabled'		=> $enabled,
@@ -227,6 +228,13 @@ class AkeebasubsModelSubscriptions extends F0FModel
 		}
 
 		JLoader::import('joomla.utilities.date');
+
+		if ($state->subid)
+		{
+			$query->where(
+				$db->qn('tbl') . '.' . $db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($state->subid)
+			);
+		}
 
 		if($state->paystate) {
 			$states_temp = explode(',', $state->paystate);
