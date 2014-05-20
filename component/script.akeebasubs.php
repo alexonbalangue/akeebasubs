@@ -241,6 +241,12 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			// 'administrator/components/com_akeebasubs/view/invoices/tmpl/default.php',
 			// 'administrator/components/com_akeebasubs/view/taxrules/tmpl/default.php',
 
+			// Affiliates feature
+			'administrator/components/com_akeebasubs/fields/akeebasubsaffiliatesowed.php',
+			'administrator/components/com_akeebasubs/models/affiliates.php',
+			'administrator/components/com_akeebasubs/models/affpayments.php',
+			'administrator/components/com_akeebasubs/tables/affiliate.php',
+			'administrator/components/com_akeebasubs/tables/affpayment.php',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
@@ -256,6 +262,12 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			'administrator/components/com_akeebasubs/views/dashboard',
 			'components/com_akeebasubs/templates',
 			'components/com_akeebasubs/controllers/behaviors',
+
+			// Affiliates feature
+			'administrator/components/com_akeebasubs/views/affiliate',
+			'administrator/components/com_akeebasubs/views/affiliates',
+			'administrator/components/com_akeebasubs/views/affpayment',
+			'administrator/components/com_akeebasubs/views/affpayments',
 		)
 	);
 

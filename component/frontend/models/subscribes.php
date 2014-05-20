@@ -2019,25 +2019,6 @@ class AkeebasubsModelSubscribes extends F0FModel
 		$jEndDate = new JDate($endDate);
 		$mEndDate = $jEndDate->toSql();
 
-		// Get the affiliate ID and make sure it exists and that it's enabled
-		$session = JFactory::getSession();
-		$affid = $session->get('affid', 0, 'com_akeebasubs');
-		if($affid > 0) {
-			$affiliate = F0FModel::getTmpInstance('Affiliates','AkeebasubsModel')
-				->setId($affid)
-				->getItem();
-			if($affiliate->akeebasubs_affiliate_id == $affid) {
-				if(!$affiliate->enabled) $affid = 0;
-			} else {
-				$affid = 0;
-			}
-		}
-
-		$aff_comission = 0;
-		if($affid > 0) {
-			$aff_comission = $validation->price->net * $affiliate->comission / 100;
-		}
-
 		// Store the price validation's "oldsub" and "expiration" keys in
 		// the subscriptions subcustom array
 		$subcustom = $state->subcustom;
@@ -2085,8 +2066,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 			'discount_amount'		=> $validation->price->discount,
 			'first_contact'			=> '0000-00-00 00:00:00',
 			'second_contact'		=> '0000-00-00 00:00:00',
-			'akeebasubs_affiliate_id' => $affid,
-			'affiliate_comission'	=> $aff_comission
+			'akeebasubs_affiliate_id' => 0,
+			'affiliate_comission'	=> 0
 		);
 
 		$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
