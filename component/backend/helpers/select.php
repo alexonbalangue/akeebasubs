@@ -824,6 +824,26 @@ class AkeebasubsHelperSelect
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
+
+	public static function processors($selected = null, $name = 'processor', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option', '', '- '.JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR').' -');
+
+		/** @var AkeebasubsModelSubscribes $model */
+		$model = F0FModel::getTmpInstance('Subscribes', 'AkeebasubsModel');
+		$paymentPlugins = $model->getPaymentPlugins();
+
+		if (!empty($paymentPlugins))
+		{
+			foreach ($paymentPlugins as $paymentPlugin)
+			{
+				$options[] = JHTML::_('select.option', $paymentPlugin->name, $paymentPlugin->title);
+			}
+		}
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
 }
 
 // Load the states from the database

@@ -197,6 +197,8 @@ $now_timestamp = $jDate->toUnix();
 			<td  colspan="2">
 				<?php echo AkeebasubsHelperSelect::paystates($this->getModel()->getState('paystate',''), 'paystate', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 
+				<?php echo AkeebasubsHelperSelect::processors($this->getModel()->getState('processor',''), 'processor', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
+
 				<input type="text" name="paykey" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('paykey',''));?>"
 					onchange="document.adminForm.submit();"
