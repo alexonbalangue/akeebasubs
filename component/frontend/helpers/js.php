@@ -25,7 +25,7 @@ class AkeebasubsHelperJs
 
 		$selectors = implode(',', self::$selectors);
 
-		$javascript = <<<ENDJS
+		$javascript = <<<JS
 
 
 // Akeeba Subscriptions --- START >> >> >>
@@ -68,7 +68,7 @@ akeeba.jQuery(document).ready(function(){
 })
 // Akeeba Subscriptions --- END << << <<
 
-ENDJS;
+JS;
 
 		JFactory::getDocument()->addScriptDeclaration($javascript);
 	}

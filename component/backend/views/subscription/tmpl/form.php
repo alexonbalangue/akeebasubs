@@ -240,27 +240,14 @@ function jSelectUser_userid(id, username)
 	}
 }
 
-window.addEvent("domready", function() {
-	// @todo Remove mooTools code – it's deprecated as of Joomla! 3.3
-	$$("button.modal").each(function(el) {
-		el.addEvent("click", function(e) {
-			try {
-				new Event(e).stop();
-			} catch(anotherMTUpgradeIssue) {
-				try {
-					e.stop();
-				} catch(WhateverIsWrongWithYouIDontCare) {
-					try {
-						DOMEvent(e).stop();
-					} catch(NoBleepinWay) {
-						alert('If you see this message, your copy of Joomla! is FUBAR');
-					}
-				}
-			}
-			SqueezeBox.fromElement($('userselect'), {
+(function($){
+	$(document).ready(function(){
+		$('button.modal').click(function(e){
+			SqueezeBox.fromElement(document.getElementById('userselect'), {
 				parse: 'rel'
 			});
-		});
-	});
-});
+			return false;
+		})
+	})
+})(akeeba.jQuery);
 </script>
