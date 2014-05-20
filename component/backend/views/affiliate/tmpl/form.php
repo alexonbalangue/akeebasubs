@@ -79,6 +79,7 @@ function jSelectUser_userid(id, username)
 	}
 }
 window.addEvent("domready", function() {
+	// @todo Remove mooTools code – it's deprecated as of Joomla! 3.3
 	$$("button.modal").each(function(el) {
 		el.addEvent("click", function(e) {
 			try {

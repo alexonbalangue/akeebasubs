@@ -1,8 +1,9 @@
 <?php die(); ?>
-Akeeba Subscriptions 4.0.2
+Akeeba Subscriptions 4.1.0
 ================================================================================
 + Added support for automatic update notification and installation
 + 2Checkout collation plugin, works around missing / invalid IPNs from 2Checkout
+~ Replacing legacy mooTools code with jQuery
 # [MEDIUM] gh-43 Custom field parsing doesn't work properly when regenerating an invoice
 # [MEDIUM] The PayMill plugin was broken under Joomla! 3.3
 

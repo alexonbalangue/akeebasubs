@@ -177,11 +177,12 @@ $this->loadHelper('params');
 </form>
 
 <script type="text/javascript">
-	window.addEvent("domready", function() {
-		akeebasubs_relations_mode_onChange();
-	});
+	(function($) {
+		$(document).ready(function(){
+			akeebasubs_relations_mode_onChange();
+		});
+	})(akeeba.jQuery);
 
-	
 	function akeebasubs_relations_mode_onChange()
 	{
 		(function($) {
