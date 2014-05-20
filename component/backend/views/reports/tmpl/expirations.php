@@ -7,11 +7,7 @@
 
 defined('_JEXEC') or die;
 
-if(version_compare(JVERSION, '3.0', 'ge')){
-	JHTML::_('behavior.framework');
-}else{
-	JHTML::_('behavior.mootools');
-}
+JHTML::_('behavior.framework', true);
 
 F0FTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 

@@ -9,11 +9,7 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.tooltip');
-if(version_compare(JVERSION, '3.0', 'ge')) {
-	JHTML::_('behavior.framework');
-} else {
-	JHTML::_('behavior.mootools');
-}
+JHTML::_('behavior.framework', true);
 JHTML::_('behavior.modal');
 
 $this->loadHelper('cparams');

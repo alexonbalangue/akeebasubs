@@ -47,11 +47,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 
-if(version_compare(JVERSION, '3.0', 'ge')) {
-	JHTML::_('behavior.framework');
-} else {
-	JHTML::_('behavior.mootools');
-}
+JHTML::_('behavior.framework', true);
 
 if(isset($this->item)) {
 	$akeebasubs_subscription_level = $this->item->akeebasubs_level_id;
