@@ -247,6 +247,10 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			'administrator/components/com_akeebasubs/models/affpayments.php',
 			'administrator/components/com_akeebasubs/tables/affiliate.php',
 			'administrator/components/com_akeebasubs/tables/affpayment.php',
+
+			// Import data
+			'administrator/components/com_akeebasubs/controllers/tools.php',
+			'administrator/components/com_akeebasubs/models/tools.php',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
@@ -268,6 +272,10 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			'administrator/components/com_akeebasubs/views/affiliates',
 			'administrator/components/com_akeebasubs/views/affpayment',
 			'administrator/components/com_akeebasubs/views/affpayments',
+
+			// Import data
+			'administrator/components/com_akeebasubs/converter',
+			'administrator/components/com_akeebasubs/views/tools',
 		)
 	);
 

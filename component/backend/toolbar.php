@@ -32,7 +32,6 @@ class AkeebasubsToolbar extends F0FToolbar
 				'apicoupons'
 			),
 			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array(
-				'tools',
 				'import',
 				'users'
 			),
