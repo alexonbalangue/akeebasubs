@@ -170,7 +170,14 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 					$_SERVER['argv'] = $argv;
 				}
 
-				$this->input = new JInputCli();
+				if (class_exists('JInputCLI'))
+				{
+					$this->input = new JInputCLI();
+				}
+				else
+				{
+					$this->input = new JInputCli();
+				}
 			}
 		}
 
