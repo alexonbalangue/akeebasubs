@@ -171,7 +171,7 @@ class AkeebaSubscriptionsUpdateApp extends JApplicationCli
 					$_SERVER['argv'] = $argv;
 				}
 
-				$this->input = new JInputCLI();
+				$this->input = new JInputCli();
 			}
 		}
 
