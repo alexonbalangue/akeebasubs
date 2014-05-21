@@ -33,7 +33,7 @@ abstract class plgAkeebasubsAbstract extends JPlugin
 			$config['params'] = new JRegistry($config['params']);
 		}
 
-		parent::__construct($subject, $name, $config);
+		parent::__construct($subject, $config);
 
 		if (is_array($name))
 		{
