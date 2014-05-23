@@ -1,6 +1,8 @@
 <?php die(); ?>
 Akeeba Subscriptions 4.1.0
 ================================================================================
+! CLI scripts were not being copied over
+! The PayMill payment plugin wasn't working on Joomla! 3.3 due to removal of mooTools
 + Added support for automatic update notification and installation
 + 2Checkout collation plugin, works around missing / invalid IPNs from 2Checkout
 + Option to filter subscriptions list by subscription ID
