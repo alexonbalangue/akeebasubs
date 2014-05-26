@@ -27,7 +27,7 @@ class AkeebasubsHelperSelect
 		'CF' =>'Central African Republic', 'CG' =>'Congo', 'CH' =>'Switzerland',
 		'CI' =>'Cote d\'Ivoire', 'CK' =>'Cook Islands', 'CL' =>'Chile',
 		'CM' =>'Cameroon', 'CN' =>'China', 'CO' =>'Colombia', 'CR' =>'Costa Rica',
-		'CU' =>'Cuba', 'CV' =>'Cape Verde', 'CX' =>'Christmas Island', 'CY' =>'Cyprus',
+		'CU' =>'Cuba', 'CW' => 'Curaçao', 'CV' =>'Cape Verde', 'CX' =>'Christmas Island', 'CY' =>'Cyprus',
 		'CZ' =>'Czech Republic', 'DE' =>'Germany', 'DJ' =>'Djibouti', 'DK' =>'Denmark',
 		'DM' =>'Dominica', 'DO' =>'Dominican Republic', 'DZ' =>'Algeria',
 		'EC' =>'Ecuador', 'EE' =>'Estonia', 'EG' =>'Egypt', 'EH' =>'Western Sahara',
@@ -71,7 +71,7 @@ class AkeebasubsHelperSelect
 		'SG' =>'Singapore', 'SH' =>'Saint Helena, Ascension and Tristan da Cunha',
 		'SI' =>'Slovenia', 'SJ' =>'Svalbard and Jan Mayen', 'SK' =>'Slovakia',
 		'SL' =>'Sierra Leone', 'SM' =>'San Marino', 'SN' =>'Senegal', 'SO' =>'Somalia',
-		'SR' =>'Suriname', 'ST' =>'Sao Tome and Principe', 'SV' =>'El Salvador',
+		'SR' =>'Suriname', 'ST' =>'Sao Tome and Principe', 'SV' =>'El Salvador', 'SX' => 'Sint Maarten'
 		'SY' =>'Syrian Arab Republic', 'SZ' =>'Swaziland', 'TC' =>'Turks and Caicos Islands',
 		'TD' =>'Chad', 'TF' =>'French Southern Territories', 'TG' =>'Togo',
 		'TH' =>'Thailand', 'TJ' =>'Tajikistan', 'TK' =>'Tokelau', 'TL' =>'Timor-Leste',
