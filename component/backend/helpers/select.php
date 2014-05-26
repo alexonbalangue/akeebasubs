@@ -27,7 +27,7 @@ class AkeebasubsHelperSelect
 		'CF' =>'Central African Republic', 'CG' =>'Congo', 'CH' =>'Switzerland',
 		'CI' =>'Cote d\'Ivoire', 'CK' =>'Cook Islands', 'CL' =>'Chile',
 		'CM' =>'Cameroon', 'CN' =>'China', 'CO' =>'Colombia', 'CR' =>'Costa Rica',
-		'CU' =>'Cuba', 'CW' => 'Curaçao', 'CV' =>'Cape Verde', 'CX' =>'Christmas Island', 'CY' =>'Cyprus',
+		'CU' =>'Cuba', 'CV' =>'Cape Verde', 'CW' => 'Curaçao', 'CX' =>'Christmas Island', 'CY' =>'Cyprus',
 		'CZ' =>'Czech Republic', 'DE' =>'Germany', 'DJ' =>'Djibouti', 'DK' =>'Denmark',
 		'DM' =>'Dominica', 'DO' =>'Dominican Republic', 'DZ' =>'Algeria',
 		'EC' =>'Ecuador', 'EE' =>'Estonia', 'EG' =>'Egypt', 'EH' =>'Western Sahara',
