@@ -33,7 +33,10 @@
 		<include name="frontend/**" />
 		<include name="language/**" />
 		<include name="media/**" />
-		<include name="strapper/**" />
+
+        <include name="strapper/**" />
+        <exclude name="strapper/sources**" />
+
 		<include name="*" />
 
 		<exclude name="backend/invoices/*.pdf" />
