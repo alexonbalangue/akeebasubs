@@ -695,6 +695,6 @@ class AkeebasubsModelSubscriptions extends F0FModel
 			}
 		}
 
-		return true;
+		return parent::onBeforeSave($data, $table);
 	}
 }
