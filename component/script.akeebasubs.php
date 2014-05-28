@@ -251,19 +251,6 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			// Import data
 			'administrator/components/com_akeebasubs/controllers/tools.php',
 			'administrator/components/com_akeebasubs/models/tools.php',
-
-			// Obsolete Akeeba Strapper files
-			'media/akeeba_strapper/css/bootstrap.j25.css',
-			'media/akeeba_strapper/css/bootstrap.j3.css',
-			'media/akeeba_strapper/css/bootstrap.j32.css',
-			'media/akeeba_strapper/css/bootstrap.min.css',
-			'media/akeeba_strapper/css/strapper.css',
-			'media/akeeba_strapper/css/smoothness/theme.css',
-			'media/akeeba_strapper/js/akeebajq.js',
-			'media/akeeba_strapper/js/akeebajqui.js',
-			'media/akeeba_strapper/js/akjqmigrate.js',
-			'media/akeeba_strapper/js/bootstrap.js',
-			'media/akeeba_strapper/js/namespace.js',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
