@@ -9,11 +9,7 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.tooltip');
-if(version_compare(JVERSION, '3.0', 'ge')) {
-	JHTML::_('behavior.framework');
-} else {
-	JHTML::_('behavior.mootools');
-}
+JHTML::_('behavior.framework', true);
 JHTML::_('behavior.modal');
 
 $this->loadHelper('cparams');
@@ -192,27 +188,15 @@ function jSelectUser_userid(id, username)
 		SqueezeBox.close();
 	}
 }
-window.addEvent("domready", function() {
-	$$("button.modal").each(function(el) {
-		el.addEvent("click", function(e) {
-			try {
-				new Event(e).stop();
-			} catch(anotherMTUpgradeIssue) {
-				try {
-					e.stop();
-				} catch(WhateverIsWrongWithYouIDontCare) {
-					try {
-						DOMEvent(e).stop();
-					} catch(NoBleepinWay) {
-						alert('If you see this message, your copy of Joomla! is FUBAR');
-					}
-				}
-			}
-			SqueezeBox.fromElement($('userselect'));
-			SqueezeBox.fromElement($('userselect'), {
+
+(function($){
+	$(document).ready(function(){
+		$('button.modal').click(function(e){
+			SqueezeBox.fromElement(document.getElementById('userselect'), {
 				parse: 'rel'
 			});
-		});
-	});
-});
+			return false;
+		})
+	})
+})(akeeba.jQuery);
 </script>

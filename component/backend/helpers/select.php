@@ -13,7 +13,7 @@ class AkeebasubsHelperSelect
 		'' => '----',
 		'AD' =>'Andorra', 'AE' =>'United Arab Emirates', 'AF' =>'Afghanistan',
 		'AG' =>'Antigua and Barbuda', 'AI' =>'Anguilla', 'AL' =>'Albania',
-		'AM' =>'Armenia', 'AN' =>'Netherlands Antilles', 'AO' =>'Angola',
+		'AM' =>'Armenia', 'AO' =>'Angola',
 		'AQ' =>'Antarctica', 'AR' =>'Argentina', 'AS' =>'American Samoa',
 		'AT' =>'Austria', 'AU' =>'Australia', 'AW' =>'Aruba',
 		'AX' =>'Aland Islands', 'AZ' =>'Azerbaijan', 'BA' =>'Bosnia and Herzegovina',
@@ -21,13 +21,14 @@ class AkeebasubsHelperSelect
 		'BF' =>'Burkina Faso', 'BG' =>'Bulgaria', 'BH' =>'Bahrain',
 		'BI' =>'Burundi', 'BJ' =>'Benin', 'BL' =>'Saint Barthélemy',
 		'BM' =>'Bermuda', 'BN' =>'Brunei Darussalam', 'BO' =>'Bolivia, Plurinational State of',
+		'BQ' => 'Bonaire, Saint Eustatius and Saba',
 		'BR' =>'Brazil', 'BS' =>'Bahamas', 'BT' =>'Bhutan', 'BV' =>'Bouvet Island',
 		'BW' =>'Botswana', 'BY' =>'Belarus', 'BZ' =>'Belize', 'CA' =>'Canada',
 		'CC' =>'Cocos (Keeling) Islands', 'CD' =>'Congo, the Democratic Republic of the',
 		'CF' =>'Central African Republic', 'CG' =>'Congo', 'CH' =>'Switzerland',
 		'CI' =>'Cote d\'Ivoire', 'CK' =>'Cook Islands', 'CL' =>'Chile',
 		'CM' =>'Cameroon', 'CN' =>'China', 'CO' =>'Colombia', 'CR' =>'Costa Rica',
-		'CU' =>'Cuba', 'CV' =>'Cape Verde', 'CX' =>'Christmas Island', 'CY' =>'Cyprus',
+		'CU' =>'Cuba', 'CV' =>'Cape Verde', 'CW' => 'Curaçao', 'CX' =>'Christmas Island', 'CY' =>'Cyprus',
 		'CZ' =>'Czech Republic', 'DE' =>'Germany', 'DJ' =>'Djibouti', 'DK' =>'Denmark',
 		'DM' =>'Dominica', 'DO' =>'Dominican Republic', 'DZ' =>'Algeria',
 		'EC' =>'Ecuador', 'EE' =>'Estonia', 'EG' =>'Egypt', 'EH' =>'Western Sahara',
@@ -71,7 +72,7 @@ class AkeebasubsHelperSelect
 		'SG' =>'Singapore', 'SH' =>'Saint Helena, Ascension and Tristan da Cunha',
 		'SI' =>'Slovenia', 'SJ' =>'Svalbard and Jan Mayen', 'SK' =>'Slovakia',
 		'SL' =>'Sierra Leone', 'SM' =>'San Marino', 'SN' =>'Senegal', 'SO' =>'Somalia',
-		'SR' =>'Suriname', 'ST' =>'Sao Tome and Principe', 'SV' =>'El Salvador',
+		'SR' =>'Suriname', 'ST' =>'Sao Tome and Principe', 'SV' =>'El Salvador', 'SX' => 'Sint Maarten',
 		'SY' =>'Syrian Arab Republic', 'SZ' =>'Swaziland', 'TC' =>'Turks and Caicos Islands',
 		'TD' =>'Chad', 'TF' =>'French Southern Territories', 'TG' =>'Togo',
 		'TH' =>'Thailand', 'TJ' =>'Tajikistan', 'TK' =>'Tokelau', 'TL' =>'Timor-Leste',
@@ -636,23 +637,6 @@ class AkeebasubsHelperSelect
 		}
  	}
 
-	public static function affiliates($selected = null, $id = 'akeebasubs_affiliate_id', $attribs = array())
-	{
-		$model = F0FModel::getTmpInstance('Affiliates','AkeebasubsModel');
-		$items = $model->savestate(0)->limit(0)->limitstart(0)->getItemList();
-
-		$options = array();
-
-		if(count($items)) foreach($items as $item)
-		{
-			$options[] = JHTML::_('select.option',$item->akeebasubs_affiliate_id, $item->username);
-		}
-
-		array_unshift($options, JHTML::_('select.option',0,'- '.JText::_('COM_AKEEBASUBS_COMMON_AFFILIATE').' -'));
-
-		return self::genericlist($options, $id, $attribs, $selected, $id);
-	}
-
 	/**
 	 * Drop down list of payment states
 	 */
@@ -838,6 +822,26 @@ class AkeebasubsHelperSelect
 		$options[] = JHTML::_('select.option', '1', JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_CREATION_LIMIT'));
 		$options[] = JHTML::_('select.option', '2',  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_SUBSCRIPTION_LIMIT'));
 		$options[] = JHTML::_('select.option', '3',  JText::_('COM_AKEEBASUBS_APICOUPONS_FIELD_VALUE_LIMIT'));
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+
+	public static function processors($selected = null, $name = 'processor', $attribs = array())
+	{
+		$options = array();
+		$options[] = JHTML::_('select.option', '', '- '.JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR').' -');
+
+		/** @var AkeebasubsModelSubscribes $model */
+		$model = F0FModel::getTmpInstance('Subscribes', 'AkeebasubsModel');
+		$paymentPlugins = $model->getPaymentPlugins();
+
+		if (!empty($paymentPlugins))
+		{
+			foreach ($paymentPlugins as $paymentPlugin)
+			{
+				$options[] = JHTML::_('select.option', $paymentPlugin->name, $paymentPlugin->title);
+			}
+		}
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}

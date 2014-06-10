@@ -209,24 +209,22 @@ akeebasubs_fieldprefs = {
 };
 akeebasubs_apply_validation = {$this->apply_validation};
 
-window.addEvent('domready', function() {
-	(function(\$) {
-		\$(document).ready(function(){
-			// Commented out until we can resolve some strange validation errors for some users
-			// \$('#signupForm').submit(onSignupFormSubmit);
-			validatePassword();
-			validateName();
-			validateEmail();
-			if($aks_personal_info != 0) {
-				validateAddress();
-			}
-			if($aks_personal_info == 1) {
-				validateBusiness();
-			}
-			validateForm();
-		});
-	})(akeeba.jQuery);
-});
+(function(\$) {
+	\$(document).ready(function(){
+		// Commented out until we can resolve some strange validation errors for some users
+		// \$('#signupForm').submit(onSignupFormSubmit);
+		validatePassword();
+		validateName();
+		validateEmail();
+		if($aks_personal_info != 0) {
+			validateAddress();
+		}
+		if($aks_personal_info == 1) {
+			validateBusiness();
+		}
+		validateForm();
+	});
+})(akeeba.jQuery);
 
 function onSignupFormSubmit()
 {

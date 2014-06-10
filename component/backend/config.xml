@@ -20,7 +20,7 @@
 			<option value="after">COM_AKEEBASUBS_CONFIG_CURRENCY_POS_AFTER</option>
 		</field>
 	</fieldset>
-	
+
 	<fieldset name="backend" label="COM_AKEEBASUBS_CONFIG_BACKEND_TITLE">
 		<field name="gravatar" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_BACKEND_GRAVATAR"
@@ -37,7 +37,7 @@
 		<field name="show2copromo" type="hidden" default="1" />
 		<field name="wizardstep" type="hidden" default="1" />
 	</fieldset>
-	
+
 	<fieldset name="frontend" label="COM_AKEEBASUBS_CONFIG_FRONTEND_TITLE">
 		<field name="secret" type="text"
 			default=""
@@ -78,7 +78,7 @@
 			<option value="never">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_NEVER</option>
 			<option value="always">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_ALWAYS</option>
 		</field>
-		
+
 		<field name="showregularfield" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWREGULARFIELD"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWREGULARFIELD_DESC">
@@ -124,37 +124,37 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field>
-		
+
 		<field name="allowlogin" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field>
 		<field name="showrenew" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field >
 		<field name="noneuvat" type="list" default="0"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_NONEUVAT_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_NONEUVAT_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field >
 		<field name="hidelonepaymentoption" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDELONEPAYMENTOPTION_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDELONEPAYMENTOPTION_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field >
 		<field name="useppimages" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_DESC">
 			<option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_DROPDOWN</option>
-			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEONLY</option>				
-			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEANDTEXT</option>				
+			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEONLY</option>
+			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USEPPIMAGES_OPT_IMAGEANDTEXT</option>
 		</field>
 		<field name="dateformat" type="text"
 			default="Y-m-d H:i"
@@ -172,19 +172,19 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REQCOUPON_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REQCOUPON_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field >
 		<field name="confirmfree" type="list" default="0"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_CONFIRMFREE_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_CONFIRMFREE_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field >
 		<field name="renderasfree" type="list" default="0"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_RENDERASFREE_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_RENDERASFREE_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field >
 
 		<field name="siteurl" type="hidden" default="" />
@@ -204,7 +204,7 @@
 			label="COM_AKEEBASUBS_CONFIG_INVOICE_AUTOSEND_TITLE"
 			description="COM_AKEEBASUBS_CONFIG_INVOICE_AUTOSEND_DESC">
 			<option value="0">JNo</option>
-			<option value="1">JYes</option>				
+			<option value="1">JYes</option>
 		</field>
 		<field name="invoice_override" type="text"
 				default="0"
@@ -244,6 +244,31 @@
 		/>
 	</fieldset>
 
+  <fieldset name="updates" label="CONFIG_UPDATES_LABEL">
+
+    <field name="autoupdateCli" type="list" default="1"
+           label="CONFIG_AUTOUPDATE_SETTINGS_LABEL"
+           description="CONFIG_AUTOUPDATE_SETTINGS_DESC">
+      <option value="1">CONFIG_AUTOUPDATE_NOTIFY_UPDATE</option>
+      <option value="2">CONFIG_AUTOUPDATE_NOTIFY</option>
+      <option value="3">CONFIG_AUTOUPDATE_UPDATE</option>
+    </field>
+
+    <field name="notificationFreq" type="text" default="1"
+           label="CONFIG_NOTIFICATION_FREQ_LABEL" />
+
+    <field name="notificationTime" type="list" default="day"
+           label="CONFIG_NOTIFICATION_TIME_LABEL" >
+      <option value="min">CONFIG_NOTIFICATION_TIME_MIN</option>
+      <option value="hour">CONFIG_NOTIFICATION_TIME_HOUR</option>
+      <option value="day">CONFIG_NOTIFICATION_TIME_DAY</option>
+    </field>
+
+    <field name="notificationEmail" type="text" default=""
+           label="CONFIG_NOTIFICATION_EMAIL_LABEL"
+           description="CONFIG_NOTIFICATION_EMAIL_DESC"/>
+  </fieldset>
+
 	<fieldset
 		name="permissions"
 		label="JCONFIG_PERMISSIONS_LABEL"
@@ -258,5 +283,5 @@
 			filter="rules"
 			component="com_akeebasubs"
 			section="component" />
-	</fieldset>	
+	</fieldset>
 </config>

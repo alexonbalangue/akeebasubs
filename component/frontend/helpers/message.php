@@ -69,7 +69,7 @@ class AkeebasubsHelperMessage
 		// Create and replace merge tags for custom per-subscription data. Format [SUBCUSTOM:KEYNAME]
 		if(array_key_exists('params', $subData)) {
 			if(is_string($subData['params'])) {
-				$custom = json_decode($subData['params']);
+				$custom = json_decode($subData['params'], true);
 			} elseif(is_array($subData['params'])) {
 				$custom = $subData['params'];
 			} elseif(is_object($subData['params'])) {
@@ -77,6 +77,14 @@ class AkeebasubsHelperMessage
 			} else {
 				$custom = array();
 			}
+
+            // Extra check for subcustom params: if you save a subscription form the backend,
+            // custom fields are inside an array named subcustom
+            if(is_array($custom) && isset($custom['subcustom']))
+            {
+                $custom = $custom['subcustom'];
+            }
+
 			if(!empty($custom)) foreach($custom as $k => $v) {
 				if(is_object($v)) continue;
 				if(substr($k,0,1) == '_') continue;

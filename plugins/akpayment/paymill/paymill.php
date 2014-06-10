@@ -233,7 +233,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 			{
 				// Apparently the credit card capture creation failed
 				$isValid = false;
-				$params['akeebasubs_failure_reason'] = JText::_('PLG_AKPAYMENT_PAYMILL_ERROR_CC');
+				$params['akeebasubs_failure_reason'] = JText::_('PLG_AKPAYMENT_PAYMILL_ERROR_CC') . '<br/>Tech info: <tt>' . htmlentities($creditcard['error']) . '</tt>';
 			}
 
 			// Log the payment creation data

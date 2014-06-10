@@ -86,16 +86,16 @@ class AkeebasubsCustomFieldTextarea extends AkeebasubsCustomFieldAbstract
 	public function getJavascript($item)
 	{
 		$slug = $item->slug;
-		$javascript = <<<ENDJS
+		$javascript = <<<JS
 (function($) {
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
-ENDJS;
-		if(!$item->allow_empty) $javascript .= <<<ENDJS
+JS;
+		if(!$item->allow_empty) $javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-ENDJS;
-		$javascript .= <<<ENDJS
+JS;
+		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
 
@@ -108,7 +108,7 @@ function plg_akeebasubs_customfields_fetch_$slug()
 	return result;
 }
 
-ENDJS;
+JS;
 
 		if(!$item->allow_empty):
 			$success_javascript = '';
@@ -121,7 +121,7 @@ ENDJS;
 				$success_javascript .= "$('#{$slug}_valid').css('display','inline-block');\n";
 				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
 			}
-			$javascript .= <<<ENDJS
+			$javascript .= <<<JS
 
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
@@ -150,7 +150,8 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 	return thisIsValid;
 }
 
-ENDJS;
+JS
+;
 		endif;
 
 		$document = JFactory::getDocument();

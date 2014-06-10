@@ -264,33 +264,6 @@ CREATE TABLE "#__akeebasubs_invoices" (
             ]]></query>
         </action>
 
-        <action table="#__akeebasubs_affiliates" canfail="0">
-            <condition type="missing" value="" />
-            <query><![CDATA[
-CREATE TABLE "#__akeebasubs_affiliates" (
-	"akeebasubs_affiliate_id" serial NOT NULL,
-	"user_id" bigint  NOT NULL,
-	"comission" float NOT NULL DEFAULT '30',
-	"enabled" smallint NOT NULL DEFAULT '1',
-	PRIMARY KEY ("akeebasubs_affiliate_id")
-);
-            ]]></query>
-        </action>
-
-        <action table="#__akeebasubs_affpayments" canfail="0">
-            <condition type="missing" value="" />
-            <query><![CDATA[
-CREATE TABLE "#__akeebasubs_affpayments" (
-	"akeebasubs_affpayment_id" serial NOT NULL,
-	"akeebasubs_affiliate_id" bigint NOT NULL,
-	"amount" float NOT NULL DEFAULT '0',
-	"created_on" timestamp without time zone NOT NULL DEFAULT '1970-01-01 00:00:00',
-	"created_by" bigint NOT NULL DEFAULT '0',
-	PRIMARY KEY ("akeebasubs_affpayment_id")
-);
-            ]]></query>
-        </action>
-
         <action table="#__akeebasubs_levelgroups" canfail="0">
             <condition type="missing" value="" />
             <query><![CDATA[

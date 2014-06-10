@@ -45,6 +45,19 @@
 			<input type="text" name="card-cvc" id="card-cvc" class="input-mini" />
 		</div>
 	</div>
+
+	<div class="control-group">
+		<label for="pay" class="control-label" style="width:190px; margin-right:20px;">
+		</label>
+		<div class="controls">
+			<a href="#ccform" id="payment-button" class="btn">
+				<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_PAYBUTTON') ?>
+			</a>
+		</div>
+	</div>
+	<div class="alert alert-warning" id="paymill-warn-noreload" style="display: none;">
+		<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_WARN_NORELOAD') ?>
+	</div>
 </div>
 
 <form id="payment-form" action="<?php echo $data->url ?>" method="post" class="form form-horizontal">
@@ -52,16 +65,6 @@
 	<input type="hidden" name="amount" id="amount" value="<?php echo $data->amount ?>" />
 	<input type="hidden" name="description" id="description" value="<?php echo $data->description ?>" />
 	<input type="hidden" name="token" id="token" />
-	<div class="control-group">
-		<label for="pay" class="control-label" style="width:190px; margin-right:20px;">
-		</label>
-		<div class="controls">
-			<input type="submit" id="payment-button" class="btn" value="<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_FORM_PAYBUTTON') ?>" />
-		</div>
-	</div>
-	<div class="alert alert-warning" id="paymill-warn-noreload" style="display: none;">
-		<?php echo JText::_('PLG_AKPAYMENT_PAYMILL_WARN_NORELOAD') ?>
-	</div>
 </form>
 
 <script type="text/javascript">
@@ -135,16 +138,16 @@ function PaymillResponseHandler(error, result)
 			$('#payment-errors').css('display', 'none');
 			var token = result.token;
 			$('#token').val(token);
+
 			$('#payment-form').submit();
 		}
 	})(akeeba.jQuery);
 }
 
 
-window.addEvent('domready', function()
-{
-	(function($) {
-		$('#payment-form').submit(function() {
+(function($) {
+	$(document).ready(function(){
+		$('#payment-button').click(function() {
 			if ($('#token').val() == '')
 			{
 				// Prevent double click
@@ -169,14 +172,11 @@ window.addEvent('domready', function()
 					currency:		$('#currency').val(),
 					cardholder:		$('#card-holder').val()
 				}, PaymillResponseHandler);
+			}
 
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		});
-	})(akeeba.jQuery);
-});
+			return false;
+		})
+	})
+})(akeeba.jQuery);
+
 </script>

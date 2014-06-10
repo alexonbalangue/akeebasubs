@@ -31,12 +31,7 @@ class AkeebasubsToolbar extends F0FToolbar
 				'coupons',
 				'apicoupons'
 			),
-			'COM_AKEEBASUBS_MAINMENU_AFFILIATES' => array(
-				'affiliates',
-				'affpayments'
-			),
 			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array(
-				'tools',
 				'import',
 				'users'
 			),

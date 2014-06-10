@@ -9,11 +9,7 @@
 defined('_JEXEC') or die();
 
 JHtml::_('behavior.tooltip');
-if(version_compare(JVERSION, '3.0', 'ge')) {
-	JHTML::_('behavior.framework');
-} else {
-	JHTML::_('behavior.mootools');
-}
+JHTML::_('behavior.framework', true);
 JHtml::_('behavior.modal');
 
 $this->loadHelper('cparams');
@@ -177,11 +173,12 @@ $this->loadHelper('params');
 </form>
 
 <script type="text/javascript">
-	window.addEvent("domready", function() {
-		akeebasubs_relations_mode_onChange();
-	});
+	(function($) {
+		$(document).ready(function(){
+			akeebasubs_relations_mode_onChange();
+		});
+	})(akeeba.jQuery);
 
-	
 	function akeebasubs_relations_mode_onChange()
 	{
 		(function($) {

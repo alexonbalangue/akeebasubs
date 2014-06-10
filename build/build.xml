@@ -33,7 +33,10 @@
 		<include name="frontend/**" />
 		<include name="language/**" />
 		<include name="media/**" />
-		<include name="strapper/**" />
+
+        <include name="strapper/**" />
+        <exclude name="strapper/sources**" />
+
 		<include name="*" />
 
 		<exclude name="backend/invoices/*.pdf" />
@@ -142,8 +145,8 @@
 	</target>
 	
 	<target name="doc-j-pdf" description="Documentation for Joomla! in PDF format">
-		<exec command="xsltproc --nonet --xinclude --novalid --stringparam img.src.path ${dirs.documentation}/ --stringparam body.start.indent 0 --stringparam variablelist.term.break.after 1 --stringparam variablelist.term.separator &quot;&quot; --stringparam variablelist.max.termlength 12 --stringparam section.autolabel 1 --stringparam toc.section.depth 5 --stringparam fop1.extensions 1  --output ${dirs.release}/akeebasubs-guide.fo ${dirs.bin.dbxsl}/fo/docbook.xsl ${dirs.documentation}/akeebasubs-guide.xml" dir="${project.basedir}" />
-		<exec command="fop -fo ${dirs.release}/akeebasubs-guide.fo -pdf ${dirs.release}/akeebasubs-guide.pdf" logoutput="true" />
+		<exec command="xsltproc --nonet --xinclude --novalid --stringparam body.start.indent 0 --stringparam variablelist.term.break.after 1 --stringparam variablelist.term.separator &quot;&quot; --stringparam variablelist.max.termlength 12 --stringparam section.autolabel 1 --stringparam toc.section.depth 5 --stringparam fop1.extensions 1  --output ${dirs.release}/akeebasubs-guide.fo ${dirs.bin.dbxsl}/fo/docbook.xsl ${dirs.documentation}/akeebasubs-guide.xml" dir="${project.basedir}" />
+		<exec command="${dirs.bin.fop}/fop -fo ${dirs.release}/akeebasubs-guide.fo -pdf ${dirs.release}/akeebasubs-guide.pdf" logoutput="true" />
 		<delete file="${dirs.release}/akeebasubs-guide.fo" quiet="yes" />
 	</target>	
 	<!--

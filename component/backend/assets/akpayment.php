@@ -77,14 +77,14 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	 * Plugin event which returns the identity information of this payment
 	 * method. The result is an array containing one or more associative arrays.
 	 * If the plugin only provides a single payment method you should only
-	 * return an array containing just one associateive array. The assoc array
+	 * return an array containing just one associative array. The assoc array
 	 * has the keys 'name' (the name of the payment method), 'title'
 	 * (translation key for the payment method's name) and 'image' (the URL to
 	 * the image used for this payment method).
 	 *
 	 * @return  array
 	 */
-	public final function onAKPaymentGetIdentity()
+	public function onAKPaymentGetIdentity()
 	{
 		$title = $this->params->get('title','');
 		if(empty($title)) $title = JText::_($this->ppKey);

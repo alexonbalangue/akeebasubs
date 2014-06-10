@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-class AkeebasubsModelSubscribes extends FOFModel
+class AkeebasubsModelSubscribes extends F0FModel
 {
 	/**
 	 * List of European states
@@ -178,7 +178,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$state = $this->getStateVariables();
 
 		if($state->slug && empty($state->id)) {
-			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			 $list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($state->slug)
 				->getItemList();
 			 if(!empty($list)) {
@@ -273,12 +273,22 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$ret = (object)array('username' => false, 'password' => true);
 		$username = $state->username;
 		$myUser = JFactory::getUser();
+
 		if(empty($username))
 		{
 			if (!$myUser->guest) $ret->username = true;
 			return $ret;
 		}
-		$user = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
+
+        // Joomla doens't allow spaces in usernames
+        if(strpos($username, ' ') !== false)
+        {
+            $ret->username = false;
+
+            return $ret;
+        }
+
+		$user = F0FModel::getTmpInstance('Jusers','AkeebasubsModel')
 			->username($username)
 			->getFirstItem();
 
@@ -337,7 +347,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$state = $this->getStateVariables();
 
 		if($state->slug && empty($state->id)) {
-			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			 $list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($state->slug)
 				->getItemList();
 			 if(!empty($list)) {
@@ -382,7 +392,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Email validation
 		if(!empty($state->email)) {
-			$list = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
+			$list = F0FModel::getTmpInstance('Jusers','AkeebasubsModel')
 				->email($state->email)
 				->getItemList();
 			$validEmail = true;
@@ -464,7 +474,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// rules for this country (the default tax rate will be applied)
 
 				// First try loading the rules for this level
-				$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
+				$taxrules = F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')
 					->savestate(0)
 					->enabled(1)
 					->akeebasubs_level_id($state->id)
@@ -478,7 +488,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// If this level has no rules try the "All levels" rules
 				if (empty($taxrules))
 				{
-					$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
+					$taxrules = F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')
 						->savestate(0)
 						->enabled(1)
 						->akeebasubs_level_id(0)
@@ -508,7 +518,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					{
 						// ...and I must have my viesregistered flag set to 2
 						// and my VAT number must match the saved record.
-						$userparams = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+						$userparams = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 							->user_id(JFactory::getUser()->id)
 							->getMergedData(JFactory::getUser()->id);
 						if (($userparams->viesregistered == 2) && ($userparams->vatnumber == $state->vatnumber))
@@ -561,7 +571,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$state = $this->getStateVariables();
 
 			// Get the subscription level
-			$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->setId($state->id)
 				->getItem();
 
@@ -570,7 +580,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$signup_fee = 0;
 			$user = JFactory::getUser();
 			if($user->id) {
-				$mysubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$mysubs = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->user_id($user->id)
 					->paystate('C')
 					->getItemList();
@@ -598,13 +608,8 @@ class AkeebasubsModelSubscribes extends FOFModel
 			JPluginHelper::importPlugin('akeebasubs');
 			JPluginHelper::importPlugin('akpayment');
 			$app = JFactory::getApplication();
-
-            // Let's convert the state object to array, so I can merge it with another array
-            $priceValidationData = array_merge((array) $state, array('level' => $level, 'netprice' => $netPrice));
-            // Then let's convert it back to an object since plugins are expecting to deal with an object
-            $priceValidationData = (object) $priceValidationData;
-
-			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array($priceValidationData));
+			$priceValidationData = array_merge((array)$state, array('level' => $level, 'netprice' => $netPrice));
+			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array((object)$priceValidationData));
 			if(is_array($jResponse) && !empty($jResponse)) {
 				foreach($jResponse as $pluginResponse) {
 					if(empty($pluginResponse)) continue;
@@ -619,7 +624,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 			$couponDiscount = 0;
 			if($validCoupon) {
-				$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+				$coupon = F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
 					->coupon(strtoupper($state->coupon))
 					->getFirstItem();
 
@@ -752,7 +757,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			$couponCode = $state->coupon;
 			$valid = false;
 
-			$coupon = FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+			$coupon = F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
 				->coupon(strtoupper($state->coupon))
 				->getFirstItem();
 			if(empty($coupon->akeebasubs_coupon_id)) $coupon = null;
@@ -802,7 +807,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					// Check hits limit
 					if($valid && $coupon->hitslimit) {
 						// Get the real coupon hits
-						$hits = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						$hits = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->savestate(0)
 							->coupon_id($coupon->akeebasubs_coupon_id)
 							->paystate('C')
@@ -824,7 +829,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 						$user_id = JFactory::getUser()->id;
 						// How many subscriptions with a paystate of C,P for this user
 						// are using this coupon code?
-						$hits = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+						$hits = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 							->savestate(0)
 							->coupon_id($coupon->akeebasubs_coupon_id)
 							->paystate('C,P')
@@ -921,7 +926,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Get the id from the slug if it's not present
 		if($state->slug && empty($state->id)) {
-			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			 $list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($state->slug)
 				->getItemList();
 			 if(!empty($list)) {
@@ -948,7 +953,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		);
 
 		// Get applicable relation rules
-		$autoRules = FOFModel::getTmpInstance('Relations','AkeebasubsModel')
+		$autoRules = F0FModel::getTmpInstance('Relations','AkeebasubsModel')
 			->savestate(0)
 			->target_level_id($state->id)
 			->enabled(1)
@@ -963,7 +968,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		// Get the current subscription level's net worth
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
 		$net = (float)$level->price;
@@ -974,7 +979,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// in the future in the source_level_id of the rule.
 			$jNow = new JDate();
 			$user_id = JFactory::getUser()->id;
-			$subscriptions = FOFModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 				->savestate(0)
 				->level($rule->source_level_id)
 				->user_id($user_id)
@@ -1171,7 +1176,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Get the id from the slug if it's not present
 		if($state->slug && empty($state->id)) {
-			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			 $list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($state->slug)
 				->getItemList();
 			 if(!empty($list)) {
@@ -1191,7 +1196,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		// Get applicable auto-rules
-		$autoRules = FOFModel::getTmpInstance('Upgrades','AkeebasubsModel')
+		$autoRules = F0FModel::getTmpInstance('Upgrades','AkeebasubsModel')
 			->savestate(0)
 			->to_id($state->id)
 			->enabled(1)
@@ -1205,7 +1210,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		// Get the user's list of subscriptions
-		$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->savestate(0)
 			->user_id($user_id)
 			->enabled(1)
@@ -1249,7 +1254,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		// Get the current subscription level's net worth
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
 		$net = (float)$level->price;
@@ -1357,7 +1362,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$isVIES = $validation->vatnumber && in_array($state->country, $this->european_states);
 
 		if($state->slug && empty($state->id)) {
-			 $list = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			 $list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->slug($state->slug)
 				->getItemList();
 			 if(!empty($list)) {
@@ -1369,7 +1374,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		// First try loading the rules for this level
-		$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
+		$taxrules = F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')
 			->savestate(0)
 			->enabled(1)
 			->akeebasubs_level_id($state->id)
@@ -1382,7 +1387,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// If this level has no rules try the "All levels" rules
 		if (empty($taxrules))
 		{
-			$taxrules = FOFModel::getTmpInstance('Taxrules','AkeebasubsModel')
+			$taxrules = F0FModel::getTmpInstance('Taxrules','AkeebasubsModel')
 				->savestate(0)
 				->enabled(1)
 				->akeebasubs_level_id(0)
@@ -1561,11 +1566,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 		if($user->id == 0) {
 			// Check for an existing, blocked, unactivated user with the same
 			// username or email address.
-			$user1 = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
+			$user1 = F0FModel::getTmpInstance('Jusers','AkeebasubsModel')
 				->username($state->username)
 				->block(1)
 				->getFirstItem();
-			$user2 = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
+			$user2 = F0FModel::getTmpInstance('Jusers','AkeebasubsModel')
 				->email($state->email)
 				->block(1)
 				->getFirstItem();
@@ -1583,7 +1588,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 					// user 2 and change user 1's email into the email address provided
 
 					// Remove the last subscription for $user2 (it will be an unpaid one)
-					$submodel = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel');
+					$submodel = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel');
 					$substodelete = $submodel
 						->user_id($id2)
 						->getList();
@@ -1669,17 +1674,17 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// UPDATE EXISTING USER
 
 			// Remove unpaid subscriptions on the same level for this user
-			$unpaidSubs = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$unpaidSubs = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->paystate('N','X')
 				->getItemList();
 			if(!empty($unpaidSubs)) foreach($unpaidSubs as $unpaidSub) {
-				$table = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')->getTable();
+				$table = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')->getTable();
 				$table->delete($unpaidSub->akeebasubs_subscription_id);
 			}
 
 			// Update existing user's details
-			$userRecord = FOFModel::getTmpInstance('Jusers','AkeebasubsModel')
+			$userRecord = F0FModel::getTmpInstance('Jusers','AkeebasubsModel')
 				->setId($user->id)
 				->getItem();
 
@@ -1741,7 +1746,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$user = $this->getState('user', $user);
 
 		// Find an existing record
-		$list = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$list = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->user_id($user->id)
 			->getItemList();
 
@@ -1791,7 +1796,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Serialize custom fields
 		$data['params'] = json_encode($data['params']);
 
-		$status = FOFModel::getTmpInstance('Users','AkeebasubsModel')
+		$status = F0FModel::getTmpInstance('Users','AkeebasubsModel')
 			->setId($id)
 			->getItem()
 			->save($data);
@@ -1822,7 +1827,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// ----------------------------------------------------------------------
 
 		// Is this actually an allowed subscription level?
-		$allowedLevels = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$allowedLevels = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->only_once(1)
 			->enabled(1)
 			->getItemList();
@@ -1839,7 +1844,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		}
 
 		// Fetch the level's object, used later on
-		$level = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->getItem($state->id);
 
 		// Step #2. Check that the payment plugin exists or return false
@@ -1862,7 +1867,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 		// Step #2.b. Apply block rules in the Professional release
 		// ----------------------------------------------------------------------
-		if (FOFModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
+		if (F0FModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
 		{
 			if (version_compare(JVERSION, '3.0', 'ge'))
 			{
@@ -1900,9 +1905,9 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$haveLevelGroup = false;
 		if($level->akeebasubs_levelgroup_id > 0) {
 			// Is the level group published?
-			$levelGroup = FOFModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
+			$levelGroup = F0FModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
 				->getItem($level->akeebasubs_levelgroup_id);
-			if($levelGroup instanceof FOFTable) {
+			if($levelGroup instanceof F0FTable) {
 				$haveLevelGroup = $levelGroup->enabled;
 			}
 		}
@@ -1911,11 +1916,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 			// We have a level group. Get all subscriptions for all levels in
 			// the group.
 			$subscriptions = array();
-			$levelsInGroup = FOFModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$levelsInGroup = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->levelgroup($level->akeebasubs_levelgroup_id)
 				->getList(true);
 			foreach($levelsInGroup as $l) {
-				$someSubscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				$someSubscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->user_id($user->id)
 					->level($l->akeebasubs_level_id)
 					->paystate('C')
@@ -1926,7 +1931,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 			}
 		} else {
 			// No level group found. Get subscriptions on the same level.
-			$subscriptions = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+			$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 				->user_id($user->id)
 				->level($state->id)
 				->paystate('C')
@@ -1957,7 +1962,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 				// Also mark the old subscription as "communicated". We don't want
 				// to spam our users with subscription renewal notices or expiration
 				// notification after they have effectively renewed!
-				FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+				F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 					->setId($row->akeebasubs_subscription_id)
 					->getItem()
 					->save(array(
@@ -1969,7 +1974,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Step #6. Create a new subscription record
 		// ----------------------------------------------------------------------
 		$nullDate = JFactory::getDbo()->getNullDate();
-		$level = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+		$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 			->setId($state->id)
 			->getItem();
 		if($level->forever)
@@ -2013,25 +2018,6 @@ class AkeebasubsModelSubscribes extends FOFModel
 		$mStartDate = $jStartDate->toSql();
 		$jEndDate = new JDate($endDate);
 		$mEndDate = $jEndDate->toSql();
-
-		// Get the affiliate ID and make sure it exists and that it's enabled
-		$session = JFactory::getSession();
-		$affid = $session->get('affid', 0, 'com_akeebasubs');
-		if($affid > 0) {
-			$affiliate = FOFModel::getTmpInstance('Affiliates','AkeebasubsModel')
-				->setId($affid)
-				->getItem();
-			if($affiliate->akeebasubs_affiliate_id == $affid) {
-				if(!$affiliate->enabled) $affid = 0;
-			} else {
-				$affid = 0;
-			}
-		}
-
-		$aff_comission = 0;
-		if($affid > 0) {
-			$aff_comission = $validation->price->net * $affiliate->comission / 100;
-		}
 
 		// Store the price validation's "oldsub" and "expiration" keys in
 		// the subscriptions subcustom array
@@ -2080,11 +2066,11 @@ class AkeebasubsModelSubscribes extends FOFModel
 			'discount_amount'		=> $validation->price->discount,
 			'first_contact'			=> '0000-00-00 00:00:00',
 			'second_contact'		=> '0000-00-00 00:00:00',
-			'akeebasubs_affiliate_id' => $affid,
-			'affiliate_comission'	=> $aff_comission
+			'akeebasubs_affiliate_id' => 0,
+			'affiliate_comission'	=> 0
 		);
 
-		$subscription = FOFModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->getTable();
 		$subscription->reset();
 		$subscription->akeebasubs_subscription_id = 0;
@@ -2095,7 +2081,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 		// Step #7. Hit the coupon code, if a coupon is indeed used
 		// ----------------------------------------------------------------------
 		if($validation->price->couponid) {
-			FOFModel::getTmpInstance('Coupons','AkeebasubsModel')
+			F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
 				->setId($validation->price->couponid)
 				->getItem()
 				->hit();
@@ -2143,7 +2129,7 @@ class AkeebasubsModelSubscribes extends FOFModel
 
 			// and then just redirect
 			$app = JFactory::getApplication();
-			$slug = FOFModel::getTmpInstance('Levels','AkeebasubsModel')
+			$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem()
 				->slug;

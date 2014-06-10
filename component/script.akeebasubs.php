@@ -132,6 +132,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
                 'com_akeebasubs'        => 1
             ),
 			'system' => array(
+				'as2cocollation'		=> 0,
 				'asexpirationcontrol'	=> 1,
 				'asexpirationnotify'	=> 1,
 				'aslogoutuser'			=> 0,
@@ -240,6 +241,16 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			// 'administrator/components/com_akeebasubs/view/invoices/tmpl/default.php',
 			// 'administrator/components/com_akeebasubs/view/taxrules/tmpl/default.php',
 
+			// Affiliates feature
+			'administrator/components/com_akeebasubs/fields/akeebasubsaffiliatesowed.php',
+			'administrator/components/com_akeebasubs/models/affiliates.php',
+			'administrator/components/com_akeebasubs/models/affpayments.php',
+			'administrator/components/com_akeebasubs/tables/affiliate.php',
+			'administrator/components/com_akeebasubs/tables/affpayment.php',
+
+			// Import data
+			'administrator/components/com_akeebasubs/controllers/tools.php',
+			'administrator/components/com_akeebasubs/models/tools.php',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
@@ -255,6 +266,16 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			'administrator/components/com_akeebasubs/views/dashboard',
 			'components/com_akeebasubs/templates',
 			'components/com_akeebasubs/controllers/behaviors',
+
+			// Affiliates feature
+			'administrator/components/com_akeebasubs/views/affiliate',
+			'administrator/components/com_akeebasubs/views/affiliates',
+			'administrator/components/com_akeebasubs/views/affpayment',
+			'administrator/components/com_akeebasubs/views/affpayments',
+
+			// Import data
+			'administrator/components/com_akeebasubs/converter',
+			'administrator/components/com_akeebasubs/views/tools',
 		)
 	);
 
@@ -265,6 +286,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	 */
 	protected $cliScriptFiles = array(
 		'akeebasubs-expiration-notify.php',
+		'akeebasubs-update.php',
 	);
 
 	/**
