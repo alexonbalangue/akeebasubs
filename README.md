@@ -76,6 +76,8 @@ This is required after every major upgrade in the component and/or when new plug
 This creates the installable ZIP packages of the component inside the MAIN/release directory.
 
 	phing git
+
+Please note that it's necessary to run `git pull` and `phing git` in your copy of the FOF repository before building an Akeeba Subscriptions package. Failure to do so will either result in an uninstallable package or will end up overwriting the already installed FOF on your site with an older version, resulting in potentially severe issues in other FOF-based components.
 	
 #### Build the documentation in PDF format
 
