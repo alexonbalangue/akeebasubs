@@ -27,6 +27,8 @@ class AkeebasubsHelperJs
 
 		$javascript = <<<JS
 
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 
 // Akeeba Subscriptions --- START >> >> >>
 akeeba.jQuery(document).ready(function(){

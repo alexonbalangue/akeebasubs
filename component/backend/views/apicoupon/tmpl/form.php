@@ -8,7 +8,10 @@
 defined('_JEXEC') or die();
 
 $this->loadHelper('select');
-JFactory::getDocument()->addScriptDeclaration('
+JFactory::getDocument()->addScriptDeclaration( <<< JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 akeeba.jQuery(document).ready(function(){
 	akeeba.jQuery("#usage_limits").change(function(){
 		var value = akeeba.jQuery(this).val();
@@ -29,7 +32,10 @@ akeeba.jQuery(document).ready(function(){
 		}
 	}).change();
 })
-');
+
+JS
+
+);
 ?>
 <?php if ($this->item->akeebasubs_apicoupon_id > 0):
 	$rootURL = rtrim(JURI::base(),'/');

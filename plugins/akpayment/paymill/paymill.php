@@ -44,7 +44,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 
 		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration(
-			"\nvar PAYMILL_PUBLIC_KEY = '" . $this->getPublicKey() . "';\n");
+			"\n;//\nvar PAYMILL_PUBLIC_KEY = '" . $this->getPublicKey() . "';\n");
 		$doc->addScript("https://bridge.paymill.de/");
 
 		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paymill&sid='.$subscription->akeebasubs_subscription_id;

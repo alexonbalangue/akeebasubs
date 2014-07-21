@@ -106,7 +106,10 @@ ENDSCRIPT;
 		$fields[] = $field;
 
 		// ----- ADD THE JAVASCRIPT -----
-		$javascript = <<<ENDJS
+		$javascript = <<<JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 (function($) {
 	$(document).ready(function(){
 		// Tell Akeeba Subscriptions how to fetch the extra field data
@@ -141,7 +144,7 @@ function plg_akeebasubs_recaptcha_validate(response)
 	})(akeeba.jQuery);
 }
 
-ENDJS;
+JS;
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($javascript);
 

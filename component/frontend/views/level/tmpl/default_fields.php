@@ -548,8 +548,10 @@ endif;
 $aks_validate_url = JURI::base().'index.php';
 $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
 $aks_noneuvat = AkeebasubsHelperCparams::getParam('noneuvat',0)?'true':'false';
-$script = <<<ENDSCRIPT
+$script = <<< JS
 
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 // Akeeba Subscriptions --- START >> >> >>
 var akeebasubs_validate_url = "$aks_validate_url";
 var akeebasubs_valid_form = false;
@@ -557,5 +559,5 @@ var akeebasubs_personalinfo = $aks_personal_info;
 var akeebasubs_noneuvat = $aks_noneuvat;
 // Akeeba Subscriptions --- END << << <<
 
-ENDSCRIPT;
+JS;
 JFactory::getDocument()->addScriptDeclaration($script);

@@ -9,7 +9,10 @@
 defined('_JEXEC') or die;
 
 $this->loadHelper('select');
-JFactory::getDocument()->addScriptDeclaration('
+JFactory::getDocument()->addScriptDeclaration( <<< JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 akeeba.jQuery(document).ready(function(){
 	akeeba.jQuery("#csvdelimiters").change(function(){
 		if(akeeba.jQuery(this).val() == -99){
@@ -22,7 +25,10 @@ akeeba.jQuery(document).ready(function(){
 		}
 	})
 });
-');
+
+JS
+
+);
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal" enctype="multipart/form-data">
 	<input type="hidden" name="option" value="com_akeebasubs" />

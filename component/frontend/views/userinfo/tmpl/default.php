@@ -40,8 +40,10 @@ $this->loadHelper('modules');
 <?php
 $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1);
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
-$script = <<<ENDSCRIPT
+$script = <<<JS
 
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 // Akeeba Subscriptions --- START >> >> >>
 (function(\$) {
 	\$(document).ready(function(){
@@ -69,5 +71,5 @@ function onSignupFormSubmit()
 }
 // Akeeba Subscriptions --- END << << <<
 
-ENDSCRIPT;
+JS;
 JFactory::getDocument()->addScriptDeclaration($script);

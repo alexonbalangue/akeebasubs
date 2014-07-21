@@ -25,7 +25,13 @@ class plgAkeebasubsCanalyticscommerce extends JPlugin
 		* Since we can only purchase 1 subscription at a time -> addItem is called only once.
 		* If this changes in the future we will have to modify the _addItem part...
 		*/
-		$script = "var _gaq = _gaq || [];
+		$script = "
+
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
+
+				  var _gaq = _gaq || [];
 				  _gaq.push(['_setAccount', '".$this->params->get('tracking_id')."']);
 				  _gaq.push(['_trackPageview']);
 				  _gaq.push(['_addTrans',

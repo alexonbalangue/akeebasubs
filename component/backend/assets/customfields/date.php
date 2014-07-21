@@ -59,6 +59,9 @@ class AkeebasubsCustomFieldDate extends AkeebasubsCustomFieldAbstract
 	{
 		$slug = $item->slug;
 		$javascript = <<<JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 (function($) {
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
