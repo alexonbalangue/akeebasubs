@@ -758,7 +758,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 			$valid = false;
 
 			$coupon = F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
-				->coupon(strtoupper($state->coupon))
+				->coupon(strtoupper(trim($state->coupon)))
 				->getFirstItem();
 			if(empty($coupon->akeebasubs_coupon_id)) $coupon = null;
 
