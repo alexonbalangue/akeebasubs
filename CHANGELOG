@@ -18,6 +18,7 @@ Akeeba Subscriptions 4.1.0
 ~ Replacing legacy mooTools code with jQuery
 # [MEDIUM] gh-43 Custom field parsing doesn't work properly when regenerating an invoice
 # [MEDIUM] The PayMill plugin was broken under Joomla! 3.3
+# [MEDIUM] Joomla! caches plugin information, leading to unexpected behaviour in various places
 
 Akeeba Subscriptions 4.0.1
 ================================================================================
