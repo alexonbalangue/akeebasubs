@@ -60,7 +60,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			'url'			=> $this->getPaymentURL(),
 			'merchant'		=> $this->getMerchantID(),
 			//'postback'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal')),
-			'postback'		=> JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal',
+			'postback'		=> $this->getPostbackURL(),
 			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
 			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
@@ -406,6 +406,27 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		} else {
 			return $this->params->get('merchant','');
 		}
+	}
+
+	/**
+	 * Creates the callback URL based on the plugins configuration.
+	 */
+	private function getPostbackURL() {
+		
+		$url = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal';
+		
+		$configurationValue = $this->params->get('protocol', 'keep');
+		$pattern = '/https?:\/\//';
+
+		if ($configurationValue == 'secure') {
+			$url = preg_replace($pattern, "https://", $url);	
+		}
+
+		if ($configurationValue == 'insecure') {
+			$url = preg_replace($pattern, "http://", $url);	
+		}
+
+		return $url;
 	}
 
 	/**

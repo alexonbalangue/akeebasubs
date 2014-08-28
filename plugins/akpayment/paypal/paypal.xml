@@ -37,6 +37,13 @@
 				<field name="cpp_header_image" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_HEADER_LABEL" description="PLG_AKPAYMENT_PAYPAL_HEADER_DESC" />
 				<field name="cpp_headerback_color" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_HEADERBACK_LABEL" description="PLG_AKPAYMENT_PAYPAL_HEADERBACK_DESC" />
 				<field name="cpp_headerborder_color" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPAL_HEADERBORDER_LABEL" description="PLG_AKPAYMENT_PAYPAL_HEADERBORDER_DESC" />
+
+				<field name="protocol" type="radio" default="keep" label="PLG_AKPAYMENT_PAYPAL_PROTOCOL_LABEL" description="PLG_AKPAYMENT_PAYPAL_PROTOCOL_DESC">
+				  <option value="keep">PLG_AKPAYMENT_PAYPAL_PROTOCOL_KEEP_LABEL</option>
+				  <option value="insecure">PLG_AKPAYMENT_PAYPAL_PROTOCOL_INSECURE_LABEL</option>
+				  <option value="secure">PLG_AKPAYMENT_PAYPAL_PROTOCOL_SECURE_LABEL</option>
+				</field>
+
 			</fieldset>
 		</fields>
 	</config>
