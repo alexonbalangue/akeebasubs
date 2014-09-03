@@ -198,7 +198,7 @@ class AkeebasubsHelperSelect
 			$temp = '';
 			foreach($attribs as $key=>$value)
 			{
-				$temp .= $key.' = "'.$value.'"';
+				$temp .= ' '.$key.'="'.$value.'"';
 			}
 			$attribs = $temp;
 		}
