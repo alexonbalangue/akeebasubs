@@ -359,7 +359,7 @@ if($apply_validation && array_key_exists('isValid', $field)) {
 		</label>
 		<div class="controls">
             <span class="col-sm-3">
-			    <?php echo AkeebasubsHelperSelect::states($field_data['state'], 'state', array('id'=>'state', 'class' => 'form-control')) ?>
+			    <?php echo AkeebasubsHelperSelect::states($field_data['state'], 'state', array('class' => 'form-control')) ?>
             </span>
 			<span id="state_empty" class="help-inline help-block" <?php if(strpos($group_classes['city'], 'error') === false):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?>
@@ -387,7 +387,7 @@ if($apply_validation && array_key_exists('isValid', $field)) {
 		</label>
 		<div class="controls">
             <span class="col-sm-3">
-			    <?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('id'=>'country', 'show' => $cparamShowCountries, 'hide' => $cparamHideCountries, 'class' => 'form-control')) ?>
+			    <?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('show' => $cparamShowCountries, 'hide' => $cparamHideCountries, 'class' => 'form-control')) ?>
             </span>
 			<span id="country_empty" class="help-inline help-block" <?php if(strpos($group_classes['country'], 'error') === false):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?>
