@@ -169,11 +169,18 @@ JS
 	 */
 	public function validate($item, $custom)
 	{
-		if(!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		if (!isset($item->slug) || !is_array($item->slug))
+		{
+			$custom[$item->slug] = '';
+		}
+		elseif(!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+
 		$valid = true;
+
 		if(!$item->allow_empty) {
 			$valid = !empty($custom[$item->slug]);
 		}
+
 		return $valid ? 1 : 0;
 	}
 }

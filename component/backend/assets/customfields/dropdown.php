@@ -27,7 +27,7 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 	public function getField($item, $cache, $userparams)
 	{
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['custom'])) {
+		if(is_array($item->slug) && array_key_exists($item->slug, $cache['custom'])) {
 			$current = $cache['custom'][$item->slug];
 		} else {
 			if(!is_object($userparams->params)) {

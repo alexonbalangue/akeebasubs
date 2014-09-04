@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 4.1.1
 ================================================================================
++ Show discounted prices (and pre-discounted amounts in Strappy and Awesome layouts) in the subscription levels page when a user is logged in.
 ~ Even better workaround for very badly written system plugins which output Javascript without a trailing semicolon and/or newline, leading to Javascript errors. This is not a bug in our software, it's a bug in those badly written plugins and WE have to work around THEIR bad code!
 + gh-55 PayPal plugin: choose the callback URL protocol
 # [MEDIUM] gh-56 Percentual surcharge was throwing a fatal error

@@ -160,7 +160,7 @@ JS
 
 	public function validate($item, $custom)
 	{
-		if(!array_key_exists($item->slug, $custom)) $custom[$item->slug] = 0;
+		if(!is_array($item->slug) || !array_key_exists($item->slug, $custom)) $custom[$item->slug] = 0;
 		$valid = true;
 		if(!$item->allow_empty) {
 			$valid = $custom[$item->slug];
