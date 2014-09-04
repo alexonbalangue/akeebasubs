@@ -54,11 +54,21 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 
 	if ($includesignup == 1)
 	{
+		if (($levelPrice + $signupFee) < 0)
+		{
+			$levelPrice = -$signupFee;
+		}
+
 		$formatedPrice = sprintf('%1.02F', ($levelPrice + $signupFee) * $vatMultiplier);
 		$levelPrice += $signupFee;
 	}
 	else
 	{
+		if ($levelPrice < 0)
+		{
+			$levelPrice = 0;
+		}
+
 		$formatedPrice = sprintf('%1.02F', ($levelPrice) * $vatMultiplier);
 	}
 
