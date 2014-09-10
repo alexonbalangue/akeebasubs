@@ -136,6 +136,9 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 	{
 		$slug = $item->slug;
 		$javascript = <<<JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 (function($) {
 	$(document).ready(function(){
 		addToSubValidationFetchQueue(plg_akeebasubs_subcustomfields_fetch_$slug);
@@ -215,11 +218,19 @@ JS
 	 */
 	public function validatePerSubscription($item, $custom)
 	{
-		if(!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		if (!isset($item->slug) || !is_array($item->slug))
+		{
+			$custom[$item->slug] = '';
+		}
+		elseif (!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+
 		$valid = true;
-		if(!$item->allow_empty) {
+
+		if(!$item->allow_empty)
+		{
 			$valid = !empty($custom[$item->slug]);
 		}
+
 		return $valid ? 1 : 0;
 	}
 
@@ -228,9 +239,12 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['subcustom'])) {
+		if(is_array($item->slug) && array_key_exists($item->slug, $cache['subcustom']))
+		{
 			$current = $cache['subcustom'][$item->slug];
-		} else {
+		}
+		else
+		{
 			$current = $item->default;
 		}
 
@@ -301,7 +315,7 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['subcustom'])) {
+		if(is_array($item->slug) && array_key_exists($item->slug, $cache['subcustom'])) {
 			$current = $cache['subcustom'][$item->slug];
 		} else {
 			$current = $item->default;

@@ -298,7 +298,6 @@ if($apply_validation && array_key_exists('isValid', $field)) {
             <span class="col-sm-3">
 			<?php
                 echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array(
-                        'id'    => 'country',
                         'show'  => $cparamShowCountries,
                         'hide'  => $cparamHideCountries,
                         'class' => 'form-control'
@@ -359,7 +358,7 @@ if($apply_validation && array_key_exists('isValid', $field)) {
 		</label>
 		<div class="controls">
             <span class="col-sm-3">
-			    <?php echo AkeebasubsHelperSelect::states($field_data['state'], 'state', array('id'=>'state', 'class' => 'form-control')) ?>
+			    <?php echo AkeebasubsHelperSelect::states($field_data['state'], 'state', array('class' => 'form-control')) ?>
             </span>
 			<span id="state_empty" class="help-inline help-block" <?php if(strpos($group_classes['city'], 'error') === false):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?>
@@ -387,7 +386,7 @@ if($apply_validation && array_key_exists('isValid', $field)) {
 		</label>
 		<div class="controls">
             <span class="col-sm-3">
-			    <?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('id'=>'country', 'show' => $cparamShowCountries, 'hide' => $cparamHideCountries, 'class' => 'form-control')) ?>
+			    <?php echo AkeebasubsHelperSelect::countries($field_data['country'], 'country', array('show' => $cparamShowCountries, 'hide' => $cparamHideCountries, 'class' => 'form-control')) ?>
             </span>
 			<span id="country_empty" class="help-inline help-block" <?php if(strpos($group_classes['country'], 'error') === false):?>style="display:none"<?php endif?>>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')?>
@@ -418,11 +417,11 @@ if ($businessFields == 'never') {
 		* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')?>
 	</label>
 	<?php if (version_compare(JVERSION, '3.0', 'ge')): ?>
-		<?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), $isBusiness); ?>
+		<?php echo JHTML::_('select.booleanlist', 'isbusiness', array(), $isBusiness); ?>
 	<?php else: ?>
 		<div class="controls">
             <span class="col-sm-3">
-			    <?php echo JHTML::_('select.booleanlist', 'isbusiness', array('id'=>'isbusiness'), $isBusiness); ?>
+			    <?php echo JHTML::_('select.booleanlist', 'isbusiness', array(), $isBusiness); ?>
             </span>
 		</div>
 	<?php endif; ?>
@@ -548,8 +547,10 @@ endif;
 $aks_validate_url = JURI::base().'index.php';
 $aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1)?'true':'false';
 $aks_noneuvat = AkeebasubsHelperCparams::getParam('noneuvat',0)?'true':'false';
-$script = <<<ENDSCRIPT
+$script = <<< JS
 
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 // Akeeba Subscriptions --- START >> >> >>
 var akeebasubs_validate_url = "$aks_validate_url";
 var akeebasubs_valid_form = false;
@@ -557,5 +558,5 @@ var akeebasubs_personalinfo = $aks_personal_info;
 var akeebasubs_noneuvat = $aks_noneuvat;
 // Akeeba Subscriptions --- END << << <<
 
-ENDSCRIPT;
+JS;
 JFactory::getDocument()->addScriptDeclaration($script);

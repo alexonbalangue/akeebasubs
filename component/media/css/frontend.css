@@ -286,6 +286,21 @@ a.akeebasubs-awesome-level-link {
 	height: 1.2em;
 }
 
+.akeebasubs-awesome-prediscount-label {
+    color: #eee;
+    font-weight: normal;
+}
+
+.akeebasubs-awesome-prediscount {
+	color: #f33;
+	font-style: italic;
+	font-weight: bold;
+	text-align: center;
+	padding: 0.2em 0;
+	text-shadow: #333 1px 1px 1px;
+	height: 1.2em;
+}
+
 .akeebasubs-awesome-price-currency:after {
 	content: " ";
 }
@@ -374,6 +389,22 @@ td.akeebasubs-strappy-signupfee {
 	padding: 0.2em 0;
 	text-shadow: #aaa 1px 1px 3px;
 	padding: 0.5em 0.25em !important;
+}
+
+td.akeebasubs-strappy-prediscount {
+    color: red;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center !important;
+    padding: 0.2em 0;
+    text-shadow: #aaa 1px 1px 3px;
+    padding: 0.5em 0.25em !important;
+}
+
+td.akeebasubs-strappy-prediscount span.akeebasubs-strappy-prediscount-label
+{
+    color: #000000;
+    font-weight: normal;
 }
 
 .akeebasubs-strappy-price-currency:after {

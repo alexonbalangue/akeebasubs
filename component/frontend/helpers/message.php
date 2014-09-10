@@ -204,7 +204,12 @@ class AkeebasubsHelperMessage
 		$jTo = new JDate($sub->publish_down);
 
 		// Download ID
-		$dlid = md5($user->id . $user->username . $user->password);
+		if (!class_exists('ArsHelperFilter'))
+		{
+			@include_once JPATH_SITE . '/components/com_ars/helpers/filter.php';
+		}
+
+		$dlid = class_exists('ArsHelperFilter') ? ArsHelperFilter::myDownloadID() : '';
 
 		// User's state, human readable
 		$formatted_state = '';

@@ -10,13 +10,16 @@ defined('_JEXEC') or die();
 $this->loadHelper('modules');
 $this->loadHelper('select');
 
-$script = <<<ENDSCRIPT
+$script = <<<JS
 
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 // Akeeba Subscriptions --- START >> >> >>
 akeebasubs_level_id = {$this->item->akeebasubs_level_id};
 // Akeeba Subscriptions --- END << << <<
 
-ENDSCRIPT;
+JS;
 JFactory::getDocument()->addScriptDeclaration($script);
 
 $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'input-append';
@@ -199,8 +202,10 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 <?php
 $aks_personal_info = $this->cparams->personalinfo ? 1 : 0;
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
-$script = <<<ENDSCRIPT
+$script = <<<JS
 
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 // Akeeba Subscriptions --- START >> >> >>
 akeebasubs_fieldprefs = {
 	'showregularfield'		: {$this->cparams->showregularfield},
@@ -236,5 +241,5 @@ function onSignupFormSubmit()
 }
 // Akeeba Subscriptions --- END << << <<
 
-ENDSCRIPT;
+JS;
 JFactory::getDocument()->addScriptDeclaration($script);

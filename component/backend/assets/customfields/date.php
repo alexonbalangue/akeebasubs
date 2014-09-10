@@ -20,7 +20,7 @@ class AkeebasubsCustomFieldDate extends AkeebasubsCustomFieldAbstract
 	public function getField($item, $cache, $userparams)
 	{
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['custom'])) {
+		if(array_key_exists(is_array($item->slug) && $item->slug, $cache['custom'])) {
 			$current = $cache['custom'][$item->slug];
 		} else {
 			if(!is_object($userparams->params)) {
@@ -59,6 +59,9 @@ class AkeebasubsCustomFieldDate extends AkeebasubsCustomFieldAbstract
 	{
 		$slug = $item->slug;
 		$javascript = <<<JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 (function($) {
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
@@ -132,7 +135,7 @@ JS
 
 	public function validate($item, $custom)
 	{
-		if (!array_key_exists($item->slug, $custom))
+		if (!is_array($item->slug) || !array_key_exists($item->slug, $custom))
 		{
 			$custom[$item->slug] = '';
 		}

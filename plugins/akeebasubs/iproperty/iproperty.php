@@ -556,6 +556,8 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 				->set($db->qn('params') . ' = ' . $db->q($param_string));
 			$db->setQuery($query);
 			$db->execute();
+
+			F0FUtilsCacheCleaner::clearPluginsCache();
 		}
 	}
 

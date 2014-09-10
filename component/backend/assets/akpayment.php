@@ -135,7 +135,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 
 			if ($percent)
 			{
-				$surcharge = $data['netprice'] * ($surcharge / 100);
+				$surcharge = $data->netprice * ($surcharge / 100);
 			}
 		}
 

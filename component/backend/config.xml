@@ -58,6 +58,12 @@
 			<option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_INPRICE</option>
 			<option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_SEPARATE</option>
 		</field>
+		<field name="includediscount" type="list" default="0"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDEDISCOUNT"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDEDISCOUNT_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="emailasusername" type="list" default="0"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME_DESC">
