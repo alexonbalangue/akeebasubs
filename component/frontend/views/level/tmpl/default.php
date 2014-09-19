@@ -27,7 +27,7 @@ $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'in
 $styleDiscount	= $this->cparams->showdiscountfield <= 0 ? 'display:none' : '';
 $styleTax		= $this->cparams->showtaxfield <= 0 ? 'display:none' : '';
 $styleRegular	= $this->cparams->showregularfield <= 0 ? 'display:none' : '';
-$styleCoupon	= (($this->cparams->showcouponfield <= 0) && empty($this->cache['coupon'])) ? 'display:none' : ''; // @todo
+$styleCoupon	= (($this->cparams->showcouponfield <= 0) && empty($this->cache['coupon'])) ? 'display:none' : '';
 $requireCoupon  = $this->cparams->reqcoupon;
 
 $paymentMethodsCount = count(AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id, 'return_raw_list' => 1)));
