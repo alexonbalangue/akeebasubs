@@ -151,8 +151,9 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 			</div>
 		</div>
 
-		<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
 	</fieldset>
+
+	<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
 
 	<fieldset>
 		<legend class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></legend>
