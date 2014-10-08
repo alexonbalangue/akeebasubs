@@ -179,11 +179,14 @@ JS;
 	 */
 	public function validate($item, $custom)
 	{
-		if (!isset($item->slug) || !is_array($item->slug))
+		if (!isset($custom[$item->slug]) || !is_array($custom))
 		{
 			$custom[$item->slug] = '';
 		}
-		elseif (!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		elseif (!array_key_exists($item->slug, $custom))
+		{
+			$custom[$item->slug] = '';
+		}
 
 		$valid = true;
 

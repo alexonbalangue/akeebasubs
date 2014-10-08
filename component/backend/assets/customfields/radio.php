@@ -83,7 +83,7 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 		if(response.custom_validation.$slug) {
 			$('#$slug').parents('div.control-group').addClass('success has-success');
 			$success_javascript
-			thisIsValid = trur;
+			thisIsValid = true;
 		} else {
 			$('#$slug').parents('div.control-group').addClass('error has-error');
 			$failure_javascript
