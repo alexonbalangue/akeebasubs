@@ -218,11 +218,14 @@ JS
 	 */
 	public function validatePerSubscription($item, $custom)
 	{
-		if (!isset($item->slug) || !is_array($item->slug))
+		if (!isset($custom[$item->slug]) || !is_array($custom))
 		{
 			$custom[$item->slug] = '';
 		}
-		elseif (!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		elseif (!array_key_exists($item->slug, $custom))
+		{
+			$custom[$item->slug] = '';
+		}
 
 		$valid = true;
 
@@ -239,7 +242,7 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(is_array($item->slug) && array_key_exists($item->slug, $cache['subcustom']))
+		if(is_array($cache) && array_key_exists($item->slug, $cache['subcustom']))
 		{
 			$current = $cache['subcustom'][$item->slug];
 		}
@@ -315,9 +318,12 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(is_array($item->slug) && array_key_exists($item->slug, $cache['subcustom'])) {
+		if(is_array($cache) && array_key_exists($item->slug, $cache['subcustom']))
+		{
 			$current = $cache['subcustom'][$item->slug];
-		} else {
+		}
+		else
+		{
 			$current = $item->default;
 		}
 

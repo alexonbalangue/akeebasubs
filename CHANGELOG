@@ -4,6 +4,9 @@ Akeeba Subscriptions 4.1.2
 + New message tags: [SLUG], [RENEWALURL] and [RENEWALURL:YourCouponCodeHere]
 ~ The coupon field will appear, even when you have disabled it, if the user provides a coupon code
 # [MEDIUM] The Akeeba Release System Download ID integration in emails didn't work due to a silly typo
+# [MEDIUM] Custom field validation was not working
+# [LOW] Fixed javascript error with radio custom fields
+# [LOW] Fixed display issue with radio custom fields
 
 Akeeba Subscriptions 4.1.1
 ================================================================================
