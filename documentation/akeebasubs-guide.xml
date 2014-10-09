@@ -4057,87 +4057,6 @@ Rule C gives $ 30 discount</programlisting>
       </tip>
     </section>
 
-    <section xml:id="affiliates">
-      <title>Affiliates management</title>
-
-      <para>Since Akeeba Subscriptions 2.0.b1 there is a very basic affiliate
-      management system. It is extremely (even stupidly!) simple by design. If
-      you want something more complex, you can easily integrate Akeeba
-      Subscriptions with a web-based affiliate management system, like OSI
-      Affiliates.</para>
-
-      <important>
-        <para>We also ship plugins which allow you to integrate Akeeba
-        Subscriptions with third party affiliate management solutions. Please
-        take a look at the integration plugins section of our
-        documentation.</para>
-      </important>
-
-      <para>The concept of affiliates in Akeeba Subscriptions is based on some
-      simple rules:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>You manually create affiliates in the back-end of the
-          component</para>
-        </listitem>
-
-        <listitem>
-          <para>Each affiliate is linked to a Joomla! user account and is
-          assigned a commission percentage</para>
-        </listitem>
-
-        <listitem>
-          <para>When you pay your affiliate, you manually create an affiliate
-          payment record to let Akeeba Subscriptions know how much you paid
-          him and when</para>
-        </listitem>
-
-        <listitem>
-          <para>Each subscription with a payment status of C (Completed)
-          counts towards the amount owed to the affiliate</para>
-        </listitem>
-
-        <listitem>
-          <para>Each affiliate payment deducts from the amount owed to the
-          affiliate</para>
-        </listitem>
-
-        <listitem>
-          <para>There is no "affiliate report" page of any kind</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>It's an extremely simple system, suitable for small sites with a
-      handful of trusted affiliates. If you're interested in integrating a
-      much more powerful third party affiliate system, please contact our
-      support.</para>
-
-      <bridgehead>How to use affiliates?</bridgehead>
-
-      <para>Each affiliate has a unique numeric Affiliate ID. You can see that
-      in the left-hand column in the affiliates management page. For our
-      example, we'll assume that our affiliate has an ID of 123.</para>
-
-      <para>In order for a sale to be registered to that affiliate, you need
-      to redirect the prospective buyer to the subscription levels list page,
-      having appended the <uri>affid=<replaceable>123</replaceable></uri> URL
-      parameter at the end of the URL. For example, if your subscription level
-      list page's URL is <uri>http://www.example.com/subscribe.html</uri> and
-      your Affiliate ID is 123 then all visitors must visit the URL
-      <uri>http://www.example.com/subscribe.html?affid=123</uri> for the sale
-      to be registered to the affiliate. If you're not using SEF URLs with
-      Joomla!, the URL would be something like
-      <uri>http://www.example.com/index.php?option=com_akeebasubs&amp;view=levels&amp;affid=123</uri>
-      instead.</para>
-
-      <para>The prospective buyer is free to wander off to other pages of your
-      site freely before coming buying his subscription. The affiliate ID is
-      stored in the user's session. As long as he has activated cookies on his
-      browser (it's on by default on all browsers) then the affiliate ID will
-      be "remembered" throughout the user's session.</para>
-    </section>
-
     <section xml:id="frotn-end-items">
       <title>Front-end items</title>
 
@@ -6051,14 +5970,6 @@ Rule C gives $ 30 discount</programlisting>
           </varlistentry>
 
           <varlistentry>
-            <term>PLG_AKEEBASUBS_AFFEMAILS_</term>
-
-            <listitem>
-              <para>E-mails sent to affiliates</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
             <term>PLG_SYSTEM_ASEXPIRATIONNOTIFY_</term>
 
             <listitem>
@@ -6462,15 +6373,6 @@ Rule C gives $ 30 discount</programlisting>
               <listitem>
                 <para>The numeric ID of the upgrade rule automatically applied
                 to the subscription, or 0 if no upgrade rule was used</para>
-              </listitem>
-            </varlistentry>
-
-            <varlistentry>
-              <term>[SUB:AKEEBASUBS_AFFILIATE_ID]</term>
-
-              <listitem>
-                <para>The numeric ID of the affiliate who referred this
-                subscription, or 0 if no affiliate was used</para>
               </listitem>
             </varlistentry>
 
