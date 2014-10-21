@@ -10,6 +10,7 @@ Akeeba Subscriptions 4.1.2
 # [LOW] Fixed display issue with radio custom fields
 # [LOW] Warning thrown from custom price point drop-down extra field
 # [LOW] Notice thrown from My Subscriptions page when the payment processor of a subscription has been disabled or no longer exists
+# [LOW] Missing language string for the message page's title
 
 Akeeba Subscriptions 4.1.1
 ================================================================================
