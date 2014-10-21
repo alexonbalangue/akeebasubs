@@ -8,6 +8,7 @@ Akeeba Subscriptions 4.1.2
 # [MEDIUM] Custom field validation was not working
 # [LOW] Fixed javascript error with radio custom fields
 # [LOW] Fixed display issue with radio custom fields
+# [LOW] Warning thrown from custom price point drop-down extra field
 
 Akeeba Subscriptions 4.1.1
 ================================================================================
