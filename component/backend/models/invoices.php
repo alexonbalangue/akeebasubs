@@ -738,8 +738,6 @@ class AkeebasubsModelInvoices extends F0FModel
 		$db->setQuery($query, 0, 1);
 		$invoiceRecord = $db->loadObject();
 
-		$invoice_no = $invoiceRecord->invoice_no;
-
 		// Repair the input HTML
 		if (function_exists('tidy_repair_string'))
 		{
