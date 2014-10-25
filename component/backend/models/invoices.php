@@ -747,7 +747,6 @@ class AkeebasubsModelInvoices extends F0FModel
 				'bare'							=> 'yes',
 				'clean'							=> 'yes',
 				'drop-proprietary-attributes'	=> 'yes',
-				'clean'							=> 'yes',
 				'output-html'					=> 'yes',
 				'show-warnings'					=> 'no',
 				'ascii-chars'					=> 'no',
