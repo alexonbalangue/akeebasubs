@@ -797,7 +797,7 @@ class AkeebasubsModelInvoices extends F0FModel
 		{
 			$hash = hash('sha256', $hashThis);
 		}
-		if (function_exists('sha1'))
+		else if (function_exists('sha1'))
 		{
 			$hash = sha1($hashThis);
 		}
