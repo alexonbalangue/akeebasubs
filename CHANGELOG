@@ -4,6 +4,7 @@ Akeeba Subscriptions 4.1.2
 + New message tags: [SLUG], [RENEWALURL] and [RENEWALURL:YourCouponCodeHere]
 ~ Updated .htaccess files for Apache 2.4 compatibility
 ~ The coupon field will appear, even when you have disabled it, if the user provides a coupon code
+~ Removing SSLv3 from PayMill payment plugin due to known vulnerabilities. See https://blog.paymill.com/poodle/
 # [MEDIUM] The Akeeba Release System Download ID integration in emails didn't work due to a silly typo
 # [MEDIUM] Custom field validation was not working
 # [LOW] Fixed javascript error with radio custom fields
