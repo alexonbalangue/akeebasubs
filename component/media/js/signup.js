@@ -91,6 +91,11 @@ function validateForm(callback_function)
 	(function($) {
 		var paymentMethod = $('input[name=paymentmethod]:checked').val();
 		
+		if (paymentMethod == null)
+		{
+			var paymentMethod = $('select[name=paymentmethod]').val();		
+		}
+		
 		if(akeebasubs_personalinfo == 1) {
 			var data = {
 				'action'	:	'read',
