@@ -54,8 +54,12 @@ class AkeebasubsHelperEuVATInfo
 		'SE' => array('Sweden', 'SE', 25),
 		'GB' => array('United Kingdom', 'GB', 20),
 		// Special cases of countries which belong to a core member state for VAT calculation
-		'MC' => array('Monaco', 'FR', 20), // Monaco belongs to France as far as VAT is concerned
-		'IM' => array('Isle of Man', 'GB', 20),  // Isle of Man belongs to Great Britain as far as VAT is concerned
+		'MC' => array('Monaco', 'FR', 20), // Monaco -> France
+		'IM' => array('Isle of Man', 'GB', 20),  // Isle of Man -> Great Britain
+		'GP' => array('Guadeloupe', 'FR', 20), // Guadeloupe -> France
+		'MQ' => array('Martinique', 'FR', 20), // Martinique -> France
+		'RE' => array('Reunion', 'FR', 20), // Reunion -> France
+		'PF' => array('French Polynesia', 'FR', 20), // French Polynesia -> France
 	);
 
 	protected static $cache = array();
