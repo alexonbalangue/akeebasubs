@@ -46,11 +46,7 @@ var akeebasubs_eu_configuration = {
 	"SE": ["Sweden", "SE", 25],
 	"GB": ["United Kingdom", "GB", 20],
 	"MC": ["Monaco", "FR", 20],
-	"IM": ["Isle of Man", "GB", 20],
-	"GP": ["Guadeloupe", "FR", 20],
-	"MQ": ["Martinique", "FR", 20],
-	"RE": ["Reunion", "FR", 20],
-	"PF": ["French Polynesia", "FR", 20]
+	"IM": ["Isle of Man", "GB", 20]
 };
 
 var akeebasubs_business_state = '';
