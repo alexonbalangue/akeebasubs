@@ -69,7 +69,14 @@ class AkeebasubsViewSubscriptions extends F0FViewHtml
 					$subscription_ids[]	 = $id;
 
 					// Propagate the info the the sub can be cancelled
-					$sub->allow_renew = $ppList[$sub->processor]->recurringCancellation;
+					if (isset($ppList[$sub->processor]))
+					{
+						$sub->allow_renew = $ppList[$sub->processor]->recurringCancellation;
+					}
+					else
+					{
+						$sub->allow_renew = true;
+					}
 
 					if (!$sub->enabled)
 					{

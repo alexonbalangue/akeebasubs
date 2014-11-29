@@ -186,9 +186,8 @@ CREATE TABLE `#__akeebasubs_upgrades` (
 	`to_id` bigint(20) unsigned NOT NULL,
 	`min_presence` int(5) unsigned NOT NULL,
 	`max_presence` int(5) unsigned NOT NULL,
-	`type` ENUM('value','percent') NOT NULL DEFAULT 'value',
+	`type` ENUM('value','percent', 'lastpercent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT '0.0',
-
 	`combine` tinyint(1) NOT NULL DEFAULT '0',
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
@@ -943,5 +942,12 @@ ALTER TABLE `#__akeebasubs_coupons` ADD `email` VARCHAR( 255 ) NULL AFTER `user`
 ALTER TABLE `#__akeebasubs_users` ADD `needs_logout` TINYINT NOT NULL DEFAULT '0';
             ]]></query>
         </action>
+
+			<action table="#__akeebasubs_upgrades" canfail="1">
+				<condition type="true"/>
+				<query><![CDATA[
+ALTER TABLE `#__akeebasubs_upgrades` CHANGE `type` `type` ENUM('value','percent', 'lastpercent') NOT NULL DEFAULT 'value' ;
+            ]]></query>
+			</action>
     </sql>
 </schema>

@@ -218,11 +218,22 @@ JS
 	 */
 	public function validatePerSubscription($item, $custom)
 	{
-		if(!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		if (!isset($custom[$item->slug]) || !is_array($custom))
+		{
+			$custom[$item->slug] = '';
+		}
+		elseif (!array_key_exists($item->slug, $custom))
+		{
+			$custom[$item->slug] = '';
+		}
+
 		$valid = true;
-		if(!$item->allow_empty) {
+
+		if(!$item->allow_empty)
+		{
 			$valid = !empty($custom[$item->slug]);
 		}
+
 		return $valid ? 1 : 0;
 	}
 
@@ -231,9 +242,12 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['subcustom'])) {
+		if(is_array($cache) && is_array(is_array($cache['subcustom'])) && array_key_exists($item->slug, $cache['subcustom']))
+		{
 			$current = $cache['subcustom'][$item->slug];
-		} else {
+		}
+		else
+		{
 			$current = $item->default;
 		}
 
@@ -304,9 +318,12 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['subcustom'])) {
+		if(is_array($cache) && array_key_exists($item->slug, $cache['subcustom']))
+		{
 			$current = $cache['subcustom'][$item->slug];
-		} else {
+		}
+		else
+		{
 			$current = $item->default;
 		}
 

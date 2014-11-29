@@ -15,8 +15,15 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
 $vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
-$includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
 $vatMultiplier = (100 + (int)$vatRate) / 100;
+// Take the various inclusions into account
+$includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
+$includediscount = AkeebasubsHelperCparams::getParam('includediscount', 0);
+// Only consider discounts if it's a logged in user
+$user = JFactory::getUser();
+$includediscount = ($includediscount && !$user->guest) ? true : false;
+
+$discounts = array();
 ?>
 
 <div id="akeebasubs" class="levels">
@@ -38,23 +45,59 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 		<tr>
 		<?php foreach($this->items as $level):
 			$signupFee = 0;
+
 			if (!in_array($level->akeebasubs_level_id, $this->subIDs) && ($includesignup != 0))
 			{
 				$signupFee = (float)$level->signupfee;
 			}
-			if ($includesignup == 1)
+
+			if ($includediscount)
 			{
-				$formatedPrice = sprintf('%1.02F', ($level->price + $signupFee) * $vatMultiplier);
+				/** @var AkeebasubsModelSubscribes $subscribesModel */
+				$subscribesModel = F0FModel::getTmpInstance('Subscribes', 'AkeebasubsModel')->savestate(false);
+				$subscribesModel->setState('id', $level->akeebasubs_level_id);
+				$subValidation = $subscribesModel->validatePrice(true);
+				$discount = $subValidation->discount;
+				$levelPrice = $level->price - $discount;
+
+				$formatedPriceD = sprintf('%1.02F', $level->price);
+				$dotposD = strpos($formatedPriceD, '.');
+				$price_integerD = substr($formatedPriceD,0,$dotposD);
+				$price_fractionalD = substr($formatedPriceD,$dotposD+1);
 			}
 			else
 			{
-				$formatedPrice = sprintf('%1.02F', ($level->price) * $vatMultiplier);
+				$discount = 0;
+				$levelPrice = $level->price;
 			}
+
+			$discounts[$level->akeebasubs_level_id] = $discount;
+
+			if ($includesignup == 1)
+			{
+				if (($levelPrice + $signupFee) < 0)
+				{
+					$levelPrice = -$signupFee;
+				}
+
+				$formatedPrice = sprintf('%1.02F', ($levelPrice + $signupFee) * $vatMultiplier);
+				$levelPrice += $signupFee;
+			}
+			else
+			{
+				if ($levelPrice < 0)
+				{
+					$levelPrice = 0;
+				}
+
+				$formatedPrice = sprintf('%1.02F', ($levelPrice) * $vatMultiplier);
+			}
+
 			$dotpos = strpos($formatedPrice, '.');
 			$price_integer = substr($formatedPrice,0,$dotpos);
 			$price_fractional = substr($formatedPrice,$dotpos+1);?>
 			<td class="akeebasubs-strappy-price">
-				<?php if(AkeebasubsHelperCparams::getParam('renderasfree', 0) && ($level->price < 0.01)):?>
+				<?php if(AkeebasubsHelperCparams::getParam('renderasfree', 0) && ($levelPrice < 0.01)):?>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
 				<?php else: ?>
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $price_integer ?></span><?php if((int)$price_fractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?><?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?>
@@ -62,6 +105,36 @@ $vatMultiplier = (100 + (int)$vatRate) / 100;
 			</td>
 		<?php endforeach ?>
 		</tr>
+
+		<?php if ($includediscount): ?>
+		<tr>
+			<?php foreach($this->items as $level):
+				$discount = 0;
+
+				if (array_key_exists($level->akeebasubs_level_id, $discounts))
+				{
+					$discount = (float)$discounts[$level->akeebasubs_level_id];
+				}
+
+				$formatedPrice = sprintf('%1.02F', $level->price * $vatMultiplier);
+				$dotpos = strpos($formatedPrice, '.');
+				$price_integer = substr($formatedPrice,0,$dotpos);
+				$price_fractional = substr($formatedPrice,$dotpos+1);
+				?>
+				<td class="akeebasubs-strappy-prediscount">
+					<?php if(abs($discount) >= 0.01): ?>
+						<span class="akeebasubs-strappy-prediscount-label">
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PREDISCOUNT'); ?>
+						</span>
+						<s>
+						<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $price_integer ?></span><?php if((int)$price_fractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?><?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?>
+						</s>
+					<?php endif; ?>
+				</td>
+			<?php endforeach ?>
+		</tr>
+		<?php endif; ?>
+
 		<?php if ($includesignup == 2): ?>
 		<tr>
 			<?php foreach($this->items as $level):

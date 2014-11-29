@@ -38,10 +38,6 @@
 				  <option value="1">JYes</option>
 				</field>
 				<field type="spacer" />
-				<field name="apimethod" type="radio" default="0" label="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_APIMETHOD_LABEL" description="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_APIMETHOD_DESC">
-				  <option value="0">file_get_contents</option>
-				  <option value="1">curl</option>
-				</field>
 			</fieldset>
 		</fields>
 	</config>

@@ -29,12 +29,18 @@ class AkeebasubsCustomFieldTextarea extends AkeebasubsCustomFieldAbstract
 	public function getField($item, $cache, $userparams)
 	{
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['custom'])) {
+		if(array_key_exists($item->slug, $cache['custom']))
+		{
 			$current = $cache['custom'][$item->slug];
-		} else {
-			if(!is_object($userparams->params)) {
+		}
+		else
+		{
+			if(!is_object($userparams->params))
+			{
 				$current = $item->default;
-			} else {
+			}
+			else
+			{
 				$slug = $item->slug;
 				$current = property_exists($userparams->params, $item->slug) ? $userparams->params->$slug : $item->default;
 			}
@@ -169,11 +175,21 @@ JS
 	 */
 	public function validate($item, $custom)
 	{
-		if(!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		if (!isset($custom[$item->slug]) || !is_array($custom))
+		{
+			$custom[$item->slug] = '';
+		}
+		elseif(!array_key_exists($item->slug, $custom))
+		{
+			$custom[$item->slug] = '';
+		}
+
 		$valid = true;
+
 		if(!$item->allow_empty) {
 			$valid = !empty($custom[$item->slug]);
 		}
+
 		return $valid ? 1 : 0;
 	}
 }

@@ -20,9 +20,12 @@ class AkeebasubsCustomFieldDate extends AkeebasubsCustomFieldAbstract
 	public function getField($item, $cache, $userparams)
 	{
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['custom'])) {
+		if(is_array($cache) && array_key_exists($item->slug, $cache['custom']))
+		{
 			$current = $cache['custom'][$item->slug];
-		} else {
+		}
+		else
+		{
 			if(!is_object($userparams->params)) {
 				$current = $item->default;
 			} else {
@@ -133,9 +136,17 @@ JS
 		$document->addScriptDeclaration($javascript);
 	}
 
+	/**
+	 * Validate a date field
+	 *
+	 * @param AkeebasubsTableCustomfield $item   The custom field to validate
+	 * @param array                      $custom The custom fields' values array
+	 *
+	 * @return int 1 if the field is valid, 0 otherwise
+	 */
 	public function validate($item, $custom)
 	{
-		if (!array_key_exists($item->slug, $custom))
+		if (!is_array($custom) || !array_key_exists($item->slug, $custom))
 		{
 			$custom[$item->slug] = '';
 		}
@@ -145,6 +156,7 @@ JS
 		if (!$item->allow_empty)
 		{
 			$valid = !empty($custom[$item->slug]);
+
 			if ($valid)
 			{
 				$valid = $custom[$item->slug] != '0000-00-00 00:00:00';

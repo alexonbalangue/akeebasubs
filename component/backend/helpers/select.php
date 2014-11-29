@@ -72,7 +72,8 @@ class AkeebasubsHelperSelect
 		'SG' =>'Singapore', 'SH' =>'Saint Helena, Ascension and Tristan da Cunha',
 		'SI' =>'Slovenia', 'SJ' =>'Svalbard and Jan Mayen', 'SK' =>'Slovakia',
 		'SL' =>'Sierra Leone', 'SM' =>'San Marino', 'SN' =>'Senegal', 'SO' =>'Somalia',
-		'SR' =>'Suriname', 'ST' =>'Sao Tome and Principe', 'SV' =>'El Salvador', 'SX' => 'Sint Maarten',
+		'SR' =>'Suriname', 'SS' => 'South Sudan',
+		'ST' =>'Sao Tome and Principe', 'SV' =>'El Salvador', 'SX' => 'Sint Maarten',
 		'SY' =>'Syrian Arab Republic', 'SZ' =>'Swaziland', 'TC' =>'Turks and Caicos Islands',
 		'TD' =>'Chad', 'TF' =>'French Southern Territories', 'TG' =>'Togo',
 		'TH' =>'Thailand', 'TJ' =>'Tajikistan', 'TK' =>'Tokelau', 'TL' =>'Timor-Leste',
@@ -198,7 +199,7 @@ class AkeebasubsHelperSelect
 			$temp = '';
 			foreach($attribs as $key=>$value)
 			{
-				$temp .= $key.' = "'.$value.'"';
+				$temp .= ' '.$key.'="'.$value.'"';
 			}
 			$attribs = $temp;
 		}
