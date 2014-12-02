@@ -6,6 +6,7 @@ Akeeba Subscriptions 4.1.2
 ~ The coupon field will appear, even when you have disabled it, if the user provides a coupon code
 ~ Removing SSLv3 from PayMill payment plugin due to known vulnerabilities. See https://blog.paymill.com/poodle/
 ~ Refactored the EU VAT implementation for easier maintenance and full compatibility with VAT MOSS
+# [HIGH] Off-line payment plugin results in fatal error
 # [MEDIUM] The Akeeba Release System Download ID integration in emails didn't work due to a silly typo
 # [MEDIUM] Custom field validation was not working
 # [LOW] Fixed javascript error with radio custom fields
