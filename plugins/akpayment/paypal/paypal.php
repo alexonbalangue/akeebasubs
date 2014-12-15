@@ -451,6 +451,7 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		$header .= "Host: $hostname:$port\r\n";
 		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 		$header .= "Content-Length: " . strlen($req) . "\r\n";
+		$header .= "User-Agent: AkeebaSubscriptions\r\n";
 		$header .= "Connection: Close\r\n\r\n";
 
 
