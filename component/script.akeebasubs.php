@@ -1,9 +1,9 @@
 <?php
 /**
- *  @package	akeebasubs
- *  @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
- *  @license	GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
- *  @version 	$Id$
+ * @package      akeebasubs
+ * @copyright    Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license      GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @version      $Id$
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 defined('_JEXEC') or die();
 
 // Load FOF if not already loaded
-if (!defined('F0F_INCLUDED'))
+if ( !defined('F0F_INCLUDED'))
 {
 	$paths = array(
 		(defined('JPATH_LIBRARIES') ? JPATH_LIBRARIES : JPATH_ROOT . '/libraries') . '/f0f/include.php',
@@ -32,7 +32,7 @@ if (!defined('F0F_INCLUDED'))
 
 	foreach ($paths as $filePath)
 	{
-		if (!defined('F0F_INCLUDED') && file_exists($filePath))
+		if ( !defined('F0F_INCLUDED') && file_exists($filePath))
 		{
 			@include_once $filePath;
 		}
@@ -40,25 +40,25 @@ if (!defined('F0F_INCLUDED'))
 }
 
 // Pre-load the installer script class from our own copy of FOF
-if (!class_exists('F0FUtilsInstallscript', false))
+if ( !class_exists('F0FUtilsInstallscript', false))
 {
 	@include_once __DIR__ . '/fof/utils/installscript/installscript.php';
 }
 
 // Pre-load the database schema installer class from our own copy of FOF
-if (!class_exists('F0FDatabaseInstaller', false))
+if ( !class_exists('F0FDatabaseInstaller', false))
 {
 	@include_once __DIR__ . '/fof/database/installer.php';
 }
 
 // Pre-load the update utility class from our own copy of FOF
-if (!class_exists('F0FUtilsUpdate', false))
+if ( !class_exists('F0FUtilsUpdate', false))
 {
 	@include_once __DIR__ . '/fof/utils/update/update.php';
 }
 
 // Pre-load the cache cleaner utility class from our own copy of FOF
-if (!class_exists('F0FUtilsCacheCleaner', false))
+if ( !class_exists('F0FUtilsCacheCleaner', false))
 {
 	@include_once __DIR__ . '/fof/utils/cache/cleaner.php';
 }
@@ -91,59 +91,64 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			'admin' => array(
 				'akeebasubs' => array('cpanel', 1)
 			),
-			'site' => array(
+			'site'  => array(
 				'aksexpires' => array('left', 0),
+				'akslevels'  => array('left', 0),
 				'aksubslist' => array('left', 0),
-				'akslevels' => array('left', 0)
 			)
 		),
 		// plugins => { (folder) => { (element) => (published) }* }*
 		'plugins' => array(
-			'akeebasubs' => array(
-				'adminemails'			=> 0,
-				'agreetotos'			=> 0,
-				'atscredits'			=> 0,
-				'autocity'				=> 0,
-				'canalyticscommerce'	=> 0,
-				'contentpublish'		=> 0,
-				'customfields'			=> 1,
-				'invoices'				=> 0,
-				'iproperty'				=> 0,
-				'joomla'				=> 1,
-				'joomlaprofilesync'		=> 1,
-				'recaptcha'				=> 0,
-				'slavesubs'				=> 1,
-				'sql'					=> 0,
-				'subscriptionemails'	=> 1,
+			'akeebasubs'         => array(
+				'adminemails'             => 0,
+				'agreetotos'              => 0,
+				'atscredits'              => 0,
+				'autocity'                => 0,
+				'canalyticscommerce'      => 0,
+				'contentpublish'          => 0,
+				'customfields'            => 1,
+				'invoices'                => 0,
+				'iproperty'               => 0,
+				'joomla'                  => 1,
+				'joomlaprofilesync'       => 1,
+				'needslogout'             => 1,
+				'recaptcha'               => 0,
+				'slavesubs'               => 1,
+				'sql'                     => 0,
+				'subscriptionemails'      => 1,
+				'subscriptionemailsdebug' => 0,
 			),
-			'akpayment' => array(
-				'2checkout'				=> 0,
-				'2conew'				=> 0,
-				'none'					=> 0,
-				'offline'				=> 0,
-				'paymill'				=> 0,
-				'paypal'				=> 1,
-				'paypalpaymentspro'		=> 0,
-				'paypalproexpress'		=> 0,
-				'skrill'				=> 0,
-				'stripe'				=> 0,
-				'viva'					=> 0,
+			'akpayment'          => array(
+				'2checkout'         => 0,
+				'2conew'            => 0,
+				'none'              => 0,
+				'offline'           => 0,
+				'paymill'           => 0,
+				'paypal'            => 1,
+				'paypalpaymentspro' => 0,
+				'paypalproexpress'  => 0,
+				'skrill'            => 0,
+				'stripe'            => 0,
+				'viva'              => 0,
 			),
-			'content' => array(
-				'aslink'				=> 1,
-				'asrestricted'			=> 1,
-				'astimedrelease'		=> 1,
+			'content'            => array(
+				'aslink'         => 1,
+				'asrestricted'   => 1,
+				'astimedrelease' => 1,
 			),
-            'sh404sefextplugins' => array(
-                'com_akeebasubs'        => 1
-            ),
-			'system' => array(
-				'as2cocollation'		=> 0,
-				'asexpirationcontrol'	=> 1,
-				'asexpirationnotify'	=> 1,
-				'aslogoutuser'			=> 0,
-				'asuserregredir'		=> 0,
-			)
+			'sh404sefextplugins' => array(
+				'com_akeebasubs' => 1
+			),
+			'system'             => array(
+				'as2cocollation'      => 0,
+				'asexpirationcontrol' => 1,
+				'asexpirationnotify'  => 1,
+				'aslogoutuser'        => 0,
+				'asuserregredir'      => 0,
+			),
+			'user'               => array(
+				'aslogoutuser' => 1,
+			),
 		)
 	);
 
@@ -154,7 +159,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	 * @var   array
 	 */
 	protected $removeFilesAllVersions = array(
-		'files'	=> array(
+		'files'   => array(
 			'cache/com_akeebasubs.updates.php',
 			'cache/com_akeebasubs.updates.ini',
 			'administrator/cache/com_akeebasubs.updates.php',
@@ -300,28 +305,33 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	 */
 	protected function renderPostInstallation($status, $fofInstallationStatus, $strapperInstallationStatus, $parent)
 	{
-?>
-<h1>Akeeba Subscriptions</h1>
+		?>
+		<h1>Akeeba Subscriptions</h1>
 
-<img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions" align="left" />
-<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">Welcome to Akeeba Subscriptions!</h2>
-<span>The easiest way to sell subscriptions on your Joomla! site</span>
+		<img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions"
+			 align="left"/>
+		<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">Welcome to Akeeba
+			Subscriptions!</h2>
+		<span>The easiest way to sell subscriptions on your Joomla! site</span>
 
-<div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
-	You can download translation files <a href="http://cdn.akeebabackup.com/language/akeebasubs/index.html">directly from our CDN page</a>.
-</div>
+		<div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
+			You can download translation files <a href="http://cdn.akeebabackup.com/language/akeebasubs/index.html">directly
+				from our CDN page</a>.
+		</div>
 
-<?php
+		<?php
 		parent::renderPostInstallation($status, $fofInstallationStatus, $strapperInstallationStatus, $parent);
 	}
 
 	protected function renderPostUninstallation($status, $parent)
 	{
-?>
-<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba Subscriptions Uninstallation</h2>
-<p>We are sorry that you decided to uninstall Akeeba Subscriptions. Please let us know why by using the Contact Us form on our site. We appreciate your feedback; it helps us develop better software!</p>
+		?>
+		<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba Subscriptions
+			Uninstallation</h2>
+		<p>We are sorry that you decided to uninstall Akeeba Subscriptions. Please let us know why by using the Contact
+			Us form on our site. We appreciate your feedback; it helps us develop better software!</p>
 
-<?php
+		<?php
 		parent::renderPostUninstallation($status, $parent);
 	}
 }
