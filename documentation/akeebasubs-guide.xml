@@ -51,18 +51,29 @@
 
       <para>Akeeba Subscriptions is a subscriptions management component for
       <trademark>Joomla!</trademark> 2.x/3.x and compatible distributions. It
-      is built using our renowned Framework on Framework architecture which
-      extends the standard Joomla! API, ensuring greater stability and
-      compatibility across different Joomla! releases. It is licensed under
-      the <link xlink:href="http://www.gnu.org/licenses/gpl.html">GNU General
-      Public License (GPL) version 3</link> or –at your option– any later
-      version published by the Free Software Foundation. It licensing scheme
-      means that you are free (and, in fact, more than welcome) to install it
-      on as many sites as you want, whenever you want and use it for as long
-      as you want, no strings attached. There are no secret per-domain
-      licensing fees and you can use it to sell one or several millions of
-      subscriptions without any hidden costs. We love Freedom of choice as
-      much as you do!</para>
+      is built using FOF (Framework on Framework, also known as Joomla! RAD),
+      ensuring greater stability and compatibility across different Joomla!
+      releases. It is licensed under the <link
+      xlink:href="http://www.gnu.org/licenses/gpl.html">GNU General Public
+      License (GPL) version 3</link> or –at your option– any later version
+      published by the Free Software Foundation.</para>
+
+      <important>
+        <para>This component is an on-line subscriptions manager. It is
+        written with the intent of providing time-limited subscriptions to
+        software, support and very specific kinds of content (Joomla!
+        articles, SobiPro listings). It is absolutely not a CRM (Custmer
+        Relationship Management) application. It is definitely not a media
+        access restriction application – media CAN NOT be resrticted the same
+        manner as content. It's not a downloads manager – you need a separate
+        application for managing software downloads, such as Akeeba
+        Subscriptions, DOCman, Phoca Downloads etc. If you want something to
+        manage print magazine subscriptions, country club memberships,
+        off-line or on-line media rental, grace periods for memberships etc
+        you are looking at the WRONG solution. Please read the documentation
+        thoroughly. If a feature you want is not listed here it is not
+        implemented and it will likely NOT be implemented.</para>
+      </important>
 
       <bridgehead>The killer features</bridgehead>
 
@@ -90,11 +101,11 @@
         </listitem>
 
         <listitem>
-          <para>Users can upgrade or expand (renew) their subscriptions.
-          Renewing a subscription will create a new subscription which becomes
-          valid the very second their old one expires. Users do not lose any
-          of their subscription time when renewing, unlike most other
-          subscription systems out there.</para>
+          <para>Users can upgrade or add extensions ("renewals") to their
+          subscriptions. Renewing a subscription will create a new
+          subscription which becomes valid the very second their old one
+          expires. Users do not lose any of their subscription time when
+          renewing, unlike most other subscription systems out there.</para>
         </listitem>
 
         <listitem>
@@ -123,7 +134,7 @@
           <para>Full support for complex tax calculations based on country,
           state and ZIP code. It fully integrates with the European Union's
           VIES system so that you can charge no VAT tax for intra-EU B2B
-          transactions.</para>
+          transactions. Now with VAT MOSS support for EU companies!</para>
         </listitem>
 
         <listitem>
@@ -141,37 +152,17 @@
         </listitem>
 
         <listitem>
-          <para>Special integrations for third party components. Check out our
-          documentation for more information.</para>
-        </listitem>
-
-        <listitem>
-          <para>Third party integrations for Akeeba Subscriptions are
-          available[1]: <link
-          xlink:href="http://www.nobbis.net/produkte/akeeba-g-sales-plugin.html">G*Sales</link>,
-          <link
-          xlink:href="https://www.zoolanders.com/extensions/item/zooaksubs">Zoo</link>,
-          <link xlink:href="http://www.hikashop.com/">HikaShop</link>.</para>
-        </listitem>
-
-        <listitem>
           <para>Content restriction: a content plugin to show parts of your
           content only to registered subscribers, without the need of any
-          external tool.</para>
+          external tool. Only applies to HTML content rendered by components,
+          modules and plugins which support the use of standard Joomla!
+          content plugins.</para>
         </listitem>
 
         <listitem>
           <para>Payment methods: PayPal (for personal, verified and business
-          accounts) is supported out of the box. Other payment methods are
-          being added continuously. Over twenty of them are already
-          implemented. Check out our documentation for more
-          information.</para>
-        </listitem>
-
-        <listitem>
-          <para>Recurring subscriptions. Not all payment methods support
-          recurring subscriptions. Please consult the documentation for
-          further information</para>
+          accounts), 2Checkout, PayMill, Stripe, Off-line payments and more.
+          Check out our documentation for more information.</para>
         </listitem>
 
         <listitem>
@@ -181,23 +172,25 @@
         </listitem>
       </itemizedlist>
 
-      <para>[1] These are third-party integration plugins, not distributed
-      with Akeeba Subscriptions.</para>
-
       <bridgehead>Support policy</bridgehead>
 
-      <para>Please note that the software is provided free of charge, but
-      support is not. You need to have an AKEEBADELUXE, SUPPORT or
-      FORUMSUPPORT subscription on AkeebaBackup.com to seek support regarding
-      setting up, using and customizing Akeeba Subscriptions. Please note that
-      we can not help you with design requests or write customisation code for
-      you. We can, however, help you by telling you what you have to do to
-      accomplish your intended goal, e.g. which files to modify and pretty
-      much a list of what you should do.</para>
+      <para>NO SUPPORT. We have discontinued support for this component. It is
+      now a developer's product. This means that we will not provide any kind
+      of support, help, instructions, custom feature implementations or any
+      other kind of work related to this component for a fee or for
+      free.</para>
     </section>
 
     <section xml:id="requirements">
       <title>Requirements and compatibility</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Akeeba Subscriptions 1.0.b4 and later will attempt to detect if
       your server meets the minimum requirements. If it does not, it will only
@@ -229,6 +222,14 @@
     <section xml:id="installing">
       <title>Installing Akeeba Subscriptions</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Installing <application>Akeeba Subscriptions</application> is no
       different than installing any other <trademark>Joomla!</trademark>
       extension on your site. You can read the complete instructions for
@@ -259,6 +260,14 @@
       <section>
         <title>Installing or manually updating the component and language
         files</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para>Just like with most Joomla! extensions there are two ways to
         install or manually update Akeeba Subscriptions on your site:</para>
@@ -299,6 +308,14 @@
 
         <section xml:id="installing-upload">
           <title>Upload and install.</title>
+
+          <warning>
+            <para>NO SUPPORT. We have discontinued support for this component.
+            It is now a developer's product. This means that we will not
+            provide any kind of support, help, instructions, custom feature
+            implementations or any other kind of work related to this
+            component for a fee or for free.</para>
+          </warning>
 
           <para>You can download the latest installation packages our site's
           <link
@@ -387,6 +404,14 @@
         <section xml:id="installation-manual">
           <title>Manual installation</title>
 
+          <warning>
+            <para>NO SUPPORT. We have discontinued support for this component.
+            It is now a developer's product. This means that we will not
+            provide any kind of support, help, instructions, custom feature
+            implementations or any other kind of work related to this
+            component for a fee or for free.</para>
+          </warning>
+
           <para>Sometimes <trademark>Joomla!</trademark> is unable to properly
           extract ZIP archives due to technical limitations on your server. In
           this case, you can follow a manual installation procedure.</para>
@@ -463,6 +488,14 @@
 
     <section xml:id="update">
       <title>Automatic updates</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <bridgehead>Checking for the latest version and upgrading</bridgehead>
 
@@ -565,6 +598,14 @@
     <section xml:id="requesting-support">
       <title>Requesting support and reporting bugs</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Akeeba Subscriptions is a product for developers. This means that
       absolutely no support, free or paid, is offered for Akeeba Subscriptions
       by our company.</para>
@@ -577,6 +618,14 @@
 
     <section xml:id="uninstallation">
       <title>Uninstallation</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>You can uninstall the component just like any other Joomla!
       component. In your site's back-end, just go to <guimenuitem>Extensions
@@ -592,6 +641,14 @@
 
     <section xml:id="how-subscriptions-work">
       <title>How subscriptions work and Quick Start</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Before you begin setting up Akeeba Subscriptions, you should be
       aware of the way subscriptions work under the hood. The most basic
@@ -688,11 +745,13 @@
       <bridgehead>How to make it all work together to make money from your
       site</bridgehead>
 
-      <note>
-        <para>The procedure outlined below works with Akeeba Subscriptions
-        2.4.5 or later. For earlier versions please consult the documentation
-        PDF file of your Akeeba Subscriptions version.</para>
-      </note>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>What we described above cover just one small part of Akeeba
       Subscriptions' functionality: how to create something that your clients
@@ -1091,8 +1150,16 @@
     <section xml:id="configuration">
       <title>Configuration options</title>
 
-      <para>Click on <guibutton>Options</guibutton> (Joomla! 1.6, 1.7 and
-      later) in the toolbar links area. The available options are:</para>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
+      <para>Click on <guibutton>Options</guibutton> in the toolbar links area.
+      The available options are:</para>
 
       <para><guilabel>Currency Options</guilabel></para>
 
@@ -1529,6 +1596,16 @@
           <term>Tax rate for display</term>
 
           <listitem>
+            <warning>
+              <para>This feature can ONLY use a SINGLE tax rate for ALL
+              subscriptions. Displaying the accurate price would require
+              knowing information about the client (such as their country and
+              city) which is of course unavailable before a client subscribes.
+              This may not be legally acceptable. Consult your accountant and
+              lawyer. We are not accountants or lawyers and we cannot offer
+              accounting or legal advice.</para>
+            </warning>
+
             <para>This is the tax rate (in percentage units) used ONLY for
             front-end display. We strongly advise against using this option
             unless you are obliged to for legal reasons.</para>
@@ -1648,10 +1725,9 @@
       <para><guilabel>Integrated invoicing</guilabel></para>
 
       <important>
-        <para>These options only apply to Akeeba Subscriptions Professional
-        and only if you are using the integrated invoicing feature of the
-        component, by enabling the Akeeba Subscriptions - Integrated Invoicing
-        plugin</para>
+        <para>These options only apply if you are using the integrated
+        invoicing feature of the component, by enabling the Akeeba
+        Subscriptions - Integrated Invoicing plugin</para>
       </important>
 
       <variablelist>
@@ -1882,11 +1958,19 @@
 
       <para>* actual label text may differ depending on your Joomla! version;
       this documentation is based on English (United Kingdom) language strings
-      found in Joomla! 2.5.1.</para>
+      found in Joomla! 2.5.1 and later.</para>
     </section>
 
     <section xml:id="level-groups">
       <title>Subscription Level Groups</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>You can access this feature by clicking on
       <guimenu>Setup</guimenu>, <guimenuitem>Levels Groups</guimenuitem> in
@@ -1924,6 +2008,14 @@
 
     <section xml:id="subscription-levels">
       <title>Subscription Levels</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>You can access this feature by clicking on
       <guimenu>Setup</guimenu>, <guimenuitem>Subscription Levels</guimenuitem>
@@ -2604,6 +2696,25 @@
     <section xml:id="tax-rules">
       <title>Tax Rules</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
+      <important>
+        <para>Attention EU businesses! This documentation page is out of date
+        and does not cover the VAT MOSS implementation. If you use the Tax
+        Rules Wizard feature after December 30th, 2014 18:00 using the lastest
+        version of Akeeba Subscriptions the VAT rate you specify will not be
+        taken into account. Instead, Akeeba Subscriptions will use its
+        internal list of VAt rates across all EU member states. This is
+        required to comply with the new VAT MOSS legislation coming into
+        effect January 1st, 2015.</para>
+      </important>
+
       <para>You can access this feature by clicking on
       <guimenu>Setup</guimenu>, <guimenuitem>Tax Rules</guimenuitem>
       <guilabel>Tax Rules</guilabel> in the toolbar links area.</para>
@@ -2800,6 +2911,14 @@
     <section xml:id="upgrade-rules">
       <title>Upgrade Rules</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>You can access this feature by clicking on
       <guimenu>Setup</guimenu>, <guimenuitem>Upgrades</guimenuitem> in the
       toolbar links area.</para>
@@ -2982,12 +3101,13 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="subscription-level-relations">
       <title>Subscription Level Relations</title>
 
-      <important>
-        <para>This feature is only available in the for-a-fee Akeeba
-        Subscriptions Professional edition of the component. It is NOT
-        available in the free of charge Akeeba Subscriptions Core
-        edition.</para>
-      </important>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>This feature allows you to create more fine-tuned subscription
       level relations than Upgrade Rules, covering areas of business policy
@@ -3409,12 +3529,13 @@ Rule C gives $ 30 discount</programlisting>
     <section xlink:href="email-templates" xml:id="email-templates">
       <title>E-mail templates</title>
 
-      <important>
-        <para>This feature is only available in the for-a-fee Akeeba
-        Subscriptions Professional edition of the component. It is NOT
-        available in the free of charge Akeeba Subscriptions Core
-        edition.</para>
-      </important>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>This feature allows you to manage HTML email templates for all
       emails sent out by Akeeba Subscriptions. In contrast with the
@@ -3514,6 +3635,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="coupons">
       <title>Coupons</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>You can access this feature by clicking on
       <guilabel>Coupons</guilabel>, <guilabel>Coupons</guilabel> in the
@@ -3686,6 +3815,14 @@ Rule C gives $ 30 discount</programlisting>
       <section xml:id="coupons-api">
         <title>Coupons API</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para>You can access this feature by clicking on
         <guilabel>Coupons</guilabel>, <guilabel>API Coupons</guilabel> in the
         toolbar links area.</para>
@@ -3831,6 +3968,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="subscriptions-management">
       <title>Subscriptions management</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>You can access this feature by clicking on
       <guilabel>Subscriptions</guilabel> in the toolbar links area.</para>
@@ -4060,6 +4205,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="frotn-end-items">
       <title>Front-end items</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>There are four types of front-end menu items you can
       create:</para>
 
@@ -4130,6 +4283,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="importing">
       <title>Importing data</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Akeeba Subscriptions allows you to import data from other
       subscription components and from other sources. This allows you to move
       data from an old subscriptions system into Akeeba Subscriptions.</para>
@@ -4141,74 +4302,30 @@ Rule C gives $ 30 discount</programlisting>
         Importing recurring subscriptions will lead to your customers being
         charged but their subscriptions not renewing. This is not a bug; it is
         how recurring payments work in all payment processors we know of. You
-        will need to cancel existing recurring payments and instruct your
-        users to resubscribe.</para>
+        will need to MANUALLY cancel existing recurring payments with your
+        payment processing service and instruct your users to
+        resubscribe.</para>
       </warning>
 
-      <section xml:id="importing-from-other-components">
-        <title>Importing from other components</title>
-
-        <para>Most likely you are already using a subscriptions system and
-        wouldn't like to have to manually import all of your subscriptions to
-        Akeeba Subscriptions. That's why we are offering an automated import
-        feature. You can access it from Akeeba Subscription's dashboard page,
-        by clicking on the Operations tab, and then on <guibutton>Import
-        Data</guibutton>.</para>
+      <section xml:id="importing-from-csv">
+        <title>Importing from CSV (a.k.a. Import Users)</title>
 
         <warning>
-          <para>Importing from other components will DELETE AND REPLACE ANY
-          AND ALL EXISTING DATA IN AKEEBA SUBSCRIPTIONS. There is NO TURNING
-          BACK. Do NOT use this option after you have been using Akeeba
-          Subscriptions and have new subscribers on your site.</para>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
         </warning>
 
-        <important>
-          <para>Please remember to review your Subscription Levels after
-          import. Most notably, the text of the subscription completion and
-          subscription cancellation pages will be missing from all
-          subscription levels.</para>
-        </important>
-
-        <para>The options are:</para>
-
-        <variablelist>
-          <varlistentry>
-            <term>AMBRA.Subscriptions</term>
-
-            <listitem>
-              <para>Imports subscription levels and subscriptions from
-              Dioscouri's AMBRA Subscriptions (a.k.a. AMBRA.subs)</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>AMBRA.Subscriptions with PayPal with VAT plugin</term>
-
-            <listitem>
-              <para>If you are using AMBRA.subs with my modified "PayPal with
-              VAT" payment plugin and the customizations for integrating
-              coupons into AMBRA.subs, you can click on this option. It will
-              import subscription levels, subscriptions and any coupon codes
-              defined. Moreover, it will also import the extra data stored per
-              user, e.g. their address and VAT number.</para>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-      </section>
-
-      <section xml:id="importing-from-csv">
-        <title>Importing from CSV</title>
-
-        <para>If you are using a Joomla! subscriptions component not supported
-        for direct import or a non-Joomla! system you need a way to quickly
-        import your existing subscriptions to Akeeba Subscriptions. The
-        fastest way is using the CSV import feature. CSV files can be
-        generated by most subscription systems, spreadsheet applications (e.g.
-        Microsoft Office Excel, OpenOffice/LibreOffice Calc, Apple Numbers,
-        Google Docs etc) and database tools (e.g. phpMyAdmin). You can access
-        the CSV import from Akeeba Subscription's dashboard page, by clicking
-        on the Operations tab, and then on <guibutton>Import
-        users</guibutton>.</para>
+        <para>If you need a way to quickly import your existing subscriptions
+        to Akeeba Subscriptions, the fastest way is using the CSV import
+        feature. CSV files can be generated by most subscription systems,
+        spreadsheet applications (e.g. Microsoft Office Excel,
+        OpenOffice/LibreOffice Calc, Apple Numbers, Google Docs etc) and
+        database tools (e.g. phpMyAdmin). You can access the CSV import from
+        Akeeba Subscription's dashboard page, by clicking on the Operations
+        tab, and then on <guibutton>Import users</guibutton>.</para>
 
         <important>
           <para>You need to manually create the subscription levels before
@@ -4685,7 +4802,13 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="custom-fields">
       <title>Custom fields</title>
 
-      <para>This feature was added in Akeeba Subscriptions 3.4.0.</para>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <important>
         <para>You need to publish the "Akeeba Subscriptions - Custom fields"
@@ -4929,6 +5052,12 @@ Rule C gives $ 30 discount</programlisting>
                 followed by the amount of time, in days, you want to
                 add/remove from the subscription's duration.</para>
 
+                <important>
+                  <para>These options only apple to the Subscription Options
+                  custom field type. They DO NOT apply to the Dropdown field
+                  type!</para>
+                </important>
+
                 <para>In this example, if someone chooses the "Normal price"
                 option the net price will be left unchanged because we did not
                 define an amount for the option.</para>
@@ -5045,6 +5174,14 @@ Rule C gives $ 30 discount</programlisting>
       <section xml:id="custom-fields-accessing">
         <title>Accessing custom fields data</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para>Custom fields can be accessed like any other custom field
         throughout the component. Whenever our documentation is talking about
         the field name's it means the Slug you have entered in the custom
@@ -5085,6 +5222,14 @@ Rule C gives $ 30 discount</programlisting>
       <section xml:id="custom-fields-translation">
         <title>Localising (translating) custom fields' labels and
         options</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para>It is possible to use "language constants" instead of plain
         words in titles and option values. A "language constant" is an
@@ -5147,11 +5292,13 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="integrated-invoicing">
       <title>Integrated invoicing</title>
 
-      <note>
-        <para>This feature is only available in the for-a-fee Akeeba
-        Subscriptions Professional edition. It is not available in the free of
-        charge Core edition.</para>
-      </note>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Since Akeeba Subscriptions 3.0.0 we offer an integrated invoicing
       feature in Akeeba Subscriptions. This allows you to automatically issue
@@ -5185,6 +5332,14 @@ Rule C gives $ 30 discount</programlisting>
 
       <section xml:id="invoice-templates">
         <title>Invoice Templates</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para>You can access it from Akeeba Subscriptions' menu through
         <guimenu>Invoicing</guimenu>, <guimenuitem>Invoice
@@ -5356,6 +5511,14 @@ Rule C gives $ 30 discount</programlisting>
       <section xml:id="invoices">
         <title>Invoice management</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para>You can access it from Akeeba Subscriptions' menu through
         <guimenu>Invoicing</guimenu>,
         <guimenuitem>Invoices</guimenuitem>.</para>
@@ -5488,6 +5651,14 @@ Rule C gives $ 30 discount</programlisting>
       <section xml:id="signed-pdfs">
         <title>Invoices as signed PDF files</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <important>
           <para>Signed PDFs can only be produced using the Integrated
           Invoicing feature of Akeeba Subscriptions. Even though other
@@ -5499,9 +5670,8 @@ Rule C gives $ 30 discount</programlisting>
 
         <tip>
           <para>If you have a business based in Greece you MUST generate
-          signed PDF files for your invoices to be considered legally valid.
-          Akeeba Subscriptions Professional is the first Joomla! invoicing
-          component to offer this feature.</para>
+          signed PDF files for your invoices to be considered legally
+          valid.</para>
         </tip>
 
         <para>We decided to devote an entire section to this slightly hidden
@@ -5699,15 +5869,18 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="reports">
       <title>Reports</title>
 
-      <important>
-        <para>This feature is only available in Akeeba Subscriptions
-        Professional.</para>
-      </important>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
-      <para>Akeeba Subscriptions Professional allows you to produce reports
-      which give you deeper insight into your clients purchasing patterns. You
-      can access the reports from the Reports link at the top of each page of
-      the component. The available reports are</para>
+      <para>Akeeba Subscriptions allows you to produce reports which give you
+      deeper insight into your clients purchasing patterns. You can access the
+      reports from the Reports link at the top of each page of the component.
+      The available reports are</para>
 
       <variablelist>
         <varlistentry>
@@ -5733,6 +5906,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="customising-akeeba-subs">
       <title>Customising Akeeba Subscriptions</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>The author has no illusions about being any good as a web
       designer. The opposite is true. To this end, we've made it very easy for
       users to override the CSS files of Akeeba Subscriptions in their
@@ -5741,6 +5922,14 @@ Rule C gives $ 30 discount</programlisting>
 
       <section xml:id="customising-frontend-layout">
         <title>Customising the front-end layout</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para>Layout customisation usually involves either changing just the
         CSS or changing both the CSS and HTML output of the component. Both
@@ -5903,111 +6092,31 @@ Rule C gives $ 30 discount</programlisting>
       <section xml:id="customising-emails">
         <title>Customising emails</title>
 
-        <para>There are two ways to customise your email messages, depending
-        on whether you are using the free-of-charge Core edition or the
-        for-a-fee Professional edition.</para>
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
-        <bridgehead>Akeeba Subscriptions Professional</bridgehead>
-
-        <para>Akeeba Subscriptions Professional has a full-featured e-mail
-        template editor discussed in the <link
-        linkend="email-templates">E-mail Templates</link> section of our
-        documentation. It allows for fine grained and very easy customisation
-        of the email messages.</para>
-
-        <bridgehead>Akeeba Subscriptions Core</bridgehead>
-
-        <para>Akeeba Subscriptions Core lacks the visual email editor of the
-        Professional version but it does allow you to customise your email
-        messages. In order to do that you have to override the translation
-        strings which define the email subject and body in each of its
-        email-capable plugins. Traditionally this required editing files on
-        your server but thanks to a feature introduced in Joomla! 2.5 this is
-        no longer necessary. Here's how to edit your emails text using Joomla!
-        2.5 and later's Language Override's feature. Log into your site's
-        back-end and go to <guimenu>Extensions</guimenu>,
-        <guimenuitem>Language Manager</guimenuitem>, then click on
-        <guilabel>Overrides</guilabel>. Right above the list, on the
-        right-hand side, there is a drop down. Select your desired language,
-        e.g. <option>English (United Kingdom) - Administrator</option>.</para>
-
-        <important>
-          <para>Make sure you select the "- Administrator" variant of your
-          language. Counter-intuitively, plugin translation files are
-          considered administrator language files.</para>
-        </important>
-
-        <para>Click on the <guibutton>New</guibutton> button. In the new page,
-        in the right-hand side of the page, there is a search box. Enter a
-        part of the email text you want to translate. For example, let's
-        change the email header of a new (just-paid) subscription. We will
-        search for <replaceable>new subscription</replaceable>. Make sure the
-        radio button called <guilabel>Value</guilabel> is selected and click
-        on <guibutton>Search</guibutton>. After 1-5 seconds, a list of
-        matching language strings is shown below. You can use the
-        <guilabel>More results</guilabel> link to load more language
-        strings.</para>
-
-        <para>The email language strings begin with a different prefix
-        depending on the plugin which sends them:</para>
-
-        <variablelist>
-          <varlistentry>
-            <term>PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_</term>
-
-            <listitem>
-              <para>E-mails sent to subscribers when a subscription is
-              created, renewed or otherwise modified</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>PLG_AKEEBASUBS_ADMINEMAILS_</term>
-
-            <listitem>
-              <para>E-mails sent to administrators</para>
-            </listitem>
-          </varlistentry>
-
-          <varlistentry>
-            <term>PLG_SYSTEM_ASEXPIRATIONNOTIFY_</term>
-
-            <listitem>
-              <para>E-mails sent to subscribers to notify them that their
-              subscription's expiration date is approaching</para>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-
-        <para>In our case, we want to change the email header for the email
-        sent to a subscriber when his subscription becomes active, so it is
-        the <option>PLG_AKEEBASUBS_SUBSCRIPTIONEMAILS_HEAD_NEW_ACTIVE</option>
-        option from the list. Click on it. Magically, the <guilabel>Language
-        constant</guilabel> and <guilabel>Text</guilabel> fields on the
-        left-hand side of the interface are populated.</para>
-
-        <para>Brilliant! Now edit the text in the <guilabel>Text</guilabel>
-        area to whatever you want. You can use <link
-        linkend="message-variables">message variables</link> in the
-        text.</para>
-
-        <para>Then make sure you tick the <guilabel>For both
-        locations</guilabel> checkbox. Finally click on the <guibutton>Save
-        &amp; Close</guibutton> button to save your override. From now on,
-        Joomla! will use your overridden translation string instead of
-        <guilabel>Akeeba Subscriptions - Subscriptions Emails</guilabel>
-        plugin's built-in strings. After setting up all those overrides, it's
-        easy to train your client to edit those emails all by themselves,
-        without your intervention.</para>
-
-        <para>The author would like to thank Joomla! co-founder and expert
-        Brian Teeman for pointing us to this very useful Joomla! hidden
-        secret.</para>
+        <para>Akeeba Subscriptions has a full-featured e-mail template editor
+        discussed in the <link linkend="email-templates">E-mail
+        Templates</link> section of our documentation. It allows for fine
+        grained and very easy customisation of the email messages.</para>
       </section>
 
       <section xml:id="message-variables">
         <title>Message variables for subscription level messages and
         emails</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para>Akeeba Subscriptions allows you to customise the subscription
         level success and cancellation messages, as well as the emails it
@@ -6658,6 +6767,14 @@ Rule C gives $ 30 discount</programlisting>
   <chapter xml:id="plugins-payment">
     <title>Payment plugins</title>
 
+    <warning>
+      <para>NO SUPPORT. We have discontinued support for this component. It is
+      now a developer's product. This means that we will not provide any kind
+      of support, help, instructions, custom feature implementations or any
+      other kind of work related to this component for a fee or for
+      free.</para>
+    </warning>
+
     <para>Akeeba Subscriptions is designed to be a modular system, powered by
     standard Joomla! plugins. Using plugins you can add payment methods as
     well as integration with third party software. Moreover, core
@@ -6676,8 +6793,7 @@ Rule C gives $ 30 discount</programlisting>
     just publish the relevant plugin.</para>
 
     <warning>
-      <para><emphasis role="bold">EXTREMELY IMPORTANT! DO NOT SEEK SUPPORT IF
-      YOU DO NOT HEED THIS WARNING.</emphasis></para>
+      <para><emphasis role="bold">EXTREMELY IMPORTANT!</emphasis></para>
 
       <para>ALL AKEEBA SUBSCRIPTIONS AND PAYMENT PLUGINS MUST BE PUBLISHED
       WITH "Public" ACCESS. IF YOU SET THEIR ACCESS TO "Registered" OR IN ANY
@@ -6689,14 +6805,20 @@ Rule C gives $ 30 discount</programlisting>
       because it does not activate subscriptions, run integrations (e.g.
       doesn't assign subscribers to Joomla! groups), accept payments or
       malfunctions in any other way, the first you MUST do before even
-      contemplating on whether you should contact us is to check your plugins.
-      During the first week of June 2012 we had four people with the same
-      self-induced problem. <emphasis role="bold">YOU MUST NEVER, EVER CHANGE
-      THE ACCESS OF THE PLUGINS</emphasis>!</para>
+      contemplating on whether there is a bug. <emphasis role="bold">YOU MUST
+      NEVER, EVER CHANGE THE ACCESS OF THE PLUGINS</emphasis>!</para>
     </warning>
 
     <section xml:id="payment-2checkout">
       <title>2Checkout Standard Purchase Routine</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - 2Checkout Standard Purchase
@@ -6870,6 +6992,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="payment-2conew">
       <title>2Checkout Standard Purchase Routine (with recurring
       support)</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - 2Checkout Standard Purchase Routine (with
@@ -7079,6 +7209,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="payment-none">
       <title>None</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - None</guilabel></para>
 
@@ -7099,6 +7237,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="payment-offline">
       <title>Off-line</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - Off-line</guilabel></para>
@@ -7166,6 +7312,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="payment-paymill">
       <title>PayMill</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - PayMill</guilabel></para>
@@ -7249,6 +7403,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="payment-paypal">
       <title>Paypal</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - Paypal</guilabel></para>
@@ -7652,6 +7814,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="payment-paypalpaymentspro">
       <title>Paypal Payments Pro</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - Paypal Payments Pro</guilabel></para>
 
@@ -7851,6 +8021,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="payment-paypalpaymentsproexpresscheckout">
       <title>Paypal Payments Pro (Express Checkout)</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - Paypal Payments Pro (Express
       Checkout)</guilabel></para>
@@ -8044,6 +8222,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="payment-skrill">
       <title>Skrill</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - Skrill (Moneybookers)</guilabel></para>
 
@@ -8161,6 +8347,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="payment-stripe">
       <title>Stripe</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - Stripe</guilabel></para>
 
@@ -8242,6 +8436,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="payment-vivapayments">
       <title>VivaPayments</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions Payment - VivaPayments</guilabel></para>
 
@@ -8250,7 +8452,10 @@ Rule C gives $ 30 discount</programlisting>
 
       <para>This payment method integrates the Greek payments service
       VivaPayments (http://www.vivapayments.com). It is a low cost payments
-      processor available only for businesses in Greece.</para>
+      processor available only to EU businesses. At the time of this writing
+      only Greece is supported, but support for other EU countries and select
+      non-EU markets (e.g. USA) are slowly being rolled out according to their
+      site.</para>
 
       <para>The options you have with this plugin are:</para>
 
@@ -8346,6 +8551,14 @@ Rule C gives $ 30 discount</programlisting>
 
   <chapter xml:id="plugins-integration">
     <title>Integration plugins</title>
+
+    <warning>
+      <para>NO SUPPORT. We have discontinued support for this component. It is
+      now a developer's product. This means that we will not provide any kind
+      of support, help, instructions, custom feature implementations or any
+      other kind of work related to this component for a fee or for
+      free.</para>
+    </warning>
 
     <para>Akeeba Subscriptions is designed to be a modular system, powered by
     standard Joomla! plugins. Using plugins you can add payment methods as
@@ -8530,6 +8743,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="integration-joomla">
       <title>Joomla! User Groups Integration</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Joomla! Usergroups Integration</guilabel></para>
 
@@ -8592,6 +8813,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="ntegration-joomlaprofilesync">
       <title>Joomla! User Profile Sync</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Joomla! user Profiles Sync</guilabel></para>
 
@@ -8609,6 +8838,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="integration-autocity">
       <title>Automatic Country and City fill</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Automatic Country and City fill</guilabel></para>
@@ -8642,6 +8879,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="integration-sql">
       <title>Custom SQL scripts</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Custom SQL scripts</guilabel></para>
 
@@ -8671,6 +8916,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="integration-iproperty">
       <title>Intellectual Property integration</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Intellectual Property Integration</guilabel>. Available
@@ -8775,6 +9028,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="integration-ganalytics-commerce">
       <title>Google Analytics Commerce integration</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Analytics commerce</guilabel></para>
 
@@ -8811,6 +9072,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="integration-atscredits">
       <title>Akeeba Ticket System credits integration</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Akeeba Ticket System credits
       integration</guilabel></para>
@@ -8837,6 +9106,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="integration-contentpublish">
       <title>Automatic content publishing</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Content Publishing</guilabel></para>
@@ -8964,6 +9241,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="integration-slavesubs">
       <title>Slave subscriptions</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Slave subscriptions support</guilabel></para>
 
@@ -8997,6 +9282,14 @@ Rule C gives $ 30 discount</programlisting>
   <chapter xml:id="plugins-misc">
     <title>Miscellaneous plugins</title>
 
+    <warning>
+      <para>NO SUPPORT. We have discontinued support for this component. It is
+      now a developer's product. This means that we will not provide any kind
+      of support, help, instructions, custom feature implementations or any
+      other kind of work related to this component for a fee or for
+      free.</para>
+    </warning>
+
     <para>Akeeba Subscriptions is designed to be a modular system, powered by
     standard Joomla! plugins. Using plugins you can add payment methods as
     well as integration with third party software. Moreover, core
@@ -9014,6 +9307,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="plugin-asexpirationcontrol">
       <title>Subscription expiration control</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <emphasis role="bold">System
       - Akeeba Subscriptions Expiration Control</emphasis></para>
@@ -9048,6 +9349,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="plugin-asexpirationnotify">
       <title>Subscription expiration notification</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>System - Akeeba
       Subscriptions Expiration Notification</guilabel></para>
 
@@ -9077,6 +9386,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="plugin-subscriptionemails">
       <title>Subscription emails</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Emails</guilabel></para>
@@ -9109,6 +9426,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="plugin-adminemails">
       <title>Administrator emails</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Administrator Emails</guilabel></para>
 
@@ -9139,6 +9464,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="plugin-asrestricted">
       <title>Content restriction</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Content - Akeeba
       Subscriptions Restricted</guilabel></para>
@@ -9234,6 +9567,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="plugin-astimedcontent">
       <title>Timed content release</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Content - Akeeba
       Subscriptions Timed Release</guilabel></para>
@@ -9414,6 +9755,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="plugin-aslink">
       <title>The Akeeba Subscriptions Link (aslink) plugin</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Content - Akeeba
       Subscriptions Link</guilabel></para>
 
@@ -9474,6 +9823,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="integration-agreetotos">
       <title>Agree to Terms of Service</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - Agree to Terms of Service</guilabel></para>
 
@@ -9509,6 +9866,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="integration-recaptcha">
       <title>ReCAPTCHA integration</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Plugins Manager as: <guilabel>Akeeba
       Subscriptions - ReCAPTCHA integration</guilabel></para>
@@ -9608,13 +9973,16 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="misc-asuserregredir">
       <title>User Registration Redirection to Akeeba Subscriptions</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Displayed in the Plugins Manager as: <guilabel>System - User
       Registration Redirection to Akeeba Subscriptions</guilabel></para>
-
-      <note>
-        <para>Available only in Akeeba Subscriptions Professional 3.1.0 and
-        later. Not available in Akeeba Subscriptions Core.</para>
-      </note>
 
       <para>Joomla! normally provides its own page to allow your visitors to
       become (free) members of the site. Many of our clients have told us that
@@ -9664,9 +10032,13 @@ Rule C gives $ 30 discount</programlisting>
     <section>
       <title>The logout plugins</title>
 
-      <note>
-        <para>Available since Akeeba Subscriptions 4.0</para>
-      </note>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>One of the major problems with the Joomla! CMS is that it caches
       the user privileges when the user logs in. Any change to the user groups
@@ -9700,6 +10072,14 @@ Rule C gives $ 30 discount</programlisting>
   <chapter xml:id="scheduling">
     <title>Scheduling information</title>
 
+    <warning>
+      <para>NO SUPPORT. We have discontinued support for this component. It is
+      now a developer's product. This means that we will not provide any kind
+      of support, help, instructions, custom feature implementations or any
+      other kind of work related to this component for a fee or for
+      free.</para>
+    </warning>
+
     <para>Akeeba Subscriptions needs to run some housekeeping tasks, such as
     checking subscriptions for expiration, in regular intervals. As you've
     read earlier on, this can be performed by means of system plugins. These
@@ -9719,6 +10099,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="scheduling-activate">
       <title>Activating the scheduling URL</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>The scheduling URL comes deactivated by default. This is a
       security setting: having this feature activated out of the box would
@@ -9752,11 +10140,27 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="scheduling-using">
       <title>Using the scheduling URL with CRON jobs</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Akeeba Subscriptions automates housekeeping tasks using a special
       URL which has to be called from a CRON job.</para>
 
       <section xml:id="scheduling-url">
         <title>The CRON URL</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para>The URL you have to use for your CRON jobs looks like
         this:</para>
@@ -9805,6 +10209,14 @@ Rule C gives $ 30 discount</programlisting>
 
       <section xml:id="scheduling-implementation">
         <title>Scheduling the housekeeping</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para>The exact method of scheduling depends on your host.</para>
 
@@ -9947,10 +10359,13 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="cli-update-script">
       <title>The CLI update notification and automatic update script</title>
 
-      <note>
-        <para>This feature is only available in the Professional
-        release.</para>
-      </note>
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Since March 2014 all of our software uses Joomla! Extensions
       Update to determine if there is an extension available and to let you
@@ -10022,23 +10437,6 @@ Rule C gives $ 30 discount</programlisting>
       following options:</para>
 
       <variablelist>
-        <varlistentry>
-          <term>Download ID</term>
-
-          <listitem>
-            <para>If you have the Professional version of our software please
-            enter your Download ID to allow Joomla! to download
-            subscriber-only updates. The Download ID may change over time: it
-            changes whenever the passwords' hashing ("encryption") on our site
-            is enhanced to increase security, when you change/reset your
-            password on our site or when you change your email address on our
-            site. If you cannot install updates to the Professional release
-            please use the My Subscription page on our site to find out your
-            current Download ID and make sure that you have an active
-            subscription.</para>
-          </listitem>
-        </varlistentry>
-
         <varlistentry>
           <term>Auto-update CLI settings</term>
 
@@ -10117,6 +10515,14 @@ Rule C gives $ 30 discount</programlisting>
 
       <bridgehead renderas="sect2">Creating a CRON job for the update
       script</bridgehead>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>You can only use this feature if you have access to the
       command-line version of PHP. In order to schedule an automatic update,
@@ -10221,6 +10627,14 @@ Rule C gives $ 30 discount</programlisting>
   <chapter xml:id="modules">
     <title>Akeeba Subscriptions' modules</title>
 
+    <warning>
+      <para>NO SUPPORT. We have discontinued support for this component. It is
+      now a developer's product. This means that we will not provide any kind
+      of support, help, instructions, custom feature implementations or any
+      other kind of work related to this component for a fee or for
+      free.</para>
+    </warning>
+
     <para>Akeeba Subscriptions comes with a variety of modules to display
     customized lists of subscription levels or a list of a user's
     subscriptions. Make sure you visit your Module Manager page and have a
@@ -10229,6 +10643,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="modules-list-of-active-subs">
       <title>List of active subscriptions</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Modules Manager as: <guilabel>Akeeba
       Subscriptions - List of active subscriptions</guilabel></para>
@@ -10241,6 +10663,14 @@ Rule C gives $ 30 discount</programlisting>
 
     <section xml:id="modules-list-sub-levels">
       <title>List subscription levels</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
 
       <para>Displayed in the Modules Manager as: <guilabel>Akeeba
       Subscriptions - List subscription levels</guilabel></para>
@@ -10282,6 +10712,14 @@ Rule C gives $ 30 discount</programlisting>
   <chapter xml:id="devinfo">
     <title>Developers' information</title>
 
+    <warning>
+      <para>NO SUPPORT. We have discontinued support for this component. It is
+      now a developer's product. This means that we will not provide any kind
+      of support, help, instructions, custom feature implementations or any
+      other kind of work related to this component for a fee or for
+      free.</para>
+    </warning>
+
     <para>Akeeba Subscriptions was designed to be very extensible right from
     its inception. Everything can be accomplished using plugins which can be
     installed through the familiar Joomla! extensions installer.</para>
@@ -10320,6 +10758,14 @@ Rule C gives $ 30 discount</programlisting>
     <section xml:id="dev-akeebasubs">
       <title>The "akeebasubs" plugin events</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <para>Since Akeeba Subscriptions 3.5.0 we recommend developers wishing
       to create plugins for Akeeba Subscriptions to place them in the
       <filename>akeebasubs</filename> directory.</para>
@@ -10348,6 +10794,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
       <section xml:id="dev-onAKSubscriptionChange">
         <title>onAKSubscriptionChange</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onAKSubscriptionChange($row, $info)</code></para>
 
@@ -10373,6 +10827,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
 
       <section xml:id="dev-onAKUserRefresh">
         <title>onAKUserRefresh</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onAKUserRefresh($user_id)</code></para>
@@ -10401,6 +10863,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
 
       <section xml:id="dev-onSubscriptionFormRender">
         <title>onSubscriptionFormRender</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onSubscriptionFormRender($userparams, $cache)</code></para>
@@ -10570,6 +11040,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
       <section xml:id="dev-onSubscriptionFormRenderPerSubFields">
         <title>onSubscriptionFormRenderPerSubFields</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onSubscriptionFormRenderPerSubFields($cache)</code></para>
 
@@ -10716,6 +11194,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
       <section xml:id="dev-onValidate">
         <title>onValidate</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onValidate($data)</code></para>
 
@@ -10759,6 +11245,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
 
       <section xml:id="dev-onValidatePerSubscription">
         <title>onValidatePerSubscription</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onValidatePerSubscription($data)</code></para>
@@ -10805,6 +11299,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
       <section xml:id="dev-onSubscriptionLevelFormRender">
         <title>onSubscriptionLevelFormRender</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onSubscriptionLevelFormRender(AkeebasubsTableLevel
         $level)</code></para>
@@ -10837,6 +11339,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
       <section xml:id="dev-onAKUserGetData">
         <title>onAKUserGetData</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onAKUserGetData($userData)</code></para>
 
@@ -10864,6 +11374,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
       <section xml:id="dev-onAKUserSaveData">
         <title>onAKUserSaveData</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onAKUserSaveData($row)</code></para>
 
@@ -10884,6 +11402,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
 
       <section xml:id="dev-onCancelMessage">
         <title>onCancelMessage</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onCancelMessage($row)</code></para>
@@ -10909,6 +11435,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
 
       <section xml:id="dev-onOrderMessage">
         <title>onOrderMessage</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onOrderMessage($row)</code></para>
@@ -10936,8 +11470,24 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
     <section xml:id="dev-akpayment">
       <title>The "akpayment" plugin events</title>
 
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
       <section>
         <title>onAKPaymentGetIdentity</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onAKPaymentGetIdentity()</code></para>
@@ -10975,6 +11525,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
       <section>
         <title>onAKPaymentNew</title>
 
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
+
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onAKPaymentNew($paymentmethod, $user, $level,
         $subscription)</code></para>
@@ -10989,6 +11547,14 @@ class plgAkeebasubsMycustomplugin extends plgAkeebasubsAbstract
 
       <section>
         <title>onAKPaymentCallback</title>
+
+        <warning>
+          <para>NO SUPPORT. We have discontinued support for this component.
+          It is now a developer's product. This means that we will not provide
+          any kind of support, help, instructions, custom feature
+          implementations or any other kind of work related to this component
+          for a fee or for free.</para>
+        </warning>
 
         <para><emphasis role="bold">Prototype</emphasis>: <code>public
         function onAKPaymentCallback($paymentmethod, $data)</code></para>
