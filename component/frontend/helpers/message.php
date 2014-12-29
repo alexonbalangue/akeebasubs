@@ -374,9 +374,8 @@ class AkeebasubsHelperMessage
 
 		// Special replacement for RENEWALURL:COUPONCODE
 		$text = self::substituteRenewalURLWithCoupon($text, $renewalURL);
-
-		JFactory::getApplication()
-				->triggerEvent('onAKParseMessage', array( &$text, $sub, $extras));
+		F0FPlatform::getInstance()
+				->runPlugins('onAkeebasubsAfterProcessTags', array(&$text, $sub, $extras));
 
 		return $text;
 	}
