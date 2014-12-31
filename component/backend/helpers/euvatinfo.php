@@ -40,7 +40,7 @@ class AkeebasubsHelperEuVATInfo
 		'CY' => array('Cyprus', 'CY', 19),
 		'LV' => array('Latvia', 'LV', 21),
 		'LT' => array('Lithuania', 'LT', 21),
-		'LU' => array('Luxembourg', 'LU', 15),
+		'LU' => array('Luxembourg', 'LU', 17),
 		'HU' => array('Hungary', 'HU', 27),
 		'MT' => array('Malta', 'MT', 18),
 		'NL' => array('Netherlands', 'NL', 21),
