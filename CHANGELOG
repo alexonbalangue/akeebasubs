@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 4.1.3
 ================================================================================
++ Add a new plugin to conform to EU regulations regarding VAT and notification of the withdrawal period
 # [LOW] PayPal IPN could fail if User-Agent is not set (thanks, Vic!)
 # [LOW] gh-82 The expiration by week report wouldn't work on live sites due to the wrong loading order of Javascript files.
 

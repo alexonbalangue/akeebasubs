@@ -23,7 +23,7 @@
 defined('_JEXEC') or die();
 
 // Load FOF if not already loaded
-if ( !defined('F0F_INCLUDED'))
+if (!defined('F0F_INCLUDED'))
 {
 	$paths = array(
 		(defined('JPATH_LIBRARIES') ? JPATH_LIBRARIES : JPATH_ROOT . '/libraries') . '/f0f/include.php',
@@ -32,7 +32,7 @@ if ( !defined('F0F_INCLUDED'))
 
 	foreach ($paths as $filePath)
 	{
-		if ( !defined('F0F_INCLUDED') && file_exists($filePath))
+		if (!defined('F0F_INCLUDED') && file_exists($filePath))
 		{
 			@include_once $filePath;
 		}
@@ -40,25 +40,25 @@ if ( !defined('F0F_INCLUDED'))
 }
 
 // Pre-load the installer script class from our own copy of FOF
-if ( !class_exists('F0FUtilsInstallscript', false))
+if (!class_exists('F0FUtilsInstallscript', false))
 {
 	@include_once __DIR__ . '/fof/utils/installscript/installscript.php';
 }
 
 // Pre-load the database schema installer class from our own copy of FOF
-if ( !class_exists('F0FDatabaseInstaller', false))
+if (!class_exists('F0FDatabaseInstaller', false))
 {
 	@include_once __DIR__ . '/fof/database/installer.php';
 }
 
 // Pre-load the update utility class from our own copy of FOF
-if ( !class_exists('F0FUtilsUpdate', false))
+if (!class_exists('F0FUtilsUpdate', false))
 {
 	@include_once __DIR__ . '/fof/utils/update/update.php';
 }
 
 // Pre-load the cache cleaner utility class from our own copy of FOF
-if ( !class_exists('F0FUtilsCacheCleaner', false))
+if (!class_exists('F0FUtilsCacheCleaner', false))
 {
 	@include_once __DIR__ . '/fof/utils/cache/cleaner.php';
 }
@@ -101,6 +101,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 		'plugins' => array(
 			'akeebasubs'         => array(
 				'adminemails'             => 0,
+				'agreetoeu'               => 0,
 				'agreetotos'              => 0,
 				'atscredits'              => 0,
 				'autocity'                => 0,
