@@ -26,7 +26,6 @@ function loadExpGraph()
 		dataType: 'json',
 		cache   : false,
 		success : function(json, status, jqXH){
-			
 			expireChart.destroy();
 			
 			var options = {
