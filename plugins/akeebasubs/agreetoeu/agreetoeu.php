@@ -22,6 +22,25 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 		// Init the fields array which will be returned
 		$fields = array();
 
+		// ----- CONFIRM BEING INFORMED FIELD -----
+		// Setup the combobox parameters
+		$options = array(
+			JHTML::_('select.option', 0, JText::_('JNO')),
+			JHTML::_('select.option', 1, JText::_('JYES')),
+		);
+		$html = JHTML::_('select.genericlist', $options, 'custom[confirm_informed]', array(), 'value', 'text', 0, 'confirm_informed');
+
+		// Setup the field
+		$field = array(
+			'id'           => 'confirm_informed',
+			'label'        => '* ' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_INFORMED_LABEL'),
+			'elementHTML'  => $html . '<br/><small style="text-align: justify; display: block; line-height: 120%; margin: 3pt 0;">' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_INFORMED_DESC') . '</small>',
+			'invalidLabel' => JText::_('PLG_AKEEBASUBS_AGREETOEU_ERR_REQUIRED'),
+			'isValid'      => false
+		);
+		// Add the field to the return output
+		$fields[] = $field;
+
 		// ----- CONFIRM POSTAL ADDRESS FIELD -----
 		// Setup the combobox parameters
 		$options = array(
@@ -74,6 +93,14 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 		// Immediate validation of the field
 		if (akeebasubs_apply_validation)
 		{
+			$('#confirm_informed').change(function(e){
+				if($('#confirm_informed').val() == 1) {
+					$('#confirm_informed_invalid').css('display','none');
+				} else {
+					$('#confirm_informed_invalid').css('display','inline-block');
+				}
+			});
+
 			$('#confirm_postal').change(function(e){
 				if($('#confirm_postal').val() == 1) {
 					$('#confirm_postal_invalid').css('display','none');
@@ -81,6 +108,7 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 					$('#confirm_postal_invalid').css('display','inline-block');
 				}
 			});
+
 			$('#confirm_withdrawal').change(function(e){
 				if($('#confirm_withdrawal').val() == 1) {
 					$('#confirm_withdrawal_invalid').css('display','none');
@@ -97,6 +125,7 @@ function plg_akeebasubs_agreetotos_fetch()
 	var result = {};
 
 	(function($) {
+		result.confirm_informed = $('#confirm_informed').val();
 		result.confirm_postal = $('#confirm_postal').val();
 		result.confirm_withdrawal = $('#confirm_withdrawal').val();
 	})(akeeba.jQuery);
@@ -109,6 +138,8 @@ function plg_akeebasubs_agreetotos_validate(response)
     var thisIsValid = true;
 
 	(function($) {
+		$('#confirm_informed').parents('div.control-group').removeClass('error has-error success has-success');
+		$('#confirm_informed_invalid').css('display','none');
 		$('#confirm_postal').parents('div.control-group').removeClass('error has-error success has-success');
 		$('#confirm_postal_invalid').css('display','none');
 		$('#confirm_withdrawal').parents('div.control-group').removeClass('error has-error success has-success');
@@ -118,6 +149,15 @@ function plg_akeebasubs_agreetotos_validate(response)
 		{
 			thisIsValid = true;
 			return;
+		}
+
+		if (response.custom_validation.confirm_informed) {
+			$('#confirm_informed').parents('div.control-group').addClass('success has-success');
+			$('#confirm_informed_invalid').css('display','none');
+		} else {
+			$('#confirm_informed').parents('div.control-group').addClass('error has-error');
+			$('#confirm_informed_invalid').css('display','inline-block');
+			thisIsValid = false;
 		}
 
 		if (response.custom_validation.confirm_postal) {
@@ -159,6 +199,11 @@ JS;
 
 		$custom = $data->custom;
 
+		if (!array_key_exists('confirm_informed', $custom))
+		{
+			$custom['confirm_informed'] = 0;
+		}
+
 		if (!array_key_exists('confirm_postal', $custom))
 		{
 			$custom['confirm_postal'] = 0;
@@ -169,11 +214,12 @@ JS;
 			$custom['confirm_withdrawal'] = 0;
 		}
 
+		$response['custom_validation']['confirm_informed'] = $custom['confirm_informed'] != 0;
 		$response['custom_validation']['confirm_postal'] = $custom['confirm_postal'] != 0;
 		$response['custom_validation']['confirm_withdrawal'] = $custom['confirm_withdrawal'] != 0;
 
 		// Huh?
-		$response['valid'] = $response['custom_validation']['confirm_postal'] && $response['custom_validation']['confirm_withdrawal'];
+		$response['valid'] = $response['custom_validation']['confirm_informed'] && $response['custom_validation']['confirm_postal'] && $response['custom_validation']['confirm_withdrawal'];
 
 		return $response;
 	}
