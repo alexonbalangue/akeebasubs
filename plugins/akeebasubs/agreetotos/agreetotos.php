@@ -14,6 +14,8 @@ class plgAkeebasubsAgreetotos extends JPlugin
 {
 	function onSubscriptionFormPrepaymentRender($userparams, $cache)
 	{
+		JHtml::_('bootstrap.popover');
+
 		// Load the language
 		$lang = JFactory::getLanguage();
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, 'en-GB', true);
@@ -62,12 +64,6 @@ class plgAkeebasubsAgreetotos extends JPlugin
 				}
 			}
 		}
-		// Setup the combobox parameters
-		$options = array(
-			JHTML::_('select.option', 0, JText::_('JNO')),
-			JHTML::_('select.option', 1, JText::_('JYES')),
-		);
-		$html = JHTML::_('select.genericlist', $options, 'custom[agreetotos]', array(), 'value', 'text', $current, 'agreetotos');
 
 		// Setup the field
 		if (version_compare(JVERSION, '3.0', 'ge'))
@@ -88,10 +84,22 @@ class plgAkeebasubsAgreetotos extends JPlugin
 			$text = JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL');
 			$urlField = '<a href="javascript:return false;" onclick="window.open(\'' . $url . '\',\'toswindow\',\'width=640,height=480,resizable=yes,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no\');">' . $text . '</a>';
 		}
+
+		// Setup the field's HTML
+		$checked = $current ? 'checked="checked"' : '';
+		$labelText = JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_AGREE_LABEL', JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL'));
+		$extraText = JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_TOS_INFO_LABEL', $urlField);
+		$html = <<<HTML
+<label class="checkbox">
+	<span class="icon icon-info-sign hasPopover" title="$extraText"></span>
+	<input type="checkbox" name="custom[agreetotos]" id="agreetotos" $checked /> $labelText
+</label>
+HTML;
+
 		$field = array(
 			'id'           => 'agreetotos',
-			'label'        => '* ' . JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_AGREE_LABEL', JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL')),
-			'elementHTML'  => $html . '<br/><small style="text-align: justify; display: block; line-height: 120%; margin: 3pt 0;">' .  JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_TOS_INFO_LABEL', $urlField) . '</small>',
+			'label'        => '* ',
+			'elementHTML'  => $html,
 			'invalidLabel' => JText::_('PLG_AKEEBASUBS_AGREETOTOS_ERR_REQUIRED'),
 			'isValid'      => $current != 0
 		);
@@ -113,7 +121,7 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		if (akeebasubs_apply_validation)
 		{
 			$('#agreetotos').change(function(e){
-				if($('#agreetotos').val() == 1) {
+				if($('#agreetotos').is(':checked')) {
 					$('#agreetotos_invalid').css('display','none');
 				} else {
 					$('#agreetotos_invalid').css('display','inline-block');
@@ -128,7 +136,7 @@ function plg_akeebasubs_agreetotos_fetch()
 	var result = {};
 
 	(function($) {
-		result.agreetotos = $('#agreetotos').val();
+		result.agreetotos = $('#agreetotos').is(':checked') ? 1 : 0;
 	})(akeeba.jQuery);
 
 	return result;
@@ -184,8 +192,10 @@ JS;
 			$custom['agreetotos'] = 0;
 		}
 
-		$response['custom_validation']['agreetotos'] = $custom['agreetotos'] != 0;
-		$response['valid'] = $response['custom_validation']['agreetotos'];
+		$custom['agreetotos'] = ($custom['agreetotos'] === 'on') ? 1 : 0;
+
+		$response['custom_validation']['agreetotos'] = ($custom['agreetotos'] != 0) ? 1 : 0;
+		$response['valid'] = $response['custom_validation']['agreetotos'] ? 1 : 0;
 
 		return $response;
 	}

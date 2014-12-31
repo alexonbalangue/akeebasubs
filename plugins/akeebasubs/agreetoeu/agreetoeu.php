@@ -24,17 +24,20 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 
 		// ----- CONFIRM BEING INFORMED FIELD -----
 		// Setup the combobox parameters
-		$options = array(
-			JHTML::_('select.option', 0, JText::_('JNO')),
-			JHTML::_('select.option', 1, JText::_('JYES')),
-		);
-		$html = JHTML::_('select.genericlist', $options, 'custom[confirm_informed]', array(), 'value', 'text', 0, 'confirm_informed');
+		$labelText = JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_INFORMED_LABEL');
+		$extraText = JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_INFORMED_DESC');
+		$html = <<<HTML
+<label class="checkbox">
+	<span class="icon icon-info-sign hasPopover" title="$extraText"></span>
+	<input type="checkbox" name="custom[confirm_informed]" id="confirm_informed" /> $labelText
+</label>
+HTML;
 
 		// Setup the field
 		$field = array(
 			'id'           => 'confirm_informed',
-			'label'        => '* ' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_INFORMED_LABEL'),
-			'elementHTML'  => $html . '<br/><small style="text-align: justify; display: block; line-height: 120%; margin: 3pt 0;">' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_INFORMED_DESC') . '</small>',
+			'label'        => '* ',
+			'elementHTML'  => $html,
 			'invalidLabel' => JText::_('PLG_AKEEBASUBS_AGREETOEU_ERR_REQUIRED'),
 			'isValid'      => false
 		);
@@ -43,17 +46,20 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 
 		// ----- CONFIRM POSTAL ADDRESS FIELD -----
 		// Setup the combobox parameters
-		$options = array(
-			JHTML::_('select.option', 0, JText::_('JNO')),
-			JHTML::_('select.option', 1, JText::_('JYES')),
-		);
-		$html = JHTML::_('select.genericlist', $options, 'custom[confirm_postal]', array(), 'value', 'text', 0, 'confirm_postal');
+		$labelText = JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_POSTAL_LABEL');
+		$extraText = JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_POSTAL_DESC');
+		$html = <<<HTML
+<label class="checkbox">
+	<span class="icon icon-info-sign hasPopover" title="$extraText"></span>
+	<input type="checkbox" name="custom[confirm_postal]" id="confirm_postal" /> $labelText
+</label>
+HTML;
 
 		// Setup the field
 		$field = array(
 			'id'           => 'confirm_postal',
-			'label'        => '* ' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_POSTAL_LABEL'),
-			'elementHTML'  => $html . '<br/><small style="text-align: justify; display: block; line-height: 120%; margin: 3pt 0;">' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_POSTAL_DESC') . '</small>',
+			'label'        => '* ',
+			'elementHTML'  => $html,
 			'invalidLabel' => JText::_('PLG_AKEEBASUBS_AGREETOEU_ERR_REQUIRED'),
 			'isValid'      => false
 		);
@@ -62,20 +68,24 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 
 		// ----- CONFIRM RIGHT TO WITHDRAWAL FIELD -----
 		// Setup the combobox parameters
-		$options = array(
-			JHTML::_('select.option', 0, JText::_('JNO')),
-			JHTML::_('select.option', 1, JText::_('JYES')),
-		);
-		$html = JHTML::_('select.genericlist', $options, 'custom[confirm_withdrawal]', array(), 'value', 'text', 0, 'confirm_withdrawal');
+		$labelText = JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_WITHDRAWAL_LABEL');
+		$extraText = JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_WITHDRAWAL_DESC');
+		$html = <<<HTML
+<label class="checkbox">
+	<span class="icon icon-info-sign hasPopover" title="$extraText"></span>
+	<input type="checkbox" name="custom[confirm_withdrawal]" id="confirm_withdrawal" /> $labelText
+</label>
+HTML;
 
 		// Setup the field
 		$field = array(
 			'id'           => 'confirm_withdrawal',
-			'label'        => '* ' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_WITHDRAWAL_LABEL'),
-			'elementHTML'  => $html . '<br/><small style="text-align: justify; display: block; line-height: 120%; margin: 3pt 0;">' . JText::_('PLG_AKEEBASUBS_AGREETOEU_CONFIRM_WITHDRAWAL_DESC') . '</small>',
+			'label'        => '* ',
+			'elementHTML'  => $html,
 			'invalidLabel' => JText::_('PLG_AKEEBASUBS_AGREETOEU_ERR_REQUIRED'),
 			'isValid'      => false
 		);
+
 		// Add the field to the return output
 		$fields[] = $field;
 
@@ -94,7 +104,7 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 		if (akeebasubs_apply_validation)
 		{
 			$('#confirm_informed').change(function(e){
-				if($('#confirm_informed').val() == 1) {
+				if($('#confirm_informed').is(':checked')) {
 					$('#confirm_informed_invalid').css('display','none');
 				} else {
 					$('#confirm_informed_invalid').css('display','inline-block');
@@ -102,7 +112,7 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 			});
 
 			$('#confirm_postal').change(function(e){
-				if($('#confirm_postal').val() == 1) {
+				if($('#confirm_postal').is(':checked')) {
 					$('#confirm_postal_invalid').css('display','none');
 				} else {
 					$('#confirm_postal_invalid').css('display','inline-block');
@@ -110,7 +120,7 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 			});
 
 			$('#confirm_withdrawal').change(function(e){
-				if($('#confirm_withdrawal').val() == 1) {
+				if($('#confirm_withdrawal').is(':checked')) {
 					$('#confirm_withdrawal_invalid').css('display','none');
 				} else {
 					$('#confirm_withdrawal_invalid').css('display','inline-block');
@@ -120,20 +130,20 @@ class plgAkeebasubsAgreetoeu extends JPlugin
 	});
 })(akeeba.jQuery);
 
-function plg_akeebasubs_agreetotos_fetch()
+function plg_akeebasubs_agreetoeu_fetch()
 {
 	var result = {};
 
 	(function($) {
-		result.confirm_informed = $('#confirm_informed').val();
-		result.confirm_postal = $('#confirm_postal').val();
-		result.confirm_withdrawal = $('#confirm_withdrawal').val();
+		result.confirm_informed = $('#confirm_informed').is(':checked') ? 1 : 0;
+		result.confirm_postal = $('#confirm_postal').is(':checked') ? 1 : 0;
+		result.confirm_withdrawal = $('#confirm_withdrawal').is(':checked') ? 1 : 0;
 	})(akeeba.jQuery);
 
 	return result;
 }
 
-function plg_akeebasubs_agreetotos_validate(response)
+function plg_akeebasubs_agreetoeu_validate(response)
 {
     var thisIsValid = true;
 
@@ -213,6 +223,10 @@ JS;
 		{
 			$custom['confirm_withdrawal'] = 0;
 		}
+
+		$custom['confirm_informed'] = ($custom['confirm_informed'] === 'on') ? 1 : 0;
+		$custom['confirm_postal'] = ($custom['confirm_postal'] === 'on') ? 1 : 0;
+		$custom['confirm_withdrawal'] = ($custom['confirm_withdrawal'] === 'on') ? 1 : 0;
 
 		$response['custom_validation']['confirm_informed'] = $custom['confirm_informed'] != 0;
 		$response['custom_validation']['confirm_postal'] = $custom['confirm_postal'] != 0;
