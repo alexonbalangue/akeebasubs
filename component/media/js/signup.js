@@ -32,7 +32,7 @@ var akeebasubs_eu_configuration = {
 	"CY": ["Cyprus", "CY", 19],
 	"LV": ["Latvia", "LV", 21],
 	"LT": ["Lithuania", "LT", 21],
-	"LU": ["Luxembourg", "LU", 15],
+	"LU": ["Luxembourg", "LU", 17],
 	"HU": ["Hungary", "HU", 27],
 	"MT": ["Malta", "MT", 18],
 	"NL": ["Netherlands", "NL", 21],
