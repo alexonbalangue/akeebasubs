@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
  */
 class plgAkeebasubsAgreetoeu extends JPlugin
 {
-	function onSubscriptionFormRender($userparams, $cache)
+	function onSubscriptionFormPrepaymentRender($userparams, $cache)
 	{
 		// Load the language
 		$lang = JFactory::getLanguage();
