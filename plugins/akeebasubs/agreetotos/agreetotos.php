@@ -87,8 +87,8 @@ class plgAkeebasubsAgreetotos extends JPlugin
 
 		// Setup the field's HTML
 		$checked = $current ? 'checked="checked"' : '';
-		$labelText = JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_AGREE_LABEL', JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL'));
-		$extraText = JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_TOS_INFO_LABEL', $urlField);
+		$labelText = JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_AGREE_LABEL', $urlField);
+		$extraText = JText::sprintf('PLG_AKEEBASUBS_AGREETOTOS_TOS_INFO_LABEL', JText::_('PLG_AKEEBASUBS_AGREETOTOS_TOS_LABEL'));
 		$html = <<<HTML
 <label class="checkbox">
 	<span class="icon icon-info-sign hasPopover" title="$extraText"></span>
