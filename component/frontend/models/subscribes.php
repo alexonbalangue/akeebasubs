@@ -317,8 +317,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 			return $ret;
 		}
 
-		// Joomla doens't allow spaces in usernames
-		if (strpos($username, ' ') !== false)
+		// Joomla versions before 3.3 do not allow spaces in usernames
+		if (version_compare(JVERSION, '3.2.0', 'lt') && (strpos($username, ' ') !== false))
 		{
 			$ret->username = false;
 
