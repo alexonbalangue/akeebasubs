@@ -95,6 +95,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 				'aksexpires' => array('left', 0),
 				'akslevels'  => array('left', 0),
 				'aksubslist' => array('left', 0),
+				'aktaxcountry' => array('akeebasubscriptionslistheader', 0),
 			)
 		),
 		// plugins => { (folder) => { (element) => (published) }* }*

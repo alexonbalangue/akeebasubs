@@ -59,7 +59,7 @@ class AkeebasubsModelTaxhelper extends F0FModel
 
 		// Get information from the VAT dropdown module
 		$session = JFactory::getSession();
-		$moduleCountry = $session->get('country', null, 'mod_akeebasubscountry');
+		$moduleCountry = $session->get('country', null, 'mod_aktaxcountry');
 
 		if (!empty($moduleCountry))
 		{

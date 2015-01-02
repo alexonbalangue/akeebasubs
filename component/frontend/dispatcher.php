@@ -80,6 +80,13 @@ class AkeebasubsDispatcher extends F0FDispatcher
 			{
 				$result = false;
 			}
+
+			// Handle the submitted form from the tax country module
+			$taxCountry = JFactory::getApplication()->input->getCmd('mod_aktaxcountry_country', null);
+			if (!is_null($taxCountry))
+			{
+				JFactory::getSession()->set('country', $taxCountry, 'mod_aktaxcountry');
+			}
 		}
 
 		return $result;

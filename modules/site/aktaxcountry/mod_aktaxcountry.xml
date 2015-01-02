@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="2.5.0" method="upgrade" client="site">
+	<name>Akeeba Subscriptions - Country selection for tax display</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<creationDate>January 2015</creationDate>
+	<copyright>Copyright (C) 2011-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com</copyright>
+	<license>GNU GPLv3 - http://www.gnu.org/licenses/gpl.html</license>
+	<authorEmail>nicholas@akeebabackup.com</authorEmail>
+	<authorUrl>www.akeebabackup.com</authorUrl>
+	<version>1.0</version>
+	<description>MOD_AKTAXCOUNTRY_DESC</description>
+	<files>
+		<file module="mod_aktaxcountry">mod_aktaxcountry.php</file>
+		<folder>tmpl</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.mod_aktaxcountry.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_aktaxcountry.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="moduleclass_sfx" type="text" default="" label="MOD_AKTAXCOUNTRY_SUFFIX_LABEL" description="MOD_AKTAXCOUNTRY_SUFFIX_DESC" />
+				<field name="countries" type="text" default="US" label="MOD_AKTAXCOUNTRY_OPT_COUNTRIES_LBL" description="MOD_AKTAXCOUNTRY_OPT_COUNTRIES_DESC" />
+				<field name="eucountries" type="list" default="1" label="MOD_AKTAXCOUNTRY_OPT_EUCOUNTRIES_LBL" description="MOD_AKTAXCOUNTRY_OPT_EUCOUNTRIES_DESC">
+					<option value="1">JYes</option>
+					<option value="0">JNo</option>
+				</field>
+				<field name="eubusiness" type="list" default="1" label="MOD_AKTAXCOUNTRY_OPT_EUBUSINESS_LBL" description="MOD_AKTAXCOUNTRY_OPT_EUBUSINESS_DESC">
+					<option value="1">JYes</option>
+					<option value="0">JNo</option>
+				</field>
+				<field name="international" type="list" default="1" label="MOD_AKTAXCOUNTRY_OPT_INTERATIONAL_LBL" description="MOD_AKTAXCOUNTRY_OPT_INTERATIONAL_DESC">
+					<option value="1">JYes</option>
+					<option value="0">JNo</option>
+				</field>
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="cache" type="list" default="1" label="MOD_AKTAXCOUNTRY_CACHING_LABEL" description="MOD_AKTAXCOUNTRY_CACHING_DESC">
+					<option value="1">MOD_AKTAXCOUNTRY_CACHING_OPT_GLOBAL</option>
+					<option value="0">MOD_AKTAXCOUNTRY_CACHING_OPT_NONE</option>
+				</field>
+				<field name="cache_time" type="text" default="900" label="MOD_AKTAXCOUNTRY_CACHETIME_LABEL" description="MOD_AKTAXCOUNTRY_CACHETIME_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>
