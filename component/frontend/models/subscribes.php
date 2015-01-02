@@ -2375,6 +2375,28 @@ class AkeebasubsModelSubscribes extends F0FModel
 		// Serialise custom subscription parameters
 		$custom_subscription_params = json_encode($subcustom);
 
+		// Get the IP address
+		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
+
+		if (class_exists('F0FUtilsIp', true))
+		{
+			$ip = F0FUtilsIp::getIp();
+		}
+
+		// Get the country from the IP address if the Akeeba GeoIP Provider Plugin is installed and activated
+		$ip_country = '(Unknown)';
+
+		if (class_exists('AkeebaGeoipProvider'))
+		{
+			$geoip = new AkeebaGeoipProvider();
+			$ip_country = $geoip->getCountryName($ip);
+
+			if (empty($ip_country))
+			{
+				$ip_country = '(Unknown)';
+			}
+		}
+
 		// Setup the new subscription
 		$data = array(
 			'akeebasubs_subscription_id' => null,
@@ -2394,6 +2416,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 			'tax_percent'                => $validation->price->taxrate,
 			'created_on'                 => $mNow,
 			'params'                     => $custom_subscription_params,
+			'ip'                         => $ip,
+			'ip_country'                 => $ip_country,
 			'akeebasubs_coupon_id'       => $validation->price->couponid,
 			'akeebasubs_upgrade_id'      => $validation->price->upgradeid,
 			'contact_flag'               => 0,
