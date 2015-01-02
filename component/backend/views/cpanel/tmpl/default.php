@@ -53,6 +53,8 @@ $this->loadHelper('cparams');
 	</div>
 	<?php endif; ?>
 
+	<?php echo $this->loadTemplate('geoip'); ?>
+
 	<div class="row-fluid">
 
 		<div id="cpanel" class="span6">
