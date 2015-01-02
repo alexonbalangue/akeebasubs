@@ -14,8 +14,10 @@ $this->loadHelper('message');
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
-$vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
-$vatMultiplier = (100 + (int)$vatRate) / 100;
+$showVat = AkeebasubsHelperCparams::getParam('showvat', 0);
+/** @var AkeebasubsModelTaxhelper $taxModel */
+$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+$taxParams = $taxModel->getTaxDefiningParameters();
 // Take the various inclusions into account
 $includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
 $includediscount = AkeebasubsHelperCparams::getParam('includediscount', 0);
@@ -50,6 +52,9 @@ $discounts = array();
 			{
 				$signupFee = (float)$level->signupfee;
 			}
+
+			$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+			$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 			if ($includediscount)
 			{
@@ -116,6 +121,9 @@ $discounts = array();
 					$discount = (float)$discounts[$level->akeebasubs_level_id];
 				}
 
+				$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+				$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
+
 				$formatedPrice = sprintf('%1.02F', $level->price * $vatMultiplier);
 				$dotpos = strpos($formatedPrice, '.');
 				$price_integer = substr($formatedPrice,0,$dotpos);
@@ -143,6 +151,10 @@ $discounts = array();
 				{
 					$signupFee = (float)$level->signupfee;
 				}
+
+				$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+				$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
+
 				$formatedPrice = sprintf('%1.02F', $signupFee * $vatMultiplier);
 				$dotpos = strpos($formatedPrice, '.');
 				$price_integer = substr($formatedPrice,0,$dotpos);

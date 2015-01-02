@@ -14,8 +14,10 @@ $this->loadHelper('message');
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
-$vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
-$vatMultiplier = (100 + (int)$vatRate) / 100;
+$showVat = AkeebasubsHelperCparams::getParam('showvat', 0);
+/** @var AkeebasubsModelTaxhelper $taxModel */
+$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+$taxParams = $taxModel->getTaxDefiningParameters();
 // Take the various inclusions into account
 $includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
 $includediscount = AkeebasubsHelperCparams::getParam('includediscount', 0);
@@ -40,6 +42,9 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 			{
 				$signupFee = (float)$level->signupfee;
 			}
+
+			$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+			$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 			if ($includediscount)
 			{

@@ -189,11 +189,11 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 		$state = $this->getStateVars();
 		if ($state->showvat)
 		{
-			$params->set('vatrate', $state->taxrate);
+			$params->set('showvat', 1);
 		}
 		else
 		{
-			$params->set('vatrate', 0);
+			$params->set('showvat', 0);
 		}
 
 		// Save the component parameters
