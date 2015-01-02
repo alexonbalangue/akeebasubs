@@ -22,7 +22,6 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 			'taxrate'   => $this->getState('taxrate', 0.0, 'float'),
 			'viesreg'   => $this->getState('viesreg', 0, 'int'),
 			'showvat'   => $this->getState('showvat', 0, 'int'),
-			'vatMoss'   => $this->getState('vatMoss', -1, 'int'),
 		);
 	}
 
@@ -75,12 +74,6 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 
 		$ordering = 0;
 
-		// Are we past December 31st, 2014 18:00 GMT? If so, apply the new VAT MOSS rules.
-		if ($params->vatMoss < 0)
-		{
-			$params->vatMoss = (time() > 1420048800) ? 1 : 0;
-		}
-
 		if ( !$inEU && !$params->viesreg)
 		{
 			// Non-EU business, without an EU VAT ID
@@ -128,8 +121,7 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 				F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
 			}
 
-			// C. All other EU countries, without VIES registration, taxrate%
-			$data['vies'] = 0;
+			// C. All other EU countries, without VIES registration, taxrate% (and with VIES: 0%)
 			foreach ($euCountries as $country)
 			{
 				$theirVATNrPrefix = AkeebasubsHelperEuVATInfo::getEUVATPrefix($country);
@@ -139,17 +131,10 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 					continue;
 				}
 
-				if ($params->vatMoss)
-				{
-					// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
-					$data['taxrate'] = AkeebasubsHelperEuVATInfo::getEUVATRate($country);
-				}
-				else
-				{
-					// Old rules: same taxrate% for all EU countries
-					$data['taxrate'] = $params->taxrate;
-				}
+				// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
+				$data['taxrate'] = AkeebasubsHelperEuVATInfo::getEUVATRate($country);
 
+				$data['vies'] = 0;
 				$data['country']  = $country;
 				$data['ordering'] = ++$ordering;
 
@@ -169,16 +154,8 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 			// B. All EU countries, with or without VIES registration, taxrate%
 			foreach ($euCountries as $country)
 			{
-				if ($params->vatMoss)
-				{
-					// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
-					$data['taxrate'] = AkeebasubsHelperEuVATInfo::getEUVATRate($country);
-				}
-				else
-				{
-					// Old rules: same taxrate% for all EU countries
-					$data['taxrate'] = $params->taxrate;
-				}
+				// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
+				$data['taxrate'] = AkeebasubsHelperEuVATInfo::getEUVATRate($country);
 
 				$data['country']  = $country;
 				$data['vies']     = 0;
