@@ -64,7 +64,6 @@ class AkeebasubsModelTaxhelper extends F0FModel
 		if (!empty($moduleCountry))
 		{
 			$result['country'] = $moduleCountry;
-			$result['vies'] = 1;
 		}
 
 		return $result;
