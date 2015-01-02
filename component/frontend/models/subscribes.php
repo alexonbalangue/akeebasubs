@@ -1576,6 +1576,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 			}
 		}
 
+		// TODO replace with AkeebasubsModelTaxhelper::getTaxRule
+
 		// First try loading the rules for this level
 		$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
 			->savestate(0)
