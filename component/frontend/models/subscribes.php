@@ -854,6 +854,9 @@ class AkeebasubsModelSubscribes extends F0FModel
 				'oldsub'     => $discountStructure['oldsub'],
 				'allsubs'    => $discountStructure['allsubs'],
 				'expiration' => $discountStructure['expiration'],
+				'taxrule_id' => $taxRule->id,
+				'tax_match'  => $taxRule->match,
+				'tax_fuzzy'  => $taxRule->fuzzy,
 			);
 		}
 
@@ -1576,97 +1579,10 @@ class AkeebasubsModelSubscribes extends F0FModel
 			}
 		}
 
-		// TODO replace with AkeebasubsModelTaxhelper::getTaxRule
+		/** @var AkeebasubsModelTaxhelper $taxModel */
+		$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
 
-		// First try loading the rules for this level
-		$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-			->savestate(0)
-			->enabled(1)
-			->akeebasubs_level_id($state->id)
-			->filter_order('ordering')
-			->filter_order_Dir('ASC')
-			->limit(0)
-			->limitstart(0)
-			->getItemList();
-
-		// If this level has no rules try the "All levels" rules
-		if (empty($taxrules))
-		{
-			$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-				->savestate(0)
-				->enabled(1)
-				->akeebasubs_level_id(0)
-				->filter_order('ordering')
-				->filter_order_Dir('ASC')
-				->limit(0)
-				->limitstart(0)
-				->getItemList();
-		}
-
-		$bestTaxRule = (object)array(
-			'match'   => 0,
-			'fuzzy'   => 0,
-			'taxrate' => 0
-		);
-
-		foreach ($taxrules as $rule)
-		{
-			// For each rule, get the match and fuzziness rating. The best, least fuzzy and last match wins.
-			$match = 0;
-			$fuzzy = 0;
-
-			if (empty($rule->country))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif ($rule->country == $state->country)
-			{
-				$match++;
-			}
-
-			if (empty($rule->state))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif ($rule->state == $state->state)
-			{
-				$match++;
-			}
-
-			if (empty($rule->city))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif (strtolower(trim($rule->city)) == strtolower(trim($state->city)))
-			{
-				$match++;
-			}
-
-			if (($rule->vies && $isVIES) || (!$rule->vies && !$isVIES))
-			{
-				$match++;
-			}
-
-			if (
-				($bestTaxRule->match < $match) ||
-				(($bestTaxRule->match == $match) && ($bestTaxRule->fuzzy > $fuzzy))
-			)
-			{
-				if ($match == 0)
-				{
-					continue;
-				}
-				$bestTaxRule->match = $match;
-				$bestTaxRule->fuzzy = $fuzzy;
-				$bestTaxRule->taxrate = $rule->taxrate;
-				$bestTaxRule->id = $rule->akeebasubs_taxrule_id;
-			}
-		}
-
-		return $bestTaxRule;
+		return $taxModel->getTaxRule($state->id, $state->country, $state->state, $state->city, $isVIES);
 	}
 
 	/**

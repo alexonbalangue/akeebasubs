@@ -27,6 +27,7 @@ class AkeebasubsControllerTaxconfigs extends F0FController
 		// CSRF protection
 		$this->_csrfProtection();
 
+		/** @var AkeebasubsModelTaxconfigs $model */
 		$model = $this->getThisModel();
 		$model->clearTaxRules();
 		$model->createTaxRules();
