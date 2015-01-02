@@ -78,6 +78,8 @@ CREATE TABLE `#__akeebasubs_subscriptions` (
 	`tax_percent` FLOAT DEFAULT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
 	`params` TEXT,
+	`ip` VARCHAR(255),
+	`ip_country` VARCHAR(255),
 
 	`akeebasubs_coupon_id` BIGINT(20) NULL,
 	`akeebasubs_upgrade_id` BIGINT(20) NULL,
@@ -949,5 +951,15 @@ ALTER TABLE `#__akeebasubs_users` ADD `needs_logout` TINYINT NOT NULL DEFAULT '0
 ALTER TABLE `#__akeebasubs_upgrades` CHANGE `type` `type` ENUM('value','percent', 'lastpercent') NOT NULL DEFAULT 'value' ;
             ]]></query>
 			</action>
-    </sql>
+
+			<action table="#__akeebasubs_subscriptions" canfail="1">
+				<condition type="missing" value="ip_country" />
+				<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `ip` VARCHAR(255) AFTER `params`;
+				]]></query>
+				<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `ip_country` VARCHAR(255) AFTER `ip`;
+				]]></query>
+			</action>
+	</sql>
 </schema>

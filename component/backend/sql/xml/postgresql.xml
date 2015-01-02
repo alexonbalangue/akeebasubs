@@ -79,6 +79,8 @@ CREATE TABLE "#__akeebasubs_subscriptions" (
 	"tax_percent" FLOAT DEFAULT NULL,
 	"created_on" timestamp without time zone NOT NULL default '1970-01-01 00:00:00',
 	"params" TEXT,
+	"ip" varchar(255),
+	"ip_country" varchar(255),
 
 	"akeebasubs_coupon_id" bigint NULL,
 	"akeebasubs_upgrade_id" bigint NULL,
@@ -728,5 +730,15 @@ VALUES
 ;
             ]]></query>
         </action>
+
+		<action table="#__akeebasubs_subscriptions" canfail="1">
+			<condition type="missing" value="ip_country" />
+			<query><![CDATA[
+ALTER TABLE "#__akeebasubs_subscriptions" ADD COLUMN "ip" varchar(255);
+				]]></query>
+			<query><![CDATA[
+ALTER TABLE "#__akeebasubs_subscriptions" ADD COLUMN "ip_country" varchar(255);
+				]]></query>
+		</action>
     </sql>
 </schema>
