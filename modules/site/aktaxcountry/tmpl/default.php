@@ -9,8 +9,15 @@ defined('_JEXEC') or die;
 
 JHtml::_('formbehavior.chosen', '#mod_aktaxcountry_country');
 
+$postURL = JURI::current();
+
+if (JFactory::getApplication()->input->getCmd('option', 'com_akeebasubs') != 'com_akeebasubs')
+{
+	$postURL = JRoute::_('index.php?option=com_akeebasubs&view=levels');
+}
+
 ?>
-<form action="<?php echo JURI::current()?>" method="POST" class="form-inline pull-right" id="mod_aktaxcountry_form">
+<form action="<?php echo $postURL?>" method="POST" class="form-inline pull-right" id="mod_aktaxcountry_form">
 	<label for="mod_aktaxcountry_country">
 		<small><?php echo JText::_('MOD_AKTAXCOUNTRY_LBL_PROMPT'); ?></small>
 	</label>
