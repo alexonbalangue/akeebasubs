@@ -93,7 +93,6 @@ class AkeebasubsModelTaxhelper extends F0FModel
 				->savestate(0)
 				->enabled(1)
 				->akeebasubs_level_id($akeebasubs_level_id)
-				->country($country)
 				->filter_order('ordering')
 				->filter_order_Dir('ASC')
 				->limit(0)
@@ -103,7 +102,7 @@ class AkeebasubsModelTaxhelper extends F0FModel
 			// If this level has no rules use the "All levels" rules
 			if (empty($taxrules) && ($akeebasubs_level_id != 0))
 			{
-				self::$cachedTaxRates[$hash] = $this->getVATRate(0, $country, $state, $city, $vies);
+				self::$cachedTaxRates[$hash] = $this->getTaxRule(0, $country, $state, $city, $vies);
 
 				return self::$cachedTaxRates[$hash];
 			}
@@ -162,8 +161,8 @@ class AkeebasubsModelTaxhelper extends F0FModel
 				}
 
 				if (
-					($bestTaxRule->match < $match) ||
-					(($bestTaxRule->match == $match) && ($bestTaxRule->fuzzy > $fuzzy))
+					($match > $bestTaxRule->match) ||
+					(($bestTaxRule->match == $match) && ($fuzzy < $bestTaxRule->fuzzy))
 				)
 				{
 					if ($match == 0)
