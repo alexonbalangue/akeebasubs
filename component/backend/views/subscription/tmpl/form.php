@@ -192,19 +192,31 @@ if (array_key_exists('subcustom', $this->item->params))
 			</div>
 		</div>
 
-		<!--
-		<div class="control-group">
-			<label for="akeebasubs_invoice_id" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_INVOICE_ID')?></label>
-			<div class="controls">
-				<input type="text" name="akeebasubs_invoice_id" id="akeebasubs_invoice_id" value="<?php echo $this->item->akeebasubs_invoice_id?>"/>
-			</div>
-		</div>
-		-->
 	</div>
 	</div>
 	</div>
 
-	<div class="row-fluid">
+	<div class="span6">
+	<div>
+		<h3><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LBL_IP')?></h3>
+
+		<div class="control-group">
+			<label for="ip" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_IP')?></label>
+			<div class="controls">
+				<input type="text" name="ip" id="ip" value="<?php echo $this->item->ip?>"/>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="ip_country" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_IP_COUNTRY')?></label>
+			<div class="controls">
+				<input type="text" name="ip_country" id="ip_country" value="<?php echo $this->item->ip_country?>"/>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<div class="span6">
 		<?php
 		$hasShownCustomParamsHeader = false;
 		JLoader::import('joomla.plugin.helper');
