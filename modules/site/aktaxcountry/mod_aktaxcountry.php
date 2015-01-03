@@ -56,6 +56,7 @@ $countries = $params->get('countries', 'US');
 $eucountries = $params->get('eucountries', 1);
 $eubusiness = $params->get('eubusiness', 1);
 $international = $params->get('international', 1);
+$prompt = $params->get('prompt', '');
 
 $countryCodes = array();
 
