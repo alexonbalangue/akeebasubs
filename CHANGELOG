@@ -4,7 +4,8 @@ Akeeba Subscriptions 4.2.0
 + Add a new plugin to conform to EU regulations regarding VAT and notification of the withdrawal period
 + gh-86 Allow spaces in usernames for Joomla! 3.3 and later
 + gh-90 Record the user's IP address on subscription (also the country, if you have the GeoIP plugin installed)
-+ gh-91 Show VAT-inclusive prices in the front-end, allowing the client to select their country
++ gh-91 Show tax-inclusive prices in the front-end, allowing the client to select their country
++ gh-88 Show the tax rate in the sign-up page
 # [LOW] PayPal IPN could fail if User-Agent is not set (thanks, Vic!)
 # [LOW] gh-82 The expiration by week report wouldn't work on live sites due to the wrong loading order of Javascript files.
 

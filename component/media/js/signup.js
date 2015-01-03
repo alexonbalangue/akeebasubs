@@ -1011,6 +1011,7 @@ function applyPrice(response)
 			$('#akeebasubs-sum-net').val(response.net);
 			$('#akeebasubs-sum-discount').val(response.discount);
 			$('#akeebasubs-sum-vat').val(response.tax);
+			$('#akeebasubs-sum-vat-percent').html(response.taxrate);
 			$('#akeebasubs-sum-total').val(response.gross);
 
 			$('#akeebasubs-sum-net-container').css('display', 'none');

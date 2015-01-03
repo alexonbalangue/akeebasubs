@@ -130,6 +130,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 		<div class="control-group form-group" style="<?php echo $styleTax ?>" id="akeebasubs-sum-vat-container">
 			<label class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT')?>
+				<span id="akeebasubs-sum-vat-percent"><?php echo $this->validation->price->taxrate?></span>%
 			</label>
 			<div class="controls col-sm-2">
 				<div class="input-group <?php echo $prepend_class?>">
