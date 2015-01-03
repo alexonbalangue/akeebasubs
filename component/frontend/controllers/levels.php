@@ -1,9 +1,9 @@
 <?php
 
 /**
- *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
- *  @license GNU General Public License version 3, or later
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 defined('_JEXEC') or die();
 
@@ -34,8 +34,8 @@ class AkeebasubsControllerLevels extends F0FController
 			$session->set('affid', $affid, 'com_akeebasubs');
 		}
 
-		$params	 = JFactory::getApplication()->getPageParameters();
-		$ids	 = $params->get('ids', '');
+		$params = JFactory::getApplication()->getPageParameters();
+		$ids = $params->get('ids', '');
 
 		if (is_array($ids) && !empty($ids))
 		{
@@ -52,17 +52,27 @@ class AkeebasubsControllerLevels extends F0FController
 		}
 
 		// Working around Progressive Caching
+		$appInput = JFactory::getApplication()->input;
+
 		if (!empty($ids))
 		{
-			JFactory::getApplication()->input->set('ids', $ids);
-			JFactory::getApplication()->input->set('_x_userid', JFactory::getUser()->id);
-			$this->registerUrlParams(array(
-				'ids'		 => 'ARRAY',
-				'no_clear'	 => 'BOOL',
-				'_x_userid'	 => 'INT',
-			));
+			$appInput->set('ids', $ids);
+			$appInput->set('_x_userid', JFactory::getUser()->id);
 		}
 
+		/** @var AkeebasubsModelTaxhelper $taxHelper */
+		$taxHelper = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+		$taxParameters = $taxHelper->getTaxDefiningParameters();
+		$appInput->set('_akeebasubs_taxParameters', $taxParameters);
+
+		$this->registerUrlParams(array(
+			'ids'                       => 'ARRAY',
+			'_akeebasubs_taxParameters' => 'ARRAY',
+			'no_clear'                  => 'BOOL',
+			'_x_userid'                 => 'INT',
+		));
+
+		// Continue parsing page options
 		if (parent::onBeforeBrowse())
 		{
 			$noClear = $this->input->getBool('no_clear', false);
@@ -112,9 +122,9 @@ class AkeebasubsControllerLevels extends F0FController
 		}
 
 		// Fetch the subscription slug from page parameters
-		$params		 = JFactory::getApplication()->getPageParameters();
-		$pageslug	 = $params->get('slug', '');
-		$slug		 = $this->input->getString('slug', null);
+		$params = JFactory::getApplication()->getPageParameters();
+		$pageslug = $params->get('slug', '');
+		$slug = $this->input->getString('slug', null);
 
 		if ($pageslug)
 		{
@@ -143,8 +153,8 @@ class AkeebasubsControllerLevels extends F0FController
 		JFactory::getApplication()->input->set('slug', $slug);
 		JFactory::getApplication()->input->set('id', $id);
 		$this->registerUrlParams(array(
-			'slug'	 => 'STRING',
-			'id'	 => 'INT',
+			'slug' => 'STRING',
+			'id'   => 'INT',
 		));
 
 		// Get the current level
@@ -176,6 +186,7 @@ class AkeebasubsControllerLevels extends F0FController
 				{
 					JFactory::getApplication()->redirect($level->renew_url);
 				}
+
 				return false;
 			}
 			$this->getThisModel()->setId($id);
@@ -190,10 +201,10 @@ class AkeebasubsControllerLevels extends F0FController
 		$view->assign('userparams', $userparams);
 
 		// Load any cached user supplied information
-		$vModel	 = F0FModel::getAnInstance('Subscribes', 'AkeebasubsModel')
+		$vModel = F0FModel::getAnInstance('Subscribes', 'AkeebasubsModel')
 			->slug($slug)
 			->id($id);
-		$cache	 = (array) ($vModel->getData());
+		$cache = (array)($vModel->getData());
 		if ($cache['firstrun'])
 		{
 			foreach ($cache as $k => $v)
@@ -207,23 +218,23 @@ class AkeebasubsControllerLevels extends F0FController
 				}
 			}
 		}
-		$view->assign('cache', (array) $cache);
+		$view->assign('cache', (array)$cache);
 		$view->assign('validation', $vModel->getValidation());
 
 		// If we accidentally have the awesome layout set, please reset to default
 		if ($this->layout == 'awesome')
 		{
-			$this->layout	 = 'default';
+			$this->layout = 'default';
 		}
 
 		if ($this->layout == 'item')
 		{
-			$this->layout	 = 'default';
+			$this->layout = 'default';
 		}
 
 		if (empty($this->layout))
 		{
-			$this->layout	 = 'default';
+			$this->layout = 'default';
 		}
 
 		return true;
@@ -267,5 +278,4 @@ class AkeebasubsControllerLevels extends F0FController
 			$app->set('registeredurlparams', $registeredurlparams);
 		}
 	}
-
 }
