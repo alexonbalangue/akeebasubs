@@ -242,7 +242,7 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(is_array($cache) && is_array(is_array($cache['subcustom'])) && array_key_exists($item->slug, $cache['subcustom']))
+		if(is_array($cache) && is_array($cache['subcustom']) && array_key_exists($item->slug, $cache['subcustom']))
 		{
 			$current = $cache['subcustom'][$item->slug];
 		}
@@ -272,7 +272,6 @@ JS
 
 				// Break down value, price and subscription length components
 				$pieces = explode('|', $label);
-				$label = $pieces[0];
 
 				if (isset($pieces[1]))
 				{
