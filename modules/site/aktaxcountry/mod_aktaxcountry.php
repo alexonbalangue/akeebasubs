@@ -137,6 +137,5 @@ if (empty($default_option))
 	$default_option = 'XX';
 }
 
-var_dump($default_option);
 // Load the layout file
 require_once JModuleHelper::getLayoutPath($module->module);
