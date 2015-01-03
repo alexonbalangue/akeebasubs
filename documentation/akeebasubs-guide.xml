@@ -1593,38 +1593,66 @@
         </varlistentry>
 
         <varlistentry>
-          <term>Tax rate for display</term>
+          <term>Include tax rate in display</term>
 
           <listitem>
-            <warning>
-              <para>This feature can ONLY use a SINGLE tax rate for ALL
-              subscriptions. Displaying the accurate price would require
-              knowing information about the client (such as their country and
-              city) which is of course unavailable before a client subscribes.
-              This may not be legally acceptable. Consult your accountant and
-              lawyer. We are not accountants or lawyers and we cannot offer
-              accounting or legal advice.</para>
-            </warning>
+            <para>When this option is enabled, the front-end display of prices
+            will include the tax amount. Moreover, if there is a non zero tax
+            applied to the price there will be a label "incl. X% VAT" next to
+            the tax-inclusive price. We believe that this feature should*
+            satisfy the two EU directives mandating the display of
+            VAT-inclusive prices and the application of a different VAT rate
+            according to your client's country starting from January 1st,
+            2015.</para>
 
-            <para>This is the tax rate (in percentage units) used ONLY for
-            front-end display. We strongly advise against using this option
-            unless you are obliged to for legal reasons.</para>
+            <important>
+              <para>The tax percentage used for this calculation is taken from
+              the Tax Rules you have defined. You might remember that tax
+              rules depend on knowing the subscription level, country, state
+              and city of the subscriber. This information is read from the
+              database for logged in users. When a user is not logged in no
+              tax will be calculated UNLESS you publish a "Akeeba
+              Subscriptions - Country selection for tax display" module in the
+              <parameter>akeebasubscriptionslistheader</parameter> position.
+              In this case Akeeba Subscriptions will try using the following
+              information, in this order (the first one to yield non-empty
+              results wins):</para>
 
-            <para>One of the problems faced by our users is that they have to
-            display prices inclusive VAT, no matter if they have tax rules
-            which define that no VAT tax will be applied in some cases. So far
-            the only way to do that was editing Akeeba Subscriptions' files
-            directly or doing template overrides. This option is here to
-            eliminate that need.</para>
+              <itemizedlist>
+                <listitem>
+                  <para>The country selection made in the module</para>
+                </listitem>
 
-            <para>Please note that this value IS NOT taken into account when
-            calculating the amount of money to charge to the subscriber. It
-            only modifies the price displayed in the All Levels view.</para>
+                <listitem>
+                  <para>The information in the database for the currently
+                  logged in user, if there is a logged in user and he's
+                  already or had once been a subscriber</para>
+                </listitem>
+
+                <listitem>
+                  <para>The country detected by the user's IP address (this
+                  feature requires you to download and install the optional
+                  <link
+                  xlink:href="https://www.akeebabackup.com/download/akgeoip.html">Akeeba
+                  GeoIP Provider Plugin</link> from our site)</para>
+                </listitem>
+              </itemizedlist>
+            </important>
 
             <para>Example: Let's say you have a subscription level which costs
-            10 EUR. You enter a "Tax rate for display" value of 19. The price
-            of the subscription level will be listed as 11.90 EUR (that's 10
-            EUR plus 19% VAT).</para>
+            10 EUR. Let's say you have a client from Germany with applicable
+            VAT rate 19%. The price of the subscription level will be listed
+            as 11.90 EUR (that's 10 EUR plus 19% VAT).</para>
+
+            <warning>
+              <para>* We are not lawyers and we are not accountants, as a
+              result we are not allowed to give you accounting and legal
+              advice. Please consult with your accountant and lawyer to make
+              sure that this solution is legal in the country you are based
+              in. Complying with local legislation and regulations is your
+              responsibility. We do not accept any responsibility or liability
+              whatsoever.</para>
+            </warning>
           </listitem>
         </varlistentry>
 
