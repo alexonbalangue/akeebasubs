@@ -17,10 +17,10 @@
       </affiliation>
     </author>
 
-    <pubdate>December 2013</pubdate>
+    <pubdate>January 2014</pubdate>
 
     <copyright>
-      <year>2013</year>
+      <year>2010-2015</year>
 
       <holder>Akeeba Ltd</holder>
     </copyright>
@@ -10734,6 +10734,91 @@ Rule C gives $ 30 discount</programlisting>
           </listitem>
         </varlistentry>
       </variablelist>
+    </section>
+
+    <section xml:id="modules-country-selection-for-tax">
+      <title>Choose country for tax display</title>
+
+      <warning>
+        <para>NO SUPPORT. We have discontinued support for this component. It
+        is now a developer's product. This means that we will not provide any
+        kind of support, help, instructions, custom feature implementations or
+        any other kind of work related to this component for a fee or for
+        free.</para>
+      </warning>
+
+      <para>Displayed in the Modules Manager as: <guilabel>Akeeba
+      Subscriptions - Country selection for tax display</guilabel></para>
+
+      <para>This module allows the guests to select the country which will be
+      used for calculating the tax displayed in the front-end to your guests
+      when the relevant option is allowed in the component's Options
+      page.</para>
+
+      <para>The preferences of this module are:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Prompt</term>
+
+          <listitem>
+            <para>Enter the prompt which will appear next to the country
+            selection drop-down. If you leave it blank the default prompt
+            ("Prices include applicable tax for") will be displayed. Enter a
+            single dash to disable the prompt altogether. Otherwise enter the
+            text you want to be displayed.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Countries</term>
+
+          <listitem>
+            <para>Enter a comma separated listed of the country codes you want
+            to appear in the country selection. By default, the only option is
+            US (United States of America). Example: enter US,CA,DE to display
+            USA, Canada and Germany.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Include EU countries</term>
+
+          <listitem>
+            <para>When enabled all the European Union taxation territory
+            countries will be included in the drop-down. This includes both EU
+            member states and other countries which are subject to EU VAT tax
+            such as Isle of Man (VAT tax charged in Great Britain) and Monaco
+            (VAT tax charged in France).</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Include EU VIES-registered business option</term>
+
+          <listitem>
+            <para>When enabled another option called "EU VIES-registered
+            business" will be included. If you use our Tax Wizard to generate
+            your tax rules this will result in displaying prices WITHOUT
+            tax.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Include International</term>
+
+          <listitem>
+            <para>When enabled another option called "International" will be
+            included. If you use our Tax Wizard to generate your tax rules
+            this will result in displaying prices WITHOUT tax.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>If a guest (not logged in user) makes a selection in this module
+      and proceeds to the subscription form the country will be pre-filled
+      with the selection made in this module UNLESS they selected the "EU
+      VIES-registered business" or "International" option.</para>
     </section>
   </chapter>
 
