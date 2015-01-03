@@ -123,10 +123,10 @@ $default_option = JFactory::getSession()->get('country', null, 'mod_aktaxcountry
 if (empty($default_option))
 {
 	$taxHelper = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
-	$taxparams = $taxHelper->getTaxDefiningParameters;
+	$taxparams = $taxHelper->getTaxDefiningParameters();
 	$default_option = $taxparams['country'];
 
-	if ($params['vies'] && AkeebasubsHelperEuVATInfo::isEUVATCountry($params['country']))
+	if ($taxparams['vies'] && AkeebasubsHelperEuVATInfo::isEUVATCountry($taxparams['country']))
 	{
 		$default_option = 'EU-VIES';
 	}
