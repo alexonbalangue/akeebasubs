@@ -161,7 +161,7 @@ function plg_akeebasubs_agreetoeu_validate(response)
 			return;
 		}
 
-		if (response.custom_validation.confirm_informed) {
+		if (response.custom_validation.confirm_informed || $('#confirm_informed').is(':checked')) {
 			$('#confirm_informed').parents('div.control-group').addClass('success has-success');
 			$('#confirm_informed_invalid').css('display','none');
 		} else {
@@ -170,7 +170,7 @@ function plg_akeebasubs_agreetoeu_validate(response)
 			thisIsValid = false;
 		}
 
-		if (response.custom_validation.confirm_postal) {
+		if (response.custom_validation.confirm_postal || $('#confirm_postal').is(':checked')) {
 			$('#confirm_postal').parents('div.control-group').addClass('success has-success');
 			$('#confirm_postal_invalid').css('display','none');
 		} else {
@@ -179,7 +179,7 @@ function plg_akeebasubs_agreetoeu_validate(response)
 			thisIsValid = false;
 		}
 
-		if (response.custom_validation.confirm_withdrawal) {
+		if (response.custom_validation.confirm_withdrawal || $('#confirm_withdrawal').is(':checked')) {
 			$('#confirm_withdrawal').parents('div.control-group').addClass('success has-success');
 			$('#confirm_withdrawal_invalid').css('display','none');
 		} else {

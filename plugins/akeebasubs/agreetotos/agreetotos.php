@@ -156,7 +156,7 @@ function plg_akeebasubs_agreetotos_validate(response)
 			return;
 		}
 
-		if(response.custom_validation.agreetotos) {
+		if(response.custom_validation.agreetotos || $('#agreetotos').is(':checked')) {
 			$('#agreetotos').parents('div.control-group').addClass('success has-success');
 			$('#agreetotos_invalid').css('display','none');
 			thisIsValid = true;
