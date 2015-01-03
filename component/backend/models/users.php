@@ -411,7 +411,15 @@ class AkeebasubsModelUsers extends F0FModel
 		}
 		else
 		{
-			$myData = array();
+			$taxParameters = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel')->getTaxDefiningParameters();
+
+			$myData = array(
+				'isbusiness'	 => $taxParameters['vies'] ? 1 : 0,
+				'city'			 => $taxParameters['city'],
+				'state'			 => $taxParameters['state'],
+				'country'		 => $taxParameters['country'],
+				'params'		 => array()
+			);
 		}
 
 		// Finally, merge data coming from the plugins. Note that the
