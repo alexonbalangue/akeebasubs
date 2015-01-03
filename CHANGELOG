@@ -8,6 +8,7 @@ Akeeba Subscriptions 4.2.0
 + gh-88 Show the tax rate in the sign-up page
 # [LOW] PayPal IPN could fail if User-Agent is not set (thanks, Vic!)
 # [LOW] gh-82 The expiration by week report wouldn't work on live sites due to the wrong loading order of Javascript files.
+# [LOW] Subscription options: value cut off in locales using commas as decimal separators
 
 Akeeba Subscriptions 4.1.2
 ================================================================================

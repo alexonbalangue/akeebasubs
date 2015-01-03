@@ -54,7 +54,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 
 				// Break down value, price and subscription length components
 				$pieces = explode('|', $label);
-				$label = $pieces[0];
+				$label = JText::_($pieces[0]);
 
 				if (isset($pieces[1]))
 				{
@@ -100,7 +100,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 		foreach($options as $o)
 		{
 			$value = $o['value'];
-			$label = JText::_($o['label']);
+			$label = $o['label'];
 			$html .= "\t<option value=\"$value\"";
 			if($current == $value) {
 				$html .= "selected=\"selected\"";
