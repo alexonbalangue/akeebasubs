@@ -110,6 +110,13 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 						<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $price_integer ?><?php if((int)$price_fractional > 0): ?></span><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?><?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?>
 						<?php endif; ?>
 					</div>
+					<?php if ((float)$vatRule->taxrate > 0.01): ?>
+					<div class="akeebasubs-awesome-taxnotice">
+						<?php if ($levelPrice > 0.01): ?>
+						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_INCLUDESVAT', (float)$vatRule->taxrate); ?>
+						<?php endif; ?>
+					</div>
+					<?php endif; ?>
 					<?php if ($includediscount == 2): ?>
 					<div class="akeebasubs-awesome-prediscount">
 						<?php if(abs($discount) >= 0.01): ?>

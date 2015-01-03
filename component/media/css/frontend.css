@@ -92,6 +92,19 @@ table.asfelist tfoot td { text-align: center; }
 	color: #0099CC;
 }
 
+#akeebasubs .level-price-taxnotice {
+	display: block;
+	float: right;
+	margin: 9px -17px 0 6pt;
+	width: 40px;
+	line-height: 100%;
+	text-shadow: none;
+	font-size: 7pt;
+	color: #666666;
+	text-align: right;
+}
+
+
 #akeebasubs img.level-image {
 	display: block;
 	max-width: 64px;
@@ -301,6 +314,17 @@ a.akeebasubs-awesome-level-link {
 	height: 1.2em;
 }
 
+.akeebasubs-awesome-taxnotice {
+	color: #aca;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 8pt;
+	text-align: center;
+	padding: 0 0 1em 0;
+	text-shadow: #333 1px 1px 1px;
+	height: 1.2em;
+}
+
 .akeebasubs-awesome-price-currency:after {
 	content: " ";
 }
@@ -382,6 +406,13 @@ td.akeebasubs-strappy-price {
 	text-shadow: #aaa 1px 1px 3px;
 	padding: 0.5em 0.25em !important;
 }
+
+div.akeebasubs-strappy-taxnotice {
+	font-size: 8pt;
+	text-shadow: none;
+	color: #797;
+}
+
 td.akeebasubs-strappy-signupfee {
 	font-style: italic;
 	font-weight: bold;

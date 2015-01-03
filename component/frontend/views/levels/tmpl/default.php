@@ -100,6 +100,11 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 				<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
 				<?php endif; ?>
 				<?php endif; ?>
+				<?php if (((float)$vatRule->taxrate > 0.01) && ($levelPrice > 0.01)): ?>
+					<span class="level-price-taxnotice">
+						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_INCLUDESVAT', (float)$vatRule->taxrate); ?>
+					</span>
+				<?php endif; ?>
 			</span>
 			<span class="level-title-text">
 				<a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>">
