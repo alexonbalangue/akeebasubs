@@ -10,7 +10,7 @@ Akeeba Subscriptions 4.2.0
 + gh-94 EU tax reports
 # [MEDIUM] gh-95 Price does not change for custom field type "Subscription options"
 # [LOW] PayPal IPN could fail if User-Agent is not set (thanks, Vic!)
-# [LOW] gh-82 The expiration by week report wouldn't work on live sites due to the wrong loading order of Javascript files.
+# [LOW] gh-82 The expiration by week report wouldn't work on some sites due to timezone issues
 # [LOW] Subscription options: value cut off in locales using commas as decimal separators
 # [LOW] gh-98 Back buttons in the back-end of Joomla! 3 do not have an icon
 # [LOW] gh-99 Display artifacts in the login area of the frontend subscription (level) page
