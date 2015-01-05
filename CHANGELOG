@@ -9,6 +9,7 @@ Akeeba Subscriptions 4.2.0
 + gh-88 Show the tax rate in the sign-up page
 + gh-94 EU tax reports
 ~ Add series label in the tooltip of Expiration by Week report
+~ Add series and value label in the tooltip of the Sales per Level graph in the Control Panel
 # [MEDIUM] gh-95 Price does not change for custom field type "Subscription options"
 # [LOW] PayPal IPN could fail if User-Agent is not set (thanks, Vic!)
 # [LOW] gh-82 The expiration by week report wouldn't work on some sites due to timezone issues

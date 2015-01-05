@@ -157,7 +157,10 @@ function akeebasubs_render_levels()
 		akeebasubs_cpanel_graph_plot2 = $.jqplot('aklevelschart', [akeebasubs_cpanel_graph_levelsPoints], {
 			show: true,
 			highlighter: {
-				show: false
+				show: true,
+				formatString: '%s: %0.2f',
+				tooltipLocation: 'sw',
+				useAxesFormatters: false
 			},
 			seriesDefaults: {
 				renderer: jQuery.jqplot.PieRenderer, 
