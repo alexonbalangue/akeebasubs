@@ -497,7 +497,11 @@ class AkeebasubsModelInvoices extends F0FModel
 
 		$inEU = AkeebasubsHelperEuVATInfo::isEUVATCountry($country);
 
-		if ($inEU && $isbusiness && $viesregistered)
+		// If the shopCountry is the same as the user's country we don't need to put the reverse charge info
+		$shopCountry = AkeebasubsHelperCparams::getParam('invoice_country');
+		$reverse = strcmp($country, $shopCountry) === 0 ? false : true;
+
+		if ($inEU && $isbusiness && $viesregistered && $reverse)
 		{
 			$vat_notice  = AkeebasubsHelperCparams::getParam('invoice_vatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
 			$cyprus_tag  = 'REVERSE CHARGE';
