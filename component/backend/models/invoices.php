@@ -499,7 +499,7 @@ class AkeebasubsModelInvoices extends F0FModel
 
 		// If the shopCountry is the same as the user's country we don't need to put the reverse charge info
 		$shopCountry = AkeebasubsHelperCparams::getParam('invoice_country');
-		$reverse = strcmp($country, $shopCountry) === 0 ? false : true;
+		$reverse = ($country == $shopCountry) ? false : true;
 
 		if ($inEU && $isbusiness && $viesregistered && $reverse)
 		{
