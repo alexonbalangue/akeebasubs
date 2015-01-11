@@ -59,6 +59,9 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 		$euCountries = AkeebasubsHelperEuVATInfo::getEUVATCountries();
 		$inEU        = AkeebasubsHelperEuVATInfo::isEUVATCountry($params->country);
 
+		// Store the country where the business is based (needed for proper invoicing)
+		AkeebasubsHelperCparams::setParam('invoice_country', $params->country);
+
 		// Prototype for tax rules
 		$data     = array(
 			'akeebasubs_level_id'

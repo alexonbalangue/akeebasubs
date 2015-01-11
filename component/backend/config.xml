@@ -249,6 +249,7 @@
 				label="COM_AKEEBASUBS_CONFIG_INVOICE_EXTRACERT_TITLE"
 				description="COM_AKEEBASUBS_CONFIG_INVOICE_EXTRACERT_DESC"
 		/>
+		<field name="invoice_country" type="hidden"	default=""/>
 	</fieldset>
 
   <fieldset name="updates" label="CONFIG_UPDATES_LABEL">
