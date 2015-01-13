@@ -187,6 +187,11 @@ class AkeebasubsHelperMessage
 
 					$tag = '[CUSTOM:' . strtoupper($k) . ']';
 
+					if ($v instanceof stdClass)
+					{
+						$v = (array)$v;
+					}
+
 					if (is_array($v))
 					{
 						$v = implode(', ', $v);
