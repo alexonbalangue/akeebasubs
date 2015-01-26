@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        akeebasubs
- * @copyright      Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -594,6 +594,7 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		$header .= "Host: $hostname:$port\r\n";
 		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 		$header .= "Content-Length: " . strlen($req) . "\r\n";
+		$header .= "User-Agent: AkeebaSubscriptions\r\n";
 		$header .= "Connection: Close\r\n\r\n";
 
 

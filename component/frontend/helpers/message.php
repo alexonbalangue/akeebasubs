@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license   GNU General Public License version 3, or later
  */
 
@@ -186,6 +186,11 @@ class AkeebasubsHelperMessage
 					}
 
 					$tag = '[CUSTOM:' . strtoupper($k) . ']';
+
+					if ($v instanceof stdClass)
+					{
+						$v = (array)$v;
+					}
 
 					if (is_array($v))
 					{
@@ -374,6 +379,8 @@ class AkeebasubsHelperMessage
 
 		// Special replacement for RENEWALURL:COUPONCODE
 		$text = self::substituteRenewalURLWithCoupon($text, $renewalURL);
+		F0FPlatform::getInstance()
+				->runPlugins('onAkeebasubsAfterProcessTags', array(&$text, $sub, $extras));
 
 		return $text;
 	}

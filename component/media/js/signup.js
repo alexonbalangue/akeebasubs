@@ -1,6 +1,6 @@
 /**
  * @package        akeebasubs
- * @copyright    Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright    Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -32,7 +32,7 @@ var akeebasubs_eu_configuration = {
 	"CY": ["Cyprus", "CY", 19],
 	"LV": ["Latvia", "LV", 21],
 	"LT": ["Lithuania", "LT", 21],
-	"LU": ["Luxembourg", "LU", 15],
+	"LU": ["Luxembourg", "LU", 17],
 	"HU": ["Hungary", "HU", 27],
 	"MT": ["Malta", "MT", 18],
 	"NL": ["Netherlands", "NL", 21],
@@ -1011,6 +1011,7 @@ function applyPrice(response)
 			$('#akeebasubs-sum-net').val(response.net);
 			$('#akeebasubs-sum-discount').val(response.discount);
 			$('#akeebasubs-sum-vat').val(response.tax);
+			$('#akeebasubs-sum-vat-percent').html(response.taxrate);
 			$('#akeebasubs-sum-total').val(response.gross);
 
 			$('#akeebasubs-sum-net-container').css('display', 'none');

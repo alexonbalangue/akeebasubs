@@ -168,12 +168,13 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_DATEFORMAT_DESC"
 		/>
-		<field name="vatrate" type="text"
+		<field name="showvat" type="list"
 			default="0"
-			size="3"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_VATRATE_LABEL"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_VATRATE_DESC"
-		/>
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWVAT_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWVAT_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field >
 		<field name="reqcoupon" type="list" default="0"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REQCOUPON_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REQCOUPON_DESC">
@@ -248,6 +249,7 @@
 				label="COM_AKEEBASUBS_CONFIG_INVOICE_EXTRACERT_TITLE"
 				description="COM_AKEEBASUBS_CONFIG_INVOICE_EXTRACERT_DESC"
 		/>
+		<field name="invoice_country" type="hidden"	default=""/>
 	</fieldset>
 
   <fieldset name="updates" label="CONFIG_UPDATES_LABEL">

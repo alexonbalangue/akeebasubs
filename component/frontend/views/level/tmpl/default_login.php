@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -25,18 +25,22 @@ if (version_compare(JVERSION, '3.2.0', 'ge'))
 	if ($useTwoFactorAuth)
 	{
 		JHtml::_('behavior.keepalive');
-		JHtml::_('bootstrap.tooltip');
 	}
 }
 
 ?>
 
-<form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post" class="form form-horizontal">
+<form action="<?php echo rtrim(JURI::base(),'/') ?>/<?php echo $login_url ?>" method="post" class="form form-horizontal well">
 	<input type="hidden" name="return" value="<?php echo base64_encode($redirectURL)?>" />
 	<input type="hidden" name="remember" value="1" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?></legend>
+
+		<div class="alert alert-info">
+			<span class="icon icon-info-sign"></span>
+			<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_DESC'); ?>
+		</div>
 
 		<div class="control-group form-group">
 			<label for="username" class="control-label col-sm-2">
@@ -61,17 +65,19 @@ if (version_compare(JVERSION, '3.2.0', 'ge'))
 			<label for="secretkey" class="control-label col-sm-2">
 				<?php echo JText::_('JGLOBAL_SECRETKEY')?>
 			</label>
-			<div class="controls col-sm-3">
+			<div class="controls col-md-6 col-sm-3">
 				<input type="text" name="secretkey" value="" class="input-small form-control" />
-				<span class="btn width-auto hasTooltip" title="<?php echo JText::_('JGLOBAL_SECRETKEY_HELP'); ?>">
-					<span class="icon-help"></span>
+				<span class="help-block">
+					<small>
+						<?php echo JText::_('JGLOBAL_SECRETKEY_HELP'); ?>
+					</small>
 				</span>
 			</div>
 		</div>
 		<?php endif; ?>
 
 		<div class="form-actions well">
-			<input type="submit" class="btn btn-primary" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN')?>" />
+			<input type="submit" class="btn btn-primary" value="<?php echo JText::_('COM_AKEEBASUBS_LEVEL_BTN_LOGIN')?>" />
 			<span>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LOGIN_ORCONTINUE')?>
 			</span>

@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -61,5 +61,68 @@ class AkeebasubsModelCpanels extends F0FModel
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Do we have the Akeeba GeoIP provider plugin installed?
+	 *
+	 * @return  boolean  False = not installed, True = installed
+	 */
+	public function hasGeoIPPlugin()
+	{
+		static $result = null;
+
+		if (is_null($result))
+		{
+			$db = JFactory::getDbo();
+
+			$query = $db->getQuery(true)
+				->select('COUNT(*)')
+				->from($db->qn('#__extensions'))
+				->where($db->qn('type') . ' = ' . $db->q('plugin'))
+				->where($db->qn('folder') . ' = ' . $db->q('system'))
+				->where($db->qn('element') . ' = ' . $db->q('akgeoip'));
+			$db->setQuery($query);
+			$result = $db->loadResult();
+		}
+
+		return ($result != 0);
+	}
+
+	/**
+	 * Does the GeoIP database need update?
+	 *
+	 * @param   integer $maxAge The maximum age of the db in days (default: 15)
+	 *
+	 * @return  boolean
+	 */
+	public function GeoIPDBNeedsUpdate($maxAge = 15)
+	{
+		$needsUpdate = false;
+
+		if (!$this->hasGeoIPPlugin())
+		{
+			return $needsUpdate;
+		}
+
+		// Get the modification time of the database file
+		$filePath = JPATH_ROOT . '/plugins/system/akgeoip/db/GeoLite2-Country.mmdb';
+		$modTime = @filemtime($filePath);
+
+		// This is now
+		$now = time();
+
+		// Minimum time difference we want (15 days) in seconds
+		if ($maxAge <= 0)
+		{
+			$maxAge = 15;
+		}
+
+		$threshold = $maxAge * 24 * 3600;
+
+		// Do we need an update?
+		$needsUpdate = ($now - $modTime) > $threshold;
+
+		return $needsUpdate;
 	}
 }

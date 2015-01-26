@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		mod_akeebasubs
- * @copyright 	Copyright (c) 2011-2013 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2015 Sander Potjer
  * @license 	GNU General Public License version 3 or later
  */
 
@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 F0FTemplateUtils::addCSS('media://com_akeebasubs/css/backend.css?'.AKEEBASUBS_VERSIONHASH);
 ?>
 
-<table class="adminlist">
+<table class="adminlist table table-striped">
 	<thead>
 		<tr>
 			<th>

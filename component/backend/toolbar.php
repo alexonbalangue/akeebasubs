@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -270,7 +270,9 @@ class AkeebasubsToolbar extends F0FToolbar
 		$icon = version_compare(JVERSION, '3.0', 'ge') ? 'download' : 'extension';
 		JToolBarHelper::custom('import', $icon, $icon, 'COM_AKEEBASUBS_IMPORT', false);
 		JToolbarHelper::divider();
-		JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
+
+		$bar = JToolbar::getInstance('toolbar');
+		$bar->appendButton('Link', 'arrow-left', 'JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
 	}
 
     public function onEmailtemplatesAdd()
@@ -317,7 +319,8 @@ class AkeebasubsToolbar extends F0FToolbar
 		$subtitle_key = 'COM_AKEEBASUBS_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
 		JToolBarHelper::title(JText::_('COM_AKEEBASUBS').' &ndash; <small>'.JText::_($subtitle_key).'</small>', 'akeebasubs');
 
-		JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
+		$bar = JToolbar::getInstance('toolbar');
+		$bar->appendButton('Link', 'arrow-left', 'JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
 	}
 
 	public function onReports()
@@ -325,7 +328,8 @@ class AkeebasubsToolbar extends F0FToolbar
 		$subtitle_key = 'COM_AKEEBASUBS_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
 		JToolBarHelper::title(JText::_('COM_AKEEBASUBS').' &ndash; <small>'.JText::_($subtitle_key).'</small>', 'akeebasubs');
 
-		JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=reports');
+		$bar = JToolbar::getInstance('toolbar');
+		$bar->appendButton('Link', 'arrow-left', 'JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=reports');
 	}
 
 	public function onReportsBrowse()
@@ -333,7 +337,8 @@ class AkeebasubsToolbar extends F0FToolbar
 		$subtitle_key = 'COM_AKEEBASUBS_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
 		JToolBarHelper::title(JText::_('COM_AKEEBASUBS').' &ndash; <small>'.JText::_($subtitle_key).'</small>', 'akeebasubs');
 
-		JToolbarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
+		$bar = JToolbar::getInstance('toolbar');
+		$bar->appendButton('Link', 'arrow-left', 'JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
 	}
 
     protected function addCustomBtn($id, $options = array())

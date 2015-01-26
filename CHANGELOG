@@ -1,10 +1,31 @@
 <?php die(); ?>
+Akeeba Subscriptions 4.2.0
+================================================================================
+- Joomla! 2.5 is no longer supported. We no longer test our software against it. If it breaks on Joomla! 2.5 you get to keep both halves.
++ Add a new plugin to conform to EU regulations regarding VAT and notification of the withdrawal period
++ gh-86 Allow spaces in usernames for Joomla! 3.3 and later
++ gh-90 Record the user's IP address on subscription (also the country, if you have the GeoIP plugin installed)
++ gh-91 Show tax-inclusive prices in the front-end, allowing the client to select their country
++ gh-88 Show the tax rate in the sign-up page
++ gh-94 EU tax reports
+~ Add series label in the tooltip of Expiration by Week report
+~ Add series and value label in the tooltip of the Sales per Level graph in the Control Panel
+# [MEDIUM] gh-95 Price does not change for custom field type "Subscription options"
+# [LOW] PayPal IPN could fail if User-Agent is not set (thanks, Vic!)
+# [LOW] gh-82 The expiration by week report wouldn't work on some sites due to timezone issues
+# [LOW] Subscription options: value cut off in locales using commas as decimal separators
+# [LOW] gh-98 Back buttons in the back-end of Joomla! 3 do not have an icon
+# [LOW] gh-99 Display artifacts in the login area of the frontend subscription (level) page
+# [LOW] gh-105 VAT liability notice was printed in invoices issued for the same country as the shop owner country even though VAT is charged. Thanks @compojoom!
+
 Akeeba Subscriptions 4.1.2
 ================================================================================
 + New message tags: [SLUG], [RENEWALURL] and [RENEWALURL:YourCouponCodeHere]
 ~ Updated .htaccess files for Apache 2.4 compatibility
 ~ The coupon field will appear, even when you have disabled it, if the user provides a coupon code
 ~ Removing SSLv3 from PayMill payment plugin due to known vulnerabilities. See https://blog.paymill.com/poodle/
+~ Refactored the EU VAT implementation for easier maintenance and full compatibility with VAT MOSS
+# [HIGH] Off-line payment plugin results in fatal error
 # [MEDIUM] The Akeeba Release System Download ID integration in emails didn't work due to a silly typo
 # [MEDIUM] Custom field validation was not working
 # [LOW] Fixed javascript error with radio custom fields
@@ -14,6 +35,7 @@ Akeeba Subscriptions 4.1.2
 # [LOW] Missing language string for the message page's title
 # [LOW] Fixed default values for min/max upgrade presence
 # [LOW] Upgrade discount type "Last percent" was not working
+# [LOW] gh-74 PayPal plugin would load PayPal button image from HTTP instead of HTTPS
 
 Akeeba Subscriptions 4.1.1
 ================================================================================

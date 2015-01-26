@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license   GNU General Public License version 3, or later
  */
 
@@ -317,8 +317,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 			return $ret;
 		}
 
-		// Joomla doens't allow spaces in usernames
-		if (strpos($username, ' ') !== false)
+		// Joomla versions before 3.3 do not allow spaces in usernames
+		if (version_compare(JVERSION, '3.2.0', 'lt') && (strpos($username, ' ') !== false))
 		{
 			$ret->username = false;
 
@@ -854,6 +854,9 @@ class AkeebasubsModelSubscribes extends F0FModel
 				'oldsub'     => $discountStructure['oldsub'],
 				'allsubs'    => $discountStructure['allsubs'],
 				'expiration' => $discountStructure['expiration'],
+				'taxrule_id' => $taxRule->id,
+				'tax_match'  => $taxRule->match,
+				'tax_fuzzy'  => $taxRule->fuzzy,
 			);
 		}
 
@@ -1576,95 +1579,10 @@ class AkeebasubsModelSubscribes extends F0FModel
 			}
 		}
 
-		// First try loading the rules for this level
-		$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-			->savestate(0)
-			->enabled(1)
-			->akeebasubs_level_id($state->id)
-			->filter_order('ordering')
-			->filter_order_Dir('ASC')
-			->limit(0)
-			->limitstart(0)
-			->getItemList();
+		/** @var AkeebasubsModelTaxhelper $taxModel */
+		$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
 
-		// If this level has no rules try the "All levels" rules
-		if (empty($taxrules))
-		{
-			$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-				->savestate(0)
-				->enabled(1)
-				->akeebasubs_level_id(0)
-				->filter_order('ordering')
-				->filter_order_Dir('ASC')
-				->limit(0)
-				->limitstart(0)
-				->getItemList();
-		}
-
-		$bestTaxRule = (object)array(
-			'match'   => 0,
-			'fuzzy'   => 0,
-			'taxrate' => 0
-		);
-
-		foreach ($taxrules as $rule)
-		{
-			// For each rule, get the match and fuzziness rating. The best, least fuzzy and last match wins.
-			$match = 0;
-			$fuzzy = 0;
-
-			if (empty($rule->country))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif ($rule->country == $state->country)
-			{
-				$match++;
-			}
-
-			if (empty($rule->state))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif ($rule->state == $state->state)
-			{
-				$match++;
-			}
-
-			if (empty($rule->city))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif (strtolower(trim($rule->city)) == strtolower(trim($state->city)))
-			{
-				$match++;
-			}
-
-			if (($rule->vies && $isVIES) || (!$rule->vies && !$isVIES))
-			{
-				$match++;
-			}
-
-			if (
-				($bestTaxRule->match < $match) ||
-				(($bestTaxRule->match == $match) && ($bestTaxRule->fuzzy > $fuzzy))
-			)
-			{
-				if ($match == 0)
-				{
-					continue;
-				}
-				$bestTaxRule->match = $match;
-				$bestTaxRule->fuzzy = $fuzzy;
-				$bestTaxRule->taxrate = $rule->taxrate;
-				$bestTaxRule->id = $rule->akeebasubs_taxrule_id;
-			}
-		}
-
-		return $bestTaxRule;
+		return $taxModel->getTaxRule($state->id, $state->country, $state->state, $state->city, $isVIES);
 	}
 
 	/**
@@ -2375,6 +2293,28 @@ class AkeebasubsModelSubscribes extends F0FModel
 		// Serialise custom subscription parameters
 		$custom_subscription_params = json_encode($subcustom);
 
+		// Get the IP address
+		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
+
+		if (class_exists('F0FUtilsIp', true))
+		{
+			$ip = F0FUtilsIp::getIp();
+		}
+
+		// Get the country from the IP address if the Akeeba GeoIP Provider Plugin is installed and activated
+		$ip_country = '(Unknown)';
+
+		if (class_exists('AkeebaGeoipProvider'))
+		{
+			$geoip = new AkeebaGeoipProvider();
+			$ip_country = $geoip->getCountryName($ip);
+
+			if (empty($ip_country))
+			{
+				$ip_country = '(Unknown)';
+			}
+		}
+
 		// Setup the new subscription
 		$data = array(
 			'akeebasubs_subscription_id' => null,
@@ -2394,6 +2334,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 			'tax_percent'                => $validation->price->taxrate,
 			'created_on'                 => $mNow,
 			'params'                     => $custom_subscription_params,
+			'ip'                         => $ip,
+			'ip_country'                 => $ip_country,
 			'akeebasubs_coupon_id'       => $validation->price->couponid,
 			'akeebasubs_upgrade_id'      => $validation->price->upgradeid,
 			'contact_flag'               => 0,

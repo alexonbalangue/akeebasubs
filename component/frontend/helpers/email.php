@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -274,7 +274,7 @@ class AkeebasubsHelperEmail
 	 * @param   string  $key     The email key, in the form PLG_LOCATION_PLUGINNAME_TYPE
 	 * @param   array   $extras  Any optional substitution strings you want to introduce
 	 *
-	 * @return  boolean|PHPMailer False if something bad happened, the PHPMailer instance in any other case
+	 * @return  JMail|boolean False if something bad happened, the PHPMailer instance in any other case
 	 */
 	public static function getPreloadedMailer($sub, $key, array $extras = array())
 	{

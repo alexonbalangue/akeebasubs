@@ -1,7 +1,7 @@
 <?php
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 
@@ -40,7 +40,7 @@ class AkeebasubsHelperEuVATInfo
 		'CY' => array('Cyprus', 'CY', 19),
 		'LV' => array('Latvia', 'LV', 21),
 		'LT' => array('Lithuania', 'LT', 21),
-		'LU' => array('Luxembourg', 'LU', 15),
+		'LU' => array('Luxembourg', 'LU', 17),
 		'HU' => array('Hungary', 'HU', 27),
 		'MT' => array('Malta', 'MT', 18),
 		'NL' => array('Netherlands', 'NL', 21),

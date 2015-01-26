@@ -1,7 +1,7 @@
 <?php
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 
@@ -56,7 +56,7 @@ if(version_compare(phpversion(), '5.3.0', 'lt')) {
 <p>
 	<strong>IMPORTANT</strong>: We can and will provide NO SUPPORT to users
 	receiving this message. We had published our intention to drop PHP 5.2
-	support since mid-2012.
+	support since mid-2015.
 </p>
 <?php return; }
 
