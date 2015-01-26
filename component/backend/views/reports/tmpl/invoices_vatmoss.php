@@ -174,7 +174,7 @@ $jDate = new JDate($this->params['year'] . '-' . $this->params['month'] . '-01')
 	<tfoot>
 	<tr style="background-color: black; color: white; font-weight: bold;">
 		<td colspan="4">
-			<?php echo JText::sprintf('COM_AKEEBASUBS_REPORTS_INVOICES_LBL_COUNTRYTOTAL', $countryInvoicesShown); ?>
+			<?php echo JText::sprintf('COM_AKEEBASUBS_REPORTS_INVOICES_LBL_COUNTRYTOTAL', AkeebasubsHelperSelect::formatCountry($lastCountry), $countryInvoicesShown); ?>
 		</td>
 		<td align="right">
 			<?php echo $countryNet ?> &euro;
