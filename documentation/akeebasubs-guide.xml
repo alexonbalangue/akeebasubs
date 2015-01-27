@@ -8072,7 +8072,7 @@ Rule C gives $ 30 discount</programlisting>
 
       <note>
         <para>This plugin implements the <link
-        xlink:href="https://www.x.com/developers/paypal/documentation-tools/express-checkout/integration-guide/ECGettingStarted">Express
+        xlink:href="https://developer.paypal.com/docs/classic/express-checkout/gs_expresscheckout/">Express
         Checkout</link> method.</para>
       </note>
 
