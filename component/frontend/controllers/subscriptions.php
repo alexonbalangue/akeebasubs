@@ -74,8 +74,7 @@ class AkeebasubsControllerSubscriptions extends F0FController
 			// Show login page
 			$juri	 = JURI::getInstance();
 			$myURI	 = base64_encode($juri->toString());
-			$com	 = version_compare(JVERSION, '1.6.0', 'ge') ? 'users' : 'user';
-			JFactory::getApplication()->redirect(JURI::base() . 'index.php?option=com_' . $com . '&view=login&return=' . $myURI);
+			JFactory::getApplication()->redirect(JURI::base() . 'index.php?option=com_users&view=login&return=' . $myURI);
 			return false;
 		}
 
@@ -172,16 +171,9 @@ class AkeebasubsControllerSubscriptions extends F0FController
 
 		$registeredurlparams = null;
 
-		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (property_exists($app, 'registeredurlparams'))
 		{
-			if (property_exists($app, 'registeredurlparams'))
-			{
-				$registeredurlparams = $app->registeredurlparams;
-			}
-		}
-		else
-		{
-			$registeredurlparams = $app->get('registeredurlparams');
+			$registeredurlparams = $app->registeredurlparams;
 		}
 
 		if (empty($registeredurlparams))
@@ -195,14 +187,7 @@ class AkeebasubsControllerSubscriptions extends F0FController
 			$registeredurlparams->$key = $value;
 		}
 
-		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
-		{
-			$app->registeredurlparams = $registeredurlparams;
-		}
-		else
-		{
-			$app->set('registeredurlparams', $registeredurlparams);
-		}
+		$app->registeredurlparams = $registeredurlparams;
 	}
 
 	/**

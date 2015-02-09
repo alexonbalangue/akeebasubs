@@ -246,16 +246,9 @@ class AkeebasubsControllerLevels extends F0FController
 
 		$registeredurlparams = null;
 
-		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
+		if (property_exists($app, 'registeredurlparams'))
 		{
-			if (property_exists($app, 'registeredurlparams'))
-			{
-				$registeredurlparams = $app->registeredurlparams;
-			}
-		}
-		else
-		{
-			$registeredurlparams = $app->get('registeredurlparams');
+			$registeredurlparams = $app->registeredurlparams;
 		}
 
 		if (empty($registeredurlparams))
@@ -269,13 +262,6 @@ class AkeebasubsControllerLevels extends F0FController
 			$registeredurlparams->$key = $value;
 		}
 
-		if (F0FPlatform::getInstance()->checkVersion(JVERSION, '3.0', 'ge'))
-		{
-			$app->registeredurlparams = $registeredurlparams;
-		}
-		else
-		{
-			$app->set('registeredurlparams', $registeredurlparams);
-		}
+		$app->registeredurlparams = $registeredurlparams;
 	}
 }

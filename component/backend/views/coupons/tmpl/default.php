@@ -8,7 +8,6 @@
 defined('_JEXEC') or die();
 
 JHtml::_('behavior.tooltip');
-JHTML::_('behavior.framework', true);
 ?>
 <div class="row-fluid">
 	<div class="span12">

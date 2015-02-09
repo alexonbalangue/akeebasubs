@@ -19,8 +19,6 @@ AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.pieRenderer.min.js?'
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/cpanelgraphs.js?'.AKEEBASUBS_VERSIONHASH);
 
-JHTML::_('behavior.framework', true);
-
 $this->loadHelper('select');
 
 $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);

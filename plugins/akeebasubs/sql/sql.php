@@ -74,12 +74,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 				$sql = str_replace('[USER_ID]', $user_id, $sql);
 				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
-				if(version_compare(JVERSION, '3.0', 'ge')) {
-					// Joomla! 3.0... Whatever!!!!
-					$db->execute();
-				} else {
-					$db->queryBatch(false);
-				}
+				$db->execute();
 			}
 		}
 
@@ -91,12 +86,7 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 				$sql = str_replace('[USER_ID]', $user_id, $sql);
 				$sql = str_replace('[USERNAME]', $username, $sql);
 				$db->setQuery($sql);
-				if(version_compare(JVERSION, '3.0', 'ge')) {
-					// Joomla! 3.0... Whatever!!!!
-					$db->execute();
-				} else {
-					$db->queryBatch(false);
-				}
+				$db->execute();
 			}
 		}
 	}

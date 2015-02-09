@@ -21,14 +21,7 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, 'en-GB', true);
 		$lang->load('plg_akeebasubs_agreetotos', JPATH_ADMINISTRATOR, null, true);
 
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
-			$cachechoice = $this->params->get('cachechoice', 0);
-		}
-		else
-		{
-			$cachechoice = $this->params->getValue('cachechoice', 0);
-		}
+		$cachechoice = $this->params->get('cachechoice', 0);
 
 		// Init the fields array which will be returned
 		$fields = array();
@@ -66,14 +59,7 @@ class plgAkeebasubsAgreetotos extends JPlugin
 		}
 
 		// Setup the field
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
-			$url = $this->params->get('tosurl', '');
-		}
-		else
-		{
-			$url = $this->params->getValue('tosurl', '');
-		}
+		$url = $this->params->get('tosurl', '');
 
 		if (empty($url))
 		{

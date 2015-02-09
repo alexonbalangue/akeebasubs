@@ -317,14 +317,6 @@ class AkeebasubsModelSubscribes extends F0FModel
 			return $ret;
 		}
 
-		// Joomla versions before 3.3 do not allow spaces in usernames
-		if (version_compare(JVERSION, '3.2.0', 'lt') && (strpos($username, ' ') !== false))
-		{
-			$ret->username = false;
-
-			return $ret;
-		}
-
 		$user = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel')
 			->username($username)
 			->getFirstItem();
@@ -1818,18 +1810,9 @@ class AkeebasubsModelSubscribes extends F0FModel
 			$params['sendEmail'] = 0;
 
 			// Set the user's default language to whatever the site's current language is
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				$params['params'] = array(
-					'language' => JFactory::getConfig()->get('language')
-				);
-			}
-			else
-			{
-				$params['params'] = array(
-					'language' => JFactory::getConfig()->getValue('config.language')
-				);
-			}
+			$params['params'] = array(
+				'language' => JFactory::getConfig()->get('language')
+			);
 
 			// We always block the user, so that only a successful payment or
 			// clicking on the email link activates his account. This is to
@@ -1838,14 +1821,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 			$params['block'] = 1;
 
 			$randomString = JUserHelper::genRandomPassword();
-			if (version_compare(JVERSION, '3.2', 'ge'))
-			{
-				$hash = JApplication::getHash($randomString);
-			}
-			else
-			{
-				$hash = JFactory::getApplication()->getHash($randomString);
-			}
+			$hash = JApplication::getHash($randomString);
 			$params['activation'] = $hash;
 
 			$userIsSaved = false;
@@ -2096,14 +2072,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 		// ----------------------------------------------------------------------
 		if (F0FModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
 		{
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
-			}
-			else
-			{
-				JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
-			}
+			throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
 		}
 
 		// Step #3. Create or update a user record
@@ -2829,37 +2798,25 @@ class AkeebasubsModelSubscribes extends F0FModel
 				$data['sitename']
 			);
 
-			if (version_compare(JVERSION, '3.0', 'lt'))
+			if ($sendpassword)
 			{
 				$emailBody = JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_BODY',
 					$data['name'],
 					$data['sitename'],
-					$data['siteurl']
+					$data['siteurl'],
+					$data['username'],
+					$data['password_clear']
 				);
 			}
 			else
 			{
-				if ($sendpassword)
-				{
-					$emailBody = JText::sprintf(
-						'COM_USERS_EMAIL_REGISTERED_BODY',
-						$data['name'],
-						$data['sitename'],
-						$data['siteurl'],
-						$data['username'],
-						$data['password_clear']
-					);
-				}
-				else
-				{
-					$emailBody = JText::sprintf(
-						'COM_USERS_EMAIL_REGISTERED_BODY_NOPW',
-						$data['name'],
-						$data['sitename'],
-						$data['siteurl']
-					);
-				}
+				$emailBody = JText::sprintf(
+					'COM_USERS_EMAIL_REGISTERED_BODY_NOPW',
+					$data['name'],
+					$data['sitename'],
+					$data['siteurl']
+				);
 			}
 		}
 

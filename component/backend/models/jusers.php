@@ -76,27 +76,14 @@ class AkeebasubsModelJusers extends F0FModel
 		$params['sendEmail'] = 0;
 
 		// Set the user's default language to whatever the site's current language is
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$params['params'] = array(
-				'language'	=> JFactory::getConfig()->get('language')
-			);
-		} else {
-			$params['params'] = array(
-				'language'	=> JFactory::getConfig()->getValue('config.language')
-			);
-		}
+		$params['params'] = array(
+			'language'	=> JFactory::getConfig()->get('language')
+		);
 
 		JLoader::import('joomla.user.helper');
 		$params['block'] = 0;
 		$randomString = JUserHelper::genRandomPassword();
-		if (version_compare(JVERSION, '3.2', 'ge'))
-		{
-			$hash = JApplication::getHash($randomString);
-		}
-		else
-		{
-			$hash = JFactory::getApplication()->getHash($randomString);
-		}
+		$hash = JApplication::getHash($randomString);
 		$params['activation'] = $hash;
 
 		$user->bind($params);

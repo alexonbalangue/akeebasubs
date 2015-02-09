@@ -215,14 +215,7 @@ class AkeebasubsHelperMessage
 
 		// -- Get the site name
 		$config = JFactory::getConfig();
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
-			$sitename = $config->get('sitename');
-		}
-		else
-		{
-			$sitename = $config->getValue('config.sitename');
-		}
+		$sitename = $config->get('sitename');
 
 		// -- First/last name
 		$fullname = $user->name;
@@ -418,14 +411,7 @@ class AkeebasubsHelperMessage
 						JLoader::import('joomla.registry.registry');
 						$params = new JRegistry($params);
 					}
-					if (version_compare(JVERSION, '3.0', 'ge'))
-					{
-						$lang = $params->get('language', '');
-					}
-					else
-					{
-						$lang = $params->getValue('language', '');
-					}
+					$lang = $params->get('language', '');
 				}
 				if (empty($lang))
 				{

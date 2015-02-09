@@ -41,11 +41,8 @@ unset($upgradesRaw);
 
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.multiselect');
-if (version_compare(JVERSION, '3.0', 'gt'))
-{
-	JHtml::_('dropdown.init');
-	JHtml::_('formbehavior.chosen', 'select');
-}
+JHtml::_('dropdown.init');
+JHtml::_('formbehavior.chosen', 'select');
 
 $sortFields = array(
 	'akeebasubs_subscription_id'	=> JText::_('COM_AKEEBASUBS_COMMON_ID'),
@@ -67,7 +64,6 @@ $now_timestamp = $jDate->toUnix();
 <div class="row-fluid">
 <div class="span12">
 
-<?php if (version_compare(JVERSION, '3.0', 'ge')): ?>
 	<script type="text/javascript">
 		Joomla.orderTable = function() {
 			table = document.getElementById("sortTable");
@@ -83,7 +79,6 @@ $now_timestamp = $jDate->toUnix();
 			Joomla.tableOrdering(order, dirn);
 		}
 	</script>
-<?php endif; ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
 <input type="hidden" name="option" value="com_akeebasubs" />
@@ -95,7 +90,6 @@ $now_timestamp = $jDate->toUnix();
 <input type="hidden" name="filter_order_Dir" id="filter_order_Dir" value="<?php echo $this->lists->order_Dir ?>" />
 <input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
-<?php if(version_compare(JVERSION, '3.0', 'gt')): ?>
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="btn-group pull-right hidden-phone">
 			<label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC') ?></label>
@@ -122,7 +116,6 @@ $now_timestamp = $jDate->toUnix();
 		</div>
 	</div>
 	<div class="clearfix"> </div>
-<?php endif; ?>
 
 <table class="adminlist table table-striped">
 	<thead>

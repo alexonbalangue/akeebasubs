@@ -7,7 +7,6 @@
 
 	defined('_JEXEC') or die;
 
-	JHtml::_('behavior.framework');
 	$app       = JFactory::getApplication();
 	$userModel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
 

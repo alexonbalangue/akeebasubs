@@ -124,14 +124,7 @@ class AkeebasubsToolbar extends F0FToolbar
 
 		// Add "Subscription Refresh"Run Integrations"
 		JToolBarHelper::divider();
-		if (version_compare(JVERSION, '3.0', 'lt'))
-		{
-			$bar->appendButton('Link', 'subrefresh', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
-		}
-		else
-		{
-			$bar->appendButton('Link', 'play', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
-		}
+		$bar->appendButton('Link', 'play', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
 
 		// Add "Export to CSV"
 		$link = JURI::getInstance();
@@ -143,8 +136,7 @@ class AkeebasubsToolbar extends F0FToolbar
 		$link->setQuery($query);
 
 		JToolBarHelper::divider();
-		$icon = version_compare(JVERSION, '3.0', 'lt') ? 'export' : 'download';
-		$bar->appendButton('Link', $icon, JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
+		$bar->appendButton('Link', 'download', JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
 	}
 
 	public function onLevelsBrowse()
@@ -267,8 +259,7 @@ class AkeebasubsToolbar extends F0FToolbar
 		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
 		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
 
-		$icon = version_compare(JVERSION, '3.0', 'ge') ? 'download' : 'extension';
-		JToolBarHelper::custom('import', $icon, $icon, 'COM_AKEEBASUBS_IMPORT', false);
+		JToolBarHelper::custom('import', 'download', 'download', 'COM_AKEEBASUBS_IMPORT', false);
 		JToolbarHelper::divider();
 
 		$bar = JToolbar::getInstance('toolbar');
@@ -298,15 +289,8 @@ class AkeebasubsToolbar extends F0FToolbar
         {
 			JToolBarHelper::divider();
 
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				$options['class']   = 'envelope';
-			}
-			else
-			{
-				$options['class']   = 'preview';
-			}
-            $options['a.task']  = 'testtemplate';
+	        $options['class']   = 'envelope';
+	        $options['a.task']  = 'testtemplate';
             $options['a.href']  = '#';
             $options['text']    = JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_TESTTEMPLATE');
 
@@ -344,15 +328,8 @@ class AkeebasubsToolbar extends F0FToolbar
     protected function addCustomBtn($id, $options = array())
     {
         $options = (array) $options;
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
-			$a_class = 'btn btn-small';
-		}
-		else
-		{
-			$a_class = 'toolbar';
-		}
-        $href	 = '';
+	    $a_class = 'btn btn-small';
+	    $href	 = '';
         $task	 = '';
         $text    = '';
         $rel	 = '';
@@ -397,14 +374,7 @@ class AkeebasubsToolbar extends F0FToolbar
         if($other)  $html .= ' '.$other;
         $html .= ' >';
 
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
-			$html .= '<span class="icon icon-'.$class.'" title="'.$text.'" > </span>';
-		}
-		else
-		{
-			$html .= '<span class="icon-32-'.$class.'" title="'.$text.'" > </span>';
-		}
+	    $html .= '<span class="icon icon-'.$class.'" title="'.$text.'" > </span>';
 
 		$html .= $text;
 

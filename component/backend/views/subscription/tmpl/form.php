@@ -9,7 +9,6 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.tooltip');
-JHTML::_('behavior.framework', true);
 JHTML::_('behavior.modal');
 
 $this->loadHelper('cparams');

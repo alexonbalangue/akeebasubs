@@ -363,14 +363,7 @@ class AkeebasubsModelImports extends F0FModel
 		$sub = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 
 		$randomString = JUserHelper::genRandomPassword();
-		if (version_compare(JVERSION, '3.2', 'ge'))
-		{
-			$hash = JApplication::getHash($randomString);
-		}
-		else
-		{
-			$hash = JFactory::getApplication()->getHash($randomString);
-		}
+		$hash = JApplication::getHash($randomString);
 
 		$bind['user_id']             = $userid;
 		$bind['akeebasubs_level_id'] = $level->akeebasubs_level_id;

@@ -16,16 +16,13 @@ $redirectURL = JURI::getInstance()->toString();
 // Should I use two factor authentication in Joomla! 3.2 and later?
 $useTwoFactorAuth = false;
 
-if (version_compare(JVERSION, '3.2.0', 'ge'))
-{
-	require_once JPATH_ADMINISTRATOR . '/components/com_users/helpers/users.php';
-	$tfaMethods = UsersHelper::getTwoFactorMethods();
-	$useTwoFactorAuth = count($tfaMethods) > 1;
+require_once JPATH_ADMINISTRATOR . '/components/com_users/helpers/users.php';
+$tfaMethods = UsersHelper::getTwoFactorMethods();
+$useTwoFactorAuth = count($tfaMethods) > 1;
 
-	if ($useTwoFactorAuth)
-	{
-		JHtml::_('behavior.keepalive');
-	}
+if ($useTwoFactorAuth)
+{
+	JHtml::_('behavior.keepalive');
 }
 
 ?>

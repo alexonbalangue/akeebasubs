@@ -7,8 +7,6 @@
 
 defined('_JEXEC') or die;
 
-JHTML::_('behavior.framework', true);
-
 F0FTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);

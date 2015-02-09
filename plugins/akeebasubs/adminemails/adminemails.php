@@ -24,11 +24,8 @@ class plgAkeebasubsAdminemails extends JPlugin
 
 		parent::__construct($subject, $config);
 
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$emailsString = trim($this->params->get('emails', ''));
-		} else {
-			$emailsString = trim($this->params->getValue('emails', ''));
-		}
+		$emailsString = trim($this->params->get('emails', ''));
+
 		if(empty($emailsString)) {
 			$this->emails = array();
 		} else {

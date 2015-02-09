@@ -385,11 +385,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	protected function logIPN($data, $isValid)
 	{
 		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$logpath = $config->get('log_path');
-		} else {
-			$logpath = $config->getValue('log_path');
-		}
+		$logpath = $config->get('log_path');
 
 		$logFilenameBase = $logpath.'/akpayment_'.strtolower($this->ppName).'_ipn';
 

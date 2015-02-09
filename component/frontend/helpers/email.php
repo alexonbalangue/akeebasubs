@@ -101,11 +101,7 @@ class AkeebasubsHelperEmail
 		// -- User's preferred language
 		JLoader::import('joomla.registry.registry');
 		$uparams = is_object($user->params) ? $user->params : new JRegistry($user->params);
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$userlang = $uparams->get('language','');
-		} else {
-			$userlang = $uparams->getValue('language','');
-		}
+		$userlang = $uparams->get('language','');
 		if(!empty($userlang)) {
 			$jlang->load($extension, JPATH_ADMINISTRATOR, $userlang, true);
 			$jlang->load($extension.'.override', JPATH_ADMINISTRATOR, $userlang, true);

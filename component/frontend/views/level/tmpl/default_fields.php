@@ -47,8 +47,6 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/cparams.php
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/format.php';
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/select.php';
 
-JHTML::_('behavior.framework', true);
-
 if(isset($this->item)) {
 	$akeebasubs_subscription_level = $this->item->akeebasubs_level_id;
 } else {
@@ -416,15 +414,7 @@ if ($businessFields == 'never') {
 	<label for="isbusiness" class="control-label col-sm-2">
 		* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')?>
 	</label>
-	<?php if (version_compare(JVERSION, '3.0', 'ge')): ?>
-		<?php echo JHTML::_('select.booleanlist', 'isbusiness', array(), $isBusiness); ?>
-	<?php else: ?>
-		<div class="controls">
-            <span class="col-sm-3">
-			    <?php echo JHTML::_('select.booleanlist', 'isbusiness', array(), $isBusiness); ?>
-            </span>
-		</div>
-	<?php endif; ?>
+	<?php echo JHTML::_('select.booleanlist', 'isbusiness', array(), $isBusiness); ?>
 </div>
 
 <?php if($businessFields == 'none'): ?>

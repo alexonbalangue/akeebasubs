@@ -80,6 +80,20 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	protected $componentTitle = 'Akeeba Subscriptions';
 
 	/**
+	 * The minimum PHP version required to install this extension
+	 *
+	 * @var   string
+	 */
+	protected $minimumPHPVersion = '5.3.4';
+
+	/**
+	 * The minimum Joomla! version required to install this extension
+	 *
+	 * @var   string
+	 */
+	protected $minimumJoomlaVersion = '3.2.1';
+
+	/**
 	 * The list of extra modules and plugins to install on component installation / update and remove on component
 	 * uninstallation.
 	 *
