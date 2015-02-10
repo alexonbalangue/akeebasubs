@@ -14,7 +14,7 @@ $this->loadHelper('cparams');
 
 <?php
 // Obsolete PHP version check
-if (version_compare(JVERSION, '5.4.0', 'lt')):
+if (version_compare(PHP_VERSION, '5.4.0', 'lt')):
 	JLoader::import('joomla.utilities.date');
 	$akeebaCommonDatePHP = new JDate('2014-08-14 00:00:00', 'GMT');
 	$akeebaCommonDateObsolescence = new JDate('2015-05-14 00:00:00', 'GMT');
