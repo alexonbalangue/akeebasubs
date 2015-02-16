@@ -70,7 +70,17 @@ class AkeebasubsControllerLevels extends F0FController
 			'_akeebasubs_taxParameters' => 'ARRAY',
 			'no_clear'                  => 'BOOL',
 			'_x_userid'                 => 'INT',
+			'coupon'                    => 'STRING'
 		));
+
+		// Save a possible coupon code in the session
+		$coupon = $this->input->getString('coupon');
+
+		if (!empty($coupon))
+		{
+			$session = JFactory::getSession();
+			$session->set('coupon', $coupon, 'com_akeebasubs');
+		}
 
 		// Continue parsing page options
 		if (parent::onBeforeBrowse())
@@ -115,6 +125,7 @@ class AkeebasubsControllerLevels extends F0FController
 	{
 		// Do we have an affiliate code?
 		$affid = $this->input->getInt('affid', 0);
+
 		if ($affid)
 		{
 			$session = JFactory::getSession();
@@ -204,7 +215,20 @@ class AkeebasubsControllerLevels extends F0FController
 		$vModel = F0FModel::getAnInstance('Subscribes', 'AkeebasubsModel')
 			->slug($slug)
 			->id($id);
+
+		// Should we use the coupon code saved in the session?
+		$session = JFactory::getSession();
+		$sessionCoupon = $session->get('coupon', null, 'com_akeebasubs');
+		$inputCoupon = $this->input->getString('coupon');
+
+		if (empty($inputCoupon) && !empty($sessionCoupon))
+		{
+			$vModel->coupon($sessionCoupon);
+			$session->set('coupon', null, 'com_akeebasubs');
+		}
+
 		$cache = (array)($vModel->getData());
+
 		if ($cache['firstrun'])
 		{
 			foreach ($cache as $k => $v)

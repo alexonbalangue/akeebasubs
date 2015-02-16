@@ -8,6 +8,7 @@ Akeeba Subscriptions 4.2.0
 + gh-91 Show tax-inclusive prices in the front-end, allowing the client to select their country
 + gh-88 Show the tax rate in the sign-up page
 + gh-94 EU tax reports
++ gh-118 Accept coupon code passed as parameter URL in the levels (subscription level selection) view
 + Check for obsolete PHP versions and printing a warning
 ~ Add series label in the tooltip of Expiration by Week report
 ~ Add series and value label in the tooltip of the Sales per Level graph in the Control Panel
