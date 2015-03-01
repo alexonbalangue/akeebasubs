@@ -96,6 +96,15 @@ $this->loadHelper('format');
 				<?php echo JHTML::_('select.booleanlist', 'combine', null, $this->item->combine); ?>
 			</div>
 		</div>
+
+		<div class="control-group">
+			<label for="expired" class="control-label hasTip" title="<?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_EXPIRED_DESC') ?>">
+				<?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_EXPIRED'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'expired', null, $this->item->expired); ?>
+			</div>
+		</div>
 	</div>
 	</div>
 </form>

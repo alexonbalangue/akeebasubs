@@ -35,6 +35,12 @@ class AkeebasubsModelSubscribes extends F0FModel
 	 */
 	protected $_upgrade_id = null;
 
+
+	/**
+	 * @var int|null Upgrade ID for expired subscriptions used in the price calculation
+	 */
+	protected $_expired_upgrade_id = null;
+
 	/**
 	 * We cache the results of all time-consuming operations, e.g. vat validation, subscription membership calculation,
 	 * tax calculations, etc into this array, saved in the user's session.
@@ -1009,8 +1015,15 @@ class AkeebasubsModelSubscribes extends F0FModel
 	 */
 	private function _getAutoDiscount()
 	{
-		// Get the automatic discount based on upgrade rules
+		// Get the automatic discount based on upgrade rules for active and expired subscriptions
 		$autoDiscount = $this->_getUpgradeRule();
+		$autoDiscountExpired = $this->_getUpgradeExpiredRule();
+
+		if ($autoDiscountExpired > $autoDiscount)
+		{
+			$autoDiscount = $autoDiscountExpired;
+			$this->_upgrade_id = $this->_expired_upgrade_id;
+		}
 
 		// Initialise the return value
 		$ret = array(
@@ -1362,6 +1375,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 			->savestate(0)
 			->to_id($state->id)
 			->enabled(1)
+			->expired(0)
 			->limit(0)
 			->limitstart(0)
 			->getItemList();
@@ -1537,6 +1551,232 @@ class AkeebasubsModelSubscribes extends F0FModel
 					{
 						$discount = $newDiscount;
 						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+					}
+					break;
+			}
+		}
+
+		return $discount;
+	}
+
+	/**
+	 * Loads any relevant upgrade rules for expired subscriptions and returns the max discount possible
+	 * under those rules.
+	 *
+	 * @return float Discount amount
+	 */
+	private function _getUpgradeExpiredRule()
+	{
+		$state = $this->getStateVariables();
+
+		// Get the id from the slug if it's not present
+		if ($state->slug && empty($state->id))
+		{
+			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			if (!empty($list))
+			{
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			}
+			else
+			{
+				$state->id = 0;
+			}
+		}
+
+		// Check that we do have a user (if there's no logged in user, we have
+		// no subscription information, ergo upgrades are not applicable!)
+		$user_id = JFactory::getUser()->id;
+		if (empty($user_id))
+		{
+			$this->_upgrade_id = null;
+
+			return 0;
+		}
+
+		// Get applicable auto-rules
+		$autoRules = F0FModel::getTmpInstance('Upgrades', 'AkeebasubsModel')
+			->savestate(0)
+			->to_id($state->id)
+			->enabled(1)
+			->expired(1)
+			->limit(0)
+			->limitstart(0)
+			->getItemList();
+
+		if (empty($autoRules))
+		{
+			$this->_upgrade_id = null;
+
+			return 0;
+		}
+
+		// Get the user's list of paid but no longer active (therefore: expired) subscriptions
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			->savestate(0)
+			->user_id($user_id)
+			->enabled(0)
+			->paystate('C')
+			->limit(0)
+			->limitstart(0)
+			->getList();
+
+		if (empty($subscriptions))
+		{
+			$this->_expired_upgrade_id = null;
+
+			return 0;
+		}
+
+		$subs = array();
+		JLoader::import('joomla.utilities.date');
+		$jNow = new JDate();
+		$uNow = $jNow->toUnix();
+
+		$subPayments = array();
+
+		foreach ($subscriptions as $subscription)
+		{
+			$jTo = new JDate($subscription->publish_down);
+			$uTo = $jTo->toUnix();
+			$age = $uNow - $uTo;
+			$subs[$subscription->akeebasubs_level_id] = $age;
+
+			$jOn = new JDate($subscription->created_on);
+			if (!array_key_exists($subscription->akeebasubs_level_id, $subPayments))
+			{
+				$subPayments[$subscription->akeebasubs_level_id] = array(
+					'value' => $subscription->net_amount,
+					'on'    => $jOn->toUnix(),
+				);
+			}
+			else
+			{
+				$oldOn = $subPayments[$subscription->akeebasubs_level_id]['on'];
+				if ($oldOn < $jOn->toUnix())
+				{
+					$subPayments[$subscription->akeebasubs_level_id] = array(
+						'value' => $subscription->net_amount,
+						'on'    => $jOn->toUnix(),
+					);
+				}
+			}
+		}
+
+		// Get the current subscription level's net worth
+		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->setId($state->id)
+			->getItem();
+		$net = (float)$level->price;
+
+		if ($net == 0)
+		{
+			$this->_expired_upgrade_id = null;
+
+			return 0;
+		}
+
+		$discount = 0;
+		$this->_expired_upgrade_id = null;
+
+		// Remove any rules that do not apply
+		foreach ($autoRules as $i => $rule)
+		{
+			if (
+				// Make sure there is an active subscription in the From level
+				!(array_key_exists($rule->from_id, $subs))
+				// Make sure the min/max presence is repected
+				|| ($subs[$rule->from_id] < ($rule->min_presence * 86400))
+				|| ($subs[$rule->from_id] > ($rule->max_presence * 86400))
+				// If From and To levels are different, make sure there is no active subscription in the To level yet
+				|| ($rule->to_id != $rule->from_id && array_key_exists($rule->to_id, $subs))
+			)
+			{
+				unset($autoRules[$i]);
+			}
+		}
+
+		// First add add all combined rules
+		foreach ($autoRules as $i => $rule)
+		{
+			if (!$rule->combine)
+			{
+				continue;
+			}
+
+			switch ($rule->type)
+			{
+				case 'value':
+					$discount += $rule->value;
+					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'percent':
+					$newDiscount = $net * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'lastpercent':
+					if (!array_key_exists($rule->from_id, $subPayments))
+					{
+						$lastNet = 0.00;
+					}
+					else
+					{
+						$lastNet = $subPayments[$rule->from_id]['value'];
+					}
+					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+			}
+			unset($autoRules[$i]);
+		}
+
+		// Then check all non-combined rules if they give a higher discount
+		foreach ($autoRules as $rule)
+		{
+			if ($rule->combine)
+			{
+				continue;
+			}
+
+			switch ($rule->type)
+			{
+				case 'value':
+					if ($rule->value > $discount)
+					{
+						$discount = $rule->value;
+						$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					}
+					break;
+
+				case 'percent':
+					$newDiscount = $net * (float)$rule->value / 100.00;
+					if ($newDiscount > $discount)
+					{
+						$discount = $newDiscount;
+						$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					}
+					break;
+
+				case 'lastpercent':
+					if (!array_key_exists($rule->from_id, $subPayments))
+					{
+						$lastNet = 0.00;
+					}
+					else
+					{
+						$lastNet = $subPayments[$rule->from_id]['value'];
+					}
+					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+					if ($newDiscount > $discount)
+					{
+						$discount = $newDiscount;
+						$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
 					}
 					break;
 			}

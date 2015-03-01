@@ -191,6 +191,7 @@ CREATE TABLE `#__akeebasubs_upgrades` (
 	`type` ENUM('value','percent', 'lastpercent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT '0.0',
 	`combine` tinyint(1) NOT NULL DEFAULT '0',
+    `expired` tinyint(1) NOT NULL DEFAULT '0'
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -961,5 +962,13 @@ ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `ip` VARCHAR(255) AFTER `pa
 ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `ip_country` VARCHAR(255) AFTER `ip`;
 				]]></query>
 			</action>
-	</sql>
+
+            <action table="#__akeebasubs_upgrades" canfail="1">
+                <condition type="missing" value="expired" />
+                <query><![CDATA[
+    ALTER TABLE `#__akeebasubs_upgrades` ADD COLUMN `expired` tinyint(1) NOT NULL DEFAULT '0' AFTER `combine`;
+                ]]></query>
+            </action>
+
+    </sql>
 </schema>

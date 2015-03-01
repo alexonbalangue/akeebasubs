@@ -177,8 +177,8 @@
       <para>NO SUPPORT. We have discontinued support for this component. It is
       now a developer's product. This means that we will not provide any kind
       of support, help, instructions, custom feature implementations or any
-      other kind of work related to this component for a fee or for
-      free.</para>
+      other kind of work related to this component for a fee or for free. This
+      documentation is written for our own reference only.</para>
     </section>
 
     <section xml:id="requirements">
@@ -3047,6 +3047,26 @@
         </varlistentry>
 
         <varlistentry>
+          <term>After Expiration</term>
+
+          <listitem>
+            <para>Normally an upgrade rule takes into account only the
+            currently active subscriptions. However, you may want to give a
+            discoutn to returning clients. For example, consider a client who
+            had a SILVER subscription, let it expire and comes two months
+            later to buy a GOLD subscription. Maybe you want to give them a
+            10% discount. This is what this feature is for.</para>
+
+            <para>By enabling this feature the upgrade rules now apply to
+            expired subscriptions only. An expired subscription is one with a
+            payment state Completed and enabled set to No. The Min and Max
+            Presence will now refer to the time which has elapsed between the
+            expiration date of the From Level and the current date and
+            time.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
           <term>Combine</term>
 
           <listitem>
@@ -3087,6 +3107,13 @@ Rule C gives $ 30 discount</programlisting>
 
             <para>Total discount will be $30 given by rule C because C gives a
             bigger discount than A+B (combined).</para>
+
+            <important>
+              <para>The Combine flag only applies to upgrade rules of the same
+              kind as far as the After Expiration flag is concerned. It will
+              NOT combine discounts for expired and active
+              subscriptions.</para>
+            </important>
           </listitem>
         </varlistentry>
       </variablelist>
@@ -3124,6 +3151,15 @@ Rule C gives $ 30 discount</programlisting>
       only to subscribers who have already bought a SUB1 and SUB2 subscription
       using the Restricted Content plugin bundled with Akeeba
       Subscriptions.</para>
+
+      <para>You want to give a 10% discount to users who used to have a SUB1
+      subscription but let it expire, then come back in the following 3 months
+      to purchase a new SUB1 or SUB2 subscription. Create an upgrade rule with
+      From Level SUB1, To Level SUB1, Min Presence 0, Max Presence 90,
+      discount type Percent, value 10, After Expire set to Yes. Then create a
+      new upgrade rule with From Level SUB1, To Level SUB2, Min Presence 0,
+      Max Presence 90, discount type Percent, value 10, After Expire set to
+      Yes.</para>
     </section>
 
     <section xml:id="subscription-level-relations">
