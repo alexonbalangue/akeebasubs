@@ -278,6 +278,15 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			// Import data
 			'administrator/components/com_akeebasubs/controllers/tools.php',
 			'administrator/components/com_akeebasubs/models/tools.php',
+
+			// Joomla! 2.5 stuff
+			'administrator/components/com_akeebasubs/views/coupons/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/customfields/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/emailtemplates/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/invoicetemplates/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/levels/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/relations/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/upgrades/tmpl/form.default.j3.xml',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
