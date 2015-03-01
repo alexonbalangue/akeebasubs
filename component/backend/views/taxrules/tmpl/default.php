@@ -8,7 +8,7 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 ?>
-<div class="row-fluid">
+<div class="row-fluid" style="margin-bottom: 1.5em">
 	<div class="span12">
 		<a href="index.php?option=com_akeebasubs&view=taxconfigs" class="btn btn-primary">
 			<i class="icon-white icon-plane"></i>

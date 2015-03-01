@@ -19,6 +19,7 @@ Akeeba Subscriptions 4.2.0
 # [LOW] gh-98 Back buttons in the back-end of Joomla! 3 do not have an icon
 # [LOW] gh-99 Display artifacts in the login area of the frontend subscription (level) page
 # [LOW] gh-105 VAT liability notice was printed in invoices issued for the same country as the shop owner country even though VAT is charged. Thanks @compojoom!
+# [LOW] Back-end styling issues under Joomla! 3.4 due to the collapsible sidebar
 
 Akeeba Subscriptions 4.1.2
 ================================================================================
