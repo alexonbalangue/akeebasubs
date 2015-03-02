@@ -6,9 +6,6 @@
 <br />
 <form action="<?php echo $data->URL ?>" method="post" class="form form-horizontal">
 	<input type="hidden" name="METHOD" value="<?php echo $data->METHOD ?>" />
-	<input type="hidden" name="USER" value="<?php echo $data->USER ?>" />
-	<input type="hidden" name="PWD" value="<?php echo $data->PWD ?>" />
-	<input type="hidden" name="SIGNATURE" value="<?php echo $data->SIGNATURE ?>" />
 	<input type="hidden" name="VERSION" value="<?php echo $data->VERSION ?>" />
 	<input type="hidden" name="PAYMENTACTION" value="<?php echo $data->PAYMENTACTION ?>" />
 	<input type="hidden" name="IPADDRESS" value="<?php echo $data->IPADDRESS ?>" />

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -495,11 +495,7 @@ class plgAkpaymentPaymill extends plgAkpaymentAbstract
 	protected function logIPN($data, $isValid, $type = 'TRANSACTION', $header = null)
 	{
 		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$logpath = $config->get('log_path');
-		} else {
-			$logpath = $config->getValue('log_path');
-		}
+		$logpath = $config->get('log_path');
 
 		$logFilenameBase = $logpath.'/akpayment_'.strtolower($this->ppName).'_ipn';
 

@@ -1,20 +1,23 @@
 <?php
 
 /**
- *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
- *  @license GNU General Public License version 3, or later
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 defined('_JEXEC') or die();
 
 class AkeebasubsTableSubscription extends F0FTable
 {
+
 	/** @var object Caches the row data on load for future reference */
-	private $_selfCache          = null;
+	private $_selfCache = null;
 
-	public  $_dontCheckPaymentID = false;
+	public $_dontCheckPaymentID = false;
 
-	public  $_dontNotify		 = false;
+	public $_dontNotify = false;
+
+	public $_noemail = null;
 
 	public function __construct($table, $key, &$db, $config = array())
 	{
@@ -22,10 +25,12 @@ class AkeebasubsTableSubscription extends F0FTable
 
 		$this->addKnownField('_dontCheckPaymentID', false);
 		$this->addKnownField('_dontNotify', false);
+		$this->addKnownField('_noemail', false);
 	}
 
 	/**
 	 * Validates the subscription row
+	 *
 	 * @return boolean True if the row validates
 	 */
 	public function check()
@@ -99,10 +104,10 @@ class AkeebasubsTableSubscription extends F0FTable
 		// If the current date is outside the publish_up / publish_down range
 		// then disable the subscription. Otherwise make sure it's enabled.
 		JLoader::import('joomla.utilities.date');
-		$jNow	 = new JDate();
-		$uNow	 = $jNow->toUnix();
-		$jDown	 = new JDate($this->publish_down);
-		$jUp	 = new JDate($this->publish_up);
+		$jNow  = new JDate();
+		$uNow  = $jNow->toUnix();
+		$jDown = new JDate($this->publish_down);
+		$jUp   = new JDate($this->publish_up);
 
 		if (($uNow >= $jDown->toUnix()))
 		{
@@ -147,6 +152,35 @@ class AkeebasubsTableSubscription extends F0FTable
 			$result = false;
 		}
 
+		if (!is_null($this->_noemail) && is_numeric($this->_noemail))
+		{
+			if ($this->_noemail == 1)
+			{
+				$this->contact_flag = 3;
+			}
+			elseif ($this->contact_flag == 3)
+			{
+				$nullDate = $this->getDbo()->getNullDate();
+
+				if (!empty($this->after_contact) && ($this->after_contact != $nullDate))
+				{
+					$this->contact_flag = 3;
+				}
+				elseif (!empty($this->second_contact) && ($this->second_contact != $nullDate))
+				{
+					$this->contact_flag = 2;
+				}
+				elseif (!empty($this->first_contact) && ($this->first_contact != $nullDate))
+				{
+					$this->contact_flag = 1;
+				}
+				else
+				{
+					$this->contact_flag = 0;
+				}
+			}
+		}
+
 		return $result;
 	}
 
@@ -180,11 +214,15 @@ class AkeebasubsTableSubscription extends F0FTable
 	{
 		// Make sure the payment is complete
 		if ($this->state != 'C')
+		{
 			return;
+		}
 
 		// Make sure the subscription is enabled
 		if (!$this->enabled)
+		{
 			return;
+		}
 
 		// Paid and enabled subscription; enable the user if he's not already enabled
 		$user = JFactory::getUser($this->user_id);
@@ -200,7 +238,7 @@ class AkeebasubsTableSubscription extends F0FTable
 			if ($confirmfree)
 			{
 				$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-					->getItem($this->akeebasubs_level_id);
+				                 ->getItem($this->akeebasubs_level_id);
 				if ($level->price < 0.01)
 				{
 					// Do not activate free subscription
@@ -209,7 +247,7 @@ class AkeebasubsTableSubscription extends F0FTable
 			}
 
 			$updates = array(
-				'block'		 => 0,
+				'block'      => 0,
 				'activation' => ''
 			);
 			$user->bind($updates);
@@ -244,11 +282,13 @@ class AkeebasubsTableSubscription extends F0FTable
 
 	/**
 	 * Resets the cache when the table is reset
+	 *
 	 * @return bool
 	 */
 	public function onAfterReset()
 	{
 		$this->_selfCache = null;
+
 		return parent::onAfterReset();
 	}
 
@@ -266,26 +306,41 @@ class AkeebasubsTableSubscription extends F0FTable
 
 		// We don't care to trigger plugins when certain fields change
 		$ignoredFields = array(
-			'notes', 'processor', 'processor_key', 'net_amount', 'tax_amount',
-			'gross_amount', 'recurring_amount', 'tax_percent', 'params',
-			'akeebasubs_coupon_id', 'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id',
-			'affiliate_comission', 'akeebasubs_invoice_id', 'prediscount_amount',
-			'discount_amount', 'contact_flag', 'first_contact', 'second_contact', 'after_contact',
+			'notes',
+			'processor',
+			'processor_key',
+			'net_amount',
+			'tax_amount',
+			'gross_amount',
+			'recurring_amount',
+			'tax_percent',
+			'params',
+			'akeebasubs_coupon_id',
+			'akeebasubs_upgrade_id',
+			'akeebasubs_affiliate_id',
+			'affiliate_comission',
+			'akeebasubs_invoice_id',
+			'prediscount_amount',
+			'discount_amount',
+			'contact_flag',
+			'first_contact',
+			'second_contact',
+			'after_contact',
 		);
 
 		$info = array(
-			'status'	 => 'unmodified',
-			'previous'	 => empty($this->_selfCache) ? null : $this->_selfCache,
-			'current'	 => clone $this,
-			'modified'	 => null
+			'status'   => 'unmodified',
+			'previous' => empty($this->_selfCache) ? null : $this->_selfCache,
+			'current'  => clone $this,
+			'modified' => null
 		);
 
 		// New record
 		if (is_null($this->_selfCache) || !is_object($this->_selfCache))
 		{
-			$info['status']		 = 'new';
+			$info['status'] = 'new';
 
-			$data = $this->getData();
+			$data     = $this->getData();
 			$modified = array();
 
 			foreach ($data as $key => $value)
@@ -296,15 +351,15 @@ class AkeebasubsTableSubscription extends F0FTable
 					continue;
 				}
 
-				$modified[$key]	 = $value;
+				$modified[ $key ] = $value;
 			}
 
-			$info['modified'] = empty($modified) ? null : (object)$modified;
+			$info['modified'] = empty($modified) ? null : (object) $modified;
 		}
 		// Possibly modified record. Let's find out!
 		else
 		{
-			$data = $this->_selfCache->getData();
+			$data     = $this->_selfCache->getData();
 			$modified = array();
 
 			foreach ($data as $key => $value)
@@ -318,12 +373,12 @@ class AkeebasubsTableSubscription extends F0FTable
 				// Check if the value has changed
 				if ($this->$key != $value)
 				{
-					$info['status']	 = 'modified';
-					$modified[$key]	 = $value;
+					$info['status']   = 'modified';
+					$modified[ $key ] = $value;
 				}
 			}
 
-			$info['modified'] = empty($modified) ? null : (object)$modified;
+			$info['modified'] = empty($modified) ? null : (object) $modified;
 		}
 
 		if ($info['status'] != 'unmodified')
@@ -336,5 +391,4 @@ class AkeebasubsTableSubscription extends F0FTable
 
 		return true;
 	}
-
 }

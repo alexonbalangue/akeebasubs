@@ -1,21 +1,16 @@
 <?php
 /**
  * @package   AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license   GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die();
 
+require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/euvatinfo.php';
+
 class AkeebasubsModelSubscribes extends F0FModel
 {
-	/**
-	 * List of European states
-	 *
-	 * @var array
-	 */
-	private $european_states = array('AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK', 'HR');
-
 	/**
 	 * Raw HTML source of the payment form, as returned by the payment plugin
 	 *
@@ -39,6 +34,12 @@ class AkeebasubsModelSubscribes extends F0FModel
 	 * @var int|null Upgrade ID used in the price calculation
 	 */
 	protected $_upgrade_id = null;
+
+
+	/**
+	 * @var int|null Upgrade ID for expired subscriptions used in the price calculation
+	 */
+	protected $_expired_upgrade_id = null;
 
 	/**
 	 * We cache the results of all time-consuming operations, e.g. vat validation, subscription membership calculation,
@@ -322,14 +323,6 @@ class AkeebasubsModelSubscribes extends F0FModel
 			return $ret;
 		}
 
-		// Joomla doens't allow spaces in usernames
-		if (strpos($username, ' ') !== false)
-		{
-			$ret->username = false;
-
-			return $ret;
-		}
-
 		$user = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel')
 			->username($username)
 			->getFirstItem();
@@ -529,7 +522,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 
 		// 4. Business validation
 		// Fix the VAT number's format
-		$vat_check = $this->_checkVATFormat($state->country, $state->vatnumber);
+		$vat_check = AkeebasubsHelperEuVATInfo::checkVATFormat($state->country, $state->vatnumber);
+
 		if ($vat_check->valid)
 		{
 			$state->vatnumber = $vat_check->vatnumber;
@@ -548,7 +542,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 		else
 		{
 			// Do I have to check the VAT number?
-			if (in_array($state->country, $this->european_states))
+			if (AkeebasubsHelperEuVATInfo::isEUVATCountry($state->country))
 			{
 				// If the country has two rules with VIES enabled/disabled and a non-zero VAT,
 				// we will skip VIES validation. We'll also skip validation if there are no
@@ -623,7 +617,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 					else
 					{
 						// No, check the VAT number against the VIES web service
-						$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
+						$ret['vatnumber'] = AkeebasubsHelperEuVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
 						//$ret['onlineviescheck'] = 1;
 					}
 
@@ -638,7 +632,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 			{
 				// Allow non-EU VAT input
 				$ret['novatrequired'] = true;
-				$ret['vatnumber'] = $this->isVIESValidVAT($state->country, $state->vatnumber);
+				$ret['vatnumber'] = AkeebasubsHelperEuVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
 			}
 		}
 
@@ -858,6 +852,9 @@ class AkeebasubsModelSubscribes extends F0FModel
 				'oldsub'     => $discountStructure['oldsub'],
 				'allsubs'    => $discountStructure['allsubs'],
 				'expiration' => $discountStructure['expiration'],
+				'taxrule_id' => $taxRule->id,
+				'tax_match'  => $taxRule->match,
+				'tax_fuzzy'  => $taxRule->fuzzy,
 			);
 		}
 
@@ -1018,8 +1015,15 @@ class AkeebasubsModelSubscribes extends F0FModel
 	 */
 	private function _getAutoDiscount()
 	{
-		// Get the automatic discount based on upgrade rules
+		// Get the automatic discount based on upgrade rules for active and expired subscriptions
 		$autoDiscount = $this->_getUpgradeRule();
+		$autoDiscountExpired = $this->_getUpgradeExpiredRule();
+
+		if ($autoDiscountExpired > $autoDiscount)
+		{
+			$autoDiscount = $autoDiscountExpired;
+			$this->_upgrade_id = $this->_expired_upgrade_id;
+		}
 
 		// Initialise the return value
 		$ret = array(
@@ -1063,7 +1067,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 				// Rule-based relation discount
 				else
 				{
-					$ret['discount'] = $relDiscount;
+					$ret['discount'] = $autoDiscount;
 				}
 			}
 		}
@@ -1297,7 +1301,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 				}
 			}
 			elseif ($discount > $ret['discount'])
-				// If the current discount is greater than what we already have, use it
+			// If the current discount is greater than what we already have, use it
 			{
 				$ret['discount'] = $discount;
 				$ret['relation'] = clone $rule;
@@ -1371,6 +1375,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 			->savestate(0)
 			->to_id($state->id)
 			->enabled(1)
+			->expired(0)
 			->limit(0)
 			->limitstart(0)
 			->getItemList();
@@ -1555,6 +1560,232 @@ class AkeebasubsModelSubscribes extends F0FModel
 	}
 
 	/**
+	 * Loads any relevant upgrade rules for expired subscriptions and returns the max discount possible
+	 * under those rules.
+	 *
+	 * @return float Discount amount
+	 */
+	private function _getUpgradeExpiredRule()
+	{
+		$state = $this->getStateVariables();
+
+		// Get the id from the slug if it's not present
+		if ($state->slug && empty($state->id))
+		{
+			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
+				->slug($state->slug)
+				->getItemList();
+			if (!empty($list))
+			{
+				$item = array_pop($list);
+				$state->id = $item->akeebasubs_level_id;
+			}
+			else
+			{
+				$state->id = 0;
+			}
+		}
+
+		// Check that we do have a user (if there's no logged in user, we have
+		// no subscription information, ergo upgrades are not applicable!)
+		$user_id = JFactory::getUser()->id;
+		if (empty($user_id))
+		{
+			$this->_upgrade_id = null;
+
+			return 0;
+		}
+
+		// Get applicable auto-rules
+		$autoRules = F0FModel::getTmpInstance('Upgrades', 'AkeebasubsModel')
+			->savestate(0)
+			->to_id($state->id)
+			->enabled(1)
+			->expired(1)
+			->limit(0)
+			->limitstart(0)
+			->getItemList();
+
+		if (empty($autoRules))
+		{
+			$this->_upgrade_id = null;
+
+			return 0;
+		}
+
+		// Get the user's list of paid but no longer active (therefore: expired) subscriptions
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			->savestate(0)
+			->user_id($user_id)
+			->enabled(0)
+			->paystate('C')
+			->limit(0)
+			->limitstart(0)
+			->getList();
+
+		if (empty($subscriptions))
+		{
+			$this->_expired_upgrade_id = null;
+
+			return 0;
+		}
+
+		$subs = array();
+		JLoader::import('joomla.utilities.date');
+		$jNow = new JDate();
+		$uNow = $jNow->toUnix();
+
+		$subPayments = array();
+
+		foreach ($subscriptions as $subscription)
+		{
+			$jTo = new JDate($subscription->publish_down);
+			$uTo = $jTo->toUnix();
+			$age = $uNow - $uTo;
+			$subs[$subscription->akeebasubs_level_id] = $age;
+
+			$jOn = new JDate($subscription->created_on);
+			if (!array_key_exists($subscription->akeebasubs_level_id, $subPayments))
+			{
+				$subPayments[$subscription->akeebasubs_level_id] = array(
+					'value' => $subscription->net_amount,
+					'on'    => $jOn->toUnix(),
+				);
+			}
+			else
+			{
+				$oldOn = $subPayments[$subscription->akeebasubs_level_id]['on'];
+				if ($oldOn < $jOn->toUnix())
+				{
+					$subPayments[$subscription->akeebasubs_level_id] = array(
+						'value' => $subscription->net_amount,
+						'on'    => $jOn->toUnix(),
+					);
+				}
+			}
+		}
+
+		// Get the current subscription level's net worth
+		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			->setId($state->id)
+			->getItem();
+		$net = (float)$level->price;
+
+		if ($net == 0)
+		{
+			$this->_expired_upgrade_id = null;
+
+			return 0;
+		}
+
+		$discount = 0;
+		$this->_expired_upgrade_id = null;
+
+		// Remove any rules that do not apply
+		foreach ($autoRules as $i => $rule)
+		{
+			if (
+				// Make sure there is an active subscription in the From level
+				!(array_key_exists($rule->from_id, $subs))
+				// Make sure the min/max presence is repected
+				|| ($subs[$rule->from_id] < ($rule->min_presence * 86400))
+				|| ($subs[$rule->from_id] > ($rule->max_presence * 86400))
+				// If From and To levels are different, make sure there is no active subscription in the To level yet
+				|| ($rule->to_id != $rule->from_id && array_key_exists($rule->to_id, $subs))
+			)
+			{
+				unset($autoRules[$i]);
+			}
+		}
+
+		// First add add all combined rules
+		foreach ($autoRules as $i => $rule)
+		{
+			if (!$rule->combine)
+			{
+				continue;
+			}
+
+			switch ($rule->type)
+			{
+				case 'value':
+					$discount += $rule->value;
+					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'percent':
+					$newDiscount = $net * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+
+				case 'lastpercent':
+					if (!array_key_exists($rule->from_id, $subPayments))
+					{
+						$lastNet = 0.00;
+					}
+					else
+					{
+						$lastNet = $subPayments[$rule->from_id]['value'];
+					}
+					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+					$discount += $newDiscount;
+					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					break;
+			}
+			unset($autoRules[$i]);
+		}
+
+		// Then check all non-combined rules if they give a higher discount
+		foreach ($autoRules as $rule)
+		{
+			if ($rule->combine)
+			{
+				continue;
+			}
+
+			switch ($rule->type)
+			{
+				case 'value':
+					if ($rule->value > $discount)
+					{
+						$discount = $rule->value;
+						$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					}
+					break;
+
+				case 'percent':
+					$newDiscount = $net * (float)$rule->value / 100.00;
+					if ($newDiscount > $discount)
+					{
+						$discount = $newDiscount;
+						$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					}
+					break;
+
+				case 'lastpercent':
+					if (!array_key_exists($rule->from_id, $subPayments))
+					{
+						$lastNet = 0.00;
+					}
+					else
+					{
+						$lastNet = $subPayments[$rule->from_id]['value'];
+					}
+					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+					if ($newDiscount > $discount)
+					{
+						$discount = $newDiscount;
+						$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+					}
+					break;
+			}
+		}
+
+		return $discount;
+	}
+
+	/**
 	 * Gets the applicable tax rule based on the state variables
 	 */
 	private function _getTaxRule()
@@ -1562,7 +1793,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 		// Do we have a VIES registered VAT number?
 		$validation = $this->_validateState();
 		$state = $this->getStateVariables();
-		$isVIES = $validation->vatnumber && in_array($state->country, $this->european_states);
+		$isVIES = $validation->vatnumber && AkeebasubsHelperEuVATInfo::isEUVATCountry($state->country);
 
 		if ($state->slug && empty($state->id))
 		{
@@ -1580,95 +1811,10 @@ class AkeebasubsModelSubscribes extends F0FModel
 			}
 		}
 
-		// First try loading the rules for this level
-		$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-			->savestate(0)
-			->enabled(1)
-			->akeebasubs_level_id($state->id)
-			->filter_order('ordering')
-			->filter_order_Dir('ASC')
-			->limit(0)
-			->limitstart(0)
-			->getItemList();
+		/** @var AkeebasubsModelTaxhelper $taxModel */
+		$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
 
-		// If this level has no rules try the "All levels" rules
-		if (empty($taxrules))
-		{
-			$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-				->savestate(0)
-				->enabled(1)
-				->akeebasubs_level_id(0)
-				->filter_order('ordering')
-				->filter_order_Dir('ASC')
-				->limit(0)
-				->limitstart(0)
-				->getItemList();
-		}
-
-		$bestTaxRule = (object)array(
-			'match'   => 0,
-			'fuzzy'   => 0,
-			'taxrate' => 0
-		);
-
-		foreach ($taxrules as $rule)
-		{
-			// For each rule, get the match and fuzziness rating. The best, least fuzzy and last match wins.
-			$match = 0;
-			$fuzzy = 0;
-
-			if (empty($rule->country))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif ($rule->country == $state->country)
-			{
-				$match++;
-			}
-
-			if (empty($rule->state))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif ($rule->state == $state->state)
-			{
-				$match++;
-			}
-
-			if (empty($rule->city))
-			{
-				$match++;
-				$fuzzy++;
-			}
-			elseif (strtolower(trim($rule->city)) == strtolower(trim($state->city)))
-			{
-				$match++;
-			}
-
-			if (($rule->vies && $isVIES) || (!$rule->vies && !$isVIES))
-			{
-				$match++;
-			}
-
-			if (
-				($bestTaxRule->match < $match) ||
-				(($bestTaxRule->match == $match) && ($bestTaxRule->fuzzy > $fuzzy))
-			)
-			{
-				if ($match == 0)
-				{
-					continue;
-				}
-				$bestTaxRule->match = $match;
-				$bestTaxRule->fuzzy = $fuzzy;
-				$bestTaxRule->taxrate = $rule->taxrate;
-				$bestTaxRule->id = $rule->akeebasubs_taxrule_id;
-			}
-		}
-
-		return $bestTaxRule;
+		return $taxModel->getTaxRule($state->id, $state->country, $state->state, $state->city, $isVIES);
 	}
 
 	/**
@@ -1904,18 +2050,9 @@ class AkeebasubsModelSubscribes extends F0FModel
 			$params['sendEmail'] = 0;
 
 			// Set the user's default language to whatever the site's current language is
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				$params['params'] = array(
-					'language' => JFactory::getConfig()->get('language')
-				);
-			}
-			else
-			{
-				$params['params'] = array(
-					'language' => JFactory::getConfig()->getValue('config.language')
-				);
-			}
+			$params['params'] = array(
+				'language' => JFactory::getConfig()->get('language')
+			);
 
 			// We always block the user, so that only a successful payment or
 			// clicking on the email link activates his account. This is to
@@ -1924,14 +2061,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 			$params['block'] = 1;
 
 			$randomString = JUserHelper::genRandomPassword();
-			if (version_compare(JVERSION, '3.2', 'ge'))
-			{
-				$hash = JApplication::getHash($randomString);
-			}
-			else
-			{
-				$hash = JFactory::getApplication()->getHash($randomString);
-			}
+			$hash = JApplication::getHash($randomString);
 			$params['activation'] = $hash;
 
 			$userIsSaved = false;
@@ -2182,14 +2312,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 		// ----------------------------------------------------------------------
 		if (F0FModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
 		{
-			if (version_compare(JVERSION, '3.0', 'ge'))
-			{
-				throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
-			}
-			else
-			{
-				JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
-			}
+			throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
 		}
 
 		// Step #3. Create or update a user record
@@ -2379,6 +2502,28 @@ class AkeebasubsModelSubscribes extends F0FModel
 		// Serialise custom subscription parameters
 		$custom_subscription_params = json_encode($subcustom);
 
+		// Get the IP address
+		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
+
+		if (class_exists('F0FUtilsIp', true))
+		{
+			$ip = F0FUtilsIp::getIp();
+		}
+
+		// Get the country from the IP address if the Akeeba GeoIP Provider Plugin is installed and activated
+		$ip_country = '(Unknown)';
+
+		if (class_exists('AkeebaGeoipProvider'))
+		{
+			$geoip = new AkeebaGeoipProvider();
+			$ip_country = $geoip->getCountryName($ip);
+
+			if (empty($ip_country))
+			{
+				$ip_country = '(Unknown)';
+			}
+		}
+
 		// Setup the new subscription
 		$data = array(
 			'akeebasubs_subscription_id' => null,
@@ -2398,6 +2543,8 @@ class AkeebasubsModelSubscribes extends F0FModel
 			'tax_percent'                => $validation->price->taxrate,
 			'created_on'                 => $mNow,
 			'params'                     => $custom_subscription_params,
+			'ip'                         => $ip,
+			'ip_country'                 => $ip_country,
 			'akeebasubs_coupon_id'       => $validation->price->couponid,
 			'akeebasubs_upgrade_id'      => $validation->price->upgradeid,
 			'contact_flag'               => 0,
@@ -2756,587 +2903,6 @@ class AkeebasubsModelSubscribes extends F0FModel
 		return true;
 	}
 
-	private function isVIESValidVAT($country, $vat)
-	{
-		// Validate VAT number
-		$vat = trim(strtoupper($vat));
-		$country = $country == 'GR' ? 'EL' : $country;
-		// (remove the country prefix if present)
-		if (substr($vat, 0, 2) == $country)
-		{
-			$vat = trim(substr($vat, 2));
-		}
-
-		// Is the validation already cached?
-		$key = $country . $vat;
-		$ret = null;
-		if (array_key_exists('vat', $this->_cache))
-		{
-			if (array_key_exists($key, $this->_cache['vat']))
-			{
-				$ret = $this->_cache['vat'][$key];
-			}
-		}
-
-		if (!is_null($ret))
-		{
-			return $ret;
-		}
-
-		if (empty($vat))
-		{
-			$ret = false;
-		}
-		else
-		{
-			if (!class_exists('SoapClient'))
-			{
-				$ret = false;
-			}
-			else
-			{
-				// Using the SOAP API
-				// Code credits: Angel Melguiz / KMELWEBDESIGN SLNE (www.kmelwebdesign.com)
-				try
-				{
-					$sOptions = array(
-						'user_agent' => 'PHP'
-					);
-					$sClient = new SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl', $sOptions);
-					$params = array('countryCode' => $country, 'vatNumber' => $vat);
-					$response = $sClient->checkVat($params);
-					if ($response->valid)
-					{
-						$ret = true;
-					}
-					else
-					{
-						$ret = false;
-					}
-				}
-				catch (SoapFault $e)
-				{
-					$ret = false;
-				}
-			}
-		}
-
-		// Cache the result
-		if (!array_key_exists('vat', $this->_cache))
-		{
-			$this->_cache['vat'] = array();
-		}
-		$this->_cache['vat'][$key] = $ret;
-		$encodedCacheData = json_encode($this->_cache);
-
-		$session = JFactory::getSession();
-		$session->set('validation_cache_data', $encodedCacheData, 'com_akeebasubs');
-
-		// Return the result
-		return $ret;
-	}
-
-	/**
-	 * Sanitizes the VAT number and checks if it's valid for a specific country.
-	 * Ref: http://ec.europa.eu/taxation_customs/vies/faq.html#item_8
-	 *
-	 * @param string $country   Country code
-	 * @param string $vatnumber VAT number to check
-	 *
-	 * @return array The VAT number and the validity check
-	 */
-	private function _checkVATFormat($country, $vatnumber)
-	{
-		$ret = (object)array(
-			'prefix'    => $country,
-			'vatnumber' => $vatnumber,
-			'valid'     => true
-		);
-
-		$vatnumber = strtoupper($vatnumber); // All uppercase
-		$vatnumber = preg_replace('/[^A-Z0-9]/', '', $vatnumber); // Remove spaces, dots and stuff
-		$vat_country_prefix = $country; // Remove the country prefix, if it exists
-		if ($vat_country_prefix == 'GR')
-		{
-			$vat_country_prefix = 'EL';
-		}
-		if (substr($vatnumber, 0, strlen($vat_country_prefix)) == $vat_country_prefix)
-		{
-			$vatnumber = substr($vatnumber, 2);
-		}
-		$ret->prefix = $vat_country_prefix;
-		$ret->vatnumber = $vatnumber;
-
-		switch ($ret->prefix)
-		{
-			case 'AT':
-				// AUSTRIA
-				// VAT number is called: MWST.
-				// Format: U + 8 numbers
-
-				if (strlen($vatnumber) != 9)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (substr($vatnumber, 0, 1) != 'U')
-					{
-						$ret->valid = false;
-					}
-				}
-				if ($ret->valid)
-				{
-					$rest = substr($vatnumber, 1);
-					if (preg_replace('/[0-9]/', '', $rest) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'BG':
-				// BULGARIA
-				// Format: 9 or 10 digits
-				if ((strlen($vatnumber) != 10) && (strlen($vatnumber) != 9))
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'CY':
-				// CYPRUS
-				// Format: 8 digits and a trailing letter
-				if (strlen($vatnumber) != 9)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					$check = substr($vatnumber, -1);
-					if (preg_replace('/[0-9]/', '', $check) == '')
-					{
-						$ret->valid = false;
-					}
-				}
-				if ($ret->valid)
-				{
-					$check = substr($vatnumber, 0, -1);
-					if (preg_replace('/[0-9]/', '', $check) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'CZ':
-				// CZECH REPUBLIC
-				// Format: 8, 9 or 10 digits
-				$len = strlen($vatnumber);
-				if (!in_array($len, array(8, 9, 10)))
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'BE':
-				// BELGIUM
-				// VAT number is called: BYW.
-				// Format: 9 digits
-				if ((strlen($vatnumber) == 10) && (substr($vatnumber, 0, 1) == '0'))
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-					break;
-				}
-				break;
-
-			case 'DE':
-				// GERMANY
-				// VAT number is called: MWST.
-				// Format: 9 digits
-			case 'GR':
-			case 'EL':
-				// GREECE
-				// VAT number is called: ΑΦΜ.
-				// Format: 9 digits
-			case 'PT':
-				// PORTUGAL
-				// VAT number is called: IVA.
-				// Format: 9 digits
-			case 'EE':
-				// ESTONIA
-				// Format: 9 digits
-			if (strlen($vatnumber) != 9)
-			{
-				$ret->valid = false;
-			}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'DK':
-				// DENMARK
-				// VAT number is called: MOMS.
-				// Format: 8 digits
-			case 'FI':
-				// FINLAND
-				// VAT number is called: ALV.
-				// Format: 8 digits
-			case 'LU':
-				// LUXEMBURG
-				// VAT number is called: TVA.
-				// Format: 8 digits
-			case 'HU':
-				// HUNGARY
-				// Format: 8 digits
-			case 'MT':
-				// MALTA
-				// Format: 8 digits
-			case 'SI':
-				// SLOVENIA
-				// Format: 8 digits
-			if (strlen($vatnumber) != 8)
-			{
-				$ret->valid = false;
-			}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'FR':
-				// FRANCE
-				// VAT number is called: TVA.
-				// Format: 11 digits; or 10 digits and a letter; or 9 digits and two letters
-				// Eg: 12345678901 or X2345678901 or 1X345678901 or XX345678901
-				if (strlen($vatnumber) != 11)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					// Letters O and I are forbidden
-					if (strstr($vatnumber, 'O'))
-					{
-						$ret->valid = false;
-					}
-					if (strstr($vatnumber, 'I'))
-					{
-						$ret->valid = false;
-					}
-				}
-				if ($ret->valid)
-				{
-					$valid = false;
-					// Case I: no letters
-					if (preg_replace('/[0-9]/', '', $vatnumber) == '')
-					{
-						$valid = true;
-					}
-
-					// Case II: first character is letter, rest is numbers
-					if (!$valid)
-					{
-						if (preg_replace('/[0-9]/', '', substr($vatnumber, 1)) == '')
-						{
-							$valid = true;
-						}
-					}
-
-					// Case III: second character is letter, rest is numbers
-					if (!$valid)
-					{
-						$check = substr($vatnumber, 0, 1) . substr($vatnumber, 2);
-						if (preg_replace('/[0-9]/', '', $check) == '')
-						{
-							$valid = true;
-						}
-					}
-
-					// Case IV: first two characters are letters, rest is numbers
-					if (!$valid)
-					{
-						$check = substr($vatnumber, 2);
-						if (preg_replace('/[0-9]/', '', $check) == '')
-						{
-							$valid = true;
-						}
-					}
-
-					$ret->valid = $valid;
-				}
-				break;
-
-			case 'IE':
-				// IRELAND
-				// VAT number is called: VAT.
-				// Format: seven digits and a letter; or six digits and two letters
-				// Eg: 1234567X or 1X34567X
-				if (strlen($vatnumber) != 8)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					// The last position must be a letter
-					$check = substr($vatnumber, -1);
-					if (preg_replace('/[0-9]/', '', $check) == '')
-					{
-						$ret->valid = false;
-					}
-				}
-				if ($ret->valid)
-				{
-					// Skip the second position (it's a number or letter, who cares), check the rest
-					$check = substr($vatnumber, 0, 1) . substr($vatnumber, 2, -1);
-					if (preg_replace('/[0-9]/', '', $check) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'IT':
-				// ITALY
-				// VAT number is called: IVA.
-				// Format: 11 digits
-				if (strlen($vatnumber) != 11)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'LT':
-				// LITHUANIA
-				// Format: 9 or 12 digits
-				if ((strlen($vatnumber) != 9) && (strlen($vatnumber) != 12))
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'LV':
-				// LATVIA
-				// Format: 11 digits
-				if ((strlen($vatnumber) != 11))
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'PL':
-				// POLAND
-				// Format: 10 digits
-			case 'SK':
-				// SLOVAKIA
-				// Format: 10 digits
-			if ((strlen($vatnumber) != 10))
-			{
-				$ret->valid = false;
-			}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'RO':
-				// ROMANIA
-				// Format: 2 to 10 digits
-				$len = strlen($vatnumber);
-				if (($len < 2) || ($len > 10))
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'NL':
-				// NETHERLANDS
-				// VAT number is called: BTW.
-				// Format: 12 characters long, first 9 characters are numbers, last three characters are B01 to B99
-				if (strlen($vatnumber) != 12)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if ((substr($vatnumber, 9, 1) != 'B'))
-					{
-						$ret->valid = false;
-					}
-				}
-				if ($ret->valid)
-				{
-					$check = substr($vatnumber, 0, 9) . substr($vatnumber, 11);
-					if (preg_replace('/[0-9]/', '', $check) == '')
-					{
-						$valid = true;
-					}
-				}
-				break;
-
-			case 'ES':
-				// SPAIN
-				// VAT number is called: IVA.
-				// Format: Eight digits and one letter; or seven digits and two letters
-				// E.g.: X12345678 or 12345678X or X1234567X
-				if (strlen($vatnumber) != 9)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					// If first is number last must be letter
-					$check = substr($vatnumber, 0, 1);
-					if (preg_replace('/[0-9]/', '', $check) == '')
-					{
-						$check = substr($vatnumber, 0);
-						if (preg_replace('/[0-9]/', '', $check) == '')
-						{
-							$ret->valid = false;
-						}
-					}
-				}
-				if ($ret->valid)
-				{
-					// If first is not a number, the  last can be anything; just check the middle
-					$check = substr($vatnumber, 1, -1);
-					if (preg_replace('/[0-9]/', '', $check) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'SE':
-				// SWEDEN
-				// VAT number is called: MOMS.
-				// Format: Twelve digits, last two must be 01
-				if (strlen($vatnumber) != 12)
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (substr($vatnumber, -2) != '01')
-					{
-						$ret->valid = false;
-					}
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'GB':
-				// UNITED KINGDOM
-				// VAT number is called: VAT.
-				// Format: Nine or twelve digits; or 5 characters (alphanumeric)
-				if (strlen($vatnumber) == 5)
-				{
-					break;
-				}
-				if ((strlen($vatnumber) != 9) && (strlen($vatnumber) != 12))
-				{
-					$ret->valid = false;
-				}
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			case 'HR':
-				// CROATIA
-				// VAT number is called: PDV.
-				// Format: 11 digits
-				if (strlen($vatnumber) != 11)
-				{
-					$ret->valid = false;
-				}
-
-				if ($ret->valid)
-				{
-					if (preg_replace('/[0-9]/', '', $vatnumber) != '')
-					{
-						$ret->valid = false;
-					}
-				}
-				break;
-
-			default:
-				$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
-				$ret->valid = $allowNonEUVAT ? true : false;
-				break;
-		}
-
-		return $ret;
-	}
-
 	/**
 	 * Send an activation email to the user
 	 *
@@ -3472,37 +3038,25 @@ class AkeebasubsModelSubscribes extends F0FModel
 				$data['sitename']
 			);
 
-			if (version_compare(JVERSION, '3.0', 'lt'))
+			if ($sendpassword)
 			{
 				$emailBody = JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_BODY',
 					$data['name'],
 					$data['sitename'],
-					$data['siteurl']
+					$data['siteurl'],
+					$data['username'],
+					$data['password_clear']
 				);
 			}
 			else
 			{
-				if ($sendpassword)
-				{
-					$emailBody = JText::sprintf(
-						'COM_USERS_EMAIL_REGISTERED_BODY',
-						$data['name'],
-						$data['sitename'],
-						$data['siteurl'],
-						$data['username'],
-						$data['password_clear']
-					);
-				}
-				else
-				{
-					$emailBody = JText::sprintf(
-						'COM_USERS_EMAIL_REGISTERED_BODY_NOPW',
-						$data['name'],
-						$data['sitename'],
-						$data['siteurl']
-					);
-				}
+				$emailBody = JText::sprintf(
+					'COM_USERS_EMAIL_REGISTERED_BODY_NOPW',
+					$data['name'],
+					$data['sitename'],
+					$data['siteurl']
+				);
 			}
 		}
 

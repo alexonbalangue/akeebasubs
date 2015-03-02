@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -54,7 +54,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 
 				// Break down value, price and subscription length components
 				$pieces = explode('|', $label);
-				$label = $pieces[0];
+				$label = JText::_($pieces[0]);
 
 				if (isset($pieces[1]))
 				{
@@ -100,7 +100,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 		foreach($options as $o)
 		{
 			$value = $o['value'];
-			$label = JText::_($o['label']);
+			$label = $o['label'];
 			$html .= "\t<option value=\"$value\"";
 			if($current == $value) {
 				$html .= "selected=\"selected\"";
@@ -218,11 +218,14 @@ JS
 	 */
 	public function validatePerSubscription($item, $custom)
 	{
-		if (!isset($item->slug) || !is_array($item->slug))
+		if (!isset($custom[$item->slug]) || !is_array($custom))
 		{
 			$custom[$item->slug] = '';
 		}
-		elseif (!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		elseif (!array_key_exists($item->slug, $custom))
+		{
+			$custom[$item->slug] = '';
+		}
 
 		$valid = true;
 
@@ -239,7 +242,7 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(is_array($item->slug) && array_key_exists($item->slug, $cache['subcustom']))
+		if(is_array($cache) && is_array($cache['subcustom']) && array_key_exists($item->slug, $cache['subcustom']))
 		{
 			$current = $cache['subcustom'][$item->slug];
 		}
@@ -269,7 +272,6 @@ JS
 
 				// Break down value, price and subscription length components
 				$pieces = explode('|', $label);
-				$label = $pieces[0];
 
 				if (isset($pieces[1]))
 				{
@@ -315,9 +317,12 @@ JS
 		$cache = (array)$data;
 
 		// Get the current value
-		if(is_array($item->slug) && array_key_exists($item->slug, $cache['subcustom'])) {
+		if(is_array($cache) && array_key_exists($item->slug, $cache['subcustom']))
+		{
 			$current = $cache['subcustom'][$item->slug];
-		} else {
+		}
+		else
+		{
 			$current = $item->default;
 		}
 

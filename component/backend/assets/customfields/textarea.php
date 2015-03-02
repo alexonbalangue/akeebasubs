@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -29,12 +29,18 @@ class AkeebasubsCustomFieldTextarea extends AkeebasubsCustomFieldAbstract
 	public function getField($item, $cache, $userparams)
 	{
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['custom'])) {
+		if(array_key_exists($item->slug, $cache['custom']))
+		{
 			$current = $cache['custom'][$item->slug];
-		} else {
-			if(!is_object($userparams->params)) {
+		}
+		else
+		{
+			if(!is_object($userparams->params))
+			{
 				$current = $item->default;
-			} else {
+			}
+			else
+			{
 				$slug = $item->slug;
 				$current = property_exists($userparams->params, $item->slug) ? $userparams->params->$slug : $item->default;
 			}
@@ -169,11 +175,14 @@ JS
 	 */
 	public function validate($item, $custom)
 	{
-		if (!isset($item->slug) || !is_array($item->slug))
+		if (!isset($custom[$item->slug]) || !is_array($custom))
 		{
 			$custom[$item->slug] = '';
 		}
-		elseif(!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		elseif(!array_key_exists($item->slug, $custom))
+		{
+			$custom[$item->slug] = '';
+		}
 
 		$valid = true;
 

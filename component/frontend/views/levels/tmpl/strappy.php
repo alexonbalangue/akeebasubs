@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -14,8 +14,10 @@ $this->loadHelper('message');
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
-$vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
-$vatMultiplier = (100 + (int)$vatRate) / 100;
+$showVat = AkeebasubsHelperCparams::getParam('showvat', 0);
+/** @var AkeebasubsModelTaxhelper $taxModel */
+$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+$taxParams = $taxModel->getTaxDefiningParameters();
 // Take the various inclusions into account
 $includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
 $includediscount = AkeebasubsHelperCparams::getParam('includediscount', 0);
@@ -50,6 +52,9 @@ $discounts = array();
 			{
 				$signupFee = (float)$level->signupfee;
 			}
+
+			$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+			$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 			if ($includediscount)
 			{
@@ -102,6 +107,11 @@ $discounts = array();
 				<?php else: ?>
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $price_integer ?></span><?php if((int)$price_fractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?><?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?>
 				<?php endif; ?>
+				<?php if (((float)$vatRule->taxrate > 0.01) && ($levelPrice > 0.01)): ?>
+					<div class="akeebasubs-strappy-taxnotice">
+						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_INCLUDESVAT', (float)$vatRule->taxrate); ?>
+					</div>
+				<?php endif; ?>
 			</td>
 		<?php endforeach ?>
 		</tr>
@@ -115,6 +125,9 @@ $discounts = array();
 				{
 					$discount = (float)$discounts[$level->akeebasubs_level_id];
 				}
+
+				$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+				$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 				$formatedPrice = sprintf('%1.02F', $level->price * $vatMultiplier);
 				$dotpos = strpos($formatedPrice, '.');
@@ -143,6 +156,10 @@ $discounts = array();
 				{
 					$signupFee = (float)$level->signupfee;
 				}
+
+				$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+				$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
+
 				$formatedPrice = sprintf('%1.02F', $signupFee * $vatMultiplier);
 				$dotpos = strpos($formatedPrice, '.');
 				$price_integer = substr($formatedPrice,0,$dotpos);

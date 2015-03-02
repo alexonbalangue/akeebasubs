@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -28,11 +28,11 @@ class AkeebasubsTableUpgrade extends F0FTable
 		}
 
 		if(empty($this->min_presence)) {
-			$data->min_presence = 0;
+			$this->min_presence = 0;
 		}
 
 		if(empty($this->max_presence)) {
-			$data->max_presence = 36500;
+			$this->max_presence = 36500;
 		}
 
 		if(empty($this->type)) {

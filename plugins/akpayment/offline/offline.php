@@ -1,23 +1,32 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
 
-$akpaymentinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akpayment.php';
-if(!$akpaymentinclude) { unset($akpaymentinclude); return; } else { unset($akpaymentinclude); }
+$akpaymentinclude = include_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akpayment.php';
+if ( !$akpaymentinclude)
+{
+	unset($akpaymentinclude);
+
+	return;
+}
+else
+{
+	unset($akpaymentinclude);
+}
 
 class plgAkpaymentOffline extends plgAkpaymentAbstract
 {
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
-			'ppName'		=> 'offline',
-			'ppKey'			=> 'PLG_AKPAYMENT_OFFLINE_TITLE',
-			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/offline.png',
+			'ppName'  => 'offline',
+			'ppKey'   => 'PLG_AKPAYMENT_OFFLINE_TITLE',
+			'ppImage' => rtrim(JURI::base(), '/') . '/media/com_akeebasubs/images/frontend/offline.png',
 		));
 
 		parent::__construct($subject, $config);
@@ -27,33 +36,38 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
 	 *
-	 * @param string $paymentmethod
-	 * @param JUser $user
-	 * @param AkeebasubsTableLevel $level
+	 * @param string                      $paymentmethod
+	 * @param JUser                       $user
+	 * @param AkeebasubsTableLevel        $level
 	 * @param AkeebasubsTableSubscription $subscription
+	 *
 	 * @return string
 	 */
 	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
 	{
-		if($paymentmethod != $this->ppName) return false;
+		if ($paymentmethod != $this->ppName)
+		{
+			return false;
+		}
 
 		// Set the payment status to Pending
-		$oSub = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-			->setId($subscription->akeebasubs_subscription_id)
-			->getItem();
+		$oSub    = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+						   ->setId($subscription->akeebasubs_subscription_id)
+						   ->getItem();
 		$updates = array(
-			'state'				=> 'P',
-			'enabled'			=> 0,
-			'processor_key'		=> md5(time()),
+			'state'         => 'P',
+			'enabled'       => 0,
+			'processor_key' => md5(time()),
 		);
 		$oSub->save($updates);
 
 		// Activate the user account, if the option is selected
 		$activate = $this->params->get('activate', 0);
-		if($activate && $user->block) {
+		if ($activate && $user->block)
+		{
 			$updates = array(
-				'block'			=> 0,
-				'activation'	=> ''
+				'block'      => 0,
+				'activation' => ''
 			);
 			$user->bind($updates);
 			$user->save($updates);
@@ -62,14 +76,18 @@ class plgAkpaymentOffline extends plgAkpaymentAbstract
 		// Render the HTML form
 		$nameParts = explode(' ', $user->name, 2);
 		$firstName = $nameParts[0];
-		if(count($nameParts) > 1) {
+		if (count($nameParts) > 1)
+		{
 			$lastName = $nameParts[1];
-		} else {
+		}
+		else
+		{
 			$lastName = '';
 		}
 
-		$html = $this->params->get('instructions','');
-		if(empty($html)) {
+		$html = $this->params->get('instructions', '');
+		if (empty($html))
+		{
 			$html = <<<ENDTEMPLATE
 <p>Dear Sir/Madam,<br/>
 In order to complete your payment, please deposit {AMOUNT}€ to our bank account:</p>
@@ -88,26 +106,34 @@ ENDTEMPLATE;
 		$html = str_replace('{LASTNAME}', $lastName, $html);
 		$html = str_replace('{LEVEL}', $level->title, $html);
 
-        // Get a preloaded mailer
-        $mailer = AkeebasubsHelperEmail::getPreloadedMailer($subscription, 'plg_akeebasubs_subscriptionemails_offline');
+		// Get a preloaded mailer
+		if ( !class_exists('AkeebasubsHelperEmail'))
+		{
+			require_once JPATH_SITE . '/components/com_akeebasubs/helpers/email.php';
+		}
 
-        // Replace custom [INSTRUCTIONS] tag
-        $body = str_replace('[INSTRUCTIONS]', $html, $mailer->Body);
-        $mailer->setBody($body);
+		$mailer = AkeebasubsHelperEmail::getPreloadedMailer($subscription, 'plg_akeebasubs_subscriptionemails_offline');
 
-        if ($mailer !== false)
-        {
-            $mailer->addRecipient($user->email);
-            $result = $mailer->Send();
-            $mailer = null;
-        }
+		// Replace custom [INSTRUCTIONS] tag
+		$body = str_replace('[INSTRUCTIONS]', $html, $mailer->Body);
 
-		@include_once JPATH_SITE.'/components/com_akeebasubs/helpers/message.php';
-		if(class_exists('AkeebasubsHelperMessage')) {
+		if ($mailer !== false)
+		{
+			/** @var JMail $mailer */
+			$mailer->setBody($body);
+			$mailer->addRecipient($user->email);
+			$result = $mailer->Send();
+			$mailer = null;
+		}
+
+		@include_once JPATH_SITE . '/components/com_akeebasubs/helpers/message.php';
+
+		if (class_exists('AkeebasubsHelperMessage'))
+		{
 			$html = AkeebasubsHelperMessage::processLanguage($html);
 		}
 
-		$html = '<div>'.$html.'</div>';
+		$html = '<div>' . $html . '</div>';
 
 		return $html;
 	}

@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -9,7 +9,6 @@
 defined('_JEXEC') or die();
 
 JHTML::_('behavior.tooltip');
-JHTML::_('behavior.framework', true);
 JHTML::_('behavior.modal');
 
 $this->loadHelper('cparams');
@@ -95,6 +94,15 @@ $this->loadHelper('format');
 			<label for="combine" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_COMBINE'); ?></label>
 			<div class="controls">
 				<?php echo JHTML::_('select.booleanlist', 'combine', null, $this->item->combine); ?>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="expired" class="control-label hasTip" title="<?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_EXPIRED_DESC') ?>">
+				<?php echo JText::_('COM_AKEEBASUBS_UPGRADES_FIELD_EXPIRED'); ?>
+			</label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', 'expired', null, $this->item->expired); ?>
 			</div>
 		</div>
 	</div>

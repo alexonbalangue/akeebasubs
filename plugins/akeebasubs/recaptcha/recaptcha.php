@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -20,11 +20,8 @@ class plgAkeebasubsRecaptcha extends JPlugin
 			$showReCAPTCHA = false;
 		}
 		if($showReCAPTCHA) {
-			if(version_compare(JVERSION, '3.0', 'ge')) {
-				$levels = $this->params->get('autoauthids', array());
-			} else {
-				$levels = $this->params->getValue('autoauthids', array());
-			}
+			$levels = $this->params->get('autoauthids', array());
+
 			if(!is_null($levels) && !empty($levels)) {
 				if(!in_array($cache['subscriptionlevel'], $levels)) {
 					if(!in_array(0, $levels)) {
@@ -69,13 +66,9 @@ class plgAkeebasubsRecaptcha extends JPlugin
 		// ----- RECAPTCHA FIELD -----
 		$uri = JUri::getInstance();
 
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$theme = $this->params->get('theme','red');
-			$language = $this->params->get('language','en');
-		} else {
-			$theme = $this->params->getValue('theme','red');
-			$language = $this->params->getValue('language','en');
-		}
+		$theme = $this->params->get('theme','red');
+		$language = $this->params->get('language','en');
+
 		$html = <<<ENDSCRIPT
 <script type="text/javascript">
 var RecaptchaOptions = {
@@ -87,11 +80,8 @@ var RecaptchaOptions = {
 ENDSCRIPT;
 
 		$useSSL = strtolower($uri->getScheme()) == 'https';
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$publickey = $this->params->get('publickey','');
-		} else {
-			$publickey = $this->params->getValue('publickey','');
-		}
+		$publickey = $this->params->get('publickey','');
+
 		$html .= '<div style="display: inline-block"><div style="float: left">'.recaptcha_get_html($publickey, null, $useSSL).'</div></div><div style="clear: both"></div>';
 
 		// Setup the field
@@ -179,11 +169,7 @@ JS;
 		if( (!array_key_exists('recaptcha_challenge',$custom)) || (!empty($challenge)) ) $custom['recaptcha_challenge'] = $challenge;
 		if( (!array_key_exists('recaptcha_response',$custom)) || (!empty($response)) ) $custom['recaptcha_response'] = $response;
 
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$privkey = $this->params->get('privatekey','');
-		} else {
-			$privkey = $this->params->getValue('privatekey','');
-		}
+		$privkey = $this->params->get('privatekey','');
 		$remoteip =  $_SERVER["REMOTE_ADDR"];
 		$challenge = $custom['recaptcha_challenge'];
 		$response = $custom['recaptcha_response'];

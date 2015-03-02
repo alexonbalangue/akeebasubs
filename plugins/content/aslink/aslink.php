@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        akeebasubs
- * @copyright    Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright    Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -186,27 +186,16 @@ class plgContentAslink extends JPlugin
             foreach ($items as $item) {
 				if(is_string($item->params)) {
 					$params = new JRegistry();
-					if(version_compare(JVERSION, '3.0', 'ge')) {
-						$params->loadString($item->params, 'JSON');
-					} else {
-						$params->loadJSON($item->params);
-					}
-				} else {
+                    $params->loadString($item->params, 'JSON');
+                } else {
 					$params = $item->params;
 				}
 
                 if (@$item->query['view'] == 'level') {
-					if(version_compare(JVERSION, '3.0', 'ge')) {
-						if ((@$params->get('slug') == $slug)) {
-							$itemId = $item->id;
-							break;
-						}
-					} else {
-						if ((@$params->getValue('slug') == $slug)) {
-							$itemId = $item->id;
-							break;
-						}
-					}
+                    if ((@$params->get('slug') == $slug)) {
+                        $itemId = $item->id;
+                        break;
+                    }
                 }
 
                 if (@$item->query['view'] == 'levels') {

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -12,7 +12,7 @@ require_once __DIR__.'/text.php';
 
 /**
  * A dropdown (selection list) field
- * 
+ *
  * @author Nicholas K. Dionysopoulos
  * @since 2.6.0
  */
@@ -20,14 +20,14 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 {
 	public function __construct(array $config = array()) {
 		parent::__construct($config);
-		
+
 		$this->input_type = 'dropdown';
 	}
-	
+
 	public function getField($item, $cache, $userparams)
 	{
 		// Get the current value
-		if(is_array($item->slug) && array_key_exists($item->slug, $cache['custom'])) {
+		if(is_array($cache) && array_key_exists($item->slug, $cache['custom'])) {
 			$current = $cache['custom'][$item->slug];
 		} else {
 			if(!is_object($userparams->params)) {
@@ -37,11 +37,11 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 				$current = property_exists($userparams->params, $item->slug) ? $userparams->params->$slug : $item->default;
 			}
 		}
-		
+
 		if(($this->input_type == 'multiselect') && !is_array($current)) {
 			$current = explode(',', $current);
 		}
-		
+
 		// Is this a required field?
 		$required = $item->allow_empty ? '' : '* ';
 
@@ -66,8 +66,9 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 				);
 				$values[] = $value;
 			}
-			
-			if(!in_array('', $values)) {
+
+			// If it's a radio field I don't have to display the "- Select -" option
+			if(!in_array('', $values) && $this->input_type != 'radio') {
 				$entry = array(
 					'value'	=> '',
 					'label'	=> '- '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' -'
@@ -77,9 +78,9 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 		} else {
 			return null;
 		}
-		
+
 		if(empty($options)) return null;
-		
+
 		$multiselect = false;
 		// Set up field's HTML content
 		switch($this->input_type) {
@@ -87,7 +88,7 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 				$multiselect = true;
 
 			case 'dropdown':
-				
+
 				if($multiselect) {
 					$html = "<select name=\"custom[{$item->slug}][]\" id=\"{$item->slug}\"";
 					$html .= " size=\"5\" multiple=\"multiple\"";
@@ -95,7 +96,7 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 					$html = "<select name=\"custom[{$item->slug}]\" id=\"{$item->slug}\"";
 				}
 				$html .= ">\n";
-				
+
 				foreach($options as $o)
 				{
 					$value = $o['value'];
@@ -112,7 +113,7 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 					}
 					$html .= ">$label</option>\n";
 				}
-				
+
 				$html .= "</select>\n";
 				break;
 
@@ -133,7 +134,7 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 				$html .= "</label>\n";
 				break;
 		}
-		
+
 		// Setup the field
 		$field = array(
 			'id'			=> $item->slug,
@@ -141,14 +142,14 @@ class AkeebasubsCustomFieldDropdown extends AkeebasubsCustomFieldText
 			'elementHTML'	=> $html,
 			'isValid'		=> $required ? !empty($current) : true
 		);
-		
+
 		if($item->invalid_label) {
 			$field['invalidLabel'] = JText::_($item->invalid_label);
 		}
 		if($item->valid_label) {
 			$field['validLabel'] = JText::_($item->valid_label);
 		}
-		
+
 		return $field;
 	}
 }

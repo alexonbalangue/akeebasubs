@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        akeebasubs
- * @copyright      Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -179,11 +179,14 @@ JS;
 	 */
 	public function validate($item, $custom)
 	{
-		if (!isset($item->slug) || !is_array($item->slug))
+		if (!isset($custom[$item->slug]) || !is_array($custom))
 		{
 			$custom[$item->slug] = '';
 		}
-		elseif (!array_key_exists($item->slug, $custom)) $custom[$item->slug] = '';
+		elseif (!array_key_exists($item->slug, $custom))
+		{
+			$custom[$item->slug] = '';
+		}
 
 		$valid = true;
 

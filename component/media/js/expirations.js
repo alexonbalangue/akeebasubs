@@ -1,6 +1,6 @@
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -11,7 +11,7 @@ if(typeof(akeeba) == 'undefined') {
 	var akeeba = {};
 }
 if(typeof(akeeba.jQuery) == 'undefined') {
-	akeeba.jQuery = jQuery.noConflict();
+	akeeba.jQuery = window.jQuery;
 }
 
 var jsonurl = 'index.php?option=com_akeebasubs&view=reports&task=getexpirations&format=json&layout=expirations';
@@ -26,16 +26,25 @@ function loadExpGraph()
 		dataType: 'json',
 		cache   : false,
 		success : function(json, status, jqXH){
-			
-			expireChart.destroy();
-			
+			try {
+				expireChart.destroy();
+			} catch (e) {}
+
 			var options = {
-				//data : json.data,
-				highlighter: { show: true, showMarker: false },
+				highlighter: {
+					show: true,
+					showMarker: false,
+					tooltipContentEditor: function(str, seriesIndex, pointIndex, plot)
+					{
+						return plot.series[seriesIndex].label + ': ' + str;
+					}
+				},
 				stackSeries: true,
 				seriesDefaults : {
 						renderer: akeeba.jQuery.jqplot.BarRenderer,
 						rendererOptions: {
+							barDirection: 'vertical',
+							highlightMouseDown: true,
 							barPadding : 10,
 							barMargin : 10,
 							barWidth : 40

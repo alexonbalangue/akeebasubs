@@ -1,13 +1,12 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
 	defined('_JEXEC') or die;
 
-	JHtml::_('behavior.framework');
 	$app       = JFactory::getApplication();
 	$userModel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
 

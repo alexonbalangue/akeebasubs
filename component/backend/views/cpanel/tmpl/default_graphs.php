@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -18,8 +18,6 @@ AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.pieRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.hermite.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/cpanelgraphs.js?'.AKEEBASUBS_VERSIONHASH);
-
-JHTML::_('behavior.framework', true);
 
 $this->loadHelper('select');
 

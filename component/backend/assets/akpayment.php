@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -317,7 +317,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 				'publish_down'	=> $jNow->toSql(),
 				'enabled'		=> 0,
 				'contact_flag'	=> 3,
-				'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$subscription->akeeabsubs_subscription_id}\n"
+				'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$oldsub->akeeabsubs_subscription_id}\n"
 			));
 			$table = clone $mastertable;
 			$table->reset();
@@ -342,7 +342,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 						'publish_down'	=> $jNow->toSql(),
 						'enabled'		=> 0,
 						'contact_flag'	=> 3,
-						'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$subscription->akeeabsubs_subscription_id}\n"
+						'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$table->akeeabsubs_subscription_id}\n"
 					));
 					$table->save($newdata);
 				}
@@ -385,11 +385,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	protected function logIPN($data, $isValid)
 	{
 		$config = JFactory::getConfig();
-		if(version_compare(JVERSION, '3.0', 'ge')) {
-			$logpath = $config->get('log_path');
-		} else {
-			$logpath = $config->getValue('log_path');
-		}
+		$logpath = $config->get('log_path');
 
 		$logFilenameBase = $logpath.'/akpayment_'.strtolower($this->ppName).'_ipn';
 

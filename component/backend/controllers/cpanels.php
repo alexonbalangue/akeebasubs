@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 class AkeebasubsControllerCpanels extends F0FController
 {
 	public function execute($task) {
-		if(!in_array($task, array('browse','hide2copromo', 'wizardstep', 'updateinfo'))) {
+		if(!in_array($task, array('browse','hide2copromo', 'wizardstep', 'updateinfo', 'updategeoip'))) {
 			$task = 'browse';
 		}
 		parent::execute($task);
@@ -155,5 +155,40 @@ ENDRESULT;
 
 		// Cut the execution short
 		JFactory::getApplication()->close();
+	}
+
+	public function updategeoip()
+	{
+		if ($this->csrfProtection)
+		{
+			$this->_csrfProtection();
+		}
+
+		// Load the GeoIP library if it's not already loaded
+		if (!class_exists('AkeebaGeoipProvider'))
+		{
+			if (@file_exists(JPATH_PLUGINS . '/system/akgeoip/lib/akgeoip.php'))
+			{
+				if (@include_once JPATH_PLUGINS . '/system/akgeoip/lib/vendor/autoload.php')
+				{
+					@include_once JPATH_PLUGINS . '/system/akgeoip/lib/akgeoip.php';
+				}
+			}
+		}
+
+		$geoip = new AkeebaGeoipProvider();
+		$result = $geoip->updateDatabase();
+
+		$url = 'index.php?option=com_akeebasubs';
+
+		if ($result === true)
+		{
+			$msg = JText::_('COM_AKEEBASUBS_GEOIP_MSG_DOWNLOADEDGEOIPDATABASE');
+			$this->setRedirect($url, $msg);
+		}
+		else
+		{
+			$this->setRedirect($url, $result, 'error');
+		}
 	}
 }

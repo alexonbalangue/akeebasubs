@@ -1,17 +1,14 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die;
 
-JHTML::_('behavior.framework', true);
-
 F0FTemplateUtils::addCSS('media://com_akeebasubs/css/jquery.jqplot.min.css?'.AKEEBASUBS_VERSIONHASH);
 
-AkeebaStrapper::addJSfile('media://com_akeebasubs/js/expirations.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/excanvas.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jquery.jqplot.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.json2.min.js?'.AKEEBASUBS_VERSIONHASH);
@@ -20,6 +17,7 @@ AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.dateAxisRenderer.min
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.canvasAxisTickRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.canvasTextRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
 AkeebaStrapper::addJSfile('media://com_akeebasubs/js/jqplot.barRenderer.min.js?'.AKEEBASUBS_VERSIONHASH);
+AkeebaStrapper::addJSfile('media://com_akeebasubs/js/expirations.js?'.AKEEBASUBS_VERSIONHASH);
 
 $exp_start = date('Y-m-d', strtotime('-2 months', strtotime('last monday')));
 

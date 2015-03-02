@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -27,6 +27,7 @@ class AkeebasubsControllerTaxconfigs extends F0FController
 		// CSRF protection
 		$this->_csrfProtection();
 
+		/** @var AkeebasubsModelTaxconfigs $model */
 		$model = $this->getThisModel();
 		$model->clearTaxRules();
 		$model->createTaxRules();

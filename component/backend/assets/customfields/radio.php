@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		akeebasubs
- * @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
@@ -83,7 +83,7 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 		if(response.custom_validation.$slug) {
 			$('#$slug').parents('div.control-group').addClass('success has-success');
 			$success_javascript
-			thisIsValid = trur;
+			thisIsValid = true;
 		} else {
 			$('#$slug').parents('div.control-group').addClass('error has-error');
 			$failure_javascript

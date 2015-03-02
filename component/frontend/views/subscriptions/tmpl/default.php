@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -103,7 +103,7 @@ if (!property_exists($this, 'extensions'))
 					<?php if ($level->content_url): ?>
 					<a href="<?php echo $this->escape($level->content_url) ?>">
 					<?php endif; ?>
-					<?php echo $this->escape($subscription->title)?>
+					<?php echo $this->escape($level->title)?>
 					<?php if ($level->content_url): ?>
 					</a>
 					<?php endif; ?>

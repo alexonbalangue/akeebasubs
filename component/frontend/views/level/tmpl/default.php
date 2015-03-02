@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -9,6 +9,18 @@ defined('_JEXEC') or die();
 
 $this->loadHelper('modules');
 $this->loadHelper('select');
+
+if(isset($this->item)) {
+	$akeebasubs_subscription_level = $this->item->akeebasubs_level_id;
+} else {
+	$akeebasubs_subscription_level = null;
+}
+
+$apply_validation = true;
+if (property_exists($this, 'apply_validation'))
+{
+	$apply_validation = $this->apply_validation == 'true';
+}
 
 $script = <<<JS
 
@@ -27,7 +39,7 @@ $prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'in
 $styleDiscount	= $this->cparams->showdiscountfield <= 0 ? 'display:none' : '';
 $styleTax		= $this->cparams->showtaxfield <= 0 ? 'display:none' : '';
 $styleRegular	= $this->cparams->showregularfield <= 0 ? 'display:none' : '';
-$styleCoupon	= $this->cparams->showcouponfield <= 0 ? 'display:none' : '';
+$styleCoupon	= (($this->cparams->showcouponfield <= 0) && empty($this->cache['coupon'])) ? 'display:none' : '';
 $requireCoupon  = $this->cparams->reqcoupon;
 
 $paymentMethodsCount = count(AkeebasubsHelperSelect::paymentmethods('paymentmethod', '', array('id'=>'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id, 'return_raw_list' => 1)));
@@ -118,6 +130,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 		<div class="control-group form-group" style="<?php echo $styleTax ?>" id="akeebasubs-sum-vat-container">
 			<label class="control-label col-sm-2">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT')?>
+				<span id="akeebasubs-sum-vat-percent"><?php echo $this->validation->price->taxrate?></span>%
 			</label>
 			<div class="controls col-sm-2">
 				<div class="input-group <?php echo $prepend_class?>">
@@ -151,11 +164,51 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 			</div>
 		</div>
 
-		<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
 	</fieldset>
+
+	<?php if($this->validation->price->net < 0.01): ?></div><?php endif ?>
 
 	<fieldset>
 		<legend class="subs"><?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')?></legend>
+
+		<?php
+		// Render pre-payment custom fields
+		JLoader::import('joomla.plugin.helper');
+		JPluginHelper::importPlugin('akeebasubs');
+		$app = JFactory::getApplication();
+		$jResponse = $app->triggerEvent('onSubscriptionFormPrepaymentRender', array($this->userparams, array_merge($this->cache,array('subscriptionlevel' => $akeebasubs_subscription_level))));
+		if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
+			if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):
+				if($apply_validation && array_key_exists('isValid', $field)) {
+					$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success has-success' : '') : 'error has-error';
+				} else {
+					$customField_class = '';
+				}
+				?>
+				<div class="control-group form-group <?php echo $customField_class ?>">
+					<label for="<?php echo $field['id']?>" class="control-label col-sm-2">
+						<?php echo $field['label']?>
+					</label>
+					<div class="controls">
+		<span class="col-sm-3">
+			<?php echo $field['elementHTML']?>
+		</span>
+						<?php if(array_key_exists('validLabel', $field)):?>
+							<span id="<?php echo $field['id']?>_valid" class="help-inline help-block"
+								  style="<?php if(!$field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
+				  <?php echo $field['validLabel']?>
+		</span>
+						<?php endif;?>
+						<?php if(array_key_exists('invalidLabel', $field)):?>
+							<span id="<?php echo $field['id']?>_invalid" class="help-inline help-block"
+								  style="<?php if($field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
+				  <?php echo $field['invalidLabel']?>
+		</span>
+						<?php endif;?>
+					</div>
+				</div>
+
+		<?php endforeach; endforeach;?>
 
 		<?php if($requireCoupon || ($this->validation->price->net > 0)): ?>
 		<div class="control-group form-group" style="<?php echo $styleCoupon ?>">

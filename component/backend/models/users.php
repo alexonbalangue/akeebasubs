@@ -1,7 +1,7 @@
 <?php
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 // Protect from unauthorized access
@@ -411,7 +411,15 @@ class AkeebasubsModelUsers extends F0FModel
 		}
 		else
 		{
-			$myData = array();
+			$taxParameters = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel')->getTaxDefiningParameters();
+
+			$myData = array(
+				'isbusiness'	 => $taxParameters['vies'] ? 1 : 0,
+				'city'			 => $taxParameters['city'],
+				'state'			 => $taxParameters['state'],
+				'country'		 => $taxParameters['country'],
+				'params'		 => array()
+			);
 		}
 
 		// Finally, merge data coming from the plugins. Note that the

@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -14,8 +14,10 @@ $this->loadHelper('message');
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
-$vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
-$vatMultiplier = (100 + (int)$vatRate) / 100;
+$showVat = AkeebasubsHelperCparams::getParam('showvat', 0);
+/** @var AkeebasubsModelTaxhelper $taxModel */
+$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+$taxParams = $taxModel->getTaxDefiningParameters();
 // Take the various inclusions into account
 $includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
 $includediscount = AkeebasubsHelperCparams::getParam('includediscount', 0);
@@ -40,6 +42,9 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 			{
 				$signupFee = (float)$level->signupfee;
 			}
+
+			$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+			$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 			if ($includediscount)
 			{
@@ -105,6 +110,13 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 						<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $price_integer ?><?php if((int)$price_fractional > 0): ?></span><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?><?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span><?php endif; ?>
 						<?php endif; ?>
 					</div>
+					<?php if ((float)$vatRule->taxrate > 0.01): ?>
+					<div class="akeebasubs-awesome-taxnotice">
+						<?php if ($levelPrice > 0.01): ?>
+						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_INCLUDESVAT', (float)$vatRule->taxrate); ?>
+						<?php endif; ?>
+					</div>
+					<?php endif; ?>
 					<?php if ($includediscount == 2): ?>
 					<div class="akeebasubs-awesome-prediscount">
 						<?php if(abs($discount) >= 0.01): ?>

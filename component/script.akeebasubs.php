@@ -1,9 +1,9 @@
 <?php
 /**
- *  @package	akeebasubs
- *  @copyright	Copyright (c)2010-2014 Nicholas K. Dionysopoulos / AkeebaBackup.com
- *  @license	GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
- *  @version 	$Id$
+ * @package      akeebasubs
+ * @copyright    Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license      GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @version      $Id$
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,6 +80,20 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	protected $componentTitle = 'Akeeba Subscriptions';
 
 	/**
+	 * The minimum PHP version required to install this extension
+	 *
+	 * @var   string
+	 */
+	protected $minimumPHPVersion = '5.3.4';
+
+	/**
+	 * The minimum Joomla! version required to install this extension
+	 *
+	 * @var   string
+	 */
+	protected $minimumJoomlaVersion = '3.2.1';
+
+	/**
 	 * The list of extra modules and plugins to install on component installation / update and remove on component
 	 * uninstallation.
 	 *
@@ -91,59 +105,66 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			'admin' => array(
 				'akeebasubs' => array('cpanel', 1)
 			),
-			'site' => array(
+			'site'  => array(
 				'aksexpires' => array('left', 0),
+				'akslevels'  => array('left', 0),
 				'aksubslist' => array('left', 0),
-				'akslevels' => array('left', 0)
+				'aktaxcountry' => array('akeebasubscriptionslistheader', 0),
 			)
 		),
 		// plugins => { (folder) => { (element) => (published) }* }*
 		'plugins' => array(
-			'akeebasubs' => array(
-				'adminemails'			=> 0,
-				'agreetotos'			=> 0,
-				'atscredits'			=> 0,
-				'autocity'				=> 0,
-				'canalyticscommerce'	=> 0,
-				'contentpublish'		=> 0,
-				'customfields'			=> 1,
-				'invoices'				=> 0,
-				'iproperty'				=> 0,
-				'joomla'				=> 1,
-				'joomlaprofilesync'		=> 1,
-				'recaptcha'				=> 0,
-				'slavesubs'				=> 1,
-				'sql'					=> 0,
-				'subscriptionemails'	=> 1,
+			'akeebasubs'         => array(
+				'adminemails'             => 0,
+				'agreetoeu'               => 0,
+				'agreetotos'              => 0,
+				'atscredits'              => 0,
+				'autocity'                => 0,
+				'canalyticscommerce'      => 0,
+				'contentpublish'          => 0,
+				'customfields'            => 1,
+				'invoices'                => 0,
+				'iproperty'               => 0,
+				'joomla'                  => 1,
+				'joomlaprofilesync'       => 1,
+				'needslogout'             => 1,
+				'recaptcha'               => 0,
+				'slavesubs'               => 1,
+				'sql'                     => 0,
+				'subscriptionemails'      => 1,
+				'subscriptionemailsdebug' => 0,
 			),
-			'akpayment' => array(
-				'2checkout'				=> 0,
-				'2conew'				=> 0,
-				'none'					=> 0,
-				'offline'				=> 0,
-				'paymill'				=> 0,
-				'paypal'				=> 1,
-				'paypalpaymentspro'		=> 0,
-				'paypalproexpress'		=> 0,
-				'skrill'				=> 0,
-				'stripe'				=> 0,
-				'viva'					=> 0,
+			'akpayment'          => array(
+				'2checkout'         => 0,
+				'2conew'            => 0,
+				'none'              => 0,
+				'offline'           => 0,
+				'paymill'           => 0,
+				'paypal'            => 1,
+				'paypalpaymentspro' => 0,
+				'paypalproexpress'  => 0,
+				'skrill'            => 0,
+				'stripe'            => 0,
+				'viva'              => 0,
 			),
-			'content' => array(
-				'aslink'				=> 1,
-				'asrestricted'			=> 1,
-				'astimedrelease'		=> 1,
+			'content'            => array(
+				'aslink'         => 1,
+				'asrestricted'   => 1,
+				'astimedrelease' => 1,
 			),
-            'sh404sefextplugins' => array(
-                'com_akeebasubs'        => 1
-            ),
-			'system' => array(
-				'as2cocollation'		=> 0,
-				'asexpirationcontrol'	=> 1,
-				'asexpirationnotify'	=> 1,
-				'aslogoutuser'			=> 0,
-				'asuserregredir'		=> 0,
-			)
+			'sh404sefextplugins' => array(
+				'com_akeebasubs' => 1
+			),
+			'system'             => array(
+				'as2cocollation'      => 0,
+				'asexpirationcontrol' => 1,
+				'asexpirationnotify'  => 1,
+				'aslogoutuser'        => 0,
+				'asuserregredir'      => 0,
+			),
+			'user'               => array(
+				'aslogoutuser' => 1,
+			),
 		)
 	);
 
@@ -154,7 +175,7 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	 * @var   array
 	 */
 	protected $removeFilesAllVersions = array(
-		'files'	=> array(
+		'files'   => array(
 			'cache/com_akeebasubs.updates.php',
 			'cache/com_akeebasubs.updates.ini',
 			'administrator/cache/com_akeebasubs.updates.php',
@@ -257,6 +278,15 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 			// Import data
 			'administrator/components/com_akeebasubs/controllers/tools.php',
 			'administrator/components/com_akeebasubs/models/tools.php',
+
+			// Joomla! 2.5 stuff
+			'administrator/components/com_akeebasubs/views/coupons/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/customfields/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/emailtemplates/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/invoicetemplates/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/levels/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/relations/tmpl/form.default.j3.xml',
+			'administrator/components/com_akeebasubs/views/upgrades/tmpl/form.default.j3.xml',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',
@@ -300,28 +330,75 @@ class Com_AkeebasubsInstallerScript extends F0FUtilsInstallscript
 	 */
 	protected function renderPostInstallation($status, $fofInstallationStatus, $strapperInstallationStatus, $parent)
 	{
-?>
-<h1>Akeeba Subscriptions</h1>
+		$this->warnAboutJSNPowerAdmin();
 
-<img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions" align="left" />
-<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">Welcome to Akeeba Subscriptions!</h2>
-<span>The easiest way to sell subscriptions on your Joomla! site</span>
+		?>
+		<h1>Akeeba Subscriptions</h1>
 
-<div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
-	You can download translation files <a href="http://cdn.akeebabackup.com/language/akeebasubs/index.html">directly from our CDN page</a>.
-</div>
+		<img src="../media/com_akeebasubs/images/akeebasubs-48.png" width="48" height="48" alt="Akeeba Subscriptions"
+			 align="left"/>
+		<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">Welcome to Akeeba
+			Subscriptions!</h2>
+		<span>The easiest way to sell subscriptions on your Joomla! site</span>
 
-<?php
+		<div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
+			You can download translation files <a href="http://cdn.akeebabackup.com/language/akeebasubs/index.html">directly
+				from our CDN page</a>.
+		</div>
+
+		<?php
 		parent::renderPostInstallation($status, $fofInstallationStatus, $strapperInstallationStatus, $parent);
 	}
 
 	protected function renderPostUninstallation($status, $parent)
 	{
-?>
-<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba Subscriptions Uninstallation</h2>
-<p>We are sorry that you decided to uninstall Akeeba Subscriptions. Please let us know why by using the Contact Us form on our site. We appreciate your feedback; it helps us develop better software!</p>
+		?>
+		<h2 style="font-size: 14pt; font-weight: black; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba Subscriptions
+			Uninstallation</h2>
+		<p>We are sorry that you decided to uninstall Akeeba Subscriptions. Please let us know why by using the Contact
+			Us form on our site. We appreciate your feedback; it helps us develop better software!</p>
 
-<?php
+		<?php
 		parent::renderPostUninstallation($status, $parent);
 	}
+
+
+	/**
+	 * The PowerAdmin extension makes menu items disappear. People assume it's our fault. JSN PowerAdmin authors don't
+	 * own up to their software's issue. I have no choice but to warn our users about the faulty third party software.
+	 */
+	private function warnAboutJSNPowerAdmin()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->select('COUNT(*)')
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type') . ' = ' . $db->q('component'))
+			->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
+			->where($db->qn('enabled') . ' = ' . $db->q('1'));
+		$hasPowerAdmin = $db->setQuery($query)->loadResult();
+
+		if (!$hasPowerAdmin)
+		{
+			return;
+		}
+
+		echo <<< HTML
+<div class="well" style="margin: 2em 0;">
+<h1 style="font-size: 32pt; line-height: 120%; color: red; margin-bottom: 1em">WARNING: Menu items for {$this->componentName} might not be displayed on your site.</h1>
+<p style="font-size: 18pt; line-height: 150%; margin-bottom: 1.5em">
+	We have detected that you are using JSN PowerAdmin on your site. This software ignores Joomla! standards and
+	<b>hides</b> the Component menu items to {$this->componentName} in the administrator backend of your site. Unfortunately we
+	can't provide support for third party software. Please contact the developers of JSN PowerAdmin for support
+	regarding this issue.
+</p>
+<p style="font-size: 18pt; line-height: 120%; color: green;">
+	Tip: You can disable JSN PowerAdmin to see the menu items to Akeeba Backup.
+</p>
+</div>
+
+HTML;
+
+	}
+
 }

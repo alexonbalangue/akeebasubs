@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -14,8 +14,10 @@ $this->loadHelper('message');
 require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 
 // Take display VAT into account
-$vatRate = AkeebasubsHelperCparams::getParam('vatrate', 0);
-$vatMultiplier = (100 + (int)$vatRate) / 100;
+$showVat = AkeebasubsHelperCparams::getParam('showvat', 0);
+/** @var AkeebasubsModelTaxhelper $taxModel */
+$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+$taxParams = $taxModel->getTaxDefiningParameters();
 // Take the various inclusions into account
 $includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
 $includediscount = AkeebasubsHelperCparams::getParam('includediscount', 0);
@@ -36,6 +38,9 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 	{
 		$signupFee = (float)$level->signupfee;
 	}
+
+	$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+	$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 	if ($includediscount)
 	{
@@ -94,6 +99,11 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
 				<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
 				<?php endif; ?>
+				<?php endif; ?>
+				<?php if (((float)$vatRule->taxrate > 0.01) && ($levelPrice > 0.01)): ?>
+					<span class="level-price-taxnotice">
+						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_INCLUDESVAT', (float)$vatRule->taxrate); ?>
+					</span>
 				<?php endif; ?>
 			</span>
 			<span class="level-title-text">

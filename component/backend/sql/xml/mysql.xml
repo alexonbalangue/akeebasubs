@@ -78,6 +78,8 @@ CREATE TABLE `#__akeebasubs_subscriptions` (
 	`tax_percent` FLOAT DEFAULT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
 	`params` TEXT,
+	`ip` VARCHAR(255),
+	`ip_country` VARCHAR(255),
 
 	`akeebasubs_coupon_id` BIGINT(20) NULL,
 	`akeebasubs_upgrade_id` BIGINT(20) NULL,
@@ -186,10 +188,10 @@ CREATE TABLE `#__akeebasubs_upgrades` (
 	`to_id` bigint(20) unsigned NOT NULL,
 	`min_presence` int(5) unsigned NOT NULL,
 	`max_presence` int(5) unsigned NOT NULL,
-	`type` ENUM('value','percent') NOT NULL DEFAULT 'value',
+	`type` ENUM('value','percent', 'lastpercent') NOT NULL DEFAULT 'value',
 	`value` FLOAT NOT NULL DEFAULT '0.0',
-
 	`combine` tinyint(1) NOT NULL DEFAULT '0',
+    `expired` tinyint(1) NOT NULL DEFAULT '0'
 	`enabled` tinyint(1) NOT NULL DEFAULT '1',
 	`ordering` bigint(20) unsigned NOT NULL,
 	`created_on` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -943,5 +945,30 @@ ALTER TABLE `#__akeebasubs_coupons` ADD `email` VARCHAR( 255 ) NULL AFTER `user`
 ALTER TABLE `#__akeebasubs_users` ADD `needs_logout` TINYINT NOT NULL DEFAULT '0';
             ]]></query>
         </action>
+
+			<action table="#__akeebasubs_upgrades" canfail="1">
+				<condition type="true"/>
+				<query><![CDATA[
+ALTER TABLE `#__akeebasubs_upgrades` CHANGE `type` `type` ENUM('value','percent', 'lastpercent') NOT NULL DEFAULT 'value' ;
+            ]]></query>
+			</action>
+
+			<action table="#__akeebasubs_subscriptions" canfail="1">
+				<condition type="missing" value="ip_country" />
+				<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `ip` VARCHAR(255) AFTER `params`;
+				]]></query>
+				<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `ip_country` VARCHAR(255) AFTER `ip`;
+				]]></query>
+			</action>
+
+            <action table="#__akeebasubs_upgrades" canfail="1">
+                <condition type="missing" value="expired" />
+                <query><![CDATA[
+    ALTER TABLE `#__akeebasubs_upgrades` ADD COLUMN `expired` tinyint(1) NOT NULL DEFAULT '0' AFTER `combine`;
+                ]]></query>
+            </action>
+
     </sql>
 </schema>

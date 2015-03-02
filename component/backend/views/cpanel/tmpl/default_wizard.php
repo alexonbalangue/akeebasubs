@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  *  @license GNU General Public License version 3, or later
  */
 
@@ -26,18 +26,10 @@ if ($wizardstep >= 6)
 	</p>
 
 	<p>
-	<?php if(version_compare(JVERSION, '3.0', 'lt')): ?>
-	<a href="index.php?option=com_config&view=component&component=com_akeebasubs&path=&tmpl=component"
-		class="modal btn btn-primary"
-		rel="{handler: 'iframe', size: {x: 660, y: 500}}">
-		<?php echo JText::_('COM_AKEEBASUBS_CPANEL_WIZARD_STEP1_BUTTON'); ?>
-	</a>
-	<?php else: ?>
-	<a href="index.php?option=com_config&view=component&component=com_akeebasubs&path=&return=<?php echo base64_encode(JURI::getInstance()->toString()) ?>"
-	   class="btn btn-primary">
-		<?php echo JText::_('COM_AKEEBASUBS_CPANEL_WIZARD_STEP1_BUTTON'); ?>
-	</a>
-	<?php endif; ?>
+		<a href="index.php?option=com_config&view=component&component=com_akeebasubs&path=&return=<?php echo base64_encode(JURI::getInstance()->toString()) ?>"
+		   class="btn btn-primary">
+			<?php echo JText::_('COM_AKEEBASUBS_CPANEL_WIZARD_STEP1_BUTTON'); ?>
+		</a>
 	</p>
 
 	<?php elseif ($wizardstep == 2): ?>

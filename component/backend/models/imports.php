@@ -1,7 +1,7 @@
 <?php
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 
@@ -363,14 +363,7 @@ class AkeebasubsModelImports extends F0FModel
 		$sub = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 
 		$randomString = JUserHelper::genRandomPassword();
-		if (version_compare(JVERSION, '3.2', 'ge'))
-		{
-			$hash = JApplication::getHash($randomString);
-		}
-		else
-		{
-			$hash = JFactory::getApplication()->getHash($randomString);
-		}
+		$hash = JApplication::getHash($randomString);
 
 		$bind['user_id']             = $userid;
 		$bind['akeebasubs_level_id'] = $level->akeebasubs_level_id;

@@ -1,7 +1,6 @@
 <?php defined('_JEXEC') or die();
-if(version_compare(JVERSION, '3.0', 'ge')) {
-	JHtml::_('jquery.framework');
-}
+JHtml::_('jquery.framework');
+
 ?>
 
 <h3><?php echo JText::_('PLG_AKPAYMENT_STRIPE_FORM_HEADER') ?></h3>

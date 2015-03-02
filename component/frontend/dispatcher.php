@@ -2,7 +2,7 @@
 
 /**
  * @package AkeebaSubs
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license GNU General Public License version 3, or later
  */
 // Protect from unauthorized access
@@ -79,6 +79,13 @@ class AkeebasubsDispatcher extends F0FDispatcher
 			if (!in_array(F0FInflector::pluralize($view), $this->allowedViews))
 			{
 				$result = false;
+			}
+
+			// Handle the submitted form from the tax country module
+			$taxCountry = JFactory::getApplication()->input->getCmd('mod_aktaxcountry_country', null);
+			if (!is_null($taxCountry))
+			{
+				JFactory::getSession()->set('country', $taxCountry, 'mod_aktaxcountry');
 			}
 		}
 
