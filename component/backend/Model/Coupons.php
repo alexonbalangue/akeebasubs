@@ -17,13 +17,15 @@ use JText;
 
 class Coupons extends DataModel
 {
+	use Mixin\Assertions, Mixin\DateManipulation, Mixin\ImplodedArrays;
+
 	public function __construct(Container $container, array $config = array())
 	{
 		parent::__construct($container, $config);
 
+		// Always load the Filters behaviour
 		$this->addBehaviour('Filters');
 	}
-
 
 	/**
 	 * Check the data for validity.
@@ -35,16 +37,10 @@ class Coupons extends DataModel
 	public function check()
 	{
 		// Check for title
-		if (empty($this->title))
-		{
-			throw new \RuntimeException(JText::_('COM_AKEEBASUBS_COUPON_ERR_TITLE'));
-		}
+		$this->assertNotEmpty($this->title, 'COM_AKEEBASUBS_COUPON_ERR_TITLE');
 
 		// Check for coupon code
-		if (empty($this->coupon))
-		{
-			throw new \RuntimeException(JText::_('COM_AKEEBASUBS_COUPON_ERR_COUPON'));
-		}
+		$this->assertNotEmpty($this->coupon, 'COM_AKEEBASUBS_COUPON_ERR_COUPON');
 
 		// Normalize coupon code to uppercase
 		$this->coupon = strtoupper($this->coupon);
@@ -52,51 +48,10 @@ class Coupons extends DataModel
 		// Assign sensible publish_up and publish_down settings
 		JLoader::import('joomla.utilities.date');
 
-		if (empty($this->publish_up) || ($this->publish_up == $this->getDbo()->getNullDate()))
-		{
-			$jUp              = new JDate();
-			$this->publish_up = $jUp->toSql();
-		}
-		else
-		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-
-			if (!preg_match($regex, $this->publish_up))
-			{
-				$this->publish_up = '2001-01-01';
-			}
-
-			$jUp = new JDate($this->publish_up);
-		}
-
-		if (empty($this->publish_down) || ($this->publish_down == $this->getDbo()->getNullDate()))
-		{
-			$jDown              = new JDate('2030-01-01 00:00:00');
-			$this->publish_down = $jDown->toSql();
-		}
-		else
-		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-
-			if (!preg_match($regex, $this->publish_down))
-			{
-				$this->publish_down = '2037-01-01';
-			}
-
-			$jDown = new JDate($this->publish_down);
-		}
-
-		if ($jDown->toUnix() < $jUp->toUnix())
-		{
-			$temp               = $this->publish_up;
-			$this->publish_up   = $this->publish_down;
-			$this->publish_down = $temp;
-		}
-		elseif ($jDown->toUnix() == $jUp->toUnix())
-		{
-			$jDown              = new JDate('2030-01-01 00:00:00');
-			$this->publish_down = $jDown->toSql();
-		}
+		// Normalise the publish up / down dates
+		$this->publish_up = $this->normaliseDate($this->publish_up, '2001-01-01 00:00:00');
+		$this->publish_down = $this->normaliseDate($this->publish_down, '2038-01-18 00:00:00');
+		list($this->publish_up, $this->publish_down) = $this->sortPublishDates($this->publish_up, $this->publish_down);
 
 		// Make sure the specified user (if any) exists
 		if (!empty($this->user))
@@ -148,20 +103,7 @@ class Coupons extends DataModel
 	 */
 	protected function getUsergroupsAttribute($value)
 	{
-		if (is_array($value))
-		{
-			return $value;
-		}
-
-		if (empty($value))
-		{
-			return array();
-		}
-
-		$value = explode(',', $value);
-		$value = array_map('trim', $value);
-
-		return $value;
+		return $this->getAttributeForImplodedArray($value);
 	}
 
 	/**
@@ -173,15 +115,7 @@ class Coupons extends DataModel
 	 */
 	protected function setUsergroupsAttribute($value)
 	{
-		if (!is_array($value))
-		{
-			return $value;
-		}
-
-		$value = array_map('trim', $value);
-		$value = implode(',', $value);
-
-		return $value;
+		return $this->setAttributeForImplodedArray($value);
 	}
 
 	/**
@@ -193,20 +127,7 @@ class Coupons extends DataModel
 	 */
 	protected function getSubscriptionsAttribute($value)
 	{
-		if (is_array($value))
-		{
-			return $value;
-		}
-
-		if (empty($value))
-		{
-			return array();
-		}
-
-		$value = explode(',', $value);
-		$value = array_map('trim', $value);
-
-		return $value;
+		return $this->getAttributeForImplodedArray($value);
 	}
 
 	/**
@@ -289,49 +210,9 @@ class Coupons extends DataModel
 			return;
 		}
 
-		JLoader::import('joomla.utilities.date');
-		$jNow = new JDate();
-		$uNow = $jNow->toUnix();
-
-		$k     = $this->getKeyName();
-
 		foreach ($resultArray as $index => &$row)
 		{
-			$triggered = false;
-
-			if ($row->publish_down && ($row->publish_down != $this->getDbo()->getNullDate()))
-			{
-				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-
-				if (!preg_match($regex, $row->publish_down))
-				{
-					$row->publish_down = '2037-01-01';
-				}
-
-				if (!preg_match($regex, $row->publish_up))
-				{
-					$row->publish_up = '2001-01-01';
-				}
-
-				$jDown = new JDate($row->publish_down);
-				$jUp   = new JDate($row->publish_up);
-
-				if (($uNow >= $jDown->toUnix()) && $row->enabled)
-				{
-					$row->enabled = 0;
-					$triggered    = true;
-				}
-				elseif (($uNow >= $jUp->toUnix()) && !$row->enabled && ($uNow < $jDown->toUnix()))
-				{
-					$row->enabled = 1;
-					$triggered    = true;
-				}
-			}
-
-			if ($triggered)
-			{
-				$row->save();
-			}
+			$this->publishByDate($row);
 		}
 	}
 }
