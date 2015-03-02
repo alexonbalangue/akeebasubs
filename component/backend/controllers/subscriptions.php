@@ -1,8 +1,8 @@
 <?php
 /**
- *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
- *  @license GNU General Public License version 3, or later
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 
 // Protect from unauthorized access
@@ -10,21 +10,26 @@ defined('_JEXEC') or die();
 
 class AkeebasubsControllerSubscriptions extends F0FController
 {
-	public function browse($cachable = false) {
+	public function browse($cachable = false)
+	{
 		// When groupbydate is set to 1 we force a JSON view which returns the
 		// sales info (subscriptions, net amount) grouped by date. You can use
 		// the since/until or other filter in the URL to filter the whole lot
-		$groupbydate = $this->input->getInt('groupbydate',0);
-		$groupbylevel = $this->input->getInt('groupbylevel',0);
-		if(($groupbydate == 1) || ($groupbylevel == 1)) {
-			if(JFactory::getUser()->guest) {
+		$groupbydate  = $this->input->getInt('groupbydate', 0);
+		$groupbylevel = $this->input->getInt('groupbylevel', 0);
+		if (($groupbydate == 1) || ($groupbylevel == 1))
+		{
+			if (JFactory::getUser()->guest)
+			{
 				return false;
-			} else {
+			}
+			else
+			{
 				$list = $this->getThisModel()
-					->savestate(0)
-					->limit(0)
-					->limitstart(0)
-					->getItemList();
+				             ->savestate(0)
+				             ->limit(0)
+				             ->limitstart(0)
+				             ->getItemList();
 				header('Content-type: application/json');
 				echo json_encode($list);
 				JFactory::getApplication()->close();
@@ -32,20 +37,25 @@ class AkeebasubsControllerSubscriptions extends F0FController
 		}
 
 		// Limit what a front-end user can do
-		if(JFactory::getApplication()->isSite()) {
-			if(JFactory::getUser()->guest) {
+		if (JFactory::getApplication()->isSite())
+		{
+			if (JFactory::getUser()->guest)
+			{
 				return false;
-			} else {
-				$this->input->set('user_id',JFactory::getUser()->id);
+			}
+			else
+			{
+				$this->input->set('user_id', JFactory::getUser()->id);
 			}
 		}
 
 		// If it's the back-end CSV view, force no limits
-		if(JFactory::getApplication()->isAdmin() && ($this->input->getCmd('format','html') == 'csv')) {
+		if (JFactory::getApplication()->isAdmin() && ($this->input->getCmd('format', 'html') == 'csv'))
+		{
 			$this->getThisModel()
-				->savestate(0)
-				->limit(0)
-				->limitstart(0);
+			     ->savestate(0)
+			     ->limit(0)
+			     ->limitstart(0);
 		}
 
 		return parent::browse($cachable);
@@ -63,8 +73,11 @@ class AkeebasubsControllerSubscriptions extends F0FController
 
 	public function noop()
 	{
-		if($customURL = $this->input->getString('returnurl','')) $customURL = base64_decode($customURL);
-		$url = !empty($customURL) ? $customURL : 'index.php?option='.$this->component.'&view='.F0FInflector::pluralize($this->view);
+		if ($customURL = $this->input->getString('returnurl', ''))
+		{
+			$customURL = base64_decode($customURL);
+		}
+		$url = !empty($customURL) ? $customURL : 'index.php?option=' . $this->component . '&view=' . F0FInflector::pluralize($this->view);
 		$this->setRedirect($url);
 	}
 

@@ -317,7 +317,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 				'publish_down'	=> $jNow->toSql(),
 				'enabled'		=> 0,
 				'contact_flag'	=> 3,
-				'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$subscription->akeeabsubs_subscription_id}\n"
+				'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$oldsub->akeeabsubs_subscription_id}\n"
 			));
 			$table = clone $mastertable;
 			$table->reset();
@@ -342,7 +342,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 						'publish_down'	=> $jNow->toSql(),
 						'enabled'		=> 0,
 						'contact_flag'	=> 3,
-						'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$subscription->akeeabsubs_subscription_id}\n"
+						'notes'			=> $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with {$table->akeeabsubs_subscription_id}\n"
 					));
 					$table->save($newdata);
 				}

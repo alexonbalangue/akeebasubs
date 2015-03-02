@@ -70,6 +70,13 @@ if (array_key_exists('subcustom', $this->item->params))
 		</div>
 
 		<div class="control-group">
+			<label for="_noemail" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_NOEMAIL')?></label>
+			<div class="controls">
+				<?php echo JHTML::_('select.booleanlist', '_noemail', null, ($this->item->contact_flag == 3) ? 1 : 0); ?>
+			</div>
+		</div>
+
+		<div class="control-group">
 			<label for="publish_up" class="control-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_UP')?></label>
 			<div class="controls">
 				<?php echo JHTML::_('calendar', $this->item->publish_up, 'publish_up', 'publish_up'); ?>
