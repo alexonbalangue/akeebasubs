@@ -1067,7 +1067,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 				// Rule-based relation discount
 				else
 				{
-					$ret['discount'] = $relDiscount;
+					$ret['discount'] = $autoDiscount;
 				}
 			}
 		}
@@ -1301,7 +1301,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 				}
 			}
 			elseif ($discount > $ret['discount'])
-				// If the current discount is greater than what we already have, use it
+			// If the current discount is greater than what we already have, use it
 			{
 				$ret['discount'] = $discount;
 				$ret['relation'] = clone $rule;
