@@ -39,13 +39,10 @@
 			required="false"
 		/>
 
-		<field name="enabled" type="List" label="JSTATUS"
-			description="JFIELD_PUBLISHED_DESC" class="inputbox"
-			filter="intval" size="1" default="1"
-			required="true"
-		>
-			<option value="1">JPUBLISHED</option>
-			<option value="0">JUNPUBLISHED</option>
-		</field>
+        <field name="enabled" type="Published" label="JSTATUS"
+               description="JFIELD_PUBLISHED_DESC" class="inputbox"
+               filter="intval" size="1" default="1"
+               required="true"/>
+
 	</fieldset>
 </form>
