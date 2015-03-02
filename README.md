@@ -1,6 +1,12 @@
 # Akeeba Subscriptions
 
-This branch contains the current, in-development version of Akeeba Subscriptions. This is currently work in progress. Expect many things to change in the first few weeks of 2014.
+This branch contains the current, in-development version of Akeeba Subscriptions.
+
+If you are looking for the code you can use to build a component to use on your site please check out either the 4.x branch (Akeeba Subscriptions 4.x, Joomla! 3.2 and later) or the 3.x branch (Akeeba Subscriptions 3.x, Joomla! 2.5, 3.0, 3.1 and 3.2). 
+
+# !!! WORK IN PROGRESS !!!
+
+The following instructions may not apply unless this warning has been removed
 
 ## Build instructions
 

@@ -5,6 +5,9 @@
 /release
 /nbproject
 
+/_test
+/_experiments
+
 /documentation/akeebasubs-guide.xml~
 /TODO
 /component/backend/version.php
@@ -41,7 +44,6 @@ modules/admin/akeebasubs/language/en-GB
 component/backend/invoices/*.pdf
 component/backend/assets/tcpdf/certificates/*.cer
 
-_test
 
 /.idea
 plugins/akpayment/mobilpaycc/mobilpaycc/private/*.cer
@@ -54,4 +56,3 @@ plugins/akpayment/mobilpaysms/mobilpaysms/private/*.cer
 /build/epub
 /build/tools
 
-/_experiments
