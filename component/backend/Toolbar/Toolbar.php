@@ -102,7 +102,13 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 
 		$key = $this->container->componentName . '_TITLE_' . $view;
 
-		if (strtoupper(\JText::_($key)) == $key)
+		// Exceptions to avoid introduction of a new language string
+		if ($view == 'ControlPanel')
+		{
+			$key = $this->container->componentName . '_TITLE_CPANEL';
+		}
+
+		if (strtoupper(\JText::_($key)) == strtoupper($key))
 		{
 			$altView = Inflector::isPlural($view) ? Inflector::singularize($view) : Inflector::pluralize($view);
 			$key2    = strtoupper($this->container->componentName) . '_TITLE_' . strtoupper($altView);
