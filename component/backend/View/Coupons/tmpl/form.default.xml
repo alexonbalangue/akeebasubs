@@ -15,7 +15,6 @@
         <header name="akeebasubs_coupon_id" type="Field" tdwidth="20px" label="#" id="num" />
 
         <header name="title" type="Searchable" sortable="true"
-                searchfieldname="search"
                 filterclass="input-small"
                 label="COM_AKEEBASUBS_COUPONS_FTITLE"
                 />

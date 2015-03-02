@@ -9,6 +9,7 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
+use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JDate;
 use JLoader;
@@ -16,6 +17,14 @@ use JText;
 
 class Coupons extends DataModel
 {
+	public function __construct(Container $container, array $config = array())
+	{
+		parent::__construct($container, $config);
+
+		$this->addBehaviour('Filters');
+	}
+
+
 	/**
 	 * Check the data for validity.
 	 *
@@ -260,5 +269,69 @@ class Coupons extends DataModel
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Post-process the loaded items list. Used to implement automatic expiration of coupons.
+	 *
+	 * @param   Coupons[]  $resultArray
+	 */
+	protected function onAfterGetItemsArray(&$resultArray)
+	{
+		// Implement the coupon automatic expiration
+		if (empty($resultArray))
+		{
+			return;
+		}
+
+		if ($this->getState('skipOnProcessList', 0))
+		{
+			return;
+		}
+
+		JLoader::import('joomla.utilities.date');
+		$jNow = new JDate();
+		$uNow = $jNow->toUnix();
+
+		$k     = $this->getKeyName();
+
+		foreach ($resultArray as $index => &$row)
+		{
+			$triggered = false;
+
+			if ($row->publish_down && ($row->publish_down != $this->getDbo()->getNullDate()))
+			{
+				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+
+				if (!preg_match($regex, $row->publish_down))
+				{
+					$row->publish_down = '2037-01-01';
+				}
+
+				if (!preg_match($regex, $row->publish_up))
+				{
+					$row->publish_up = '2001-01-01';
+				}
+
+				$jDown = new JDate($row->publish_down);
+				$jUp   = new JDate($row->publish_up);
+
+				if (($uNow >= $jDown->toUnix()) && $row->enabled)
+				{
+					$row->enabled = 0;
+					$triggered    = true;
+				}
+				elseif (($uNow >= $jUp->toUnix()) && !$row->enabled && ($uNow < $jDown->toUnix()))
+				{
+					$row->enabled = 1;
+					$triggered    = true;
+				}
+			}
+
+			if ($triggered)
+			{
+				$row->save();
+			}
+		}
 	}
 }
