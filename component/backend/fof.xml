@@ -3,6 +3,7 @@
     <common>
         <container>
             <option name="componentNamespace">Akeeba\Subscriptions</option>
+            <option name="factoryClass">FOF30\Factory\MagicFactory</option>
         </container>
     </common>
 </fof>
