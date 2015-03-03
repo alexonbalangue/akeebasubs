@@ -7,6 +7,7 @@
 
 namespace Akeeba\Subscriptions\Admin\CustomField;
 
+use Akeeba\Subscriptions\Admin\Model\CustomFields;
 use JText;
 use JFactory;
 

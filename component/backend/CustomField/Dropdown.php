@@ -117,6 +117,7 @@ class Dropdown extends Text
 		{
 			case 'multiselect':
 				$multiselect = true;
+				// Deliberately no break;
 
 			case 'dropdown':
 

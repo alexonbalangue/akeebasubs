@@ -25,11 +25,11 @@ class Textarea extends Base
 	/**
 	 * Creates a custom field of the "textarea" type
 	 *
-	 * @param    CustomFields $item       A custom field definition
-	 * @param    array                      $cache      The values cache
-	 * @param    stdClass                   $userparams User parameters
+	 * @param   CustomFields  $item        A custom field definition
+	 * @param   array         $cache       The values cache
+	 * @param   stdClass      $userparams  User parameters
 	 *
-	 * @return array|null
+	 * @return  array
 	 */
 	public function getField($item, $cache, $userparams)
 	{
@@ -92,9 +92,9 @@ class Textarea extends Base
 	/**
 	 * Create the necessary Javascript for a textbox
 	 *
-	 * @param    CustomFields $item The item to render the Javascript for
+	 * @param   CustomFields  $item  The item to render the Javascript for
 	 *
-	 * @return  null|void
+	 * @return  string
 	 */
 	public function getJavascript($item)
 	{

@@ -52,9 +52,11 @@ abstract class Base
 	 * Creates a custom field array which will be used by the renderer to be
 	 * shown on the front- or back-end page, for per-user fields
 	 *
-	 * @param    CustomFields  $item        A custom field definition
-	 * @param    array         $cache       The values cache
-	 * @param    stdClass      $userparams  User parameters
+	 * @param   CustomFields  $item        A custom field definition
+	 * @param   array         $cache       The values cache
+	 * @param   stdClass      $userparams  User parameters
+	 *
+	 * @return  array  Field definition
 	 */
 	public function getField($item, $cache, $userparams)
 	{
@@ -65,6 +67,8 @@ abstract class Base
 	 * Create the necessary Javascript and add it to the page
 	 *
 	 * @param   CustomFields  $item  The item to render the Javascript for
+	 *
+	 * @return  string  Javascript to add to the page
 	 */
 	public function getJavascript($item)
 	{
@@ -90,6 +94,8 @@ abstract class Base
 	 *
 	 * @param   CustomFields  $item   A custom field definition
 	 * @param   array         $cache  The values cache
+	 *
+	 * @return  array  Field definition
 	 */
 	public function getPerSubscriptionField($item, $cache)
 	{
@@ -115,7 +121,7 @@ abstract class Base
 	 * @param   CustomFields  $item  The custom field to validate
 	 * @param   array         $data  The data coming from the form
 	 *
-	 * @return float How much we should add/remove from the price or 0/null when no modification is required
+	 * @return  float  How much we should add/remove from the price or 0/null when no modification is required
 	 */
 	public function validatePrice($item, $data)
 	{
@@ -128,8 +134,8 @@ abstract class Base
 	 * @param   CustomFields   $item  The custom field to validate
 	 * @param   array          $data  The data coming from the form
 	 *
-	 * @return int  How much we should add/remove from the subscription length (in days) or 0/null when no modification
-	 *              is required
+	 * @return  int  How much we should add/remove from the subscription length (in days) or 0/null when no modification
+	 *               is required
 	 */
 	public function validateLength($item, $data)
 	{

@@ -28,9 +28,11 @@ class Text extends Base
 	/**
 	 * Creates a custom field of the "text" type
 	 *
-	 * @param    CustomFields $item       A custom field definition
-	 * @param    array                      $cache      The values cache
-	 * @param    stdClass                   $userparams User parameters
+	 * @param   CustomFields  $item        A custom field definition
+	 * @param   array         $cache       The values cache
+	 * @param   stdClass      $userparams  User parameters
+	 *
+	 * @return  array
 	 */
 	public function getField($item, $cache, $userparams)
 	{
@@ -91,7 +93,9 @@ class Text extends Base
 	/**
 	 * Create the necessary Javascript for a textbox
 	 *
-	 * @param    CustomFields $item The item to render the Javascript for
+	 * @param   CustomFields  $item  The item to render the Javascript for
+	 *
+	 * @return  string
 	 */
 	public function getJavascript($item)
 	{
@@ -178,8 +182,8 @@ JS;
 	/**
 	 * Validate a text field
 	 *
-	 * @param CustomFields $item   The custom field to validate
-	 * @param array                      $custom The custom fields' values array
+	 * @param   CustomFields  $item    The custom field to validate
+	 * @param   array         $custom  The custom fields' values array
 	 *
 	 * @return int 1 if the field is valid, 0 otherwise
 	 */

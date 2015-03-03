@@ -10,7 +10,6 @@ namespace Akeeba\Subscriptions\Admin\CustomField;
 use Akeeba\Subscriptions\Admin\Model\CustomFields;
 use JText;
 use JFactory;
-use stdClass;
 
 defined('_JEXEC') or die();
 

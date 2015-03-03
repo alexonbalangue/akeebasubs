@@ -7,9 +7,6 @@
 
 namespace Akeeba\Subscriptions\Admin\CustomField;
 
-use JText;
-use JFactory;
-
 defined('_JEXEC') or die();
 
 /**
