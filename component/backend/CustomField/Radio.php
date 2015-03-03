@@ -5,10 +5,12 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\CustomField;
 
-require_once __DIR__ . '/abstract.php';
-require_once __DIR__ . '/dropdown.php';
+use JText;
+use JFactory;
+
+defined('_JEXEC') or die();
 
 /**
  * A radio selection list field
@@ -16,7 +18,7 @@ require_once __DIR__ . '/dropdown.php';
  * @author Nicholas K. Dionysopoulos
  * @since  2.6.0
  */
-class AkeebasubsCustomFieldRadio extends AkeebasubsCustomFieldDropdown
+class Radio extends Dropdown
 {
 	public function __construct(array $config = array())
 	{
@@ -41,7 +43,8 @@ JS;
 			$javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-JS;}
+JS;
+}
 		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);

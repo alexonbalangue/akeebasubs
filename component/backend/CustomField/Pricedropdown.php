@@ -5,9 +5,14 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\CustomField;
 
-require_once __DIR__ . '/abstract.php';
+use Akeeba\Subscriptions\Admin\Model\CustomFields;
+use JText;
+use JFactory;
+use stdClass;
+
+defined('_JEXEC') or die();
 
 /**
  * A dropdown (selection list) field with price modifier options
@@ -15,7 +20,7 @@ require_once __DIR__ . '/abstract.php';
  * @author Nicholas K. Dionysopoulos
  * @since  2.6.0
  */
-class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
+class Pricedropdown extends Base
 {
 	public function __construct(array $config = array())
 	{
@@ -158,7 +163,7 @@ class AkeebasubsCustomFieldPricedropdown extends AkeebasubsCustomFieldAbstract
 	/**
 	 * Create the necessary Javascript for a textbox
 	 *
-	 * @param    AkeebasubsTableCustomfield $item The item to render the Javascript for
+	 * @param    CustomFields $item The item to render the Javascript for
 	 */
 	public function getJavascript($item)
 	{
@@ -176,7 +181,8 @@ JS;
 			$javascript .= <<<JS
 
 		addToSubValidationQueue(plg_akeebasubs_subcustomfields_validate_$slug);
-JS;}
+JS;
+}
 		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
@@ -244,7 +250,7 @@ JS;
 		/**
 		 * Validate a text field
 		 *
-		 * @param AkeebasubsTableCustomfield $item   The custom field to validate
+		 * @param CustomFields $item   The custom field to validate
 		 * @param array                      $custom The custom fields' values array
 		 *
 		 * @return int 1 if the field is valid, 0 otherwise

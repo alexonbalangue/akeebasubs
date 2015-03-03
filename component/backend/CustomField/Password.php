@@ -5,10 +5,12 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\CustomField;
 
-require_once __DIR__ . '/abstract.php';
-require_once __DIR__ . '/Text.php';
+use JText;
+use JFactory;
+
+defined('_JEXEC') or die();
 
 /**
  * A password input field
@@ -16,7 +18,7 @@ require_once __DIR__ . '/Text.php';
  * @author Nicholas K. Dionysopoulos
  * @since  2.6.0
  */
-class AkeebasubsCustomFieldPassword extends AkeebasubsCustomFieldText
+class Password extends Text
 {
 	public function __construct(array $config = array())
 	{

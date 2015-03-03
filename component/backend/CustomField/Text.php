@@ -5,9 +5,14 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\CustomField;
 
-require_once __DIR__ . '/abstract.php';
+use Akeeba\Subscriptions\Admin\Model\CustomFields;
+use JText;
+use JFactory;
+use stdClass;
+
+defined('_JEXEC') or die();
 
 /**
  * A text input (editbox) field
@@ -15,7 +20,7 @@ require_once __DIR__ . '/abstract.php';
  * @author Nicholas K. Dionysopoulos
  * @since  2.6.0
  */
-class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
+class Text extends Base
 {
 
 	protected $input_type = 'text';
@@ -23,7 +28,7 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 	/**
 	 * Creates a custom field of the "text" type
 	 *
-	 * @param    AkeebasubsTableCustomfield $item       A custom field definition
+	 * @param    CustomFields $item       A custom field definition
 	 * @param    array                      $cache      The values cache
 	 * @param    stdClass                   $userparams User parameters
 	 */
@@ -86,7 +91,7 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 	/**
 	 * Create the necessary Javascript for a textbox
 	 *
-	 * @param    AkeebasubsTableCustomfield $item The item to render the Javascript for
+	 * @param    CustomFields $item The item to render the Javascript for
 	 */
 	public function getJavascript($item)
 	{
@@ -173,7 +178,7 @@ JS;
 	/**
 	 * Validate a text field
 	 *
-	 * @param AkeebasubsTableCustomfield $item   The custom field to validate
+	 * @param CustomFields $item   The custom field to validate
 	 * @param array                      $custom The custom fields' values array
 	 *
 	 * @return int 1 if the field is valid, 0 otherwise

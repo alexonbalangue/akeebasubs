@@ -5,9 +5,12 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\CustomField;
 
-require_once __DIR__ . '/abstract.php';
+use JText;
+use JFactory;
+
+defined('_JEXEC') or die();
 
 /**
  * A date input field
@@ -15,7 +18,7 @@ require_once __DIR__ . '/abstract.php';
  * @author Nicholas K. Dionysopoulos
  * @since  2.6.0
  */
-class AkeebasubsCustomFieldDate extends AkeebasubsCustomFieldAbstract
+class Date extends Base
 {
 	public function getField($item, $cache, $userparams)
 	{
@@ -79,7 +82,8 @@ JS;
 			$javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-JS;}
+JS;
+}
 		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
@@ -147,7 +151,7 @@ JS;
 	/**
 	 * Validate a date field
 	 *
-	 * @param AkeebasubsTableCustomfield $item   The custom field to validate
+	 * @param CustomFields $item   The custom field to validate
 	 * @param array                      $custom The custom fields' values array
 	 *
 	 * @return int 1 if the field is valid, 0 otherwise

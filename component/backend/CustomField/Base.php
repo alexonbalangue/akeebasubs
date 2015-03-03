@@ -5,6 +5,12 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+namespace Akeeba\Subscriptions\Admin\CustomField;
+
+use Akeeba\Subscriptions\Admin\Model\CustomFields;
+use FOF30\Inflector\Inflector;
+use stdClass;
+
 defined('_JEXEC') or die();
 
 /**
@@ -12,7 +18,7 @@ defined('_JEXEC') or die();
  *
  * @since 2.6.0
  */
-abstract class AkeebasubsCustomFieldAbstract
+abstract class Base
 {
 
 	/** The field type, set by the constructor */
@@ -30,7 +36,7 @@ abstract class AkeebasubsCustomFieldAbstract
 		{
 			if (empty($this->fieldType))
 			{
-				$parts                = F0FInflector::explode(get_called_class());
+				$parts                = Inflector::explode(get_called_class());
 				$type                 = strtolower(array_pop($parts));
 				$config['field_type'] = $type;
 			}
@@ -46,9 +52,9 @@ abstract class AkeebasubsCustomFieldAbstract
 	 * Creates a custom field array which will be used by the renderer to be
 	 * shown on the front- or back-end page, for per-user fields
 	 *
-	 * @param    AkeebasubsTableCustomfield $item       A custom field definition
-	 * @param    array                      $cache      The values cache
-	 * @param    stdClass                   $userparams User parameters
+	 * @param    CustomFields  $item        A custom field definition
+	 * @param    array         $cache       The values cache
+	 * @param    stdClass      $userparams  User parameters
 	 */
 	public function getField($item, $cache, $userparams)
 	{
@@ -58,7 +64,7 @@ abstract class AkeebasubsCustomFieldAbstract
 	/**
 	 * Create the necessary Javascript and add it to the page
 	 *
-	 * @param    AkeebasubsTableCustomfield $item The item to render the Javascript for
+	 * @param   CustomFields  $item  The item to render the Javascript for
 	 */
 	public function getJavascript($item)
 	{
@@ -68,10 +74,10 @@ abstract class AkeebasubsCustomFieldAbstract
 	/**
 	 * Validate a per-user field
 	 *
-	 * @param AkeebasubsTableCustomfield $item   The custom field to validate
-	 * @param array                      $custom The custom fields' values array
+	 * @param   CustomFields  $item    The custom field to validate
+	 * @param   array         $custom  The custom fields' values array
 	 *
-	 * @return int 1 if the field is valid, 0 otherwise, null if not supported
+	 * @return  int  1 if the field is valid, 0 otherwise, null if not supported
 	 */
 	public function validate($item, $custom)
 	{
@@ -82,8 +88,8 @@ abstract class AkeebasubsCustomFieldAbstract
 	 * Creates a custom field array which will be used by the renderer to be
 	 * shown on the front- or back-end page, for per subscription fields
 	 *
-	 * @param    AkeebasubsTableCustomfield $item  A custom field definition
-	 * @param    array                      $cache The values cache
+	 * @param   CustomFields  $item   A custom field definition
+	 * @param   array         $cache  The values cache
 	 */
 	public function getPerSubscriptionField($item, $cache)
 	{
@@ -93,10 +99,10 @@ abstract class AkeebasubsCustomFieldAbstract
 	/**
 	 * Validate a per-subscription field
 	 *
-	 * @param AkeebasubsTableCustomfield $item   The custom field to validate
-	 * @param array                      $custom The custom fields' values array
+	 * @param   CustomFields  $item    The custom field to validate
+	 * @param   array         $custom  The custom fields' values array
 	 *
-	 * @return int 1 if the field is valid, 0 otherwise, null if not supported
+	 * @return  int  1 if the field is valid, 0 otherwise, null if not supported
 	 */
 	public function validatePerSubscription($item, $custom)
 	{
@@ -106,8 +112,8 @@ abstract class AkeebasubsCustomFieldAbstract
 	/**
 	 * Return price modifiers
 	 *
-	 * @param AkeebasubsTableCustomfield $item The custom field to validate
-	 * @param array                      $data The data coming from the form
+	 * @param   CustomFields  $item  The custom field to validate
+	 * @param   array         $data  The data coming from the form
 	 *
 	 * @return float How much we should add/remove from the price or 0/null when no modification is required
 	 */
@@ -119,11 +125,11 @@ abstract class AkeebasubsCustomFieldAbstract
 	/**
 	 * Return subscription length modifiers
 	 *
-	 * @param AkeebasubsTableCustomfield $item The custom field to validate
-	 * @param array                      $data The data coming from the form
+	 * @param   CustomFields   $item  The custom field to validate
+	 * @param   array          $data  The data coming from the form
 	 *
-	 * @return int How much we should add/remove from the subscription length (in days) or 0/null when no modification
-	 *             is required
+	 * @return int  How much we should add/remove from the subscription length (in days) or 0/null when no modification
+	 *              is required
 	 */
 	public function validateLength($item, $data)
 	{

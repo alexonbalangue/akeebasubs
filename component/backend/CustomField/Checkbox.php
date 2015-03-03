@@ -5,9 +5,12 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\CustomField;
 
-require_once __DIR__ . '/abstract.php';
+use JText;
+use JFactory;
+
+defined('_JEXEC') or die();
 
 /**
  * A single checkbox field
@@ -15,11 +18,12 @@ require_once __DIR__ . '/abstract.php';
  * @author Nicholas K. Dionysopoulos
  * @since  2.6.0
  */
-class AkeebasubsCustomFieldCheckbox extends AkeebasubsCustomFieldAbstract
+class Checkbox extends Base
 {
 	public function getField($item, $cache, $userparams)
 	{
 		$default = strtoupper(trim($item->default));
+
 		switch ($default)
 		{
 			case 'YES':
@@ -83,6 +87,7 @@ class AkeebasubsCustomFieldCheckbox extends AkeebasubsCustomFieldAbstract
 		{
 			$field['invalidLabel'] = JText::_($item->invalid_label);
 		}
+
 		if ($item->valid_label)
 		{
 			$field['validLabel'] = JText::_($item->valid_label);
@@ -102,12 +107,14 @@ class AkeebasubsCustomFieldCheckbox extends AkeebasubsCustomFieldAbstract
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
 JS;
+
 		if (!$item->allow_empty)
 		{
 			$javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-JS;}
+JS;
+}
 		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
