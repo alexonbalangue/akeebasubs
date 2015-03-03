@@ -14,9 +14,9 @@ use JText;
 defined('_JEXEC') or die;
 
 /**
- * Renders the limits imposed on Coupon entries
+ * Renders the limits imposed on API Coupon entries
  */
-class CouponLimits extends Text
+class APICouponLimits extends Text
 {
 	/**
 	 * Get the rendering of this field type for a repeatable (grid) display,
@@ -30,29 +30,14 @@ class CouponLimits extends Text
 	{
 		$limits = array();
 
-		if ($this->item->user)
-		{
-			$limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_USERS') . ' (' . JFactory::getUser($this->item->user)->username . ')';
-		}
-
-		if ($this->item->email)
-		{
-			$limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_EMAIL') . ' (' . $this->item->email . ')';
-		}
-
-		if (count($this->item->subscriptions))
+		if ($this->item->subscriptions)
 		{
 			$limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_LEVELS');
 		}
 
-		if ($this->item->hitslimit)
+		if ($this->item->creation_limit)
 		{
 			$limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_HITS');
-		}
-
-		if ($this->item->userhits)
-		{
-			$limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_USERHITS');
 		}
 
 		$strLimits = implode(', ', $limits);
