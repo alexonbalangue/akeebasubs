@@ -122,5 +122,13 @@
             required="false"
             />
 
+        <field
+            name="userhits"
+            type="Text"
+            label="COM_AKEEBASUBS_COUPON_FIELD_USERHITSLIMIT"
+            class="input-small"
+            required="false"
+            />
+
     </fieldset>
 </form>
