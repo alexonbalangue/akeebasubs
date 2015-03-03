@@ -5,87 +5,117 @@
  * @license   GNU General Public License version 3, or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\Helper;
+
+use FOF30\Container\Container;
+use FOF30\Model\DataModel;
+use JFactory;
+use JLoader;
+use JText;
+use Joomla\Registry\Registry as JRegistry;
+
+defined('_JEXEC') or die;
 
 /**
- * Message pre-processing
+ * A helper class for sending out emails
  */
-class AkeebasubsHelperMessage
+abstract class Message
 {
 	/**
 	 * Pre-processes the message text in $text, replacing merge tags with those
 	 * fetched based on subscription $sub
 	 *
-	 * @param   string                      $text The message to process
-	 * @param   AkeebasubsTableSubscription $sub  A subscription object
+	 * @param   string     $text  The message to process
+	 * @param   DataModel  $sub   A subscription object
 	 *
 	 * @return  string  The processed string
 	 */
 	public static function processSubscriptionTags($text, $sub, $extras = array())
 	{
 		// Get the user object for this subscription
-		$user = JFactory::getUser($sub->user_id);
+		$joomlaUser = JFactory::getUser($sub->user_id);
 
 		// Get the extra user parameters object for the subscription
-		$kuser = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-						 ->user_id($sub->user_id)
-						 ->getFirstItem();
+		/** @var DataModel $subsUser */
+		$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Users')
+			->savestate(false)->setIgnoreRequest(true)
+			->user_id($sub->user_id)->firstOrFail();
 
 		// Get the subscription level
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-						 ->getItem($sub->akeebasubs_level_id);
+		/** @var DataModel $level */
+		$level = Container::getInstance('com_akeebasubs')->factory->model('Level')
+            ->savestate(false)->setIgnoreRequest(true)
+			->findOrFail($sub->akeebasubs_level_id);
 
 		// Merge the user objects
-		$userdata = array_merge((array)$user, (array)($kuser->getData()));
+		$userData = array_merge((array) $joomlaUser, (array) ($subsUser->getData()));
 
 		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
-		if ($sub instanceof AkeebasubsTableSubscription)
+		if ($sub instanceof DataModel)
 		{
-			$subData = (array)($sub->getData());
+			$subData = (array) ($sub->getData());
 		}
 		else
 		{
-			$subData = (array)$sub;
+			// Why am I here?!
+			$subData = (array) $sub;
 		}
+
 		foreach ($subData as $k => $v)
 		{
 			if (is_array($v) || is_object($v))
 			{
 				continue;
 			}
+
 			if (substr($k, 0, 1) == '_')
 			{
 				continue;
 			}
+
 			if ($k == 'akeebasubs_subscription_id')
 			{
 				$k = 'id';
 			}
+
 			$tag = '[SUB:' . strtoupper($k) . ']';
-			if (in_array($k, array('net_amount', 'gross_amount', 'tax_amount', 'prediscount_amount', 'discount_amount', 'affiliate_comission')))
+
+			if (in_array($k, array(
+				'net_amount',
+				'gross_amount',
+				'tax_amount',
+				'prediscount_amount',
+				'discount_amount',
+				'affiliate_comission'
+			)))
 			{
 				$v = sprintf('%.2f', $v);
 			}
+
 			$text = str_replace($tag, $v, $text);
 		}
 
 		// Create and replace merge tags for the subscription level. Format [LEVEL:KEYNAME]
-		$levelData = (array)($level->getData());
+		$levelData = (array) ($level->getData());
+
 		foreach ($levelData as $k => $v)
 		{
 			if (is_array($v) || is_object($v))
 			{
 				continue;
 			}
+
 			if (substr($k, 0, 1) == '_')
 			{
 				continue;
 			}
+
 			if ($k == 'akeebasubs_level_id')
 			{
 				$k = 'id';
 			}
-			$tag = '[LEVEL:' . strtoupper($k) . ']';
+
+			$tag  = '[LEVEL:' . strtoupper($k) . ']';
 			$text = str_replace($tag, $v, $text);
 		}
 
@@ -102,7 +132,7 @@ class AkeebasubsHelperMessage
 			}
 			elseif (is_object($subData['params']))
 			{
-				$custom = (array)$subData['params'];
+				$custom = (array) $subData['params'];
 			}
 			else
 			{
@@ -124,58 +154,66 @@ class AkeebasubsHelperMessage
 					{
 						continue;
 					}
+
 					if (substr($k, 0, 1) == '_')
 					{
 						continue;
 					}
+
 					$tag = '[SUBCUSTOM:' . strtoupper($k) . ']';
+
 					if (is_array($v))
 					{
 						continue;
 					}
+
 					$text = str_replace($tag, $v, $text);
 				}
 			}
 		}
 
 		// Create and replace merge tags for user data. Format [USER:KEYNAME]
-		foreach ($userdata as $k => $v)
+		foreach ($userData as $k => $v)
 		{
 			if (is_object($v) || is_array($v))
 			{
 				continue;
 			}
+
 			if (substr($k, 0, 1) == '_')
 			{
 				continue;
 			}
+
 			if ($k == 'akeebasubs_subscription_id')
 			{
 				$k = 'id';
 			}
-			$tag = '[USER:' . strtoupper($k) . ']';
+
+			$tag  = '[USER:' . strtoupper($k) . ']';
 			$text = str_replace($tag, $v, $text);
 		}
 
 		// Create and replace merge tags for custom fields data. Format [CUSTOM:KEYNAME]
-		if (array_key_exists('params', $userdata))
+		if (array_key_exists('params', $userData))
 		{
-			if (is_string($userdata['params']))
+			if (is_string($userData['params']))
 			{
-				$custom = json_decode($userdata['params']);
+				$custom = json_decode($userData['params']);
 			}
-			elseif (is_array($userdata['params']))
+			elseif (is_array($userData['params']))
 			{
-				$custom = $userdata['params'];
+				$custom = $userData['params'];
 			}
-			elseif (is_object($userdata['params']))
+			elseif (is_object($userData['params']))
 			{
-				$custom = (array)$userdata['params'];
+				$custom = (array) $userData['params'];
 			}
 			else
 			{
 				$custom = array();
 			}
+
 			if (!empty($custom))
 			{
 				foreach ($custom as $k => $v)
@@ -187,9 +225,9 @@ class AkeebasubsHelperMessage
 
 					$tag = '[CUSTOM:' . strtoupper($k) . ']';
 
-					if ($v instanceof stdClass)
+					if ($v instanceof \stdClass)
 					{
-						$v = (array)$v;
+						$v = (array) $v;
 					}
 
 					if (is_array($v))
@@ -204,97 +242,105 @@ class AkeebasubsHelperMessage
 
 		// Extra variables replacement
 		// -- Coupon code
-		$couponcode = '';
+		$couponCode = '';
+
 		if ($sub->akeebasubs_coupon_id)
 		{
-			$couponData = F0FModel::getTmpInstance('Coupons', 'AkeebasubsModel')
-								  ->savestate(0)
-								  ->getItem($sub->akeebasubs_coupon_id);
-			$couponcode = $couponData->coupon;
+			try
+			{
+				$couponData = Container::getInstance('com_akeebasubs')->factory->model('Coupons')
+					->savestate(false)->setIgnoreRequest(true)
+					->findOrFail($sub->akeebasubs_coupon_id);
+
+				$couponCode = $couponData->coupon;
+			}
+			catch (\RuntimeException $e)
+			{
+				$couponCode = '';
+			}
 		}
 
 		// -- Get the site name
-		$config = JFactory::getConfig();
+		$config   = JFactory::getConfig();
 		$sitename = $config->get('sitename');
 
 		// -- First/last name
-		$fullname = $user->name;
+		$fullname  = $joomlaUser->name;
 		$nameParts = explode(' ', $fullname, 2);
 		$firstname = array_shift($nameParts);
-		$lastname = !empty($nameParts) ? array_shift($nameParts) : '';
-
-		// -- Get the subscription level
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-						 ->setId($sub->akeebasubs_level_id)
-						 ->getItem();
+		$lastname  = !empty($nameParts) ? array_shift($nameParts) : '';
 
 		// -- Site URL
-		list($isCli, $isAdmin) = F0FDispatcher::isCliAdmin();
+		$container = Container::getInstance('com_akeebasubs');
+		$isCli = $container->platform->isCli();
+		$isAdmin = $container->platform->isBackend();
+
 		if ($isCli)
 		{
 			JLoader::import('joomla.application.component.helper');
-			$baseURL = JComponentHelper::getParams('com_akeebasubs')->get('siteurl', 'http://www.example.com');
-			$temp = str_replace('http://', '', $baseURL);
-			$temp = str_replace('https://', '', $temp);
-			$parts = explode($temp, '/', 2);
+			$baseURL    = \JComponentHelper::getParams('com_akeebasubs')->get('siteurl', 'http://www.example.com');
+			$temp       = str_replace('http://', '', $baseURL);
+			$temp       = str_replace('https://', '', $temp);
+			$parts      = explode($temp, '/', 2);
 			$subpathURL = count($parts) > 1 ? $parts[1] : '';
 		}
 		else
 		{
-			$baseURL = JURI::base();
-			$subpathURL = JURI::base(true);
+			$baseURL    = \JURI::base();
+			$subpathURL = \JURI::base(true);
 		}
-		$baseURL = str_replace('/administrator', '', $baseURL);
+
+		$baseURL    = str_replace('/administrator', '', $baseURL);
 		$subpathURL = str_replace('/administrator', '', $subpathURL);
 		$subpathURL = ltrim($subpathURL, '/');
 
 		// -- My Subscriptions URL
 		if ($isAdmin || $isCli)
 		{
-			$url = 'index.php?option=com_akeebasubs&view=subscriptions&layout=default';
+			$url = 'index.php?option=com_akeebasubs&view=Subscriptions';
 		}
 		else
 		{
-			$url = str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=subscriptions&layout=default'));
+			$url = str_replace('&amp;', '&', \JRoute::_('index.php?option=com_akeebasubs&view=Subscriptions&layout=default'));
 		}
+
 		$url = ltrim($url, '/');
+
 		if (substr($url, 0, strlen($subpathURL) + 1) == "$subpathURL/")
 		{
 			$url = substr($url, strlen($subpathURL) + 1);
 		}
+
 		$mysubsurl = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
 
 		// -- Renewal URL
 		$slug = $level->slug;
-		$url = 'index.php?option=com_akeebasubs&view=level&slug=' . $slug . '&layout=default';
+		$url  = 'index.php?option=com_akeebasubs&view=Level&slug=' . $slug . '&layout=default';
+
 		if (!$isAdmin && !$isCli)
 		{
-			$url = str_replace('&amp;', '&', JRoute::_($url));
+			$url = str_replace('&amp;', '&', \JRoute::_($url));
 		}
+
 		$url = ltrim($url, '/');
+
 		if (substr($url, 0, strlen($subpathURL) + 1) == "$subpathURL/")
 		{
 			$url = substr($url, strlen($subpathURL) + 1);
 		}
+
 		$renewalURL = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
 
 		// Currency
-		$currency = '';
-		if (!class_exists('AkeebasubsHelperCparams'))
-		{
-			@include_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
-		}
-		if (class_exists('AkeebasubsHelperCparams'))
-		{
-			$currency = AkeebasubsHelperCparams::getParam('currencysymbol', '€');
-		}
+		$currency = ComponentParams::getParam('currencysymbol', '€');
 
 		// Dates
 		JLoader::import('joomla.utilities.date');
-		$jFrom = new JDate($sub->publish_up);
-		$jTo = new JDate($sub->publish_down);
+		$jFrom = new \JDate($sub->publish_up);
+		$jTo   = new \JDate($sub->publish_down);
 
 		// Download ID
+
 		if (!class_exists('ArsHelperFilter'))
 		{
 			@include_once JPATH_SITE . '/components/com_ars/helpers/filter.php';
@@ -304,26 +350,20 @@ class AkeebasubsHelperMessage
 
 		// User's state, human readable
 		$formatted_state = '';
-		$state = $kuser->state;
+		$state           = $subsUser->getFieldValue('state', 'N');
+
 		if (!empty($state))
 		{
-			if (!class_exists('AkeebasubsHelperSelect'))
-			{
-				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
-			}
-			$formatted_state = AkeebasubsHelperSelect::formatState($state);
+			$formatted_state = Select::formatState($state);
 		}
 
 		// User's country, human readable
 		$formatted_country = '';
-		$country = $kuser->country;
+		$country           = $subsUser->country;
+
 		if (!empty($country))
 		{
-			if (!class_exists('AkeebasubsHelperSelect'))
-			{
-				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
-			}
-			$formatted_country = AkeebasubsHelperSelect::formatCountry($country);
+			$formatted_country = Select::formatCountry($country);
 		}
 
 		// -- The actual replacement
@@ -334,14 +374,14 @@ class AkeebasubsHelperMessage
 			'[FULLNAME]'               => $fullname,
 			'[FIRSTNAME]'              => $firstname,
 			'[LASTNAME]'               => $lastname,
-			'[USERNAME]'               => $user->username,
-			'[USEREMAIL]'              => $user->email,
+			'[USERNAME]'               => $joomlaUser->username,
+			'[USEREMAIL]'              => $joomlaUser->email,
 			'[LEVEL]'                  => $level->title,
 			'[SLUG]'                   => $level->slug,
 			'[RENEWALURL]'             => $renewalURL,
 			'[RENEWALURL:]'            => $renewalURL, // Malformed tag without a coupon code...
 			'[ENABLED]'                => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_COMMON_' . ($sub->enabled ? 'ENABLED' : 'DISABLED')),
-			'[PAYSTATE]'               => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_' . $sub->state),
+			'[PAYSTATE]'               => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_' . $sub->getFieldValue('state', 'N')),
 			'[PUBLISH_UP]'             => $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
 			'[PUBLISH_UP_EU]'          => $jFrom->format('d/m/Y H:i:s', true),
 			'[PUBLISH_UP_USA]'         => $jFrom->format('m/d/Y h:i:s a', true),
@@ -355,12 +395,12 @@ class AkeebasubsHelperMessage
 			'[CURRENCY]'               => $currency,
 			'[$]'                      => $currency,
 			'[DLID]'                   => $dlid,
-			'[COUPONCODE]'             => $couponcode,
+			'[COUPONCODE]'             => $couponCode,
 			'[USER:STATE_FORMATTED]'   => $formatted_state,
 			'[USER:COUNTRY_FORMATTED]' => $formatted_country,
 			// Legacy keys
 			'[NAME]'                   => $firstname,
-			'[STATE]'                  => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_' . $sub->state),
+			'[STATE]'                  => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_' . $sub->getFieldValue('state', 'N')),
 			'[FROM]'                   => $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
 			'[TO]'                     => $jTo->format(JText::_('DATE_FORMAT_LC2'), true),
 		), $extras);
@@ -372,8 +412,8 @@ class AkeebasubsHelperMessage
 
 		// Special replacement for RENEWALURL:COUPONCODE
 		$text = self::substituteRenewalURLWithCoupon($text, $renewalURL);
-		F0FPlatform::getInstance()
-				->runPlugins('onAkeebasubsAfterProcessTags', array(&$text, $sub, $extras));
+
+		$container->platform->runPlugins('onAkeebasubsAfterProcessTags', array(&$text, $sub, $extras));
 
 		return $text;
 	}
@@ -382,8 +422,10 @@ class AkeebasubsHelperMessage
 	 * Processes the language merge tags ([IFLANG langCode], [/IFLANG]) in some
 	 * block of text.
 	 *
-	 * @param string $text The text to process
-	 * @param string $lang Which language to keep. Null means the default language.
+	 * @param   string  $text  The text to process
+	 * @param   string  $lang  Which language to keep. Null means the default language.
+	 *
+	 * @return  string
 	 */
 	public static function processLanguage($text, $lang = null)
 	{
@@ -399,6 +441,7 @@ class AkeebasubsHelperMessage
 			else
 			{
 				$user = JFactory::getUser();
+
 				if (property_exists($user, 'language'))
 				{
 					$lang = $user->language;
@@ -406,30 +449,33 @@ class AkeebasubsHelperMessage
 				else
 				{
 					$params = $user->params;
+
 					if (!is_object($params))
 					{
 						JLoader::import('joomla.registry.registry');
 						$params = new JRegistry($params);
 					}
+
 					$lang = $params->get('language', '');
 				}
 				if (empty($lang))
 				{
-					$lang = JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
+					$lang = \JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 				}
 			}
 		}
 
 		// Find languages
 		$translations = array();
+
 		while (strpos($text, '[IFLANG ') !== false)
 		{
-			$start = strpos($text, '[IFLANG ');
-			$end = strpos($text, '[/IFLANG]');
-			$langEnd = strpos($text, ']', $start);
-			$langCode = substr($text, $start + 8, $langEnd - $start - 8);
-			$langText = substr($text, $langEnd + 1, $end - $langEnd - 1);
-			$translations[$langCode] = $langText;
+			$start                     = strpos($text, '[IFLANG ');
+			$end                       = strpos($text, '[/IFLANG]');
+			$langEnd                   = strpos($text, ']', $start);
+			$langCode                  = substr($text, $start + 8, $langEnd - $start - 8);
+			$langText                  = substr($text, $langEnd + 1, $end - $langEnd - 1);
+			$translations[ $langCode ] = $langText;
 
 			if ($start > 0)
 			{
@@ -439,6 +485,7 @@ class AkeebasubsHelperMessage
 			{
 				$temp = 0;
 			}
+
 			$temp .= substr($text, $end + 9);
 			$text = $temp;
 		}
@@ -450,15 +497,15 @@ class AkeebasubsHelperMessage
 			}
 		}
 
-		$siteLang = JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
+		$siteLang = \JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 
 		if (array_key_exists($lang, $translations))
 		{
-			return $translations[$lang];
+			return $translations[ $lang ];
 		}
 		elseif (array_key_exists($siteLang, $translations))
 		{
-			return $translations[$siteLang];
+			return $translations[ $siteLang ];
 		}
 		elseif (array_key_exists('*', $translations))
 		{
@@ -481,7 +528,7 @@ class AkeebasubsHelperMessage
 	public static function substituteRenewalURLWithCoupon($text, $renewalURL)
 	{
 		// Find where the tag starts
-		$nextPos = 0;
+		$nextPos      = 0;
 		$tagStartText = '[RENEWALURL:';
 
 		if (!class_exists('JUri', true))
@@ -490,7 +537,7 @@ class AkeebasubsHelperMessage
 			JLoader::import('joomla.uri.uri');
 		}
 
-		$uri = new JUri($renewalURL);
+		$uri = new \JUri($renewalURL);
 
 		do
 		{
@@ -522,7 +569,7 @@ class AkeebasubsHelperMessage
 			$uri->setVar('coupon', $couponCode);
 
 			$toReplace = substr($text, $pos, $endPos - $pos + 1);
-			$text = str_replace($toReplace, $uri->toString(), $text);
+			$text      = str_replace($toReplace, $uri->toString(), $text);
 		}
 		while ($pos !== false);
 

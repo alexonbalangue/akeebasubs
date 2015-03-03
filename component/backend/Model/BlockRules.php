@@ -9,15 +9,23 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
+use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use FOF30\Utils\Ip;
 
 class BlockRules extends DataModel
 {
+	public function __construct(Container $container, array $config = array())
+	{
+		parent::__construct($container, $config);
+
+		$this->addBehaviour('Filters');
+	}
+
 	/**
 	 * Checks if the current user is blocked, i.e. they are not allowed to subscribe to this site.
 	 *
-	 * @param   \stdObject $state The state of the subscriptions model
+	 * @param   \stdClass  $state  The state of the subscriptions model
 	 *
 	 * @return  boolean  True if the user is blocked
 	 */

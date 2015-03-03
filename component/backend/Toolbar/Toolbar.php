@@ -94,6 +94,46 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 		$this->renderSubmenu();
 	}
 
+	public function onCustomFieldsBrowse()
+	{
+		$this->onBrowse();
+
+		JToolBarHelper::divider();
+		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
+	}
+
+	public function onEmailtemplatesBrowse()
+	{
+		$this->onBrowse();
+
+		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', true);
+	}
+
+	public function onEmailtemplatesAdd()
+	{
+		// Quick hack to mark this record as new
+		$this->_isNew = true;
+
+		$this->onAdd();
+	}
+
+	public function onEmailtemplatesEdit()
+	{
+		$this->onEdit();
+
+		if (!isset($this->_isNew))
+		{
+			JToolBarHelper::divider();
+
+			$options['class']   = 'envelope';
+			$options['a.task']  = 'testTemplate';
+			$options['a.href']  = '#';
+			$options['text']    = JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_TESTTEMPLATE');
+
+			$this->addCustomBtn('test-template', $options);
+		}
+	}
+
 	/**
 	 * Adds a link to the submenu (toolbar links)
 	 *

@@ -19,7 +19,7 @@ use JText;
 defined('_JEXEC') or die;
 
 /**
- * A helper class fro drop-down selection boxes
+ * A helper class for drop-down selection boxes
  */
 abstract class Select
 {

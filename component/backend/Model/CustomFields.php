@@ -9,6 +9,7 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
+use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 
 /**
@@ -30,6 +31,13 @@ use FOF30\Model\DataModel;
 class CustomFields extends DataModel
 {
 	use Mixin\Assertions, Mixin\ImplodedArrays;
+
+	public function __construct(Container $container, array $config = array())
+	{
+		parent::__construct($container, $config);
+
+		$this->addBehaviour('Filters');
+	}
 
 	public function check()
 	{

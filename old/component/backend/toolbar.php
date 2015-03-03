@@ -10,83 +10,6 @@ defined('_JEXEC') or die();
 
 class AkeebasubsToolbar extends F0FToolbar
 {
-	public function renderSubmenu()
-	{
-		$views = array(
-			'cpanel',
-			'COM_AKEEBASUBS_MAINMENU_SETUP' => array(
-				'levels',
-				'customfields',
-				'levelgroups',
-				'relations',
-				'upgrades',
-				'taxconfigs',
-				'taxrules',
-				'states',
-				'emailtemplates',
-				'blockrules',
-			),
-			'subscriptions',
-			'COM_AKEEBASUBS_MAINMENU_COUPONS' => array(
-				'coupons',
-				'apicoupons'
-			),
-			'COM_AKEEBASUBS_MAINMENU_TOOLS' => array(
-				'import',
-				'users'
-			),
-			'reports',
-			'COM_AKEEBASUBS_MAINMENU_INVOICES' => array(
-				'invoices',
-				'invoicetemplates'
-			),
-		);
-
-		foreach($views as $label => $view) {
-			if(!is_array($view)) {
-				$this->addSubmenuLink($view);
-			} else {
-				$label = JText::_($label);
-				$this->appendLink($label, '', false);
-				foreach($view as $v) {
-					$this->addSubmenuLink($v, $label);
-				}
-			}
-		}
-	}
-
-	private function addSubmenuLink($view, $parent = null)
-	{
-		static $activeView = null;
-		if(empty($activeView)) {
-			$activeView = $this->input->getCmd('view','cpanel');
-		}
-
-		if ($activeView == 'cpanels')
-		{
-			$activeView = 'cpanel';
-		}
-
-		$key = strtoupper($this->component).'_TITLE_'.strtoupper($view);
-		if(strtoupper(JText::_($key)) == $key) {
-			$altview = F0FInflector::isPlural($view) ? F0FInflector::singularize($view) : F0FInflector::pluralize($view);
-			$key2 = strtoupper($this->component).'_TITLE_'.strtoupper($altview);
-			if(strtoupper(JText::_($key2)) == $key2) {
-				$name = ucfirst($view);
-			} else {
-				$name = JText::_($key2);
-			}
-		} else {
-			$name = JText::_($key);
-		}
-
-		$link = 'index.php?option='.$this->component.'&view='.$view;
-
-		$active = $view == $activeView;
-
-		$this->appendLink($name, $link, $active, null, $parent);
-	}
-
 	protected function getMyViews()
 	{
 		$views = array('cpanel');
@@ -187,14 +110,6 @@ class AkeebasubsToolbar extends F0FToolbar
 		$this->renderSubmenu();
 	}
 
-	public function onMakecouponsOverview()
-	{
-		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
-		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
-
-		$this->renderSubmenu();
-	}
-
 	/**
 	 * Renders the toolbar for the component's Control Panel page
 	 */
@@ -238,14 +153,6 @@ class AkeebasubsToolbar extends F0FToolbar
 		}
 	}
 
-	public function onCustomfieldsBrowse()
-	{
-		$this->onBrowse();
-
-		JToolBarHelper::divider();
-		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
-	}
-
 	public function onInvoicetemplatesBrowse()
 	{
 		$this->onBrowse();
@@ -265,38 +172,6 @@ class AkeebasubsToolbar extends F0FToolbar
 		$bar = JToolbar::getInstance('toolbar');
 		$bar->appendButton('Link', 'arrow-left', 'JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
 	}
-
-    public function onEmailtemplatesAdd()
-    {
-        // Quick hack to mark this record as new
-        $this->_isNew = true;
-
-        parent::onAdd();
-    }
-
-	public function onEmailtemplatesBrowse()
-	{
-		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', true);
-
-		parent::onBrowse();
-	}
-
-    public function onEmailtemplatesEdit()
-    {
-		parent::onEdit();
-
-        if(!isset($this->_isNew))
-        {
-			JToolBarHelper::divider();
-
-	        $options['class']   = 'envelope';
-	        $options['a.task']  = 'testtemplate';
-            $options['a.href']  = '#';
-            $options['text']    = JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_TESTTEMPLATE');
-
-            $this->addCustomBtn('test-template', $options);
-        }
-    }
 
 	public function onToolsBrowse()
 	{
@@ -324,63 +199,4 @@ class AkeebasubsToolbar extends F0FToolbar
 		$bar = JToolbar::getInstance('toolbar');
 		$bar->appendButton('Link', 'arrow-left', 'JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
 	}
-
-    protected function addCustomBtn($id, $options = array())
-    {
-        $options = (array) $options;
-	    $a_class = 'btn btn-small';
-	    $href	 = '';
-        $task	 = '';
-        $text    = '';
-        $rel	 = '';
-        $target  = '';
-        $other   = '';
-
-        if(isset($options['a.class']))	$a_class .= $options['a.class'];
-        if(isset($options['a.href']))	$href     = $options['a.href'];
-        if(isset($options['a.task']))	$task     = $options['a.task'];
-        if(isset($options['a.target']))	$target   = $options['a.target'];
-        if(isset($options['a.other']))	$other    = $options['a.other'];
-        if(isset($options['text']))		$text	  = $options['text'];
-        if(isset($options['class']))
-        {
-            $class = $options['class'];
-        }
-        else
-        {
-            $class = 'default';
-        }
-
-        if(isset($options['modal']))
-        {
-            JHTML::_('behavior.modal');
-            $a_class .= ' modal';
-            $rel	  = "'handler':'iframe'";
-            if(is_array($options['modal']))
-            {
-                if(isset($options['modal']['size']['x']) && isset($options['modal']['size']['y']))
-                {
-                    $rel .= ", 'size' : {'x' : ".$options['modal']['size']['x'].", 'y' : ".$options['modal']['size']['y']."}";
-                }
-            }
-        }
-
-        $html = '<a id="'.$id.'" class="'.$a_class.'" alt="'.$text.'"';
-
-        if($rel)	$html .= ' rel="{'.$rel.'}"';
-        if($href)	$html .= ' href="'.$href.'"';
-        if($task)	$html .= " onclick=\"javascript:submitbutton('".$task."')\"";
-        if($target) $html .= ' target="'.$target.'"';
-        if($other)  $html .= ' '.$other;
-        $html .= ' >';
-
-	    $html .= '<span class="icon icon-'.$class.'" title="'.$text.'" > </span>';
-
-		$html .= $text;
-
-		$html .= '</a>';
-
-        $bar = JToolBar::getInstance();
-        $bar->appendButton('Custom', $html, $id);
-    }
 }
