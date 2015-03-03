@@ -26,7 +26,7 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 			'ControlPanel',
 			'COM_AKEEBASUBS_MAINMENU_SETUP'    => array(
 				'Levels',
-				'Customfields',
+				'CustomFields',
 				'LevelGroups',
 				'Relations',
 				'Upgrades',

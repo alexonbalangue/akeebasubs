@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form
+        cssfiles="media://com_akeebasubs/css/backend.css"
+        type="browse"
+        show_header="1"
+        show_filters="1"
+        show_pagination="1"
+        norows_placeholder="COM_AKEEBASUBS_COMMON_NORECORDS"
+        >
+    <headerset>
+        <header name="ordering" type="Ordering" sortable="true" tdwidth="20px" />
+
+        <header name="akeebasubs_customfield_id" type="RowSelect" tdwidth="20px" />
+
+        <header name="akeebasubs_customfield_id" type="Field" tdwidth="20px" label="#" id="num" />
+
+        <header name="title" type="Searchable" sortable="true" />
+
+        <header name="type" type="Selectable"
+                source_class="Akeeba\Subscriptions\Admin\Helper\Select" source_method="getFieldTypes"
+                sortable="true" tdwidth="15%"
+                />
+
+        <header name="default" type="Field" sortable="true" tdwidth="8%" />
+
+        <header name="enabled" type="Published" sortable="true" tdwidth="8%" />
+    </headerset>
+
+    <fieldset name="items">
+        <field name="ordering" type="Ordering" labelclass="order"/>
+
+        <field name="akeebasubs_customfield_id" type="SelectRow"/>
+
+        <field name="akeebasubs_customfield_id" type="Text" id="num" />
+
+        <field name="title" type="Title"
+               show_link="true"
+               url="index.php?option=com_akeebasubs&amp;view=CustomFields&amp;task=edit&amp;id=[ITEM:ID]"
+               slug_format="COM_AKEEBASUBS_LBL_CUSTOMFIELDS_SLUGFORMAT"
+                />
+
+        <field name="type" type="GenericList"
+               source_class="Akeeba\Subscriptions\Admin\Helper\Select" source_method="getFieldTypes"
+                />
+
+        <field name="default" type="text" />
+
+        <field name="enabled" type="published"/>
+    </fieldset>
+</form>

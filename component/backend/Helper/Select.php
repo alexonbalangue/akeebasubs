@@ -316,7 +316,7 @@ abstract class Select
 
 			if (class_exists($className))
 			{
-				$fieldTypes[ $type ] = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_' . strtoupper($type));
+				$fieldTypes[ strtolower($type) ] = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_' . strtoupper($type));
 			}
 		}
 
