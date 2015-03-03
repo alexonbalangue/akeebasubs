@@ -9,8 +9,11 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.tooltip');
 ?>
-<div class="row-fluid j-toggle-main j-toggle-transition">
-	<div class="span12">
+<div class="row-fluid">
+	<div class="span2">
+		&nbsp;
+	</div>
+	<div class="span10 j-toggle-main j-toggle-transition">
 		<a href="index.php?option=com_akeebasubs&view=MakeCoupons" class="btn btn-success">
 			<i class="icon icon-cog icon-white"></i>
 			<?php echo JText::_('COM_AKEEBASUBS_TITLE_MAKECOUPONS')?>
