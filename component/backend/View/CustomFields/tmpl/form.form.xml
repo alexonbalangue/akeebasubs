@@ -8,6 +8,7 @@
             name="title"
             type="Text"
             label="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TITLE"
+            hint="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TITLE"
             description="COM_AKEEBASUBS_CUSTOMFIELDS_HELP_TITLE"
             required="true"
             />
@@ -16,6 +17,7 @@
             name="slug"
             type="Text"
             label="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SLUG"
+            hint="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SLUG"
             description="COM_AKEEBASUBS_CUSTOMFIELDS_HELP_SLUG"
             required="true"
             />
@@ -74,6 +76,7 @@
             name="default"
             type="Text"
             label="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_DEFAULT"
+            hint="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_DEFAULT"
             description="COM_AKEEBASUBS_CUSTOMFIELDS_HELP_DEFAULT"
             required="true"
             />
@@ -90,6 +93,7 @@
             name="valid_label"
             type="Text"
             label="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_VALID_LABEL"
+            hint="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_VALID_LABEL"
             description="COM_AKEEBASUBS_CUSTOMFIELDS_HELP_VALID_LABEL"
             />
 
@@ -97,6 +101,7 @@
             name="invalid_label"
             type="Text"
             label="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_INVALID_LABEL"
+            hint="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_INVALID_LABEL"
             description="COM_AKEEBASUBS_CUSTOMFIELDS_HELP_INVALID_LABEL"
             />
     </fieldset>

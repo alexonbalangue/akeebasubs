@@ -12,6 +12,7 @@
             name="title"
             type="Text"
             label="COM_AKEEBASUBS_COUPON_FIELD_TITLE"
+            hint="COM_AKEEBASUBS_COUPON_FIELD_TITLE"
             class="input-xlarge"
             required="true"
             />
@@ -20,6 +21,7 @@
             name="coupon"
             type="Text"
             label="COM_AKEEBASUBS_COUPON_FIELD_COUPON"
+            hint="COM_AKEEBASUBS_COUPON_FIELD_COUPON"
             class="input-large"
             required="true"
             />
@@ -39,6 +41,7 @@
             name="value"
             type="Text"
             label="COM_AKEEBASUBS_COUPON_FIELD_VALUE"
+            hint="COM_AKEEBASUBS_COUPON_FIELD_VALUE"
             class="input-large"
             required="true"
             />
@@ -54,6 +57,7 @@
             name="hits"
             type="Text"
             label="COM_AKEEBASUBS_COMMON_HITS"
+            hint="COM_AKEEBASUBS_COMMON_HITS"
             required="false"
             />
 
@@ -69,6 +73,7 @@
             name="publish_up"
             type="Calendar"
             label="COM_AKEEBASUBS_COUPON_PUBLISH_UP"
+            hint="COM_AKEEBASUBS_COUPON_PUBLISH_UP"
             required="false"
             />
 
@@ -76,6 +81,7 @@
             name="publish_down"
             type="Calendar"
             label="COM_AKEEBASUBS_COUPON_PUBLISH_DOWN"
+            hint="COM_AKEEBASUBS_COUPON_PUBLISH_DOWN"
             required="false"
             />
 
@@ -90,6 +96,7 @@
             name="email"
             type="Email"
             label="JGLOBAL_EMAIL"
+            hint="JGLOBAL_EMAIL"
             required="false"
             />
 
@@ -118,6 +125,7 @@
             name="hitslimit"
             type="Text"
             label="COM_AKEEBASUBS_COUPON_FIELD_HITSLIMIT"
+            hint="COM_AKEEBASUBS_COUPON_FIELD_HITSLIMIT"
             class="input-small"
             required="false"
             />
@@ -126,6 +134,7 @@
             name="userhits"
             type="Text"
             label="COM_AKEEBASUBS_COUPON_FIELD_USERHITSLIMIT"
+            hint="COM_AKEEBASUBS_COUPON_FIELD_USERHITSLIMIT"
             class="input-small"
             required="false"
             />
