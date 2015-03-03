@@ -1,8 +1,8 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
@@ -14,11 +14,12 @@ require_once __DIR__ . '/dropdown.php';
  * A radio selection list field
  *
  * @author Nicholas K. Dionysopoulos
- * @since 2.6.0
+ * @since  2.6.0
  */
 class AkeebasubsCustomFieldRadio extends AkeebasubsCustomFieldDropdown
 {
-	public function __construct(array $config = array()) {
+	public function __construct(array $config = array())
+	{
 		parent::__construct($config);
 
 		$this->input_type = 'radio';
@@ -26,7 +27,7 @@ class AkeebasubsCustomFieldRadio extends AkeebasubsCustomFieldDropdown
 
 	public function getJavascript($item)
 	{
-		$slug = $item->slug;
+		$slug       = $item->slug;
 		$javascript = <<<JS
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
@@ -35,10 +36,12 @@ class AkeebasubsCustomFieldRadio extends AkeebasubsCustomFieldDropdown
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
 JS;
-		if(!$item->allow_empty) $javascript .= <<<JS
+		if (!$item->allow_empty)
+		{
+			$javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-JS;
+JS;}
 		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
@@ -54,18 +57,20 @@ function plg_akeebasubs_customfields_fetch_$slug()
 
 JS;
 
-		if(!$item->allow_empty):
-			$success_javascript = '';
-			$failure_javascript = '';
-			if(!empty($item->invalid_label)) {
-				$success_javascript .= "$('#{$slug}_invalid').css('display','none');\n";
-				$failure_javascript .= "$('#{$slug}_invalid').css('display','inline-block');\n";
-			}
-			if(!empty($item->valid_label)) {
-				$success_javascript .= "$('#{$slug}_valid').css('display','inline-block');\n";
-				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
-			}
-			$javascript .= <<<JS
+			if (!$item->allow_empty):
+				$success_javascript = '';
+				$failure_javascript = '';
+				if (!empty($item->invalid_label))
+				{
+					$success_javascript .= "$('#{$slug}_invalid').css('display','none');\n";
+					$failure_javascript .= "$('#{$slug}_invalid').css('display','inline-block');\n";
+				}
+				if (!empty($item->valid_label))
+				{
+					$success_javascript .= "$('#{$slug}_valid').css('display','inline-block');\n";
+					$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
+				}
+				$javascript .= <<<JS
 
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
@@ -94,11 +99,10 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 	return thisIsValid;
 }
 
-JS
-;
-		endif;
+JS;
+			endif;
 
-		$document = JFactory::getDocument();
-		$document->addScriptDeclaration($javascript);
-	}
+			$document = JFactory::getDocument();
+			$document->addScriptDeclaration($javascript);
+		}
 }

@@ -17,6 +17,7 @@ require_once __DIR__ . '/abstract.php';
  */
 class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 {
+
 	protected $input_type = 'text';
 
 	/**
@@ -31,7 +32,7 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 		// Get the current value
 		if (array_key_exists($item->slug, $cache['custom']))
 		{
-			$current = $cache['custom'][$item->slug];
+			$current = $cache['custom'][ $item->slug ];
 		}
 		else
 		{
@@ -41,7 +42,7 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 			}
 			else
 			{
-				$slug = $item->slug;
+				$slug    = $item->slug;
 				$current = property_exists($userparams->params, $item->slug) ? $userparams->params->$slug : $item->default;
 			}
 		}
@@ -89,7 +90,7 @@ class AkeebasubsCustomFieldText extends AkeebasubsCustomFieldAbstract
 	 */
 	public function getJavascript($item)
 	{
-		$slug = $item->slug;
+		$slug       = $item->slug;
 		$javascript = <<<JS
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
@@ -179,20 +180,20 @@ JS;
 	 */
 	public function validate($item, $custom)
 	{
-		if (!isset($custom[$item->slug]) || !is_array($custom))
+		if (!isset($custom[ $item->slug ]) || !is_array($custom))
 		{
-			$custom[$item->slug] = '';
+			$custom[ $item->slug ] = '';
 		}
 		elseif (!array_key_exists($item->slug, $custom))
 		{
-			$custom[$item->slug] = '';
+			$custom[ $item->slug ] = '';
 		}
 
 		$valid = true;
 
 		if (!$item->allow_empty)
 		{
-			$valid = !empty($custom[$item->slug]);
+			$valid = !empty($custom[ $item->slug ]);
 		}
 
 		return $valid ? 1 : 0;

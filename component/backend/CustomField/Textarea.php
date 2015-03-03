@@ -1,8 +1,8 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
@@ -13,35 +13,35 @@ require_once __DIR__ . '/abstract.php';
  * A textarea field
  *
  * @author Nicholas K. Dionysopoulos
- * @since 2.6.0
+ * @since  2.6.0
  */
 class AkeebasubsCustomFieldTextarea extends AkeebasubsCustomFieldAbstract
 {
-    /**
-     * Creates a custom field of the "textarea" type
-     *
-     * @param    AkeebasubsTableCustomfield  $item        A custom field definition
-     * @param    array                       $cache       The values cache
-     * @param    stdClass                    $userparams  User parameters
-     *
-     * @return array|null
-     */
+	/**
+	 * Creates a custom field of the "textarea" type
+	 *
+	 * @param    AkeebasubsTableCustomfield $item       A custom field definition
+	 * @param    array                      $cache      The values cache
+	 * @param    stdClass                   $userparams User parameters
+	 *
+	 * @return array|null
+	 */
 	public function getField($item, $cache, $userparams)
 	{
 		// Get the current value
-		if(array_key_exists($item->slug, $cache['custom']))
+		if (array_key_exists($item->slug, $cache['custom']))
 		{
-			$current = $cache['custom'][$item->slug];
+			$current = $cache['custom'][ $item->slug ];
 		}
 		else
 		{
-			if(!is_object($userparams->params))
+			if (!is_object($userparams->params))
 			{
 				$current = $item->default;
 			}
 			else
 			{
-				$slug = $item->slug;
+				$slug    = $item->slug;
 				$current = property_exists($userparams->params, $item->slug) ? $userparams->params->$slug : $item->default;
 			}
 		}
@@ -50,48 +50,50 @@ class AkeebasubsCustomFieldTextarea extends AkeebasubsCustomFieldAbstract
 		$required = $item->allow_empty ? '' : '* ';
 
 		// Parse options
-		if($item->options)
-        {
+		if ($item->options)
+		{
 			$placeholder = htmlentities(str_replace("\n", '', $item->options), ENT_COMPAT, 'UTF-8');
 		}
-        else
-        {
+		else
+		{
 			$placeholder = '';
 		}
 
 		// Set up field's HTML content
-        $html = '<textarea name="custom['.$item->slug.']" id="'.$item->slug.'" placeholder="'.$placeholder.'">';
-        $html .= $current;
-        $html .= '</textarea>';
+		$html = '<textarea name="custom[' . $item->slug . ']" id="' . $item->slug . '" placeholder="' . $placeholder . '">';
+		$html .= $current;
+		$html .= '</textarea>';
 
 		// Setup the field
 		$field = array(
-			'id'			=> $item->slug,
-			'label'			=> $required.JText::_($item->title),
-			'elementHTML'	=> $html,
-			'isValid'		=> $required ? !empty($current) : true
+			'id'          => $item->slug,
+			'label'       => $required . JText::_($item->title),
+			'elementHTML' => $html,
+			'isValid'     => $required ? !empty($current) : true
 		);
 
-		if($item->invalid_label) {
+		if ($item->invalid_label)
+		{
 			$field['invalidLabel'] = JText::_($item->invalid_label);
 		}
-		if($item->valid_label) {
+		if ($item->valid_label)
+		{
 			$field['validLabel'] = JText::_($item->valid_label);
 		}
 
 		return $field;
 	}
 
-    /**
-     * Create the necessary Javascript for a textbox
-     *
-     * @param    AkeebasubsTableCustomfield $item The item to render the Javascript for
-     *
-     * @return  null|void
-     */
+	/**
+	 * Create the necessary Javascript for a textbox
+	 *
+	 * @param    AkeebasubsTableCustomfield $item The item to render the Javascript for
+	 *
+	 * @return  null|void
+	 */
 	public function getJavascript($item)
 	{
-		$slug = $item->slug;
+		$slug       = $item->slug;
 		$javascript = <<<JS
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
@@ -100,10 +102,12 @@ class AkeebasubsCustomFieldTextarea extends AkeebasubsCustomFieldAbstract
 	$(document).ready(function(){
 		addToValidationFetchQueue(plg_akeebasubs_customfields_fetch_$slug);
 JS;
-		if(!$item->allow_empty) $javascript .= <<<JS
+		if (!$item->allow_empty)
+		{
+			$javascript .= <<<JS
 
 		addToValidationQueue(plg_akeebasubs_customfields_validate_$slug);
-JS;
+JS;}
 		$javascript .= <<<JS
 	});
 })(akeeba.jQuery);
@@ -119,18 +123,20 @@ function plg_akeebasubs_customfields_fetch_$slug()
 
 JS;
 
-		if(!$item->allow_empty):
-			$success_javascript = '';
-			$failure_javascript = '';
-			if(!empty($item->invalid_label)) {
-				$success_javascript .= "$('#{$slug}_invalid').css('display','none');\n";
-				$failure_javascript .= "$('#{$slug}_invalid').css('display','inline-block');\n";
-			}
-			if(!empty($item->valid_label)) {
-				$success_javascript .= "$('#{$slug}_valid').css('display','inline-block');\n";
-				$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
-			}
-			$javascript .= <<<JS
+			if (!$item->allow_empty):
+				$success_javascript = '';
+				$failure_javascript = '';
+				if (!empty($item->invalid_label))
+				{
+					$success_javascript .= "$('#{$slug}_invalid').css('display','none');\n";
+					$failure_javascript .= "$('#{$slug}_invalid').css('display','inline-block');\n";
+				}
+				if (!empty($item->valid_label))
+				{
+					$success_javascript .= "$('#{$slug}_valid').css('display','inline-block');\n";
+					$failure_javascript .= "$('#{$slug}_valid').css('display','none');\n";
+				}
+				$javascript .= <<<JS
 
 function plg_akeebasubs_customfields_validate_$slug(response)
 {
@@ -159,35 +165,37 @@ function plg_akeebasubs_customfields_validate_$slug(response)
 	return thisIsValid;
 }
 
-JS
-;
-		endif;
+JS;
+			endif;
 
-		$document = JFactory::getDocument();
-		$document->addScriptDeclaration($javascript);
-	}
+			$document = JFactory::getDocument();
+			$document->addScriptDeclaration($javascript);
+		}
 
 	/**
 	 * Validate a text field
-	 * @param AkeebasubsTableCustomfield	$item	The custom field to validate
-	 * @param array							$custom	The custom fields' values array
+	 *
+	 * @param AkeebasubsTableCustomfield $item   The custom field to validate
+	 * @param array                      $custom The custom fields' values array
+	 *
 	 * @return int 1 if the field is valid, 0 otherwise
 	 */
 	public function validate($item, $custom)
 	{
-		if (!isset($custom[$item->slug]) || !is_array($custom))
+		if (!isset($custom[ $item->slug ]) || !is_array($custom))
 		{
-			$custom[$item->slug] = '';
+			$custom[ $item->slug ] = '';
 		}
-		elseif(!array_key_exists($item->slug, $custom))
+		elseif (!array_key_exists($item->slug, $custom))
 		{
-			$custom[$item->slug] = '';
+			$custom[ $item->slug ] = '';
 		}
 
 		$valid = true;
 
-		if(!$item->allow_empty) {
-			$valid = !empty($custom[$item->slug]);
+		if (!$item->allow_empty)
+		{
+			$valid = !empty($custom[ $item->slug ]);
 		}
 
 		return $valid ? 1 : 0;
