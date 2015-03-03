@@ -1818,50 +1818,6 @@ class AkeebasubsModelSubscribes extends F0FModel
 	}
 
 	/**
-	 * Gets a list of payment plugins and their titles
-	 */
-	public function getPaymentPlugins()
-	{
-		JLoader::import('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akpayment');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKPaymentGetIdentity');
-
-		$ret = array();
-
-		foreach ($jResponse as $item)
-		{
-			if (is_object($item))
-			{
-				$ret[] = $item;
-			}
-			elseif (is_array($item))
-			{
-				if (array_key_exists('name', $item))
-				{
-					$ret[] = (object)$item;
-				}
-				else
-				{
-					foreach ($item as $anItem)
-					{
-						if (is_object($anItem))
-						{
-							$ret[] = $anItem;
-						}
-						else
-						{
-							$ret[] = (object)$anItem;
-						}
-					}
-				}
-			}
-		}
-
-		return $ret; // name, title
-	}
-
-	/**
 	 * Checks that the current state passes the validation
 	 *
 	 * @return bool

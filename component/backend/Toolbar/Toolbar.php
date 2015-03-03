@@ -7,8 +7,9 @@
 
 namespace Akeeba\Subscriptions\Admin\Toolbar;
 
-use FOF30\Container\Container;
 use FOF30\Inflector\Inflector;
+use JToolBarHelper;
+use JText;
 
 defined('_JEXEC') or die;
 
@@ -75,9 +76,22 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 
 		$option = $this->container->componentName;
 
-		\JToolBarHelper::title(\JText::_(strtoupper($option)), str_replace('com_', '', $option));
+		JToolBarHelper::title(JText::_(strtoupper($option)), str_replace('com_', '', $option));
 
-		\JToolBarHelper::preferences($option);
+		JToolBarHelper::preferences($option);
+	}
+
+	public function onMakeCoupons()
+	{
+		$option = $this->container->componentName;
+
+		$subtitle_key = $option . '_TITLE_MAKECOUPONS';
+		JToolBarHelper::title(
+			JText::_($option) . ' &ndash; <small>' . JText::_($subtitle_key) . '</small>',
+			str_replace('com_', '', $option));
+		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=Coupons');
+
+		$this->renderSubmenu();
 	}
 
 	/**
