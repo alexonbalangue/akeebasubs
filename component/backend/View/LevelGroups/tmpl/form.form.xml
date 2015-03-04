@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form
+	cssfiles="media://com_akeebasubs/css/backend.css"
+>
+	<fieldset name="basic">
+		<field
+            name="title" type="Text"
+            label="COM_AKEEBASUBS_LEVELGROUPS_FIELD_TITLE"
+        />
+		
+		<field
+            name="enabled" type="Published"
+            label="JPUBLISHED"
+        />
+	</fieldset>
+</form>

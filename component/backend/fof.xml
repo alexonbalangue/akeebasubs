@@ -6,4 +6,10 @@
             <option name="factoryClass">FOF30\Factory\MagicFactory</option>
         </container>
     </common>
+
+    <backend>
+        <model name="LevelGroups">
+            <behaviors>Filters</behaviors>
+        </model>
+    </backend>
 </fof>
