@@ -7,18 +7,21 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use Akeeba\Subscriptions\Admin\Helper\Select;
+
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.modal');
 
 $this->loadHelper('cparams');
 $this->loadHelper('select');
-$this->loadHelper('params');
 
-$editor = JFactory::getEditor();
+$editor = JEditor::getInstance(JFactory::getConfig()->get('editor'));
+
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 <input type="hidden" name="option" value="com_akeebasubs" />
-<input type="hidden" name="view" value="invoicetemplate" />
+<input type="hidden" name="view" value="InvoiceTemplates" />
 <input type="hidden" name="task" value="" />
 <input type="hidden" name="akeebasubs_invoicetemplate_id" value="<?php echo $this->item->akeebasubs_invoicetemplate_id ?>" />
 <input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
@@ -44,7 +47,7 @@ $editor = JFactory::getEditor();
 	<div class="control-group">
 		<label for="levels_field" class="control-label"><?php echo  JText::_('COM_AKEEBASUBS_COUPON_FIELD_SUBSCRIPTIONS'); ?></label>
 		<div class="controls">
-			<?php echo AkeebasubsHelperSelect::levels('levels[]', empty($this->item->levels) ? '0' : explode(',',$this->item->levels), array('multiple' => 'multiple', 'size' => 4, 'include_all' => true, 'include_none' => true)) ?>
+			<?php echo Select::levels('levels[]', empty($this->item->levels) ? '0' : explode(',',$this->item->levels), array('multiple' => 'multiple', 'size' => 4, 'include_all' => true, 'include_none' => true)) ?>
 		</div>
 	</div>
 	<div class="control-group">
@@ -59,7 +62,7 @@ $editor = JFactory::getEditor();
 		</div>
 	</div>
 	<div class="control-group">
-		<label for="format" class="control-label" class="mainlabel">
+		<label for="localformat" class="control-label" class="mainlabel">
 			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_FORMAT'); ?>
 		</label>
 		<div class="controls">
@@ -96,7 +99,7 @@ $editor = JFactory::getEditor();
 			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS'); ?>
 		</label>
 		<div class="controls">
-			<?php echo akeebasubsHelperSelect::invoicetemplateisbusines('isbusiness', $this->item->isbusiness); ?>
+			<?php echo Select::invoicetemplateisbusines('isbusiness', $this->item->isbusiness); ?>
 			<span class="help-block">
 				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_ISBUSINESS_HELP'); ?>
 			</span>
@@ -107,7 +110,7 @@ $editor = JFactory::getEditor();
 			<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY'); ?>
 		</label>
 		<div class="controls">
-			<?php echo akeebasubsHelperSelect::countries($this->item->country, 'country'); ?>
+			<?php echo Select::countries($this->item->country, 'country'); ?>
 			<span class="help-block">
 				<?php echo JText::_('COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_COUNTRY_HELP'); ?>
 			</span>

@@ -226,7 +226,7 @@ abstract class Format
 			$model = Container::getInstance('com_akeebasubs')->factory
 				->model('Invoices')->savestate(0)->setIgnoreRequest(1);
 
-			$map = $model->->getExtensions(2);
+			$map = $model->getExtensions(2);
 		}
 
 		if (array_key_exists($extension, $map))
