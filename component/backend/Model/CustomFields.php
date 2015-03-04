@@ -30,7 +30,7 @@ use FOF30\Model\DataModel;
  */
 class CustomFields extends DataModel
 {
-	use Mixin\Assertions, Mixin\ImplodedArrays;
+	use Mixin\Assertions, Mixin\ImplodedArrays, Mixin\ImplodedLevels;
 
 	public function __construct(Container $container, array $config = array())
 	{
@@ -73,57 +73,6 @@ class CustomFields extends DataModel
 	 */
 	protected function setAkeebasubsLevelIdAttribute($value)
 	{
-		if (!empty($value))
-		{
-			if (is_array($value))
-			{
-				$subs = $value;
-			}
-			else
-			{
-				$subs = explode(',', $value);
-			}
-			if (empty($subs))
-			{
-				$value = '';
-			}
-			else
-			{
-				$subscriptions = array();
-
-				/** @var DataModel $levelModel */
-				$levelModel = $this->container->factory
-					->model('Levels')
-					->setIgnoreRequest(true)->savestate(false);
-
-				foreach ($subs as $id)
-				{
-					try
-					{
-						$levelModel->reset(true, true);
-						$levelModel->findOrFail($id);
-						$id = $levelModel->akeebasubs_level_id;
-					}
-					catch (\Exception $e)
-					{
-						$id = null;
-					}
-
-
-					if (!is_null($id))
-					{
-						$subscriptions[] = $id;
-					}
-				}
-
-				$value = implode(',', $subscriptions);
-			}
-		}
-		else
-		{
-			return '';
-		}
-
-		return $value;
+		return $this->setAttributeForImplodedLevels($value);
 	}
 }
