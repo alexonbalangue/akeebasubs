@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 4.2.1
+================================================================================
+! Missing comma in mysql.xml makes it uninstallable on fresh sites (thanks, Tim!)
+
 Akeeba Subscriptions 4.2.0
 ================================================================================
 - Joomla! 2.5 is no longer supported. We no longer test our software against it. If it breaks on Joomla! 2.5 you get to keep both halves.
