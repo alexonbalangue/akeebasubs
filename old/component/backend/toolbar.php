@@ -161,18 +161,6 @@ class AkeebasubsToolbar extends F0FToolbar
 		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
 	}
 
-	public function onImportsAdd()
-	{
-		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
-		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
-
-		JToolBarHelper::custom('import', 'download', 'download', 'COM_AKEEBASUBS_IMPORT', false);
-		JToolbarHelper::divider();
-
-		$bar = JToolbar::getInstance('toolbar');
-		$bar->appendButton('Link', 'arrow-left', 'JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=cpanel');
-	}
-
 	public function onToolsBrowse()
 	{
 		$subtitle_key = 'COM_AKEEBASUBS_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));

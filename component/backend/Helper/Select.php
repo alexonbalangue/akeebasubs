@@ -882,44 +882,15 @@ abstract class Select
 	/**
 	 * Returns the human readable subscription level title based on the numeric subscription level ID given in $id
 	 *
+	 * Alias of Format::formatLevel
+	 *
 	 * @param   int  $id  The subscription level ID
 	 *
 	 * @return  string  The subscription level title, or three em-dashes if it's unknown
 	 */
 	public static function formatLevel($id)
 	{
-		static $levels;
-
-		if (empty($levels))
-		{
-			/** @var DataModel $levelsModel */
-			$levelsModel = Container::getInstance('com_akeebasubs')->factory
-				->model('Levels')->savestate(false)->setIgnoreRequest(true);
-
-			$rawlevels = $levelsModel
-				->filter_order('ordering')
-				->filter_order_Dir('ASC')
-				->get(true);
-
-			$levels = array();
-
-			if (!empty($rawlevels))
-			{
-				foreach ($rawlevels as $rawlevel)
-				{
-					$levels[ $rawlevel->akeebasubs_level_id ] = $rawlevel->title;
-				}
-			}
-		}
-
-		if (array_key_exists($id, $levels))
-		{
-			return $levels[ $id ];
-		}
-		else
-		{
-			return '&mdash;&mdash;&mdash;';
-		}
+		return Format::formatLevel($id);
 	}
 
 	/**

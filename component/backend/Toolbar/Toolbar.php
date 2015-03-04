@@ -134,6 +134,23 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 		}
 	}
 
+	public function onImportsDefault()
+	{
+		$option = $this->container->componentName;
+		$view = 'Import';
+
+		$subtitle_key = $option . '_TITLE_' . $view;
+		JToolBarHelper::title(JText::_($option).' &ndash; <small>' .
+		                      JText::_($subtitle_key) .
+		                      '</small>',
+			str_replace('com_', '', $option));
+
+		JToolBarHelper::custom('import', 'download', 'download', 'COM_AKEEBASUBS_IMPORT', false);
+		JToolbarHelper::divider();
+
+		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=ControlPanel');
+	}
+
 	/**
 	 * Adds a link to the submenu (toolbar links)
 	 *

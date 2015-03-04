@@ -1,14 +1,25 @@
 <?php
 /**
- * @package AkeebaSubs
+ * @package   AkeebaSubs
  * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
- * @license GNU General Public License version 3, or later
+ * @license   GNU General Public License version 3, or later
  */
 
-// Protect from unauthorized access
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\Model;
 
-class AkeebasubsModelImports extends F0FModel
+defined('_JEXEC') or die;
+
+use Akeeba\Subscriptions\Admin\Helper\Format;
+use FOF30\Model\DataModel;
+use FOF30\Model\Model;
+use JApplicationHelper;
+use JDate;
+use JFactory;
+use JLoader;
+use JText;
+use JUserHelper;
+
+class Import extends Model
 {
 	/**
 	 * Column mapping for imported data
@@ -27,31 +38,32 @@ class AkeebasubsModelImports extends F0FModel
 	/**
 	 * Parses a CSV file, importing every row as a new user
 	 *
-	 * @param   string  $file               Uploaded file
-	 * @param   string  $fieldDelimiter     Fields separator, such as ";" or ","
-	 * @param   string  $fieldEnlosure      Field enclosurem such as " or '
+	 * @param   string  $file            Uploaded file
+	 * @param   string  $fieldDelimiter  Fields separator, such as ";" or ","
+	 * @param   string  $fieldQuotes     Field quotes such as " or '
 	 *
-	 * @return bool|int     False if there is an error, otherwise the number of imported users.
+	 * @return  int  The number of imported users.
 	 */
-	public function import($file, $fieldDelimiter, $fieldEnlosure)
+	public function import($file, $fieldDelimiter, $fieldQuotes)
 	{
 		$result     = 0;
 		$i          = 0;
 
-		if(!$file)
+		if (!$file)
 		{
-			$this->setError(JText::_('COM_AKEEBASUBS_USERS_IMPORT_ERR_FILE'));
-			return false;
+			throw new \RuntimeException(JText::_('COM_AKEEBASUBS_USERS_IMPORT_ERR_FILE'));
 		}
 
-		// At the moment I don't need the enclosure, it seems that fgetcsv works with or without it
+		// At the moment I don't need the $fieldQuotes, it seems that fgetcsv works with or without it
 		//list($field, ) = $this->decodeDelimiterOptions($delimiter);
 
 		$handle = fopen($file, 'r');
+
 		while (true)
 		{
 			// Read the next line
 			$line = '';
+
 			while (!feof($handle) && (strpos($line, "\n") === false) && (strpos($line, "\r") === false))
 			{
 				$line .= fgets($handle, 65536);
@@ -118,7 +130,7 @@ class AkeebasubsModelImports extends F0FModel
 				}
 			}
 
-			// Handle DOS and Mac OS classic linebreaks
+			// Handle DOS and Mac OS classic line breaks
 			$line = str_replace("\r\n", "\n", $line);
 			$line = str_replace("\r", "\n", $line);
 			$line = trim($line);
@@ -130,9 +142,9 @@ class AkeebasubsModelImports extends F0FModel
 
 			// I have to use this weird structure because if an user passes an empty char as field enclosure
 			// str_getcsv will return false, so I have to omit it, forcing PHP to use the function default one
-			if($fieldEnlosure)
+			if($fieldQuotes)
 			{
-				$this->currentData = str_getcsv($line, $fieldDelimiter, $fieldEnlosure);
+				$this->currentData = str_getcsv($line, $fieldDelimiter, $fieldQuotes);
 			}
 			else
 			{
@@ -157,21 +169,20 @@ class AkeebasubsModelImports extends F0FModel
 
 			// Perform integrity checks on current line (required fields, existing subscription etc etc)
 			$check = $this->performImportChecks();
-			if(!$check)
+
+			if (!$check)
 			{
-				$this->setError(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
-				continue;
+				throw new \RuntimeException(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
 			}
 
-			if(!($userid = $this->importCustomer()))
+			if (!($userid = $this->importClient()))
 			{
-				$this->setError(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
-				continue;
+				throw new \RuntimeException(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
 			}
 
-			if(!$this->importSubscription($userid))
+			if (!$this->importSubscription($userid))
 			{
-				$this->setError(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
+				throw new \RuntimeException(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
 				continue;
 			}
 
@@ -186,9 +197,9 @@ class AkeebasubsModelImports extends F0FModel
 	/**
 	 * Imports the user, creating if there isn't and updating the AS user table.
 	 *
-	 * @return  bool|int        Joomla user_id if successful, otherwise false
+	 * @return  int  Joomla user_id if successful, otherwise false
 	 */
-	protected function importCustomer()
+	protected function importClient()
 	{
 		static $cache = array(
 			'email'	=> array(),
@@ -201,10 +212,14 @@ class AkeebasubsModelImports extends F0FModel
 			return false;
 		}
 
-		$usermodel = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel');
-		$subusermodel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
+		$factory = $this->container->factory;
 
-		$userid = 0;
+		/** @var JoomlaUsers $joomlaUser */
+		$joomlaUser = $factory->model('JoomlaUsers')->setIgnoreRequest(true)->savestate(false);
+		/** @var DataModel $subsUser */
+		$subsUser = $factory->model('Users')->setIgnoreRequest(true)->savestate(false)->addBehaviour('Filters');
+
+		$userId = 0;
 		$email = $this->getCsvData('email');
 		$username = $this->getCsvData('username');
 
@@ -212,43 +227,47 @@ class AkeebasubsModelImports extends F0FModel
 		{
 			if (array_key_exists($email, $cache['email']))
 			{
-				$userid = $cache['email'][$email]->id;
+				$userId = $cache['email'][$email]->id;
 			}
 		}
 
-		if(($userid == 0) && !empty($cache['user']))
+		if (($userId == 0) && !empty($cache['user']))
 		{
 			if (array_key_exists($username, $cache['user']))
 			{
-				$userid = $cache['user'][$username]->id;
+				$userId = $cache['user'][$username]->id;
 			}
 		}
 
-		if($userid == 0)
+		if ($userId == 0)
 		{
 			// Maybe the user does exist?
-			$db = $this->getDbo();
-			$query = $db->getQuery(true)
-				->select('id')
-				->from($db->qn('#__users'))
-				->where($db->qn('email') . ' = ' . $db->q($email), 'OR')
-				->where($db->qn('username') . ' = ' . $db->q($username), 'OR');
-			$db->setQuery($query);
-			$userid = $db->loadResult();
 
-			if (empty($userid))
+			try
 			{
-				$userid = 0;
+				if ($joomlaUser->reset()->email($email)->count())
+				{
+					$userId = $joomlaUser->getId();
+				}
+				elseif ($joomlaUser->reset()->username($username)->count())
+				{
+					$userId = $joomlaUser->getId();
+				}
 			}
-			else
+			catch (\RuntimeException $e)
 			{
-				$cache['email'][$email] = $userid;
-				$cache['user'][$username] = $userid;
+				$userId = 0;
+			}
+
+			if (!empty($userId))
+			{
+				$cache['email'][$email] = $userId;
+				$cache['user'][$username] = $userId;
 			}
 		}
 
 		// No user? Let's create it
-		if($userid == 0)
+		if($userId == 0)
 		{
 			$params = array(
 				'name'			=> $this->getCsvData('name'),
@@ -259,26 +278,27 @@ class AkeebasubsModelImports extends F0FModel
 			);
 
 			// Error while creating the user
-			$userid = $usermodel->createNewUser($params);
+			$userId = $joomlaUser->createNewUser($params);
 
-			if(!$userid)
+			if (!$userId)
 			{
 				return false;
 			}
 
 			// Cache this user
-			$cache['email'][$email] = $userid;
-			$cache['user'][$username] = $userid;
+			$cache['email'][$email] = $userId;
+			$cache['user'][$username] = $userId;
 		}
 
 		// Ok, in a way or in another I have the Joomla user. Now it's time to update AS user
-		$ASuser = clone $subusermodel->getTable();
+		$subsUser->reset();
 
 		// Let's try loading it using Joomla id. Using the table object will assure me that I'll automatically update/create the user
-		$ASuser->load(array('user_id' => $userid));
+		$subsUser->setState('user_id', $userId);
+		$subsUser->firstOrNew();
 
 		$updates = array(
-			'user_id'			=> (int) $userid,
+			'user_id'			=> (int) $userId,
 			'isbusiness'		=> (int) $this->getCsvData('isbusiness'),
 			'businessname'		=> $this->getCsvData('businessname'),
 			'occupation'		=> $this->getCsvData('occupation'),
@@ -292,65 +312,67 @@ class AkeebasubsModelImports extends F0FModel
 			'country'			=> $this->getCsvData('country'),
 		);
 
-		if(!$ASuser->save($updates))
+		if (!$subsUser->save($updates))
 		{
 			return false;
 		}
 
-		return $userid;
+		return $userId;
 	}
 
 	/**
 	 * Imports a subscription for a given user, using data coming from a CSV file
 	 *
-	 * @param   int     $userid     Joomla user_id of the imported user
+	 * @param   int     $userId     Joomla user_id of the imported user
 	 *
 	 * @return  bool    True if successful
 	 */
-	protected function importSubscription($userid)
+	protected function importSubscription($userId)
 	{
 		static $levelCache = array();
 
 		JLoader::import('joomla.application.component.helper');
 
-		if(!class_exists('AkeebasubsHelperFormat')){
-			require_once JPATH_ROOT.'/administrator/components/com_akeebasubs/helpers/format.php';
-		}
-
-		if(!$levelCache)
+		if (empty($levelCache))
 		{
-			$levelCache = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
+			$levelCache = $this->container->factory
+				->model('Levels')
+				->setIgnoreRequest(true)
+				->savestate(0)
+				->createTitleLookup();
 		}
 
 		$app        = JFactory::getApplication();
 		$level      = $levelCache[strtoupper($this->getCsvData('subscription_level'))];
-		$publish_up = AkeebasubsHelperFormat::checkDateFormat($this->getCsvData('publish_up'));
+		$publish_up = Format::checkDateFormat($this->getCsvData('publish_up'));
 
-		if(!$publish_up)
+		if (!$publish_up)
 		{
 			return false;
 		}
 
 		// Publish down
-		if($this->getCsvData('publish_down'))
+		if ($this->getCsvData('publish_down'))
 		{
-			$publish_down = AkeebasubsHelperFormat::checkDateFormat($this->getCsvData('publish_down'));
-			if(!$publish_down)
+			$publish_down = Format::checkDateFormat($this->getCsvData('publish_down'));
+
+			if (!$publish_down)
 			{
 				return false;
 			}
 		}
 		else
 		{
-			$temp = strtotime('+'.$level->duration.' days', $publish_up->toUnix());
+			$temp = strtotime('+' . $level->duration . ' days', $publish_up->toUnix());
 			$publish_down = new JDate($temp);
 		}
 
 		// Created on
 		if($this->getCsvData('created_on'))
 		{
-			$created_on = AkeebasubsHelperFormat::checkDateFormat($this->getCsvData('created_on'));
-			if(!$created_on)
+			$created_on = Format::checkDateFormat($this->getCsvData('created_on'));
+
+			if (!$created_on)
 			{
 				return false;
 			}
@@ -360,12 +382,12 @@ class AkeebasubsModelImports extends F0FModel
 			$created_on = clone $publish_up;
 		}
 
-		$sub = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+		$sub = $this->container->factory->model('Subscriptions')->savestate(false)->setIgnoreRequest(true);
 
 		$randomString = JUserHelper::genRandomPassword();
-		$hash = JApplication::getHash($randomString);
+		$hash = JApplicationHelper::getHash($randomString);
 
-		$bind['user_id']             = $userid;
+		$bind['user_id']             = $userId;
 		$bind['akeebasubs_level_id'] = $level->akeebasubs_level_id;
 		$bind['publish_up']          = $publish_up->toSql();
 		$bind['publish_down']        = $publish_down->toSql();
@@ -375,11 +397,11 @@ class AkeebasubsModelImports extends F0FModel
 		$bind['state']               = $this->getCsvData('status', 'C');
 		$bind['net_amount']          = $this->getCsvData('net_amount', 0);
 		$bind['tax_amount']          = $this->getCsvData('tax_amount', 0);
-		$bind['gross_amount']        = $this->getCsvData('gross_amount', $bind['net_amount'] + $bind['tax_amount']);
+		$bind['gross_amount']        = $this->getCsvData('gross_amount', (float)$bind['net_amount'] + (float)$bind['tax_amount']);
 		$bind['recurring_amount']    = $this->getCsvData('recurring_amount', $bind['gross_amount']);
-		$bind['tax_percent']         = $this->getCsvData('tax_percent', (100 * $bind['tax_amount'] / $bind['net_amount']));
+		$bind['tax_percent']         = $this->getCsvData('tax_percent', (100 * (float)$bind['tax_amount'] / (float)$bind['net_amount']));
 		$bind['created_on']          = $created_on->toSql();
-		$bind['prediscount_amount']  = $this->getCsvData('prediscount_amount', $bind['gross_amount']);
+		$bind['prediscount_amount']  = $this->getCsvData('prediscount_amount', (float)$bind['gross_amount']);
 		$bind['discount_amount']     = $this->getCsvData('discount_amount', 0);
 		$bind['contact_flag']        = $this->getCsvData('contact_flag', 0);
 
@@ -395,43 +417,51 @@ class AkeebasubsModelImports extends F0FModel
 	 */
 	public function decodeDelimiterOptions($delimiter)
 	{
-		if($delimiter == 1)
+		switch ($delimiter)
 		{
-			return array(',', '');
-		}
-		elseif($delimiter == 2)
-		{
-			return array(';', '');
-		}
-		else
-		{
-			return array(';', '"');
+			case 1:
+				return array(',', '');
+				break;
+
+			case 2:
+				return array(';', '');
+				break;
+
+			default:
+				return array(';', '"');
+				break;
 		}
 	}
 
 	/**
 	 * Performs checks on current columns got from the CSV, controlling that everything is alright
 	 *
-	 * @return  bool    Is everything alright?
+	 * @return  bool  Is everything alright?
 	 */
 	protected function performImportChecks()
 	{
 		static $cache = array();
 
 		// Required fields as: username, email, password, name, subscription_level, publish_up
-		if(!$this->getCsvData('username') || !$this->getCsvData('email') || !$this->getCsvData('password') ||
-		   !$this->getCsvData('name') || !$this->getCsvData('subscription_level') || !$this->getCsvData('publish_up'))
+		if (
+			!$this->getCsvData('username') ||
+			!$this->getCsvData('email') ||
+			!$this->getCsvData('password') ||
+		    !$this->getCsvData('name') ||
+			!$this->getCsvData('subscription_level') ||
+			!$this->getCsvData('publish_up'))
 		{
 			return false;
 		}
 
-		if(!$cache)
+		if (!$cache)
 		{
-			$cache = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')->createTitleLookup();
+			$cache = $this->container->factory->model('Levels')->setIgnoreRequest(true)->savestate(false)
+				->createTitleLookup();
 		}
 
 		// Is the subscrption level existing?
-		if(!isset($cache[strtoupper($this->getCsvData('subscription_level'))]))
+		if (!isset($cache[ strtoupper($this->getCsvData('subscription_level')) ]))
 		{
 			return false;
 		}
@@ -441,7 +471,7 @@ class AkeebasubsModelImports extends F0FModel
 
 	protected function readColumns()
 	{
-		for($i = 0; $i < count($this->currentData); $i++)
+		for ($i = 0; $i < count($this->currentData); $i++)
 		{
 			$this->columnMap[$this->currentData[$i]] = $i;
 		}
@@ -451,9 +481,9 @@ class AkeebasubsModelImports extends F0FModel
 	{
 		$mapping = array();
 
-		foreach($this->columnMap as $column => $position)
+		foreach ($this->columnMap as $column => $position)
 		{
-			if(!$column) continue;
+			if (!$column) continue;
 
 			$mapping[$column] = $this->currentData[$position];
 		}
@@ -463,11 +493,12 @@ class AkeebasubsModelImports extends F0FModel
 
 	protected function getCsvData($key, $default = '')
 	{
-		if(isset($this->currentData[$key]))
+		if (isset($this->currentData[$key]))
 		{
 			return $this->currentData[$key];
 		}
 
 		return $default;
 	}
+
 }

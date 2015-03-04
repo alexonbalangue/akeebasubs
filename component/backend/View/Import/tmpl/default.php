@@ -51,7 +51,7 @@ JS
 			<div class="control-group">
 				<label class="control-label"><?php echo JText::_('COM_AKEEBASUBS_IMPORT_DELIMITERS')?></label>
 				<div class="controls">
-					<?php echo AkeebasubsHelperSelect::csvdelimiters('csvdelimiters', 1, array('class'=>'minwidth')) ?>
+					<?php echo \Akeeba\Subscriptions\Admin\Helper\Select::csvdelimiters('csvdelimiters', 1, array('class'=>'minwidth')) ?>
 					<div class="help-block">
 						<?php echo JText::_('COM_AKEEBASUBS_IMPORT_DELIMITERS_DESC'); ?>
 					</div>
