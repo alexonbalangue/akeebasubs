@@ -1048,7 +1048,11 @@ abstract class Select
 			if ($default_option)
 			{
 				$options[] = JHtml::_('select.option', '', JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PAYMENT_PLUGINS_UNSELECT'));
-				$selected  = explode(',', $selected);
+
+				if (!is_array($selected))
+				{
+					$selected  = explode(',', $selected);
+				}
 			}
 
 			foreach ($plugins as $plugin)

@@ -40,7 +40,7 @@ trait ImplodedArrays
 	}
 
 	/**
-	 * Converts the array of user groups into a comma separated list
+	 * Converts an array of values into a comma separated list
 	 *
 	 * @param   array  $value  The array of values
 	 *

@@ -7,19 +7,18 @@
 
 defined('_JEXEC') or die();
 
+use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use \Akeeba\Subscriptions\Admin\Helper\Select;
+
 JHtml::_('behavior.tooltip');
 
-$editor = JFactory::getEditor();
-
-$this->loadHelper('select');
-$this->loadHelper('cparams');
-JHtml::_('behavior.tooltip');
+$editor = JEditor::getInstance(JFactory::getConfig()->get('editor'));
 
 ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs" />
-	<input type="hidden" name="view" value="level" />
+	<input type="hidden" name="view" value="Levels" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="akeebasubs_level_id" value="<?php echo $this->item->akeebasubs_level_id ?>" />
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
@@ -126,16 +125,16 @@ JHtml::_('behavior.tooltip');
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PRICE'); ?>
 				</label>
 				<div class="controls">
-					<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
-						<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<div class="input-<?php echo (ComponentParams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
+						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
 						<span class="add-on">
-							<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+							<?php echo ComponentParams::getParam('currencysymbol','€')?>
 						</span>
 						<?php endif; ?>
 						<input type="text" size="15" id="price_field" name="price" value="<?php echo  $this->item->price ?>" style="float: none" />
-						<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+						<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
 						<span class="add-on">
-							<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+							<?php echo ComponentParams::getParam('currencysymbol','€')?>
 						</span>
 						<?php endif; ?>
 					</div>
@@ -147,16 +146,16 @@ JHtml::_('behavior.tooltip');
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE'); ?>
 				</label>
 				<div class="controls">
-					<div class="input-<?php echo (AkeebasubsHelperCparams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
-						<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
+					<div class="input-<?php echo (ComponentParams::getParam('currencypos','before') == 'before') ? 'prepend' : 'append' ?>">
+						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
 						<span class="add-on">
-							<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+							<?php echo ComponentParams::getParam('currencysymbol','€')?>
 						</span>
 						<?php endif; ?>
 						<input type="text" size="15" id="signupfee_field" name="signupfee" value="<?php echo  $this->item->signupfee ?>" style="float: none" />
-						<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
+						<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
 						<span class="add-on">
-							<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+							<?php echo ComponentParams::getParam('currencysymbol','€')?>
 						</span>
 						<?php endif; ?>
 					</div>
@@ -196,7 +195,7 @@ JHtml::_('behavior.tooltip');
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PAYMENT_PLUGINS'); ?>
 				</label>
 				<div class="controls">
-					<?php echo AkeebasubsHelperSelect::paymentmethods('payment_plugins[]', $this->item->payment_plugins, array('id'=>'payment_plugins', 'multiple' => 'multiple', 'always_dropdown' => 1, 'default_option' => 1)) ?>
+					<?php echo Select::paymentmethods('payment_plugins[]', $this->item->payment_plugins, array('id'=>'payment_plugins', 'multiple' => 'multiple', 'always_dropdown' => 1, 'default_option' => 1)) ?>
 				</div>
 			</div>
 
@@ -205,7 +204,7 @@ JHtml::_('behavior.tooltip');
 					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_FIELD_LEVELGROUP'); ?>
 				</label>
 				<div class="controls">
-					<?php echo AkeebasubsHelperSelect::levelgroups($this->item->akeebasubs_levelgroup_id); ?>
+					<?php echo Select::levelgroups($this->item->akeebasubs_levelgroup_id); ?>
 				</div>
 			</div>
 
