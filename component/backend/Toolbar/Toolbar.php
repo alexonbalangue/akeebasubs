@@ -151,6 +151,21 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=ControlPanel');
 	}
 
+	public function onTaxconfigsMain()
+	{
+		$option = $this->container->componentName;
+		$view = 'TaxConfigs';
+
+		$subtitle_key = $option . '_TITLE_' . $view;
+		JToolBarHelper::title(JText::_($option).' &ndash; <small>' .
+			JText::_($subtitle_key) .
+			'</small>',
+			str_replace('com_', '', $option));
+
+		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=TaxRules');
+	}
+
+
 	/**
 	 * Adds a link to the submenu (toolbar links)
 	 *

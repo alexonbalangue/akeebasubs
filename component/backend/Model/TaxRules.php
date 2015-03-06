@@ -23,6 +23,9 @@ class TaxRules extends DataModel
 
 		// Always load the Filters behaviour
 		$this->addBehaviour('Filters');
+
+		// Some NOT NULL fields should be allowed to be set to an empty string, therefore have to be skipped by check()
+		$this->fieldsSkipChecks = ['country', 'akeebasubs_level_id'];
 	}
 
 	public function buildQuery($overrideLimits = false)

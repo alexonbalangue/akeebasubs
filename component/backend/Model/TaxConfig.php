@@ -5,13 +5,24 @@
  * @license   GNU General Public License version 3, or later
  */
 
-// Protect from unauthorized access
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\Model;
 
-require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/euvatinfo.php';
+defined('_JEXEC') or die;
 
-class AkeebasubsModelTaxconfigs extends F0FModel
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
+use FOF30\Model\Model;
+use JFactory;
+use JRegistry;
+use JText;
+
+class TaxConfig extends Model
 {
+	/**
+	 * Get an object with all the interesting state variables
+	 *
+	 * @return  object
+	 */
 	public function getStateVars()
 	{
 		return (object)array(
@@ -27,21 +38,25 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 
 	/**
 	 * Removes all tax rules
+	 *
+	 * @return  void
 	 */
 	public function clearTaxRules()
 	{
 		$state = $this->getStateVars();
 
-		$db    = JFactory::getDbo();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
-					->delete($db->qn('#__akeebasubs_taxrules'))
-					->where($db->qn('akeebasubs_level_id') . '=' . $db->q($state->akeebasubs_level_id));
+			->delete($db->qn('#__akeebasubs_taxrules'))
+			->where($db->qn('akeebasubs_level_id') . '=' . $db->q($state->akeebasubs_level_id));
 		$db->setQuery($query);
 		$db->execute();
 	}
 
 	/**
 	 * Creates new tax rules based on the user preferences
+	 *
+	 * @return  void
 	 */
 	public function createTaxRules()
 	{
@@ -56,14 +71,14 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 		}
 
 		// Is this an EU country?
-		$euCountries = AkeebasubsHelperEuVATInfo::getEUVATCountries();
-		$inEU        = AkeebasubsHelperEuVATInfo::isEUVATCountry($params->country);
+		$euCountries = EUVATInfo::getEUVATCountries();
+		$inEU = EUVATInfo::isEUVATCountry($params->country);
 
 		// Store the country where the business is based (needed for proper invoicing)
-		AkeebasubsHelperCparams::setParam('invoice_country', $params->country);
+		ComponentParams::setParam('invoice_country', $params->country);
 
 		// Prototype for tax rules
-		$data     = array(
+		$data = array(
 			'akeebasubs_level_id'
 					   => $params->akeebasubs_level_id,
 			'country'  => '',
@@ -77,16 +92,19 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 
 		$ordering = 0;
 
-		if ( !$inEU && !$params->viesreg)
+		if (!$inEU && !$params->viesreg)
 		{
 			// Non-EU business, without an EU VAT ID
 			// A. All countries, with or without VIES registration: taxrate%
-			$data['taxrate']  = $params->taxrate;
+			$data['taxrate'] = $params->taxrate;
 			$data['ordering'] = ++$ordering;
-			F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
-			$data['vies']     = 1;
+
+			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+
+			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
-			F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+
+			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 		}
 		elseif ($params->viesreg)
 		{
@@ -94,19 +112,22 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 
 			// A. All countries, with or without VIES registration, 0%
 			$data['ordering'] = ++$ordering;
-			F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
-			$data['vies']     = 1;
+
+			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+
+			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
-			F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+
+			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 
 			// B.1. All countries with the same VAT number prefix as mine, with or without VIES registration, taxrate%
 			$data['taxrate'] = $params->taxrate;
 
-			$myVATNrPrefix = AkeebasubsHelperEuVATInfo::getEUVATPrefix($params->country);
+			$myVATNrPrefix = EUVATInfo::getEUVATPrefix($params->country);
 
 			foreach ($euCountries as $country)
 			{
-				$theirVATNrPrefix = AkeebasubsHelperEuVATInfo::getEUVATPrefix($country);
+				$theirVATNrPrefix = EUVATInfo::getEUVATPrefix($country);
 
 				if ($theirVATNrPrefix != $myVATNrPrefix)
 				{
@@ -115,19 +136,19 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 
 				$data['country'] = $country;
 
-				$data['vies']     = 0;
+				$data['vies'] = 0;
 				$data['ordering'] = ++$ordering;
-				F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 
-				$data['vies']     = 1;
+				$data['vies'] = 1;
 				$data['ordering'] = ++$ordering;
-				F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 			}
 
 			// C. All other EU countries, without VIES registration, taxrate% (and with VIES: 0%)
 			foreach ($euCountries as $country)
 			{
-				$theirVATNrPrefix = AkeebasubsHelperEuVATInfo::getEUVATPrefix($country);
+				$theirVATNrPrefix = EUVATInfo::getEUVATPrefix($country);
 
 				if ($theirVATNrPrefix == $myVATNrPrefix)
 				{
@@ -135,13 +156,13 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 				}
 
 				// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
-				$data['taxrate'] = AkeebasubsHelperEuVATInfo::getEUVATRate($country);
+				$data['taxrate'] = EUVATInfo::getEUVATRate($country);
 
 				$data['vies'] = 0;
-				$data['country']  = $country;
+				$data['country'] = $country;
 				$data['ordering'] = ++$ordering;
 
-				F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 			}
 		}
 		else
@@ -149,27 +170,30 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 			// EU non-VIES-registered business
 			// A. All countries, with or without VIES registration, 0%
 			$data['ordering'] = ++$ordering;
-			F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
-			$data['vies']     = 1;
+
+			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+
+			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
-			F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+
+			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 
 			// B. All EU countries, with or without VIES registration, taxrate%
 			foreach ($euCountries as $country)
 			{
 				// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
-				$data['taxrate'] = AkeebasubsHelperEuVATInfo::getEUVATRate($country);
+				$data['taxrate'] = EUVATInfo::getEUVATRate($country);
 
-				$data['country']  = $country;
-				$data['vies']     = 0;
+				$data['country'] = $country;
+				$data['vies'] = 0;
 				$data['ordering'] = ++$ordering;
 
-				F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 
-				$data['vies']     = 1;
+				$data['vies'] = 1;
 				$data['ordering'] = ++$ordering;
 
-				F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')->setId(0)->save($data);
+				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
 			}
 		}
 	}
@@ -177,15 +201,16 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 	public function applyComponentConfiguration()
 	{
 		// Fetch the component parameters
-		$db  = JFactory::getDbo();
+		$db = JFactory::getDbo();
 		$sql = $db->getQuery(true)
-				  ->select($db->qn('params'))
-				  ->from($db->qn('#__extensions'))
-				  ->where($db->qn('type') . ' = ' . $db->q('component'))
-				  ->where($db->qn('element') . ' = ' . $db->q('com_akeebasubs'));
+			->select($db->qn('params'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type') . ' = ' . $db->q('component'))
+			->where($db->qn('element') . ' = ' . $db->q('com_akeebasubs'));
 		$db->setQuery($sql);
+
 		$rawparams = $db->loadResult();
-		$params    = new JRegistry();
+		$params = new JRegistry();
 		$params->loadString($rawparams, 'JSON');
 
 		// Set the parameter
@@ -201,11 +226,11 @@ class AkeebasubsModelTaxconfigs extends F0FModel
 
 		// Save the component parameters
 		$data = $params->toString('JSON');
-		$sql  = $db->getQuery(true)
-				   ->update($db->qn('#__extensions'))
-				   ->set($db->qn('params') . ' = ' . $db->q($data))
-				   ->where($db->qn('type') . ' = ' . $db->q('component'))
-				   ->where($db->qn('element') . ' = ' . $db->q('com_akeebasubs'));
+		$sql = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params') . ' = ' . $db->q($data))
+			->where($db->qn('type') . ' = ' . $db->q('component'))
+			->where($db->qn('element') . ' = ' . $db->q('com_akeebasubs'));
 
 		$db->setQuery($sql);
 		$db->execute();

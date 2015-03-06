@@ -110,28 +110,6 @@ class AkeebasubsToolbar extends F0FToolbar
 		$this->renderSubmenu();
 	}
 
-	/**
-	 * Renders the toolbar for the component's Control Panel page
-	 */
-	public function onTaxconfigsMain()
-	{
-		//on frontend, buttons must be added specifically
-		list($isCli, $isAdmin) = F0FDispatcher::isCliAdmin();
-
-		if($isAdmin || $this->renderFrontendSubmenu) {
-			$this->renderSubmenu();
-		}
-
-		if(!$isAdmin && !$this->renderFrontendButtons) return;
-
-		// Set toolbar title
-		$option = $this->input->getCmd('option','com_foobar');
-		$subtitle_key = strtoupper($option.'_TITLE_'.$this->input->getCmd('view','cpanel'));
-		JToolBarHelper::title(JText::_( strtoupper($option)).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $option));
-
-		JToolBarHelper::save();
-	}
-
 	public function onInvoicesBrowse()
 	{
 		//on frontend, buttons must be added specifically

@@ -1,20 +1,24 @@
 <?php
 /**
- * @package AkeebaSubs
+ * @package   AkeebaSubs
  * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
- * @license GNU General Public License version 3, or later
+ * @license   GNU General Public License version 3, or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Admin\Helper;
 
-require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
+use JFactory;
+use SoapClient;
+use SoapFault;
+
+defined('_JEXEC') or die;
 
 /**
  * Helper functions for European Union VAT tax calculations.
  *
  * @see http://ec.europa.eu/taxation_customs/resources/documents/taxation/vat/how_vat_works/rates/vat_rates_en.pdf
  */
-class AkeebasubsHelperEuVATInfo
+abstract class EUVATInfo
 {
 	/**
 	 * European Union VAT Information
@@ -73,7 +77,7 @@ class AkeebasubsHelperEuVATInfo
 	/**
 	 * Are the European Union VAT rules applicable to a given country?
 	 *
-	 * @param   string  $countryCode  The country code to check
+	 * @param   string $countryCode The country code to check
 	 *
 	 * @return  bool  True if it's a country where EU VAT is applicable
 	 */
@@ -89,7 +93,7 @@ class AkeebasubsHelperEuVATInfo
 	 * number prefix is EL instead of GR. Moreover we have sovereign territories which belong to a member state for
 	 * taxation, e.g. Isle of Man (IM) gets British (GB) VAT numbers.
 	 *
-	 * @param   string  $countryCode  The country code to get the EU VAT prefix for
+	 * @param   string $countryCode The country code to get the EU VAT prefix for
 	 *
 	 * @return  string  The VAT number prefix or an empty string if this is not an EU VAT Territory country
 	 */
@@ -110,7 +114,7 @@ class AkeebasubsHelperEuVATInfo
 	/**
 	 * Get the applicable standard VAT tax rate for an EU country.
 	 *
-	 * @param   string  $countryCode  The country code to get the EU VAT rate for
+	 * @param   string $countryCode The country code to get the EU VAT rate for
 	 *
 	 * @return  float  The VAT rate or zero if this is not an EU VAT Territory country
 	 */
@@ -190,9 +194,11 @@ class AkeebasubsHelperEuVATInfo
 					$sOptions = array(
 						'user_agent' => 'PHP'
 					);
+
 					$sClient = new SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl', $sOptions);
 					$params = array('countryCode' => $prefix, 'vatNumber' => $vat);
 					$response = $sClient->checkVat($params);
+
 					if ($response->valid)
 					{
 						$ret = true;
@@ -229,8 +235,8 @@ class AkeebasubsHelperEuVATInfo
 	 * Sanitizes the VAT number and checks if it's valid for a specific country.
 	 * Ref: http://ec.europa.eu/taxation_customs/vies/faq.html#item_8
 	 *
-	 * @param   string   $country    Country code
-	 * @param   string   $vat  VAT number to check
+	 * @param   string $country Country code
+	 * @param   string $vat     VAT number to check
 	 *
 	 * @return   array  The VAT number and the format validity check (prefix, vatnumber, valid)
 	 */
@@ -607,7 +613,7 @@ class AkeebasubsHelperEuVATInfo
 					$check = substr($vat, 0, 9) . substr($vat, 11);
 					if (preg_replace('/[0-9]/', '', $check) == '')
 					{
-						$valid = true;
+						$ret->valid = true;
 					}
 				}
 				break;
@@ -709,7 +715,7 @@ class AkeebasubsHelperEuVATInfo
 				break;
 
 			default:
-				$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
+				$allowNonEUVAT = ComponentParams::getParam('noneuvat', 0);
 				$ret->valid = $allowNonEUVAT ? true : false;
 				break;
 		}
@@ -720,8 +726,8 @@ class AkeebasubsHelperEuVATInfo
 	/**
 	 * Sanitize a VAT number
 	 *
-	 * @param   string  $country  The country code
-	 * @param   string  $vat      The unsanitized VAT number
+	 * @param   string $country The country code
+	 * @param   string $vat     The unsanitized VAT number
 	 *
 	 * @return array
 	 */
