@@ -83,7 +83,7 @@
 
         <field
             name="allow_empty"
-            type="Boolean"
+            type="BooleanToggle"
             label="COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_ALLOW_EMPTY"
             description="COM_AKEEBASUBS_CUSTOMFIELDS_HELP_ALLOW_EMPTY"
             required="true"

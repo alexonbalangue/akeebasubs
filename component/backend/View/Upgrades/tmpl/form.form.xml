@@ -75,13 +75,16 @@
 
         <field
             name="combine"
-            type="Boolean"
+            id="combined"
+            type="BooleanToggle"
+            default="0"
             label="COM_AKEEBASUBS_UPGRADES_FIELD_COMBINE"
         />
 
         <field
             name="expired"
-            type="Boolean"
+            type="BooleanToggle"
+            default="0"
             label="COM_AKEEBASUBS_UPGRADES_FIELD_EXPIRED"
             description="COM_AKEEBASUBS_UPGRADES_FIELD_EXPIRED_DESC"
         />

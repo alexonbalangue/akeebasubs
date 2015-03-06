@@ -85,7 +85,7 @@
 
         <field
             name="forever"
-            type="Boolean"
+            type="BooleanToggle"
             label="COM_AKEEBASUBS_LEVEL_FIELD_FOREVER"
         />
 
@@ -163,13 +163,13 @@
 
         <field
             name="recurring"
-            type="Boolean"
+            type="BooleanToggle"
             label="COM_AKEEBASUBS_LEVELS_FIELD_RECURRING"
         />
 
         <field
             name="onle_once"
-            type="Boolean"
+            type="BooleanToggle"
             label="COM_AKEEBASUBS_LEVELS_FIELD_ONLY_ONCE"
         />
 

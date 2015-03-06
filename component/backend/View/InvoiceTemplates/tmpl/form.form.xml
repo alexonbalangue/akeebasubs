@@ -31,7 +31,7 @@
 
         <field
             name="globalformat"
-            type="Boolean"
+            type="BooleanToggle"
             label="COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALFORMAT"
             description="COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALFORMAT_HELP"
         />
@@ -46,7 +46,7 @@
 
         <field
             name="globalnumbering"
-            type="Boolean"
+            type="BooleanToggle"
             label="COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALNUMBERING"
             description="COM_AKEEBASUBS_INVOICETEMPLATES_FIELD_GLOBALNUMBERING_HELP"
         />
