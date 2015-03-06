@@ -8,23 +8,23 @@
         norows_placeholder="COM_AKEEBASUBS_COMMON_NORECORDS"
         >
     <headerset>
-        <header name="akeebasubs_relation_id" type="rowselect" tdwidth="20" />
+        <header name="akeebasubs_relation_id" type="RowSelect" tdwidth="20" />
 
-        <header name="ordering" type="ordering" sortable="true" tdwidth="10%" />
+        <header name="ordering" type="Ordering" sortable="true" tdwidth="10%" />
 
-        <header name="source_level_id" type="model"
+        <header name="source_level_id" type="Model"
                 sortable="true" key_field="akeebasubs_level_id" value_field="title"
-                model="AkeebasubsModelLevels"
+                model="Levels"
                 translate="false"
                 />
 
-        <header name="target_level_id" type="model"
+        <header name="target_level_id" type="Model"
                 sortable="true" key_field="akeebasubs_level_id" value_field="title"
-                model="AkeebasubsModelLevels"
+                model="Levels"
                 translate="false"
                 />
 
-        <header name="mode" type="fieldselectable"
+        <header name="mode" type="Selectable"
                 sortable="true"
                 >
             <option value="rules">COM_AKEEBASUBS_RELATIONS_MODE_RULES</option>
@@ -32,25 +32,27 @@
             <option value="flexi">COM_AKEEBASUBS_RELATIONS_MODE_FLEXI</option>
         </header>
 
-        <header name="enabled" type="published" sortable="true" tdwidth="8%" />
+        <header name="enabled" type="Published" sortable="true" tdwidth="8%" />
     </headerset>
 
     <fieldset name="items">
-        <field name="akeebasubs_relation_id" type="selectrow"/>
+        <field name="akeebasubs_relation_id" type="SelectRow"/>
 
-        <field name="ordering" type="ordering" labelclass="order"/>
+        <field name="ordering" type="Ordering" labelclass="order"/>
 
-        <field name="source_level_id" type="akeebasubslevelid"
+        <field name="source_level_id" type="Model"
+               key_field="akeebasubs_level_id" value_field="title"  model="Levels"
                show_link="true"
-               url="index.php?option=com_akeebasubs&amp;view=relation&amp;id=[ITEM:ID]"
+               url="index.php?option=com_akeebasubs&amp;view=Relation&amp;id=[ITEM:ID]"
                 />
 
-        <field name="target_level_id" type="akeebasubslevelid"
+        <field name="target_level_id" type="Model"
+               key_field="akeebasubs_level_id" value_field="title"  model="Levels"
                show_link="true"
-               url="index.php?option=com_akeebasubs&amp;view=relation&amp;id=[ITEM:ID]"
+               url="index.php?option=com_akeebasubs&amp;view=Relation&amp;id=[ITEM:ID]"
                 />
 
-        <field name="mode" type="list"
+        <field name="mode" type="GenericList"
                sortable="true"
                 >
             <option value="rules">COM_AKEEBASUBS_RELATIONS_MODE_RULES</option>
@@ -58,6 +60,6 @@
             <option value="flexi">COM_AKEEBASUBS_RELATIONS_MODE_FLEXI</option>
         </field>
 
-        <field name="enabled" type="published"/>
+        <field name="enabled" type="Published"/>
     </fieldset>
 </form>
