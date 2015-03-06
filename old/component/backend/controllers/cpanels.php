@@ -17,23 +17,6 @@ class AkeebasubsControllerCpanels extends F0FController
 		parent::execute($task);
 	}
 
-	protected function onBeforeBrowse() {
-		$result = parent::onBeforeBrowse();
-
-		if($result) {
-			F0FModel::getTmpInstance('Cpanels', 'AkeebasubsModel')
-				->checkAndFixDatabase()
-				->saveMagicVariables();
-
-			// Run the automatic update site refresh
-			/** @var AkeebasubsModelUpdates $updateModel */
-			$updateModel = F0FModel::getTmpInstance('Updates', 'AkeebasubsModel');
-			$updateModel->refreshUpdateSite();
-		}
-
-		return $result;
-	}
-
 	public function hide2copromo()
 	{
 		// Fetch the component parameters
