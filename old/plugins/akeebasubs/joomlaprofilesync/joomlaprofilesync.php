@@ -181,7 +181,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 	 * developer interested in creating, for example, a "bridge" with a social
 	 * component like Community Builder or JomSocial.
 	 *
-	 * @param AkeebasubsTableUser $userData The user data
+	 * @param stdClass $userData The user data
 	 */
 	public function onAKUserSaveData($userData)
 	{
@@ -189,7 +189,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		$user_id = $userData->user_id;
 
 		// Initialise the data array
-		$data = $userData->getData();
+		$data = (array)$userData;
 
 		// Remove the params field
 		$params = array();
