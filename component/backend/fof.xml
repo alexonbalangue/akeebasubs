@@ -4,6 +4,7 @@
         <container>
             <option name="componentNamespace">Akeeba\Subscriptions</option>
             <option name="factoryClass">FOF30\Factory\MagicFactory</option>
+            <option name="scaffolding">0</option>
         </container>
     </common>
 

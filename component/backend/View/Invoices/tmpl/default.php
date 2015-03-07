@@ -7,10 +7,7 @@
 
 defined('_JEXEC') or die();
 
-JHtml::_('behavior.tooltip');
-JHTML::_('behavior.modal');
-
-$nullDate = JFactory::getDbo()->getNullDate();
+$nullDate = \JFactory::getDbo()->getNullDate();
 $extensions = $this->getModel()->getExtensions();
 ?>
 
@@ -23,13 +20,14 @@ $extensions = $this->getModel()->getExtensions();
 <?php else: ?>
 <div class="alert alert-info">
 	<p>
-	<?php echo JText::_('COM_AKEEBASUBS_INVOICES_MSG_EXTENSIONS_SOME'); ?>
+		<?php echo JText::_('COM_AKEEBASUBS_INVOICES_MSG_EXTENSIONS_SOME'); ?>
+	</p>
+
 	<ul>
 	<?php foreach ($extensions as $key => $extension): ?>
 		<li><?php echo $extension['title'] ?></li>
 	<?php endforeach; ?>
 	</ul>
-	</p>
 <?php if(count($extensions) > 1): ?>
 	<p><strong>
 		<?php echo JText::_('COM_AKEEBASUBS_INVOICES_MSG_EXTENSIONS_MULTIPLE'); ?>
@@ -38,4 +36,4 @@ $extensions = $this->getModel()->getExtensions();
 </div>
 <?php endif; ?>
 
-<?php echo $this->getRenderedForm(); ?>
+<?php echo $this->getRenderedForm();

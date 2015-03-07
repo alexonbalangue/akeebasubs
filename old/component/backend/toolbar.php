@@ -62,35 +62,6 @@ class AkeebasubsToolbar extends F0FToolbar
 		$bar->appendButton('Link', 'download', JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
 	}
 
-	public function onInvoicesBrowse()
-	{
-		//on frontend, buttons must be added specifically
-		list($isCli, $isAdmin) = F0FDispatcher::isCliAdmin();
-
-		if($isAdmin || $this->renderFrontendSubmenu) {
-			$this->renderSubmenu();
-		}
-
-		if(!$isAdmin && !$this->renderFrontendButtons) return;
-
-		// Set toolbar title
-		$subtitle_key = $this->input->getCmd('option','com_foobar').'_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));
-		JToolBarHelper::title(JText::_( $this->input->getCmd('option','com_foobar')).' &ndash; <small>'.JText::_($subtitle_key).'</small>', str_replace('com_', '', $this->input->getCmd('option','com_foobar')));
-
-		// Add toolbar buttons
-		if($this->perms->delete) {
-			JToolBarHelper::deleteList();
-		}
-	}
-
-	public function onInvoicetemplatesBrowse()
-	{
-		$this->onBrowse();
-
-		JToolBarHelper::divider();
-		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
-	}
-
 	public function onToolsBrowse()
 	{
 		$subtitle_key = 'COM_AKEEBASUBS_TITLE_'.strtoupper($this->input->getCmd('view','cpanel'));

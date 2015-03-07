@@ -458,7 +458,7 @@ class Invoices extends DataModel
 
 			$jInvoiceDate = \JFactory::getDate($invoiceRecord->invoice_date);
 
-			$invoiceData = (array)$invoiceRecord;
+			$invoiceData = $invoiceRecord->toArray();
 		}
 
 		// Get the custom variables
@@ -501,19 +501,10 @@ class Invoices extends DataModel
 		$invoiceData['html'] = Message::processSubscriptionTags($template, $sub, $extras);
 
 		// Save the record
-		if ($existingRecord)
-		{
-			$o = (object)$invoiceData;
-			$db->updateObject('#__akeebasubs_invoices', $o, 'akeebasubs_subscription_id');
-		}
-		else
-		{
-			$o = (object)$invoiceData;
-			$db->insertObject('#__akeebasubs_invoices', $o);
-		}
-
-		// Set up the return value
-		$this->akeebasubs_subscription_id = $sub->akeebasubs_subscription_id;
+		$invoiceData['akeebasubs_subscription_id'] = $sub->akeebasubs_subscription_id;
+		$invoiceRecord->save($invoiceData);
+		$this->reset(true, true);
+		$this->find($sub->akeebasubs_subscription_id);
 
 		// Create PDF
 		$this->createPDF();
@@ -535,7 +526,7 @@ class Invoices extends DataModel
 
 		if ($autoSend)
 		{
-			$this->emailPDF();
+			$this->emailPDF($sub);
 		}
 
 		return true;
@@ -634,7 +625,7 @@ class Invoices extends DataModel
 			->enabled(1)
 			->filter_order('enabled')
 			->filter_order_Dir('ASC')
-			->getList();
+			->get(true);
 
 		$lastscore = 0;
 
@@ -642,7 +633,13 @@ class Invoices extends DataModel
 		{
 			foreach ($templates as $template)
 			{
-				$levels = explode(',', $template->levels);
+				$levels = [0];
+
+				if (!empty($levels) && is_string($levels))
+				{
+					$levels = explode(',', $template->levels);
+				}
+
 				if (in_array(-1, $levels))
 				{
 					// "No template" is selected
@@ -821,7 +818,7 @@ class Invoices extends DataModel
 	 *
 	 * @return  string  The filename of the PDF or false if the creation failed.
 	 */
-	public function emailPDF()
+	public function emailPDF($sub)
 	{
 		\JLoader::import('joomla.filesystem.file');
 		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
@@ -837,10 +834,18 @@ class Invoices extends DataModel
 		}
 
 		// Get the subscription record
-		$sub = $this->subscription;
+		if (empty($sub))
+		{
+			$sub = $this->subscription;
+		}
 
 		// Get the mailer
 		$mailer = Email::getPreloadedMailer($sub, 'PLG_AKEEBASUBS_INVOICES_EMAIL');
+
+		if ($mailer === false)
+		{
+			return false;
+		}
 
 		// Attach the PDF invoice
 		$mailer->AddAttachment($path . $this->filename, 'invoice.pdf', 'base64', 'application/pdf');
@@ -866,12 +871,6 @@ class Invoices extends DataModel
 	 */
 	public function &getTCPDF()
 	{
-		// Load PDF signing certificates
-		if ( !class_exists('AkeebasubsHelperCparams'))
-		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
-		}
-
 		$certificateFile = ComponentParams::getParam('invoice_certificatefile', 'certificate.cer');
 		$secretKeyFile   = ComponentParams::getParam('invoice_secretkeyfile', 'secret.cer');
 		$secretKeyPass   = ComponentParams::getParam('invoice_secretkeypass', '');

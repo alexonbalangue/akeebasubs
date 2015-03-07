@@ -323,16 +323,6 @@ abstract class Email
 			return false;
 		}
 
-		// Substitute variables in $templateText and $subject
-		if (!class_exists('AkeebasubsHelperMessage'))
-		{
-			$included = @include_once JPATH_ROOT . '/components/com_akeebasubs/helpers/message.php';
-			if (!$included)
-			{
-				return false;
-			}
-		}
-
 		$templateText = Message::processSubscriptionTags($templateText, $sub, $extras);
 		$subject      = Message::processSubscriptionTags($subject, $sub, $extras);
 

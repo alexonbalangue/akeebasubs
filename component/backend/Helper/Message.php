@@ -341,12 +341,17 @@ abstract class Message
 
 		// Download ID
 
-		if (!class_exists('ArsHelperFilter'))
+		if (!class_exists('ArsHelperFilter') && file_exists(JPATH_SITE . '/components/com_ars/helpers/filter.php'))
 		{
 			@include_once JPATH_SITE . '/components/com_ars/helpers/filter.php';
 		}
 
-		$dlid = class_exists('ArsHelperFilter') ? ArsHelperFilter::myDownloadID() : '';
+		$dlid = '';
+
+		if (class_exists('ArsHelperFilter'))
+		{
+			$dlid = \ArsHelperFilter::myDownloadID();
+		}
 
 		// User's state, human readable
 		$formatted_state = '';
