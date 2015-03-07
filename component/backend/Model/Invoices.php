@@ -100,20 +100,31 @@ class Invoices extends DataModel
 		{
 			$search = '%' . $user . '%';
 
-			/** @var Subscriptions $subs */
-			$subs = $this->container->factory->model('Subscriptions')->setIgnoreRequest(true);
-			$subs->whereHas('joomlaUser', function(\JDatabaseQuery $q) use($search) {
-				$q->where(
-					'((' . $q->qn('name') . ' LIKE ' . $q->q($search) . ') OR (' .
-					'(' . $q->qn('username') . ' LIKE ' . $q->q($search) . ') OR (' .
-					'(' . $q->qn('email') . ' LIKE ' . $q->q($search) . '))'
-				);
-			});
-			$subs->with([]);
+			// First get the Joomla! users fulfilling the criteria
+			$users = $this->container->factory->model('JoomlaUsers')->setIgnoreRequest(true);
+			$userIDs = $users->search($user)->with([])->get(true)->modelKeys();
+			$filteredIDs = [-1];
 
-			$filteredIDs = $subs->get(true)->modelKeys();
-			$filteredIDs = empty($filteredIDs) ? [0] : $filteredIDs;
-			$subIDs = array_merge($subIDs, $filteredIDs);
+			if (!empty($userIDs))
+			{
+				// Now get the subscriptions IDs for these users
+				/** @var Subscriptions $subs */
+				$subs = $this->container->factory->model('Subscriptions')->setIgnoreRequest(true);
+				$subs->setState('user_id', $userIDs);
+				$subs->with([]);
+
+				$filteredIDs = $subs->get(true)->modelKeys();
+				$filteredIDs = empty($filteredIDs) ? [-1] : $filteredIDs;
+			}
+
+			if (!empty($subIDs))
+			{
+				$subIDs = array_intersect($subIDs, $filteredIDs);
+			}
+			else
+			{
+				$subIDs = $filteredIDs;
+			}
 
 			unset($subs);
 		}
@@ -136,8 +147,16 @@ class Invoices extends DataModel
 
 			$subs->with([]);
 			$filteredIDs = $subs->get(true)->modelKeys();
-			$filteredIDs = empty($filteredIDs) ? [0] : $filteredIDs;
-			$subIDs = array_merge($subIDs, $filteredIDs);
+			$filteredIDs = empty($filteredIDs) ? [-1] : $filteredIDs;
+
+			if (!empty($subIDs))
+			{
+				$subIDs = array_intersect($subIDs, $filteredIDs);
+			}
+			else
+			{
+				$subIDs = $filteredIDs;
+			}
 
 			unset($subs);
 		}
