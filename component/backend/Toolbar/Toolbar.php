@@ -165,6 +165,14 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=TaxRules');
 	}
 
+	public function onLevelsBrowse()
+	{
+		$this->onBrowse();
+
+		JToolBarHelper::divider();
+		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
+	}
+
 
 	/**
 	 * Adds a link to the submenu (toolbar links)
