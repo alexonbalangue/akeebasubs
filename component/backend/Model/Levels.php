@@ -237,7 +237,12 @@ class Levels extends DataModel
 				}
 			}
 
-			$this->assert($count == 0, 'COM_AKEEBASUBS_LEVEL_ERR_TITLEUNIQUE');
+			if ($count != 0)
+			{
+				$this->title .= ' ' . JFactory::getDate()->format(\JText::_('DATE_FORMAT_LC4'));
+			}
+
+			//$this->assert($count == 0, 'COM_AKEEBASUBS_LEVEL_ERR_TITLEUNIQUE');
 		}
 
 		// Create a new or sanitise an existing slug
@@ -270,7 +275,12 @@ class Levels extends DataModel
 				}
 			}
 
-			$this->assert($count == 0, 'COM_AKEEBASUBS_LEVEL_ERR_SLUGUNIQUE');
+			if ($count != 0)
+			{
+				$this->slug .= ' ' . JFactory::getDate()->toUnix();
+			}
+
+			//$this->assert($count == 0, 'COM_AKEEBASUBS_LEVEL_ERR_SLUGUNIQUE');
 		}
 
 		// Do we have an image?
