@@ -8,6 +8,7 @@
 namespace Akeeba\Subscriptions\Admin\Helper;
 
 use Akeeba\Subscriptions\Admin\Model\EmailTemplates;
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JFactory;
@@ -306,13 +307,13 @@ abstract class Email
 	 * data based on the key and extra substitution parameters and waits for
 	 * you to send a recipient and send the email.
 	 *
-	 * @param   \stdClass  $sub     The subscription record against which the email is sent
-	 * @param   string     $key     The email key, in the form PLG_LOCATION_PLUGINNAME_TYPE
-	 * @param   array      $extras  Any optional substitution strings you want to introduce
+	 * @param   Subscriptions  $sub     The subscription record against which the email is sent
+	 * @param   string         $key     The email key, in the form PLG_LOCATION_PLUGINNAME_TYPE
+	 * @param   array          $extras  Any optional substitution strings you want to introduce
 	 *
 	 * @return  \JMail|boolean False if something bad happened, the PHPMailer instance in any other case
 	 */
-	public static function getPreloadedMailer($sub, $key, array $extras = array())
+	public static function getPreloadedMailer(Subscriptions $sub, $key, array $extras = array())
 	{
 		// Load the template
 		list($isHTML, $subject, $templateText, $loadLanguage) = self::loadEmailTemplate($key, $sub->akeebasubs_level_id, JFactory::getUser($sub->user_id));

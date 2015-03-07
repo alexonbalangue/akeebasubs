@@ -11,10 +11,32 @@ defined('_JEXEC') or die;
 
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
-use JDate;
 use JLoader;
-use JText;
 
+/**
+ * Model class for Akeeba Subscriptions user data
+ *
+ * @property  int		$akeebasubs_user_id
+ * @property  int		$user_id
+ * @property  int		$isbusiness
+ * @property  string	$businessname
+ * @property  string	$occupation
+ * @property  string	$vatnumber
+ * @property  int		$viesregistered
+ * @property  string	$taxauthority
+ * @property  string	$address1
+ * @property  string	$address2
+ * @property  string	$city
+ * @property  string	$state
+ * @property  string	$zip
+ * @property  string	$country
+ * @property  array		$params
+ * @property  string	$notes
+ * @property  int		$needs_logout
+ *
+ * @property-read  JoomlaUsers		$user
+ * @property-read  Subscriptions[]  $subscriptions
+ */
 class Users extends DataModel
 {
 	use Mixin\JsonData;
@@ -29,6 +51,7 @@ class Users extends DataModel
 
 		$this->hasOne('user', 'JoomlaUsers', 'user_id', 'id');
 		$this->hasMany('subscriptions', 'Subscriptions', 'user_id', 'user_id');
+		$this->with(['user']);
 	}
 
 	/**

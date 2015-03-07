@@ -15,6 +15,9 @@ use JDate;
 use JLoader;
 use JText;
 
+/**
+ * Model for handling invoice templates
+ */
 class InvoiceTemplates extends DataModel
 {
 	use Mixin\Assertions, Mixin\DateManipulation, Mixin\ImplodedArrays, Mixin\ImplodedLevels;
