@@ -16,11 +16,11 @@
 				tdwidth="20px"
 		/>
 		
-		<header name="user_id" type="Searchable"
+		<header name="user_id" type="Field"
 				label="COM_AKEEBASUBS_SUBSCRIPTIONS_USER"
 				filterclass="input-small"
 				searchfieldname="user"
-				sortable="true" tdwidth="15%"
+				sortable="false" tdwidth="15%"
 		/>
 		
 		<header name="extension" type="Selectable"
@@ -47,7 +47,7 @@
 		
 		<field name="akeebasubs_invoice_id" type="SelectRow" />
 		
-		<field name="user_id" type="User"
+		<field name="user_id" name_from="subscription.user_id" type="User"
 			avatar_size="48"
 			show_link="false"
 			link_url="index.php?option=com_akeebasubs&amp;view=User&amp;id=[USER:ID]"
