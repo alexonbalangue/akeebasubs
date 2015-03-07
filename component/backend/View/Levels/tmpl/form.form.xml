@@ -158,7 +158,7 @@
     <fieldset
             name="renewalsnotifications"
             label="COM_AKEEBASUBS_LEVEL_TAB_RENEWALSNOTIFICATIONS"
-            class="tab-pane active"
+            class="tab-pane"
             >
 
         <field
