@@ -205,6 +205,48 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 		}
 	}
 
+	public function onReports()
+	{
+		$this->renderSubmenu();
+
+		$option = $this->container->componentName;
+		$view = 'Reports';
+
+		$subtitle_key = $option . '_TITLE_' . $view;
+		JToolBarHelper::title(JText::_($option).' &ndash; <small>' .
+			JText::_($subtitle_key) .
+			'</small>',
+			str_replace('com_', '', $option));
+
+		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=ControlPanel');
+	}
+
+	public function onReportsInvoices()
+	{
+		$this->renderSubmenu();
+
+		$option = $this->container->componentName;
+		$view = 'Reports';
+
+		$subtitle_key = $option . '_TITLE_' . $view;
+		JToolBarHelper::title(JText::_($option).' &ndash; <small>' .
+			JText::_($subtitle_key) .
+			'</small>',
+			str_replace('com_', '', $option));
+
+		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=Reports');
+	}
+
+	public function onReportsVies()
+	{
+		$this->onReportsInvoices();
+	}
+
+	public function onReportsVatmoss()
+	{
+		$this->onReportsInvoices();
+	}
+
 	/**
 	 * Adds a link to the submenu (toolbar links)
 	 *

@@ -7,6 +7,8 @@
 
 defined('_JEXEC') or die;
 
+/** @var \FOF30\View\View $this */
+
 $optionsMonths = array(
 	JHtml::_('select.option', 1, JText::_('JANUARY')),
 	JHtml::_('select.option', 2, JText::_('FEBRUARY')),
@@ -23,7 +25,7 @@ $optionsMonths = array(
 );
 
 $optionsYears = array();
-$nextYear = gmdate('Y') + 1;
+$nextYear = intval(gmdate('Y')) + 1;
 
 for ($year = 2010; $year <= $nextYear; $year++)
 {
@@ -36,7 +38,7 @@ $printUrl->setVar('tmpl', 'component')
 
 <form action="index.php" method="get" name="invoiceControlsForm" class="form form-horizontal">
 	<input type="hidden" name="option" value="com_akeebasubs">
-	<input type="hidden" name="view" value="reports">
+	<input type="hidden" name="view" value="Reports">
 	<input type="hidden" name="task" value="<?php echo $this->input->getCmd('task', 'invoices') ?>">
 
 	<?php echo JHtml::_('select.genericlist', $optionsMonths, 'month', array(

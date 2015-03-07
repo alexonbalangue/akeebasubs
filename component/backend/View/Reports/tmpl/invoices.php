@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die;
 
-/** @var AkeebasubsViewReports $this */
+/** @var \FOF30\View\View $this */
 
 if ($this->input->getCmd('tmpl', 'html') != 'component')
 {

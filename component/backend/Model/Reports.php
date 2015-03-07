@@ -1,28 +1,23 @@
 <?php
-
 /**
  * @package   AkeebaSubs
  * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license   GNU General Public License version 3, or later
  */
-class AkeebasubsControllerReports extends F0FController
+
+namespace Akeeba\Subscriptions\Admin\Model;
+
+defined('_JEXEC') or die;
+
+use FOF30\Model\Model;
+use JDate;
+use JFactory;
+use JLoader;
+
+class Reports extends Model
 {
-	public function __construct($config = array())
+	public function getInvoices()
 	{
-		parent::__construct($config);
-
-		$this->registerTask('getexpirations', 'browse');
-		$this->registerTask('renewals', 'browse');
-		$this->registerTask('vies', 'invoices');
-		$this->registerTask('vatmoss', 'invoices');
-
-		$this->cacheableTasks = array();
-	}
-
-	public function invoices()
-	{
-		$this->layout = 'invoices';
-
 		// Get the display parameters
 		$params = $this->getInvoiceListParameters();
 
@@ -78,16 +73,10 @@ class AkeebasubsControllerReports extends F0FController
 		$db->setQuery($query);
 		$records = $db->loadObjectList();
 
-		// Assign the records and the layout to the view
-		$view = $this->getThisView();
-		$view->records = $records;
-		$view->params = $params;
-
-		// Show the view
-		$this->display(false);
+		return $records;
 	}
 
-	private function getInvoiceListParameters()
+	public function getInvoiceListParameters()
 	{
 		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
@@ -116,7 +105,7 @@ class AkeebasubsControllerReports extends F0FController
 		$vies = false;
 		$vatmoss = false;
 
-		switch ($this->getTask())
+		switch ($this->getState('task', 'invoices'))
 		{
 			case 'vies':
 				$vies = true;
@@ -137,4 +126,5 @@ class AkeebasubsControllerReports extends F0FController
 			'extension' => $invoiceExtension,
 		);
 	}
+
 }

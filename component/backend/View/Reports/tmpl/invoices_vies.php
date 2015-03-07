@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die;
 
-/** @var AkeebasubsViewReports $this */
+/** @var \FOF30\View\View $this */
 
 if ($this->input->getCmd('tmpl', 'html') != 'component')
 {
@@ -18,13 +18,11 @@ else
 	JFactory::getDocument()->addScriptDeclaration("\n\nwindow.print();");
 }
 
-$this->loadHelper('select');
-
 $jDate = new JDate($this->params['year'] . '-' . $this->params['month'] . '-01');
 ?>
 
 <h1>
-	<?php echo JText::sprintf('COM_AKEEBASUBS_REPORTS_VATMOSS_TITLE', $jDate->format('F Y')); ?>
+	<?php echo JText::sprintf('COM_AKEEBASUBS_REPORTS_VIES_TITLE', $jDate->format('F Y')); ?>
 </h1>
 
 <table width="100%" cellspacing="0" cellpadding="0" style="border-top: thin solid #c0c0c0">
@@ -50,52 +48,7 @@ $jDate = new JDate($this->params['year'] . '-' . $this->params['month'] . '-01')
 	$totalNet = 0;
 	$totalInvoicesShown = 0;
 
-	$lastCountry = '';
-	$countryInvoicesShown = 0;
-	$countryAmount = 0;
-	$countryTax = 0;
-	$countryNet = 0;
-
 	foreach ($this->records as $r):
-		if ((($r->country != $lastCountry) && ($lastCountry != ''))):?>
-		<tr style="background-color: black; color: white; font-weight: bold;">
-			<td colspan="4">
-				<?php echo JText::sprintf('COM_AKEEBASUBS_REPORTS_INVOICES_LBL_COUNTRYTOTAL', AkeebasubsHelperSelect::formatCountry($lastCountry), $countryInvoicesShown); ?>
-			</td>
-			<td align="right">
-				<?php echo $countryNet ?> &euro;
-			</td>
-			<td></td>
-			<td align="right">
-				<?php echo $countryTax ?> &euro;
-			</td>
-			<td align="right">
-				<?php echo $countryAmount ?> &euro;
-			</td>
-		</tr>
-		<tr style="background-color: white; color: white; font-weight: bold;">
-			<td colspan="8">
-				&nbsp;
-			</td>
-		</tr>
-		<?php endif;
-
-		if ($r->country != $lastCountry):
-			$lastCountry = $r->country;
-			$countryInvoicesShown = 0;
-			$countryAmount = 0;
-			$countryTax = 0;
-			$countryNet = 0;
-
-			// TODO Show Country header
-			?>
-			<tr style="background-color: #ccc;">
-				<td colspan="8" style="color: black; font-weight: bold; font-size: 15pt; text-align: center; padding: 6pt">
-					<?php echo AkeebasubsHelperSelect::formatCountry($r->country) ?>
-				</td>
-			</tr>
-		<?php endif;
-
 		$m = 1 - $m;
 		$i++;
 		$color = $m ? '#f0f0f0' : 'white';
@@ -121,13 +74,9 @@ $jDate = new JDate($this->params['year'] . '-' . $this->params['month'] . '-01')
 		}
 
 		$totalAmount += $r->gross_amount;
-		$countryAmount += $r->gross_amount;
 		$totalTax += $r->tax_amount;
-		$countryTax += $r->tax_amount;
 		$totalNet += $r->net_amount;
-		$countryNet += $r->net_amount;
 		$totalInvoicesShown++;
-		$countryInvoicesShown++;
 
 		$r->net_amount = sprintf('%.02f', $r->net_amount);
 		$r->tax_amount = sprintf('%.02f', $r->tax_amount);
@@ -172,26 +121,6 @@ $jDate = new JDate($this->params['year'] . '-' . $this->params['month'] . '-01')
 	<?php endforeach; ?>
 	</tbody>
 	<tfoot>
-	<tr style="background-color: black; color: white; font-weight: bold;">
-		<td colspan="4">
-			<?php echo JText::sprintf('COM_AKEEBASUBS_REPORTS_INVOICES_LBL_COUNTRYTOTAL', AkeebasubsHelperSelect::formatCountry($lastCountry), $countryInvoicesShown); ?>
-		</td>
-		<td align="right">
-			<?php echo $countryNet ?> &euro;
-		</td>
-		<td></td>
-		<td align="right">
-			<?php echo $countryTax ?> &euro;
-		</td>
-		<td align="right">
-			<?php echo $countryAmount ?> &euro;
-		</td>
-	</tr>
-	<tr style="background-color: white; color: white; font-weight: bold;">
-		<td colspan="8">
-			&nbsp;
-		</td>
-	</tr>
 	<tr style="background-color: navy; color: white; font-weight: bold;">
 		<td colspan="4">
 			<?php echo JText::sprintf('COM_AKEEBASUBS_REPORTS_INVOICES_LBL_GRANDTOTAL', $totalInvoicesShown); ?>
