@@ -9,9 +9,7 @@
 
 defined('_JEXEC') or die;
 
-$this->getContainer()->platform->getDocument()->addStyleSheet(
-	$this->getContainer()->template->parsePath('media://com_akeebasubs/css/backend.css')
-);
+$this->addCssFile('media://com_akeebasubs/css/backend.css');
 ?>
 
 <div>

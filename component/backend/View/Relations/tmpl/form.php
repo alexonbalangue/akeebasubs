@@ -37,7 +37,7 @@ $script = <<< JS
 JS;
 
 
-JFactory::getDocument()->addScriptDeclaration($script);
+$this->addJavascriptInline($script);
 
 /** @var $this \FOF30\View\DataView\Form */
 

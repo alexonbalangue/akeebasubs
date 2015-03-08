@@ -15,7 +15,7 @@ if ($this->input->getCmd('tmpl', 'html') != 'component')
 }
 else
 {
-	JFactory::getDocument()->addScriptDeclaration("\n\nwindow.print();");
+	$this->addJavascriptInline("\n\nwindow.print();");
 }
 
 $this->loadHelper('select');

@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 \JHtml::_('jquery.framework', true);
 \JHtml::_('formbehavior.chosen', 'select');
 
-JFactory::getDocument()->addScriptDeclaration(<<< JS
+$this->addJavascriptInline(<<< JS
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
 // due to missing trailing semicolon and/or newline in their code.
