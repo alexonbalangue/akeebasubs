@@ -12,6 +12,11 @@ defined('_JEXEC') or die;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 
+/**
+ * Model for automatic discounts for upgrading and renewing levels
+ *
+ * @method  $this  search() search(string $upgradeTitle)
+ */
 class Upgrades extends DataModel
 {
 	use Mixin\Assertions;

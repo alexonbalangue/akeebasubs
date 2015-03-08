@@ -18,6 +18,11 @@ use JLoader;
 use JUser;
 use JUserHelper;
 
+/**
+ * Model for querying Joomla! users
+ *
+ * @method  $this  search() search(string $userInfoToSearch)
+ */
 class JoomlaUsers extends DataModel
 {
 	/**

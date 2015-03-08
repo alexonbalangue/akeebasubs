@@ -17,6 +17,8 @@ use JLoader;
 /**
  * The model for the subscription records
  *
+ * Tio: to get the subscriptions of a particular user use the User model and its "subscriptions" relation
+ *
  * Fields:
  *
  * @property  int			$akeebasubs_subscription_id	Primary key
@@ -52,15 +54,36 @@ use JLoader;
  *
  * Filters / state:
  *
- * @property  bool          $_noemail                   Do not send email on save when true (resets after successful save)
+ * @method  $this _noemail() _noemail(bool $v)          Do not send email on save when true (resets after successful save)
+ * @method  $this refresh()  refresh(int $v)            Set to 1 to ignore filters, used for running integrations on all subscriptions
+ * @method  $this filter_discountmode() filter_discountmode(string $v)  Discount filter mode (none, coupon, upgrade)
+ * @method  $this filter_discountcode() filter_discountcode(string $v)  Discount code search (coupon code/title or upgrade title)
+ * @method  $this publish_up() publish_up(string $v)      Subscriptions coming up after date
+ * @method  $this publish_down() publish_down(string $v)  Subscriptions coming up before date (if publish_up is set), or subscriptions expiring before date (if publish_up is not set)
+ * @method  $this since() since(string $v)              Subscriptions created after this date
+ * @method  $this until() until(string $v)              Subscriptions created before this date
+ * @method  $this expires_from() expires_from(string $v)  Subscriptions expiring from this date onwards
+ * @method  $this expires_to() expires_to(string $v)      Subscriptions expiring before this date
+ * @method  $this nozero() nozero(bool $v)              Set to 1 to skip free (net_amount=0) subscriptions
+ * @method  $this search() search(string $v)            Search by user info (username, name, email, business name or VAT number)
+ * @method  $this subid() subid(mixed $ids)             Search by subscription ID (int or array of int)
+ * @method  $this level() level(mixed $ids)             Search by subscription level ID (int or array of int)
+ * @method  $this coupon_id() coupon_id(mixed $ids)     Search by coupon ID (int or array of int)
+ * @method  $this paystate() paystate(mixed $states)    Search by payment state (string or array of string)
+ * @method  $this processor() processor(string $v)      Search by payment processor identifier
+ * @method  $this ip() ip(string $v)                    Search by IP of user signing up
+ * @method  $this ip_country() ip_country(string $v)    Search by auto-detected country code based on IP
+ * @method  $this paykey() paykey(string $key)          Search by payment key
+ * @method  $this user_id() user_id(mixed $ids)         Search by user ID (int or array of int)
+ * @method  $this enabled() enabled(int $enabled)       Search by enabled statis
  *
  * Relations:
  *
  * @property-read  Users	 $user		The subscription user
- * @property-read  Levels	 $level		The subscription level
- * @property-read  Coupons	 $coupon	The coupon code used (if akeebasubs_coupon_id is not empty)
+ * @property-read  Levels	 $level 	The subscription level. Note: the method is a filter, the property is a relation!
+ * @property-read  Coupons	 $coupon	The coupon used (if akeebasubs_coupon_id is not empty)
  * @property-read  Upgrades	 $upgrade	The upgrade rule used (if akeebasubs_upgrade_id is not empty)
- * @property-read  Invoices  $invoice	The invoice issues (if akeebasubs_invoice_id is not empty)
+ * @property-read  Invoices  $invoice	The invoice issued (if akeebasubs_invoice_id is not empty)
  */
 class Subscriptions extends DataModel
 {
@@ -72,6 +95,11 @@ class Subscriptions extends DataModel
 
 		// Add the filtering behaviour
 		$this->addBehaviour('Filters');
+		$this->blacklistFilters([
+			'publish_up',
+			'publish_down',
+		    'created_on',
+		]);
 
 		// Set up relations
 		$this->hasOne('user', 'Users');
@@ -79,6 +107,549 @@ class Subscriptions extends DataModel
 		$this->hasOne('coupon', 'Coupons');
 		$this->hasOne('upgrade', 'Upgrades');
 		$this->hasOne('invoice', 'Invoices', 'akeebasubs_subscription_id', 'akeebasubs_subscription_id');
+	}
+
+	/**
+	 * Map state variables from their old names to their new names, for a modicum of backwards compatibility
+	 *
+	 * @param   \JDatabaseQuery  $query
+	 */
+	protected function onBeforeBuildQuery(\JDatabaseQuery &$query)
+	{
+		// Map state variables to what is used by automatic filters
+		foreach (
+			[
+				'subid'     => 'akeebasubs_subscription_id',
+				'level'     => 'akeebasubs_level_id',
+				'paystate'  => 'state',
+				'paykey'    => 'processor_key',
+			    'coupon_id' => 'akeebasubs_coupon_id',
+			] as $from => $to)
+		{
+			$this->setState($to, $this->getState($from, null));
+		}
+
+		// Apply filtering by user. This is a relation filter, it needs to go before the main query builder fires.
+		$this->filterByUser();
+	}
+
+	/**
+	 * Apply additional filtering to the select query
+	 *
+	 * @param   \JDatabaseQuery  $query  The query to modify
+	 */
+	protected function onAfterBuildQuery(\JDatabaseQuery $query)
+	{
+		// If the refresh flag is set in the state we must return all records, without honoring any kind of filter,
+		// custom WHERE clause or relation filter.
+		$refresh = $this->getState('refresh', null, 'int');
+
+		if ($refresh)
+		{
+			// Remove already added WHERE clauses
+			$query->clear('where');
+
+			// Remove user-defined WHERE clauses
+			$this->whereClauses = [];
+
+			// Remove relation filters which would result in WHERE clauses with sub-queries
+			$this->relationFilters = [];
+
+			// Do not process anything else, we're done
+			return;
+		}
+
+		// Filter by discount mode and code (filter_discountmode / filter_discountcode)
+		$this->filterByDiscountCode($query);
+
+		// Filter by publish_up / publish_down dates
+		$this->filterByDate($query);
+
+		// Filter by created date (since / until)
+		$this->filterByCreatedOn($query);
+
+		// Filter by expiration date range (expires_from / expires_to)
+		$this->filterByExpirationDate($query);
+
+		// Fitler by non-free subscriptions (nozero)
+		$this->filterByNonFree($query);
+	}
+
+	/**
+	 * Apply select query filtering by username, email, business name or VAT / tax ID number
+	 *
+	 * @return  void
+	 */
+	protected function filterByUser()
+	{
+		// User search feature
+		$search = $this->getState('search', null, 'string');
+
+		if ($search)
+		{
+			// First get the Joomla! users fulfilling the criteria
+			/** @var JoomlaUsers $users */
+			$users = $this->container->factory->model('JoomlaUsers')->setIgnoreRequest(true);
+			$userIDs = $users->search($search)->with([])->get(true)->modelKeys();
+
+			// Then do a relation filter against the user relation
+			$this->whereHas('user', function (\JDatabaseQuery $q) use($userIDs, $search) {
+				$q->where(
+					'(' .
+					'(' . $q->qn('user') . ' IN (' . implode(',', array_map(array($q, 'q'), $userIDs)) . '))' .
+					' OR ' .
+					'(' . $q->qn('businessname') . ' LIKE ' . $q->qn("%$search%") . ')' .
+					' OR ' .
+					'(' . $q->qn('vatnumber') . ' LIKE ' . $q->qn("%$search%") . ')' .
+					')'
+				);
+			});
+		}
+	}
+
+	/**
+	 * Apply select query filtering by discount code
+	 *
+	 * @param   \JDatabaseQuery  $query  The query to modify
+	 *
+	 * @return  void
+	 */
+	protected function filterByDiscountCode(\JDatabaseQuery $query)
+	{
+		$db = $this->getDbo();
+
+		$filter_discountmode = $this->getState('filter_discountmode', null, 'cmd');
+		$filter_discountcode = $this->getState('filter_discountcode', null, 'string');
+
+		$coupon_ids  = array();
+		$upgrade_ids = array();
+
+		switch ($filter_discountmode)
+		{
+			case 'none':
+				$query->where(
+					'(' .
+					'(' . $db->qn('akeebasubs_coupon_id') . ' = ' . $db->q(0) . ')'
+					. ' AND ' .
+					'(' . $db->qn('akeebasubs_upgrade_id') . ' = ' . $db->q(0) . ')'
+					. ')'
+				);
+				break;
+
+			case 'coupon':
+				$query->where(
+					'(' .
+					'(' . $db->qn('akeebasubs_coupon_id') . ' > ' . $db->q(0) . ')'
+					. ' AND ' .
+					'(' . $db->qn('akeebasubs_upgrade_id') . ' = ' . $db->q(0) . ')'
+					. ')'
+				);
+
+				if ($filter_discountcode)
+				{
+					/** @var Coupons $couponsModel */
+					$couponsModel = $this->container->factory->model('Coupons');
+
+					$coupons = $couponsModel
+						->search($filter_discountcode)
+						->get(true);
+
+					if (!empty($coupons))
+					{
+						foreach ($coupons as $coupon)
+						{
+							$coupon_ids[] = $coupon->akeebasubs_coupon_id;
+						}
+					}
+					unset($coupons);
+				}
+				break;
+
+			case 'upgrade':
+				$query->where(
+					'(' .
+					'(' . $db->qn('akeebasubs_coupon_id') . ' = ' . $db->q(0) . ')'
+					. ' AND ' .
+					'(' . $db->qn('akeebasubs_upgrade_id') . ' > ' . $db->q(0) . ')'
+					. ')'
+				);
+				if ($filter_discountcode)
+				{
+					/** @var Upgrades $upgradesModel */
+					$upgradesModel = $this->container->factory->model('Upgrades');
+
+					$upgrades = $upgradesModel
+						->search($filter_discountcode)
+						->get(true);
+
+					if (!empty($upgrades))
+					{
+						foreach ($upgrades as $upgrade)
+						{
+							$upgrade_ids[] = $upgrade->akeebasubs_upgrade_id;
+						}
+					}
+					unset($upgrades);
+				}
+				break;
+
+			default:
+				if ($filter_discountcode)
+				{
+					/** @var Coupons $couponsModel */
+					$couponsModel = $this->container->factory->model('Coupons');
+
+					$coupons = $couponsModel
+						->search($filter_discountcode)
+						->get(true);
+
+					if (!empty($coupons))
+					{
+						foreach ($coupons as $coupon)
+						{
+							$coupon_ids[] = $coupon->akeebasubs_coupon_id;
+						}
+					}
+					unset($coupons);
+				}
+
+				if ($filter_discountcode)
+				{
+					/** @var Upgrades $upgradesModel */
+					$upgradesModel = $this->container->factory->model('Upgrades');
+
+					$upgrades = $upgradesModel
+						->search($filter_discountcode)
+						->get(true);
+
+					if (!empty($upgrades))
+					{
+						foreach ($upgrades as $upgrade)
+						{
+							$upgrade_ids[] = $upgrade->akeebasubs_upgrade_id;
+						}
+					}
+
+					unset($upgrades);
+				}
+				break;
+		}
+
+		if (!empty($coupon_ids) && !empty($upgrade_ids))
+		{
+			$query->where(
+				'(' .
+				'(' . $db->qn('akeebasubs_coupon_id') . ' IN (' . $db->q(implode(',', $coupon_ids)) . '))'
+				. ' OR ' .
+				'(' . $db->qn('akeebasubs_upgrade_id') . ' IN (' . $db->q(implode(',', $upgrade_ids)) . '))'
+				. ')'
+			);
+		}
+		elseif (!empty($coupon_ids))
+		{
+			$query->where($db->qn('akeebasubs_coupon_id') . ' IN (' . $db->q(implode(',', $coupon_ids)) . ')');
+		}
+		elseif (!empty($upgrade_ids))
+		{
+			$query->where($db->qn('akeebasubs_upgrade_id') . ' IN (' . $db->q(implode(',', $upgrade_ids)) . ')');
+		}
+	}
+
+	/**
+	 * Filter the select query by publish_up / publish_down date
+	 *
+	 * @param   \JDatabaseQuery  $query  The query to modify
+	 *
+	 * @return  void
+	 */
+	protected function filterByDate(\JDatabaseQuery $query)
+	{
+		$db = $this->getDbo();
+
+		\JLoader::import('joomla.utilities.date');
+		$publish_up = $this->getState('publish_up', null, 'string');
+		$publish_down = $this->getState('publish_down', null, 'string');
+
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+
+		// Filter the dates
+		$from = trim($publish_up);
+
+		if (empty($from))
+		{
+			$from = '';
+		}
+		else
+		{
+			if (!preg_match($regex, $from))
+			{
+				$from = '2001-01-01';
+			}
+
+			$jFrom = new JDate($from);
+			$from  = $jFrom->toUnix();
+
+			if ($from == 0)
+			{
+				$from = '';
+			}
+			else
+			{
+				$from = $jFrom->toSql();
+			}
+		}
+
+		$to = trim($publish_down);
+
+		if (empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00'))
+		{
+			$to = '';
+		}
+		else
+		{
+			if (!preg_match($regex, $to))
+			{
+				$to = '2037-01-01';
+			}
+
+			$jTo = new JDate($to);
+			$to  = $jTo->toUnix();
+
+			if ($to == 0)
+			{
+				$to = '';
+			}
+			else
+			{
+				$to = $jTo->toSql();
+			}
+		}
+
+		if (!empty($from) && !empty($to))
+		{
+			// Filter from-to dates
+			$query->where(
+				$db->qn('publish_up') . ' >= ' .  $db->q($from)
+			);
+			$query->where(
+				$db->qn('publish_up') . ' <= ' . $db->q($to)
+			);
+		}
+		elseif (!empty($from) && empty($to))
+		{
+			// Filter after date
+			$query->where(
+				$db->qn('publish_up') . ' >= ' . $db->q($from)
+			);
+		}
+		elseif (empty($from) && !empty($to))
+		{
+			// Filter up to a date
+			$query->where(
+				$db->qn('publish_down') . ' <= ' . $db->q($to)
+			);
+		}
+	}
+
+	/**
+	 * Filter the select query by created date (since / until)
+	 *
+	 * @param   \JDatabaseQuery  $query  The query to modify
+	 *
+	 * @return  void
+	 */
+	protected function filterByCreatedOn(\JDatabaseQuery $query)
+	{
+		$db = $this->getDbo();
+
+		\JLoader::import('joomla.utilities.date');
+		$since = $this->getState('since', null, 'string');
+		$until = $this->getState('until', null, 'string');
+
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{1,2}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+
+		// "Since" queries
+		$since = trim($since);
+
+		if (empty($since) || ($since == '0000-00-00') || ($since == '0000-00-00 00:00:00') || ($since == $db->getNullDate()))
+		{
+			$since = '';
+		}
+		else
+		{
+			if (!preg_match($regex, $since))
+			{
+				$since = '2001-01-01';
+			}
+
+			$jFrom = new JDate($since);
+			$since = $jFrom->toUnix();
+
+			if ($since == 0)
+			{
+				$since = '';
+			}
+			else
+			{
+				$since = $jFrom->toSql();
+			}
+
+			// Filter from-to dates
+			$query->where(
+				$db->qn('created_on') . ' >= ' . $db->q($since)
+			);
+		}
+
+		// "Until" queries
+		$until = trim($until);
+
+		if (empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00') || ($until == $db->getNullDate()))
+		{
+			$until = '';
+		}
+		else
+		{
+			if (!preg_match($regex, $until))
+			{
+				$until = '2037-01-01';
+			}
+
+			$jFrom = new JDate($until);
+			$until = $jFrom->toUnix();
+
+			if ($until == 0)
+			{
+				$until = '';
+			}
+			else
+			{
+				$until = $jFrom->toSql();
+			}
+
+			$query->where(
+				$db->qn('created_on') . ' <= ' . $db->q($until)
+			);
+		}
+	}
+
+	/**
+	 * Filter the select query by expiration date range (expires_from / expires_to)
+	 *
+	 * @param   \JDatabaseQuery  $query  The query to modify
+	 *
+	 * @return  void
+	 */
+	protected function filterByExpirationDate(\JDatabaseQuery $query)
+	{
+		$db = $this->getDbo();
+
+		\JLoader::import('joomla.utilities.date');
+		$expires_from = $this->getState('expires_from', null, 'string');
+		$expires_to = $this->getState('expires_to', null, 'string');
+
+		$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{1,2}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+
+		$from = trim($expires_from);
+
+		if (empty($from))
+		{
+			$from = '';
+		}
+		else
+		{
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+
+			if (!preg_match($regex, $from))
+			{
+				$from = '2001-01-01';
+			}
+
+			$jFrom = new JDate($from);
+			$from  = $jFrom->toUnix();
+
+			if ($from == 0)
+			{
+				$from = '';
+			}
+			else
+			{
+				$from = $jFrom->toSql();
+			}
+		}
+
+		$to = trim($expires_to);
+
+		if (empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00'))
+		{
+			$to = '';
+		}
+		else
+		{
+			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+
+			if (!preg_match($regex, $to))
+			{
+				$to = '2037-01-01';
+			}
+
+			$jTo = new JDate($to);
+			$to  = $jTo->toUnix();
+
+			if ($to == 0)
+			{
+				$to = '';
+			}
+			else
+			{
+				$to = $jTo->toSql();
+			}
+		}
+
+		if (!empty($from) && !empty($to))
+		{
+			// Filter from-to dates
+			$query->where(
+				$db->qn('publish_down') . ' >= ' . $db->q($from)
+			);
+			$query->where(
+				$db->qn('publish_down') . ' <= ' . $db->q($to)
+			);
+		}
+		elseif (!empty($from) && empty($to))
+		{
+			// Filter after date
+			$query->where(
+				$db->qn('publish_down') . ' >= ' . $db->q($from)
+			);
+		}
+		elseif (empty($from) && !empty($to))
+		{
+			// Filter up to a date
+			$query->where(
+				$db->qn('publish_down') . ' <= ' . $db->q($to)
+			);
+		}
+	}
+
+	/**
+	 * Filter the select query by non-free subscriptions (nozero)
+	 *
+	 * @param   \JDatabaseQuery  $query  The query to modify
+	 *
+	 * @return  void
+	 */
+	protected function filterByNonFree(\JDatabaseQuery $query)
+	{
+		$db = $this->getDbo();
+
+		$nozero = $this->getState('nozero', null, 'int');
+
+		if (!empty($nozero))
+		{
+			$query->where(
+				$db->qn('net_amount') . ' > ' . $db->q('0')
+			);
+		}
 	}
 
 	/**
@@ -102,8 +673,6 @@ class Subscriptions extends DataModel
 		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
-
-		$k     = $this->getKeyName();
 
 		foreach ($resultArray as $index => &$row)
 		{
@@ -198,11 +767,25 @@ class Subscriptions extends DataModel
 		$this->setState('_noemail', false);
 	}
 
+	/**
+	 * Decode the JSON-encoded params field into an associative array when loading the record
+	 *
+	 * @param   string  $value  JSON data
+	 *
+	 * @return  array  The decoded array
+	 */
 	protected function getParamsAttribute($value)
 	{
 		return $this->getAttributeForJson($value);
 	}
 
+	/**
+	 * Encode the params array field into a JSON-encoded string when saving the record
+	 *
+	 * @param   array  $value  The array
+	 *
+	 * @return  string  The JSON-encoded data
+	 */
 	protected function setParamsAttribute($value)
 	{
 		return $this->setAttributeForJson($value);

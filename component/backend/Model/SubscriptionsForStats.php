@@ -711,7 +711,7 @@ class SubscriptionsForStats extends DataModel
 		// "Until" queries
 		$until = trim($state->until);
 
-		if (empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00') || ($since == $db->getNullDate()))
+		if (empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00') || ($until == $db->getNullDate()))
 		{
 			$until = '';
 		}
@@ -903,7 +903,7 @@ class SubscriptionsForStats extends DataModel
 			'moneysum'            => $this->getState('moneysum', null, 'int'),
 			'coupon_id'           => $this->getState('coupon_id', null, 'int'),
 			'filter_discountmode' => $this->getState('filter_discountmode', null, 'cmd'),
-			'filter_discountcode' => $this->getState('filter_discountcode', null, 'cmd'),
+			'filter_discountcode' => $this->getState('filter_discountcode', null, 'string'),
 			'nozero'              => $this->getState('nozero', null, 'int'),
 			'nojoins'             => $this->getState('nojoins', null, 'int'),
 		);

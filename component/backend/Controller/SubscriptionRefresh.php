@@ -37,7 +37,8 @@ class SubscriptionRefresh extends Controller
 		$limitStart = $this->input->getInt('forceoffset', 0);
 		$limit = $this->input->getInt('forcelimit', 100);
 
-		$model->limitstart(0)->limit(0)->refresh(1);
+		$model->limitstart(0)->limit(0);
+		$model->setState('refresh', 1);
 		$list = $model->get();
 		$total = $model->count();
 		$processed = 0;
