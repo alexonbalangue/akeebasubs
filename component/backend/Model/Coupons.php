@@ -15,6 +15,45 @@ use JDate;
 use JLoader;
 use JText;
 
+/**
+ * Model for discount Coupons
+ *
+ * Fields:
+ *
+ * @property  int     $akeebasubs_coupon_id
+ * @property  int     $akeebasubs_apicoupon_id
+ * @property  string  $title
+ * @property  string  $coupon
+ * @property  string  $publish_up
+ * @property  string  $publish_down
+ * @property  int[]   $subscriptions
+ * @property  int     $user
+ * @property  string  $email
+ * @property  array   $params
+ * @property  int     $hitslimit
+ * @property  int     $userhits
+ * @property  int[]   $usergroups
+ * @property  string  $type
+ * @property  float   $value
+ * @property  int     $enabled
+ * @property  int     $ordering
+ * @property  string  $created_on
+ * @property  int     $created_by
+ * @property  string  $modified_on
+ * @property  int     $modified_by
+ * @property  string  $locked_on
+ * @property  int     $locked_by
+ * @property  int     $hits
+ *
+ * Filters:
+ *
+ * @method  $this  search()  search(string $search)
+ *
+ * Relations:
+ *
+ * @property-read  APICoupons  $apiCoupon
+ * @property-read  Users       $forUser
+ */
 class Coupons extends DataModel
 {
 	use Mixin\Assertions, Mixin\DateManipulation, Mixin\ImplodedArrays, Mixin\ImplodedLevels;
@@ -25,7 +64,28 @@ class Coupons extends DataModel
 
 		// Always load the Filters behaviour
 		$this->addBehaviour('Filters');
+
+		$this->hasOne('apiCoupon', 'APICoupons', 'akeebasubs_apicoupon_id', 'akeebasubs_apicoupon_id');
+		$this->hasOne('forUser', 'Users', 'user', 'user_id');
 	}
+
+	public function buildQuery($overrideLimits = false)
+	{
+		$q = parent::buildQuery($overrideLimits);
+
+		$search = $this->getState('search', null, 'string');
+
+		if (!empty($search))
+		{
+			$q->where(
+				"(" . $q->qn('title') . ' LIKE ' . $q->q("%$search%") . ") OR (" .
+				$q->qn('coupon') . ' LIKE ' . $q->q("%$search%") . ")"
+			);
+		}
+
+		return $q;
+	}
+
 
 	/**
 	 * Check the data for validity.

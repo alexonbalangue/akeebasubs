@@ -11,11 +11,13 @@ defined('_JEXEC') or die;
 
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
+use JDate;
+use JLoader;
 
 /**
  * The model for the subscription records
  *
- * Type hints for fields:
+ * Fields:
  *
  * @property  int			$akeebasubs_subscription_id	Primary key
  * @property  int			$user_id					User ID. FK to user relation.
@@ -48,16 +50,22 @@ use FOF30\Model\DataModel;
  * @property  string		$second_contact				Date/time of second expiration notification email sent.
  * @property  string		$after_contact				Date/time of post-expiration notification email sent.
  *
- * Type hints for relations:
+ * Filters / state:
  *
- * @property-read  Users	user		The subscription user
- * @property-read  Levels	level		The subscription level
- * @property-read  Coupons	coupon		The coupon code used (if akeebasubs_coupon_id is not empty)
- * @property-read  Upgrades	upgrade		The upgrade rule used (if akeebasubs_upgrade_id is not empty)
- * @property-read  Invoices invoice		The invoice issues (if akeebasubs_invoice_id is not empty)
+ * @property  bool          $_noemail                   Do not send email on save when true (resets after successful save)
+ *
+ * Relations:
+ *
+ * @property-read  Users	 $user		The subscription user
+ * @property-read  Levels	 $level		The subscription level
+ * @property-read  Coupons	 $coupon	The coupon code used (if akeebasubs_coupon_id is not empty)
+ * @property-read  Upgrades	 $upgrade	The upgrade rule used (if akeebasubs_upgrade_id is not empty)
+ * @property-read  Invoices  $invoice	The invoice issues (if akeebasubs_invoice_id is not empty)
  */
 class Subscriptions extends DataModel
 {
+	use Mixin\JsonData;
+
 	public function __construct(Container $container, array $config = array())
 	{
 		parent::__construct($container, $config);
@@ -73,5 +81,130 @@ class Subscriptions extends DataModel
 		$this->hasOne('invoice', 'Invoices', 'akeebasubs_subscription_id', 'akeebasubs_subscription_id');
 	}
 
-	// TODO Implement this model
+	/**
+	 * Automatically process a list of subscriptions loaded off the database
+	 *
+	 * @param   Subscriptions[]  $resultArray  The list of loaded subscriptions to process
+	 */
+	protected function onAfterGetItemsArray(array &$resultArray)
+	{
+		// Implement the subscription automatic expiration
+		if (empty($resultArray))
+		{
+			return;
+		}
+
+		if ($this->getState('skipOnProcessList', 0))
+		{
+			return;
+		}
+
+		JLoader::import('joomla.utilities.date');
+		$jNow = new JDate();
+		$uNow = $jNow->toUnix();
+
+		$k     = $this->getKeyName();
+
+		foreach ($resultArray as $index => &$row)
+		{
+			if (!property_exists($row, 'params'))
+			{
+				continue;
+			}
+
+			// TODO: This should no longer be necessary
+			if (!is_array($row->params))
+			{
+				if (!empty($row->params))
+				{
+					$row->params = json_decode($row->params, true);
+				}
+			}
+			if (is_null($row->params) || empty($row->params))
+			{
+				$row->params = array();
+			}
+
+			$triggered = false;
+
+			if (($row->getFieldValue('state', 'N') != 'C') && $row->enabled)
+			{
+				$row->enabled = false;
+				$row->save();
+
+				continue;
+			}
+
+			if ($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00'))
+			{
+				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+
+				if (!preg_match($regex, $row->publish_down))
+				{
+					$row->publish_down = '2037-01-01';
+				}
+
+				if (!preg_match($regex, $row->publish_up))
+				{
+					$row->publish_up = '2001-01-01';
+				}
+
+				$jDown = new JDate($row->publish_down);
+				$jUp   = new JDate($row->publish_up);
+
+				if (($uNow >= $jDown->toUnix()) && $row->enabled)
+				{
+					$row->enabled = 0;
+					$triggered    = true;
+				}
+				elseif (($uNow >= $jUp->toUnix()) && !$row->enabled && ($uNow < $jDown->toUnix()))
+				{
+					$row->enabled = 1;
+					$triggered    = true;
+				}
+			}
+
+			if ($triggered)
+			{
+				$row->save();
+			}
+		}
+	}
+
+	/**
+	 * Handle the _noemail flag, used to avoid sending emails after we modify a subscriptions
+	 *
+	 * @param   array  $data
+	 */
+	protected function onBeforeBind(&$data)
+	{
+		if (!is_array($data))
+		{
+			return;
+		}
+
+		if (isset($data['_noemail']))
+		{
+			$this->setState('_noemail', $data['_noemail']);
+			unset($data['_noemail']);
+		}
+	}
+
+	/**
+	 * Reset the _noemail flag after save
+	 */
+	protected function onAfterSave()
+	{
+		$this->setState('_noemail', false);
+	}
+
+	protected function getParamsAttribute($value)
+	{
+		return $this->getAttributeForJson($value);
+	}
+
+	protected function setParamsAttribute($value)
+	{
+		return $this->setAttributeForJson($value);
+	}
 }
