@@ -16,7 +16,7 @@ use JText;
 defined('_JEXEC') or die;
 
 /**
- * A helper class for sending out emails
+ * A helper class for formatting data for display
  */
 abstract class Format
 {
