@@ -9,8 +9,10 @@ namespace Akeeba\Subscriptions\Admin\Controller;
 
 defined('_JEXEC') or die;
 
+use Akeeba\Subscriptions\Admin\Model\RenewalsForReports;
 use FOF30\Container\Container;
 use FOF30\Controller\Controller;
+use FOF30\View\DataView\Form;
 
 class Reports extends Controller
 {
@@ -24,7 +26,7 @@ class Reports extends Controller
 		$this->registerTask('vies', 'invoices');
 		$this->registerTask('vatmoss', 'invoices');
 
-		$this->setPredefinedTaskList(['overview', 'invoices', 'vies', 'vatmoss']);
+		$this->setPredefinedTaskList(['overview', 'invoices', 'vies', 'vatmoss', 'renewals']);
 		$this->cacheableTasks = array();
 	}
 
@@ -44,6 +46,37 @@ class Reports extends Controller
 		$this->layout = $model->layout;
 
 		// Show the view
+		$this->display(false);
+	}
+
+	public function renewals()
+	{
+		$this->modelName = 'RenewalsForReports';
+
+		/** @var RenewalsForReports $model */
+		$model = $this->getModel();
+
+		$getRenewals = $model->getState('getRenewals', 1, 'int');
+
+		if (is_null($getRenewals))
+		{
+			$model->setState('getRenewals', 1);
+		}
+
+		$model
+			->limit($this->input->getInt('limit', \JFactory::getApplication()->get('list_limit')))
+			->limitstart($this->input->getInt('limitstart', 0));
+
+		$this->layout = 'renewals';
+
+		$this->viewInstances['Reports'] = $this->container->factory->view('Reports', 'form', []);
+
+		/** @var Form $view */
+		$view = $this->getView();
+		$view->setDefaultModel($model);
+
+		$form = $model->getForm();
+
 		$this->display(false);
 	}
 }
