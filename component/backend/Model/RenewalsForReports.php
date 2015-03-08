@@ -18,7 +18,8 @@ class RenewalsForReports extends DataModel
 	{
 		$config = [
 			'tableName'   => '#__akeebasubs_users',
-			'idFieldName' => 'akeebasubs_user_id'
+			'idFieldName' => 'akeebasubs_user_id',
+		    'name'        => 'Reports'
 		];
 
 		parent::__construct($container, $config);
@@ -43,6 +44,9 @@ class RenewalsForReports extends DataModel
 				$db->qn('tbl') . '.' . $db->qn('user_id')
 			);
 
+		$this->knownFields['name'] = (object)['Default' => ''];
+		$this->knownFields['email'] = (object)['Default' => ''];
+
 		if (!is_null($state->getRenewals))
 		{
 			$query
@@ -58,6 +62,9 @@ class RenewalsForReports extends DataModel
 				->select(
 					'COUNT(' . $db->qn('subs') . '.' . $db->qn('akeebasubs_level_id') . ') as count_renewals'
 				);
+
+				$this->knownFields['raw_subs'] = (object)['Default' => 0];
+				$this->knownFields['count_renewals'] = (object)['Default' => 0];
 		}
 
 		if (is_numeric($state->user_id) && ($state->user_id > 0))

@@ -51,31 +51,30 @@ class Reports extends Controller
 
 	public function renewals()
 	{
+		// Set up a custom Model
 		$this->modelName = 'RenewalsForReports';
 
 		/** @var RenewalsForReports $model */
 		$model = $this->getModel();
 
 		$getRenewals = $model->getState('getRenewals', 1, 'int');
-
-		if (is_null($getRenewals))
-		{
-			$model->setState('getRenewals', 1);
-		}
+		$model->setState('getRenewals', 1);
 
 		$model
 			->limit($this->input->getInt('limit', \JFactory::getApplication()->get('list_limit')))
 			->limitstart($this->input->getInt('limitstart', 0));
 
+		$model->setFormName('form.renewals');
+
+		// Override the layout
 		$this->layout = 'renewals';
 
+		// Setup a Form view, even though we're not a DataController
 		$this->viewInstances['Reports'] = $this->container->factory->view('Reports', 'form', []);
 
 		/** @var Form $view */
 		$view = $this->getView();
 		$view->setDefaultModel($model);
-
-		$form = $model->getForm();
 
 		$this->display(false);
 	}

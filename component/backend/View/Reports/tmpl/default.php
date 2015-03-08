@@ -14,7 +14,15 @@ $this->getContainer()->platform->getDocument()->addStyleSheet(
 );
 ?>
 
-<div id="cpanel">
+<div>
+	<a href="index.php?option=com_akeebasubs&view=Reports&task=renewals" class="btn cpanel-icon">
+		<span class="icon icon-refresh ak-icon"></span>
+		<br/>
+		<span><?php echo JText::_('COM_AKEEBASUBS_REPORTS_USER_RENEWAL');?></span>
+	</a>
+</div>
+<p></p>
+<div>
 	<a href="index.php?option=com_akeebasubs&view=Reports&task=invoices" class="btn cpanel-icon">
 		<span class="icon icon-list ak-icon"></span>
 		<br/>
