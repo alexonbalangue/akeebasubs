@@ -44,8 +44,8 @@ class RenewalsForReports extends DataModel
 				$db->qn('tbl') . '.' . $db->qn('user_id')
 			);
 
-		$this->knownFields['name'] = (object)['Default' => ''];
-		$this->knownFields['email'] = (object)['Default' => ''];
+		$this->addKnownField('name', '', 'varchar(255)');
+		$this->addKnownField('email', '', 'varchar(255)');
 
 		if (!is_null($state->getRenewals))
 		{
@@ -63,8 +63,8 @@ class RenewalsForReports extends DataModel
 					'COUNT(' . $db->qn('subs') . '.' . $db->qn('akeebasubs_level_id') . ') as count_renewals'
 				);
 
-				$this->knownFields['raw_subs'] = (object)['Default' => 0];
-				$this->knownFields['count_renewals'] = (object)['Default' => 0];
+			$this->addKnownField('raw_subs', 0, 'integer');
+			$this->addKnownField('count_renewals', 0, 'integer');
 		}
 
 		if (is_numeric($state->user_id) && ($state->user_id > 0))
