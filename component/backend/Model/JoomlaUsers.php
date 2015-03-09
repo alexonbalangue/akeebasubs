@@ -43,15 +43,15 @@ class JoomlaUsers extends DataModel
 	}
 
 	/**
-	 * Overridden for additional filters which are not implemented by the Filters behaviour
+	 * Build the SELECT query for returning records. Overridden to apply custom filters.
 	 *
-	 * @param   bool  $overrideLimits
+	 * @param   \JDatabaseQuery  $query           The query being built
+	 * @param   bool             $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
 	 *
-	 * @return  \JDatabaseQuery
+	 * @return  void
 	 */
-	public function buildQuery($overrideLimits = false)
+	public function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
-		$query = parent::buildQuery($overrideLimits);
 		$db = $this->getDbo();
 
 		$userId = $this->getState('user_id', null, 'int');
@@ -74,8 +74,6 @@ class JoomlaUsers extends DataModel
 				')'
 			);
 		}
-
-		return $query;
 	}
 
 	/**
