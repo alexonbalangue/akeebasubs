@@ -86,10 +86,17 @@ class Users extends DataModel
 		}
 	}
 
-	public function buildQuery($overrideLimits = false)
+	/**
+	 * Build the SELECT query for returning records. Overridden to apply custom filters.
+	 *
+	 * @param   \JDatabaseQuery  $query           The query being built
+	 * @param   bool             $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
+	 *
+	 * @return  void
+	 */
+	public function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
 		$db = $this->getDbo();
-		$query = parent::buildQuery($overrideLimits);
 
 		$username = $this->getState('username', null, 'string');
 
@@ -144,8 +151,6 @@ class Users extends DataModel
 				. ')'
 			);
 		}
-
-		return $query;
 	}
 
 	public function getMergedData($user_id = null)
