@@ -125,12 +125,7 @@
                url="index.php?option=com_akeebasubs&amp;view=User&amp;id=[ITEM:ID]"
                 />
 
-        <field name="state" type="GenericList">
-            <option value="N">COM_AKEEBASUBS_SUBSCRIPTION_STATE_N</option>
-            <option value="P">COM_AKEEBASUBS_SUBSCRIPTION_STATE_P</option>
-            <option value="C">COM_AKEEBASUBS_SUBSCRIPTION_STATE_C</option>
-            <option value="X">COM_AKEEBASUBS_SUBSCRIPTION_STATE_X</option>
-        </field>
+        <field name="state" type="PaymentStatus" />
 
         <field name="akeebasubs_coupon_id" type="Text"
         />
