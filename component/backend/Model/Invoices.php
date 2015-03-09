@@ -141,7 +141,7 @@ class Invoices extends DataModel
 			$subs->whereHas('user', function(\JDatabaseQuery $q) use($search) {
 				$q->where(
 					'((' . $q->qn('businessname') . ' LIKE ' . $q->q($search) . ') OR (' .
-					'(' . $q->qn('vatnumber') . ' LIKE ' . $q->q($search) . '))'
+					$q->qn('vatnumber') . ' LIKE ' . $q->q($search) . '))'
 				);
 			});
 
