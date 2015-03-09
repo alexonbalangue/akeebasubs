@@ -788,24 +788,46 @@ class Subscriptions extends DataModel
 	}
 
 	/**
-	 * Handle the flags communicated through the data to be bound / saved.
+	 * Handle the flags communicated through the data to be bound / saved. Also handle the subcustom array passed by the
+	 * GUI which needs to be saved in the params field.
 	 *
 	 * @param   array  $data
 	 */
 	protected function onBeforeBind(&$data)
 	{
+		// No point doing anything on null data, huh?
 		if (!is_array($data))
 		{
 			return;
 		}
 
+		// Handle the flags
 		foreach (['_noemail', '_dontNotify', '_dontCheckPaymentID'] as $flag)
 		{
 			if (isset($data[$flag]))
 			{
 				$this->setState($flag, $data[$flag]);
+
 				unset($data[$flag]);
 			}
+		}
+
+		// Handle the subcustom array which really belongs inside the params array
+		if (!isset($data['params']))
+		{
+			$data['params'] = [];
+		}
+
+		if (!isset($data['params']['subcustom']))
+		{
+			$data['params']['subcustom'] = [];
+		}
+
+		if (isset($data['subcustom']))
+		{
+			$data['params']['subcustom'] = array_merge($data['params']['subcustom'], $data['subcustom']);
+
+			unset($data['subcustom']);
 		}
 	}
 
