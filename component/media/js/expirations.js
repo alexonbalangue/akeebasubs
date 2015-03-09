@@ -14,7 +14,7 @@ if(typeof(akeeba.jQuery) == 'undefined') {
 	akeeba.jQuery = window.jQuery;
 }
 
-var jsonurl = 'index.php?option=com_akeebasubs&view=reports&task=getexpirations&format=json&layout=expirations';
+var jsonurl = 'index.php?option=com_akeebasubs&view=Reports&task=getExpirations&format=json&layout=expirations';
 var expireChart;
 
 function loadExpGraph()

@@ -228,7 +228,7 @@ function validateForm(callback_function)
 
 		$.ajax({
 			type:     'POST',
-			url: akeebasubs_validate_url + '?option=com_akeebasubs&view=validate&format=json',
+			url: akeebasubs_validate_url + '?option=com_akeebasubs&view=Validate&format=json',
 			data:     data,
 			dataType: 'json',
 			success:  function (msg, textStatus, xhr)
