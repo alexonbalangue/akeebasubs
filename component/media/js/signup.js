@@ -13,7 +13,7 @@ if (typeof(akeeba) == 'undefined')
 }
 if (typeof(akeeba.jQuery) == 'undefined')
 {
-	akeeba.jQuery = jQuery.noConflict();
+	akeeba.jQuery = window.jQuery.noConflict();
 }
 
 var akeebasubs_eu_configuration = {

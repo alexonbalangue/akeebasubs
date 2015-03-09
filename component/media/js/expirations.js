@@ -11,7 +11,7 @@ if(typeof(akeeba) == 'undefined') {
 	var akeeba = {};
 }
 if(typeof(akeeba.jQuery) == 'undefined') {
-	akeeba.jQuery = window.jQuery;
+	akeeba.jQuery = window.jQuery.noConflict();
 }
 
 var jsonurl = 'index.php?option=com_akeebasubs&view=Reports&task=getExpirations&format=json&layout=expirations';
