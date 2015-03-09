@@ -2516,7 +2516,7 @@ class AkeebasubsModelSubscribes extends F0FModel
 			->getTable();
 		$subscription->reset();
 		$subscription->akeebasubs_subscription_id = 0;
-		$subscription->_dontCheckPaymentID = true;
+		$data['_dontCheckPaymentID'] = true;
 		$result = $subscription->save($data);
 		$this->_item = $subscription;
 

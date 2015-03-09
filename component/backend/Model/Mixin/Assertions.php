@@ -42,4 +42,18 @@ trait Assertions
 	{
 		$this->assert(!empty($value), $message);
 	}
+
+	/**
+	 * Assert that $value is set to one of $validValues or throw a RuntimeException with the $message language string
+	 *
+	 * @param   mixed   $value        The value to check
+	 * @param   array   $validValues  An array of valid values for $value
+	 * @param   string  $message      The language key for the message to throw
+	 *
+	 * @throws  \RuntimeException
+	 */
+	protected function assertInArray($value, array $validValues, $message)
+	{
+		$this->assert(in_array($value, $validValues), $message);
+	}
 }

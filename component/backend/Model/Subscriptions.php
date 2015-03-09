@@ -87,8 +87,14 @@ use JLoader;
  */
 class Subscriptions extends DataModel
 {
-	use Mixin\JsonData;
+	use Mixin\JsonData, Mixin\Assertions, Mixin\DateManipulation;
 
+	/**
+	 * Public constructor. Adds behaviours and sets up the behaviours and the relations
+	 *
+	 * @param   Container  $container
+	 * @param   array      $config
+	 */
 	public function __construct(Container $container, array $config = array())
 	{
 		parent::__construct($container, $config);
@@ -107,6 +113,32 @@ class Subscriptions extends DataModel
 		$this->hasOne('coupon', 'Coupons');
 		$this->hasOne('upgrade', 'Upgrades');
 		$this->hasOne('invoice', 'Invoices', 'akeebasubs_subscription_id', 'akeebasubs_subscription_id');
+	}
+
+	/**
+	 * Validates the subscription row
+	 */
+	public function check()
+	{
+		$this->assertNotEmpty($this->user_id, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_USER_ID');
+		$this->assertNotEmpty($this->akeebasubs_level_id, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_LEVEL_ID');
+		$this->assertNotEmpty($this->publish_up, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_UP');
+		$this->assertNotEmpty($this->publish_down, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN');
+		$this->assertInArray($this->state, ['N', 'P', 'C', 'X'], 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_STATE');
+
+		$this->normaliseDate($this->publish_up, '2000-01-01');
+		$this->normaliseDate($this->publish_down, '2038-01-01');
+		$this->normaliseEnabled();
+
+		$this->assertNotEmpty($this->processor, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PROCESSOR');
+
+		if (!$this->getState('_dontCheckPaymentID', false))
+		{
+			$this->assertNotEmpty($this->processor, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PROCESSOR_KEY');
+		}
+
+		// If the _noemail state variable is set we have to modify contact_flag
+		$this->applyNoEmailFlag();
 	}
 
 	/**
@@ -752,7 +784,7 @@ class Subscriptions extends DataModel
 	}
 
 	/**
-	 * Handle the _noemail flag, used to avoid sending emails after we modify a subscriptions
+	 * Handle the flags communicated through the data to be bound / saved.
 	 *
 	 * @param   array  $data
 	 */
@@ -763,19 +795,25 @@ class Subscriptions extends DataModel
 			return;
 		}
 
-		if (isset($data['_noemail']))
+		foreach (['_noemail', '_dontNotify', '_dontCheckPaymentID'] as $flag)
 		{
-			$this->setState('_noemail', $data['_noemail']);
-			unset($data['_noemail']);
+			if (isset($data[$flag]))
+			{
+				$this->setState($flag, $data[$flag]);
+				unset($data[$flag]);
+			}
 		}
 	}
 
 	/**
-	 * Reset the _noemail flag after save
+	 * Reset the flags communicated through the data to be bound / saved.
 	 */
 	protected function onAfterSave()
 	{
-		$this->setState('_noemail', false);
+		foreach (['_noemail', '_dontNotify', '_dontCheckPaymentID'] as $flag)
+		{
+			$this->setState($flag, false);
+		}
 	}
 
 	/**
@@ -800,5 +838,69 @@ class Subscriptions extends DataModel
 	protected function setParamsAttribute($value)
 	{
 		return $this->setAttributeForJson($value);
+	}
+
+	/**
+	 * If the current date is outside the publish_up / publish_down range then disable the subscription. Otherwise make
+	 * sure it's enabled if state = C or disabled in any other case.
+	 */
+	protected function normaliseEnabled()
+	{
+		JLoader::import('joomla.utilities.date');
+		$jNow  = new JDate();
+		$uNow  = $jNow->toUnix();
+		$jDown = new JDate($this->publish_down);
+		$jUp   = new JDate($this->publish_up);
+
+		if (($uNow >= $jDown->toUnix()))
+		{
+			$this->enabled = 0;
+		}
+		elseif (($uNow >= $jUp->toUnix()) && ($uNow < $jDown->toUnix()))
+		{
+			$this->enabled = ($this->state == 'C') ? 1 : 0;
+		}
+		else
+		{
+			$this->enabled = 0;
+		}
+	}
+
+	/**
+	 * If the _noemail state variable is set we have to modify the contact_flag. This is used by the backend GUI to let
+	 * the managers set subscriptions to not send notification emails, e.g. when renewed manually.
+	 */
+	protected function applyNoEmailFlag()
+	{
+		$noEmailFlag = $this->getState('_noemail', null);
+
+		if (!is_null($noEmailFlag) && is_numeric($noEmailFlag))
+		{
+			if ($noEmailFlag == 1)
+			{
+				$this->contact_flag = 3;
+			}
+			elseif ($this->contact_flag == 3)
+			{
+				$nullDate = $this->getDbo()->getNullDate();
+
+				if (!empty($this->after_contact) && ($this->after_contact != $nullDate))
+				{
+					$this->contact_flag = 3;
+				}
+				elseif (!empty($this->second_contact) && ($this->second_contact != $nullDate))
+				{
+					$this->contact_flag = 2;
+				}
+				elseif (!empty($this->first_contact) && ($this->first_contact != $nullDate))
+				{
+					$this->contact_flag = 1;
+				}
+				else
+				{
+					$this->contact_flag = 0;
+				}
+			}
+		}
 	}
 }
