@@ -79,15 +79,14 @@ class Invoices extends DataModel
 	/**
 	 * Build the SELECT query for returning records. Overridden to apply custom filters.
 	 *
-	 * @param   bool  $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
+	 * @param   \JDatabaseQuery  $query           The query being built
+	 * @param   bool             $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
 	 *
-	 * @return  \JDatabaseQuery  The SELECT query
+	 * @return  void
 	 */
-	public function buildQuery($overrideLimits = false)
+	public function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
 		$db = $this->getDbo();
-		$query = parent::buildQuery($overrideLimits);
-
 
 		$id = $this->getState('akeebasubs_subscription_id', null, 'int');
 		$subIDs = $this->getState('subids', null, 'array');
@@ -98,9 +97,8 @@ class Invoices extends DataModel
 
 		if (!empty($user))
 		{
-			$search = '%' . $user . '%';
-
 			// First get the Joomla! users fulfilling the criteria
+			/** @var JoomlaUsers $users */
 			$users = $this->container->factory->model('JoomlaUsers')->setIgnoreRequest(true);
 			$userIDs = $users->search($user)->with([])->get(true)->modelKeys();
 			$filteredIDs = [-1];
@@ -273,8 +271,6 @@ class Invoices extends DataModel
 				$query->where($db->qn('sent_on') . ' >= ' . $db->q($jDate->toSql()));
 			}
 		}
-
-		return $query;
 	}
 
 	/**
