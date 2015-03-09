@@ -69,10 +69,8 @@ class Coupons extends DataModel
 		$this->hasOne('forUser', 'Users', 'user', 'user_id');
 	}
 
-	public function buildQuery($overrideLimits = false)
+	public function onAfterBuildQuery(\JDatabaseQuery $q, $overrideLimits = false)
 	{
-		$q = parent::buildQuery($overrideLimits);
-
 		$search = $this->getState('search', null, 'string');
 
 		if (!empty($search))
@@ -82,8 +80,6 @@ class Coupons extends DataModel
 				$q->qn('coupon') . ' LIKE ' . $q->q("%$search%") . ")"
 			);
 		}
-
-		return $q;
 	}
 
 
