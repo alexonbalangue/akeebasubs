@@ -22,21 +22,23 @@ class States extends DataModel
 		$this->addBehaviour('Filters');
 
 		// Some NOT NULL fields should be allowed to be set to an empty string, therefore have to be skipped by check()
-		//$this->fieldsSkipChecks = ['country', 'akeebasubs_level_id'];
+		$this->fieldsSkipChecks = ['country', 'akeebasubs_level_id'];
 	}
 
-	public function buildQuery($overrideLimits = false)
+	/**
+	 * Build the SELECT query for returning records. Overridden to apply custom filters.
+	 *
+	 * @param   \JDatabaseQuery  $query           The query being built
+	 * @param   bool             $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
+	 *
+	 * @return  void
+	 */
+	public function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
-		$query = parent::buildQuery($overrideLimits);
-
-		$db = $this->getDbo();
-
 		if ($this->getState('orderByLabels'))
 		{
 			$query->clear('order');
 			$query->order('country ASC, label ASC');
 		}
-
-		return $query;
 	}
 }
