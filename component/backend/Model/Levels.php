@@ -9,6 +9,7 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
+use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JFactory;
 
@@ -16,37 +17,26 @@ class Levels extends DataModel
 {
 	use Mixin\Assertions, Mixin\ImplodedArrays, Mixin\JsonData;
 
-	public function buildQuery($overrideLimits = false)
+	public function __construct(Container $container, array $config = array())
+	{
+		parent::__construct($container, $config);
+
+		$this->addBehaviour('Filters');
+	}
+
+
+	/**
+	 * Build the SELECT query for returning records. Overridden to apply custom filters.
+	 *
+	 * @param   \JDatabaseQuery  $query           The query being built
+	 * @param   bool             $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
+	 *
+	 * @return  void
+	 */
+	public function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
 		$db = $this->getDbo();
 		$user      = \JFactory::getUser();
-
-		$query = $db->getQuery(true)
-		            ->select('*')
-		            ->from($db->qn('#__akeebasubs_levels'));
-
-		// Run the "before build query" hook and behaviours
-		$this->triggerEvent('onBeforeBuildQuery', array(&$query));
-
-
-		$ordering = $this->getState('ordering', null, 'int');
-
-		if (is_numeric($ordering))
-		{
-			$query->where($db->qn('ordering') . ' = ' . (int) $ordering);
-		}
-
-		$enabled = $this->getState('enabled', '', 'cmd');
-
-		if ($enabled !== '')
-		{
-			$enabled = (int) $enabled;
-		}
-
-		if (is_numeric($enabled))
-		{
-			$query->where($db->qn('enabled') . ' = ' . (int) $enabled);
-		}
 
 		$access_user_id = $this->getState('access_user_id', null);
 
@@ -61,28 +51,17 @@ class Levels extends DataModel
 			}
 		}
 
-		$slug = $this->getState('slug', null);
-
-		if ($slug)
-		{
-			$query->where($db->qn('slug') . ' = ' . $db->q($slug));
-		}
-
-		$title = $this->getState('title', null);
-
-		if ($title)
-		{
-			$query->where($db->qn('title') . ' = ' . $db->q($title));
-		}
-
 		$subIDs = array();
 
 		$only_once = $this->getState('only_once', null);
 
 		if ($only_once && $user->id)
 		{
+			/** @var Subscriptions $mySubscriptions */
 			$mySubscriptions = $this->container->factory
-				->model('Subscriptions')->setIgnoreRequest(true)->savestate(false)
+				->model('Subscriptions')->setIgnoreRequest(true)->savestate(false);
+
+			$mySubscriptions
 				->user_id($user->id)
 				->paystate('C')
 				->get(true);
@@ -205,11 +184,6 @@ class Levels extends DataModel
 			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
 			$query->order($order . ' ' . $dir);
 		}
-
-		// Run the "before after query" hook and behaviours
-		$this->triggerEvent('onAfterBuildQuery', array(&$query));
-
-		return $query;
 	}
 
 	public function check()
