@@ -85,15 +85,15 @@ class Upgrades extends DataModel
 	}
 
 	/**
-	 * Build the query to fetch data from the database
+	 * Build the SELECT query for returning records. Overridden to apply custom filters.
 	 *
-	 * @param   boolean $overrideLimits Should I override limits
+	 * @param   \JDatabaseQuery  $query           The query being built
+	 * @param   bool             $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
 	 *
-	 * @return  \JDatabaseQuery  The database query to use
+	 * @return  void
 	 */
-	public function buildQuery($overrideLimits = false)
+	public function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
-		$query = parent::buildQuery($overrideLimits);
 		$db = $this->getDbo();
 
 		$search = $this->getState('search', null);
@@ -105,7 +105,5 @@ class Upgrades extends DataModel
 				$db->qn('title') . ' LIKE ' . $db->q($search)
 			);
 		}
-
-		return $query;
 	}
 }
