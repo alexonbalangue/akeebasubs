@@ -28,10 +28,16 @@ class TaxRules extends DataModel
 		$this->fieldsSkipChecks = ['country', 'akeebasubs_level_id'];
 	}
 
-	public function buildQuery($overrideLimits = false)
+	/**
+	 * Build the SELECT query for returning records. Overridden to apply custom filters.
+	 *
+	 * @param   \JDatabaseQuery  $query           The query being built
+	 * @param   bool             $overrideLimits  Should I be overriding the limit state (limitstart & limit)?
+	 *
+	 * @return  void
+	 */
+	public function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
-		$query = parent::buildQuery($overrideLimits);
-
 		$db = $this->getDbo();
 
 		$search = $this->getState('search', null, 'string');
@@ -41,20 +47,5 @@ class TaxRules extends DataModel
 			$search = '%' . $search . '%';
 			$query->where($db->qn('city') . ' LIKE ' . $db->q($search));
 		}
-
-		if (!$overrideLimits)
-		{
-			$order = $this->getState('filter_order', 'akeebasubs_taxrule_id', 'cmd');
-
-			if (!in_array($order, array_keys($this->getData())))
-			{
-				$order = 'akeebasubs_taxrule_id';
-			}
-
-			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
-			$query->order($order . ' ' . $dir);
-		}
-
-		return $query;
 	}
 }
