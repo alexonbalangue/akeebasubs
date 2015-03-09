@@ -110,15 +110,12 @@
 
         <field name="id" name_from="akeebasubs_subscription_id" type="Text"
                show_link="true"
+               format="%05u"
                url="index.php?option=com_akeebasubs&amp;view=Subscription&amp;id=[ITEM:ID]"
         />
 
-        <field name="akeebasubs_level_id" type="Model"
+        <field name="akeebasubs_level_id" type="SubscriptionLevel"
             model="Levels"
-            key_field="akeebasubs_level_id"
-            value_field="title"
-            translate="false"
-            apply_access="false"
             show_link="true"
             url="index.php?option=com_akeebasubs&amp;view=Level&amp;id=[ITEM:ID]"
         />

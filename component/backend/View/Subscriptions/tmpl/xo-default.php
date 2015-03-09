@@ -5,20 +5,23 @@
  *  @license GNU General Public License version 3, or later
  */
 
+use Akeeba\Subscriptions\Admin\Helper\Select;
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use Akeeba\Subscriptions\Admin\Helper\Image;
+use Akeeba\Subscriptions\Admin\Helper\Format;
+
+/** @var \FOF30\View\DataView\Html $this */
+
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-AkeebaStrapper::addJSfile('media://com_akeebasubs/js/blockui.js?'.AKEEBASUBS_VERSIONHASH);
+$this->addJavascriptFile('media://com_akeebasubs/js/blockui.js');
 
 JHTML::_('behavior.tooltip');
 
-$this->loadHelper('cparams');
-$this->loadHelper('select');
-$this->loadHelper('format');
-$this->loadHelper('image');
-
-$couponsRaw = F0FModel::getTmpInstance('Coupons','AkeebasubsModel')
+$couponsRaw = $this->getContainer()->factory->model('Coupons')
 	->savestate(0)
+	->setIgnoreRequest(true)
 	->limit(0)
 	->limitstart(0)
 	->getList();
@@ -28,8 +31,9 @@ foreach($couponsRaw as $coupon) {
 }
 unset($couponsRaw);
 
-$upgradesRaw = F0FModel::getTmpInstance('Upgrades','AkeebasubsModel')
+$upgradesRaw = $this->getContainer()->factory->model('Upgrades')
 	->savestate(0)
+    ->setIgnoreRequest(true)
 	->limit(0)
 	->limitstart(0)
 	->getList();
@@ -93,7 +97,7 @@ $now_timestamp = $jDate->toUnix();
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="btn-group pull-right hidden-phone">
 			<label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC') ?></label>
-			<?php echo $this->getModel()->getPagination()->getLimitBox(); ?>
+			<?php echo $this->getPagination()->getLimitBox(); ?>
 		</div>
 		<?php
 		$asc_sel	= ($this->getLists()->order_Dir == 'asc') ? 'selected="selected"' : '';
@@ -170,7 +174,7 @@ $now_timestamp = $jDate->toUnix();
 				</button>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::subscriptionlevels($this->getModel()->getState('level',''), 'level', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
+				<?php echo Select::subscriptionlevels($this->getModel()->getState('level',''), 'level', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 			</td>
 			<td>
 				<input type="text" name="search" id="search"
@@ -188,9 +192,9 @@ $now_timestamp = $jDate->toUnix();
 				</nobr>
 			</td>
 			<td  colspan="2">
-				<?php echo AkeebasubsHelperSelect::paystates($this->getModel()->getState('paystate',''), 'paystate', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
+				<?php echo Select::paystates($this->getModel()->getState('paystate',''), 'paystate', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 
-				<?php echo AkeebasubsHelperSelect::processors($this->getModel()->getState('processor',''), 'processor', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
+				<?php echo Select::processors($this->getModel()->getState('processor',''), 'processor', array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 
 				<input type="text" name="paykey" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('paykey',''));?>"
@@ -200,7 +204,7 @@ $now_timestamp = $jDate->toUnix();
 					placeholder="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_PROCESSOR_KEY')?>"
 				/>
 
-				<?php echo AkeebasubsHelperSelect::discountmodes('filter_discountmode', $this->getModel()->getState('filter_discountmode','') , array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
+				<?php echo Select::discountmodes('filter_discountmode', $this->getModel()->getState('filter_discountmode','') , array('onchange'=>'this.form.submit();', 'class'=>'input-medium')) ?>
 				<input type="text" name="filter_discountcode" id="paykey"
 					value="<?php echo $this->escape($this->getModel()->getState('filter_discountcode',''));?>"
 					class="input-medium" onchange="document.adminForm.submit();"
@@ -216,7 +220,7 @@ $now_timestamp = $jDate->toUnix();
 				<?php echo JHTML::_('calendar', $this->getModel()->getState('since',''), 'since', 'since', '%Y-%m-%d', array('onchange' => 'this.form.submit();', 'class'=>'input-small')); ?>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperSelect::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'input-small')) ?>
+				<?php echo Select::published($this->getModel()->getState('enabled',''), 'enabled', array('onchange'=>'this.form.submit();', 'class'=>'input-small')) ?>
 			</td>
 		</tr>
 	</thead>
@@ -252,7 +256,9 @@ $now_timestamp = $jDate->toUnix();
 
 			$subscription->published = $subscription->enabled;
 
-			$users = F0FModel::getTmpInstance('Users','AkeebasubsModel')
+			$users = $this->getContainer()->factory->model('Users')
+				->savestate(0)
+			    ->setIgnoreRequest(true)
 				->user_id($subscription->user_id)
 				->getList();
 			if(empty($users)) {
@@ -277,7 +283,7 @@ $now_timestamp = $jDate->toUnix();
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?php echo $this->escape($subscription->title); ?>::<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_LEVEL_EDIT_TOOLTIP')?>">
-					<img src="<?php echo AkeebasubsHelperImage::getURL($subscription->image)?>" width="32" height="32" class="sublevelpic" />
+					<img src="<?php echo Image::getURL($subscription->image)?>" width="32" height="32" class="sublevelpic" />
 					<a href="index.php?option=com_akeebasubs&view=level&id=<?php echo $subscription->akeebasubs_level_id ?>" class="subslevel">
     					<?php echo $this->escape($subscription->title)?>
     				</a>
@@ -285,7 +291,7 @@ $now_timestamp = $jDate->toUnix();
 			</td>
 			<td>
 				<span class="editlinktip hasTip" title="<?php echo $this->escape($subscription->username) ?>::<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_USER_EDIT_TOOLTIP')?>">
-					<?php if(AkeebasubsHelperCparams::getParam('gravatar',true)):?>
+					<?php if(ComponentParams::getParam('gravatar',true)):?>
 						<?php if(JURI::getInstance()->getScheme() == 'http'): ?>
 							<img src="http://www.gravatar.com/avatar/<?php echo md5(strtolower($subscription->email))?>.jpg?s=32&d=mm" align="left" class="gravatar"  />
 						<?php else: ?>
@@ -341,64 +347,64 @@ $now_timestamp = $jDate->toUnix();
 
 				<?php if($subscription->discount_amount > 0): ?>
 				<span class="akeebasubs-subscription-netamount">
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				<?php echo sprintf('%2.2f', (float)$subscription->prediscount_amount) ?>
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				</span>
 				<span class="akeebasubs-subscription-discountamount">
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				- <?php echo sprintf('%2.2f', (float)$subscription->discount_amount) ?>
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				</span>
 				<?php else: ?>
 				<span class="akeebasubs-subscription-netamount">
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				<?php echo sprintf('%2.2f', (float)$subscription->net_amount) ?>
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				</span>
 				<?php endif; ?>
 				<span class="akeebasubs-subscription-taxamount">
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				<?php echo sprintf('%2.2f', (float)$subscription->tax_amount) ?>
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				</span>
 				<?php endif; ?>
 				<span class="akeebasubs-subscription-grossamount">
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				<?php echo sprintf('%2.2f', (float)$subscription->gross_amount) ?>
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+				<?php echo ComponentParams::getParam('currencysymbol','€')?>
 				<?php endif; ?>
 				</span>
 			</td>
 			<td>
 				<div class="akeebasubs-susbcription-publishup">
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up, 'Y-m-d H:i') ?>
+					<?php echo Format::date($subscription->publish_up, 'Y-m-d H:i') ?>
 				</div>
 				<div class="akeebasubs-susbcription-publishdown">
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down, 'Y-m-d H:i') ?>
+					<?php echo Format::date($subscription->publish_down, 'Y-m-d H:i') ?>
 				</div>
 			</td>
 			<td>
-				<?php echo AkeebasubsHelperFormat::date($subscription->created_on, 'Y-m-d H:i') ?>
+				<?php echo Format::date($subscription->created_on, 'Y-m-d H:i') ?>
 			</td>
 			<td align="center">
 				<?php echo JHTML::_('grid.published', $subscription, $i); ?>

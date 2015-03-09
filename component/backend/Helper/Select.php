@@ -1395,6 +1395,24 @@ abstract class Select
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
+
+	public static function getAllPaymentMethods()
+	{
+		/** @var PaymentMethods $pluginsModel */
+		$pluginsModel = Container::getInstance('com_akeebasubs')->factory
+			->model('PaymentMethods');
+
+		$plugins = $pluginsModel->getPaymentPlugins();
+
+		$ret = [];
+
+		foreach ($plugins as $plugin)
+		{
+			$ret[$plugin->name ] = $plugin->title;
+		}
+
+		return $ret;
+	}
 }
 
 // Load the states from the database
