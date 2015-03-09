@@ -18,7 +18,7 @@ use JDate;
  * By having a separate model for the funky statistics gathering we can keep the main Subscriptions model simple
  * and tidy.
  */
-class SubscriptionsForStats extends DataModel
+class SubscriptionsForStats extends Subscriptions
 {
 	public function __construct(Container $container, array $config = array())
 	{
@@ -28,6 +28,8 @@ class SubscriptionsForStats extends DataModel
 		];
 
 		parent::__construct($container, $config);
+
+		$this->setBehaviorParam('tableAlias', 'tbl');
 	}
 
 	/**
@@ -48,76 +50,53 @@ class SubscriptionsForStats extends DataModel
 	}
 
 	/**
-	 * Generate the query for count()
+	 * Build the COUNT query
 	 *
-	 * @return  \JDatabaseQuery
+	 * @param   \JDatabaseQuery $query
 	 */
-	protected function buildCountQuery()
+	protected function onBuildCountQuery($query)
 	{
-		$db    = $this->getDbo();
+		$db = $this->getDbo();
+
 		$state = $this->getFilterValues();
+
+		// Get a "count all" query
+		$query = $db->getQuery(true)
+            ->select('COUNT(*)')
+            ->from($db->qn('#__akeebasubs_subscriptions') . ' AS ' . $db->qn('tbl'));
 
 		if ($state->refresh == 1)
 		{
-			$query = $db->getQuery(true)
+			$query1 = $db->getQuery(true)
 			            ->select('COUNT(*)')
 			            ->from($db->qn('#__akeebasubs_subscriptions') . ' AS ' . $db->qn('tbl'));
 
-			$this->_buildQueryJoins($query);
-			$this->_buildQueryWhere($query);
-			$this->_buildQueryGroup($query);
-
-			// $query retruns X rows, where X is the number of users. We need the count of users, so...
-			$query2 = $db->getQuery(true)
+			// $query1 retruns X rows, where X is the number of users. We need the count of users, so...
+			$query = $db->getQuery(true)
 			             ->select('COUNT(*)')
-			             ->from('(' . (string) $query . ') AS ' . $db->qn('tbl'));
-
-			return $query2;
+			             ->from('(' . (string) $query1 . ') AS ' . $db->qn('tbl'));
 		}
 		elseif ($state->moneysum == 1)
 		{
 			$query = $db->getQuery(true)
 			            ->select('SUM(' . $db->qn('net_amount') . ') AS ' . $db->qn('x'))
 			            ->from($db->qn('#__akeebasubs_subscriptions') . ' AS ' . $db->qn('tbl'));
-
-			$this->_buildQueryJoins($query);
-			$this->_buildQueryWhere($query);
-			$this->_buildQueryGroup($query);
-
-			return $query;
 		}
-		else
+
+		// Apply user filtering
+		$this->filterByUser();
+
+		// Apply custom WHERE clauses
+		if (count($this->whereClauses))
 		{
-			$query = $db->getQuery(true)
-			            ->select('COUNT(*)')
-			            ->from($db->qn('#__akeebasubs_subscriptions') . ' AS ' . $db->qn('tbl'));
-
-			$this->_buildQueryJoins($query);
-			$this->_buildQueryWhere($query);
-			$this->_buildQueryGroup($query);
-
-			return $query;
+			foreach ($this->whereClauses as $clause)
+			{
+				$query->where($clause);
+			}
 		}
-	}
 
-	/**
-	 * Overridden count to use our custom buildCountQuery method
-	 *
-	 * @return mixed
-	 */
-	public function count()
-	{
-		$db = $this->getDbo();
-
-		// Get a "count all" query
-		$query = $this->buildCountQuery();
-
-		// Run the "before build query" hook and behaviours
-		$this->triggerEvent('onBuildCountQuery', array(&$query));
-
-		$total = $db->setQuery($query)->loadResult();
-
-		return $total;
+		// Run filters and apply WHERE, JOIN and GROUP BY clauses
+		$this->triggerEvent('onAfterBuildQuery', array(&$query));
 	}
 
 	/**
@@ -324,557 +303,103 @@ class SubscriptionsForStats extends DataModel
 	}
 
 	/**
-	 * Build the WHERE clause of select and count queries
+	 * Map state variables from their old names to their new names, for a modicum of backwards compatibility
 	 *
-	 * @param   \JDatabaseQuery  $query
+	 * @param   \JDatabaseQuery  $query           The query I'm modifying
+	 * @param   bool             $overrideLimits  Am I asked to override limit/limitstart?
 	 */
-	protected function _buildQueryWhere(\JDatabaseQuery $query)
+	protected function onBeforeBuildQuery(\JDatabaseQuery &$query, $overrideLimits = false)
+	{
+		// We need to disable auto filtering when group by date or level is enabled
+		$state = $this->getFilterValues();
+
+		if ($state->groupbydate && $state->groupbylevel)
+		{
+			$this->blacklistFilters([
+				'enabled', 'title', 'akeebasubs_coupon_id', 'user_id', 'contact_flag', 'publish_up', 'publish_down'
+			]);
+		}
+		else
+		{
+			// Filtering by user information only applies when we're not grouping by date / level
+			$this->filterByUser();
+		}
+
+		// Map state variables to what is used by automatic filters
+		foreach (
+			[
+				'subid'     => 'akeebasubs_subscription_id',
+				'level'     => 'akeebasubs_level_id',
+				'paystate'  => 'state',
+				'paykey'    => 'processor_key',
+				'coupon_id' => 'akeebasubs_coupon_id',
+			] as $from => $to)
+		{
+			$this->setState($to, $this->getState($from, null));
+		}
+
+		// Replace the query with our custom query
+		$db = $this->getDbo();
+		$query = $db->getQuery(true)
+		    ->from($db->qn('#__akeebasubs_subscriptions') . ' AS ' . $db->qn('tbl'));
+
+		// Build the query columns
+		$this->_buildQueryColumns($query, $overrideLimits);
+	}
+
+	/**
+	 * Apply additional filtering to the select query
+	 *
+	 * @param   \JDatabaseQuery  $query  The query to modify
+	 */
+	protected function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
 	{
 		$db    = $this->getDbo();
 		$state = $this->getFilterValues();
 
+		// Build the JOIN and GROUP BY clauses
+		$this->_buildQueryJoins($query);
+		$this->_buildQueryGroup($query);
+
 		if ($state->refresh == 1)
 		{
+			// Remove already added WHERE clauses
+			$query->clear('where');
+
+			// Remove user-defined WHERE clauses
+			$this->whereClauses = [];
+
+			// Remove relation filters which would result in WHERE clauses with sub-queries
+			$this->relationFilters = [];
+
+			// Do not process anything else, we're done
 			return;
-		}
-
-		\JLoader::import('joomla.utilities.date');
-
-		if ($state->subid)
-		{
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('akeebasubs_subscription_id') . ' = ' . $db->q($state->subid)
-			);
-		}
-
-		if ($state->paystate)
-		{
-			$states_temp = explode(',', $state->paystate);
-			$states      = array();
-
-			foreach ($states_temp as $s)
-			{
-				$s = strtoupper($s);
-
-				if (!in_array($s, array('C', 'P', 'N', 'X')))
-				{
-					continue;
-				}
-
-				$states[] = $db->q($s);
-			}
-
-			if (!empty($states))
-			{
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('state') . ' IN (' .
-					implode(',', $states) . ')'
-				);
-			}
-		}
-
-		if ($state->processor)
-		{
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('processor') . ' = ' .
-				$db->q($state->processor)
-			);
-		}
-
-		if ($state->paykey)
-		{
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('processor_key') . ' LIKE ' .
-				$db->q('%' . $state->paykey . '%')
-			);
 		}
 
 		if (!$state->groupbydate && !$state->groupbylevel)
 		{
-			if (is_numeric($state->enabled))
-			{
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('enabled') . ' = ' .
-					$db->q($state->enabled)
-				);
-			}
+			// Filter by discount mode and code (filter_discountmode / filter_discountcode)
+			$this->filterByDiscountCode($query);
 
-			if ($state->title)
-			{
-				$search = '%' . $state->title . '%';
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('title') . ' LIKE ' .
-					$db->q($search)
-				);
-			}
-
-			if ($state->search)
-			{
-				$search = '%' . $state->search . '%';
-				// @todo Try to use JDatabase quoting functions on this beast without a strong urge to commit suicide
-				$query->where(
-					'CONCAT(IF(u.name IS NULL,"",u.name),IF(u.username IS NULL,"",u.username),IF(u.email IS NULL, "", u.email),IF(a.businessname IS NULL, "", a.businessname), IF(a.vatnumber IS NULL,"",a.vatnumber)) LIKE ' .
-					$db->q($search)
-				);
-			}
-
-			if (is_numeric($state->coupon_id) && ($state->coupon_id > 0))
-			{
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('akeebasubs_coupon_id') . ' = ' .
-					$db->q($state->coupon_id)
-				);
-			}
-
-			if (is_numeric($state->user_id) && ($state->user_id > 0))
-			{
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('user_id') . ' = ' .
-					$db->q($state->user_id)
-				);
-			}
-
-			if (is_numeric($state->contact_flag))
-			{
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('contact_flag') . ' = ' .
-					$db->q($state->contact_flag)
-				);
-			}
-
-			// Filter the dates
-			$from = trim($state->publish_up);
-			if (empty($from))
-			{
-				$from = '';
-			}
-			else
-			{
-				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-				if (!preg_match($regex, $from))
-				{
-					$from = '2001-01-01';
-				}
-				$jFrom = new JDate($from);
-				$from  = $jFrom->toUnix();
-				if ($from == 0)
-				{
-					$from = '';
-				}
-				else
-				{
-					$from = $jFrom->toSql();
-				}
-			}
-
-			$to = trim($state->publish_down);
-			if (empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00'))
-			{
-				$to = '';
-			}
-			else
-			{
-				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-				if (!preg_match($regex, $to))
-				{
-					$to = '2037-01-01';
-				}
-				$jTo = new JDate($to);
-				$to  = $jTo->toUnix();
-				if ($to == 0)
-				{
-					$to = '';
-				}
-				else
-				{
-					$to = $jTo->toSql();
-				}
-			}
-
-			if (!empty($from) && !empty($to))
-			{
-				// Filter from-to dates
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('publish_up') . ' >= ' .
-					$db->q($from)
-				);
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('publish_up') . ' <= ' .
-					$db->q($to)
-				);
-			}
-			elseif (!empty($from) && empty($to))
-			{
-				// Filter after date
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('publish_up') . ' >= ' .
-					$db->q($from)
-				);
-			}
-			elseif (empty($from) && !empty($to))
-			{
-				// Filter up to a date
-				$query->where(
-					$db->qn('tbl') . '.' . $db->qn('publish_down') . ' <= ' .
-					$db->q($to)
-				);
-			}
-
-			// Dicsount mode and code search
-			$coupon_ids  = array();
-			$upgrade_ids = array();
-
-			switch ($state->filter_discountmode)
-			{
-				case 'none':
-					$query->where(
-						'(' .
-						'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_coupon_id') . ' = ' .
-						$db->q(0) . ')'
-						. ' AND ' .
-						'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_upgrade_id') . ' = ' .
-						$db->q(0) . ')'
-						. ')'
-					);
-					break;
-
-				case 'coupon':
-					$query->where(
-						'(' .
-						'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_coupon_id') . ' > ' .
-						$db->q(0) . ')'
-						. ' AND ' .
-						'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_upgrade_id') . ' = ' .
-						$db->q(0) . ')'
-						. ')'
-					);
-
-					if ($state->filter_discountcode)
-					{
-						/** @var Coupons $couponsModel */
-						$couponsModel = $this->container->factory->model('Coupons');
-
-						$coupons = $couponsModel
-		                   ->search($state->filter_discountcode)
-		                   ->get(true);
-
-						if (!empty($coupons))
-						{
-							foreach ($coupons as $coupon)
-							{
-								$coupon_ids[] = $coupon->akeebasubs_coupon_id;
-							}
-						}
-						unset($coupons);
-					}
-					break;
-
-				case 'upgrade':
-					$query->where(
-						'(' .
-						'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_coupon_id') . ' = ' .
-						$db->q(0) . ')'
-						. ' AND ' .
-						'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_upgrade_id') . ' > ' .
-						$db->q(0) . ')'
-						. ')'
-					);
-					if ($state->filter_discountcode)
-					{
-						/** @var Upgrades $upgradesModel */
-						$upgradesModel = $this->container->factory->model('Upgrades');
-
-						$upgrades = $upgradesModel
-		                    ->search($state->filter_discountcode)
-		                    ->get(true);
-
-						if (!empty($upgrades))
-						{
-							foreach ($upgrades as $upgrade)
-							{
-								$upgrade_ids[] = $upgrade->akeebasubs_upgrade_id;
-							}
-						}
-						unset($upgrades);
-					}
-					break;
-
-				default:
-					if ($state->filter_discountcode)
-					{
-						/** @var Coupons $couponsModel */
-						$couponsModel = $this->container->factory->model('Coupons');
-
-						$coupons = $couponsModel
-		                   ->search($state->filter_discountcode)
-		                   ->get(true);
-
-						if (!empty($coupons))
-						{
-							foreach ($coupons as $coupon)
-							{
-								$coupon_ids[] = $coupon->akeebasubs_coupon_id;
-							}
-						}
-						unset($coupons);
-					}
-
-					if ($state->filter_discountcode)
-					{
-						/** @var Upgrades $upgradesModel */
-						$upgradesModel = $this->container->factory->model('Upgrades');
-
-						$upgrades = $upgradesModel
-							->search($state->filter_discountcode)
-							->get(true);
-
-						if (!empty($upgrades))
-						{
-							foreach ($upgrades as $upgrade)
-							{
-								$upgrade_ids[] = $upgrade->akeebasubs_upgrade_id;
-							}
-						}
-
-						unset($upgrades);
-					}
-					break;
-			}
-
-			if (!empty($coupon_ids) && !empty($upgrade_ids))
-			{
-				$query->where(
-					'(' .
-					'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_coupon_id') . ' IN (' .
-					$db->q(implode(',', $coupon_ids)) . '))'
-					. ' OR ' .
-					'(' . $db->qn('tbl') . '.' . $db->qn('akeebasubs_upgrade_id') . ' IN (' .
-					$db->q(implode(',', $upgrade_ids)) . '))'
-					. ')'
-				);
-			}
-			elseif (!empty($coupon_ids))
-			{
-				$query->where($db->qn('tbl') . '.' . $db->qn('akeebasubs_coupon_id') . ' IN (' .
-				              $db->q(implode(',', $coupon_ids)) . ')');
-			}
-			elseif (!empty($upgrade_ids))
-			{
-				$query->where($db->qn('tbl') . '.' . $db->qn('akeebasubs_upgrade_id') . ' IN (' .
-				              $db->q(implode(',', $upgrade_ids)) . ')');
-			}
+			// Filter by publish_up / publish_down dates
+			$this->filterByDate($query);
 		}
 
-		// Subscription level filter
-		if (is_numeric($state->level) && ($state->level > 0))
-		{
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('akeebasubs_level_id') . ' = ' .
-				$db->q($state->level)
-			);
-		}
+		// Filter by created date (since / until)
+		$this->filterByCreatedOn($query);
 
-		// "Since" queries
-		$since = trim($state->since);
-		if (empty($since) || ($since == '0000-00-00') || ($since == '0000-00-00 00:00:00') || ($since == $db->getNullDate()))
-		{
-			$since = '';
-		}
-		else
-		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{1,2}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
+		// Filter by expiration date range (expires_from / expires_to)
+		$this->filterByExpirationDate($query);
 
-			if (!preg_match($regex, $since))
-			{
-				$since = '2001-01-01';
-			}
-
-			$jFrom = new JDate($since);
-			$since = $jFrom->toUnix();
-
-			if ($since == 0)
-			{
-				$since = '';
-			}
-			else
-			{
-				$since = $jFrom->toSql();
-			}
-
-			// Filter from-to dates
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('created_on') . ' >= ' .
-				$db->q($since)
-			);
-		}
-
-		// "Until" queries
-		$until = trim($state->until);
-
-		if (empty($until) || ($until == '0000-00-00') || ($until == '0000-00-00 00:00:00') || ($until == $db->getNullDate()))
-		{
-			$until = '';
-		}
-		else
-		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{1,2}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-			if (!preg_match($regex, $until))
-			{
-				$until = '2037-01-01';
-			}
-
-			$jFrom = new JDate($until);
-			$until = $jFrom->toUnix();
-
-			if ($until == 0)
-			{
-				$until = '';
-			}
-			else
-			{
-				$until = $jFrom->toSql();
-			}
-
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('created_on') . ' <= ' .
-				$db->q($until)
-			);
-		}
-
-		// Expiration control queries
-		\JLoader::import('joomla.utilities.date');
-		$from = trim($state->expires_from);
-
-		if (empty($from))
-		{
-			$from = '';
-		}
-		else
-		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-
-			if (!preg_match($regex, $from))
-			{
-				$from = '2001-01-01';
-			}
-
-			$jFrom = new JDate($from);
-			$from  = $jFrom->toUnix();
-
-			if ($from == 0)
-			{
-				$from = '';
-			}
-			else
-			{
-				$from = $jFrom->toSql();
-			}
-		}
-
-		$to = trim($state->expires_to);
-
-		if (empty($to) || ($to == '0000-00-00') || ($to == '0000-00-00 00:00:00'))
-		{
-			$to = '';
-		}
-		else
-		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-
-			if (!preg_match($regex, $to))
-			{
-				$to = '2037-01-01';
-			}
-
-			$jTo = new JDate($to);
-			$to  = $jTo->toUnix();
-
-			if ($to == 0)
-			{
-				$to = '';
-			}
-			else
-			{
-				$to = $jTo->toSql();
-			}
-		}
-
-		if (!empty($from) && !empty($to))
-		{
-			// Filter from-to dates
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('publish_down') . ' >= ' .
-				$db->q($from)
-			);
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('publish_down') . ' <= ' .
-				$db->q($to)
-			);
-		}
-		elseif (!empty($from) && empty($to))
-		{
-			// Filter after date
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('publish_down') . ' >= ' .
-				$db->q($from)
-			);
-		}
-		elseif (empty($from) && !empty($to))
-		{
-			// Filter up to a date
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('publish_down') . ' <= ' .
-				$db->q($to)
-			);
-		}
-
-		// No-zero toggle
-		if (!empty($state->nozero))
-		{
-			$query->where(
-				$db->qn('tbl') . '.' . $db->qn('net_amount') . ' > ' .
-				$db->q('0')
-			);
-		}
+		// Fitler by non-free subscriptions (nozero)
+		$this->filterByNonFree($query);
 	}
 
 	/**
-	 * Return a customised query for SELECT queries
+	 * A quick way to get the values of all interesting state parameters
 	 *
-	 * @param   bool  $overrideLimits  True to not apply any limits
-	 *
-	 * @return \JDatabaseQuery
+	 * @return  object
 	 */
-	public function buildQuery($overrideLimits = false)
-	{
-		$db    = $this->getDbo();
-
-		$query = $db->getQuery(true)
-            ->from($db->qn('#__akeebasubs_subscriptions') . ' AS ' . $db->qn('tbl'));
-
-		// Run the "before build query" hook and behaviours
-		$this->triggerEvent('onBeforeBuildQuery', array(&$query));
-
-		$this->_buildQueryColumns($query, $overrideLimits);
-		$this->_buildQueryJoins($query);
-		$this->_buildQueryWhere($query);
-		$this->_buildQueryGroup($query);
-
-		// Apply custom WHERE clauses
-		if (count($this->whereClauses))
-		{
-			foreach ($this->whereClauses as $clause)
-			{
-				$query->where($clause);
-			}
-		}
-
-		// Run the "before after query" hook and behaviours
-		$this->triggerEvent('onAfterBuildQuery', array(&$query));
-
-		return $query;
-	}
-
 	private function getFilterValues()
 	{
 		$enabled = $this->getState('enabled', '', 'cmd');
