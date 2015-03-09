@@ -102,7 +102,7 @@ class Subscriptions extends DataModel
 		]);
 
 		// Set up relations
-		$this->hasOne('user', 'Users');
+		$this->hasOne('user', 'Users', 'user_id', 'user_id');
 		$this->hasOne('level', 'Levels');
 		$this->hasOne('coupon', 'Coupons');
 		$this->hasOne('upgrade', 'Upgrades');
