@@ -218,6 +218,9 @@ class Subscriptions extends DataModel
 	{
 		$db = $this->getDbo();
 
+		$tableAlias = $this->getBehaviorParam('tableAlias', null);
+		$tableAlias = !empty($tableAlias) ? ($db->qn($tableAlias) . '.') : '';
+
 		$filter_discountmode = $this->getState('filter_discountmode', null, 'cmd');
 		$filter_discountcode = $this->getState('filter_discountcode', null, 'string');
 
@@ -229,9 +232,9 @@ class Subscriptions extends DataModel
 			case 'none':
 				$query->where(
 					'(' .
-					'(' . $db->qn('akeebasubs_coupon_id') . ' = ' . $db->q(0) . ')'
+					'(' . $tableAlias . $db->qn('akeebasubs_coupon_id') . ' = ' . $db->q(0) . ')'
 					. ' AND ' .
-					'(' . $db->qn('akeebasubs_upgrade_id') . ' = ' . $db->q(0) . ')'
+					'(' . $tableAlias . $db->qn('akeebasubs_upgrade_id') . ' = ' . $db->q(0) . ')'
 					. ')'
 				);
 				break;
@@ -239,9 +242,9 @@ class Subscriptions extends DataModel
 			case 'coupon':
 				$query->where(
 					'(' .
-					'(' . $db->qn('akeebasubs_coupon_id') . ' > ' . $db->q(0) . ')'
+					'(' . $tableAlias . $db->qn('akeebasubs_coupon_id') . ' > ' . $db->q(0) . ')'
 					. ' AND ' .
-					'(' . $db->qn('akeebasubs_upgrade_id') . ' = ' . $db->q(0) . ')'
+					'(' . $tableAlias . $db->qn('akeebasubs_upgrade_id') . ' = ' . $db->q(0) . ')'
 					. ')'
 				);
 
@@ -268,9 +271,9 @@ class Subscriptions extends DataModel
 			case 'upgrade':
 				$query->where(
 					'(' .
-					'(' . $db->qn('akeebasubs_coupon_id') . ' = ' . $db->q(0) . ')'
+					'(' . $tableAlias . $db->qn('akeebasubs_coupon_id') . ' = ' . $db->q(0) . ')'
 					. ' AND ' .
-					'(' . $db->qn('akeebasubs_upgrade_id') . ' > ' . $db->q(0) . ')'
+					'(' . $tableAlias . $db->qn('akeebasubs_upgrade_id') . ' > ' . $db->q(0) . ')'
 					. ')'
 				);
 				if ($filter_discountcode)
@@ -339,19 +342,19 @@ class Subscriptions extends DataModel
 		{
 			$query->where(
 				'(' .
-				'(' . $db->qn('akeebasubs_coupon_id') . ' IN (' . $db->q(implode(',', $coupon_ids)) . '))'
+				'(' . $tableAlias . $db->qn('akeebasubs_coupon_id') . ' IN (' . $db->q(implode(',', $coupon_ids)) . '))'
 				. ' OR ' .
-				'(' . $db->qn('akeebasubs_upgrade_id') . ' IN (' . $db->q(implode(',', $upgrade_ids)) . '))'
+				'(' . $tableAlias . $db->qn('akeebasubs_upgrade_id') . ' IN (' . $db->q(implode(',', $upgrade_ids)) . '))'
 				. ')'
 			);
 		}
 		elseif (!empty($coupon_ids))
 		{
-			$query->where($db->qn('akeebasubs_coupon_id') . ' IN (' . $db->q(implode(',', $coupon_ids)) . ')');
+			$query->where($tableAlias . $db->qn('akeebasubs_coupon_id') . ' IN (' . $db->q(implode(',', $coupon_ids)) . ')');
 		}
 		elseif (!empty($upgrade_ids))
 		{
-			$query->where($db->qn('akeebasubs_upgrade_id') . ' IN (' . $db->q(implode(',', $upgrade_ids)) . ')');
+			$query->where($tableAlias . $db->qn('akeebasubs_upgrade_id') . ' IN (' . $db->q(implode(',', $upgrade_ids)) . ')');
 		}
 	}
 
@@ -365,6 +368,9 @@ class Subscriptions extends DataModel
 	protected function filterByDate(\JDatabaseQuery $query)
 	{
 		$db = $this->getDbo();
+
+		$tableAlias = $this->getBehaviorParam('tableAlias', null);
+		$tableAlias = !empty($tableAlias) ? ($db->qn($tableAlias) . '.') : '';
 
 		\JLoader::import('joomla.utilities.date');
 		$publish_up = $this->getState('publish_up', null, 'string');
@@ -429,24 +435,24 @@ class Subscriptions extends DataModel
 		{
 			// Filter from-to dates
 			$query->where(
-				$db->qn('publish_up') . ' >= ' .  $db->q($from)
+				$tableAlias . $db->qn('publish_up') . ' >= ' .  $db->q($from)
 			);
 			$query->where(
-				$db->qn('publish_up') . ' <= ' . $db->q($to)
+				$tableAlias . $db->qn('publish_up') . ' <= ' . $db->q($to)
 			);
 		}
 		elseif (!empty($from) && empty($to))
 		{
 			// Filter after date
 			$query->where(
-				$db->qn('publish_up') . ' >= ' . $db->q($from)
+				$tableAlias . $db->qn('publish_up') . ' >= ' . $db->q($from)
 			);
 		}
 		elseif (empty($from) && !empty($to))
 		{
 			// Filter up to a date
 			$query->where(
-				$db->qn('publish_down') . ' <= ' . $db->q($to)
+				$tableAlias . $db->qn('publish_down') . ' <= ' . $db->q($to)
 			);
 		}
 	}
@@ -461,6 +467,9 @@ class Subscriptions extends DataModel
 	protected function filterByCreatedOn(\JDatabaseQuery $query)
 	{
 		$db = $this->getDbo();
+
+		$tableAlias = $this->getBehaviorParam('tableAlias', null);
+		$tableAlias = !empty($tableAlias) ? ($db->qn($tableAlias) . '.') : '';
 
 		\JLoader::import('joomla.utilities.date');
 		$since = $this->getState('since', null, 'string');
@@ -496,7 +505,7 @@ class Subscriptions extends DataModel
 
 			// Filter from-to dates
 			$query->where(
-				$db->qn('created_on') . ' >= ' . $db->q($since)
+				$tableAlias . $db->qn('created_on') . ' >= ' . $db->q($since)
 			);
 		}
 
@@ -527,7 +536,7 @@ class Subscriptions extends DataModel
 			}
 
 			$query->where(
-				$db->qn('created_on') . ' <= ' . $db->q($until)
+				$tableAlias . $db->qn('created_on') . ' <= ' . $db->q($until)
 			);
 		}
 	}
@@ -543,6 +552,9 @@ class Subscriptions extends DataModel
 	{
 		$db = $this->getDbo();
 
+		$tableAlias = $this->getBehaviorParam('tableAlias', null);
+		$tableAlias = !empty($tableAlias) ? ($db->qn($tableAlias) . '.') : '';
+
 		\JLoader::import('joomla.utilities.date');
 		$expires_from = $this->getState('expires_from', null, 'string');
 		$expires_to = $this->getState('expires_to', null, 'string');
@@ -557,8 +569,6 @@ class Subscriptions extends DataModel
 		}
 		else
 		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-
 			if (!preg_match($regex, $from))
 			{
 				$from = '2001-01-01';
@@ -585,8 +595,6 @@ class Subscriptions extends DataModel
 		}
 		else
 		{
-			$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
-
 			if (!preg_match($regex, $to))
 			{
 				$to = '2037-01-01';
@@ -609,24 +617,24 @@ class Subscriptions extends DataModel
 		{
 			// Filter from-to dates
 			$query->where(
-				$db->qn('publish_down') . ' >= ' . $db->q($from)
+				$tableAlias . $db->qn('publish_down') . ' >= ' . $db->q($from)
 			);
 			$query->where(
-				$db->qn('publish_down') . ' <= ' . $db->q($to)
+				$tableAlias . $db->qn('publish_down') . ' <= ' . $db->q($to)
 			);
 		}
 		elseif (!empty($from) && empty($to))
 		{
 			// Filter after date
 			$query->where(
-				$db->qn('publish_down') . ' >= ' . $db->q($from)
+				$tableAlias . $db->qn('publish_down') . ' >= ' . $db->q($from)
 			);
 		}
 		elseif (empty($from) && !empty($to))
 		{
 			// Filter up to a date
 			$query->where(
-				$db->qn('publish_down') . ' <= ' . $db->q($to)
+				$tableAlias . $db->qn('publish_down') . ' <= ' . $db->q($to)
 			);
 		}
 	}
@@ -642,12 +650,15 @@ class Subscriptions extends DataModel
 	{
 		$db = $this->getDbo();
 
+		$tableAlias = $this->getBehaviorParam('tableAlias', null);
+		$tableAlias = !empty($tableAlias) ? ($db->qn($tableAlias) . '.') : '';
+
 		$nozero = $this->getState('nozero', null, 'int');
 
 		if (!empty($nozero))
 		{
 			$query->where(
-				$db->qn('net_amount') . ' > ' . $db->q('0')
+				$tableAlias . $db->qn('net_amount') . ' > ' . $db->q('0')
 			);
 		}
 	}
