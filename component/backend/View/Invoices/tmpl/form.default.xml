@@ -16,13 +16,19 @@
 				tdwidth="20px"
 		/>
 		
-		<header name="user_id" type="Field"
+		<header name="user_id" type="Searchable"
 				label="COM_AKEEBASUBS_SUBSCRIPTIONS_USER"
 				filterclass="input-small"
 				searchfieldname="user"
 				sortable="false" tdwidth="15%"
 		/>
-		
+
+        <header name="business" type="Searchable"
+                label="COM_AKEEBASUBS_USERS_FIELD_BUSINESSNAME"
+                filterclass="input-small"
+                searchfieldname="business"
+                onlyFilter="true" />
+
 		<header name="extension" type="Selectable"
 				sortable="true" tdwidth="10%"
 				source_class="Akeeba\Subscriptions\Admin\Helper\Select"
