@@ -813,21 +813,24 @@ class Subscriptions extends DataModel
 		}
 
 		// Handle the subcustom array which really belongs inside the params array
-		if (!isset($data['params']))
+		if (is_array($data['params']))
 		{
-			$data['params'] = [];
-		}
+			if (!isset($data['params']))
+			{
+				$data['params'] = [];
+			}
 
-		if (!isset($data['params']['subcustom']))
-		{
-			$data['params']['subcustom'] = [];
-		}
+			if (!isset($data['params']['subcustom']))
+			{
+				$data['params']['subcustom'] = [];
+			}
 
-		if (isset($data['subcustom']))
-		{
-			$data['params']['subcustom'] = array_merge($data['params']['subcustom'], $data['subcustom']);
+			if (isset($data['subcustom']))
+			{
+				$data['params']['subcustom'] = array_merge($data['params']['subcustom'], $data['subcustom']);
 
-			unset($data['subcustom']);
+				unset($data['subcustom']);
+			}
 		}
 	}
 

@@ -247,6 +247,29 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 		$this->onReportsInvoices();
 	}
 
+	public function onSubscriptionsBrowse()
+	{
+		$this->onBrowse();
+
+		$bar = \JToolBar::getInstance('toolbar');
+
+		// Add "Subscription Refresh"Run Integrations"
+		JToolBarHelper::divider();
+		$bar->appendButton('Link', 'play', JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH'), 'javascript:akeebasubs_refresh_integrations();');
+
+		// Add "Export to CSV"
+		$link = \JUri::getInstance();
+		$query = $link->getQuery(true);
+		$query['format'] = 'csv';
+		$query['option'] = 'com_akeebasubs';
+		$query['view'] = 'subscriptions';
+		$query['task'] = 'browse';
+		$link->setQuery($query);
+
+		JToolBarHelper::divider();
+		$bar->appendButton('Link', 'download', JText::_('COM_AKEEBASUBS_COMMON_EXPORTCSV'), $link->toString());
+	}
+
 	/**
 	 * Adds a link to the submenu (toolbar links)
 	 *
