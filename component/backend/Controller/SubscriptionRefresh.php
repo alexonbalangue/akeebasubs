@@ -55,7 +55,7 @@ class SubscriptionRefresh extends Controller
 		}
 
 		$response = array(
-			'total'	=> $model->getTotal(),
+			'total'	=> $model->count(),
 			'processed'	=> count($list)
 		);
 
