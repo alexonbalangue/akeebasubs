@@ -9,6 +9,7 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JDate;
@@ -88,6 +89,9 @@ use JLoader;
 class Subscriptions extends DataModel
 {
 	use Mixin\JsonData, Mixin\Assertions, Mixin\DateManipulation;
+
+	/** @var   self  Caches the row data on load for future reference */
+	private $_selfCache = null;
 
 	/**
 	 * Public constructor. Adds behaviours and sets up the behaviours and the relations
@@ -806,13 +810,28 @@ class Subscriptions extends DataModel
 	}
 
 	/**
-	 * Reset the flags communicated through the data to be bound / saved.
+	 * Reset the flags communicated through the data to be bound / saved and run post-save features (unblock user,
+	 * notify plugins about subscription change)
+	 *
+	 * @return  void
 	 */
 	protected function onAfterSave()
 	{
+		$notify = $this->getState('_dontNotify', null) != false;
+
+		// Reset the flags communicated through the data to be bound / saved.
 		foreach (['_noemail', '_dontNotify', '_dontCheckPaymentID'] as $flag)
 		{
 			$this->setState($flag, false);
+		}
+
+		// Unblock users when their payment is Complete
+		$this->userUnblock();
+
+		// Run the subscription change notification plugins unless we're told otherwise
+		if ($notify)
+		{
+			$this->subNotifiable();
 		}
 	}
 
@@ -843,6 +862,8 @@ class Subscriptions extends DataModel
 	/**
 	 * If the current date is outside the publish_up / publish_down range then disable the subscription. Otherwise make
 	 * sure it's enabled if state = C or disabled in any other case.
+	 *
+	 * @return  void
 	 */
 	protected function normaliseEnabled()
 	{
@@ -869,6 +890,8 @@ class Subscriptions extends DataModel
 	/**
 	 * If the _noemail state variable is set we have to modify the contact_flag. This is used by the backend GUI to let
 	 * the managers set subscriptions to not send notification emails, e.g. when renewed manually.
+	 *
+	 * @return  void
 	 */
 	protected function applyNoEmailFlag()
 	{
@@ -902,5 +925,172 @@ class Subscriptions extends DataModel
 				}
 			}
 		}
+	}
+
+	/**
+	 * Runs after loading a new record. Caches the record to allow us to detect subscription changes which must cause
+	 * the subscription notification plugins to run.
+	 *
+	 * @param   bool   $result  Did the load succeed?
+	 * @param   mixed  $keys    The PK we were asked to load or an associative array of (filter) keys
+	 *
+	 * @return  void
+	 */
+	protected function onAfterLoad($result, &$keys)
+	{
+		$this->_selfCache = $result ? clone $this : null;
+	}
+
+	/**
+	 * Runs after the model resets itself. We clear the record cache.
+	 *
+	 * @param   bool  $useDefaults     Did we use the field default values when resetting?
+	 * @param   bool  $resetRelations  Did we also reset the relations?
+	 *
+	 * @return  void
+	 */
+	protected function onAfterReset($useDefaults, $resetRelations)
+	{
+		$this->_selfCache = null;
+	}
+
+	/**
+	 * Automatically unblock a user whose subscription is paid (status = C) and
+	 * enabled, if he's not already enabled.
+	 *
+	 * @return  void
+	 */
+	private function userUnblock()
+	{
+		// Make sure the payment is complete
+		if ($this->state != 'C')
+		{
+			return;
+		}
+
+		// Make sure the subscription is enabled
+		if (!$this->enabled)
+		{
+			return;
+		}
+
+		// Paid and enabled subscription; enable the user if he's not already enabled
+		$user = $this->container->platform->getUser($this->user_id);
+
+		if ($user->block)
+		{
+			$confirmfree = ComponentParams::getParam('confirmfree', 0);
+
+			if ($confirmfree && ($this->level->price < 0.01))
+			{
+				// Do not activate free subscription
+				return;
+			}
+
+			$updates = array(
+				'block'      => 0,
+				'activation' => ''
+			);
+
+			$user->save($updates);
+		}
+	}
+
+	/**
+	 * Notifies the plugins if a subscription has changed. We use _selfCache to determine which fields have changed.
+	 * Some fields ($ignoredFields) are considered indifferent for notification plugins. If only any number of these
+	 * were modified the plugins will NOT be triggered.
+	 *
+	 * @return  void
+	 */
+	private function subNotifiable()
+	{
+		// Load the "akeebasubs" plugins
+		$this->container->platform->importPlugin('akeebasubs');
+
+		// We don't care to trigger plugins when certain fields change
+		$ignoredFields = array(
+			'notes',
+			'processor',
+			'processor_key',
+			'net_amount',
+			'tax_amount',
+			'gross_amount',
+			'recurring_amount',
+			'tax_percent',
+			'params',
+			'akeebasubs_coupon_id',
+			'akeebasubs_upgrade_id',
+			'akeebasubs_affiliate_id',
+			'affiliate_comission',
+			'akeebasubs_invoice_id',
+			'prediscount_amount',
+			'discount_amount',
+			'contact_flag',
+			'first_contact',
+			'second_contact',
+			'after_contact',
+		);
+
+		$info = array(
+			'status'   => 'unmodified',
+			'previous' => empty($this->_selfCache) ? null : $this->_selfCache,
+			'current'  => clone $this,
+			'modified' => null
+		);
+
+		// New record
+		if (is_null($this->_selfCache) || !is_object($this->_selfCache))
+		{
+			$info['status'] = 'new';
+
+			$data     = $this->getData();
+			$modified = array();
+
+			foreach ($data as $key => $value)
+			{
+				// Skip ignored fields
+				if (in_array($key, $ignoredFields))
+				{
+					continue;
+				}
+
+				$modified[ $key ] = $value;
+			}
+
+			$info['modified'] = empty($modified) ? null : (object) $modified;
+		}
+		// Possibly modified record. Let's find out!
+		else
+		{
+			$data     = $this->_selfCache->getData();
+			$modified = array();
+
+			foreach ($data as $key => $value)
+			{
+				// Skip ignored fields
+				if (in_array($key, $ignoredFields))
+				{
+					continue;
+				}
+
+				// Check if the value has changed
+				if ($this->$key != $value)
+				{
+					$info['status']   = 'modified';
+					$modified[ $key ] = $value;
+				}
+			}
+
+			$info['modified'] = empty($modified) ? null : (object) $modified;
+		}
+
+		if ($info['status'] != 'unmodified')
+		{
+			// Fire plugins (onAKSubscriptionChange) passing ourselves as a parameter
+			$this->container->platform->runPlugins('onAKSubscriptionChange', array($this, $info));
+		}
+
+		$this->_selfCache = clone $this;
 	}
 }
