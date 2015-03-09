@@ -13,4 +13,11 @@
             <behaviors>Filters</behaviors>
         </model>
     </backend>
+
+    <frontend>
+        <container>
+            <option name="factoryClass">FOF30\Factory\BasicFactory</option>
+            <option name="scaffolding">0</option>
+        </container>
+    </frontend>
 </fof>
