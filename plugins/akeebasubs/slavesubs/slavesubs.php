@@ -366,6 +366,11 @@ JS;
 				}
 
 				$user_id = JUserHelper::getUserId($slaveUsername);
+				//double check that the user is valid
+				if ($user_id <= 0)
+				{
+					continue;
+				}
 
 				// Save the new subscription record
 				$result = $this->createSlaveSub($user_id, $data, $params);
