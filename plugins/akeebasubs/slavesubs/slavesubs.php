@@ -70,7 +70,7 @@ class plgAkeebasubsSlavesubs extends JPlugin
 		{
 			return $fields;
 		}
-		// Make sure this leve supports slave subscriptions
+		// Make sure this level supports slave subscriptions
 		$level = $cache['subscriptionlevel'];
 		if (!array_key_exists($level, $this->maxSlaves))
 		{
@@ -499,7 +499,6 @@ JS;
 	private function createSlaveSub($username, $data, $params)
 	{
 		$user_id = JUserHelper::getUserId($username);
-
 		if ($user_id <= 0)
 		{
 			return false;
@@ -514,7 +513,11 @@ JS;
 		{
 			unset($params['slaveusers']);
 		}
-
+		//store the ID of the parent subscription
+		$parentsub_id = $data ['akeebasubs_subscription_id'];
+		$params['parentsub_id'] = $parentsub_id;
+		$newdata = array_merge($data, array('params' => json_encode($params), '_dontNotify' => true));
+		
 		$newdata = array_merge($data, array(
 			'akeebasubs_subscription_id'	=> 0,
 			'user_id'						=> $user_id,
