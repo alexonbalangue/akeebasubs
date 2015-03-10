@@ -825,7 +825,7 @@ class Subscriptions extends DataModel
 		}
 
 		// Handle the subcustom array which really belongs inside the params array
-		if (is_array($data['params']))
+		if (isset($data['params']) && is_array($data['params']))
 		{
 			if (!isset($data['params']))
 			{
