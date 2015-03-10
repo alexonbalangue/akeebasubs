@@ -345,46 +345,53 @@ $now_timestamp = $jDate->toUnix();
 			<td class="akeebasubs-subscription-amount">
 				<?php if($subscription->net_amount > 0): ?>
 
-				<?php if($subscription->discount_amount > 0): ?>
-				<span class="akeebasubs-subscription-netamount">
-				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
+					<?php if($subscription->discount_amount > 0): ?>
+						<span class="akeebasubs-subscription-netamount">
+						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+						<?php echo ComponentParams::getParam('currencysymbol','€')?>
+						<?php endif; ?>
+						<?php echo sprintf('%2.2f', (float)$subscription->prediscount_amount) ?>
+						<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+						<?php echo ComponentParams::getParam('currencysymbol','€')?>
+						<?php endif; ?>
+						</span>
+
+						<span class="akeebasubs-subscription-discountamount">
+						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+						<?php echo ComponentParams::getParam('currencysymbol','€')?>
+						<?php endif; ?>
+						- <?php echo sprintf('%2.2f', (float)$subscription->discount_amount) ?>
+						<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+						<?php echo ComponentParams::getParam('currencysymbol','€')?>
+						<?php endif; ?>
+						</span>
+
+					<?php else: ?>
+
+						<span class="akeebasubs-subscription-netamount">
+						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+						<?php echo ComponentParams::getParam('currencysymbol','€')?>
+						<?php endif; ?>
+						<?php echo sprintf('%2.2f', (float)$subscription->net_amount) ?>
+						<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+						<?php echo ComponentParams::getParam('currencysymbol','€')?>
+						<?php endif; ?>
+						</span>
+
+					<?php endif; ?>
+
+					<span class="akeebasubs-subscription-taxamount">
+					<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+					<?php echo ComponentParams::getParam('currencysymbol','€')?>
+					<?php endif; ?>
+					<?php echo sprintf('%2.2f', (float)$subscription->tax_amount) ?>
+					<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+					<?php echo ComponentParams::getParam('currencysymbol','€')?>
+					<?php endif; ?>
+					</span>
+
 				<?php endif; ?>
-				<?php echo sprintf('%2.2f', (float)$subscription->prediscount_amount) ?>
-				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
-				<?php endif; ?>
-				</span>
-				<span class="akeebasubs-subscription-discountamount">
-				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
-				<?php endif; ?>
-				- <?php echo sprintf('%2.2f', (float)$subscription->discount_amount) ?>
-				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
-				<?php endif; ?>
-				</span>
-				<?php else: ?>
-				<span class="akeebasubs-subscription-netamount">
-				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
-				<?php endif; ?>
-				<?php echo sprintf('%2.2f', (float)$subscription->net_amount) ?>
-				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
-				<?php endif; ?>
-				</span>
-				<?php endif; ?>
-				<span class="akeebasubs-subscription-taxamount">
-				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
-				<?php endif; ?>
-				<?php echo sprintf('%2.2f', (float)$subscription->tax_amount) ?>
-				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
-				<?php echo ComponentParams::getParam('currencysymbol','€')?>
-				<?php endif; ?>
-				</span>
-				<?php endif; ?>
+
 				<span class="akeebasubs-subscription-grossamount">
 				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
 				<?php echo ComponentParams::getParam('currencysymbol','€')?>

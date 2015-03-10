@@ -76,7 +76,7 @@
                 onlyFilter="1"
                 />
 
-        <header name="akeebasubs_coupon_id" type="Field" sortable="false"
+        <header name="discount" type="Field" sortable="false"
                 label="COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT"
                 />
 
@@ -127,10 +127,9 @@
 
         <field name="state" type="PaymentStatus" />
 
-        <field name="akeebasubs_coupon_id" type="Text"
-        />
+        <field name="discount" type="SubscriptionDiscount" />
 
-        <field name="gross_amount" type="Text" />
+        <field name="gross_amount" type="PriceBreakdown" />
 
         <field name="publish_up" type="Calendar" />
 
