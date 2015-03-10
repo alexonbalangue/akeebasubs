@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form
-        cssfiles="media://com_akeebasubs/css/backend.css"
         type="browse"
         show_header="1"
         show_filters="1"
@@ -11,7 +10,7 @@
         <header name="akeebasubs_subscription_id" type="RowSelect" tdwidth="20px" />
 
         <header name="akeebasubs_subscription_id" type="Searchable"
-                tdwidth="20px" label="#" id="num"
+                tdwidth="60px" label="#" id="num"
                 buttons="false" filterclass="input-small"
                 />
 
@@ -22,6 +21,7 @@
                 value_field="title"
                 translate="false"
                 apply_access="false"
+                tdwidth="15%"
                 />
 
         <header name="search" type="Searchable"
@@ -29,12 +29,12 @@
                 buttons="false"
                 onlyFilter="1" />
 
-        <header name="user_id" type="User" sortable="true" tdwidth="8%"
+        <header name="user_id" type="User" sortable="true" tdwidth="10%"
                 label="COM_AKEEBASUBS_SUBSCRIPTIONS_USER"
                 filterclass="input-small"
                 />
 
-        <header name="state" type="Selectable" sortable="true" tdwidth="8%"
+        <header name="state" type="Selectable" sortable="true" tdwidth="30px"
                 searchfieldname="paystate"
                 label="COM_AKEEBASUBS_SUBSCRIPTIONS_STATE">
             <option value="N">COM_AKEEBASUBS_SUBSCRIPTION_STATE_N</option>
@@ -78,13 +78,14 @@
 
         <header name="discount" type="Field" sortable="false"
                 label="COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT"
+                tdwidth="60px"
                 />
 
         <header name="gross_amount" type="Field" sortable="true" tdwidth="8%"
                 label="COM_AKEEBASUBS_SUBSCRIPTIONS_AMOUNT"
                 />
 
-        <header name="publish_up" type="Date" sortable="true" tdwidth="8%"
+        <header name="publish_up" type="Date" sortable="true" tdwidth="14%"
                 label="COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP"
                 placeholder="COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP"
                 />
@@ -95,12 +96,12 @@
                 onlyFilter="true"
                 />
 
-        <header name="created_on" type="Date" sortable="true" tdwidth="8%"
+        <header name="created_on" type="Date" sortable="true" tdwidth="10%"
                 label="COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON"
                 placeholder="COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON"
                 />
 
-        <header name="enabled" type="Published" sortable="true" tdwidth="8%"
+        <header name="enabled" type="Published" sortable="true" tdwidth="30px"
                 label="JPUBLISHED"
                 />
     </headerset>
