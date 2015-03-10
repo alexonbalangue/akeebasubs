@@ -1,34 +1,22 @@
 <?php
 defined('_JEXEC') or die();
 
-JLoader::import('joomla.utilities.date');
-$jRelDate = new JDate(AKEEBASUBS_DATE);
-
-// IMPORTANT!!! DO NOT TRANSLATE THESE MESSAGES!!!
 ?>
 <p style="font-size: small" class="well">
 	<strong>
-		Akeeba Subscriptions <?php echo AKEEBASUBS_VERSION ?>
+		Akeeba Subscriptions {{{ AKEEBASUBS_VERSION }}}
 	</strong>
 
 	<a href="index.php?option=com_akeebasubs&view=Update&task=force" class="btn btn-inverse btn-small">
-		<?php echo JText::_('COM_AKEEBASUBS_CPANEL_MSG_RELOADUPDATE'); ?>
+        @lang('COM_AKEEBASUBS_CPANEL_MSG_RELOADUPDATE')
 	</a>
 
 	<br/>
 	<span style="font-size: x-small">
-		Copyright &copy;2010&ndash;<?php echo $jRelDate->format('y') ?>
+		Copyright &copy;2010&ndash;{{{ $this->getContainer()->platform->getDate(AKEEBASUBS_DATE)->format('Y') }}}
 		Nicholas K. Dionysopoulos / AkeebaBackup.com
 	</span>
 	<br/>
-
-	<!--
-	<strong>
-		If you use Akeeba Subscriptions, please post a rating and a review at the
-		<a href="http://extensions.joomla.org/extensions/e-commerce/membership-a-subscriptions/19528">Joomla! Extensions Directory</a>.
-	</strong>
-	<br/>
-	-->
 
 	<span style="font-size: x-small">
 		Akeeba Subscriptions is Free software released under the
