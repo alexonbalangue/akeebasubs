@@ -70,7 +70,7 @@ class plgAkeebasubsSlavesubs extends JPlugin
 		{
 			return $fields;
 		}
-		// Make sure this leve supports slave subscriptions
+		// Make sure this level supports slave subscriptions
 		$level = $cache['subscriptionlevel'];
 		if (!array_key_exists($level, $this->maxSlaves))
 		{
@@ -345,15 +345,6 @@ JS;
 				return;
 			}
 
-			$newParams = $params;
-
-			if (isset($newParams['slavesubs_ids']))
-			{
-				unset($newParams['slavesubs_ids']);
-			}
-
-			unset($newParams['slaveusers']);
-
 			// Create new slave subscriptions
 			JLoader::import('joomla.user.helper');
 			$slavesubs_ids = array();
@@ -375,39 +366,15 @@ JS;
 				}
 
 				$user_id = JUserHelper::getUserId($slaveUsername);
-
+				//double check that the user is valid
 				if ($user_id <= 0)
 				{
 					continue;
 				}
 
-				$newdata = array_merge($data, array(
-					'akeebasubs_subscription_id'	=> 0,
-					'user_id'						=> $user_id,
-					'net_amount'					=> 0,
-					'tax_amount'					=> 0,
-					'gross_amount'					=> 0,
-					'tax_percent'					=> 0,
-					'params'						=> $newParams,
-					'akeebasubs_coupon_id'			=> 0,
-					'akeebasubs_upgrade_id'			=> 0,
-					'akeebasubs_affiliate_id'		=> 0,
-					'affiliate_comission'			=> 0,
-					'prediscount_amount'			=> 0,
-					'discount_amount'				=> 0,
-					'contact_flag'					=> 0,
-				 ));
-
 				// Save the new subscription record
-				$db = JFactory::getDbo();
-				$tableName = '#__akeebasubs_subscriptions';
-				$tableKey = 'akeebasubs_subscription_id';
-				$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
-				$table->reset();
-				self::$dontFire = true;
-				$table->save($newdata);
-				self::$dontFire = false;
-				$slavesubs_ids[] = $table->akeebasubs_subscription_id;
+				$result = $this->createSlaveSub($user_id, $data, $params);
+				$slavesubs_ids[] = $result;
 			}
 
 			$params['slavesubs_ids'] = $slavesubs_ids;
@@ -537,7 +504,6 @@ JS;
 	private function createSlaveSub($username, $data, $params)
 	{
 		$user_id = JUserHelper::getUserId($username);
-
 		if ($user_id <= 0)
 		{
 			return false;
@@ -552,7 +518,11 @@ JS;
 		{
 			unset($params['slaveusers']);
 		}
-
+		//store the ID of the parent subscription
+		$parentsub_id = $data ['akeebasubs_subscription_id'];
+		$params['parentsub_id'] = $parentsub_id;
+		$newdata = array_merge($data, array('params' => json_encode($params), '_dontNotify' => true));
+		
 		$newdata = array_merge($data, array(
 			'akeebasubs_subscription_id'	=> 0,
 			'user_id'						=> $user_id,
