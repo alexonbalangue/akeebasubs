@@ -603,14 +603,25 @@ JS;
 				{
 					$params = (array) $params;
 				}
-
+				//unset params that should not be copied from parent sub to child sub
 				if (isset($params['slavesubs_ids']))
 				{
-					unset($params['slavesubs_ids']);
+				unset($params['slavesubs_ids']);
 				}
-
+				
+				if(isset($params['slaveusers']))
+				{
+				unset($params['slaveusers']);
+				}
+				
+				if(isset($params['parentsub_id']))
+				{
+				unset($params['parentsub_id']);
+				}
+				
 				$to->params = json_encode($params);
-			}
+				}
+				
 			// Copy over everything else
 			elseif (property_exists($from, $k))
 			{
