@@ -117,6 +117,9 @@ class Subscriptions extends DataModel
 		$this->hasOne('coupon', 'Coupons');
 		$this->hasOne('upgrade', 'Upgrades');
 		$this->hasOne('invoice', 'Invoices', 'akeebasubs_subscription_id', 'akeebasubs_subscription_id');
+
+		// Used for forms
+		$this->addKnownField('_noemail', 0, 'int');
 	}
 
 	/**
@@ -128,7 +131,7 @@ class Subscriptions extends DataModel
 		$this->assertNotEmpty($this->akeebasubs_level_id, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_LEVEL_ID');
 		$this->assertNotEmpty($this->publish_up, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_UP');
 		$this->assertNotEmpty($this->publish_down, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN');
-		$this->assertInArray($this->state, ['N', 'P', 'C', 'X'], 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_STATE');
+		$this->assertInArray($this->getFieldValue('state', ''), ['N', 'P', 'C', 'X'], 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_STATE');
 
 		$this->normaliseDate($this->publish_up, '2000-01-01');
 		$this->normaliseDate($this->publish_down, '2038-01-01');
@@ -812,6 +815,15 @@ class Subscriptions extends DataModel
 			}
 		}
 
+		// Handle the fake payment_state field
+		if (isset($data['payment_state']))
+		{
+			//$this->setFieldValue('state', $data['payment_state']);
+			$data['state'] = $data['payment_state'];
+
+			unset($data['payment_state']);
+		}
+
 		// Handle the subcustom array which really belongs inside the params array
 		if (is_array($data['params']))
 		{
@@ -831,6 +843,20 @@ class Subscriptions extends DataModel
 
 				unset($data['subcustom']);
 			}
+		}
+	}
+
+	/**
+	 * Runs before saving data. We use it to remove the fake _noemail field.
+	 *
+	 * @param  $data
+	 */
+	protected function onBeforeSave(&$data)
+	{
+		// This is just a fake record field, it must not be present when saving the record
+		if (isset($this->recordData['_noemail']))
+		{
+			unset($this->recordData['_noemail']);
 		}
 	}
 
@@ -963,7 +989,15 @@ class Subscriptions extends DataModel
 	 */
 	protected function onAfterLoad($result, &$keys)
 	{
+		// Set up the cache
 		$this->_selfCache = $result ? clone $this : null;
+
+		$this->setFieldValue('_noemail', 0);
+
+		if ($result && ($this->contact_flag == 3))
+		{
+			$this->setFieldValue('_noemail', 1);
+		}
 	}
 
 	/**

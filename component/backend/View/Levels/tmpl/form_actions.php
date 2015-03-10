@@ -7,11 +7,10 @@
 
 defined('_JEXEC') or die();
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+/** @var  \Akeeba\Subscriptions\Admin\Model\Levels  $model */
 
-JLoader::import('joomla.plugin.helper');
-JPluginHelper::importPlugin('akeebasubs');
-$app = JFactory::getApplication();
+$model->getContainer()->platform->importPlugin('akeebasubs');
+
 $params = $model->params;
 
 if (is_array($params))
@@ -24,7 +23,8 @@ else
 }
 
 $model->params = $params;
-$jResponse = $app->triggerEvent('onSubscriptionLevelFormRender', array($model));
+
+$jResponse = $model->getContainer()->platform->runPlugins('onSubscriptionLevelFormRender', array($model));
 
 if (is_array($jResponse) && !empty($jResponse)):
 	?>
