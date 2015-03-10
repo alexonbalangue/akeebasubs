@@ -133,7 +133,10 @@
 
         <field name="publish_up" type="Calendar" />
 
-        <field name="created_on" type="Calendar" />
+        <field name="created_on" type="Text"
+               format_source_class="Akeeba\Subscriptions\Admin\Helper\Format"
+               format_source_method="date"
+        />
 
         <field name="enabled" type="Published"/>
     </fieldset>
