@@ -11,6 +11,8 @@ defined('_JEXEC') or die;
 
 use FOF30\Database\Installer;
 use FOF30\Model\Model;
+use JRegistry;
+use JFactory;
 
 class ControlPanel extends Model
 {
@@ -47,7 +49,7 @@ class ControlPanel extends Model
 		$db->setQuery($query);
 		$rawparams = $db->loadResult();
 
-		$params = new \JRegistry();
+		$params = new JRegistry();
 		$params->loadString($rawparams, 'JSON');
 
 		$siteURL_stored = $params->get('siteurl', '');
@@ -129,5 +131,44 @@ class ControlPanel extends Model
 		$needsUpdate = ($now - $modTime) > $threshold;
 
 		return $needsUpdate;
+	}
+
+	/**
+	 * Sets the value of a component parameter in the #__extensions table
+	 *
+	 * @param   string  $parameter  The parameter name
+	 * @param   string  $value      The parameter value
+	 *
+	 * @return  void
+	 */
+	public function setComponentParameter($parameter, $value)
+	{
+		// Fetch the component parameters
+		$db = JFactory::getDbo();
+		$sql = $db->getQuery(true)
+		          ->select($db->qn('params'))
+		          ->from($db->qn('#__extensions'))
+		          ->where($db->qn('type').' = '.$db->q('component'))
+		          ->where($db->qn('element').' = '.$db->q('com_akeebasubs'));
+		$db->setQuery($sql);
+		$rawparams = $db->loadResult();
+
+		$params = new JRegistry();
+		$params->loadString($rawparams, 'JSON');
+
+		// Set the show2copromo parameter to 0
+		$params->set($parameter, $value);
+
+		// Save the component parameters
+		$data = $params->toString('JSON');
+
+		$sql = $db->getQuery(true)
+		          ->update($db->qn('#__extensions'))
+		          ->set($db->qn('params').' = '.$db->q($data))
+		          ->where($db->qn('type').' = '.$db->q('component'))
+		          ->where($db->qn('element').' = '.$db->q('com_akeebasubs'));
+
+		$db->setQuery($sql);
+		$db->execute();
 	}
 }
