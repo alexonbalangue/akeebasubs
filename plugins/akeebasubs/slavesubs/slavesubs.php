@@ -420,15 +420,15 @@ JS;
 
 				$result = false;
 
-				if (in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
+				if (in_array($slave, $list['slaveusers']) && in_array($slave, $previous['slaveusers']))
 				{
 					// Slave is still here, just check if his subscription is expired, if so extend it
-					$index = array_search($slave, $current['slaveusers']);
+					$index = array_search($slave, $previous['slaveusers']);
 
-					if(isset($current['slavesubs_ids'][$index]))
+					if(isset($previous['slavesubs_ids'][$index]))
 					{
 						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-									->getItem($current['slavesubs_ids'][$index]);
+									->getItem($previous['slavesubs_ids'][$index]);
 
 						if(!$table->enabled)
 						{
