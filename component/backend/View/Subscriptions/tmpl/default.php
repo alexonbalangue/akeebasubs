@@ -26,6 +26,12 @@ echo $this->getRenderedForm();
 
 ?>
 
+<div id="refreshMessage" style="display:none">
+	<h3><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_TITLE');?></h3>
+	<p><img id="asriSpinner" src="<?php echo JURI::base()?>../media/com_akeebasubs/images/throbber.gif" align="center" /></p>
+	<p><span id="asriPercent">0</span><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_SUBREFRESH_PROGRESS')?></p>
+</div>
+
 <script type="text/javascript">
 	var akeebasubs_token = "<?php echo JFactory::getSession()->getFormToken();?>";
 
