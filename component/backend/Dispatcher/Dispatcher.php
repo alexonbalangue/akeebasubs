@@ -18,6 +18,12 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 
 	public function onBeforeDispatch()
 	{
+		if (!@include_once(JPATH_ADMINISTRATOR . '/components/com_akeebasubs/version.php'))
+		{
+			define('AKEEBASUBS_VERSION', 'dev');
+			define('AKEEBASUBS_DATE', date('Y-m-d'));
+		}
+
 		// Render submenus as drop-down navigation bars powered by Bootstrap
 		$this->container->renderer->setOption('linkbar_style', 'classic');
 
