@@ -131,7 +131,7 @@
 
         <field name="gross_amount" type="PriceBreakdown" />
 
-        <field name="publish_up" type="Calendar" />
+        <field name="publish_up" type="PublishRangeDates" />
 
         <field name="created_on" type="Text"
                format_source_class="Akeeba\Subscriptions\Admin\Helper\Format"
