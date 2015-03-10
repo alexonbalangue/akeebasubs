@@ -47,21 +47,21 @@
             <filename>access.xml</filename>
             <filename>akeebasubs.php</filename>
             <filename>config.xml</filename>
-            <filename>dispatcher.php</filename>
             <filename>fof.xml</filename>
-            <filename>toolbar.php</filename>
             <filename>version.php</filename>
 
             <folder>assets</folder>
-            <folder>controllers</folder>
-            <folder>fields</folder>
-            <folder>fof</folder>
-            <folder>helpers</folder>
+            <folder>Controller</folder>
+            <folder>CustomField</folder>
+            <folder>Dispatcher</folder>
+            <folder>Form</folder>
+            <folder>Helper</folder>
             <folder>invoices</folder>
-            <folder>models</folder>
+            <folder>Model</folder>
+            <folder>PluginAbstracts</folder>
             <folder>sql</folder>
-            <folder>tables</folder>
-            <folder>views</folder>
+            <folder>Toolbar</folder>
+            <folder>View</folder>
         </files>
 
         <!-- Back-end translation files -->
