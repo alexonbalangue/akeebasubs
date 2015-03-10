@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form
-        cssfiles="media://com_akeebasubs/css/backend.css"
-        tabbed="1"
-        >
+    tabbed="1"
+>
 
     <fieldset
         name="details"

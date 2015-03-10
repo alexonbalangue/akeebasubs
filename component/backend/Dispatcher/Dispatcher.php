@@ -22,7 +22,8 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 		$this->container->renderer->setOption('linkbar_style', 'classic');
 
 		// Load common CSS and JavaScript
-		$this->container->template->addCSS('media://com_akeebasubs/css/backend.css');
-		$this->container->template->addJS('media://com_akeebasubs/js/backend.js');
+		\JHtml::_('jquery.framework');
+		$this->container->template->addCSS('media://com_akeebasubs/css/backend.css', $this->container->mediaVersion);
+		$this->container->template->addJS('media://com_akeebasubs/js/backend.js', false, false, $this->container->mediaVersion);
 	}
 }

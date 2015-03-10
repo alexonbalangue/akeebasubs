@@ -9,7 +9,6 @@
 
 defined('_JEXEC') or die;
 
-$this->addCssFile('media://com_akeebasubs/css/backend.css');
 ?>
 
 <div>

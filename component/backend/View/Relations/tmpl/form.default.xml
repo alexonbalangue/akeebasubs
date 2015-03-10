@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form
-        cssfiles="media://com_akeebasubs/css/backend.css"
         type="browse"
         show_header="1"
         show_filters="1"

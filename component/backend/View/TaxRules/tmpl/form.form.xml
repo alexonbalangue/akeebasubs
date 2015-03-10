@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form
-	cssfiles="media://com_akeebasubs/css/backend.css"
->
+<form>
 	<fieldset name="basic">
 		<field name="akeebasubs_level_id" type="Model"
 			label="COM_AKEEBASUBS_TAXRULES_LEVEL"
