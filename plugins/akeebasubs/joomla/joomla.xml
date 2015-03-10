@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - Joomla! Usergroups Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>April 2011</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_JOOMLA_DESCRIPTION</description>
+	<files>
+		<filename plugin="joomla">joomla.php</filename>
+		<folder>override</folder>
+		<folder>tmpl</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_joomla.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_joomla.sys.ini</language>
+	</languages>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="addgroups" type="hidden" default="" />
+				<field name="removegroups" type="hidden" default="" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>
