@@ -345,15 +345,6 @@ JS;
 				return;
 			}
 
-			$newParams = $params;
-
-			if (isset($newParams['slavesubs_ids']))
-			{
-				unset($newParams['slavesubs_ids']);
-			}
-
-			unset($newParams['slaveusers']);
-
 			// Create new slave subscriptions
 			JLoader::import('joomla.user.helper');
 			$slavesubs_ids = array();
@@ -376,38 +367,9 @@ JS;
 
 				$user_id = JUserHelper::getUserId($slaveUsername);
 
-				if ($user_id <= 0)
-				{
-					continue;
-				}
-
-				$newdata = array_merge($data, array(
-					'akeebasubs_subscription_id'	=> 0,
-					'user_id'						=> $user_id,
-					'net_amount'					=> 0,
-					'tax_amount'					=> 0,
-					'gross_amount'					=> 0,
-					'tax_percent'					=> 0,
-					'params'						=> $newParams,
-					'akeebasubs_coupon_id'			=> 0,
-					'akeebasubs_upgrade_id'			=> 0,
-					'akeebasubs_affiliate_id'		=> 0,
-					'affiliate_comission'			=> 0,
-					'prediscount_amount'			=> 0,
-					'discount_amount'				=> 0,
-					'contact_flag'					=> 0,
-				 ));
-
 				// Save the new subscription record
-				$db = JFactory::getDbo();
-				$tableName = '#__akeebasubs_subscriptions';
-				$tableKey = 'akeebasubs_subscription_id';
-				$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
-				$table->reset();
-				self::$dontFire = true;
-				$table->save($newdata);
-				self::$dontFire = false;
-				$slavesubs_ids[] = $table->akeebasubs_subscription_id;
+				$result = $this->createSlaveSub($user_id, $data, $params);
+				$slavesubs_ids[] = $result;
 			}
 
 			$params['slavesubs_ids'] = $slavesubs_ids;
