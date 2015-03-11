@@ -12,6 +12,6 @@ defined('_JEXEC') or die;
 /**
  * This model extends the back-end model, pulling it into the frontend without duplicating the code
  */
-class States extends \Akeeba\Subscriptions\Admin\Model\APICoupons
+class States extends \Akeeba\Subscriptions\Admin\Model\States
 {
 }

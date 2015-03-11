@@ -12,6 +12,6 @@ defined('_JEXEC') or die;
 /**
  * This model extends the back-end model, pulling it into the frontend without duplicating the code
  */
-class BlockRules extends \Akeeba\Subscriptions\Admin\Model\APICoupons
+class BlockRules extends \Akeeba\Subscriptions\Admin\Model\BlockRules
 {
 }
