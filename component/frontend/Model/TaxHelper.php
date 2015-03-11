@@ -1,17 +1,22 @@
 <?php
 /**
- * @package   AkeebaSubs
- * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
- * @license   GNU General Public License version 3, or later
+ * @package		Akeeba Subscriptions
+ * @copyright	2015 Nicholas K. Dionysopoulos / Akeeba Ltd 
+ * @license		GNU GPL version 3 or later
  */
 
-defined('_JEXEC') or die();
+namespace Akeeba\Subscriptions\Site\Model;
 
-require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/euvatinfo.php';
-JLoader::import('joomla.cms.model.legacy');
+use FOF30\Model\Model;
+use FOF30\Utils\Ip;
 
-class AkeebasubsModelTaxhelper extends F0FModel
+class TaxHelper extends Model
 {
+	/**
+	 * Cached tax rates by level, country, state and VIES registration sattus
+	 *
+	 * @var  array
+	 */
 	protected static $cachedTaxRates = array();
 
 	/**
@@ -32,14 +37,13 @@ class AkeebasubsModelTaxhelper extends F0FModel
 		$result['country'] = $this->getCountryFromGeoIP();
 
 		// Get information from Akeeba Subscriptions user record
-		$user = JFactory::getUser();
+		$user = $this->container->platform->getUser();
 
 		if (!$user->guest && $user->id)
 		{
-			$userModel = F0FModel::getTmpInstance('Users', 'AkeebasubsModel');
-			$userparams = $userModel
-				->user_id($user->id)
-				->getMergedData($user->id);
+			/** @var Users $userModel */
+			$userModel = $this->container->factory->model('Users')->savestate(false)->setIgnoreRequest(true);
+			$userparams = $userModel->getMergedData($user->id);
 
 			if ($userparams->country)
 			{
@@ -58,7 +62,7 @@ class AkeebasubsModelTaxhelper extends F0FModel
 		}
 
 		// Get information from the VAT dropdown module
-		$session = JFactory::getSession();
+		$session = \JFactory::getSession();
 		$moduleCountry = $session->get('country', null, 'mod_aktaxcountry');
 
 		if (!empty($moduleCountry))
@@ -88,15 +92,14 @@ class AkeebasubsModelTaxhelper extends F0FModel
 		if (!array_key_exists($hash, self::$cachedTaxRates))
 		{
 			// First try loading the rules for this level
-			$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-				->savestate(0)
+			/** @var TaxRules $taxrules */
+			$taxrules = $this->container->factory->model('TaxRules')->savestate(0)->setIgnoreRequest(true);
+			$taxrules
 				->enabled(1)
 				->akeebasubs_level_id($akeebasubs_level_id)
 				->filter_order('ordering')
 				->filter_order_Dir('ASC')
-				->limit(0)
-				->limitstart(0)
-				->getList();
+				->get(true);
 
 			// If this level has no rules use the "All levels" rules
 			if (empty($taxrules) && ($akeebasubs_level_id != 0))
@@ -204,11 +207,11 @@ class AkeebasubsModelTaxhelper extends F0FModel
 		// If we have a newer FOF version, use it to get the correct IP address of the client
 		if (class_exists('F0FUtilsIp'))
 		{
-			$ip = F0FUtilsIp::getIp();
+			$ip = Ip::getIp();
 		}
 
 		// Use GeoIP to detect the country
-		$geoip = new AkeebaGeoipProvider();
+		$geoip = new \AkeebaGeoipProvider();
 		$country = $geoip->getCountryCode($ip);
 
 		// If detection failed, return "XX" (no country detected)

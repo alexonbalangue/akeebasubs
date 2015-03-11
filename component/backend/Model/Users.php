@@ -153,6 +153,14 @@ class Users extends DataModel
 		}
 	}
 
+	/**
+	 * Returns the merged data from the Akeeba Subscriptions' user parameters, the Joomla! user data and the Joomla!
+	 * user profile data.
+	 *
+	 * @param   int  $user_id  The user ID to load, null to use the alredy loaded user
+	 *
+	 * @return  object
+	 */
 	public function getMergedData($user_id = null)
 	{
 		if (is_null($user_id))
@@ -292,6 +300,11 @@ class Users extends DataModel
 		return (object)$myData;
 	}
 
+	/**
+	 * Map the 'custom' data key to params
+	 *
+	 * @param   array|mixed $data
+	 */
 	protected function onBeforeBind(&$data)
 	{
 		if (!is_array($data))

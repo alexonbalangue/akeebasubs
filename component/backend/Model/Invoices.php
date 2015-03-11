@@ -634,7 +634,7 @@ class Invoices extends DataModel
 		$ret = null;
 
 		// Load all enabled templates and check if they fit
-		$templatesModel = $this->container->factory->model('InvoiceTemplates')->savestate(false)->setIgnoreRequest(false);
+		$templatesModel = $this->container->factory->model('InvoiceTemplates')->savestate(false)->setIgnoreRequest(true);
 		$templates =
 			$templatesModel
 			->enabled(1)
