@@ -204,7 +204,7 @@ class Levels extends DataController
 		$view->userparams = $userparams;
 
 		// Load any cached user supplied information
-		$vModel = $this->getModel('Subscribes')
+		$vModel = $this->getModel('Subscribe')
 			->slug($slug)
 			->id($id);
 

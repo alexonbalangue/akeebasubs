@@ -44,10 +44,10 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 
 	if ($includediscount)
 	{
-		/** @var \Akeeba\Subscriptions\Site\Model\Subscribes $subscribesModel */
-		$subscribesModel = $this->getContainer()->factory->model('Subscribes')->savestate(0);
-		$subscribesModel->setState('id', $level->akeebasubs_level_id);
-		$subValidation = $subscribesModel->validatePrice(true);
+		/** @var \Akeeba\Subscriptions\Site\Model\Subscribe $subscribeModel */
+		$subscribeModel = $this->getContainer()->factory->model('Subscribe')->savestate(0);
+		$subscribeModel->setState('id', $level->akeebasubs_level_id);
+		$subValidation = $subscribeModel->validatePrice(true);
 		$discount = $subValidation->discount;
 		$levelPrice = $level->price - $discount;
 	}
