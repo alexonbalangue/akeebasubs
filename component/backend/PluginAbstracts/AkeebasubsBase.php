@@ -21,7 +21,7 @@ use JText;
 defined('_JEXEC') or die();
 
 /**
- * Akeeba Subscriptions payment plugin abstract class
+ * Akeeba Subscriptions integration plugin abstract class
  */
 abstract class AkeebasubsBase extends JPlugin
 {
