@@ -46,7 +46,8 @@ class Levels extends DataModel
 
 			if (!empty($levels))
 			{
-				$levels = array_map(array($this->_db, 'quote'), $levels);
+				$levels = array_map(array($this->getDbo(), 'quote'), $levels);
+
 				$query->where($db->qn('access') . ' IN (' . implode(',', $levels) . ')');
 			}
 		}
