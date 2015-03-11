@@ -69,6 +69,12 @@ class Coupons extends DataModel
 		$this->hasOne('forUser', 'Users', 'user', 'user_id');
 	}
 
+	/**
+	 * Implement custom filters
+	 *
+	 * @param   \JDatabaseQuery  $q               The query to modify
+	 * @param   bool             $overrideLimits  Should I override limits?
+	 */
 	public function onAfterBuildQuery(\JDatabaseQuery $q, $overrideLimits = false)
 	{
 		$search = $this->getState('search', null, 'string');
@@ -81,7 +87,6 @@ class Coupons extends DataModel
 			);
 		}
 	}
-
 
 	/**
 	 * Check the data for validity.

@@ -13,6 +13,21 @@ use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use FOF30\Utils\Ip;
 
+/**
+ * Model class for subscription blocking rules
+ *
+ * @property int    $akeebasubs_blockrule_id
+ * @property string $username
+ * @property string $name
+ * @property string $email
+ * @property string $iprange
+ *
+ * @method $this akeebasubs_blockrule_id() akeebasubs_blockrule_id(int $v)
+ * @method $this username() username(string $v)
+ * @method $this name() name(string $v)
+ * @method $this email() email(string $v)
+ * @method $this iprange() iprange(string $v)
+ */
 class BlockRules extends DataModel
 {
 	public function __construct(Container $container, array $config = array())
