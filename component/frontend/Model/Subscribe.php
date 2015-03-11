@@ -7,8 +7,13 @@
 
 namespace Akeeba\Subscriptions\Site\Model;
 
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
+use Akeeba\Subscriptions\Admin\Helper\Select;
+use Akeeba\Subscriptions\Admin\Model\Levels;
 use FOF30\Container\Container;
 use FOF30\Model\Model;
+use JDate;
 use JFactory;
 
 defined('_JEXEC') or die;
@@ -113,9 +118,8 @@ class Subscribe extends Model
 		}
 
 		$rawDataCache = $this->_cache['state'];
-		$rawDataPost = JRequest::get('POST', 2);
-		$rawDataGet = JRequest::get('GET', 2);
-		$rawData = array_merge($rawDataCache, $rawDataGet, $rawDataPost);
+		$rawDataInput = $this->input->getData();
+		$rawData = array_replace_recursive($rawDataCache, $rawDataInput);
 
 		if (!empty($rawData))
 		{
@@ -149,7 +153,6 @@ class Subscribe extends Model
 
 		if (is_null($stateVars) || $force)
 		{
-
 			$session = JFactory::getSession();
 			$firstRun = $session->get('firstrun', true, 'com_akeebasubs');
 
@@ -158,8 +161,7 @@ class Subscribe extends Model
 				$session->set('firstrun', false, 'com_akeebasubs');
 			}
 
-			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
-			$emailasusername = AkeebasubsHelperCparams::getParam('emailasusername', 0);
+			$emailasusername = ComponentParams::getParam('emailasusername', 0);
 
 			$stateVars = (object)array(
 				'firstrun'      => $firstRun,
@@ -203,24 +205,16 @@ class Subscribe extends Model
 	 */
 	public function getValidation()
 	{
-		$response = new stdClass();
+		$response = new \stdClass();
 
 		$state = $this->getStateVariables();
 
 		if ($state->slug && empty($state->id))
 		{
-			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->slug($state->slug)
-				->getItemList();
-			if (!empty($list))
-			{
-				$item = array_pop($list);
-				$state->id = $item->akeebasubs_level_id;
-			}
-			else
-			{
-				$state->id = 0;
-			}
+			/** @var Levels $levelsModel */
+			$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+			$item = $levelsModel->slug($state->slug)->firstOrNew();
+			$state->id = $item->akeebasubs_level_id;
 		}
 
 		switch ($state->opt)
@@ -250,16 +244,14 @@ class Subscribe extends Model
 
 	private function pluginValidation(&$response, &$state)
 	{
-		JLoader::import('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akeebasubs');
-
-		$app = JFactory::getApplication();
+		$this->container->platform->importPlugin('akeebasubs');
 
 		// Get the results from the custom validation
 		$response->custom_validation = array();
 		$response->custom_valid = true;
 
-		$jResponse = $app->triggerEvent('onValidate', array($state));
+		$jResponse = $this->container->platform->runPlugins('onValidate', array($state));
+
 		if (is_array($jResponse) && !empty($jResponse))
 		{
 			foreach ($jResponse as $pluginResponse)
@@ -268,10 +260,12 @@ class Subscribe extends Model
 				{
 					continue;
 				}
+
 				if (!array_key_exists('valid', $pluginResponse))
 				{
 					continue;
 				}
+
 				if (!array_key_exists('custom_validation', $pluginResponse))
 				{
 					continue;
@@ -279,6 +273,7 @@ class Subscribe extends Model
 
 				$response->custom_valid = $response->custom_valid && $pluginResponse['valid'];
 				$response->custom_validation = array_merge($response->custom_validation, $pluginResponse['custom_validation']);
+
 				if (array_key_exists('data', $pluginResponse))
 				{
 					$state = $pluginResponse['data'];
@@ -290,7 +285,8 @@ class Subscribe extends Model
 		$response->subscription_custom_validation = array();
 		$response->subscription_custom_valid = true;
 
-		$jResponse = $app->triggerEvent('onValidatePerSubscription', array($state));
+		$jResponse = $this->container->platform->runPlugins('onValidatePerSubscription', array($state));
+
 		if (is_array($jResponse) && !empty($jResponse))
 		{
 			foreach ($jResponse as $pluginResponse)
@@ -299,17 +295,23 @@ class Subscribe extends Model
 				{
 					continue;
 				}
+
 				if (!array_key_exists('valid', $pluginResponse))
 				{
 					continue;
 				}
+
 				if (!array_key_exists('subscription_custom_validation', $pluginResponse))
 				{
 					continue;
 				}
 
 				$response->subscription_custom_valid = $response->subscription_custom_valid && $pluginResponse['valid'];
-				$response->subscription_custom_validation = array_merge($response->subscription_custom_validation, $pluginResponse['subscription_custom_validation']);
+				$response->subscription_custom_validation = array_merge(
+					$response->subscription_custom_validation,
+					$pluginResponse['subscription_custom_validation']
+				);
+
 				if (array_key_exists('data', $pluginResponse))
 				{
 					$state = $pluginResponse['data'];
@@ -339,9 +341,9 @@ class Subscribe extends Model
 			return $ret;
 		}
 
-		$user = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel')
-			->username($username)
-			->getFirstItem();
+		/** @var JoomlaUsers $userModel */
+		$userModel = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+		$user = $userModel->username($username)->firstOrNew();
 
 		if ($myUser->guest)
 		{
@@ -399,24 +401,15 @@ class Subscribe extends Model
 
 		if ($state->slug && empty($state->id))
 		{
-			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->slug($state->slug)
-				->getItemList();
-			if (!empty($list))
-			{
-				$item = array_pop($list);
-				$state->id = $item->akeebasubs_level_id;
-			}
-			else
-			{
-				$state->id = 0;
-			}
+			/** @var Levels $levelsModel */
+			$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+			$item = $levelsModel->slug($state->slug)->firstOrNew();
+			$state->id = $item->akeebasubs_level_id;
 		}
 
-		require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
-		$personalInfo = AkeebasubsHelperCparams::getParam('personalinfo', 1);
-		$allowNonEUVAT = AkeebasubsHelperCparams::getParam('noneuvat', 0);
-		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
+		$personalInfo = ComponentParams::getParam('personalinfo', 1);
+		$allowNonEUVAT = ComponentParams::getParam('noneuvat', 0);
+		$requireCoupon = ComponentParams::getParam('reqcoupon', 0) ? true : false;
 
 		// 1. Basic checks
 		$ret = array(
@@ -437,21 +430,28 @@ class Subscribe extends Model
 
 		// Name validation; must contain AT LEAST two parts (name/surname)
 		// separated by a space
-		/*
-		if(!empty($state->name)) {
+		if (!empty($state->name))
+		{
 			$name = trim($state->name);
 			$nameParts = explode(" ", $name);
-			if(count($nameParts) < 2) $ret['name'] = false;
+
+			if (count($nameParts) < 2)
+			{
+				$ret['name'] = false;
+			}
 		}
-		*/
 
 		// Email validation
 		if (!empty($state->email))
 		{
-			$list = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel')
+			/** @var JoomlaUsers $usersModel */
+			$usersModel = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+			$list = $usersModel
 				->email($state->email)
-				->getItemList();
+				->get(true);
+
 			$validEmail = true;
+
 			foreach ($list as $item)
 			{
 				if ($item->email == $state->email)
@@ -499,8 +499,7 @@ class Subscribe extends Model
 		// 2. Country validation
 		if ($ret['country'] && ($personalInfo != 0))
 		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
-			$ret['country'] = array_key_exists($state->country, AkeebasubsHelperSelect::$countries) && !empty($state->country);
+			$ret['country'] = array_key_exists($state->country, Select::$countries) && !empty($state->country);
 		}
 		elseif ($personalInfo == 0)
 		{
@@ -520,9 +519,9 @@ class Subscribe extends Model
 		{
 			if (in_array($state->country, array('US', 'CA')))
 			{
-				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
 				$ret['state'] = false;
-				foreach (AkeebasubsHelperSelect::$states as $country => $states)
+
+				foreach (Select::$states as $country => $states)
 				{
 					if (array_key_exists($state->state, $states))
 					{
@@ -538,7 +537,7 @@ class Subscribe extends Model
 
 		// 4. Business validation
 		// Fix the VAT number's format
-		$vat_check = AkeebasubsHelperEuVATInfo::checkVATFormat($state->country, $state->vatnumber);
+		$vat_check = EUVATInfo::checkVATFormat($state->country, $state->vatnumber);
 
 		if ($vat_check->valid)
 		{
@@ -548,6 +547,7 @@ class Subscribe extends Model
 		{
 			$state->vatnumber = '';
 		}
+
 		$this->setState('vatnumber', $state->vatnumber);
 
 		if (!$state->isbusiness || ($personalInfo <= 0))
@@ -558,43 +558,42 @@ class Subscribe extends Model
 		else
 		{
 			// Do I have to check the VAT number?
-			if (AkeebasubsHelperEuVATInfo::isEUVATCountry($state->country))
+			if (EUVATInfo::isEUVATCountry($state->country))
 			{
 				// If the country has two rules with VIES enabled/disabled and a non-zero VAT,
 				// we will skip VIES validation. We'll also skip validation if there are no
 				// rules for this country (the default tax rate will be applied)
 
+				/** @var TaxRules $taxRulesModel */
+				$taxRulesModel = $this->container->factory->model('TaxRules')->savestate(0)->setIgnoreRequest(1);
+
 				// First try loading the rules for this level
-				$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-					->savestate(0)
+				$taxrules = $taxRulesModel
 					->enabled(1)
 					->akeebasubs_level_id($state->id)
 					->country($state->country)
 					->filter_order('ordering')
 					->filter_order_Dir('ASC')
-					->limit(0)
-					->limitstart(0)
-					->getList();
+					->get(true);
 
 				// If this level has no rules try the "All levels" rules
 				if (empty($taxrules))
 				{
-					$taxrules = F0FModel::getTmpInstance('Taxrules', 'AkeebasubsModel')
-						->savestate(0)
+					$taxrules = $taxRulesModel
 						->enabled(1)
 						->akeebasubs_level_id(0)
 						->country($state->country)
 						->filter_order('ordering')
 						->filter_order_Dir('ASC')
-						->limit(0)
-						->limitstart(0)
-						->getList();
+						->get(True);
 				}
 
 				$catchRules = 0;
 				$lastVies = null;
+
 				if (!empty($taxrules))
 				{
+					/** @var TaxRules $rule */
 					foreach ($taxrules as $rule)
 					{
 						if (empty($rule->state) && empty($rule->city) && $rule->taxrate && ($lastVies != $rule->vies))
@@ -604,20 +603,25 @@ class Subscribe extends Model
 						}
 					}
 				}
+
 				$mustCheck = ($catchRules < 2) && ($catchRules > 0);
 
 				if ($mustCheck)
 				{
 					// Can I use cached result? In order to do so...
 					$useCachedResult = false;
+
 					// ...I have to be logged in...
 					if (!JFactory::getUser()->guest)
 					{
 						// ...and I must have my viesregistered flag set to 2
 						// and my VAT number must match the saved record.
-						$userparams = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-							->user_id(JFactory::getUser()->id)
+						/** @var Users $subsUsersModel */
+						$subsUsersModel = $this->container->factory->model('Users')->savestate(0)->setIgnoreRequest(1);
+
+						$userparams = $subsUsersModel
 							->getMergedData(JFactory::getUser()->id);
+
 						if (($userparams->viesregistered == 2) && ($userparams->vatnumber == $state->vatnumber))
 						{
 							$useCachedResult = true;
@@ -628,13 +632,11 @@ class Subscribe extends Model
 					{
 						// Use the cached VIES validation result
 						$ret['vatnumber'] = true;
-						//$ret['onlineviescheck'] = 0;
 					}
 					else
 					{
 						// No, check the VAT number against the VIES web service
-						$ret['vatnumber'] = AkeebasubsHelperEuVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
-						//$ret['onlineviescheck'] = 1;
+						$ret['vatnumber'] = EUVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
 					}
 
 					$ret['novatrequired'] = false;
@@ -648,7 +650,7 @@ class Subscribe extends Model
 			{
 				// Allow non-EU VAT input
 				$ret['novatrequired'] = true;
-				$ret['vatnumber'] = AkeebasubsHelperEuVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
+				$ret['vatnumber'] = EUVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
 			}
 		}
 
@@ -662,9 +664,9 @@ class Subscribe extends Model
 	 * Calculates the level's price applicable to the specific user and the
 	 * actual state information
 	 *
-	 * @param   bool $force Set true to force recalculation of the price validation
+	 * @param   bool  $force  Set true to force recalculation of the price validation
 	 *
-	 * @return  stdClass
+	 * @return  \stdClass
 	 */
 	public function validatePrice($force = false)
 	{
@@ -675,9 +677,9 @@ class Subscribe extends Model
 			$state = $this->getStateVariables($force);
 
 			// Get the subscription level
-			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->setId($state->id)
-				->getItem();
+			/** @var Levels $level */
+			$level = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+			$level->find($state->id);
 
 			// Get the user's subscription levels and calculate the signup fee
 			$subIDs = array();
@@ -686,10 +688,12 @@ class Subscribe extends Model
 
 			if ($user->id)
 			{
-				$mysubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+				/** @var Subscriptions $subscriptionsModel */
+				$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+				$mysubs = $subscriptionsModel
 					->user_id($user->id)
 					->paystate('C')
-					->getItemList();
+					->get(true);
 
 				if (!empty($mysubs))
 				{
@@ -716,12 +720,19 @@ class Subscribe extends Model
 
 			// Net price modifiers (via plugins)
 			$price_modifier = 0;
-			JLoader::import('joomla.plugin.helper');
-			JPluginHelper::importPlugin('akeebasubs');
-			JPluginHelper::importPlugin('akpayment');
-			$app = JFactory::getApplication();
-			$priceValidationData = array_merge((array)$state, array('level' => $level, 'netprice' => $netPrice));
-			$jResponse = $app->triggerEvent('onValidateSubscriptionPrice', array((object)$priceValidationData));
+			$this->container->platform->importPlugin('akeebasubs');
+			$this->container->platform->importPlugin('akpayment');
+
+			$priceValidationData = array_merge(
+				(array)$state, array(
+					'level' => $level,
+					'netprice' => $netPrice
+				)
+			);
+
+			$jResponse = $this->container->platform->runPlugins('onValidateSubscriptionPrice', array(
+				(object)$priceValidationData)
+			);
 
 			if (is_array($jResponse) && !empty($jResponse))
 			{
@@ -731,6 +742,7 @@ class Subscribe extends Model
 					{
 						continue;
 					}
+
 					$price_modifier += $pluginResponse;
 				}
 			}
@@ -738,16 +750,17 @@ class Subscribe extends Model
 			$netPrice += $price_modifier;
 
 			// Coupon discount
-			$couponDiscount = 0;
 			$validCoupon = $this->_validateCoupon(false);
 
 			$couponDiscount = 0;
 
 			if ($validCoupon)
 			{
-				$coupon = F0FModel::getTmpInstance('Coupons', 'AkeebasubsModel')
+				/** @var Coupons $couponsModel */
+				$couponsModel = $this->container->factory->model('Coupons')->savestate(0)->setIgnoreRequest(1);
+				$coupon = $couponsModel
 					->coupon(strtoupper($state->coupon))
-					->getFirstItem();
+					->firstOrNew();
 
 				$this->_coupon_id = $coupon->akeebasubs_coupon_id;
 
@@ -755,10 +768,12 @@ class Subscribe extends Model
 				{
 					case 'value':
 						$couponDiscount = (float)$coupon->value;
+
 						if ($couponDiscount > $netPrice)
 						{
 							$couponDiscount = $netPrice;
 						}
+
 						if ($couponDiscount <= 0)
 						{
 							$couponDiscount = 0;
@@ -767,14 +782,17 @@ class Subscribe extends Model
 
 					case 'percent':
 						$percent = (float)$coupon->value / 100.0;
+
 						if ($percent <= 0)
 						{
 							$percent = 0;
 						}
+
 						if ($percent > 1)
 						{
 							$percent = 1;
 						}
+
 						$couponDiscount = $percent * $netPrice;
 						break;
 				}
@@ -785,67 +803,57 @@ class Subscribe extends Model
 			}
 
 			// Upgrades (auto-rule) validation
-			$autoDiscount = 0;
 			$discountStructure = $this->_getAutoDiscount();
 			$autoDiscount = $discountStructure['discount'];
 
 			// Should I use the coupon code or the automatic discount?
+			$this->_coupon_id = null;
 			$useCoupon = false;
-			$useAuto = false;
+			$useAuto = true;
+
 			if ($validCoupon)
 			{
 				if ($autoDiscount > $couponDiscount)
 				{
-					$discount = $autoDiscount;
+					$useCoupon = false;
 					$useAuto = true;
 					$this->_coupon_id = null;
 				}
 				else
 				{
-					$discount = $couponDiscount;
+					$useAuto = false;
 					$useCoupon = true;
 					$this->_upgrade_id = null;
 				}
-			}
-			else
-			{
-				$this->_coupon_id = null;
-				$discount = $autoDiscount;
-				$useAuto = true;
 			}
 
 			$discount = $useCoupon ? $couponDiscount : $autoDiscount;
 			$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
 			$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
 
-			// If we are not using the automatic discount, make sure the oldsub
-			// and expiration fields are reset
-			// -- NO! Subscription level relations must not be bound to the
-			// discount.
-			/**
-			 * if (!$useAuto)
-			 * {
-			 * $discountStructure['oldsub'] = null;
-			 * $discountStructure['expiration'] = 'overlap';
-			 * }
-			 * /**/
+			// Note: do not reset the oldsup and expiration fields. Subscription level relations must not be bound
+			// to the discount.
 
 			// Get the applicable tax rule
 			$taxRule = $this->_getTaxRule();
 
 			// Calculate the base price minimising rounding errors
 			$basePrice = 0.01 * (100 * $netPrice - 100 * $discount);
+
 			if ($basePrice < 0.01)
 			{
 				$basePrice = 0;
 			}
+
 			// Calculate the tax amount minimising rounding errors
 			$taxAmount = 0.01 * ($taxRule->taxrate * $basePrice);
+
 			// Calculate the gross amount minimising rounding errors
 			$grossAmount = 0.01 * (100 * $basePrice + 100 * $taxAmount);
 
 			// Calculate the recurring amount, if necessary
 			$recurringAmount = 0;
+
 			if ($level->recurring && (abs($signup_fee) >= 0.01))
 			{
 				$rectaxAmount = 0.01 * ($taxRule->taxrate * $level->price);
@@ -880,6 +888,11 @@ class Subscribe extends Model
 	/**
 	 * Validates a coupon code, making sure it exists, it's activated, it's not expired,
 	 * it applies to the specific subscription and user.
+	 *
+	 * @param   bool  $validIfNotExists
+	 * @param   bool  $force
+	 *
+	 * @return bool
 	 */
 	private function _validateCoupon($validIfNotExists = true, $force = false)
 	{
@@ -913,10 +926,22 @@ class Subscribe extends Model
 			$couponCode = $state->coupon;
 			$valid = false;
 
-			$coupon = F0FModel::getTmpInstance('Coupons', 'AkeebasubsModel')
-				->coupon(strtoupper(trim($state->coupon)))
-				->getFirstItem();
-			if (empty($coupon->akeebasubs_coupon_id))
+			/** @var Coupons $couponsModel */
+			$couponsModel = $this->container->factory->model('Coupons')->savestate(0)->setIgnoreRequest(1);
+
+			try
+			{
+				/** @var Coupons $coupon */
+				$coupon = $couponsModel
+					->coupon(strtoupper(trim($state->coupon)))
+					->firstOrFail();
+
+				if (empty($coupon->akeebasubs_coupon_id))
+				{
+					$coupon = null;
+				}
+			}
+			catch (\Exception $e)
 			{
 				$coupon = null;
 			}
@@ -924,10 +949,10 @@ class Subscribe extends Model
 			if (is_object($coupon))
 			{
 				$valid = false;
+
 				if ($coupon->enabled && (strtoupper($coupon->coupon) == strtoupper($couponCode)))
 				{
 					// Check validity period
-					JLoader::import('joomla.utilities.date');
 					$jFrom = new JDate($coupon->publish_up);
 					$jTo = new JDate($coupon->publish_down);
 					$jNow = new JDate();
@@ -960,36 +985,39 @@ class Subscribe extends Model
 						$groups = explode(',', $coupon->usergroups);
 						$ugroups = JFactory::getUser()->getAuthorisedGroups();
 						$valid = 0;
+
 						foreach ($ugroups as $ugroup)
 						{
 							if (in_array($ugroup, $groups))
 							{
 								$valid = 1;
+
 								break;
 							}
 						}
 					}
 
 					// Check hits limit
-					if ($valid && $coupon->hitslimit)
+					if ($valid && ($coupon->hitslimit > 0))
 					{
+						/** @var Subscriptions $subscriptionsModel */
+						$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
 						// Get the real coupon hits
-						$hits = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-							->savestate(0)
+						$hits = $subscriptionsModel
 							->coupon_id($coupon->akeebasubs_coupon_id)
 							->paystate('C')
 							->limit(0)
 							->limitstart(0)
-							->getTotal();
-						if ($coupon->hitslimit >= 0)
+							->count();
+
+						$valid = $hits < $coupon->hitslimit;
+
+						if (($coupon->hits != $hits) || ($hits >= $coupon->hitslimit))
 						{
-							$valid = $hits < $coupon->hitslimit;
-							if (($coupon->hits != $hits) || ($hits >= $coupon->hitslimit))
-							{
-								$coupon->hits = $hits;
-								$coupon->enabled = $hits < $coupon->hitslimit;
-								$coupon->store();
-							}
+							$coupon->hits = $hits;
+							$coupon->enabled = $hits < $coupon->hitslimit;
+							$coupon->store();
 						}
 					}
 
@@ -997,16 +1025,20 @@ class Subscribe extends Model
 					if ($valid && $coupon->userhits && !JFactory::getUser()->guest)
 					{
 						$user_id = JFactory::getUser()->id;
+
 						// How many subscriptions with a paystate of C,P for this user
 						// are using this coupon code?
-						$hits = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-							->savestate(0)
+						/** @var Subscriptions $subscriptionsModel */
+						$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
+						$hits = $subscriptionsModel
 							->coupon_id($coupon->akeebasubs_coupon_id)
 							->paystate('C,P')
 							->user_id($user_id)
 							->limit(0)
 							->limitstart(0)
-							->getTotal();
+							->count();
+
 						$valid = $hits < $coupon->userhits;
 					}
 				}
@@ -1845,22 +1877,20 @@ class Subscribe extends Model
 		$validation = $this->getValidation();
 		$state = $this->getStateVariables();
 
-		require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
-		$requireCoupon = AkeebasubsHelperCparams::getParam('reqcoupon', 0) ? true : false;
+		$requireCoupon = ComponentParams::getParam('reqcoupon', 0) ? true : false;
 
 		// Iterate the core validation rules
 		$isValid = true;
 		foreach ($validation->validation as $key => $validData)
 		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
-			if (AkeebasubsHelperCparams::getParam('personalinfo', 1) == 0)
+			if (ComponentParams::getParam('personalinfo', 1) == 0)
 			{
 				if (!in_array($key, array('username', 'email', 'email2', 'name', 'coupon')))
 				{
 					continue;
 				}
 			}
-			elseif (AkeebasubsHelperCparams::getParam('personalinfo', 1) == -1)
+			elseif (ComponentParams::getParam('personalinfo', 1) == -1)
 			{
 				if (!in_array($key, array('username', 'email', 'email2', 'name', 'country', 'coupon')))
 				{
@@ -2084,11 +2114,7 @@ class Subscribe extends Model
 		// Send activation email for free subscriptions if confirmfree is enabled
 		if ($user->block && ($level->price < 0.01))
 		{
-			if (!class_exists('AkeebasubsHelperCparams'))
-			{
-				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/cparams.php';
-			}
-			$confirmfree = AkeebasubsHelperCparams::getParam('confirmfree', 0);
+			$confirmfree = ComponentParams::getParam('confirmfree', 0);
 			if ($confirmfree)
 			{
 				// Send the activation email

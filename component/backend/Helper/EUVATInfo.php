@@ -238,7 +238,7 @@ abstract class EUVATInfo
 	 * @param   string $country Country code
 	 * @param   string $vat     VAT number to check
 	 *
-	 * @return   array  The VAT number and the format validity check (prefix, vatnumber, valid)
+	 * @return   \stdClass  The VAT number and the format validity check (prefix, vatnumber, valid)
 	 */
 	public static function checkVATFormat($country, $vat)
 	{
