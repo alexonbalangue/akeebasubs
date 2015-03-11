@@ -17,6 +17,42 @@ use JText;
 
 /**
  * Model for handling invoice templates
+ *
+ * Fields:
+ *
+ * @property  int     $akeebasubs_invoicetemplate_id
+ * @property  string  $title
+ * @property  string  $template
+ * @property  array   $levels
+ * @property  bool    $globalformat
+ * @property  bool    $globalnumbering
+ * @property  int     $number_reset
+ * @property  string  $country
+ * @property  string  $format
+ * @property  bool    $isbusiness
+ * @property  bool    $noinvoice
+ *
+ * Filters:
+ *
+ * @method  $this  akeebasubs_invoicetemplate_id()  akeebasubs_invoicetemplate_id(int $v)
+ * @method  $this  title()                          title(string $v)
+ * @method  $this  template()                       template(string $v)
+ * @method  $this  levels()                         levels(int $v)
+ * @method  $this  globalformat()                   globalformat(bool $v)
+ * @method  $this  globalnumbering()                globalnumbering(bool $v)
+ * @method  $this  number_reset()                   number_reset(int $v)
+ * @method  $this  country()                        country(string $v)
+ * @method  $this  format()                         format(string $v)
+ * @method  $this  isbusiness()                     isbusiness(bool $v)
+ * @method  $this  enabled()                        enabled(bool $v)
+ * @method  $this  ordering()                       ordering(int $v)
+ * @method  $this  noinvoice()                      noinvoice(bool $v)
+ * @method  $this  created_on()                     created_on(string $v)
+ * @method  $this  created_by()                     created_by(int $v)
+ * @method  $this  modified_on()                    modified_on(string $v)
+ * @method  $this  modified_by()                    modified_by(int $v)
+ * @method  $this  locked_on()                      locked_on(string $v)
+ * @method  $this  locked_by()                      locked_by(int $v)
  */
 class InvoiceTemplates extends DataModel
 {

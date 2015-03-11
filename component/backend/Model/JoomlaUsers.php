@@ -21,9 +21,45 @@ use JUserHelper;
 /**
  * Model for querying Joomla! users
  *
- * @method  $this  search() search(string $userInfoToSearch)
- */
-class JoomlaUsers extends DataModel
+ * Fields:
+ *
+ * @property  int     $id
+ * @property  string  $name
+ * @property  string  $username
+ * @property  string  $email
+ * @property  string  $password
+ * @property  bool    $block
+ * @property  bool    $sendEmail
+ * @property  string  $registerDate
+ * @property  string  $lastvisitDate
+ * @property  string  $activation
+ * @property  string  $params
+ * @property  string  $lastResetTime
+ * @property  int     $resetCount
+ * @property  string  $otpKey
+ * @property  string  $otep
+ * @property  bool    $requireReset
+ *
+ * Filters:
+ *
+ * @method  $this  id()             id(int $v)
+ * @method  $this  name()           name(string $v)
+ * @method  $this  username()       username(string $v)
+ * @method  $this  email()          email(string $v)
+ * @method  $this  password()       password(string $v)
+ * @method  $this  block()          block(bool $v)
+ * @method  $this  sendEmail()      sendEmail(bool $v)
+ * @method  $this  registerDate()   registerDate(string $v)
+ * @method  $this  lastvisitDate()  lastvisitDate(string $v)
+ * @method  $this  activation()     activation(string $v)
+ * @method  $this  lastResetTime()  lastResetTime(string $v)
+ * @method  $this  resetCount()     resetCount(int $v)
+ * @method  $this  otpKey()         otpKey(string $v)
+ * @method  $this  otep()           otep(string $v)
+ * @method  $this  requireReset()   requireReset(bool $v)
+ * @method  $this  search()         search(string $userInfoToSearch)
+ *
+ **/class JoomlaUsers extends DataModel
 {
 	/**
 	 * Override the constructor since I need to attach to a core table and add the Filters behaviour

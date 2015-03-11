@@ -13,6 +13,73 @@ use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JFactory;
 
+/**
+ * Model for subscription levels
+ *
+ * Fields:
+ *
+ * @property  int       $akeebasubs_level_id
+ * @property  string    $title
+ * @property  string    $slug
+ * @property  string    $image
+ * @property  string    $description
+ * @property  int       $duration
+ * @property  float     $price
+ * @property  float     $signupfee
+ * @property  string    $ordertext
+ * @property  string    $orderurl
+ * @property  string    $canceltext
+ * @property  string    $cancelurl
+ * @property  bool      $only_once
+ * @property  bool      $recurring
+ * @property  bool      $forever
+ * @property  int       $akeebasubs_levelgroup_id
+ * @property  int       $access
+ * @property  string    $fixed_date
+ * @property  string[]  $payment_plugins
+ * @property  string    $renew_url
+ * @property  string    $content_url
+ * @property  array     $params
+ * @property  int       $notify1
+ * @property  int       $notify2
+ * @property  int       $notifyafter
+ *
+ * Filters:
+ *
+ * @method  $this  akeebasubs_level_id()       akeebasubs_level_id(int $v)
+ * @method  $this  title()                     title(string $v)
+ * @method  $this  slug()                      slug(string $v)
+ * @method  $this  image()                     image(string $v)
+ * @method  $this  description()               description(string $v)
+ * @method  $this  duration()                  duration(int $v)
+ * @method  $this  price()                     price(float $v)
+ * @method  $this  signupfee()                 signupfee(float $v)
+ * @method  $this  ordertext()                 ordertext(string $v)
+ * @method  $this  orderurl()                  orderurl(string $v)
+ * @method  $this  canceltext()                canceltext(string $v)
+ * @method  $this  cancelurl()                 cancelurl(string $v)
+ * @method  $this  only_once()                 only_once(bool $v)
+ * @method  $this  recurring()                 recurring(bool $v)
+ * @method  $this  forever()                   forever(bool $v)
+ * @method  $this  akeebasubs_levelgroup_id()  akeebasubs_levelgroup_id(int $v)
+ * @method  $this  access()                    access(int $v)
+ * @method  $this  fixed_date()                fixed_date(string $v)
+ * @method  $this  payment_plugins()           payment_plugins(string $v)
+ * @method  $this  renew_url()                 renew_url(string $v)
+ * @method  $this  content_url()               content_url(string $v)
+ * @method  $this  enabled()                   enabled(bool $v)
+ * @method  $this  ordering()                  ordering(int $v)
+ * @method  $this  created_on()                created_on(string $v)
+ * @method  $this  created_by()                created_by(int $v)
+ * @method  $this  modified_on()               modified_on(string $v)
+ * @method  $this  modified_by()               modified_by(int $v)
+ * @method  $this  locked_on()                 locked_on(string $v)
+ * @method  $this  locked_by()                 locked_by(int $v)
+ * @method  $this  notify1()                   notify1(int $v)
+ * @method  $this  notify2()                   notify2(int $v)
+ * @method  $this  notifyafter()               notifyafter(int $v)
+ *
+ */
 class Levels extends DataModel
 {
 	use Mixin\Assertions, Mixin\ImplodedArrays, Mixin\JsonData;
@@ -23,7 +90,6 @@ class Levels extends DataModel
 
 		$this->addBehaviour('Filters');
 	}
-
 
 	/**
 	 * Build the SELECT query for returning records. Overridden to apply custom filters.

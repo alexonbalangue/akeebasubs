@@ -39,6 +39,27 @@ use FOF30\Model\DataModel;
  * @property  int     	$locked_by    		ID of the user who locked this record
  * @property  string  	$locked_on    		Date/time stamp of record locking
  *
+ * Filters:
+ *
+ * @method  $this  akeebasubs_subscription_id()     akeebasubs_subscription_id(int $v)
+ * @method  $this  extension()                      extension(string $v)
+ * @method  $this  akeebasubs_invoicetemplate_id()  akeebasubs_invoicetemplate_id(int $v)
+ * @method  $this  invoice_no()                     invoice_no(int $v)
+ * @method  $this  display_number()                 display_number(string $v)
+ * @method  $this  invoice_date()                   invoice_date(string $v)
+ * @method  $this  html()                           html(string $v)
+ * @method  $this  atxt()                           atxt(string $v)
+ * @method  $this  btxt()                           btxt(string $v)
+ * @method  $this  filename()                       filename(string $v)
+ * @method  $this  sent_on()                        sent_on(string $v)
+ * @method  $this  enabled()                        enabled(bool $v)
+ * @method  $this  created_on()                     created_on(string $v)
+ * @method  $this  created_by()                     created_by(int $v)
+ * @method  $this  modified_on()                    modified_on(string $v)
+ * @method  $this  modified_by()                    modified_by(int $v)
+ * @method  $this  locked_on()                      locked_on(string $v)
+ * @method  $this  locked_by()                      locked_by(int $v)
+ *
  * @property-read  Subscriptions  		$subscription	The subscription of this invoice
  * @property-read  InvoiceTemplates		$template		The template for this invoice
  */

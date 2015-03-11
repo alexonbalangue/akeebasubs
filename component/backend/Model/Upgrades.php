@@ -15,7 +15,43 @@ use FOF30\Model\DataModel;
 /**
  * Model for automatic discounts for upgrading and renewing levels
  *
+ * Fields:
+ *
+ * @property  int     $akeebasubs_upgrade_id
+ * @property  string  $title
+ * @property  int     $from_id
+ * @property  int     $to_id
+ * @property  int     $min_presence
+ * @property  int     $max_presence
+ * @property  string  $type
+ * @property  float   $value
+ * @property  bool    $combine
+ * @property  bool    $expired
+ * @property  int     $hits
+ *
+ * Filters:
+ *
+ * @method  $this  akeebasubs_upgrade_id()  akeebasubs_upgrade_id(int $v)
+ * @method  $this  title()                  title(string $v)
+ * @method  $this  from_id()                from_id(int $v)
+ * @method  $this  to_id()                  to_id(int $v)
+ * @method  $this  min_presence()           min_presence(int $v)
+ * @method  $this  max_presence()           max_presence(int $v)
+ * @method  $this  type()                   type(string $v)
+ * @method  $this  value()                  value(float $v)
+ * @method  $this  combine()                combine(bool $v)
+ * @method  $this  expired()                expired(bool $v)
+ * @method  $this  enabled()                enabled(bool $v)
+ * @method  $this  ordering()               ordering(int $v)
+ * @method  $this  created_on()             created_on(string $v)
+ * @method  $this  created_by()             created_by(int $v)
+ * @method  $this  modified_on()            modified_on(string $v)
+ * @method  $this  modified_by()            modified_by(int $v)
+ * @method  $this  locked_on()              locked_on(string $v)
+ * @method  $this  locked_by()              locked_by(int $v)
+ * @method  $this  hits()                   hits(int $v)
  * @method  $this  search() search(string $upgradeTitle)
+ *
  */
 class Upgrades extends DataModel
 {

@@ -47,7 +47,31 @@ use JText;
  *
  * Filters:
  *
- * @method  $this  search()  search(string $search)
+ * @method  $this  search()                   search(string $search)
+ * @method  $this  akeebasubs_coupon_id()     akeebasubs_coupon_id(int $v)
+ * @method  $this  akeebasubs_apicoupon_id()  akeebasubs_apicoupon_id(int $v)
+ * @method  $this  title()                    title(string $v)
+ * @method  $this  coupon()                   coupon(string $v)
+ * @method  $this  publish_up()               publish_up(string $v)
+ * @method  $this  publish_down()             publish_down(string $v)
+ * @method  $this  subscriptions()            subscriptions(int $v)
+ * @method  $this  user()                     user(int $v)
+ * @method  $this  email()                    email(string $v)
+ * @method  $this  hitslimit()                hitslimit(int $v)
+ * @method  $this  userhits()                 userhits(int $v)
+ * @method  $this  usergroups()               usergroups(int $v)
+ * @method  $this  type()                     type(string $v)
+ * @method  $this  value()                    value(float $v)
+ * @method  $this  enabled()                  enabled(int $v)
+ * @method  $this  ordering()                 ordering(int $v)
+ * @method  $this  created_on()               created_on(string $v)
+ * @method  $this  created_by()               created_by(int $v)
+ * @method  $this  modified_on()              modified_on(string $v)
+ * @method  $this  modified_by()              modified_by(int $v)
+ * @method  $this  locked_on()                locked_on(string $v)
+ * @method  $this  locked_by()                locked_by(int $v)
+ * @method  $this  hits()                     hits(int $v)
+ * @method  $this  skipOnProcessList()        skipOnProcessList(bool $v)
  *
  * Relations:
  *

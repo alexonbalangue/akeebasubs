@@ -27,11 +27,39 @@ use FOF30\Model\DataModel;
  * @property  string  $valid_label    Translation key to show next to a valid field
  * @property  string  $invalid_label  Translation key to show next to an invalid field
  * @property  string  $params         Field parameters
+ *
+ * Filters:
+ *
+ * @method  $this  akeebasubs_customfield_id()  akeebasubs_customfield_id(int $v)
+ * @method  $this  title()                      title(string $v)
+ * @method  $this  slug()                       slug(string $v)
+ * @method  $this  show()                       show(string $v)
+ * @method  $this  akeebasubs_level_id()        akeebasubs_level_id(string $v)
+ * @method  $this  type()                       type(string $v)
+ * @method  $this  options()                    options(string $v)
+ * @method  $this  default()                    default(string $v)
+ * @method  $this  allow_empty()                allow_empty(bool $v)
+ * @method  $this  valid_label()                valid_label(string $v)
+ * @method  $this  invalid_label()              invalid_label(string $v)
+ * @method  $this  enabled()                    enabled(bool $v)
+ * @method  $this  ordering()                   ordering(int $v)
+ * @method  $this  created_by()                 created_by(int $v)
+ * @method  $this  created_on()                 created_on(string $v)
+ * @method  $this  modified_by()                modified_by(int $v)
+ * @method  $this  modified_on()                modified_on(string $v)
  */
 class CustomFields extends DataModel
 {
 	use Mixin\Assertions, Mixin\ImplodedArrays, Mixin\ImplodedLevels;
 
+	/**
+	 * Public constructor.
+	 *
+	 * @param   Container  $container  The configuration variables to this model
+	 * @param   array      $config     Configuration values for this model
+	 *
+	 * @throws \FOF30\Model\DataModel\Exception\NoTableColumns
+	 */
 	public function __construct(Container $container, array $config = array())
 	{
 		parent::__construct($container, $config);
@@ -39,6 +67,13 @@ class CustomFields extends DataModel
 		$this->addBehaviour('Filters');
 	}
 
+	/**
+	 * Check the data for validity.
+	 *
+	 * @return  static  Self, for chaining
+	 *
+	 * @throws \RuntimeException  When the data bound to this record is invalid
+	 */
 	public function check()
 	{
 		$this->assertNotEmpty($this->slug, 'COM_AKEEBASUBS_ERR_SLUG_EMPTY');

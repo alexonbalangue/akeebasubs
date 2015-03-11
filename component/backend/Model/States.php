@@ -12,6 +12,31 @@ defined('_JEXEC') or die;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 
+/**
+ * Model for states / prefectures / geographic areas of countries
+ *
+ * Fields:
+ *
+ * @property  int     $akeebasubs_state_id
+ * @property  string  $country
+ * @property  string  $state
+ * @property  string  $label
+ *
+ * Filters:
+ *
+ * @method  $this  akeebasubs_state_id()  akeebasubs_state_id(int $v)
+ * @method  $this  country()              country(string $v)
+ * @method  $this  state()                state(string $v)
+ * @method  $this  label()                label(string $v)
+ * @method  $this  enabled()              enabled(bool $v)
+ * @method  $this  created_on()           created_on(string $v)
+ * @method  $this  created_by()           created_by(int $v)
+ * @method  $this  modified_on()          modified_on(string $v)
+ * @method  $this  modified_by()          modified_by(int $v)
+ * @method  $this  locked_on()            locked_on(string $v)
+ * @method  $this  locked_by()            locked_by(int $v)
+ *
+ */
 class States extends DataModel
 {
 	public function __construct(Container $container, array $config = array())

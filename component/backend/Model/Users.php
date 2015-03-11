@@ -34,6 +34,23 @@ use JLoader;
  * @property  string	$notes
  * @property  int		$needs_logout
  *
+ * @method  $this  akeebasubs_user_id()  akeebasubs_user_id(int $v)
+ * @method  $this  user_id()             user_id(int $v)
+ * @method  $this  isbusiness()          isbusiness(bool $v)
+ * @method  $this  businessname()        businessname(string $v)
+ * @method  $this  occupation()          occupation(string $v)
+ * @method  $this  vatnumber()           vatnumber(string $v)
+ * @method  $this  viesregistered()      viesregistered(bool $v)
+ * @method  $this  taxauthority()        taxauthority(string $v)
+ * @method  $this  address1()            address1(string $v)
+ * @method  $this  address2()            address2(string $v)
+ * @method  $this  city()                city(string $v)
+ * @method  $this  state()               state(string $v)
+ * @method  $this  zip()                 zip(string $v)
+ * @method  $this  country()             country(string $v)
+ * @method  $this  notes()               notes(string $v)
+ * @method  $this  needs_logout()        needs_logout(bool $v)
+ *
  * @property-read  JoomlaUsers		$user
  * @property-read  Subscriptions[]  $subscriptions
  */

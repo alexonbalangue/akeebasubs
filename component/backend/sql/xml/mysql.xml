@@ -421,7 +421,7 @@ CREATE TABLE `#__akeebasubs_emailtemplates` (
   `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` bigint(20) NOT NULL DEFAULT '0',
   `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modifed_by` bigint(20) NOT NULL DEFAULT '0',
+  `modified_by` bigint(20) NOT NULL DEFAULT '0',
   `locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `locked_by` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`akeebasubs_emailtemplate_id`)
@@ -967,6 +967,16 @@ ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `ip_country` VARCHAR(255) A
                 <condition type="missing" value="expired" />
                 <query><![CDATA[
     ALTER TABLE `#__akeebasubs_upgrades` ADD COLUMN `expired` tinyint(1) NOT NULL DEFAULT '0' AFTER `combine`;
+                ]]></query>
+            </action>
+
+            <action table="#__akeebasubs_emailtemplates" canfail="1">
+                <condition type="missing" value="modified_by" />
+                <query><![CDATA[
+    ALTER TABLE `#__akeebasubs_upgrades` DROP COLUMN `modifed_by`;
+                ]]></query>
+                <query><![CDATA[
+    ALTER TABLE `#__akeebasubs_upgrades` ADD COLUMN `modified_by` int(11) NOT NULL DEFAULT 0;
                 ]]></query>
             </action>
 
