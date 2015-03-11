@@ -17,6 +17,28 @@ use JText;
 /**
  * Model class for coupon generation API. This is used to remotely and automatically create coupon codes based on
  * predefined criteria and allowances provided to partners of your site.
+ *
+ * @property int     $akeebasubs_apicoupon_id
+ * @property string  $title
+ * @property string  $key
+ * @property string  $password
+ * @property int     $creation_limit
+ * @property array   $subscriptions
+ * @property int     $subscription_limit
+ * @property string  $type
+ * @property float   $value
+ * @property int     $value_limit
+ *
+ * @method  $this  akeebasubs_apicoupon_id() akeebasubs_apicoupon_id(int $v)
+ * @method  $this  title() title(string $v)
+ * @method  $this  key() key(string $v)
+ * @method  $this  password() password(string $v)
+ * @method  $this  creation_limit() creation_limit(int $v)
+ * @method  $this  subscriptions() subscriptions(array $v)
+ * @method  $this  subscription_limit() subscription_limit(int $v)
+ * @method  $this  type() type(string $v)
+ * @method  $this  value() value(float $v)
+ * @method  $this  value_limit() value_limit(int $v)
  */
 class APICoupons extends DataModel
 {
