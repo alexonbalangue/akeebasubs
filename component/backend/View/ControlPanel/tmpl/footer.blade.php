@@ -1,6 +1,11 @@
 <?php
-defined('_JEXEC') or die();
+/**
+ * package   AkeebaSubs
+ * copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * license   GNU General Public License version 3, or later
+ */
 
+defined('_JEXEC') or die;
 ?>
 <p style="font-size: small" class="well">
 	<strong>

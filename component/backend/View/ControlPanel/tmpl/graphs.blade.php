@@ -5,6 +5,8 @@
  *  @license GNU General Public License version 3, or later
  */
 
+defined('_JEXEC') or die;
+
 use \Akeeba\Subscriptions\Admin\Helper\Select;
 
 $graphDayFrom = gmdate('Y-m-d', time() - 30 * 24 * 3600);

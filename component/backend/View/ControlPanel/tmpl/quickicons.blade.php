@@ -4,6 +4,8 @@
  * copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * license   GNU General Public License version 3, or later
  */
+
+defined('_JEXEC') or die;
 ?>
 
 <a href="index.php?option=com_akeebasubs&view=Level" class="btn">

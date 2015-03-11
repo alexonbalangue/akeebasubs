@@ -5,6 +5,8 @@
  * @license   GNU General Public License version 3, or later
  */
 
+defined('_JEXEC') or die;
+
 $backtrace_array = debug_backtrace();
 $filename = $backtrace_array[1]['file'];
 $folder = dirname($filename);

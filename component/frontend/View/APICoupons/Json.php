@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\View\APICoupons;
 
+defined('_JEXEC') or die;
+
 use Akeeba\Subscriptions\Site\Model\APICoupons;
 
 class Json extends \FOF30\View\DataView\Json

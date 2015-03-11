@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\View\Levels;
 
+defined('_JEXEC') or die;
+
 use Akeeba\Subscriptions\Site\Model\Subscriptions;
 
 class Html extends \FOF30\View\DataView\Html

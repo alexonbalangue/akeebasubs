@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\Model;
 
+defined('_JEXEC') or die;
+
 use FOF30\Model\Model;
 use FOF30\Utils\Ip;
 

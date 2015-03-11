@@ -4,6 +4,8 @@
  * copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * license   GNU General Public License version 3, or later
  */
+
+defined('_JEXEC') or die;
 ?>
 
 {{-- Include external sections. Do note how you can include sub-templates in one order and compile them in a completely

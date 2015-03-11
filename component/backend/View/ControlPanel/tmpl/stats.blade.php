@@ -5,6 +5,8 @@
  * license   GNU General Public License version 3, or later
  */
 
+defined('_JEXEC') or die;
+
 use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 /** @var \Akeeba\Subscriptions\Admin\View\ControlPanel\Html $this */
