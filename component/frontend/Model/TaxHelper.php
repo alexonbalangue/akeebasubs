@@ -121,6 +121,11 @@ class TaxHelper extends Model
 				return $bestTaxRule;
 			}
 
+			if (!$taxrules->count())
+			{
+				return $bestTaxRule;
+			}
+
 			foreach ($taxrules as $rule)
 			{
 				// For each rule, get the match and fuzziness rating. The best, least fuzzy and last match wins.

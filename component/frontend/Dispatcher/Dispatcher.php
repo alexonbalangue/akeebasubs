@@ -46,7 +46,7 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 			'crons'         => 'CRON',
 			'invoice'       => 'Invoices',
 			'invoices'      => 'Invoices',
-			'level'         => 'Levels',
+			'level'         => 'Level',
 			'levels'        => 'Levels',
 			'messages'      => 'Messages',
 			'message'       => 'Messages',

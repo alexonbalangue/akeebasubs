@@ -1,40 +1,50 @@
 <?php
-
 /**
  * @package   AkeebaSubs
  * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
  * @license   GNU General Public License version 3, or later
  */
-defined('_JEXEC') or die();
 
-class AkeebasubsControllerLevels extends F0FController
+namespace Akeeba\Subscriptions\Site\Controller;
+
+defined('_JEXEC') or die;
+
+use Akeeba\Subscriptions\Admin\Controller\Mixin;
+use Akeeba\Subscriptions\Site\Model\TaxHelper;
+use FOF30\Container\Container;
+use FOF30\Controller\DataController;
+use FOF30\View\Exception\AccessForbidden;
+
+class Levels extends DataController
 {
+	use Mixin\PredefinedTaskList;
 
-	public function __construct($config = array())
+	/**
+	 * Overridden. Limit the tasks we're allowed to execute.
+	 *
+	 * @param   Container  $container
+	 * @param   array      $config
+	 */
+	public function __construct(Container $container, array $config = array())
 	{
-		parent::__construct($config);
+		parent::__construct($container, $config);
+
+		$this->predefinedTaskList = ['browse', 'read'];
 
 		if ($this->input->getBool('caching', true))
 		{
-			$this->cacheableTasks = array('browse');
+			$this->cacheableTasks = ['browse'];
 		}
 		else
 		{
-			$this->cacheableTasks = array();
+			$this->cacheableTasks = [];
 		}
 	}
 
 	public function onBeforeBrowse()
 	{
-		// Do we have an affiliate code?
-		$affid = $this->input->getInt('affid', 0);
-		if ($affid)
-		{
-			$session = JFactory::getSession();
-			$session->set('affid', $affid, 'com_akeebasubs');
-		}
+		$params = \JFactory::getApplication()->getPageParameters();
 
-		$params = JFactory::getApplication()->getPageParameters();
 		$ids = $params->get('ids', '');
 
 		if (is_array($ids) && !empty($ids))
@@ -52,7 +62,7 @@ class AkeebasubsControllerLevels extends F0FController
 		}
 
 		// Working around Progressive Caching
-		$appInput = JFactory::getApplication()->input;
+		$appInput = \JFactory::getApplication()->input;
 
 		if (!empty($ids))
 		{
@@ -60,8 +70,8 @@ class AkeebasubsControllerLevels extends F0FController
 			$appInput->set('_x_userid', JFactory::getUser()->id);
 		}
 
-		/** @var AkeebasubsModelTaxhelper $taxHelper */
-		$taxHelper = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+		/** @var TaxHelper $taxHelper */
+		$taxHelper = $this->getModel('TaxHelper');
 		$taxParameters = $taxHelper->getTaxDefiningParameters();
 		$appInput->set('_akeebasubs_taxParameters', $taxParameters);
 
@@ -78,42 +88,35 @@ class AkeebasubsControllerLevels extends F0FController
 
 		if (!empty($coupon))
 		{
-			$session = JFactory::getSession();
+			$session = \JFactory::getSession();
 			$session->set('coupon', $coupon, 'com_akeebasubs');
 		}
 
 		// Continue parsing page options
-		if (parent::onBeforeBrowse())
-		{
-			$noClear = $this->input->getBool('no_clear', false);
+		/** @var \Akeeba\Subscriptions\Site\Model\Levels $model */
+		$model = $this->getModel();
+		$noClear = $this->input->getBool('no_clear', false);
 
-			if (!$noClear)
+		if (!$noClear)
+		{
+			$model
+				->clearState()
+				->savestate(0)
+				->setIgnoreRequest(1)
+				->limit(0)
+				->limitstart(0)
+				->enabled(1)
+				->only_once(1)
+				->filter_order('ordering')
+				->filter_order_Dir('ASC');
+
+			if (!empty($ids))
 			{
-				$model = $this->getThisModel()
-					->clearState()
-					->clearInput()
-					->savestate(0)
-					->limit(0)
-					->limitstart(0)
-					->enabled(1)
-					->only_once(1)
-					->filter_order('ordering')
-					->filter_order_Dir('ASC');
-
-				if (!empty($ids))
-				{
-					$model->id($ids);
-				}
+				$model->id($ids);
 			}
-
-			$this->getThisModel()->access_user_id(JFactory::getUser()->id);
-
-			return true;
 		}
-		else
-		{
-			return false;
-		}
+
+		$model->access_user_id(\JFactory::getUser()->id);
 	}
 
 	/**
@@ -123,17 +126,8 @@ class AkeebasubsControllerLevels extends F0FController
 	 */
 	public function onBeforeRead()
 	{
-		// Do we have an affiliate code?
-		$affid = $this->input->getInt('affid', 0);
-
-		if ($affid)
-		{
-			$session = JFactory::getSession();
-			$session->set('affid', $affid, 'com_akeebasubs');
-		}
-
 		// Fetch the subscription slug from page parameters
-		$params = JFactory::getApplication()->getPageParameters();
+		$params = \JFactory::getApplication()->getPageParameters();
 		$pageslug = $params->get('slug', '');
 		$slug = $this->input->getString('slug', null);
 
@@ -143,81 +137,79 @@ class AkeebasubsControllerLevels extends F0FController
 			$this->input->set('slug', $slug);
 		}
 
-		$this->getThisModel()->setIDsFromRequest();
-		$this->getThisModel()->access_user_id(JFactory::getUser()->id);
-		$id = $this->getThisModel()->getId();
+		/** @var \Akeeba\Subscriptions\Site\Model\Levels $model */
+		$model = $this->getModel();
+
+		$this->getIDsFromRequest($model, true);
+		$model->access_user_id(\JFactory::getUser()->id);
+		$id = $model->getId();
 
 		if (!$id && $slug)
 		{
-			$item = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
+			$model
 				->slug($slug)
-				->getFirstItem();
+				->firstOrFail();
 
-			if (!empty($item->akeebasubs_level_id))
-			{
-				$id = $item->akeebasubs_level_id;
-				$this->getThisModel()->setId($item->akeebasubs_level_id);
-			}
+			$id = $model->getId();
 		}
 
 		// Working around Progressive Caching
-		JFactory::getApplication()->input->set('slug', $slug);
-		JFactory::getApplication()->input->set('id', $id);
+		\JFactory::getApplication()->input->set('slug', $slug);
+		\JFactory::getApplication()->input->set('id', $id);
+
 		$this->registerUrlParams(array(
 			'slug' => 'STRING',
 			'id'   => 'INT',
 		));
 
-		// Get the current level
-		$level = $this->getThisModel()->getItem();
-
 		// Make sure the level exists
-		if ($level->akeebasubs_level_id == 0)
+		if ($model->akeebasubs_level_id == 0)
 		{
 			return false;
 		}
 
 		// Make sure the level is published
-		if (!$level->enabled)
+		if (!$model->enabled)
 		{
 			return false;
 		}
 
 		// Check for "Forbid renewal" conditions
-		if ($level->only_once)
+		if ($model->only_once)
 		{
-			$levels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->slug($level->slug)
+			$levels = $model->getClone()->savestate(false)->setIgnoreRequest(true)->clearState()->reset(true, true);
+			$levels
+				->slug($model->slug)
 				->only_once(1)
-				->getItemList();
+				->get(true);
+
 			if (!count($levels))
 			{
 				// User trying to renew a level which is marked as only_once
-				if ($level->renew_url)
+				if ($model->renew_url)
 				{
-					JFactory::getApplication()->redirect($level->renew_url);
+					\JFactory::getApplication()->redirect($model->renew_url);
 				}
 
 				return false;
 			}
-			$this->getThisModel()->setId($id);
 		}
 
-		$view = $this->getThisView();
+		$view = $this->getView();
 
 		// Get the user model and load the user data
-		$userparams = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->user_id(JFactory::getUser()->id)
-			->getMergedData(JFactory::getUser()->id);
-		$view->assign('userparams', $userparams);
+		$userparams = $this->getModel('Users')
+			->getMergedData(\JFactory::getUser()->id);
+
+		$view->userparams = $userparams;
 
 		// Load any cached user supplied information
-		$vModel = F0FModel::getAnInstance('Subscribes', 'AkeebasubsModel')
+		$vModel = $this->getModel('Subscribes')
 			->slug($slug)
 			->id($id);
 
 		// Should we use the coupon code saved in the session?
-		$session = JFactory::getSession();
+		$session = \JFactory::getSession();
 		$sessionCoupon = $session->get('coupon', null, 'com_akeebasubs');
 		$inputCoupon = $this->input->getString('coupon');
 
@@ -242,8 +234,8 @@ class AkeebasubsControllerLevels extends F0FController
 				}
 			}
 		}
-		$view->assign('cache', (array)$cache);
-		$view->assign('validation', $vModel->getValidation());
+		$view->cache = (array)$cache;
+		$view->validation = $vModel->getValidation();
 
 		// If we accidentally have the awesome layout set, please reset to default
 		if ($this->layout == 'awesome')
@@ -266,7 +258,7 @@ class AkeebasubsControllerLevels extends F0FController
 
 	protected function registerUrlParams($urlparams = array())
 	{
-		$app = JFactory::getApplication();
+		$app = \JFactory::getApplication();
 
 		$registeredurlparams = null;
 
@@ -277,7 +269,7 @@ class AkeebasubsControllerLevels extends F0FController
 
 		if (empty($registeredurlparams))
 		{
-			$registeredurlparams = new stdClass;
+			$registeredurlparams = new \stdClass;
 		}
 
 		foreach ($urlparams AS $key => $value)

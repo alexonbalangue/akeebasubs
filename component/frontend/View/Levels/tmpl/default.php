@@ -7,20 +7,20 @@
 
 defined('_JEXEC') or die();
 
-$this->loadHelper('cparams');
-$this->loadHelper('modules');
-$this->loadHelper('format');
-$this->loadHelper('message');
-require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
+use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use \Akeeba\Subscriptions\Admin\Helper\Image;
+use \Akeeba\Subscriptions\Admin\Helper\Message;
+
+/** @var \Akeeba\Subscriptions\Site\View\Levels\Html $this */
 
 // Take display VAT into account
-$showVat = AkeebasubsHelperCparams::getParam('showvat', 0);
-/** @var AkeebasubsModelTaxhelper $taxModel */
-$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+$showVat = ComponentParams::getParam('showvat', 0);
+/** @var \Akeeba\Subscriptions\Site\Model\TaxHelper $taxModel */
+$taxModel = $this->getContainer()->factory->model('TaxHelper')->savestate(0)->setIgnoreRequest(1);
 $taxParams = $taxModel->getTaxDefiningParameters();
 // Take the various inclusions into account
-$includesignup = AkeebasubsHelperCparams::getParam('includesignup', 2);
-$includediscount = AkeebasubsHelperCparams::getParam('includediscount', 0);
+$includesignup = ComponentParams::getParam('includesignup', 2);
+$includediscount = ComponentParams::getParam('includediscount', 0);
 // Only consider discounts if it's a logged in user
 $user = JFactory::getUser();
 $includediscount = ($includediscount && !$user->guest) ? true : false;
@@ -28,7 +28,7 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 
 <div id="akeebasubs" class="levels">
 
-<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionslistheader')?>
+<?php echo $this->getContainer()->template->loadPosition('akeebasubscriptionslistheader')?>
 
 <?php if(!empty($this->items)) foreach($this->items as $level):?>
 <?php
@@ -44,8 +44,8 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 
 	if ($includediscount)
 	{
-		/** @var AkeebasubsModelSubscribes $subscribesModel */
-		$subscribesModel = F0FModel::getTmpInstance('Subscribes', 'AkeebasubsModel')->savestate(false);
+		/** @var \Akeeba\Subscriptions\Site\Model\Subscribes $subscribesModel */
+		$subscribesModel = $this->getContainer()->factory->model('Subscribes')->savestate(0);
 		$subscribesModel->setState('id', $level->akeebasubs_level_id);
 		$subValidation = $subscribesModel->validatePrice(true);
 		$discount = $subValidation->discount;
@@ -89,15 +89,15 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 	<div class="level akeebasubs-level-<?php echo $level->akeebasubs_level_id ?>">
 		<p class="level-title">
 			<span class="level-price">
-				<?php if(AkeebasubsHelperCparams::getParam('renderasfree', 0) && ($levelPrice < 0.01)):?>
+				<?php if(ComponentParams::getParam('renderasfree', 0) && ($levelPrice < 0.01)):?>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
 				<?php else: ?>
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-				<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+				<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 				<?php endif; ?>
 				<span class="level-price-integer"><?php echo $price_integer ?></span><?php if((int)$price_fractional > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?>
-				<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-				<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+				<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 				<?php endif; ?>
 				<?php endif; ?>
 				<?php if (((float)$vatRule->taxrate > 0.01) && ($levelPrice > 0.01)): ?>
@@ -116,22 +116,22 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 			<div class="level-description">
 				<div class="level-description-inner">
 					<?php if(!empty($level->image)):?>
-					<img class="level-image" src="<?php echo AkeebasubsHelperImage::getURL($level->image)?>" />
+					<img class="level-image" src="<?php echo Image::getURL($level->image)?>" />
 					<?php endif;?>
 
 					<?php if(abs($signupFee) >= 0.01):?>
 					<b><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST'); ?></b>
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-					<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+					<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 					<?php endif; ?>
 					<span class="level-price-integer"><?php echo $price_integerSU ?></span><?php if((int)$price_fractionalSU > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $price_fractionalSU ?></span><?php endif; ?>
-					<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-					<span class="level-price-currency"><?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?></span>
+					<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+					<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 					<?php endif; ?>
 					<br/>
 					<?php endif; ?>
 
-					<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($level->description));?>
+					<?php echo JHTML::_('content.prepare', Message::processLanguage($level->description));?>
 				</div>
 			</div>
 			<div class="level-clear"></div>
@@ -145,5 +145,5 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 <?php endforeach;?>
 <div class="level-clear"></div>
 
-<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionslistfooter')?>
+<?php echo $this->getContainer()->template->loadPosition('akeebasubscriptionslistfooter')?>
 </div>
