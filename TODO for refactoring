@@ -1,0 +1,38 @@
+Add missing _JEXEC or die
+
+Migrate all front-end views with the same code as now
+
+Rewrite Levels templates
+Rewrite Level template
+Rewrite Invoice template
+Rewrite Message controller (force default template)
+Remove Message templates except default
+Rewrite Message templates
+Rewrite Subscribe template
+Rewrite Subscriptions template
+Rewrite Subscription template
+Rewrite Userinfo template
+
+Migrate CLI
+
+Refactor and Unit Test the Subscribe model
+
+Migrate payment plugins
+
+Migrate integration plugins
+
+Migrate modules
+
+Migrate content plugins
+
+Migrate system plugins
+
+Migrate user plugins
+
++ Trigger integrations for a specific user
+
++ EU VAT country prefix tag for invoices + modify invoice to have it before the VAT number
+
++ upgrade from multiple levels with old subs expiration
+
++ GitHub integration
