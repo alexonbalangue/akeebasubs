@@ -156,8 +156,9 @@ class Levels extends DataController
 			// Note: do note replace $item with $model or read() won't see the loaded record because of how references
 			// work in PHP.
 			$item = $model
+				->id(0)
 				->slug($slug)
-				->firstOrFail();
+				->firstOrNew();
 
 			$id = $item->getId();
 		}
