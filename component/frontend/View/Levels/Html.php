@@ -68,6 +68,13 @@ class Html extends \FOF30\View\DataView\Html
 		parent::onBeforeBrowse();
 	}
 
+	/**
+	 * Returns the pricing information for a subscription level. Used by the view templates to avoid code duplication.
+	 *
+	 * @param   \Akeeba\Subscriptions\Site\Model\Levels  $level  The subscription level
+	 *
+	 * @return  object
+	 */
 	public function getLevelPriceInformation(Levels $level)
 	{
 		$signupFee = 0;
@@ -153,7 +160,7 @@ class Html extends \FOF30\View\DataView\Html
 			'priceInteger'         => $price_integer,
 			'priceFractional'      => $price_fractional,
 			'formattedPriceSignup' => $formattedPriceSU,
-			'singupInteger'        => $price_integerSU,
+			'signupInteger'        => $price_integerSU,
 			'signupFractional'     => $price_fractionalSU,
 		];
 	}

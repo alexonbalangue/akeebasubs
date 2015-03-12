@@ -21,77 +21,25 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 
 <?php if(!empty($this->items)) foreach($this->items as $level):?>
 <?php
-	$signupFee = 0;
-
-	if (!in_array($level->akeebasubs_level_id, $this->subIDs) && ($this->includeSignup != 0))
-	{
-		$signupFee = (float)$level->signupfee;
-	}
-
-	$vatRule = $this->taxModel->getTaxRule($level->akeebasubs_level_id, $this->taxParams['country'], $this->taxParams['state'], $this->taxParams['city'], $this->taxParams['vies']);
-	$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
-
-	if ($this->includeDiscount)
-	{
-		/** @var \Akeeba\Subscriptions\Site\Model\Subscribe $subscribeModel */
-		$subscribeModel = $this->getContainer()->factory->model('Subscribe')->savestate(0);
-		$subscribeModel->setState('id', $level->akeebasubs_level_id);
-		$subValidation = $subscribeModel->validatePrice(true);
-		$discount = $subValidation->discount;
-		$levelPrice = $level->price - $discount;
-	}
-	else
-	{
-		$discount = 0;
-		$levelPrice = $level->price;
-	}
-
-	if ($this->includeSignup == 1)
-	{
-		if (($levelPrice + $signupFee) < 0)
-		{
-			$levelPrice = -$signupFee;
-		}
-
-		$formatedPrice = sprintf('%1.02F', ($levelPrice + $signupFee) * $vatMultiplier);
-		$levelPrice += $signupFee;
-	}
-	else
-	{
-		if ($levelPrice < 0)
-		{
-			$levelPrice = 0;
-		}
-
-		$formatedPrice = sprintf('%1.02F', ($levelPrice) * $vatMultiplier);
-	}
-
-	$dotpos = strpos($formatedPrice, '.');
-	$price_integer = substr($formatedPrice,0,$dotpos);
-	$price_fractional = substr($formatedPrice,$dotpos+1);
-
-	$formatedPriceSU = sprintf('%1.02F', $signupFee * $vatMultiplier);
-	$dotposSU = strpos($formatedPriceSU, '.');
-	$price_integerSU = substr($formatedPriceSU,0,$dotposSU);
-	$price_fractionalSU = substr($formatedPriceSU,$dotposSU+1);
+	$priceInfo = $this->getLevelPriceInformation($level);
 ?>
 	<div class="level akeebasubs-level-<?php echo $level->akeebasubs_level_id ?>">
 		<p class="level-title">
 			<span class="level-price">
-				<?php if($this->renderAsFree && ($levelPrice < 0.01)):?>
+				<?php if($this->renderAsFree && ($priceInfo->levelPrice < 0.01)):?>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
 				<?php else: ?>
 				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
 				<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 				<?php endif; ?>
-				<span class="level-price-integer"><?php echo $price_integer ?></span><?php if((int)$price_fractional > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?>
+				<span class="level-price-integer"><?php echo $priceInfo->priceInteger ?></span><?php if((int)$priceInfo->priceFractional > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $priceInfo->priceFractional ?></span><?php endif; ?>
 				<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
 				<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 				<?php endif; ?>
 				<?php endif; ?>
-				<?php if (((float)$vatRule->taxrate > 0.01) && ($levelPrice > 0.01)): ?>
+				<?php if (((float)$priceInfo->vatRule->taxrate > 0.01) && ($priceInfo->levelPrice > 0.01)): ?>
 					<span class="level-price-taxnotice">
-						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_INCLUDESVAT', (float)$vatRule->taxrate); ?>
+						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_INCLUDESVAT', (float)$priceInfo->vatRule->taxrate); ?>
 					</span>
 				<?php endif; ?>
 			</span>
@@ -108,12 +56,12 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 					<img class="level-image" src="<?php echo Image::getURL($level->image)?>" />
 					<?php endif;?>
 
-					<?php if(abs($signupFee) >= 0.01):?>
+					<?php if(abs($priceInfo->signupFee) >= 0.01):?>
 					<b><?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST'); ?></b>
 					<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
 					<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 					<?php endif; ?>
-					<span class="level-price-integer"><?php echo $price_integerSU ?></span><?php if((int)$price_fractionalSU > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $price_fractionalSU ?></span><?php endif; ?>
+					<span class="level-price-integer"><?php echo $priceInfo->signupInteger ?></span><?php if((int)$priceInfo->signupFractional > 0): ?><span class="level-price-separator">.</span><span class="level-price-decimal"><?php echo $priceInfo->signupFractional ?></span><?php endif; ?>
 					<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
 					<span class="level-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span>
 					<?php endif; ?>
