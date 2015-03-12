@@ -10,10 +10,12 @@ namespace Akeeba\Subscriptions\Site\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Controller\Mixin;
+use Akeeba\Subscriptions\Site\Model\Subscribe;
 use Akeeba\Subscriptions\Site\Model\TaxHelper;
+use Akeeba\Subscriptions\Site\Model\Users;
 use FOF30\Container\Container;
 use FOF30\Controller\DataController;
-use FOF30\View\Exception\AccessForbidden;
+use JFactory;
 
 class Levels extends DataController
 {
@@ -203,15 +205,17 @@ class Levels extends DataController
 		$view = $this->getView();
 
 		// Get the user model and load the user data
-		$userparams = $this->getModel('Users')
+		/** @var Users $usersModel */
+		$usersModel = $this->getModel('Users');
+		$userparams = $usersModel
 			->getMergedData(\JFactory::getUser()->id);
 
 		$view->userparams = $userparams;
 
 		// Load any cached user supplied information
-		$vModel = $this->getModel('Subscribe')
-			->slug($slug)
-			->id($id);
+		/** @var Subscribe $vModel */
+		$vModel = $this->getModel('Subscribe');
+		$vModel->slug($slug)->id($id);
 
 		// Should we use the coupon code saved in the session?
 		$session = \JFactory::getSession();

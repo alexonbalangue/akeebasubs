@@ -80,6 +80,7 @@ use JFactory;
  * @method  $this  notifyafter()               notifyafter(int $v)
  * @method  $this  levelgroup()                levelgroup(int $v)
  * @method  $this  access_user_id()            access_user_id(int $v)
+ * @method  $this  id()                        id(mixed $v)
  *
  */
 class Levels extends DataModel

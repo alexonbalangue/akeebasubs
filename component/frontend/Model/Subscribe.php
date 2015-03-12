@@ -21,6 +21,29 @@ defined('_JEXEC') or die;
 /**
  * This model handles validation and subscription creation
  *
+ * @method $this slug() slug(string $v)
+ * @method $this id() id(int $v)
+ * @method $this paymentmethod() paymentmethod(string $v)
+ * @method $this username() username(string $v)
+ * @method $this password() password(string $v)
+ * @method $this password2() password2(string $v)
+ * @method $this name() name(string $v)
+ * @method $this email() email(string $v)
+ * @method $this email2() email2(string $v)
+ * @method $this address1() address1(string $v)
+ * @method $this address2() address2(string $v)
+ * @method $this country() country(string $v)
+ * @method $this state() state(string $v)
+ * @method $this city() city(string $v)
+ * @method $this zip() zip(string $v)
+ * @method $this isbusiness() isbusiness(int $v)
+ * @method $this businessname() businessname(string $v)
+ * @method $this vatnumber() vatnumber(string $v)
+ * @method $this coupon() coupon(string $v)
+ * @method $this occupation() occupation(string $v)
+ * @method $this custom() custom(array $v)
+ * @method $this subcustom() subcustom(array $v)
+ *
  * TODO Refactor this. Over 3k lines in a specialised model is just asking for trouble!
  */
 class Subscribe extends Model
