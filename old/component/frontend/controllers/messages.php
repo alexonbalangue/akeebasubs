@@ -21,6 +21,7 @@ class AkeebasubsControllerMessages extends F0FController
 	}
 
 	public function execute($task) {
+		// TODO We need to handle two different tasks, thankyou and cancel (instead of read)
 		$task = 'read';
 		$this->input->set('task','read');
 		parent::execute($task);
