@@ -271,7 +271,7 @@ JS;
 			}
 
 			$response['valid'] = $response['valid'] &&
-			                     $response['subscription_custom_validation']['slaveuser'.$i];
+				$response['subscription_custom_validation']['slaveuser'.$i];
 		}
 
 		return $response;
@@ -420,23 +420,16 @@ JS;
 
 				$result = false;
 
-				if (in_array($slave, $list['slaveusers']) && in_array($slave, $previous['slaveusers']))
+				if (in_array($slave, $previous['slaveusers']) && in_array($slave, $current['slaveusers']))
 				{
-					// Slave is still here, just check if his subscription is expired, if so extend it
+					// Slave is still here, just sync with the parent subscription
 					$index = array_search($slave, $previous['slaveusers']);
 
 					if(isset($previous['slavesubs_ids'][$index]))
 					{
-						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-						                 ->getItem($previous['slavesubs_ids'][$index]);
-
-						if(!$table->enabled)
-						{
-							$table->save(array('publish_down' => $row->publish_down));
-							$dirty = true;
-						}
-
-						$result = $table->akeebasubs_subscription_id;
+						//we have a valid slave so copy from parent to slave
+						$result =$this->copySubscriptionInformation($row, $previous['slavesubs_ids'][$index]);
+						$dirty = true;
 					}
 				}
 				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
@@ -491,8 +484,8 @@ JS;
 	{
 		// Get all of the user's subscriptions
 		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-		                         ->user_id($user_id)
-		                         ->getList();
+			->user_id($user_id)
+			->getList();
 
 		$info = array();
 		foreach ($subscriptions as $row)
@@ -626,8 +619,11 @@ JS;
 			elseif (property_exists($from, $k))
 			{
 				$to->$k = $from->$k;
+				//return the id of the subscription that was modified
+				return $to;
 			}
 		}
+
 	}
 
 	/**
