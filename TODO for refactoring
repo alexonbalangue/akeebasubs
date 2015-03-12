@@ -1,12 +1,5 @@
-PR to Joomla: Typehint for JRoute::_() is wrong (should be type string)
-
-Move this to get state
-
-	Also provide the level object itself
-
 Migrate all front-end views with the same code as now
 
-Rewrite Levels templates
 Rewrite Level template
 Rewrite Invoice template
 Rewrite Message controller (force default template)
