@@ -1,5 +1,6 @@
 Migrate all front-end views with the same code as now
 
+Rewrite Levels template
 Rewrite Level template
 Rewrite Invoice template
 Rewrite Message controller (force default template)

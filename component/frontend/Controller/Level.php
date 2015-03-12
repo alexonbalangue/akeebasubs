@@ -27,5 +27,9 @@ class Level extends Levels
 		$this->predefinedTaskList = ['read'];
 
 		$this->cacheableTasks = [];
+
+		// Force the view name, required because I am extending the Levels (plural) controller but I want my view
+		// templates to be read from the Level (singular) directory.
+		$this->viewName = 'Level';
 	}
 }

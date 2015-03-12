@@ -7,9 +7,6 @@
 
 defined('_JEXEC') or die();
 
-$this->loadHelper('message');
-require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
-
 ?>
 
 <div id="akeebasubs-subscribe-level">
@@ -21,9 +18,9 @@ require_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/helpers/image.php';
 	<div class="level-description level-description-short">
 		<div class="level-description-inner">
 			<?php if(!empty($this->item->image)):?>
-			<img class="level-image" src="<?php echo AkeebasubsHelperImage::getURL($this->item->image)?>" />
+			<img class="level-image" src="<?php echo \Akeeba\Subscriptions\Admin\Helper\Image::getURL($this->item->image)?>" />
 			<?php endif;?>
-			<?php echo JHTML::_('content.prepare', AkeebasubsHelperMessage::processLanguage($this->item->description));?>
+			<?php echo JHTML::_('content.prepare', \Akeeba\Subscriptions\Admin\Helper\Message::processLanguage($this->item->description));?>
 		</div>
 	</div>
 	<div class="level-clear"></div>	

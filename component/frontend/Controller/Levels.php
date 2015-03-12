@@ -43,6 +43,11 @@ class Levels extends DataController
 		}
 	}
 
+	/**
+	 * Runs before the browse task
+	 *
+	 * @throws \Exception
+	 */
 	public function onBeforeBrowse()
 	{
 		$params = \JFactory::getApplication()->getPageParameters();
@@ -122,7 +127,7 @@ class Levels extends DataController
 	}
 
 	/**
-	 * Use the slug instead of the id to read a record
+	 * Runs before the read task
 	 *
 	 * @return bool
 	 */
@@ -245,22 +250,6 @@ class Levels extends DataController
 		}
 		$view->cache = (array)$cache;
 		$view->validation = $vModel->getValidation();
-
-		// If we accidentally have the awesome layout set, please reset to default
-		if ($this->layout == 'awesome')
-		{
-			$this->layout = 'default';
-		}
-
-		if ($this->layout == 'item')
-		{
-			$this->layout = 'default';
-		}
-
-		if (empty($this->layout))
-		{
-			$this->layout = 'default';
-		}
 
 		return true;
 	}

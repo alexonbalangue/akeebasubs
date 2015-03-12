@@ -123,13 +123,13 @@ if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFiel
 				<?php echo $field['elementHTML']?>
 				<?php if(array_key_exists('validLabel', $field)):?>
 					<span id="<?php echo $field['id']?>_valid" class="help-inline <?php echo $validationClass ?>"
-					      style="<?php if(!$field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
+					      style="<?php if(!$field['isValid'] || !$applyValidationBoolean):?>display:none<?php endif?>">
 					  <?php echo $field['validLabel']?>
 					</span>
 				<?php endif;?>
 				<?php if(array_key_exists('invalidLabel', $field)):?>
 					<span id="<?php echo $field['id']?>_invalid" class="help-inline <?php echo $validationClass ?>"
-					      style="<?php if($field['isValid'] || !$apply_validation):?>display:none<?php endif?>">
+					      style="<?php if($field['isValid'] || !$applyValidationBoolean):?>display:none<?php endif?>">
 					  <?php echo $field['invalidLabel']?>
 					</span>
 				<?php endif;?>
