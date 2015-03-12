@@ -1,11 +1,8 @@
+PR to Joomla: Typehint for JRoute::_() is wrong (should be type string)
+
 Move this to get state
 
 	Also provide the level object itself
-
-Get rid of "new JDate", use $this->container->platform->getDate instead
-
-$this->container->platform->getDate()->toUnix ==> time()  because, duh!
-	WARNING: Do not just search for $this->container->platform->getDate(), we use ->toSql() as well!!!
 
 Migrate all front-end views with the same code as now
 

@@ -2714,9 +2714,7 @@ class Subscribe extends Model
 	{
 		$state = $this->getStateVariables();
 
-		$rawDataPost = JRequest::get('POST', 2);
-		$rawDataGet = JRequest::get('GET', 2);
-		$data = array_merge($rawDataGet, $rawDataPost);
+		$data = $this->input->getData();
 
 		// Some plugins result in an empty Itemid being added to the request
 		// data, screwing up the payment callback validation in some cases (e.g.
@@ -2731,13 +2729,13 @@ class Subscribe extends Model
 
 		/** @var PaymentMethods $paymentMethodsModel */
 		$paymentMethodsModel = $this->container->factory->model('PaymentMethods');
-		$dummy = $paymentMethodsModel->getPaymentPlugins();
+		$paymentMethodsModel->getPaymentPlugins();
 
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKPaymentCallback', array(
+		$jResponse = $this->container->platform->runPlugins('onAKPaymentCallback', array(
 			$state->paymentmethod,
 			$data
 		));
+
 		if (empty($jResponse))
 		{
 			return false;
@@ -2774,14 +2772,17 @@ class Subscribe extends Model
 	 *
 	 * This function generates a truly random UUID.
 	 *
-	 * @paream boolean    If TRUE return the uuid in hex format, otherwise as a string
-	 * @see    http://tools.ietf.org/html/rfc4122#section-4.4
-	 * @see    http://en.wikipedia.org/wiki/UUID
-	 * @return string A UUID, made up of 36 characters or 16 hex digits.
+	 * @param   boolean  $hex  If TRUE return the uuid in hex format, otherwise as a string
+	 *
+	 * @return  string A UUID, made up of 36 characters or 16 hex digits.
+	 *
+	 * @see     http://tools.ietf.org/html/rfc4122#section-4.4
+	 * @see     http://en.wikipedia.org/wiki/UUID
 	 */
 	protected function _uuid($hex = false)
 	{
 		$pr_bits = false;
+
 		if (is_resource($this->_urand))
 		{
 			$pr_bits .= @fread($this->_urand, 16);
@@ -2790,6 +2791,7 @@ class Subscribe extends Model
 		if (!$pr_bits)
 		{
 			$fp = @fopen('/dev/urandom', 'rb');
+
 			if ($fp !== false)
 			{
 				$pr_bits .= @fread($fp, 16);
@@ -2799,6 +2801,7 @@ class Subscribe extends Model
 			{
 				// If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
 				$pr_bits = "";
+
 				for ($cnt = 0; $cnt < 16; $cnt++)
 				{
 					$pr_bits .= chr(mt_rand(0, 255));
@@ -2837,10 +2840,18 @@ class Subscribe extends Model
 		return sprintf($format, $time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
 	}
 
+	/**
+	 * Is this string a valid email address?
+	 *
+	 * @param   string  $email  The email string to check
+	 *
+	 * @return  bool  True if it's a valid email string
+	 */
 	private function validEmail($email)
 	{
 		$isValid = true;
 		$atIndex = strrpos($email, "@");
+
 		if (is_bool($atIndex) && !$atIndex)
 		{
 			$isValid = false;
@@ -2856,33 +2867,38 @@ class Subscribe extends Model
 				// local part length exceeded
 				$isValid = false;
 			}
-			else if ($domainLen < 1 || $domainLen > 255)
+			elseif ($domainLen < 1 || $domainLen > 255)
 			{
 				// domain part length exceeded
 				$isValid = false;
 			}
-			else if ($local[0] == '.' || $local[$localLen - 1] == '.')
+			elseif ($local[0] == '.' || $local[$localLen - 1] == '.')
 			{
 				// local part starts or ends with '.'
 				$isValid = false;
 			}
-			else if (preg_match('/\\.\\./', $local))
+			elseif (preg_match('/\\.\\./', $local))
 			{
 				// local part has two consecutive dots
 				$isValid = false;
 			}
-			else if (!preg_match('/^[A-Za-z0-9\\-\\.]+$/', $domain))
+			// The domain character validation is commented out because of UTF-8 domains.
+			/**
+			elseif (!preg_match('/^[A-Za-z0-9\\-\\.]+$/', $domain))
 			{
 				// character not valid in domain part
 				$isValid = false;
 			}
-			else if (preg_match('/\\.\\./', $domain))
+			/**/
+			elseif (preg_match('/\\.\\./', $domain))
 			{
 				// domain part has two consecutive dots
 				$isValid = false;
 			}
-			else if
-			(!preg_match('/^(\\\\.|[A-Za-z0-9!#%&`_=\\/$\'*+?^{}|~.-])+$/',
+			// UTF-8 characters in local name are allowed, so we have to comment out this check
+			/**
+			elseif (
+				!preg_match('/^(\\\\.|[A-Za-z0-9!#%&`_=\\/$\'*+?^{}|~.-])+$/',
 				str_replace("\\\\", "", $local))
 			)
 			{
@@ -2895,12 +2911,15 @@ class Subscribe extends Model
 					$isValid = false;
 				}
 			}
+			/**/
 
-			// Check the domain name
+			// Check the domain name –– NOPE. Because of UTF-8 domains.
+			/**
 			if ($isValid && !$this->is_valid_domain_name($domain))
 			{
 				return false;
 			}
+			/**/
 
 			// Uncomment below to have PHP run a proper DNS check (risky on shared hosts!)
 			/**
@@ -2914,6 +2933,14 @@ class Subscribe extends Model
 		return $isValid;
 	}
 
+	/**
+	 * Checks if a domain name is valid. Used by validEmail(). Currently not used because this method only understands
+	 * non-UTF domain names :(
+	 *
+	 * @param   string  $domain_name  The domain name to check
+	 *
+	 * @return  bool  Is this a valid domain name?
+	 */
 	function is_valid_domain_name($domain_name)
 	{
 		$pieces = explode(".", $domain_name);
@@ -2933,14 +2960,19 @@ class Subscribe extends Model
 	/**
 	 * Send an activation email to the user
 	 *
-	 * @param JUser $user
+	 * @param   \JUser  $user
+	 * @param   array   $indata
+	 *
+	 * @return  bool
+	 *
+	 * @throws  \Exception
 	 */
-	private function sendActivationEmail($user, $indata)
+	private function sendActivationEmail($user, array $indata = [])
 	{
 		$app = JFactory::getApplication();
 		$config = JFactory::getConfig();
 		$db = JFactory::getDbo();
-		$params = JComponentHelper::getParams('com_users');
+		$params = \JComponentHelper::getParams('com_users');
 
 		$data = array_merge((array)$user->getProperties(), $indata);
 
@@ -2950,7 +2982,7 @@ class Subscribe extends Model
 		// Check if the user needs to activate their account.
 		if (($useractivation == 1) || ($useractivation == 2))
 		{
-			$user->activation = JApplication::getHash(JUserHelper::genRandomPassword());
+			$user->activation = \JApplicationHelper::getHash(\JUserHelper::genRandomPassword());
 			$user->block = 1;
 			$user->lastvisitDate = JFactory::getDbo()->getNullDate();
 		}
@@ -2960,7 +2992,7 @@ class Subscribe extends Model
 		}
 
 		// Load the users plugin group.
-		JPluginHelper::importPlugin('user');
+		\JPluginHelper::importPlugin('user');
 
 		// Store the data.
 		if (!$user->save())
@@ -2974,7 +3006,7 @@ class Subscribe extends Model
 		$data['fromname'] = $config->get('fromname');
 		$data['mailfrom'] = $config->get('mailfrom');
 		$data['sitename'] = $config->get('sitename');
-		$data['siteurl'] = JUri::root();
+		$data['siteurl'] = \JUri::root();
 
 		// Load com_users translation files
 		$jlang = JFactory::getLanguage();
@@ -2985,11 +3017,11 @@ class Subscribe extends Model
 		// Handle account activation/confirmation emails.
 		if ($useractivation == 2)
 		{
-			$uri = JURI::getInstance();
+			$uri = \JURI::getInstance();
 			$base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
-			$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
+			$data['activate'] = $base . \JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
 
-			$emailSubject = JText::sprintf(
+			$emailSubject = \JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
 				$data['name'],
 				$data['sitename']
@@ -2997,7 +3029,7 @@ class Subscribe extends Model
 
 			if ($sendpassword)
 			{
-				$emailBody = JText::sprintf(
+				$emailBody = \JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_WITH_ADMIN_ACTIVATION_BODY',
 					$data['name'],
 					$data['sitename'],
@@ -3009,7 +3041,7 @@ class Subscribe extends Model
 			}
 			else
 			{
-				$emailBody = JText::sprintf(
+				$emailBody = \JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_WITH_ADMIN_ACTIVATION_BODY_NOPW',
 					$data['name'],
 					$data['sitename'],
@@ -3022,11 +3054,11 @@ class Subscribe extends Model
 		elseif ($useractivation == 1)
 		{
 			// Set the link to activate the user account.
-			$uri = JURI::getInstance();
+			$uri = \JUri::getInstance();
 			$base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
-			$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
+			$data['activate'] = $base . \JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
 
-			$emailSubject = JText::sprintf(
+			$emailSubject = \JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
 				$data['name'],
 				$data['sitename']
@@ -3034,7 +3066,7 @@ class Subscribe extends Model
 
 			if ($sendpassword)
 			{
-				$emailBody = JText::sprintf(
+				$emailBody = \JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY',
 					$data['name'],
 					$data['sitename'],
@@ -3046,7 +3078,7 @@ class Subscribe extends Model
 			}
 			else
 			{
-				$emailBody = JText::sprintf(
+				$emailBody = \JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY_NOPW',
 					$data['name'],
 					$data['sitename'],
@@ -3059,7 +3091,7 @@ class Subscribe extends Model
 		else
 		{
 
-			$emailSubject = JText::sprintf(
+			$emailSubject = \JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
 				$data['name'],
 				$data['sitename']
@@ -3067,7 +3099,7 @@ class Subscribe extends Model
 
 			if ($sendpassword)
 			{
-				$emailBody = JText::sprintf(
+				$emailBody = \JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_BODY',
 					$data['name'],
 					$data['sitename'],
@@ -3078,7 +3110,7 @@ class Subscribe extends Model
 			}
 			else
 			{
-				$emailBody = JText::sprintf(
+				$emailBody = \JText::sprintf(
 					'COM_USERS_EMAIL_REGISTERED_BODY_NOPW',
 					$data['name'],
 					$data['sitename'],
@@ -3093,13 +3125,13 @@ class Subscribe extends Model
 		//Send Notification mail to administrators
 		if (($params->get('useractivation') < 2) && ($params->get('mail_to_admin') == 1))
 		{
-			$emailSubject = JText::sprintf(
+			$emailSubject = \JText::sprintf(
 				'COM_USERS_EMAIL_ACCOUNT_DETAILS',
 				$data['name'],
 				$data['sitename']
 			);
 
-			$emailBodyAdmin = JText::sprintf(
+			$emailBodyAdmin = \JText::sprintf(
 				'COM_USERS_EMAIL_REGISTERED_NOTIFICATION_TO_ADMIN_BODY',
 				$data['name'],
 				$data['username'],
@@ -3118,7 +3150,7 @@ class Subscribe extends Model
 			{
 				$rows = $db->loadObjectList();
 			}
-			catch (RuntimeException $e)
+			catch (\RuntimeException $e)
 			{
 				return false;
 			}
