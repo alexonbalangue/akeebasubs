@@ -12,9 +12,10 @@ use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Admin\Helper\Select;
 use Akeeba\Subscriptions\Admin\Model\JoomlaUsers;
 use Akeeba\Subscriptions\Admin\Model\Levels;
+use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 use FOF30\Container\Container;
 use FOF30\Model\Model;
-use JDate;
+use FOF30\Utils\Ip;
 use JFactory;
 
 defined('_JEXEC') or die;
@@ -2162,19 +2163,13 @@ class Subscribe extends Model
 		$user = $this->getState('user', $user);
 
 		// Find an existing record
-		$list = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->user_id($user->id)
-			->getItemList();
+		/** @var Users $subsUsersModel */
+		$subsUsersModel = $this->container->factory->model('Users')->savestate(0)->setIgnoreRequest(1);
 
-		if (!count($list))
-		{
-			$id = 0;
-		}
-		else
-		{
-			$thisUser = array_pop($list);
-			$id = $thisUser->akeebasubs_user_id;
-		}
+		$thisUser = $subsUsersModel
+			->user_id($user->id)
+			->firstOrNew();
+		$id = $thisUser->akeebasubs_user_id;
 
 		$data = array(
 			'akeebasubs_user_id' => $id,
@@ -2184,7 +2179,7 @@ class Subscribe extends Model
 			'occupation'         => $state->occupation,
 			'vatnumber'          => $state->vatnumber,
 			'viesregistered'     => $validation->validation->vatnumber,
-			// @todo Ask for tax authority
+			// @todo Ask for tax authority (does it make sense, I think it's a Greek thing only...)
 			'taxauthority'       => '',
 			'address1'           => $state->address1,
 			'address2'           => $state->address2,
@@ -2196,10 +2191,9 @@ class Subscribe extends Model
 		);
 
 		// Allow plugins to post-process the fields
-		JLoader::import('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akeebasubs');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKSignupUserSave', array((object)$data));
+		$this->container->platform->importPlugin('akeebasubs');
+		$jResponse = $this->container->platform->runPlugins('onAKSignupUserSave', array((object)$data));
+
 		if (is_array($jResponse) && !empty($jResponse))
 		{
 			foreach ($jResponse as $pResponse)
@@ -2208,10 +2202,12 @@ class Subscribe extends Model
 				{
 					continue;
 				}
+
 				if (empty($pResponse))
 				{
 					continue;
 				}
+
 				if (array_key_exists('params', $pResponse))
 				{
 					if (!empty($pResponse['params']))
@@ -2221,21 +2217,24 @@ class Subscribe extends Model
 							$data['params'][$k] = $v;
 						}
 					}
+
 					unset($pResponse['params']);
 				}
+
 				$data = array_merge($data, $pResponse);
 			}
 		}
 
-		// Serialize custom fields
-		$data['params'] = json_encode($data['params']);
+		try
+		{
+			$thisUser->save($data);
 
-		$status = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->setId($id)
-			->getItem()
-			->save($data);
-
-		return $status;
+			return true;
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -2264,13 +2263,19 @@ class Subscribe extends Model
 		// ----------------------------------------------------------------------
 
 		// Is this actually an allowed subscription level?
-		$allowedLevels = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
+		/** @var Levels $levelsModel */
+		$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+
+		$allowedLevels = $levelsModel
 			->only_once(1)
 			->enabled(1)
-			->getItemList();
+			->get(true);
+
 		$allowed = false;
-		if (count($allowedLevels))
+
+		if ($allowedLevels->count())
 		{
+			/** @var Levels $l */
 			foreach ($allowedLevels as $l)
 			{
 				if ($l->akeebasubs_level_id == $state->id)
@@ -2287,12 +2292,14 @@ class Subscribe extends Model
 		}
 
 		// Fetch the level's object, used later on
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->getItem($state->id);
+		$level = $levelsModel->getClone()->find($state->id);
 
 		// Step #2. Check that the payment plugin exists or return false
 		// ----------------------------------------------------------------------
-		$plugins = $this->getPaymentPlugins();
+		/** @var PaymentMethods $paymentMethodsModel */
+		$paymentMethodsModel = $this->container->factory->model('PaymentMethods');
+		$plugins = $paymentMethodsModel->getPaymentPlugins();
+
 		$found = false;
 		if (!empty($plugins))
 		{
@@ -2316,9 +2323,12 @@ class Subscribe extends Model
 
 		// Step #2.b. Apply block rules in the Professional release
 		// ----------------------------------------------------------------------
-		if (F0FModel::getTmpInstance('Blockrules', 'AkeebasubsModel')->isBlocked($state))
+		/** @var BlockRules $blockRulesModel */
+		$blockRulesModel = $this->container->factory->model('Blockrules')->savestate(0)->setIgnoreRequest(1);
+
+		if ($blockRulesModel->isBlocked($state))
 		{
-			throw new Exception(JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
+			throw new \Exception(\JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'), 403);
 		}
 
 		// Step #3. Create or update a user record
@@ -2326,6 +2336,7 @@ class Subscribe extends Model
 		$user = JFactory::getUser();
 		$this->setState('user', $user);
 		$userIsSaved = $this->updateUserInfo(true, $level);
+
 		if (!$userIsSaved)
 		{
 			return false;
@@ -2342,18 +2353,21 @@ class Subscribe extends Model
 		// Step #4. Create or add user extra fields
 		// ----------------------------------------------------------------------
 		// Find an existing record
-		$dummy = $this->saveCustomFields();
+		$this->saveCustomFields();
 
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------
 		// First, the question: is this level part of a group?
 		$haveLevelGroup = false;
+
 		if ($level->akeebasubs_levelgroup_id > 0)
 		{
 			// Is the level group published?
-			$levelGroup = F0FModel::getTmpInstance('Levelgroups', 'AkeebasubsModel')
-				->getItem($level->akeebasubs_levelgroup_id);
-			if ($levelGroup instanceof F0FTable)
+			/** @var LevelGroups $levelGroupModel */
+			$levelGroupModel = $this->container->factory->model('LevelGroups')->savestate(0)->setIgnoreRequest(1);
+			$levelGroup = $levelGroupModel->find($level->akeebasubs_levelgroup_id);
+
+			if ($levelGroup->getId())
 			{
 				$haveLevelGroup = $levelGroup->enabled;
 			}
@@ -2364,42 +2378,57 @@ class Subscribe extends Model
 			// We have a level group. Get all subscriptions for all levels in
 			// the group.
 			$subscriptions = array();
-			$levelsInGroup = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
+
+			/** @var Levels $levelsModel */
+			$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+			$levelsInGroup = $levelsModel
 				->levelgroup($level->akeebasubs_levelgroup_id)
-				->getList(true);
-			foreach ($levelsInGroup as $l)
+				->get(true);
+
+			if ($levelsInGroup->count())
 			{
-				$someSubscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-					->user_id($user->id)
-					->level($l->akeebasubs_level_id)
-					->paystate('C')
-					->getList(true);
-				if (count($someSubscriptions))
+				$groupList = [];
+
+				foreach ($levelsInGroup as $l)
 				{
-					$subscriptions = array_merge($subscriptions, $someSubscriptions);
+					$groupList[] = $l->akeebasubs_level_id;
 				}
+
+				/** @var Subscriptions $subscriptionsModel */
+				$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
+				$subscriptions = $subscriptionsModel
+					->user_id($user->id)
+					->akeebasubs_level_id($groupList)
+					->paystate('C')
+					->get(true);
 			}
 		}
 		else
 		{
 			// No level group found. Get subscriptions on the same level.
-			$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			/** @var Subscriptions $subscriptionsModel */
+			$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
+			$subscriptions = $subscriptionsModel
 				->user_id($user->id)
 				->level($state->id)
 				->paystate('C')
-				->getList(true);
+				->get(true);
 		}
 
 		$now = time();
 		$mNow = $this->container->platform->getDate()->toSql();
 
-		if (empty($subscriptions))
+		if (!$subscriptions->count())
 		{
 			$startDate = $now;
 		}
 		else
 		{
 			$startDate = $now;
+
+			/** @var Subscriptions $row */
 			foreach ($subscriptions as $row)
 			{
 				// Only take into account paid-for subscriptions
@@ -2407,37 +2436,40 @@ class Subscribe extends Model
 				{
 					continue;
 				}
+
 				// Calculate the expiration date
 				$expiryDate = $this->container->platform->getDate($row->publish_down)->toUnix();
+
 				// If the subscription expiration date is earlier than today, ignore it
 				if ($expiryDate < $now)
 				{
 					continue;
 				}
+
 				// If the previous subscription's expiration date is later than the current start date,
 				// update the start date to be one second after that.
 				if ($expiryDate > $startDate)
 				{
 					$startDate = $expiryDate + 1;
 				}
+
 				// Also mark the old subscription as "communicated". We don't want
 				// to spam our users with subscription renewal notices or expiration
 				// notification after they have effectively renewed!
-				F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-					->setId($row->akeebasubs_subscription_id)
-					->getItem()
-					->save(array(
-						'contact_flag' => 3
-					));
+				$row->save([
+					'contact_flag' => 3
+				]);
 			}
 		}
 
 		// Step #6. Create a new subscription record
 		// ----------------------------------------------------------------------
 		$nullDate = JFactory::getDbo()->getNullDate();
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($state->id)
-			->getItem();
+
+		/** @var Levels $level */
+		$level = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$level->find($state->id);
+
 		if ($level->forever)
 		{
 			$jStartDate = $this->container->platform->getDate();
@@ -2454,10 +2486,10 @@ class Subscribe extends Model
 
 			// Subscription duration (length) modifiers, via plugins
 			$duration_modifier = 0;
-			JLoader::import('joomla.plugin.helper');
-			JPluginHelper::importPlugin('akeebasubs');
-			$app = JFactory::getApplication();
-			$jResponse = $app->triggerEvent('onValidateSubscriptionLength', array($state));
+
+			$this->container->platform->importPlugin('akeebasubs');
+			$jResponse = $this->container->platform->runPlugins('onValidateSubscriptionLength', array($state));
+
 			if (is_array($jResponse) && !empty($jResponse))
 			{
 				foreach ($jResponse as $pluginResponse)
@@ -2466,12 +2498,14 @@ class Subscribe extends Model
 					{
 						continue;
 					}
+
 					$duration_modifier += $pluginResponse;
 				}
 			}
 
 			// Calculate the effective duration
 			$duration = (int)$level->duration + $duration_modifier;
+
 			if ($duration <= 0)
 			{
 				$duration = 0;
@@ -2487,6 +2521,7 @@ class Subscribe extends Model
 		// Store the price validation's "oldsub" and "expiration" keys in
 		// the subscriptions subcustom array
 		$subcustom = $state->subcustom;
+
 		if (empty($subcustom))
 		{
 			$subcustom = array();
@@ -2495,30 +2530,24 @@ class Subscribe extends Model
 		{
 			$subcustom = (array)$subcustom;
 		}
+
 		$priceValidation = $this->validatePrice();
+
 		$subcustom['fixdates'] = array(
 			'oldsub'     => $priceValidation->oldsub,
 			'allsubs'    => $priceValidation->allsubs,
 			'expiration' => $priceValidation->expiration,
 		);
 
-		// Serialise custom subscription parameters
-		$custom_subscription_params = json_encode($subcustom);
-
 		// Get the IP address
-		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
-
-		if (class_exists('F0FUtilsIp', true))
-		{
-			$ip = F0FUtilsIp::getIp();
-		}
+		$ip = Ip::getIp();
 
 		// Get the country from the IP address if the Akeeba GeoIP Provider Plugin is installed and activated
 		$ip_country = '(Unknown)';
 
 		if (class_exists('AkeebaGeoipProvider'))
 		{
-			$geoip = new AkeebaGeoipProvider();
+			$geoip = new \AkeebaGeoipProvider();
 			$ip_country = $geoip->getCountryName($ip);
 
 			if (empty($ip_country))
@@ -2545,7 +2574,7 @@ class Subscribe extends Model
 			'recurring_amount'           => $validation->price->recurring,
 			'tax_percent'                => $validation->price->taxrate,
 			'created_on'                 => $mNow,
-			'params'                     => $custom_subscription_params,
+			'params'                     => $subcustom,
 			'ip'                         => $ip,
 			'ip_country'                 => $ip_country,
 			'akeebasubs_coupon_id'       => $validation->price->couponid,
@@ -2556,25 +2585,24 @@ class Subscribe extends Model
 			'first_contact'              => '0000-00-00 00:00:00',
 			'second_contact'             => '0000-00-00 00:00:00',
 			'akeebasubs_affiliate_id'    => 0,
-			'affiliate_comission'        => 0
+			'affiliate_comission'        => 0,
+			// Flags
+			'_dontCheckPaymentID'		 => true
 		);
 
-		$subscription = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-			->getTable();
-		$subscription->reset();
-		$subscription->akeebasubs_subscription_id = 0;
-		$data['_dontCheckPaymentID'] = true;
-		$result = $subscription->save($data);
-		$this->_item = $subscription;
+		/** @var Subscriptions $subscription */
+		$subscription = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+		$this->_item = $subscription->reset(true, true)->save($data);
 
 		// Step #7. Hit the coupon code, if a coupon is indeed used
 		// ----------------------------------------------------------------------
 		if ($validation->price->couponid)
 		{
-			F0FModel::getTmpInstance('Coupons', 'AkeebasubsModel')
-				->setId($validation->price->couponid)
-				->getItem()
-				->hit();
+			/** @var Coupons $couponsModel */
+			$couponsModel = $this->container->factory->model('Coupons')->savestate(0)->setIgnoreRequest(1);
+			$couponsModel->find($validation->price->couponid);
+			$couponsModel->hits++;
+			$couponsModel->save();
 		}
 
 		// Step #8. Clear the session
@@ -2589,13 +2617,13 @@ class Subscribe extends Model
 		if ($subscription->gross_amount != 0)
 		{
 			// Non-zero charges; use the plugins
-			$app = JFactory::getApplication();
-			$jResponse = $app->triggerEvent('onAKPaymentNew', array(
+			$jResponse = $this->container->platform->runPlugins('onAKPaymentNew', array(
 				$state->paymentmethod,
 				$user,
 				$level,
 				$subscription
 			));
+
 			if (empty($jResponse))
 			{
 				return false;
@@ -2614,26 +2642,18 @@ class Subscribe extends Model
 		else
 		{
 			// Zero charges. First apply subscription replacement
-			if (!class_exists('plgAkpaymentAbstract'))
-			{
-				require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akpayment.php';
-			}
 			$updates = array();
-			plgAkpaymentAbstract::fixSubscriptionDates($subscription, $updates);
+			AkpaymentBase::fixSubscriptionDates($subscription, $updates);
 
 			if (!empty($updates))
 			{
-				$result = $subscription->save($updates);
+				$subscription->save($updates);
 				$this->_item = $subscription;
 			}
 
 			// and then just redirect
 			$app = JFactory::getApplication();
-			$slug = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem()
-				->slug;
-			$app->redirect(str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug=' . $slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id)));
+			$app->redirect(str_replace('&amp;', '&', \JRoute::_('index.php?option=com_akeebasubs&layout=default&view=message&slug=' . $level->slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id)));
 
 			return false;
 		}
@@ -2662,7 +2682,9 @@ class Subscribe extends Model
 			}
 		}
 
-		$this->getPaymentPlugins();
+		/** @var PaymentMethods $paymentMethodsModel */
+		$paymentMethodsModel = $this->container->factory->model('PaymentMethods');
+		$paymentMethodsModel->getPaymentPlugins();
 
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKPaymentCancelRecurring', array(
@@ -2707,7 +2729,9 @@ class Subscribe extends Model
 			}
 		}
 
-		$dummy = $this->getPaymentPlugins();
+		/** @var PaymentMethods $paymentMethodsModel */
+		$paymentMethodsModel = $this->container->factory->model('PaymentMethods');
+		$dummy = $paymentMethodsModel->getPaymentPlugins();
 
 		$app = JFactory::getApplication();
 		$jResponse = $app->triggerEvent('onAKPaymentCallback', array(

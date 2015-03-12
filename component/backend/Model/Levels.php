@@ -78,6 +78,7 @@ use JFactory;
  * @method  $this  notify1()                   notify1(int $v)
  * @method  $this  notify2()                   notify2(int $v)
  * @method  $this  notifyafter()               notifyafter(int $v)
+ * @method  $this  levelgroup()                levelgroup(int $v)
  *
  */
 class Levels extends DataModel
