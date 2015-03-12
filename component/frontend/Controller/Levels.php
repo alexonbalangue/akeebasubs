@@ -146,12 +146,23 @@ class Levels extends DataController
 
 		if (!$id && $slug)
 		{
-			$model
+			// Note: do note replace $item with $model or read() won't see the loaded record because of how references
+			// work in PHP.
+			$item = $model
 				->slug($slug)
 				->firstOrFail();
 
-			$id = $model->getId();
+			$id = $item->getId();
 		}
+
+		// Make sure the level exists
+		if ($id == 0)
+		{
+			return false;
+		}
+
+		// The level exists, load it.
+		$model->find($id);
 
 		// Working around Progressive Caching
 		\JFactory::getApplication()->input->set('slug', $slug);
@@ -161,12 +172,6 @@ class Levels extends DataController
 			'slug' => 'STRING',
 			'id'   => 'INT',
 		));
-
-		// Make sure the level exists
-		if ($model->akeebasubs_level_id == 0)
-		{
-			return false;
-		}
 
 		// Make sure the level is published
 		if (!$model->enabled)
@@ -183,7 +188,7 @@ class Levels extends DataController
 				->only_once(1)
 				->get(true);
 
-			if (!count($levels))
+			if (!$levels->count())
 			{
 				// User trying to renew a level which is marked as only_once
 				if ($model->renew_url)

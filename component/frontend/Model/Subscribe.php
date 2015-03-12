@@ -10,8 +10,6 @@ namespace Akeeba\Subscriptions\Site\Model;
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Admin\Helper\Select;
-use Akeeba\Subscriptions\Admin\Model\JoomlaUsers;
-use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 use FOF30\Container\Container;
 use FOF30\Model\Model;
@@ -193,12 +191,12 @@ class Subscribe extends Model
 				'opt'           => $this->getState('opt', '', 'cmd')
 			);
 
-			if (empty($stateVars['id']) && !empty($stateVars['slug']))
+			if (empty($stateVars->id) && !empty($stateVars->slug))
 			{
 				/** @var Levels $levelsModel */
 				$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
-				$item = $levelsModel->slug($stateVars['slug'])->firstOrNew();
-				$stateVars['id'] = $item->akeebasubs_level_id;
+				$item = $levelsModel->slug($stateVars->slug)->firstOrNew();
+				$stateVars->id = $item->akeebasubs_level_id;
 			}
 
 			if ($emailasusername && (JFactory::getUser()->guest))

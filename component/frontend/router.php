@@ -135,6 +135,7 @@ function AkeebasubsParseRoute($segments)
 			case 'New':
 			case 'new':
 				$vars['view'] = 'Level';
+				$vars['task'] = 'read';
 				break;
 
 			case 'Invoices':
@@ -146,6 +147,7 @@ function AkeebasubsParseRoute($segments)
 			case 'Invoice':
 			case 'invoice':
 				$vars['view'] = 'Invoice';
+				$vars['task'] = 'read';
 				$vars['layout'] = 'item';
 				break;
 
@@ -153,12 +155,14 @@ function AkeebasubsParseRoute($segments)
 			case 'Thankyou':
 			case 'ThankYou':
 				$vars['view'] = 'Messages';
+				$vars['task'] = 'thankyou';
 				$vars['layout'] = 'order';
 				break;
 
 			case 'cancelled':
 			case 'Cancelled':
 				$vars['view'] = 'Messages';
+				$vars['task'] = 'cancel';
 				$vars['layout'] = 'cancel';
 				break;
 
@@ -166,6 +170,7 @@ function AkeebasubsParseRoute($segments)
 			case 'Userinfo':
 			case 'UserInfo':
 				$vars['view'] = 'UserInfo';
+				$vars['task'] = 'read';
 				$vars['layout'] = 'default';
 				break;
 		}
