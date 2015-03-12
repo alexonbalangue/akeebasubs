@@ -10,6 +10,7 @@ namespace Akeeba\Subscriptions\Site\Model;
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Admin\Helper\Select;
+use Akeeba\Subscriptions\Admin\Model\JoomlaUsers;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use FOF30\Container\Container;
 use FOF30\Model\Model;
@@ -191,6 +192,14 @@ class Subscribe extends Model
 				'opt'           => $this->getState('opt', '', 'cmd')
 			);
 
+			if (empty($stateVars['id']) && !empty($stateVars['slug']))
+			{
+				/** @var Levels $levelsModel */
+				$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+				$item = $levelsModel->slug($stateVars['slug'])->firstOrNew();
+				$stateVars['id'] = $item->akeebasubs_level_id;
+			}
+
 			if ($emailasusername && (JFactory::getUser()->guest))
 			{
 				$stateVars->username = $stateVars->email;
@@ -208,14 +217,6 @@ class Subscribe extends Model
 		$response = new \stdClass();
 
 		$state = $this->getStateVariables();
-
-		if ($state->slug && empty($state->id))
-		{
-			/** @var Levels $levelsModel */
-			$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
-			$item = $levelsModel->slug($state->slug)->firstOrNew();
-			$state->id = $item->akeebasubs_level_id;
-		}
 
 		switch ($state->opt)
 		{
@@ -398,14 +399,6 @@ class Subscribe extends Model
 	private function _validateState()
 	{
 		$state = $this->getStateVariables();
-
-		if ($state->slug && empty($state->id))
-		{
-			/** @var Levels $levelsModel */
-			$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
-			$item = $levelsModel->slug($state->slug)->firstOrNew();
-			$state->id = $item->akeebasubs_level_id;
-		}
 
 		$personalInfo = ComponentParams::getParam('personalinfo', 1);
 		$allowNonEUVAT = ComponentParams::getParam('noneuvat', 0);
@@ -953,9 +946,9 @@ class Subscribe extends Model
 				if ($coupon->enabled && (strtoupper($coupon->coupon) == strtoupper($couponCode)))
 				{
 					// Check validity period
-					$jFrom = new JDate($coupon->publish_up);
-					$jTo = new JDate($coupon->publish_down);
-					$jNow = new JDate();
+					$jFrom = $this->container->platform->getDate($coupon->publish_up);
+					$jTo = $this->container->platform->getDate($coupon->publish_down);
+					$jNow = $this->container->platform->getDate();
 
 					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
 
@@ -1128,6 +1121,8 @@ class Subscribe extends Model
 	 * Gets the applicable subscription level relation rule applicable for this
 	 * subscription attempt.
 	 *
+	 * @param   float  $autoDiscount  The value of an existing upgrade rule based discount already discovered
+	 *
 	 * @return  array  Hash array. discount is the value of the discount,
 	 *                 relation is a copy of the relation row, oldsub is the id
 	 *                 of the old subscription on which the relation row was
@@ -1137,23 +1132,6 @@ class Subscribe extends Model
 	{
 		$state = $this->getStateVariables();
 
-		// Get the id from the slug if it's not present
-		if ($state->slug && empty($state->id))
-		{
-			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->slug($state->slug)
-				->getItemList();
-			if (!empty($list))
-			{
-				$item = array_pop($list);
-				$state->id = $item->akeebasubs_level_id;
-			}
-			else
-			{
-				$state->id = 0;
-			}
-		}
-
 		// Initialise the return array
 		$ret = array(
 			'discount' => 0,
@@ -1162,7 +1140,7 @@ class Subscribe extends Model
 			'allsubs'  => null,
 		);
 
-		$combineret = array(
+		$combinedReturn = array(
 			'discount' => 0,
 			'relation' => null,
 			'oldsub'   => null,
@@ -1170,58 +1148,68 @@ class Subscribe extends Model
 		);
 
 		// Get applicable relation rules
-		$autoRules = F0FModel::getTmpInstance('Relations', 'AkeebasubsModel')
-			->savestate(0)
+
+		/** @var Relations $relModel */
+		$relModel = $this->container->factory->model('Relations')->savestate(0)->setIgnoreRequest(1);
+
+		$autoRules = $relModel
 			->target_level_id($state->id)
 			->enabled(1)
 			->limit(0)
 			->limitstart(0)
-			->getItemList();
+			->get(true);
 
-		if (empty($autoRules))
+		if (!$autoRules->count())
 		{
 			// No point continuing if we don't have any rules, right?
 			return $ret;
 		}
 
-		// Get the current subscription level's net worth
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($state->id)
-			->getItem();
+		// Get the current subscription level's price
+		/** @var Levels $level */
+		$level = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$level->find($state->id);
 		$net = (float)$level->price;
 
+		/** @var Relations $rule */
 		foreach ($autoRules as $rule)
 		{
 			// Get all of the user's paid subscriptions with an expiration date
 			// in the future in the source_level_id of the rule.
-			$jNow = new JDate();
+			$jNow = $this->container->platform->getDate();
 			$user_id = JFactory::getUser()->id;
-			$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-				->savestate(0)
+
+			/** @var Subscriptions $subscriptionsModel */
+			$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
+			$subscriptions = $subscriptionsModel
 				->level($rule->source_level_id)
 				->user_id($user_id)
 				->expires_from($jNow->toSql())
 				->paystate('C')
 				->filter_order('publish_down')
 				->filter_order('ASC')
-				->getItemList(true);
+				->get(true);
 
-			if (empty($subscriptions))
+			if (!$subscriptions->count())
 			{
 				// If there are no subscriptions on this level don't bother.
 				continue;
 			}
 
 			$allsubs = array();
+
 			foreach ($subscriptions as $sub)
 			{
 				$allsubs[] = $sub->akeebasubs_level_id;
 			}
+
 			reset($allsubs);
 
 			switch ($rule->mode)
 			{
 				// Rules-based discount.
+				default:
 				case 'rules':
 					$discount = $autoDiscount;
 					break;
@@ -1243,6 +1231,7 @@ class Subscribe extends Model
 					// Translate period to days
 					switch ($rule->flex_uom)
 					{
+						default:
 						case 'd':
 							$modifier = 1;
 							break;
@@ -1259,14 +1248,16 @@ class Subscribe extends Model
 							$modifier = 365;
 							break;
 					}
+
 					$modifier = $modifier * 86400; // translate to seconds
 
 					$period = $rule->flex_period;
 
 					// Calculate presence
 					$remaining_seconds = 0;
-					$jNow = new JDate();
-					$now = $jNow->toUnix();
+					$now = time();
+
+					/** @var Subscriptions $sub */
 					foreach ($subscriptions as $sub)
 					{
 						if ($rule->flex_timecalculation && !$sub->enabled)
@@ -1274,10 +1265,9 @@ class Subscribe extends Model
 							continue;
 						}
 
-						$jFrom = new JDate($sub->publish_up);
-						$jTo = new JDate($sub->publish_down);
-						$from = $jFrom->toUnix();
-						$to = $jTo->toUnix();
+						$from = $this->container->platform->getDate($sub->publish_up)->toUnix();
+						$to = $this->container->platform->getDate($sub->publish_down)->toUnix();
+
 						if ($from > $now)
 						{
 							$remaining_seconds += $to - $from;
@@ -1287,6 +1277,7 @@ class Subscribe extends Model
 							$remaining_seconds += $to - $now;
 						}
 					}
+
 					$remaining = $remaining_seconds / $modifier;
 
 					// Check for low threshold
@@ -1300,7 +1291,7 @@ class Subscribe extends Model
 						$discount = $rule->high_amount;
 					}
 					else
-						// Calculate discount based on presence
+					// Calculate discount based on presence
 					{
 						// Round the quantised presence
 						switch ($rule->time_rounding)
@@ -1317,6 +1308,7 @@ class Subscribe extends Model
 								$remaining = round($remaining / $period);
 								break;
 						}
+
 						$discount = $rule->flex_amount * $remaining;
 					}
 
@@ -1332,10 +1324,11 @@ class Subscribe extends Model
 			// Combined rule. Add to, um, the combined rules return array
 			if ($rule->combine)
 			{
-				$combineret['discount'] += $discount;
-				$combineret['relation'] = clone $rule;
-				$combineret['allsubs'] = array_merge($combineret['allsubs'], $allsubs);
-				$combineret['allsubs'] = array_unique($combineret['allsubs']);
+				$combinedReturn['discount'] += $discount;
+				$combinedReturn['relation'] = clone $rule;
+				$combinedReturn['allsubs'] = array_merge($combinedReturn['allsubs'], $allsubs);
+				$combinedReturn['allsubs'] = array_unique($combinedReturn['allsubs']);
+
 				foreach ($subscriptions as $sub)
 				{
 					// Loop until we find an enabled subscription
@@ -1343,17 +1336,19 @@ class Subscribe extends Model
 					{
 						continue;
 					}
+
 					// Use that subscription and beat it
-					$combineret['oldsub'] = $sub->akeebasubs_subscription_id;
+					$combinedReturn['oldsub'] = $sub->akeebasubs_subscription_id;
 					break;
 				}
 			}
 			elseif ($discount > $ret['discount'])
-				// If the current discount is greater than what we already have, use it
+			// If the current discount is greater than what we already have, use it
 			{
 				$ret['discount'] = $discount;
 				$ret['relation'] = clone $rule;
 				$ret['allsubs'] = $allsubs;
+
 				foreach ($subscriptions as $sub)
 				{
 					// Loop until we find an enabled subscription
@@ -1361,6 +1356,7 @@ class Subscribe extends Model
 					{
 						continue;
 					}
+
 					// Use that subscription and beat it
 					$ret['oldsub'] = $sub->akeebasubs_subscription_id;
 					break;
@@ -1371,11 +1367,11 @@ class Subscribe extends Model
 		// Finally, check if the combined rule trumps the currently selected
 		// rule. If it does, use it instead of the regular return array.
 		if (
-			($combineret['discount'] > $ret['discount']) ||
-			(($ret['discount'] <= 0.01) && !is_null($combineret['relation']))
+			($combinedReturn['discount'] > $ret['discount']) ||
+			(($ret['discount'] <= 0.01) && !is_null($combinedReturn['relation']))
 		)
 		{
-			$ret = $combineret;
+			$ret = $combinedReturn;
 		}
 
 		return $ret;
@@ -1391,26 +1387,10 @@ class Subscribe extends Model
 	{
 		$state = $this->getStateVariables();
 
-		// Get the id from the slug if it's not present
-		if ($state->slug && empty($state->id))
-		{
-			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->slug($state->slug)
-				->getItemList();
-			if (!empty($list))
-			{
-				$item = array_pop($list);
-				$state->id = $item->akeebasubs_level_id;
-			}
-			else
-			{
-				$state->id = 0;
-			}
-		}
-
 		// Check that we do have a user (if there's no logged in user, we have
 		// no subscription information, ergo upgrades are not applicable!)
 		$user_id = JFactory::getUser()->id;
+
 		if (empty($user_id))
 		{
 			$this->_upgrade_id = null;
@@ -1419,16 +1399,15 @@ class Subscribe extends Model
 		}
 
 		// Get applicable auto-rules
-		$autoRules = F0FModel::getTmpInstance('Upgrades', 'AkeebasubsModel')
-			->savestate(0)
+		/** @var Upgrades $upgradesModel */
+		$upgradesModel = $this->container->factory->model('Upgrades')->savestate(0)->setIgnoreRequest(1);
+		$autoRules = $upgradesModel
 			->to_id($state->id)
 			->enabled(1)
 			->expired(0)
-			->limit(0)
-			->limitstart(0)
-			->getItemList();
+			->get(true);
 
-		if (empty($autoRules))
+		if (!$autoRules->count())
 		{
 			$this->_upgrade_id = null;
 
@@ -1436,15 +1415,14 @@ class Subscribe extends Model
 		}
 
 		// Get the user's list of subscriptions
-		$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-			->savestate(0)
+		/** @var Subscriptions $subscriptionsModel */
+		$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+		$subscriptions = $subscriptionsModel
 			->user_id($user_id)
 			->enabled(1)
-			->limit(0)
-			->limitstart(0)
-			->getList();
+			->get(true);
 
-		if (empty($subscriptions))
+		if (!$subscriptions->count())
 		{
 			$this->_upgrade_id = null;
 
@@ -1452,45 +1430,42 @@ class Subscribe extends Model
 		}
 
 		$subs = array();
-		JLoader::import('joomla.utilities.date');
-		$jNow = new JDate();
-		$uNow = $jNow->toUnix();
+		$uNow = time();
 
 		$subPayments = array();
 
 		foreach ($subscriptions as $subscription)
 		{
-			$jFrom = new JDate($subscription->publish_up);
-			$uFrom = $jFrom->toUnix();
+			$uFrom = $this->container->platform->getDate($subscription->publish_up)->toUnix();
 			$presence = $uNow - $uFrom;
 			$subs[$subscription->akeebasubs_level_id] = $presence;
 
-			$jOn = new JDate($subscription->created_on);
+			$uOn = $this->container->platform->getDate($subscription->created_on)->toUnix();
+
 			if (!array_key_exists($subscription->akeebasubs_level_id, $subPayments))
 			{
 				$subPayments[$subscription->akeebasubs_level_id] = array(
 					'value' => $subscription->net_amount,
-					'on'    => $jOn->toUnix(),
+					'on'    => $uOn,
 				);
 			}
 			else
 			{
 				$oldOn = $subPayments[$subscription->akeebasubs_level_id]['on'];
-				if ($oldOn < $jOn->toUnix())
+				if ($oldOn < $uOn)
 				{
 					$subPayments[$subscription->akeebasubs_level_id] = array(
 						'value' => $subscription->net_amount,
-						'on'    => $jOn->toUnix(),
+						'on'    => $uOn,
 					);
 				}
 			}
 		}
 
-		// Get the current subscription level's net worth
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($state->id)
-			->getItem();
-		$net = (float)$level->price;
+		// Get the current subscription level's price
+		/** @var Levels $levelsModel */
+		$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$net = (float)$levelsModel->find($state->id)->price;
 
 		if ($net == 0)
 		{
@@ -1509,7 +1484,7 @@ class Subscribe extends Model
 			if (
 				// Make sure there is an active subscription in the From level
 				!(array_key_exists($rule->from_id, $subs))
-				// Make sure the min/max presence is repected
+				// Make sure the min/max presence is respected
 				|| ($subs[$rule->from_id] < ($rule->min_presence * 86400))
 				|| ($subs[$rule->from_id] > ($rule->max_presence * 86400))
 				// If From and To levels are different, make sure there is no active subscription in the To level yet
@@ -1533,12 +1508,15 @@ class Subscribe extends Model
 				case 'value':
 					$discount += $rule->value;
 					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+
 					break;
 
+				default:
 				case 'percent':
 					$newDiscount = $net * (float)$rule->value / 100.00;
 					$discount += $newDiscount;
 					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+
 					break;
 
 				case 'lastpercent':
@@ -1550,11 +1528,14 @@ class Subscribe extends Model
 					{
 						$lastNet = $subPayments[$rule->from_id]['value'];
 					}
+
 					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
 					$discount += $newDiscount;
 					$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
+
 					break;
 			}
+
 			unset($autoRules[$i]);
 		}
 
@@ -1574,15 +1555,19 @@ class Subscribe extends Model
 						$discount = $rule->value;
 						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
 					}
+
 					break;
 
+				default:
 				case 'percent':
 					$newDiscount = $net * (float)$rule->value / 100.00;
+
 					if ($newDiscount > $discount)
 					{
 						$discount = $newDiscount;
 						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
 					}
+
 					break;
 
 				case 'lastpercent':
@@ -1594,12 +1579,15 @@ class Subscribe extends Model
 					{
 						$lastNet = $subPayments[$rule->from_id]['value'];
 					}
+
 					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+
 					if ($newDiscount > $discount)
 					{
 						$discount = $newDiscount;
 						$this->_upgrade_id = $rule->akeebasubs_upgrade_id;
 					}
+
 					break;
 			}
 		}
@@ -1617,26 +1605,10 @@ class Subscribe extends Model
 	{
 		$state = $this->getStateVariables();
 
-		// Get the id from the slug if it's not present
-		if ($state->slug && empty($state->id))
-		{
-			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->slug($state->slug)
-				->getItemList();
-			if (!empty($list))
-			{
-				$item = array_pop($list);
-				$state->id = $item->akeebasubs_level_id;
-			}
-			else
-			{
-				$state->id = 0;
-			}
-		}
-
 		// Check that we do have a user (if there's no logged in user, we have
 		// no subscription information, ergo upgrades are not applicable!)
 		$user_id = JFactory::getUser()->id;
+
 		if (empty($user_id))
 		{
 			$this->_upgrade_id = null;
@@ -1645,16 +1617,16 @@ class Subscribe extends Model
 		}
 
 		// Get applicable auto-rules
-		$autoRules = F0FModel::getTmpInstance('Upgrades', 'AkeebasubsModel')
-			->savestate(0)
+		/** @var Upgrades $upgradesModel */
+		$upgradesModel = $this->container->factory->model('Upgrades')->savestate(0)->setIgnoreRequest(1);
+
+		$autoRules = $upgradesModel
 			->to_id($state->id)
 			->enabled(1)
 			->expired(1)
-			->limit(0)
-			->limitstart(0)
-			->getItemList();
+			->get(true);
 
-		if (empty($autoRules))
+		if (!$autoRules->count())
 		{
 			$this->_upgrade_id = null;
 
@@ -1662,16 +1634,16 @@ class Subscribe extends Model
 		}
 
 		// Get the user's list of paid but no longer active (therefore: expired) subscriptions
-		$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-			->savestate(0)
+		/** @var Subscriptions $subscriptionsModel */
+		$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
+		$subscriptions = $subscriptionsModel
 			->user_id($user_id)
 			->enabled(0)
 			->paystate('C')
-			->limit(0)
-			->limitstart(0)
-			->getList();
+			->get(true);
 
-		if (empty($subscriptions))
+		if (!$subscriptions->count())
 		{
 			$this->_expired_upgrade_id = null;
 
@@ -1679,45 +1651,43 @@ class Subscribe extends Model
 		}
 
 		$subs = array();
-		JLoader::import('joomla.utilities.date');
-		$jNow = new JDate();
-		$uNow = $jNow->toUnix();
+		$uNow = time();
 
 		$subPayments = array();
 
 		foreach ($subscriptions as $subscription)
 		{
-			$jTo = new JDate($subscription->publish_down);
-			$uTo = $jTo->toUnix();
+			$uTo = $this->container->platform->getDate($subscription->publish_down)->toUnix();
 			$age = $uNow - $uTo;
 			$subs[$subscription->akeebasubs_level_id] = $age;
 
-			$jOn = new JDate($subscription->created_on);
+			$uOn = $this->container->platform->getDate($subscription->created_on);
+
 			if (!array_key_exists($subscription->akeebasubs_level_id, $subPayments))
 			{
 				$subPayments[$subscription->akeebasubs_level_id] = array(
 					'value' => $subscription->net_amount,
-					'on'    => $jOn->toUnix(),
+					'on'    => $uOn,
 				);
 			}
 			else
 			{
 				$oldOn = $subPayments[$subscription->akeebasubs_level_id]['on'];
-				if ($oldOn < $jOn->toUnix())
+
+				if ($oldOn < $uOn)
 				{
 					$subPayments[$subscription->akeebasubs_level_id] = array(
 						'value' => $subscription->net_amount,
-						'on'    => $jOn->toUnix(),
+						'on'    => $uOn,
 					);
 				}
 			}
 		}
 
-		// Get the current subscription level's net worth
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($state->id)
-			->getItem();
-		$net = (float)$level->price;
+		// Get the current subscription level's price
+		/** @var Levels $levelsModel */
+		$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$net = (float)$levelsModel->find($state->id)->price;
 
 		if ($net == 0)
 		{
@@ -1759,12 +1729,15 @@ class Subscribe extends Model
 				case 'value':
 					$discount += $rule->value;
 					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+
 					break;
 
+				default:
 				case 'percent':
 					$newDiscount = $net * (float)$rule->value / 100.00;
 					$discount += $newDiscount;
 					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+
 					break;
 
 				case 'lastpercent':
@@ -1776,9 +1749,11 @@ class Subscribe extends Model
 					{
 						$lastNet = $subPayments[$rule->from_id]['value'];
 					}
+
 					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
 					$discount += $newDiscount;
 					$this->_expired_upgrade_id = $rule->akeebasubs_upgrade_id;
+
 					break;
 			}
 			unset($autoRules[$i]);
@@ -1802,8 +1777,10 @@ class Subscribe extends Model
 					}
 					break;
 
+				default:
 				case 'percent':
 					$newDiscount = $net * (float)$rule->value / 100.00;
+
 					if ($newDiscount > $discount)
 					{
 						$discount = $newDiscount;
@@ -1820,7 +1797,9 @@ class Subscribe extends Model
 					{
 						$lastNet = $subPayments[$rule->from_id]['value'];
 					}
+
 					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
+
 					if ($newDiscount > $discount)
 					{
 						$discount = $newDiscount;
@@ -1841,26 +1820,10 @@ class Subscribe extends Model
 		// Do we have a VIES registered VAT number?
 		$validation = $this->_validateState();
 		$state = $this->getStateVariables();
-		$isVIES = $validation->vatnumber && AkeebasubsHelperEuVATInfo::isEUVATCountry($state->country);
+		$isVIES = $validation->vatnumber && EUVATInfo::isEUVATCountry($state->country);
 
-		if ($state->slug && empty($state->id))
-		{
-			$list = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->slug($state->slug)
-				->getItemList();
-			if (!empty($list))
-			{
-				$item = array_pop($list);
-				$state->id = $item->akeebasubs_level_id;
-			}
-			else
-			{
-				$state->id = 0;
-			}
-		}
-
-		/** @var AkeebasubsModelTaxhelper $taxModel */
-		$taxModel = F0FModel::getTmpInstance('Taxhelper', 'AkeebasubsModel');
+		/** @var TaxHelper $taxModel */
+		$taxModel = $this->container->factory->model('TaxHelper')->savestate(0);
 
 		return $taxModel->getTaxRule($state->id, $state->country, $state->state, $state->city, $isVIES);
 	}
@@ -1881,6 +1844,7 @@ class Subscribe extends Model
 
 		// Iterate the core validation rules
 		$isValid = true;
+
 		foreach ($validation->validation as $key => $validData)
 		{
 			if (ComponentParams::getParam('personalinfo', 1) == 0)
@@ -1897,21 +1861,25 @@ class Subscribe extends Model
 					continue;
 				}
 			}
+
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if ($key == 'vatnumber')
 			{
 				continue;
 			}
+
 			// A wrong coupon code is not a fatal error, unless we require a coupon code
 			if (!$requireCoupon && ($key == 'coupon'))
 			{
 				continue;
 			}
+
 			// A missing business occupation is not a fatal error either
 			if ($key == 'occupation')
 			{
 				continue;
 			}
+
 			// This is a dummy key which must be ignored
 			if ($key == 'novatrequired')
 			{
@@ -1919,11 +1887,13 @@ class Subscribe extends Model
 			}
 
 			$isValid = $isValid && $validData;
+
 			if (!$isValid)
 			{
 				if ($key == 'username')
 				{
 					$user = JFactory::getUser();
+
 					if ($user->username == $state->username)
 					{
 						$isValid = true;
@@ -1933,6 +1903,7 @@ class Subscribe extends Model
 						break;
 					}
 				}
+
 				break;
 			}
 		}
@@ -1945,9 +1916,10 @@ class Subscribe extends Model
 	/**
 	 * Updates the user info based on the state data
 	 *
-	 * @param bool $allowNewUser When true, we can create a new user. False, only update an existing user's data.
+	 * @param   bool    $allowNewUser  When true, we can create a new user. False, only update an existing user's data.
+	 * @param   Levels  $level         The subscription level object
 	 *
-	 * @return boolean
+	 * @return  bool  True on success
 	 */
 	public function updateUserInfo($allowNewUser = true, $level = null)
 	{
@@ -1965,16 +1937,24 @@ class Subscribe extends Model
 		{
 			// Check for an existing, blocked, unactivated user with the same
 			// username or email address.
-			$user1 = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel')
+			/** @var JoomlaUsers $joomlaUsers */
+			$joomlaUsers = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+
+			/** @var JoomlaUsers $user1 */
+			$user1 = $joomlaUsers->getClone()->reset(true, true)
 				->username($state->username)
 				->block(1)
-				->getFirstItem();
-			$user2 = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel')
+				->firstOrNew();
+
+			/** @var JoomlaUsers $user2 */
+			$user2 = $joomlaUsers->getClone()->reset(true, true)
 				->email($state->email)
 				->block(1)
-				->getFirstItem();
+				->firstOrNew();
+
 			$id1 = $user1->id;
 			$id2 = $user2->id;
+
 			// Do we have a match?
 			if ($id1 || $id2)
 			{
@@ -1991,21 +1971,41 @@ class Subscribe extends Model
 					// user 2 and change user 1's email into the email address provided
 
 					// Remove the last subscription for $user2 (it will be an unpaid one)
-					$submodel = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel');
-					$substodelete = $submodel
+					/** @var Subscriptions $subscriptionsModel */
+					$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
+					$substodelete = $subscriptionsModel
 						->user_id($id2)
-						->getList();
-					if (!empty($substodelete))
+						->get(true);
+
+					if ($substodelete->count())
 					{
+						/** @var Subscriptions $subtodelete */
 						foreach ($substodelete as $subtodelete)
 						{
-							$subtable = $submodel->getTable();
-							$subtable->delete($subtodelete->akeebasubs_subscription_id);
+							$substodelete->delete($subtodelete->akeebasubs_subscription_id);
 						}
 					}
 
 					// Remove $user2 and set $user to $user1 so that it gets updated
-					$user2->delete($id2);
+					$jUser2 = JFactory::getUser($user2->id);
+					$error = '';
+
+					try
+					{
+						$jUser2->delete();
+					}
+					catch (\Exception $e)
+					{
+						$error = $e->getMessage();
+					}
+
+					// If deleting through JUser failed, try a direct deletion (may leave junk behind, e.g. in user-usergroup map table)
+					if ($jUser2->getErrors() || $error)
+					{
+						$user2->delete($id2);
+					}
+
 					$user = JFactory::getUser($user1->id);
 					$user->email = $state->email;
 					$user->save(true);
@@ -2036,10 +2036,11 @@ class Subscribe extends Model
 				'password2' => $state->password2
 			);
 
-			$user = new JUser(0);
+			// We have to use JUser directly instead of JFactory getUser
+			$user = new \JUser(0);
 
-			JLoader::import('joomla.application.component.helper');
-			$usersConfig = JComponentHelper::getParams('com_users');
+			\JLoader::import('joomla.application.component.helper');
+			$usersConfig = \JComponentHelper::getParams('com_users');
 			$newUsertype = $usersConfig->get('new_usertype');
 
 			// get the New User Group from com_users' settings
@@ -2047,6 +2048,7 @@ class Subscribe extends Model
 			{
 				$newUsertype = 2;
 			}
+
 			$params['groups'] = array($newUsertype);
 
 			$params['sendEmail'] = 0;
@@ -2059,14 +2061,14 @@ class Subscribe extends Model
 			// We always block the user, so that only a successful payment or
 			// clicking on the email link activates his account. This is to
 			// prevent spam registrations when the subscription form is abused.
-			JLoader::import('joomla.user.helper');
+			\JLoader::import('joomla.user.helper');
+			\JLoader::import('cms.application.helper');
 			$params['block'] = 1;
 
-			$randomString = JUserHelper::genRandomPassword();
-			$hash = JApplication::getHash($randomString);
+			$randomString = \JUserHelper::genRandomPassword();
+			$hash = \JApplicationHelper::getHash($randomString);
 			$params['activation'] = $hash;
 
-			$userIsSaved = false;
 			$user->bind($params);
 			$userIsSaved = $user->save();
 		}
@@ -2075,39 +2077,46 @@ class Subscribe extends Model
 			// UPDATE EXISTING USER
 
 			// Remove unpaid subscriptions on the same level for this user
-			$unpaidSubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			/** @var Subscriptions $subscriptionsModel */
+			$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+
+			$unpaidSubs = $subscriptionsModel
 				->user_id($user->id)
 				->paystate('N', 'X')
-				->getItemList();
+				->get(true);
+
 			if (!empty($unpaidSubs))
 			{
+				/** @var Subscriptions $unpaidSub */
 				foreach ($unpaidSubs as $unpaidSub)
 				{
-					$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
-					$table->delete($unpaidSub->akeebasubs_subscription_id);
+					$unpaidSub->delete($unpaidSub->akeebasubs_subscription_id);
 				}
 			}
 
 			// Update existing user's details
-			$userRecord = F0FModel::getTmpInstance('Jusers', 'AkeebasubsModel')
-				->setId($user->id)
-				->getItem();
+			/** @var JoomlaUsers $userRecord */
+			$userRecord = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+			$userRecord->find($user->id);
 
 			$updates = array(
 				'name'  => $state->name,
 				'email' => $state->email
 			);
+
 			if (!empty($state->password) && ($state->password == $state->password2))
 			{
-				JLoader::import('joomla.user.helper');
-				$salt = JUserHelper::genRandomPassword(32);
-				$pass = JUserHelper::getCryptedPassword($state->password, $salt);
+				\JLoader::import('joomla.user.helper');
+				$salt = \JUserHelper::genRandomPassword(32);
+				$pass = \JUserHelper::getCryptedPassword($state->password, $salt);
 				$updates['password'] = $pass . ':' . $salt;
 			}
+
 			if (!empty($state->username))
 			{
 				$updates['username'] = $state->username;
 			}
+
 			$userIsSaved = $userRecord->save($updates);
 		}
 
@@ -2129,15 +2138,14 @@ class Subscribe extends Model
 
 		if (!$userIsSaved)
 		{
-			JError::raiseWarning('', JText::_($user->getError())); // ...raise a Warning
+			$this->setState('user', null);
+
 			return false;
 		}
-		else
-		{
-			$this->setState('user', $user);
-		}
 
-		return $userIsSaved;
+		$this->setState('user', $user);
+
+		return true;
 	}
 
 	/**
@@ -2382,9 +2390,8 @@ class Subscribe extends Model
 				->getList(true);
 		}
 
-		$jNow = new JDate();
-		$now = $jNow->toUnix();
-		$mNow = $jNow->toSql();
+		$now = time();
+		$mNow = $this->container->platform->getDate()->toSql();
 
 		if (empty($subscriptions))
 		{
@@ -2401,8 +2408,7 @@ class Subscribe extends Model
 					continue;
 				}
 				// Calculate the expiration date
-				$jDate = new JDate($row->publish_down);
-				$expiryDate = $jDate->toUnix();
+				$expiryDate = $this->container->platform->getDate($row->publish_down)->toUnix();
 				// If the subscription expiration date is earlier than today, ignore it
 				if ($expiryDate < $now)
 				{
@@ -2434,17 +2440,17 @@ class Subscribe extends Model
 			->getItem();
 		if ($level->forever)
 		{
-			$jStartDate = new JDate();
+			$jStartDate = $this->container->platform->getDate();
 			$endDate = '2038-01-01 00:00:00';
 		}
 		elseif (!is_null($level->fixed_date) && ($level->fixed_date != $nullDate))
 		{
-			$jStartDate = new JDate();
+			$jStartDate = $this->container->platform->getDate();
 			$endDate = $level->fixed_date;
 		}
 		else
 		{
-			$jStartDate = new JDate($startDate);
+			$jStartDate = $this->container->platform->getDate($startDate);
 
 			// Subscription duration (length) modifiers, via plugins
 			$duration_modifier = 0;
@@ -2476,8 +2482,7 @@ class Subscribe extends Model
 		}
 
 		$mStartDate = $jStartDate->toSql();
-		$jEndDate = new JDate($endDate);
-		$mEndDate = $jEndDate->toSql();
+		$mEndDate = $this->container->platform->getDate($endDate)->toSql();
 
 		// Store the price validation's "oldsub" and "expiration" keys in
 		// the subscriptions subcustom array

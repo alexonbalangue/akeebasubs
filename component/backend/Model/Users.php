@@ -50,6 +50,11 @@ use JLoader;
  * @method  $this  country()             country(string $v)
  * @method  $this  notes()               notes(string $v)
  * @method  $this  needs_logout()        needs_logout(bool $v)
+ * @method  $this  block()               block(bool $v)
+ * @method  $this  username()            username(string $v)
+ * @method  $this  name()                name(string $v)
+ * @method  $this  email()               email(string $v)
+ * @method  $this  search()              search(string $v)
  *
  * @property-read  JoomlaUsers		$user
  * @property-read  Subscriptions[]  $subscriptions
@@ -139,6 +144,15 @@ class Users extends DataModel
 		{
 			$this->whereHas('user', function(\JDatabaseQuery $subQuery) use($email, $db) {
 				$subQuery->where($db->qn('email') . ' LIKE ' . $db->q('%' . $email . '%'));
+			});
+		}
+
+		$block = $this->getState('block', null, 'int');
+
+		if (!is_null($block))
+		{
+			$this->whereHas('user', function(\JDatabaseQuery $subQuery) use($block, $db) {
+				$subQuery->where($db->qn('block') . ' = ' . $db->q($block));
 			});
 		}
 
