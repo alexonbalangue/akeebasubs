@@ -12,9 +12,69 @@ defined('_JEXEC') or die;
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Site\Model\Levels;
 use Akeeba\Subscriptions\Site\Model\Subscriptions;
+use Akeeba\Subscriptions\Site\Model\TaxHelper;
 
 class Html extends \FOF30\View\DataView\Html
 {
+	/**
+	 * List of subscription IDs of the current user
+	 *
+	 * @var  int[]
+	 */
+	public $subIDs = [];
+
+	/**
+	 * Should I include VAT in the front-end display?
+	 *
+	 * @var  bool
+	 */
+	public $showVat = false;
+
+	/**
+	 * The tax helper model
+	 *
+	 * @var  TaxHelper
+	 */
+	public $taxModel;
+
+	/**
+	 * Tax defining parameters, fetched from the tax helper model
+	 *
+	 * @var  array
+	 */
+	public $taxParams = [];
+
+	/**
+	 * Should I include sign-up fees in the displayed prices?
+	 *
+	 * @var  int
+	 */
+	public $includeSignup = 0;
+
+	/**
+	 * Should I include discounts in the displayed prices?
+	 *
+	 * @var  bool
+	 */
+	public $includeDiscount = false;
+
+	/**
+	 * Should I render prices of 0 as "FREE"?
+	 *
+	 * @var  bool
+	 */
+	public $renderAsFree = false;
+
+	/**
+	 * Cache of pricing information per subscription level, required to cut down on queries in the Strappy layout.
+	 *
+	 * @var  object[]
+	 */
+	protected $pricingInformationCache = [];
+
+	/**
+	 * Executes before rendering the page for the Browse task.
+	 */
 	protected function onBeforeBrowse()
 	{
 		// Cache subscription IDs of this user
@@ -77,6 +137,13 @@ class Html extends \FOF30\View\DataView\Html
 	 */
 	public function getLevelPriceInformation(Levels $level)
 	{
+		$levelKey = $level->getId() . '-' . $level->slug;
+
+		if (isset($this->pricingInformationCache[$levelKey]))
+		{
+			return $this->pricingInformationCache[$levelKey];
+		}
+
 		$signupFee = 0;
 		$discount = 0;
 		$levelPrice = $level->price;
@@ -147,7 +214,7 @@ class Html extends \FOF30\View\DataView\Html
 		$price_integerD = substr($formattedPriceD, 0, $dotposD);
 		$price_fractionalD = substr($formattedPriceD, $dotposD + 1);
 
-		return (object)[
+		$this->pricingInformationCache[$levelKey] = (object)[
 			'vatRule'              => $vatRule,
 			'signupFee'            => $signupFee,
 			'discount'             => $discount,
@@ -163,5 +230,7 @@ class Html extends \FOF30\View\DataView\Html
 			'signupInteger'        => $price_integerSU,
 			'signupFractional'     => $price_fractionalSU,
 		];
+
+		return $this->pricingInformationCache[$levelKey];
 	}
 }
