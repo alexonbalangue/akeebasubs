@@ -126,16 +126,16 @@ class Levels extends DataModel
 
 		if ($only_once && $user->id)
 		{
-			/** @var Subscriptions $mySubscriptions */
-			$mySubscriptions = $this->container->factory
+			/** @var Subscriptions $subscriptionsModel */
+			$subscriptionsModel = $this->container->factory
 				->model('Subscriptions')->setIgnoreRequest(true)->savestate(false);
 
-			$mySubscriptions
+			$mySubscriptions = $subscriptionsModel
 				->user_id($user->id)
 				->paystate('C')
 				->get(true);
 
-			if (!empty($mySubscriptions))
+			if ($mySubscriptions->count())
 			{
 				foreach ($mySubscriptions as $sub)
 				{
@@ -267,7 +267,7 @@ class Levels extends DataModel
 		                      ->title($this->title)
 		                      ->get(true);
 
-		if (!empty($existingItems))
+		if ($existingItems->count())
 		{
 			$count = 0;
 			$k     = $this->getKeyName();
@@ -305,7 +305,7 @@ class Levels extends DataModel
 		                      ->slug($this->slug)
 		                      ->get(true);
 
-		if (!empty($existingItems))
+		if ($existingItems->count())
 		{
 			$count = 0;
 			$k     = $this->getKeyName();

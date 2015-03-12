@@ -8,20 +8,10 @@
 defined('_JEXEC') or die();
 
 use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use \Akeeba\Subscriptions\Admin\Helper\Image;
+use \Akeeba\Subscriptions\Admin\Helper\Message;
 
 /** @var \Akeeba\Subscriptions\Site\View\Levels\Html $this */
-
-// Take display VAT into account
-$showVat = ComponentParams::getParam('showvat', 0);
-/** @var \Akeeba\Subscriptions\Site\Model\TaxHelper $taxModel */
-$taxModel = $this->getContainer()->factory->model('TaxHelper')->savestate(0)->setIgnoreRequest(1);
-$taxParams = $taxModel->getTaxDefiningParameters();
-// Take the various inclusions into account
-$includesignup = ComponentParams::getParam('includesignup', 2);
-$includediscount = ComponentParams::getParam('includediscount', 0);
-// Only consider discounts if it's a logged in user
-$user = JFactory::getUser();
-$includediscount = ($includediscount && !$user->guest) ? true : false;
 
 $discounts = array();
 ?>
@@ -46,15 +36,15 @@ $discounts = array();
 		<?php foreach($this->items as $level):
 			$signupFee = 0;
 
-			if (!in_array($level->akeebasubs_level_id, $this->subIDs) && ($includesignup != 0))
+			if (!in_array($level->akeebasubs_level_id, $this->subIDs) && ($this->includeSignup != 0))
 			{
 				$signupFee = (float)$level->signupfee;
 			}
 
-			$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+			$vatRule = $this->taxModel->getTaxRule($level->akeebasubs_level_id, $this->taxParams['country'], $this->taxParams['state'], $this->taxParams['city'], $this->taxParams['vies']);
 			$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
-			if ($includediscount)
+			if ($this->includeDiscount)
 			{
 				/** @var \Akeeba\Subscriptions\Site\Model\Subscribe $subscribeModel */
 				$subscribeModel = $this->getContainer()->factory->model('Subscribe')->savestate(0);
@@ -76,7 +66,7 @@ $discounts = array();
 
 			$discounts[$level->akeebasubs_level_id] = $discount;
 
-			if ($includesignup == 1)
+			if ($this->includeSignup == 1)
 			{
 				if (($levelPrice + $signupFee) < 0)
 				{
@@ -100,7 +90,7 @@ $discounts = array();
 			$price_integer = substr($formatedPrice,0,$dotpos);
 			$price_fractional = substr($formatedPrice,$dotpos+1);?>
 			<td class="akeebasubs-strappy-price">
-				<?php if(ComponentParams::getParam('renderasfree', 0) && ($levelPrice < 0.01)):?>
+				<?php if($this->renderAsFree && ($levelPrice < 0.01)):?>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
 				<?php else: ?>
 				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $price_integer ?></span><?php if((int)$price_fractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $price_fractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
@@ -114,7 +104,7 @@ $discounts = array();
 		<?php endforeach ?>
 		</tr>
 
-		<?php if ($includediscount): ?>
+		<?php if ($this->includeDiscount): ?>
 		<tr>
 			<?php foreach($this->items as $level):
 				$discount = 0;
@@ -124,7 +114,7 @@ $discounts = array();
 					$discount = (float)$discounts[$level->akeebasubs_level_id];
 				}
 
-				$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+				$vatRule = $this->taxModel->getTaxRule($level->akeebasubs_level_id, $this->taxParams['country'], $this->taxParams['state'], $this->taxParams['city'], $this->taxParams['vies']);
 				$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 				$formatedPrice = sprintf('%1.02F', $level->price * $vatMultiplier);
@@ -146,7 +136,7 @@ $discounts = array();
 		</tr>
 		<?php endif; ?>
 
-		<?php if ($includesignup == 2): ?>
+		<?php if ($this->includeSignup == 2): ?>
 		<tr>
 			<?php foreach($this->items as $level):
 				$signupFee = 0;
@@ -155,7 +145,7 @@ $discounts = array();
 					$signupFee = (float)$level->signupfee;
 				}
 
-				$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+				$vatRule = $this->taxModel->getTaxRule($level->akeebasubs_level_id, $this->taxParams['country'], $this->taxParams['state'], $this->taxParams['city'], $this->taxParams['vies']);
 				$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
 				$formatedPrice = sprintf('%1.02F', $signupFee * $vatMultiplier);
@@ -176,14 +166,14 @@ $discounts = array();
 		<tr>
 		<?php foreach($this->items as $level):?>
 			<td class="akeebasubs-strappy-image">
-				<img src="<?php echo \Akeeba\Subscriptions\Admin\Helper\Image::getURL($level->image)?>" />
+				<img src="<?php echo Image::getURL($level->image)?>" />
 			</td>
 		<?php endforeach ?>
 		</tr>
 		<tr>
 		<?php foreach($this->items as $level):?>
 			<td class="akeebasubs-strappy-description">
-				<?php echo JHTML::_('content.prepare', \Akeeba\Subscriptions\Admin\Helper\Message::processLanguage($level->description) );?>
+				<?php echo JHTML::_('content.prepare', Message::processLanguage($level->description) );?>
 			</td>
 		<?php endforeach ?>
 		</tr>

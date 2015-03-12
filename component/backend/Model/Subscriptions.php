@@ -318,7 +318,7 @@ class Subscriptions extends DataModel
 						->search($filter_discountcode)
 						->get(true);
 
-					if (!empty($coupons))
+					if ($coupons->count())
 					{
 						foreach ($coupons as $coupon)
 						{
@@ -346,7 +346,7 @@ class Subscriptions extends DataModel
 						->search($filter_discountcode)
 						->get(true);
 
-					if (!empty($upgrades))
+					if ($upgrades->count())
 					{
 						foreach ($upgrades as $upgrade)
 						{
@@ -367,7 +367,7 @@ class Subscriptions extends DataModel
 						->search($filter_discountcode)
 						->get(true);
 
-					if (!empty($coupons))
+					if ($coupons->count())
 					{
 						foreach ($coupons as $coupon)
 						{
@@ -386,7 +386,7 @@ class Subscriptions extends DataModel
 						->search($filter_discountcode)
 						->get(true);
 
-					if (!empty($upgrades))
+					if ($upgrades->count())
 					{
 						foreach ($upgrades as $upgrade)
 						{

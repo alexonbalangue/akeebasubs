@@ -13,17 +13,6 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 
 /** @var \Akeeba\Subscriptions\Site\View\Levels\Html $this */
 
-// Take display VAT into account
-$showVat = ComponentParams::getParam('showvat', 0);
-/** @var \Akeeba\Subscriptions\Site\Model\TaxHelper $taxModel */
-$taxModel = $this->getContainer()->factory->model('TaxHelper')->savestate(0)->setIgnoreRequest(1);
-$taxParams = $taxModel->getTaxDefiningParameters();
-// Take the various inclusions into account
-$includesignup = ComponentParams::getParam('includesignup', 2);
-$includediscount = ComponentParams::getParam('includediscount', 0);
-// Only consider discounts if it's a logged in user
-$user = JFactory::getUser();
-$includediscount = ($includediscount && !$user->guest) ? true : false;
 ?>
 
 <div id="akeebasubs" class="levels">
@@ -34,15 +23,15 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 <?php
 	$signupFee = 0;
 
-	if (!in_array($level->akeebasubs_level_id, $this->subIDs) && ($includesignup != 0))
+	if (!in_array($level->akeebasubs_level_id, $this->subIDs) && ($this->includeSignup != 0))
 	{
 		$signupFee = (float)$level->signupfee;
 	}
 
-	$vatRule = $taxModel->getTaxRule($level->akeebasubs_level_id, $taxParams['country'], $taxParams['state'], $taxParams['city'], $taxParams['vies']);
+	$vatRule = $this->taxModel->getTaxRule($level->akeebasubs_level_id, $this->taxParams['country'], $this->taxParams['state'], $this->taxParams['city'], $this->taxParams['vies']);
 	$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 
-	if ($includediscount)
+	if ($this->includeDiscount)
 	{
 		/** @var \Akeeba\Subscriptions\Site\Model\Subscribe $subscribeModel */
 		$subscribeModel = $this->getContainer()->factory->model('Subscribe')->savestate(0);
@@ -57,7 +46,7 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 		$levelPrice = $level->price;
 	}
 
-	if ($includesignup == 1)
+	if ($this->includeSignup == 1)
 	{
 		if (($levelPrice + $signupFee) < 0)
 		{
@@ -89,7 +78,7 @@ $includediscount = ($includediscount && !$user->guest) ? true : false;
 	<div class="level akeebasubs-level-<?php echo $level->akeebasubs_level_id ?>">
 		<p class="level-title">
 			<span class="level-price">
-				<?php if(ComponentParams::getParam('renderasfree', 0) && ($levelPrice < 0.01)):?>
+				<?php if($this->renderAsFree && ($levelPrice < 0.01)):?>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
 				<?php else: ?>
 				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
