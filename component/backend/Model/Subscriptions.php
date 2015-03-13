@@ -135,9 +135,9 @@ class Subscriptions extends DataModel
 
 		// Set up relations
 		$this->hasOne('user', 'Users', 'user_id', 'user_id');
-		$this->hasOne('level', 'Levels');
-		$this->hasOne('coupon', 'Coupons');
-		$this->hasOne('upgrade', 'Upgrades');
+		$this->hasOne('level', 'Levels', 'akeebasubs_level_id', 'akeebasubs_level_id');
+		$this->hasOne('coupon', 'Coupons', 'akeebasubs_coupon_id', 'akeebasubs_coupon_id');
+		$this->hasOne('upgrade', 'Upgrades', 'akeebasubs_upgrade_id', 'akeebasubs_upgrade_id');
 		$this->hasOne('invoice', 'Invoices', 'akeebasubs_subscription_id', 'akeebasubs_subscription_id');
 
 		// Used for forms
