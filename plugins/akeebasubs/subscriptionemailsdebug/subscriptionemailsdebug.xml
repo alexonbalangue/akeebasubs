@@ -6,8 +6,8 @@
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU General Public License version 3, or later</license>
-	<creationDate>2011-03-04</creationDate>
-	<version>1.0</version>
+    <creationDate>April 2015</creationDate>
+    <version>5.0</version>
 	<description>Allows the developer to debug mails sent out to subscribers without actually sending out emails</description>
 	<files>
 		<filename plugin="subscriptionemailsdebug">subscriptionemailsdebug.php</filename>
