@@ -95,7 +95,7 @@ ENDFORM;
 
 		/** @var Subscriptions $subscription */
 		$subscription = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')
-			->savestate(false)->getIgnoreRequest(true);
+			->savestate(false)->setIgnoreRequest(true);
 
 		$subscription->find($id);
 
