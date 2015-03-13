@@ -16,7 +16,7 @@ use FOF30\Container\Container;
 use FOF30\Controller\DataController;
 use FOF30\View\Exception\AccessForbidden;
 
-class Messages extends DataController
+class Message extends DataController
 {
 	use Mixin\PredefinedTaskList;
 
