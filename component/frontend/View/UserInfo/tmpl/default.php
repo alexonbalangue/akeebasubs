@@ -7,13 +7,14 @@
 
 defined('_JEXEC') or die();
 
-$this->loadHelper('modules');
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
+/** @var \Akeeba\Subscriptions\Site\View\UserInfo\Html $this */
 ?>
 
 <div id="akeebasubs" class="userinfo">
 
-<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsuserinfoheader')?>
+<?php echo $this->getContainer()->template->loadPosition('akeebasubscriptionsuserinfoheader'); ?>
 
 <noscript>
 <hr/>
@@ -22,23 +23,23 @@ $this->loadHelper('modules');
 <hr/>
 </noscript>
 
-<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=userinfo') ?>" method="post" id="userinfoForm" >
+<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=UserInfo') ?>" method="post" id="userinfoForm" >
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 	<input type="hidden" name="task" value="save" />
 
-	<?php echo $this->loadAnyTemplate('site:com_akeebasubs/level/default_fields') ?>
+	<?php echo $this->loadAnyTemplate('site:com_akeebasubs/Level/default_fields') ?>
 
 	<div class="form-actions">
 		<button class="btn btn-primary btn-large" id="update_userinfo" type="submit"><?php echo JText::_('COM_AKEEBASUBS_USERINFO_BUTTON_UPDATE_USER')?></button>
 	</div>
 </form>
 
-	<?php echo AkeebasubsHelperModules::loadposition('akeebasubscriptionsuserinfofooter')?>
+	<?php echo $this->getContainer()->template->loadPosition('akeebasubscriptionsuserinfofooter'); ?>
 
 </div>
 
 <?php
-$aks_personal_info = AkeebasubsHelperCparams::getParam('personalinfo',1);
+$aks_personal_info = ComponentParams::getParam('personalinfo',1);
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<JS
 
