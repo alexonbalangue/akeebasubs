@@ -15,7 +15,7 @@ $this->addJavascriptFile('media://com_akeebasubs/js/autosubmit.js');
 
 ?>
 <?php if(ComponentParams::getParam('stepsbar',1)):?>
-<?php echo $this->loadAnyTemplate('level/steps',array('step'=>'payment')); ?>
+<?php echo $this->loadAnyTemplate('site:com_akeebasubs/Level/steps',array('step'=>'payment')); ?>
 <?php endif; ?>
 
 <?php echo $this->form ?>
