@@ -170,6 +170,8 @@ class Html extends \FOF30\View\DataView\Html
 			$vatMultiplier = (100 + (float)$vatRule->taxrate) / 100;
 		}
 
+		$preDiscount = max($levelPrice, 0.0);
+
 		if ($this->includeDiscount)
 		{
 			/** @var \Akeeba\Subscriptions\Site\Model\Subscribe $subscribeModel */
@@ -188,6 +190,7 @@ class Html extends \FOF30\View\DataView\Html
 			}
 
 			$formattedPrice = sprintf('%1.02F', ($levelPrice + $signupFee) * $vatMultiplier);
+			$preDiscount = max(($preDiscount + $signupFee) * $vatMultiplier, 0);
 			$levelPrice += $signupFee;
 		}
 		else
@@ -198,6 +201,7 @@ class Html extends \FOF30\View\DataView\Html
 			}
 
 			$formattedPrice = sprintf('%1.02F', ($levelPrice) * $vatMultiplier);
+			$preDiscount = $preDiscount * $vatMultiplier;
 		}
 
 		$dotpos = strpos($formattedPrice, '.');
@@ -214,19 +218,32 @@ class Html extends \FOF30\View\DataView\Html
 		$price_integerD = substr($formattedPriceD, 0, $dotposD);
 		$price_fractionalD = substr($formattedPriceD, $dotposD + 1);
 
+		$formattedPreDiscount = sprintf('%1.02F', $preDiscount);
+		$dotposPD = strpos($formattedPreDiscount, '.');
+		$price_integerPD = substr($formattedPreDiscount, 0, $dotposPD);
+		$price_fractionalPD = substr($formattedPreDiscount, $dotposPD + 1);
+
 		$this->pricingInformationCache[$levelKey] = (object)[
 			'vatRule'              => $vatRule,
-			'signupFee'            => $signupFee,
+			'vatMultiplier'        => $vatMultiplier,
+			'levelPrice'           => $levelPrice,
+
 			'discount'             => $discount,
 			'discountFormatted'    => $formattedPriceD,
 			'discountInteger'      => $price_integerD,
 			'discountFractional'   => $price_fractionalD,
-			'vatMultiplier'        => $vatMultiplier,
-			'levelPrice'           => $levelPrice,
+
+			'prediscount'             => $preDiscount,
+			'prediscountFormatted'    => $formattedPreDiscount,
+			'prediscountInteger'      => $price_integerPD,
+			'prediscountFractional'   => $price_fractionalPD,
+
 			'formattedPrice'       => $formattedPrice,
 			'priceInteger'         => $price_integer,
 			'priceFractional'      => $price_fractional,
 			'formattedPriceSignup' => $formattedPriceSU,
+
+			'signupFee'            => $signupFee,
 			'signupInteger'        => $price_integerSU,
 			'signupFractional'     => $price_fractionalSU,
 		];
