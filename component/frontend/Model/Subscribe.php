@@ -592,7 +592,7 @@ class Subscribe extends Model
 					->get(true);
 
 				// If this level has no rules try the "All levels" rules
-				if (empty($taxrules))
+				if (!$taxrules->count())
 				{
 					$taxrules = $taxRulesModel
 						->enabled(1)
@@ -600,18 +600,21 @@ class Subscribe extends Model
 						->country($state->country)
 						->filter_order('ordering')
 						->filter_order_Dir('ASC')
-						->get(True);
+						->get(true);
 				}
 
 				$catchRules = 0;
 				$lastVies = null;
 
-				if (!empty($taxrules))
+				if ($taxrules->count())
 				{
 					/** @var TaxRules $rule */
 					foreach ($taxrules as $rule)
 					{
-						if (empty($rule->state) && empty($rule->city) && $rule->taxrate && ($lastVies != $rule->vies))
+						// Note: You can't use $rule->state since it returns the model state
+						$rule_state = $rule->getFieldValue('state', null);
+
+						if (empty($rule_state) && empty($rule->city) && $rule->taxrate && ($lastVies != $rule->vies))
 						{
 							$catchRules++;
 							$lastVies = $rule->vies;
@@ -2452,8 +2455,8 @@ class Subscribe extends Model
 			/** @var Subscriptions $row */
 			foreach ($subscriptions as $row)
 			{
-				// Only take into account paid-for subscriptions
-				if ($row->state != 'C')
+				// Only take into account paid-for subscriptions. Note: you can't use $row->state, it returns the model state!
+				if ($row->getFieldValue('state', null) != 'C')
 				{
 					continue;
 				}

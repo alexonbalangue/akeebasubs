@@ -56,7 +56,8 @@ class PriceBreakdown extends Text
 			$publishDown = new \JDate($subscription->publish_down);
 			$expires_timestamp = $publishDown->toUnix();
 
-			if (($subscription->state == 'C') && ($expires_timestamp > time()))
+			// Note: You can't use $subscription->state. Instead of the field it get the model state.
+			if (($subscription->getFieldValue('state', null) == 'C') && ($expires_timestamp > time()))
 			{
 				$rowClass = 'pending-renewal';
 			}

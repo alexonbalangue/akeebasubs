@@ -952,7 +952,7 @@ class Subscriptions extends DataModel
 		}
 		elseif (($uNow >= $jUp->toUnix()) && ($uNow < $jDown->toUnix()))
 		{
-			$this->enabled = ($this->state == 'C') ? 1 : 0;
+			$this->enabled = ($this->getFieldValue('state', null) == 'C') ? 1 : 0;
 		}
 		else
 		{
@@ -1044,7 +1044,7 @@ class Subscriptions extends DataModel
 	private function userUnblock()
 	{
 		// Make sure the payment is complete
-		if ($this->state != 'C')
+		if ($this->getFieldValue('state', null) != 'C')
 		{
 			return;
 		}

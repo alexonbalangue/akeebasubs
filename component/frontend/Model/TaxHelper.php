@@ -78,7 +78,8 @@ class TaxHelper extends Model
 	/**
 	 * Finds the applicable tax rule for a given set of parameters
 	 *
-	 * @param   int     $akeebasubs_level_id  The subscription level to get the rule for. 0 looks for "All levels" rules.
+	 * @param   int     $akeebasubs_level_id  The subscription level to get the rule for. 0 looks for "All levels"
+	 *                                        rules.
 	 * @param   string  $country              The country code, e.g. 'DE' for Germany
 	 * @param   string  $state                The state of the client
 	 * @param   string  $city                 The city of the client
@@ -94,9 +95,9 @@ class TaxHelper extends Model
 		if (!array_key_exists($hash, self::$cachedTaxRates))
 		{
 			// First try loading the rules for this level
-			/** @var TaxRules $taxrules */
-			$taxrules = $this->container->factory->model('TaxRules')->savestate(0)->setIgnoreRequest(true);
-			$taxrules
+			/** @var TaxRules $taxrulesModel */
+			$taxrulesModel = $this->container->factory->model('TaxRules')->savestate(0)->setIgnoreRequest(true);
+			$taxrules = $taxrulesModel
 				->enabled(1)
 				->akeebasubs_level_id($akeebasubs_level_id)
 				->filter_order('ordering')
@@ -104,7 +105,7 @@ class TaxHelper extends Model
 				->get(true);
 
 			// If this level has no rules use the "All levels" rules
-			if (empty($taxrules) && ($akeebasubs_level_id != 0))
+			if (!$taxrules->count() && ($akeebasubs_level_id != 0))
 			{
 				self::$cachedTaxRates[$hash] = $this->getTaxRule(0, $country, $state, $city, $vies);
 
@@ -118,16 +119,12 @@ class TaxHelper extends Model
 				'id'	  => 0, // The ID of the tax rule in effect
 			);
 
-			if (empty($taxrules))
-			{
-				return $bestTaxRule;
-			}
-
 			if (!$taxrules->count())
 			{
 				return $bestTaxRule;
 			}
 
+			/** @var TaxRules $rule */
 			foreach ($taxrules as $rule)
 			{
 				// For each rule, get the match and fuzziness rating. The best, least fuzzy and last match wins.
@@ -144,12 +141,15 @@ class TaxHelper extends Model
 					$match++;
 				}
 
-				if (empty($rule->state))
+				// Note: you can't use $rule->state, it returns the model's state
+				$rule_state = $rule->getFieldValue('state', null);
+
+				if (empty($rule_state))
 				{
 					$match++;
 					$fuzzy++;
 				}
-				elseif ($rule->state == $state)
+				elseif ($rule_state == $state)
 				{
 					$match++;
 				}

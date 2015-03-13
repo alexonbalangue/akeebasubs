@@ -8,6 +8,7 @@
 namespace Akeeba\Subscriptions\Admin\Helper;
 
 use Akeeba\Subscriptions\Admin\Model\PaymentMethods;
+use Akeeba\Subscriptions\Admin\Model\States;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JFactory;
@@ -1418,7 +1419,7 @@ abstract class Select
 // Load the states from the database
 function akeebasubsHelperSelect_init()
 {
-	/** @var DataModel $model */
+	/** @var States $model */
 	$model                = Container::getInstance('com_akeebasubs')->factory->model('States');
 	$rawstates            = $model->enabled(1)->orderByLabels(1)->get(true);
 	$states               = array();
@@ -1426,8 +1427,12 @@ function akeebasubsHelperSelect_init()
 	$current_country_name = 'N/A';
 	$current_states       = array('' => 'N/A');
 
+	/** @var States $rawstate */
 	foreach ($rawstates as $rawstate)
 	{
+		// Note: you can't use $rawstate->state, it gets the model state
+		$rawstate_state = $rawstate->getFieldValue('state', null);
+
 		if ($rawstate->country != $current_country)
 		{
 			if (!empty($current_country_name))
@@ -1438,7 +1443,7 @@ function akeebasubsHelperSelect_init()
 				$current_country_name            = '';
 			}
 
-			if (empty($rawstate->country) || empty($rawstate->state) || empty($rawstate->label))
+			if (empty($rawstate->country) || empty($rawstate_state) || empty($rawstate->label))
 			{
 				continue;
 			}
@@ -1447,7 +1452,7 @@ function akeebasubsHelperSelect_init()
 			$current_country_name = Select::$countries[ $current_country ];
 		}
 
-		$current_states[ $rawstate->state ] = $rawstate->label;
+		$current_states[ $rawstate_state ] = $rawstate->label;
 	}
 
 	if (!empty($current_country_name))
