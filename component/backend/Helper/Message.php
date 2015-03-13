@@ -7,6 +7,9 @@
 
 namespace Akeeba\Subscriptions\Admin\Helper;
 
+use Akeeba\Subscriptions\Admin\Model\Levels;
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
+use Akeeba\Subscriptions\Admin\Model\Users;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JFactory;
@@ -26,7 +29,7 @@ abstract class Message
 	 * fetched based on subscription $sub
 	 *
 	 * @param   string     $text  The message to process
-	 * @param   DataModel  $sub   A subscription object
+	 * @param   Subscriptions  $sub   A subscription object
 	 *
 	 * @return  string  The processed string
 	 */
@@ -36,16 +39,24 @@ abstract class Message
 		$joomlaUser = JFactory::getUser($sub->user_id);
 
 		// Get the extra user parameters object for the subscription
-		/** @var DataModel $subsUser */
-		$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Users')
-			->savestate(false)->setIgnoreRequest(true)
-			->user_id($sub->user_id)->firstOrFail();
+		/** @var Users $subsUser */
+		$subsUser = $sub->user;
+
+		if (!is_object($subsUser))
+		{
+			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Users')
+				->savestate(0)->setIgnoreRequest(1);
+		}
 
 		// Get the subscription level
-		/** @var DataModel $level */
-		$level = Container::getInstance('com_akeebasubs')->factory->model('Level')
-            ->savestate(false)->setIgnoreRequest(true)
-			->findOrFail($sub->akeebasubs_level_id);
+		/** @var Levels $level */
+		$level = $sub->level;
+
+		if (!is_object($level))
+		{
+			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Levels')
+				->savestate(0)->setIgnoreRequest(1);
+		}
 
 		// Merge the user objects
 		$userData = array_merge((array) $joomlaUser, (array) ($subsUser->getData()));
