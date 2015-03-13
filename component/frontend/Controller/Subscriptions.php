@@ -74,7 +74,7 @@ class Subscriptions extends DataController
 		}
 		else
 		{
-			$subsModel->paystate('C,P');
+			$subsModel->paystate(['C', 'P']);
 		}
 
 		// Let me cheat. If the request doesn't specify how many records to show, show them all!
@@ -93,6 +93,16 @@ class Subscriptions extends DataController
 	 */
 	protected function onBeforeRead()
 	{
+		// Work around router.php setting the subscription ID in the slug instead of the id request parameter
+		$reqId = $this->input->getInt('id', null);
+		$reqSlug = $this->input->getInt('slug', null);
+
+		if (!$reqId && $reqSlug)
+		{
+			$this->input->set('slug', null);
+			$this->input->set('id', $reqSlug);
+		}
+
 		/** @var \Akeeba\Subscriptions\Site\Model\Subscriptions $model */
 		$model = $this->getModel();
 		$user = $this->container->platform->getUser();
@@ -112,7 +122,7 @@ class Subscriptions extends DataController
 		$view = $this->getView();
 		$this->layout = 'default';
 		$view->setLayout('default');
-		$model->paystate('C,P');
+		$model->paystate(['C', 'P']);
 
 		// If the record is not found throw a generic "Access forbidden" error
 		if (!$model->getId())

@@ -1051,7 +1051,7 @@ class Subscribe extends Model
 
 						$hits = $subscriptionsModel
 							->coupon_id($coupon->akeebasubs_coupon_id)
-							->paystate('C,P')
+							->paystate(['C', 'P'])
 							->user_id($user_id)
 							->limit(0)
 							->limitstart(0)
