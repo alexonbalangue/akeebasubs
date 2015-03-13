@@ -1068,12 +1068,9 @@ class Subscriptions extends DataModel
 				return;
 			}
 
-			$updates = array(
-				'block'      => 0,
-				'activation' => ''
-			);
-
-			$user->save($updates);
+			$user->block = 0;
+			$user->activation = '';
+			$user->save(true);
 		}
 	}
 
