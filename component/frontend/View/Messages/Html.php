@@ -35,18 +35,19 @@ class Html extends \FOF30\View\DataView\Html
 	 */
 	public $message = '';
 
-	public function onBeforeThankyou($tpl = null)
+	public function onBeforeRead($tpl = null)
 	{
-		$this->setLayout('thankyou');
+		switch ($this->getLayout())
+		{
+			case 'thankyou':
+			default:
+				$this->prepareView('onOrderMessage', 'orderurl', 'ordertext');
+				break;
 
-		$this->prepareView('onOrderMessage', 'orderurl', 'ordertext');
-	}
-
-	public function onBeforeCancel($tpl = null)
-	{
-		$this->setLayout('cancel');
-
-		$this->prepareView('onCancelMessage', 'cancelurl', 'canceltext');
+			case 'cancel':
+				$this->prepareView('onCancelMessage', 'cancelurl', 'canceltext');
+				break;
+		}
 	}
 
 	protected function prepareView($event = 'onOrderMessage', $urlField = 'orderurl', $messageField = 'ordertext')
