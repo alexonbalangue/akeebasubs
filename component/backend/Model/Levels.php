@@ -92,6 +92,8 @@ class Levels extends DataModel
 		parent::__construct($container, $config);
 
 		$this->addBehaviour('Filters');
+
+		$this->blacklistFilters(['only_once']);
 	}
 
 	/**
@@ -153,15 +155,13 @@ class Levels extends DataModel
 			{
 				$query->where(
 					'(' .
-					'(' .
-					$db->qn('only_once') . ' = ' . $db->q(0)
-					. ')' .
-					' OR ' .
-					'(' .
-					'(' . $db->qn('only_once') . ' = ' . $db->q(1) . ')'
-					. ' AND ' .
-					'(' . $db->qn('akeebasubs_level_id') . ' NOT IN ' . '(' . implode(',', $subIDs) . ')' . ')'
-					. ')' .
+						'(' . $db->qn('only_once') . ' = ' . $db->q(0) . ')' .
+						' OR ' .
+						'(' .
+							'(' . $db->qn('only_once') . ' = ' . $db->q(1) . ')'
+							. ' AND ' .
+							'(' . $db->qn('akeebasubs_level_id') . ' NOT IN ' . '(' . implode(',', $subIDs) . ')' . ')'
+						. ')' .
 					')'
 				);
 			}
