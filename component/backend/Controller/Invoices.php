@@ -151,7 +151,8 @@ class Invoices extends DataController
 		}
 
 		// Email the PDF file
-		$status = ($model->emailPDF() === true);
+		$sub = $model->subscription;
+		$status = ($model->emailPDF($sub) === true);
 
 		// Post-action redirection
 		if ($customURL = $this->input->get('returnurl','','string'))
