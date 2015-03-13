@@ -5,15 +5,16 @@
  *  @license GNU General Public License version 3, or later
  */
 
+/** @var \Akeeba\Subscriptions\Site\View\Subscribe\Html $this */
+
 defined('_JEXEC') or die();
 
-AkeebaStrapper::addJSfile('media://com_akeebasubs/js/autosubmit.js?'.AKEEBASUBS_VERSIONHASH);
+use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
-$this->loadHelper('cparams');
-$this->loadHelper('modules');
-$this->loadHelper('format');
+$this->addJavascriptFile('media://com_akeebasubs/js/autosubmit.js');
+
 ?>
-<?php if(AkeebasubsHelperCparams::getParam('stepsbar',1)):?>
+<?php if(ComponentParams::getParam('stepsbar',1)):?>
 <?php echo $this->loadAnyTemplate('level/steps',array('step'=>'payment')); ?>
 <?php endif; ?>
 

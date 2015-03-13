@@ -1,8 +1,8 @@
 <?php
 /**
- * @package        Akeeba Subscriptions
- * @copyright      2015 Nicholas K. Dionysopoulos / Akeeba Ltd
- * @license        GNU GPL version 3 or later
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 
 namespace Akeeba\Subscriptions\Site\View\Levels;
