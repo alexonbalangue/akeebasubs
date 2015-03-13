@@ -28,6 +28,14 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 
 		// Translate view names from Akeeba Subscriptions 1.x, 2.x, 3.x and 4.x
 		$this->translateOldViewNames();
+
+		// Handle the submitted form from the tax country module
+		$taxCountry = \JFactory::getApplication()->input->getCmd('mod_aktaxcountry_country', null);
+
+		if (!is_null($taxCountry))
+		{
+			\JFactory::getSession()->set('country', $taxCountry, 'mod_aktaxcountry');
+		}
 	}
 
 	/**
