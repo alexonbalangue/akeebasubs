@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="2.5.0" method="upgrade" client="site">
-	<name>Akeeba Subscriptions - Country selection for tax display</name>
+<extension type="module" version="3.3.0" method="upgrade" client="site">
+	<name>MOD_AKTAXCOUNTRY</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<creationDate>January 2015</creationDate>
 	<copyright>Copyright (C) 2011-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com</copyright>
