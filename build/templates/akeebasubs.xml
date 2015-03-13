@@ -20,7 +20,9 @@
         <folder>elements</folder>
         <folder>Model</folder>
         <folder>Toolbar</folder>
+        <!-- Not a typo. We need BOTH views and View folders, for different reasons. -->
         <folder>View</folder>
+        <folder>views</folder>
     </files>
 
     <!-- Front end translation files -->
