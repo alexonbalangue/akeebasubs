@@ -155,8 +155,9 @@ class Subscriptions extends DataModel
 		$this->assertNotEmpty($this->publish_down, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PUBLISH_DOWN');
 		$this->assertInArray($this->getFieldValue('state', ''), ['N', 'P', 'C', 'X'], 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_STATE');
 
-		$this->normaliseDate($this->publish_up, '2000-01-01');
-		$this->normaliseDate($this->publish_down, '2038-01-01');
+		$this->publish_up = $this->normaliseDate($this->publish_up, '2000-01-01');
+		$this->publish_down = $this->normaliseDate($this->publish_down, '2038-01-01');
+		$this->created_on = $this->normaliseDate($this->created_on, $this->container->platform->getDate()->toSql());
 		$this->normaliseEnabled();
 
 		$this->assertNotEmpty($this->processor, 'COM_AKEEBASUBS_SUBSCRIPTION_ERR_PROCESSOR');
@@ -890,7 +891,7 @@ class Subscriptions extends DataModel
 	 */
 	protected function onAfterSave()
 	{
-		$notify = $this->getState('_dontNotify', null) != false;
+		$notify = $this->getState('_dontNotify', null) != true;
 
 		// Reset the flags communicated through the data to be bound / saved.
 		foreach (['_noemail', '_dontNotify', '_dontCheckPaymentID'] as $flag)
@@ -1141,7 +1142,9 @@ class Subscriptions extends DataModel
 		// Possibly modified record. Let's find out!
 		else
 		{
-			$data     = $this->_selfCache->getData();
+			$data     = $this->_selfCache->toArray();
+			$currentData = $this->toArray();
+
 			$modified = array();
 
 			foreach ($data as $key => $value)
@@ -1153,7 +1156,7 @@ class Subscriptions extends DataModel
 				}
 
 				// Check if the value has changed
-				if ($this->$key != $value)
+				if (isset($currentData[$key]) && ($currentData[$key] != $value))
 				{
 					$info['status']   = 'modified';
 					$modified[ $key ] = $value;
