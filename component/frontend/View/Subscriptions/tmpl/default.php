@@ -7,9 +7,10 @@
 
 defined('_JEXEC') or die();
 
-$this->loadHelper('cparams');
-$this->loadHelper('modules');
-$this->loadHelper('format');
+/** @var \Akeeba\Subscriptions\Site\View\Subscriptions\Html $this */
+
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+Use Akeeba\Subscriptions\Admin\Helper\Format;
 
 JLoader::import('joomla.utilities.date');
 
@@ -21,7 +22,7 @@ if (!property_exists($this, 'extensions'))
 
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
-	<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions') ?>" method="post" class="adminform" name="adminForm" id="adminForm">
+	<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=Subscriptions') ?>" method="post" class="adminform" name="adminForm" id="adminForm">
 	<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 
 	<table class="table table-striped" width="100%">
@@ -70,7 +71,10 @@ if (!property_exists($this, 'extensions'))
 					<h4><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_AREAHEADING_' . $area) ?></h4>
 				</td>
 			</tr>
-			<?php foreach($this->items as $subscription):?>
+			<?php
+			/** @var \Akeeba\Subscriptions\Site\Model\Subscriptions $subscription */
+			foreach($this->items as $subscription):
+			?>
 			<?php
 				if (!in_array($subscription->akeebasubs_subscription_id, $this->sortTable[$area]))
 				{
@@ -82,8 +86,9 @@ if (!property_exists($this, 'extensions'))
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
 
-				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
+				$canRenew = ComponentParams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
+
 				if ($level->only_once)
 				{
 					$canRenew = false;
@@ -109,44 +114,54 @@ if (!property_exists($this, 'extensions'))
 					<?php endif; ?>
 				</td>
 				<td>
-					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$subscription->state)?>
+					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_' . $subscription->getFieldValue('state', 'N'))?>
 				</td>
 				<td>
 					<?php if(empty($subscription->publish_up) || ($subscription->publish_up == '0000-00-00 00:00:00')):?>
 					&mdash;
 					<?php else:?>
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_up) ?>
+					<?php echo Format::date($subscription->publish_up) ?>
 					<?php endif;?>
 				</td>
 				<td>
 					<?php if(empty($subscription->publish_up) || ($subscription->publish_down == '0000-00-00 00:00:00')):?>
 					&mdash;
 					<?php else:?>
-					<?php echo AkeebasubsHelperFormat::date($subscription->publish_down) ?>
+					<?php echo Format::date($subscription->publish_down) ?>
 					<?php endif;?>
 				</td>
 				<td align="center">
-					<?php if($subscription->enabled):?>
-					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/enabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
+					<?php if ($subscription->enabled):?>
+					<img
+						src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/enabled.png'); ?>"
+						align="center"
+						title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
 					<?php elseif($jPublishUp->toUnix() >= time()):?>
-					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/scheduled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
+					<img
+						src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/scheduled.png'); ?>"
+						align="center"
+						title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
 					<?php else:?>
-					<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/disabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
+					<img
+						src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/disabled.png'); ?>"
+						align="center"
+						title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
 					<?php endif;?>
 	            </td>
 	            <td>
-					<a class="btn btn-mini btn-info" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscription&id='.$subscription->akeebasubs_subscription_id)?>">
+					<a class="btn btn-mini btn-info" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=Subscription&id='.$subscription->akeebasubs_subscription_id)?>">
 						<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_VIEW')?>
 					</a>
 
-					<?php if(array_key_exists($subscription->akeebasubs_subscription_id, $this->invoices)):
+					<?php if (array_key_exists($subscription->akeebasubs_subscription_id, $this->invoices)):
 					$invoice = $this->invoices[$subscription->akeebasubs_subscription_id];
 					$url2 = '';
 					$target = '';
+
 					if($invoice->extension == 'akeebasubs')
 					{
-						$url2 = JRoute::_('index.php?option=com_akeebasubs&view=invoices&task=download&id='.$invoice->akeebasubs_subscription_id);
-						$url = JRoute::_('index.php?option=com_akeebasubs&view=invoice&task=read&id='.$invoice->akeebasubs_subscription_id.'&tmpl=component');
+						$url2 = JRoute::_('index.php?option=com_akeebasubs&view=Invoices&task=download&id='.$invoice->akeebasubs_subscription_id);
+						$url = JRoute::_('index.php?option=com_akeebasubs&view=Invoice&task=read&id=' . $invoice->akeebasubs_subscription_id.'&tmpl=component');
 						$target = 'target="_blank"';
 					}
 					elseif(array_key_exists($invoice->extension, $this->extensions))
@@ -179,11 +194,7 @@ if (!property_exists($this, 'extensions'))
 	            	<?php
 						if ($canRenew)
 						{
-							$slug = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
-								->setId($subscription->akeebasubs_level_id)
-								->getItem()
-								->slug;
-							$renewURL = JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$slug);
+							$renewURL = JRoute::_('index.php?option=com_akeebasubs&view=level&slug=' . $subscription->level->slug);
 						}
 						else
 						{
@@ -197,7 +208,7 @@ if (!property_exists($this, 'extensions'))
 	            	<?php endif;?>
 
 		            <?php
-		                if($level->recurring && $subscription->allow_cancel):
+		                if ($level->recurring && $subscription->allow_cancel):
 			                $cancelURL = JRoute::_('index.php?option=com_akeebasubs&view=callback&task=cancel&paymentmethod='.$subscription->processor.'&sid='.$subscription->akeebasubs_subscription_id);
 			        ?>
 		            <a class="btn btn-mini btn-danger" href="<?php echo $cancelURL?>">

@@ -59,6 +59,7 @@ use FOF30\Model\DataModel;
  * @method  $this  modified_by()                    modified_by(int $v)
  * @method  $this  locked_on()                      locked_on(string $v)
  * @method  $this  locked_by()                      locked_by(int $v)
+ * @method  $this  subids()							subids(array $v)
  *
  * @property-read  Subscriptions  		$subscription	The subscription of this invoice
  * @property-read  InvoiceTemplates		$template		The template for this invoice

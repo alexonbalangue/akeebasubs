@@ -1,9 +1,9 @@
 <?php
 
 /**
- *  @package AkeebaSubs
- *  @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
- *  @license GNU General Public License version 3, or later
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 defined('_JEXEC') or die();
 
@@ -21,16 +21,16 @@ class AkeebasubsViewSubscriptions extends F0FViewHtml
 				->enabled(1)
 				->getList();
 
-			$activeLevels	 = array();
-			$allLevels		 = array();
-			$ppList          = array();
+			$activeLevels = array();
+			$allLevels = array();
+			$ppList = array();
 
 			// Let's get all the enabled plugins
 			JPluginHelper::importPlugin('akpayment');
 			$tempList = JFactory::getApplication()->triggerEvent('onAKPaymentGetIdentity');
 
 			// Remove a level for better handling
-			foreach($tempList as $tempPlugin)
+			foreach ($tempList as $tempPlugin)
 			{
 				$keys = array_keys($tempPlugin);
 				$name = array_pop($keys);
@@ -41,20 +41,20 @@ class AkeebasubsViewSubscriptions extends F0FViewHtml
 			{
 				foreach ($rawActiveLevels as $l)
 				{
-					$activeLevels[]						 = $l->akeebasubs_level_id;
-					$allLevels[$l->akeebasubs_level_id]	 = $l;
+					$activeLevels[] = $l->akeebasubs_level_id;
+					$allLevels[$l->akeebasubs_level_id] = $l;
 				}
 			}
 
 			// Get subscription and subscription level IDs, sort subscriptions
 			// based on status
-			$subIDs				 = array();
-			$subscription_ids	 = array();
-			$sortTable			 = array(
-				'active'	 => array(),
-				'waiting'	 => array(),
-				'pending'	 => array(),
-				'expired'	 => array(),
+			$subIDs = array();
+			$subscription_ids = array();
+			$sortTable = array(
+				'active'  => array(),
+				'waiting' => array(),
+				'pending' => array(),
+				'expired' => array(),
 			);
 
 			if (count($this->items))
@@ -65,8 +65,8 @@ class AkeebasubsViewSubscriptions extends F0FViewHtml
 				{
 					$id = $sub->akeebasubs_subscription_id;
 
-					$subIDs[]			 = $id;
-					$subscription_ids[]	 = $id;
+					$subIDs[] = $id;
+					$subscription_ids[] = $id;
 
 					// Propagate the info the the sub can be cancelled
 					if (isset($ppList[$sub->processor]))
@@ -121,19 +121,18 @@ class AkeebasubsViewSubscriptions extends F0FViewHtml
 				}
 			}
 
-			// Get incoiving extensions
+			// Get invoicing extensions
 			$extensions = F0FModel::getTmpInstance('Invoices', 'AkeebasubsModel')->getExtensions();
 
 			// Assign variables
-			$this->activeLevels	 = $activeLevels;
-			$this->allLevels	 = $allLevels;
-			$this->subIDs		 = $subIDs;
-			$this->invoices		 = $invoices;
-			$this->extensions	 = $extensions;
-			$this->sortTable	 = $sortTable;
+			$this->activeLevels = $activeLevels;
+			$this->allLevels = $allLevels;
+			$this->subIDs = $subIDs;
+			$this->invoices = $invoices;
+			$this->extensions = $extensions;
+			$this->sortTable = $sortTable;
 		}
 
 		return $ret;
 	}
-
 }

@@ -7,16 +7,19 @@
 
 defined('_JEXEC') or die();
 
-$this->loadHelper('cparams');
-$this->loadHelper('modules');
-$this->loadHelper('format');
+/** @var \Akeeba\Subscriptions\Site\View\Subscriptions\Html $this */
+
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+Use Akeeba\Subscriptions\Admin\Helper\Format;
+use Akeeba\Subscriptions\Admin\Helper\Validator;
 
 JLoader::import('joomla.utilities.date');
 JLoader::import('joomla.plugin.helper');
-JPluginHelper::importPlugin('akeebasubs');
+
+$this->getContainer()->platform->importPlugin('akeebasubs');
 
 $app        = JFactory::getApplication();
-$jPublishUp = new JDate($this->item->publish_up);
+$jPublishUp = $this->getContainer()->platform->getDate($this->item->publish_up);
 ?>
 
 <div id="akeebasubs">
@@ -38,53 +41,62 @@ $jPublishUp = new JDate($this->item->publish_up);
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?></td>
 		<td class="subscription-info">
-			<?php echo F0FModel::getTmpInstance('Levels','AkeebasubsModel')->setId($this->item->akeebasubs_level_id)->getItem()->title?>
+			<?php echo $this->item->level->title ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_UP')?></td>
 		<td class="subscription-info">
-			<?php echo AkeebasubsHelperFormat::date($this->item->publish_up) ?>
+			<?php echo Format::date($this->item->publish_up) ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_PUBLISH_DOWN')?></td>
 		<td class="subscription-info">
-			<?php echo AkeebasubsHelperFormat::date($this->item->publish_down) ?>
+			<?php echo Format::date($this->item->publish_down) ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED')?></td>
 		<td class="subscription-info">
 			<?php if($this->item->enabled):?>
-			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/enabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
+				<img
+					src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/enabled.png'); ?>"
+					align="center"
+					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
 			<?php elseif($jPublishUp->toUnix() >= time()):?>
-			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/scheduled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
+				<img
+					src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/scheduled.png'); ?>"
+					align="center"
+					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
 			<?php else:?>
-			<img src="<?php echo JURI::base(); ?>/media/com_akeebasubs/images/frontend/disabled.png" align="center" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
+				<img
+					src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/disabled.png'); ?>"
+					align="center"
+					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
 			<?php endif;?>
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_STATE')?></td>
-		<td class="subscription-info"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$this->item->state)?></td>
+		<td class="subscription-info"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_'.$this->item->getFieldValue('state', 'N'))?></td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_AMOUNT_PAID')?></td>
 		<td class="subscription-info">
-			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'before'): ?>
-			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
+			<?php echo ComponentParams::getParam('currencysymbol','€')?>
 			<?php endif; ?>
 			<?php echo sprintf('%2.02F',$this->item->gross_amount)?>
-			<?php if(AkeebasubsHelperCparams::getParam('currencypos','before') == 'after'): ?>
-			<?php echo AkeebasubsHelperCparams::getParam('currencysymbol','€')?>
+			<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
+			<?php echo ComponentParams::getParam('currencysymbol','€')?>
 			<?php endif; ?>
 		</td>
 	</tr>
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_SUBSCRIBED_ON')?></td>
 		<td class="subscription-info">
-			<?php echo AkeebasubsHelperFormat::date($this->item->created_on) ?>
+			<?php echo Format::date($this->item->created_on) ?>
 		</td>
 	</tr>
 </table>
@@ -98,7 +110,7 @@ $args      = array(
 				)
 			 );
 
-$jResponse = $app->triggerEvent('onSubscriptionFormRenderPerSubFields', $args);
+$jResponse = $this->getContainer()->platform->runPlugins('onSubscriptionFormRenderPerSubFields', $args);
 @ob_start();
 if(is_array($jResponse) && !empty($jResponse)) foreach($jResponse as $customFields):
 	if(is_array($customFields) && !empty($customFields)) foreach($customFields as $field):
@@ -142,8 +154,7 @@ endforeach;
 $subfieldsHTML = trim(@ob_get_clean());
 if(!empty($subfieldsHTML)):
 	// Do I have to inject any plugin validators?
-	require_once JPATH_ROOT.'/components/com_akeebasubs/helpers/js.php';
-	AkeebasubsHelperJs::deployValidator();
+	Validator::deployValidator();
 ?>
 	<fieldset>
 		<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')?></legend>
