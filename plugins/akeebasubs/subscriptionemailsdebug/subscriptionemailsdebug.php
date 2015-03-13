@@ -17,6 +17,16 @@ require_once __DIR__ . '/../subscriptionemails/subscriptionemails.php';
 class plgAkeebasubsSubscriptionemailsdebug extends plgAkeebasubsSubscriptionemails
 {
 	/**
+	 * This plugin does not specify email keys
+	 *
+	 * @return  null
+	 */
+	public function onAKGetEmailKeys()
+	{
+		return null;
+	}
+
+	/**
 	 * Sends out the email to the owner of the subscription.
 	 *
 	 * @param   Subscriptions  $row   The subscription row object
