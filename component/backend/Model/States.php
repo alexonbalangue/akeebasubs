@@ -35,6 +35,7 @@ use FOF30\Model\DataModel;
  * @method  $this  modified_by()          modified_by(int $v)
  * @method  $this  locked_on()            locked_on(string $v)
  * @method  $this  locked_by()            locked_by(int $v)
+ * @method  $this  orderByLabels()		  orderByLabels(int $v)
  *
  */
 class States extends DataModel
