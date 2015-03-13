@@ -6,8 +6,8 @@
     <authorUrl>http://www.akeebabackup.com</authorUrl>
     <copyright>Copyright (c)2011-2015 Nicholas K. Dionysopoulos</copyright>
     <license>GNU General Public License version 3, or later</license>
-    <creationDate>January 2015</creationDate>
-    <version>1.0</version>
+    <creationDate>April 2015</creationDate>
+    <version>5.0</version>
     <description>PLG_AKEEBASUBS_AGREETOEU_DESCRIPTION</description>
     <files>
         <filename plugin="agreetoeu">agreetoeu.php</filename>
