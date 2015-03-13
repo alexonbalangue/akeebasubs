@@ -10,10 +10,7 @@ namespace Akeeba\Subscriptions\Site\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Controller\Mixin;
-use Akeeba\Subscriptions\Site\Model\Subscribe;
 use FOF30\Container\Container;
-use FOF30\Controller\DataController;
-use FOF30\View\Exception\AccessForbidden;
 
 class Subscription extends Subscriptions
 {
