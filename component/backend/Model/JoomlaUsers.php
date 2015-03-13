@@ -76,6 +76,9 @@ use JUserHelper;
 
 		// Always load the Filters behaviour
 		$this->addBehaviour('Filters');
+
+		// Do not run automatic value validation of data before saving it.
+		$this->autoChecks = false;
 	}
 
 	/**
