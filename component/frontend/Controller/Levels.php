@@ -255,23 +255,28 @@ class Levels extends DataController
 		return true;
 	}
 
+	/**
+	 * Registers page-identifying parameters to the application object. This is used by the Joomla! caching system to
+	 * get the unique identifier of a page and decide its caching status (cached, not cached, cache expired).
+	 *
+	 * @param array $urlparams
+	 */
 	protected function registerUrlParams($urlparams = array())
 	{
 		$app = \JFactory::getApplication();
 
 		$registeredurlparams = null;
 
-		if (property_exists($app, 'registeredurlparams'))
+		if (!empty($app->registeredurlparams))
 		{
 			$registeredurlparams = $app->registeredurlparams;
 		}
-
-		if (empty($registeredurlparams))
+		else
 		{
 			$registeredurlparams = new \stdClass;
 		}
 
-		foreach ($urlparams AS $key => $value)
+		foreach ($urlparams as $key => $value)
 		{
 			// Add your safe url parameters with variable type as value {@see JFilterInput::clean()}.
 			$registeredurlparams->$key = $value;

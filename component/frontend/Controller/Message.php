@@ -265,8 +265,6 @@ class Message extends DataController
 	 * Registers page-identifying parameters to the application object. This is used by the Joomla! caching system to
 	 * get the unique identifier of a page and decide its caching status (cached, not cached, cache expired).
 	 *
-	 * TODO Is this still valid in Joomla! 3.4?
-	 *
 	 * @param array $urlparams
 	 */
 	protected function registerUrlParams($urlparams = array())
@@ -276,14 +274,16 @@ class Message extends DataController
 
 		$registeredurlparams = null;
 
-		$registeredurlparams = $app->registeredurlparams;
-
-		if (empty($registeredurlparams))
+		if (!empty($app->registeredurlparams))
+		{
+			$registeredurlparams = $app->registeredurlparams;
+		}
+		else
 		{
 			$registeredurlparams = new \stdClass;
 		}
 
-		foreach ($urlparams AS $key => $value)
+		foreach ($urlparams as $key => $value)
 		{
 			// Add your safe url parameters with variable type as value {@see JFilterInput::clean()}.
 			$registeredurlparams->$key = $value;
