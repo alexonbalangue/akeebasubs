@@ -35,4 +35,12 @@ class Levels extends DataController
 
 		$this->setRedirect($url);
 	}
+
+	/**
+	 * Since I have an "id" filter its state is set after editing an item, causing browse issues.
+	 */
+	protected function onBeforeBrowse()
+	{
+		$this->getModel()->setState('id', []);
+	}
 }
