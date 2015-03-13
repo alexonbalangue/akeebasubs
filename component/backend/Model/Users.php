@@ -74,6 +74,9 @@ class Users extends DataModel
 		$this->hasOne('user', 'JoomlaUsers', 'user_id', 'id');
 		$this->hasMany('subscriptions', 'Subscriptions', 'user_id', 'user_id');
 		$this->with(['user']);
+
+		// Not NULL fields which do accept 0 values should not be part of auto-checks
+		$this->fieldsSkipChecks = ['isbusiness', 'viesregistered', 'needs_logout'];
 	}
 
 	/**

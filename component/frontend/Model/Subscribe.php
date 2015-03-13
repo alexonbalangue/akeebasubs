@@ -2345,7 +2345,7 @@ class Subscribe extends Model
 		// data from the database
 		JFactory::getSession()->set('firstrun', true, 'com_akeebasubs');
 
-		// Step #2.b. Apply block rules in the Professional release
+		// Step #2.b. Apply block rules
 		// ----------------------------------------------------------------------
 		/** @var BlockRules $blockRulesModel */
 		$blockRulesModel = $this->container->factory->model('Blockrules')->savestate(0)->setIgnoreRequest(1);
