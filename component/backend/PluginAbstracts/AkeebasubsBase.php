@@ -148,13 +148,8 @@ abstract class AkeebasubsBase extends JPlugin
 	 */
 	public function onSubscriptionLevelFormRender(Levels $level)
 	{
-		JLoader::import('joomla.filesystem.file');
-		$filename = $this->templatePath . '/override/default.php';
-
-		if (!JFile::exists($filename))
-		{
-			$filename = $this->templatePath . '/tmpl/default.php';
-		}
+		$filePath = 'plugin://akeebasubs/' . $this->name . '/default.php';
+		$filename = $this->container->template->parsePath($filePath, true);
 
 		$addgroupsKey    = strtolower($this->name) . '_addgroups';
 		$removegroupsKey = strtolower($this->name) . '_addgroups';
@@ -212,7 +207,10 @@ abstract class AkeebasubsBase extends JPlugin
 	 *
 	 * @return  void
 	 */
-	abstract public function onAKUserRefresh($user_id);
+	public function onAKUserRefresh($user_id)
+	{
+		// Override this with your own code.
+	}
 
 	/**
 	 * Load the groups to add / remove for a user
