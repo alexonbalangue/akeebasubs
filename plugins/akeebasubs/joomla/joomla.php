@@ -123,9 +123,9 @@ class plgAkeebasubsJoomla extends \Akeeba\Subscriptions\Admin\PluginAbstracts\Ak
 
 		$key = "joomla_{$type}groups";
 
-		if (isset($level->params->$key))
+		if (isset($level->params[$key]))
 		{
-			$groupList = $level->params->$key;
+			$groupList = $level->params[$key];
 		}
 		else
 		{

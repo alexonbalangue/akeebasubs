@@ -13,17 +13,6 @@ $model->getContainer()->platform->importPlugin('akeebasubs');
 
 $params = $model->params;
 
-if (is_array($params))
-{
-	$params = (object)$params;
-}
-else
-{
-	$params = new stdClass();
-}
-
-$model->params = $params;
-
 $jResponse = $model->getContainer()->platform->runPlugins('onSubscriptionLevelFormRender', array($model));
 
 if (is_array($jResponse) && !empty($jResponse)):

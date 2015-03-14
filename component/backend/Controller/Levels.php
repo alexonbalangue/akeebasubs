@@ -41,6 +41,7 @@ class Levels extends DataController
 	 */
 	protected function onBeforeBrowse()
 	{
+		$this->getModel()->blacklistFilters(['created_on', 'created_by']);
 		$this->getModel()->setState('id', []);
 	}
 }

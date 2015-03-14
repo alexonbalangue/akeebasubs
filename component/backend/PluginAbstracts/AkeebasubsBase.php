@@ -84,7 +84,7 @@ abstract class AkeebasubsBase extends JPlugin
 		parent::__construct($subject, $config);
 
 		$name   = $config['name'];
-		$templatePath = $config['templatePath'];
+		$templatePath = isset($config['templatePath']) ? $config['templatePath'] : '';
 
 		$this->templatePath = $templatePath;
 		$this->name         = $name;
@@ -100,30 +100,6 @@ abstract class AkeebasubsBase extends JPlugin
 
 		$strAddGroups = null;
 		$strRemoveGroups = null;
-
-		// Do we have values from the Olden Days?
-		if (isset($config['params']))
-		{
-			$configParams = @json_decode($config['params']);
-
-			if (property_exists($configParams, 'addgroups'))
-			{
-				$strAddGroups = $configParams->addgroups;
-			}
-			else
-			{
-				$strAddGroups = null;
-			}
-
-			if (property_exists($configParams, 'removegroups'))
-			{
-				$strRemoveGroups = $configParams->removegroups;
-			}
-			else
-			{
-				$strRemoveGroups = null;
-			}
-		}
 
 		if (!empty($strAddGroups) || !empty($strRemoveGroups))
 		{
@@ -154,15 +130,19 @@ abstract class AkeebasubsBase extends JPlugin
 		$addgroupsKey    = strtolower($this->name) . '_addgroups';
 		$removegroupsKey = strtolower($this->name) . '_addgroups';
 
-		if (!isset($level->params->$addgroupsKey))
+		$params = $level->params;
+
+		if (!isset($params[$addgroupsKey]))
 		{
-			$level->params->$addgroupsKey = array();
+			$params[$addgroupsKey] = array();
 		}
 
-		if (!isset($level->params->$removegroupsKey))
+		if (!isset($params[$removegroupsKey]))
 		{
-			$level->params->$removegroupsKey = array();
+			$params[$removegroupsKey] = array();
 		}
+
+		$level->params = $params;
 
 		@ob_start();
 
@@ -355,14 +335,14 @@ abstract class AkeebasubsBase extends JPlugin
 		{
 			foreach ($levels as $level)
 			{
-				if (isset($level->params->$addgroupsKey))
+				if (isset($level->params[$addgroupsKey]))
 				{
-					$this->addGroups[ $level->akeebasubs_level_id ] = array_filter($level->params->$addgroupsKey);
+					$this->addGroups[ $level->akeebasubs_level_id ] = array_filter($level->params[$addgroupsKey]);
 				}
 
-				if (isset($level->params->$removegroupsKey))
+				if (isset($level->params[$removegroupsKey]))
 				{
-					$this->removeGroups[ $level->akeebasubs_level_id ] = array_filter($level->params->$removegroupsKey);
+					$this->removeGroups[ $level->akeebasubs_level_id ] = array_filter($level->params[$removegroupsKey]);
 				}
 			}
 		}
