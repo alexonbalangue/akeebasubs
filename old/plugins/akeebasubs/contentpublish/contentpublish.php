@@ -1,13 +1,13 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
 
-if (!include_once(JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php'))
+if (!include_once(JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akeebasubs.php'))
 {
 	return;
 }
@@ -16,6 +16,8 @@ JLoader::import('joomla.application.component.helper');
 
 class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 {
+	// TODO Change all level->params->something to level->params['something']. Same for property_exists.
+
 	/** @var bool Should I re-publish core Joomla! articles? */
 	protected $publishCore = array();
 
@@ -46,7 +48,8 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/** @var array ZOO apps to unpublish items */
 	protected $removeGroups = array();
 
-	public function __construct(&$subject, $name, $config = array(), $templatePath = null) {
+	public function __construct(&$subject, $name, $config = array(), $templatePath = null)
+	{
 		parent::__construct($subject, $name, $config, $templatePath);
 
 		$this->loadLanguage();
@@ -56,14 +59,16 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	 * Renders the configuration page in the component's back-end
 	 *
 	 * @param AkeebasubsTableLevel $level
+	 *
 	 * @return object
 	 */
 	public function onSubscriptionLevelFormRender(AkeebasubsTableLevel $level)
 	{
 		JLoader::import('joomla.filesystem.file');
-		$filename = dirname(__FILE__).'/override/default.php';
-		if(!JFile::exists($filename)) {
-			$filename = dirname(__FILE__).'/tmpl/default.php';
+		$filename = dirname(__FILE__) . '/override/default.php';
+		if (!JFile::exists($filename))
+		{
+			$filename = dirname(__FILE__) . '/tmpl/default.php';
 		}
 
 		if (!property_exists($level->params, 'contentpublish_addgroups'))
@@ -108,7 +113,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		}
 
 		JLoader::import('joomla.filesystem.folder');
-		if(JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo'))
+		if (JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_zoo'))
 		{
 			$db = JFactory::getDbo();
 			$query = $db->getQuery(true)
@@ -139,8 +144,8 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		$html = @ob_get_clean();
 
 		$ret = (object)array(
-			'title'	=> JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_TAB_TITLE'),
-			'html'	=> $html
+			'title' => JText::_('PLG_AKEEBASUBS_CONTENTPUBLISH_TAB_TITLE'),
+			'html'  => $html
 		);
 
 		return $ret;
@@ -157,13 +162,13 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		static $hasK2 = null;
 		static $hasSobipro = null;
 
-		if(is_null($hasZoo) || is_null($hasK2) || is_null($hasSobipro))
+		if (is_null($hasZoo) || is_null($hasK2) || is_null($hasSobipro))
 		{
 			JLoader::import('joomla.filesystem.folder');
-			$hasZoo = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_zoo');
-			$hasK2 = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_k2');
-			$hasSobipro = JFolder::exists(JPATH_ADMINISTRATOR.'/components/com_sobipro');
-			if(@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' ))
+			$hasZoo = JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_zoo');
+			$hasK2 = JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_k2');
+			$hasSobipro = JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_sobipro');
+			if (@include_once(JPATH_ROOT . '/components/com_sobipro/lib/sobi.php'))
 			{
 				if (!method_exists('Sobi', 'Initialise'))
 				{
@@ -178,7 +183,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		}
 
 		// Get all of the user's subscriptions
-		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
@@ -229,9 +234,9 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 						// Unpublish core articles
 						$query = $db->getQuery(true)
 							->update($db->qn('#__content'))
-							->set($db->qn('state').' = '.$db->q('0'))
-							->where($db->qn('created_by').' = '.$db->q($user_id))
-							->where($db->qn('state').' <= '.$db->q('1'));
+							->set($db->qn('state') . ' = ' . $db->q('0'))
+							->where($db->qn('created_by') . ' = ' . $db->q($user_id))
+							->where($db->qn('state') . ' <= ' . $db->q('1'));
 						$db->setQuery($query);
 						$db->execute();
 					}
@@ -244,8 +249,8 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 						// Unpublish K2 items
 						$query = $db->getQuery(true)
 							->update($db->qn('#__k2_items'))
-							->set($db->qn('published').' = '.$db->q('0'))
-							->where($db->qn('created_by').' = '.$db->q($user_id));
+							->set($db->qn('published') . ' = ' . $db->q('0'))
+							->where($db->qn('created_by') . ' = ' . $db->q($user_id));
 						$db->setQuery($query);
 						$db->execute();
 					}
@@ -257,29 +262,28 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					{
 						if (!class_exists('Sobi'))
 						{
-							@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' );
+							@include_once(JPATH_ROOT . '/components/com_sobipro/lib/sobi.php');
 						}
 
 						if (class_exists('Sobi'))
 						{
-							Sobi::Initialise( );
+							Sobi::Initialise();
 
 							// Unpublish SOBI Pro items
 							$query = $db->getQuery(true)
 								->select($db->qn('id'))
 								->from($db->qn('#__sobipro_object'))
-								->where($db->qn('oType').' = '.$db->q('entry'))
-								->where($db->qn('owner').' = '.$db->q($user_id))
-								->where($db->qn('state').' = '.$db->q(1))
-								;
+								->where($db->qn('oType') . ' = ' . $db->q('entry'))
+								->where($db->qn('owner') . ' = ' . $db->q($user_id))
+								->where($db->qn('state') . ' = ' . $db->q(1));
 							$db->setQuery($query);
 							$ids = $db->loadColumn();
 
 							if (count($ids))
 							{
-								foreach($ids as $id)
+								foreach ($ids as $id)
 								{
-									SPFactory::Entry( $id )->unpublish();
+									SPFactory::Entry($id)->unpublish();
 								}
 							}
 						}
@@ -301,10 +305,10 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							// Unpublish ZOO items
 							$query = $db->getQuery(true)
 								->update($db->qn('#__zoo_item'))
-								->set($db->qn('state').' = '.$db->q('0'))
-								->where($db->qn('created_by').' = '.$db->q($user_id))
-								->where($db->qn('state').' <= '.$db->q('1'))
-								->where($db->qn('application_id').' IN ('.implode(',', $temp).')');
+								->set($db->qn('state') . ' = ' . $db->q('0'))
+								->where($db->qn('created_by') . ' = ' . $db->q($user_id))
+								->where($db->qn('state') . ' <= ' . $db->q('1'))
+								->where($db->qn('application_id') . ' IN (' . implode(',', $temp) . ')');
 							$db->setQuery($query);
 							$db->execute();
 						}
@@ -325,9 +329,9 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 						// Publish core Joomla! articles
 						$query = $db->getQuery(true)
 							->update($db->qn('#__content'))
-							->set($db->qn('state').' = '.$db->q('1'))
-							->where($db->qn('created_by').' = '.$db->q($user_id))
-							->where($db->qn('state').' = '.$db->q('0'));
+							->set($db->qn('state') . ' = ' . $db->q('1'))
+							->where($db->qn('created_by') . ' = ' . $db->q($user_id))
+							->where($db->qn('state') . ' = ' . $db->q('0'));
 						$db->setQuery($query);
 						$db->execute();
 					}
@@ -340,9 +344,9 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 						// Publish K2 content
 						$query = $db->getQuery(true)
 							->update($db->qn('#__k2_items'))
-							->set($db->qn('published').' = '.$db->q('1'))
-							->where($db->qn('created_by').' = '.$db->q($user_id))
-							->where($db->qn('published').' = '.$db->q('0'));
+							->set($db->qn('published') . ' = ' . $db->q('1'))
+							->where($db->qn('created_by') . ' = ' . $db->q($user_id))
+							->where($db->qn('published') . ' = ' . $db->q('0'));
 						$db->setQuery($query);
 						$db->execute();
 					}
@@ -354,7 +358,7 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 					{
 						if (!class_exists('Sobi'))
 						{
-							@include_once( JPATH_ROOT . '/components/com_sobipro/lib/sobi.php' );
+							@include_once(JPATH_ROOT . '/components/com_sobipro/lib/sobi.php');
 						}
 
 						if (class_exists('Sobi'))
@@ -365,18 +369,17 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							$query = $db->getQuery(true)
 								->select($db->qn('id'))
 								->from($db->qn('#__sobipro_object'))
-								->where($db->qn('oType').' = '.$db->q('entry'))
-								->where($db->qn('owner').' = '.$db->q($user_id))
-								->where($db->qn('state').' = '.$db->q(0))
-								;
+								->where($db->qn('oType') . ' = ' . $db->q('entry'))
+								->where($db->qn('owner') . ' = ' . $db->q($user_id))
+								->where($db->qn('state') . ' = ' . $db->q(0));
 							$db->setQuery($query);
 							$ids = $db->loadColumn();
 
 							if (count($ids))
 							{
-								foreach($ids as $id)
+								foreach ($ids as $id)
 								{
-									SPFactory::Entry( $id )->publish();
+									SPFactory::Entry($id)->publish();
 								}
 							}
 						}
@@ -398,10 +401,10 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 							// Publish ZOO items
 							$query = $db->getQuery(true)
 								->update($db->qn('#__zoo_item'))
-								->set($db->qn('state').' = '.$db->q('1'))
-								->where($db->qn('created_by').' = '.$db->q($user_id))
-								->where($db->qn('state').' = '.$db->q('0'))
-								->where($db->qn('application_id').' IN ('.implode(',', $temp).')');
+								->set($db->qn('state') . ' = ' . $db->q('1'))
+								->where($db->qn('created_by') . ' = ' . $db->q($user_id))
+								->where($db->qn('state') . ' = ' . $db->q('0'))
+								->where($db->qn('application_id') . ' IN (' . implode(',', $temp) . ')');
 							$db->setQuery($query);
 							$db->execute();
 						}
@@ -416,19 +419,23 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 		$this->addGroups = array();
 		$this->removeGroups = array();
 
-		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel');
 		$levels = $model->getList(true);
-		if(!empty($levels))
+		if (!empty($levels))
 		{
-			foreach($levels as $level)
+			foreach ($levels as $level)
 			{
 				$save = false;
-				if(is_string($level->params)) {
+				if (is_string($level->params))
+				{
 					$level->params = @json_decode($level->params);
-					if(empty($level->params)) {
+					if (empty($level->params))
+					{
 						$level->params = new stdClass();
 					}
-				} elseif(empty($level->params)) {
+				}
+				elseif (empty($level->params))
+				{
 					continue;
 				}
 
@@ -504,7 +511,8 @@ class plgAkeebasubsContentpublish extends plgAkeebasubsAbstract
 	/**
 	 * Not used in this plugin
 	 */
-	protected function getGroups() {
+	protected function getGroups()
+	{
 		return array();
 	}
 }

@@ -1,8 +1,8 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
@@ -26,7 +26,10 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 	 */
 	public function onAKUserGetData($userData)
 	{
-		if(empty($userData->username)) return array();
+		if (empty($userData->username))
+		{
+			return array();
+		}
 		$user_id = JFactory::getUser($userData->username)->id;
 
 		$db = JFactory::getDbo();
@@ -52,7 +55,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		$ret = array();
 
 		// Make sure the select helper is loaded
-		if(!class_exists('AkeebasubsHelperSelect'))
+		if (!class_exists('AkeebasubsHelperSelect'))
 		{
 			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
 		}
@@ -61,7 +64,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		if (isset($rows['profile.country']))
 		{
 			$country = json_decode($rows['profile.country'][1]);
-			if(in_array($country, AkeebasubsHelperSelect::$countries))
+			if (in_array($country, AkeebasubsHelperSelect::$countries))
 			{
 				$country = array_search($country, AkeebasubsHelperSelect::$countries);
 			}
@@ -91,7 +94,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				$states = array();
 			}
 
-			if(in_array($state, $states))
+			if (in_array($state, $states))
 			{
 				$state = array_search($state, $states);
 			}
@@ -121,7 +124,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				$states = array();
 			}
 
-			if(in_array($state, $states))
+			if (in_array($state, $states))
 			{
 				$state = array_search($state, $states);
 				$ret['state'] = $state;
@@ -136,12 +139,12 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 
 		// Check for basic information
 		$basic_keys = array('isbusiness', 'businessname', 'occupation', 'vatnumber', 'viesregistered', 'taxauthority', 'address1', 'address2', 'city', 'zip', 'country');
-		foreach($basic_keys as $key)
+		foreach ($basic_keys as $key)
 		{
-			if(isset($rows['profile.'.$key]))
+			if (isset($rows['profile.' . $key]))
 			{
-				$ret[$key] = json_decode($rows['profile.'.$key][1], true);
-				unset($rows['profile.'.$key]);
+				$ret[$key] = json_decode($rows['profile.' . $key][1], true);
+				unset($rows['profile.' . $key]);
 			}
 		}
 
@@ -156,9 +159,9 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		$params = array();
 		if (!empty($rows))
 		{
-			foreach($rows as $key => $row)
+			foreach ($rows as $key => $row)
 			{
-				if(substr($key,0,11) != 'akeebasubs.')
+				if (substr($key, 0, 11) != 'akeebasubs.')
 				{
 					continue;
 				}
@@ -217,7 +220,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		}
 
 		// Translate country and state
-		if(!class_exists('AkeebasubsHelperSelect'))
+		if (!class_exists('AkeebasubsHelperSelect'))
 		{
 			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
 		}
@@ -245,9 +248,9 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		}
 
 		// Convert basic data
-		foreach(array_keys($data) as $key)
+		foreach (array_keys($data) as $key)
 		{
-			$data['profile.'.$key] = json_encode($data[$key]);
+			$data['profile.' . $key] = json_encode($data[$key]);
 			unset($data[$key]);
 		}
 
@@ -256,7 +259,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		{
 			foreach ($params as $k => $v)
 			{
-				$data['akeebasubs.'.$k] = json_encode($v);
+				$data['akeebasubs.' . $k] = json_encode($v);
 			}
 		}
 
@@ -266,7 +269,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		// Loop through all keys, check if they already exist and create/replace them
 		if (count($data))
 		{
-			foreach($data as $k => $v)
+			foreach ($data as $k => $v)
 			{
 				// Check for an existing record
 				$query = $db->getQuery(true)
@@ -290,10 +293,10 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 
 				// Insert the new record
 				$o = array(
-					'user_id'		=> $user_id,
-					'profile_key'	=> $k,
-					'profile_value'	=> $v,
-					'ordering'		=> 1
+					'user_id'       => $user_id,
+					'profile_key'   => $k,
+					'profile_value' => $v,
+					'ordering'      => 1
 				);
 				$o = (object)$o;
 

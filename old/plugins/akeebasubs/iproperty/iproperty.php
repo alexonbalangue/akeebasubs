@@ -364,15 +364,7 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 		{
 			foreach ($levels as $level)
 			{
-				if (is_string($level->params))
-				{
-					$level->params = @json_decode($level->params);
-					if (empty($level->params))
-					{
-						$level->params = new stdClass();
-					}
-				}
-				elseif (empty($level->params))
+				if (empty($level->params))
 				{
 					continue;
 				}
@@ -383,7 +375,7 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 				{
 					$paramsKey = strtolower($this->name) . '_' . $k;
 
-					if (property_exists($level->params, $paramsKey))
+					if (isset($level->params[$paramsKey]))
 					{
 						$levelparams[$k] = $level->params->$paramsKey;
 					}
@@ -418,146 +410,6 @@ class plgAkeebasubsIproperty extends plgAkeebasubsAbstract
 		else
 		{
 			return $default;
-		}
-	}
-
-	// =========================================================================
-	// LEGACY SECTION
-	// =========================================================================
-
-	/**
-	 * Parse legacy options format
-	 *
-	 * @param   array  $rawData  Legacy data to parse
-	 *
-	 * @return  array  The parsed configuration
-	 */
-	protected function parseGroups($rawData)
-	{
-		$ret = array();
-
-		if (empty($rawData))
-			return $ret;
-
-		// Just in case something funky happened...
-		$rawData = str_replace("\\n", "\n", $rawData);
-		$rawData = str_replace("\r", "\n", $rawData);
-		$rawData = str_replace("\n\n", "\n", $rawData);
-
-		$lines = explode("\n", $rawData);
-
-		foreach ($lines as $line)
-		{
-			$line	 = trim($line);
-			$parts	 = explode('=', $line, 2);
-			if (count($parts) != 2)
-				continue;
-
-			$level		 = $parts[0];
-			$rawParams	 = $parts[1];
-
-			$levelId = $this->ASLevelToId($level);
-
-			$params		 = explode(',', $rawParams);
-			$paramsArray = array();
-			if (empty($params))
-			{
-				$ret[$levelId] = array();
-			}
-			else
-			{
-				foreach ($params as $paramString)
-				{
-					$paramParts			 = explode('=', $paramString, 2);
-					if (count($paramParts) != 2)
-						continue;
-					$key				 = trim($paramParts[0]);
-					$value				 = intval(trim($paramParts[1]));
-					$paramsArray[$key]	 = $value;
-				}
-				$ret[$levelId] = $paramsArray;
-			}
-		}
-
-		return $ret;
-	}
-
-	/**
-	 * Moves this plugin's settings from the plugin into each subscription
-	 * level's configuration parameters.
-	 */
-	protected function upgradeSettings($config = array())
-	{
-		$model			 = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel');
-		$levels			 = $model->getList(true);
-		$addgroupsKey	 = strtolower($this->name) . '_addgroups';
-		$removegroupsKey = strtolower($this->name) . '_removegroups';
-
-		if (!empty($levels))
-		{
-			foreach ($levels as $level)
-			{
-				$save = false;
-
-				if (is_string($level->params))
-				{
-					$level->params = @json_decode($level->params);
-
-					if (empty($level->params))
-					{
-						$level->params = new stdClass();
-					}
-				}
-				elseif (empty($level->params))
-				{
-					$level->params = new stdClass();
-				}
-
-				if (array_key_exists($level->akeebasubs_level_id, $this->addGroups))
-				{
-					$data = $this->addGroups[$level->akeebasubs_level_id];
-					if (!empty($data))
-					{
-						foreach ($data as $k => $v)
-						{
-							$key = strtolower($this->name) . '_' . $k;
-
-							if (empty($level->params->$key))
-							{
-								$level->params->$key = $v;
-								$save				 = true;
-							}
-						}
-					}
-				}
-
-				if ($save)
-				{
-					$level->params	 = json_encode($level->params);
-					$result			 = $model->setId($level->akeebasubs_level_id)->save($level);
-				}
-			}
-		}
-
-		// Remove the plugin parameters
-		if (isset($config['params']))
-		{
-			$configParams	 = @json_decode($config['params']);
-			unset($configParams->addgroups);
-			unset($configParams->removegroups);
-			$param_string	 = @json_encode($configParams);
-
-			$db		 = JFactory::getDbo();
-			$query	 = $db->getQuery(true)
-				->update($db->qn('#__extensions'))
-				->where($db->qn('type') . '=' . $db->q('plugin'))
-				->where($db->qn('element') . '=' . $db->q(strtolower($this->name)))
-				->where($db->qn('folder') . '=' . $db->q('akeebasubs'))
-				->set($db->qn('params') . ' = ' . $db->q($param_string));
-			$db->setQuery($query);
-			$db->execute();
-
-			F0FUtilsCacheCleaner::clearPluginsCache();
 		}
 	}
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
@@ -24,22 +24,30 @@ class plgAkeebasubsAutocity extends JPlugin
 	{
 		// If the city and country fields are already filled in, we have nothing
 		// to do here.
-		if(
+		if (
 			!empty($userData->city) &&
 			!empty($userData->country)
-		) return;
+		)
+		{
+			return false;
+		}
 
 		// Get our IP address
-		$ip = htmlspecialchars($_SERVER['REMOTE_ADDR']);
-		if (strpos($ip, '::') === 0) {
-			$ip = substr($ip, strrpos($ip, ':')+1);
+		$ip = \FOF30\Utils\Ip::getIp();
+
+		if (strpos($ip, '::') === 0)
+		{
+			$ip = substr($ip, strrpos($ip, ':') + 1);
 		}
 
 		// No point continuing if we can't get an address, right?
-		if(empty($ip)) return false;
+		if (empty($ip))
+		{
+			return false;
+		}
 
 		// Get the GeoLocation information
-		$url = 'http://api.hostip.info/?ip='.urlencode($ip);
+		$url = 'http://api.hostip.info/?ip=' . urlencode($ip);
 		$ch = curl_init($url);
 		@curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
 		curl_setopt($ch, CURLOPT_AUTOREFERER, true);
@@ -55,22 +63,32 @@ class plgAkeebasubsAutocity extends JPlugin
 		curl_close($ch);
 
 		// If no data came through, forget about it
-		if(($result === false) || empty($result)) return false;
+		if (($result === false) || empty($result))
+		{
+			return false;
+		}
 
 		// If that was a private IP address (e.g. 127.0.0.1) ignore
-		if(strstr($result,'(Private Address)')) return false;
+		if (strstr($result, '(Private Address)'))
+		{
+			return false;
+		}
 
 		// Parse the geolocation response
 		$ret = array();
+
 		preg_match("@<Hostip>(\s)*<gml:name>(.*?)</gml:name>@si", $result, $match);
+
 		if (empty($userData->city) && is_array($match) && (count($match) >= 2))
 		{
 			$ret['city'] = $match[2];
 		}
+
 		preg_match("@<countryAbbrev>(.*?)</countryAbbrev>@si", $result, $cc_match);
+
 		if (empty($userData->country) && is_array($cc_match) && count($cc_match))
 		{
-			$ret['country'] =  $cc_match[1];
+			$ret['country'] = $cc_match[1];
 		}
 
 		return $ret;
@@ -94,7 +112,6 @@ class plgAkeebasubsAutocity extends JPlugin
 		$city = $row->city;
 		$country = $row->country;
 		*/
-
 		// Do something with that data... You get the picture :)
 
 	}

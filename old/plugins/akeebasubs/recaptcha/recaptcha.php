@@ -1,50 +1,64 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
 
 /**
  * ReCAPTCHA integration
+ *
+ * TODO Rewrite this to use Joomla!'s CAPTCHA instead of the now obsolete reCAPTCHA code
  */
 class plgAkeebasubsRecaptcha extends JPlugin
 {
 	function onSubscriptionFormRender($userparams, $cache)
 	{
 		$showReCAPTCHA = true;
-		if(!array_key_exists('subscriptionlevel', $cache)) $cache['subscriptionlevel'] = null;
-		if(is_null($cache['subscriptionlevel'])) {
+		if (!array_key_exists('subscriptionlevel', $cache))
+		{
+			$cache['subscriptionlevel'] = null;
+		}
+		if (is_null($cache['subscriptionlevel']))
+		{
 			$showReCAPTCHA = false;
 		}
-		if($showReCAPTCHA) {
+		if ($showReCAPTCHA)
+		{
 			$levels = $this->params->get('autoauthids', array());
 
-			if(!is_null($levels) && !empty($levels)) {
-				if(!in_array($cache['subscriptionlevel'], $levels)) {
-					if(!in_array(0, $levels)) {
+			if (!is_null($levels) && !empty($levels))
+			{
+				if (!in_array($cache['subscriptionlevel'], $levels))
+				{
+					if (!in_array(0, $levels))
+					{
 						$showReCAPTCHA = false;
 					}
 				}
 			}
 		}
 
-		if(!$showReCAPTCHA) {
+		if (!$showReCAPTCHA)
+		{
 			// When we're not showing the CAPTCHA pretend it's always valid
 			$session = JFactory::getSession();
 			$session->set('recaptcha.valid', true, 'com_akeebasubs');
+
 			return;
 		}
 
 		// Load the library
-		if(!defined('RECAPTCHA_API_SERVER')) {
-			@include_once dirname(__FILE__).'/recaptcha/recaptchalib.php';
+		if (!defined('RECAPTCHA_API_SERVER'))
+		{
+			@include_once dirname(__FILE__) . '/recaptcha/recaptchalib.php';
 		}
 
 		// Make sure the ReCAPTCHA library is loaded
-		if(!defined('RECAPTCHA_API_SERVER')) {
+		if (!defined('RECAPTCHA_API_SERVER'))
+		{
 			return array();
 		}
 
@@ -58,7 +72,8 @@ class plgAkeebasubsRecaptcha extends JPlugin
 
 		$session = JFactory::getSession();
 		$isValid = $session->get('recaptcha.valid', false, 'com_akeebasubs');
-		if($isValid) {
+		if ($isValid)
+		{
 			// The user has already solved the CAPTCHA; don't show him a new CAPTCHA
 			return $fields;
 		}
@@ -66,8 +81,8 @@ class plgAkeebasubsRecaptcha extends JPlugin
 		// ----- RECAPTCHA FIELD -----
 		$uri = JUri::getInstance();
 
-		$theme = $this->params->get('theme','red');
-		$language = $this->params->get('language','en');
+		$theme = $this->params->get('theme', 'red');
+		$language = $this->params->get('language', 'en');
 
 		$html = <<<ENDSCRIPT
 <script type="text/javascript">
@@ -80,17 +95,17 @@ var RecaptchaOptions = {
 ENDSCRIPT;
 
 		$useSSL = strtolower($uri->getScheme()) == 'https';
-		$publickey = $this->params->get('publickey','');
+		$publickey = $this->params->get('publickey', '');
 
-		$html .= '<div style="display: inline-block"><div style="float: left">'.recaptcha_get_html($publickey, null, $useSSL).'</div></div><div style="clear: both"></div>';
+		$html .= '<div style="display: inline-block"><div style="float: left">' . recaptcha_get_html($publickey, null, $useSSL) . '</div></div><div style="clear: both"></div>';
 
 		// Setup the field
 		$field = array(
-			'id'			=> 'recaptcha',
-			'label'			=> '* '.JText::_('PLG_AKEEBASUBS_RECAPTCHA_FIELD_LABEL'),
-			'elementHTML'	=> $html,
+			'id'          => 'recaptcha',
+			'label'       => '* ' . JText::_('PLG_AKEEBASUBS_RECAPTCHA_FIELD_LABEL'),
+			'elementHTML' => $html,
 			//'invalidLabel'	=> JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED'),
-			'isValid'		=> false
+			'isValid'     => false
 		);
 		// Add the field to the return output
 		$fields[] = $field;
@@ -145,38 +160,47 @@ JS;
 	function onValidate($data)
 	{
 		$ret = array(
-			'isValid'			=> true,
-			'valid'				=> true,
-			'custom_validation'	=> array(
-				'recaptcha'	=> true
+			'isValid'           => true,
+			'valid'             => true,
+			'custom_validation' => array(
+				'recaptcha' => true
 			)
 		);
 
 		// Load the library
-		if(!defined('RECAPTCHA_API_SERVER')) {
-			@include_once dirname(__FILE__).'/recaptcha/recaptchalib.php';
+		if (!defined('RECAPTCHA_API_SERVER'))
+		{
+			@include_once dirname(__FILE__) . '/recaptcha/recaptchalib.php';
 		}
 
 		// Make sure the ReCAPTCHA library is loaded
-		if(!defined('RECAPTCHA_API_SERVER')) {
+		if (!defined('RECAPTCHA_API_SERVER'))
+		{
 			return $ret;
 		}
 
 		$custom = $data->custom;
 
-		$challenge = JRequest::getVar('recaptcha_challenge_field','');
-		$response = JRequest::getVar('recaptcha_response_field','');
-		if( (!array_key_exists('recaptcha_challenge',$custom)) || (!empty($challenge)) ) $custom['recaptcha_challenge'] = $challenge;
-		if( (!array_key_exists('recaptcha_response',$custom)) || (!empty($response)) ) $custom['recaptcha_response'] = $response;
+		$challenge = JRequest::getVar('recaptcha_challenge_field', '');
+		$response = JRequest::getVar('recaptcha_response_field', '');
+		if ((!array_key_exists('recaptcha_challenge', $custom)) || (!empty($challenge)))
+		{
+			$custom['recaptcha_challenge'] = $challenge;
+		}
+		if ((!array_key_exists('recaptcha_response', $custom)) || (!empty($response)))
+		{
+			$custom['recaptcha_response'] = $response;
+		}
 
-		$privkey = $this->params->get('privatekey','');
-		$remoteip =  $_SERVER["REMOTE_ADDR"];
+		$privkey = $this->params->get('privatekey', '');
+		$remoteip = $_SERVER["REMOTE_ADDR"];
 		$challenge = $custom['recaptcha_challenge'];
 		$response = $custom['recaptcha_response'];
 
 		$session = JFactory::getSession();
 		$isValid = $session->get('recaptcha.valid', false, 'com_akeebasubs');
-		if($isValid) {
+		if ($isValid)
+		{
 			return $ret;
 		}
 

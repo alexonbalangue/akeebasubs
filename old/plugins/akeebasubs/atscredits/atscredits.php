@@ -13,6 +13,8 @@ if(!JComponentHelper::isEnabled('com_ats', true)) return;
 
 class plgAkeebasubsAtscredits extends JPlugin
 {
+	// TODO Change $level->params->something to $level->params['something'] here and in the template
+
 	/** @var array Levels to number of credits added mapping */
 	private $credits = array();
 

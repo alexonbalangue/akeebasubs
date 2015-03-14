@@ -1,14 +1,23 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
 
-$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
-if(!$akeebasubsinclude) { unset($akeebasubsinclude); return; } else { unset($akeebasubsinclude); }
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akeebasubs.php';
+if (!$akeebasubsinclude)
+{
+	unset($akeebasubsinclude);
+
+	return;
+}
+else
+{
+	unset($akeebasubsinclude);
+}
 
 class plgAkeebasubsSql extends plgAkeebasubsAbstract
 {
@@ -23,30 +32,52 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 	protected function loadUserGroups($user_id, &$addGroups, &$removeGroups, $addGroupsVarName = 'addGroups', $removeGroupsVarName = 'removeGroups')
 	{
 		// Make sure we're configured
-		if(empty($this->addGroups) && empty($this->removeGroups)) return;
+		if (empty($this->addGroups) && empty($this->removeGroups))
+		{
+			return;
+		}
 
 		// Get all of the user's subscriptions
-		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
 		// Make sure there are subscriptions set for the user
-		if(!count($subscriptions)) return;
+		if (!count($subscriptions))
+		{
+			return;
+		}
 
 		// Get the initial list of sql commands to run
 		$addGroups = array();
 		$removeGroups = array();
-		foreach($subscriptions as $sub) {
+		foreach ($subscriptions as $sub)
+		{
 			$level = $sub->akeebasubs_level_id;
-			if($sub->enabled) {
+			if ($sub->enabled)
+			{
 				// Enabled subscription, add groups
-				if(empty($this->addGroups)) continue;
-				if(!array_key_exists($level, $this->addGroups)) continue;
+				if (empty($this->addGroups))
+				{
+					continue;
+				}
+				if (!array_key_exists($level, $this->addGroups))
+				{
+					continue;
+				}
 				$addGroups[] = $this->addGroups[$level];
-			} else {
+			}
+			else
+			{
 				// Disabled subscription, sql commands to run on deactivation
-				if(empty($this->removeGroups)) continue;
-				if(!array_key_exists($level, $this->removeGroups)) continue;
+				if (empty($this->removeGroups))
+				{
+					continue;
+				}
+				if (!array_key_exists($level, $this->removeGroups))
+				{
+					continue;
+				}
 				$removeGroups[] = $this->removeGroups[$level];
 			}
 		}
@@ -58,7 +89,10 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		$addGroups = array();
 		$removeGroups = array();
 		$this->loadUserGroups($user_id, $addGroups, $removeGroups);
-		if(empty($addGroups) && empty($removeGroups)) return;
+		if (empty($addGroups) && empty($removeGroups))
+		{
+			return;
+		}
 
 		// Get DB connection
 		$db = JFactory::getDBO();
@@ -67,8 +101,10 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		$username = JFactory::getUser($user_id)->username;
 
 		// Deactivation SQL
-		if(!empty($removeGroups)) {
-			foreach($removeGroups as $sql) {
+		if (!empty($removeGroups))
+		{
+			foreach ($removeGroups as $sql)
+			{
 				$sql = implode('; ', $sql);
 				$sql = str_replace('[USERID]', $user_id, $sql);
 				$sql = str_replace('[USER_ID]', $user_id, $sql);
@@ -79,8 +115,10 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 		}
 
 		// Activation SQL
-		if(!empty($addGroups)) {
-			foreach($addGroups as $sql) {
+		if (!empty($addGroups))
+		{
+			foreach ($addGroups as $sql)
+			{
 				$sql = implode('; ', $sql);
 				$sql = str_replace('[USERID]', $user_id, $sql);
 				$sql = str_replace('[USER_ID]', $user_id, $sql);
@@ -90,38 +128,35 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 			}
 		}
 	}
+
 	protected function loadGroupAssignments()
 	{
 		$this->addGroups = array();
 		$this->removeGroups = array();
 
-		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel');
 		$levels = $model->getList(true);
-		$addgroupsKey = strtolower($this->name).'_addgroups';
-		$removegroupsKey = strtolower($this->name).'_removegroups';
-		if(!empty($levels)) {
-			foreach($levels as $level)
+		$addgroupsKey = strtolower($this->name) . '_addgroups';
+		$removegroupsKey = strtolower($this->name) . '_removegroups';
+		if (!empty($levels))
+		{
+			foreach ($levels as $level)
 			{
-				if(is_string($level->params)) {
-					$level->params = @json_decode($level->params);
-					if(empty($level->params)) {
-						$level->params = new stdClass();
-					}
-				} elseif(empty($level->params)) {
-					continue;
-				}
-				if(property_exists($level->params, $addgroupsKey))
+				if (isset($level->params[$addgroupsKey]))
 				{
-					$addSqlCommands = explode("\n", $level->params->$addgroupsKey);
-					foreach($addSqlCommands as &$sqlCmd) {
+					$addSqlCommands = explode("\n", $level->params[$addgroupsKey]);
+					foreach ($addSqlCommands as &$sqlCmd)
+					{
 						$sqlCmd = preg_replace('/^[\s]+|[\s;]+$/', '', $sqlCmd);
 					}
 					$this->addGroups[$level->akeebasubs_level_id] = array_filter($addSqlCommands);
 				}
-				if(property_exists($level->params, $removegroupsKey))
+
+				if (isset($level->params[$removegroupsKey]))
 				{
-					$removeSqlCommands = explode("\n", $level->params->$removegroupsKey);
-					foreach($removeSqlCommands as &$sqlCmd) {
+					$removeSqlCommands = explode("\n", $level->params[$removegroupsKey]);
+					foreach ($removeSqlCommands as &$sqlCmd)
+					{
 						$sqlCmd = preg_replace('/^[\s]+|[\s;]+$/', '', $sqlCmd);
 					}
 					$this->removeGroups[$level->akeebasubs_level_id] = array_filter($removeSqlCommands);
@@ -132,7 +167,10 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 
 	protected function parseGroups($rawData)
 	{
-		if(empty($rawData)) return array();
+		if (empty($rawData))
+		{
+			return array();
+		}
 
 		$ret = array();
 
@@ -143,18 +181,29 @@ class plgAkeebasubsSql extends plgAkeebasubsAbstract
 
 		$lines = explode("\n", $rawData);
 
-		foreach($lines as $line) {
+		foreach ($lines as $line)
+		{
 			$line = trim($line);
 			$parts = explode('=', $line, 2);
-			if(count($parts) != 2) continue;
+			if (count($parts) != 2)
+			{
+				continue;
+			}
 
 			$level = $parts[0];
 			$rawGroups = $parts[1];
 
 			$groups = explode(';', $rawGroups);
-			if(empty($groups)) continue;
-			if(!is_array($groups)) $groups = array($groups);
-			foreach($groups as &$sqlCmd) {
+			if (empty($groups))
+			{
+				continue;
+			}
+			if (!is_array($groups))
+			{
+				$groups = array($groups);
+			}
+			foreach ($groups as &$sqlCmd)
+			{
 				$sqlCmd = trim($sqlCmd);
 			}
 			$levelId = $this->ASLevelToId($level);
