@@ -95,7 +95,7 @@ $default_option = JFactory::getSession()->get('country', null, 'mod_aktaxcountry
 if (empty($default_option))
 {
 	/** @var \Akeeba\Subscriptions\Site\Model\TaxHelper $taxHelper */
-	$taxHelper = $container->factory->model('TaxHelper');
+	$taxHelper = $container->factory->model('TaxHelper')->tmpInstance();
 	$taxparams = $taxHelper->getTaxDefiningParameters();
 	$default_option = $taxparams['country'];
 
