@@ -7,19 +7,12 @@
 
 defined('_JEXEC') or die();
 
-$akpaymentinclude = include_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/akpayment.php';
-if (!$akpaymentinclude)
-{
-	unset($akpaymentinclude);
+use FOF30\Container\Container;
+use Akeeba\Subscriptions\Admin\Model\Levels;
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
+use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 
-	return;
-}
-else
-{
-	unset($akpaymentinclude);
-}
-
-class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
+class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 {
 	public function __construct(&$subject, $config = array())
 	{
@@ -36,14 +29,15 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 	 * Returns the payment form to be submitted by the user's browser. The form must have an ID of
 	 * "paymentForm" and a visible submit button.
 	 *
-	 * @param string                      $paymentmethod
-	 * @param JUser                       $user
-	 * @param AkeebasubsTableLevel        $level
-	 * @param AkeebasubsTableSubscription $subscription
+	 * @param   string        $paymentmethod The currently used payment method. Check it against $this->ppName.
+	 * @param   JUser         $user          User buying the subscription
+	 * @param   Levels        $level         Subscription level
+	 * @param   Subscriptions $subscription  The new subscription's object
 	 *
-	 * @return string
+	 * @return  string  The payment form to render on the page. Use the special id 'paymentForm' to have it
+	 *                  automatically submitted after 5 seconds.
 	 */
-	public function onAKPaymentNew($paymentmethod, $user, $level, $subscription)
+	public function onAKPaymentNew($paymentmethod, JUser $user, Levels $level, Subscriptions $subscription)
 	{
 		if ($paymentmethod != $this->ppName)
 		{
@@ -107,7 +101,14 @@ class plgAkpaymentPaypalpaymentspro extends plgAkpaymentAbstract
 		return $html;
 	}
 
-
+	/**
+	 * Processes a callback from the payment processor
+	 *
+	 * @param   string  $paymentmethod  The currently used payment method. Check it against $this->ppName
+	 * @param   array   $data           Input (request) data
+	 *
+	 * @return  boolean  True if the callback was handled, false otherwise
+	 */
 	public function onAKPaymentCallback($paymentmethod, $data)
 	{
 		// Check if we're supposed to handle this

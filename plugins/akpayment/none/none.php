@@ -5,13 +5,14 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
+use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
-use FOF30\Container\Container;
+use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 
 defined('_JEXEC') or die();
 
-class plgAkpaymentNone extends \Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase
+class plgAkpaymentNone extends AkpaymentBase
 {
 	/**
 	 * Public constructor for the plugin
