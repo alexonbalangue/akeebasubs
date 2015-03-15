@@ -98,21 +98,7 @@ abstract class AkeebasubsBase extends JPlugin
 		// Load the container
 		$this->container = Container::getInstance('com_akeebasubs');
 
-		$strAddGroups = null;
-		$strRemoveGroups = null;
-
-		if (!empty($strAddGroups) || !empty($strRemoveGroups))
-		{
-			// Load level to group mapping from plugin parameters
-			$this->addGroups    = $this->parseGroups($strAddGroups);
-			$this->removeGroups = $this->parseGroups($strRemoveGroups);
-			// Do a transparent upgrade
-			$this->upgradeSettings($config);
-		}
-		else
-		{
-			$this->loadGroupAssignments();
-		}
+		$this->loadGroupAssignments();
 	}
 
 	/**
@@ -326,23 +312,37 @@ abstract class AkeebasubsBase extends JPlugin
 		$this->removeGroups = array();
 
 		/** @var Levels $model */
-		$model           = $this->container->factory->model('Levels');
+		$model           = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1)->clearState();
 		$levels          = $model->get(true);
 		$addgroupsKey    = strtolower($this->name) . '_addgroups';
 		$removegroupsKey = strtolower($this->name) . '_removegroups';
 
-		if (!empty($levels))
+		if ($levels->count())
 		{
 			foreach ($levels as $level)
 			{
 				if (isset($level->params[$addgroupsKey]))
 				{
-					$this->addGroups[ $level->akeebasubs_level_id ] = array_filter($level->params[$addgroupsKey]);
+					$content = $level->params[$addgroupsKey];
+
+					if (is_array($content))
+					{
+						$content = array_filter($content);
+					}
+
+					$this->addGroups[ $level->akeebasubs_level_id ] = $content;
 				}
 
 				if (isset($level->params[$removegroupsKey]))
 				{
-					$this->removeGroups[ $level->akeebasubs_level_id ] = array_filter($level->params[$removegroupsKey]);
+					$content = $level->params[$removegroupsKey];
+
+					if (is_array($content))
+					{
+						$content = array_filter($content);
+					}
+
+					$this->removeGroups[ $level->akeebasubs_level_id ] = $content;
 				}
 			}
 		}
