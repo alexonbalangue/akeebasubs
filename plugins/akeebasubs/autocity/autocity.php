@@ -7,6 +7,12 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * Sample Akeeba Subscriptions plugin which demonstrates the interaction with user data.
+ *
+ * This plugin will try to pre-populate the country and city fields of the user record based on the IP address of the
+ * client. Read the comments to understand what is going on.
+ */
 class plgAkeebasubsAutocity extends JPlugin
 {
 	/**
@@ -16,9 +22,9 @@ class plgAkeebasubsAutocity extends JPlugin
 	 * The values in the array will replace the values stored in the user's
 	 * profile.
 	 *
-	 * @param object $userData The already fetched user information
+	 * @param   object  $userData  The already fetched user information
 	 *
-	 * @return array A key/value array with user information overrides
+	 * @return  array  A key/value array with user information overrides
 	 */
 	public function onAKUserGetData($userData)
 	{
@@ -103,16 +109,20 @@ class plgAkeebasubsAutocity extends JPlugin
 	 * developer interested in creating, for example, a "bridge" with a social
 	 * component like Community Builder or JomSocial.
 	 *
-	 * @param stdClass $row The user data
+	 * @param   array  $data  The user data being saved
+	 *
+	 * @return  bool  Return false to cancel the user data saving
 	 */
-	public function onAKUserSaveData(stdClass $row)
+	public function onAKUserSaveData(array &$data)
 	{
 		// Fetch some data from the $row object, e.g.:
 		/*
-		$city = $row->city;
-		$country = $row->country;
+		$city = $row['city'];
+		$country = $row['country'];
 		*/
 		// Do something with that data... You get the picture :)
 
+		// And finally return true to let Akeeba Subs save the data
+		return true;
 	}
 }

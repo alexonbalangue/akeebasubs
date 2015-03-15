@@ -103,7 +103,7 @@ class Users extends DataModel
 		}
 
 		$this->container->platform->importPlugin('akeebasubs');
-		$jResponse = $this->container->platform->runPlugins('onAKUserSaveData', array($pluginData));
+		$jResponse = $this->container->platform->runPlugins('onAKUserSaveData', array(&$pluginData));
 
 		if (in_array(false, $jResponse))
 		{
