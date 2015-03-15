@@ -7,19 +7,27 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
+use FOF30\Container\Container;
+use Akeeba\Subscriptions\Admin\Model\Invoices;
+
 class plgAkeebasubsInvoices extends JPlugin
 {
 	/**
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
+	 *
+	 * @param   Subscriptions  $row   The subscriptions row
+	 * @param   array          $info  The row modification information
+	 *
+	 * @return  void
 	 */
-	public function onAKSubscriptionChange($row, $info)
+	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
 		if (is_null($info['modified']) || empty($info['modified']))
 		{
 			return;
 		}
-		//if(!array_key_exists('enabled', (array)$info['modified'])) return;
 
 		// Load the plugin's language files
 		$lang = JFactory::getLanguage();
@@ -40,18 +48,21 @@ class plgAkeebasubsInvoices extends JPlugin
 		}
 
 		// Should we handle this subscription?
-		$generateAnInvoice = ($row->state == "C");
+		$generateAnInvoice = ($row->getFieldValue('state') == "C");
+
 		$whenToGenerate = $this->params->get('generatewhen', '0');
+
 		if ($whenToGenerate == 1)
 		{
 			// Handle new subscription, even if they are not yet enabled
-			$specialCasePending = in_array($row->state, array('P', 'C')) && !$row->enabled;
+			$state = $row->getFieldValue('state');
+			$specialCasePending = in_array($state, array('P', 'C')) && !$row->enabled;
 			$generateAnInvoice = $generateAnInvoice || $specialCasePending;
 		}
 
 		// If the payment is over a week old do not generate an invoice. This
-		// prevents accidentally creating an invoice for pas subscriptions not
-		// handled by ccInvoices
+		// prevents accidentally creating an invoice for past subscriptions not
+		// handled by the invoicing system
 		JLoader::import('joomla.utilities.date');
 		$jCreated = new JDate($row->created_on);
 		$jNow = new JDate();
@@ -81,8 +92,10 @@ class plgAkeebasubsInvoices extends JPlugin
 			}
 
 			// Create (and, optionally, send) a new invoice
-			F0FModel::getAnInstance('Invoices', 'AkeebasubsModel')
-				->createInvoice($row);
+			/** @var Invoices $invoicesModel */
+			$invoicesModel = Container::getInstance('com_akeebasubs')->factory->model('Invoices')->tmpInstance();
+
+			$invoicesModel->createInvoice($row);
 		}
 	}
 
@@ -105,8 +118,8 @@ class plgAkeebasubsInvoices extends JPlugin
 			'extension'   => 'akeebasubs',
 			'title'       => 'Integrated invoicing',
 			'enabled'     => $enabled,
-			'backendurl'  => 'index.php?option=com_akeebasubs&view=invoice&task=read&id=%s',
-			'frontendurl' => 'index.php?option=com_akeebasubs&view=invoice&task=read&id=%s',
+			'backendurl'  => 'index.php?option=com_akeebasubs&view=Invoice&task=read&id=%s',
+			'frontendurl' => 'index.php?option=com_akeebasubs&view=Invoice&task=read&id=%s',
 		);
 	}
 
@@ -114,8 +127,6 @@ class plgAkeebasubsInvoices extends JPlugin
 	 * Notifies the component of the supported email keys by this plugin.
 	 *
 	 * @return  array
-	 *
-	 * @since 3.0
 	 */
 	public function onAKGetEmailKeys()
 	{

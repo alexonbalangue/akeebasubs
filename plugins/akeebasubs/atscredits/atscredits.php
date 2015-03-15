@@ -161,7 +161,7 @@ class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstract
 			$jNow = $this->container->platform->getDate();
 
 			$enabled = $sub->enabled
-				|| (($sub->state = 'C') && ($jPublishUp->toUnix() > $jNow->toUnix()));
+				|| (($sub->getFieldValue('state') == 'C') && ($jPublishUp->toUnix() > $jNow->toUnix()));
 
 			if ($enabled)
 			{
