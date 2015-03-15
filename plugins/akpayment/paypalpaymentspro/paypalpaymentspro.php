@@ -7,10 +7,10 @@
 
 defined('_JEXEC') or die();
 
-use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 {
@@ -46,6 +46,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 
 		$nameParts = explode(' ', trim($user->name), 2);
 		$firstName = $nameParts[0];
+
 		if (count($nameParts) > 1)
 		{
 			$lastName = $nameParts[1];
@@ -55,9 +56,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			$lastName = '';
 		}
 
-		$kuser = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->user_id($user->id)
-			->getFirstItem();
+		$kuser = $subscription->user;
 
 		$callbackUrl = JURI::base() . 'index.php?option=com_akeebasubs&view=Callback&paymentmethod=paypalpaymentspro';
 		$data = (object)array(
@@ -77,7 +76,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			'AMT'           => sprintf('%.2f', $subscription->gross_amount),
 			'ITEMAMT'       => sprintf('%.2f', $subscription->net_amount),
 			'TAXAMT'        => sprintf('%.2f', $subscription->tax_amount),
-			'CURRENCYCODE'  => strtoupper(AkeebasubsHelperCparams::getParam('currency', 'EUR')),
+			'CURRENCYCODE'  => strtoupper(ComponentParams::getParam('currency', 'EUR')),
 			'DESC'          => $level->title . ' - [' . $user->username . ']'
 		);
 
@@ -104,8 +103,8 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 	/**
 	 * Processes a callback from the payment processor
 	 *
-	 * @param   string  $paymentmethod  The currently used payment method. Check it against $this->ppName
-	 * @param   array   $data           Input (request) data
+	 * @param   string $paymentmethod The currently used payment method. Check it against $this->ppName
+	 * @param   array  $data          Input (request) data
 	 *
 	 * @return  boolean  True if the callback was handled, false otherwise
 	 */
@@ -143,9 +142,10 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			$subscription = null;
 			if ($id > 0)
 			{
-				$subscription = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-					->setId($id)
-					->getItem();
+				/** @var Subscriptions $subscription */
+				$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
+				$subscription->find($id);
+
 				if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
 				{
 					$subscription = null;
@@ -162,11 +162,14 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			}
 		}
 
+		/** @var Subscriptions $subscription */
+
 		// Call paypal to check the payment
 		if ($isValid)
 		{
 			// Build the payment request
 			$requestData = array();
+
 			foreach ($data as $key => $val)
 			{
 				if ($key == 'option'
@@ -176,17 +179,22 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 				{
 					continue;
 				}
+
 				$requestData[$key] = trim($val);
+
 				if ($key == 'CVV2')
 				{
 					break;
 				}
 			}
+
 			if ($isRecurring)
 			{
 				$requestData['PROFILESTARTDATE'] = $jNow->toISO8601();
 			}
+
 			$requestQuery = http_build_query($requestData);
+
 			$http_header = array(
 				'X-PAYPAL-SECURITY-USERID'    => $this->getMerchantUsername(),
 				'X-PAYPAL-SECURITY-PASSWORD'  => $this->getMerchantPassword(),
@@ -239,7 +247,9 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 					'VERSION'   => '85.0',
 					'PROFILEID' => $responseData['PROFILEID']
 				);
+
 				$recDetailsRequestQuery = http_build_query($recDetailsRequestData);
+
 				$recDetailsRequestContext = stream_context_create(array(
 					'http' => array(
 						'method'  => 'POST',
@@ -248,13 +258,16 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 						'content' => $recDetailsRequestQuery
 					)
 				));
+
 				$recDetailsResponseQuery = file_get_contents(
 					$this->getPaymentURL(),
 					false,
 					$recDetailsRequestContext);
+
 				$recDetailsResponseData = array();
 				parse_str($recDetailsResponseQuery, $recDetailsResponseData);
 				$responseData = $recDetailsResponseData;
+
 				if (!preg_match('/^Success/', $responseData['ACK']))
 				{
 					$responseData['akeebasubs_failure_reason'] = $responseData['L_LONGMESSAGE0'];
@@ -265,7 +278,8 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 
 		// Check that TRANSACTIONID has not been previously processed
 		$transactionId = $isRecurring ? $responseData['CORRELATIONID'] : $responseData['TRANSACTIONID'];
-		if ($isValid && !is_null($subscription))
+
+		if ($isValid)
 		{
 			if ($subscription->processor_key == $transactionId)
 			{
@@ -275,9 +289,10 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		}
 
 		// Check that CURRENCYCODE is correct
-		if ($isValid && !is_null($subscription))
+		if ($isValid)
 		{
-			$currency = strtoupper(AkeebasubsHelperCparams::getParam('currency', 'EUR'));
+			$currency = strtoupper(ComponentParams::getParam('currency', 'EUR'));
+
 			if ($currency != $responseData['CURRENCYCODE'])
 			{
 				$isValid = false;
@@ -287,10 +302,12 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 
 		// Check that amount is correct
 		$isPartialRefund = false;
+
 		if ($isValid && !is_null($subscription))
 		{
 			$mc_gross = floatval($responseData['AMT']);
 			$gross = $subscription->gross_amount;
+
 			if ($mc_gross > 0)
 			{
 				// A positive value means "payment". The prices MUST match!
@@ -303,6 +320,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 				$temp_mc_gross = -1 * $mc_gross;
 				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
 			}
+
 			if (!$isValid)
 			{
 				$responseData['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
@@ -318,13 +336,13 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 				'state'                      => 'X',
 				'enabled'                    => 0
 			);
+
 			$subscription->save($updates);
+
 			// Redirect to the subscription form and show the error message
-			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem();
-			$error_url = 'index.php?option=com_akeebasubs' .
-				'&view=level&slug=' . $level->slug;
+			$level = $subscription->level;
+
+			$error_url = 'index.php?option=com_akeebasubs&view=level&slug=' . $level->slug;
 			$error_url = JRoute::_($error_url, false);
 			JFactory::getApplication()->redirect($error_url, $responseData['akeebasubs_failure_reason'], 'error');
 
@@ -332,9 +350,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		}
 
 		// Redirect the user to the "thank you" page
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($subscription->akeebasubs_level_id)
-			->getItem();
+		$level = $subscription->level;
 		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug=' . $level->slug . '&task=thankyou&subid=' . $subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 
@@ -347,12 +363,15 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 
 		// Check IPN data for validity (i.e. protect against fraud attempt)
 		$isValid = $this->isValidIPN($data);
+
 		if (!$isValid)
 		{
 			$data['akeebasubs_failure_reason'] = 'PayPal reports transaction as invalid';
 		}
 
 		// Check txn_type; we only accept web_accept transactions with this plugin
+		$recurring = false;
+
 		if ($isValid)
 		{
 			// This is required to process some IPNs, such as Reversed and Canceled_Reversal
@@ -381,9 +400,10 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			$subscription = null;
 			if ($id > 0)
 			{
-				$subscription = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-					->setId($id)
-					->getItem();
+				/** @var Subscriptions $subscription */
+				$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
+				$subscription->find($id);
+
 				if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
 				{
 					$subscription = null;
@@ -394,18 +414,23 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			{
 				$isValid = false;
 			}
+
 			if (!$isValid)
 			{
 				$data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("custom" field) is invalid';
 			}
 		}
 
+		/** @var Subscriptions $subscription */
+
 		// Check that mc_gross is correct
 		$isPartialRefund = false;
-		if ($isValid && !is_null($subscription))
+
+		if ($isValid)
 		{
 			$mc_gross = floatval($data['mc_gross']);
 			$gross = $subscription->gross_amount;
+
 			if ($mc_gross > 0)
 			{
 				// A positive value means "payment". The prices MUST match!
@@ -418,6 +443,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 				$temp_mc_gross = -1 * $mc_gross;
 				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
 			}
+
 			if (!$isValid)
 			{
 				$data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
@@ -425,7 +451,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		}
 
 		// Check that txn_id has not been previously processed
-		if ($isValid && !is_null($subscription) && !$isPartialRefund)
+		if ($isValid && !$isPartialRefund)
 		{
 			if ($subscription->processor_key == $data['txn_id'])
 			{
@@ -438,10 +464,11 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		}
 
 		// Check that mc_currency is correct
-		if ($isValid && !is_null($subscription))
+		if ($isValid)
 		{
 			$mc_currency = strtoupper($data['mc_currency']);
-			$currency = strtoupper(AkeebasubsHelperCparams::getParam('currency', 'EUR'));
+			$currency = strtoupper(ComponentParams::getParam('currency', 'EUR'));
+
 			if ($mc_currency != $currency)
 			{
 				$isValid = false;
@@ -500,11 +527,14 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			'state'                      => $newStatus,
 			'enabled'                    => 0
 		);
+
 		JLoader::import('joomla.utilities.date');
+
 		if ($newStatus == 'C')
 		{
-			$this->fixDates($subscription, $updates);
+			self::fixSubscriptionDates($subscription, $updates);
 		}
+
 		// In the case of a successful recurring payment, fetch the old subscription's data
 		if ($recurring && ($newStatus == 'C') && ($subscription->state == 'C'))
 		{
@@ -514,6 +544,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			$now = $jNow->toUnix();
 			$start = $jStart->toUnix();
 			$end = $jEnd->toUnix();
+
 			// Create a new record for the old subscription
 			$oldData = $subscription->getData();
 			$oldData['akeebasubs_subscription_id'] = 0;
@@ -523,17 +554,21 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			$oldData['notes'] = "Automatically renewed subscription on " . $jNow->toSql();
 
 			// Calculate new start/end time for the subscription
-			$allSubs = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
+			$allSubs = $subscription->tmpInstance()
 				->paystate('C')
 				->level($subscription->akeebasubs_level_id)
-				->user_id($subscription->user_id);
+				->user_id($subscription->user_id)
+				->get(true);
+
 			$max_expire = 0;
-			if (count($allSubs))
+
+			if ($allSubs->count())
 			{
 				foreach ($allSubs as $aSub)
 				{
 					$jExpire = new JDate($aSub->publish_down);
 					$expire = $jExpire->toUnix();
+
 					if ($expire > $max_expire)
 					{
 						$max_expire = $expire;
@@ -551,12 +586,10 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			$updates['publish_down'] = $jEnd->toSql();
 
 			// Save the record for the old subscription
-			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-				->getTable();
-			$table->reset();
-			$table->bind($oldData);
-			$table->store();
+			$table = $subscription->tmpInstance();
+			$table->save($oldData);
 		}
+
 		// Save the changes
 		$subscription->save($updates);
 
@@ -676,7 +709,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 
 	public function selectExpirationDate()
 	{
-		$year = gmdate('Y');
+		$year = (int) gmdate('Y');
 
 		$options = array();
 		$options[] = JHTML::_('select.option', 0, '--');

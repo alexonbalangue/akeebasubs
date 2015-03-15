@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.3.0" type="plugin" group="akpayment" method="upgrade">
-	<name>Akeeba Subscriptions Payment - PayPal Payments Pro (Direct Payment)</name>
+	<name>PLG_AKPAYMENT_PAYPALPAYMENTSPRO</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2011-2015 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU General Public License version 3, or later</license>
-	<creationDate>2011-03-04</creationDate>
+	<creationDate>April 2015</creationDate>
 	<version>5.0</version>
 	<description>PLG_AKPAYMENT_PAYPALPAYMENTSPRO_DESCRIPTION</description>
 	<files>
