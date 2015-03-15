@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
@@ -44,13 +43,11 @@ class plgAkpayment2checkout extends AkpaymentBase
 			return false;
 		}
 
-		$slug = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($subscription->akeebasubs_level_id)
-			->getItem()
-			->slug;
+		$slug = $level->slug;
 
 		$rootURL = rtrim(JURI::base(), '/');
 		$subpathURL = JURI::base(true);
+
 		if (!empty($subpathURL) && ($subpathURL != '/'))
 		{
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
@@ -59,15 +56,13 @@ class plgAkpayment2checkout extends AkpaymentBase
 		$data = (object)array(
 			'url'                => ($this->params->get('checkout') == 'single') ? 'https://www.2checkout.com/checkout/spurchase' : 'https://www.2checkout.com/checkout/purchase',
 			'sid'                => $this->params->get('sid', ''),
-			'x_receipt_link_url' => $rootURL . str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=message&slug=' . $slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id)),
+			'x_receipt_link_url' => $rootURL . str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=Message&task=thankyou&slug=' . $slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id)),
 			'params'             => $this->params,
 			'name'               => $user->name,
 			'email'              => $user->email
 		);
 
-		$kuser = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->user_id($user->id)
-			->getFirstItem();
+		$kuser = $subscription->user;
 
 		@ob_start();
 		include dirname(__FILE__) . '/2checkout/form.php';
@@ -104,6 +99,7 @@ class plgAkpayment2checkout extends AkpaymentBase
 		$isValid = in_array($message_type, array(
 			'ORDER_CREATED', 'REFUND_ISSUED', 'RECURRING_INSTALLMENT_SUCCESS', 'FRAUD_STATUS_CHANGED', 'INVOICE_STATUS_CHANGED'
 		));
+
 		if (!$isValid)
 		{
 			$data['akeebasubs_failure_reason'] = 'INS message type "' . $message_type . '" is not supported.';
@@ -113,6 +109,7 @@ class plgAkpayment2checkout extends AkpaymentBase
 		if ($isValid)
 		{
 			$isValid = $this->isValidIPN($data);
+
 			if (!$isValid)
 			{
 				$data['akeebasubs_failure_reason'] = 'Transaction MD5 signature is invalid. Fraudulent transaction or testing mode enabled.';
@@ -124,11 +121,13 @@ class plgAkpayment2checkout extends AkpaymentBase
 		{
 			$id = array_key_exists('item_id_1', $data) ? (int)$data['item_id_1'] : -1;
 			$subscription = null;
+
 			if ($id > 0)
 			{
-				$subscription = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-					->setId($id)
-					->getItem();
+				/** @var Subscriptions $subscription */
+				$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
+				$subscription->find($id);
+
 				if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
 				{
 					$subscription = null;
@@ -144,6 +143,8 @@ class plgAkpayment2checkout extends AkpaymentBase
 				$data['akeebasubs_failure_reason'] = 'The referenced subscription ID ("item_id_1" field) is invalid';
 			}
 		}
+
+		/** @var Subscriptions $subscription */
 
 		// Check that order_number has not been previously processed
 		if ($isValid && !is_null($subscription))
@@ -190,13 +191,11 @@ class plgAkpayment2checkout extends AkpaymentBase
 		}
 
 		// Load the subscription level and get its slug
-		$slug = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($subscription->akeebasubs_level_id)
-			->getItem()
-			->slug;
+		$slug = $subscription->level->slug;
 
 		$rootURL = rtrim(JURI::base(), '/');
 		$subpathURL = JURI::base(true);
+
 		if (!empty($subpathURL) && ($subpathURL != '/'))
 		{
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
@@ -258,17 +257,17 @@ class plgAkpayment2checkout extends AkpaymentBase
 			'enabled'                    => 0
 		);
 		JLoader::import('joomla.utilities.date');
+
 		if ($newStatus == 'C')
 		{
-			$this->fixDates($subscription, $updates);
+			self::fixSubscriptionDates($subscription, $updates);
 		}
+
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
-		JLoader::import('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akeebasubs');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback', array(
+		$this->container->platform->importPlugin('akeebasubs');
+		$this->container->platform->runPlugins('onAKAfterPaymentCallback', array(
 			$subscription
 		));
 

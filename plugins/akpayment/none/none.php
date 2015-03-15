@@ -5,7 +5,6 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
@@ -95,7 +94,7 @@ ENDFORM;
 		$id = (int)$data['subscription'];
 
 		/** @var Subscriptions $subscription */
-		$subscription = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')->tmpInstance();
+		$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 		$subscription->find($id);
 
@@ -122,8 +121,8 @@ ENDFORM;
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
-		$subscription->getContainer()->platform->importPlugin('akeebasubs');
-		$subscription->getContainer()->platform->runPlugins('onAKAfterPaymentCallback', array(
+		$this->container->platform->importPlugin('akeebasubs');
+		$this->container->platform->runPlugins('onAKAfterPaymentCallback', array(
 			$subscription
 		));
 

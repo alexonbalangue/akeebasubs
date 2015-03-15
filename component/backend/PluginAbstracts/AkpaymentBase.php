@@ -55,6 +55,11 @@ abstract class AkpaymentBase extends JPlugin
 	protected $ppRecurringCancellation = false;
 
 	/**
+	 * @var  Container
+	 */
+	protected $container;
+
+	/**
 	 * Public constructor for the plugin
 	 *
 	 * @param   object  $subject  The object to observe
@@ -68,6 +73,9 @@ abstract class AkpaymentBase extends JPlugin
 		}
 
 		parent::__construct($subject, $config);
+
+		// Get the container
+		$this->container = Container::getInstance('com_akeebasubs');
 
 		if (array_key_exists('ppName', $config))
 		{
