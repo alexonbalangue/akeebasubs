@@ -7,10 +7,9 @@
 
 defined('_JEXEC') or die();
 
-/**
- * A sample plugin which creates two extra fields, age group and gender.
- * The former is mandatory, the latter is not
- */
+use FOF30\Container\Container;
+use Akeeba\Subscriptions\Admin\Model\CustomFields;
+
 class plgAkeebasubsCustomfields extends JPlugin
 {
 	private $fieldTypes = array();
@@ -25,7 +24,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 	/**
 	 * Renders per-subscription custom fields in the form
 	 *
-	 * @param  array $cache
+	 * @param   array  $cache
 	 *
 	 * @return  array  The custom fields definitions
 	 */
@@ -37,14 +36,13 @@ class plgAkeebasubsCustomfields extends JPlugin
 	/**
 	 * Renders per-user custom fields in the form
 	 *
-	 * @param  array $userparams
-	 * @param  array $cache
+	 * @param   array  $userparams
+	 * @param   array  $cache
 	 *
 	 * @return  array  The custom fields definitions
 	 */
 	public function onSubscriptionFormRender($userparams, $cache)
 	{
-		// @TODO Handle user edit in custom fields, too
 		if (isset($cache['useredit']))
 		{
 			return array();
@@ -56,9 +54,9 @@ class plgAkeebasubsCustomfields extends JPlugin
 	/**
 	 * Renders per-subscription or per-user custom fields
 	 *
-	 * @param   string $fieldType 'user' or 'subscription'
-	 * @param   array  $cache
-	 * @param   array  $userparams
+	 * @param   string  $fieldType   'user' or 'subscription'
+	 * @param   array   $cache
+	 * @param   array   $userparams
 	 *
 	 * @return  array
 	 */
@@ -79,20 +77,21 @@ class plgAkeebasubsCustomfields extends JPlugin
 		}
 
 		// Load field definitions
-		$items = F0FModel::getTmpInstance('Customfields', 'AkeebasubsModel')
+		/** @var CustomFields $fieldsModel */
+		$fieldsModel = Container::getInstance('com_akeebasubs')->factory->model('CustomFields')->tmpInstance();
+		$items = $fieldsModel
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
-			->limitstart(0)
-			->limit(0)
-			->getItemList(false);
+			->get(true);
 
-		if (empty($items))
+		if ($items->isEmpty())
 		{
 			return $fields;
 		}
 
 		// Loop through the items
+		/** @var CustomFields $item */
 		foreach ($items as $item)
 		{
 			// If it's not something shown in this level, skip it
@@ -100,7 +99,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 			{
 				if ($cache['subscriptionlevel'] != -1)
 				{
-					$fieldlevels = explode(',', $item->akeebasubs_level_id);
+					$fieldlevels = $item->akeebasubs_level_id;
 
 					if (($item->show == 'level') && !in_array($cache['subscriptionlevel'], $fieldlevels))
 					{
@@ -115,17 +114,20 @@ class plgAkeebasubsCustomfields extends JPlugin
 
 			// Get the names of the methods to use
 			$type = $item->type;
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			$class = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . ucfirst($type);
 
 			if (!class_exists($class))
 			{
 				continue;
 			}
+
+			/** @var Akeeba\Subscriptions\Admin\CustomField\Base $object */
 			$object = new $class;
 
 			// Add the field to the list
 			switch ($fieldType)
 			{
+				default:
 				case 'user':
 					$result = $object->getField($item, $cache, $userparams);
 					break;
@@ -164,19 +166,23 @@ class plgAkeebasubsCustomfields extends JPlugin
 		$custom = $data->custom;
 
 		// Load field definitions
-		$items = F0FModel::getTmpInstance('Customfields', 'AkeebasubsModel')
+		/** @var CustomFields $fieldsModel */
+		$fieldsModel = Container::getInstance('com_akeebasubs')->factory->model('CustomFields')->tmpInstance();
+
+		$items = $fieldsModel
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
-			->getItemList(true);
+			->get(true);
 
 		// If there are no custom fields return true (all valid)
-		if (empty($items))
+		if ($items->isEmpty())
 		{
 			return $response;
 		}
 
 		// Loop through each custom field
+		/** @var CustomFields $item */
 		foreach ($items as $item)
 		{
 			// Make sure it's supposed to be shown in the particular level
@@ -187,7 +193,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 					continue;
 				}
 
-				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+				$fieldlevels = $item->akeebasubs_level_id;
 
 				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
 				{
@@ -201,12 +207,14 @@ class plgAkeebasubsCustomfields extends JPlugin
 
 			// Make sure there is a validation method for this type of field
 			$type = $item->type;
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			$class = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . ucfirst($type);
 
 			if (!class_exists($class))
 			{
 				continue;
 			}
+
+			/** @var \Akeeba\Subscriptions\Admin\CustomField\Base $object */
 			$object = new $class;
 
 			// Get the validation result and save it in the $response array
@@ -247,14 +255,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		$subcustom = $data->subcustom;
 
 		// Load field definitions
-		$items = F0FModel::getTmpInstance('Customfields', 'AkeebasubsModel')
+		/** @var CustomFields $fieldsModel */
+		$fieldsModel = Container::getInstance('com_akeebasubs')->factory->model('CustomFields')->tmpInstance();
+
+		$items = $fieldsModel
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
-			->getItemList(true);
+			->get(true);
 
 		// If there are no custom fields return true (all valid)
-		if (empty($items))
+		if ($items->isEmpty())
 		{
 			return $response;
 		}
@@ -270,7 +281,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 					continue;
 				}
 
-				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+				$fieldlevels = $item->akeebasubs_level_id;
 
 				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
 				{
@@ -284,12 +295,14 @@ class plgAkeebasubsCustomfields extends JPlugin
 
 			// Make sure there is a validation method for this type of field
 			$type = $item->type;
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			$class = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . ucfirst($type);
 
 			if (!class_exists($class))
 			{
 				continue;
 			}
+
+			/** @var \Akeeba\Subscriptions\Admin\CustomField\Base $object */
 			$object = new $class;
 
 			// Get the validation result and save it in the $response array
@@ -323,14 +336,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		}
 
 		// Load field definitions
-		$items = F0FModel::getTmpInstance('Customfields', 'AkeebasubsModel')
+		/** @var CustomFields $fieldsModel */
+		$fieldsModel = Container::getInstance('com_akeebasubs')->factory->model('CustomFields')->tmpInstance();
+
+		$items = $fieldsModel
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
-			->getItemList(true);
+			->get(true);
 
 		// If there are no custom fields return true (all valid)
-		if (empty($items))
+		if ($items->isEmpty())
 		{
 			return $response;
 		}
@@ -348,7 +364,7 @@ class plgAkeebasubsCustomfields extends JPlugin
 					continue;
 				}
 
-				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+				$fieldlevels = $item->akeebasubs_level_id;
 
 				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
 				{
@@ -362,12 +378,14 @@ class plgAkeebasubsCustomfields extends JPlugin
 
 			// Make sure there is a validation method for this type of field
 			$type = $item->type;
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			$class = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . ucfirst($type);
 
 			if (!class_exists($class))
 			{
 				continue;
 			}
+
+			/** @var \Akeeba\Subscriptions\Admin\CustomField\Base $object */
 			$object = new $class;
 
 			// Get the validation result and save it in the $response array
@@ -392,11 +410,14 @@ class plgAkeebasubsCustomfields extends JPlugin
 		}
 
 		// Load field definitions
-		$items = F0FModel::getTmpInstance('Customfields', 'AkeebasubsModel')
+		/** @var CustomFields $fieldsModel */
+		$fieldsModel = Container::getInstance('com_akeebasubs')->factory->model('CustomFields')->tmpInstance();
+
+		$items = $fieldsModel
 			->enabled(1)
 			->filter_order('ordering')
 			->filter_order_Dir('ASC')
-			->getItemList(true);
+			->get(true);
 
 		// If there are no custom fields return true (all valid)
 		if (empty($items))
@@ -431,12 +452,14 @@ class plgAkeebasubsCustomfields extends JPlugin
 
 			// Make sure there is a validation method for this type of field
 			$type = $item->type;
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
+			$class = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . ucfirst($type);
 
 			if (!class_exists($class))
 			{
 				continue;
 			}
+
+			/** @var \Akeeba\Subscriptions\Admin\CustomField\Base $object */
 			$object = new $class;
 
 			// Get the validation result and save it in the $response array
@@ -454,19 +477,22 @@ class plgAkeebasubsCustomfields extends JPlugin
 	{
 		$this->fieldTypes = array();
 
+		$basepath = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/CustomField';
+
 		JLoader::import('joomla.filesystem.folder');
-		$basepath = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/assets/customfields';
 		$files = JFolder::files($basepath, '.php');
+
 		foreach ($files as $file)
 		{
-			if ($file === 'abstract.php')
+			if ($file === 'Base.php')
 			{
 				continue;
 			}
 
-			require_once $basepath . '/' . $file;
 			$type = substr($file, 0, -4);
-			$class = 'AkeebasubsCustomField' . ucfirst($type);
+
+			$class = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . ucfirst($type);
+
 			if (class_exists($class))
 			{
 				$this->fieldTypes[] = $type;
