@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.3.0" type="plugin" group="system" method="upgrade">
+	<name>PLG_SYSTEM_ASUSERREGDIR_TITLE</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2015 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>April 2015</creationDate>
+	<version>5.0</version>
+	<description>PLG_SYSTEM_ASUSERREGDIR_DESC</description>
+	<files>
+		<filename plugin="asuserregredir">asuserregredir.php</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_system_asuserregredir.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_system_asuserregredir.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="url" type="text" size="40"
+					default=""
+					label="PLG_SYSTEM_ASUSERREGDIR_DESC_URL_LABEL"
+					description="PLG_SYSTEM_ASUSERREGDIR_DESC_URL_DESC"
+				/>
+				<field name="message" type="text" size="40"
+					default=""
+					label="PLG_SYSTEM_ASUSERREGDIR_DESC_MESSAGE_LABEL"
+					description="PLG_SYSTEM_ASUSERREGDIR_DESC_MESSAGE_DESC"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
