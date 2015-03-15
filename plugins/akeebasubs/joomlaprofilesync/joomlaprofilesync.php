@@ -334,7 +334,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		$container = Container::getInstance('com_akeebasubs');
 
 		/** @var \Akeeba\Subscriptions\Admin\Model\Users $usersModel */
-		$usersModel = $container->factory->model('Users');
+		$usersModel = $container->factory->model('Users')->savestate(0)->setIgnoreRequest(1);
 
 		$mergedData = $usersModel->getMergedData($user_id);
 
