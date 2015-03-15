@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.3.0" type="plugin" group="akpayment" method="upgrade">
-	<name>Akeeba Subscriptions Payment - 2Checkout Standard Purchase Routine (with recurring support)</name>
+	<name>PLG_AKPAYMENT_2CONEW</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2011-2015 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU General Public License version 3, or later</license>
-	<creationDate>2011-06-29</creationDate>
+	<creationDate>April 2015</creationDate>
 	<version>5.0</version>
 	<description>PLG_AKPAYMENT_2CONEW_DESCRIPTION</description>
 	<files>

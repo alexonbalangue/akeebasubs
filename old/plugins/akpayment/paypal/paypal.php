@@ -65,8 +65,8 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			'merchant'		=> $this->getMerchantID(),
 			//'postback'		=> rtrim(JURI::base(),'/').str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal')),
 			'postback'		=> $this->getPostbackURL(),
-			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id)),
-			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id)),
+			'success'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=Message&slug='.$slug.'&task=thankyou&subid='.$subscription->akeebasubs_subscription_id)),
+			'cancel'		=> $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=Message&slug='.$slug.'&task=cancel&subid='.$subscription->akeebasubs_subscription_id)),
 			'currency'		=> strtoupper(AkeebasubsHelperCparams::getParam('currency','EUR')),
 			'firstname'		=> $firstName,
 			'lastname'		=> $lastName,
@@ -425,7 +425,7 @@ class plgAkpaymentPaypal extends AkpaymentBase
 	 */
 	private function getPostbackURL() {
 		
-		$url = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypal';
+		$url = JURI::base().'index.php?option=com_akeebasubs&view=Callback&paymentmethod=paypal';
 		
 		$configurationValue = $this->params->get('protocol', 'keep');
 		$pattern = '/https?:\/\//';

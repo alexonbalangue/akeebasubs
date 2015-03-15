@@ -60,9 +60,8 @@ class plgAkpaymentViva extends AkpaymentBase
 		$orderResult = json_decode($jsonResult);
 		if($orderResult->ErrorCode != 0) {
 			$errorText = $orderResult->ErrorText;
-			$errorUrl = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$level->slug.
-				'&layout='.JRequest::getCmd('layout','default');
+			$errorUrl = 'index.php?option=com_akeebasubs'.
+				'&view=Level&slug='.$level->slug;
 			$errorUrl = JRoute::_($errorUrl,false);
 			JFactory::getApplication()->redirect($errorUrl,$errorText,'error');
 		}
@@ -123,7 +122,7 @@ class plgAkpaymentViva extends AkpaymentBase
 
 		if($isValid && $data['type'] == 'cancel') {
 			// Redirect the user to the "cancel" page
-			$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
+			$cancelUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug='.$level->slug.'&task=cancel&subid='.$subscription->akeebasubs_subscription_id, false);
 			JFactory::getApplication()->redirect($cancelUrl);
 			return true;
 		}
@@ -191,9 +190,8 @@ class plgAkpaymentViva extends AkpaymentBase
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
-			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$level->slug.
-				'&layout='.JRequest::getCmd('layout','default');
+			$error_url = 'index.php?option=com_akeebasubs'.
+				'&view=Level&slug='.$level->slug;
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
 			return false;
@@ -234,7 +232,7 @@ class plgAkpaymentViva extends AkpaymentBase
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug='.$level->slug.'&task=thankyou&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}

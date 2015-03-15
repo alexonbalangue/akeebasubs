@@ -52,8 +52,8 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
-		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id.'&mode=init';
-		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$slug.'&layout=cancel&subid='.$subscription->akeebasubs_subscription_id));
+		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=Callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id.'&mode=init';
+		$cancelUrl = $rootURL.str_replace('&amp;','&',JRoute::_('index.php?option=com_akeebasubs&view=Message&slug='.$slug.'&task=cancel&subid='.$subscription->akeebasubs_subscription_id));
 		$requestData = (object)array(
 			'METHOD'							=> 'SetExpressCheckout',
 			'USER'								=> $this->getMerchantUsername(),
@@ -97,9 +97,8 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 		if(preg_match('/^SUCCESS/', strtoupper($responseData['ACK']))) {
 			$data['URL'] = $this->getPaypalURL($responseData['TOKEN']);
 		} else {
-			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$level->slug.
-				'&layout='.JRequest::getCmd('layout','default');
+			$error_url = 'index.php?option=com_akeebasubs' .
+				'&view=Level&slug='.$level->slug;
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$responseData['L_LONGMESSAGE0'],'error');
 		}
@@ -196,9 +195,8 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
                 $level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
                     ->setId($subscription->akeebasubs_level_id)
                     ->getItem();
-				$error_url = 'index.php?option='.JRequest::getCmd('option').
-					'&view=level&slug='.$level->slug.
-					'&layout='.JRequest::getCmd('layout','default');
+				$error_url = 'index.php?option=com_akeebasubs' .
+					'&view=Level&slug='.$level->slug;
 				$error_url = JRoute::_($error_url,false);
 				JFactory::getApplication()->redirect($error_url,$responseData['L_LONGMESSAGE0'],'error');
 			} else if(! preg_match('/^SUCCESS/', strtoupper($responseData['PAYMENTINFO_0_ACK']))) {
@@ -209,7 +207,7 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 			if($level->recurring) {
 				// Create recurring payment profile
 				$nextPayment = new JDate("+$level->duration day");
-				$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id;
+				$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=Callback&paymentmethod=paypalproexpress&sid='.$subscription->akeebasubs_subscription_id;
 				$recurringRequestData = (object)array(
 					'METHOD'			=> 'CreateRecurringPaymentsProfile',
 					'NOTIFYURL'			=> $callbackUrl,
@@ -249,9 +247,8 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 				parse_str($recurringResponseQuery, $recurringResponseData);
 				if(! preg_match('/^SUCCESS/', strtoupper($recurringResponseData['ACK']))) {
 					$isValid = false;
-					$error_url = 'index.php?option='.JRequest::getCmd('option').
-						'&view=level&slug='.$level->slug.
-						'&layout='.JRequest::getCmd('layout','default');
+					$error_url = 'index.php?option=com_akeebasubs' .
+						'&view=Level&slug='.$level->slug;
 					$error_url = JRoute::_($error_url,false);
 					JFactory::getApplication()->redirect($error_url,$recurringResponseData['L_LONGMESSAGE0'],'error');
 				} else {
@@ -282,9 +279,8 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 					parse_str($recurringCheckQuery, $recurringCheckData);
 					if(! preg_match('/^SUCCESS/', strtoupper($recurringCheckData['ACK']))) {
 						$isValid = false;
-						$error_url = 'index.php?option='.JRequest::getCmd('option').
-							'&view=level&slug='.$level->slug.
-							'&layout='.JRequest::getCmd('layout','default');
+						$error_url = 'index.php?option=com_akeebasubs' .
+							'&view=Level&slug='.$level->slug;
 						$error_url = JRoute::_($error_url,false);
 						JFactory::getApplication()->redirect($error_url,$recurringCheckData['L_LONGMESSAGE0'],'error');
 					}
@@ -344,9 +340,8 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 
 		// Fraud attempt? Do nothing more!
 		if(!$isValid) {
-			$error_url = 'index.php?option='.JRequest::getCmd('option').
-				'&view=level&slug='.$level->slug.
-				'&layout='.JRequest::getCmd('layout','default');
+			$error_url = 'index.php?option=com_akeebasubs' .
+				'&view=Level&slug='.$level->slug;
 			$error_url = JRoute::_($error_url,false);
 			JFactory::getApplication()->redirect($error_url,$responseData['akeebasubs_failure_reason'],'error');
 			return false;
@@ -406,7 +401,7 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug='.$level->slug.'&layout=order&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug='.$level->slug.'&task=thankyou&subid='.$subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 		return true;
 	}

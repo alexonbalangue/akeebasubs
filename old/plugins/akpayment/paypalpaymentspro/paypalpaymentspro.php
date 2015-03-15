@@ -59,7 +59,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			->user_id($user->id)
 			->getFirstItem();
 
-		$callbackUrl = JURI::base() . 'index.php?option=com_akeebasubs&view=callback&paymentmethod=paypalpaymentspro';
+		$callbackUrl = JURI::base() . 'index.php?option=com_akeebasubs&view=Callback&paymentmethod=paypalpaymentspro';
 		$data = (object)array(
 			'URL'           => $callbackUrl . '&mode=init',
 			'NOTIFYURL'     => $callbackUrl,
@@ -323,9 +323,8 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 				->setId($subscription->akeebasubs_level_id)
 				->getItem();
-			$error_url = 'index.php?option=' . JRequest::getCmd('option') .
-				'&view=level&slug=' . $level->slug .
-				'&layout=' . JRequest::getCmd('layout', 'default');
+			$error_url = 'index.php?option=com_akeebasubs' .
+				'&view=level&slug=' . $level->slug;
 			$error_url = JRoute::_($error_url, false);
 			JFactory::getApplication()->redirect($error_url, $responseData['akeebasubs_failure_reason'], 'error');
 
@@ -336,7 +335,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
 			->setId($subscription->akeebasubs_level_id)
 			->getItem();
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=message&slug=' . $level->slug . '&layout=order&subid=' . $subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug=' . $level->slug . '&task=thankyou&subid=' . $subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 
 		return true;
