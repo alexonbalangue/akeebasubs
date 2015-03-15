@@ -99,12 +99,12 @@ class TaxConfig extends Model
 			$data['taxrate'] = $params->taxrate;
 			$data['ordering'] = ++$ordering;
 
-			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+			$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 
 			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
 
-			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+			$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 		}
 		elseif ($params->viesreg)
 		{
@@ -113,12 +113,12 @@ class TaxConfig extends Model
 			// A. All countries, with or without VIES registration, 0%
 			$data['ordering'] = ++$ordering;
 
-			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+			$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 
 			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
 
-			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+			$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 
 			// B.1. All countries with the same VAT number prefix as mine, with or without VIES registration, taxrate%
 			$data['taxrate'] = $params->taxrate;
@@ -138,11 +138,11 @@ class TaxConfig extends Model
 
 				$data['vies'] = 0;
 				$data['ordering'] = ++$ordering;
-				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+				$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 
 				$data['vies'] = 1;
 				$data['ordering'] = ++$ordering;
-				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+				$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 			}
 
 			// C. All other EU countries, without VIES registration, taxrate% (and with VIES: 0%)
@@ -162,7 +162,7 @@ class TaxConfig extends Model
 				$data['country'] = $country;
 				$data['ordering'] = ++$ordering;
 
-				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+				$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 			}
 		}
 		else
@@ -171,12 +171,12 @@ class TaxConfig extends Model
 			// A. All countries, with or without VIES registration, 0%
 			$data['ordering'] = ++$ordering;
 
-			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+			$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 
 			$data['vies'] = 1;
 			$data['ordering'] = ++$ordering;
 
-			$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+			$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 
 			// B. All EU countries, with or without VIES registration, taxrate%
 			foreach ($euCountries as $country)
@@ -188,12 +188,12 @@ class TaxConfig extends Model
 				$data['vies'] = 0;
 				$data['ordering'] = ++$ordering;
 
-				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+				$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 
 				$data['vies'] = 1;
 				$data['ordering'] = ++$ordering;
 
-				$this->container->factory->model('TaxRules')->savestate(false)->reset(true, true)->save($data);
+				$this->container->factory->model('TaxRules')->tmpInstance()->save($data);
 			}
 		}
 	}

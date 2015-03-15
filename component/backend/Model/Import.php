@@ -215,9 +215,9 @@ class Import extends Model
 		$factory = $this->container->factory;
 
 		/** @var JoomlaUsers $joomlaUser */
-		$joomlaUser = $factory->model('JoomlaUsers')->setIgnoreRequest(true)->savestate(false);
+		$joomlaUser = $factory->model('JoomlaUsers')->tmpInstance();
 		/** @var DataModel $subsUser */
-		$subsUser = $factory->model('Users')->setIgnoreRequest(true)->savestate(false)->addBehaviour('Filters');
+		$subsUser = $factory->model('Users')->tmpInstance()->addBehaviour('Filters');
 
 		$userId = 0;
 		$email = $this->getCsvData('email');
@@ -336,9 +336,7 @@ class Import extends Model
 		if (empty($levelCache))
 		{
 			$levelCache = $this->container->factory
-				->model('Levels')
-				->setIgnoreRequest(true)
-				->savestate(0)
+				->model('Levels')->tmpInstance()
 				->createTitleLookup();
 		}
 
@@ -382,7 +380,7 @@ class Import extends Model
 			$created_on = clone $publish_up;
 		}
 
-		$sub = $this->container->factory->model('Subscriptions')->savestate(false)->setIgnoreRequest(true);
+		$sub = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 		$randomString = JUserHelper::genRandomPassword();
 		$hash = JApplicationHelper::getHash($randomString);
@@ -456,7 +454,7 @@ class Import extends Model
 
 		if (!$cache)
 		{
-			$cache = $this->container->factory->model('Levels')->setIgnoreRequest(true)->savestate(false)
+			$cache = $this->container->factory->model('Levels')->tmpInstance()
 				->createTitleLookup();
 		}
 

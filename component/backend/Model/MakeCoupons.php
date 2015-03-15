@@ -104,8 +104,7 @@ class MakeCoupons extends Model
 		$ret = array();
 
 		// Get a reference to the coupons model
-		$model = $this->container->factory->model('Coupons')
-			->savestate(false)->setIgnoreRequest(true);
+		$model = $this->container->factory->model('Coupons')->tmpInstance();
 
 		// Get the maximum coupon code
 		$db    = JFactory::getDbo();

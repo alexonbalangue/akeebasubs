@@ -131,7 +131,7 @@ class Levels extends DataModel
 		{
 			/** @var Subscriptions $subscriptionsModel */
 			$subscriptionsModel = $this->container->factory
-				->model('Subscriptions')->setIgnoreRequest(true)->savestate(false);
+				->model('Subscriptions')->tmpInstance();
 
 			$mySubscriptions = $subscriptionsModel
 				->user_id($user->id)

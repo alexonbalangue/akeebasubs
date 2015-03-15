@@ -217,7 +217,7 @@ class Subscribe extends Model
 			if (empty($stateVars->id) && !empty($stateVars->slug))
 			{
 				/** @var Levels $levelsModel */
-				$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+				$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
 				$item = $levelsModel->slug($stateVars->slug)->firstOrNew();
 				$stateVars->id = $item->akeebasubs_level_id;
 			}
@@ -365,7 +365,7 @@ class Subscribe extends Model
 		}
 
 		/** @var JoomlaUsers $userModel */
-		$userModel = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+		$userModel = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 		$user = $userModel->username($username)->firstOrNew();
 
 		if ($myUser->guest)
@@ -460,7 +460,7 @@ class Subscribe extends Model
 		if (!empty($state->email))
 		{
 			/** @var JoomlaUsers $usersModel */
-			$usersModel = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+			$usersModel = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 			$list = $usersModel
 				->email($state->email)
 				->get(true);
@@ -580,7 +580,7 @@ class Subscribe extends Model
 				// rules for this country (the default tax rate will be applied)
 
 				/** @var TaxRules $taxRulesModel */
-				$taxRulesModel = $this->container->factory->model('TaxRules')->savestate(0)->setIgnoreRequest(1);
+				$taxRulesModel = $this->container->factory->model('TaxRules')->tmpInstance();
 
 				// First try loading the rules for this level
 				$taxrules = $taxRulesModel
@@ -635,7 +635,7 @@ class Subscribe extends Model
 						// ...and I must have my viesregistered flag set to 2
 						// and my VAT number must match the saved record.
 						/** @var Users $subsUsersModel */
-						$subsUsersModel = $this->container->factory->model('Users')->savestate(0)->setIgnoreRequest(1);
+						$subsUsersModel = $this->container->factory->model('Users')->tmpInstance();
 
 						$userparams = $subsUsersModel
 							->getMergedData(JFactory::getUser()->id);
@@ -696,7 +696,7 @@ class Subscribe extends Model
 
 			// Get the subscription level
 			/** @var Levels $level */
-			$level = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+			$level = $this->container->factory->model('Levels')->tmpInstance();
 			$level->find($state->id);
 
 			// Get the user's subscription levels and calculate the signup fee
@@ -707,7 +707,7 @@ class Subscribe extends Model
 			if ($user->id)
 			{
 				/** @var Subscriptions $subscriptionsModel */
-				$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+				$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 				$mysubs = $subscriptionsModel
 					->user_id($user->id)
 					->paystate('C')
@@ -775,7 +775,7 @@ class Subscribe extends Model
 			if ($validCoupon)
 			{
 				/** @var Coupons $couponsModel */
-				$couponsModel = $this->container->factory->model('Coupons')->savestate(0)->setIgnoreRequest(1);
+				$couponsModel = $this->container->factory->model('Coupons')->tmpInstance();
 				$coupon = $couponsModel
 					->coupon(strtoupper($state->coupon))
 					->firstOrNew();
@@ -945,7 +945,7 @@ class Subscribe extends Model
 			$valid = false;
 
 			/** @var Coupons $couponsModel */
-			$couponsModel = $this->container->factory->model('Coupons')->savestate(0)->setIgnoreRequest(1);
+			$couponsModel = $this->container->factory->model('Coupons')->tmpInstance();
 
 			try
 			{
@@ -1019,7 +1019,7 @@ class Subscribe extends Model
 					if ($valid && ($coupon->hitslimit > 0))
 					{
 						/** @var Subscriptions $subscriptionsModel */
-						$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+						$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 						// Get the real coupon hits
 						$hits = $subscriptionsModel
@@ -1047,7 +1047,7 @@ class Subscribe extends Model
 						// How many subscriptions with a paystate of C,P for this user
 						// are using this coupon code?
 						/** @var Subscriptions $subscriptionsModel */
-						$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+						$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 						$hits = $subscriptionsModel
 							->coupon_id($coupon->akeebasubs_coupon_id)
@@ -1175,7 +1175,7 @@ class Subscribe extends Model
 		// Get applicable relation rules
 
 		/** @var Relations $relModel */
-		$relModel = $this->container->factory->model('Relations')->savestate(0)->setIgnoreRequest(1);
+		$relModel = $this->container->factory->model('Relations')->tmpInstance();
 
 		$autoRules = $relModel
 			->target_level_id($state->id)
@@ -1192,7 +1192,7 @@ class Subscribe extends Model
 
 		// Get the current subscription level's price
 		/** @var Levels $level */
-		$level = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$level = $this->container->factory->model('Levels')->tmpInstance();
 		$level->find($state->id);
 		$net = (float)$level->price;
 
@@ -1205,7 +1205,7 @@ class Subscribe extends Model
 			$user_id = JFactory::getUser()->id;
 
 			/** @var Subscriptions $subscriptionsModel */
-			$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+			$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 			$subscriptions = $subscriptionsModel
 				->level($rule->source_level_id)
@@ -1425,7 +1425,7 @@ class Subscribe extends Model
 
 		// Get applicable auto-rules
 		/** @var Upgrades $upgradesModel */
-		$upgradesModel = $this->container->factory->model('Upgrades')->savestate(0)->setIgnoreRequest(1);
+		$upgradesModel = $this->container->factory->model('Upgrades')->tmpInstance();
 		$autoRules = $upgradesModel
 			->to_id($state->id)
 			->enabled(1)
@@ -1441,7 +1441,7 @@ class Subscribe extends Model
 
 		// Get the user's list of subscriptions
 		/** @var Subscriptions $subscriptionsModel */
-		$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+		$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 		$subscriptions = $subscriptionsModel
 			->user_id($user_id)
 			->enabled(1)
@@ -1489,7 +1489,7 @@ class Subscribe extends Model
 
 		// Get the current subscription level's price
 		/** @var Levels $levelsModel */
-		$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
 		$net = (float)$levelsModel->find($state->id)->price;
 
 		if ($net == 0)
@@ -1643,7 +1643,7 @@ class Subscribe extends Model
 
 		// Get applicable auto-rules
 		/** @var Upgrades $upgradesModel */
-		$upgradesModel = $this->container->factory->model('Upgrades')->savestate(0)->setIgnoreRequest(1);
+		$upgradesModel = $this->container->factory->model('Upgrades')->tmpInstance();
 
 		$autoRules = $upgradesModel
 			->to_id($state->id)
@@ -1660,7 +1660,7 @@ class Subscribe extends Model
 
 		// Get the user's list of paid but no longer active (therefore: expired) subscriptions
 		/** @var Subscriptions $subscriptionsModel */
-		$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+		$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 		$subscriptions = $subscriptionsModel
 			->user_id($user_id)
@@ -1711,7 +1711,7 @@ class Subscribe extends Model
 
 		// Get the current subscription level's price
 		/** @var Levels $levelsModel */
-		$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
 		$net = (float)$levelsModel->find($state->id)->price;
 
 		if ($net == 0)
@@ -1848,7 +1848,7 @@ class Subscribe extends Model
 		$isVIES = $validation->vatnumber && EUVATInfo::isEUVATCountry($state->country);
 
 		/** @var TaxHelper $taxModel */
-		$taxModel = $this->container->factory->model('TaxHelper')->savestate(0);
+		$taxModel = $this->container->factory->model('TaxHelper')->tmpInstance();
 
 		return $taxModel->getTaxRule($state->id, $state->country, $state->state, $state->city, $isVIES);
 	}
@@ -1963,7 +1963,7 @@ class Subscribe extends Model
 			// Check for an existing, blocked, unactivated user with the same
 			// username or email address.
 			/** @var JoomlaUsers $joomlaUsers */
-			$joomlaUsers = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+			$joomlaUsers = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 
 			/** @var JoomlaUsers $user1 */
 			$user1 = $joomlaUsers->getClone()->reset(true, true)
@@ -1997,7 +1997,7 @@ class Subscribe extends Model
 
 					// Remove the last subscription for $user2 (it will be an unpaid one)
 					/** @var Subscriptions $subscriptionsModel */
-					$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+					$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 					$substodelete = $subscriptionsModel
 						->user_id($id2)
@@ -2103,7 +2103,7 @@ class Subscribe extends Model
 
 			// Remove unpaid subscriptions on the same level for this user
 			/** @var Subscriptions $subscriptionsModel */
-			$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+			$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 			$unpaidSubs = $subscriptionsModel
 				->user_id($user->id)
@@ -2121,7 +2121,7 @@ class Subscribe extends Model
 
 			// Update existing user's details
 			/** @var JoomlaUsers $userRecord */
-			$userRecord = $this->container->factory->model('JoomlaUsers')->savestate(0)->setIgnoreRequest(1);
+			$userRecord = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 			$userRecord->find($user->id);
 
 			$updates = array(
@@ -2188,7 +2188,7 @@ class Subscribe extends Model
 
 		// Find an existing record
 		/** @var Users $subsUsersModel */
-		$subsUsersModel = $this->container->factory->model('Users')->savestate(0)->setIgnoreRequest(1);
+		$subsUsersModel = $this->container->factory->model('Users')->tmpInstance();
 
 		$thisUser = $subsUsersModel
 			->user_id($user->id)
@@ -2288,7 +2288,7 @@ class Subscribe extends Model
 
 		// Is this actually an allowed subscription level?
 		/** @var Levels $levelsModel */
-		$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
 
 		$allowedLevels = $levelsModel
 			->only_once(1)
@@ -2321,7 +2321,7 @@ class Subscribe extends Model
 		// Step #2. Check that the payment plugin exists or return false
 		// ----------------------------------------------------------------------
 		/** @var PaymentMethods $paymentMethodsModel */
-		$paymentMethodsModel = $this->container->factory->model('PaymentMethods');
+		$paymentMethodsModel = $this->container->factory->model('PaymentMethods')->tmpInstance();
 		$plugins = $paymentMethodsModel->getPaymentPlugins();
 
 		$found = false;
@@ -2348,7 +2348,7 @@ class Subscribe extends Model
 		// Step #2.b. Apply block rules
 		// ----------------------------------------------------------------------
 		/** @var BlockRules $blockRulesModel */
-		$blockRulesModel = $this->container->factory->model('Blockrules')->savestate(0)->setIgnoreRequest(1);
+		$blockRulesModel = $this->container->factory->model('Blockrules')->tmpInstance();
 
 		if ($blockRulesModel->isBlocked($state))
 		{
@@ -2388,7 +2388,7 @@ class Subscribe extends Model
 		{
 			// Is the level group published?
 			/** @var LevelGroups $levelGroupModel */
-			$levelGroupModel = $this->container->factory->model('LevelGroups')->savestate(0)->setIgnoreRequest(1);
+			$levelGroupModel = $this->container->factory->model('LevelGroups')->tmpInstance();
 			$levelGroup = $levelGroupModel->find($level->akeebasubs_levelgroup_id);
 
 			if ($levelGroup->getId())
@@ -2404,7 +2404,7 @@ class Subscribe extends Model
 			$subscriptions = array();
 
 			/** @var Levels $levelsModel */
-			$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+			$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
 			$levelsInGroup = $levelsModel
 				->levelgroup($level->akeebasubs_levelgroup_id)
 				->get(true);
@@ -2419,7 +2419,7 @@ class Subscribe extends Model
 				}
 
 				/** @var Subscriptions $subscriptionsModel */
-				$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+				$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 				$subscriptions = $subscriptionsModel
 					->user_id($user->id)
@@ -2432,7 +2432,7 @@ class Subscribe extends Model
 		{
 			// No level group found. Get subscriptions on the same level.
 			/** @var Subscriptions $subscriptionsModel */
-			$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+			$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 			$subscriptions = $subscriptionsModel
 				->user_id($user->id)
@@ -2491,7 +2491,7 @@ class Subscribe extends Model
 		$nullDate = JFactory::getDbo()->getNullDate();
 
 		/** @var Levels $level */
-		$level = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$level = $this->container->factory->model('Levels')->tmpInstance();
 		$level->find($state->id);
 
 		if ($level->forever)
@@ -2615,7 +2615,7 @@ class Subscribe extends Model
 		);
 
 		/** @var Subscriptions $subscription */
-		$subscription = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+		$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
 		$this->_item = $subscription->reset(true, true)->save($data);
 
 		// Step #7. Hit the coupon code, if a coupon is indeed used
@@ -2623,7 +2623,7 @@ class Subscribe extends Model
 		if ($validation->price->couponid)
 		{
 			/** @var Coupons $couponsModel */
-			$couponsModel = $this->container->factory->model('Coupons')->savestate(0)->setIgnoreRequest(1);
+			$couponsModel = $this->container->factory->model('Coupons')->tmpInstance();
 			$couponsModel->find($validation->price->couponid);
 			$couponsModel->hits++;
 			$couponsModel->save();
@@ -2707,7 +2707,7 @@ class Subscribe extends Model
 		}
 
 		/** @var PaymentMethods $paymentMethodsModel */
-		$paymentMethodsModel = $this->container->factory->model('PaymentMethods');
+		$paymentMethodsModel = $this->container->factory->model('PaymentMethods')->tmpInstance();
 		$paymentMethodsModel->getPaymentPlugins();
 
 		$app = JFactory::getApplication();
@@ -2752,7 +2752,7 @@ class Subscribe extends Model
 		}
 
 		/** @var PaymentMethods $paymentMethodsModel */
-		$paymentMethodsModel = $this->container->factory->model('PaymentMethods');
+		$paymentMethodsModel = $this->container->factory->model('PaymentMethods')->tmpInstance();
 		$paymentMethodsModel->getPaymentPlugins();
 
 		$jResponse = $this->container->platform->runPlugins('onAKPaymentCallback', array(

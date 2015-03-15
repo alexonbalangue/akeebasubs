@@ -78,7 +78,7 @@ abstract class Format
 		{
 			/** @var DataModel $levelsModel */
 			$levelsModel = Container::getInstance('com_akeebasubs')->factory
-				->model('Levels')->savestate(false)->setIgnoreRequest(true);
+				->model('Levels')->tmpInstance();
 
 			$rawlevels = $levelsModel
 				->filter_order('ordering')
@@ -122,7 +122,7 @@ abstract class Format
 		{
 			/** @var DataModel $levelsModel */
 			$levelGroupsModel = Container::getInstance('com_akeebasubs')->factory
-				->model('LevelGroups')->savestate(false)->setIgnoreRequest(true);
+				->model('LevelGroups')->tmpInstance();
 
 			$levelGroupsList = $levelGroupsModel
 				->get(true);
@@ -177,8 +177,7 @@ abstract class Format
 
 		if (empty($levels))
 		{
-			$levelsList = Container::getInstance('com_akeebasubs')->factory->model('Levels')
-				->setIgnoreRequest(true)->savestate(false)->get(true);
+			$levelsList = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance()->get(true);
 
 			if (!empty($levelsList))
 			{
@@ -224,7 +223,7 @@ abstract class Format
 		{
 			/** @var Akeeba\Subscriptions\Admin\Model\Invoices $model */
 			$model = Container::getInstance('com_akeebasubs')->factory
-				->model('Invoices')->savestate(0)->setIgnoreRequest(1);
+				->model('Invoices')->tmpInstance();
 
 			$map = $model->getExtensions(2);
 		}

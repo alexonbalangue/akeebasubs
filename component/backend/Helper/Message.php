@@ -44,8 +44,7 @@ abstract class Message
 
 		if (!is_object($subsUser))
 		{
-			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Users')
-				->savestate(0)->setIgnoreRequest(1);
+			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Users')->tmpInstance();
 		}
 
 		// Get the subscription level
@@ -54,8 +53,7 @@ abstract class Message
 
 		if (!is_object($level))
 		{
-			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Levels')
-				->savestate(0)->setIgnoreRequest(1);
+			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
 		}
 
 		// Merge the user objects
@@ -259,8 +257,7 @@ abstract class Message
 		{
 			try
 			{
-				$couponData = Container::getInstance('com_akeebasubs')->factory->model('Coupons')
-					->savestate(false)->setIgnoreRequest(true)
+				$couponData = Container::getInstance('com_akeebasubs')->factory->model('Coupons')->tmpInstance()
 					->findOrFail($sub->akeebasubs_coupon_id);
 
 				$couponCode = $couponData->coupon;

@@ -251,7 +251,7 @@ class Subscriptions extends DataModel
 		{
 			// First get the Joomla! users fulfilling the criteria
 			/** @var JoomlaUsers $users */
-			$users = $this->container->factory->model('JoomlaUsers')->setIgnoreRequest(true);
+			$users = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 			$userIDs = $users->search($search)->with([])->get(true)->modelKeys();
 
 			// Then do a relation filter against the user relation
@@ -313,7 +313,7 @@ class Subscriptions extends DataModel
 				if ($filter_discountcode)
 				{
 					/** @var Coupons $couponsModel */
-					$couponsModel = $this->container->factory->model('Coupons');
+					$couponsModel = $this->container->factory->model('Coupons')->tmpInstance();
 
 					$coupons = $couponsModel
 						->search($filter_discountcode)
@@ -341,7 +341,7 @@ class Subscriptions extends DataModel
 				if ($filter_discountcode)
 				{
 					/** @var Upgrades $upgradesModel */
-					$upgradesModel = $this->container->factory->model('Upgrades');
+					$upgradesModel = $this->container->factory->model('Upgrades')->tmpInstance();
 
 					$upgrades = $upgradesModel
 						->search($filter_discountcode)
@@ -362,7 +362,7 @@ class Subscriptions extends DataModel
 				if ($filter_discountcode)
 				{
 					/** @var Coupons $couponsModel */
-					$couponsModel = $this->container->factory->model('Coupons');
+					$couponsModel = $this->container->factory->model('Coupons')->tmpInstance();
 
 					$coupons = $couponsModel
 						->search($filter_discountcode)
@@ -381,7 +381,7 @@ class Subscriptions extends DataModel
 				if ($filter_discountcode)
 				{
 					/** @var Upgrades $upgradesModel */
-					$upgradesModel = $this->container->factory->model('Upgrades');
+					$upgradesModel = $this->container->factory->model('Upgrades')->tmpInstance();
 
 					$upgrades = $upgradesModel
 						->search($filter_discountcode)

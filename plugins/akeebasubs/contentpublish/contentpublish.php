@@ -195,7 +195,7 @@ class plgAkeebasubsContentpublish extends \Akeeba\Subscriptions\Admin\PluginAbst
 
 		// Get all of the user's subscriptions
 		/** @var  Subscriptions  $subscriptionModel */
-		$subscriptionModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1)->clearState();
+		$subscriptionModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 		$subscriptions = $subscriptionModel
 			->user_id($user_id)
@@ -437,7 +437,7 @@ class plgAkeebasubsContentpublish extends \Akeeba\Subscriptions\Admin\PluginAbst
 		$this->addGroups = array();
 		$this->removeGroups = array();
 
-		$model           = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1)->clearState();
+		$model           = $this->container->factory->model('Levels')->tmpInstance();
 		$levels          = $model->get(true);
 
 		if (!empty($levels))

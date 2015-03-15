@@ -39,7 +39,7 @@ class EmailTemplates extends DataController
 		// Let's grab the first published level
 		/** @var DataModel $levelsModel */
 		$levelsModel = $this->container->factory
-			->model('Levels')->setIgnoreRequest(true)->savestate(false);
+			->model('Levels')->tmpInstance();
 		$level = $levelsModel->enabled(1)->firstOrFail();
 
 		// No level? So what's the point?
@@ -52,7 +52,7 @@ class EmailTemplates extends DataController
 		// Let's get a dummy subscription
 		/** @var DataModel $sub */
 		$sub = $this->container->factory
-			->model('Subscriptions')->setIgnoreRequest(true)->savestate(false);
+			->model('Subscriptions')->tmpInstance();
 
 		$sub->akeebasubs_subscription_id = 999999;
 		$sub->user_id                    = JFactory::getUser()->id;

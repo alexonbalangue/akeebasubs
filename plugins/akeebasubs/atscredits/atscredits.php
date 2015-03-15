@@ -52,7 +52,7 @@ class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstract
 		$this->credits = array();
 
 		/** @var Levels $model */
-		$model = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$model = $this->container->factory->model('Levels')->tmpInstance();
 
 		$levels = $model->get(true);
 
@@ -84,7 +84,7 @@ class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstract
 
 		// Get all of the user's subscriptions
 		/** @var Subscriptions $subscriptionsModel */
-		$subscriptionsModel = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(1);
+		$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 
 		$subscriptions = $subscriptionsModel
 			->user_id($user_id)

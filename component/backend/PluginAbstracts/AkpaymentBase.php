@@ -319,8 +319,7 @@ abstract class AkpaymentBase extends JPlugin
 				}
 				else
 				{
-					$level = Container::getInstance('com_akeebasubs')->factory->model('Levels')
-						->savestate(false)->setIgnoreRequest(true);
+					$level = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
 					$level->find($subscription->akeebasubs_level_id);
 				}
 

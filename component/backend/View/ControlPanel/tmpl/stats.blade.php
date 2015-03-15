@@ -11,8 +11,7 @@ use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 /** @var \Akeeba\Subscriptions\Admin\View\ControlPanel\Html $this */
 /** @var \Akeeba\Subscriptions\Admin\Model\SubscriptionsForStats $subs */
-$subs = $this->container->factory->model('SubscriptionsForStats')
-                                 ->savestate(false)->setIgnoreRequest(true)->clearState();
+$subs = $this->container->factory->model('SubscriptionsForStats')->tmpInstance();
 ?>
 
 @section('stats')

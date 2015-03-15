@@ -45,8 +45,7 @@ trait ImplodedLevels
 				$subscriptions = array();
 
 				/** @var DataModel $levelModel */
-				$levelModel = $this->container->factory->model('Levels')
-					->setIgnoreRequest(true)->savestate(false);
+				$levelModel = $this->container->factory->model('Levels')->tmpInstance();
 
 				foreach ($subs as $id)
 				{

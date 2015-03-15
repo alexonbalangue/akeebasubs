@@ -187,7 +187,7 @@ abstract class Email
 		// Look for an override in the database
 		/** @var EmailTemplates $templatesModel */
 		$templatesModel = Container::getInstance('com_akeebasubs')->factory
-			->model('EmailTemplates')->setIgnoreRequest(true)->savestate(false);
+			->model('EmailTemplates')->tmpInstance();
 
 		$allTemplates = $templatesModel->key($keyInDatabase)->enabled(1)->get(true);
 

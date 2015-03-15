@@ -40,7 +40,7 @@ class plgAkeebasubsSql extends AkeebasubsBase
 		$user = JFactory::getUser($user_id);
 
 		/** @var \Akeeba\Subscriptions\Admin\Model\Users $usersModel */
-		$usersModel = $this->container->factory->model('Users')->savestate(0)->setIgnoreRequest(1);
+		$usersModel = $this->container->factory->model('Users')->tmpInstance();
 
 		$mergedData = $usersModel->getMergedData($user_id);
 		$mergedData = (array)$mergedData;

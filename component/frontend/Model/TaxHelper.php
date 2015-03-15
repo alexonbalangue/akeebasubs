@@ -44,7 +44,7 @@ class TaxHelper extends Model
 		if (!$user->guest && $user->id)
 		{
 			/** @var Users $userModel */
-			$userModel = $this->container->factory->model('Users')->savestate(false)->setIgnoreRequest(true);
+			$userModel = $this->container->factory->model('Users')->tmpInstance();
 			$userparams = $userModel->getMergedData($user->id);
 
 			if ($userparams->country)
@@ -96,7 +96,7 @@ class TaxHelper extends Model
 		{
 			// First try loading the rules for this level
 			/** @var TaxRules $taxrulesModel */
-			$taxrulesModel = $this->container->factory->model('TaxRules')->savestate(0)->setIgnoreRequest(true);
+			$taxrulesModel = $this->container->factory->model('TaxRules')->tmpInstance();
 			$taxrules = $taxrulesModel
 				->enabled(1)
 				->akeebasubs_level_id($akeebasubs_level_id)

@@ -210,7 +210,7 @@ class Users extends DataModel
 		if (empty($this->user_id))
 		{
 			/** @var JoomlaUsers $userRow */
-			$userRow = $this->container->factory->model('JoomlaUsers');
+			$userRow = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 			$userRow->find($user_id);
 		}
 
@@ -269,7 +269,7 @@ class Users extends DataModel
 		}
 		else
 		{
-			$taxParameters = $this->container->factory->model('TaxHelper')->getTaxDefiningParameters();
+			$taxParameters = $this->container->factory->model('TaxHelper')->tmpInstance()->getTaxDefiningParameters();
 
 			$myData = array(
 				'isbusiness' => $taxParameters['vies'] ? 1 : 0,

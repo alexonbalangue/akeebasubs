@@ -386,7 +386,7 @@ abstract class Select
 		if (is_null($invoiceExtensions))
 		{
 			$source = Container::getInstance('com_akeebasubs')->factory
-				->model('Invoices')
+				->model('Invoices')->tmpInstance()
 				->getExtensions(0);
 			$invoiceExtensions = array();
 
@@ -829,7 +829,7 @@ abstract class Select
 	{
 		/** @var DataModel $model */
 		$model =  Container::getInstance('com_akeebasubs')->factory
-			->model('Levels')->setIgnoreRequest(true)->savestate(false);
+			->model('Levels')->tmpInstance();
 
 		$list = $model->filter_order('ordering')->filter_order_Dir('ASC')->get(true);
 
@@ -914,7 +914,7 @@ abstract class Select
 	{
 		/** @var PaymentMethods $pluginsModel */
 		$pluginsModel = Container::getInstance('com_akeebasubs')->factory
-			->model('PaymentMethods');
+			->model('PaymentMethods')->tmpInstance();
 
 		$plugins = $pluginsModel->getPaymentPlugins();
 
@@ -928,7 +928,7 @@ abstract class Select
 		{
 			/** @var DataModel $levelsModel */
 			$levelsModel =  Container::getInstance('com_akeebasubs')->factory
-				->model('Levels')->setIgnoreRequest(true)->savestate(false);
+				->model('Levels')->tmpInstance();
 
 			try
 			{
@@ -1136,7 +1136,7 @@ abstract class Select
 	{
 		/** @var DataModel $model */
 		$model = Container::getInstance('com_akeebasubs')->factory
-			->model('LevelGroups')->savestate(0)->setIgnoreRequest(true);
+			->model('LevelGroups')->tmpInstance();
 
 		$items = $model->get(true);
 
@@ -1309,9 +1309,9 @@ abstract class Select
 	 */
 	public static function invoiceextensions($name = 'extension', $selected = '', $attribs = array())
 	{
-		/** @var Akeeba\Subscriptions\Admin\Model\Invoices $model */
+		/** @var \Akeeba\Subscriptions\Admin\Model\Invoices $model */
 		$model = Container::getInstance('com_akeebasubs')->factory
-			->model('Invoices')->savestate(0)->setIgnoreRequest(1);
+			->model('Invoices')->tmpInstance();
 
 		$options = $model->getExtensions(1);
 		$option = JHtml::_('select.option', '', '- ' . JText::_('COM_AKEEBASUBS_COMMON_SELECT') . ' -');
@@ -1401,7 +1401,7 @@ abstract class Select
 	{
 		/** @var PaymentMethods $pluginsModel */
 		$pluginsModel = Container::getInstance('com_akeebasubs')->factory
-			->model('PaymentMethods');
+			->model('PaymentMethods')->tmpInstance();
 
 		$plugins = $pluginsModel->getPaymentPlugins();
 
@@ -1420,7 +1420,7 @@ abstract class Select
 function akeebasubsHelperSelect_init()
 {
 	/** @var States $model */
-	$model                = Container::getInstance('com_akeebasubs')->factory->model('States');
+	$model                = Container::getInstance('com_akeebasubs')->factory->model('States')->tmpInstance();
 	$rawstates            = $model->enabled(1)->orderByLabels(1)->get(true);
 	$states               = array();
 	$current_country      = '';

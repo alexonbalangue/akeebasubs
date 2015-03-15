@@ -149,7 +149,7 @@ class APICoupons extends DataModel
 		// If I'm here, I'm clear to go
 		\JLoader::import('joomla.user.helper');
 		/** @var Coupons $coupon */
-		$coupon = $this->container->factory->model('Coupon')->savestate(false)->setIgnoreRequest(true);
+		$coupon = $this->container->factory->model('Coupon')->tmpInstance();
 		$coupon->clearState()->reset(true, true);
 
 		$data['akeebasubs_apicoupon_id'] = $this->akeebasubs_apicoupon_id;

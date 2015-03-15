@@ -132,7 +132,7 @@ class SubscriptionLevel extends Model
 			}
 
 			$container = $this->form->getContainer();
-			$model = $container->factory->model('Levels')->setIgnoreRequest(true)->savestate(false);
+			$model = $container->factory->model('Levels')->tmpInstance();
 
 			// Process state variables
 			/** @var \SimpleXMLElement $stateoption */

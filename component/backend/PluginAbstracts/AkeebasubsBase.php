@@ -199,7 +199,7 @@ abstract class AkeebasubsBase extends JPlugin
 
 		// Get all of the user's subscriptions
 		/** @var  Users  $user */
-		$user = $this->container->factory->model('Users')->savestate(0)->setIgnoreRequest(1)->clearState();
+		$user = $this->container->factory->model('Users')->tmpInstance();
 		$user->find($user_id);
 		$subscriptions = $user->subscriptions;
 
@@ -313,7 +313,7 @@ abstract class AkeebasubsBase extends JPlugin
 		$this->removeGroups = array();
 
 		/** @var Levels $model */
-		$model           = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1)->clearState();
+		$model           = $this->container->factory->model('Levels')->tmpInstance();
 		$levels          = $model->get(true);
 		$addgroupsKey    = strtolower($this->name) . '_addgroups';
 		$removegroupsKey = strtolower($this->name) . '_removegroups';

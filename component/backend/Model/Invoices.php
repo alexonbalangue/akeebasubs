@@ -121,7 +121,7 @@ class Invoices extends DataModel
 		{
 			// First get the Joomla! users fulfilling the criteria
 			/** @var JoomlaUsers $users */
-			$users = $this->container->factory->model('JoomlaUsers')->setIgnoreRequest(true);
+			$users = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 			$userIDs = $users->search($user)->with([])->get(true)->modelKeys();
 			$filteredIDs = [-1];
 
@@ -129,7 +129,7 @@ class Invoices extends DataModel
 			{
 				// Now get the subscriptions IDs for these users
 				/** @var Subscriptions $subs */
-				$subs = $this->container->factory->model('Subscriptions')->setIgnoreRequest(true);
+				$subs = $this->container->factory->model('Subscriptions')->tmpInstance();
 				$subs->setState('user_id', $userIDs);
 				$subs->with([]);
 
@@ -157,7 +157,7 @@ class Invoices extends DataModel
 			$search = '%' . $business . '%';
 
 			/** @var Subscriptions $subs */
-			$subs = $this->container->factory->model('Subscriptions')->setIgnoreRequest(true);
+			$subs = $this->container->factory->model('Subscriptions')->tmpInstance();
 			$subs->whereHas('user', function(\JDatabaseQuery $q) use($search) {
 				$q->where(
 					'((' . $q->qn('businessname') . ' LIKE ' . $q->q($search) . ') OR (' .
@@ -408,8 +408,7 @@ class Invoices extends DataModel
 				{
 					// Invoice template number override reset
 					/** @var InvoiceTemplates $templateTable */
-					$templateTable = $this->container->factory->model('InvoiceTemplates')->savestate(false)
-						->setIgnoreRequest(true);
+					$templateTable = $this->container->factory->model('InvoiceTemplates')->tmpInstance();
 					$templateTable->find($templateRow->akeebasubs_invoicetemplate_id);
 					$templateTable->save(array(
 						'number_reset' => 0
@@ -656,7 +655,7 @@ class Invoices extends DataModel
 		$ret = null;
 
 		// Load all enabled templates and check if they fit
-		$templatesModel = $this->container->factory->model('InvoiceTemplates')->savestate(false)->setIgnoreRequest(true);
+		$templatesModel = $this->container->factory->model('InvoiceTemplates')->tmpInstance();
 		$templates =
 			$templatesModel
 			->enabled(1)

@@ -84,7 +84,7 @@ class Html extends \FOF30\View\DataView\Html
 		if ($user->id)
 		{
 			/** @var Subscriptions $mysubs */
-			$mysubs = $this->container->factory->model('Subscriptions')->savestate(0)->setIgnoreRequest(true);
+			$mysubs = $this->container->factory->model('Subscriptions')->tmpInstance();
 			$mysubs
 				->user_id($user->id)
 				->paystate('C')
@@ -108,7 +108,7 @@ class Html extends \FOF30\View\DataView\Html
 
 		// Cache tax parameters
 		/** @var \Akeeba\Subscriptions\Site\Model\TaxHelper $taxModel */
-		$this->taxModel = $this->getContainer()->factory->model('TaxHelper')->savestate(0)->setIgnoreRequest(1);
+		$this->taxModel = $this->getContainer()->factory->model('TaxHelper')->tmpInstance();
 		$this->taxParams = $this->taxModel->getTaxDefiningParameters();
 
 		// Should I include sign-up one time fees?

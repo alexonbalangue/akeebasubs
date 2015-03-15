@@ -22,7 +22,7 @@ class Html extends \FOF30\View\DataView\Html
 		// Get all levels and all active levels
 
 		/** @var Levels $levelsModel */
-		$levelsModel = $this->container->factory->model('Levels')->savestate(0)->setIgnoreRequest(1);
+		$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
 
 		$rawActiveLevels = $levelsModel
 			->enabled(1)
@@ -117,7 +117,7 @@ class Html extends \FOF30\View\DataView\Html
 		$invoices = array();
 
 		/** @var Invoices $invoicesModel */
-		$invoicesModel = $this->container->factory->model('Invoices')->savestate(0)->setIgnoreRequest(1);
+		$invoicesModel = $this->container->factory->model('Invoices')->tmpInstance();
 
 		if (!empty($subscription_ids))
 		{
