@@ -11,6 +11,7 @@ use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentPaymill extends AkpaymentBase
 {
@@ -58,7 +59,7 @@ class plgAkpaymentPaymill extends AkpaymentBase
 		$data = (object)array(
 			'url'         => $callbackUrl,
 			'amount'      => (int)($subscription->gross_amount * 100),
-			'currency'    => strtoupper(AkeebasubsHelperCparams::getParam('currency', 'EUR')),
+			'currency'    => strtoupper(ComponentParams::getParam('currency', 'EUR')),
 			'description' => $level->title . ' #' . $subscription->akeebasubs_subscription_id,
 			'carholder'   => $user->name,
 		);
@@ -96,9 +97,10 @@ class plgAkpaymentPaymill extends AkpaymentBase
 		// CHECK: Is this a valid subscription record?
 		if ($id > 0)
 		{
-			$subscription = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')
-				->setId($id)
-				->getItem();
+			/** @var Subscriptions $subscription */
+			$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
+			$subscription->find($id);
+
 			if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
 			{
 				$subscription = null;
@@ -109,6 +111,8 @@ class plgAkpaymentPaymill extends AkpaymentBase
 		{
 			$isValid = false;
 		}
+
+		/** @var Subscriptions $subscription */
 
 		if (!$isValid)
 		{
@@ -140,11 +144,8 @@ class plgAkpaymentPaymill extends AkpaymentBase
 		// Fraud attempt? Do nothing more!
 		if (!$isValid)
 		{
-			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem();
-			$error_url = 'index.php?option=com_akeebasubs' .
-				'&view=level&slug=' . $level->slug;
+			$level = $subscription->level;
+			$error_url = 'index.php?option=com_akeebasubs&view=Level&slug=' . $level->slug;
 			$error_url = JRoute::_($error_url, false);
 
 			JFactory::getApplication()->redirect($error_url, $data['akeebasubs_failure_reason'], 'error');
@@ -157,15 +158,19 @@ class plgAkpaymentPaymill extends AkpaymentBase
 		{
 			$apiKey = $this->getPrivateKey();
 			$apiEndpoint = 'https://api.paymill.de/v2/';
-			$db = JFactory::getDbo();
 		}
+
+		$db = JFactory::getDbo();
 
 		// CHECK: Do we have a user already defined in PayMill?
 		$user = JFactory::getUser($subscription->user_id);
+
 		$clientsObject = new Services_Paymill_Clients($apiKey, $apiEndpoint);
+
 		$filters = array(
 			'email' => $user->email
 		);
+
 		$clients = $clientsObject->get($filters);
 
 		// ACTION: Get the client ID or create and save a new user in PayMill if necessary
@@ -203,11 +208,8 @@ class plgAkpaymentPaymill extends AkpaymentBase
 			// Fraud attempt? Do nothing more!
 			if (!$isValid)
 			{
-				$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-					->setId($subscription->akeebasubs_level_id)
-					->getItem();
-				$error_url = 'index.php?option=com_akeebasubs' .
-					'&view=level&slug=' . $level->slug;
+				$level = $subscription->level;
+				$error_url = 'index.php?option=com_akeebasubs&view=Level&slug=' . $level->slug;
 				$error_url = JRoute::_($error_url, false);
 
 				JFactory::getApplication()->redirect($error_url, $params['akeebasubs_failure_reason'], 'error');
@@ -258,11 +260,8 @@ class plgAkpaymentPaymill extends AkpaymentBase
 			// Fraud attempt? Do nothing more!
 			if (!$isValid)
 			{
-				$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-					->setId($subscription->akeebasubs_level_id)
-					->getItem();
-				$error_url = 'index.php?option=com_akeebasubs' .
-					'&view=level&slug=' . $level->slug;
+				$level = $subscription->level;
+				$error_url = 'index.php?option=com_akeebasubs&view=Level&slug=' . $level->slug;
 				$error_url = JRoute::_($error_url, false);
 
 				JFactory::getApplication()->redirect($error_url, $params['akeebasubs_failure_reason'], 'error');
@@ -280,6 +279,7 @@ class plgAkpaymentPaymill extends AkpaymentBase
 				'processor_key'              => $subscription->processor_key,
 				'state'                      => 'P',
 			);
+
 			JFactory::getDbo()->updateObject('#__akeebasubs_subscriptions', $oUpdate, 'akeebasubs_subscription_id');
 		}
 
@@ -305,6 +305,7 @@ class plgAkpaymentPaymill extends AkpaymentBase
 				'processor_key'              => $subscription->processor_key,
 				'state'                      => 'P',
 			);
+
 			JFactory::getDbo()->updateObject('#__akeebasubs_subscriptions', $oUpdate, 'akeebasubs_subscription_id');
 
 			// Create the transaction
@@ -362,11 +363,8 @@ class plgAkpaymentPaymill extends AkpaymentBase
 			// Fraud attempt? Do nothing more!
 			if (!$isValid)
 			{
-				$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-					->setId($subscription->akeebasubs_level_id)
-					->getItem();
-				$error_url = 'index.php?option=com_akeebasubs' .
-					'&view=level&slug=' . $level->slug;
+				$level = $subscription->level;
+				$error_url = 'index.php?option=com_akeebasubs&view=Level&slug=' . $level->slug;
 				$error_url = JRoute::_($error_url, false);
 
 				JFactory::getApplication()->redirect($error_url, $params['akeebasubs_failure_reason'], 'error');
@@ -377,11 +375,8 @@ class plgAkpaymentPaymill extends AkpaymentBase
 		else
 		{
 			// ACTION: If no transaction is necessary, show an error
-			$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem();
-			$error_url = 'index.php?option=com_akeebasubs' .
-				'&view=level&slug=' . $level->slug;
+			$level = $subscription->level;
+			$error_url = 'index.php?option=com_akeebasubs&view=Level&slug=' . $level->slug;
 			$error_url = JRoute::_($error_url, false);
 
 			JFactory::getApplication()->redirect($error_url, 'Cannot process the transaction twice. Wait to receive your subscription confirmation email and do not retry submitting the payment form again.', 'error');
@@ -427,24 +422,22 @@ class plgAkpaymentPaymill extends AkpaymentBase
 			'enabled'                    => 0
 		);
 		JLoader::import('joomla.utilities.date');
+
 		if ($newStatus == 'C')
 		{
-			$this->fixDates($subscription, $updates);
+			self::fixSubscriptionDates($subscription, $updates);
 		}
+
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
-		JLoader::import('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akeebasubs');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback', array(
+		$this->container->platform->importPlugin('akeebasubs');
+		$this->container->platform->runPlugins('onAKAfterPaymentCallback', array(
 			$subscription
 		));
 
 		// Redirect the user to the "thank you" page
-		$level = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')
-			->setId($subscription->akeebasubs_level_id)
-			->getItem();
+		$level = $subscription->level;
 		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug=' . $level->slug . '&task=thankyou&subid=' . $subscription->akeebasubs_subscription_id, false);
 		JFactory::getApplication()->redirect($thankyouUrl);
 
@@ -492,7 +485,7 @@ class plgAkpaymentPaymill extends AkpaymentBase
 
 	public function selectYear()
 	{
-		$year = gmdate('Y');
+		$year = (int) gmdate('Y');
 
 		$options = array();
 		$options[] = JHTML::_('select.option', 0, '--');
@@ -503,70 +496,5 @@ class plgAkpaymentPaymill extends AkpaymentBase
 		}
 
 		return JHTML::_('select.genericlist', $options, 'card-expiry-year', 'class="input-small"', 'value', 'text', '', 'card-expiry-year');
-	}
-
-	/**
-	 * Logs the received IPN information to file
-	 *
-	 * @param   array   $data    Request data
-	 * @param   boolean $isValid Is it a valid payment?
-	 * @param   string  $type    The type of the record, for the automatic header
-	 * @param   string  $header  The header of this entry (leave null for automatic header)
-	 *
-	 * @return  void
-	 */
-	protected function logIPN($data, $isValid, $type = 'TRANSACTION', $header = null)
-	{
-		$config = JFactory::getConfig();
-		$logpath = $config->get('log_path');
-
-		$logFilenameBase = $logpath . '/akpayment_' . strtolower($this->ppName) . '_ipn';
-
-		$logFile = $logFilenameBase . '.php';
-		JLoader::import('joomla.filesystem.file');
-		if (!JFile::exists($logFile))
-		{
-			$dummy = "<?php die(); ?>\n";
-			JFile::write($logFile, $dummy);
-		}
-		else
-		{
-			if (@filesize($logFile) > 1048756)
-			{
-				$altLog = $logFilenameBase . '-1.php';
-				if (JFile::exists($altLog))
-				{
-					JFile::delete($altLog);
-				}
-				JFile::copy($logFile, $altLog);
-				JFile::delete($logFile);
-				$dummy = "<?php die(); ?>\n";
-				JFile::write($logFile, $dummy);
-			}
-		}
-		$logData = JFile::read($logFile);
-		if ($logData === false)
-		{
-			$logData = '';
-		}
-		$logData .= "\n" . str_repeat('-', 80);
-		$pluginName = strtoupper($this->ppName);
-
-		if ($header)
-		{
-			$logData .= $header;
-		}
-		else
-		{
-			$logData .= $isValid ? 'VALID ' . $pluginName . ' ' . $type : 'INVALID ' . $pluginName . ' ' . $type . ' *** FRAUD ATTEMPT OR INVALID CALLBACK ***';
-		}
-
-		$logData .= "\nDate/time : " . gmdate('Y-m-d H:i:s') . " GMT\n\n";
-		foreach ($data as $key => $value)
-		{
-			$logData .= '  ' . str_pad($key, 30, ' ') . $value . "\n";
-		}
-		$logData .= "\n";
-		JFile::write($logFile, $logData);
 	}
 }
