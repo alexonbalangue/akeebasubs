@@ -7,19 +7,18 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
+
 class plgAkeebasubsCanalyticscommerce extends JPlugin
 {
 	/**
 	 * Let's add some analytics code to track the subscription on the order success page!
 	 *
-	 * @param row - object
+	 * @param   Subscriptions  $row  The subscription object
 	 */
-	public function onOrderMessage($row)
+	public function onOrderMessage(Subscriptions $row)
 	{
 		$document = JFactory::getDocument();
-
-		// let us get the sub level
-		$akeebasubsLevel = F0FModel::getTmpInstance('Levels', 'AkeebasubsModel')->setId($row->akeebasubs_level_id)->getItem();
 
 		/**
 		 * doc example: https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingEcommerce
@@ -50,9 +49,9 @@ class plgAkeebasubsCanalyticscommerce extends JPlugin
 				  _gaq.push(['_addItem',
 					'" . $row->akeebasubs_subscription_id . "',
 					'" . $row->akeebasubs_level_id . "',
-					'" . $akeebasubsLevel->title . "',
+					'" . $row->level->title . "',
 					'',   // category or variation
-					'" . $akeebasubsLevel->price . "',
+					'" . $row->level->price . "',
 					'1'
 				  ]);
 				  _gaq.push(['_trackTrans']);

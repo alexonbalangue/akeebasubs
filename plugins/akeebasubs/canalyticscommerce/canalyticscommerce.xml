@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
-	<name>Akeeba Subscriptions - Analytics commerce</name>
+<extension version="3.3.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>PLG_AKEEBASUBS_CANALYTICSCOMMERCE</name>
 	<author>Daniel Dimitrov</author>
 	<authorEmail>daniel@compojoom.com</authorEmail>
 	<authorUrl>http://www.compojoom.com</authorUrl>
-	<copyright>Copyright (c)2008-2013 Daniel Dimitrov / compojoom.com</copyright>
+	<copyright>Copyright (c)2011-2015 Daniel Dimitrov / compojoom.com</copyright>
 	<license>GNU General Public License version 3, or later</license>
-	<creationDate>November 2012</creationDate>
-	<version>1.0</version>
+	<creationDate>April 2015</creationDate>
+	<version>5.0</version>
 	<description>PLG_AKEEBASUBS_CANALYTICSCOMMERCE_DESCRIPTION</description>
 	<files>
 		<filename plugin="canalyticscommerce">canalyticscommerce.php</filename>
