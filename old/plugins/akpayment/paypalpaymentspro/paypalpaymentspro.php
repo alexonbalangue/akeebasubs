@@ -561,10 +561,8 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
-		JLoader::import('joomla.plugin.helper');
-		JPluginHelper::importPlugin('akeebasubs');
-		$app = JFactory::getApplication();
-		$jResponse = $app->triggerEvent('onAKAfterPaymentCallback', array(
+		$this->container->platform->importPlugin('akeebasubs');
+		$this->container->platform->runPlugins('onAKAfterPaymentCallback', array(
 			$subscription
 		));
 
