@@ -1,30 +1,30 @@
 <?php
 /**
- * @package		akeebasubs
- * @copyright	Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
- * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @package        akeebasubs
+ * @copyright      Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
 defined('_JEXEC') or die();
 
-use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentStripe extends AkpaymentBase
 {
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
-			'ppName'		=> 'stripe',
-			'ppKey'			=> 'PLG_AKPAYMENT_STRIPE_TITLE',
-			'ppImage'		=> rtrim(JURI::base(),'/').'/media/com_akeebasubs/images/frontend/stripe-logo.png',
+			'ppName'  => 'stripe',
+			'ppKey'   => 'PLG_AKPAYMENT_STRIPE_TITLE',
+			'ppImage' => rtrim(JURI::base(), '/') . '/media/com_akeebasubs/images/frontend/stripe-logo.png',
 		));
 
 		parent::__construct($subject, $config);
 
-		require_once dirname(__FILE__).'/stripe/lib/Stripe.php';
+		require_once dirname(__FILE__) . '/stripe/lib/Stripe.php';
 	}
 
 	/**
@@ -41,7 +41,10 @@ class plgAkpaymentStripe extends AkpaymentBase
 	 */
 	public function onAKPaymentNew($paymentmethod, JUser $user, Levels $level, Subscriptions $subscription)
 	{
-		if($paymentmethod != $this->ppName) return false;
+		if ($paymentmethod != $this->ppName)
+		{
+			return false;
+		}
 
 		$doc = JFactory::getDocument();
 		$doc->addScriptDeclaration("
@@ -126,17 +129,17 @@ class plgAkpaymentStripe extends AkpaymentBase
 				});
 			");
 
-		$callbackUrl = JURI::base().'index.php?option=com_akeebasubs&view=Callback&paymentmethod=stripe&sid='.$subscription->akeebasubs_subscription_id;
+		$callbackUrl = JURI::base() . 'index.php?option=com_akeebasubs&view=Callback&paymentmethod=stripe&sid=' . $subscription->akeebasubs_subscription_id;
 		$data = (object)array(
-			'url'			=> $callbackUrl,
-			'amount'		=> (int)($subscription->gross_amount * 100),
-			'currency'		=> strtolower(AkeebasubsHelperCparams::getParam('currency','usd')),
-			'description'	=> $level->title . ' #' . $subscription->akeebasubs_subscription_id,
-			'cardholder'	=> $user->name
+			'url'         => $callbackUrl,
+			'amount'      => (int)($subscription->gross_amount * 100),
+			'currency'    => strtolower(ComponentParams::getParam('currency', 'usd')),
+			'description' => $level->title . ' #' . $subscription->akeebasubs_subscription_id,
+			'cardholder'  => $user->name
 		);
 
 		@ob_start();
-		include dirname(__FILE__).'/stripe/form.php';
+		include dirname(__FILE__) . '/stripe/form.php';
 		$html = @ob_get_clean();
 
 		return $html;
@@ -145,8 +148,8 @@ class plgAkpaymentStripe extends AkpaymentBase
 	/**
 	 * Processes a callback from the payment processor
 	 *
-	 * @param   string  $paymentmethod  The currently used payment method. Check it against $this->ppName
-	 * @param   array   $data           Input (request) data
+	 * @param   string $paymentmethod The currently used payment method. Check it against $this->ppName
+	 * @param   array  $data          Input (request) data
 	 *
 	 * @return  boolean  True if the callback was handled, false otherwise
 	 */
@@ -155,53 +158,78 @@ class plgAkpaymentStripe extends AkpaymentBase
 		JLoader::import('joomla.utilities.date');
 
 		// Check if we're supposed to handle this
-		if($paymentmethod != $this->ppName) return false;
+		if ($paymentmethod != $this->ppName)
+		{
+			return false;
+		}
+
 		$isValid = true;
 
 		// Load the relevant subscription row
 		$id = $data['sid'];
 		$subscription = null;
-		if($id > 0) {
-			$subscription = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
-				->setId($id)
-				->getItem();
-			if( ($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id) ) {
+
+		if ($id > 0)
+		{
+			/** @var Subscriptions $subscription */
+			$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
+			$subscription->find($id);
+
+			if (($subscription->akeebasubs_subscription_id <= 0) || ($subscription->akeebasubs_subscription_id != $id))
+			{
 				$subscription = null;
 				$isValid = false;
 			}
-            $level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
-                ->setId($subscription->akeebasubs_level_id)
-                ->getItem();
-		} else {
+
+			$level = $subscription->level;
+		}
+		else
+		{
 			$isValid = false;
 		}
-		if(!$isValid) $data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
 
-		if($isValid) {
-			try {
+		/** @var Subscriptions $subscription */
+		/** @var Levels $levels */
+
+		if (!$isValid)
+		{
+			$data['akeebasubs_failure_reason'] = 'The subscription ID is invalid';
+		}
+
+		if ($isValid)
+		{
+			try
+			{
 				$apiKey = $this->getPrivateKey();
 				Stripe::setApiKey($apiKey);
+
 				$params = array(
-					'amount'		=> $data['amount'],
-					'currency'		=> $data['currency'],
-					'card'			=> $data['token'],
-					'description'	=> $data['description']
+					'amount'      => $data['amount'],
+					'currency'    => $data['currency'],
+					'card'        => $data['token'],
+					'description' => $data['description']
 				);
+
 				$transaction = Stripe_Charge::create($params);
-			}catch(Exception $e) {
+			}
+			catch (Exception $e)
+			{
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = $e->getMessage();
 			}
 		}
 
-		if($isValid && !empty($transaction['failure_message'])) {
+		if ($isValid && !empty($transaction['failure_message']))
+		{
 			$isValid = false;
 			$data['akeebasubs_failure_reason'] = "Stripe failure: " . $transaction['failure_message'];
 		}
 
 		// Check that transaction has not been previously processed
-		if($isValid) {
-			if($transaction['id'] == $subscription->processor_key) {
+		if ($isValid)
+		{
+			if ($transaction['id'] == $subscription->processor_key)
+			{
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "I will not processe this transaction twice";
 			}
@@ -209,31 +237,46 @@ class plgAkpaymentStripe extends AkpaymentBase
 
 		// Check that amount is correct
 		$isPartialRefund = false;
-		if($isValid && !is_null($subscription)) {
+
+		if ($isValid && !is_null($subscription))
+		{
 			$mc_gross = $transaction['amount'];
 			$gross = (int)($subscription->gross_amount * 100);
-			if($mc_gross > 0) {
+
+			if ($mc_gross > 0)
+			{
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
 				$isValid = ($gross - $mc_gross) < 0.01;
-			} else {
+			}
+			else
+			{
 				$isPartialRefund = false;
 				$temp_mc_gross = -1 * $mc_gross;
 				$isPartialRefund = ($gross - $temp_mc_gross) > 0.01;
 			}
-			if(!$isValid) $data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+
+			if (!$isValid)
+			{
+				$data['akeebasubs_failure_reason'] = 'Paid amount does not match the subscription amount';
+			}
 		}
 
-		if($isValid) {
-			if($data['currency'] != strtolower($transaction['currency'])) {
+		if ($isValid)
+		{
+			if ($data['currency'] != strtolower($transaction['currency']))
+			{
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Currency doesn't match.";
 			}
 		}
 
 		$sandbox = $this->params->get('sandbox');
-		if($isValid) {
-			if($sandbox == $transaction['livemode']) {
+
+		if ($isValid)
+		{
+			if ($sandbox == $transaction['livemode'])
+			{
 				$isValid = false;
 				$data['akeebasubs_failure_reason'] = "Transaction done in wrong mode.";
 			}
@@ -243,35 +286,40 @@ class plgAkpaymentStripe extends AkpaymentBase
 		$this->logIPN($transaction, $isValid);
 
 		// Fraud attempt? Do nothing more!
-		if(!$isValid) {
-			$level = F0FModel::getTmpInstance('Levels','AkeebasubsModel')
-				->setId($subscription->akeebasubs_level_id)
-				->getItem();
-			$error_url = 'index.php?option=com_akeebasubs'.
-				'&view=Level&slug='.$level->slug;
-			$error_url = JRoute::_($error_url,false);
-			JFactory::getApplication()->redirect($error_url,$data['akeebasubs_failure_reason'],'error');
+		if (!$isValid)
+		{
+			$level = $subscription->level;
+
+			$error_url = 'index.php?option=com_akeebasubs&view=Level&slug=' . $level->slug;
+			$error_url = JRoute::_($error_url, false);
+			JFactory::getApplication()->redirect($error_url, $data['akeebasubs_failure_reason'], 'error');
+
 			return false;
 		}
 
 		// Payment status
-		if($transaction['paid']) {
+		if ($transaction['paid'])
+		{
 			$newStatus = 'C';
-		} else {
+		}
+		else
+		{
 			$newStatus = 'X';
 		}
 
 		// Update subscription status (this+ also automatically calls the plugins)
 		$updates = array(
-				'akeebasubs_subscription_id'	=> $id,
-				'processor_key'					=> $transaction['id'],
-				'state'							=> $newStatus,
-				'enabled'						=> 0
+			'akeebasubs_subscription_id' => $id,
+			'processor_key'              => $transaction['id'],
+			'state'                      => $newStatus,
+			'enabled'                    => 0
 		);
-		JLoader::import('joomla.utilities.date');
-		if($newStatus == 'C') {
-			$this->fixDates($subscription, $updates);
+
+		if ($newStatus == 'C')
+		{
+			self::fixSubscriptionDates($subscription, $updates);
 		}
+
 		$subscription->save($updates);
 
 		// Run the onAKAfterPaymentCallback events
@@ -281,38 +329,49 @@ class plgAkpaymentStripe extends AkpaymentBase
 		));
 
 		// Redirect the user to the "thank you" page
-		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug='.$level->slug.'&task=thankyou&subid='.$subscription->akeebasubs_subscription_id, false);
+		$thankyouUrl = JRoute::_('index.php?option=com_akeebasubs&view=Message&slug=' . $subscription->level->slug . '&task=thankyou&subid=' . $subscription->akeebasubs_subscription_id, false);
+
 		JFactory::getApplication()->redirect($thankyouUrl);
+
 		return true;
 	}
 
 	private function getPublicKey()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
-			return trim($this->params->get('sb_public_key',''));
-		} else {
-			return trim($this->params->get('public_key',''));
+		$sandbox = $this->params->get('sandbox', 0);
+
+		if ($sandbox)
+		{
+			return trim($this->params->get('sb_public_key', ''));
+		}
+		else
+		{
+			return trim($this->params->get('public_key', ''));
 		}
 	}
 
 	private function getPrivateKey()
 	{
-		$sandbox = $this->params->get('sandbox',0);
-		if($sandbox) {
-			return trim($this->params->get('sb_private_key',''));
-		} else {
-			return trim($this->params->get('private_key',''));
+		$sandbox = $this->params->get('sandbox', 0);
+
+		if ($sandbox)
+		{
+			return trim($this->params->get('sb_private_key', ''));
+		}
+		else
+		{
+			return trim($this->params->get('private_key', ''));
 		}
 	}
 
 	public function selectMonth()
 	{
 		$options = array();
-		$options[] = JHTML::_('select.option',0,'--');
-		for($i = 1; $i <= 12; $i++) {
+		$options[] = JHTML::_('select.option', 0, '--');
+		for ($i = 1; $i <= 12; $i++)
+		{
 			$m = sprintf('%02u', $i);
-			$options[] = JHTML::_('select.option',$m,$m);
+			$options[] = JHTML::_('select.option', $m, $m);
 		}
 
 		return JHTML::_('select.genericlist', $options, 'card-expiry-month', 'class="input-small"', 'value', 'text', '', 'card-expiry-month');
@@ -320,13 +379,14 @@ class plgAkpaymentStripe extends AkpaymentBase
 
 	public function selectYear()
 	{
-		$year = gmdate('Y');
+		$year = (int) gmdate('Y');
 
 		$options = array();
-		$options[] = JHTML::_('select.option',0,'--');
-		for($i = 0; $i <= 10; $i++) {
-			$y = sprintf('%04u', $i+$year);
-			$options[] = JHTML::_('select.option',$y,$y);
+		$options[] = JHTML::_('select.option', 0, '--');
+		for ($i = 0; $i <= 10; $i++)
+		{
+			$y = sprintf('%04u', $i + $year);
+			$options[] = JHTML::_('select.option', $y, $y);
 		}
 
 		return JHTML::_('select.genericlist', $options, 'card-expiry-year', 'class="input-small"', 'value', 'text', '', 'card-expiry-year');
