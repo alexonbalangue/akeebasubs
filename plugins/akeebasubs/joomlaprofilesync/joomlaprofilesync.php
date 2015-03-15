@@ -7,6 +7,9 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Subscriptions\Admin\Helper\Select;
+use FOF30\Container\Container;
+
 /**
  * A sample plugin which creates two extra fields, age group and gender.
  * The former is mandatory, the latter is not
@@ -20,9 +23,9 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 	 * The values in the array will replace the values stored in the user's
 	 * profile.
 	 *
-	 * @param object $userData The already fetched user information
+	 * @param   object  $userData  The already fetched user information
 	 *
-	 * @return array A key/value array with user information overrides
+	 * @return  array  A key/value array with user information overrides
 	 */
 	public function onAKUserGetData($userData)
 	{
@@ -30,6 +33,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		{
 			return array();
 		}
+
 		$user_id = JFactory::getUser($userData->username)->id;
 
 		$db = JFactory::getDbo();
@@ -54,24 +58,19 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		// Initialise return value
 		$ret = array();
 
-		// Make sure the select helper is loaded
-		if (!class_exists('AkeebasubsHelperSelect'))
-		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
-		}
-
 		// Special case: country
 		if (isset($rows['profile.country']))
 		{
 			$country = json_decode($rows['profile.country'][1]);
-			if (in_array($country, AkeebasubsHelperSelect::$countries))
+			if (in_array($country, Select::$countries))
 			{
-				$country = array_search($country, AkeebasubsHelperSelect::$countries);
+				$country = array_search($country, Select::$countries);
 			}
 			else
 			{
 				$country = 'US';
 			}
+
 			$rows['profile.country'][1] = json_encode($country);
 		}
 
@@ -86,9 +85,10 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			{
 				$country = 'US';
 			}
+
 			$state = json_decode($rows['profile.region'][1]);
-			$cname = AkeebasubsHelperSelect::$countries[$country];
-			$states = isset(AkeebasubsHelperSelect::$states[$country]) ? AkeebasubsHelperSelect::$states[$country] : null;
+			$cname = Select::$countries[$country];
+			$states = isset(Select::$states[$country]) ? Select::$states[$country] : null;
 			if (!is_array($states))
 			{
 				$states = array();
@@ -102,6 +102,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			{
 				$state = '';
 			}
+
 			$rows['profile.region'][1] = json_encode($state);
 		}
 
@@ -116,9 +117,11 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			{
 				$country = 'US';
 			}
+
 			$state = json_decode($rows['profile.region'][1], true);
-			$cname = AkeebasubsHelperSelect::$countries[$country];
-			$states = isset(AkeebasubsHelperSelect::$states[$country]) ? AkeebasubsHelperSelect::$states[$country] : null;
+			$cname = Select::$countries[$country];
+			$states = isset(Select::$states[$country]) ? Select::$states[$country] : null;
+
 			if (!is_array($states))
 			{
 				$states = array();
@@ -138,12 +141,17 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		}
 
 		// Check for basic information
-		$basic_keys = array('isbusiness', 'businessname', 'occupation', 'vatnumber', 'viesregistered', 'taxauthority', 'address1', 'address2', 'city', 'zip', 'country');
+		$basic_keys = [
+			'isbusiness', 'businessname', 'occupation', 'vatnumber', 'viesregistered', 'taxauthority', 'address1',
+			'address2', 'city', 'zip', 'country'
+		];
+
 		foreach ($basic_keys as $key)
 		{
 			if (isset($rows['profile.' . $key]))
 			{
 				$ret[$key] = json_decode($rows['profile.' . $key][1], true);
+
 				unset($rows['profile.' . $key]);
 			}
 		}
@@ -152,11 +160,13 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		if (isset($rows['profile.tos']))
 		{
 			$rows['akeebasubs.agreetotos'] = $rows['profile.tos'];
+
 			unset($rows['tos']);
 		}
 
 		// The rest of the records is treated as extra fields
 		$params = array();
+
 		if (!empty($rows))
 		{
 			foreach ($rows as $key => $row)
@@ -165,10 +175,12 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 				{
 					continue;
 				}
+
 				$key = substr($key, 11);
 				$params[$key] = json_decode($row[1]);
 			}
 		}
+
 		$ret['params'] = $params;
 
 		// Return result
@@ -184,21 +196,23 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 	 * developer interested in creating, for example, a "bridge" with a social
 	 * component like Community Builder or JomSocial.
 	 *
-	 * @param stdClass $userData The user data
+	 *
+	 * @param   array  $data  The user data being saved
+	 *
+	 * @return  bool  Return false to cancel the user data saving
 	 */
-	public function onAKUserSaveData($userData)
+	public function onAKUserSaveData(array &$data)
 	{
 		// Get the user ID
-		$user_id = $userData->user_id;
-
-		// Initialise the data array
-		$data = (array)$userData;
+		$user_id = $data['user_id'];
 
 		// Remove the params field
 		$params = array();
+
 		if (isset($data['params']))
 		{
 			$params = $data['params'];
+
 			if (is_string($params))
 			{
 				$params = json_decode($params, true);
@@ -207,11 +221,12 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 			{
 				$params = (array)$params;
 			}
+
 			unset($data['params']);
 		}
 
 		// Remove some fields which must not be saved
-		foreach (array('akeebasubs_user_id', 'user_id', 'notes', 'input') as $key)
+		foreach (['akeebasubs_user_id', 'user_id', 'notes', 'input'] as $key)
 		{
 			if (isset($data[$key]))
 			{
@@ -220,23 +235,21 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		}
 
 		// Translate country and state
-		if (!class_exists('AkeebasubsHelperSelect'))
-		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_akeebasubs/helpers/select.php';
-		}
 		if (isset($data['state']))
 		{
-			$data['state'] = AkeebasubsHelperSelect::formatState($data['state']);
+			$data['state'] = Select::formatState($data['state']);
 		}
+
 		if (isset($data['country']))
 		{
-			$data['country'] = AkeebasubsHelperSelect::formatCountry($data['country']);
+			$data['country'] = Select::formatCountry($data['country']);
 		}
 
 		// Rename the ZIP field
 		if (isset($data['zip']))
 		{
 			$data['postal_code'] = $data['zip'];
+
 			unset($data['zip']);
 		}
 
@@ -244,6 +257,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		if (isset($data['state']))
 		{
 			$data['region'] = $data['state'];
+
 			unset($data['state']);
 		}
 
@@ -251,6 +265,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		foreach (array_keys($data) as $key)
 		{
 			$data['profile.' . $key] = json_encode($data[$key]);
+
 			unset($data[$key]);
 		}
 
@@ -307,10 +322,21 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 		return $result;
 	}
 
+	/**
+	 * Called whenever the administrator asks to refresh integration status.
+	 *
+	 * @param   int  $user_id  The Joomla! user ID to refresh information for.
+	 *
+	 * @return  void
+	 */
 	public function onAKUserRefresh($user_id)
 	{
-		$mergedData = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->getMergedData($user_id);
+		$container = Container::getInstance('com_akeebasubs');
+
+		/** @var \Akeeba\Subscriptions\Admin\Model\Users $usersModel */
+		$usersModel = $container->factory->model('Users');
+
+		$mergedData = $usersModel->getMergedData($user_id);
 
 		if (!property_exists($mergedData, 'akeebasubs_user_id'))
 		{
@@ -319,8 +345,7 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 
 		$akeebasubs_user_id = $mergedData->akeebasubs_user_id;
 
-		$userData = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')
-			->getItem($akeebasubs_user_id);
+		$userData = $usersModel->find($akeebasubs_user_id)->toArray();
 
 		$this->onAKUserSaveData($userData);
 	}
