@@ -207,7 +207,7 @@ class Users extends DataModel
 		// Get a legacy data set from the user parameters
 		$userRow = $this->user;
 
-		if (empty($this->user_id))
+		if (empty($this->user_id) || !is_object($userRow))
 		{
 			/** @var JoomlaUsers $userRow */
 			$userRow = $this->container->factory->model('JoomlaUsers')->tmpInstance();
