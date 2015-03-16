@@ -2348,7 +2348,7 @@ class Subscribe extends Model
 		// Step #2.b. Apply block rules
 		// ----------------------------------------------------------------------
 		/** @var BlockRules $blockRulesModel */
-		$blockRulesModel = $this->container->factory->model('Blockrules')->tmpInstance();
+		$blockRulesModel = $this->container->factory->model('BlockRules')->tmpInstance();
 
 		if ($blockRulesModel->isBlocked($state))
 		{
