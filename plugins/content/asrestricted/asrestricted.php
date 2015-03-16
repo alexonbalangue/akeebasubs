@@ -5,14 +5,13 @@
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-defined('_JEXEC') or die();
-
 JLoader::import('joomla.plugin.plugin');
 
 use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 
-class plgContentAslink extends JPlugin
+class plgContentAsrestricted extends JPlugin
 {
 	/**
 	 * Should this plugin be allowed to run? True if FOF can be loaded and the Akeeba Subscriptions component is enabled
@@ -49,23 +48,37 @@ class plgContentAslink extends JPlugin
 	 *
 	 * @return bool
 	 */
-	public function onContentPrepare($context, &$article, &$params, $limitstart = 0)
+	public function onContentPrepare($context, &$row, &$params, $page = 0)
 	{
 		if (!$this->enabled)
-		{
-			return;
-		}
-
-		// Check whether the plugin should process or not
-		if (JString::strpos($article->text, 'aslink') === false)
 		{
 			return true;
 		}
 
-		// Search for this tag in the content
-		$regex = "#{aslink (.*?)}#s";
+		if (is_object($row))
+		{
+			// Check whether the plugin should process or not
+			if (JString::strpos($row->text, 'akeebasubs') === false)
+			{
+				return true;
+			}
 
-		$article->text = preg_replace_callback($regex, array('self', 'process'), $article->text);
+			// Search for this tag in the content
+			$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
+			$row->text = preg_replace_callback($regex, array('self', 'process'), $row->text);
+		}
+		else
+		{
+			if (JString::strpos($row, 'akeebasubs') === false)
+			{
+				return true;
+			}
+
+			$regex = "#{akeebasubs(.*?)}(.*?){/akeebasubs}#s";
+			$row   = preg_replace_callback($regex, array('self', 'process'), $row);
+		}
+
+		return true;
 	}
 
 	/**
@@ -172,121 +185,135 @@ class plgContentAslink extends JPlugin
 	}
 
 	/**
-	 * Callback to preg_replace_callback in the onContentPrepare event handler of this plugin.
+	 * Checks if a user has a valid, active subscription by that particular ID
 	 *
-	 * @param   array  $match  A match to the {aslink} plugin tag
+	 * @param $id int The subscription level ID
 	 *
-	 * @return  string  The processed result
+	 * @return bool True if there is such a subscription
+	 */
+	private static function isTrue($id)
+	{
+		static $subscriptions = null;
+
+		// Don't process empty or invalid IDs
+		$id = trim($id);
+
+		if (empty($id) || (($id <= 0) && ($id != '*')))
+		{
+			return false;
+		}
+
+		// Don't process for guests
+		$user = JFactory::getUser();
+
+		if ($user->guest)
+		{
+			$subscriptions = array();
+		}
+		elseif (is_null($subscriptions))
+		{
+			$subscriptions = array();
+			JLoader::import('joomla.utilities.date');
+			$jNow = new JDate();
+
+			/** @var Subscriptions $subsModel */
+			$subsModel = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')->tmpInstance();
+			$list = $subsModel
+	            ->user_id($user->id)
+	            ->expires_from($jNow->toSql())
+	            ->paystate('C')
+	            ->get(true);
+
+			if ($list->count())
+			{
+				/** @var Subscriptions $sub */
+				foreach ($list as $sub)
+				{
+					if ($sub->enabled)
+					{
+						if (!in_array($sub->akeebasubs_level_id, $subscriptions))
+						{
+							$subscriptions[] = $sub->akeebasubs_level_id;
+						}
+					}
+				}
+			}
+		}
+
+		if ($id == '*')
+		{
+			return !empty($subscriptions);
+		}
+		else
+		{
+			return in_array($id, $subscriptions);
+		}
+	}
+
+	/**
+	 * preg_match callback to process each match
 	 */
 	private static function process($match)
 	{
 		$ret = '';
 
-		if (($match[1] != 'view=levels') && ($match[1] != 'view=Levels'))
+		if (self::analyze($match[1]))
 		{
-			$slug = self::getId($match[1], true);
-
-			if (!empty($slug))
-			{
-				$root = self::getRootUrl();
-
-				$itemId = self::_findItem($slug);
-				if ($itemId)
-				{
-					$itemId = '&Itemid=' . $itemId;
-				}
-
-				$ret = rtrim($root, '/') . JRoute::_('index.php?option=com_akeebasubs&view=level&slug=' . $slug . $itemId);
-			}
-		}
-		else
-		{
-			$root = self::getRootUrl();
-
-			$itemId = self::_findItem('levels');
-			if ($itemId)
-			{
-				$itemId = '&Itemid=' . $itemId;
-			}
-
-			$ret = rtrim($root, '/') . JRoute::_('index.php?option=com_akeebasubs&view=levels&Itemid=' . $itemId);
+			$ret = $match[2];
 		}
 
 		return $ret;
 	}
 
 	/**
-	 * Gets the URL to the site's root
+	 * Analyzes a filter statement and decides if it's true or not
 	 *
-	 * @return  string
+	 * @return boolean
 	 */
-	private static function getRootUrl()
+	private static function analyze($statement)
 	{
-		static $root = null;
+		$ret = false;
 
-		if (is_null($root))
+		if ($statement)
 		{
-			$root    = rtrim(JURI::base(), '/');
-			$subpath = JURI::base(true);
+			// Stupid, stupid crap... ampersands replaced by &amp;...
+			$statement = str_replace('&amp;&amp;', '&&', $statement);
 
-			if (!empty($subpath) && ($subpath != '/'))
+			// First, break down to OR statements
+			$items = explode("||", trim($statement));
+
+			for ($i = 0; $i < count($items) && !$ret; $i ++)
 			{
-				$root = substr($root, 0, - 1 * strlen($subpath));
-			}
-		}
+				// Break down AND statements
+				$expression = trim($items[ $i ]);
+				$subitems   = explode('&&', $expression);
+				$ret        = true;
 
-		return $root;
-	}
-
-	/**
-	 * Finds out the Itemid for the subscription
-	 *
-	 * @param   string  $slug  The subscription level slug for which we want to find the Itemid
-	 *
-	 * @return  null|string  The Itemid or null if nothing is found
-	 */
-	private static function _findItem($slug)
-	{
-
-		$component = JComponentHelper::getComponent('com_akeebasubs');
-		$menus     = JFactory::getApplication()->getMenu('site', array());
-		$items     = $menus->getItems('component_id', $component->id);
-		$itemId    = null;
-
-		if (count($items))
-		{
-			foreach ($items as $item)
-			{
-				if (is_string($item->params))
+				foreach ($subitems as $item)
 				{
-					$params = new JRegistry();
-					$params->loadString($item->params, 'JSON');
-				}
-				else
-				{
-					$params = $item->params;
-				}
+					$item   = trim($item);
+					$negate = false;
 
-				if (@$item->query['view'] == 'level')
-				{
-					if ((@$params->get('slug') == $slug))
+					if (substr($item, 0, 1) == '!')
 					{
-						$itemId = $item->id;
-						break;
+						$negate = true;
+						$item   = substr($item, 1);
+						$item   = trim($item);
 					}
-				}
 
-				if (@$item->query['view'] == 'levels')
-				{
-					if ($item->query['view'] == $slug)
+					$id = trim($item);
+
+					if ($id != '*')
 					{
-						$itemId = $item->id;
-						break;
+						$id = self::getId($id);
 					}
+
+					$result = self::isTrue($id);
+					$ret    = $ret && ($negate ? !$result : $result);
 				}
 			}
 		}
 
-		return $itemId;
+		return $ret;
 	}
 }

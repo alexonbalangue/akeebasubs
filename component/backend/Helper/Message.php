@@ -105,7 +105,12 @@ abstract class Message
 		}
 
 		// Create and replace merge tags for the subscription level. Format [LEVEL:KEYNAME]
-		$levelData = (array) ($level->getData());
+		$levelData = [];
+
+		if ($level instanceof Levels)
+		{
+			$levelData = (array) ($level->getData());
+		}
 
 		foreach ($levelData as $k => $v)
 		{

@@ -12,13 +12,20 @@ JLoader::import('joomla.plugin.plugin');
 class plgSystemAsuserregredir extends JPlugin
 {
 	/**
+	 * Should this plugin be allowed to run? True if FOF can be loaded and the Akeeba Subscriptions component is enabled
+	 *
+	 * @var  bool
+	 */
+	private $enabled = true;
+
+	/**
 	 * Public constructor. Overridden to load the language strings.
 	 */
 	public function __construct(& $subject, $config = array())
 	{
 		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
 		{
-			throw new RuntimeException('FOF 3.0 is not installed', 500);
+			$this->enabled = false;
 		}
 
 		// Do not run if Akeeba Subscriptions is not enabled
@@ -26,7 +33,7 @@ class plgSystemAsuserregredir extends JPlugin
 
 		if (!JComponentHelper::isEnabled('com_akeebasubs'))
 		{
-			throw new RuntimeException('Akeeba Subscriptions is not installed or enabled', 500);
+			$this->enabled = false;
 		}
 
 		if (!is_object($config['params']))
@@ -59,6 +66,11 @@ class plgSystemAsuserregredir extends JPlugin
 
 	public function onAfterRoute()
 	{
+		if (!$this->enabled)
+		{
+			return;
+		}
+
 		// Only run in the front-end
 		if (!JFactory::getApplication()->isSite())
 		{

@@ -502,7 +502,17 @@ class Invoices extends DataModel
 		$cyprus_tag     = 'TRIANGULAR TRANSACTION';
 		$cyprus_note    = 'We are obliged by local tax laws to write the words "triangular transaction" on all invoices issued in Euros. This doesn\'t mean anything in particular about your transaction.';
 
-		$asUser         = $sub->user;
+		if (is_object($sub->user))
+		{
+			$asUser = $sub->user;
+		}
+		else
+		{
+			/** @var Users $userModel */
+			$userModel = $this->container->factory->model('Users')->tmpInstance();
+			$asUser = $userModel->find(['user_id' => $this->container->platform->getUser()->id]);
+		}
+
 		$country        = $asUser->country;
 		$isbusiness     = $asUser->isbusiness;
 		$viesregistered = $asUser->viesregistered;
@@ -650,7 +660,17 @@ class Invoices extends DataModel
 	{
 		$level_id = $sub->akeebasubs_level_id;
 
-		$mergedData = $sub->user->getMergedData($sub->user_id);
+		if (is_object($sub->user))
+		{
+			$mergedData = $sub->user->getMergedData($sub->user_id);
+		}
+		else
+		{
+			/** @var Users $userModel */
+			$userModel = $this->container->factory->model('Users')->tmpInstance();
+			$mergedData = $userModel->getMergedData();
+		}
+
 
 		$ret = null;
 

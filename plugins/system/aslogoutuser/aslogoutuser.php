@@ -15,13 +15,20 @@ use Akeeba\Subscriptions\Admin\Model\Users;
 class plgSystemAslogoutuser extends JPlugin
 {
 	/**
+	 * Should this plugin be allowed to run? True if FOF can be loaded and the Akeeba Subscriptions component is enabled
+	 *
+	 * @var  bool
+	 */
+	private $enabled = true;
+
+	/**
 	 * Public constructor. Overridden to load the language strings.
 	 */
 	public function __construct(& $subject, $config = array())
 	{
 		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
 		{
-			throw new RuntimeException('FOF 3.0 is not installed', 500);
+			$this->enabled = false;
 		}
 
 		// Do not run if Akeeba Subscriptions is not enabled
@@ -29,7 +36,7 @@ class plgSystemAslogoutuser extends JPlugin
 
 		if (!JComponentHelper::isEnabled('com_akeebasubs'))
 		{
-			throw new RuntimeException('Akeeba Subscriptions is not installed or enabled', 500);
+			$this->enabled = false;
 		}
 
 		if (!is_object($config['params']))
@@ -71,10 +78,15 @@ class plgSystemAslogoutuser extends JPlugin
 	 */
 	public function onAfterInitialise()
 	{
+		if (!$this->enabled)
+		{
+			return;
+		}
+
         $juser = JFactory::getUser();
 
         // Guest user? No need to check
-        if($juser->guest)
+        if ($juser->guest)
         {
             return;
         }
@@ -85,13 +97,13 @@ class plgSystemAslogoutuser extends JPlugin
         $user->find(['user_id' => $juser->id]);
 
         // Mhm... the user was not found inside Akeeba Subscription, better stop here
-        if(!$user->akeebasubs_user_id)
+        if (!$user->akeebasubs_user_id)
         {
             return;
         }
 
         // No need to logout, let's stop here
-        if(!$user->needs_logout)
+        if (!$user->needs_logout)
         {
             return;
         }
