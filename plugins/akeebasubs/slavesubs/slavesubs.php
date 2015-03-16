@@ -494,6 +494,17 @@ JS;
 		}
 	}
 
+	/**
+	 * This is called whenever a new slave subscription is created.
+	 * We are using it to create slave subscriptions where necessary 
+	 * and "mirror" the parameters of the master subscription
+	 *
+	 * @param   string           $username   The Slave User which we create a subscription for
+	 * @param   array            $data  information from the master subscription
+	 * @param   array            $params  parmeters from the master subscription with current modifications
+	 * 
+	 **/
+	 
 	private function createSlaveSub($username, $data, $params)
 	{
 		$user_id = JUserHelper::getUserId($username);
@@ -545,7 +556,14 @@ JS;
 
 		return $table->akeebasubs_subscription_id;
 	}
-
+	
+	/**
+	 * This is called whenever a slave subscription is expired.
+	 *
+	 * @param   int              $subId   The Slave subscription ID which we are expireing
+	 * 
+	 **/
+	 
 	private function expireSlaveSub($subId)
 	{
 		self::$dontFire = true;
