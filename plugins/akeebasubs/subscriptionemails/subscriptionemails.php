@@ -35,7 +35,7 @@ class plgAkeebasubsSubscriptionemails extends JPlugin
 	 * @param   Subscriptions  $row
 	 * @param   array		   $info
 	 */
-	public function onAKSubscriptionChange($row, $info)
+	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
 		$payState = $row->getFieldValue('state', 'N');
 

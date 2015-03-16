@@ -22,7 +22,7 @@ class plgAkeebasubsInvoices extends JPlugin
 	 *
 	 * @return  void
 	 */
-	public function onAKSubscriptionChange($row, $info)
+	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
 		if (is_null($info['modified']) || empty($info['modified']))
 		{

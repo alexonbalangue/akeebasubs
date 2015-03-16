@@ -317,7 +317,7 @@ JS;
 	 * @param   Subscriptions  $row   The subscription which we act upon
 	 * @param   array          $info  Update information
 	 */
-	public function onAKSubscriptionChange($row, $info)
+	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
 		if (self::$dontFire)
 		{

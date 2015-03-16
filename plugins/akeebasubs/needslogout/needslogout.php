@@ -21,7 +21,7 @@ class plgAkeebasubsNeedslogout extends JPlugin
 	 *
 	 * @return  void
 	 */
-	public function onAKSubscriptionChange($row, $info)
+	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
 		if ($info['status'] != 'modified')
 		{
