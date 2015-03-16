@@ -373,7 +373,7 @@ JS;
 				}
 
 				// Save the new subscription record
-				$result = $this->createSlaveSub($user_id, $data, $params);
+				$result = $this->createSlaveSub($slaveUsername, $data, $params);
 				$slavesubs_ids[] = $result;
 			}
 
@@ -427,7 +427,7 @@ JS;
 
 					if(isset($previous['slavesubs_ids'][$index]))
 					{
-						//we have a valid slave so copy from parent to slave
+						//we still have a valid slave so copy from parent to slave
 						$result =$this->copySubscriptionInformation($row, $previous['slavesubs_ids'][$index]);
 						$dirty = true;	
 					}
@@ -494,6 +494,18 @@ JS;
 		}
 	}
 
+	/**
+	 * This is called whenever a new slave subscription is created.
+	 * We are using it to create slave subscriptions where necessary 
+	 * and "mirror" the parameters of the master subscription
+	 *
+	 * @param   string  $username  The Slave User which we create a subscription for
+	 * @param   array  $data  information from the master subscription
+	 * @param   array  $params  parameters from the master subscription with current modifications
+	 * 
+	 * 
+	 * @return   int  akeebasubs_subscription_id  The id of the slave subscription created
+	 */
 	private function createSlaveSub($username, $data, $params)
 	{
 		$user_id = JUserHelper::getUserId($username);
@@ -545,7 +557,13 @@ JS;
 
 		return $table->akeebasubs_subscription_id;
 	}
-
+	
+	/**
+	 * This is called whenever a slave subscription is expired.
+	 *
+	 * @param   int  $subId  The Slave subscription ID which we are expiring
+	 * 
+	 */
 	private function expireSlaveSub($subId)
 	{
 		self::$dontFire = true;
@@ -564,8 +582,10 @@ JS;
 	/**
 	 * Copies the subscription information from row $from to $to.
 	 *
-	 * @param   AkeebasubsTableSubscription $from  Row to copy from
-	 * @param   AkeebasubsTableSubscription $to    Row to copy to
+	 * @param   Subscription  $from  Row to copy from
+	 * @param   Subscription  $to    Row to copy to
+	 * 
+	 * @return int  akeebasubs_subscription_id  The id of the slave subscription created
 	 */
 	private function copySubscriptionInformation($from, &$to)
 	{
