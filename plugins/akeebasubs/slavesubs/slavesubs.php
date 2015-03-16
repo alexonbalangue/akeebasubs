@@ -397,7 +397,7 @@ JS;
 				}
 
 				// Save the new subscription record
-				$result          = $this->createSlaveSub($user_id, $data, $params);
+				$result          = $this->createSlaveSub($slaveUsername, $data, $params);
 				$slavesubs_ids[] = $result;
 			}
 
