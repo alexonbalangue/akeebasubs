@@ -373,7 +373,7 @@ JS;
 				}
 
 				// Save the new subscription record
-				$result = $this->createSlaveSub($user_id, $data, $params);
+				$result = $this->createSlaveSub($slaveUsername, $data, $params);
 				$slavesubs_ids[] = $result;
 			}
 
@@ -427,7 +427,7 @@ JS;
 
 					if(isset($previous['slavesubs_ids'][$index]))
 					{
-						//we have a valid slave so copy from parent to slave
+						//we still have a valid slave so copy from parent to slave
 						$result =$this->copySubscriptionInformation($row, $previous['slavesubs_ids'][$index]);
 						$dirty = true;	
 					}
