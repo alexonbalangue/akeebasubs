@@ -205,7 +205,11 @@ class plgSystemAsexpirationnotify extends JPlugin
 			}
 
 			// If there are no subscriptions, bail out
-			if (($subs1->count() + $subs2->count() + $subs3->count()) == 0)
+			$subs1count = is_object($subs1) ? $subs1->count() : 0;
+			$subs2count = is_object($subs2) ? $subs2->count() : 0;
+			$subs3count = is_object($subs3) ? $subs3->count() : 0;
+
+			if (($subs1count + $subs2count + $subs3count) == 0)
 			{
 				continue;
 			}
