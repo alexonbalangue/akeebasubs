@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.3.0" type="plugin" group="content" method="upgrade">
-	<name>Content - Akeeba Subscriptions Link</name>
+	<name>PLG_CONTENT_ASLINK</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2011-2015 Nicholas K. Dionysopoulos</copyright>
 	<license>GNU General Public License version 3, or later</license>
-	<creationDate>July 2011</creationDate>
+	<creationDate>April 2015</creationDate>
 	<version>5.0</version>
 	<description>PLG_CONTENT_ASLINK_DESCRIPTION</description>
 	<files>

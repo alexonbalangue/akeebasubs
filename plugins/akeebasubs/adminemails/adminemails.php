@@ -50,7 +50,7 @@ class plgAkeebasubsAdminemails extends plgAkeebasubsSubscriptionemails
 	 *
 	 * @return  void
 	 */
-	public function onAKSubscriptionChange(Subscriptions $row, array $info)
+	public function onAKSubscriptionChange($row, $info)
 	{
 		// No point running if there are no emails defined, right?
 		if (empty($this->emails))
