@@ -36,7 +36,8 @@ HTML;
 		if ($subscription->akeebasubs_upgrade_id)
 		{
 			$title = JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_DISCOUNT_UPGRADE');
-			$discountTitle = empty($subscription->upgrade->title) ? '&mdash;&mdash;&mdash;' : $subscription->coupon->title;
+
+			$discountTitle = empty($subscription->upgrade->title) ? '&mdash;&mdash;&mdash;' : $subscription->upgrade->title;
 
 			return <<< HTML
 <span class="akeebasubs-subscription-discount-upgrade" title="$title">
