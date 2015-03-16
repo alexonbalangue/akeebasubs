@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.3.0" client="administrator" method="upgrade">
+	<name>MOD_AKEEBASUBS</name>
+    <author>Nicholas K. Dionysopoulos</author>
+    <copyright>Copyright (C) 2011-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com</copyright>
+    <license>GNU GPLv3 - http://www.gnu.org/licenses/gpl.html</license>
+    <authorEmail>nicholas@akeebabackup.com</authorEmail>
+    <authorUrl>www.akeebabackup.com</authorUrl>
+    <creationDate>April 2015</creationDate>
+    <version>5.0</version>
+	<description>MOD_AKEEBASUBS_XML_DESC</description>
+	<files>
+		<filename module="mod_akeebasubs">mod_akeebasubs.php</filename>
+		<folder>tmpl</folder>
+	</files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.mod_akeebasubs.ini</language>
+        <language tag="en-GB">en-GB/en-GB.mod_akeebasubs.sys.ini</language>
+    </languages>
+</extension>
