@@ -37,6 +37,12 @@ class plgAkeebasubsNeedslogout extends JPlugin
 
 		$user = $row->user;
 
+		// This happens if the Joomla! user record was removed manually
+		if (!is_object($user))
+		{
+			return;
+		}
+
 		$updates = ['needs_logout' => 1];
 		$user->save($updates);
 	}
