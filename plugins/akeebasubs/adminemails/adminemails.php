@@ -44,8 +44,13 @@ class plgAkeebasubsAdminemails extends plgAkeebasubsSubscriptionemails
 	/**
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
 	 * payment status or valid from/to dates are changed.
+	 *
+	 * @param   Subscriptions  $row   The subscriptions row
+	 * @param   array          $info  The row modification information
+	 *
+	 * @return  void
 	 */
-	public function onAKSubscriptionChange($row, $info)
+	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
 		// No point running if there are no emails defined, right?
 		if (empty($this->emails))
