@@ -5,7 +5,7 @@
 			<?php echo JText::_('PLG_AKEEBASUBS_SLAVESUBS_MAXSLAVES_TITLE'); ?>
 		</label>
 		<div class="controls">
-			<?php echo JHtml::_('select.integerlist', 0, 10, 1, 'params[slavesubs_maxSlaves]', array('class' => 'input-small'), $level->params->slavesubs_maxSlaves); ?>
+			<?php echo JHtml::_('select.integerlist', 0, 10, 1, 'params[slavesubs_maxSlaves]', array('class' => 'input-small'), $level->params['slavesubs_maxSlaves']); ?>
 			<span class="help-block">
 				<?php echo JText::_('PLG_AKEEBASUBS_SLAVESUBS_MAXSLAVES_DESCRIPTION') ?>
 			</span>

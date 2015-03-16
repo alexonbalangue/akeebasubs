@@ -1,31 +1,6 @@
-Migrate all front-end views with the same code as now
-
-Rewrite Levels template
-Rewrite Level template
-Rewrite Invoice template
-Rewrite Message controller (force default template)
-Remove Message templates except default
-Rewrite Message templates
-Rewrite Subscribe template
-Rewrite Subscriptions template
-Rewrite Subscription template
-Rewrite Userinfo template
+Migrate plugins
 
 Migrate CLI
-
-Refactor and Unit Test the Subscribe model
-
-Migrate payment plugins
-
-Migrate integration plugins
-
-Migrate modules
-
-Migrate content plugins
-
-Migrate system plugins
-
-Migrate user plugins
 
 Migrate script.akeebasubs.php
 
@@ -36,3 +11,8 @@ Migrate script.akeebasubs.php
 + upgrade from multiple levels with old subs expiration
 
 + GitHub integration
+
++ Front-end showing discounts, mark upgrade and renewal discounts differently.
+    If the active discount rule is for the same level show a “Special RENEWAL price” label. Otherwise show it as “Upgrade price”.
+
++ Option to consolidate subscriptions
