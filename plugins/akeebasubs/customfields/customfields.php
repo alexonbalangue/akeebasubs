@@ -438,7 +438,12 @@ class plgAkeebasubsCustomfields extends JPlugin
 					continue;
 				}
 
-				$fieldlevels = explode(',', $item->akeebasubs_level_id);
+				$fieldlevels = $item->akeebasubs_level_id;
+
+				if (is_string($fieldlevels))
+				{
+					$fieldlevels = explode(',', $fieldlevels);
+				}
 
 				if (($item->show == 'level') && !in_array($data->id, $fieldlevels))
 				{
