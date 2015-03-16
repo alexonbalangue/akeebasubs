@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.3.0" type="plugin" group="system" method="upgrade">
-	<name>System - Akeeba Subscriptions Expiration Notification</name>
+	<name>PLG_SYSTEM_ASEXPIRATIONNOTIFY</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
@@ -8,13 +8,7 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>2011-10-31</creationDate>
 	<version>1.1</version>
-	<description>
-		Emails the users before their subscription expires, based on the
-		preferences set in each subscription level (default: 30 and 15 days
-		before the subscription expiration). It tries to trigger itself around
-		midnight (server time) if there's adequate traffic, otherwise as soon as
-		there is traffic anytime after midnight.
-	</description>
+	<description>PLG_SYSTEM_ASEXPIRATIONNOTIFY_XML_DESC</description>
 	<files>
 		<filename plugin="asexpirationnotify">asexpirationnotify.php</filename>
 		<folder>asexpirationnotify</folder>
