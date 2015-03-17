@@ -360,6 +360,7 @@ JS;
 		if ($info['status'] == 'new')
 		{
 			$allSlaveUsernames = $params['slaveusers'];
+			$allSlaveUsernames = array_filter($allSlaveUsernames);
 
 			// Do we have at least one slave user?
 			if (empty($allSlaveUsernames))
@@ -406,7 +407,13 @@ JS;
 			// Let's get the full list of all slave user accounts
 			$allSlaveUsernames = array_merge($current['slaveusers'], $previous['slaveusers']);
 			$allSlaveUsernames = array_unique($allSlaveUsernames);
+			$allSlaveUsernames = array_filter($allSlaveUsernames);
 			$dirty             = false;
+
+			if (empty($allSlaveUsernames))
+			{
+				return;
+			}
 
 			foreach ($allSlaveUsernames as $slaveUserName)
 			{
@@ -414,8 +421,6 @@ JS;
 				{
 					continue;
 				}
-
-				$user_id = JUserHelper::getUserId($slaveUserName);
 
 				$result = false;
 
@@ -433,7 +438,6 @@ JS;
 						try
 						{
 							$to->findOrFail($previous['slavesubs_ids'][ $index ]);
-
 							$result = $this->copySubscriptionInformation($row, $to);
 							$dirty  = true;
 						}
@@ -504,11 +508,14 @@ JS;
 			->user_id($user_id)
 			->get(true);
 
-		$info = array();
+		$info = array(
+			'status' => 'modified',
+		);
 
 		/** @var Subscriptions $row */
 		foreach ($subscriptions as $row)
 		{
+			$info['previous'] = $row;
 			$this->onAKSubscriptionChange($row, $info);
 		}
 	}
