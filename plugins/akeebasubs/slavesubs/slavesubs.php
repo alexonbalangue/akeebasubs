@@ -476,13 +476,11 @@ JS;
 				}
 			}
 
-			/*
 			// Do not try to save the subscription unless we made a change in slave subscribers
 			if (!$dirty)
 			{
 				return;
 			}
-			*/
 
 			$params['slavesubs_ids'] = $slavesubs_ids;
 			$newdata                 = array_merge($data, array('params' => $params, '_dontNotify' => true));
