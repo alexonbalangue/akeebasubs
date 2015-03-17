@@ -38,7 +38,7 @@ use JLoader;
  * @property  float			$recurring_amount			Total payable amount for further recurring subscriptions
  * @property  float			$tax_percent				% of tax (tax_amount / net_amount)
  * @property  string		$created_on					Date/time when this subscription was created
- * @property  \stdClass		$params						Parameters, used by custom fields and plugins
+ * @property  array 		$params						Parameters, used by custom fields and plugins
  * @property  string		$ip							IP address of the user who created this subscription
  * @property  string		$ip_country					Country of the user who created this subscription, based on IP geolocation
  * @property  int			$akeebasubs_coupon_id		Coupon code used. FK to coupon relation.

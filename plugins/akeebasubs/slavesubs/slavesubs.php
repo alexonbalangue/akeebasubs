@@ -13,6 +13,7 @@ use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 
 class plgAkeebasubsSlavesubs extends AkeebasubsBase
 {
+
 	/**
 	 * Maximum slave subscriptions per subscription level
 	 *
@@ -39,7 +40,7 @@ class plgAkeebasubsSlavesubs extends AkeebasubsBase
 	/**
 	 * Renders the configuration page in the component's back-end
 	 *
-	 * @param   Levels  $level  The subscription level
+	 * @param   Levels $level The subscription level
 	 *
 	 * @return  stdClass  Definition object, with two properties: 'title' and 'html'
 	 */
@@ -128,7 +129,6 @@ class plgAkeebasubsSlavesubs extends AkeebasubsBase
 			{
 				$allSlaves = array();
 			}
-
 			if (array_key_exists($i, $allSlaves))
 			{
 				$current = $allSlaves[ $i ];
@@ -212,7 +212,6 @@ function plg_akeebasubs_slavesubs_validate(response)
 	var thisIsValid = true;
 	(function($) {
 $javascript_validate
-
 	})(akeeba.jQuery);
 
 	return thisIsValid;
@@ -234,7 +233,7 @@ JS;
 	 * Performs validation of the custom fields, i.e. check that a valid
 	 * username (or no username) is set on each one of them.
 	 *
-	 * @param   object  $data
+	 * @param   stdClass  $data
 	 *
 	 * @return  array  subscription_custom_validation, valid
 	 */
@@ -279,6 +278,7 @@ JS;
 			if (!array_key_exists($i, $subcustom['slaveusers']))
 			{
 				$response['subscription_custom_validation'][ 'slaveuser' . $i ] = true;
+
 				continue;
 			}
 
@@ -354,66 +354,43 @@ JS;
 		JLoader::import('joomla.user.helper');
 
 		$slavesubs_ids = array();
-		$data          = $row instanceof Subscriptions ? $row->toArray() : (array) $row;
+		$data          = $row->toArray();
 
-		// Let's look inside modified fields, is this a new slave, a removed one or I'm just renewing his subscription?
-		// Simply create new subscription, the user specified slaves while creating his subscription
+		// New subscription, the user specified slaves while creating his subscription
 		if ($info['status'] == 'new')
 		{
-			$slaveusers = $params['slaveusers'];
+			$allSlaveUsernames = $params['slaveusers'];
 
 			// Do we have at least one slave user?
-			if (empty($slaveusers))
+			if (empty($allSlaveUsernames))
 			{
 				return;
 			}
 
 			// Create new slave subscriptions
-			JLoader::import('joomla.user.helper');
-			$slavesubs_ids = array();
-
-			if ($row instanceof Subscriptions)
+			foreach ($allSlaveUsernames as $slaveUserName)
 			{
-				$data = $row->toArray();
-			}
-			else
-			{
-				$data = (array) $row;
-			}
-
-			foreach ($slaveusers as $slaveUsername)
-			{
-				if (empty($slaveUsername))
+				if (empty($slaveUserName))
 				{
 					continue;
 				}
 
-				$user_id = JUserHelper::getUserId($slaveUsername);
+				$user_id = JUserHelper::getUserId($slaveUserName);
 
-				//double check that the user is valid
+				// Double check that the user is valid
 				if ($user_id <= 0)
 				{
 					continue;
 				}
 
 				// Save the new subscription record
-				$result          = $this->createSlaveSub($slaveUsername, $data, $params);
-				$slavesubs_ids[] = $result;
+				$result = $this->createSlaveSub($slaveUserName, $data, $params);
+
+				if ($result)
+				{
+					$slavesubs_ids[] = $result;
+				}
 			}
-
-			$params['slavesubs_ids'] = $slavesubs_ids;
-
-			$newdata = array_merge($data, array(
-				'params'      => $params,
-				'_dontNotify' => true,
-			));
-
-			/** @var Subscriptions $table */
-			$table     = $this->container->factory->model('Subscriptions')->tmpInstance();
-
-			self::$dontFire = true;
-			$table->save($newdata);
-			self::$dontFire = false;
 		}
 		// Modified subscription, let's figure out what to do with slave subscriptions
 		else
@@ -426,51 +403,67 @@ JS;
 				$previous['slaveusers'] = array();
 			}
 
-			// Let's get the full list of involved people
-			$list = array_merge($current['slaveusers'], $previous['slaveusers']);
+			// Let's get the full list of all slave user accounts
+			$allSlaveUsernames = array_merge($current['slaveusers'], $previous['slaveusers']);
+			$allSlaveUsernames = array_unique($allSlaveUsernames);
+			$dirty             = false;
 
-			$dirty = false;
-
-			foreach ($list as $slave)
+			foreach ($allSlaveUsernames as $slaveUserName)
 			{
-				if (empty($slave))
+				if (empty($slaveUserName))
 				{
 					continue;
 				}
 
+				$user_id = JUserHelper::getUserId($slaveUserName);
+
 				$result = false;
 
-				if (in_array($slave, $previous['slaveusers']) && in_array($slave, $current['slaveusers']))
+				// The slave user was neither added, nor removed: sync with the parent subscription
+				if (in_array($slaveUserName, $previous['slaveusers']) && in_array($slaveUserName, $current['slaveusers']))
 				{
-					// Slave is still here, just sync with the parent subscription
-					$index = array_search($slave, $previous['slaveusers']);
+					$index = array_search($slaveUserName, $previous['slaveusers']);
 
-					if (isset($previous['slavesubs_ids'][ $index ]))
+					// We still have a valid slave so copy from parent to slave
+					if ($index !== false)
 					{
-						//we have a valid slave so copy from parent to slave
-						$result = $this->copySubscriptionInformation($row, $previous['slavesubs_ids'][ $index ]);
-						$dirty  = true;
+						/** @var Subscriptions $to */
+						$to = $this->container->factory->model('Subscriptions')->tmpInstance();
+
+						try
+						{
+							$to->findOrFail($previous['slavesubs_ids'][ $index ]);
+
+							$result = $this->copySubscriptionInformation($row, $to);
+							$dirty  = true;
+						}
+						catch (\Exception $e)
+						{
+							// The subscription doesn't exist. Treat it as if a slave user was ADDED.
+							$result = $this->createSlaveSub($slaveUserName, $data, $params);
+							$dirty  = true;
+						}
 					}
 				}
-				elseif (in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
+				// A slave user has been ADDED
+				elseif (in_array($slaveUserName, $current['slaveusers']) && !in_array($slaveUserName, $previous['slaveusers']))
 				{
-					// Added user, create a new subscription for him
-					$result = $this->createSlaveSub($slave, $data, $params);
+					$result = $this->createSlaveSub($slaveUserName, $data, $params);
 					$dirty  = true;
 				}
-				elseif (!in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
+				// A slave user has been REMOVED
+				elseif (!in_array($slaveUserName, $current['slaveusers']) && in_array($slaveUserName, $previous['slaveusers']))
 				{
-					// Before he was active, now it's no more; let's fire this slave (aka expire his subscription)
-					$index = array_search($slave, $previous['slaveusers']);
+					$index = array_search($slaveUserName, $previous['slaveusers']);
 
-					if (isset($previous['slavesubs_ids'][ $index ]))
+					if ($index !== false)
 					{
 						$this->expireSlaveSub($previous['slavesubs_ids'][ $index ]);
 						$dirty = true;
 					}
 				}
 
-				if ($result)
+				if ($result !== false)
 				{
 					$slavesubs_ids[] = $result;
 				}
@@ -481,17 +474,18 @@ JS;
 			{
 				return;
 			}
-
-			$params['slavesubs_ids'] = $slavesubs_ids;
-			$newdata                 = array_merge($data, array('params' => $params, '_dontNotify' => true));
-
-			/** @var Subscriptions $table */
-			$table     = $this->container->factory->model('Subscriptions')->tmpInstance();
-
-			self::$dontFire = true;
-			$table->save($newdata);
-			self::$dontFire = false;
 		}
+
+		$params['slavesubs_ids'] = $slavesubs_ids;
+
+		$newdata = array_merge($data, array(
+			'params'      => $params,
+			'_dontNotify' => true,
+		));
+
+		self::$dontFire = true;
+		$row->save($newdata);
+		self::$dontFire = false;
 	}
 
 	/**
@@ -505,7 +499,7 @@ JS;
 	{
 		// Get all of the user's subscriptions
 		/** @var Subscriptions $subsModel */
-		$subsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
+		$subsModel     = $this->container->factory->model('Subscriptions')->tmpInstance();
 		$subscriptions = $subsModel
 			->user_id($user_id)
 			->get(true);
@@ -549,14 +543,9 @@ JS;
 			unset($params['slaveusers']);
 		}
 
-		//store the ID of the parent subscription
+		// Store the ID of the parent subscription
 		$parentsub_id           = $data ['akeebasubs_subscription_id'];
 		$params['parentsub_id'] = $parentsub_id;
-
-		$newdata                = array_merge($data, [
-			'params' => $params,
-			'_dontNotify' => true
-		]);
 
 		$newdata = array_merge($data, array(
 			'akeebasubs_subscription_id' => 0,
@@ -573,11 +562,12 @@ JS;
 			'prediscount_amount'         => 0,
 			'discount_amount'            => 0,
 			'contact_flag'               => 0,
+			'_dontNotify'                => true
 		));
 
 		// Save the new subscription record
 		/** @var Subscriptions $table */
-		$table = $this->container->factory->model('Subscriptions')->tmpInstance();
+		$table                             = $this->container->factory->model('Subscriptions')->tmpInstance();
 		$table->akeebasubs_subscription_id = 0;
 
 		self::$dontFire = true;
@@ -592,6 +582,7 @@ JS;
 	 *
 	 * @param   int  $subId  The Slave subscription ID which we are expiring
 	 *
+	 * @return  void
 	 */
 	private function expireSlaveSub($subId)
 	{
@@ -600,10 +591,20 @@ JS;
 		/** @var Subscriptions $table */
 		$table = $this->container->factory->model('Subscriptions')->tmpInstance();
 
-		// Set expiration one minute before, so it will be automatically unpublished
-		$expire = $this->container->platform->getDate('-1 minutes');
-		$data   = array('publish_down' => $expire->toSql());
-		$table->save($data);
+		try
+		{
+			$table->findOrFail($subId);
+
+			// Set expiration one minute before, so it will be automatically unpublished
+			$expire = new JDate('-1 minutes');
+			$data   = array('publish_down' => $expire->toSql());
+			$table->save($data);
+		}
+		catch (\Exception $e)
+		{
+			// No subscription to expire, nothing to do.
+		}
+
 
 		self::$dontFire = false;
 	}
@@ -611,10 +612,10 @@ JS;
 	/**
 	 * Copies the subscription information from row $from to $to.
 	 *
-	 * @param   Subscriptions  $from  Row to copy from
-	 * @param   Subscriptions  $to    Row to copy to
+	 * @param   Subscriptions $from Row to copy from
+	 * @param   Subscriptions $to   Row to copy to
 	 *
-	 * @return  Subscriptions
+	 * @return  int  The id of the slave subscription updated
 	 */
 	private function copySubscriptionInformation($from, &$to)
 	{
@@ -633,9 +634,8 @@ JS;
 			'discount_amount',
 			'contact_flag'
 		);
-
-		$asArray = $from->toArray();
-		$properties = array_keys($asArray);
+		$fromData            = $from->toArray();
+		$properties          = array_keys($fromData);
 
 		foreach ($properties as $k => $v)
 		{
@@ -647,7 +647,7 @@ JS;
 			// Special handling for params
 			elseif ($k == 'params')
 			{
-				$params = $from->params;
+				$params = array_merge($from->params);
 
 				// Unset params that should not be copied from parent sub to child sub
 				if (isset($params['slavesubs_ids']))
@@ -671,17 +671,25 @@ JS;
 			else
 			{
 				$to->setFieldValue($k, $from->getFieldValue($k));
-
 			}
 		}
 
-		// Return the subscription that was modified
-		return $to;
+		try
+		{
+			$to->save();
+
+			return $to->getId();
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
 	}
 
 	/**
-	 * Loads the maximum slave subscriptions assignments for each subscription
-	 * level.
+	 * Loads the maximum slave subscriptions assignments for each subscription level.
+	 *
+	 * @return  void
 	 */
 	private function loadLevelAssignments()
 	{
@@ -696,7 +704,7 @@ JS;
 		{
 			foreach ($levels as $level)
 			{
-				if (isset($level->params[ $slavesKey ]))
+				if (array_key_exists($slavesKey, $level->params))
 				{
 					$this->maxSlaves[ $level->akeebasubs_level_id ] = $level->params[ $slavesKey ];
 				}
