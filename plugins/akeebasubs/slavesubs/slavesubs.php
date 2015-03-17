@@ -546,6 +546,9 @@ JS;
 			'prediscount_amount'			=> 0,
 			'discount_amount'				=> 0,
 			'contact_flag'					=> 0,
+			'processor_key'					=> md5(microtime(false)),
+			'state'							=> 'C',
+			'enabled'						=> 1,
 		));
 
 		// Save the new subscription record
