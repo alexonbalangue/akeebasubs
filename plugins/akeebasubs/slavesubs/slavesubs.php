@@ -568,7 +568,9 @@ JS;
 			'affiliate_comission'        => 0,
 			'prediscount_amount'         => 0,
 			'discount_amount'            => 0,
-			'contact_flag'               => 0,
+			'contact_flag'               => 3, // Don't notify slave users for the subscription's expiration
+			'processor'                  => 'slavesub', // Inform the human operator we're a slave
+			'processor_key'              => 'parent_' . sprintf('%05u', $parentsub_id) . '_' . md5(microtime(true)), // Inform the human operator who's our parent
 			'_dontNotify'                => true
 		));
 
@@ -639,20 +641,23 @@ JS;
 			'affiliate_comission',
 			'prediscount_amount',
 			'discount_amount',
-			'contact_flag'
+			'processor',
+			'processor_key',
+			'contact_flag',
 		);
 		$fromData            = $from->toArray();
 		$properties          = array_keys($fromData);
 
-		foreach ($properties as $k => $v)
+		foreach ($properties as $k)
 		{
 			// Do not copy forbidden properties
 			if (in_array($k, $forbiddenProperties))
 			{
 				continue;
 			}
+
 			// Special handling for params
-			elseif ($k == 'params')
+			if ($k == 'params')
 			{
 				$params = array_merge($from->params);
 
@@ -673,12 +678,12 @@ JS;
 				}
 
 				$to->params = $params;
+
+				continue;
 			}
+
 			// Copy over everything else
-			else
-			{
-				$to->setFieldValue($k, $from->getFieldValue($k));
-			}
+			$to->setFieldValue($k, $from->getFieldValue($k));
 		}
 
 		try
