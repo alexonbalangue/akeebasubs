@@ -110,7 +110,24 @@ class Invoices extends DataModel
 	{
 		$db = $this->getDbo();
 
-		$id = $this->getState('akeebasubs_subscription_id', null, 'int');
+		$id = $this->getState('akeebasubs_subscription_id', null, 'raw');
+
+		if (is_array($id))
+		{
+			if (isset($id['method']) && ($id['method'] == 'exact'))
+			{
+				$id = (int) $id['value'];
+			}
+			else
+			{
+				$id = 0;
+			}
+		}
+		else
+		{
+			$id = (int) $id;
+		}
+
 		$subIDs = $this->getState('subids', null, 'array');
 		$subIDs = empty($subIDs) ? [] : $subIDs;
 
