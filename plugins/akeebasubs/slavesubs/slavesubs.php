@@ -597,7 +597,7 @@ JS;
 			'akeebasubs_subscription_id', 'user_id', 'net_amount',
 			'tax_amount', 'gross_amount', 'tax_percent', 'akeebasubs_coupon_id',
 			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id', 'affiliate_comission',
-			'prediscount_amount', 'discount_amount', 'contact_flag'
+			'akeebasubs_invoice_id', 'discount_amount', 'contact_flag'
 		);
 
 		$properties = get_object_vars($from);
