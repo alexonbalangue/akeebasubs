@@ -547,8 +547,6 @@ JS;
 			'discount_amount'				=> 0,
 			'contact_flag'					=> 0,
 			'processor_key'					=> md5(microtime(false)),
-			'state'							=> 'C',
-			'enabled'						=> 1,
 		));
 
 		// Save the new subscription record
@@ -603,7 +601,7 @@ JS;
 		);
 
 		$properties = get_object_vars($from);
-		foreach($properties as $k => $v)
+		foreach($properties as $k)
 		{
 			// Do not copy forbidden properties
 			if (in_array($k, $forbiddenProperties))
