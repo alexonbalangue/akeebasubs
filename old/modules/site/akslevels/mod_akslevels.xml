@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="2.5.0" method="upgrade" client="site">
+<extension type="module" version="3.3.0" method="upgrade" client="site">
 	<name>Akeeba Subscriptions - List subscription levels</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<creationDate>March 2011</creationDate>
