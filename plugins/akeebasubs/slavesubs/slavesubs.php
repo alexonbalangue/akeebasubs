@@ -545,8 +545,9 @@ JS;
 			'affiliate_comission'			=> 0,
 			'prediscount_amount'			=> 0,
 			'discount_amount'				=> 0,
-			'contact_flag'					=> 0,
-			'processor_key'					=> md5(microtime(false)),
+			'contact_flag'					=> 3,
+			'processor'                  => 'slavesub', // Inform the human operator we're a slave
+			'processor_key'              => 'parent_' . sprintf('%05u', $parentsub_id) . '_' . md5(microtime(true)), // Inform the human operator who's our parent
 		));
 
 		// Save the new subscription record
