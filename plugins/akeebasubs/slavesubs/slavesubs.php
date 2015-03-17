@@ -388,8 +388,7 @@ JS;
 			$tableName = '#__akeebasubs_subscriptions';
 			$tableKey = 'akeebasubs_subscription_id';
 			$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
-			$table->reset();
-
+			
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
@@ -459,14 +458,14 @@ JS;
 			// Do not try to save the subscription unless we made a change in slave subscribers
 			if (!$dirty)
 			{
-				//return;
+				return;
 			}
 
 			$params['slavesubs_ids'] = $slavesubs_ids;
 			$newdata = array_merge($data, array('params' => json_encode($params), '_dontNotify' => true));
 
-			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
-			$table->reset();
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
+			
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
