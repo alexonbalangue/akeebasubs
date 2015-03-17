@@ -388,10 +388,12 @@ JS;
 			$tableName = '#__akeebasubs_subscriptions';
 			$tableKey = 'akeebasubs_subscription_id';
 			$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
-			
+			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
+			//force a return of the parent sub ID to prevent the slave sub id return to URL
+			return $table->akeebasubs_subscription_id; 
 		}
 		// Modified subscription, let's figure out what to do with slave subscriptions
 		else
@@ -469,6 +471,8 @@ JS;
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
+			//force a return of the parent sub ID to prevent the salve Sub ID being returned to the URL
+			return $table->akeebasubs_subscription_id;
 		}
 	}
 
