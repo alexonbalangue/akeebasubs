@@ -426,11 +426,21 @@ JS;
 					// Slave is still here, just sync with the parent subscription
 					$index = array_search($slave, $previous['slaveusers']);
 
-					if(isset($previous['slavesubs_ids'][$index]))
+					if($index !== false)
 					{
-						//we still have a valid slave so copy from parent to slave
-						$result =$this->copySubscriptionInformation($row, $previous['slavesubs_ids'][$index]);
-						$dirty = true;	
+						$to = $this->container->factory->model('Subscriptions')->tmpInstance();
+						try
+						{
+							$to->findOrFail($previous['slavesubs_ids'][ $index ]);
+							$result = $this->copySubscriptionInformation($row, $to);
+							$dirty  = true;
+						}
+						catch (\Exception $e)
+						{
+							// The subscription doesn't exist. Treat it as if a slave user was ADDED.
+							$result = $this->createSlaveSub($slaveUserName, $data, $params);
+							$dirty  = true;
+						}
 					}
 				}
 				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
@@ -543,6 +553,7 @@ JS;
 			'akeebasubs_upgrade_id'			=> 0,
 			'akeebasubs_affiliate_id'		=> 0,
 			'affiliate_comission'			=> 0,
+			'akeebasubs_invoice_id'			=> 0,
 			'prediscount_amount'			=> 0,
 			'discount_amount'				=> 0,
 			'contact_flag'					=> 3,
@@ -552,10 +563,8 @@ JS;
 
 		// Save the new subscription record
 		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
-
 		$table->reset();
 		$table->akeebasubs_subscription_id = 0;
-
 		self::$dontFire = true;
 		$table->save($newdata);
 		self::$dontFire = false;
@@ -595,10 +604,21 @@ JS;
 	private function copySubscriptionInformation($from, &$to)
 	{
 		$forbiddenProperties = array(
-			'akeebasubs_subscription_id', 'user_id', 'net_amount',
-			'tax_amount', 'gross_amount', 'tax_percent', 'akeebasubs_coupon_id',
-			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id', 'affiliate_comission',
-			'akeebasubs_invoice_id', 'discount_amount', 'contact_flag'
+			'akeebasubs_subscription_id',
+			'user_id',
+			'net_amount',
+			'tax_amount',
+			'gross_amount',
+			'tax_percent',
+			'akeebasubs_coupon_id',
+			'akeebasubs_upgrade_id',
+			'akeebasubs_affiliate_id',
+			'affiliate_comission',
+			'akeebasubs_invoice_id',
+			'discount_amount',
+			'processor',
+			'processor_key',
+			'contact_flag', 
 		);
 
 		$properties = get_object_vars($from);
@@ -610,7 +630,7 @@ JS;
 				continue;
 			}
 			// Special handling for params
-			elseif ($k == 'params')
+			if ($k == 'params')
 			{
 				$params = $from->params;
 				if (!is_object($params) && !is_array($params))
@@ -638,17 +658,17 @@ JS;
 				}
 				
 				$to->params = json_encode($params);
+				continue;
 				}
 				
 			// Copy over everything else
-			elseif (property_exists($from, $k))
+			if (property_exists($from, $k))
 			{
 				$to->$k = $from->$k;
-				//return the id of the subscription that was modified
-				return $to;
 			}
 		}
-
+		//return the id of the subscription that was modified
+		return $subid=F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($to ['akeebasubs_subscription_id']);
 	}
 
 	/**
