@@ -568,6 +568,14 @@ JS;
 			return false;
 		}
 
+		//if the user is not in akeebasubs_users, create the akeebasubs_users for the slave user
+		$akuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')->getItem($user_id);
+		if(!isset($akuser))
+		{
+			$userData = JUserHelper::getProfile($user_id);
+			$this->onAKUserGetData($userData);
+		}
+
 		if(isset($params['slavesubs_ids']))
 		{
 			unset($params['slavesubs_ids']);
