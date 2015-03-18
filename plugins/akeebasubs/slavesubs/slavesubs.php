@@ -428,12 +428,19 @@ JS;
 
 					if($index !== false)
 					{
-						$to = $this->container->factory->model('Subscriptions')->tmpInstance();
+						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
 						try
 						{
-							$to->findOrFail($previous['slavesubs_ids'][ $index ]);
-							$result = $this->copySubscriptionInformation($row, $to);
-							$dirty  = true;
+							$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table, true);
+							if($to !== false)
+							{
+								$result = $this->copySubscriptionInformation($row, $to);
+								$dirty  = true;
+							}
+							else
+							{
+								throw new Exception();
+							}
 						}
 						catch (\Exception $e)
 						{
@@ -445,9 +452,32 @@ JS;
 				}
 				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
 				{
-					// Added user, create a new subscription for him
-					$result = $this->createSlaveSub($slave, $data, $params);
-					$dirty = true;
+					//Added user, create a new subscription for him, but if it exists just sync with the parent subscription
+					$index = array_search($slave, $current['slaveusers']);
+
+					if($index !== false)
+					{
+						//$to = $this->container->factory->model('Subscriptions')->tmpInstance();
+						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
+						try
+						{
+							//$to->findOrFail($previous['slavesubs_ids'][ $index ]);
+							$to = array_search($current['slavesubs_ids'][ $index ],$table,true);
+							if($to !== false){
+							$result = $this->copySubscriptionInformation($row, $to);
+							$dirty  = true;
+							}
+							else{
+								throw new Exception();
+							}
+						}
+						catch (\Exception $e)
+						{
+							// The subscription doesn't exist. must be an Added user, create a new subscription for him.
+							$result = $this->createSlaveSub($slave, $data, $params);
+							$dirty  = true;
+						}
+					}
 				}
 				elseif(!in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
 				{
