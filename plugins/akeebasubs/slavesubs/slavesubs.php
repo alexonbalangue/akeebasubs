@@ -429,6 +429,7 @@ JS;
 					if($index !== false)
 					{
 						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
+						$table = (array)$table;
 						try
 						{
 							$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table, true);
@@ -457,11 +458,10 @@ JS;
 
 					if($index !== false)
 					{
-						//$to = $this->container->factory->model('Subscriptions')->tmpInstance();
 						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
+						$table = (array)$table;
 						try
 						{
-							//$to->findOrFail($previous['slavesubs_ids'][ $index ]);
 							$to = array_search($current['slavesubs_ids'][ $index ],$table,true);
 							if($to !== false){
 							$result = $this->copySubscriptionInformation($row, $to);
