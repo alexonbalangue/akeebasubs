@@ -434,6 +434,11 @@ JS;
 						try
 						{
 							$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table, true);
+							//make sure that we are not accidently looking at the parent subscription
+							if($to ['akeebasubs_subscription_id'] = $data ['akeebasubs_subscription_id'])
+							{
+								continue;
+							}
 							if($to !== false)
 							{
 								$result = $this->copySubscriptionInformation($row, $to);
@@ -464,6 +469,11 @@ JS;
 						try
 						{
 							$to = array_search($current['slavesubs_ids'][ $index ],$table,true);
+							//make sure that we are not looking at the parent subscription
+							if($to ['akeebasubs_subscription_id'] = $data ['akeebasubs_subscription_id'])
+							{
+								continue;
+							}
 							if($to !== false){
 							$result = $this->copySubscriptionInformation($row, $to);
 							$dirty  = true;
