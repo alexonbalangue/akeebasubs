@@ -283,7 +283,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 						'contact_flag'  => 1,
 						'first_contact' => $mNow
 					);
-					$this->sendEmail($sub, 'first');
+
+					$result = $this->sendEmail($sub, 'first');
 				}
 				elseif ($sub->enabled && ($sub->contact_flag == 1))
 				{
@@ -292,7 +293,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 						'contact_flag'   => 2,
 						'second_contact' => $mNow
 					);
-					$this->sendEmail($sub, 'second');
+
+					$result = $this->sendEmail($sub, 'second');
 				}
 				elseif (!$sub->enabled)
 				{
@@ -300,16 +302,21 @@ class plgSystemAsexpirationnotify extends JPlugin
 						'contact_flag'  => 3,
 						'after_contact' => $mNow
 					);
-					$this->sendEmail($sub, 'after');
+
+					$result = $this->sendEmail($sub, 'after');
 				}
 				else
 				{
 					continue;
 				}
 
-				$subsModel->getClone()
-				        ->find($sub->akeebasubs_subscription_id)
-				        ->save($data);
+				if ($result)
+				{
+					$table = $subsModel->getClone();
+					$table->find($sub->akeebasubs_subscription_id);
+					$table->setState('_dontNotify', true);
+					$table->save($data);
+				}
 
 				// Timeout check -- Only if we sent at least one email!
 				$clockNow = microtime(true);
