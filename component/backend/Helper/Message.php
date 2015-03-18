@@ -160,6 +160,11 @@ abstract class Message
 				$custom = $custom['subcustom'];
 			}
 
+			if (is_object($custom))
+			{
+				$custom = (array) $custom;
+			}
+
 			if (!empty($custom))
 			{
 				foreach ($custom as $k => $v)

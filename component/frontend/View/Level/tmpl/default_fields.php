@@ -558,12 +558,10 @@ $emailasusername = ComponentParams::getParam('emailasusername', 0);
 			// Render per-subscription fields, only when we have a valid subscription level!
 			if (!is_null($akeebasubs_subscription_level)):
 			$this->getContainer()->platform->importPlugin('akeebasubs');
+
 			$jResponse = $this->getContainer()->platform->runPlugins(
 				'onSubscriptionFormRenderPerSubFields',
-				array(array_merge(
-						  $this->cache, array('subscriptionlevel' => $akeebasubs_subscription_level)
-					  )
-				)
+				array(array_merge($this->cache, array('subscriptionlevel' => $akeebasubs_subscription_level)))
 			);
 
 			@ob_start();
