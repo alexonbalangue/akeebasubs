@@ -665,7 +665,8 @@ JS;
 			'after_contact',
 		);
 
-		$fromData            = (array)$from;
+		$fromData = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($from ['akeebasubs_subscription_id']);
+		$fromData            = (array)$fromData;
 		$properties          = array_keys($fromData);
 		
 		foreach($properties as $k)
