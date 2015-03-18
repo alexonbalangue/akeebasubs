@@ -243,8 +243,11 @@ class AkeebaSubscriptionsUpdateApp extends JApplicationCli
 		if (!defined('_JEXEC'))
 			define('_JEXEC', 1);
 
-		// Load F0F
-		JLoader::import('f0f.include');
+		// Load FOF
+		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+		{
+			die('FOF 3.0 is not installed');
+		}
 
 		// Load the version.php file
 		include_once JPATH_COMPONENT_ADMINISTRATOR . '/version.php';
@@ -284,8 +287,9 @@ class AkeebaSubscriptionsUpdateApp extends JApplicationCli
 
         $this->out("Checking for new versions");
 
-        /** @var AkeebasubsModelUpdates $updateModel */
-        $updateModel = F0FModel::getTmpInstance('Updates', 'AkeebasubsModel');
+		$container = \FOF30\Container\Container::getInstance('com_akeebasubs');
+		/** @var \Akeeba\Subscriptions\Admin\Model\Updates $updateModel */
+		$updateModel = $container->factory->model('Updates')->tmpInstance();
 
         $result = $updateModel->autoupdate();
 
