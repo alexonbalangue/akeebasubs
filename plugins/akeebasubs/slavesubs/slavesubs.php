@@ -648,7 +648,10 @@ JS;
 			'discount_amount',
 			'processor',
 			'processor_key',
-			'contact_flag', 
+			'contact_flag',
+			'first_contact',
+			'second_contact',
+			'after_contact',
 		);
 
 		$properties = get_object_vars($from);
