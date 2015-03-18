@@ -665,7 +665,9 @@ JS;
 			'after_contact',
 		);
 
-		$properties = get_object_vars($from);
+		$fromData            = (array)$from;
+		$properties          = array_keys($fromData);
+		
 		foreach($properties as $k)
 		{
 			// Do not copy forbidden properties
