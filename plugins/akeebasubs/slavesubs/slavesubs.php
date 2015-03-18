@@ -573,7 +573,7 @@ JS;
 		if(!isset($akuser))
 		{
 			$userData = JUserHelper::getProfile($user_id);
-			$this->onAKUserGetData($userData);
+			$newuser = plgAkeebasubsJoomlaprofilesync::onAKUserGetData($userData);
 		}
 
 		if(isset($params['slavesubs_ids']))
