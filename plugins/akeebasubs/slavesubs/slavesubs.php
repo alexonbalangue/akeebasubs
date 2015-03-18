@@ -411,15 +411,16 @@ JS;
 			$i    = 0;
 
 			$dirty = false;
+			$result = false;
 
 			foreach($list as $slave)
 			{
 				if (empty($slave))
 				{
+					$result = false;
+					$dirty = false;
 					continue;
 				}
-
-				$result = false;
 
 				if (in_array($slave, $previous['slaveusers']) && in_array($slave, $current['slaveusers']))
 				{
