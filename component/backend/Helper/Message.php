@@ -368,7 +368,7 @@ abstract class Message
 
 		if (class_exists('ArsHelperFilter'))
 		{
-			$dlid = \ArsHelperFilter::myDownloadID();
+			$dlid = \ArsHelperFilter::myDownloadID($sub->user_id);
 		}
 
 		// User's state, human readable
