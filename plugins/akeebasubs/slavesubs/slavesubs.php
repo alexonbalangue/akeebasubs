@@ -578,11 +578,20 @@ JS;
 		}
 
 		//if the user is not in akeebasubs_users, create the akeebasubs_users for the slave user
-		$akuser = F0FModel::getTmpInstance('Users','AkeebasubsModel')->getItem($user_id);
-		if(!isset($akuser))
+		$newuser = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')->user_id($user_id)->getItem();
+		if(!isset($newuser))
 		{
-			$userData = JUserHelper::getProfile($user_id);
-			$newuser = plgAkeebasubsJoomlaprofilesync::onAKUserGetData($userData);
+			$new_userdata = array(
+			'akeebasubs_subscription_id'	=> 0,
+			'user_id'						=> $user_id,
+			'needs_logout'					=> 0,
+			);
+			//$userData = JUserHelper::getProfile($user_id);
+			$table = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
+			$table->reset();
+			self::$dontFire = true;
+			$table->save($new_userdata);
+			self::$dontFire = false;
 		}
 
 		if(isset($params['slavesubs_ids']))
