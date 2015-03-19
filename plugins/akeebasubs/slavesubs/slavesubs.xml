@@ -11,7 +11,6 @@
 	<description>PLG_AKEEBASUBS_SLAVESUBS_DESCRIPTION</description>
 	<files>
 		<filename plugin="slavesubs">slavesubs.php</filename>
-		<folder>override</folder>
 		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">

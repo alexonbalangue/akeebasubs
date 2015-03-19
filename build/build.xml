@@ -41,7 +41,7 @@
 
     <fileset dir="${dirs.component}/cli" id="cli">
         <include name="*.php" />
-        <include name="files_akeebasubs.xml" />
+        <include name="file_akeebasubs.xml" />
     </fileset>
 
 	<!--
@@ -88,8 +88,19 @@
 	
 	<target name="component-packages" depends="package-pkg" />
 
-    <target name="package-files" description="files_akeebasubs for CLI files" depends="new-release,setup-properties">
-        <copy file="./templates/files_akeebasubs.xml" tofile="${dirs.component}/cli/files_akeebasubs.xml" overwrite="true">
+    <target name="package-com" description="Akeeba Subscriptions Professional"
+            depends="new-release,setup-properties">
+
+        <copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="DATE" value="${build.date}" />
+                    <token key="VERSION" value="${version}" />
+                    <token key="PRO" value="1" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+        <copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
             <filterchain>
                 <replacetokens begintoken="##" endtoken="##">
                     <token key="DATE" value="${build.date}" />
@@ -98,53 +109,134 @@
             </filterchain>
         </copy>
 
-        <zipme basedir="${dirs.component}/cli" destfile="${dirs.release}/files_akeebasubs.zip" includeemptydirs="true">
+        <zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs.zip" includeemptydirs="true">
+            <fileset refid="component" />
+        </zipme>
+    </target>
+
+
+    <target name="package-files" description="file_akeebasubs for CLI files" depends="new-release,setup-properties">
+        <copy file="./templates/file_akeebasubs.xml" tofile="${dirs.component}/cli/file_akeebasubs.xml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="DATE" value="${build.date}" />
+                    <token key="VERSION" value="${version}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <zipme basedir="${dirs.component}/cli" destfile="${dirs.release}/file_akeebasubs.zip" includeemptydirs="true">
             <fileset refid="cli" />
         </zipme>
     </target>
 
-    <target name="package-pkg" description="Akeeba Subscriptions Installation Package">
-        <!-- TODO -->
+    <target name="package-modules" description="Build all modules" depends="new-release,setup-properties">
+        <foreach param="dirname" absparam="absname" target="package-module-folder">
+            <fileset dir="${dirs.modules}">
+                <type type="dir" />
+                <depth max="0" min="0" />
+            </fileset>
+        </foreach>
     </target>
 
-	<target name="package-com" description="Akeeba Subscriptions Professional"
-		depends="new-release,setup-properties">
-		
-		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="1" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
-				</replacetokens>
-			</filterchain>
-		</copy>
-		
-		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
-			<fileset refid="component" />
-		</zipme>
-		<zipme basedir="${dirs.modules}" prefix="modules/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
-			<fileset dir="${dirs.modules}">
-				<include name="**"/>
-			</fileset>
-		</zipme>
-		<zipme basedir="${dirs.plugins}" prefix="plugins/" destfile="${dirs.release}/com_akeebasubs-${version}.zip" includeemptydirs="true">
-			<fileset dir="${dirs.plugins}">
-				<include name="**"/>
-			</fileset>
-		</zipme>
+    <target name="package-module-folder" description="Iterate over the modules in an area (site, admin) directory">
+        <property name="module_area" value="${dirname}" />
 
+        <foreach param="module_name" absparam="module_dir" target="package-module-item">
+            <fileset dir="${absname}">
+                <type type="dir" />
+                <depth max="0" min="0" />
+            </fileset>
+        </foreach>
+    </target>
 
-	</target>
-	
+    <target name="package-module-item" description="Package a single module">
+        <echo message="Packaging module ${module_area}/${module_name}" />
+
+        <property name="module_package" value="${dirs.release}/mod_${module_name}.zip" />
+
+        <zipme basedir="${module_dir}" destfile="${module_package}" includeemptydirs="true">
+            <fileset dir="${module_dir}">
+                <include name="**" />
+            </fileset>
+        </zipme>
+    </target>
+
+    <target name="package-plugins" description="Build all plugins" depends="new-release,setup-properties">
+        <foreach param="dirname" absparam="absname" target="package-plugin-folder">
+            <fileset dir="${dirs.plugins}">
+                <type type="dir" />
+                <depth max="0" min="0" />
+            </fileset>
+        </foreach>
+    </target>
+
+    <target name="package-plugin-folder" description="Iterate over the plugins in an area (system, user, ...) directory">
+        <property name="plugin_area" value="${dirname}" />
+
+        <foreach param="plugin_name" absparam="plugin_dir" target="package-plugin-item">
+            <fileset dir="${absname}">
+                <type type="dir" />
+                <depth max="0" min="0" />
+            </fileset>
+        </foreach>
+    </target>
+
+    <target name="package-plugin-item" description="Package a single plugin">
+        <echo message="Packaging plugin ${plugin_area}/${plugin_name}" />
+
+        <property name="plugin_package" value="${dirs.release}/plg_${plugin_area}_${plugin_name}.zip" />
+
+        <zipme basedir="${plugin_dir}" destfile="${plugin_package}" includeemptydirs="true">
+            <fileset dir="${plugin_dir}">
+                <include name="**" />
+            </fileset>
+        </zipme>
+    </target>
+
+    <target name="package-fof" description="Copy the FOF 3 installation package to the release directory">
+        <!-- TODO Implement a proper package grabber -->
+        <copy file="../../fof3/release/lib_fof30.zip" tofile="${dirs.release}/lib_fof30.zip" overwrite="true" />
+    </target>
+
+    <target name="package-pkg" description="Akeeba Subscriptions installation package" depends="new-release, setup-properties, package-com, package-files, package-modules, package-plugins, package-fof">
+        <!-- Create the XML manifest -->
+        <copy file="./templates/pkg_akeebasubs.xml" tofile="${dirs.release}/pkg_akeebasubs.xml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="DATE" value="${build.date}" />
+                    <token key="VERSION" value="${version}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <!-- Create the ZIP file -->
+        <property name="package_zip" value="${dirs.release}/pkg_akeebasubs-${version}.zip" />
+
+        <zipme basedir="${dirs.release}" destfile="${package_zip}" includeemptydirs="true">
+            <fileset dir="${dirs.release}">
+                <include name="com_*.zip" />
+                <include name="file_*.zip" />
+                <include name="mod_*.zip" />
+                <include name="plg_*.zip" />
+                <include name="lib_*.zip" />
+                <include name="pkg_*.xml" />
+            </fileset>
+        </zipme>
+
+        <!-- Clean up -->
+        <delete>
+            <fileset dir="${dirs.release}">
+                <include name="com_*.zip" />
+                <include name="file_*.zip" />
+                <include name="mod_*.zip" />
+                <include name="plg_*.zip" />
+                <include name="lib_*.zip" />
+                <include name="pkg_*.xml" />
+            </fileset>
+        </delete>
+    </target>
+
 	<!--
 	====================================================================================================
 	Tasks - Documentation
