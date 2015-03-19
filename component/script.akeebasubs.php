@@ -29,7 +29,7 @@ class Pkg_AkeebasubsInstallerScript
 	 *
 	 * @var   string
 	 */
-	protected $minimumPHPVersion = '5.3.4';
+	protected $minimumPHPVersion = '5.4.0';
 
 	/**
 	 * The minimum Joomla! version required to install this extension
@@ -44,6 +44,29 @@ class Pkg_AkeebasubsInstallerScript
 	 * @var   string
 	 */
 	protected $maximumJoomlaVersion = '3.9.99';
+
+	/**
+	 * A list of extensions (modules, plugins) to enable after installation. Each item has four values, in this order:
+	 * type (plugin, module, ...), name (of the extension), client (0=site, 1=admin), group (for plugins).
+	 *
+	 * @var array
+	 */
+	protected $extensionsToEnable = [
+		['plugin', 'customfields', 1, 'akeebasubs'],
+		['plugin', 'invoices', 1, 'akeebasubs'],
+		['plugin', 'joomla', 1, 'akeebasubs'],
+		['plugin', 'joomlaprofilesync', 1, 'akeebasubs'],
+		['plugin', 'needslogout', 1, 'akeebasubs'],
+		['plugin', 'slavesubs', 1, 'akeebasubs'],
+		['plugin', 'subscriptionemails', 1, 'akeebasubs'],
+		['plugin', 'offline', 1, 'akpayment'],
+		['plugin', 'aslink', 1, 'content'],
+		['plugin', 'asrestricted', 1, 'content'],
+		['plugin', 'asexpirationcontrol', 1, 'system'],
+		['plugin', 'asexpirationnotify', 1, 'system'],
+		['plugin', 'aslogoutuser', 1, 'system'],
+		['plugin', 'aslogoutuser', 1, 'user'],
+	];
 
 	/**
 	 * Joomla! pre-flight event. This runs before Joomla! installs or updates the package. This is our last chance to
@@ -98,9 +121,26 @@ class Pkg_AkeebasubsInstallerScript
 	}
 
 	/**
+	 * Tuns on installation (but not on upgrade). This happens in install and discover_install installation routes.
+	 *
+	 * @param   \JInstallerAdapterPackage  $parent  Parent object
+	 *
+	 * @return  bool
+	 */
+	public function install($parent)
+	{
+		// Enable the extensions we need to install
+		$this->enableExtensions();
+
+		return true;
+	}
+
+	/**
 	 * Runs on uninstallation
 	 *
 	 * @param   \JInstallerAdapterPackage  $parent  Parent object
+	 *
+	 * @return  bool
 	 */
 	public function uninstall($parent)
 	{
@@ -111,6 +151,8 @@ class Pkg_AkeebasubsInstallerScript
 
 		// Try to uninstall FOF
 		$this->uninstallFOF($parent);
+
+		return true;
 	}
 
 	/**
@@ -193,6 +235,72 @@ class Pkg_AkeebasubsInstallerScript
 		catch (\Exception $e)
 		{
 			// We can expect the uninstallation to fail if there are other extensions depending on the FOF library.
+		}
+	}
+
+	/**
+	 * Enable modules and plugins after installing them
+	 */
+	private function enableExtensions()
+	{
+		$db = JFactory::getDbo();
+
+		foreach ($this->extensionsToEnable as $ext)
+		{
+			$this->enableExtension($ext[0], $ext[1], $ext[2], $ext[3]);
+		}
+	}
+
+	/**
+	 * Enable an extension
+	 *
+	 * @param   string   $type    The extension type.
+	 * @param   string   $name    The name of the extension (the element field).
+	 * @param   integer  $client  The application id (0: Joomla CMS site; 1: Joomla CMS administrator).
+	 * @param   string   $group   The extension group (for plugins).
+	 */
+	private function enableExtension($type, $name, $client = 1, $group = null)
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+					->update('#__extensions')
+					->set($db->qn('enabled') . ' = ' . $db->q(1))
+		            ->where('type = ' . $db->quote($type))
+		            ->where('element = ' . $db->quote($name));
+
+		switch ($type)
+		{
+			case 'plugin':
+				// Plugins have a folder but not a client
+				$query->where('folder = ' . $db->quote($group));
+				break;
+
+			case 'language':
+			case 'module':
+			case 'template':
+				// Languages, modules and templates have a client but not a folder
+				$client = JApplicationHelper::getClientInfo($client, true);
+				$query->where('client_id = ' . (int) $client->id);
+				break;
+
+			default:
+			case 'library':
+			case 'package':
+			case 'component':
+				// Components, packages and libraries don't have a folder or client.
+				// Included for completeness.
+				break;
+		}
+
+		$db->setQuery($query);
+
+		try
+		{
+			$db->execute();
+		}
+		catch (\Exception $e)
+		{
 		}
 	}
 }
