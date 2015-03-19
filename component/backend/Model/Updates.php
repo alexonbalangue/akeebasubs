@@ -29,10 +29,11 @@ class Updates extends Update
 	 */
 	public function __construct($config = array())
 	{
-		parent::__construct($config);
+		$config['update_component'] = 'pkg_akeebasubs';
+		$config['update_sitename']  = 'Akeeba Subscriptions';
+		$config['update_site']      = 'http://cdn.akeebabackup.com/updates/akeebasubs.xml';
 
-		$this->updateSiteName = 'Akeeba Subscriptions';
-		$this->updateSite = 'http://cdn.akeebabackup.com/updates/akeebasubs.xml';
+		parent::__construct($config);
 	}
 
 	/**
@@ -47,28 +48,28 @@ class Updates extends Update
 		);
 
 		// First of all let's check if there are any updates
-		$updateInfo = (object)$this->getUpdates(true);
+		$updateInfo = (object) $this->getUpdates(true);
 
 		// There are no updates, there's no point in continuing
-		if(!$updateInfo->hasUpdate)
+		if (!$updateInfo->hasUpdate)
 		{
 			return array(
 				'message' => array("No available updates found")
 			);
 		}
 
-		$return['message'][] = "Update detected, version: ".$updateInfo->version;
+		$return['message'][] = "Update detected, version: " . $updateInfo->version;
 
 		// Ok, an update is found, what should I do?
-		$params = JComponentHelper::getParams('com_akeebasubs');
+		$params     = JComponentHelper::getParams('com_akeebasubs');
 		$autoupdate = $params->get('autoupdateCli', 1);
 
 		// Let's notifiy the user
-		if($autoupdate == 1 || $autoupdate == 2)
+		if ($autoupdate == 1 || $autoupdate == 2)
 		{
 			$email = $params->get('notificationEmail');
 
-			if(!$email)
+			if (!$email)
 			{
 				$return['message'][] = "There isn't an email for notifications, no notification will be sent.";
 			}
@@ -80,15 +81,15 @@ class Updates extends Update
 				$lastSend   = $this->getLastSend();
 				$shouldSend = false;
 
-				if(!$numfreq)
+				if (!$numfreq)
 				{
 					$shouldSend = true;
 				}
 				else
 				{
-					$check = strtotime('-'.$numfreq.' '.$freqtime);
+					$check = strtotime('-' . $numfreq . ' ' . $freqtime);
 
-					if($lastSend < $check)
+					if ($lastSend < $check)
 					{
 						$shouldSend = true;
 					}
@@ -98,9 +99,9 @@ class Updates extends Update
 					}
 				}
 
-				if($shouldSend)
+				if ($shouldSend)
 				{
-					if($this->sendNotificationEmail($updateInfo->version, $email))
+					if ($this->sendNotificationEmail($updateInfo->version, $email))
 					{
 						$return['message'][] = "E-mail(s) correctly sent";
 					}
@@ -115,7 +116,7 @@ class Updates extends Update
 		}
 
 		// Let's download and install the latest version
-		if($autoupdate == 1 || $autoupdate == 3)
+		if ($autoupdate == 1 || $autoupdate == 3)
 		{
 			$return['message'][] = $this->updateComponent();
 		}
@@ -126,14 +127,14 @@ class Updates extends Update
 	/**
 	 * Sends an update notification email
 	 *
-	 * @param   string  $version  The newest available version
-	 * @param   string  $email    The email address of the recipient
+	 * @param   string $version The newest available version
+	 * @param   string $email   The email address of the recipient
 	 *
 	 * @return  boolean  The result from JMailer::send()
 	 */
 	private function sendNotificationEmail($version, $email)
 	{
-		$email_subject	= <<<ENDSUBJECT
+		$email_subject = <<<ENDSUBJECT
 THIS EMAIL IS SENT FROM YOUR SITE "[SITENAME]" - Update available
 ENDSUBJECT;
 
@@ -181,8 +182,8 @@ ENDBODY;
 		$sitename = $jconfig->get('sitename');
 
 		$substitutions = array(
-			'[VERSION]'			=> $version,
-			'[SITENAME]'		=> $sitename
+			'[VERSION]'  => $version,
+			'[SITENAME]' => $sitename
 		);
 
 		$email_subject = str_replace(array_keys($substitutions), array_values($substitutions), $email_subject);
@@ -193,7 +194,7 @@ ENDBODY;
 		$mailfrom = $jconfig->get('mailfrom');
 		$fromname = $jconfig->get('fromname');
 
-		$mailer->setSender(array( $mailfrom, $fromname ));
+		$mailer->setSender(array($mailfrom, $fromname));
 		$mailer->addRecipient($email);
 		$mailer->setSubject($email_subject);
 		$mailer->setBody($email_body);
@@ -215,13 +216,13 @@ ENDBODY;
 		$update_site = array_shift($this->getUpdateSiteIds());
 
 		$query = $db->getQuery(true)
-			->select($db->qn('update_id'))
-			->from($db->qn('#__updates'))
-			->where($db->qn('update_site_id').' = '.$update_site);
+		            ->select($db->qn('update_id'))
+		            ->from($db->qn('#__updates'))
+		            ->where($db->qn('update_site_id') . ' = ' . $update_site);
 
 		$uid = $db->setQuery($query)->loadResult();
 
-		$update = new JUpdate();
+		$update   = new JUpdate();
 		$instance = JTable::getInstance('update');
 		$instance->load($uid);
 		$update->loadFromXML($instance->detailsurl);
@@ -235,29 +236,29 @@ ENDBODY;
 			return "No download URL found inside XML manifest";
 		}
 
-		$config		= JFactory::getConfig();
-		$tmp_dest	= $config->get('tmp_path');
+		$config   = JFactory::getConfig();
+		$tmp_dest = $config->get('tmp_path');
 
-		if(!$tmp_dest)
+		if (!$tmp_dest)
 		{
 			return "Joomla temp directory is empty, please set it before continuing";
 		}
-		elseif(!JFolder::exists($tmp_dest))
+		elseif (!JFolder::exists($tmp_dest))
 		{
 			return "Joomla temp directory does not exists, please set the correct path before continuing";
 		}
 
 		$p_file = JInstallerHelper::downloadPackage($url);
 
-		if(!$p_file)
+		if (!$p_file)
 		{
 			return "An error occurred while trying to download the latest version";
 		}
 
 		// Unpack the downloaded package file
-		$package	= JInstallerHelper::unpack($tmp_dest . '/' . $p_file);
+		$package = JInstallerHelper::unpack($tmp_dest . '/' . $p_file);
 
-		if(!$package)
+		if (!$package)
 		{
 			return "An error occurred while unpacking the file, please double check your Joomla temp directory";
 		}
@@ -266,17 +267,17 @@ ENDBODY;
 		$installed = $installer->install($package['extractdir']);
 
 		// Let's cleanup the downloaded archive and the temp folder
-		if(JFolder::exists($package['extractdir']))
+		if (JFolder::exists($package['extractdir']))
 		{
 			JFolder::delete($package['extractdir']);
 		}
 
-		if(JFile::exists($package['packagefile']))
+		if (JFile::exists($package['packagefile']))
 		{
 			JFile::delete($package['packagefile']);
 		}
 
-		if($installed)
+		if ($installed)
 		{
 			return "Component successfully updated";
 		}
@@ -312,9 +313,9 @@ ENDBODY;
 		$data = $params->toString();
 
 		$query = $db->getQuery(true)
-			->update($db->qn('#__extensions'))
-			->set($db->qn('params').' = '.$db->q($data))
-			->where($db->qn('extension_id').' = '.$db->q($this->extension_id));
+		            ->update($db->qn('#__extensions'))
+		            ->set($db->qn('params') . ' = ' . $db->q($data))
+		            ->where($db->qn('extension_id') . ' = ' . $db->q($this->extension_id));
 		$db->setQuery($query)->execute();
 	}
 }
