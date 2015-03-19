@@ -35,6 +35,8 @@
 
 		<include name="*" />
 
+		<exclude name="LICENSE.txt" />
+		<exclude name="script.akeebasubs.php" />
 		<exclude name="backend/invoices/*.pdf" />
 		<exclude name="backend/assets/tcpdf/certificates/*.cer" />
 	</fileset>
@@ -210,7 +212,8 @@
             </filterchain>
         </copy>
 
-        <copy file="${dirs.component}/LICENSE.txt" tofile="${dirs.release}/LICENSE.txt" overwrite="true">
+        <copy file="${dirs.component}/LICENSE.txt" tofile="${dirs.release}/LICENSE.txt" overwrite="true" />
+        <copy file="${dirs.component}/script.akeebasubs.php" tofile="${dirs.release}/script.akeebasubs.php" overwrite="true" />
 
         <!-- Create the ZIP file -->
         <property name="package_zip" value="${dirs.release}/pkg_akeebasubs-${version}.zip" />
@@ -224,6 +227,7 @@
                 <include name="lib_*.zip" />
                 <include name="pkg_*.xml" />
                 <include name="*.txt" />
+                <include name="script.*.php" />
             </fileset>
         </zipme>
 

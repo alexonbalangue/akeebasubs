@@ -11,10 +11,8 @@
     <copyright>Copyright (c)2010-2015 Nicholas K. Dionysopoulos</copyright>
     <license>GNU GPL v3 or later</license>
     <description>Akeeba Subscriptions installation package v.##VERSION##</description>
-    <!-- Update servers -->
-    <updateservers>
-        <server type="extension" priority="1" name="Akeeba Subscriptions">http://cdn.akeebabackup.com/updates/akeebasubs.xml</server>
-    </updateservers>
+
+    <!-- List of extensions to install -->
     <files>
         <!-- Component -->
         <file type="component" id="com_akeebasubs">com_akeebasubs.zip</file>
@@ -76,8 +74,13 @@
 
         <!-- Plugins: user -->
         <file type="plugin" group="user" id="aslogoutuser">plg_user_aslogoutuser.zip</file>
-
-        <!-- FOF -->
-        <file type="library" id="lib_fof30">lib_fof30.zip</file>
     </files>
+
+    <!-- Installation script -->
+    <scriptfile>script.akeebasubs.php</scriptfile>
+
+    <!-- Update servers -->
+    <updateservers>
+        <server type="extension" priority="1" name="Akeeba Subscriptions">http://cdn.akeebabackup.com/updates/akeebasubs.xml</server>
+    </updateservers>
 </extension>

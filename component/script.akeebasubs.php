@@ -1,0 +1,198 @@
+<?php
+/**
+ * @package      akeebasubs
+ * @copyright    Copyright (c)2010-2015 Nicholas K. Dionysopoulos / AkeebaBackup.com
+ * @license      GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
+ * @version      $Id$
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// no direct access
+defined('_JEXEC') or die();
+
+class Pkg_AkeebasubsInstallerScript
+{
+	/**
+	 * The minimum PHP version required to install this extension
+	 *
+	 * @var   string
+	 */
+	protected $minimumPHPVersion = '5.3.4';
+
+	/**
+	 * The minimum Joomla! version required to install this extension
+	 *
+	 * @var   string
+	 */
+	protected $minimumJoomlaVersion = '3.3.0';
+
+	/**
+	 * The maximum Joomla! version this extension can be installed on
+	 *
+	 * @var   string
+	 */
+	protected $maximumJoomlaVersion = '3.9.99';
+
+	/**
+	 * Joomla! pre-flight event. This runs before Joomla! installs or updates the package. This is our last chance to
+	 * tell Joomla! if it should abort the installation.
+	 *
+	 * In here we'll try to install FOF. We have to do that before installing the component since it's using an
+	 * installation script extending FOF's InstallScript class. We can't use a <file> tag in the manifest to install FOF
+	 * since the FOF installation is expected to fail if a newer version of FOF is already installed on the site.
+	 *
+	 * @param   string                     $type    Installation type (install, update, discover_install)
+	 * @param   \JInstallerAdapterPackage  $parent  Parent object
+	 *
+	 * @return  boolean  True to let the installation proceed, false to halt the installation
+	 */
+	public function preflight($type, $parent)
+	{
+		// Check the minimum PHP version
+		if (!version_compare(PHP_VERSION, $this->minimumPHPVersion, 'ge'))
+		{
+			$msg = "<p>You need PHP $this->minimumPHPVersion or later to install this package</p>";
+			JLog::add($msg, JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
+		// Check the minimum Joomla! version
+		if (!version_compare(JVERSION, $this->minimumJoomlaVersion, 'ge'))
+		{
+			$msg = "<p>You need Joomla! $this->minimumJoomlaVersion or later to install this component</p>";
+			JLog::add($msg, JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
+		// Check the maximum Joomla! version
+		if (!version_compare(JVERSION, $this->maximumJoomlaVersion, 'le'))
+		{
+			$msg = "<p>You need Joomla! $this->maximumJoomlaVersion or earlier to install this component</p>";
+			JLog::add($msg, JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
+		// Try to install FOF. We need to do this in preflight to make sure that FOF is available when we install our
+		// component. The reason being that the component's installation script extends FOF's InstallScript class.
+		// We can't use a <file> tag in our package manifest because FOF's package is *supposed* to fail to install if
+		// a newer version is already installed. This would unfortunately cancel the installation of the entire package,
+		// so we have to get a bit tricky.
+		$this->installOrUpdateFOF($parent);
+
+		return true;
+	}
+
+	/**
+	 * Runs on uninstallation
+	 *
+	 * @param   \JInstallerAdapterPackage  $parent  Parent object
+	 */
+	public function uninstall($parent)
+	{
+		// Preload FOF classes required for the InstallScript. This is required since we'll be trying to uninstall FOF
+		// before uninstalling the component itself. The component has an uninstallation script which uses FOF, so...
+		class_exists('FOF30\\Utils\\InstallScript');
+		class_exists('FOF30\\Database\\Installer');
+
+		// Try to uninstall FOF
+		$this->uninstallFOF($parent);
+	}
+
+	/**
+	 * Tries to install or update FOF. The FOF library package installation can fail if there's a newer version
+	 * installed. In this case we raise no error. If, however, the FOF library package installation failed AND we can
+	 * not load FOF then we raise an error: this means that FOF installation really failed (e.g. unwritable folder) and
+	 * we can't install this package.
+	 *
+	 * @param   \JInstallerAdapterPackage  $parent
+	 */
+	private function installOrUpdateFOF($parent)
+	{
+		// Get the path to the FOF package
+		$sourcePath = $parent->getParent()->getPath('source');
+		$sourcePackage = $sourcePath . '/lib_fof30.zip';
+
+		// Extract and install the package
+		$package = JInstallerHelper::unpack($sourcePackage);
+		$tmpInstaller  = new JInstaller;
+		$error = null;
+
+		try
+		{
+			$installResult = $tmpInstaller->install($package['dir']);
+		}
+		catch (\Exception $e)
+		{
+			$installResult = false;
+			$error = $e->getMessage();
+		}
+
+		// Try to include FOF. If that fails then the FOF package isn't installed because its installation failed, not
+		// because we had a newer version already installed. As a result we have to abort the entire package's
+		// installation.
+		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+		{
+			if (empty($error))
+			{
+				$error = JText::sprintf(
+					'JLIB_INSTALLER_ABORT_PACK_INSTALL_ERROR_EXTENSION',
+					JText::_('JLIB_INSTALLER_' . strtoupper($parent->get('route'))),
+					basename($sourcePackage)
+				);
+			}
+
+			throw new RuntimeException($error);
+		}
+	}
+
+	/**
+	 * Try to uninstall the FOF library. We don't go through the Joomla! package uninstallation since we can expect the
+	 * uninstallation of the FOF library to fail if other software depends on it.
+	 *
+	 * @param   JInstallerAdapterPackage  $parent
+	 */
+	private function uninstallFOF($parent)
+	{
+		$tmpInstaller = new JInstaller;
+
+		$db = $parent->getParent()->getDbo();
+
+		$query = $db->getQuery(true)
+		            ->select('extension_id')
+		            ->from('#__extensions')
+		            ->where('type = ' . $db->quote('library'))
+		            ->where('element = ' . $db->quote('lib_fof30'));
+
+		$db->setQuery($query);
+		$id = $db->loadResult();
+
+		if (!$id)
+		{
+			return;
+		}
+
+		try
+		{
+			$tmpInstaller->uninstall('library', $id, 0);
+		}
+		catch (\Exception $e)
+		{
+			// We can expect the uninstallation to fail if there are other extensions depending on the FOF library.
+		}
+	}
+}
