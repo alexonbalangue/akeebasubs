@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<project name="AkeebaSubscriptions" description="Akeeba Subscriptions component based on Nooku FW" default="git" >
+<project name="AkeebaSubscriptions" description="Akeeba Subscriptions" default="git" >
 	<property file="./build.properties" />
-	<!-- Default properties, set only if not already assigned in the build.properties file -->
+
+    <!-- Default properties, set only if not already assigned in the build.properties file -->
 	<property name="dirs.root" value="../" />
 	<property name="dirs.component" value="../component" />
 	<property name="dirs.modules" value="../modules" />
@@ -28,20 +29,20 @@
 
 	<fileset dir="${dirs.component}" id="component">
 		<include name="backend/**" />
-		<include name="cli/**" />
-		<include name="fof/**" />
 		<include name="frontend/**" />
 		<include name="language/**" />
 		<include name="media/**" />
-
-        <include name="strapper/**" />
-        <exclude name="strapper/sources**" />
 
 		<include name="*" />
 
 		<exclude name="backend/invoices/*.pdf" />
 		<exclude name="backend/assets/tcpdf/certificates/*.cer" />
 	</fileset>
+
+    <fileset dir="${dirs.component}/cli" id="cli">
+        <include name="*.php" />
+        <include name="files_akeebasubs.xml" />
+    </fileset>
 
 	<!--
 	====================================================================================================
@@ -85,20 +86,30 @@
 	====================================================================================================
 	-->
 	
-	<target name="component-packages" depends="component-package" />
-	
-	<target name="component-package" description="Akeeba Subscriptions Professional"
+	<target name="component-packages" depends="package-pkg" />
+
+    <target name="package-files" description="files_akeebasubs for CLI files" depends="new-release,setup-properties">
+        <copy file="./templates/files_akeebasubs.xml" tofile="${dirs.component}/cli/files_akeebasubs.xml" overwrite="true">
+            <filterchain>
+                <replacetokens begintoken="##" endtoken="##">
+                    <token key="DATE" value="${build.date}" />
+                    <token key="VERSION" value="${version}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <zipme basedir="${dirs.component}/cli" destfile="${dirs.release}/files_akeebasubs.zip" includeemptydirs="true">
+            <fileset refid="cli" />
+        </zipme>
+    </target>
+
+    <target name="package-pkg" description="Akeeba Subscriptions Installation Package">
+        <!-- TODO -->
+    </target>
+
+	<target name="package-com" description="Akeeba Subscriptions Professional"
 		depends="new-release,setup-properties">
 		
-		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/aaa_akeebasubs.xml" overwrite="true">
-			<filterchain>
-				<replacetokens begintoken="##" endtoken="##">
-					<token key="DATE" value="${build.date}" />
-					<token key="VERSION" value="${version}" />
-					<token key="PRO" value="1" />
-				</replacetokens>
-			</filterchain>
-		</copy>
 		<copy file="./templates/akeebasubs.xml" tofile="${dirs.component}/akeebasubs.xml" overwrite="true">
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.3.0" type="package" method="upgrade">
+    <name>Akeeba Subscriptions package</name>
+    <author>Nicholas K. Dionysopoulos</author>
+    <creationDate>##DATE##</creationDate>
+    <packagename>akeebasubs</packagename>
+    <version>##VERSION##</version>
+    <url>https://www.akeebabackup.com</url>
+    <packager>Akeeba Ltd</packager>
+    <packagerurl>https://www.akeebabackup.com</packagerurl>
+    <copyright>Copyright (c)2010-2015 Nicholas K. Dionysopoulos</copyright>
+    <license>GNU GPL v3 or later</license>
+    <description>Akeeba Subscriptions installation package v.##VERSION##</description>
+    <!-- Update servers -->
+    <updateservers>
+        <server type="extension" priority="1" name="Akeeba Subscriptions">http://cdn.akeebabackup.com/updates/akeebasubs.xml</server>
+    </updateservers>
+    <files>
+        <!-- Component -->
+        <file type="component" id="com_akeebasubs">com_akeebasubs.zip</file>
+
+        <!-- CLI scripts -->
+        <file type="files" id="files_akeebasubs">files_akeebasubs.zip</file>
+
+        <!-- Modules -->
+        <file type="module" id="mod_akeebasubs">mod_akeebasubs.zip</file>
+        <file type="module" id="mod_aksexpires">mod_aksexpires.zip</file>
+        <file type="module" id="mod_akslevels">mod_akslevels.zip</file>
+        <file type="module" id="mod_aksubslist">mod_aksubslist.zip</file>
+        <file type="module" id="mod_aktaxcountry">mod_aktaxcountry.zip</file>
+
+        <!-- Plugins: akeebasubs -->
+        <file type="plugin" id="plg_akeebasubs_adminemails">plg_akeebasubs_adminemails.zip</file>
+        <file type="plugin" id="plg_akeebasubs_agreetoeu">plg_akeebasubs_agreetoeu.zip</file>
+        <file type="plugin" id="plg_akeebasubs_agreetotos">plg_akeebasubs_agreetotos.zip</file>
+        <file type="plugin" id="plg_akeebasubs_atscredits">plg_akeebasubs_atscredits.zip</file>
+        <file type="plugin" id="plg_akeebasubs_autocity">plg_akeebasubs_autocity.zip</file>
+        <file type="plugin" id="plg_akeebasubs_canalyticscommerce">plg_akeebasubs_canalyticscommerce.zip</file>
+        <file type="plugin" id="plg_akeebasubs_contentpublish">plg_akeebasubs_contentpublish.zip</file>
+        <file type="plugin" id="plg_akeebasubs_customfields">plg_akeebasubs_customfields.zip</file>
+        <file type="plugin" id="plg_akeebasubs_invoices">plg_akeebasubs_invoices.zip</file>
+        <file type="plugin" id="plg_akeebasubs_iproperty">plg_akeebasubs_iproperty.zip</file>
+        <file type="plugin" id="plg_akeebasubs_joomla">plg_akeebasubs_joomla.zip</file>
+        <file type="plugin" id="plg_akeebasubs_joomlaprofilesync">plg_akeebasubs_joomlaprofilesync.zip</file>
+        <file type="plugin" id="plg_akeebasubs_needslogout">plg_akeebasubs_needslogout.zip</file>
+        <file type="plugin" id="plg_akeebasubs_recaptcha">plg_akeebasubs_recaptcha.zip</file>
+        <file type="plugin" id="plg_akeebasubs_slavesubs">plg_akeebasubs_slavesubs.zip</file>
+        <file type="plugin" id="plg_akeebasubs_sql">plg_akeebasubs_sql.zip</file>
+        <file type="plugin" id="plg_akeebasubs_subscriptionemails">plg_akeebasubs_subscriptionemails.zip</file>
+        <file type="plugin" id="plg_akeebasubs_subscriptionemailsdebug">plg_akeebasubs_subscriptionemailsdebug.zip</file>
+
+        <!-- Plugins: akpayment -->
+        <file type="plugin" id="plg_akpayment_2checkout">plg_akpayment_2checkout.zip</file>
+        <file type="plugin" id="plg_akpayment_2conew">plg_akpayment_2conew.zip</file>
+        <file type="plugin" id="plg_akpayment_none">plg_akpayment_none.zip</file>
+        <file type="plugin" id="plg_akpayment_offline">plg_akpayment_offline.zip</file>
+        <file type="plugin" id="plg_akpayment_paymill">plg_akpayment_paymill.zip</file>
+        <file type="plugin" id="plg_akpayment_paypal">plg_akpayment_paypal.zip</file>
+        <file type="plugin" id="plg_akpayment_paypalpaymentspro">plg_akpayment_paypalpaymentspro.zip</file>
+        <file type="plugin" id="plg_akpayment_paypalproexpress">plg_akpayment_paypalproexpress.zip</file>
+        <file type="plugin" id="plg_akpayment_skrill">plg_akpayment_skrill.zip</file>
+        <file type="plugin" id="plg_akpayment_stripe">plg_akpayment_stripe.zip</file>
+        <file type="plugin" id="plg_akpayment_viva">plg_akpayment_viva.zip</file>
+
+        <!-- Plugins: content -->
+        <file type="plugin" id="plg_content_aslink">plg_content_aslink.zip</file>
+        <file type="plugin" id="plg_content_asrestricted">plg_content_asrestricted.zip</file>
+        <file type="plugin" id="plg_content_astimedrelease">plg_content_astimedrelease.zip</file>
+
+        <!-- Plugins: system -->
+        <file type="plugin" id="plg_system_as2cocollation">plg_system_as2cocollation.zip</file>
+        <file type="plugin" id="plg_system_asexpirationcontrol">plg_system_asexpirationcontrol.zip</file>
+        <file type="plugin" id="plg_system_asexpirationnotify">plg_system_asexpirationnotify.zip</file>
+        <file type="plugin" id="plg_system_aslogoutuser">plg_system_aslogoutuser.zip</file>
+        <file type="plugin" id="plg_system_asuserregredir">plg_system_asuserregredir.zip</file>
+
+        <!-- Plugins: user -->
+        <file type="plugin" id="plg_user_aslogoutuser">plg_user_aslogoutuser.zip</file>
+
+        <!-- FOF -->
+        <file type="library" id="lib_fof30">lib_fof30.zip</file>
+    </files>
+</extension>

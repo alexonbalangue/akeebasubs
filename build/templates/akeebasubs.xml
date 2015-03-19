@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5" type="component" method="upgrade">
+<extension version="3.3.0" type="component" method="upgrade">
     <name>AkeebaSubs</name>
     <creationDate>##DATE##</creationDate>
     <author>Nicholas K. Dionysopoulos</author>
     <authorEmail>nicholas@akeebabackup.com</authorEmail>
     <authorUrl>http://www.akeebabackup.com</authorUrl>
-    <copyright>Copyright (c)2010-2011 Nicholas K. Dionysopoulos</copyright>
+    <copyright>Copyright (c)2010-2015 Nicholas K. Dionysopoulos</copyright>
     <license>GNU GPL v3 or later</license>
     <version>##VERSION##</version>
     <description>Akeeba Subscriptions v.##VERSION##</description>
@@ -74,9 +74,4 @@
     </administration>
 
     <scriptfile>script.akeebasubs.php</scriptfile>
-
-    <!-- Update servers -->
-    <updateservers>
-        <server type="extension" priority="1" name="Akeeba Subscriptions">http://cdn.akeebabackup.com/updates/akeebasubs.xml</server>
-    </updateservers>
 </extension>

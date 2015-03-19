@@ -31,7 +31,10 @@
 # Generated invoices
 /component/backend/invoices/*.pdf
 
-# Version file
+# Version and manifest files
+/component/akeebasubs.xml
+/component/pkg_akeebasubs.xml
+/component/cli/files_akeebasubs.xml
 /component/backend/version.php
 
 # Language files (symlinked)
