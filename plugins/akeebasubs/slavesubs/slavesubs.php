@@ -6,8 +6,17 @@
  */
 
 defined('_JEXEC') or die();
-
-class plgAkeebasubsSlavesubs extends JPlugin
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
+if(!$akeebasubsinclude)
+{
+	unset($akeebasubsinclude);
+	return;
+}
+else
+{
+	unset($akeebasubsinclude);
+}
+class plgAkeebasubsSlavesubs extends plgAkeebasubsAbstract
 {
 	private         $maxSlaves = array();
 	private static  $dontFire  = false;
@@ -756,4 +765,8 @@ JS;
 			}
 		}
 	}
+
+public function getGroups(){} //plgAkeebasubsAbstract has 2 abstrct methods and therefore
+//extends class must be declared abstract or implement the remaining methods (plgAkeebasubsAbstract::getGroups)
+//thus we set the function in the class but have it empty
 }
