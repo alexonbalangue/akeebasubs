@@ -210,30 +210,26 @@
             </filterchain>
         </copy>
 
+        <copy file="${dirs.component}/LICENSE.txt" tofile="${dirs.release}/LICENSE.txt" overwrite="true">
+
         <!-- Create the ZIP file -->
         <property name="package_zip" value="${dirs.release}/pkg_akeebasubs-${version}.zip" />
 
         <zipme basedir="${dirs.release}" destfile="${package_zip}" includeemptydirs="true">
-            <fileset dir="${dirs.release}">
+            <fileset dir="${dirs.release}" id="pkg_fileset">
                 <include name="com_*.zip" />
                 <include name="file_*.zip" />
                 <include name="mod_*.zip" />
                 <include name="plg_*.zip" />
                 <include name="lib_*.zip" />
                 <include name="pkg_*.xml" />
+                <include name="*.txt" />
             </fileset>
         </zipme>
 
         <!-- Clean up -->
         <delete>
-            <fileset dir="${dirs.release}">
-                <include name="com_*.zip" />
-                <include name="file_*.zip" />
-                <include name="mod_*.zip" />
-                <include name="plg_*.zip" />
-                <include name="lib_*.zip" />
-                <include name="pkg_*.xml" />
-            </fileset>
+            <fileset refid="pkg_fileset" />
         </delete>
     </target>
 
@@ -301,7 +297,7 @@
 			passive="true"
 			level="debug">
 			<fileset dir="${dirs.release}">
-				<include name="com_akeebasubs-*.zip"/>
+				<include name="pkg_akeebasubs-*.zip"/>
 			</fileset>			
 			<fileset dir="${dirs.root}">
 				<include name="CHANGELOG"/>
