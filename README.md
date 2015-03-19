@@ -1,12 +1,14 @@
-# Akeeba Subscriptions
+# Akeeba Subscriptions 5
 
-This branch contains the current, in-development version of Akeeba Subscriptions.
+**This version of Akeeba Subscriptions is written on FOF 3. It requires Joomla! 3.4 or later and PHP 5.4.0 or later.**
 
-If you are looking for the code you can use to build a component to use on your site please check out either the 4.x branch (Akeeba Subscriptions 4.x, Joomla! 3.2 and later) or the 3.x branch (Akeeba Subscriptions 3.x, Joomla! 2.5, 3.0, 3.1 and 3.2). 
+This branch contains the current, in-development version of Akeeba Subscriptions based on FOF 3. You can study this
+code as a good example of a real world application utilising the full power of FOF 3. There are things in here you won't
+find in the FOF 3 documentation.
 
-# !!! WORK IN PROGRESS !!!
-
-The following instructions may not apply unless this warning has been removed
+If you are looking for earlier versions to build a component you can use on your Joomla! 2.5, 3.0, 3.1, 3.2 or 3.3 site
+please check out either the 4.x branch (Akeeba Subscriptions 4.x, Joomla! 3.2 and later) or the 3.x branch
+(Akeeba Subscriptions 3.x, Joomla! 2.5, 3.0, 3.1 and 3.2). Older versions can work on PHP 5.3.4 or later. 
 
 ## Build instructions
 
@@ -24,7 +26,7 @@ You will also need the following path structure inside a folder on your system
 
 * **akeebasubs** This repository. We will refer to this as the MAIN directory
 * **buildfiles** [Akeeba Build Tools](https://github.com/akeeba/buildfiles)
-* **fof** [Framework on Framework](https://github.com/akeeba/fof)
+* **fof3** [Framework on Framework](https://github.com/akeeba/fof) – WARNING! You need to check out the `fof3` branch.
 
 You must use the exact folder names specified here.
 
