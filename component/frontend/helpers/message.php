@@ -300,7 +300,7 @@ class AkeebasubsHelperMessage
 			@include_once JPATH_SITE . '/components/com_ars/helpers/filter.php';
 		}
 
-		$dlid = class_exists('ArsHelperFilter') ? ArsHelperFilter::myDownloadID() : '';
+		$dlid = class_exists('ArsHelperFilter') ? ArsHelperFilter::myDownloadID($sub->user_id) : '';
 
 		// User's state, human readable
 		$formatted_state = '';
