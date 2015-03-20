@@ -34,7 +34,7 @@ class plgAkeebasubsIproperty extends AkeebasubsBase
 		$templatePath = dirname(__FILE__);
 		$name         = 'iproperty';
 
-		parent::__construct($subject, $name, $config, $templatePath);
+		parent::__construct($subject, $config);
 	}
 
 	/**

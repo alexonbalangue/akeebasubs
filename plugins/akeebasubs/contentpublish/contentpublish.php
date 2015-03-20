@@ -42,9 +42,9 @@ class plgAkeebasubsContentpublish extends \Akeeba\Subscriptions\Admin\PluginAbst
 	/** @var array ZOO apps to unpublish items */
 	protected $removeGroups = array();
 
-	public function __construct(&$subject, $name, $config = array(), $templatePath = null)
+	public function __construct(&$subject, $config = array())
 	{
-		parent::__construct($subject, $name, $config, $templatePath);
+		parent::__construct($subject, $config);
 
 		$this->loadLanguage();
 	}

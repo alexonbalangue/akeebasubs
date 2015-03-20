@@ -28,9 +28,9 @@ class plgAkeebasubsSlavesubs extends AkeebasubsBase
 	 */
 	private static $dontFire = false;
 
-	public function __construct(&$subject, $name, $config = array())
+	public function __construct(&$subject, $config = array())
 	{
-		parent::__construct($subject, $name, $config);
+		parent::__construct($subject, $config);
 
 		$this->loadLanguage();
 
