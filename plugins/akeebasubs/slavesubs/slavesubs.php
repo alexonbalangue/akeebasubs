@@ -577,37 +577,6 @@ JS;
 			return false;
 		}
 
-		//if the user is not in akeebasubs_users, create the akeebasubs_users for the slave user
-		$newuser = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')->user_id($user_id)->getItem();
-		if(empty($newuser))
-		{
-			$new_userdata = array(
-			'akeebasubs_subscription_id'	=> 0,
-			'user_id'						=> $user_id,
-			'isbusiness'					=> 0,
-			'businessname'					=> 0,
-			'occupation'					=> 0,
-			'vatnumber'						=> 0,
-			'viesregistered'				=> 0,
-			'taxauthority'					=> 0,
-			'address1'						=> 0,
-			'address2'						=> 0,
-			'city'							=> 0,
-			'state'							=> 0,
-			'zip'							=> 0,
-			'country'						=> 0,
-			'params'						=> 0,
-			'notes'							=> 0,
-			'needs_logout'					=> 0,
-			);
-			$table = F0FModel::getTmpInstance('Users', 'AkeebasubsModel')->getTable();
-			$table->reset();
-			$table->akeebasubs_user_id = 0;
-			self::$dontFire = true;
-			$table->save($new_userdata);
-			self::$dontFire = false;
-		}
-
 		if(isset($params['slavesubs_ids']))
 		{
 			unset($params['slavesubs_ids']);
