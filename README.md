@@ -50,7 +50,7 @@ All of the following commands are to be run from the MAIN directory.
 	
 		phing link
 		
-	If you are on Windows make sure that you are running an elevated command prompt (run cmd.exe as Administrator)
+	If you are on Windows make sure that you are running an elevated command prompt (run cmd.exe as Administrator or for xampp modify your xampp_shell.bat file to run as administrator by forced UAC)
 	
 ### Useful Phing tasks
 
@@ -85,7 +85,7 @@ This creates the installable ZIP packages of the component inside the MAIN/relea
 
 	phing git
 
-Please note that it's necessary to run `git pull` and `phing git` in your copy of the FOF repository before building an Akeeba Subscriptions package. Failure to do so will either result in an uninstallable package or will end up overwriting the already installed FOF on your site with an older version, resulting in potentially severe issues in other FOF-based components.
+Please note that it's necessary to do a package build for FOF with `git pull` and `phing git`commands in your copy of the FOF repository before building an Akeeba Subscriptions package. For more details see the package build instructions on the [FOF page](https://github.com/akeeba/fof). Failure to do so will either result in a failure to create a package, an uninstallable package or will end up overwriting the already installed FOF on your site with an older version, resulting in potentially severe issues in other FOF-based components.
 	
 #### Build the documentation in PDF format
 
