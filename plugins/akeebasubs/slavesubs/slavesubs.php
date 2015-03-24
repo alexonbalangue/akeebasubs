@@ -417,6 +417,9 @@ JS;
 
 			// Let's get the full list of involved people
 			$list = array_merge($current['slaveusers'], $previous['slaveusers']);
+			$list = array_unique($list);
+			$list = array_filter($list);
+			
 			$i    = 0;
 
 			$dirty = false;
