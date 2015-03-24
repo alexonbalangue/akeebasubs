@@ -50,7 +50,7 @@ All of the following commands are to be run from the MAIN directory.
 	
 		phing link
 		
-	If you are on Windows make sure that you are running an elevated command prompt (run cmd.exe as Administrator or for xampp modify your xampp_shell.bat file to run as administrator by forced UAC)
+	If you are on Windows make sure that you are running an elevated command prompt (run cmd.exe as Administrator)
 	
 ### Useful Phing tasks
 
@@ -71,7 +71,7 @@ or, on Windows:
 	
 or, on Windows:
 	
-	phing relink -Dsite=c:\xampp\htdocs\joomla
+	phing relink -Dsite=c:\path\to\site\root\joomla
 
 #### Relinking internal files
 
