@@ -333,12 +333,6 @@ JS;
 			return;
 		}
 
-		// Nothing in the params array? No need to check anything else!
-		if (empty($params))
-		{
-			return;
-		}
-
 		// Create new slave subscriptions if the subscription level allows us to
 		if (!isset($this->maxSlaves[ $row->akeebasubs_level_id ]))
 		{
