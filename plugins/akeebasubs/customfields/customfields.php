@@ -70,11 +70,17 @@ class plgAkeebasubsCustomfields extends JPlugin
 		// Init the fields array which will be returned
 		$fields = array();
 		
-		//if the cache is null, or is not an array... make $cache an array
-		if (is_null($cache) || !is_array($cache)) 
+		// If the cache is null, or is not an array... make $cache an array
+		if (is_null($cache))
+		{
+			$cache = array();
+		}
+
+		if (!is_array($cache))
 		{
 			$cache = (array) $cache;
 		}
+
 		// Which subscription level is that?
 		if (!array_key_exists('subscriptionlevel', $cache))
 		{
