@@ -340,7 +340,7 @@ JS;
 
 		JLoader::import('joomla.user.helper');
 		$slavesubs_ids = array();
-		$data          = $row instanceof F0FTable ? $row->getData() : (array)$row;
+		$data          = $row instanceof F0FTable ? $row->getData() : (array)$row; 
 
 		// Let's look inside modified fields, is this a new slave, a removed one or I'm just renewing his subscription?
 		// Simply create new subscription, the user specified slaves while creating his subscription
@@ -358,15 +358,6 @@ JS;
 			// Create new slave subscriptions
 			JLoader::import('joomla.user.helper');
 			$slavesubs_ids = array();
-
-			if ($row instanceof F0FTable)
-			{
-				$data = $row->getData();
-			}
-			else
-			{
-				$data = (array)$row;
-			}
 
 			foreach($slaveusers as $slaveUsername)
 			{
@@ -394,16 +385,10 @@ JS;
 			   '_dontNotify' => true,
 			));
 
-			$db = JFactory::getDbo();
-			$tableName = '#__akeebasubs_subscriptions';
-			$tableKey = 'akeebasubs_subscription_id';
-			$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
 			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
-			//force a return of the parent sub ID to prevent the slave sub id return to URL
-			return $table->akeebasubs_subscription_id; 
 		}
 		// Modified subscription, let's figure out what to do with slave subscriptions
 		else
@@ -621,7 +606,6 @@ JS;
 		$data   = array('publish_down' => $expire->toSql());
 
 		$table->save($data);
-
 		self::$dontFire = false;
 	}
 
