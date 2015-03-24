@@ -30,6 +30,12 @@ class Pricedropdown extends Base
 
 	public function getPerSubscriptionField($item, $cache)
 	{
+		//if $cache['subcustom'] is null or is not an array, make $cache['subcustom'] an empty array
+		if (is_null($cache['subcustom']) || !is_array($cache['subcustom']))
+		{
+			$cache['subcustom'] = array();
+		}
+
 		// Get the current value
 		if (array_key_exists($item->slug, $cache['subcustom']))
 		{
