@@ -172,7 +172,18 @@ JS;
 		);
 
 		$custom = $data->custom;
+		
+		// If the $custom is null, or is not an array... make $custom an array
+		if (is_null($custom))
+		{
+			$custom = array();
+		}
 
+		if (!is_array($custom))
+ 		{
+ 			$custom = (array) $custom;
+ 		}
+ 		
 		if (!array_key_exists('agreetotos', $custom))
 		{
 			$custom['agreetotos'] = 0;
