@@ -26,7 +26,7 @@ class TaxHelper extends Model
 	 *
 	 * @return  array
 	 */
-	public function getTaxDefiningParameters()
+	public function getTaxDefiningParameters(array $userData = [])
 	{
 		$result = array(
 			'country'	=> 'XX',
@@ -43,9 +43,16 @@ class TaxHelper extends Model
 
 		if (!$user->guest && $user->id)
 		{
-			/** @var Users $userModel */
-			$userModel = $this->container->factory->model('Users')->tmpInstance();
-			$userparams = $userModel->getMergedData($user->id);
+			if (!empty($userData))
+			{
+				$userparams = (object) $userData;
+			}
+			else
+			{
+				/** @var Users $userModel */
+				$userModel = $this->container->factory->model('Users')->tmpInstance();
+				$userparams = $userModel->getMergedData($user->id);
+			}
 
 			if ($userparams->country)
 			{

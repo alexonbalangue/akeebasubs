@@ -269,15 +269,17 @@ class Users extends DataModel
 		}
 		else
 		{
-			$taxParameters = $this->container->factory->model('TaxHelper')->tmpInstance()->getTaxDefiningParameters();
+			$taxParameters = $this->container->factory->model('TaxHelper')->tmpInstance()->getTaxDefiningParameters($myData);
 
-			$myData = array(
+			$taxData = array(
 				'isbusiness' => $taxParameters['vies'] ? 1 : 0,
 				'city'       => $taxParameters['city'],
 				'state'      => $taxParameters['state'],
 				'country'    => $taxParameters['country'],
 				'params'     => array()
 			);
+
+			$myData = array_merge($myData, $taxData);
 		}
 
 		// Finally, merge data coming from the plugins. Note that the
