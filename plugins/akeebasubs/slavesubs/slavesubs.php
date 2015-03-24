@@ -347,7 +347,8 @@ JS;
 		if($info['status'] == 'new')
 		{
 			$slaveusers = $params['slaveusers'];
-
+			$slaveusers = array_filter($slaveusers);
+			
 			// Do we have at least one slave user?
 			if (empty($slaveusers))
 			{
@@ -469,52 +470,27 @@ JS;
 						}
 					}
 				}
+				// A slave user has been ADDED
 				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
 				{
-					//Added user, create a new subscription for him, but if it exists just sync with the parent subscription
-					$index = array_search($slave, $current['slaveusers']);
-
-					if($index !== false)
-					{
-						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
-						$table = (array)$table;
-						try
-						{
-							$to = array_search($current['slavesubs_ids'][ $index ],$table,true);
-							//make sure that we are not looking at the parent subscription
-							if($to ['akeebasubs_subscription_id'] = $data ['akeebasubs_subscription_id'])
-							{
-								continue;
-							}
-							if($to !== false){
-							$result = $this->copySubscriptionInformation($row, $to);
-							$dirty  = true;
-							}
-							else{
-								throw new Exception();
-							}
-						}
-						catch (\Exception $e)
-						{
-							// The subscription doesn't exist. must be an Added user, create a new subscription for him.
-							$result = $this->createSlaveSub($slave, $data, $params);
-							$dirty  = true;
-						}
-					}
+					$result = $this->createSlaveSub($slave, $data, $params);
+					$dirty  = true;
 				}
+				
+				// A slave user has been REMOVED
 				elseif(!in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
 				{
 					// Before he was active, now it's no more; let's fire this slave (aka expire his subscription)
 					$index = array_search($slave, $previous['slaveusers']);
 
-					if(isset($previous['slavesubs_ids'][$index]))
+					if($index !== false)
 					{
 						$this->expireSlaveSub($previous['slavesubs_ids'][$index]);
 						$dirty = true;
 					}
 				}
 
-				if($result)
+				if($result !== false)
 				{
 					$slavesubs_ids[] = $result;
 				}
@@ -527,15 +503,16 @@ JS;
 			}
 
 			$params['slavesubs_ids'] = $slavesubs_ids;
-			$newdata = array_merge($data, array('params' => json_encode($params), '_dontNotify' => true));
+			$newdata = array_merge($data, array(
+				'params' => json_encode($params),
+				'_dontNotify' => true,
+				));
 
 			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
 			
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
-			//force a return of the parent sub ID to prevent the salve Sub ID being returned to the URL
-			return $table->akeebasubs_subscription_id;
 		}
 	}
 
@@ -553,9 +530,10 @@ JS;
 			->user_id($user_id)
 			->getList();
 
-		$info = array();
+		$info = array('status' => 'modified',); //status should always be modified on refresh
 		foreach ($subscriptions as $row)
 		{
+			$info['previous'] = $row;
 			$this->onAKSubscriptionChange($row, $info);
 		}
 	}
@@ -612,6 +590,7 @@ JS;
 			'contact_flag'					=> 3,
 			'processor'                  => 'slavesub', // Inform the human operator we're a slave
 			'processor_key'              => 'parent_' . sprintf('%05u', $parentsub_id) . '_' . md5(microtime(true)), // Inform the human operator who's our parent
+			'_dontNotify'                => true,
 		));
 
 		// Save the new subscription record
