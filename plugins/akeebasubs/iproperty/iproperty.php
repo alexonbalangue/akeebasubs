@@ -52,6 +52,12 @@ class plgAkeebasubsIproperty extends AkeebasubsBase
 			->user_id($user_id)
 			->get(true);
 
+		// Make sure there are subscriptions set for the user
+		if (!$subscriptions->count())
+		{
+			return;
+		}
+
 		// Do I have to activate the user?
 		$mustActivate   = false;
 		$mustDeactivate = false;

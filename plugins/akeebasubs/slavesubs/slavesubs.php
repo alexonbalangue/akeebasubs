@@ -502,6 +502,12 @@ JS;
 			->user_id($user_id)
 			->get(true);
 
+		// Make sure there are subscriptions set for the user
+		if (!$subscriptions->count())
+		{
+			return;
+		}
+
 		$info = array(
 			'status' => 'modified',
 		);

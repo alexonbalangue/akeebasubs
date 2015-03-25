@@ -345,8 +345,15 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 
 		$akeebasubs_user_id = $mergedData->akeebasubs_user_id;
 
-		$userData = $usersModel->find($akeebasubs_user_id)->toArray();
+		try
+		{
+			$userData = $usersModel->findOrFail($akeebasubs_user_id)->toArray();
 
-		$this->onAKUserSaveData($userData);
+			$this->onAKUserSaveData($userData);
+		}
+		catch (\Exception $e)
+		{
+			// No user record found for this user. We can't continue.
+		}
 	}
 }
