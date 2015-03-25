@@ -532,6 +532,12 @@ JS;
 			->user_id($user_id)
 			->getList();
 
+		// Make sure there are subscriptions set for the user
+    		if (!$subscriptions->count())
+		{
+			return;
+		}
+		
 		$info = array('status' => 'modified',); //status should always be modified on refresh
 		foreach ($subscriptions as $row)
 		{
