@@ -30,6 +30,8 @@ if (!property_exists($this, 'extensions'))
 				<th width="40px">
 					<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?>
 				</th>
+				<th width="32px">
+                		</th>
 				<th width="100px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?>
 				</th>
@@ -66,7 +68,7 @@ if (!property_exists($this, 'extensions'))
 			<?php foreach(array('active', 'waiting', 'pending', 'expired') as $area): ?>
 			<?php if (!count($this->sortTable[$area])) continue; ?>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<h4><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_AREAHEADING_' . $area) ?></h4>
 				</td>
 			</tr>
@@ -81,7 +83,7 @@ if (!property_exists($this, 'extensions'))
 				$email = trim($subscription->email);
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
-
+				$image = $subscription->image;
 				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
 				if ($level->only_once)
@@ -99,6 +101,9 @@ if (!property_exists($this, 'extensions'))
 				<td align="left">
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
+				<td align="left">
+                		<img src="<?php echo JURI::base(); ?><?php echo $image ?>" align="center" title="<?php echo $this->escape($level->title)?>" />
+                		</td>
 				<td>
 					<?php if ($level->content_url): ?>
 					<a href="<?php echo $this->escape($level->content_url) ?>">
