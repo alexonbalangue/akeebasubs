@@ -456,8 +456,28 @@ JS;
 				// A slave user has been ADDED
 				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
 				{
-					$result = $this->createSlaveSub($slave, $data, $params);
-					$dirty  = true;
+					//double check that there isn't a slave subscription for this user
+					$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
+					$table = (array)$table;
+					try
+					{	//there is a slave subscription already, so sync with parent sub
+						$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table);
+						if($to !== false)
+						{
+							$result = $this->copySubscriptionInformation($row, $to);
+							$dirty  = true;
+						}
+						else
+						{
+							throw new Exception();
+						}
+					}
+					catch (\Exception $e)
+					{
+						// No slave subscription existed. create one for the user.
+						$result = $this->createSlaveSub($slaveUserName, $data, $params);
+						$dirty  = true;
+					}
 				}
 				
 				// A slave user has been REMOVED
