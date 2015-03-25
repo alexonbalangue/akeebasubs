@@ -30,7 +30,7 @@ if (!property_exists($this, 'extensions'))
 				<th width="40px">
 					<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?>
 				</th>
-				<th width="32px">
+				<th width="64px">
                 		</th>
 				<th width="100px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?>
