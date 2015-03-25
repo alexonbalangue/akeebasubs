@@ -405,21 +405,24 @@ JS;
 			$list = array_merge($current['slaveusers'], $previous['slaveusers']);
 			$list = array_unique($list);
 			$list = array_filter($list);
-			
-			$i    = 0;
 
 			$dirty = false;
 			$result = false;
-
+			
+			// No slaves, nothing to do
+			if (empty($list))
+			{
+				return;
+			}
+			
 			foreach($list as $slave)
 			{
 				if (empty($slave))
 				{
-					$result = false;
-					$dirty = false;
 					continue;
 				}
-
+				$result = false;
+				
 				if (in_array($slave, $previous['slaveusers']) && in_array($slave, $current['slaveusers']))
 				{
 					// Slave is still here, just sync with the parent subscription
@@ -431,12 +434,7 @@ JS;
 						$table = (array)$table;
 						try
 						{
-							$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table, true);
-							//make sure that we are not accidently looking at the parent subscription
-							if($to ['akeebasubs_subscription_id'] = $data ['akeebasubs_subscription_id'])
-							{
-								continue;
-							}
+							$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table);
 							if($to !== false)
 							{
 								$result = $this->copySubscriptionInformation($row, $to);
@@ -494,7 +492,6 @@ JS;
 				));
 
 			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
-			
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
