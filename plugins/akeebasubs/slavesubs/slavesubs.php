@@ -640,15 +640,15 @@ JS;
 		$fromData = $from instanceof F0FTable ? $from->getData() : (array)$from;
 		$properties          = array_keys($fromData);
 		
-		foreach($properties as $k)
+		foreach($properties as $property)
 		{
 			// Do not copy forbidden properties
-			if (in_array($k, $forbiddenProperties))
+			if (in_array($property, $forbiddenProperties))
 			{
 				continue;
 			}
 			// Special handling for params
-			if ($k == 'params')
+			if ($property == 'params')
 			{
 				$params = $from->params;
 				if (!is_object($params) && !is_array($params))
@@ -680,9 +680,9 @@ JS;
 				}
 				
 			// Copy over everything else
-			if (property_exists($from, $k))
+			if (property_exists($from, $property))
 			{
-				$to->$k = $from->$k;
+				$to->$property = $from->$property;
 			}
 		}
 		//return the id of the subscription that was modified
