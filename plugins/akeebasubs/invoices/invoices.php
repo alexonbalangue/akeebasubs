@@ -112,12 +112,11 @@ class plgAkeebasubsInvoices extends JPlugin
 	public function onAKGetInvoicingOptions()
 	{
 		JLoader::import('joomla.filesystem.file');
-		$enabled = JFile::exists(JPATH_ADMINISTRATOR . '/components/com_ccinvoices/controllers/invoices.php');
 
 		return array(
 			'extension'   => 'akeebasubs',
 			'title'       => 'Integrated invoicing',
-			'enabled'     => $enabled,
+			'enabled'     => 1,
 			'backendurl'  => 'index.php?option=com_akeebasubs&view=Invoice&task=read&id=%s',
 			'frontendurl' => 'index.php?option=com_akeebasubs&view=Invoice&task=read&id=%s',
 		);
