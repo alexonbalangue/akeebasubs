@@ -18,27 +18,7 @@ if (!property_exists($this, 'extensions'))
 	$this->extensions = array();
 }
 ?>
-<?php
-$summaryimage = AkeebasubsHelperCparams::getParam('summaryimages', 0); 
-  if ($summaryimage == 1){
-	  $imagewidth = '20px';
-  }
-  elseif ($summaryimage == 2)
-  {
-	  $imagewidth = '32px';
-  }
-  elseif ($summaryimage == 3)
-  {
-	  $imagewidth = '64px';
-  }
-  elseif ($summaryimage == 4)
-  {
-	  $imagewidth = '128px';
-  }
-  else{
-	  $imagewidth = '';
-  }
-?>
+<?php $summaryimage = AkeebasubsHelperCparams::getParam('summaryimages', 1); ?>
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
 	<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions') ?>" method="post" class="adminform" name="adminForm" id="adminForm">
@@ -51,7 +31,7 @@ $summaryimage = AkeebasubsHelperCparams::getParam('summaryimages', 0);
 					<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?>
 				</th>
 				 <?php if($summaryimage !== '0'):?>
-                		<th width="<?php echo $imagewidth ?>">
+                		<th width="<?php echo $summaryimage ?>px">
                 		</th>
                 		<?php endif; ?>
 				<th width="100px">
