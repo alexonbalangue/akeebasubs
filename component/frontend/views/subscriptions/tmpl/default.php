@@ -18,7 +18,27 @@ if (!property_exists($this, 'extensions'))
 	$this->extensions = array();
 }
 ?>
-
+<?php
+$summaryimage = AkeebasubsHelperCparams::getParam('summaryimages', 0); 
+  if ($summaryimage == 1){
+	  $imagewidth = '20px';
+  }
+  elseif ($summaryimage == 2)
+  {
+	  $imagewidth = '32px';
+  }
+  elseif ($summaryimage == 3)
+  {
+	  $imagewidth = '64px';
+  }
+  elseif ($summaryimage == 4)
+  {
+	  $imagewidth = '128px';
+  }
+  else{
+	  $imagewidth = '';
+  }
+?>
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
 	<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions') ?>" method="post" class="adminform" name="adminForm" id="adminForm">
@@ -30,8 +50,10 @@ if (!property_exists($this, 'extensions'))
 				<th width="40px">
 					<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?>
 				</th>
-				<th width="64px">
+				 <?php if($summaryimage !== '0'):?>
+                		<th width="<?php echo $imagewidth ?>">
                 		</th>
+                		<?php endif; ?>
 				<th width="100px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?>
 				</th>
@@ -101,9 +123,11 @@ if (!property_exists($this, 'extensions'))
 				<td align="left">
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
-				<td align="left">
-                		<img src="<?php echo JURI::base(); ?><?php echo $image ?>" align="center" title="<?php echo $this->escape($level->title)?>" />
+                		<?php if($summaryimage !== '0'):?>
+        			<td align="left">
+                			<img src="<?php echo JURI::base(); ?><?php echo $image ?>" align="center" title="<?php echo $this->escape($level->title)?>" />
                 		</td>
+                		<?php endif; ?>
 				<td>
 					<?php if ($level->content_url): ?>
 					<a href="<?php echo $this->escape($level->content_url) ?>">
