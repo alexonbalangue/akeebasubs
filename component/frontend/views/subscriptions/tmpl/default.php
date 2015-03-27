@@ -18,7 +18,7 @@ if (!property_exists($this, 'extensions'))
 	$this->extensions = array();
 }
 ?>
-
+<?php $summaryimage = AkeebasubsHelperCparams::getParam('summaryimages', 1); ?>
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
 	<form action="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=subscriptions') ?>" method="post" class="adminform" name="adminForm" id="adminForm">
@@ -30,6 +30,10 @@ if (!property_exists($this, 'extensions'))
 				<th width="40px">
 					<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?>
 				</th>
+				 <?php if($summaryimage !== '0'):?>
+                		<th width="<?php echo $summaryimage ?>px">
+                		</th>
+                		<?php endif; ?>
 				<th width="100px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?>
 				</th>
@@ -66,7 +70,7 @@ if (!property_exists($this, 'extensions'))
 			<?php foreach(array('active', 'waiting', 'pending', 'expired') as $area): ?>
 			<?php if (!count($this->sortTable[$area])) continue; ?>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<h4><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_AREAHEADING_' . $area) ?></h4>
 				</td>
 			</tr>
@@ -81,7 +85,7 @@ if (!property_exists($this, 'extensions'))
 				$email = trim($subscription->email);
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
-
+				$image = $subscription->image;
 				$canRenew = AkeebasubsHelperCparams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
 				if ($level->only_once)
@@ -99,6 +103,11 @@ if (!property_exists($this, 'extensions'))
 				<td align="left">
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
+                		<?php if($summaryimage !== '0'):?>
+        			<td align="center">
+                			<img src="<?php echo JURI::base(); ?><?php echo $image ?>" align="center" width="<?php echo $summaryimage ?>px" title="<?php echo $this->escape($level->title)?>" />
+                		</td>
+                		<?php endif; ?>
 				<td>
 					<?php if ($level->content_url): ?>
 					<a href="<?php echo $this->escape($level->content_url) ?>">
