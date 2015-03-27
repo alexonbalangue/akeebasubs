@@ -426,58 +426,22 @@ JS;
 				if (in_array($slave, $previous['slaveusers']) && in_array($slave, $current['slaveusers']))
 				{
 					// Slave is still here, just sync with the parent subscription
-					$index = array_search($slave, $previous['slaveusers']);
+					$index = array_search($slave, $current['slaveusers']);
 
 					if($index !== false)
 					{
-						$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
-						$table = (array)$table;
-						try
-						{
-							$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table);
-							if($to !== false)
-							{
-								$result = $this->copySubscriptionInformation($row, $to);
-								$dirty  = true;
-							}
-							else
-							{
-								throw new Exception();
-							}
-						}
-						catch (\Exception $e)
-						{
-							// The subscription doesn't exist. Treat it as if a slave user was ADDED.
-							$result = $this->createSlaveSub($slaveUserName, $data, $params);
-							$dirty  = true;
-						}
+						$from = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data['akeebasubs_subscription_id']);
+						$to = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($current['slavesubs_ids'][$index]);
+						$result = $this->copySubscriptionInformation($from, $to);
+						$dirty  = true;
 					}
 				}
 				// A slave user has been ADDED
 				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
 				{
-					//double check that there isn't a slave subscription for this user
-					$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable(); //get the table to search
-					$table = (array)$table;
-					try
-					{	//there is a slave subscription already, so sync with parent sub
-						$to = array_search($previous[ 'slavesubs_ids' ][ $index ], $table);
-						if($to !== false)
-						{
-							$result = $this->copySubscriptionInformation($row, $to);
-							$dirty  = true;
-						}
-						else
-						{
-							throw new Exception();
-						}
-					}
-					catch (\Exception $e)
-					{
-						// No slave subscription existed. create one for the user.
-						$result = $this->createSlaveSub($slaveUserName, $data, $params);
+						// No slave subscription existed, create one for the user.
+						$result = $this->createSlaveSub($slave, $data, $params);
 						$dirty  = true;
-					}
 				}
 				
 				// A slave user has been REMOVED
@@ -642,6 +606,21 @@ JS;
 	 */
 	private function copySubscriptionInformation($from, &$to)
 	{
+		// Don't copy if it's the same record (this shouldn't happen, but if it does)
+		if ($from->akeebasubs_subscription_id == $to->akeebasubs_subscription_id)
+		{
+			return false;
+		}
+		// Don't copy over if the $to record has slave users, this is a parent sub (this shouldn't happen, but if it does)
+		if (isset($to->slaveusers))
+		{
+			return false;
+		}
+		// Don't copy over if the $to record has slavesubs_ids, this is a parent sub (this shouldn't happen, but if it does)
+		if (isset($to->slavesubs_ids))
+		{
+			return false;
+		}
 		$forbiddenProperties = array(
 			'akeebasubs_subscription_id',
 			'user_id',
@@ -663,11 +642,13 @@ JS;
 			'after_contact',
 		);
 
-		$fromData = $from instanceof F0FTable ? $from->getData() : (array)$from;
-		$properties          = array_keys($fromData);
-		
-		foreach($properties as $property)
+		$properties = get_object_vars($from);
+		$this->varDumpToErrorLog($properties);
+		$copiedData = array();
+		foreach( $properties as $property => $parentValue )
 		{
+			$this->varDumpToErrorLog($property);
+			$this->varDumpToErrorLog($parentValue);
 			// Do not copy forbidden properties
 			if (in_array($property, $forbiddenProperties))
 			{
@@ -676,7 +657,7 @@ JS;
 			// Special handling for params
 			if ($property == 'params')
 			{
-				$params = $from->params;
+				$params = $parentValue;
 				if (!is_object($params) && !is_array($params))
 				{
 					$params = json_decode($params, true);
@@ -701,18 +682,23 @@ JS;
 				unset($params['parentsub_id']);
 				}
 				
-				$to->params = json_encode($params);
+				$copiedData = array_merge($copiedData , array('params' => json_encode($params)));
 				continue;
 				}
 				
 			// Copy over everything else
 			if (property_exists($from, $property))
 			{
-				$to->$property = $from->$property;
+				$copiedData  = array_merge($copiedData , array( $property => $parentValue));
 			}
+
 		}
+		self::$dontFire = true;
+		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($to->akeebasubs_subscription_id);
+		$table->save($copiedData); //save the copied data
+		self::$dontFire = false;
 		//return the id of the subscription that was modified
-		return $subid=F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($to ['akeebasubs_subscription_id']);
+		return $subid = $table->akeebasubs_subscription_id;
 	}
 
 	/**
