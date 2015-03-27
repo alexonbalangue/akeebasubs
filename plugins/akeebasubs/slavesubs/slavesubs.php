@@ -6,8 +6,17 @@
  */
 
 defined('_JEXEC') or die();
-
-class plgAkeebasubsSlavesubs extends JPlugin
+$akeebasubsinclude = include_once JPATH_ADMINISTRATOR.'/components/com_akeebasubs/assets/akeebasubs.php';
+if(!$akeebasubsinclude)
+{
+	unset($akeebasubsinclude);
+	return;
+}
+else
+{
+	unset($akeebasubsinclude);
+}
+class plgAkeebasubsSlavesubs extends plgAkeebasubsAbstract
 {
 	private         $maxSlaves = array();
 	private static  $dontFire  = false;
@@ -331,14 +340,15 @@ JS;
 
 		JLoader::import('joomla.user.helper');
 		$slavesubs_ids = array();
-		$data          = $row instanceof F0FTable ? $row->getData() : (array)$row;
+		$data          = $row instanceof F0FTable ? $row->getData() : (array)$row; 
 
 		// Let's look inside modified fields, is this a new slave, a removed one or I'm just renewing his subscription?
 		// Simply create new subscription, the user specified slaves while creating his subscription
 		if($info['status'] == 'new')
 		{
 			$slaveusers = $params['slaveusers'];
-
+			$slaveusers = array_filter($slaveusers);
+			
 			// Do we have at least one slave user?
 			if (empty($slaveusers))
 			{
@@ -348,15 +358,6 @@ JS;
 			// Create new slave subscriptions
 			JLoader::import('joomla.user.helper');
 			$slavesubs_ids = array();
-
-			if ($row instanceof F0FTable)
-			{
-				$data = $row->getData();
-			}
-			else
-			{
-				$data = (array)$row;
-			}
 
 			foreach($slaveusers as $slaveUsername)
 			{
@@ -384,16 +385,10 @@ JS;
 			   '_dontNotify' => true,
 			));
 
-			$db = JFactory::getDbo();
-			$tableName = '#__akeebasubs_subscriptions';
-			$tableKey = 'akeebasubs_subscription_id';
-			$table = new AkeebasubsTableSubscription($tableName, $tableKey, $db);
 			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
-			//force a return of the parent sub ID to prevent the slave sub id return to URL
-			return $table->akeebasubs_subscription_id; 
 		}
 		// Modified subscription, let's figure out what to do with slave subscriptions
 		else
@@ -408,50 +403,61 @@ JS;
 
 			// Let's get the full list of involved people
 			$list = array_merge($current['slaveusers'], $previous['slaveusers']);
-			$i    = 0;
+			$list = array_unique($list);
+			$list = array_filter($list);
 
 			$dirty = false;
-
+			$result = false;
+			
+			// No slaves, nothing to do
+			if (empty($list))
+			{
+				return;
+			}
+			
 			foreach($list as $slave)
 			{
 				if (empty($slave))
 				{
 					continue;
 				}
-
 				$result = false;
-
+				
 				if (in_array($slave, $previous['slaveusers']) && in_array($slave, $current['slaveusers']))
 				{
 					// Slave is still here, just sync with the parent subscription
-					$index = array_search($slave, $previous['slaveusers']);
+					$index = array_search($slave, $current['slaveusers']);
 
-					if(isset($previous['slavesubs_ids'][$index]))
+					if($index !== false)
 					{
-						//we still have a valid slave so copy from parent to slave
-						$result =$this->copySubscriptionInformation($row, $previous['slavesubs_ids'][$index]);
-						$dirty = true;	
+						$from = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data['akeebasubs_subscription_id']);
+						$to = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($current['slavesubs_ids'][$index]);
+						$result = $this->copySubscriptionInformation($from, $to);
+						$dirty  = true;
 					}
 				}
+				// A slave user has been ADDED
 				elseif(in_array($slave, $current['slaveusers']) && !in_array($slave, $previous['slaveusers']))
 				{
-					// Added user, create a new subscription for him
-					$result = $this->createSlaveSub($slave, $data, $params);
-					$dirty = true;
+						// No slave subscription existed, create one for the user.
+						$result = $this->createSlaveSub($slave, $data, $params);
+						$dirty  = true;
 				}
+				
+				// A slave user has been REMOVED
 				elseif(!in_array($slave, $current['slaveusers']) && in_array($slave, $previous['slaveusers']))
 				{
 					// Before he was active, now it's no more; let's fire this slave (aka expire his subscription)
 					$index = array_search($slave, $previous['slaveusers']);
 
-					if(isset($previous['slavesubs_ids'][$index]))
+					if($index !== false)
 					{
 						$this->expireSlaveSub($previous['slavesubs_ids'][$index]);
 						$dirty = true;
 					}
 				}
 
-				if($result)
+				if($result !== false)
 				{
 					$slavesubs_ids[] = $result;
 				}
@@ -464,15 +470,15 @@ JS;
 			}
 
 			$params['slavesubs_ids'] = $slavesubs_ids;
-			$newdata = array_merge($data, array('params' => json_encode($params), '_dontNotify' => true));
+			$newdata = array_merge($data, array(
+				'params' => json_encode($params),
+				'_dontNotify' => true,
+				));
 
 			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
-			
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
-			//force a return of the parent sub ID to prevent the salve Sub ID being returned to the URL
-			return $table->akeebasubs_subscription_id;
 		}
 	}
 
@@ -490,9 +496,16 @@ JS;
 			->user_id($user_id)
 			->getList();
 
-		$info = array();
+		// Make sure there are subscriptions set for the user
+    		if (!$subscriptions->count())
+		{
+			return;
+		}
+		
+		$info = array('status' => 'modified',); //status should always be modified on refresh
 		foreach ($subscriptions as $row)
 		{
+			$info['previous'] = $row;
 			$this->onAKSubscriptionChange($row, $info);
 		}
 	}
@@ -543,17 +556,19 @@ JS;
 			'akeebasubs_upgrade_id'			=> 0,
 			'akeebasubs_affiliate_id'		=> 0,
 			'affiliate_comission'			=> 0,
+			'akeebasubs_invoice_id'			=> 0,
 			'prediscount_amount'			=> 0,
 			'discount_amount'				=> 0,
-			'contact_flag'					=> 0,
+			'contact_flag'					=> 3,
+			'processor'                  => 'slavesub', // Inform the human operator we're a slave
+			'processor_key'              => 'parent_' . sprintf('%05u', $parentsub_id) . '_' . md5(microtime(true)), // Inform the human operator who's our parent
+			'_dontNotify'                => true,
 		));
 
 		// Save the new subscription record
 		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
-
 		$table->reset();
 		$table->akeebasubs_subscription_id = 0;
-
 		self::$dontFire = true;
 		$table->save($newdata);
 		self::$dontFire = false;
@@ -578,7 +593,6 @@ JS;
 		$data   = array('publish_down' => $expire->toSql());
 
 		$table->save($data);
-
 		self::$dontFire = false;
 	}
 
@@ -592,25 +606,55 @@ JS;
 	 */
 	private function copySubscriptionInformation($from, &$to)
 	{
+		// Don't copy if it's the same record (this shouldn't happen, but if it does)
+		if ($from->akeebasubs_subscription_id == $to->akeebasubs_subscription_id)
+		{
+			return false;
+		}
+		// Don't copy over if the $to record has slave users, this is a parent sub (this shouldn't happen, but if it does)
+		if (isset($to->slaveusers))
+		{
+			return false;
+		}
+		// Don't copy over if the $to record has slavesubs_ids, this is a parent sub (this shouldn't happen, but if it does)
+		if (isset($to->slavesubs_ids))
+		{
+			return false;
+		}
 		$forbiddenProperties = array(
-			'akeebasubs_subscription_id', 'user_id', 'net_amount',
-			'tax_amount', 'gross_amount', 'tax_percent', 'akeebasubs_coupon_id',
-			'akeebasubs_upgrade_id', 'akeebasubs_affiliate_id', 'affiliate_comission',
-			'prediscount_amount', 'discount_amount', 'contact_flag'
+			'akeebasubs_subscription_id',
+			'user_id',
+			'net_amount',
+			'tax_amount',
+			'gross_amount',
+			'tax_percent',
+			'akeebasubs_coupon_id',
+			'akeebasubs_upgrade_id',
+			'akeebasubs_affiliate_id',
+			'affiliate_comission',
+			'akeebasubs_invoice_id',
+			'discount_amount',
+			'processor',
+			'processor_key',
+			'contact_flag',
+			'first_contact',
+			'second_contact',
+			'after_contact',
 		);
 
 		$properties = get_object_vars($from);
-		foreach($properties as $k => $v)
+		$copiedData = array();
+		foreach( $properties as $property => $parentValue )
 		{
 			// Do not copy forbidden properties
-			if (in_array($k, $forbiddenProperties))
+			if (in_array($property, $forbiddenProperties))
 			{
 				continue;
 			}
 			// Special handling for params
-			elseif ($k == 'params')
+			if ($property == 'params')
 			{
-				$params = $from->params;
+				$params = $parentValue;
 				if (!is_object($params) && !is_array($params))
 				{
 					$params = json_decode($params, true);
@@ -635,18 +679,23 @@ JS;
 				unset($params['parentsub_id']);
 				}
 				
-				$to->params = json_encode($params);
+				$copiedData = array_merge($copiedData , array('params' => json_encode($params)));
+				continue;
 				}
 				
 			// Copy over everything else
-			elseif (property_exists($from, $k))
+			if (property_exists($from, $property))
 			{
-				$to->$k = $from->$k;
-				//return the id of the subscription that was modified
-				return $to;
+				$copiedData  = array_merge($copiedData , array( $property => $parentValue));
 			}
-		}
 
+		}
+		self::$dontFire = true;
+		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($to->akeebasubs_subscription_id);
+		$table->save($copiedData); //save the copied data
+		self::$dontFire = false;
+		//return the id of the subscription that was modified
+		return $subid = $table->akeebasubs_subscription_id;
 	}
 
 	/**
@@ -680,4 +729,8 @@ JS;
 			}
 		}
 	}
+
+public function getGroups(){} //plgAkeebasubsAbstract has 2 abstrct methods and therefore
+//extends class must be declared abstract or implement the remaining methods (plgAkeebasubsAbstract::getGroups)
+//thus we set the function in the class but have it empty
 }
