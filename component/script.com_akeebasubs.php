@@ -140,16 +140,17 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 	{
 		// Call the parent method
 		parent::postflight($type, $parent);
-
-		// Remove the update sites for this component on installation. The update sites are now handled at the package
-		// level.
-		if ($type != 'uninstall')
-		{
-			$this->removeObsoleteUpdateSites($parent);
-		}
 	}
 
+	public function uninstall($parent)
+	{
+		// Remove the update sites for this component on installation. The update sites are now handled at the package
+		// level.
+		$this->removeObsoleteUpdateSites($parent);
 
+		parent::uninstall($parent);
+	}
+	
 	/**
 	 * Renders the post-installation message
 	 */
