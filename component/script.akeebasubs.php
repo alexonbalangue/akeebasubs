@@ -121,6 +121,9 @@ class Pkg_AkeebasubsInstallerScript
 		// cancel the installation of the entire package, so we have to get a bit tricky.
 		$this->installOrUpdateStapper($parent);
 
+		// Add strapper30 dependency for pkg_akeebasubs
+		$this->addDependency('strapper30', 'pkg_akeebasubs');
+
 		return true;
 	}
 
@@ -152,6 +155,9 @@ class Pkg_AkeebasubsInstallerScript
 		// before uninstalling the component itself. The component has an uninstallation script which uses FOF, so...
 		class_exists('FOF30\\Utils\\InstallScript');
 		class_exists('FOF30\\Database\\Installer');
+
+		// Remove strapper30 dependency for pkg_akeebasubs
+		$this->removeDependency('strapper30', 'pkg_akeebasubs');
 
 		// First try to uninstall Akeeba Strapper. The uninstallation might fail if there are other extensions depending
 		// on it. That would cause the entire package uninstallation to fail, hence the need for special handling.
@@ -377,5 +383,129 @@ class Pkg_AkeebasubsInstallerScript
 		catch (\Exception $e)
 		{
 		}
+	}
+
+	/**
+	 * Get the dependencies for a package from the #__akeeba_common table
+	 *
+	 * @param   string  $package  The package
+	 *
+	 * @return  array  The dependencies
+	 */
+	protected function getDependencies($package)
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+		            ->select($db->qn('value'))
+		            ->from($db->qn('#__akeeba_common'))
+		            ->where($db->qn('key') . ' = ' . $db->q($package));
+
+		try
+		{
+			$dependencies = $db->setQuery($query)->loadResult();
+			$dependencies = json_decode($dependencies);
+
+			if (empty($dependencies))
+			{
+				$dependencies = array();
+			}
+		}
+		catch (Exception $e)
+		{
+			$dependencies = array();
+		}
+
+		return $dependencies;
+	}
+
+	/**
+	 * Sets the dependencies for a package into the #__akeeba_common table
+	 *
+	 * @param   string  $package       The package
+	 * @param   array   $dependencies  The dependencies list
+	 */
+	protected function setDependencies($package, array $dependencies)
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+		            ->delete('#__akeeba_common')
+		            ->where($db->qn('key') . ' = ' . $db->q($package));
+
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			// Do nothing if the old key wasn't found
+		}
+
+		$object = (object)array(
+			'key' => $package,
+			'value' => json_encode($dependencies)
+		);
+
+		try
+		{
+			$db->insertObject('#__akeeba_common', $object, 'key');
+		}
+		catch (Exception $e)
+		{
+			// Do nothing if the old key wasn't found
+		}
+	}
+
+	/**
+	 * Adds a package dependency to #__akeeba_common
+	 *
+	 * @param   string  $package     The package
+	 * @param   string  $dependency  The dependency to add
+	 */
+	protected function addDependency($package, $dependency)
+	{
+		$dependencies = $this->getDependencies($package);
+
+		if (!in_array($dependency, $dependencies))
+		{
+			$dependencies[] = $dependency;
+
+			$this->setDependencies($package, $dependencies);
+		}
+	}
+
+	/**
+	 * Removes a package dependency from #__akeeba_common
+	 *
+	 * @param   string  $package     The package
+	 * @param   string  $dependency  The dependency to remove
+	 */
+	protected function removeDependency($package, $dependency)
+	{
+		$dependencies = $this->getDependencies($package);
+
+		if (in_array($dependency, $dependencies))
+		{
+			$index = array_search($dependency, $dependencies);
+			unset($dependencies[$index]);
+
+			$this->setDependencies($package, $dependencies);
+		}
+	}
+
+	/**
+	 * Do I have a dependency for a package in #__akeeba_common
+	 *
+	 * @param   string  $package     The package
+	 * @param   string  $dependency  The dependency to check for
+	 *
+	 * @return bool
+	 */
+	protected function hasDependency($package, $dependency)
+	{
+		$dependencies = $this->getDependencies($package);
+
+		return in_array($dependency, $dependencies);
 	}
 }
