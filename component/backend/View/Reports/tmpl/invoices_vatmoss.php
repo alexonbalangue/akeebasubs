@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 if ($this->input->getCmd('tmpl', 'html') != 'component')
 {
-	echo $this->loadAnyTemplate('admin:com_akeebasubs/reports/invoices_controls', array('params' => $this->params));
+	echo $this->loadAnyTemplate('admin:com_akeebasubs/Reports/invoices_controls', array('params' => $this->params));
 }
 else
 {
