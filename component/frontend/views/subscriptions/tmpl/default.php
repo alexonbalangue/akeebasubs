@@ -104,8 +104,8 @@ if (!property_exists($this, 'extensions'))
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
                 		<?php if($summaryimage !== '0'):?>
-        			<td align="left">
-                			<img src="<?php echo JURI::base(); ?><?php echo $image ?>" align="center" title="<?php echo $this->escape($level->title)?>" />
+        			<td align="center">
+                			<img src="<?php echo JURI::base(); ?><?php echo $image ?>" align="center" width="<?php echo $summaryimage ?>px" title="<?php echo $this->escape($level->title)?>" />
                 		</td>
                 		<?php endif; ?>
 				<td>
