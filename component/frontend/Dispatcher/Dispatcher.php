@@ -22,6 +22,19 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 			define('AKEEBASUBS_DATE', date('Y-m-d'));
 		}
 
+		// Load Akeeba Strapper, if it is installed
+		\JLoader::import('joomla.filesystem.folder');
+
+		if (\JFolder::exists(JPATH_SITE . '/media/strapper30'))
+		{
+			@include_once JPATH_SITE . '/media/strapper30/strapper.php';
+
+			if (class_exists('\\AkeebaStrapper30', false))
+			{
+				\AkeebaStrapper30::bootstrap();
+			}
+		}
+
 		// Load common CSS JavaScript
 		\JHtml::_('jquery.framework');
 		$this->container->template->addCSS('media://com_akeebasubs/css/frontend.css', $this->container->mediaVersion);
