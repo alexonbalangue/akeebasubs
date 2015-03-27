@@ -643,12 +643,9 @@ JS;
 		);
 
 		$properties = get_object_vars($from);
-		$this->varDumpToErrorLog($properties);
 		$copiedData = array();
 		foreach( $properties as $property => $parentValue )
 		{
-			$this->varDumpToErrorLog($property);
-			$this->varDumpToErrorLog($parentValue);
 			// Do not copy forbidden properties
 			if (in_array($property, $forbiddenProperties))
 			{
