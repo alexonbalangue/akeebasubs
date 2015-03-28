@@ -18,7 +18,7 @@ class plgAkpayment2checkout extends AkpaymentBase
 		$config = array_merge($config, array(
 			'ppName'  => '2checkout',
 			'ppKey'   => 'PLG_AKPAYMENT_2CHECKOUT_TITLE',
-			'ppImage' => 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
+			'ppImage' => 'https://www.2checkout.com/upload/images/paymentlogoshorizontal.png',
 		));
 
 		parent::__construct($subject, $config);

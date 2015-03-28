@@ -20,7 +20,7 @@ class plgAkpayment2conew extends AkpaymentBase
 		$config = array_merge($config, array(
 			'ppName'                  => '2conew',
 			'ppKey'                   => 'PLG_AKPAYMENT_2CONEW_TITLE',
-			'ppImage'                 => 'https://www.2checkout.com/images/paymentlogoshorizontal.png',
+			'ppImage'                 => 'https://www.2checkout.com/upload/images/paymentlogoshorizontal.png',
 			'ppRecurringCancellation' => true
 		));
 
