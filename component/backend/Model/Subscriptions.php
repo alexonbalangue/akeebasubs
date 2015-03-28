@@ -200,7 +200,7 @@ class Subscriptions extends DataModel
 	 *
 	 * @param   \JDatabaseQuery  $query  The query to modify
 	 */
-	protected function onAfterBuildQuery(\JDatabaseQuery $query)
+	protected function onAfterBuildQuery(\JDatabaseQuery &$query)
 	{
 		// If the refresh flag is set in the state we must return all records, without honoring any kind of filter,
 		// custom WHERE clause or relation filter.

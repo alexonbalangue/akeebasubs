@@ -54,7 +54,7 @@ class SubscriptionsForStats extends Subscriptions
 	 *
 	 * @param   \JDatabaseQuery $query
 	 */
-	protected function onBuildCountQuery($query)
+	protected function onBuildCountQuery(&$query)
 	{
 		$db = $this->getDbo();
 
@@ -352,7 +352,7 @@ class SubscriptionsForStats extends Subscriptions
 	 *
 	 * @param   \JDatabaseQuery  $query  The query to modify
 	 */
-	protected function onAfterBuildQuery(\JDatabaseQuery $query, $overrideLimits = false)
+	protected function onAfterBuildQuery(\JDatabaseQuery &$query, $overrideLimits = false)
 	{
 		$db    = $this->getDbo();
 		$state = $this->getFilterValues();
