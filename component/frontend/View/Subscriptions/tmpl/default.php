@@ -20,7 +20,7 @@ if (!property_exists($this, 'extensions'))
 }
 ?>
 
-<?php $summaryimage = AkeebasubsHelperCparams::getParam('summaryimages', 1); ?>
+<?php $summaryimage = ComponentParams::getParam('summaryimages', 1); ?>
 
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
