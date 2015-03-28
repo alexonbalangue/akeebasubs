@@ -58,6 +58,13 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 
 		$kuser = $subscription->user;
 
+		if (is_null($kuser))
+		{
+			/** @var \Akeeba\Subscriptions\Site\Model\Users $userModel */
+			$userModel = $this->container->factory->model('Users')->tmpInstance();
+			$kuser = $userModel->user_id($subscription->user_id)->firstOrNew();
+		}
+
 		$callbackUrl = JURI::base() . 'index.php?option=com_akeebasubs&view=Callback&paymentmethod=paypalpaymentspro';
 		$data = (object)array(
 			'URL'           => $callbackUrl . '&mode=init',

@@ -96,6 +96,13 @@ class plgAkpaymentPaypal extends AkpaymentBase
 
 		$kuser = $subscription->user;
 
+		if (is_null($kuser))
+		{
+			/** @var \Akeeba\Subscriptions\Site\Model\Users $userModel */
+			$userModel = $this->container->factory->model('Users')->tmpInstance();
+			$kuser = $userModel->user_id($subscription->user_id)->firstOrNew();
+		}
+
 		@ob_start();
 		include dirname(__FILE__) . '/paypal/form.php';
 		$html = @ob_get_clean();

@@ -65,7 +65,14 @@ class plgAkpaymentSkrill extends AkpaymentBase
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
-		$kuser = $subscription->level;
+		$kuser = $subscription->user;
+
+		if (is_null($kuser))
+		{
+			/** @var \Akeeba\Subscriptions\Site\Model\Users $userModel */
+			$userModel = $this->container->factory->model('Users')->tmpInstance();
+			$kuser = $userModel->user_id($subscription->user_id)->firstOrNew();
+		}
 
 		$data = (object)array(
 			'url'       => $this->getPaymentURL(),
