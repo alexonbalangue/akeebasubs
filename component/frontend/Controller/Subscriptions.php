@@ -10,7 +10,7 @@ namespace Akeeba\Subscriptions\Site\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Controller\Mixin;
-use Akeeba\Subscriptions\Site\Model\Subscribe;
+use Akeeba\Subscriptions\Site\Model\Subscribe as ModelSubscribe;
 use FOF30\Container\Container;
 use FOF30\Controller\DataController;
 use FOF30\View\Exception\AccessForbidden;
@@ -214,7 +214,7 @@ class Subscriptions extends DataController
 		$subscription = $this->getModel()->savestate(0)->setIgnoreRequest(1);
 		$subscription->find($subId);
 
-		/** @var Subscribe $subscribes */
+		/** @var ModelSubscribe $subscribes */
 		$subscribes = $this->getModel('Subscribe')->savestate(0);
 
 		// Subscription validation (plugins only)
