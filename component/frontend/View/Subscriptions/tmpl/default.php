@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 /** @var \Akeeba\Subscriptions\Site\View\Subscriptions\Html $this */
 
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-Use Akeeba\Subscriptions\Admin\Helper\Format;
+use Akeeba\Subscriptions\Admin\Helper\Format;
 
 JLoader::import('joomla.utilities.date');
 
@@ -19,6 +19,8 @@ if (!property_exists($this, 'extensions'))
 	$this->extensions = array();
 }
 ?>
+
+<?php $summaryimage = AkeebasubsHelperCparams::getParam('summaryimages', 1); ?>
 
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
@@ -31,6 +33,10 @@ if (!property_exists($this, 'extensions'))
 				<th width="40px">
 					<?php echo JText::_('COM_AKEEBASUBS_COMMON_ID')?>
 				</th>
+			<?php if($summaryimage !== '0'):?>
+				<th width="<?php echo $summaryimage ?>px">
+				</th>
+			<?php endif; ?>
 				<th width="100px">
 					<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_LEVEL')?>
 				</th>
@@ -85,7 +91,7 @@ if (!property_exists($this, 'extensions'))
 				$email = trim($subscription->email);
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
-
+				$image = $subscription->image;
 				$canRenew = ComponentParams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
 
@@ -104,6 +110,11 @@ if (!property_exists($this, 'extensions'))
 				<td align="left">
 					<?php echo sprintf('%05u', (int)$subscription->akeebasubs_subscription_id)?>
 				</td>
+			<?php if($summaryimage !== '0'):?>
+				<td align="center">
+					<img src="<?php echo JURI::base(); ?><?php echo $image ?>" align="center" width="<?php echo $summaryimage ?>px" title="<?php echo $this->escape($level->title)?>" />
+				</td>
+			<?php endif; ?>
 				<td>
 					<?php if ($level->content_url): ?>
 					<a href="<?php echo $this->escape($level->content_url) ?>">
