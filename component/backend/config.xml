@@ -204,6 +204,15 @@
 			<option value="128">COM_AKEEBASUBS_CONFIG_FRONTEND_SUMMARYIMAGES_OPT_LARGEIMAGE</option>
 		</field >
 
+        <field name="usestrapper" type="list" default="3"
+               label="COM_AKEEBASUBS_CONFIG_FRONTEND_USESTRAPPER_LABEL"
+               description="COM_AKEEBASUBS_CONFIG_FRONTEND_USESTRAPPER_DESC">
+            <option value="0">COM_AKEEBASUBS_CONFIG_FRONTEND_USESTRAPPER_NONE</option>
+            <option value="1">COM_AKEEBASUBS_CONFIG_FRONTEND_USESTRAPPER_FRONTEND</option>
+            <option value="2">COM_AKEEBASUBS_CONFIG_FRONTEND_USESTRAPPER_BACKEND</option>
+            <option value="3">COM_AKEEBASUBS_CONFIG_FRONTEND_USESTRAPPER_BOTH</option>
+        </field >
+
 		<field name="siteurl" type="hidden" default="" />
 	</fieldset>
 

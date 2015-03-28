@@ -1587,6 +1587,37 @@
             </warning>
           </listitem>
         </varlistentry>
+
+        <varlistentry>
+          <term>Render zero price as FREE</term>
+
+          <listitem>
+            <para>When the subscription price is zero show it as FREE instead
+            of 0.00</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Summary images</term>
+
+          <listitem>
+            <para>Should we display subscription level images in the My
+            Subscriptions page? If so, what is the forced width of the
+            images?</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Use Akeeba Strapper</term>
+
+          <listitem>
+            <para>If your template does not use Bootstrap 2.3 you need to
+            enable Akeeba Strapper to display the interface correctly. You can
+            choose between front-end only, back-end only or both. You can find
+            Akeeba Strapper and its configuration in your site's
+            /media/strapper30 directory.</para>
+          </listitem>
+        </varlistentry>
       </variablelist>
 
       <para><guilabel>Integrated invoicing</guilabel></para>
@@ -1741,23 +1772,37 @@
         </varlistentry>
       </variablelist>
 
-      <para><guilabel>Live Update</guilabel></para>
+      <para><guilabel>Updates</guilabel></para>
 
-      <para>These options control how the integrated Live Update which allows
-      you to update our component works</para>
+      <para>These options control how the updates work</para>
 
       <variablelist>
         <varlistentry>
-          <term>Minimum stability</term>
+          <term>Auto-update CLI settings</term>
 
           <listitem>
-            <para>Choose the minimum stability level of releases to be
-            notified for. By default this is set to Stable and is the
-            recommended setting for live sites. If you want to help us build
-            better software with less bugs please consider installing alphas,
-            betas on your test/staging site or RCs on your live site. Your
-            feedback helps us improve the software. Thank you in
-            advance!</para>
+            <para>What the auto update CLI script should do: notify only (send
+            email about update availability), update only (install the updated
+            version) or both notify and update.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notification frequency and Notification time</term>
+
+          <listitem>
+            <para>Maximum frequency of notification emails sent by the update
+            CLI script. Actual frequency may be lower, depending on your CRON
+            job settings.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Email for update notification</term>
+
+          <listitem>
+            <para>Email address to be notified about updates from the update
+            CLI script. One email only.</para>
           </listitem>
         </varlistentry>
       </variablelist>

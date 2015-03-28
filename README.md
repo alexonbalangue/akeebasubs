@@ -27,6 +27,7 @@ You will also need the following path structure inside a folder on your system
 * **akeebasubs** This repository. We will refer to this as the MAIN directory
 * **buildfiles** [Akeeba Build Tools](https://github.com/akeeba/buildfiles)
 * **fof3** [Framework on Framework](https://github.com/akeeba/fof) – WARNING! You need to check out the `fof3` branch.
+* **strapper** [Akeeba Strapper](https://github.com/akeeba/strapper)
 
 You must use the exact folder names specified here.
 
