@@ -385,7 +385,7 @@ JS;
 			   '_dontNotify' => true,
 			));
 
-			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
+			$table = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
@@ -430,8 +430,8 @@ JS;
 
 					if($index !== false)
 					{
-						$from = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data['akeebasubs_subscription_id']);
-						$to = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($current['slavesubs_ids'][$index]);
+						$from = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data['akeebasubs_subscription_id']);
+						$to = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($current['slavesubs_ids'][$index]);
 						$result = $this->copySubscriptionInformation($from, $to);
 						$dirty  = true;
 					}
@@ -475,7 +475,7 @@ JS;
 				'_dontNotify' => true,
 				));
 
-			$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
+			$table = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($data ['akeebasubs_subscription_id']);
 			self::$dontFire = true;
 			$table->save($newdata);
 			self::$dontFire = false;
@@ -492,7 +492,7 @@ JS;
 	public function onAKUserRefresh($user_id)
 	{
 		// Get all of the user's subscriptions
-		$subscriptions = F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
+		$subscriptions = clone F0FModel::getTmpInstance('Subscriptions','AkeebasubsModel')
 			->user_id($user_id)
 			->getList();
 
@@ -566,7 +566,7 @@ JS;
 		));
 
 		// Save the new subscription record
-		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
+		$table = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getTable();
 		$table->reset();
 		$table->akeebasubs_subscription_id = 0;
 		self::$dontFire = true;
@@ -586,7 +586,7 @@ JS;
 	{
 		self::$dontFire = true;
 
-		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
+		$table = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($subId);
 
 		// Set expiration one minute before, so it will be automatically unpublished
 		$expire = new JDate('-1 minutes');
@@ -691,7 +691,7 @@ JS;
 
 		}
 		self::$dontFire = true;
-		$table = F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($to->akeebasubs_subscription_id);
+		$table = clone F0FModel::getTmpInstance('Subscriptions', 'AkeebasubsModel')->getItem($to->akeebasubs_subscription_id);
 		$table->save($copiedData); //save the copied data
 		self::$dontFire = false;
 		//return the id of the subscription that was modified
@@ -706,7 +706,7 @@ JS;
 	{
 		$this->maxSlaves = array();
 
-		$model = F0FModel::getTmpInstance('Levels','AkeebasubsModel');
+		$model = clone F0FModel::getTmpInstance('Levels','AkeebasubsModel');
 		$levels = $model->getList(true);
 		$slavesKey = 'slavesubs_maxSlaves';
 
