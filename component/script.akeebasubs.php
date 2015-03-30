@@ -36,7 +36,7 @@ class Pkg_AkeebasubsInstallerScript
 	 *
 	 * @var   string
 	 */
-	protected $minimumJoomlaVersion = '3.3.0';
+	protected $minimumJoomlaVersion = '3.4.0';
 
 	/**
 	 * The maximum Joomla! version this extension can be installed on
