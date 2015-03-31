@@ -441,8 +441,8 @@ class plgSystemAsexpirationnotify extends JPlugin
 		}
 
 		$mailer->addRecipient($user->email);
-
 		$result = $mailer->Send();
+		$mailer = null;
 
 		return $result;
 	}
