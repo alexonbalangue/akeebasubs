@@ -8,6 +8,7 @@
 namespace Akeeba\Subscriptions\Admin\CustomField;
 
 use Akeeba\Subscriptions\Admin\Model\CustomFields;
+use FOF30\Container\Container;
 use FOF30\Inflector\Inflector;
 use stdClass;
 
@@ -36,7 +37,8 @@ abstract class Base
 		{
 			if (empty($this->fieldType))
 			{
-				$parts                = Inflector::explode(get_called_class());
+				$container            = Container::getInstance('com_akeebasubs');
+				$parts                = $container->inflector->explode(get_called_class());
 				$type                 = strtolower(array_pop($parts));
 				$config['field_type'] = $type;
 			}

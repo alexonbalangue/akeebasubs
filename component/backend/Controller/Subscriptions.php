@@ -40,7 +40,7 @@ class Subscriptions extends DataController
 			$customURL = base64_decode($customURL);
 		}
 
-		$url = !empty($customURL) ? $customURL : 'index.php?option=' . $this->container->componentName . '&view=' . Inflector::pluralize($this->view) . $this->getItemidURLSuffix();
+		$url = !empty($customURL) ? $customURL : 'index.php?option=' . $this->container->componentName . '&view=' . $this->container->inflector->pluralize($this->view) . $this->getItemidURLSuffix();
 
 		$this->setRedirect($url);
 	}

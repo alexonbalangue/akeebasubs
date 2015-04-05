@@ -81,7 +81,9 @@ function AkeebasubsBuildRoute(&$query)
 	// Add the slug
 	if ($newView != 'userinfo')
 	{
-		if (array_key_exists('slug', $query) && (Inflector::isSingular($segments[0]) || ($segments[0] == 'new')))
+		$container = \FOF30\Container\Container::getInstance('com_akeebasubs');
+
+		if (array_key_exists('slug', $query) && ($container->inflector->isSingular($segments[0]) || ($segments[0] == 'new')))
 		{
 			$segments[1] = $query['slug'];
 			unset($query['slug']);
@@ -194,7 +196,9 @@ function AkeebasubsParseRoute($segments)
 		}
 
 		// if we are in a singular view, the next item is the slug, unless we are in the userinfo view
-		if (Inflector::isSingular($vars['view']) && ($vars['view'] != 'UserInfo'))
+		$container = \FOF30\Container\Container::getInstance('com_akeebasubs');
+
+		if ($container->inflector->isSingular($vars['view']) && ($vars['view'] != 'UserInfo'))
 		{
 			if (in_array($vars['view'], array('Subscription', 'Invoice')))
 			{

@@ -300,7 +300,7 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 
 		if (strtoupper(\JText::_($key)) == strtoupper($key))
 		{
-			$altView = Inflector::isPlural($view) ? Inflector::singularize($view) : Inflector::pluralize($view);
+			$altView = $this->container->inflector->isPlural($view) ? $this->container->inflector->singularize($view) : $this->container->inflector->pluralize($view);
 			$key2    = strtoupper($this->container->componentName) . '_TITLE_' . strtoupper($altView);
 
 			if (strtoupper(\JText::_($key2)) == $key2)
