@@ -250,18 +250,15 @@ class SubscriptionsForStats extends Subscriptions
 			$this->addKnownField('userparams', '', 'varchar(255)');
 			$this->addKnownField('usernotes', '', 'varchar(255)');
 
-			if (!$overrideLimits)
+			$order = $this->getState('filter_order', 'akeebasubs_subscription_id', 'cmd');
+
+			if (!in_array($order, array_keys($this->toArray())))
 			{
-				$order = $this->getState('filter_order', 'akeebasubs_subscription_id', 'cmd');
-
-				if (!in_array($order, array_keys($this->toArray())))
-				{
-					$order = 'akeebasubs_subscription_id';
-				}
-
-				$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
-				$query->order($order . ' ' . $dir);
+				$order = 'akeebasubs_subscription_id';
 			}
+
+			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
+			$query->order($order . ' ' . $dir);
 		}
 	}
 

@@ -242,18 +242,15 @@ class Levels extends DataModel
 			$query->where($db->qn('akeebasubs_levelgroup_id') . ' = ' . (int) $levelgroup);
 		}
 
-		if (!$overrideLimits)
+		$order = $this->getState('filter_order', 'akeebasubs_level_id', 'cmd');
+
+		if (!in_array($order, array_keys($this->getData())))
 		{
-			$order = $this->getState('filter_order', 'akeebasubs_level_id', 'cmd');
-
-			if (!in_array($order, array_keys($this->getData())))
-			{
-				$order = 'akeebasubs_level_id';
-			}
-
-			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
-			$query->order($order . ' ' . $dir);
+			$order = 'akeebasubs_level_id';
 		}
+
+		$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
+		$query->order($order . ' ' . $dir);
 	}
 
 	public function check()
