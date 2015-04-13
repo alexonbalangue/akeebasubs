@@ -355,7 +355,7 @@
         </if>
     </target>
 
-    <target name="package-pkg" description="Akeeba Subscriptions installation package" depends="new-release, setup-properties, package-com, package-files, package-modules, package-plugins, package-fof">
+    <target name="package-pkg" description="Akeeba Subscriptions installation package" depends="new-release, setup-properties, package-com, package-files, package-modules, package-plugins, package-fof, package-strapper">
         <!-- Create the XML manifest -->
         <copy file="./templates/pkg_akeebasubs.xml" tofile="${dirs.release}/pkg_akeebasubs.xml" overwrite="true">
             <filterchain>
