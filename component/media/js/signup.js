@@ -150,8 +150,8 @@ function validateForm(callback_function)
 				'email2':        $('#email2').val(),
 				'address1':      $('#address1').val(),
 				'address2':      $('#address2').val(),
-				'country':       $('select[name$="country"]').val(),
-				'state':         $('select[name$="state"]').val(),
+				'country':       $('#signupForm select[name$="country"]').val(),
+				'state':         $('#signupForm select[name$="state"]').val(),
 				'city':          $('#city').val(),
 				'zip':           $('#zip').val(),
 				'isbusiness':    $('#isbusiness1').is(':checked') ? 1 : 0,
@@ -173,7 +173,7 @@ function validateForm(callback_function)
 				'name':          $('#name').val(),
 				'email':         $('#email').val(),
 				'email2':        $('#email2').val(),
-				'country':       $('select[name$="country"]').val(),
+				'country':       $('#signupForm select[name$="country"]').val(),
 				'coupon':        ($("#coupon").length > 0) ? $('#coupon').val() : '',
 				'paymentmethod': paymentMethod,
 				'custom':        {},
@@ -463,8 +463,8 @@ function validateAddress()
 	(function ($)
 	{
 		var address = $('#address1').val();
-		var country = $('select[name$="country"]').val();
-		var state = $('select[name$="state"]').val();
+		var country = $('#signupForm select[name$="country"]').val();
+		var state = $('#signupForm select[name$="state"]').val();
 		var city = $('#city').val();
 		var zip = $('#zip').val();
 
@@ -662,7 +662,7 @@ function validateBusiness()
 		}
 
 		// Do I have to show VAT fields?
-		var country = $('select[name$="country"]').val();
+		var country = $('#signupForm select[name$="country"]').val();
 		$('#vatfields').css('display', 'none');
 		if (akeebasubs_noneuvat)
 		{
@@ -692,8 +692,8 @@ function validateBusiness()
 			}
 
 			var data = {
-				country:      $('select[name$="country"]').val(),
-				state:        $('select[name$="state"]').val(),
+				country:      $('#signupForm select[name$="country"]').val(),
+				state:        $('#signupForm select[name$="state"]').val(),
 				city:         $('#city').val(),
 				zip:          $('#zip').val(),
 				isbusiness:   $('#isbusiness1').is(':checked') ? 1 : 0,
@@ -1130,8 +1130,8 @@ function addToSubValidationQueue(myfunction)
 		$('#email2').blur(validateEmail);
 		if (akeebasubs_personalinfo)
 		{
-			$('select[name$="country"]').change(validateBusiness);
-			$('select[name$="state"]').change(validateBusiness);
+			$('#signupForm select[name$="country"]').change(validateBusiness);
+			$('#signupForm select[name$="state"]').change(validateBusiness);
 			$('#address1').blur(validateAddress);
 			$('#city').blur(validateBusiness);
 			$('#zip').blur(validateBusiness);
