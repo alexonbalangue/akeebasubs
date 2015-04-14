@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 5.0.0
 ================================================================================
+~ Improved "My Subscriptions" page styling
 # [HIGH] Could not create subscription level relations
 # [LOW] Would not proceed to the next wizard step
 

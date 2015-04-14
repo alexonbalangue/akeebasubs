@@ -60,20 +60,11 @@ $jPublishUp = $this->getContainer()->platform->getDate($this->item->publish_up);
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED')?></td>
 		<td class="subscription-info">
 			<?php if($this->item->enabled):?>
-				<img
-					src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/enabled.png'); ?>"
-					align="center"
-					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
+				<span class="icon icon-ok" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>"></span>
 			<?php elseif($jPublishUp->toUnix() >= time()):?>
-				<img
-					src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/scheduled.png'); ?>"
-					align="center"
-					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
+				<span class="icon icon-time" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>"></span>
 			<?php else:?>
-				<img
-					src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/disabled.png'); ?>"
-					align="center"
-					title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
+				<span class="icon icon-ban-circle" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>"></span>
 			<?php endif;?>
 		</td>
 	</tr>

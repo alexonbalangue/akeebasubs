@@ -73,7 +73,7 @@ if (!property_exists($this, 'extensions'))
 			<?php foreach(array('active', 'waiting', 'pending', 'expired') as $area): ?>
 			<?php if (!count($this->sortTable[$area])) continue; ?>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<h4><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_AREAHEADING_' . $area) ?></h4>
 				</td>
 			</tr>
@@ -91,7 +91,7 @@ if (!property_exists($this, 'extensions'))
 				$email = trim($subscription->email);
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
-				$image = $subscription->image;
+				$image = $subscription->level->image;
 				$canRenew = ComponentParams::getParam('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
 
@@ -143,20 +143,13 @@ if (!property_exists($this, 'extensions'))
 				</td>
 				<td align="center">
 					<?php if ($subscription->enabled):?>
-					<img
-						src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/enabled.png'); ?>"
-						align="center"
-						title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>" />
+					<span class="icon icon-ok" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_ACTIVE') ?>"></span>
+
 					<?php elseif($jPublishUp->toUnix() >= time()):?>
-					<img
-						src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/scheduled.png'); ?>"
-						align="center"
-						title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>" />
+						<span class="icon icon-time" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_PENDING') ?>"></span>
+
 					<?php else:?>
-					<img
-						src="<?php echo $this->getContainer()->template->parsePath('media://com_akeebasubs/images/frontend/disabled.png'); ?>"
-						align="center"
-						title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>" />
+						<span class="icon icon-ban-circle" title="<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ENABLED_INACTIVE') ?>"></span>
 					<?php endif;?>
 	            </td>
 	            <td>
