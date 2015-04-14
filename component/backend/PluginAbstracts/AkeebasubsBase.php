@@ -198,13 +198,15 @@ abstract class AkeebasubsBase extends JPlugin
 		}
 
 		// Get all of the user's subscriptions
-		/** @var  Users  $user */
-		$user = $this->container->factory->model('Users')->tmpInstance();
-		$user->find($user_id);
-		$subscriptions = $user->subscriptions;
+		/** @var Subscriptions $subscriptionsModel */
+		$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
+
+		$subscriptions = $subscriptionsModel
+			->user_id($user_id)
+			->get(true);
 
 		// Make sure there are subscriptions set for the user
-		if (!count($subscriptions))
+		if (!$subscriptions->count())
 		{
 			return;
 		}
