@@ -11,6 +11,8 @@ use Akeeba\Subscriptions\Admin\Helper\Select;
 
 /** @var \Akeeba\Subscriptions\Site\View\Level\Html $this */
 
+\JHtml::_('formbehavior.chosen');
+
 $applyValidationBoolean = $this->apply_validation == 'true';
 
 $script = <<<JS

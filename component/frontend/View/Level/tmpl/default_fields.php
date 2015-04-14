@@ -413,7 +413,7 @@ $emailasusername = ComponentParams::getParam('emailasusername', 0);
 
 				<div class="controls">
             <span class="col-sm-3">
-			    <?php echo Select::states($field_data['state'], 'state', array('class' => 'form-control')) ?>
+			    <?php echo Select::states($field_data['state'], 'state', array('class' => 'form-control advancedSelect')) ?>
             </span>
 			<span id="state_empty" class="help-inline help-block"
 				  <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
@@ -446,7 +446,7 @@ $emailasusername = ComponentParams::getParam('emailasusername', 0);
 
 				<div class="controls">
             <span class="col-sm-3">
-			    <?php echo Select::countries($field_data['country'], 'country', array('show' => $cparamShowCountries, 'hide' => $cparamHideCountries, 'class' => 'form-control')) ?>
+			    <?php echo Select::countries($field_data['country'], 'country', array('show' => $cparamShowCountries, 'hide' => $cparamHideCountries, 'class' => 'form-control advancedSelect')) ?>
             </span>
 			<span id="country_empty" class="help-inline help-block"
 				  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>

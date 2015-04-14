@@ -2,6 +2,7 @@
 Akeeba Subscriptions 5.0.0
 ================================================================================
 ~ Improved "My Subscriptions" page styling
+~ Improved styling for country and state selection in front-end Level page
 # [HIGH] The Joomla! usergroups integration plugin didn't work
 # [HIGH] Some invoice fields would be blank when the invoice is generated from the front-end
 # [HIGH] Could not create subscription level relations
