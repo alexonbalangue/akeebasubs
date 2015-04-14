@@ -3,6 +3,7 @@ Akeeba Subscriptions 5.0.0
 ================================================================================
 ~ Improved "My Subscriptions" page styling
 ~ Improved styling for country and state selection in front-end Level page
+# [HIGH] Username validation failed when it is a partial match to an existing one
 # [HIGH] Wrong subscription country when the country selection for tax display module is published on the subscription form (Level) page
 # [HIGH] The Joomla! usergroups integration plugin didn't work
 # [HIGH] Some invoice fields would be blank when the invoice is generated from the front-end

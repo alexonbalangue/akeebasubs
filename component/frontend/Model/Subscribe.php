@@ -366,7 +366,10 @@ class Subscribe extends Model
 
 		/** @var JoomlaUsers $userModel */
 		$userModel = $this->container->factory->model('JoomlaUsers')->tmpInstance();
-		$user = $userModel->username($username)->firstOrNew();
+		$user = $userModel->username([
+			'value' => $username,
+			'method' => 'exact'
+		])->firstOrNew();
 
 		if ($myUser->guest)
 		{
