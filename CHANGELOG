@@ -1,8 +1,9 @@
 <?php die(); ?>
-Akeeba Subscriptions 5.0.1
+Akeeba Subscriptions 5.0.0
 ================================================================================
+# [HIGH] Could not create subscription level relations
 # [LOW] Would not proceed to the next wizard step
 
-Akeeba Subscriptions 5.0.0
+Akeeba Subscriptions 5.0.0.b1
 ================================================================================
 ! Rewritten on our brand new FOF 3 framework

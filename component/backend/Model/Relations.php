@@ -71,5 +71,7 @@ class Relations extends DataModel
 		parent::__construct($container, $config);
 
 		$this->addBehaviour('Filters');
+
+		$this->fieldsSkipChecks = ['ordering'];
 	}
 }
