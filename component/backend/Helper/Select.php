@@ -11,6 +11,7 @@ use Akeeba\Subscriptions\Admin\Model\PaymentMethods;
 use Akeeba\Subscriptions\Admin\Model\States;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
+use FOF30\Utils\String;
 use JFactory;
 use JFolder;
 use JHtml;
@@ -671,21 +672,28 @@ abstract class Select
 	 */
 	public static function states($selected = null, $id = 'state', $attribs = array())
 	{
-		$options = array();
+		$data = array();
 
 		foreach (self::$states as $country => $states)
 		{
-			$options[] = JHtml::_('select.option', '<optgroup>', $country);
+			$data[$country] = [
+				'id' => \JApplicationHelper::stringURLSafe($country),
+				'text' => $country,
+				'items' => []
+			];
 
 			foreach ($states as $code => $name)
 			{
-				$options[] = JHtml::_('select.option', $code, $name);
+				$data[$country]['items'][] = JHtml::_('select.option', $code, $name);
 			}
-
-			$options[] = JHtml::_('select.option', '</optgroup>');
 		}
 
-		return self::genericlist($options, $id, $attribs, $selected, $id);
+		return JHtml::_('select.groupedlist', $data, $id, [
+			'id' =>$id,
+			'group.id' => 'id',
+			'list.attr' => $attribs,
+			'list.select' => $selected
+		]);
 	}
 
 	/**
