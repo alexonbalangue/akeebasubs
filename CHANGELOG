@@ -5,6 +5,7 @@ Akeeba Subscriptions 5.0.0
 # [HIGH] The Joomla! usergroups integration plugin didn't work
 # [HIGH] Some invoice fields would be blank when the invoice is generated from the front-end
 # [HIGH] Could not create subscription level relations
+# [LOW] Back-end subscriptions didn't link username to Akeeba Subs user record
 # [LOW] Would not proceed to the next wizard step
 
 Akeeba Subscriptions 5.0.0.b1

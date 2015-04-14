@@ -123,7 +123,7 @@
 
         <field name="user_id" type="User"
                show_link="true"
-               url="index.php?option=com_akeebasubs&amp;view=User&amp;id=[ITEM:ID]"
+			   link_url="index.php?option=com_akeebasubs&amp;view=User&amp;task=edit&amp;user_id=[ITEM:USER_ID]"
                 />
 
         <field name="state" type="PaymentStatus" />
