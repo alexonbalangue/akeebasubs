@@ -99,7 +99,7 @@ defined('_JEXEC') or die;
     @endif
 
     <div class="form-actions">
-        <a href="index.php?option=com_akeebasubs&view=ControlPanel&task=wizardstep&wizardstep=<?php echo $wizardstep++ ?>" class="btn btn-success">
+        <a href="index.php?option=com_akeebasubs&view=ControlPanel&task=wizardstep&wizardstep=<?php echo ++$wizardstep ?>" class="btn btn-success">
             <span class="icon icon-white icon-check"></span>
             @lang('COM_AKEEBASUBS_CPANEL_WIZARD_COMMON_COMPLETE')
         </a>
