@@ -53,7 +53,9 @@ abstract class Message
 
 		if (!is_object($level))
 		{
-			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
+			/** @var Levels $levelModel */
+			$levelModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
+			$level = $levelModel->id($sub->akeebasubs_level_id)->firstOrNew();
 		}
 
 		// Merge the user objects
