@@ -262,7 +262,10 @@ class Levels extends DataModel
 
 		// Make sure the title is unique
 		$existingItems = $this->getClone()->setIgnoreRequest(true)->savestate(false)
-		                      ->title($this->title)
+		                      ->title([
+								  'method' => 'exact',
+								  'value' => $this->title
+							  ])
 		                      ->get(true);
 
 		if ($existingItems->count())
@@ -300,8 +303,11 @@ class Levels extends DataModel
 
 		// Look for a similar slug
 		$existingItems = $this->getClone()->setIgnoreRequest(true)->savestate(false)
-		                      ->slug($this->slug)
-		                      ->get(true);
+								->slug([
+									'method' => 'exact',
+									'value' => $this->slug
+								])
+								->get(true);
 
 		if ($existingItems->count())
 		{
