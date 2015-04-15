@@ -31,17 +31,6 @@ defined('_JEXEC') or die();
 		</div>
 	</div>
 </div>
-<option id="paramsjoomla_addgroups_noselect" value=""><?php echo JText::_('PLG_AKEEBASUBS_JOOMLA_NONE') ?></option>
-<option id="paramsjoomla_removegroups_noselect" value=""><?php echo JText::_('PLG_AKEEBASUBS_JOOMLA_NONE') ?></option>
-<script type="text/javascript">
-(function($) {
-	$(document).ready(function(){
-		$('#paramsjoomla_addgroups').prepend($('#paramsjoomla_addgroups_noselect'))
-		$('#paramsjoomla_removegroups').prepend($('#paramsjoomla_removegroups_noselect'))
-	})
-	
-})(akeeba.jQuery);
-</script>
 <div class="alert alert-warning">
 	<p><?php echo JText::_('PLG_AKEEBASUBS_JOOMLA_USAGENOTE'); ?></p>
 </div>
