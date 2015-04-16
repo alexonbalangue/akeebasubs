@@ -443,7 +443,7 @@ CREATE TABLE `#__akeebasubs_blockrules` (
 	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`created_by` bigint(20) NOT NULL DEFAULT '0',
 	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`modifed_by` bigint(20) NOT NULL DEFAULT '0',
+	`modified_by` bigint(20) NOT NULL DEFAULT '0',
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` bigint(20) NOT NULL DEFAULT '0',
 

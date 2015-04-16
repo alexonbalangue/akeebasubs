@@ -14,6 +14,7 @@ Akeeba Subscriptions 5.0.0
 # [LOW] Back-end subscriptions page didn't link username to Akeeba Subs user record
 # [LOW] Back-end invoices page didn't link username to Akeeba Subs user record
 # [LOW] Would not proceed to the next wizard step
+# [LOW] Typo in SQL script resulted in default email templates not being installed
 
 Akeeba Subscriptions 5.0.0.b1
 ================================================================================
