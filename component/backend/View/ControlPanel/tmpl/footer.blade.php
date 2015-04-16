@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 		Akeeba Subscriptions {{{ AKEEBASUBS_VERSION }}}
 	</strong>
 
-	<a href="index.php?option=com_akeebasubs&view=Update&task=force" class="btn btn-inverse btn-small">
+	<a href="index.php?option=com_akeebasubs&view=Updates&task=force" class="btn btn-inverse btn-small">
         @lang('COM_AKEEBASUBS_CPANEL_MSG_RELOADUPDATE')
 	</a>
 
