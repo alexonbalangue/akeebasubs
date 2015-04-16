@@ -107,6 +107,13 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'media/com_akeebasubs/tcdpf/fonts/timesb.php',
 			'media/com_akeebasubs/tcdpf/fonts/timesi.php',
 			'media/com_akeebasubs/tcdpf/fonts/zapfdingbats.php',
+
+			// Renamed between 5.0.0.b1 and 5.0.0 (plural to singular)
+			'administrator/components/com_akeebasubs/Controller/Coupons.php',
+			'administrator/components/com_akeebasubs/Controller/EmailTemplates.php',
+			'administrator/components/com_akeebasubs/Controller/Invoices.php',
+			'administrator/components/com_akeebasubs/Controller/Levels.php',
+			'administrator/components/com_akeebasubs/Controller/Subscriptions.php',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',

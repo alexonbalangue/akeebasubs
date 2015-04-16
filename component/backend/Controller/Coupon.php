@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 use FOF30\Controller\DataController;
 
-class Coupons extends DataController
+class Coupon extends DataController
 {
 	protected function onBeforeApplySave(&$data)
 	{

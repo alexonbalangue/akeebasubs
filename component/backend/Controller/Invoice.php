@@ -14,7 +14,7 @@ use FOF30\Controller\DataController;
 use FOF30\Controller\Exception\ItemNotFound;
 use FOF30\View\Exception\AccessForbidden;
 
-class Invoices extends DataController
+class Invoice extends DataController
 {
 	public function __construct(Container $container, array $config = array())
 	{

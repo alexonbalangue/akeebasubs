@@ -14,7 +14,7 @@ use FOF30\Container\Container;
 use FOF30\Controller\DataController;
 use FOF30\View\Exception\AccessForbidden;
 
-class Invoices extends \Akeeba\Subscriptions\Admin\Controller\Invoices
+class Invoices extends \Akeeba\Subscriptions\Admin\Controller\Invoice
 {
 	use Mixin\PredefinedTaskList;
 

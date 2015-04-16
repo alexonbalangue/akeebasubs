@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 use FOF30\Container\Container;
 use FOF30\Controller\DataController;
 
-class Levels extends DataController
+class Level extends DataController
 {
 	public function __construct(Container $container, array $config = array())
 	{

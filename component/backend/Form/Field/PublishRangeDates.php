@@ -7,7 +7,7 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
-use Akeeba\Subscriptions\Admin\Controller\Subscriptions;
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\Helper\Format;
 use FOF30\Form\Field\Text;
 

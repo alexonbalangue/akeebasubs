@@ -15,7 +15,7 @@ use FOF30\Model\DataModel;
 use JFactory;
 use JText;
 
-class EmailTemplates extends DataController
+class EmailTemplate extends DataController
 {
 	public function testTemplate()
 	{
