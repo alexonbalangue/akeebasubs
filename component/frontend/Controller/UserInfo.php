@@ -124,7 +124,10 @@ class UserInfo extends Controller
 		}
 
 		// Redirect to the display task
-		$url = 'index.php?option=com_akeebasubs&view=UserInfo';
+		$itemId = \JFactory::getApplication()->input->getInt('Itemid');
+		$itemId = $itemId ? '*itemid=' . $itemId : '';
+		$url = \JRoute::_('index.php?option=com_akeebasubs&view=UserInfo' . $itemId);
+
 
 		$this->setRedirect($url, $msg, $msgType);
 	}
