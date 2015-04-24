@@ -46,8 +46,6 @@ defined('_JEXEC') or die;
  * @method $this occupation() occupation(string $v)
  * @method $this custom() custom(array $v)
  * @method $this subcustom() subcustom(array $v)
- *
- * TODO Refactor this. Over 3k lines in a specialised model is just asking for trouble!
  */
 class Subscribe extends Model
 {
@@ -288,132 +286,14 @@ class Subscribe extends Model
 		{
 			$state = $this->getStateVariables($force);
 
-			// Get the subscription level
-			/** @var Levels $level */
-			$level = $this->container->factory->model('Levels')->tmpInstance();
-			$level->find($state->id);
+			$netPrice = $this->getValidator('BasePrice')->execute();
 
-			// Get the user's subscription levels and calculate the signup fee
-			$subIDs = array();
-			$signup_fee = 0;
-			$user = JFactory::getUser();
-
-			if ($user->id)
-			{
-				/** @var Subscriptions $subscriptionsModel */
-				$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
-				$mysubs = $subscriptionsModel
-					->user_id($user->id)
-					->paystate('C')
-					->get(true);
-
-				if (!empty($mysubs))
-				{
-					foreach ($mysubs as $sub)
-					{
-						$subIDs[] = $sub->akeebasubs_level_id;
-					}
-				}
-
-				$subIDs = array_unique($subIDs);
-
-				if (!in_array($level->akeebasubs_level_id, $subIDs))
-				{
-					$signup_fee = $level->signupfee;
-				}
-			}
-			else
-			{
-				$signup_fee = $level->signupfee;
-			}
-
-			// Get the default price value
-			$netPrice = (float)$level->price + (float)$signup_fee;
-
-			// Net price modifiers (via plugins)
-			$price_modifier = 0;
-			$this->container->platform->importPlugin('akeebasubs');
-			$this->container->platform->importPlugin('akpayment');
-
-			$priceValidationData = array_merge(
-				(array)$state, array(
-					'level' => $level,
-					'netprice' => $netPrice
-				)
-			);
-
-			$jResponse = $this->container->platform->runPlugins('onValidateSubscriptionPrice', array(
-				(object)$priceValidationData)
-			);
-
-			if (is_array($jResponse) && !empty($jResponse))
-			{
-				foreach ($jResponse as $pluginResponse)
-				{
-					if (empty($pluginResponse))
-					{
-						continue;
-					}
-
-					$price_modifier += $pluginResponse;
-				}
-			}
-
-			$netPrice += $price_modifier;
-
-			// Coupon discount
+			// This is required to populate $_coupon_id
 			$validCoupon = $this->_validateCoupon(false);
 
-			$couponDiscount = 0;
+			$couponDiscount = $this->getValidator('CouponDiscount')->execute();
 
-			if ($validCoupon)
-			{
-				/** @var Coupons $couponsModel */
-				$couponsModel = $this->container->factory->model('Coupons')->tmpInstance();
-				$coupon = $couponsModel
-					->coupon(strtoupper($state->coupon))
-					->firstOrNew();
-
-				$this->_coupon_id = $coupon->akeebasubs_coupon_id;
-
-				switch ($coupon->type)
-				{
-					case 'value':
-						$couponDiscount = (float)$coupon->value;
-
-						if ($couponDiscount > $netPrice)
-						{
-							$couponDiscount = $netPrice;
-						}
-
-						if ($couponDiscount <= 0)
-						{
-							$couponDiscount = 0;
-						}
-						break;
-
-					case 'percent':
-						$percent = (float)$coupon->value / 100.0;
-
-						if ($percent <= 0)
-						{
-							$percent = 0;
-						}
-
-						if ($percent > 1)
-						{
-							$percent = 1;
-						}
-
-						$couponDiscount = $percent * $netPrice;
-						break;
-				}
-			}
-			else
-			{
-				$this->_coupon_id = null;
-			}
-
+			// TODO Refactor from here onwards
 			// Upgrades (auto-rule) validation
 			$discountStructure = $this->_getAutoDiscount();
 			$autoDiscount = $discountStructure['discount'];
@@ -1658,7 +1538,7 @@ class Subscribe extends Model
 			'occupation'         => $state->occupation,
 			'vatnumber'          => $state->vatnumber,
 			'viesregistered'     => $validation->validation->vatnumber,
-			// @todo Ask for tax authority (does it make sense, I think it's a Greek thing only...)
+			// The tax authority doesn't make sense, it's a Greek thing only... Left here just in case.
 			'taxauthority'       => '',
 			'address1'           => $state->address1,
 			'address2'           => $state->address2,

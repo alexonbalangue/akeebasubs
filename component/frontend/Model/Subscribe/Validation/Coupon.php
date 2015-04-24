@@ -16,8 +16,6 @@ class Coupon extends Base
 {
 	/**
 	 * Get the validation result. Returns an array:
-	 * couponCode	The validated coupon code. Empty if the coupon is not found or its conditions don't validate
-	 * couponId		The validated coupon ID. Same conditions as couponCode apply
 	 * couponFound	True if we found a coupon code. If this is true and valid is false the coupon was found but its
 	 * 				conditions did not validate
 	 * coupon		The validated Coupons object, or null if there is no valid coupon found
