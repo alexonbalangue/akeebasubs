@@ -7,23 +7,24 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
-use Akeeba\Subscriptions\Site\Model\Subscriptions;
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Site\Model\Upgrades;
 
-class UpgradeDiscount extends Base
+class UpgradeExpiredDiscount extends Base
 {
 	/**
-	 * Get the discount from applying an upgrade rule
+	 * Get the discount from applying an upgrade rule for expired subscriptions
 	 *
 	 * @return  array  upgrade_id, value
 	 */
 	protected function getValidationResult()
 	{
-		// Initialise the response
 		$ret = [
 			'upgrade_id'	=> null,
-			'value'			=> 0.0
+			'value'			=> 0.00
 		];
+
+		$state = $this->state;
 
 		// Check that we do have a user (if there's no logged in user, we have
 		// no subscription information, ergo upgrades are not applicable!)
@@ -34,42 +35,32 @@ class UpgradeDiscount extends Base
 			return $ret;
 		}
 
-		// Get the state variables
-		$state = $this->state;
-
-		// Get the current subscription base price
-		$basePrice = $this->factory->getValidator('BasePrice')->execute();
-
-		// If this is a free subscription we don't have a discount.
-		if ($basePrice <= 0.001)
-		{
-			return $ret;
-		}
-
 		// Get applicable auto-rules
 		/** @var Upgrades $upgradesModel */
 		$upgradesModel = $this->container->factory->model('Upgrades')->tmpInstance();
+
 		$autoRules = $upgradesModel
 			->to_id($state->id)
 			->enabled(1)
-			->expired(0)
+			->expired(1)
 			->get(true);
 
-		// No rules found? No discount.
 		if (!$autoRules->count())
 		{
 			return $ret;
 		}
 
-		// Get the user's list of subscriptions
+		// Get the user's list of paid but no longer active (therefore: expired) subscriptions
 		/** @var Subscriptions $subscriptionsModel */
 		$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
+
 		$subscriptions = $subscriptionsModel
 			->user_id($user_id)
-			->enabled(1)
+			->enabled(0)
+			->paystate('C')
 			->get(true);
 
-		// No subscriptions? No discount: you can't upgrade when you don't have an active subscription.
+		// No expired subscriptions, so no discount
 		if (!$subscriptions->count())
 		{
 			return $ret;
@@ -82,11 +73,11 @@ class UpgradeDiscount extends Base
 
 		foreach ($subscriptions as $subscription)
 		{
-			$uFrom = $this->container->platform->getDate($subscription->publish_up)->toUnix();
-			$presence = $uNow - $uFrom;
-			$subs[$subscription->akeebasubs_level_id] = $presence;
+			$uTo = $this->container->platform->getDate($subscription->publish_down)->toUnix();
+			$age = $uNow - $uTo;
+			$subs[$subscription->akeebasubs_level_id] = $age;
 
-			$uOn = $this->container->platform->getDate($subscription->created_on)->toUnix();
+			$uOn = $this->container->platform->getDate($subscription->created_on);
 
 			if (!array_key_exists($subscription->akeebasubs_level_id, $subPayments))
 			{
@@ -98,6 +89,7 @@ class UpgradeDiscount extends Base
 			else
 			{
 				$oldOn = $subPayments[$subscription->akeebasubs_level_id]['on'];
+
 				if ($oldOn < $uOn)
 				{
 					$subPayments[$subscription->akeebasubs_level_id] = array(
@@ -108,13 +100,21 @@ class UpgradeDiscount extends Base
 			}
 		}
 
+		// Get the current subscription level's price
+		$basePrice = $this->factory->getValidator('BasePrice')->execute();
+
+		if ($basePrice <= 0.001)
+		{
+			return $ret;
+		}
+
 		// Remove any rules that do not apply
 		foreach ($autoRules as $i => $rule)
 		{
 			if (
 				// Make sure there is an active subscription in the From level
 				!(array_key_exists($rule->from_id, $subs))
-				// Make sure the min/max presence is respected
+				// Make sure the min/max presence is repected
 				|| ($subs[$rule->from_id] < ($rule->min_presence * 86400))
 				|| ($subs[$rule->from_id] > ($rule->max_presence * 86400))
 				// If From and To levels are different, make sure there is no active subscription in the To level yet
@@ -125,7 +125,7 @@ class UpgradeDiscount extends Base
 			}
 		}
 
-		// First add all combined rules
+		// First add add all combined rules
 		foreach ($autoRules as $i => $rule)
 		{
 			if (!$rule->combine)
@@ -185,7 +185,6 @@ class UpgradeDiscount extends Base
 						$ret['value'] = $rule->value;
 						$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
 					}
-
 					break;
 
 				default:
@@ -197,7 +196,6 @@ class UpgradeDiscount extends Base
 						$ret['value'] = $newDiscount;
 						$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
 					}
-
 					break;
 
 				case 'lastpercent':
@@ -217,7 +215,6 @@ class UpgradeDiscount extends Base
 						$ret['value'] = $newDiscount;
 						$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
 					}
-
 					break;
 			}
 		}
