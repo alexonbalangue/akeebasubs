@@ -56,20 +56,6 @@ class Subscribe extends Model
 	private $paymentForm = '';
 
 	/**
-	 * File handle
-	 *
-	 * @var resource
-	 */
-	protected $_urand;
-
-	/**
-	 * Coupon ID used in the price calculation
-	 *
-	 * @var int|null
-	 */
-	protected $_coupon_id = null;
-
-	/**
 	 * @var  ValidatorFactory  The validator object factory
 	 */
 	protected $validatorFactory = null;
@@ -273,28 +259,24 @@ class Subscribe extends Model
 
 			$netPrice = $this->getValidator('BasePrice')->execute();
 
-			// This is required to populate $_coupon_id
-			$validCoupon = $this->_validateCoupon(false);
-
-			$couponDiscount = $this->getValidator('CouponDiscount')->execute();
+			$couponStructure = $this->getValidator('CouponDiscount')->execute();
+			$couponDiscount = $couponStructure['value'];
 
 			// Automatic discount (upgrade rules, subscription level relations) validation
 			$discountStructure = $this->getValidator('BestAutomaticDiscount')->execute();
 			$autoDiscount = $discountStructure['discount'];
 
-			// TODO Refactor from here onwards
-
 			// Should I use the coupon code or the automatic discount?
 			$useCoupon = false;
 			$useAuto = true;
 
-			if ($validCoupon)
+			if ($couponStructure['valid'])
 			{
 				if ($autoDiscount > $couponDiscount)
 				{
 					$useCoupon = false;
 					$useAuto = true;
-					$this->_coupon_id = null;
+					$couponStructure['coupon_id'] = null;
 				}
 				else
 				{
@@ -305,12 +287,13 @@ class Subscribe extends Model
 			}
 
 			$discount = $useCoupon ? $couponDiscount : $autoDiscount;
-			$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
+			$couponid = is_null($couponStructure['coupon_id']) ? 0 : $couponStructure['coupon_id'];
 			$upgradeid = is_null($discountStructure['upgrade_id']) ? 0 : $discountStructure['upgrade_id'];
 
 			// Note: do not reset the oldsup and expiration fields. Subscription level relations must not be bound
 			// to the discount.
 
+			// TODO Refactor from here onwards
 			// Get the applicable tax rule
 			$taxRule = $this->_getTaxRule();
 
@@ -382,11 +365,6 @@ class Subscribe extends Model
 		if (!$valid && $validIfNotExists && !$couponValidation['couponFound'])
 		{
 			$valid = true;
-		}
-
-		if (!is_null($coupon))
-		{
-			$this->_coupon_id = $coupon->akeebasubs_coupon_id;
 		}
 
 		return $valid;
@@ -1361,29 +1339,21 @@ class Subscribe extends Model
 	{
 		$pr_bits = false;
 
-		if (is_resource($this->_urand))
+		$fp = @fopen('/dev/urandom', 'rb');
+
+		if ($fp !== false)
 		{
-			$pr_bits .= @fread($this->_urand, 16);
+			$pr_bits .= @fread($fp, 16);
+			@fclose($fp);
 		}
-
-		if (!$pr_bits)
+		else
 		{
-			$fp = @fopen('/dev/urandom', 'rb');
+			// If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
+			$pr_bits = "";
 
-			if ($fp !== false)
+			for ($cnt = 0; $cnt < 16; $cnt++)
 			{
-				$pr_bits .= @fread($fp, 16);
-				@fclose($fp);
-			}
-			else
-			{
-				// If /dev/urandom isn't available (eg: in non-unix systems), use mt_rand().
-				$pr_bits = "";
-
-				for ($cnt = 0; $cnt < 16; $cnt++)
-				{
-					$pr_bits .= chr(mt_rand(0, 255));
-				}
+				$pr_bits .= chr(mt_rand(0, 255));
 			}
 		}
 

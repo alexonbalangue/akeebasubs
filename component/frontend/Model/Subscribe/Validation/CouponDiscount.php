@@ -16,69 +16,84 @@ class CouponDiscount extends Base
 	/**
 	 * Get the discount from applying a coupon
 	 *
-	 * @return  float
+	 * @return  array
 	 */
 	protected function getValidationResult()
 	{
+		$ret = [
+			'valid' => false,
+			'couponFound' => false,
+			'value' => 0.0,
+			'coupon_id' => null
+		];
+
 		// Get the coupon validation results
 		$couponValidation = $this->factory->getValidator('Coupon')->execute();
 
+		$ret['valid'] = $couponValidation['valid'];
+		$ret['couponFound'] = $couponValidation['couponFound'];
+
 		// No valid coupon, no coupon discount
-		if (!$couponValidation['valid'])
+		if (!$ret['valid'])
 		{
-			return 0.0;
+			return $ret;
 		}
 
 		/** @var Coupons $coupon */
 		$coupon = $couponValidation['coupon'];
+		$ret['coupon_id'] = $coupon->akeebasubs_apicoupon_id;
 
 		// Double check we really do have a coupon
 		if (!is_object($coupon))
 		{
-			return 0.0;
+			return $ret;
 		}
 
 		// Get the base price of the subscription
 		$basePrice = $this->factory->getValidator('BasePrice')->execute();
 
 		// Initialise the coupon discount value
-		$couponDiscount = 0.0;
+		$ret['value'] = 0.0;
 
 		// Get the actual coupon discount amount
 		switch ($coupon->type)
 		{
 			case 'value':
-				$couponDiscount = (float)$coupon->value;
+				$ret['value'] = (float)$coupon->value;
 
-				if ($couponDiscount > $basePrice)
+				if ($ret['value'] > $basePrice)
 				{
-					$couponDiscount = $basePrice;
+					$ret['value'] = $basePrice;
 				}
 
-				if ($couponDiscount <= 0.001)
+				if ($ret['value'] <= 0.001)
 				{
-					$couponDiscount = 0.0;
+					$ret['value'] = 0.0;
 				}
 				break;
 
 			case 'percent':
-				$percent = (float)$coupon->value / 100.0;
+				$multiplier = (float)$coupon->value / 100.0;
 
-				if ($percent <= 0.001)
+				if ($multiplier <= 0.001)
 				{
-					$percent = 0.0;
+					$multiplier = 0.0;
 				}
 
-				if ($percent > 0.999)
+				if ($multiplier > 0.999)
 				{
-					$percent = 1.0;
+					$multiplier = 1.0;
 				}
 
-				$couponDiscount = $percent * $basePrice;
+				$ret['value'] = $multiplier * $basePrice;
+				break;
+
+			case 'lastpercent':
+				// TODO
 				break;
 		}
 
-		return $couponDiscount;
+		return $ret;
 	}
 
 }
