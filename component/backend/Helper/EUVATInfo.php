@@ -135,7 +135,7 @@ abstract class EUVATInfo
 	public static function isVIESValidVATNumber($country, $vat)
 	{
 		// Get the VAT validation cache from the session
-		if (false && !array_key_exists('vat', self::$cache))
+		if (!array_key_exists('vat', self::$cache))
 		{
 			$session = JFactory::getSession();
 			$encodedCacheData = $session->get('vat_validation_cache_data', null, 'com_akeebasubs');
