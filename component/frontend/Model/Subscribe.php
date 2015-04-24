@@ -159,8 +159,8 @@ class Subscribe extends Model
 
 			default:
 				$response->validation = $this->_validateState();
-				$response->validation->username = $this->validateUsernamePassword()->username;
-				$response->validation->password = $this->validateUsernamePassword()->password;
+				$response->validation->username = $this->getValidator('username')->execute();
+				$response->validation->password = $this->getValidator('password')->execute();
 				$response->price = $this->validatePrice();
 
 				$pluginResponse = $this->pluginValidation();
@@ -245,73 +245,11 @@ class Subscribe extends Model
 
 		$ret['rawDataForDebug'] = (array)$state;
 
-		// Name validation; must contain AT LEAST two parts (name/surname)
-		// separated by a space
-		if (!empty($state->name))
-		{
-			$name = trim($state->name);
-			$nameParts = explode(" ", $name);
-
-			if (count($nameParts) < 2)
-			{
-				$ret['name'] = false;
-			}
-		}
+		// Name validation
+		$ret['name'] = $this->getValidator('Name')->execute();
 
 		// Email validation
-		if (!empty($state->email))
-		{
-			/** @var JoomlaUsers $usersModel */
-			$usersModel = $this->container->factory->model('JoomlaUsers')->tmpInstance();
-			$list = $usersModel
-				->email($state->email)
-				->get(true);
-
-			$validEmail = true;
-
-			foreach ($list as $item)
-			{
-				if ($item->email == $state->email)
-				{
-					if ($item->id != JFactory::getUser()->id)
-					{
-						if (!$item->block)
-						{
-							// Email belongs to a non-blocked user; this is not allowed.
-							$validEmail = false;
-							break;
-						}
-						else
-						{
-							// Email belongs to a blocked user. Allow reusing it,
-							// if the user is not activated yet. The idea is that
-							// a newly created user is blocked and has the activation
-							// field filled in. This is a user who failed to complete
-							// his subscription. If the validation field is empty, it
-							// is a user blocked by the administrator who should not
-							// be able to subscribe again!
-							if (empty($item->activation))
-							{
-								$validEmail = false;
-								break;
-							}
-						}
-					}
-				}
-			}
-
-			// Double check that it's a valid email
-			if ($validEmail)
-			{
-				$validEmail = $this->validEmail($state->email);
-			}
-
-			$ret['email'] = $validEmail;
-		}
-		else
-		{
-			$ret['email'] = false;
-		}
+		$ret['email'] = $this->getValidator('Email')->execute();
 
 		// 2. Country validation
 		if ($ret['country'] && ($personalInfo != 0))
@@ -2524,123 +2462,6 @@ class Subscribe extends Model
 		$format = $hex ? '%08s%04s%04x%04x%012s' : '%08s-%04s-%04x-%04x-%012s';
 
 		return sprintf($format, $time_low, $time_mid, $time_hi_and_version, $clock_seq_hi_and_reserved, $node);
-	}
-
-	/**
-	 * Is this string a valid email address?
-	 *
-	 * @param   string  $email  The email string to check
-	 *
-	 * @return  bool  True if it's a valid email string
-	 */
-	private function validEmail($email)
-	{
-		$isValid = true;
-		$atIndex = strrpos($email, "@");
-
-		if (is_bool($atIndex) && !$atIndex)
-		{
-			$isValid = false;
-		}
-		else
-		{
-			$domain = substr($email, $atIndex + 1);
-			$local = substr($email, 0, $atIndex);
-			$localLen = strlen($local);
-			$domainLen = strlen($domain);
-			if ($localLen < 1 || $localLen > 64)
-			{
-				// local part length exceeded
-				$isValid = false;
-			}
-			elseif ($domainLen < 1 || $domainLen > 255)
-			{
-				// domain part length exceeded
-				$isValid = false;
-			}
-			elseif ($local[0] == '.' || $local[$localLen - 1] == '.')
-			{
-				// local part starts or ends with '.'
-				$isValid = false;
-			}
-			elseif (preg_match('/\\.\\./', $local))
-			{
-				// local part has two consecutive dots
-				$isValid = false;
-			}
-			// The domain character validation is commented out because of UTF-8 domains.
-			/**
-			elseif (!preg_match('/^[A-Za-z0-9\\-\\.]+$/', $domain))
-			{
-				// character not valid in domain part
-				$isValid = false;
-			}
-			/**/
-			elseif (preg_match('/\\.\\./', $domain))
-			{
-				// domain part has two consecutive dots
-				$isValid = false;
-			}
-			// UTF-8 characters in local name are allowed, so we have to comment out this check
-			/**
-			elseif (
-				!preg_match('/^(\\\\.|[A-Za-z0-9!#%&`_=\\/$\'*+?^{}|~.-])+$/',
-				str_replace("\\\\", "", $local))
-			)
-			{
-				// character not valid in local part unless
-				// local part is quoted
-				if (!preg_match('/^"(\\\\"|[^"])+"$/',
-					str_replace("\\\\", "", $local))
-				)
-				{
-					$isValid = false;
-				}
-			}
-			/**/
-
-			// Check the domain name –– NOPE. Because of UTF-8 domains.
-			/**
-			if ($isValid && !$this->is_valid_domain_name($domain))
-			{
-				return false;
-			}
-			/**/
-
-			// Uncomment below to have PHP run a proper DNS check (risky on shared hosts!)
-			/**
-			 * if ($isValid && !(checkdnsrr($domain,"MX") || checkdnsrr($domain,"A"))) {
-			 * // domain not found in DNS
-			 * $isValid = false;
-			 * }
-			 * /**/
-		}
-
-		return $isValid;
-	}
-
-	/**
-	 * Checks if a domain name is valid. Used by validEmail(). Currently not used because this method only understands
-	 * non-UTF domain names :(
-	 *
-	 * @param   string  $domain_name  The domain name to check
-	 *
-	 * @return  bool  Is this a valid domain name?
-	 */
-	function is_valid_domain_name($domain_name)
-	{
-		$pieces = explode(".", $domain_name);
-		foreach ($pieces as $piece)
-		{
-			if (!preg_match('/^[a-z\d][a-z\d-]{0,62}$/i', $piece)
-				|| preg_match('/-$/', $piece)
-			)
-			{
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	/**
