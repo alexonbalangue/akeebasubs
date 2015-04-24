@@ -111,7 +111,7 @@ class Subscribe extends Model
 	 *
 	 * @return   StateData
 	 */
-	public function getStateVariables($force = false)
+	public function &getStateVariables($force = false)
 	{
 		static $stateVars = null;
 
@@ -225,7 +225,6 @@ class Subscribe extends Model
 		$state = $this->getStateVariables();
 
 		$personalInfo = ComponentParams::getParam('personalinfo', 1);
-		$allowNonEUVAT = ComponentParams::getParam('noneuvat', 0);
 		$requireCoupon = ComponentParams::getParam('reqcoupon', 0) ? true : false;
 
 		// 1. Basic checks
@@ -258,126 +257,14 @@ class Subscribe extends Model
 		$ret['state'] = $this->getValidator('State')->execute();
 
 		// 4. Business validation
-		// Fix the VAT number's format
-		$vat_check = EUVATInfo::checkVATFormat($state->country, $state->vatnumber);
+		$businessValidation = $this->getValidator('Business')->execute();
+		$ret['businessname'] = $businessValidation['businessname'];
+		$ret['occupation'] = $businessValidation['occupation'];
+		$ret['vatnumber'] = $businessValidation['vatnumber'];
+		$ret['novatrequired'] = $businessValidation['novatrequired'];
 
-		if ($vat_check->valid)
-		{
-			$state->vatnumber = $vat_check->vatnumber;
-		}
-		else
-		{
-			$state->vatnumber = '';
-		}
-
+		// After the business validation $this->state->vatnumber contains the reformatted VAT number
 		$this->setState('vatnumber', $state->vatnumber);
-
-		if (!$state->isbusiness || ($personalInfo <= 0))
-		{
-			$ret['businessname'] = true;
-			$ret['vatnumber'] = false;
-		}
-		else
-		{
-			// Do I have to check the VAT number?
-			if (EUVATInfo::isEUVATCountry($state->country))
-			{
-				// If the country has two rules with VIES enabled/disabled and a non-zero VAT,
-				// we will skip VIES validation. We'll also skip validation if there are no
-				// rules for this country (the default tax rate will be applied)
-
-				/** @var TaxRules $taxRulesModel */
-				$taxRulesModel = $this->container->factory->model('TaxRules')->tmpInstance();
-
-				// First try loading the rules for this level
-				$taxrules = $taxRulesModel
-					->enabled(1)
-					->akeebasubs_level_id($state->id)
-					->country($state->country)
-					->filter_order('ordering')
-					->filter_order_Dir('ASC')
-					->get(true);
-
-				// If this level has no rules try the "All levels" rules
-				if (!$taxrules->count())
-				{
-					$taxrules = $taxRulesModel
-						->enabled(1)
-						->akeebasubs_level_id(0)
-						->country($state->country)
-						->filter_order('ordering')
-						->filter_order_Dir('ASC')
-						->get(true);
-				}
-
-				$catchRules = 0;
-				$lastVies = null;
-
-				if ($taxrules->count())
-				{
-					/** @var TaxRules $rule */
-					foreach ($taxrules as $rule)
-					{
-						// Note: You can't use $rule->state since it returns the model state
-						$rule_state = $rule->getFieldValue('state', null);
-
-						if (empty($rule_state) && empty($rule->city) && $rule->taxrate && ($lastVies != $rule->vies))
-						{
-							$catchRules++;
-							$lastVies = $rule->vies;
-						}
-					}
-				}
-
-				$mustCheck = ($catchRules < 2) && ($catchRules > 0);
-
-				if ($mustCheck)
-				{
-					// Can I use cached result? In order to do so...
-					$useCachedResult = false;
-
-					// ...I have to be logged in...
-					if (!JFactory::getUser()->guest)
-					{
-						// ...and I must have my viesregistered flag set to 2
-						// and my VAT number must match the saved record.
-						/** @var Users $subsUsersModel */
-						$subsUsersModel = $this->container->factory->model('Users')->tmpInstance();
-
-						$userparams = $subsUsersModel
-							->getMergedData(JFactory::getUser()->id);
-
-						if (($userparams->viesregistered == 2) && ($userparams->vatnumber == $state->vatnumber))
-						{
-							$useCachedResult = true;
-						}
-					}
-
-					if ($useCachedResult)
-					{
-						// Use the cached VIES validation result
-						$ret['vatnumber'] = true;
-					}
-					else
-					{
-						// No, check the VAT number against the VIES web service
-						$ret['vatnumber'] = EUVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
-					}
-
-					$ret['novatrequired'] = false;
-				}
-				else
-				{
-					$ret['novatrequired'] = true;
-				}
-			}
-			elseif ($allowNonEUVAT)
-			{
-				// Allow non-EU VAT input
-				$ret['novatrequired'] = true;
-				$ret['vatnumber'] = EUVATInfo::isVIESValidVATNumber($state->country, $state->vatnumber);
-			}
-		}
 
 		// 5. Coupon validation
 		$ret['coupon'] = $this->_validateCoupon(!$requireCoupon);
