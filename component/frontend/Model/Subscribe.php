@@ -255,29 +255,7 @@ class Subscribe extends Model
 		$ret['country'] = $this->getValidator('Country')->execute();
 
 		// 3. State validation
-		if ($personalInfo <= 0)
-		{
-			$ret['state'] = true;
-		}
-		else
-		{
-			if (in_array($state->country, array('US', 'CA')))
-			{
-				$ret['state'] = false;
-
-				foreach (Select::$states as $country => $states)
-				{
-					if (array_key_exists($state->state, $states))
-					{
-						$ret['state'] = true;
-					}
-				}
-			}
-			else
-			{
-				$ret['state'] = true;
-			}
-		}
+		$ret['state'] = $this->getValidator('State')->execute();
 
 		// 4. Business validation
 		// Fix the VAT number's format
