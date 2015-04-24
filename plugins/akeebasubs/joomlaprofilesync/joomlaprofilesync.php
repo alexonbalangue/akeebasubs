@@ -203,7 +203,12 @@ class plgAkeebasubsJoomlaprofilesync extends JPlugin
 	 */
 	public function onAKUserSaveData(array &$data)
 	{
-		// Get the user ID
+		// Get the user ID, if available
+		if (!isset($data['user_id']))
+		{
+			return true;
+		}
+
 		$user_id = $data['user_id'];
 
 		// Remove the params field

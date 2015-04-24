@@ -15,6 +15,7 @@ Akeeba Subscriptions 5.0.0
 # [LOW] Back-end invoices page didn't link username to Akeeba Subs user record
 # [LOW] Would not proceed to the next wizard step
 # [LOW] Typo in SQL script resulted in default email templates not being installed
+# [LOW] PHP Warning from the Joomla! Profile Sync plugin under some conditions
 
 Akeeba Subscriptions 5.0.0.b1
 ================================================================================
