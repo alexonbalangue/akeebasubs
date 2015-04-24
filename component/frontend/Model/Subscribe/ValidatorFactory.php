@@ -8,6 +8,7 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe;
 
+defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 use FOF30\Container\Container;

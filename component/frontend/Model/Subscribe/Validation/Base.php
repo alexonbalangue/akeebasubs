@@ -8,6 +8,7 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
+defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;

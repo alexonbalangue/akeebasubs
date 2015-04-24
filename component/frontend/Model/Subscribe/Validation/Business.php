@@ -1,13 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nikosdion
- * Date: 24/4/15
- * Time: 13:04
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
+defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;

@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe;
 
+defined('_JEXEC') or die;
+
 use Akeeba\Subscriptions\Site\Model\Levels;
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Model\Model;

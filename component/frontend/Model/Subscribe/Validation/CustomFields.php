@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
+defined('_JEXEC') or die;
+
 /**
  * Runs the validation events of the per user custom field plugins
  *

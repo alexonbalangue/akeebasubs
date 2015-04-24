@@ -7,7 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
-use Akeeba\Subscriptions\Site\Model\JoomlaUsers;
+defined('_JEXEC') or die;
+
 use Akeeba\Subscriptions\Site\Model\Subscribe;
 
 /**
