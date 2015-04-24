@@ -716,160 +716,21 @@ class Subscribe extends Model
 	 */
 	private function _validateCoupon($validIfNotExists = true, $force = false)
 	{
-		static $couponCode = null;
-		static $valid = false;
-		static $couponid = null;
+		$couponValidation = $this->getValidator('Coupon')->execute($force);
 
-		if ($force)
+		$valid = $couponValidation['valid'];
+		/** @var Coupons $coupon */
+		$coupon = $couponValidation['coupon'];
+
+		if (!$valid && $validIfNotExists && !$couponValidation['couponFound'])
 		{
-			$couponCode = null;
-			$valid = false;
-			$couponid = null;
+			$valid = true;
 		}
 
-		$state = $this->getStateVariables();
-		$this->_coupon_id = null;
-
-		if ($state->coupon)
+		if (!is_null($coupon))
 		{
-			if ($state->coupon == $couponCode)
-			{
-				$this->_coupon_id = $valid ? $couponid : null;
-
-				return $valid;
-			}
+			$this->_coupon_id = $coupon->akeebasubs_coupon_id;
 		}
-
-		$valid = $validIfNotExists;
-		if ($state->coupon)
-		{
-			$couponCode = $state->coupon;
-			$valid = false;
-
-			/** @var Coupons $couponsModel */
-			$couponsModel = $this->container->factory->model('Coupons')->tmpInstance();
-
-			try
-			{
-				/** @var Coupons $coupon */
-				$coupon = $couponsModel
-					->coupon(strtoupper(trim($state->coupon)))
-					->firstOrFail();
-
-				if (empty($coupon->akeebasubs_coupon_id))
-				{
-					$coupon = null;
-				}
-			}
-			catch (\Exception $e)
-			{
-				$coupon = null;
-			}
-
-			if (is_object($coupon))
-			{
-				$valid = false;
-
-				if ($coupon->enabled && (strtoupper($coupon->coupon) == strtoupper($couponCode)))
-				{
-					// Check validity period
-					$jFrom = $this->container->platform->getDate($coupon->publish_up);
-					$jTo = $this->container->platform->getDate($coupon->publish_down);
-					$jNow = $this->container->platform->getDate();
-
-					$valid = ($jNow->toUnix() >= $jFrom->toUnix()) && ($jNow->toUnix() <= $jTo->toUnix());
-
-					// Check levels list
-					if ($valid && !empty($coupon->subscriptions))
-					{
-						$levels = explode(',', $coupon->subscriptions);
-						$valid = in_array($state->id, $levels);
-					}
-
-					// Check user
-					if ($valid && $coupon->user)
-					{
-						$user_id = JFactory::getUser()->id;
-						$valid = $user_id == $coupon->user;
-					}
-
-					// Check email
-					if ($valid && $coupon->email)
-					{
-						$valid = $state->email == $coupon->email;
-					}
-
-					// Check user group levels
-					if ($valid && !empty($coupon->usergroups))
-					{
-						$groups = explode(',', $coupon->usergroups);
-						$ugroups = JFactory::getUser()->getAuthorisedGroups();
-						$valid = 0;
-
-						foreach ($ugroups as $ugroup)
-						{
-							if (in_array($ugroup, $groups))
-							{
-								$valid = 1;
-
-								break;
-							}
-						}
-					}
-
-					// Check hits limit
-					if ($valid && ($coupon->hitslimit > 0))
-					{
-						/** @var Subscriptions $subscriptionsModel */
-						$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
-
-						// Get the real coupon hits
-						$hits = $subscriptionsModel
-							->coupon_id($coupon->akeebasubs_coupon_id)
-							->paystate('C')
-							->limit(0)
-							->limitstart(0)
-							->count();
-
-						$valid = $hits < $coupon->hitslimit;
-
-						if (($coupon->hits != $hits) || ($hits >= $coupon->hitslimit))
-						{
-							$coupon->hits = $hits;
-							$coupon->enabled = $hits < $coupon->hitslimit;
-							$coupon->store();
-						}
-					}
-
-					// Check user hits limit
-					if ($valid && $coupon->userhits && !JFactory::getUser()->guest)
-					{
-						$user_id = JFactory::getUser()->id;
-
-						// How many subscriptions with a paystate of C,P for this user
-						// are using this coupon code?
-						/** @var Subscriptions $subscriptionsModel */
-						$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
-
-						$hits = $subscriptionsModel
-							->coupon_id($coupon->akeebasubs_coupon_id)
-							->paystate(['C', 'P'])
-							->user_id($user_id)
-							->limit(0)
-							->limitstart(0)
-							->count();
-
-						$valid = $hits < $coupon->userhits;
-					}
-				}
-				else
-				{
-					$valid = false;
-				}
-			}
-		}
-
-		$this->_coupon_id = $valid ? $couponid : null;
 
 		return $valid;
 	}
