@@ -10,6 +10,7 @@ namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
 
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
+use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;
 use FOF30\Container\Container;
 
 abstract class Base
@@ -20,19 +21,24 @@ abstract class Base
 	/** @var  StateData  The state data we're operating on */
 	protected $state = null;
 
+	/** @var  ValidatorFactory  The validator factory */
+	protected $factory = null;
+
 	/** @var  mixed  The (cached) result of this validation class */
 	protected static $result = null;
 
 	/**
 	 * Public constructor
 	 *
-	 * @param   Container  $container
-	 * @param   StateData  $state
+	 * @param   Container         $container  The container of the component
+	 * @param   StateData         $state      State data to operate on
+	 * @param   ValidatorFactory  $factory    The validator factory
 	 */
-	public function __construct(Container $container, StateData $state)
+	public function __construct(Container $container, StateData $state, ValidatorFactory $factory)
 	{
 		$this->container = $container;
 		$this->state = $state;
+		$this->factory = $factory;
 	}
 
 	/**

@@ -55,7 +55,7 @@ class ValidatorFactory
 
 		if (!isset($this->validators[$type]))
 		{
-			$this->validators[$type] = new $className($this->container, $this->state);
+			$this->validators[$type] = new $className($this->container, $this->state, $this);
 		}
 
 		return $this->validators[$type];
