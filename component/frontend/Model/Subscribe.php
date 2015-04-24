@@ -12,6 +12,8 @@ use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Admin\Helper\Select;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
+use Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
+use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;
 use FOF30\Container\Container;
 use FOF30\Model\Model;
 use FOF30\Utils\Ip;
@@ -85,14 +87,29 @@ class Subscribe extends Model
 	protected $_expired_upgrade_id = null;
 
 	/**
-	 * We cache the results of all time-consuming operations, e.g. vat validation, subscription membership calculation,
-	 * tax calculations, etc into this array, saved in the user's session.
-	 *
-	 * @var array
+	 * @var  ValidatorFactory  The validator object factory
 	 */
-	private $_cache = array();
+	protected $validatorFactory = null;
 
-	private function getStateVariables($force = false)
+	/**
+	 * Public constructor. Initialises the internal objects used for validation and subscription creation.
+	 *
+	 * @param   Container  $container
+	 * @param   array      $config
+	 */
+	public function __construct(Container $container, array $config = array())
+	{
+		parent::__construct($container, $config);
+
+		$this->validatorFactory = new ValidatorFactory($this->container, $this->getStateVariables());
+	}
+
+	/**
+	 * @param    bool  $force  Should I force-reload the data?
+	 *
+	 * @return   StateData
+	 */
+	public function getStateVariables($force = false)
 	{
 		static $stateVars = null;
 
@@ -102,6 +119,20 @@ class Subscribe extends Model
 		}
 
 		return $stateVars;
+	}
+
+	/**
+	 * Gets a validator object by type. If you request the same object type again the same object will be returned.
+	 *
+	 * @param   string  $type  The validator type
+	 *
+	 * @return  Validation\Base
+	 *
+	 * @throws  \InvalidArgumentException  If the validator type is not found
+	 */
+	public function getValidator($type)
+	{
+		return $this->validatorFactory->getValidator($type);
 	}
 
 	/**
@@ -116,7 +147,7 @@ class Subscribe extends Model
 		switch ($state->opt)
 		{
 			case 'username':
-				$response->validation = $this->_validateUsername();
+				$response->validation = $this->validateUsernamePassword();
 				break;
 
 			// Perform validations on plugins only
@@ -126,8 +157,8 @@ class Subscribe extends Model
 
 			default:
 				$response->validation = $this->_validateState();
-				$response->validation->username = $this->_validateUsername()->username;
-				$response->validation->password = $this->_validateUsername()->password;
+				$response->validation->username = $this->validateUsernamePassword()->username;
+				$response->validation->password = $this->validateUsernamePassword()->password;
 				$response->price = $this->validatePrice();
 
 				$this->pluginValidation($response, $state);
@@ -219,76 +250,12 @@ class Subscribe extends Model
 	/**
 	 * Validates the username for uniqueness
 	 */
-	private function _validateUsername()
+	private function validateUsernamePassword()
 	{
-		$state = $this->getStateVariables();
-
-		$ret = (object)array('username' => false, 'password' => true);
-		$username = $state->username;
-		$myUser = JFactory::getUser();
-
-		if (empty($username))
-		{
-			if (!$myUser->guest)
-			{
-				$ret->username = true;
-			}
-
-			return $ret;
-		}
-
-		/** @var JoomlaUsers $userModel */
-		$userModel = $this->container->factory->model('JoomlaUsers')->tmpInstance();
-		$user = $userModel->username([
-			'value' => $username,
-			'method' => 'exact'
-		])->firstOrNew();
-
-		if ($myUser->guest)
-		{
-			if (empty($state->password) || empty($state->password2))
-			{
-				$ret->password = false;
-			}
-			elseif ($state->password != $state->password2)
-			{
-				$ret->password = false;
-			}
-
-			if (empty($user->username))
-			{
-				$ret->username = true;
-			}
-			else
-			{
-				// If it's a blocked user, we should allow reusing the username;
-				// this would be a user who tried to subscribe, closed the payment
-				// window and came back to re-register. However, if the validation
-				// field is non-empty, this is a manually blocked user and should
-				// not be allowed to subscribe again.
-				if ($user->block)
-				{
-					if (!empty($user->activation))
-					{
-						$ret->username = true;
-					}
-					else
-					{
-						$ret->username = false;
-					}
-				}
-				else
-				{
-					$ret->username = false;
-				}
-			}
-		}
-		else
-		{
-			$ret->username = ($user->username == $myUser->username);
-		}
-
-		return $ret;
+		return (object)[
+			'username' => $this->getValidator('username')->execute(),
+			'password' => $this->getValidator('password')->execute()
+		];
 	}
 
 	/**
