@@ -10,6 +10,7 @@ namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Site\Model\Coupons;
+use Akeeba\Subscriptions\Site\Model\Subscriptions;
 
 class CouponDiscount extends Base
 {
@@ -89,11 +90,101 @@ class CouponDiscount extends Base
 				break;
 
 			case 'lastpercent':
-				// TODO
+				$subPayments = $this->getLatestPayments();
+
+				if (!array_key_exists($this->state->id, $subPayments))
+				{
+					$lastNet = 0.00;
+				}
+				else
+				{
+					$lastNet = $subPayments[$this->state->id]['value'];
+				}
+
+				$multiplier = (float)$coupon->value / 100.0;
+
+				if ($multiplier <= 0.001)
+				{
+					$multiplier = 0.0;
+				}
+
+				if ($multiplier > 0.999)
+				{
+					$multiplier = 1.0;
+				}
+
+				$ret['value'] = (float)$lastNet * $multiplier;
+
 				break;
 		}
 
 		return $ret;
 	}
 
+	/**
+	 * Get the latest payments of the user
+	 *
+	 * @return  array
+	 */
+	private function getLatestPayments()
+	{
+		$user = \JFactory::getUser();
+
+		// Not logged in? No last payment.
+		if ($user->guest)
+		{
+			return [];
+		}
+
+		$user_id = $user->id;
+
+		// Get the user's list of subscriptions
+		/** @var Subscriptions $subscriptionsModel */
+		$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
+		$subscriptions = $subscriptionsModel
+			->user_id($user_id)
+			->enabled(1)
+			->get(true);
+
+		// No subscriptions? Last payment is 0.
+		if (!$subscriptions->count())
+		{
+			return [];
+		}
+
+		$subs = array();
+		$uNow = time();
+
+		$subPayments = array();
+
+		foreach ($subscriptions as $subscription)
+		{
+			$uFrom = $this->container->platform->getDate($subscription->publish_up)->toUnix();
+			$presence = $uNow - $uFrom;
+			$subs[$subscription->akeebasubs_level_id] = $presence;
+
+			$uOn = $this->container->platform->getDate($subscription->created_on)->toUnix();
+
+			if (!array_key_exists($subscription->akeebasubs_level_id, $subPayments))
+			{
+				$subPayments[$subscription->akeebasubs_level_id] = array(
+					'value' => $subscription->net_amount,
+					'on'    => $uOn,
+				);
+			}
+			else
+			{
+				$oldOn = $subPayments[$subscription->akeebasubs_level_id]['on'];
+				if ($oldOn < $uOn)
+				{
+					$subPayments[$subscription->akeebasubs_level_id] = array(
+						'value' => $subscription->net_amount,
+						'on'    => $uOn,
+					);
+				}
+			}
+		}
+
+		return $subPayments;
+	}
 }
