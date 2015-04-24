@@ -70,20 +70,6 @@ class Subscribe extends Model
 	protected $_coupon_id = null;
 
 	/**
-	 * Upgrade ID used in the price calculation
-	 *
-	 * @var int|null
-	 */
-	protected $_upgrade_id = null;
-
-	/**
-	 * Upgrade ID for expired subscriptions used in the price calculation
-	 *
-	 * @var int|null
-	 */
-	protected $_expired_upgrade_id = null;
-
-	/**
 	 * @var  ValidatorFactory  The validator object factory
 	 */
 	protected $validatorFactory = null;
@@ -283,7 +269,7 @@ class Subscribe extends Model
 
 		if (is_null($result) || $force)
 		{
-			$state = $this->getStateVariables($force);
+			$this->getStateVariables($force);
 
 			$netPrice = $this->getValidator('BasePrice')->execute();
 
@@ -292,13 +278,13 @@ class Subscribe extends Model
 
 			$couponDiscount = $this->getValidator('CouponDiscount')->execute();
 
-			// TODO Refactor from here onwards
-			// Upgrades (auto-rule) validation
-			$discountStructure = $this->_getAutoDiscount();
+			// Automatic discount (upgrade rules, subscription level relations) validation
+			$discountStructure = $this->getValidator('BestAutomaticDiscount')->execute();
 			$autoDiscount = $discountStructure['discount'];
 
+			// TODO Refactor from here onwards
+
 			// Should I use the coupon code or the automatic discount?
-			$this->_coupon_id = null;
 			$useCoupon = false;
 			$useAuto = true;
 
@@ -314,13 +300,13 @@ class Subscribe extends Model
 				{
 					$useAuto = false;
 					$useCoupon = true;
-					$this->_upgrade_id = null;
+					$discountStructure['upgrade_id'] = null;
 				}
 			}
 
 			$discount = $useCoupon ? $couponDiscount : $autoDiscount;
 			$couponid = is_null($this->_coupon_id) ? 0 : $this->_coupon_id;
-			$upgradeid = is_null($this->_upgrade_id) ? 0 : $this->_upgrade_id;
+			$upgradeid = is_null($discountStructure['upgrade_id']) ? 0 : $discountStructure['upgrade_id'];
 
 			// Note: do not reset the oldsup and expiration fields. Subscription level relations must not be bound
 			// to the discount.
@@ -404,69 +390,6 @@ class Subscribe extends Model
 		}
 
 		return $valid;
-	}
-
-	/**
-	 * Loads any relevant auto discount (upgrade rules or discount) and returns
-	 * the max discount possible under those rules, as well as related
-	 * information in subscription expiration and so on.
-	 *
-	 * @return array Discount type and value
-	 */
-	private function _getAutoDiscount()
-	{
-		// Get the automatic discount based on upgrade rules for active and expired subscriptions
-		$upgradeRule = $this->getValidator('BestUpgradeDiscount')->execute();
-		$autoDiscount = $upgradeRule['value'];
-		$this->_upgrade_id = $upgradeRule['upgrade_id'];
-
-		// Initialise the return value
-		$ret = array(
-			'discount'   => $autoDiscount, // discount amount
-			'expiration' => 'overlap', // old subscription expiration mode
-			'allsubs'    => null, // all old subscription ids
-			'oldsub'     => null, // old subscription id
-		);
-
-		//SubscriptionRelationDiscount
-
-		// Check if we have a valid subscription level and user
-		$relationData = $this->getValidator('SubscriptionRelationDiscount')->execute();
-
-		// Check that a relation row is relevant
-		if (!is_null($relationData['relation']))
-		{
-			// As long as we have an expiration method other than "overlap"
-			// pass along the subscriptions which will be replaced / used
-			// to extend the subscription time
-			if ($relationData['relation']->expiration != 'overlap')
-			{
-				$ret['expiration'] = $relationData['relation']->expiration;
-				$ret['oldsub'] = $relationData['oldsub'];
-				$ret['allsubs'] = $relationData['allsubs'];
-
-				$this->_upgrade_id = null;
-			}
-
-			// Assume rule-based relation discount
-			$ret['discount'] = $autoDiscount;
-
-			// No. What we really have is a relation discount which is NOT based on rules
-			if ($relationData['relation']->mode != 'rules')
-			{
-				// Get the discount from the levels relation and make sure it's greater than the rule-based discount
-				$relDiscount = $relationData['discount'];
-
-				if ($relDiscount > $autoDiscount)
-				{
-					// yes, it's greater than the upgrade rule-based discount. Use it.
-					$ret['discount'] = $relDiscount;
-				}
-			}
-		}
-
-		// Finally, return the structure
-		return $ret;
 	}
 
 	/**

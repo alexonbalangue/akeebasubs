@@ -12,6 +12,10 @@ class BestUpgradeDiscount extends Base
 	/**
 	 * Get the maximum discount from applying upgrade rules for active and expired subscriptions
 	 *
+	 * Uses:
+	 * 		UpgradeDiscount
+	 * 		UpgradeExpiredDiscount
+	 *
 	 * @return  array  upgrade_id, value
 	 */
 	protected function getValidationResult()
