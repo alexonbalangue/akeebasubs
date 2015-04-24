@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Site\Model;
 
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
-use Akeeba\Subscriptions\Admin\Helper\Select;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
@@ -417,21 +416,9 @@ class Subscribe extends Model
 	private function _getAutoDiscount()
 	{
 		// Get the automatic discount based on upgrade rules for active and expired subscriptions
-		$upgradeRule = $this->getValidator('UpgradeDiscount')->execute();
+		$upgradeRule = $this->getValidator('BestUpgradeDiscount')->execute();
 		$autoDiscount = $upgradeRule['value'];
 		$this->_upgrade_id = $upgradeRule['upgrade_id'];
-
-		$upgradeExpiredRule = $this->getValidator('UpgradeExpiredDiscount')->execute();
-		$autoDiscountExpired = $upgradeExpiredRule['value'];
-		$this->_expired_upgrade_id = $upgradeRule['upgrade_id'];
-
-		if ($autoDiscountExpired > $autoDiscount)
-		{
-			$autoDiscount = $autoDiscountExpired;
-			$this->_upgrade_id = $this->_expired_upgrade_id;
-		}
-
-		// TODO Refactor onwards
 
 		// Initialise the return value
 		$ret = array(
@@ -441,306 +428,44 @@ class Subscribe extends Model
 			'oldsub'     => null, // old subscription id
 		);
 
+		//SubscriptionRelationDiscount
+
 		// Check if we have a valid subscription level and user
-		if (!JFactory::getUser()->guest)
+		$relationData = $this->getValidator('SubscriptionRelationDiscount')->execute();
+
+		// Check that a relation row is relevant
+		if (!is_null($relationData['relation']))
 		{
-			$relationData = $this->_getLevelRelation($autoDiscount);
-
-			// Check that a relation row is relevant
-			if (!is_null($relationData['relation']))
+			// As long as we have an expiration method other than "overlap"
+			// pass along the subscriptions which will be replaced / used
+			// to extend the subscription time
+			if ($relationData['relation']->expiration != 'overlap')
 			{
-				// As long as we have an expiration method other than "overlap"
-				// pass along the subscriptions which will be replaced / used
-				// to extend the subscription time
-				if ($relationData['relation']->expiration != 'overlap')
-				{
-					$ret['expiration'] = $relationData['relation']->expiration;
-					$ret['oldsub'] = $relationData['oldsub'];
-					$ret['allsubs'] = $relationData['allsubs'];
-					$this->_upgrade_id = null;
-				}
+				$ret['expiration'] = $relationData['relation']->expiration;
+				$ret['oldsub'] = $relationData['oldsub'];
+				$ret['allsubs'] = $relationData['allsubs'];
 
-				// Non-rule-based relation discount
-				if ($relationData['relation']->mode != 'rules')
-				{
-					// Get the discount from the levels relation and make sure it's greater than the rule-based discount
-					$relDiscount = $relationData['discount'];
+				$this->_upgrade_id = null;
+			}
 
-					if ($relDiscount > $autoDiscount)
-					{
-						// yes, it's greated than the upgrade rule-based discount. Use it.
-						$ret['discount'] = $relDiscount;
-					}
-				}
-				// Rule-based relation discount
-				else
+			// Assume rule-based relation discount
+			$ret['discount'] = $autoDiscount;
+
+			// No. What we really have is a relation discount which is NOT based on rules
+			if ($relationData['relation']->mode != 'rules')
+			{
+				// Get the discount from the levels relation and make sure it's greater than the rule-based discount
+				$relDiscount = $relationData['discount'];
+
+				if ($relDiscount > $autoDiscount)
 				{
-					$ret['discount'] = $autoDiscount;
+					// yes, it's greater than the upgrade rule-based discount. Use it.
+					$ret['discount'] = $relDiscount;
 				}
 			}
 		}
 
 		// Finally, return the structure
-		return $ret;
-	}
-
-	/**
-	 * Gets the applicable subscription level relation rule applicable for this
-	 * subscription attempt.
-	 *
-	 * @param   float  $autoDiscount  The value of an existing upgrade rule based discount already discovered
-	 *
-	 * @return  array  Hash array. discount is the value of the discount,
-	 *                 relation is a copy of the relation row, oldsub is the id
-	 *                 of the old subscription on which the relation row was
-	 *                 applied against.
-	 */
-	private function _getLevelRelation($autoDiscount)
-	{
-		$state = $this->getStateVariables();
-
-		// Initialise the return array
-		$ret = array(
-			'discount' => 0,
-			'relation' => null,
-			'oldsub'   => null,
-			'allsubs'  => null,
-		);
-
-		$combinedReturn = array(
-			'discount' => 0,
-			'relation' => null,
-			'oldsub'   => null,
-			'allsubs'  => array(),
-		);
-
-		// Get applicable relation rules
-
-		/** @var Relations $relModel */
-		$relModel = $this->container->factory->model('Relations')->tmpInstance();
-
-		$autoRules = $relModel
-			->target_level_id($state->id)
-			->enabled(1)
-			->limit(0)
-			->limitstart(0)
-			->get(true);
-
-		if (!$autoRules->count())
-		{
-			// No point continuing if we don't have any rules, right?
-			return $ret;
-		}
-
-		// Get the current subscription level's price
-		/** @var Levels $level */
-		$level = $this->container->factory->model('Levels')->tmpInstance();
-		$level->find($state->id);
-		$net = (float)$level->price;
-
-		/** @var Relations $rule */
-		foreach ($autoRules as $rule)
-		{
-			// Get all of the user's paid subscriptions with an expiration date
-			// in the future in the source_level_id of the rule.
-			$jNow = $this->container->platform->getDate();
-			$user_id = JFactory::getUser()->id;
-
-			/** @var Subscriptions $subscriptionsModel */
-			$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
-
-			$subscriptions = $subscriptionsModel
-				->level($rule->source_level_id)
-				->user_id($user_id)
-				->expires_from($jNow->toSql())
-				->paystate('C')
-				->filter_order('publish_down')
-				->filter_order('ASC')
-				->get(true);
-
-			if (!$subscriptions->count())
-			{
-				// If there are no subscriptions on this level don't bother.
-				continue;
-			}
-
-			$allsubs = array();
-
-			foreach ($subscriptions as $sub)
-			{
-				$allsubs[] = $sub->akeebasubs_level_id;
-			}
-
-			reset($allsubs);
-
-			switch ($rule->mode)
-			{
-				// Rules-based discount.
-				default:
-				case 'rules':
-					$discount = $autoDiscount;
-					break;
-
-				// Fixed discount
-				case 'fixed':
-					if ($rule->type == 'value')
-					{
-						$discount = (float)$rule->amount;
-					}
-					else
-					{
-						$discount = $net * (float)$rule->amount / 100;
-					}
-					break;
-
-				// Flexible subscriptions
-				case 'flexi':
-					// Translate period to days
-					switch ($rule->flex_uom)
-					{
-						default:
-						case 'd':
-							$modifier = 1;
-							break;
-
-						case 'w':
-							$modifier = 7;
-							break;
-
-						case 'm':
-							$modifier = 30;
-							break;
-
-						case 'y':
-							$modifier = 365;
-							break;
-					}
-
-					$modifier = $modifier * 86400; // translate to seconds
-
-					$period = $rule->flex_period;
-
-					// Calculate presence
-					$remaining_seconds = 0;
-					$now = time();
-
-					/** @var Subscriptions $sub */
-					foreach ($subscriptions as $sub)
-					{
-						if ($rule->flex_timecalculation && !$sub->enabled)
-						{
-							continue;
-						}
-
-						$from = $this->container->platform->getDate($sub->publish_up)->toUnix();
-						$to = $this->container->platform->getDate($sub->publish_down)->toUnix();
-
-						if ($from > $now)
-						{
-							$remaining_seconds += $to - $from;
-						}
-						else
-						{
-							$remaining_seconds += $to - $now;
-						}
-					}
-
-					$remaining = $remaining_seconds / $modifier;
-
-					// Check for low threshold
-					if (($rule->low_threshold > 0) && ($remaining <= $rule->low_threshold))
-					{
-						$discount = $rule->low_amount;
-					}
-					// Check for high threshold
-					elseif (($rule->high_threshold > 0) && ($remaining >= $rule->high_threshold))
-					{
-						$discount = $rule->high_amount;
-					}
-					else
-					// Calculate discount based on presence
-					{
-						// Round the quantised presence
-						switch ($rule->time_rounding)
-						{
-							case 'floor':
-								$remaining = floor($remaining / $period);
-								break;
-
-							case 'ceil':
-								$remaining = ceil($remaining / $period);
-								break;
-
-							case 'round':
-								$remaining = round($remaining / $period);
-								break;
-						}
-
-						$discount = $rule->flex_amount * $remaining;
-					}
-
-					// Translate percentages to net values
-					if ($rule->type == 'percent')
-					{
-						$discount = $net * (float)$discount / 100;
-					}
-
-					break;
-			}
-
-			// Combined rule. Add to, um, the combined rules return array
-			if ($rule->combine)
-			{
-				$combinedReturn['discount'] += $discount;
-				$combinedReturn['relation'] = clone $rule;
-				$combinedReturn['allsubs'] = array_merge($combinedReturn['allsubs'], $allsubs);
-				$combinedReturn['allsubs'] = array_unique($combinedReturn['allsubs']);
-
-				foreach ($subscriptions as $sub)
-				{
-					// Loop until we find an enabled subscription
-					if (!$sub->enabled)
-					{
-						continue;
-					}
-
-					// Use that subscription and beat it
-					$combinedReturn['oldsub'] = $sub->akeebasubs_subscription_id;
-					break;
-				}
-			}
-			elseif ($discount > $ret['discount'])
-			// If the current discount is greater than what we already have, use it
-			{
-				$ret['discount'] = $discount;
-				$ret['relation'] = clone $rule;
-				$ret['allsubs'] = $allsubs;
-
-				foreach ($subscriptions as $sub)
-				{
-					// Loop until we find an enabled subscription
-					if (!$sub->enabled)
-					{
-						continue;
-					}
-
-					// Use that subscription and beat it
-					$ret['oldsub'] = $sub->akeebasubs_subscription_id;
-					break;
-				}
-			}
-		}
-
-		// Finally, check if the combined rule trumps the currently selected
-		// rule. If it does, use it instead of the regular return array.
-		if (
-			($combinedReturn['discount'] > $ret['discount']) ||
-			(($ret['discount'] <= 0.01) && !is_null($combinedReturn['relation']))
-		)
-		{
-			$ret = $combinedReturn;
-		}
-
 		return $ret;
 	}
 
