@@ -252,18 +252,7 @@ class Subscribe extends Model
 		$ret['email'] = $this->getValidator('Email')->execute();
 
 		// 2. Country validation
-		if ($ret['country'] && ($personalInfo != 0))
-		{
-			$ret['country'] = array_key_exists($state->country, Select::$countries) && !empty($state->country);
-		}
-		elseif ($personalInfo == 0)
-		{
-			$ret['country'] = 0;
-		}
-		else
-		{
-			$ret['country'] = !empty($state->country);
-		}
+		$ret['country'] = $this->getValidator('Country')->execute();
 
 		// 3. State validation
 		if ($personalInfo <= 0)
