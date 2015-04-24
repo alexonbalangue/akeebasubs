@@ -105,6 +105,8 @@ class Subscribe extends Model
 	}
 
 	/**
+	 * Gets the state variables from the form submission or validation request
+	 *
 	 * @param    bool  $force  Should I force-reload the data?
 	 *
 	 * @return   StateData
@@ -152,7 +154,7 @@ class Subscribe extends Model
 
 			// Perform validations on plugins only
 			case 'plugins':
-				$this->pluginValidation($response, $state);
+				$response = $this->pluginValidation();
 				break;
 
 			default:
@@ -161,7 +163,11 @@ class Subscribe extends Model
 				$response->validation->password = $this->validateUsernamePassword()->password;
 				$response->price = $this->validatePrice();
 
-				$this->pluginValidation($response, $state);
+				$pluginResponse = $this->pluginValidation();
+				$response->custom_validation = $pluginResponse->custom_validation;
+				$response->custom_valid = $pluginResponse->custom_valid;
+				$response->subscription_custom_validation = $pluginResponse->subscription_custom_validation;
+				$response->subscription_custom_valid = $pluginResponse->subscription_custom_valid;
 
 				break;
 		}
@@ -169,82 +175,35 @@ class Subscribe extends Model
 		return $response;
 	}
 
-	private function pluginValidation(&$response, &$state)
+	/**
+	 * Executes per user and per subscription custom field validation using the plugins.
+	 *
+	 * The return object contains the following keys:
+	 * custom_validation				array
+	 * custom_valid						bool
+	 * subscription_custom_validation	array
+	 * subscription_custom_valid		bool
+	 *
+	 * @return   object  See above
+	 */
+	private function pluginValidation()
 	{
-		$this->container->platform->importPlugin('akeebasubs');
+		$ret = [
+			'custom_validation' => [],
+			'custom_valid' => false,
+			'subscription_custom_validation' => [],
+			'subscription_custom_valid' => false
+		];
 
-		// Get the results from the custom validation
-		$response->custom_validation = array();
-		$response->custom_valid = true;
+		$customResponse = $this->getValidator('CustomFields')->execute();
+		$ret['custom_validation'] = $customResponse->custom_validation;
+		$ret['custom_valid'] = $customResponse->custom_valid;
 
-		$jResponse = $this->container->platform->runPlugins('onValidate', array($state));
+		$subcustomResponse = $this->getValidator('SubscriptionCustomFields')->execute();
+		$ret['subscription_custom_validation'] = $subcustomResponse->subscription_custom_validation;
+		$ret['subscription_custom_valid'] = $subcustomResponse->subscription_custom_valid;
 
-		if (is_array($jResponse) && !empty($jResponse))
-		{
-			foreach ($jResponse as $pluginResponse)
-			{
-				if (!is_array($pluginResponse))
-				{
-					continue;
-				}
-
-				if (!array_key_exists('valid', $pluginResponse))
-				{
-					continue;
-				}
-
-				if (!array_key_exists('custom_validation', $pluginResponse))
-				{
-					continue;
-				}
-
-				$response->custom_valid = $response->custom_valid && $pluginResponse['valid'];
-				$response->custom_validation = array_merge($response->custom_validation, $pluginResponse['custom_validation']);
-
-				if (array_key_exists('data', $pluginResponse))
-				{
-					$state = $pluginResponse['data'];
-				}
-			}
-		}
-
-		// Get the results from the per-subscription custom validation
-		$response->subscription_custom_validation = array();
-		$response->subscription_custom_valid = true;
-
-		$jResponse = $this->container->platform->runPlugins('onValidatePerSubscription', array($state));
-
-		if (is_array($jResponse) && !empty($jResponse))
-		{
-			foreach ($jResponse as $pluginResponse)
-			{
-				if (!is_array($pluginResponse))
-				{
-					continue;
-				}
-
-				if (!array_key_exists('valid', $pluginResponse))
-				{
-					continue;
-				}
-
-				if (!array_key_exists('subscription_custom_validation', $pluginResponse))
-				{
-					continue;
-				}
-
-				$response->subscription_custom_valid = $response->subscription_custom_valid && $pluginResponse['valid'];
-				$response->subscription_custom_validation = array_merge(
-					$response->subscription_custom_validation,
-					$pluginResponse['subscription_custom_validation']
-				);
-
-				if (array_key_exists('data', $pluginResponse))
-				{
-					$state = $pluginResponse['data'];
-				}
-			}
-		}
+		return (object)$ret;
 	}
 
 	/**

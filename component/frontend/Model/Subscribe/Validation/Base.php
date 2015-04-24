@@ -25,7 +25,7 @@ abstract class Base
 	protected $factory = null;
 
 	/** @var  mixed  The (cached) result of this validation class */
-	protected static $result = null;
+	protected $result = null;
 
 	/**
 	 * Public constructor
@@ -48,7 +48,7 @@ abstract class Base
 	 */
 	public function reset()
 	{
-		self::$result = null;
+		$this->result = null;
 
 		return $this;
 	}
@@ -67,12 +67,12 @@ abstract class Base
 			$this->reset();
 		}
 
-		if (is_null(self::$result))
+		if (is_null($this->result))
 		{
-			self::$result = $this->getValidationResult();
+			$this->result = $this->getValidationResult();
 		}
 
-		return self::$result;
+		return $this->result;
 	}
 
 	/**

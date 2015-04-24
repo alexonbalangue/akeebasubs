@@ -18,7 +18,7 @@ use Akeeba\Subscriptions\Site\Model\Subscribe;
 class Password extends Base
 {
 	/**
-	 * Validates the username and the password.
+	 * Validates the password.
 	 *
 	 * @return  object  Has keys 'username' and 'password'.
 	 */
