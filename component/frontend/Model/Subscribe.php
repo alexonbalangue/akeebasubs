@@ -11,6 +11,7 @@ use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Admin\Helper\Select;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
+use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use FOF30\Container\Container;
 use FOF30\Model\Model;
 use FOF30\Utils\Ip;
@@ -91,141 +92,13 @@ class Subscribe extends Model
 	 */
 	private $_cache = array();
 
-	public function __construct(Container $container, array $config = array())
-	{
-		parent::__construct($container, $config);
-
-		$session = JFactory::getSession();
-		$encodedCacheData = $session->get('validation_cache_data', null, 'com_akeebasubs');
-
-		if (!is_null($encodedCacheData))
-		{
-			$this->_cache = json_decode($encodedCacheData, true);
-		}
-		else
-		{
-			$this->_cache = array();
-		}
-
-		// Load the state from cache, GET or POST variables
-		if (!array_key_exists('state', $this->_cache))
-		{
-			$this->_cache['state'] = array(
-				'paymentmethod' => '',
-				'username'      => '',
-				'password'      => '',
-				'password2'     => '',
-				'name'          => '',
-				'email'         => '',
-				'email2'        => '',
-				'address1'      => '',
-				'address2'      => '',
-				'country'       => 'XX',
-				'state'         => '',
-				'city'          => '',
-				'zip'           => '',
-				'isbusiness'    => '',
-				'businessname'  => '',
-				'vatnumber'     => '',
-				'coupon'        => '',
-				'occupation'    => '',
-				'custom'        => array(),
-				'subcustom'     => array(),
-			);
-		}
-
-		// Otherwise we always see the same level over and over again
-		if (array_key_exists('id', $this->_cache['state']))
-		{
-			unset($this->_cache['state']['id']);
-		}
-
-		$rawDataCache = $this->_cache['state'];
-		$rawDataInput = $this->input->getData();
-		$rawData = array_replace_recursive($rawDataCache, $rawDataInput);
-
-		if (!empty($rawData))
-		{
-			foreach ($rawData as $k => $v)
-			{
-				if (substr($k, 0, 1) == chr(0))
-				{
-					// Some people reported a key starting with a null byte causing a fatal error. Uh?!
-					continue;
-				}
-
-				if (empty($k))
-				{
-					// Some people reported an empty(!!!) key causing a fatal error. WTF?!
-					continue;
-				}
-
-				$this->setState($k, $v);
-			}
-		}
-
-		// Save the new state data in the cache
-		$this->_cache['state'] = (array)($this->getState());
-		$encodedCacheData = json_encode($this->_cache);
-		$session->set('validation_cache_data', $encodedCacheData, 'com_akeebasubs');
-	}
-
 	private function getStateVariables($force = false)
 	{
 		static $stateVars = null;
 
 		if (is_null($stateVars) || $force)
 		{
-			$session = JFactory::getSession();
-			$firstRun = $session->get('firstrun', true, 'com_akeebasubs');
-
-			if ($firstRun)
-			{
-				$session->set('firstrun', false, 'com_akeebasubs');
-			}
-
-			$emailasusername = ComponentParams::getParam('emailasusername', 0);
-
-			$stateVars = (object)array(
-				'firstrun'      => $firstRun,
-				'slug'          => $this->getState('slug', '', 'string'),
-				'id'            => $this->getState('id', 0, 'int'),
-				'paymentmethod' => $this->getState('paymentmethod', 'none', 'cmd'),
-				'processorkey'  => $this->getState('processorkey', '', 'raw'),
-				'username'      => $this->getState('username', '', 'string'),
-				'password'      => $this->getState('password', '', 'raw'),
-				'password2'     => $this->getState('password2', '', 'raw'),
-				'name'          => $this->getState('name', '', 'string'),
-				'email'         => $this->getState('email', '', 'string'),
-				'email2'        => $this->getState('email2', '', 'string'),
-				'address1'      => $this->getState('address1', '', 'string'),
-				'address2'      => $this->getState('address2', '', 'string'),
-				'country'       => $this->getState('country', '', 'cmd'),
-				'state'         => $this->getState('state', '', 'cmd'),
-				'city'          => $this->getState('city', '', 'string'),
-				'zip'           => $this->getState('zip', '', 'string'),
-				'isbusiness'    => $this->getState('isbusiness', '', 'int'),
-				'businessname'  => $this->getState('businessname', '', 'string'),
-				'occupation'    => $this->getState('occupation', '', 'string'),
-				'vatnumber'     => $this->getState('vatnumber', '', 'cmd'),
-				'coupon'        => $this->getState('coupon', '', 'string'),
-				'custom'        => $this->getState('custom', '', 'raw'),
-				'subcustom'     => $this->getState('subcustom', '', 'raw'),
-				'opt'           => $this->getState('opt', '', 'cmd')
-			);
-
-			if (empty($stateVars->id) && !empty($stateVars->slug))
-			{
-				/** @var Levels $levelsModel */
-				$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
-				$item = $levelsModel->slug($stateVars->slug)->firstOrNew();
-				$stateVars->id = $item->akeebasubs_level_id;
-			}
-
-			if ($emailasusername && (JFactory::getUser()->guest))
-			{
-				$stateVars->username = $stateVars->email;
-			}
+			$stateVars = new StateData($this);
 		}
 
 		return $stateVars;
@@ -2635,7 +2508,6 @@ class Subscribe extends Model
 		// Step #8. Clear the session
 		// ----------------------------------------------------------------------
 		$session = JFactory::getSession();
-		$session->set('validation_cache_data', null, 'com_akeebasubs');
 		$session->set('apply_validation.' . $state->id, null, 'com_akeebasubs');
 
 		// Step #9. Call the specific plugin's onAKPaymentNew() method and get the redirection URL,
