@@ -8,7 +8,6 @@
 namespace Akeeba\Subscriptions\Site\Model;
 
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
@@ -118,7 +117,10 @@ class Subscribe extends Model
 		switch ($state->opt)
 		{
 			case 'username':
-				$response->validation = $this->validateUsernamePassword();
+				$response->validation = (object)[
+					'username' => $this->getValidator('username')->execute(),
+					'password' => $this->getValidator('password')->execute()
+				];
 				break;
 
 			// Perform validations on plugins only
@@ -127,10 +129,10 @@ class Subscribe extends Model
 				break;
 
 			default:
-				$response->validation = $this->_validateState();
+				$response->validation = (object)$this->getValidator('PersonalInformation')->execute();
 				$response->validation->username = $this->getValidator('username')->execute();
 				$response->validation->password = $this->getValidator('password')->execute();
-				$response->price = $this->getValidator('Price')->execute();
+				$response->price = (object)$this->getValidator('Price')->execute();
 
 				$pluginResponse = $this->pluginValidation();
 				$response->custom_validation = $pluginResponse->custom_validation;
@@ -173,97 +175,6 @@ class Subscribe extends Model
 		$ret['subscription_custom_valid'] = $subcustomResponse->subscription_custom_valid;
 
 		return (object)$ret;
-	}
-
-	/**
-	 * Validates the username for uniqueness
-	 */
-	private function validateUsernamePassword()
-	{
-		return (object)[
-			'username' => $this->getValidator('username')->execute(),
-			'password' => $this->getValidator('password')->execute()
-		];
-	}
-
-	/**
-	 * Validates the state data for completeness
-	 */
-	private function _validateState()
-	{
-		$state = $this->getStateVariables();
-
-		$personalInfo = ComponentParams::getParam('personalinfo', 1);
-		$requireCoupon = ComponentParams::getParam('reqcoupon', 0) ? true : false;
-
-		// 1. Basic checks
-		$ret = array(
-			'name'         => !empty($state->name),
-			'email'        => !empty($state->email),
-			'email2'       => !empty($state->email2) && ($state->email == $state->email2),
-			'address1'     => $personalInfo == 1 ? !empty($state->address1) : true,
-			'country'      => $personalInfo != 0 ? !empty($state->country) : true,
-			'state'        => $personalInfo == 1 ? !empty($state->state) : true,
-			'city'         => $personalInfo == 1 ? !empty($state->city) : true,
-			'zip'          => $personalInfo == 1 ? !empty($state->zip) : true,
-			'businessname' => $personalInfo == 1 ? !empty($state->businessname) : true,
-			'vatnumber'    => $personalInfo == 1 ? !empty($state->vatnumber) : true,
-			'coupon'       => $personalInfo == 1 ? !empty($state->coupon) : true,
-		);
-
-		$ret['rawDataForDebug'] = (array)$state;
-
-		// Name validation
-		$ret['name'] = $this->getValidator('Name')->execute();
-
-		// Email validation
-		$ret['email'] = $this->getValidator('Email')->execute();
-
-		// 2. Country validation
-		$ret['country'] = $this->getValidator('Country')->execute();
-
-		// 3. State validation
-		$ret['state'] = $this->getValidator('State')->execute();
-
-		// 4. Business validation
-		$businessValidation = $this->getValidator('Business')->execute();
-		$ret['businessname'] = $businessValidation['businessname'];
-		$ret['occupation'] = $businessValidation['occupation'];
-		$ret['vatnumber'] = $businessValidation['vatnumber'];
-		$ret['novatrequired'] = $businessValidation['novatrequired'];
-
-		// After the business validation $this->state->vatnumber contains the reformatted VAT number
-		$this->setState('vatnumber', $state->vatnumber);
-
-		// 5. Coupon validation
-		$ret['coupon'] = $this->_validateCoupon(!$requireCoupon);
-
-		return (object)$ret;
-	}
-
-	/**
-	 * Validates a coupon code, making sure it exists, it's activated, it's not expired,
-	 * it applies to the specific subscription and user.
-	 *
-	 * @param   bool  $validIfNotExists
-	 * @param   bool  $force
-	 *
-	 * @return bool
-	 */
-	private function _validateCoupon($validIfNotExists = true, $force = false)
-	{
-		$couponValidation = $this->getValidator('Coupon')->execute($force);
-
-		$valid = $couponValidation['valid'];
-		/** @var Coupons $coupon */
-		$coupon = $couponValidation['coupon'];
-
-		if (!$valid && $validIfNotExists && !$couponValidation['couponFound'])
-		{
-			$valid = true;
-		}
-
-		return $valid;
 	}
 
 	/**

@@ -8,6 +8,7 @@
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
+use Akeeba\Subscriptions\Site\Model\TaxRules;
 use Akeeba\Subscriptions\Site\Model\TaxHelper;
 
 defined('_JEXEC') or die;
@@ -15,9 +16,9 @@ defined('_JEXEC') or die;
 class Price extends Base
 {
 	/**
-	 * Get the validation result.
+	 * Return the pricing information.
 	 *
-	 * @return  bool
+	 * @return  array
 	 */
 	protected function getValidationResult()
 	{
@@ -87,7 +88,7 @@ class Price extends Base
 			$recurringAmount = $grossAmount - $signUp - $signUpTax;
 		}
 
-		$result = (object)array(
+		$result = array(
 			'net'        => sprintf('%1.02F', round($netPrice, 2)),
 			'realnet'    => sprintf('%1.02F', round($basePriceStructure['levelNet'], 2)),
 			'signup'     => sprintf('%1.02F', round($signUp, 2)),
@@ -107,17 +108,20 @@ class Price extends Base
 			'tax_match'  => $taxRule->match,
 			'tax_fuzzy'  => $taxRule->fuzzy,
 		);
+
+		return $result;
 	}
 
 	/**
 	 * Gets the applicable tax rule based on the state variables
+	 *
+	 * @return  TaxRules  The applicable tax rule
 	 */
 	private function getTaxRule()
 	{
 		// Do we have a VIES registered VAT number?
-		// TODO Move _validateState into PersonalInformation validator
 		$validation = $this->factory->getValidator('PersonalInformation')->execute();
-		$isVIES = $validation->vatnumber && EUVATInfo::isEUVATCountry($this->state->country);
+		$isVIES = $validation['vatnumber'] && EUVATInfo::isEUVATCountry($this->state->country);
 
 		/** @var TaxHelper $taxModel */
 		$taxModel = $this->container->factory->model('TaxHelper')->tmpInstance();
