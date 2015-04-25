@@ -17,25 +17,33 @@ class BasePrice extends Base
 	/**
 	 * Get the base price including the sign-up fee and any price modifiers set by the plugins
 	 *
-	 * @return  float
+	 * @return  array    basePrice, net, signUp, isRecurring
 	 */
 	protected function getValidationResult()
 	{
+		$ret = [
+			'levelNet'    => 0.0,
+			'basePrice'   => 0.0, // Base price, including sign-up and surcharges
+			'signUp'      => 0.0, // Sign-up fee applied
+			'isRecurring' => false
+		];
+
 		// Get the subscription level and the default sign-up fee
 		/** @var Levels $level */
 		$level = $this->container->factory->model('Levels')->tmpInstance();
 		$level->find($this->state->id);
 		$signup_fee = $level->signupfee;
+		$ret['levelNet'] = (float)$level->price;
 
 		// If the user is already a subscriber to this level do not charge a sign-up fee
 		$subIDs = array();
-		$user = \JFactory::getUser();
+		$user   = \JFactory::getUser();
 
 		if ($user->id)
 		{
 			/** @var Subscriptions $subscriptionsModel */
 			$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
-			$mysubs = $subscriptionsModel
+			$mysubs             = $subscriptionsModel
 				->user_id($user->id)
 				->paystate('C')
 				->get(true);
@@ -57,7 +65,10 @@ class BasePrice extends Base
 		}
 
 		// Get the default price value
-		$netPrice = (float)$level->price + (float)$signup_fee;
+		$basePrice = (float)$level->price + (float)$signup_fee;
+
+		$ret['signup']      = (float)$signup_fee;
+		$ret['isRecurring'] = $level->recurring;
 
 		// Net price modifiers (via plugins)
 		$price_modifier = 0;
@@ -67,8 +78,8 @@ class BasePrice extends Base
 
 		$priceValidationData = array_merge(
 			(array)$this->state, array(
-				'level' => $level,
-				'netprice' => $netPrice
+				'level'    => $level,
+				'netprice' => $basePrice
 			)
 		);
 
@@ -89,9 +100,11 @@ class BasePrice extends Base
 			}
 		}
 
-		$netPrice += $price_modifier;
+		$basePrice += $price_modifier;
 
-		return $netPrice;
+		$ret['basePrice'] = $basePrice;
+
+		return $ret;
 	}
 
 }

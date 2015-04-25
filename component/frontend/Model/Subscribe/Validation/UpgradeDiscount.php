@@ -38,7 +38,8 @@ class UpgradeDiscount extends Base
 		$state = $this->state;
 
 		// Get the current subscription base price
-		$basePrice = $this->factory->getValidator('BasePrice')->execute();
+		$basePriceStructure = $this->factory->getValidator('BasePrice')->execute();
+		$basePrice = $basePriceStructure['basePrice'];
 
 		// If this is a free subscription we don't have a discount.
 		if ($basePrice <= 0.001)

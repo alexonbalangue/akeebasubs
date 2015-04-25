@@ -257,7 +257,8 @@ class Subscribe extends Model
 		{
 			$this->getStateVariables($force);
 
-			$netPrice = $this->getValidator('BasePrice')->execute();
+			$basePriceStructure = $this->factory->getValidator('BasePrice')->execute();
+			$netPrice = $basePriceStructure['basePrice'];
 
 			$couponStructure = $this->getValidator('CouponDiscount')->execute();
 			$couponDiscount = $couponStructure['value'];
@@ -293,7 +294,6 @@ class Subscribe extends Model
 			// Note: do not reset the oldsup and expiration fields. Subscription level relations must not be bound
 			// to the discount.
 
-			// TODO Refactor from here onwards
 			// Get the applicable tax rule
 			$taxRule = $this->_getTaxRule();
 
@@ -314,16 +314,19 @@ class Subscribe extends Model
 			// Calculate the recurring amount, if necessary
 			$recurringAmount = 0;
 
-			if ($level->recurring && (abs($signup_fee) >= 0.01))
+			// Sign-up fee
+			$signUp = $basePriceStructure['signUp'];
+
+			if ($basePriceStructure['isRecurring'])
 			{
-				$rectaxAmount = 0.01 * ($taxRule->taxrate * $level->price);
-				$recurringAmount = 0.01 * (100 * $level->price + 100 * $rectaxAmount);
+				$signUpTax = 0.01 * ($taxRule->taxrate * $signUp);
+				$recurringAmount = $grossAmount - $signUp - $signUpTax;
 			}
 
 			$result = (object)array(
 				'net'        => sprintf('%1.02F', round($netPrice, 2)),
-				'realnet'    => sprintf('%1.02F', round($level->price, 2)),
-				'signup'     => sprintf('%1.02F', round($signup_fee, 2)),
+				'realnet'    => sprintf('%1.02F', round($basePriceStructure['levelNet'], 2)),
+				'signup'     => sprintf('%1.02F', round($signUp, 2)),
 				'discount'   => sprintf('%1.02F', round($discount, 2)),
 				'taxrate'    => sprintf('%1.02F', (float)$taxRule->taxrate),
 				'tax'        => sprintf('%1.02F', round($taxAmount, 2)),

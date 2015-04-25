@@ -101,7 +101,8 @@ class UpgradeExpiredDiscount extends Base
 		}
 
 		// Get the current subscription level's price
-		$basePrice = $this->factory->getValidator('BasePrice')->execute();
+		$basePriceStructure = $this->factory->getValidator('BasePrice')->execute();
+		$basePrice = $basePriceStructure['basePrice'];
 
 		if ($basePrice <= 0.001)
 		{
