@@ -130,7 +130,7 @@ class Subscribe extends Model
 				$response->validation = $this->_validateState();
 				$response->validation->username = $this->getValidator('username')->execute();
 				$response->validation->password = $this->getValidator('password')->execute();
-				$response->price = $this->validatePrice();
+				$response->price = $this->getValidator('Price')->execute();
 
 				$pluginResponse = $this->pluginValidation();
 				$response->custom_validation = $pluginResponse->custom_validation;
@@ -242,113 +242,6 @@ class Subscribe extends Model
 	}
 
 	/**
-	 * Calculates the level's price applicable to the specific user and the
-	 * actual state information
-	 *
-	 * @param   bool  $force  Set true to force recalculation of the price validation
-	 *
-	 * @return  \stdClass
-	 */
-	public function validatePrice($force = false)
-	{
-		static $result = null;
-
-		if (is_null($result) || $force)
-		{
-			$this->getStateVariables($force);
-
-			$basePriceStructure = $this->factory->getValidator('BasePrice')->execute();
-			$netPrice = $basePriceStructure['basePrice'];
-
-			$couponStructure = $this->getValidator('CouponDiscount')->execute();
-			$couponDiscount = $couponStructure['value'];
-
-			// Automatic discount (upgrade rules, subscription level relations) validation
-			$discountStructure = $this->getValidator('BestAutomaticDiscount')->execute();
-			$autoDiscount = $discountStructure['discount'];
-
-			// Should I use the coupon code or the automatic discount?
-			$useCoupon = false;
-			$useAuto = true;
-
-			if ($couponStructure['valid'])
-			{
-				if ($autoDiscount > $couponDiscount)
-				{
-					$useCoupon = false;
-					$useAuto = true;
-					$couponStructure['coupon_id'] = null;
-				}
-				else
-				{
-					$useAuto = false;
-					$useCoupon = true;
-					$discountStructure['upgrade_id'] = null;
-				}
-			}
-
-			$discount = $useCoupon ? $couponDiscount : $autoDiscount;
-			$couponid = is_null($couponStructure['coupon_id']) ? 0 : $couponStructure['coupon_id'];
-			$upgradeid = is_null($discountStructure['upgrade_id']) ? 0 : $discountStructure['upgrade_id'];
-
-			// Note: do not reset the oldsup and expiration fields. Subscription level relations must not be bound
-			// to the discount.
-
-			// Get the applicable tax rule
-			$taxRule = $this->_getTaxRule();
-
-			// Calculate the base price minimising rounding errors
-			$basePrice = 0.01 * (100 * $netPrice - 100 * $discount);
-
-			if ($basePrice < 0.01)
-			{
-				$basePrice = 0;
-			}
-
-			// Calculate the tax amount minimising rounding errors
-			$taxAmount = 0.01 * ($taxRule->taxrate * $basePrice);
-
-			// Calculate the gross amount minimising rounding errors
-			$grossAmount = 0.01 * (100 * $basePrice + 100 * $taxAmount);
-
-			// Calculate the recurring amount, if necessary
-			$recurringAmount = 0;
-
-			// Sign-up fee
-			$signUp = $basePriceStructure['signUp'];
-
-			if ($basePriceStructure['isRecurring'])
-			{
-				$signUpTax = 0.01 * ($taxRule->taxrate * $signUp);
-				$recurringAmount = $grossAmount - $signUp - $signUpTax;
-			}
-
-			$result = (object)array(
-				'net'        => sprintf('%1.02F', round($netPrice, 2)),
-				'realnet'    => sprintf('%1.02F', round($basePriceStructure['levelNet'], 2)),
-				'signup'     => sprintf('%1.02F', round($signUp, 2)),
-				'discount'   => sprintf('%1.02F', round($discount, 2)),
-				'taxrate'    => sprintf('%1.02F', (float)$taxRule->taxrate),
-				'tax'        => sprintf('%1.02F', round($taxAmount, 2)),
-				'gross'      => sprintf('%1.02F', round($grossAmount, 2)),
-				'recurring'  => sprintf('%1.02F', round($recurringAmount, 2)),
-				'usecoupon'  => $useCoupon ? 1 : 0,
-				'useauto'    => $useAuto ? 1 : 0,
-				'couponid'   => $couponid,
-				'upgradeid'  => $upgradeid,
-				'oldsub'     => $discountStructure['oldsub'],
-				'allsubs'    => $discountStructure['allsubs'],
-				'expiration' => $discountStructure['expiration'],
-				'taxrule_id' => $taxRule->id,
-				'tax_match'  => $taxRule->match,
-				'tax_fuzzy'  => $taxRule->fuzzy,
-			);
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Validates a coupon code, making sure it exists, it's activated, it's not expired,
 	 * it applies to the specific subscription and user.
 	 *
@@ -371,22 +264,6 @@ class Subscribe extends Model
 		}
 
 		return $valid;
-	}
-
-	/**
-	 * Gets the applicable tax rule based on the state variables
-	 */
-	private function _getTaxRule()
-	{
-		// Do we have a VIES registered VAT number?
-		$validation = $this->_validateState();
-		$state = $this->getStateVariables();
-		$isVIES = $validation->vatnumber && EUVATInfo::isEUVATCountry($state->country);
-
-		/** @var TaxHelper $taxModel */
-		$taxModel = $this->container->factory->model('TaxHelper')->tmpInstance();
-
-		return $taxModel->getTaxRule($state->id, $state->country, $state->state, $state->city, $isVIES);
 	}
 
 	/**
@@ -1091,7 +968,7 @@ class Subscribe extends Model
 			$subcustom = (array)$subcustom;
 		}
 
-		$priceValidation = $this->validatePrice();
+		$priceValidation = $this->getValidator('Price')->execute();
 
 		$subcustom['fixdates'] = array(
 			'oldsub'     => $priceValidation->oldsub,
