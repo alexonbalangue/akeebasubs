@@ -1014,9 +1014,7 @@ class Subscribe extends Model
 	{
 		$state = $this->getStateVariables();
 
-		$rawDataPost = JRequest::get('POST', 2);
-		$rawDataGet = JRequest::get('GET', 2);
-		$data = array_merge($rawDataGet, $rawDataPost);
+		$data = $this->input->getData();
 
 		// Some plugins result in an empty Itemid being added to the request
 		// data, screwing up the payment callback validation in some cases (e.g.
