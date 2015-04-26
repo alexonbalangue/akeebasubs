@@ -1,9 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nikosdion
- * Date: 24/4/15
- * Time: 11:43
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe;
@@ -13,6 +12,11 @@ defined('_JEXEC') or die;
 use Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 use FOF30\Container\Container;
 
+/**
+ * Factory for validator objects
+ *
+ * @package Akeeba\Subscriptions\Site\Model\Subscribe
+ */
 class ValidatorFactory
 {
 	/** @var   array   Already created validator objects */

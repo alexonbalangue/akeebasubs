@@ -14,7 +14,7 @@ use Akeeba\Subscriptions\Site\Model\JoomlaUsers;
 class Email extends Base
 {
 	/**
-	 * Get the validation result.
+	 * Validate the Email field
 	 *
 	 * @return  bool
 	 */

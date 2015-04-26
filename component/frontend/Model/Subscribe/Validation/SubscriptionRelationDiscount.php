@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
+defined('_JEXEC') or die;
+
 use Akeeba\Subscriptions\Site\Model\Subscriptions;
 use Akeeba\Subscriptions\Site\Model\Relations;
 
@@ -14,6 +16,10 @@ class SubscriptionRelationDiscount extends Base
 {
 	/**
 	 * Get the information for applying a subscription level relation discount rule
+	 *
+	 * Uses:
+	 * 		BasePrice
+	 * 		BestUpgradeDiscount
 	 *
 	 * @return  array  discount, relation, oldsub, allsubs
 	 */

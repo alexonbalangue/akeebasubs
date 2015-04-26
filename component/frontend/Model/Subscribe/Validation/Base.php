@@ -1,9 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: nikosdion
- * Date: 24/4/15
- * Time: 11:15
+ * @package   AkeebaSubs
+ * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @license   GNU General Public License version 3, or later
  */
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
@@ -14,6 +13,11 @@ use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;
 use FOF30\Container\Container;
 
+/**
+ * Base class for the Validator objects
+ *
+ * @package Akeeba\Subscriptions\Site\Model\Subscribe\Validation
+ */
 abstract class Base
 {
 	/** @var  Container  The Container of the component */
@@ -47,7 +51,7 @@ abstract class Base
 	 *
 	 * @return  $this  for chaining
 	 */
-	public function reset()
+	final public function reset()
 	{
 		$this->result = null;
 
@@ -61,7 +65,7 @@ abstract class Base
 	 *
 	 * @return  mixed  The (cached) validation results
 	 */
-	public function execute($force = false)
+	final public function execute($force = false)
 	{
 		if ($force)
 		{

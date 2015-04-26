@@ -17,6 +17,10 @@ class CouponDiscount extends Base
 	/**
 	 * Get the discount from applying a coupon
 	 *
+	 * Uses:
+	 * 		BasePrice
+	 * 		Coupon
+	 *
 	 * @return  array
 	 */
 	protected function getValidationResult()

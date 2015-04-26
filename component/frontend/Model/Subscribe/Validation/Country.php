@@ -15,7 +15,7 @@ use Akeeba\Subscriptions\Admin\Helper\Select;
 class Country extends Base
 {
 	/**
-	 * Get the validation result.
+	 * Validates the Country field
 	 *
 	 * @return  bool
 	 */

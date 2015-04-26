@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 class Name extends Base
 {
 	/**
-	 * Get the validation result.
+	 * Validate the Name field
 	 *
 	 * @return  bool
 	 */

@@ -7,14 +7,22 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-
 defined('_JEXEC') or die;
+
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class PersonalInformation extends Base
 {
 	/**
-	 * Get the validation results for all personal information
+	 * Get the validation results for all personal information.
+	 *
+	 * Uses:
+	 * 		Name
+	 * 		Email
+	 * 		Country
+	 * 		State
+	 * 		Business
+	 * 		Coupon
 	 *
 	 * @return  bool
 	 */

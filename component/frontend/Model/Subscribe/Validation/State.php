@@ -15,7 +15,7 @@ use Akeeba\Subscriptions\Admin\Helper\Select;
 class State extends Base
 {
 	/**
-	 * Get the validation result.
+	 * Validates the State field (part of address)
 	 *
 	 * @return  bool
 	 */

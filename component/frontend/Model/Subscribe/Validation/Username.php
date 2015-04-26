@@ -13,7 +13,7 @@ use Akeeba\Subscriptions\Site\Model\JoomlaUsers;
 use Akeeba\Subscriptions\Site\Model\Subscribe;
 
 /**
- * Validates the username and the password
+ * Validates the username
  *
  * @package Akeeba\Subscriptions\Site\Model\Subscribe\Validation
  */

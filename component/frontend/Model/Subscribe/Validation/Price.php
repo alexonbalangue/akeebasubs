@@ -7,16 +7,22 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
+defined('_JEXEC') or die;
+
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Site\Model\TaxRules;
 use Akeeba\Subscriptions\Site\Model\TaxHelper;
-
-defined('_JEXEC') or die;
 
 class Price extends Base
 {
 	/**
 	 * Return the pricing information.
+	 *
+	 * Uses
+	 * 		BasePrice
+	 * 		CouponDiscount
+	 * 		BestAutomaticDiscount
+	 * 		PersonalInformation
 	 *
 	 * @return  array
 	 */

@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
+defined('_JEXEC') or die;
+
 class BestAutomaticDiscount extends Base
 {
 	/**

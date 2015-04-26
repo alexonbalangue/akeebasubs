@@ -15,7 +15,7 @@ use Akeeba\Subscriptions\Site\Model\Subscriptions;
 class Coupon extends Base
 {
 	/**
-	 * Get the validation result. Returns an array:
+	 * Validates the Coupon field. Returns an array:
 	 * couponFound	True if we found a coupon code. If this is true and valid is false the coupon was found but its
 	 * 				conditions did not validate
 	 * coupon		The validated Coupons object, or null if there is no valid coupon found

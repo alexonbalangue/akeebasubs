@@ -17,7 +17,7 @@ use Akeeba\Subscriptions\Site\Model\Users;
 class Business extends Base
 {
 	/**
-	 * Get the validation result.
+	 * Validate the business fields: business name, activity, VAT number
 	 *
 	 * @return  array
 	 */

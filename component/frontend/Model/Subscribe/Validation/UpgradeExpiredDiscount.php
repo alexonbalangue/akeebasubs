@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
+defined('_JEXEC') or die;
+
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Site\Model\Upgrades;
 
@@ -14,6 +16,9 @@ class UpgradeExpiredDiscount extends Base
 {
 	/**
 	 * Get the discount from applying an upgrade rule for expired subscriptions
+	 *
+	 * Uses
+	 * 		BasePrice
 	 *
 	 * @return  array  upgrade_id, value
 	 */
