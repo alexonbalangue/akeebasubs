@@ -43,7 +43,7 @@ class Email extends Base
 			}
 
 			// This is the currently loaded user. Of course we can have the same email address.
-			if ($item->id == \JFactory::getUser()->id)
+			if ($item->id == $this->jUser->id)
 			{
 				continue;
 			}

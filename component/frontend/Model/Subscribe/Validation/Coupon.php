@@ -92,7 +92,7 @@ class Coupon extends Base
 			// Check user
 			if ($valid && $coupon->user)
 			{
-				$user_id = \JFactory::getUser()->id;
+				$user_id = $this->jUser->id;
 				$valid = $user_id == $coupon->user;
 			}
 
@@ -106,7 +106,7 @@ class Coupon extends Base
 			if ($valid && !empty($coupon->usergroups))
 			{
 				$groups = explode(',', $coupon->usergroups);
-				$ugroups = \JFactory::getUser()->getAuthorisedGroups();
+				$ugroups = $this->jUser->getAuthorisedGroups();
 				$valid = 0;
 
 				foreach ($ugroups as $ugroup)
@@ -145,9 +145,9 @@ class Coupon extends Base
 			}
 
 			// Check user hits limit
-			if ($valid && $coupon->userhits && !\JFactory::getUser()->guest)
+			if ($valid && $coupon->userhits && !$this->jUser->guest)
 			{
-				$user_id = \JFactory::getUser()->id;
+				$user_id = $this->jUser->id;
 
 				// How many subscriptions with a paystate of C,P for this user
 				// are using this coupon code?

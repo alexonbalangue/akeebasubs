@@ -138,7 +138,7 @@ class Business extends Base
 		$useCachedResult = false;
 
 		// ...I have to be logged in...
-		if (!\JFactory::getUser()->guest)
+		if (!$this->jUser->guest)
 		{
 			// ...and I must have my viesregistered flag set to 2
 			// and my VAT number must match the saved record.
@@ -146,7 +146,7 @@ class Business extends Base
 			$subsUsersModel = $this->container->factory->model('Users')->tmpInstance();
 
 			$userparams = $subsUsersModel
-				->getMergedData(\JFactory::getUser()->id);
+				->getMergedData($this->jUser->id);
 
 			if (($userparams->viesregistered == 2) && ($userparams->vatnumber == $vatNumber))
 			{

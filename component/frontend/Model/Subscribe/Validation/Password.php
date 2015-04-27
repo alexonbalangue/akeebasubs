@@ -25,8 +25,7 @@ class Password extends Base
 	 */
 	public function getValidationResult()
 	{
-		$username = $this->state->username;
-		$myUser   = \JFactory::getUser();
+		$myUser   = $this->jUser;
 
 		// Password is always valid for logged in users (of course!)
 		if (!$myUser->guest)

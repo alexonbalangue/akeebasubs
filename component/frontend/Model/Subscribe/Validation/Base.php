@@ -12,6 +12,7 @@ defined('_JEXEC') or die;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;
 use FOF30\Container\Container;
+use JUser;
 
 /**
  * Base class for the Validator objects
@@ -29,6 +30,9 @@ abstract class Base
 	/** @var  ValidatorFactory  The validator factory */
 	protected $factory = null;
 
+	/** @var  JUser  The current user's object  */
+	protected $jUser = null;
+
 	/** @var  mixed  The (cached) result of this validation class */
 	protected $result = null;
 
@@ -38,12 +42,14 @@ abstract class Base
 	 * @param   Container         $container  The container of the component
 	 * @param   StateData         $state      State data to operate on
 	 * @param   ValidatorFactory  $factory    The validator factory
+	 * @param   JUser             $jUser      The Joomla! user object of the user we're validating against
 	 */
-	public function __construct(Container $container, StateData $state, ValidatorFactory $factory)
+	public function __construct(Container $container, StateData $state, ValidatorFactory $factory, JUser $jUser)
 	{
 		$this->container = $container;
-		$this->state = $state;
-		$this->factory = $factory;
+		$this->state     = $state;
+		$this->factory   = $factory;
+		$this->jUser     = $jUser;
 	}
 
 	/**

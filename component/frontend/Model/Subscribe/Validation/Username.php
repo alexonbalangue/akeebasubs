@@ -27,7 +27,7 @@ class Username extends Base
 	public function getValidationResult()
 	{
 		$username = trim($this->state->username);
-		$myUser   = \JFactory::getUser();
+		$myUser   = $this->jUser;
 
 		// No username specified, that's invalid
 		if (empty($username))

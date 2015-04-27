@@ -33,7 +33,7 @@ class UpgradeExpiredDiscount extends Base
 
 		// Check that we do have a user (if there's no logged in user, we have
 		// no subscription information, ergo upgrades are not applicable!)
-		$user_id = \JFactory::getUser()->id;
+		$user_id = $this->jUser->id;
 
 		if (empty($user_id))
 		{

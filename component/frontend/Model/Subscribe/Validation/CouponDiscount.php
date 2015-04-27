@@ -133,7 +133,7 @@ class CouponDiscount extends Base
 	 */
 	private function getLatestPayments()
 	{
-		$user = \JFactory::getUser();
+		$user = $this->jUser;
 
 		// Not logged in? No last payment.
 		if ($user->guest)

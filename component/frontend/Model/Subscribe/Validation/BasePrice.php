@@ -37,7 +37,7 @@ class BasePrice extends Base
 
 		// If the user is already a subscriber to this level do not charge a sign-up fee
 		$subIDs = array();
-		$user   = \JFactory::getUser();
+		$user   = $this->jUser;
 
 		if ($user->id)
 		{

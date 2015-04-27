@@ -42,7 +42,7 @@ class SubscriptionRelationDiscount extends Base
 			'allsubs'  => [],
 		];
 
-		if (!\JFactory::getUser()->guest)
+		if (!$this->jUser->guest)
 		{
 			return $combinedReturn;
 		}
@@ -79,7 +79,7 @@ class SubscriptionRelationDiscount extends Base
 			// Get all of the user's paid subscriptions with an expiration date
 			// in the future in the source_level_id of the rule.
 			$jNow = $this->container->platform->getDate();
-			$user_id = \JFactory::getUser()->id;
+			$user_id = $this->jUser->id;
 
 			/** @var Subscriptions $subscriptionsModel */
 			$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();

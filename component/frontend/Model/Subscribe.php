@@ -69,7 +69,7 @@ class Subscribe extends Model
 	{
 		parent::__construct($container, $config);
 
-		$this->validatorFactory = new ValidatorFactory($this->container, $this->getStateVariables());
+		$this->validatorFactory = new ValidatorFactory($this->container, $this->getStateVariables(), JFactory::getUser());
 	}
 
 	/**
