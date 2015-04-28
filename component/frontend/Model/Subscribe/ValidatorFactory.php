@@ -73,6 +73,19 @@ class ValidatorFactory
 	}
 
 	/**
+	 * Used in Unit Tests. Replaces or sets a validation object in the factory.
+	 *
+	 * @param   string          $type       The validator type to replace/set
+	 * @param   Validation\Base $validator  The validator object for this type
+	 *
+	 * @return  void
+	 */
+	public function setValidator($type, $validator)
+	{
+		$this->validators[$type] = $validator;
+	}
+
+	/**
 	 * Reset the validator manager. It expunges all validators from memory.
 	 */
 	public function reset()

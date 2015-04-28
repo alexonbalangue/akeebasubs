@@ -190,4 +190,25 @@ class StateData
 			$this->username = $this->email;
 		}
 	}
+
+	/**
+	 * Reset the state attributes to their default values
+	 *
+	 * @return  void
+	 */
+	public function reset()
+	{
+		$properties = get_object_vars($this);
+
+		foreach ($properties as $k => $v)
+		{
+			$this->$k = '';
+		}
+
+		$this->firstrun = false;
+		$this->id = 0;
+		$this->isbusiness = 0;
+		$this->custom = [];
+		$this->subcustom = [];
+	}
 }
