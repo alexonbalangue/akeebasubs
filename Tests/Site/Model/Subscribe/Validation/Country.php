@@ -12,9 +12,9 @@ use Akeeba\Subscriptions\Admin\Helper\Select;
 use Akeeba\Subscriptions\Tests\Stubs\ValidatorTest;
 
 /**
- * Test the Name validator
+ * Test the Country validator
  *
- * @covers Akeeba\Subscriptions\Site\Model\Subscribe\Validation\Name
+ * @covers Akeeba\Subscriptions\Site\Model\Subscribe\Validation\Country
  */
 class Country extends ValidatorTest
 {
