@@ -82,6 +82,16 @@ class ValidatorFactory
 	 */
 	public function setValidator($type, $validator)
 	{
+		if (is_null($validator))
+		{
+			if (isset($this->validators[$type]))
+			{
+				unset ($this->validators[$type]);
+			}
+
+			return;
+		}
+
 		$this->validators[$type] = $validator;
 	}
 

@@ -109,16 +109,29 @@ abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetValidationResult($state, $expected, $message)
 	{
+		// Reset the state data
 		static::$state->reset();
 
+		// Apply the new state data
 		foreach ($state as $k => $v)
 		{
 			static::$state->$k = $v;
 		}
 
+		// Replace the JUser object in the ValidatorFactory
+		$factoryReflector = new \ReflectionObject(static::$factory);
+		$jUserProperty = $factoryReflector->getProperty('jUser');
+		$jUserProperty->setAccessible(true);
+		$jUserProperty->setValue(static::$factory, static::$jUser);
+
+		// Force create a new validator object
+		static::$factory->setValidator(self::$validatorType, null);
 		$validator = static::$factory->getValidator(self::$validatorType);
+
+		// Forcibly execute the validator and get the actual value
 		$actual = $validator->execute(true);
 
+		// Assert the actual value matches the expected value
 		$this->assertEquals($expected, $actual, $message);
 	}
 

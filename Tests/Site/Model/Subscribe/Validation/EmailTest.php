@@ -38,6 +38,7 @@ class EmailTest extends ValidatorTestCase
 			'email'     => 'user1@test.web',
 			'block'     => 0,
 			'groups'    => [2],
+			'guest'		=> 0,
 		]);
 
 		// Not a typo! For some reason I have to try creating user1 TWICE for it to be created. ONLY user1. No idea!
@@ -47,6 +48,7 @@ class EmailTest extends ValidatorTestCase
 			'email'     => 'user1@test.web',
 			'block'     => 0,
 			'groups'    => [2],
+			'guest'		=> 0,
 		]);
 
 		self::$users['user2'] = self::userCreate([
@@ -55,6 +57,7 @@ class EmailTest extends ValidatorTestCase
 			'email'     => 'user2@test.web',
 			'block'     => 1,
 			'groups'    => [2],
+			'guest'		=> 0,
 		]);
 	}
 
