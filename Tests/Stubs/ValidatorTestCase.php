@@ -138,8 +138,22 @@ abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$user = new JUser($userId);
-		$user->delete();
+		$db = \JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+			->delete('#__users')
+			->where($db->qn('id') . ' = ' . $db->q($userId));
+		$db->setQuery($query)->execute();
+
+		$query = $db->getQuery(true)
+			->delete('#__user_usergroup_map')
+			->where($db->qn('user_id') . ' = ' . $db->q($userId));
+		$db->setQuery($query)->execute();
+
+		$query = $db->getQuery(true)
+			->delete('#__user_profiles')
+			->where($db->qn('user_id') . ' = ' . $db->q($userId));
+		$db->setQuery($query)->execute();
 	}
 
 	/**
