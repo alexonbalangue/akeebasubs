@@ -21,32 +21,6 @@ class PasswordTest extends ValidatorTestCase
 		self::$validatorType = 'Password';
 
 		parent::setUpBeforeClass();
-
-		// Create users afresh
-		self::$users = [
-			'guest' => clone self::$jUser
-		];
-
-		self::userDelete('user1');
-
-		self::$users['user1'] = self::userCreate([
-			'name'     => 'User One',
-			'username' => 'user1',
-			'email'    => 'user1@test.web',
-			'block'    => 0,
-			'groups'   => [2],
-			'guest'    => 0,
-		]);
-
-		// Not a typo! For some reason I have to try creating user1 TWICE for it to be created. ONLY user1. No idea!
-		self::$users['user1'] = self::userCreate([
-			'name'     => 'User One',
-			'username' => 'user1',
-			'email'    => 'user1@test.web',
-			'block'    => 0,
-			'groups'   => [2],
-			'guest'    => 0,
-		]);
 	}
 
 	public function getTestData()

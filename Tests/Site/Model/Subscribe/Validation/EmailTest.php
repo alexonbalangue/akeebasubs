@@ -23,42 +23,6 @@ class EmailTest extends ValidatorTestCase
 
 		// Create the base objects
 		parent::setUpBeforeClass();
-
-		// Create users afresh
-		self::$users = [
-			'guest' => clone self::$jUser
-		];
-
-		self::userDelete('user1');
-		self::userDelete('user2');
-
-		self::$users['user1'] = self::userCreate([
-			'name'      => 'User One',
-			'username'  => 'user1',
-			'email'     => 'user1@test.web',
-			'block'     => 0,
-			'groups'    => [2],
-			'guest'		=> 0,
-		]);
-
-		// Not a typo! For some reason I have to try creating user1 TWICE for it to be created. ONLY user1. No idea!
-		self::$users['user1'] = self::userCreate([
-			'name'      => 'User One',
-			'username'  => 'user1',
-			'email'     => 'user1@test.web',
-			'block'     => 0,
-			'groups'    => [2],
-			'guest'		=> 0,
-		]);
-
-		self::$users['user2'] = self::userCreate([
-			'name'      => 'User Two',
-			'username'  => 'user2',
-			'email'     => 'user2@test.web',
-			'block'     => 1,
-			'groups'    => [2],
-			'guest'		=> 0,
-		]);
 	}
 
 	public function getTestData()
@@ -78,7 +42,15 @@ class EmailTest extends ValidatorTestCase
 					'email' => 'user2@test.web'
 				],
 				'expected' => false,
-				'message'  => 'Existing email, blocked user: valid'
+				'message'  => 'Existing email, blocked and activated user: invalid'
+			],
+			[
+				'loggedIn' => 'guest',
+				'state'    => [
+					'email' => 'user3@test.web'
+				],
+				'expected' => true,
+				'message'  => 'Existing email, blocked and NOT activated user: valid'
 			],
 			[
 				'loggedIn' => 'guest',

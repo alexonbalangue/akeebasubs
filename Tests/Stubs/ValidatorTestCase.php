@@ -48,9 +48,60 @@ abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 			static::$jUser = new JUser();
 		}
 
+		// Create users afresh
+		self::$users = [
+			'guest' => clone self::$jUser
+		];
+
+		self::userDelete('user1');
+		self::userDelete('user2');
+
+		// Regular, active user
+		self::$users['user1'] = self::userCreate([
+			'name'     => 'User One',
+			'username' => 'user1',
+			'email'    => 'user1@test.web',
+			'block'    => 0,
+			'groups'   => [2],
+			'guest'    => 0,
+		]);
+
+		// Not a typo! For some reason I have to try creating user1 TWICE for it to be created. ONLY user1. No idea!
+		self::$users['user1'] = self::userCreate([
+			'name'     => 'User One',
+			'username' => 'user1',
+			'email'    => 'user1@test.web',
+			'block'    => 0,
+			'groups'   => [2],
+			'guest'    => 0,
+		]);
+
+		// Blocked, activated user (not allowed to be a subscriber)
+		self::$users['user2'] = self::userCreate([
+			'name'     => 'User Two',
+			'username' => 'user2',
+			'email'    => 'user2@test.web',
+			'block'    => 1,
+			'groups'   => [2],
+			'guest'    => 0,
+		]);
+
+		// Blocked, not activated user (allowed to be a subscriber)
+		self::$users['user3'] = self::userCreate([
+			'name'       => 'User Three',
+			'username'   => 'user3',
+			'email'      => 'user3@test.web',
+			'block'      => 1,
+			'groups'     => [2],
+			'guest'      => 0,
+			'activation' => 'notempty'
+		]);
+
+		// Set up the StateData object
 		$model = static::$container->factory->model('Subscribe');
 		static::$state = new StateData($model);
 
+		// Set up the ValidatorFactory object
 		static::$factory = new ValidatorFactory(static::$container, static::$state, static::$jUser);
 	}
 
