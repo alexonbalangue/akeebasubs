@@ -11,8 +11,9 @@ use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;
 use FOF30\Container\Container;
 use JUser;
+use JUserHelper;
 
-abstract class ValidatorTest extends \PHPUnit_Framework_TestCase
+abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 {
 	/** @var   ValidatorFactory  The validator factory for this class */
 	public static $factory = null;
@@ -25,6 +26,9 @@ abstract class ValidatorTest extends \PHPUnit_Framework_TestCase
 
 	/** @var   JUser  The currently active Joomla! user object */
 	public static $jUser = null;
+
+	/** @var   array  Known users we have already created */
+	public static $users = [];
 
 	/** @var   string  Which validator are we testing? */
 	public static $validatorType = '';
@@ -94,6 +98,15 @@ abstract class ValidatorTest extends \PHPUnit_Framework_TestCase
 		];
 	}
 
+	/**
+	 * Run the validator test
+	 *
+	 * @param   array   $state     State variables to set to the StateData instance
+	 * @param   mixed   $expected  Expected validation result
+	 * @param   string  $message   Message to show if the test fails
+	 *
+	 * @return  void
+	 */
 	public function testGetValidationResult($state, $expected, $message)
 	{
 		static::$state->reset();
@@ -107,5 +120,41 @@ abstract class ValidatorTest extends \PHPUnit_Framework_TestCase
 		$actual = $validator->execute(true);
 
 		$this->assertEquals($expected, $actual, $message);
+	}
+
+	/**
+	 * Delete a Joomla! user by username
+	 *
+	 * @param   string  $username  The username of the user to delete
+	 *
+	 * @return  void
+	 */
+	public static function userDelete($username)
+	{
+		$userId = JUserHelper::getUserId($username);
+
+		if ($userId == 0)
+		{
+			return;
+		}
+
+		$user = new JUser($userId);
+		$user->delete();
+	}
+
+	/**
+	 * Create a Joomla! user
+	 *
+	 * @param   array   $userInfo  The information of the user being created
+	 *
+	 * @return  JUser  The newly created user
+	 */
+	public static function userCreate(array $userInfo)
+	{
+		$user = new JUser();
+		$user->bind($userInfo);
+		$user->save();
+
+		return $user;
 	}
 }

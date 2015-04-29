@@ -9,14 +9,14 @@ namespace Akeeba\Subscriptions\Tests\Site\Model\Subscribe\Validation;
 
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\Select;
-use Akeeba\Subscriptions\Tests\Stubs\ValidatorTest;
+use Akeeba\Subscriptions\Tests\Stubs\ValidatorTestCase;
 
 /**
  * Test the Country validator
  *
  * @covers Akeeba\Subscriptions\Site\Model\Subscribe\Validation\Country
  */
-class Country extends ValidatorTest
+class CountryTest extends ValidatorTestCase
 {
 	public static function setUpBeforeClass()
 	{

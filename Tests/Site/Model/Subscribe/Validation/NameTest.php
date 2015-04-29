@@ -7,14 +7,14 @@
 
 namespace Akeeba\Subscriptions\Tests\Site\Model\Subscribe\Validation;
 
-use Akeeba\Subscriptions\Tests\Stubs\ValidatorTest;
+use Akeeba\Subscriptions\Tests\Stubs\ValidatorTestCase;
 
 /**
  * Test the Name validator
  *
  * @covers Akeeba\Subscriptions\Site\Model\Subscribe\Validation\Name
  */
-class Name extends ValidatorTest
+class NameTest extends ValidatorTestCase
 {
 	public static function setUpBeforeClass()
 	{
