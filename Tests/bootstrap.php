@@ -70,7 +70,5 @@ require_once JPATH_LIBRARIES . '/fof30/include.php';
 
 \FOF30\Autoloader\Autoloader::getInstance()->addMap('Akeeba\\Subscriptions\\Tests\\', __DIR__);
 
-// TODO Apply the SQL
-//$importer = new \FOF30\Database\Installer(JFactory::getDbo(), JPATH_TESTS.'/Stubs/schema');
-//$importer->updateSchema();
-//unset($importer);
+// Perform the master setup
+\Akeeba\Subscriptions\Tests\Stubs\CommonSetup::masterSetup();

@@ -7,6 +7,8 @@
 
 namespace Akeeba\Subscriptions\Tests\Stubs;
 
+use Akeeba\Subscriptions\Admin\Model\TaxConfig;
+use FOF30\Container\Container;
 use JFactory;
 use JUser;
 use JUserHelper;
@@ -15,6 +17,12 @@ abstract class CommonSetup
 {
 	/** @var   array  Known users we have already created */
 	protected static $users = [];
+
+	public static function masterSetup()
+	{
+		self::getUsers();
+		self::setupTaxRules();
+	}
 
 	/**
 	 * Get a list of pre-fabricated Joomla! users we're using throughout our tests
@@ -78,6 +86,35 @@ abstract class CommonSetup
 		}
 
 		return self::$users;
+	}
+
+	/**
+	 * Set up the tax rules. Default configuration: Cyprus, 19% VAT, VIES registered business
+	 */
+	public static function setupTaxRules()
+	{
+		$container = Container::getInstance('com_akeebasubs', [
+			'tempInstance' => true,
+			'factoryClass' => '\\FOF30\\Factory\\SwitchFactory'
+		], 'admin');
+		/** @var TaxConfig $taxConfigModel */
+		$taxConfigModel = new TaxConfig($container);
+
+		foreach ([
+					 'novatcalc' => 0,
+					 'akeebasubs_level_id'  => 0,
+					 'country' => 'CY',
+					 'taxrate' => '19',
+					 'viesreg' => 1,
+					 'showvat' => 0,
+				 ] as $key => $value)
+		{
+			$taxConfigModel->setState($key, $value);
+		}
+
+		$taxConfigModel->clearTaxRules();
+		$taxConfigModel->createTaxRules();
+		$taxConfigModel->applyComponentConfiguration();
 	}
 
 	/**
