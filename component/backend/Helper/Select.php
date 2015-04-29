@@ -560,6 +560,75 @@ abstract class Select
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
 
+	public static function getFilteredCountries($force = false)
+	{
+		static $countries = null;
+
+		if (is_null($countries) || $force)
+		{
+			$countries = array_merge(self::$countries);
+
+			// -- Initialisation
+			$show = trim(ComponentParams::getParam('showcountries', ''));
+			$hide = trim(ComponentParams::getParam('hidecountries', ''));
+
+			if (!empty($show))
+			{
+				$show = explode(',', ComponentParams::getParam('showcountries', ''));
+			}
+
+			if (!empty($hide))
+			{
+				$hide = explode(',', ComponentParams::getParam('hidecountries', ''));
+			}
+
+			if (!empty($show))
+			{
+				$show = array_map('trim', $show);
+			}
+
+			if (!empty($hide))
+			{
+				$hide = array_map('trim', $hide);
+			}
+
+			// -- If $show is not empty, filter the countries
+			if (!empty($show))
+			{
+				$temp = array();
+
+				foreach ($show as $key)
+				{
+					if (array_key_exists($key, $countries))
+					{
+						$temp[ $key ] = $countries[ $key ];
+					}
+				}
+
+				asort($temp);
+				$countries = $temp;
+			}
+			// -- If $show is empty but $hide is not, filter the countries
+			elseif (!empty($hide))
+			{
+				$temp = array();
+
+				foreach ($countries as $key => $v)
+				{
+					if (!in_array($key, $hide))
+					{
+						$temp[ $key ] = $v;
+					}
+				}
+
+				asort($temp);
+				$countries = $temp;
+			}
+		}
+
+		return $countries;
+	}
+
 	/**
 	 * Returns a drop-down selection box for countries. Some special attributes:
 	 *

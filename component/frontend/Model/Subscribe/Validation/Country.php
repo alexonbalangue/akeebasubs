@@ -40,7 +40,8 @@ class Country extends Base
 		}
 
 		// Otherwise make sure it's one of the allowed countries
-		return array_key_exists($country, Select::$countries);
+		$countries = Select::getFilteredCountries();
+		return array_key_exists($country, $countries);
 	}
 
 }
