@@ -48,7 +48,7 @@ class UsernameTest extends ValidatorTestCase
 					'username' => 'user2'
 				],
 				'expected' => false,
-				'message'  => 'Existing email, blocked but activated user: invalid'
+				'message'  => 'Existing username, blocked but activated user: invalid'
 			],
 			[
 				'loggedIn' => 'guest',
@@ -56,7 +56,7 @@ class UsernameTest extends ValidatorTestCase
 					'username' => 'user3'
 				],
 				'expected' => true,
-				'message'  => 'Existing email, blocked but not activated user: valid'
+				'message'  => 'Existing username, blocked but not activated user: valid'
 			],
 			[
 				'loggedIn' => 'guest',
