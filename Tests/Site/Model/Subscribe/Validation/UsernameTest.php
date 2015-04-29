@@ -67,6 +67,30 @@ class UsernameTest extends ValidatorTestCase
 				'message'  => 'Not existing username: valid'
 			],
 			[
+				'loggedIn' => 'guest',
+				'state'    => [
+					'username' => 'new user'
+				],
+				'expected' => true,
+				'message'  => 'Not existing username with spaces: valid'
+			],
+			[
+				'loggedIn' => 'guest',
+				'state'    => [
+					'username' => 'new@user.com'
+				],
+				'expected' => true,
+				'message'  => 'Not existing username looking like an email address: valid'
+			],
+			[
+				'loggedIn' => 'guest',
+				'state'    => [
+					'username' => 'Παπαδόπουλος'
+				],
+				'expected' => true,
+				'message'  => 'Not existing username with UTF characters: valid'
+			],
+			[
 				'loggedIn' => 'user1',
 				'state'    => [
 					'username' => ''
