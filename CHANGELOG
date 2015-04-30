@@ -19,6 +19,7 @@ Akeeba Subscriptions 5.0.0
 # [LOW] "Last percent" coupon type actually did nothing at all
 # [LOW] Wrong discount type drop-down in Coupon page
 # [LOW] Cannot save new tax rule (it complains about ordering being empty)
+# [LOW] Users view: cannot save VIES registration preference from the GUI
 
 Akeeba Subscriptions 5.0.0.b1
 ================================================================================

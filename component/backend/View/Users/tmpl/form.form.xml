@@ -85,7 +85,7 @@
         />
 
         <field
-            name="COM_AKEEBASUBS_USERS_FIELD_VIESREGISTERED"
+            name="viesregistered"
             type="GenericList"
             label="COM_AKEEBASUBS_USERS_FIELD_VIESREGISTERED"
             class="btn-group"
