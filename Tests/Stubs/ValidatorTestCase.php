@@ -141,6 +141,11 @@ abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 		$actual = $validator->execute(true);
 
 		// Assert the actual value matches the expected value
+		$this->performAssertion($expected, $actual, $message);
+	}
+
+	public function performAssertion($expected, $actual, $message)
+	{
 		$this->assertEquals($expected, $actual, $message);
 	}
 }
