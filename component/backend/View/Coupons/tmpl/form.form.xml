@@ -32,7 +32,8 @@
             required="true"
             >
             <option value="value">COM_AKEEBASUBS_COUPON_TYPE_VALUE</option>
-            <option value="percent">COM_AKEEBASUBS_COUPON_TYPE_VALUE</option>
+            <option value="percent">COM_AKEEBASUBS_COUPON_TYPE_PERCENT</option>
+            <option value="lastpercent">COM_AKEEBASUBS_COUPON_TYPE_LASTPERCENT</option>
         </field>
 
         <field

@@ -17,6 +17,7 @@ Akeeba Subscriptions 5.0.0
 # [LOW] Typo in SQL script resulted in default email templates not being installed
 # [LOW] PHP Warning from the Joomla! Profile Sync plugin under some conditions
 # [LOW] "Last percent" coupon type actually did nothing at all
+# [LOW] Wrong discount type drop-down in Coupon page
 
 Akeeba Subscriptions 5.0.0.b1
 ================================================================================
