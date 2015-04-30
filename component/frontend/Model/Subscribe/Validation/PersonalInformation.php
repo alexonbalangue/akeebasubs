@@ -30,22 +30,24 @@ class PersonalInformation extends Base
 	{
 		$state = $this->state;
 
-		$personalInfo = ComponentParams::getParam('personalinfo', 1);
+		$personalInfo  = ComponentParams::getParam('personalinfo', 1);
 		$requireCoupon = ComponentParams::getParam('reqcoupon', 0) ? true : false;
 
 		// 1. Basic checks
 		$ret = array(
-			'name'         => !empty($state->name),
-			'email'        => !empty($state->email),
-			'email2'       => !empty($state->email2) && ($state->email == $state->email2),
-			'address1'     => $personalInfo == 1 ? !empty($state->address1) : true,
-			'country'      => $personalInfo != 0 ? !empty($state->country) : true,
-			'state'        => $personalInfo == 1 ? !empty($state->state) : true,
-			'city'         => $personalInfo == 1 ? !empty($state->city) : true,
-			'zip'          => $personalInfo == 1 ? !empty($state->zip) : true,
-			'businessname' => $personalInfo == 1 ? !empty($state->businessname) : true,
-			'vatnumber'    => $personalInfo == 1 ? !empty($state->vatnumber) : true,
-			'coupon'       => $personalInfo == 1 ? !empty($state->coupon) : true,
+			'name'          => !empty($state->name),
+			'email'         => !empty($state->email),
+			'email2'        => !empty($state->email2) && ($state->email == $state->email2),
+			'address1'      => $personalInfo == 1 ? !empty($state->address1) : true,
+			'country'       => $personalInfo != 0 ? !empty($state->country) : true,
+			'state'         => $personalInfo == 1 ? !empty($state->state) : true,
+			'city'          => $personalInfo == 1 ? !empty($state->city) : true,
+			'zip'           => $personalInfo == 1 ? !empty($state->zip) : true,
+			'businessname'  => $personalInfo == 1 ? !empty($state->businessname) : true,
+			'occupation'    => $personalInfo == 1 ? !empty($state->occupation) : true,
+			'vatnumber'     => $personalInfo == 1 ? !empty($state->vatnumber) : true,
+			'novatrequired' => true,
+			'coupon'        => $personalInfo == 1 ? !empty($state->coupon) : true,
 		);
 
 		$ret['rawDataForDebug'] = (array)$state;
@@ -63,10 +65,10 @@ class PersonalInformation extends Base
 		$ret['state'] = $this->factory->getValidator('State')->execute();
 
 		// 4. Business validation
-		$businessValidation = $this->factory->getValidator('Business')->execute();
-		$ret['businessname'] = $businessValidation['businessname'];
-		$ret['occupation'] = $businessValidation['occupation'];
-		$ret['vatnumber'] = $businessValidation['vatnumber'];
+		$businessValidation   = $this->factory->getValidator('Business')->execute();
+		$ret['businessname']  = $businessValidation['businessname'];
+		$ret['occupation']    = $businessValidation['occupation'];
+		$ret['vatnumber']     = $businessValidation['vatnumber'];
 		$ret['novatrequired'] = $businessValidation['novatrequired'];
 
 		// After the business validation $this->state->vatnumber contains the reformatted VAT number
@@ -74,7 +76,7 @@ class PersonalInformation extends Base
 
 		// 5. Coupon validation
 		$couponValidation = $this->factory->getValidator('Coupon')->execute();
-		$ret['coupon'] = $couponValidation['valid'];
+		$ret['coupon']    = $couponValidation['valid'];
 
 		// If the coupon is invalid because the coupon is not found and we are NOT required to have a valid coupon to
 		// subscribe to this level we need to report the coupon as valid, preventing validation errors. The idea is that
