@@ -10,6 +10,7 @@ Akeeba Subscriptions 5.0.0
 # [HIGH] Some invoice fields would be blank when the invoice is generated from the front-end
 # [HIGH] Could not create subscription level relations
 # [MEDIUM] Can't create a subscription level whose title/slug is a subset of another level's title/slug respectively
+# [MEDIUM] Coupons tied to subscription levels or user groups didn't work (the validator threw a PHP error)
 # [LOW] States selection had the wrong layout
 # [LOW] Back-end subscriptions page didn't link username to Akeeba Subs user record
 # [LOW] Back-end invoices page didn't link username to Akeeba Subs user record

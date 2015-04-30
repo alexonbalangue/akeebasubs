@@ -85,7 +85,13 @@ class Coupon extends Base
 			// Check levels list
 			if ($valid && !empty($coupon->subscriptions))
 			{
-				$levels = explode(',', $coupon->subscriptions);
+				$levels = $coupon->subscriptions;
+
+				if (!is_array($levels))
+				{
+					$levels = explode(',', $coupon->subscriptions);
+				}
+
 				$valid = in_array($this->state->id, $levels);
 			}
 
@@ -105,7 +111,13 @@ class Coupon extends Base
 			// Check user group levels
 			if ($valid && !empty($coupon->usergroups))
 			{
-				$groups = explode(',', $coupon->usergroups);
+				$groups = $coupon->usergroups;
+
+				if (!is_array($groups))
+				{
+					$groups = explode(',', $coupon->usergroups);
+				}
+
 				$ugroups = $this->jUser->getAuthorisedGroups();
 				$valid = 0;
 
