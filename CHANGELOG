@@ -18,6 +18,7 @@ Akeeba Subscriptions 5.0.0
 # [LOW] PHP Warning from the Joomla! Profile Sync plugin under some conditions
 # [LOW] "Last percent" coupon type actually did nothing at all
 # [LOW] Wrong discount type drop-down in Coupon page
+# [LOW] Cannot save new tax rule (it complains about ordering being empty)
 
 Akeeba Subscriptions 5.0.0.b1
 ================================================================================
