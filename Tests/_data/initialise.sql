@@ -64,7 +64,7 @@ TRUNCATE TABLE `#__akeebasubs_users`;
 INSERT INTO `#__akeebasubs_users` (`akeebasubs_user_id`, `user_id`, `isbusiness`, `businessname`, `occupation`, `vatnumber`, `viesregistered`, `taxauthority`, `address1`, `address2`, `city`, `state`, `zip`, `country`, `params`, `notes`, `needs_logout`)
 VALUES
   (1, 1010, 1, 'Η Εταιρία', 'Κατασκευή προγραμμάτων', '', 0, NULL, 'Μεγάλου Αλεξάνδρου 1', 'Γραφείο 101', 'Κωλοπετινίτσα', 'GR-ATT', '99999', 'GR', '[]', '', 0),
-  (2, 1011, 1, 'Τρία Κιλά Κώδικα ΑΕ', 'Εμπορία λογισμικού', '123456789', 0, NULL, 'Μακρυγιάννη 13', '', 'Μικρό Πεύκο', 'GR-ATT', '99888', 'GR', '[]', '', 0);
+  (2, 1011, 1, 'Τρία Κιλά Κώδικα ΑΕ', 'Εμπορία λογισμικού', '123456789', 2, NULL, 'Μακρυγιάννη 13', '', 'Μικρό Πεύκο', 'GR-ATT', '99888', 'GR', '[]', '', 0);
 
 # Akeeba Subscriptions: Tax Rules (Cyprus, 19% VAT, VIES registered)
 
