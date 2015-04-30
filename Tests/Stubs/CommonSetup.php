@@ -18,10 +18,13 @@ abstract class CommonSetup
 	/** @var   array  Known users we have already created */
 	protected static $users = [];
 
+	/**
+	 * Initialisation of the site for testing purposes
+	 */
 	public static function masterSetup()
 	{
-		self::getUsers();
-		self::setupTaxRules();
+		self::importSQL();
+		self::applyTaxRulesComponentConfig();
 	}
 
 	/**
@@ -35,63 +38,64 @@ abstract class CommonSetup
 		{
 			// Create users afresh
 			self::$users = [
-				'guest' => new JUser()
+				'guest'     => new JUser(),
+				'user1'     => new JUser(1000),
+				'user2'     => new JUser(1001),
+				'user3'     => new JUser(1002),
+				'business'  => new JUser(1010),
+				'forcedvat' => new JUser(1011),
 			];
-
-			// Delete existing users
-			self::userDelete('user1');
-			self::userDelete('user2');
-			self::userDelete('user3');
-
-			// Regular, active user
-			self::$users['user1'] = self::userCreate([
-				'name'     => 'User One',
-				'username' => 'user1',
-				'email'    => 'user1@test.web',
-				'block'    => 0,
-				'groups'   => [2],
-				'guest'    => 0,
-			]);
-
-			// Not a typo! For some reason I have to try creating user1 TWICE for it to be created. ONLY user1. No idea!
-			self::$users['user1'] = self::userCreate([
-				'name'     => 'User One',
-				'username' => 'user1',
-				'email'    => 'user1@test.web',
-				'block'    => 0,
-				'groups'   => [2],
-				'guest'    => 0,
-			]);
-
-			// Blocked, activated user (not allowed to be a subscriber)
-			self::$users['user2'] = self::userCreate([
-				'name'     => 'User Two',
-				'username' => 'user2',
-				'email'    => 'user2@test.web',
-				'block'    => 1,
-				'groups'   => [2],
-				'guest'    => 0,
-			]);
-
-			// Blocked, not activated user (allowed to be a subscriber)
-			self::$users['user3'] = self::userCreate([
-				'name'       => 'User Three',
-				'username'   => 'user3',
-				'email'      => 'user3@test.web',
-				'block'      => 1,
-				'groups'     => [2],
-				'guest'      => 0,
-				'activation' => 'notempty'
-			]);
 		}
 
 		return self::$users;
 	}
 
 	/**
-	 * Set up the tax rules. Default configuration: Cyprus, 19% VAT, VIES registered business
+	 * Imports the Tests/_data/initialise.sql file which contains our basic testing environment
 	 */
-	public static function setupTaxRules()
+	protected static function importSQL()
+	{
+		// Load the raw SQL
+		$fileName = __DIR__ . '/../_data/initialise.sql';
+		$sql      = file_get_contents($fileName);
+
+		// Chop it into distinct queries
+		$db          = JFactory::getDbo();
+		$sqlCommands = $db->splitSql($sql);
+
+		// Start a transaction
+		$db->transactionStart();
+
+		foreach ($sqlCommands as $query)
+		{
+			$query = trim($query);
+
+			if (empty($query))
+			{
+				continue;
+			}
+
+			try
+			{
+				$db->setQuery($query)->execute();
+			}
+			catch (\Exception $e)
+			{
+				echo "!! SQL import error\n\nSQL query:\n";
+				echo $query . "\n\nError message:\n";
+				echo $e->getMessage() . "\n\n";
+				die;
+			}
+		}
+
+		// Commit the transaction
+		$db->transactionCommit();
+	}
+
+	/**
+	 * Set up the component configuration side of the tax rules. The actual tax rules are in initialise.sql
+	 */
+	protected static function applyTaxRulesComponentConfig()
 	{
 		$container = Container::getInstance('com_akeebasubs', [
 			'tempInstance' => true,
@@ -101,26 +105,24 @@ abstract class CommonSetup
 		$taxConfigModel = new TaxConfig($container);
 
 		foreach ([
-					 'novatcalc' => 0,
-					 'akeebasubs_level_id'  => 0,
-					 'country' => 'CY',
-					 'taxrate' => '19',
-					 'viesreg' => 1,
-					 'showvat' => 0,
+					 'novatcalc'           => 0,
+					 'akeebasubs_level_id' => 0,
+					 'country'             => 'CY',
+					 'taxrate'             => '19',
+					 'viesreg'             => 1,
+					 'showvat'             => 0,
 				 ] as $key => $value)
 		{
 			$taxConfigModel->setState($key, $value);
 		}
 
-		$taxConfigModel->clearTaxRules();
-		$taxConfigModel->createTaxRules();
 		$taxConfigModel->applyComponentConfiguration();
 	}
 
 	/**
 	 * Delete a Joomla! user by username
 	 *
-	 * @param   string  $username  The username of the user to delete
+	 * @param   string $username The username of the user to delete
 	 *
 	 * @return  void
 	 */
@@ -154,7 +156,7 @@ abstract class CommonSetup
 	/**
 	 * Create a Joomla! user
 	 *
-	 * @param   array   $userInfo  The information of the user being created
+	 * @param   array $userInfo The information of the user being created
 	 *
 	 * @return  JUser  The newly created user
 	 */
