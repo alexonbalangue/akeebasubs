@@ -8,6 +8,7 @@
 namespace Akeeba\Subscriptions\Tests\Stubs;
 
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use Akeeba\Subscriptions\Admin\Helper\Select;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;
 use FOF30\Container\Container;
@@ -53,7 +54,11 @@ abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 			'personalinfo' => 1,
 			'showcountries' => '',
 			'hidecountries' => '',
+		    'reqcoupon' => 0,
 		]);
+
+		// Force reset the filtered countries list (some tests change the showcountries / hidecountries)
+		Select::getFilteredCountries(true);
 
 		// Set up the StateData object
 		$model = static::$container->factory->model('Subscribe');
