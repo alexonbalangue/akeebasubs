@@ -628,6 +628,23 @@ JS;
 	 */
 	private function copySubscriptionInformation($from, &$to)
 	{
+		// If it's the same record, there is nothing to do (this shouldn't happen, but if it does...)
+		if ($from->akeebasubs_subscription_id == $to->akeebasubs_subscription_id)
+		{
+			return false;
+		}
+		// Let's make sure we are not trying to copy over a parent subscription
+		// Don't copy over if the $to record has slaveusers, this is a parent sub (this shouldn't happen, but if it does...)
+		if (isset($to->slaveusers))
+		{
+			return false;
+		}
+		// If the "$to" subscription has slavesubs_ids, than it is a parent sub so don't copy (this shouldn't happen, but if it does...)
+		if (isset($to->slavesubs_ids))
+		{
+			return false;
+		}
+
 		$forbiddenProperties = array(
 			'akeebasubs_subscription_id',
 			'user_id',
