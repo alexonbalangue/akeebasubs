@@ -52,6 +52,11 @@ class SubscriptionCustomFields extends Base
 					continue;
 				}
 
+				if (!is_array($pluginResponse['subscription_custom_validation']))
+				{
+					continue;
+				}
+
 				$response->subscription_custom_valid = $response->subscription_custom_valid && $pluginResponse['valid'];
 				$response->subscription_custom_validation = array_merge(
 					$response->subscription_custom_validation,

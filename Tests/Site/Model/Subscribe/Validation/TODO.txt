@@ -1,6 +1,5 @@
 Validator Unit Test queue
 ========================================================================================================================
-SubscriptionCustomFields
 BasePrice
 CouponDiscount
 UpgradeDiscount
