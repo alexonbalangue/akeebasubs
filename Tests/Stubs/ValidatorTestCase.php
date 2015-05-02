@@ -42,7 +42,9 @@ abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 	{
 		if (is_null(static::$container))
 		{
-			static::$container = Container::getInstance('com_akeebasubs');
+			static::$container = Container::getInstance('com_akeebasubs', [
+				'platformClass' => 'Akeeba\\Subscriptions\\Tests\\Stubs\\CustomPlatform'
+			]);
 		}
 
 		static::$jUser = new JUser();
@@ -149,6 +151,15 @@ abstract class ValidatorTestCase extends \PHPUnit_Framework_TestCase
 		$this->performAssertion($expected, $actual, $message);
 	}
 
+	/**
+	 * Perform the assertion(s) required for this test
+	 *
+	 * @param   mixed   $expected  Expected value
+	 * @param   mixed   $actual    Actual validator result
+	 * @param   string  $message   Message to show on failure
+	 *
+	 * @return  void
+	 */
 	public function performAssertion($expected, $actual, $message)
 	{
 		$this->assertEquals($expected, $actual, $message);

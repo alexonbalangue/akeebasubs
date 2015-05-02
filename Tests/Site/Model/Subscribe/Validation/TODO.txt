@@ -1,0 +1,11 @@
+Validator Unit Test queue
+========================================================================================================================
+SubscriptionCustomFields
+BasePrice
+CouponDiscount
+UpgradeDiscount
+UpgradeExpiredDiscount
+BestUpgradeDiscount
+SubscriptionRelationDiscount
+BestAutomaticDiscount
+Price

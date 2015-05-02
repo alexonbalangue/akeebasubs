@@ -50,6 +50,11 @@ class CustomFields extends Base
 					continue;
 				}
 
+				if (!is_array($pluginResponse['custom_validation']))
+				{
+					continue;
+				}
+
 				$response->custom_valid = $response->custom_valid && $pluginResponse['valid'];
 				$response->custom_validation = array_merge(
 					$response->custom_validation,
