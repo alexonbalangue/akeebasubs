@@ -635,12 +635,12 @@ JS;
 		}
 		// Let's make sure we are not trying to copy over a parent subscription
 		// Don't copy over if the $to record has slaveusers, this is a parent sub (this shouldn't happen, but if it does...)
-		if (isset($to->slaveusers))
+		if (isset($to->params->slaveusers))
 		{
 			return false;
 		}
 		// If the "$to" subscription has slavesubs_ids, than it is a parent sub so don't copy (this shouldn't happen, but if it does...)
-		if (isset($to->slavesubs_ids))
+		if (isset($to->params->slavesubs_ids))
 		{
 			return false;
 		}
