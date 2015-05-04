@@ -26,7 +26,26 @@ class BestUpgradeDiscount extends Base
 		$upgradeRule = $this->factory->getValidator('UpgradeDiscount')->execute();
 		$upgradeExpiredRule = $this->factory->getValidator('UpgradeExpiredDiscount')->execute();
 
-		if ($upgradeRule['value'] > $upgradeExpiredRule['value'])
+		// If both rules are supposed to be combined with other rules we return the combined discount
+		if ($upgradeRule['combine'] && $upgradeExpiredRule['combine'])
+		{
+			// We have to choose which rule ID to report. We will report the one which would give the highest discount
+			// by itself. This is just for statistics collection. It has no impact on the discount itself.
+
+			if ($upgradeRule['value'] >= $upgradeExpiredRule['value'])
+			{
+				$upgradeRule['value'] += $upgradeExpiredRule['value'];
+
+				return $upgradeRule;
+			}
+
+			$upgradeExpiredRule['value'] += $upgradeRule['value'];
+
+			return $upgradeExpiredRule;
+		}
+
+		// If either or both rules are not set up to be combined we will only return the maximum discount
+		if ($upgradeRule['value'] >= $upgradeExpiredRule['value'])
 		{
 			return $upgradeRule;
 		}

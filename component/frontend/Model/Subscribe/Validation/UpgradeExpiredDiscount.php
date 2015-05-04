@@ -20,13 +20,14 @@ class UpgradeExpiredDiscount extends Base
 	 * Uses
 	 * 		BasePrice
 	 *
-	 * @return  array  upgrade_id, value
+	 * @return  array  upgrade_id, value, combine
 	 */
 	protected function getValidationResult()
 	{
 		$ret = [
 			'upgrade_id'	=> null,
-			'value'			=> 0.00
+			'value'			=> 0.00,
+		    'combine'       => false
 		];
 
 		$state = $this->state;
@@ -144,6 +145,7 @@ class UpgradeExpiredDiscount extends Base
 				case 'value':
 					$ret['value'] += $rule->value;
 					$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
+					$ret['combine'] = true;
 
 					break;
 
@@ -152,6 +154,7 @@ class UpgradeExpiredDiscount extends Base
 					$newDiscount = $basePrice * (float)$rule->value / 100.00;
 					$ret['value'] += $newDiscount;
 					$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
+					$ret['combine'] = true;
 
 					break;
 
@@ -168,6 +171,7 @@ class UpgradeExpiredDiscount extends Base
 					$newDiscount = (float)$lastNet * (float)$rule->value / 100.00;
 					$ret['value'] += $newDiscount;
 					$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
+					$ret['combine'] = true;
 
 					break;
 			}
@@ -190,6 +194,7 @@ class UpgradeExpiredDiscount extends Base
 					{
 						$ret['value'] = $rule->value;
 						$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
+						$ret['combine'] = false;
 					}
 					break;
 
@@ -201,6 +206,7 @@ class UpgradeExpiredDiscount extends Base
 					{
 						$ret['value'] = $newDiscount;
 						$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
+						$ret['combine'] = false;
 					}
 					break;
 
@@ -220,6 +226,7 @@ class UpgradeExpiredDiscount extends Base
 					{
 						$ret['value'] = $newDiscount;
 						$ret['upgrade_id'] = $rule->akeebasubs_upgrade_id;
+						$ret['combine'] = false;
 					}
 					break;
 			}

@@ -47,7 +47,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => null,
-					'value'      => 0.0
+					'value'      => 0.0,
+				    'combine'    => false
 				],
 				'message'  => 'No upgrade'
 			],
@@ -66,6 +67,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				'expected' => [
 					'upgrade_id' => 0,
 					'value'      => 0.0
+					,
+					'combine'    => false
 				],
 				'message'  => 'LEVEL1 renewal but no rule catches it (expired subscription) – Only validates in UpgradeExpiredDiscount'
 			],
@@ -82,7 +85,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 1,
-					'value'      => 10.0
+					'value'      => 10.0,
+					'combine'    => false
 				],
 				'message'  => 'LEVEL1 renewal, first six months'
 			],
@@ -99,7 +103,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 3,
-					'value'      => 20.0
+					'value'      => 20.0,
+					'combine'    => false
 				],
 				'message'  => 'LEVEL1 renewal, last six months'
 			],
@@ -117,7 +122,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 3,
-					'value'      => 16.0
+					'value'      => 16.0,
+					'combine'    => false
 				],
 				'message'  => 'LEVEL1 renewal, last six months, different price for lastpercent'
 			],
@@ -134,7 +140,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 2,
-					'value'      => 5.00
+					'value'      => 5.00,
+					'combine'    => false
 				],
 				'message'  => 'LEVEL1 to LEVEL2, fixed price'
 			],
@@ -146,7 +153,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 0,
-					'value'      => 0.00
+					'value'      => 0.00,
+					'combine'    => false
 				],
 				'message'  => 'LEVEL1 to LEVEL2, no subscription (rule not applied)'
 			],
@@ -164,7 +172,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 0,
-					'value'      => 0.00
+					'value'      => 0.00,
+					'combine'    => false
 				],
 				'message'  => 'Expired LEVEL1 up to 10 days to LEVEL2 (rule only validates in UpgradeExpiredDiscount)'
 			],
@@ -181,7 +190,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 6,
-					'value'      => 10.00
+					'value'      => 10.00,
+					'combine'    => true
 				],
 				'message'  => 'LEVEL1 to FOREVER, 10%'
 			],
@@ -198,7 +208,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 7,
-					'value'      => 10.00
+					'value'      => 10.00,
+					'combine'    => true
 				],
 				'message'  => 'LEVEL2 to FOREVER, 10%'
 			],
@@ -219,7 +230,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 7,
-					'value'      => 20.00
+					'value'      => 20.00,
+					'combine'    => true
 				],
 				'message'  => 'LEVEL1 and LEVEL2 to FOREVER, combined 10% each (the second rule is reported as active)'
 			],
@@ -236,7 +248,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 8,
-					'value'      => 10.00
+					'value'      => 10.00,
+					'combine'    => true
 				],
 				'message'  => 'RECURRING to FIXED, active, combined 10%'
 			],
@@ -253,7 +266,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 0,
-					'value'      => 0.00
+					'value'      => 0.00,
+					'combine'    => false
 				],
 				'message'  => 'RECURRING to FIXED, expired, combined 10% (only validates in UpgradeExpiredDiscount)'
 			],
@@ -270,7 +284,8 @@ class UpgradeDiscountTest extends ValidatorTestCase
 				],
 				'expected' => [
 					'upgrade_id' => 0,
-					'value'      => 0.00
+					'value'      => 0.00,
+					'combine'    => false
 				],
 				'message'  => 'FREE to FIXED: the rule is unpublished'
 			],
