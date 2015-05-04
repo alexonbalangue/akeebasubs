@@ -1,7 +1,5 @@
 Validator Unit Test queue
 ========================================================================================================================
-BasePrice
-CouponDiscount
 UpgradeDiscount
 UpgradeExpiredDiscount
 BestUpgradeDiscount

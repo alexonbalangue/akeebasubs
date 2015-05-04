@@ -46,7 +46,7 @@ class CouponDiscount extends Base
 
 		/** @var Coupons $coupon */
 		$coupon = $couponValidation['coupon'];
-		$ret['coupon_id'] = $coupon->akeebasubs_apicoupon_id;
+		$ret['coupon_id'] = $coupon->akeebasubs_coupon_id;
 
 		// Double check we really do have a coupon
 		if (!is_object($coupon))
@@ -148,7 +148,7 @@ class CouponDiscount extends Base
 		$subscriptionsModel = $this->container->factory->model('Subscriptions')->tmpInstance();
 		$subscriptions = $subscriptionsModel
 			->user_id($user_id)
-			->enabled(1)
+			->paystate('C')
 			->get(true);
 
 		// No subscriptions? Last payment is 0.
