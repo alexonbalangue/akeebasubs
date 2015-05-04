@@ -44,6 +44,7 @@ abstract class CommonSetup
 				'user3'     => new JUser(1002),
 				'business'  => new JUser(1010),
 				'forcedvat' => new JUser(1011),
+				'guineapig' => new JUser(1020),
 			];
 		}
 

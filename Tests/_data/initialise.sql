@@ -40,7 +40,8 @@ VALUES
 	(1001, 'User Two', 'user2', 'user2@test.web', '$2y$10$LpoNGSf0UMrt6BCrANfFkOD0bwxvJobHULVr4Daz0cDVkmVjwFCqO', 1, 0, '2015-04-29 18:13:57', '0000-00-00 00:00:00', '', '{}', '0000-00-00 00:00:00', 0, '', '', 0),
 	(1002, 'User Three', 'user3', 'user3@test.web', '$2y$10$9ezk6XoWrpyXUXESQccRcOX65xsY0mX8NVLh6tDX7HMxbipQk/ji.', 1, 0, '2015-04-29 18:13:57', '0000-00-00 00:00:00', 'notempty', '{}', '0000-00-00 00:00:00', 0, '', '', 0),
   (1010, 'Business User', 'business', 'business@test.web', '$2y$10$vyC0MR3wtTRwD4JjvQylrOu0NGtFJ2HJSUJkpo9eDyHZO9L7.kj4m', 0, 0, '2015-04-29 18:13:57', '0000-00-00 00:00:00', '', '{}', '0000-00-00 00:00:00', 0, '', '', 0),
-  (1011, 'Forced VAT Check', 'forcedvat', 'forcedvat@test.web', '$2y$10$vyC0MR3wtTRwD4JjvQylrOu0NGtFJ2HJSUJkpo9eDyHZO9L7.kj4m', 0, 0, '2015-04-29 18:13:57', '0000-00-00 00:00:00', '', '{}', '0000-00-00 00:00:00', 0, '', '', 0);
+  (1011, 'Forced VAT Check', 'forcedvat', 'forcedvat@test.web', '$2y$10$vyC0MR3wtTRwD4JjvQylrOu0NGtFJ2HJSUJkpo9eDyHZO9L7.kj4m', 0, 0, '2015-04-29 18:13:57', '0000-00-00 00:00:00', '', '{}', '0000-00-00 00:00:00', 0, '', '', 0),
+  (1020, 'Guinea Pig', 'guineapig', 'guineapig@test.web', '$2y$10$vyC0MR3wtTRwD4JjvQylrOu0NGtFJ2HJSUJkpo9eDyHZO9L7.kj4m', 0, 0, '2015-04-29 18:13:57', '0000-00-00 00:00:00', '', '{}', '0000-00-00 00:00:00', 0, '', '', 0);
 
 # Users to user groups
 
@@ -56,7 +57,8 @@ VALUES
   (1010, 2),
   (1010, 10),
   (1011, 2),
-  (1011, 10);
+  (1011, 10),
+  (1020, 2);
 
 # Akeeba Subscriptions: Users
 
@@ -162,3 +164,20 @@ VALUES
   (5, 1010, 2, '2013-04-30 00:00:00', '2014-04-29 00:00:00', '', 0, 'none', '20140430101010', 'C', 90, 0, 90, 0, 0, '2014-04-30 00:00:00', '[]', '', '', 12, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
   (6, 1010, 2, '2014-04-30 00:00:00', '2015-04-29 00:00:00', '', 0, 'none', '20140430111010', 'C', 90, 0, 90, 0, 0, '2014-04-30 00:00:00', '[]', '', '', 13, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
   (7, 1010, 1, '2015-04-30 00:00:00', '2025-04-29 00:00:00', '', 0, 'none', '20150430001010', 'C', 100, 0, 100, 0, 0, '2015-04-30 00:00:00', '[]', '', '', 0, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+# Upgrade rules
+
+TRUNCATE TABLE `#__akeebasubs_upgrades`;
+
+INSERT INTO `#__akeebasubs_upgrades` (`akeebasubs_upgrade_id`, `title`, `from_id`, `to_id`, `min_presence`, `max_presence`, `type`, `value`, `combine`, `expired`, `enabled`, `ordering`, `created_on`, `created_by`, `modified_on`, `modified_by`, `locked_on`, `locked_by`, `hits`)
+VALUES
+  (1, 'LEVEL1 renewal 10% six first months', 1, 1, 0, 180, 'percent', 10, 0, 0, 1, 0, '2015-05-04 10:19:41', 100, '2015-05-04 10:21:08', 100, '0000-00-00 00:00:00', 0, 0),
+  (2, 'LEVEL1 to LEVEL2 – 5€ off', 1, 2, 0, 600, 'value', 5, 0, 0, 1, 0, '2015-05-04 10:20:26', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (3, 'LEVEL1 renewal 20% last after 6 months', 1, 1, 180, 720, 'lastpercent', 20, 0, 0, 1, 0, '2015-05-04 10:40:57', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (4, 'LEVEL1 resubscribe 30% after expiration', 1, 1, 1, 6000, 'percent', 30, 0, 1, 1, 0, '2015-05-04 10:41:43', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (5, 'Expired LEVEL1 up to 10 days to LEVEL2, 12.34€ off', 1, 2, 365, 375, 'value', 12.34, 0, 1, 1, 0, '2015-05-04 10:42:46', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (6, 'LEVEL1 to FOREVER 10%, combine', 1, 4, 0, 365, 'percent', 10, 1, 0, 1, 0, '2015-05-04 10:46:23', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (7, 'LEVEL2 to FOREVER 10%, combine', 2, 4, 0, 365, 'percent', 10, 1, 0, 1, 0, '2015-05-04 10:46:44', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (8, 'RECURRING to FIXED active, 10%, combine', 3, 5, 0, 365, 'percent', 10, 1, 0, 1, 0, '2015-05-04 10:49:43', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (9, 'RECURRING to FIXED after expiration, 10%, combine', 1, 5, 365, 6000, 'percent', 10, 1, 1, 1, 0, '2015-05-04 10:50:10', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
+  (10, 'FREE to FIXED, unpublished', 6, 5, 0, 365, 'percent', 10, 0, 0, 0, 0, '2015-05-04 10:50:45', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0);
