@@ -121,7 +121,7 @@ class UpgradeExpiredDiscount extends Base
 			if (
 				// Make sure there is an active subscription in the From level
 				!(array_key_exists($rule->from_id, $subs))
-				// Make sure the min/max presence is repected
+				// Make sure the min/max presence is respected
 				|| ($subs[$rule->from_id] < ($rule->min_presence * 86400))
 				|| ($subs[$rule->from_id] > ($rule->max_presence * 86400))
 				// If From and To levels are different, make sure there is no active subscription in the To level yet
