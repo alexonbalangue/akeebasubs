@@ -67,8 +67,8 @@ class BasePrice extends Base
 		// Get the default price value
 		$basePrice = (float)$level->price + (float)$signup_fee;
 
-		$ret['signup']      = (float)$signup_fee;
-		$ret['isRecurring'] = $level->recurring;
+		$ret['signUp']      = (float) $signup_fee;
+		$ret['isRecurring'] = (bool) $level->recurring;
 
 		// Net price modifiers (via plugins)
 		$price_modifier = 0;
