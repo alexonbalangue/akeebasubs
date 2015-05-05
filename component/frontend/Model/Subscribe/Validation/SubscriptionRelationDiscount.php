@@ -162,13 +162,19 @@ class SubscriptionRelationDiscount extends Base
 					/** @var Subscriptions $sub */
 					foreach ($subscriptions as $sub)
 					{
-						if ($rule->flex_timecalculation && !$sub->enabled)
+						if (($rule->flex_timecalculation == 'current') && !$sub->enabled)
 						{
 							continue;
 						}
 
 						$from = $this->container->platform->getDate($sub->publish_up)->toUnix();
 						$to = $this->container->platform->getDate($sub->publish_down)->toUnix();
+
+						// If the subscription is expired it doesn't count as remaining time
+						if ($to < $now)
+						{
+							continue;
+						}
 
 						if ($from > $now)
 						{

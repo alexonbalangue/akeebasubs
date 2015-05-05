@@ -183,3 +183,19 @@ VALUES
   (10, 'FREE to FIXED, unpublished', 6, 5, 0, 365, 'percent', 10, 0, 0, 0, 0, '2015-05-04 10:50:45', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
   (11, 'LEVEL2 to LEVEL1, active – 15€ off', 2, 1, 0, 600, 'value', 15, 0, 0, 1, 0, '2015-05-04 10:20:26', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0),
   (12, 'LEVEL2 to LEVEL1, inactive – 5€ off', 2, 1, 0, 600, 'value', 5, 0, 1, 1, 0, '2015-05-04 10:20:26', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, 0);
+
+# Subscription level relations
+
+TRUNCATE TABLE `#__akeebasubs_relations`;
+
+INSERT INTO `#__akeebasubs_relations` (`akeebasubs_relation_id`, `source_level_id`, `target_level_id`, `mode`, `type`, `amount`, `low_threshold`, `low_amount`, `high_threshold`, `high_amount`, `flex_amount`, `flex_period`, `flex_uom`, `flex_timecalculation`, `time_rounding`, `expiration`, `combine`, `enabled`, `ordering`, `created_on`, `created_by`, `modified_on`, `modified_by`, `locked_on`, `locked_by`)
+VALUES
+  (1, 1, 1, 'rules', 'percent', 0, 0, 0, 0, 0, 0, 0, 'd', 'current', 'round', 'replace', 0, 1, 0, '2015-05-05 08:00:52', 100, '2015-05-05 08:32:31', 100, '0000-00-00 00:00:00', 0),
+  (2, 1, 2, 'rules', 'percent', 0, 0, 0, 0, 0, 0, 0, 'd', 'current', 'round', 'after', 0, 1, 0, '2015-05-05 08:01:05', 100, '2015-05-05 08:32:31', 100, '0000-00-00 00:00:00', 0),
+  (3, 2, 4, 'rules', 'percent', 0, 0, 0, 0, 0, 0, 0, 'd', 'current', 'round', 'overlap', 0, 1, 0, '2015-05-05 08:31:20', 100, '2015-05-05 08:32:31', 100, '0000-00-00 00:00:00', 0),
+  (4, 7, 1, 'fixed', 'value', 5, 0, 0, 0, 0, 0, 0, 'd', 'current', 'round', 'replace', 0, 1, 0, '2015-05-05 08:32:14', 100, '2015-05-05 08:32:31', 100, '0000-00-00 00:00:00', 0),
+  (5, 7, 2, 'fixed', 'percent', 10, 0, 0, 0, 0, 0, 0, 'd', 'current', 'round', 'replace', 0, 1, 0, '2015-05-05 08:32:27', 100, '2015-05-05 08:32:31', 100, '0000-00-00 00:00:00', 0),
+  (6, 6, 1, 'flexi', 'value', 0, 2, 2, 11, 12, 1, 1, 'm', 'current', 'round', 'replace', 0, 1, 0, '2015-05-05 08:33:18', 100, '2015-05-05 08:38:50', 100, '0000-00-00 00:00:00', 0),
+  (7, 6, 2, 'flexi', 'value', 0, 2, 2, 20, 22, 1, 1, 'm', 'future', 'round', 'replace', 0, 1, 0, '2015-05-05 08:40:32', 100, '2015-05-05 08:49:51', 100, '0000-00-00 00:00:00', 0),
+  (8, 1, 3, 'fixed', 'value', 10, 0, 0, 0, 0, 0, 0, 'd', 'current', 'round', 'replace', 1, 1, 0, '2015-05-05 08:50:43', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0),
+  (9, 2, 3, 'fixed', 'value', 15, 0, 0, 0, 0, 0, 0, 'd', 'current', 'round', 'replace', 1, 1, 0, '2015-05-05 08:50:59', 100, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0);
