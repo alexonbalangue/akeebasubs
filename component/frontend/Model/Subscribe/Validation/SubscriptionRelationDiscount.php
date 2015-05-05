@@ -32,7 +32,7 @@ class SubscriptionRelationDiscount extends Base
 			'discount' => 0,
 			'relation' => null,
 			'oldsub'   => null,
-			'allsubs'  => null,
+			'allsubs'  => [],
 		];
 
 		$combinedReturn = [
@@ -42,7 +42,7 @@ class SubscriptionRelationDiscount extends Base
 			'allsubs'  => [],
 		];
 
-		if (!$this->jUser->guest)
+		if ($this->jUser->guest)
 		{
 			return $combinedReturn;
 		}
@@ -103,7 +103,7 @@ class SubscriptionRelationDiscount extends Base
 
 			foreach ($subscriptions as $sub)
 			{
-				$allsubs[] = $sub->akeebasubs_level_id;
+				$allsubs[] = $sub->akeebasubs_subscription_id;
 			}
 
 			reset($allsubs);
