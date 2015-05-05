@@ -7,14 +7,14 @@
 
 namespace Akeeba\Subscriptions\Tests\Site\Model\Subscribe\Validation;
 
-use Akeeba\Subscriptions\Tests\Stubs\ValidatorTestCase;
+use Akeeba\Subscriptions\Tests\Stubs\ValidatorWithSubsTestCase;
 
 /**
  * Test the UpgradeDiscount validator
  *
  * @covers Akeeba\Subscriptions\Site\Model\Subscribe\Validation\UpgradeExpiredDiscount
  */
-class UpgradeExpiredDiscountTest extends ValidatorTestCase
+class UpgradeExpiredDiscountTest extends ValidatorWithSubsTestCase
 {
 	public static function setUpBeforeClass()
 	{
@@ -326,112 +326,5 @@ class UpgradeExpiredDiscountTest extends ValidatorTestCase
 		self::$factory->reset();
 
 		parent::testGetValidationResult($state, $expected, $message);
-	}
-
-	protected function createSubscriptions(array $subs, $user_id = 1020)
-	{
-		// array of arrays with keys: level, publish_up
-		$db = \JFactory::getDbo();
-		$db->transactionStart();
-
-		$query = $db->getQuery(true)
-		            ->delete('#__akeebasubs_subscriptions')
-		            ->where($db->qn('user_id') . ' = ' . $db->q($user_id));
-		$db->setQuery($query)->execute();
-
-		if (!empty($subs))
-		{
-			foreach ($subs as $params)
-			{
-				if (isset($params['level']))
-				{
-					$params['akeebasubs_level_id'] = $params['level'];
-					unset ($params['level']);
-				}
-
-				if (!isset($params['user_id']))
-				{
-					$params['user_id'] = $user_id;
-				}
-
-				$query = $this->getSubscriptionQuery($params);
-				$db->setQuery($query)->execute();
-			}
-		}
-
-		$db->transactionCommit();
-	}
-
-	/**
-	 * Get the SQL for inserting a subscription row
-	 *
-	 * @param   array $params Fields for creating the subscription row
-	 *
-	 * @return  string
-	 */
-	protected function getSubscriptionQuery(array $params)
-	{
-		$db = \JFactory::getDbo();
-
-		$jNow = \JFactory::getDate();
-
-		$defaultParams = [
-			'user_id'               => 1020,
-			'akeebasubs_level_id'   => 1,
-			'publish_up'            => $jNow->toSql(),
-			'publish_down'          => null,
-			'enabled'               => 1,
-			'processor'             => 'none',
-			'processor_key'         => md5(microtime()),
-			'state'                 => 'C',
-			'net_amount'            => 100,
-			'tax_amount'            => 0,
-			'gross_amount'          => 0,
-			'recurring_amount'      => 0,
-			'tax_percent'           => 0,
-			'created_on'            => $jNow->toSql(),
-			'params'                => '',
-			'akeebasubs_coupon_id'  => 0,
-			'akeebasubs_upgrade_id' => 0,
-			'prediscount_amount'    => 0,
-			'discount_amount'       => 0,
-			'contact_flag'          => 0,
-			'first_contact'         => $db->getNullDate(),
-			'second_contact'        => $db->getNullDate(),
-			'after_contact'         => $db->getNullDate(),
-		];
-
-		$params = array_merge($defaultParams, $params);
-
-		$params['gross_amount'] = $params['net_amount'] + $params['tax_amount'];
-
-		if ($params['gross_amount'] > 0.001)
-		{
-			$params['tax_percent'] = 100.0 * $params['tax_amount'] / $params['gross_amount'];
-		}
-
-		if (empty($params['publish_down']))
-		{
-			$oneYear                = new \DateInterval('P1Y');
-			$jTo                    = \JFactory::getDate($params['publish_up'])->add($oneYear);
-			$params['publish_down'] = $jTo->toSql();
-		}
-
-		$query = $db->getQuery(true)
-		            ->insert($db->qn('#__akeebasubs_subscriptions'));
-
-		$columns = [];
-		$values  = [];
-
-		foreach ($params as $field => $value)
-		{
-			$columns[] = $db->qn($field);
-			$values[]  = $db->q($value);
-		}
-
-		$query->columns($columns)
-		      ->values(implode(',', $values));
-
-		return (string) $query;
 	}
 }
