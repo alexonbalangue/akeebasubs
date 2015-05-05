@@ -15,7 +15,7 @@ use Akeeba\Subscriptions\Tests\Stubs\ValidatorTestCase;
  *
  * @covers Akeeba\Subscriptions\Site\Model\Subscribe\Validation\SubscriptionRelationDiscount
  */
-class UpgradeDiscountTest extends ValidatorTestCase
+class SubscriptionRelationDiscountTest extends ValidatorTestCase
 {
 
 	protected static $subscriptions = [];
