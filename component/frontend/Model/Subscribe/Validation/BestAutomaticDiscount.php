@@ -26,7 +26,7 @@ class BestAutomaticDiscount extends Base
 		$ret = array(
 			'discount'   => 0.00, // discount amount
 			'expiration' => 'overlap', // old subscription expiration mode
-			'allsubs'    => null, // all old subscription ids
+			'allsubs'    => [], // all old subscription ids
 			'oldsub'     => null, // old subscription id
 			'upgrade_id' => null, // upgrade rule ID
 		);
@@ -45,9 +45,8 @@ class BestAutomaticDiscount extends Base
 			return $ret;
 		}
 
-		// As long as we have an expiration method other than "overlap"
-		// pass along the subscriptions which will be replaced / used
-		// to extend the subscription time
+		// As long as we have an expiration method other than "overlap" pass along the subscriptions which will be
+		// replaced / used to extend the subscription time
 		if ($relationData['relation']->expiration != 'overlap')
 		{
 			$ret['expiration'] = $relationData['relation']->expiration;
@@ -65,8 +64,11 @@ class BestAutomaticDiscount extends Base
 
 			if ($relDiscount > $ret['discount'])
 			{
-				// yes, it's greater than the upgrade rule-based discount. Use it.
+				// Yes, it's greater than the upgrade rule-based discount. Use it.
 				$ret['discount'] = $relDiscount;
+				// Also remember to tell our caller that there's no upgrade discount involved, since we're using a
+				// subscription level relation which is not bound to upgrade rules.
+				$ret['upgrade_id'] = null;
 			}
 		}
 

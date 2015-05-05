@@ -1,4 +1,4 @@
 Validator Unit Test queue
 ========================================================================================================================
-BestAutomaticDiscount
 Price
+AkpaymentBase::fixSubscriptionDates
