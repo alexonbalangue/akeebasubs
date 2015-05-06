@@ -19,6 +19,27 @@ abstract class ValidatorWithSubsTestCase extends ValidatorTestCase
 {
 	protected static $subscriptions = [];
 
+	public static function setUpBeforeClass()
+	{
+		// Create the base objects
+		parent::setUpBeforeClass();
+
+		// Fake the EU VAT checks
+		$reflector     = new \ReflectionClass('Akeeba\Subscriptions\Admin\Helper\EUVATInfo');
+		$propReflector = $reflector->getProperty('cache');
+		$propReflector->setAccessible(true);
+		$propReflector->setValue([
+			'vat' => [
+				'EL123456789' => false,
+				'EL070298898' => true,
+				'EL666666666' => false,
+				'CY123456789' => false,
+				'CY999999999' => true,
+			]
+		]);
+	}
+
+
 	/**
 	 * The subscription records are created dynamically. Therefore our 'expected' array cannot have hard-coded IDs.
 	 * Instead we use fake subscription IDs in the format S1, S2 and so on. The number after the 'S' denotes the

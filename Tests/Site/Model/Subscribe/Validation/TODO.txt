@@ -1,4 +1,3 @@
 Validator Unit Test queue
 ========================================================================================================================
-Price
 AkpaymentBase::fixSubscriptionDates
