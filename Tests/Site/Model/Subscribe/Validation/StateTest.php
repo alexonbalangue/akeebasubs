@@ -24,7 +24,7 @@ class StateTest extends ValidatorTestCase
 
 		parent::setUpBeforeClass();
 
-		// Only enable the USA and Greek states
+		// Only enable the USA, Greece and Spain states
 		$db = \JFactory::getDbo();
 		$query = $db->getQuery(true)
 			->update($db->qn('#__akeebasubs_states'))
@@ -41,11 +41,31 @@ class StateTest extends ValidatorTestCase
 			->set($db->qn('enabled') . ' = ' . $db->q(1))
 			->where($db->qn('country') . ' = ' . $db->q('GR'));
 		$db->setQuery($query)->execute();
+		$query = $db->getQuery(true)
+			->update($db->qn('#__akeebasubs_states'))
+			->set($db->qn('enabled') . ' = ' . $db->q(1))
+			->where($db->qn('country') . ' = ' . $db->q('ES'));
+		$db->setQuery($query)->execute();
+
+		\Akeeba\Subscriptions\Admin\Helper\akeebasubsHelperSelect_init();
 	}
 
 	public function getTestData()
 	{
 		return [
+			[
+				'componentParams' => [
+					'personalinfo' => 1,
+					'_expectEmpty' => true
+				],
+				'state' => [
+					'country' => 'GR',
+					'state' => 'AL'
+				],
+				'expected' => false,
+				'message' => 'Correct country, state belongs to other country: invalid'
+			],
+
 			// ========== Personal information: 1 (YES)
 			[
 				'componentParams' => [

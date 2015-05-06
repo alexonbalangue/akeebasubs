@@ -25,6 +25,31 @@ class PersonalInformationTest extends ValidatorTestCase
 		// Create the base objects
 		parent::setUpBeforeClass();
 
+		// Only enable the USA, Greece and Spain states
+		$db = \JFactory::getDbo();
+		$query = $db->getQuery(true)
+		            ->update($db->qn('#__akeebasubs_states'))
+		            ->set($db->qn('enabled') . ' = ' . $db->q(0))
+		            ->where($db->qn('country') . ' != ' . $db->q('US'));
+		$db->setQuery($query)->execute();
+		$query = $db->getQuery(true)
+		            ->update($db->qn('#__akeebasubs_states'))
+		            ->set($db->qn('enabled') . ' = ' . $db->q(1))
+		            ->where($db->qn('country') . ' = ' . $db->q('US'));
+		$db->setQuery($query)->execute();
+		$query = $db->getQuery(true)
+		            ->update($db->qn('#__akeebasubs_states'))
+		            ->set($db->qn('enabled') . ' = ' . $db->q(1))
+		            ->where($db->qn('country') . ' = ' . $db->q('GR'));
+		$db->setQuery($query)->execute();
+		$query = $db->getQuery(true)
+		            ->update($db->qn('#__akeebasubs_states'))
+		            ->set($db->qn('enabled') . ' = ' . $db->q(1))
+		            ->where($db->qn('country') . ' = ' . $db->q('ES'));
+		$db->setQuery($query)->execute();
+
+		\Akeeba\Subscriptions\Admin\Helper\akeebasubsHelperSelect_init();
+
 		// Fake the EU VAT checks
 		$reflector     = new \ReflectionClass('Akeeba\Subscriptions\Admin\Helper\EUVATInfo');
 		$propReflector = $reflector->getProperty('cache');
