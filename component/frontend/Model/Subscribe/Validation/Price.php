@@ -62,6 +62,12 @@ class Price extends Base
 		$couponid = is_null($couponStructure['coupon_id']) ? 0 : $couponStructure['coupon_id'];
 		$upgradeid = is_null($discountStructure['upgrade_id']) ? 0 : $discountStructure['upgrade_id'];
 
+		if ($discount < 0.001)
+		{
+			$useCoupon = false;
+			$useAuto = false;
+		}
+
 		// Note: do not reset the oldsup and expiration fields. Subscription level relations must not be bound
 		// to the discount.
 
@@ -90,8 +96,12 @@ class Price extends Base
 
 		if ($basePriceStructure['isRecurring'])
 		{
-			$signUpTax = 0.01 * ($taxRule->taxrate * $signUp);
-			$recurringAmount = $grossAmount - $signUp - $signUpTax;
+			$discountFactor = $discount / $netPrice;
+			$recurringAmount = $basePriceStructure['levelNet'] * (1.0 - $discountFactor);
+
+			// Now we need to add the tax rate
+			$taxAmountRec = 0.01 * ($taxRule->taxrate * $recurringAmount);
+			$recurringAmount = 0.01 * (100 * $recurringAmount + 100 * $taxAmountRec);
 		}
 
 		$result = array(
