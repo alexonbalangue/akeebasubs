@@ -882,9 +882,9 @@ class Subscribe extends Model
 		$priceValidation = $this->getValidator('Price')->execute();
 
 		$subcustom['fixdates'] = array(
-			'oldsub'     => $priceValidation->oldsub,
-			'allsubs'    => $priceValidation->allsubs,
-			'expiration' => $priceValidation->expiration,
+			'oldsub'     => $priceValidation['oldsub'],
+			'allsubs'    => $priceValidation['allsubs'],
+			'expiration' => $priceValidation['expiration'],
 		);
 
 		// Get the IP address
