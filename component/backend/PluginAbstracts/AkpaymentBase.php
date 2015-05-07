@@ -402,17 +402,14 @@ abstract class AkpaymentBase extends JPlugin
 		if ($expiration == 'replace')
 		{
 			// Disable the primary subscription used to determine the subscription date
-			$data = $oldsub->getData();
-
-			$newdata = array_merge($data, array(
+			$newdata = array(
 				'publish_down' => $jNow->toSql(),
 				'enabled'      => 0,
 				'contact_flag' => 3,
 				'notes'        => $oldsub->notes . "\n\n" . "SYSTEM MESSAGE: This subscription was upgraded and replaced with " . $oldsub->akeeabsubs_subscription_id . "\n"
-			));
+			);
 
-			$table = $subscription->getClone()->savestate(false)->reset(true, true);
-			$table->save($newdata);
+			$oldsub->save($newdata);
 
 			// Disable all old subscriptions
 			if (!empty($allsubs))
