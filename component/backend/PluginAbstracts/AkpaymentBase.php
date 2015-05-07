@@ -317,22 +317,22 @@ abstract class AkpaymentBase extends JPlugin
 
 		if (is_null($oldsub))
 		{
-			$oldsubstart = $now;
+			$oldSubExpirationTimestamp = $now;
 		}
 		else
 		{
 			if (!preg_match($regex, $oldsub->publish_down))
 			{
-				$oldsubstart = $now;
+				$oldSubExpirationTimestamp = $now;
 			}
 			else
 			{
-				$jOldsubstart = new JDate($oldsub->publish_down);
-				$oldsubstart = $jOldsubstart->toUnix();
+				$jOldSubExpiration = new JDate($oldsub->publish_down);
+				$oldSubExpirationTimestamp = $jOldSubExpiration->toUnix();
 			}
 		}
 
-		if ($start < $now)
+		if ($start <= $now)
 		{
 			if ($end >= 2145916800)
 			{
@@ -387,7 +387,8 @@ abstract class AkpaymentBase extends JPlugin
 					// But if expiration = after => start date = end date of old sub
 					if ($expiration == 'after')
 					{
-						$start = $oldsubstart;
+						// Make sure the activation date is never in the past
+						$start = max($now, $oldSubExpirationTimestamp);
 					}
 
 					$end = $start + $duration;

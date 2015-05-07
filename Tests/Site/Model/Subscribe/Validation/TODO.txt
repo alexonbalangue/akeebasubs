@@ -59,11 +59,11 @@ No fixdates keys. Existing subscription in another level (active), publish_up in
 
 expiration = after
 
-    [UID 2010]
+    √ [UID 2010]
 
-    oldsub in the same level (active), publish_up in the past
-    oldsub in the same level (active), publish_up now
-    oldsub in the same level (active), publish_up in the future
+    √ oldsub in the same level (active), publish_up in the past
+    √ oldsub in the same level (active), publish_up now
+    √ oldsub in the same level (active), publish_up in the future
 
     [UID 2030]
 
