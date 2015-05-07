@@ -705,6 +705,7 @@ class Subscribe extends Model
 
 		// Step #5. Check for existing subscription records and calculate the subscription expiration date
 		// ----------------------------------------------------------------------
+		// @todo Refactor the entire step #5 into a validator class
 		// First, the question: is this level part of a group?
 		$haveLevelGroup = false;
 
@@ -810,8 +811,6 @@ class Subscribe extends Model
 			}
 		}
 
-		// Step #6. Create a new subscription record
-		// ----------------------------------------------------------------------
 		$nullDate = JFactory::getDbo()->getNullDate();
 
 		/** @var Levels $level */
@@ -865,6 +864,10 @@ class Subscribe extends Model
 
 		$mStartDate = $jStartDate->toSql();
 		$mEndDate = $this->container->platform->getDate($endDate)->toSql();
+
+		// Step #6. Create a new subscription record
+		// ----------------------------------------------------------------------
+		// @todo Get the start ($mStartDate) and end ($mEndDate) dates from the validator plugin which replaces step 5
 
 		// Store the price validation's "oldsub" and "expiration" keys in
 		// the subscriptions subcustom array
