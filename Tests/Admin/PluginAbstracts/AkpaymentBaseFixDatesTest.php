@@ -327,7 +327,7 @@ class AkpaymentBaseFixDatesTest extends \PHPUnit_Framework_TestCase
 				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up in the future"
 			],
 
-			// Expiration = after. The old subscription is on the same level and gets disabled.
+			// Expiration = after. The old subscription 2010 is on the same level and was disabled anyway.
 			[
 				'uid'         => 2010,
 				'submods2000' => [
@@ -376,7 +376,7 @@ class AkpaymentBaseFixDatesTest extends \PHPUnit_Framework_TestCase
 					'publish_up'   => 'down@2020', // The old sub's expiration is in the future, so that's when our new subscription starts
 					'publish_down' => null,
 					'enabled'      => 1,
-				    '_allsubs_active' => [2020]
+				    '_allsubs_active' => [2020] // Subscription 2020 is active and remains active (since the expiration is AFTER the existing subscription)
 				],
 				'message'     => "expiration = after. oldsub in the same level (active), publish_up now, must become half year from now"
 			],
@@ -398,7 +398,178 @@ class AkpaymentBaseFixDatesTest extends \PHPUnit_Framework_TestCase
 				'message'     => "expiration = after. oldsub in the same level (active), publish_up in the future"
 			],
 
-		    // @todo What happens if my new subscription starts in the future but BEFORE the existing subscription expires?
+			// Expiration = after. The old subscription is in another level
+			[
+				'uid'         => 2030,
+				'submods2000' => [
+					'publish_up' => 'past', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2030,
+						'allsubs'    => [2030],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'down@2030',  // The old sub's expiration is in the future
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2030]
+				],
+				'message'     => "expiration = after. oldsub in the same level (active), publish_up in the past"
+			],
+			[
+				'uid'         => 2030,
+				'submods2000' => [
+					'publish_up' => 'now', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2030,
+						'allsubs'    => [2030],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'down@2030',  // The old sub's expiration is in the future
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2030]
+				],
+				'message'     => "expiration = after. oldsub in the same level (active), publish_up now"
+			],
+			[
+				'uid'         => 2030,
+				'submods2000' => [
+					'publish_up' => 'future', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2030,
+						'allsubs'    => [2030],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'Same', // Clearly, our start is in the future and it shall remain so
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2030]
+				],
+				'message'     => "expiration = after. oldsub in the same level (active), publish_up in the future"
+			],
+
+			// Expiration = after. With many allsubs
+			[
+				'uid'         => 2040,
+				'submods2000' => [
+					'publish_up' => 'past', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2040,
+						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'Now',
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2041, 2042, 2044, 2045],
+				],
+				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up in the past."
+			],
+			[
+				'uid'         => 2040,
+				'submods2000' => [
+					'publish_up' => 'now', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2040,
+						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'Now',
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2041, 2042, 2044, 2045],
+				],
+				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up now"
+			],
+			[
+				'uid'         => 2040,
+				'submods2000' => [
+					'publish_up' => 'future', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2040,
+						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'Same',
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2041, 2042, 2044, 2045],
+				],
+				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up in the future"
+			],
+
+			// Expiration = after. With many allsubs and subscription in the future
+			[
+				'uid'         => 2040,
+				'submods2000' => [
+					'publish_up' => 'past', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2042,
+						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'down@2042',
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2041, 2042, 2044, 2045],
+				],
+				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up in the past."
+			],
+			[
+				'uid'         => 2040,
+				'submods2000' => [
+					'publish_up' => 'now', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2042,
+						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'down@2042',
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2041, 2042, 2044, 2045],
+				],
+				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up now"
+			],
+
+			// @todo What happens if my new subscription starts in the future but BEFORE the existing subscription expires?
+			// @todo Would that ever happen in a real world scenario?
+
+			[
+				'uid'         => 2040,
+				'submods2000' => [
+					'publish_up' => 'future', // past, future, now
+					'fixdates'   => [
+						'oldsub'     => 2042,
+						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
+						'expiration' => 'after'
+					]
+				],
+				'expected'    => [
+					'publish_up'   => 'down@2042', // 2042 Expires in 18 months. "Future" is in just 12 months.
+					'publish_down' => null,
+					'enabled'      => 1,
+					'_allsubs_active' => [2041, 2042, 2044, 2045],
+				],
+				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up in the future"
+			],
+
 		];
 	}
 

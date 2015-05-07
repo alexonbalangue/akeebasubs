@@ -67,9 +67,9 @@ expiration = after
 
     [UID 2030]
 
-    oldsub in another level (active), publish_up in the past
-    oldsub in another level (active), publish_up now
-    oldsub in another level (active), publish_up in the future
+    √ oldsub in another level (active), publish_up in the past
+    √ oldsub in another level (active), publish_up now
+    √ oldsub in another level (active), publish_up in the future
 
     [UID 2040]
 
