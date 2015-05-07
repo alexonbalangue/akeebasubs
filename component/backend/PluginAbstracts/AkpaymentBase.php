@@ -420,7 +420,7 @@ abstract class AkpaymentBase extends JPlugin
 					$table = $subscription->getClone()->savestate(false)->reset(true, true);
 					$table->find($sub_id);
 
-					if ($table->akeebasubs_level_id == $oldsub->akeebasubs_level_id)
+					if ($table->akeebasubs_subscription_id == $oldsub->akeebasubs_subscription_id)
 					{
 						// Don't try to disable the same subscription twice
 						continue;
