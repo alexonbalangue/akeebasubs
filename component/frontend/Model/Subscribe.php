@@ -768,6 +768,7 @@ class Subscribe extends Model
 
 		$now = time();
 		$mNow = $this->container->platform->getDate()->toSql();
+		$noContact = array();
 
 		if (!$subscriptions->count())
 		{
@@ -805,9 +806,11 @@ class Subscribe extends Model
 				// Also mark the old subscription as "communicated". We don't want
 				// to spam our users with subscription renewal notices or expiration
 				// notification after they have effectively renewed!
-				$row->save([
-					'contact_flag' => 3
-				]);
+				$noContact[] = $row->akeebasubs_subscription_id;
+
+//				$row->save([
+//					'contact_flag' => 3
+//				]);
 			}
 		}
 
@@ -867,7 +870,7 @@ class Subscribe extends Model
 
 		// Step #6. Create a new subscription record
 		// ----------------------------------------------------------------------
-		// @todo Get the start ($mStartDate) and end ($mEndDate) dates from the validator plugin which replaces step 5
+		// @todo Get the start ($mStartDate) and end ($mEndDate) dates and the $noContact array from the validator plugin which replaces step 5
 
 		// Store the price validation's "oldsub" and "expiration" keys in
 		// the subscriptions subcustom array
@@ -888,6 +891,7 @@ class Subscribe extends Model
 			'oldsub'     => $priceValidation['oldsub'],
 			'allsubs'    => $priceValidation['allsubs'],
 			'expiration' => $priceValidation['expiration'],
+			'nocontact'  => $noContact,
 		);
 
 		// Get the IP address

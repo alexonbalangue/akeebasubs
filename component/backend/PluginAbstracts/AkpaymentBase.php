@@ -235,13 +235,38 @@ abstract class AkpaymentBase extends JPlugin
 			$subcustom = (array)$subcustom;
 		}
 
-		$oldsub = isset($subcustom['fixdates']['oldsub']) ? $subcustom['fixdates']['oldsub'] : null;
-		$expiration = isset($subcustom['fixdates']['expiration']) ? $subcustom['fixdates']['expiration'] : 'overlap';
-		$allsubs = isset($subcustom['fixdates']['allsubs']) ? $subcustom['fixdates']['allsubs'] : array();
+		$oldsub = null;
+		$expiration = 'overlap';
+		$allsubs = array();
+		$noContact = array();
 
 		if (isset($subcustom['fixdates']))
 		{
+			$oldsub = isset($subcustom['fixdates']['oldsub']) ? $subcustom['fixdates']['oldsub'] : null;
+			$expiration = isset($subcustom['fixdates']['expiration']) ? $subcustom['fixdates']['expiration'] : 'overlap';
+			$allsubs = isset($subcustom['fixdates']['allsubs']) ? $subcustom['fixdates']['allsubs'] : array();
+			$noContact = isset($subcustom['fixdates']['nocontact']) ? $subcustom['fixdates']['nocontact'] : array();
+
 			unset($subcustom['fixdates']);
+		}
+
+		// Mark all subscriptions being renewed by this subscription as "no contact" (contact_flag is set to 3)
+		if (!empty($noContact))
+		{
+			foreach ($noContact as $subId)
+			{
+				/** @var Subscriptions $row */
+				$row = $subscription->getContainer()->factory->model('Subscriptions')->tmpInstance();
+
+				try
+				{
+					$row->findOrFail($subId)->save(['contact_flag' => 3]);
+				}
+				catch (\Exception $e)
+				{
+					// Failure *is* an option.
+				}
+			}
 		}
 
 		if (is_numeric($oldsub))
