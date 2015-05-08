@@ -548,27 +548,30 @@ class AkpaymentBaseFixDatesTest extends \PHPUnit_Framework_TestCase
 				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up now"
 			],
 
-			// @todo What happens if my new subscription starts in the future but BEFORE the existing subscription expires?
-			// @todo Would that ever happen in a real world scenario?
-
-			[
-				'uid'         => 2040,
-				'submods2000' => [
-					'publish_up' => 'future', // past, future, now
-					'fixdates'   => [
-						'oldsub'     => 2042,
-						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
-						'expiration' => 'after'
-					]
-				],
-				'expected'    => [
-					'publish_up'   => 'down@2042', // 2042 Expires in 18 months. "Future" is in just 12 months.
-					'publish_down' => null,
-					'enabled'      => 1,
-					'_allsubs_active' => [2041, 2042, 2044, 2045],
-				],
-				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up in the future"
-			],
+			// What happens if my new subscription starts in the future but BEFORE the existing subscription expires?
+			// This will never happen in the real world. The start date of the subscription would already be the
+			// latest expiration date. You can't even have two subscriptions waiting for payment confirmation at the
+			// same time without violating another check made by the Subscribe model. Basically, this test case requires
+			// several bugs to all happen at the same time. Well, I can't test that, can I?
+//
+//			[
+//				'uid'         => 2040,
+//				'submods2000' => [
+//					'publish_up' => 'future', // past, future, now
+//					'fixdates'   => [
+//						'oldsub'     => 2042,
+//						'allsubs'    => [2040, 2041, 2042, 2043, 2044, 2045],
+//						'expiration' => 'after'
+//					]
+//				],
+//				'expected'    => [
+//					'publish_up'   => 'down@2042', // 2042 Expires in 18 months. "Future" is in just 12 months.
+//					'publish_down' => null,
+//					'enabled'      => 1,
+//					'_allsubs_active' => [2041, 2042, 2044, 2045],
+//				],
+//				'message'     => "expiration = replace. oldsub in the same level (active), allsubs in mixed levels (active & expired), publish_up in the future"
+//			],
 
 		];
 	}
