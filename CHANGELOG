@@ -3,6 +3,7 @@ Akeeba Subscriptions 5.0.0
 ================================================================================
 ~ Improved "My Subscriptions" page styling
 ~ Improved styling for country and state selection in front-end Level page
+~ The subscription page validators, price determination and post-payment subscription date modification code are now fully Unit Tested
 # [HIGH] Strappy layout: main price shown instead of signup fee
 # [HIGH] Username validation failed when it is a partial match to an existing one
 # [HIGH] Wrong subscription country when the country selection for tax display module is published on the subscription form (Level) page
