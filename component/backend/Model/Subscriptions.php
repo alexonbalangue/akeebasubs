@@ -258,11 +258,11 @@ class Subscriptions extends DataModel
 			$this->whereHas('user', function (\JDatabaseQuery $q) use($userIDs, $search) {
 				$q->where(
 					'(' .
-					'(' . $q->qn('user') . ' IN (' . implode(',', array_map(array($q, 'q'), $userIDs)) . '))' .
+					'(' . $q->qn('user_id') . ' IN (' . implode(',', array_map(array($q, 'q'), $userIDs)) . '))' .
 					' OR ' .
-					'(' . $q->qn('businessname') . ' LIKE ' . $q->qn("%$search%") . ')' .
+					'(' . $q->qn('businessname') . ' LIKE ' . $q->q("%$search%") . ')' .
 					' OR ' .
-					'(' . $q->qn('vatnumber') . ' LIKE ' . $q->qn("%$search%") . ')' .
+					'(' . $q->qn('vatnumber') . ' LIKE ' . $q->q("%$search%") . ')' .
 					')'
 				);
 			});
