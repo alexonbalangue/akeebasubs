@@ -22,6 +22,7 @@ Akeeba Subscriptions 5.0.0
 # [LOW] Wrong discount type drop-down in Coupon page
 # [LOW] Cannot save new tax rule (it complains about ordering being empty)
 # [LOW] Users view: cannot save VIES registration preference from the GUI
+# [LOW] Subscriptions and Invoices: should be sorted by ID descending by default
 
 Akeeba Subscriptions 5.0.0.b1
 ================================================================================

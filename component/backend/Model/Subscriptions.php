@@ -191,6 +191,13 @@ class Subscriptions extends DataModel
 			$this->setState($to, $this->getState($from, null));
 		}
 
+		// Set the default ordering by ID, descending
+		if (is_null($this->getState('filter_order', null, 'cmd')) && is_null($this->getState('filter_order_Dir', null, 'cmd')))
+		{
+			$this->setState('filter_order', $this->getIdFieldName());
+			$this->setState('filter_order_Dir', 'DESC');
+		}
+
 		// Apply filtering by user. This is a relation filter, it needs to go before the main query builder fires.
 		$this->filterByUser();
 	}

@@ -99,6 +99,24 @@ class Invoices extends DataModel
 	}
 
 	/**
+	 * Set the default ordering
+	 *
+	 * @param   \JDatabaseQuery  $query
+	 *
+	 * @return  void
+	 */
+	protected function onBeforeBuildQuery(\JDatabaseQuery &$query)
+	{
+		// Set the default ordering by ID, descending
+		if (is_null($this->getState('filter_order', null, 'cmd')) && is_null($this->getState('filter_order_Dir', null, 'cmd')))
+		{
+			$this->setState('filter_order', $this->getIdFieldName());
+			$this->setState('filter_order_Dir', 'DESC');
+		}
+	}
+
+
+	/**
 	 * Build the SELECT query for returning records. Overridden to apply custom filters.
 	 *
 	 * @param   \JDatabaseQuery  $query           The query being built
