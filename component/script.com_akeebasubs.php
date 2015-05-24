@@ -198,14 +198,30 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
-			->select('COUNT(*)')
-			->from($db->qn('#__extensions'))
-			->where($db->qn('type') . ' = ' . $db->q('component'))
-			->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
-			->where($db->qn('enabled') . ' = ' . $db->q('1'));
+					->select('COUNT(*)')
+					->from($db->qn('#__extensions'))
+					->where($db->qn('type') . ' = ' . $db->q('component'))
+					->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
+					->where($db->qn('enabled') . ' = ' . $db->q('1'));
 		$hasPowerAdmin = $db->setQuery($query)->loadResult();
 
 		if (!$hasPowerAdmin)
+		{
+			return;
+		}
+
+		$query = $db->getQuery(true)
+					->select('manifest_cache')
+					->from($db->qn('#__extensions'))
+					->where($db->qn('type') . ' = ' . $db->q('component'))
+					->where($db->qn('element') . ' = ' . $db->q('com_poweradmin'))
+					->where($db->qn('enabled') . ' = ' . $db->q('1'));
+		$paramsJson = $db->setQuery($query)->loadResult();
+		$jsnPAManifest = new JRegistry();
+		$jsnPAManifest->loadString($paramsJson, 'JSON');
+		$version = $jsnPAManifest->get('version', '0.0.0');
+
+		if (version_compare($version, '2.1.2', 'ge'))
 		{
 			return;
 		}
@@ -220,7 +236,7 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 	regarding this issue.
 </p>
 <p style="font-size: 18pt; line-height: 120%; color: green;">
-	Tip: You can disable JSN PowerAdmin to see the menu items to Akeeba Backup.
+	Tip: You can disable JSN PowerAdmin to see the menu items to {$this->componentName}.
 </p>
 </div>
 
