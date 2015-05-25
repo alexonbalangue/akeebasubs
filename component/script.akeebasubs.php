@@ -166,6 +166,7 @@ class Pkg_AkeebasubsInstallerScript
 	{
 		// Preload FOF classes required for the InstallScript. This is required since we'll be trying to uninstall FOF
 		// before uninstalling the component itself. The component has an uninstallation script which uses FOF, so...
+		@include_once(JPATH_LIBRARIES . '/fof30/include.php');
 		class_exists('FOF30\\Utils\\InstallScript');
 		class_exists('FOF30\\Database\\Installer');
 
