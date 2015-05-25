@@ -180,7 +180,7 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 		<?php
 	}
 
-	protected function renderPostUninstallation($status, $parent)
+	protected function renderPostUninstallation($parent)
 	{
 		?>
 		<h2 style="font-size: 14pt; font-weight: bold; padding: 0; margin: 0 0 0.5em;">&nbsp;Akeeba Subscriptions Uninstallation</h2>
@@ -260,7 +260,7 @@ HTML;
 		            ->where($db->qn('type') . ' = ' . $db->q('component'))
 		            ->where($db->qn('name') . ' = ' . $db->q($this->componentName));
 		$db->setQuery($query);
-		$extensionId = $db->loadColumn(0);
+		$extensionId = $db->loadResult();
 
 		if (!$extensionId)
 		{
