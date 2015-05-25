@@ -25,6 +25,13 @@ defined('_JEXEC') or die();
 class Pkg_AkeebasubsInstallerScript
 {
 	/**
+	 * The name of our package, e.g. pkg_example. Used for dependency tracking.
+	 *
+	 * @var  string
+	 */
+	protected $packageName = 'pkg_akeebasubs';
+
+	/**
 	 * The minimum PHP version required to install this extension
 	 *
 	 * @var   string
@@ -67,6 +74,12 @@ class Pkg_AkeebasubsInstallerScript
 		['plugin', 'aslogoutuser', 1, 'system'],
 		['plugin', 'aslogoutuser', 1, 'user'],
 	];
+
+	/**
+	 * =================================================================================================================
+	 * DO NOT EDIT BELOW THIS LINE
+	 * =================================================================================================================
+	 */
 
 	/**
 	 * Joomla! pre-flight event. This runs before Joomla! installs or updates the package. This is our last chance to
@@ -121,8 +134,8 @@ class Pkg_AkeebasubsInstallerScript
 		// cancel the installation of the entire package, so we have to get a bit tricky.
 		$this->installOrUpdateStapper($parent);
 
-		// Add strapper30 dependency for pkg_akeebasubs
-		$this->addDependency('strapper30', 'pkg_akeebasubs');
+		// Add strapper30 dependency for our package
+		$this->addDependency('strapper30', $this->packageName);
 
 		return true;
 	}
@@ -156,8 +169,8 @@ class Pkg_AkeebasubsInstallerScript
 		class_exists('FOF30\\Utils\\InstallScript');
 		class_exists('FOF30\\Database\\Installer');
 
-		// Remove strapper30 dependency for pkg_akeebasubs
-		$this->removeDependency('strapper30', 'pkg_akeebasubs');
+		// Remove strapper30 dependency for our package
+		$this->removeDependency('strapper30', $this->packageName);
 
 		// First try to uninstall Akeeba Strapper. The uninstallation might fail if there are other extensions depending
 		// on it. That would cause the entire package uninstallation to fail, hence the need for special handling.
