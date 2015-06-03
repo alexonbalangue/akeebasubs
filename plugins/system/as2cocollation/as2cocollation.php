@@ -180,8 +180,7 @@ class plgSystemAs2cocollation extends JPlugin
 			$sale = $this->loadSaleId($id);
 
 			// Find the subscription ID
-			$pNameParts = explode(':', $sale['sale']['invoices'][0]['lineitems'][0]['product_name']);
-			$subId = trim($pNameParts[1]);
+			$subId = trim($sale['sale']['invoices'][0]['vendor_order_id']);
 
 			// Construct the processor key
 			$invoiceId = $sale['sale']['invoices'][0]['invoice_id'];
