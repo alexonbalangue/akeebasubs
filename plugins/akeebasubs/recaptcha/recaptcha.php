@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
  */
 class plgAkeebasubsRecaptcha extends JPlugin
 {
-	function onSubscriptionFormRender($userparams, $cache)
+	public function onSubscriptionFormRender($userparams, $cache)
 	{
 		$this->loadLanguage();
 
@@ -91,7 +91,7 @@ class plgAkeebasubsRecaptcha extends JPlugin
 		return $fields;
 	}
 
-	function onValidate($data)
+	public function onValidate($data)
 	{
 		$ret = array(
 			'isValid'           => true,
