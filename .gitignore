@@ -10,7 +10,6 @@
 /build/buildlang
 /build/epub
 /build/phingext
-/build/templates/release*.json
 /build/tools
 /DESCRIPTION.html
 /RELEASENOTES.html
