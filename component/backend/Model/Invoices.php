@@ -579,7 +579,7 @@ class Invoices extends DataModel
 		);
 
 		// Render the template into HTML
-		$invoiceData['html'] = Message::processSubscriptionTags($template, $sub, $extras);
+		$invoiceData['html'] = Message::processSubscriptionTags($template, $sub, $extras, true);
 
 		// Save the record
 		$invoiceData['akeebasubs_subscription_id'] = $sub->akeebasubs_subscription_id;
