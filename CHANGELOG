@@ -5,6 +5,7 @@ Akeeba Subscriptions 5.0.0
 ~ Improved styling for country and state selection in front-end Level page
 ~ The subscription page validators, price determination and post-payment subscription date modification code are now fully Unit Tested
 ~ Blank out business name, activity and VAT for non-business registrations when issuing invoices
++ New PayMill payment plugin with PCI DSS 3 compliance using the new IFRAME method provided by PayMill
 # [HIGH] Strappy layout: main price shown instead of signup fee
 # [HIGH] Username validation failed when it is a partial match to an existing one
 # [HIGH] Wrong subscription country when the country selection for tax display module is published on the subscription form (Level) page
