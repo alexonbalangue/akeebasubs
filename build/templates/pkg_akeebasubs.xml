@@ -53,6 +53,7 @@
         <file type="plugin" group="akpayment" id="none">plg_akpayment_none.zip</file>
         <file type="plugin" group="akpayment" id="offline">plg_akpayment_offline.zip</file>
         <file type="plugin" group="akpayment" id="paymill">plg_akpayment_paymill.zip</file>
+        <file type="plugin" group="akpayment" id="paymilldss3">plg_akpayment_paymilldss3.zip</file>
         <file type="plugin" group="akpayment" id="paypal">plg_akpayment_paypal.zip</file>
         <file type="plugin" group="akpayment" id="paypalpaymentspro">plg_akpayment_paypalpaymentspro.zip</file>
         <file type="plugin" group="akpayment" id="paypalproexpress">plg_akpayment_paypalproexpress.zip</file>
