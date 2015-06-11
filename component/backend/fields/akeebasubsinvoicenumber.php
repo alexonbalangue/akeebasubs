@@ -41,7 +41,7 @@ class F0FFormFieldAkeebasubsinvoicenumber extends F0FFormFieldText
 			$value .= '<span class="label label-info">' . $invoicetemplates[$this->item->akeebasubs_invoicetemplate_id]->title . '</span> ';
 		}
 
-		if (!empty($invoice->display_number))
+		if (!empty($this->item->display_number))
 		{
 			$value .= htmlentities($this->item->display_number, ENT_COMPAT, 'UTF-8');
 		}
