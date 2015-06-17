@@ -84,7 +84,7 @@ class SubscriptionsForStats extends Subscriptions
 		}
 
 		// Apply user filtering
-		$this->filterByUser();
+		$this->filterByUser($query);
 
 		// Apply custom WHERE clauses
 		if (count($this->whereClauses))
@@ -319,7 +319,7 @@ class SubscriptionsForStats extends Subscriptions
 		else
 		{
 			// Filtering by user information only applies when we're not grouping by date / level
-			$this->filterByUser();
+			$this->filterByUser($query);
 		}
 
 		// Map state variables to what is used by automatic filters

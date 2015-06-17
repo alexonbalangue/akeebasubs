@@ -199,7 +199,7 @@ class Subscriptions extends DataModel
 		}
 
 		// Apply filtering by user. This is a relation filter, it needs to go before the main query builder fires.
-		$this->filterByUser();
+		$this->filterByUser($query);
 	}
 
 	/**
@@ -249,7 +249,7 @@ class Subscriptions extends DataModel
 	 *
 	 * @return  void
 	 */
-	protected function filterByUser()
+	protected function filterByUser(\JDatabaseQuery &$query)
 	{
 		// User search feature
 		$search = $this->getState('search', null, 'string');
@@ -260,6 +260,14 @@ class Subscriptions extends DataModel
 			/** @var JoomlaUsers $users */
 			$users = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 			$userIDs = $users->search($search)->with([])->get(true)->modelKeys();
+
+			// If there is no user match we can't return any records, sorry.
+			if (empty($userIDs))
+			{
+				$query->where($query->qn('akeebasubs_subscription_id') . ' = ' . $query->q('-1'));
+
+				return;
+			}
 
 			// Then do a relation filter against the user relation
 			$this->whereHas('user', function (\JDatabaseQuery $q) use($userIDs, $search) {
