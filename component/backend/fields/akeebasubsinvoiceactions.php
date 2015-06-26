@@ -35,6 +35,8 @@ class F0FFormFieldAkeebasubsinvoiceactions extends F0FFormFieldText
 
 		if ($this->item->extension == 'akeebasubs')
 		{
+			JHtml::_('behavior.modal');
+
 			$html .= '<a href="index.php?option=com_akeebasubs&view=invoices&task=read&id=' .
 				htmlspecialchars($this->item->akeebasubs_subscription_id, ENT_COMPAT, 'UTF-8') .
 				'&tmpl=component" class="btn btn-info modal" rel="{handler: \'iframe\', size: {x: 800, y: 500}}" title="' .
