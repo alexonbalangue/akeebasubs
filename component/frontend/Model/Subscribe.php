@@ -748,7 +748,7 @@ class Subscribe extends Model
 
 				$subscriptions = $subscriptionsModel
 					->user_id($user->id)
-					->akeebasubs_level_id($groupList)
+					->level($groupList)
 					->paystate('C')
 					->get(true);
 			}
