@@ -758,5 +758,89 @@ ALTER TABLE "#__akeebasubs_emailtemplates" DROP COLUMN "modifed_by";
 ALTER TABLE "#__akeebasubs_emailtemplates" ADD COLUMN "modified_by" bigint NOT NULL DEFAULT '0';
 				]]></query>
 		</action>
-    </sql>
+
+		<action table="#__akeebasubs_countrycurrencies" canfail="0">
+			<condition type="missing" value="" />
+			<query><![CDATA[
+CREATE TABLE "#__akeebasubs_countrycurrencies" (
+  "country" char(2) NOT NULL DEFAULT '',
+  "currency" char(3) NOT NULL DEFAULT 'EUR',
+  "name" varchar(255) DEFAULT 'Euro',
+  "symbol" varchar(10) DEFAULT '€',
+  PRIMARY KEY ( "country" )
+);
+				]]>
+			</query>
+			<query><![CDATA[
+INSERT INTO "#__akeebasubs_countrycurrencies" ("country", "currency", "name", "symbol")
+VALUES
+	('AU', 'AUD', 'Australian dollar', 'A$'),
+	('BG', 'BGN', 'Lev', 'лв.'),
+	('BR', 'BRL', 'Real', 'R$'),
+	('CA', 'CAD', 'Canadian dollar', 'C$'),
+	('CH', 'CHF', 'Swiss franc', 'CHF'),
+	('CN', 'CNY', 'Yuan renminbi', '¥'),
+	('CZ', 'CZK', 'Koruna', 'Kč'),
+	('DK', 'DKK', 'Krone', 'kr'),
+	('IE', 'EUR', 'Euro', '€'),
+	('IT', 'EUR', 'Euro', '€'),
+	('SK', 'EUR', 'Euro', '€'),
+	('LT', 'EUR', 'Euro', '€'),
+	('LU', 'EUR', 'Euro', '€'),
+	('LV', 'EUR', 'Euro', '€'),
+	('MC', 'EUR', 'Euro', '€'),
+	('NL', 'EUR', 'Euro', '€'),
+	('PT', 'EUR', 'Euro', '€'),
+	('VA', 'EUR', 'Euro', '€'),
+	('SI', 'EUR', 'Euro', '€'),
+	('SM', 'EUR', 'Euro', '€'),
+	('MT', 'EUR', 'Euro', '€'),
+	('DE', 'EUR', 'Euro', '€'),
+	('CY', 'EUR', 'Euro', '€'),
+	('BE', 'EUR', 'Euro', '€'),
+	('AT', 'EUR', 'Euro', '€'),
+	('AD', 'EUR', 'Euro', '€'),
+	('EE', 'EUR', 'Euro', '€'),
+	('ES', 'EUR', 'Euro', '€'),
+	('FI', 'EUR', 'Euro', '€'),
+	('FR', 'EUR', 'Euro', '€'),
+	('GR', 'EUR', 'Euro', '€'),
+	('GB', 'GBP', 'Pound sterling', '£'),
+	('HK', 'HKD', 'Hong Kong dollar', 'HK$'),
+	('HR', 'HRK', 'Kuna', 'kn'),
+	('HU', 'HUF', 'Forint', 'Ft'),
+	('ID', 'IDR', 'Rupiah', 'Rp'),
+	('IL', 'ILS', 'Shekel', '₪'),
+	('IN', 'INR', 'Rupee', '₹'),
+	('JP', 'JPY', 'Yen', '¥'),
+	('KR', 'KRW', 'Won', '₩'),
+	('MX', 'MXN', 'Peso', 'MX$'),
+	('MY', 'MYR', 'Ringgit', 'RM'),
+	('NO', 'NOK', 'Krone', 'kr'),
+	('NZ', 'NZD', 'New Zealand dollar', 'NZ$'),
+	('PH', 'PHP', 'Peso', '₱'),
+	('PL', 'PLN', 'Zloty', 'zł'),
+	('RO', 'RON', 'Leu', 'lei'),
+	('RU', 'RUB', 'Rouble', 'руб'),
+	('SE', 'SEK', 'Krona', 'kr'),
+	('SG', 'SGD', 'Singapore dollar', 'SG$'),
+	('TH', 'THB', 'Baht', '฿'),
+	('TR', 'TRY', 'Lira', '₺'),
+	('US', 'USD', 'US dollar', '$'),
+	('ZA', 'ZAR', 'Rand', 'R');
+				]]></query>
+		</action>
+
+		<action table="#__akeebasubs_forexrates" canfail="1">
+			<condition type="missing" value="" />
+			<query><![CDATA[
+CREATE TABLE "#__akeebasubs_forexrates" (
+  "akeebasubs_forexrate_id" char(3) NOT NULL DEFAULT '',
+  "rate" double NOT NULL DEFAULT '1',
+  PRIMARY KEY ("akeebasubs_forexrate_id")
+);
+			]]></query>
+		</action>
+
+	</sql>
 </schema>
