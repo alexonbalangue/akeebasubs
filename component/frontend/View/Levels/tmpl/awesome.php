@@ -107,7 +107,7 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 	</div>
 </div>
 
-<?php if($this->showLocalPrices || $this->includeDiscount): ?>
+<?php if($this->showNotices && ($this->showLocalPrices || $this->includeDiscount)): ?>
 	<div class="akeebasubs-notices">
 		<h4><?php echo JText::_('COM_AKEEBASUBS_LEVELS_NOTICES') ?></h4>
 		<?php if ($this->showLocalPrices) : ?>
