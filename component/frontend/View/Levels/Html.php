@@ -102,6 +102,13 @@ class Html extends \FOF30\View\DataView\Html
 	public $country = '';
 
 	/**
+	 * Should I display notices about
+	 *
+	 * @var bool
+	 */
+	public $showNotices = true;
+
+	/**
 	 * Cache of pricing information per subscription level, required to cut down on queries in the Strappy layout.
 	 *
 	 * @var  object[]

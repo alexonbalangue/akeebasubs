@@ -52,7 +52,8 @@ $config = [
 		'filter_order'     => 'ordering',
 		'filter_order_Dir' => 'ASC',
 		'enabled'          => 1,
-		'caching'          => false
+		'caching'          => false,
+		'shownotices'	   => false,
 	]
 
 ];

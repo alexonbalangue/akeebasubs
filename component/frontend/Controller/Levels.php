@@ -99,6 +99,13 @@ class Levels extends DataController
 			$session->set('coupon', $coupon, 'com_akeebasubs');
 		}
 
+		// Are we told to hide notices?
+		if (!$this->input->getBool('shownotices', true))
+		{
+			$view = $this->getView();
+			$view->showNotices = false;
+		}
+
 		// Continue parsing page options
 		/** @var \Akeeba\Subscriptions\Site\Model\Levels $model */
 		$model = $this->getModel();
