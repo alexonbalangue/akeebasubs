@@ -7,6 +7,7 @@
 
 namespace Akeeba\Subscriptions\Tests\Admin\Helper;
 
+use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Helper\Forex;
 
@@ -26,6 +27,9 @@ class ForexTest extends \PHPUnit_Framework_TestCase
 				'platformClass' => 'Akeeba\\Subscriptions\\Tests\\Stubs\\CustomPlatform'
 			]);
 		}
+
+		// Prime the ComponentParams class
+		ComponentParams::getParam('currency');
 	}
 
 	/**
@@ -307,10 +311,157 @@ class ForexTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($expected, $actual, "Exchange rate of $from to $to must be $expected, not $actual");
 	}
 
-	public function testConvertToLocal($country, $value, $expected)
+	/**
+	 * @covers Akeeba\Subscriptions\Admin\Helper\Forex::convertToLocal
+	 * @depends testExhangeRate
+	 *
+	 * @dataProvider Akeeba\Subscriptions\Tests\Admin\Helper\ForexTest::getTestConvertToLocal
+	 */
+	public function testConvertToLocal($options, $country, $value, $expected, $message)
 	{
-		// TODO Write this test
-		$this->markTestIncomplete('This test is not yet written');
+		// Apply component options
+		$reflectionClass = new \ReflectionClass('Akeeba\\Subscriptions\\Admin\\Helper\\ComponentParams');
+		$refParams = $reflectionClass->getProperty('params');
+		$refParams->setAccessible(true);
+		/** @var \JRegistry $params */
+		$params = $refParams->getValue();
+
+		foreach ($options as $k => $v)
+		{
+			$params->set($k, $v);
+		}
+
+		// Get the result
+		$actual = Forex::convertToLocal($country, $value, self::$container);
+
+		// Assert equality
+		$this->assertEquals($expected, $actual, $message);
+	}
+
+	public static function getTestConvertToLocal()
+	{
+		return [
+			[
+				'options' => [
+					'currency' => 'EUR',
+					'currencysymbol' => '€'
+				],
+				'country' => 'GR',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'EUR',
+					'symbol' => '€',
+					'value' => 10.00,
+					'rate' => 1.00
+				],
+				'message' => 'Inside Eurozone (canonical)'
+			],
+			[
+				'options' => [
+					'currency' => 'eur',
+					'currencysymbol' => 'e'
+				],
+				'country' => 'GR',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'EUR',
+					'symbol' => 'e',
+					'value' => 10.00,
+					'rate' => 1.00
+				],
+				'message' => 'Inside Eurozone (lowercase currency code and alt symbol)'
+			],
+			[
+				'options' => [
+					'currency' => 'APL',
+					'currencysymbol' => ''
+				],
+				'country' => 'US',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'APL',
+					'symbol' => '',
+					'value' => 10.00,
+					'rate' => 1.00
+				],
+				'message' => 'Unknown currency'
+			],
+			[
+				'options' => [
+					'currency' => 'EUR',
+					'currencysymbol' => '€'
+				],
+				'country' => 'XX',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'EUR',
+					'symbol' => '€',
+					'value' => 10.00,
+					'rate' => 1.00
+				],
+				'message' => 'Invalid country'
+			],
+			[
+				'options' => [
+					'currency' => 'EUR',
+					'currencysymbol' => '€'
+				],
+				'country' => 'AD',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'EUR',
+					'symbol' => '€',
+					'value' => 10.00,
+					'rate' => 1.00
+				],
+				'message' => 'Country with no currency preference'
+			],
+			[
+				'options' => [
+					'currency' => 'EUR',
+					'currencysymbol' => '€'
+				],
+				'country' => 'US',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'USD',
+					'symbol' => '$',
+					'value' => 11.096,
+					'rate' => 1.1096
+				],
+				'message' => 'EUR to USD with USA country preference'
+			],
+			[
+				'options' => [
+					'currency' => 'USD',
+					'currencysymbol' => '$'
+				],
+				'country' => 'DE',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'EUR',
+					'symbol' => '€',
+					'value' => 9.0122566690699,
+					'rate' => 0.90122566690699
+				],
+				'message' => 'USD to EUR with Germany country preference'
+			],
+			[
+				'options' => [
+					'currency' => 'USD',
+					'currencysymbol' => '$'
+				],
+				'country' => 'AU',
+				'value' => 10.00,
+				'expected' => [
+					'currency' => 'AUD',
+					'symbol' => 'A$',
+					'value' => 13.2903749098774,
+					'rate' => 1.32903749098774
+				],
+				'message' => 'USD to AUD with Australia country preference'
+			],
+		];
 	}
 
 	public static function getTestExhangeRate()

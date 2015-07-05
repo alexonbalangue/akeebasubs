@@ -220,6 +220,7 @@ class Forex
 		self::reloadCurrencyData(false, $container);
 
 		$defaultAkeebaSubsCurrency = ComponentParams::getParam('currency', 'EUR');
+		$defaultAkeebaSubsCurrency = strtoupper($defaultAkeebaSubsCurrency);
 
 		$defaultReturn = [
 			'currency' => $defaultAkeebaSubsCurrency,
@@ -236,6 +237,11 @@ class Forex
 		}
 
 		$newCurrency = self::$countryCurrency[$country]['currency'];
+
+		if ($newCurrency == $defaultAkeebaSubsCurrency)
+		{
+			return $defaultReturn;
+		}
 
 		try
 		{
@@ -295,13 +301,13 @@ class Forex
 			throw new \InvalidArgumentException('Invalid currency');
 		}
 
+		$from = strtoupper($from);
+		$to = strtoupper($to);
+
 		if ($from == $to)
 		{
 			return $value;
 		}
-
-		$from = strtoupper($from);
-		$to = strtoupper($to);
 
 		if ($from == 'EUR')
 		{
