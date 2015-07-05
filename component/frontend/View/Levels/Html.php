@@ -10,6 +10,7 @@ namespace Akeeba\Subscriptions\Site\View\Levels;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use Akeeba\Subscriptions\Admin\Helper\Forex;
 use Akeeba\Subscriptions\Site\Model\Levels;
 use Akeeba\Subscriptions\Site\Model\Subscriptions;
 use Akeeba\Subscriptions\Site\Model\TaxHelper;
@@ -64,6 +65,34 @@ class Html extends \FOF30\View\DataView\Html
 	 * @var  bool
 	 */
 	public $renderAsFree = false;
+
+	/**
+	 * Should I display price conversions when the user's selected country's currency is other than the shop's currency?
+	 *
+	 * @var bool
+	 */
+	public $showLocalPrices = false;
+
+	/**
+	 * Exchange rate in use
+	 *
+	 * @var float
+	 */
+	public $exchangeRate = 1.00;
+
+	/**
+	 * Local currency code, e.g. EUR
+	 *
+	 * @var string
+	 */
+	public $localCurrency = '';
+
+	/**
+	 * Local currency symbol, e.g. €
+	 *
+	 * @var string
+	 */
+	public $localSymbol = '';
 
 	/**
 	 * Cache of pricing information per subscription level, required to cut down on queries in the Strappy layout.
@@ -124,6 +153,25 @@ class Html extends \FOF30\View\DataView\Html
 
 		// Should I render zero prices as "FREE"?
 		$this->renderAsFree = ComponentParams::getParam('renderasfree', 0);
+
+		// Should I display prices in local currency based on country selection?
+		$this->showLocalPrices = ComponentParams::getParam('showlocalprices', 1);
+
+		// Update the rates and check the conversion rate for this display
+		if ($this->showLocalPrices)
+		{
+			Forex::updateRates(false, $this->container);
+			$temp = Forex::convertToLocal($this->taxParams['country'], 1.00, $this->container);
+			$this->exchangeRate = $temp['rate'];
+			$this->localCurrency = $temp['currency'];
+			$this->localSymbol = $temp['symbol'];
+		}
+
+		// Do not show foreign exchange conversions unless the exchange rate is different than unity
+		if (abs($this->exchangeRate - 1.00) <= 0.000001)
+		{
+			$this->showLocalPrices = false;
+		}
 
 		parent::onBeforeBrowse();
 	}
@@ -247,6 +295,17 @@ class Html extends \FOF30\View\DataView\Html
 			'signupInteger'        => $price_integerSU,
 			'signupFractional'     => $price_fractionalSU,
 		];
+
+		// TODO Duplicate all price points to local currency if showLocalPrices is enabled
+		if ($this->showLocalPrices)
+		{
+			$temp = [];
+
+			foreach ($this->pricingInformationCache[$levelKey] as $k => $v)
+			{
+				$temp[$k . 'Local'] = $v * $this->exchangeRate;
+			}
+		}
 
 		return $this->pricingInformationCache[$levelKey];
 	}

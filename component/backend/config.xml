@@ -175,6 +175,13 @@
 			<option value="0">JNo</option>
 			<option value="1">JYes</option>
 		</field >
+		<field name="showlocalprices" type="list"
+			default="1"
+			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWLOCALPRICES_LABEL"
+			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWLOCALPRICES_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
+		</field >
 		<field name="reqcoupon" type="list" default="0"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_REQCOUPON_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_REQCOUPON_DESC">
