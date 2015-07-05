@@ -38,8 +38,16 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 					<div class="akeebasubs-awesome-price">
 						<?php if($this->renderAsFree && ($priceInfo->levelPrice < 0.01)):?>
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
+						<?php if ($this->showLocalPrices): ?>
+							<div class="akeebasubs-awesome-forexrate-free">&nbsp;</div>
+						<?php endif; ?>
 						<?php else: ?>
 						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->priceInteger ?><?php if((int)$priceInfo->priceFractional > 0): ?></span><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->priceFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
+							<?php if ($this->showLocalPrices): ?>
+								<div class="akeebasubs-awesome-forexrate">
+									<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE_LBL', $this->toLocalCurrency((float)$priceInfo->levelPrice)); ?>
+								</div>
+							<?php endif; ?>
 						<?php endif; ?>
 					</div>
 					<?php if ((float)$priceInfo->vatRule->taxrate > 0.01): ?>
@@ -50,14 +58,19 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 					</div>
 					<?php endif; ?>
 					<?php if ($this->includeDiscount): ?>
-					<div class="akeebasubs-awesome-prediscount">
-						<?php if(abs($priceInfo->discount) >= 0.01): ?>
+					<div class="akeebasubs-awesome-prediscount<?php echo ($this->showLocalPrices) ? '-withforex': '' ?>">
+						<?php if((abs($priceInfo->discount) >= 0.01) && (abs($priceInfo->prediscount) >= 0.01)): ?>
 						<span class="akeebasubs-awesome-prediscount-label">
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PREDISCOUNT'); ?>
 						</span>
 						<s>
 						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->prediscountInteger ?></span><?php if((int)$priceInfo->prediscountFractional > 0): ?><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->prediscountFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
 						</s>
+						<?php if ($this->showLocalPrices): ?>
+							<div class="akeebasubs-awesome-forexrate-discount">
+								<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE_LBL', $this->toLocalCurrency((float)$priceInfo->prediscount)); ?>
+							</div>
+						<?php endif; ?>
 						<?php endif; ?>
 					</div>
 					<?php endif; ?>
@@ -94,14 +107,27 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 	</div>
 </div>
 
-<?php if ($this->showLocalPrices) : ?>
-	<div class="akeebasubs-forex-notice">
-		<p>
-			<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE',
-				$this->localCurrency, $this->localSymbol,
-				ComponentParams::getParam('currency','EUR'),
-				$this->exchangeRate); ?>
-		</p>
+<?php if($this->showLocalPrices || $this->includeDiscount): ?>
+	<div class="akeebasubs-notices">
+		<h4><?php echo JText::_('COM_AKEEBASUBS_LEVELS_NOTICES') ?></h4>
+		<?php if ($this->showLocalPrices) : ?>
+			<div class="akeebasubs-forex-notice">
+				<p>
+					<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE',
+						$this->localCurrency, $this->localSymbol,
+						ComponentParams::getParam('currency','EUR'),
+						$this->exchangeRate); ?>
+				</p>
+			</div>
+		<?php endif; ?>
+
+		<?php if ($this->includeDiscount) : ?>
+			<div class="akeebasubs-include-discount-notice">
+				<p>
+					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_PREDISCOUNT_NOTE'); ?>
+				</p>
+			</div>
+		<?php endif; ?>
 	</div>
 <?php endif; ?>
 

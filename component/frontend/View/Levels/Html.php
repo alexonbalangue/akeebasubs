@@ -95,6 +95,13 @@ class Html extends \FOF30\View\DataView\Html
 	public $localSymbol = '';
 
 	/**
+	 * Country used for foreign currency display
+	 *
+	 * @var string
+	 */
+	public $country = '';
+
+	/**
 	 * Cache of pricing information per subscription level, required to cut down on queries in the Strappy layout.
 	 *
 	 * @var  object[]
@@ -160,6 +167,7 @@ class Html extends \FOF30\View\DataView\Html
 		// Update the rates and check the conversion rate for this display
 		if ($this->showLocalPrices)
 		{
+			$this->country = $this->taxParams['country'];
 			Forex::updateRates(false, $this->container);
 			$temp = Forex::convertToLocal($this->taxParams['country'], 1.00, $this->container);
 			$this->exchangeRate = $temp['rate'];
@@ -225,8 +233,8 @@ class Html extends \FOF30\View\DataView\Html
 			/** @var \Akeeba\Subscriptions\Site\Model\Subscribe $subscribeModel */
 			$subscribeModel = $this->getContainer()->factory->model('Subscribe')->savestate(0);
 			$subscribeModel->setState('id', $level->akeebasubs_level_id);
-			$subValidation = $subscribeModel->validatePrice(true);
-			$discount = $subValidation->discount;
+			$subValidation = $subscribeModel->getValidation();
+			$discount = $subValidation->price->discount;
 			$levelPrice = $level->price - $discount;
 		}
 
@@ -296,17 +304,31 @@ class Html extends \FOF30\View\DataView\Html
 			'signupFractional'     => $price_fractionalSU,
 		];
 
-		// TODO Duplicate all price points to local currency if showLocalPrices is enabled
-		if ($this->showLocalPrices)
-		{
-			$temp = [];
+		return $this->pricingInformationCache[$levelKey];
+	}
 
-			foreach ($this->pricingInformationCache[$levelKey] as $k => $v)
-			{
-				$temp[$k . 'Local'] = $v * $this->exchangeRate;
-			}
+	public function toLocalCurrency($rawPrice)
+	{
+		static $currencyPosition = null;
+
+		if (is_null($currencyPosition))
+		{
+			$currencyPosition = ComponentParams::getParam('currencypos','before');
 		}
 
-		return $this->pricingInformationCache[$levelKey];
+		$convertedPriceInfo = Forex::convertToLocal($this->country, $rawPrice);
+
+		$result = sprintf('%0.2f', $convertedPriceInfo['value']);
+
+		if ($currencyPosition == 'before')
+		{
+			$result = $convertedPriceInfo['symbol'] . $result;
+		}
+		else
+		{
+			$result .= $convertedPriceInfo['symbol'];
+		}
+
+		return $result;
 	}
 }

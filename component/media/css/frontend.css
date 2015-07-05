@@ -33,7 +33,16 @@ table.asfelist tfoot tr { background-color: silver; border-top: thin solid black
 table.asfelist tfoot td { text-align: center; }
 
 /*
- * Subscriptions list page
+ * Subscription levels list page
+ */
+
+div.akeebasubs-notices {
+    font-size: 80%;
+    color: #888;
+}
+
+/*
+ * Subscription levels list page (default layout)
  */
 
 #akeebasubs div.level {
@@ -256,6 +265,36 @@ div.akeebasubs-awesome-column:hover div.akeebasubs-awesome-header {
 	) !important;
 }
 
+div.akeebasubs-awesome-forexrate-free {
+    display: block;
+    font-size: 35%;
+    margin-top: 0.5em;
+    height: 2em;
+}
+
+div.akeebasubs-awesome-forexrate,
+div.akeebasubs-awesome-forexrate-signup,
+div.akeebasubs-awesome-forexrate-discount {
+    margin-top: 0.5em;
+    font-size: 35%;
+    text-shadow: none;
+    color: #ccc;
+}
+
+div.akeebasubs-awesome-forexrate-signup {
+    margin-top: 0.2em;
+    font-size: 80%;
+}
+
+div.akeebasubs-awesome-forexrate-discount {
+    font-size: 80%;
+    color: #ff9999;
+}
+
+div.akeebasubs-awesome-forexrate-discount small {
+    color: #ccc;
+}
+
 .akeebasubs-awesome-level {
 	margin-bottom: 0.5em;
 	border-top: 1px solid #222;
@@ -299,14 +338,19 @@ a.akeebasubs-awesome-level-link {
     font-weight: normal;
 }
 
-.akeebasubs-awesome-prediscount {
-	color: #f33;
+.akeebasubs-awesome-prediscount,
+.akeebasubs-awesome-prediscount-withforex {
+	color: #ff9999;
 	font-style: italic;
 	font-weight: bold;
 	text-align: center;
 	padding: 0.2em 0;
 	text-shadow: #333 1px 1px 1px;
-	height: 1.2em;
+    height: 1.2em;
+}
+
+.akeebasubs-awesome-prediscount-withforex {
+    height: 2.4em;
 }
 
 .akeebasubs-awesome-taxnotice {
@@ -406,6 +450,30 @@ div.akeebasubs-strappy-taxnotice {
 	font-size: 8pt;
 	text-shadow: none;
 	color: #797;
+}
+
+div.akeebasubs-strappy-forexrate,
+div.akeebasubs-strappy-forexrate-signup,
+div.akeebasubs-strappy-forexrate-discount {
+    margin-top: 0.5em;
+	font-size: 50%;
+	text-shadow: none;
+	color: #779;
+}
+
+div.akeebasubs-strappy-forexrate-signup {
+    margin-top: 0.2em;
+    font-size: 80%;
+}
+
+div.akeebasubs-strappy-forexrate-discount {
+    font-size: 80%;
+    color: red;
+    text-decoration: line-through;
+}
+
+div.akeebasubs-strappy-forexrate-discount small {
+    color: black;
 }
 
 td.akeebasubs-strappy-signupfee {
