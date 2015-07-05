@@ -82,5 +82,16 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 <?php endforeach;?>
 <div class="level-clear"></div>
 
+<?php if ($this->showLocalPrices) : ?>
+	<div class="akeebasubs-forex-notice">
+		<p>
+			<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE',
+				$this->localCurrency, $this->localSymbol,
+				ComponentParams::getParam('currency','EUR'),
+				$this->exchangeRate); ?>
+		</p>
+	</div>
+<?php endif; ?>
+
 <?php echo $this->getContainer()->template->loadPosition('akeebasubscriptionslistfooter')?>
 </div>
