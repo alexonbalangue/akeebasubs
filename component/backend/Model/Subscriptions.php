@@ -261,20 +261,22 @@ class Subscriptions extends DataModel
 			$users = $this->container->factory->model('JoomlaUsers')->tmpInstance();
 			$userIDs = $users->search($search)->with([])->get(true)->modelKeys();
 
-			// If there is no user match we can't return any records, sorry.
-			if (empty($userIDs))
+			// If there are user IDs, we need to filter by them and not search for business name or VAT number
+			if (!empty($userIDs))
 			{
-				$query->where($query->qn('akeebasubs_subscription_id') . ' = ' . $query->q('-1'));
+				$this->whereHas('user', function (\JDatabaseQuery $q) use($userIDs) {
+					$q->where(
+						$q->qn('user_id') . ' IN (' . implode(',', array_map(array($q, 'q'), $userIDs)) . ')'
+					);
+				});
 
 				return;
 			}
 
-			// Then do a relation filter against the user relation
-			$this->whereHas('user', function (\JDatabaseQuery $q) use($userIDs, $search) {
+			// Otherwise we have to do a relation filter against the user relation, filtering by business name or VAT number
+			$this->whereHas('user', function (\JDatabaseQuery $q) use($search) {
 				$q->where(
 					'(' .
-					'(' . $q->qn('user_id') . ' IN (' . implode(',', array_map(array($q, 'q'), $userIDs)) . '))' .
-					' OR ' .
 					'(' . $q->qn('businessname') . ' LIKE ' . $q->q("%$search%") . ')' .
 					' OR ' .
 					'(' . $q->qn('vatnumber') . ' LIKE ' . $q->q("%$search%") . ')' .
