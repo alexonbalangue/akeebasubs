@@ -5,11 +5,6 @@
  *  @license GNU General Public License version 3, or later
  */
 
-use Akeeba\Subscriptions\Admin\Helper\Select;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-use Akeeba\Subscriptions\Admin\Helper\Image;
-use Akeeba\Subscriptions\Admin\Helper\Format;
-
 /** @var \FOF30\View\DataView\Form $this */
 
 // Protect from unauthorized access

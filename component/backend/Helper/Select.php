@@ -569,17 +569,17 @@ abstract class Select
 			$countries = array_merge(self::$countries);
 
 			// -- Initialisation
-			$show = trim(ComponentParams::getParam('showcountries', ''));
-			$hide = trim(ComponentParams::getParam('hidecountries', ''));
+			$show = trim(self::getContainer()->params->get('showcountries', ''));
+			$hide = trim(self::getContainer()->params->get('hidecountries', ''));
 
 			if (!empty($show))
 			{
-				$show = explode(',', ComponentParams::getParam('showcountries', ''));
+				$show = explode(',', self::getContainer()->params->get('showcountries', ''));
 			}
 
 			if (!empty($hide))
 			{
-				$hide = explode(',', ComponentParams::getParam('hidecountries', ''));
+				$hide = explode(',', self::getContainer()->params->get('hidecountries', ''));
 			}
 
 			if (!empty($show))
@@ -1056,7 +1056,7 @@ abstract class Select
 		}
 
 		// Determine how to render the payment method (drop-down or radio box)
-		if ((ComponentParams::getParam('useppimages', 1) > 0) && !$always_dropdown)
+		if ((self::getContainer()->params->get('useppimages', 1) > 0) && !$always_dropdown)
 		{
 			// Show images instead of a drop-down
 			$options = array();
@@ -1079,7 +1079,7 @@ abstract class Select
 
 				$innerHTML = '<img border="0" src="' . $plugin->image . '" /> ';
 
-				if (ComponentParams::getParam('useppimages', 1) == 2)
+				if (self::getContainer()->params->get('useppimages', 1) == 2)
 				{
 					$innerHTML .= '<span class="pull-left">' . $plugin->title . '</span>';
 				}
@@ -1490,6 +1490,23 @@ abstract class Select
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Returns the current Akeeba Subscriptions container object
+	 *
+	 * @return  Container
+	 */
+	protected static function getContainer()
+	{
+		static $container = null;
+
+		if (is_null($container))
+		{
+			$container = Container::getInstance('com_akeebasubs');
+		}
+
+		return $container;
 	}
 }
 

@@ -10,7 +10,6 @@ defined('_JEXEC') or die();
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentPaypalproexpress extends AkpaymentBase
 {
@@ -70,7 +69,7 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 			'PAYMENTREQUEST_0_TAXAMT'        => sprintf('%.2f', $subscription->tax_amount),
 			'PAYMENTREQUEST_0_ITEMAMT'       => sprintf('%.2f', $subscription->net_amount),
 			'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
-			'PAYMENTREQUEST_0_CURRENCYCODE'  => strtoupper(ComponentParams::getParam('currency', 'EUR')),
+			'PAYMENTREQUEST_0_CURRENCYCODE'  => strtoupper($this->container->params->get('currency', 'EUR')),
 			'L_PAYMENTREQUEST_0_NAME0'       => $level->title,
 			'L_PAYMENTREQUEST_0_QTY0'        => 1,
 			'L_PAYMENTREQUEST_0_AMT0'        => sprintf('%.2f', $subscription->net_amount)
@@ -194,7 +193,7 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 				'PAYERID'                        => $data['PayerID'],
 				'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
 				'PAYMENTREQUEST_0_AMT'           => sprintf('%.2f', $subscription->gross_amount),
-				'PAYMENTREQUEST_0_CURRENCYCODE'  => strtoupper(ComponentParams::getParam('currency', 'EUR')),
+				'PAYMENTREQUEST_0_CURRENCYCODE'  => strtoupper($this->container->params->get('currency', 'EUR')),
 				'PAYMENTREQUEST_0_INVNUM'        => $subscription->akeebasubs_subscription_id,
 				'PAYMENTREQUEST_0_DESC'          => '[' . $subscription->akeebasubs_subscription_id . '] ' . $level->title,
 				'IPADDRESS'                      => $_SERVER['REMOTE_ADDR']
@@ -252,7 +251,7 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 					'IPADDRESS'        => $_SERVER['REMOTE_ADDR'],
 					'AMT'              => sprintf('%.2f', $subscription->gross_amount),
 					'TAXAMT'           => sprintf('%.2f', $subscription->tax_amount),
-					'CURRENCYCODE'     => strtoupper(ComponentParams::getParam('currency', 'EUR')),
+					'CURRENCYCODE'     => strtoupper($this->container->params->get('currency', 'EUR')),
 					'DESC'             => $level->title,
 					'PROFILEREFERENCE' => $subscription->akeebasubs_subscription_id,
 					'PROFILESTARTDATE' => $nextPayment->toISO8601(),
@@ -363,7 +362,7 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 
 		if ($isValid)
 		{
-			if (strtoupper(ComponentParams::getParam('currency', 'EUR')) != strtoupper($responseData['PAYMENTINFO_0_CURRENCYCODE']))
+			if (strtoupper($this->container->params->get('currency', 'EUR')) != strtoupper($responseData['PAYMENTINFO_0_CURRENCYCODE']))
 			{
 				$isValid = false;
 				$responseData['akeebasubs_failure_reason'] = "Currency code doesn't match.";
@@ -585,7 +584,7 @@ class plgAkpaymentPaypalproexpress extends AkpaymentBase
 		if ($isValid && !is_null($subscription))
 		{
 			$mc_currency = strtoupper($data['mc_currency']);
-			$currency = strtoupper(ComponentParams::getParam('currency', 'EUR'));
+			$currency = strtoupper($this->container->params->get('currency', 'EUR'));
 
 			if ($mc_currency != $currency)
 			{

@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
 use JDate;
@@ -1078,7 +1077,7 @@ class Subscriptions extends DataModel
 
 		if ($user->block)
 		{
-			$confirmfree = ComponentParams::getParam('confirmfree', 0);
+			$confirmfree = $this->container->params->get('confirmfree', 0);
 
 			if ($confirmfree && ($this->level->price < 0.01))
 			{

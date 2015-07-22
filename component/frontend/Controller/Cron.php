@@ -10,7 +10,6 @@ namespace Akeeba\Subscriptions\Site\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Controller\Mixin;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Container\Container;
 use FOF30\Controller\Controller;
 
@@ -42,7 +41,7 @@ class Cron extends Controller
 		$app = \JFactory::getApplication();
 		$app->setHeader('X-Cache-Control', 'False', true);
 
-		$configuredSecret = ComponentParams::getParam('secret', '');
+		$configuredSecret = $this->container->params->get('secret', '');
 
 		if (empty($configuredSecret))
 		{

@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Site\Model;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
@@ -189,21 +188,21 @@ class Subscribe extends Model
 		$validation = $this->getValidation();
 		$state = $this->getStateVariables();
 
-		$requireCoupon = ComponentParams::getParam('reqcoupon', 0) ? true : false;
+		$requireCoupon = $this->container->params->get('reqcoupon', 0) ? true : false;
 
 		// Iterate the core validation rules
 		$isValid = true;
 
 		foreach ($validation->validation as $key => $validData)
 		{
-			if (ComponentParams::getParam('personalinfo', 1) == 0)
+			if ($this->container->params->get('personalinfo', 1) == 0)
 			{
 				if (!in_array($key, array('username', 'email', 'email2', 'name', 'coupon')))
 				{
 					continue;
 				}
 			}
-			elseif (ComponentParams::getParam('personalinfo', 1) == -1)
+			elseif ($this->container->params->get('personalinfo', 1) == -1)
 			{
 				if (!in_array($key, array('username', 'email', 'email2', 'name', 'country', 'coupon')))
 				{
@@ -472,7 +471,7 @@ class Subscribe extends Model
 		// Send activation email for free subscriptions if confirmfree is enabled
 		if ($user->block && ($level->price < 0.01))
 		{
-			$confirmfree = ComponentParams::getParam('confirmfree', 0);
+			$confirmfree = $this->container->params->get('confirmfree', 0);
 			if ($confirmfree)
 			{
 				// Send the activation email

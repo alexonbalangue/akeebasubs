@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Form\Field\Text;
 
 defined('_JEXEC') or die;
@@ -60,16 +59,19 @@ class Discount extends Text
 		// Case 1: Value discount
 		if ($type == 'value')
 		{
-			if (ComponentParams::getParam('currencypos', 'before') == 'before')
+			$currencyPos = $this->form->getContainer()->params->get('currencypos', 'before');
+			$currencySymbol = $this->form->getContainer()->params->get('currencysymbol', '€');
+
+			if ($currencyPos == 'before')
 			{
-				$html .= ComponentParams::getParam('currencysymbol', '€');
+				$html .= $currencySymbol;
 			}
 
 			$html .= ' ' . sprintf('%02.02f', (float) $this->value) . ' ';
 
-			if (ComponentParams::getParam('currencypos', 'before') == 'after')
+			if ($currencyPos == 'after')
 			{
-				$html .= ComponentParams::getParam('currencysymbol', '€');
+				$html .= $currencySymbol;
 			}
 		}
 		else

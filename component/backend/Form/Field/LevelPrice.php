@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Form\Field\Text;
 use JText;
 
@@ -17,6 +16,9 @@ class LevelPrice extends Text
 {
 	public function getRepeatable()
 	{
+		$currencyPos = $this->form->getContainer()->params->get('currencypos', 'before');
+		$currencySymbol = $this->form->getContainer()->params->get('currencysymbol', '€');
+
 		// Initialise
 		$class             = $this->id;
 
@@ -30,16 +32,16 @@ class LevelPrice extends Text
 		$html = '<span class="' . $class . '">';
 
 		// First line: regular price
-		if (ComponentParams::getParam('currencypos','before') == 'before')
+		if ($currencyPos == 'before')
 		{
-			$html .= ComponentParams::getParam('currencysymbol','€');
+			$html .= $currencySymbol;
 		}
 
 		$html .= ' ' . sprintf('%02.02f', (float)$this->value) . ' ';
 
-		if (ComponentParams::getParam('currencypos','before') == 'after')
+		if ($currencyPos == 'after')
 		{
-			$html .= ComponentParams::getParam('currencysymbol','€');
+			$html .= $currencySymbol;
 		}
 
 		// Second line: sign-up fee
@@ -48,16 +50,16 @@ class LevelPrice extends Text
 			$html .= '<br /><span class="small">( ';
 			$html .= JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST');
 
-			if (ComponentParams::getParam('currencypos','before') == 'before')
+			if ($currencyPos == 'before')
 			{
-				$html .= ' ' . ComponentParams::getParam('currencysymbol','€');
+				$html .= ' ' . $currencySymbol;
 			}
 
 			$html .= sprintf('%02.02f', (float)$this->item->signupfee);
 
-			if (ComponentParams::getParam('currencypos','before') == 'after')
+			if ($currencyPos == 'after')
 			{
-				$html .= ComponentParams::getParam('currencysymbol','€');
+				$html .= $currencySymbol;
 			}
 
 			$html .= ' )</span>';

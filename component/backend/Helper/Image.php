@@ -40,7 +40,7 @@ abstract class Image
 			$url .= '/..';
 		}
 
-		$imagePath = trim(ComponentParams::getParam('imagedir', 'images/'), '/');
+		$imagePath = trim(self::getContainer()->params->get('imagedir', 'images/'), '/');
 
 		// Where is the image (we search for images in J! 2.5 compatible paths to cater for migrated sites)?
 		$testJ30 = JPATH_SITE . '/' . $filename;
@@ -53,5 +53,22 @@ abstract class Image
 		{
 			return $url . '/' . $imagePath . '/' . $filename;
 		}
+	}
+
+	/**
+	 * Returns the current Akeeba Subscriptions container object
+	 *
+	 * @return  Container
+	 */
+	protected static function getContainer()
+	{
+		static $container = null;
+
+		if (is_null($container))
+		{
+			$container = Container::getInstance('com_akeebasubs');
+		}
+
+		return $container;
 	}
 }

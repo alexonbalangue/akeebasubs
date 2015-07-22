@@ -10,7 +10,6 @@ defined('_JEXEC') or die();
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentStripe extends AkpaymentBase
 {
@@ -133,7 +132,7 @@ class plgAkpaymentStripe extends AkpaymentBase
 		$data = (object)array(
 			'url'         => $callbackUrl,
 			'amount'      => (int)($subscription->gross_amount * 100),
-			'currency'    => strtolower(ComponentParams::getParam('currency', 'usd')),
+			'currency'    => strtolower($this->container->params->get('currency', 'usd')),
 			'description' => $level->title . ' #' . $subscription->akeebasubs_subscription_id,
 			'cardholder'  => $user->name
 		);

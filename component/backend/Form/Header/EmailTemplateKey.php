@@ -7,10 +7,7 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Header;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\Email;
-use FOF30\Form\Field\GenericList;
-use FOF30\Form\Field\Text;
 use FOF30\Form\Header\Selectable;
 
 defined('_JEXEC') or die;

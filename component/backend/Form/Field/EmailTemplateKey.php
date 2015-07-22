@@ -7,10 +7,8 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\Email;
 use FOF30\Form\Field\GenericList;
-use FOF30\Form\Field\Text;
 
 defined('_JEXEC') or die;
 

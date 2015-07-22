@@ -7,23 +7,24 @@
 
 defined('_JEXEC') or die();
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-
 $fieldName = (string) $fieldElement['name'];
+$currencyPosition = $this->container->params->get('currencypos','before');
+$currencySymbol = $this->container->params->get('currencysymbol','€');
+
 
 ?>
 <div
-	class="input-<?php echo (ComponentParams::getParam('currencypos', 'before') == 'before') ? 'prepend' : 'append' ?>">
-	<?php if (ComponentParams::getParam('currencypos', 'before') == 'before'): ?>
+	class="input-<?php echo ($currencyPosition == 'before') ? 'prepend' : 'append' ?>">
+	<?php if ($currencyPosition == 'before'): ?>
 		<span class="add-on">
-			<?php echo ComponentParams::getParam('currencysymbol', '€') ?>
+			<?php echo $currencySymbol ?>
 		</span>
 	<?php endif; ?>
 	<input type="text" size="15" id="<?php echo $fieldName ?>" name="<?php echo $fieldName ?>" value="<?php echo $fieldValue ?>"
 		   style="float: none"/>
-	<?php if (ComponentParams::getParam('currencypos', 'before') == 'after'): ?>
+	<?php if ($currencyPosition == 'after'): ?>
 		<span class="add-on">
-			<?php echo ComponentParams::getParam('currencysymbol', '€') ?>
+			<?php echo $currencySymbol ?>
 		</span>
 	<?php endif; ?>
 </div>

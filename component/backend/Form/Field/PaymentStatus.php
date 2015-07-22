@@ -7,8 +7,6 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-use Akeeba\Subscriptions\Admin\Model\Invoices;
 use FOF30\Form\Field\Text;
 use JText;
 

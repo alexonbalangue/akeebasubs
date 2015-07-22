@@ -11,7 +11,6 @@ use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentPaymilldss3 extends AkpaymentBase
 {
@@ -59,7 +58,7 @@ class plgAkpaymentPaymilldss3 extends AkpaymentBase
 		$data = (object)array(
 			'url'         => $callbackUrl,
 			'amount'      => (int)($subscription->gross_amount * 100),
-			'currency'    => strtoupper(ComponentParams::getParam('currency', 'EUR')),
+			'currency'    => strtoupper($this->container->params->get('currency', 'EUR')),
 			'description' => $level->title . ' #' . $subscription->akeebasubs_subscription_id,
 			'carholder'   => $user->name,
 		);

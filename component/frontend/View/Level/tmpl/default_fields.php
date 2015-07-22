@@ -42,8 +42,6 @@
 
 defined('_JEXEC') or die();
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-use Akeeba\Subscriptions\Admin\Helper\Format;
 use Akeeba\Subscriptions\Admin\Helper\Select;
 
 $this->addJavascriptFile('media://com_akeebasubs/js/signup.js');
@@ -104,11 +102,11 @@ if (JFactory::getUser()->guest)
 	$group_classes['password2'] = (!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'error has-error' : '';
 }
 
-$styleStateField = ComponentParams::getParam('showstatefield', 1) ? '' : 'display: none';
-$businessFields = ComponentParams::getParam('businessfields', 'auto');
-$cparamShowCountries = ComponentParams::getParam('showcountries', '');
-$cparamHideCountries = ComponentParams::getParam('hidecountries', '');
-$emailasusername = ComponentParams::getParam('emailasusername', 0);
+$styleStateField = $this->container->params->get('showstatefield', 1) ? '' : 'display: none';
+$businessFields = $this->container->params->get('businessfields', 'auto');
+$cparamShowCountries = $this->container->params->get('showcountries', '');
+$cparamHideCountries = $this->container->params->get('hidecountries', '');
+$emailasusername = $this->container->params->get('emailasusername', 0);
 ?>
 
 	<div class="form form-horizontal">
@@ -334,7 +332,7 @@ $emailasusername = ComponentParams::getParam('emailasusername', 0);
 					} endforeach;
 			} ?>
 
-			<?php if (ComponentParams::getParam('personalinfo', 1) == -1): ?>
+			<?php if ($this->container->params->get('personalinfo', 1) == -1): ?>
 				<div class="control-group form-group <?php echo $group_classes['country'] ?>">
 					<label for="country" class="control-label col-sm-2">
 						* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY') ?>
@@ -356,7 +354,7 @@ $emailasusername = ComponentParams::getParam('emailasusername', 0);
 			</span>
 					</div>
 				</div>
-			<?php elseif (ComponentParams::getParam('personalinfo', 1) == 1): ?>
+			<?php elseif ($this->container->params->get('personalinfo', 1) == 1): ?>
 
 			<div class="control-group form-group <?php echo $group_classes['address1'] ?>">
 				<label for="address1" class="control-label col-sm-2">
@@ -527,7 +525,7 @@ $emailasusername = ComponentParams::getParam('emailasusername', 0);
 
 					<div class="control-group form-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
 						<label for="vatnumber" class="control-label col-sm-2" id="vatlabel">
-							* <?php echo ComponentParams::getParam('noneuvat', 0) ? JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') : JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER') ?>
+							* <?php echo $this->container->params->get('noneuvat', 0) ? JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') : JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER') ?>
 						</label>
 
 						<div class="controls">
@@ -627,8 +625,8 @@ $emailasusername = ComponentParams::getParam('emailasusername', 0);
 
 <?php
 $aks_validate_url = JURI::base() . 'index.php';
-$aks_personal_info = ComponentParams::getParam('personalinfo', 1) ? 'true' : 'false';
-$aks_noneuvat = ComponentParams::getParam('noneuvat', 0) ? 'true' : 'false';
+$aks_personal_info = $this->container->params->get('personalinfo', 1) ? 'true' : 'false';
+$aks_noneuvat = $this->container->params->get('noneuvat', 0) ? 'true' : 'false';
 $script = <<< JS
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error

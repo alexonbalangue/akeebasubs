@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Site\View\Levels;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\Forex;
 use Akeeba\Subscriptions\Site\Model\Levels;
 use Akeeba\Subscriptions\Site\Model\Subscriptions;
@@ -147,7 +146,7 @@ class Html extends \FOF30\View\DataView\Html
 		$this->subIDs = $subIDs;
 
 		// Should I show VAT?
-		$this->showVat = ComponentParams::getParam('showvat', 0);
+		$this->showVat = $this->container->params->get('showvat', 0);
 
 		// Cache tax parameters
 		/** @var \Akeeba\Subscriptions\Site\Model\TaxHelper $taxModel */
@@ -155,21 +154,21 @@ class Html extends \FOF30\View\DataView\Html
 		$this->taxParams = $this->taxModel->getTaxDefiningParameters();
 
 		// Should I include sign-up one time fees?
-		$this->includeSignup = ComponentParams::getParam('includesignup', 2);
+		$this->includeSignup = $this->container->params->get('includesignup', 2);
 
 		// Should I include discounts? (only valid if it's a logged in user)
 		$this->includeDiscount = false;
 
 		if (!$user->guest)
 		{
-			$this->includeDiscount = ComponentParams::getParam('includediscount', 0);
+			$this->includeDiscount = $this->container->params->get('includediscount', 0);
 		}
 
 		// Should I render zero prices as "FREE"?
-		$this->renderAsFree = ComponentParams::getParam('renderasfree', 0);
+		$this->renderAsFree = $this->container->params->get('renderasfree', 0);
 
 		// Should I display prices in local currency based on country selection?
-		$this->showLocalPrices = ComponentParams::getParam('showlocalprices', 1);
+		$this->showLocalPrices = $this->container->params->get('showlocalprices', 1);
 
 		// Update the rates and check the conversion rate for this display
 		if ($this->showLocalPrices)
@@ -320,7 +319,7 @@ class Html extends \FOF30\View\DataView\Html
 
 		if (is_null($currencyPosition))
 		{
-			$currencyPosition = ComponentParams::getParam('currencypos','before');
+			$currencyPosition = $this->container->params->get('currencypos','before');
 		}
 
 		$convertedPriceInfo = Forex::convertToLocal($this->country, $rawPrice);

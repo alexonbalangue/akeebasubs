@@ -114,6 +114,9 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_akeebasubs/Controller/Invoices.php',
 			'administrator/components/com_akeebasubs/Controller/Levels.php',
 			'administrator/components/com_akeebasubs/Controller/Subscriptions.php',
+
+			// Removed in 5.0.1
+			'administrator/components/com_akeebasubs/Helper/ComponentParams.php',
 		),
 		'folders' => array(
 			'administrator/components/com_akeebasubs/commands',

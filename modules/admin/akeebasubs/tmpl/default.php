@@ -85,7 +85,7 @@ $container->template->addCSS('media://com_akeebasubs/css/backend.css');
 					<?php echo htmlspecialchars($subscription->user->username, ENT_COMPAT, 'UTF-8') ?>
 				</td>
 				<td>
-					<?php echo sprintf('%2.2f', (float) $subscription->net_amount) ?> <?php echo \Akeeba\Subscriptions\Admin\Helper\ComponentParams::getParam('currencysymbol', '€') ?>
+					<?php echo sprintf('%2.2f', (float) $subscription->net_amount) ?> <?php echo $container->params->get('currencysymbol', '€') ?>
 				</td>
 				<td>
 					<?php echo \Akeeba\Subscriptions\Admin\Helper\Format::date($subscription->created_on, 'Y-m-d H:i'); ?>

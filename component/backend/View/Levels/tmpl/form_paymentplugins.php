@@ -7,8 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-
 $fieldName = (string)$fieldElement['name'];
 
 echo \Akeeba\Subscriptions\Admin\Helper\Select::paymentmethods(

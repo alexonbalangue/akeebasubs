@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Site\View\Level;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Site\Model\Levels;
 
 class Html extends \FOF30\View\DataView\Html
@@ -50,17 +49,17 @@ class Html extends \FOF30\View\DataView\Html
 
 		// Get component parameters and pass them to the view
 		$componentParams = (object)array(
-			'currencypos'           => ComponentParams::getParam('currencypos', 'before'),
-			'stepsbar'              => ComponentParams::getParam('stepsbar', 1),
-			'allowlogin'            => ComponentParams::getParam('allowlogin', 1),
-			'currencysymbol'        => ComponentParams::getParam('currencysymbol', '€'),
-			'personalinfo'          => ComponentParams::getParam('personalinfo', 1),
-			'showdiscountfield'     => ComponentParams::getParam('showdiscountfield', 1),
-			'showtaxfield'          => ComponentParams::getParam('showtaxfield', 1),
-			'showregularfield'      => ComponentParams::getParam('showregularfield', 1),
-			'showcouponfield'       => ComponentParams::getParam('showcouponfield', 1),
-			'hidelonepaymentoption' => ComponentParams::getParam('hidelonepaymentoption', 1),
-			'reqcoupon'             => ComponentParams::getParam('reqcoupon', 0),
+			'currencypos'           => $this->container->params->get('currencypos', 'before'),
+			'stepsbar'              => $this->container->params->get('stepsbar', 1),
+			'allowlogin'            => $this->container->params->get('allowlogin', 1),
+			'currencysymbol'        => $this->container->params->get('currencysymbol', '€'),
+			'personalinfo'          => $this->container->params->get('personalinfo', 1),
+			'showdiscountfield'     => $this->container->params->get('showdiscountfield', 1),
+			'showtaxfield'          => $this->container->params->get('showtaxfield', 1),
+			'showregularfield'      => $this->container->params->get('showregularfield', 1),
+			'showcouponfield'       => $this->container->params->get('showcouponfield', 1),
+			'hidelonepaymentoption' => $this->container->params->get('hidelonepaymentoption', 1),
+			'reqcoupon'             => $this->container->params->get('reqcoupon', 0),
 		);
 
 		$this->cparams = $componentParams;

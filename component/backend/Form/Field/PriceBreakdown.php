@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use FOF30\Form\Field\Text;
 use JText;
@@ -81,8 +80,8 @@ class PriceBreakdown extends Text
 
 		if (is_null($currencyPosition))
 		{
-			$currencyPosition = ComponentParams::getParam('currencypos','before');
-			$currencySymbol = ComponentParams::getParam('currencysymbol','€');
+			$currencyPosition = $this->form->getContainer()->params->get('currencypos', 'before');
+			$currencySymbol = $this->form->getContainer()->params->get('currencysymbol', '€');
 		}
 
 		$html = "<span class=\"akeebasubs-subscription-$type\">";

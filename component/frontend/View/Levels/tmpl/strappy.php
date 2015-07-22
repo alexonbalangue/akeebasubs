@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use \Akeeba\Subscriptions\Admin\Helper\Image;
 use \Akeeba\Subscriptions\Admin\Helper\Message;
 
@@ -40,7 +39,7 @@ $discounts = array();
 				<?php if($this->renderAsFree && ($priceInfo->levelPrice < 0.01)):?>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE') ?>
 				<?php else: ?>
-				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $priceInfo->priceInteger ?></span><?php if((int)$priceInfo->priceFractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $priceInfo->priceFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
+				<?php if($this->container->params->get('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $priceInfo->priceInteger ?></span><?php if((int)$priceInfo->priceFractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $priceInfo->priceFractional ?></span><?php endif; ?><?php if($this->container->params->get('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?>
 					<?php if ($this->showLocalPrices): ?>
 						<div class="akeebasubs-strappy-forexrate">
 							<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE_LBL', $this->toLocalCurrency((float)$priceInfo->levelPrice)); ?>
@@ -67,7 +66,7 @@ $discounts = array();
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PREDISCOUNT'); ?>
 						</span>
 						<s>
-						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $priceInfo->prediscountInteger ?></span><?php if((int)$priceInfo->prediscountFractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $priceInfo->prediscountFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
+						<?php if($this->container->params->get('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $priceInfo->prediscountInteger ?></span><?php if((int)$priceInfo->prediscountFractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $priceInfo->prediscountFractional ?></span><?php endif; ?><?php if($this->container->params->get('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?>
 						</s>
 						<?php if ($this->showLocalPrices): ?>
 							<div class="akeebasubs-strappy-forexrate-discount">
@@ -88,7 +87,7 @@ $discounts = array();
 			<td class="akeebasubs-strappy-signupfee">
 				<?php if(abs($priceInfo->signupFee) >= 0.01): ?>
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST'); ?>
-				<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $priceInfo->signupInteger ?></span><?php if((int)$priceInfo->signupFractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $priceInfo->signupFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
+				<?php if($this->container->params->get('currencypos','before') == 'before'): ?><span class="akeebasubs-strappy-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-strappy-price-integer"><?php echo $priceInfo->signupInteger ?></span><?php if((int)$priceInfo->signupFractional > 0): ?><span class="akeebasubs-strappy-price-separator">.</span><span class="akeebasubs-strappy-price-decimal"><?php echo $priceInfo->signupFractional ?></span><?php endif; ?><?php if($this->container->params->get('currencypos','before') == 'after'): ?><span class="akeebasubs-strappy-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?>
 				<?php if ($this->showLocalPrices): ?>
 					<div class="akeebasubs-strappy-forexrate-signup">
 						<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE_LBL', $this->toLocalCurrency((float)$priceInfo->signupFee)); ?>
@@ -135,7 +134,7 @@ $discounts = array();
 		<p>
 			<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE',
 				$this->localCurrency, $this->localSymbol,
-				ComponentParams::getParam('currency','EUR'),
+				$this->container->params->get('currency','EUR'),
 				$this->exchangeRate); ?>
 		</p>
 	</div>

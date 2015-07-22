@@ -36,7 +36,7 @@ abstract class Format
 
 		if (empty($format))
 		{
-			$format = ComponentParams::getParam('dateformat', 'Y-m-d H:i');
+			$format = self::getContainer()->params->get('dateformat', 'Y-m-d H:i');
 			$format = str_replace('%', '', $format);
 		}
 
@@ -236,5 +236,22 @@ abstract class Format
 		{
 			return $extension;
 		}
+	}
+
+	/**
+	 * Returns the current Akeeba Subscriptions container object
+	 *
+	 * @return  Container
+	 */
+	protected static function getContainer()
+	{
+		static $container = null;
+
+		if (is_null($container))
+		{
+			$container = Container::getInstance('com_akeebasubs');
+		}
+
+		return $container;
 	}
 }

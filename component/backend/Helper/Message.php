@@ -367,7 +367,7 @@ abstract class Message
 		$renewalURL = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
 
 		// Currency
-		$currency = ComponentParams::getParam('currencysymbol', '€');
+		$currency = self::getContainer()->params->get('currencysymbol', '€');
 
 		// Dates
 		JLoader::import('joomla.utilities.date');
@@ -614,5 +614,22 @@ abstract class Message
 		while ($pos !== false);
 
 		return $text;
+	}
+
+	/**
+	 * Returns the current Akeeba Subscriptions container object
+	 *
+	 * @return  Container
+	 */
+	protected static function getContainer()
+	{
+		static $container = null;
+
+		if (is_null($container))
+		{
+			$container = Container::getInstance('com_akeebasubs');
+		}
+
+		return $container;
 	}
 }

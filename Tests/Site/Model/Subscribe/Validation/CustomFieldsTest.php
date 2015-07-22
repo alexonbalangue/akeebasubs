@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Tests\Site\Model\Subscribe\Validation;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Tests\Stubs\CustomPlatform;
 use Akeeba\Subscriptions\Tests\Stubs\ValidatorTestCase;

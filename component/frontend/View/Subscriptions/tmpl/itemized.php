@@ -7,9 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-Use Akeeba\Subscriptions\Admin\Helper\Format;
-
 $subs = array();
 $expired = array();
 JLoader::import('joomla.utilities.date');

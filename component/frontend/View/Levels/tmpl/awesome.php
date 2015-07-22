@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use \Akeeba\Subscriptions\Admin\Helper\Image;
 use \Akeeba\Subscriptions\Admin\Helper\Message;
 
@@ -42,7 +41,7 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 							<div class="akeebasubs-awesome-forexrate-free">&nbsp;</div>
 						<?php endif; ?>
 						<?php else: ?>
-						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->priceInteger ?><?php if((int)$priceInfo->priceFractional > 0): ?></span><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->priceFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
+						<?php if($this->container->params->get('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->priceInteger ?><?php if((int)$priceInfo->priceFractional > 0): ?></span><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->priceFractional ?></span><?php endif; ?><?php if($this->container->params->get('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?>
 							<?php if ($this->showLocalPrices): ?>
 								<div class="akeebasubs-awesome-forexrate">
 									<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE_LBL', $this->toLocalCurrency((float)$priceInfo->levelPrice)); ?>
@@ -64,7 +63,7 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PREDISCOUNT'); ?>
 						</span>
 						<s>
-						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->prediscountInteger ?></span><?php if((int)$priceInfo->prediscountFractional > 0): ?><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->prediscountFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
+						<?php if($this->container->params->get('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->prediscountInteger ?></span><?php if((int)$priceInfo->prediscountFractional > 0): ?><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->prediscountFractional ?></span><?php endif; ?><?php if($this->container->params->get('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?>
 						</s>
 						<?php if ($this->showLocalPrices): ?>
 							<div class="akeebasubs-awesome-forexrate-discount">
@@ -78,7 +77,7 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 					<div class="akeebasubs-awesome-signup">
 						<?php if(abs($priceInfo->signupFee) >= 0.01): ?>
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_SIGNUPFEE_LIST'); ?>
-						<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->signupInteger ?></span><?php if((int)$priceInfo->signupFractional > 0): ?><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->signupFractional ?></span><?php endif; ?><?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo ComponentParams::getParam('currencysymbol','€')?></span><?php endif; ?>
+						<?php if($this->container->params->get('currencypos','before') == 'before'): ?><span class="akeebasubs-awesome-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?><span class="akeebasubs-awesome-price-integer"><?php echo $priceInfo->signupInteger ?></span><?php if((int)$priceInfo->signupFractional > 0): ?><span class="akeebasubs-awesome-price-separator">.</span><span class="akeebasubs-awesome-price-decimal"><?php echo $priceInfo->signupFractional ?></span><?php endif; ?><?php if($this->container->params->get('currencypos','before') == 'after'): ?><span class="akeebasubs-awesome-price-currency"><?php echo $this->container->params->get('currencysymbol','€')?></span><?php endif; ?>
 						<?php endif; ?>
 					</div>
 					<?php endif; ?>
@@ -115,7 +114,7 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 				<p>
 					<?php echo JText::sprintf('COM_AKEEBASUBS_LEVELS_FOREXNOTICE',
 						$this->localCurrency, $this->localSymbol,
-						ComponentParams::getParam('currency','EUR'),
+						$this->container->params->get('currency','EUR'),
 						$this->exchangeRate); ?>
 				</p>
 			</div>

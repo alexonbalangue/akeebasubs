@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Site\Model\TaxRules;
 use Akeeba\Subscriptions\Site\Model\Users;
@@ -31,7 +30,7 @@ class Business extends Base
 		];
 
 		// Should I collect personal information? -1: only country, 0: none, 1: all
-		$personalInfo = ComponentParams::getParam('personalinfo', 1);
+		$personalInfo = $this->container->params->get('personalinfo', 1);
 
 		// Get some state data
 		$country = trim($this->state->country);

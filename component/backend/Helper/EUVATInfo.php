@@ -7,6 +7,7 @@
 
 namespace Akeeba\Subscriptions\Admin\Helper;
 
+use FOF30\Container\Container;
 use JFactory;
 use SoapClient;
 use SoapFault;
@@ -715,7 +716,7 @@ abstract class EUVATInfo
 				break;
 
 			default:
-				$allowNonEUVAT = ComponentParams::getParam('noneuvat', 0);
+				$allowNonEUVAT = self::getContainer()->params->get('noneuvat', 0);
 				$ret->valid = $allowNonEUVAT ? true : false;
 				break;
 		}
@@ -750,5 +751,22 @@ abstract class EUVATInfo
 		}
 
 		return array($vat, $prefix);
+	}
+
+	/**
+	 * Returns the current Akeeba Subscriptions container object
+	 *
+	 * @return  Container
+	 */
+	protected static function getContainer()
+	{
+		static $container = null;
+
+		if (is_null($container))
+		{
+			$container = Container::getInstance('com_akeebasubs');
+		}
+
+		return $container;
 	}
 }

@@ -11,7 +11,6 @@ use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpayment2conew extends AkpaymentBase
 {
@@ -63,7 +62,7 @@ class plgAkpayment2conew extends AkpaymentBase
 			'params'             => $this->params,
 			'name'               => $user->name,
 			'email'              => $user->email,
-			'currency'           => strtoupper(ComponentParams::getParam('currency', 'EUR')),
+			'currency'           => strtoupper($this->container->params->get('currency', 'EUR')),
 			'recurring'          => $level->recurring ? ($subscription->recurring_amount >= 0.01 ? 2 : 1) : 0,
 		);
 

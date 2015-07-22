@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use FOF30\Model\Model;
 use JFactory;
@@ -75,7 +74,8 @@ class TaxConfig extends Model
 		$inEU = EUVATInfo::isEUVATCountry($params->country);
 
 		// Store the country where the business is based (needed for proper invoicing)
-		ComponentParams::setParam('invoice_country', $params->country);
+		$this->container->params->set('invoice_country', $params->country);
+		$this->container->params->save();
 
 		// Prototype for tax rules
 		$data = array(

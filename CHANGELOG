@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 5.0.1
+================================================================================
+! Removed the ComponentParams helper. Front-end template overrides MAY be affected.
+
 Akeeba Subscriptions 5.0.0
 ================================================================================
 ~ Improved "My Subscriptions" page styling

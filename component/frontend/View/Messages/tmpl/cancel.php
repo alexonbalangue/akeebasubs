@@ -8,10 +8,9 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 ?>
 
-<?php if(ComponentParams::getParam('stepsbar',1) && ($this->subscription->prediscount_amount > 0.01)):?>
+<?php if($this->container->params->get('stepsbar',1) && ($this->subscription->prediscount_amount > 0.01)):?>
 <?php echo $this->loadAnyTemplate('site:com_akeebasubs/Level/steps',array('step'=>'done')); ?>
 <?php endif; ?>
 

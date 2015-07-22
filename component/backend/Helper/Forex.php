@@ -219,12 +219,12 @@ class Forex
 	{
 		self::reloadCurrencyData(false, $container);
 
-		$defaultAkeebaSubsCurrency = ComponentParams::getParam('currency', 'EUR');
+		$defaultAkeebaSubsCurrency = self::getContainer()->params->get('currency', 'EUR');
 		$defaultAkeebaSubsCurrency = strtoupper($defaultAkeebaSubsCurrency);
 
 		$defaultReturn = [
 			'currency' => $defaultAkeebaSubsCurrency,
-			'symbol'   => ComponentParams::getParam('currencysymbol', '€'),
+			'symbol'   => self::getContainer()->params->get('currencysymbol', '€'),
 			'value'    => $value,
 			'rate'     => 1.00
 		];
@@ -510,5 +510,22 @@ class Forex
 		$jNow = $container->platform->getDate();
 
 		return $jNow->toUnix() > $jNextUpdate->toUnix();
+	}
+
+	/**
+	 * Returns the current Akeeba Subscriptions container object
+	 *
+	 * @return  Container
+	 */
+	protected static function getContainer()
+	{
+		static $container = null;
+
+		if (is_null($container))
+		{
+			$container = Container::getInstance('com_akeebasubs');
+		}
+
+		return $container;
 	}
 }

@@ -10,7 +10,7 @@ namespace Akeeba\Subscriptions\Site\Model\Subscribe;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Site\Model\Levels;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
+use FOF30\Container\Container;
 use FOF30\Model\Model;
 
 /**
@@ -125,7 +125,7 @@ class StateData
 		}
 
 		// Should I use the email as username?
-		$emailasusername = ComponentParams::getParam('emailasusername', 0);
+		$emailasusername = Container::getInstance('com_akeebasubs')->params->get('emailasusername', 0);
 
 		// Apply the state variables from the model
 		$stateVars = array(

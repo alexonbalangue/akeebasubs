@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Tests\Admin\Helper;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Helper\Forex;
 
@@ -28,8 +27,8 @@ class ForexTest extends \PHPUnit_Framework_TestCase
 			]);
 		}
 
-		// Prime the ComponentParams class
-		ComponentParams::getParam('currency');
+		// Prime the component parameters
+		static::$container->params->get('currency');
 	}
 
 	/**
@@ -320,16 +319,15 @@ class ForexTest extends \PHPUnit_Framework_TestCase
 	public function testConvertToLocal($options, $country, $value, $expected, $message)
 	{
 		// Apply component options
-		$reflectionClass = new \ReflectionClass('Akeeba\\Subscriptions\\Admin\\Helper\\ComponentParams');
-		$refParams = $reflectionClass->getProperty('params');
-		$refParams->setAccessible(true);
-		/** @var \JRegistry $params */
-		$params = $refParams->getValue();
+		/** @var array $params */
+		$params = static::$container->params->getParams();
 
 		foreach ($options as $k => $v)
 		{
-			$params->set($k, $v);
+			static::$container->params->set($k, $v);
 		}
+
+		static::$container->params->save();
 
 		// Get the result
 		$actual = Forex::convertToLocal($country, $value, self::$container);

@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Tests\Site\Model\Subscribe\Validation;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Tests\Stubs\ValidatorTestCase;
 
 /**
@@ -643,9 +642,10 @@ class BusinessTest extends ValidatorTestCase
 	{
 		foreach ($componentParams as $k => $v)
 		{
-			if (ComponentParams::getParam($k) != $v)
+			if (static::$container->params->get($k) != $v)
 			{
-				ComponentParams::setParam($k, $v);
+				static::$container->params->set($k, $v);
+				static::$container->params->save();
 			}
 		}
 

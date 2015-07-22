@@ -10,7 +10,6 @@ defined('_JEXEC') or die();
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 {
@@ -83,7 +82,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 			'AMT'           => sprintf('%.2f', $subscription->gross_amount),
 			'ITEMAMT'       => sprintf('%.2f', $subscription->net_amount),
 			'TAXAMT'        => sprintf('%.2f', $subscription->tax_amount),
-			'CURRENCYCODE'  => strtoupper(ComponentParams::getParam('currency', 'EUR')),
+			'CURRENCYCODE'  => strtoupper($this->container->params->get('currency', 'EUR')),
 			'DESC'          => $level->title . ' - [' . $user->username . ']'
 		);
 
@@ -298,7 +297,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		// Check that CURRENCYCODE is correct
 		if ($isValid)
 		{
-			$currency = strtoupper(ComponentParams::getParam('currency', 'EUR'));
+			$currency = strtoupper($this->container->params->get('currency', 'EUR'));
 
 			if ($currency != $responseData['CURRENCYCODE'])
 			{
@@ -474,7 +473,7 @@ class plgAkpaymentPaypalpaymentspro extends AkpaymentBase
 		if ($isValid)
 		{
 			$mc_currency = strtoupper($data['mc_currency']);
-			$currency = strtoupper(ComponentParams::getParam('currency', 'EUR'));
+			$currency = strtoupper($this->container->params->get('currency', 'EUR'));
 
 			if ($mc_currency != $currency)
 			{

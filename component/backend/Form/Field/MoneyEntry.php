@@ -7,7 +7,6 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use FOF30\Form\Field\Text;
 use SimpleXMLElement;
 
@@ -24,8 +23,8 @@ class MoneyEntry extends Text
 
 		if (is_null($currencyPosition))
 		{
-			$currencyPosition = ComponentParams::getParam('currencypos','before');
-			$currencySymbol = ComponentParams::getParam('currencysymbol','€');
+			$currencyPosition = $this->form->getContainer()->params->get('currencypos', 'before');
+			$currencySymbol = $this->form->getContainer()->params->get('currencysymbol', '€');
 		}
 
 		if ($currencyPosition == 'before')

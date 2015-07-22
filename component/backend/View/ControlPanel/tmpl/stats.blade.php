@@ -7,8 +7,6 @@
 
 defined('_JEXEC') or die;
 
-use \Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-
 /** @var \Akeeba\Subscriptions\Admin\View\ControlPanel\Html $this */
 /** @var \Akeeba\Subscriptions\Admin\Model\SubscriptionsForStats $subs */
 $subs = $this->container->factory->model('SubscriptionsForStats')->tmpInstance();
@@ -20,14 +18,18 @@ $subs = $this->container->factory->model('SubscriptionsForStats')->tmpInstance()
     </h3>
 
     @repeatable('renderMoney', $moneyValue)
-    @if (ComponentParams::getParam('currencypos','before') == 'before')
-        {{{ ComponentParams::getParam('currencysymbol','€') }}}
+    <?php
+    $currencyPosition = $this->container->params->get('currencypos','before');
+    $currencySymbol = $this->container->params->get('currencysymbol','€');
+    ?>
+    @if ($currencyPosition == 'before')
+        {{{ $currencySymbol }}}
     @endif
 
     <?php echo sprintf('%.02f', $moneyValue); ?>
 
-    @if (ComponentParams::getParam('currencypos','before') == 'after')
-        {{{ ComponentParams::getParam('currencysymbol','€') }}}
+    @if ($currencyPosition == 'after')
+        {{{ $currencySymbol }}}
     @endif
     @endRepeatable
 

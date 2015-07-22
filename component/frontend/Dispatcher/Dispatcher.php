@@ -7,8 +7,6 @@
 
 namespace Akeeba\Subscriptions\Site\Dispatcher;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-
 defined('_JEXEC') or die;
 
 class Dispatcher extends \FOF30\Dispatcher\Dispatcher
@@ -27,7 +25,7 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 		// Load Akeeba Strapper, if it is installed
 		\JLoader::import('joomla.filesystem.folder');
 
-		$useStrapper = ComponentParams::getParam('usestrapper', 3);
+		$useStrapper = $this->container->params->get('usestrapper', 3);
 
 		if (in_array($useStrapper, [1, 3]) && \JFolder::exists(JPATH_SITE . '/media/strapper30'))
 		{

@@ -10,7 +10,6 @@ defined('_JEXEC') or die();
 use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 
 class plgAkpaymentPaypal extends AkpaymentBase
 {
@@ -70,7 +69,7 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			'postback'  => $this->getPostbackURL(),
 			'success'   => $rootURL . str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=Message&slug=' . $slug . '&task=thankyou&subid=' . $subscription->akeebasubs_subscription_id)),
 			'cancel'    => $rootURL . str_replace('&amp;', '&', JRoute::_('index.php?option=com_akeebasubs&view=Message&slug=' . $slug . '&task=cancel&subid=' . $subscription->akeebasubs_subscription_id)),
-			'currency'  => strtoupper(ComponentParams::getParam('currency', 'EUR')),
+			'currency'  => strtoupper($this->container->params->get('currency', 'EUR')),
 			'firstname' => $firstName,
 			'lastname'  => $lastName,
 			'cmd'       => $level->recurring ? '_xclick-subscriptions' : '_xclick',
@@ -267,7 +266,7 @@ class plgAkpaymentPaypal extends AkpaymentBase
 		if ($isValid && !is_null($subscription))
 		{
 			$mc_currency = strtoupper($data['mc_currency']);
-			$currency = strtoupper(ComponentParams::getParam('currency', 'EUR'));
+			$currency = strtoupper($this->container->params->get('currency', 'EUR'));
 
 			if ($mc_currency != $currency)
 			{

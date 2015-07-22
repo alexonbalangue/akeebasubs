@@ -7,14 +7,6 @@
 
 namespace Akeeba\Subscriptions\Tests\Stubs;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-use Akeeba\Subscriptions\Admin\Helper\Select;
-use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
-use Akeeba\Subscriptions\Site\Model\Subscribe\ValidatorFactory;
-use FOF30\Container\Container;
-use JUser;
-use JUserHelper;
-
 abstract class ValidatorWithSubsTestCase extends ValidatorTestCase
 {
 	protected static $subscriptions = [];

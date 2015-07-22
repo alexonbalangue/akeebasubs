@@ -9,7 +9,6 @@ defined('_JEXEC') or die();
 
 /** @var \Akeeba\Subscriptions\Site\View\Subscriptions\Html $this */
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\Format;
 
 JLoader::import('joomla.utilities.date');
@@ -20,7 +19,7 @@ if (!property_exists($this, 'extensions'))
 }
 ?>
 
-<?php $summaryimage = ComponentParams::getParam('summaryimages', 1); ?>
+<?php $summaryimage = $this->container->params->get('summaryimages', 1); ?>
 
 <div id="akeebasubs" class="subscriptions">
 	<h2 class="pageTitle"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_TITLE')?></h2>
@@ -92,7 +91,7 @@ if (!property_exists($this, 'extensions'))
 				$email = strtolower($email);
 				$rowClass = ($subscription->enabled) ? '' : 'expired';
 				$image = $subscription->level->image;
-				$canRenew = ComponentParams::getParam('showrenew', 1) ? true : false;
+				$canRenew = $this->container->params->get('showrenew', 1) ? true : false;
 				$level = $this->allLevels[$subscription->akeebasubs_level_id];
 
 				if ($level->only_once)

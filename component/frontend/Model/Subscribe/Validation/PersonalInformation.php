@@ -9,8 +9,6 @@ namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-
 class PersonalInformation extends Base
 {
 	/**
@@ -30,8 +28,8 @@ class PersonalInformation extends Base
 	{
 		$state = $this->state;
 
-		$personalInfo  = ComponentParams::getParam('personalinfo', 1);
-		$requireCoupon = ComponentParams::getParam('reqcoupon', 0) ? true : false;
+		$personalInfo  = $this->container->params->get('personalinfo', 1);
+		$requireCoupon = $this->container->params->get('reqcoupon', 0) ? true : false;
 
 		// 1. Basic checks
 		$ret = array(

@@ -7,8 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
-
 /** @var \Akeeba\Subscriptions\Site\View\UserInfo\Html $this */
 ?>
 
@@ -39,7 +37,7 @@ use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 </div>
 
 <?php
-$aks_personal_info = ComponentParams::getParam('personalinfo',1);
+$aks_personal_info = $this->container->params->get('personalinfo',1);
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<JS
 

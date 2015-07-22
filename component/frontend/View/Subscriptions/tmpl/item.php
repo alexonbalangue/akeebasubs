@@ -9,7 +9,6 @@ defined('_JEXEC') or die();
 
 /** @var \Akeeba\Subscriptions\Site\View\Subscriptions\Html $this */
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 Use Akeeba\Subscriptions\Admin\Helper\Format;
 use Akeeba\Subscriptions\Admin\Helper\Validator;
 
@@ -75,12 +74,12 @@ $jPublishUp = $this->getContainer()->platform->getDate($this->item->publish_up);
 	<tr>
 		<td class="subscription-label"><?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTION_AMOUNT_PAID')?></td>
 		<td class="subscription-info">
-			<?php if(ComponentParams::getParam('currencypos','before') == 'before'): ?>
-			<?php echo ComponentParams::getParam('currencysymbol','€')?>
+			<?php if($this->container->params->get('currencypos','before') == 'before'): ?>
+			<?php echo $this->container->params->get('currencysymbol','€')?>
 			<?php endif; ?>
 			<?php echo sprintf('%2.02F',$this->item->gross_amount)?>
-			<?php if(ComponentParams::getParam('currencypos','before') == 'after'): ?>
-			<?php echo ComponentParams::getParam('currencysymbol','€')?>
+			<?php if($this->container->params->get('currencypos','before') == 'after'): ?>
+			<?php echo $this->container->params->get('currencysymbol','€')?>
 			<?php endif; ?>
 		</td>
 	</tr>

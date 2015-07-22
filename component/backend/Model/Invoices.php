@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Admin\Model;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\Email;
 use Akeeba\Subscriptions\Admin\Helper\EUVATInfo;
 use Akeeba\Subscriptions\Admin\Helper\Format;
@@ -400,7 +399,7 @@ class Invoices extends DataModel
 
 		if ($globalFormat)
 		{
-			$numberFormat = ComponentParams::getParam('invoice_number_format', '[N:5]');
+			$numberFormat = $this->container->params->get('invoice_number_format', '[N:5]');
 		}
 		else
 		{
@@ -409,7 +408,7 @@ class Invoices extends DataModel
 
 		if ($globalNumbering)
 		{
-			$numberOverride = ComponentParams::getParam('invoice_override', 0);
+			$numberOverride = $this->container->params->get('invoice_override', 0);
 		}
 		else
 		{
@@ -437,7 +436,8 @@ class Invoices extends DataModel
 				if ($globalNumbering)
 				{
 					// Global number override reset
-					ComponentParams::setParam('invoice_override', 0);
+					$this->container->params->set('invoice_override', 0);
+					$this->container->params->save();
 				}
 				else
 				{
@@ -555,12 +555,12 @@ class Invoices extends DataModel
 		$inEU = EUVATInfo::isEUVATCountry($country);
 
 		// If the shopCountry is the same as the user's country we don't need to put the reverse charge info
-		$shopCountry = ComponentParams::getParam('invoice_country');
+		$shopCountry = $this->container->params->get('invoice_country');
 		$reverse = ($country == $shopCountry) ? false : true;
 
 		if ($inEU && $isbusiness && $viesregistered && $reverse)
 		{
-			$vat_notice  = ComponentParams::getParam('invoice_vatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
+			$vat_notice  = $this->container->params->get('invoice_vatnote', 'VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive.');
 			$cyprus_tag  = 'REVERSE CHARGE';
 			$cyprus_note = 'We are obliged by local and European tax laws to write the words "reverse charge" on all invoices issued to EU business when no VAT is charged. This is supposed to serve as a reminder that the recipient of the invoice (you) have to be registered to your local VAT office so as to apply to YOUR business\' VAT form the VAT owed by this transaction on the reverse charge basis, as described above. The words "reverse charge" DO NOT indicate a problem with your transaction, a cancellation or a refund.';
 		}
@@ -603,7 +603,7 @@ class Invoices extends DataModel
 		$sub->akeebasubs_invoice_id = $invoice_no;
 
 		// If auto-send is enabled, send the invoice by email
-		$autoSend = ComponentParams::getParam('invoice_autosend', 1);
+		$autoSend = $this->container->params->get('invoice_autosend', 1);
 
 		if ($autoSend)
 		{
@@ -962,10 +962,10 @@ class Invoices extends DataModel
 	 */
 	public function &getTCPDF()
 	{
-		$certificateFile = ComponentParams::getParam('invoice_certificatefile', 'certificate.cer');
-		$secretKeyFile   = ComponentParams::getParam('invoice_secretkeyfile', 'secret.cer');
-		$secretKeyPass   = ComponentParams::getParam('invoice_secretkeypass', '');
-		$extraCertFile   = ComponentParams::getParam('invoice_extracert', 'extra.cer');
+		$certificateFile = $this->container->params->get('invoice_certificatefile', 'certificate.cer');
+		$secretKeyFile   = $this->container->params->get('invoice_secretkeyfile', 'secret.cer');
+		$secretKeyPass   = $this->container->params->get('invoice_secretkeypass', '');
+		$extraCertFile   = $this->container->params->get('invoice_extracert', 'extra.cer');
 
 		$certificate = '';
 		$secretkey   = '';

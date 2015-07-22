@@ -9,7 +9,6 @@ namespace Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
 
 defined('_JEXEC') or die;
 
-use Akeeba\Subscriptions\Admin\Helper\ComponentParams;
 use Akeeba\Subscriptions\Admin\Helper\Select;
 
 class Country extends Base
@@ -22,7 +21,7 @@ class Country extends Base
 	protected function getValidationResult()
 	{
 		// Should I collect personal information? -1: only country, 0: none, 1: all
-		$personalInfo = ComponentParams::getParam('personalinfo', 1);
+		$personalInfo = $this->container->params->get('personalinfo', 1);
 
 		// I am told to not collect any personal information, the field is always valid
 		if ($personalInfo == 0)
