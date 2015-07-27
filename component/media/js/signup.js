@@ -522,7 +522,7 @@ function validateAddress()
 					if (akeebasubs_noneuvat)
 					{
 						$('#vatfields').css('display', 'block');
-						//$('#vatcountry').css('display','none');
+						$('#vatcountry').text('');
 					}
 
 					Object.keys(akeebasubs_eu_configuration).forEach(function(key){
@@ -664,17 +664,17 @@ function validateBusiness()
 		// Do I have to show VAT fields?
 		var country = $('#signupForm select[name$="country"]').val();
 		$('#vatfields').css('display', 'none');
+
 		if (akeebasubs_noneuvat)
 		{
 			$('#vatfields').css('display', 'block');
-			//$('#vatcountry').css('display','none');
+			$('#vatcountry').text('');
 		}
 
 		Object.keys(akeebasubs_eu_configuration).forEach(function(key){
 			if (key == country)
 			{
 				$('#vatfields').css('display', 'block');
-				//$('#vatcountry').css('display','inline-block');
 
 				var ccode = akeebasubs_eu_configuration[key][1];
 				$('#vatcountry').text(ccode);
