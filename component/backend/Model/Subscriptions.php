@@ -748,6 +748,8 @@ class Subscriptions extends DataModel
 	 */
 	protected function onAfterGetItemsArray(array &$resultArray)
 	{
+		static $alreadyRunning = false;
+
 		// Implement the subscription automatic expiration
 		if (empty($resultArray))
 		{
@@ -759,9 +761,16 @@ class Subscriptions extends DataModel
 			return;
 		}
 
+		if ($alreadyRunning)
+		{
+			return;
+		}
+
 		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
 		$uNow = $jNow->toUnix();
+
+		$alreadyRunning = true;
 
 		foreach ($resultArray as $index => &$row)
 		{
@@ -770,14 +779,6 @@ class Subscriptions extends DataModel
 				continue;
 			}
 
-			// TODO: This should no longer be necessary
-			if (!is_array($row->params))
-			{
-				if (!empty($row->params))
-				{
-					$row->params = json_decode($row->params, true);
-				}
-			}
 			if (is_null($row->params) || empty($row->params))
 			{
 				$row->params = array();
@@ -793,7 +794,7 @@ class Subscriptions extends DataModel
 				continue;
 			}
 
-			if ($row->publish_down && ($row->publish_down != '0000-00-00 00:00:00'))
+			if ($row->publish_down && ($row->publish_down != $this->getDbo()->getNullDate()))
 			{
 				$regex = '/^\d{1,4}(\/|-)\d{1,2}(\/|-)\d{2,4}[[:space:]]{0,}(\d{1,2}:\d{1,2}(:\d{1,2}){0,1}){0,1}$/';
 
@@ -827,6 +828,8 @@ class Subscriptions extends DataModel
 				$row->save();
 			}
 		}
+
+		$alreadyRunning = false;
 	}
 
 	/**
