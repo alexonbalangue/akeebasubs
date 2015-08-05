@@ -129,7 +129,7 @@ class APICoupons extends DataModel
 
 		try
 		{
-			$this->firstOrFail();
+			$item = $this->firstOrFail();
 		}
 		catch (\RuntimeException $e)
 		{
@@ -137,13 +137,13 @@ class APICoupons extends DataModel
 		}
 
 		// Are they valid?
-		if (!$this->akeebasubs_apicoupon_id || !$this->enabled)
+		if (!$item->akeebasubs_apicoupon_id || !$item->enabled)
 		{
 			return array('error' => JText::_('COM_AKEEBASUBS_APICOUPONS_INVALID_CREDENTIALS'));
 		}
 
 		// Do I hit a limit?
-		if (!$this->performApiChecks($this))
+		if (!$this->performApiChecks($item))
 		{
 			return array('error' => JText::_('COM_AKEEBASUBS_APICOUPONS_LIMIT_EXCEEDED'));
 		}
@@ -151,20 +151,20 @@ class APICoupons extends DataModel
 		// If I'm here, I'm clear to go
 		\JLoader::import('joomla.user.helper');
 		/** @var Coupons $coupon */
-		$coupon = $this->container->factory->model('Coupon')->tmpInstance();
+		$coupon = $this->container->factory->model('Coupons')->tmpInstance();
 		$coupon->clearState()->reset(true, true);
 
-		$data['akeebasubs_apicoupon_id'] = $this->akeebasubs_apicoupon_id;
-		$data['title']                   = 'API coupon for: ' . $this->title;
+		$data['akeebasubs_apicoupon_id'] = $item->akeebasubs_apicoupon_id;
+		$data['title']                   = 'API coupon for: ' . $item->title;
 		$data['coupon']                  = strtoupper(\JUserHelper::genRandomPassword(10));
-		$data['subscriptions']           = $this->subscriptions;
+		$data['subscriptions']           = $item->subscriptions;
 
 		// By default I want the coupon to be single-use
 		$data['hitslimit'] = 1;
 		$data['userhits']  = 1;
 
-		$data['type']  = $this->type;
-		$data['value'] = $this->value;
+		$data['type']  = $item->type;
+		$data['value'] = $item->value;
 
 		if (!$coupon->save($data))
 		{
