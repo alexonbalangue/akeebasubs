@@ -779,6 +779,8 @@ class Subscriptions extends DataModel
 				continue;
 			}
 
+			$row->triggerOnAfterLoad();
+
 			if (is_null($row->params) || empty($row->params))
 			{
 				$row->params = array();
@@ -1018,6 +1020,14 @@ class Subscriptions extends DataModel
 				}
 			}
 		}
+	}
+
+	/**
+	 * Trigger onAfterLoad. This is called by onAfterGetItemsArray to allow plugins to work when save() is triggered.
+	 */
+	public function triggerOnAfterLoad()
+	{
+		$this->onAfterLoad(true, $this->getId());
 	}
 
 	/**
