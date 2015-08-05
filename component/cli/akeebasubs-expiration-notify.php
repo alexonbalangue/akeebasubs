@@ -31,7 +31,7 @@ use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\Helper\Email;
 
-$minphp = '5.3.1';
+$minphp = '5.4.0';
 if (version_compare(PHP_VERSION, $minphp, 'lt'))
 {
 	$curversion = PHP_VERSION;
