@@ -58,7 +58,9 @@ class APICoupons extends DataModel
 	{
 		$config['tableName'] = '#__akeebasubs_apicoupons';
 
-		return parent::__construct($container, $config);
+		parent::__construct($container, $config);
+
+        $this->autoChecks = false;
 	}
 
 	/**
