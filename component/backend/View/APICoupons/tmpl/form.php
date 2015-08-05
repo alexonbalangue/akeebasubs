@@ -61,7 +61,7 @@ JS
 		$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 	}
 
-	$apiURL = $rootURL . '/index.php?option=com_akeebasubs&view=APICoupon&task=create&key=' .
+	$apiURL = $rootURL . '/index.php?option=com_akeebasubs&view=APICoupons&task=create&key=' .
 		urlencode($this->item->key) . '&pwd=' . urlencode($this->item->password) .
 		'&format=json';
 	?>
