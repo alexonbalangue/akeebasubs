@@ -765,7 +765,7 @@ class Subscriptions extends DataModel
 
 		foreach ($resultArray as $index => &$row)
 		{
-			if (!property_exists($row, 'params'))
+			if (!($row instanceof Subscriptions))
 			{
 				continue;
 			}

@@ -2,6 +2,7 @@
 Akeeba Subscriptions 5.0.1
 ================================================================================
 ! Removed the ComponentParams helper. Front-end template overrides MAY be affected.
+# [HIGH] Expiration control is broken
 # [LOW] Country code not cleared in signup form for non-EU VAT entry
 
 Akeeba Subscriptions 5.0.0
