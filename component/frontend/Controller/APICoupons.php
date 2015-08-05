@@ -28,9 +28,14 @@ class APICoupons extends DataController
 	{
 		parent::__construct($container, $config);
 
-		$this->registerTask('create', 'read');
 		$this->predefinedTaskList = ['create'];
 	}
+
+    public function create()
+    {
+        // We have to use a real method for every task, so we can hook at them inside the view
+        $this->display();
+    }
 
 	/**
 	 * Make sure we only call the create event through the json format.

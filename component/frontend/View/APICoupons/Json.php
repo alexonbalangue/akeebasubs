@@ -13,7 +13,7 @@ use Akeeba\Subscriptions\Site\Model\APICoupons;
 
 class Json extends \FOF30\View\DataView\Json
 {
-	protected function onBeforeRead($tpl = null)
+	protected function onBeforeCreate($tpl = null)
 	{
 		/** @var APICoupons $model */
 		$model = $this->getModel();
