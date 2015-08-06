@@ -280,4 +280,108 @@ class APICoupons extends DataModel
 
 		return true;
 	}
+
+    /**
+     * Given an APICoupon record, it returns the limits and the current usage
+     *
+     * @param APICoupons $apiCouponRecord
+     *
+     * @return array
+     */
+    public function getApiLimits(APICoupons $apiCouponRecord)
+    {
+        $db     = JFactory::getDbo();
+        $result = array(
+            'type'         => '',   // Type of the limit
+            'subscription' => '',   // If the limit is binded to a specific subscription
+            'current'      => 0,    // Current usage
+            'limit'        => 0     // Usage limit
+        );
+
+        // Let's get the title of all the subscriptions
+        if($apiCouponRecord->subscriptions)
+        {
+            /** @var Levels $level */
+            $level  = $this->container->factory->model('Levels')->tmpInstance();
+            $titles = $level->id($apiCouponRecord->subscriptions)->get();
+
+            $result['subscription'] = implode(',', $titles);
+        }
+
+        if ($apiCouponRecord->creation_limit)
+        {
+            $query = $db->getQuery(true)
+                        ->select('COUNT(*)')
+                        ->from('#__akeebasubs_coupons')
+                        ->where('akeebasubs_apicoupon_id = ' . $apiCouponRecord->akeebasubs_apicoupon_id);
+
+            $result['type']         = 'creation_limit';
+            $result['current']      = $db->setQuery($query)->loadResult();
+            $result['limit']        = $apiCouponRecord->creation_limit;
+
+            return $result;
+        }
+
+        if ($apiCouponRecord->subscription_limit)
+        {
+            $query = $db->getQuery(true)
+                        ->select('akeebasubs_coupon_id')
+                        ->from('#__akeebasubs_coupons')
+                        ->where('akeebasubs_apicoupon_id = ' . $apiCouponRecord->akeebasubs_apicoupon_id);
+
+            $coupons = $db->setQuery($query)->loadColumn();
+
+            if ($coupons)
+            {
+                $query = $db->getQuery(true)
+                            ->select('COUNT(*)')
+                            ->from('#__akeebasubs_subscriptions')
+                            ->where('akeebasubs_coupon_id IN(' . implode(',', $coupons) . ')');
+
+                $result['type']         = 'subscription_limit';
+                $result['current']      = $db->setQuery($query)->loadResult();
+                $result['limit']        = $apiCouponRecord->subscription_limit;
+
+                return $result;
+            }
+        }
+
+        if ($apiCouponRecord->value_limit)
+        {
+            $query = $db->getQuery(true)
+                        ->select('akeebasubs_coupon_id')
+                        ->from('#__akeebasubs_coupons')
+                        ->where('akeebasubs_apicoupon_id = ' . $apiCouponRecord->akeebasubs_apicoupon_id);
+
+            $coupons = $db->setQuery($query)->loadColumn();
+
+            if ($coupons)
+            {
+                $query = $db->getQuery(true)
+                            ->select('SUM(net_amount) as total_amount, COUNT(*) as total')
+                            ->from('#__akeebasubs_subscriptions')
+                            ->where('akeebasubs_coupon_id IN(' . implode(',', $coupons) . ')');
+                $sub   = $db->setQuery($query)->loadObject();
+
+                if ($apiCouponRecord->type == 'value')
+                {
+                    $result['type']         = 'value_limit_value';
+                    $result['current']      = $sub->total * $apiCouponRecord->value;
+                    $result['limit']        = $apiCouponRecord->value_limit;
+
+                    return $result;
+                }
+                else
+                {
+                    $result['type']         = 'value_limit_perc';
+                    $result['current']      = ($sub->total_amount * $apiCouponRecord->value / 100);
+                    $result['limit']        = $apiCouponRecord->value_limit;
+
+                    return $result;
+                }
+            }
+        }
+
+        return $result;
+    }
 }
