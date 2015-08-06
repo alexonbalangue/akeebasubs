@@ -30,4 +30,22 @@ class Json extends \FOF30\View\DataView\Json
 		// Call the parent's onBeforeRead which handles the output
 		parent::onBeforeRead($tpl);
 	}
+
+    protected function onBeforeGetlimits($tpl = null)
+    {
+        /** @var APICoupons $model */
+        $model = $this->getModel();
+
+        // Get the key and password
+        $key = $this->input->getCmd('key', '');
+        $pwd = $this->input->getCmd('pwd', '');
+
+        // Create the coupon and set the response into $this->item
+        $this->item = $model->getApiLimits($key, $pwd);
+        $this->alreadyLoaded = true;
+        $this->useHypermedia = false;
+
+        // Call the parent's onBeforeRead which handles the output
+        parent::onBeforeRead($tpl);
+    }
 }

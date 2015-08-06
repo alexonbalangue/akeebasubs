@@ -53,20 +53,17 @@ JS
 );
 ?>
 <?php if ($this->item->akeebasubs_apicoupon_id > 0):
-	$rootURL = rtrim(JURI::base(), '/');
-	$subpathURL = JURI::base(true);
-
-	if (!empty($subpathURL) && ($subpathURL != '/'))
-	{
-		$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
-	}
-
-	$apiURL = $rootURL . '/index.php?option=com_akeebasubs&view=APICoupon&task=create&key=' .
+	$createURL = JUri::root() . 'index.php?option=com_akeebasubs&view=APICoupons&task=create&key=' .
 		urlencode($this->item->key) . '&pwd=' . urlencode($this->item->password) .
 		'&format=json';
+
+    $limitsURL = JUri::root() . 'index.php?option=com_akeebasubs&view=APICoupons&task=getlimits&key=' .
+        urlencode($this->item->key) . '&pwd=' . urlencode($this->item->password) .
+        '&format=json';
 	?>
 	<div class="alert alert-info">
-		<?php echo JText::sprintf('COM_AKEEBASUBS_APICOUPONS_INFO_URL', $apiURL); ?>
+		<div><?php echo JText::sprintf('COM_AKEEBASUBS_APICOUPONS_INFO_URL', $createURL); ?></div>
+        <div><?php echo JText::sprintf('COM_AKEEBASUBS_APICOUPONS_LIMITS_URL', $limitsURL); ?></div>
 	</div>
 <?php endif; ?>
 
