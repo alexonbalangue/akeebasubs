@@ -284,50 +284,76 @@ class APICoupons extends DataModel
     /**
      * Given an APICoupon record, it returns the limits and the current usage
      *
-     * @param APICoupons $apiCouponRecord
+     * @param   string $APIKey      API key for the partner
+     * @param   string $APIPassword API password for the partner
      *
      * @return array
      */
-    public function getApiLimits(APICoupons $apiCouponRecord)
+    public function getApiLimits($APIKey, $APIPassword)
     {
+        // Do I have a key/pwd pair?
+        if (!$APIKey || !$APIPassword)
+        {
+            return array('error' => JText::_('COM_AKEEBASUBS_APICOUPONS_INVALID_CREDENTIALS'));
+        }
+
+        $this->addBehaviour('Filters');
+        $this->setState('key', $APIKey);
+        $this->setState('password', $APIPassword);
+
+        try
+        {
+            $item = $this->firstOrFail();
+        }
+        catch (\RuntimeException $e)
+        {
+            return array('error' => JText::_('COM_AKEEBASUBS_APICOUPONS_INVALID_CREDENTIALS'));
+        }
+
+        // Are they valid?
+        if (!$item->akeebasubs_apicoupon_id || !$item->enabled)
+        {
+            return array('error' => JText::_('COM_AKEEBASUBS_APICOUPONS_INVALID_CREDENTIALS'));
+        }
+
         $db     = JFactory::getDbo();
         $result = array(
-            'type'         => '',   // Type of the limit
+            'type'         => 'unlimited',   // Type of the limit
             'subscription' => '',   // If the limit is binded to a specific subscription
             'current'      => 0,    // Current usage
             'limit'        => 0     // Usage limit
         );
 
         // Let's get the title of all the subscriptions
-        if($apiCouponRecord->subscriptions)
+        if($item->subscriptions)
         {
             /** @var Levels $level */
             $level  = $this->container->factory->model('Levels')->tmpInstance();
-            $titles = $level->id($apiCouponRecord->subscriptions)->get();
+            $levels = $level->id($item->subscriptions)->get();
 
-            $result['subscription'] = implode(',', $titles);
+            $result['subscription'] = $levels->implode('title', ', ');
         }
 
-        if ($apiCouponRecord->creation_limit)
+        if ($item->creation_limit)
         {
             $query = $db->getQuery(true)
                         ->select('COUNT(*)')
                         ->from('#__akeebasubs_coupons')
-                        ->where('akeebasubs_apicoupon_id = ' . $apiCouponRecord->akeebasubs_apicoupon_id);
+                        ->where('akeebasubs_apicoupon_id = ' . $item->akeebasubs_apicoupon_id);
 
             $result['type']         = 'creation_limit';
             $result['current']      = $db->setQuery($query)->loadResult();
-            $result['limit']        = $apiCouponRecord->creation_limit;
+            $result['limit']        = $item->creation_limit;
 
             return $result;
         }
 
-        if ($apiCouponRecord->subscription_limit)
+        if ($item->subscription_limit)
         {
             $query = $db->getQuery(true)
                         ->select('akeebasubs_coupon_id')
                         ->from('#__akeebasubs_coupons')
-                        ->where('akeebasubs_apicoupon_id = ' . $apiCouponRecord->akeebasubs_apicoupon_id);
+                        ->where('akeebasubs_apicoupon_id = ' . $item->akeebasubs_apicoupon_id);
 
             $coupons = $db->setQuery($query)->loadColumn();
 
@@ -340,18 +366,18 @@ class APICoupons extends DataModel
 
                 $result['type']         = 'subscription_limit';
                 $result['current']      = $db->setQuery($query)->loadResult();
-                $result['limit']        = $apiCouponRecord->subscription_limit;
+                $result['limit']        = $item->subscription_limit;
 
                 return $result;
             }
         }
 
-        if ($apiCouponRecord->value_limit)
+        if ($item->value_limit)
         {
             $query = $db->getQuery(true)
                         ->select('akeebasubs_coupon_id')
                         ->from('#__akeebasubs_coupons')
-                        ->where('akeebasubs_apicoupon_id = ' . $apiCouponRecord->akeebasubs_apicoupon_id);
+                        ->where('akeebasubs_apicoupon_id = ' . $item->akeebasubs_apicoupon_id);
 
             $coupons = $db->setQuery($query)->loadColumn();
 
@@ -363,19 +389,19 @@ class APICoupons extends DataModel
                             ->where('akeebasubs_coupon_id IN(' . implode(',', $coupons) . ')');
                 $sub   = $db->setQuery($query)->loadObject();
 
-                if ($apiCouponRecord->type == 'value')
+                if ($item->type == 'value')
                 {
                     $result['type']         = 'value_limit_value';
-                    $result['current']      = $sub->total * $apiCouponRecord->value;
-                    $result['limit']        = $apiCouponRecord->value_limit;
+                    $result['current']      = $sub->total * $item->value;
+                    $result['limit']        = $item->value_limit;
 
                     return $result;
                 }
                 else
                 {
                     $result['type']         = 'value_limit_perc';
-                    $result['current']      = ($sub->total_amount * $apiCouponRecord->value / 100);
-                    $result['limit']        = $apiCouponRecord->value_limit;
+                    $result['current']      = ($sub->total_amount * $item->value / 100);
+                    $result['limit']        = $item->value_limit;
 
                     return $result;
                 }
