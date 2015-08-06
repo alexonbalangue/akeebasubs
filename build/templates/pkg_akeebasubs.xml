@@ -63,6 +63,7 @@
 
         <!-- Plugins: content -->
         <file type="plugin" group="content" id="aslink">plg_content_aslink.zip</file>
+        <file type="plugin" group="content" id="asprice">plg_content_asprice.zip</file>
         <file type="plugin" group="content" id="asrestricted">plg_content_asrestricted.zip</file>
         <file type="plugin" group="content" id="astimedrelease">plg_content_astimedrelease.zip</file>
 

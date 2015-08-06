@@ -68,6 +68,7 @@ class Pkg_AkeebasubsInstallerScript
 		['plugin', 'subscriptionemails', 1, 'akeebasubs'],
 		['plugin', 'offline', 1, 'akpayment'],
 		['plugin', 'aslink', 1, 'content'],
+		['plugin', 'asprice', 1, 'content'],
 		['plugin', 'asrestricted', 1, 'content'],
 		['plugin', 'asexpirationcontrol', 1, 'system'],
 		['plugin', 'asexpirationnotify', 1, 'system'],

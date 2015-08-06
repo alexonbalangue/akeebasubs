@@ -12,7 +12,7 @@ JLoader::import('joomla.plugin.plugin');
 use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
 
-class plgContentAslink extends JPlugin
+class plgContentAsprice extends JPlugin
 {
 	/**
 	 * Should this plugin be allowed to run? True if FOF can be loaded and the Akeeba Subscriptions component is enabled
@@ -57,13 +57,13 @@ class plgContentAslink extends JPlugin
 		}
 
 		// Check whether the plugin should process or not
-		if (JString::strpos($article->text, 'aslink') === false)
+		if (JString::strpos($article->text, 'asprice') === false)
 		{
 			return true;
 		}
 
 		// Search for this tag in the content
-		$regex = "#{aslink (.*?)}#s";
+		$regex = "#{asprice (.*?)}#s";
 
 		$article->text = preg_replace_callback($regex, array('self', 'process'), $article->text);
 	}
@@ -182,111 +182,58 @@ class plgContentAslink extends JPlugin
 	{
 		$ret = '';
 
-		if (($match[1] != 'view=levels') && ($match[1] != 'view=Levels'))
+		$levelId = self::getId($match[1], false);
+
+		if ($levelId <= 0)
 		{
-			$slug = self::getId($match[1], true);
-
-			if (!empty($slug))
-			{
-				$root = self::getRootUrl();
-
-				$itemId = self::_findItem($slug);
-				if ($itemId)
-				{
-					$itemId = '&Itemid=' . $itemId;
-				}
-
-				$ret = rtrim($root, '/') . JRoute::_('index.php?option=com_akeebasubs&view=level&slug=' . $slug . $itemId);
-			}
+			return $ret;
 		}
-		else
-		{
-			$root = self::getRootUrl();
 
-			$itemId = self::_findItem('levels');
-			if ($itemId)
-			{
-				$itemId = '&Itemid=' . $itemId;
-			}
-
-			$ret = rtrim($root, '/') . JRoute::_('index.php?option=com_akeebasubs&view=levels&Itemid=' . $itemId);
-		}
+		$ret = self::getPrice($levelId);
 
 		return $ret;
 	}
 
-	/**
-	 * Gets the URL to the site's root
-	 *
-	 * @return  string
-	 */
-	private static function getRootUrl()
+	private static function getPrice($levelId)
 	{
-		static $root = null;
+		static $prices = [];
 
-		if (is_null($root))
+		if (!array_key_exists($levelId, $prices))
 		{
-			$root    = rtrim(JURI::base(), '/');
-			$subpath = JURI::base(true);
+			$container = Container::getInstance('com_akeebasubs');
+			/** @var \Akeeba\Subscriptions\Site\Model\Levels $level */
+			$level = $container->factory->model('Levels');
+			$level->load($levelId);
 
-			if (!empty($subpath) && ($subpath != '/'))
+			/** @var Akeeba\Subscriptions\Site\View\Levels\Html $view */
+			$view = $container->factory->view('Levels', 'html');
+			$view->applyViewConfiguration();
+			$priceInfo = $view->getLevelPriceInformation($level);
+
+			$price = '';
+
+			if ($view->renderAsFree && ($priceInfo->levelPrice < 0.01))
 			{
-				$root = substr($root, 0, - 1 * strlen($subpath));
+				$price = JText::_('COM_AKEEBASUBS_LEVEL_LBL_FREE');
 			}
-		}
-
-		return $root;
-	}
-
-	/**
-	 * Finds out the Itemid for the subscription
-	 *
-	 * @param   string  $slug  The subscription level slug for which we want to find the Itemid
-	 *
-	 * @return  null|string  The Itemid or null if nothing is found
-	 */
-	private static function _findItem($slug)
-	{
-
-		$component = JComponentHelper::getComponent('com_akeebasubs');
-		$menus     = JFactory::getApplication()->getMenu('site', array());
-		$items     = $menus->getItems('component_id', $component->id);
-		$itemId    = null;
-
-		if (count($items))
-		{
-			foreach ($items as $item)
+			else
 			{
-				if (is_string($item->params))
+				if ($container->params->get('currencypos','before') == 'before')
 				{
-					$params = new JRegistry();
-					$params->loadString($item->params, 'JSON');
-				}
-				else
-				{
-					$params = $item->params;
+					$price .= $container->params->get('currencysymbol','€');
 				}
 
-				if (@$item->query['view'] == 'level')
-				{
-					if ((@$params->get('slug') == $slug))
-					{
-						$itemId = $item->id;
-						break;
-					}
-				}
+				$price .= $priceInfo->formattedPrice;
 
-				if (@$item->query['view'] == 'levels')
+				if ($container->params->get('currencypos','before') == 'after')
 				{
-					if ($item->query['view'] == $slug)
-					{
-						$itemId = $item->id;
-						break;
-					}
+					$price .= $container->params->get('currencysymbol','€');
 				}
 			}
+
+			$prices[$levelId] = $price;
 		}
 
-		return $itemId;
+		return $prices[$levelId];
 	}
 }

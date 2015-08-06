@@ -114,14 +114,11 @@ class Html extends \FOF30\View\DataView\Html
 	 */
 	protected $pricingInformationCache = [];
 
-	/**
-	 * Executes before rendering the page for the Browse task.
-	 */
-	protected function onBeforeBrowse()
+	public function applyViewConfiguration()
 	{
-		// Cache subscription IDs of this user
+// Cache subscription IDs of this user
 		$subIDs = array();
-		$user = \JFactory::getUser();
+		$user   = \JFactory::getUser();
 
 		if ($user->id)
 		{
@@ -150,7 +147,7 @@ class Html extends \FOF30\View\DataView\Html
 
 		// Cache tax parameters
 		/** @var \Akeeba\Subscriptions\Site\Model\TaxHelper $taxModel */
-		$this->taxModel = $this->getContainer()->factory->model('TaxHelper')->tmpInstance();
+		$this->taxModel  = $this->getContainer()->factory->model('TaxHelper')->tmpInstance();
 		$this->taxParams = $this->taxModel->getTaxDefiningParameters();
 
 		// Should I include sign-up one time fees?
@@ -175,10 +172,10 @@ class Html extends \FOF30\View\DataView\Html
 		{
 			$this->country = $this->taxParams['country'];
 			Forex::updateRates(false, $this->container);
-			$temp = Forex::convertToLocal($this->taxParams['country'], 1.00, $this->container);
-			$this->exchangeRate = $temp['rate'];
+			$temp                = Forex::convertToLocal($this->taxParams['country'], 1.00, $this->container);
+			$this->exchangeRate  = $temp['rate'];
 			$this->localCurrency = $temp['currency'];
-			$this->localSymbol = $temp['symbol'];
+			$this->localSymbol   = $temp['symbol'];
 		}
 
 		// Do not show foreign exchange conversions unless the exchange rate is different than unity
@@ -186,6 +183,14 @@ class Html extends \FOF30\View\DataView\Html
 		{
 			$this->showLocalPrices = false;
 		}
+	}
+
+	/**
+	 * Executes before rendering the page for the Browse task.
+	 */
+	protected function onBeforeBrowse()
+	{
+		$this->applyViewConfiguration();
 
 		parent::onBeforeBrowse();
 	}
