@@ -1027,7 +1027,8 @@ class Subscriptions extends DataModel
 	 */
 	public function triggerOnAfterLoad()
 	{
-		$this->onAfterLoad(true, $this->getId());
+		$tmpID = $this->getId();
+		$this->onAfterLoad(true, $tmpID);
 	}
 
 	/**
