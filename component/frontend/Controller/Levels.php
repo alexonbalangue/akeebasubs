@@ -56,9 +56,9 @@ class Levels extends DataController
 
 		if (is_array($ids) && !empty($ids))
 		{
-			$ids = implode(',', $ids);
+			$checkIds = implode(',', $ids);
 
-			if ($ids === '0')
+			if (($checkIds === '0') || $checkIds === '')
 			{
 				$ids = '';
 			}
