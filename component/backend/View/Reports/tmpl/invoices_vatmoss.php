@@ -18,8 +18,6 @@ else
 	$this->addJavascriptInline("\n\nwindow.print();");
 }
 
-$this->loadHelper('select');
-
 $jDate = new JDate($this->params['year'] . '-' . $this->params['month'] . '-01');
 ?>
 

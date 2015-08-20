@@ -7,6 +7,10 @@
 
 defined('_JEXEC') or die;
 
+use \Akeeba\Subscriptions\Admin\Helper\Select;
+
+JHtml::_('formbehavior.chosen');
+
 /** @var \FOF30\View\View $this */
 
 $optionsMonths = array(
@@ -33,7 +37,8 @@ for ($year = 2010; $year <= $nextYear; $year++)
 }
 
 $printUrl = JURI::getInstance();
-$printUrl->setVar('tmpl', 'component')
+$printUrl->setVar('tmpl', 'component');
+$template_id = isset($params['template_id']) ? $params['template_id'] : null;
 ?>
 
 <form action="index.php" method="get" name="invoiceControlsForm" class="form form-horizontal">
@@ -47,6 +52,18 @@ $printUrl->setVar('tmpl', 'component')
 	<?php echo JHtml::_('select.genericlist', $optionsYears, 'year', array(
 		'onchange' => 'document.forms.invoiceControlsForm.submit()'
 	), 'value', 'text', $params['year']) ?>
+	<?php
+		echo Select::invoicetemplates(
+			'template_id[]',
+			$template_id,
+			array('multiple' => 'true', 'size' => 5, 'class' => 'advancedSelect')
+		)
+	?>
+
+	<button class="btn btn-primary">
+		<span class="icon icon-search"></span>
+		<?php echo JText::_('COM_AKEEBASUBS_REPORTS_INVOICES_BTN_LOAD')?>
+	</button>
 
 	<a href="<?php echo $printUrl ?>" class="btn btn-primary" target="_blank">
 		<span class="icon icon-print"></span>

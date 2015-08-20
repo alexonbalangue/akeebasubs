@@ -1398,6 +1398,40 @@ abstract class Select
 	}
 
 	/**
+	 * Drop down list of invoice templates
+	 *
+	 * @param   string  $name      The field's name
+	 * @param   string  $selected  Pre-selected value
+	 * @param   array   $attribs   Field attributes
+	 * @param	bool	$enabled   Fetch only enabled templates?
+	 *
+	 * @return  string  The HTML of the drop-down
+	 */
+	public static function invoicetemplates($name, $selected = '', $attribs = array(), $enabled = true)
+	{
+		/** @var \Akeeba\Subscriptions\Admin\Model\InvoiceTemplates $model */
+		$model = Container::getInstance('com_akeebasubs')->factory
+			->model('InvoiceTemplates')->tmpInstance();
+
+		if($enabled)
+		{
+			$model->enabled(true);
+		}
+
+		/** @var \Akeeba\Subscriptions\Admin\Model\InvoiceTemplates[] $rows */
+		$rows = $model->filter_order('title')->filter_order_Dir('ASC')->get(true);
+
+		$options[] = JHtml::_('select.option', '', '- ' . JText::_('COM_AKEEBASUBS_COMMON_SELECT') . ' -');
+
+		foreach($rows as $row)
+		{
+			$options[] = JHtml::_('select.option', $row->akeebasubs_invoicetemplate_id, $row->title);
+		}
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+
+	/**
 	 * Drop down list of VIES registration flag
 	 *
 	 * @param   string  $name      The field's name
@@ -1511,50 +1545,53 @@ abstract class Select
 }
 
 // Load the states from the database
-function akeebasubsHelperSelect_init()
+if(!function_exists('akeebasubsHelperSelect_init'))
 {
-	/** @var States $model */
-	$model                = Container::getInstance('com_akeebasubs')->factory->model('States')->tmpInstance();
-	$rawstates            = $model->enabled(1)->orderByLabels(1)->get(true);
-	$states               = array();
-	$current_country      = '';
-	$current_country_name = 'N/A';
-	$current_states       = array('' => 'N/A');
-
-	/** @var States $rawstate */
-	foreach ($rawstates as $rawstate)
+	function akeebasubsHelperSelect_init()
 	{
-		// Note: you can't use $rawstate->state, it gets the model state
-		$rawstate_state = $rawstate->getFieldValue('state', null);
+		/** @var States $model */
+		$model                = Container::getInstance('com_akeebasubs')->factory->model('States')->tmpInstance();
+		$rawstates            = $model->enabled(1)->orderByLabels(1)->get(true);
+		$states               = array();
+		$current_country      = '';
+		$current_country_name = 'N/A';
+		$current_states       = array('' => 'N/A');
 
-		if ($rawstate->country != $current_country)
+		/** @var States $rawstate */
+		foreach ($rawstates as $rawstate)
 		{
-			if (!empty($current_country_name))
+			// Note: you can't use $rawstate->state, it gets the model state
+			$rawstate_state = $rawstate->getFieldValue('state', null);
+
+			if ($rawstate->country != $current_country)
 			{
-				$states[ $current_country_name ] = $current_states;
-				$current_states                  = array();
-				$current_country                 = '';
-				$current_country_name            = '';
+				if (!empty($current_country_name))
+				{
+					$states[ $current_country_name ] = $current_states;
+					$current_states                  = array();
+					$current_country                 = '';
+					$current_country_name            = '';
+				}
+
+				if (empty($rawstate->country) || empty($rawstate_state) || empty($rawstate->label))
+				{
+					continue;
+				}
+
+				$current_country      = $rawstate->country;
+				$current_country_name = Select::$countries[ $current_country ];
 			}
 
-			if (empty($rawstate->country) || empty($rawstate_state) || empty($rawstate->label))
-			{
-				continue;
-			}
-
-			$current_country      = $rawstate->country;
-			$current_country_name = Select::$countries[ $current_country ];
+			$current_states[ $rawstate_state ] = $rawstate->label;
 		}
 
-		$current_states[ $rawstate_state ] = $rawstate->label;
+		if (!empty($current_country_name))
+		{
+			$states[ $current_country_name ] = $current_states;
+		}
+
+		Select::$states = $states;
 	}
 
-	if (!empty($current_country_name))
-	{
-		$states[ $current_country_name ] = $current_states;
-	}
-
-	Select::$states = $states;
+	akeebasubsHelperSelect_init();
 }
-
-akeebasubsHelperSelect_init();
