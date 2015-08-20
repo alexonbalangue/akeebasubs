@@ -1398,6 +1398,41 @@ abstract class Select
 	}
 
 	/**
+	 * Drop down list of invoice templates
+	 *
+	 * @param   string  $name      The field's name
+	 * @param   string  $selected  Pre-selected value
+	 * @param   array   $attribs   Field attributes
+	 * @param	bool	$enabled   Fetch only enabled templates?
+	 *
+	 * @return  string  The HTML of the drop-down
+	 */
+	public static function invoicetemplates($name, $selected = '', $attribs = array(), $enabled = true)
+	{
+		/** @var \Akeeba\Subscriptions\Admin\Model\InvoiceTemplates $model */
+		$model = Container::getInstance('com_akeebasubs')->factory
+			->model('InvoiceTemplates')->tmpInstance();
+
+		if($enabled)
+		{
+			$model->enabled(true);
+		}
+
+		/** @var \Akeeba\Subscriptions\Admin\Model\InvoiceTemplates[] $rows */
+		$rows = $model->filter_order('title')->filter_order_Dir('ASC')->get(true);
+
+		$options = array();
+		//$options[] = JHtml::_('select.option', '', '- ' . JText::_('COM_AKEEBASUBS_COMMON_SELECT') . ' -');
+
+		foreach($rows as $row)
+		{
+			$options[] = JHtml::_('select.option', $row->akeebasubs_invoicetemplate_id, $row->title);
+		}
+
+		return self::genericlist($options, $name, $attribs, $selected, $name);
+	}
+
+	/**
 	 * Drop down list of VIES registration flag
 	 *
 	 * @param   string  $name      The field's name
