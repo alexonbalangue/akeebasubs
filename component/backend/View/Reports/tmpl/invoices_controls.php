@@ -38,7 +38,7 @@ for ($year = 2010; $year <= $nextYear; $year++)
 
 $printUrl = JURI::getInstance();
 $printUrl->setVar('tmpl', 'component');
-$template_id = isset($params['akeebasubs_invoicetemplate_id']) ? $params['akeebasubs_invoicetemplate_id'] : null;
+$template_id = isset($params['template_id']) ? $params['template_id'] : null;
 ?>
 
 <form action="index.php" method="get" name="invoiceControlsForm" class="form form-horizontal">
@@ -54,7 +54,7 @@ $template_id = isset($params['akeebasubs_invoicetemplate_id']) ? $params['akeeba
 	), 'value', 'text', $params['year']) ?>
 	<?php
 		echo Select::invoicetemplates(
-			'akeebasubs_invoicetemplate_id',
+			'template_id[]',
 			$template_id,
 			array('multiple' => 'true', 'size' => 5, 'class' => 'advancedSelect')
 		)
