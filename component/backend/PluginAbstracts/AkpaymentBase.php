@@ -142,7 +142,11 @@ abstract class AkpaymentBase extends JPlugin
 					'name'                  => $this->ppName,
 					'title'                 => $title,
 					'image'                 => $image,
-					'recurringCancellation' => $this->ppRecurringCancellation
+					'recurringCancellation' => $this->ppRecurringCancellation,
+					'activeCountries'		=> array(
+						'type' => $this->params->get('typeCountryList', 2),
+						'list' => $this->params->get('countryList', array())
+					)
 				)
 		);
 

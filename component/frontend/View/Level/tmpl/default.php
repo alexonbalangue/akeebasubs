@@ -259,7 +259,17 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 						</label>
 
 						<div id="paymentlist-container" class="controls col-sm-3">
-							<?php echo Select::paymentmethods('paymentmethod', '', array('id' => 'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id)) ?>
+							<?php
+							$country = !empty($this->userparams->country) && ($this->userparams->country != 'XX') ? $this->userparams->country : $this->cache['country'];
+							echo Select::paymentmethods(
+								'paymentmethod',
+								'',
+								array(
+									'id' 		=> 'paymentmethod',
+									'level_id' 	=> $this->item->akeebasubs_level_id,
+									'country'  	=> $country
+								)
+							) ?>
 						</div>
 					</div>
 				</div>
