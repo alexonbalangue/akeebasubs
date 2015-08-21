@@ -261,7 +261,7 @@ function validateForm(callback_function)
 			dataType: 'text',
 			success:  function (result)
 			{
-				var html = /##x#(\{.*?\})###/.exec(result);
+				var html = /###(\{.*?\})###/.exec(result);
 
 				if(html && html[1] !== 'undefined' && html[1].html !== 'undefined')
 				{
