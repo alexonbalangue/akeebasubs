@@ -253,6 +253,22 @@ function validateForm(callback_function)
 			}
 		});
 
+		// Fetch list of
+		$.ajax({
+			type:     'POST',
+			url: akeebasubs_validate_url + '?option=com_akeebasubs&view=Validate&task=getpayment&format=json',
+			data:     data,
+			dataType: 'json',
+			success:  function (result)
+			{
+				enableInterface();
+			},
+			error:    function (jqXHR, textStatus, errorThrown)
+			{
+				enableInterface();
+			}
+		});
+
 	})(akeeba.jQuery);
 }
 
