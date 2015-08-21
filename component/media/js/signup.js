@@ -258,12 +258,19 @@ function validateForm(callback_function)
 			type:     'POST',
 			url: akeebasubs_validate_url + '?option=com_akeebasubs&view=Validate&task=getpayment&format=json',
 			data:     data,
-			dataType: 'json',
+			dataType: 'text',
 			success:  function (result)
 			{
+				var html = /##x#(\{.*?\})###/.exec(result);
+
+				if(html && html[1] !== 'undefined' && html[1].html !== 'undefined')
+				{
+					$('#paymentlist-container').html(JSON.parse(html[1]).html);
+				}
+
 				enableInterface();
 			},
-			error:    function (jqXHR, textStatus, errorThrown)
+			error:    function ()
 			{
 				enableInterface();
 			}

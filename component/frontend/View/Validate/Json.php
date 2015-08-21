@@ -17,6 +17,6 @@ class Json extends \FOF30\View\DataView\Json
 
         $result = $this->loadTemplate($tpl, true);
 
-        echo $result;
+        echo '###'.json_encode(array('html' => $result)).'###';
     }
 }
