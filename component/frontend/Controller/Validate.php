@@ -31,7 +31,7 @@ class Validate extends Controller
 
 		parent::__construct($container, $config);
 
-		$this->predefinedTaskList = ['validate'];
+		$this->predefinedTaskList = ['validate', 'getpayment'];
 
 		$this->cacheableTasks = [];
 	}
@@ -53,5 +53,18 @@ class Validate extends Controller
 		echo json_encode($data);
 
 		$this->container->platform->closeApplication();
+	}
+
+	/**
+	 * Returns the payment list HTML code accordingly to the country of the user and plugins parameters
+	 *
+	 * @throws \Exception
+	 */
+	public function getpayment()
+	{
+		// Makes sure SiteGround's SuperCache doesn't cache the subscription page
+		\JFactory::getApplication()->setHeader('X-Cache-Control', 'False', true);
+
+		$this->display(false);
 	}
 }

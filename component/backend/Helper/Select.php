@@ -999,6 +999,7 @@ abstract class Select
 		$level_id        = isset($attribs['level_id']) ? $attribs['level_id'] : 0;
 		$always_dropdown = isset($attribs['always_dropdown']) ? 1 : 0;
 		$default_option  = isset($attribs['default_option']) ? 1 : 0;
+		$country		 = isset($attribs['country']) ? $attribs['country'] : '';
 
 		// Per-level payment option filtering
 		if ($level_id > 0)
@@ -1040,6 +1041,30 @@ abstract class Select
 					$plugins = $temp;
 				}
 			}
+		}
+
+		if($country && $plugins)
+		{
+			$temp = array();
+
+			foreach($plugins as $plugin)
+			{
+				// These two if statements are split so we can better understand what's going on
+				// Inclusion list and the country is in the list
+				if($plugin->activeCountries['type'] == 1 && in_array($country, $plugin->activeCountries['list']))
+				{
+					$temp[] = $plugin;
+				}
+				// Exclusion list and the country is NOT in the list
+				elseif($plugin->activeCountries['type'] == 2 && !in_array($country, $plugin->activeCountries['list']))
+				{
+					$temp[] = $plugin;
+				}
+
+				// In any other case, ignore the plugin...
+			}
+
+			$plugins = $temp;
 		}
 
 		$returnRawList = false;

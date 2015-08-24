@@ -131,6 +131,7 @@ class Subscribe extends Model
 				$response->validation = (object)$this->getValidator('PersonalInformation')->execute();
 				$response->validation->username = $this->getValidator('username')->execute();
 				$response->validation->password = $this->getValidator('password')->execute();
+				$response->validation->paymentmethod = $this->getValidator('PaymentMethod')->execute();
 				$response->price = (object)$this->getValidator('Price')->execute();
 
 				$pluginResponse = $this->pluginValidation();
