@@ -24,6 +24,17 @@
 				<field name="ppimage" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_PPIMAGE_LABEL" description="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_PPIMAGE_DESC" />
 				<field type="spacer" />
 				<field name="surcharge" type="text" size="50" default="" label="PLG_AKPAYMENT_COMMON_SURCHARGE_LABEL" description="PLG_AKPAYMENT_COMMON_SURCHARGE_DESC"/>
+				<field name="typeCountryList" type="list" default="2"
+					   label="PLG_AKPAYMENT_COMMON_COUNTRYLIST_TYPE_LABEL"
+					   description="PLG_AKPAYMENT_COMMON_COUNTRYLIST_TYPE_DESC"
+						>
+					<option value="1">PLG_AKPAYMENT_COMMON_COUNTRYLIST_INCLUDE</option>
+					<option value="2">PLG_AKPAYMENT_COMMON_COUNTRYLIST_EXCLUDE</option>
+				</field>
+				<field name="countryList" type="akeebasubscountries" default=""
+					   multiple="true" size="5"
+					   label="PLG_AKPAYMENT_COMMON_COUNTRYLIST_LABEL" />
+
 				<field type="spacer" />
 				<field name="apiuser" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_APIUSER_LABEL" description="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_APIUSER_DESC"/>
 				<field name="apipw" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_APIPW_LABEL" description="PLG_AKPAYMENT_PAYPALPAYMENTSPRO_APIPW_DESC"/>
