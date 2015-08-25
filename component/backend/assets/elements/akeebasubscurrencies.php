@@ -16,7 +16,7 @@ class JFormFieldAkeebasubscurrencies extends JFormFieldList
     protected function getOptions()
     {
         $db      = JFactory::getDbo();
-        $options = array();
+        $options[] = array('value' => '', 'text' => ' - '.JText::_('COM_AKEEBASUBS_COMMON_SELECT').' - ');
 
         $query = $db->getQuery(true)
                     ->select('*')
