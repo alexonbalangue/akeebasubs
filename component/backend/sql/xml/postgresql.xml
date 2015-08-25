@@ -842,5 +842,26 @@ CREATE TABLE "#__akeebasubs_forexrates" (
 			]]></query>
 		</action>
 
+		<action table="#__akeebasubs_subscriptions" canfail="0">
+			<condition type="missing" value="net_amount_alt" />
+			<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `net_amount_alt` FLOAT NOT NULL;
+				]]></query>
+			<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `tax_amount_alt` FLOAT NOT NULL;
+				]]></query>
+			<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `gross_amount_alt` FLOAT NOT NULL;
+				]]></query>
+			<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `prediscount_amount_alt` FLOAT NOT NULL;
+				]]></query>
+			<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `discount_amount_alt` FLOAT NOT NULL;
+				]]></query>
+			<query><![CDATA[
+ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `affiliate_comission_alt` FLOAT NOT NULL;
+				]]></query>
+		</action>
 	</sql>
 </schema>

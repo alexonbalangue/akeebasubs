@@ -4,6 +4,7 @@ Akeeba Subscriptions 5.0.1
 ! Removed the ComponentParams helper. Front-end template overrides MAY be affected.
 + New content plugin which displays a level's price when using {asprice level_name}
 + Added support for invoice template id filtering in the Reports page
++ Added support for alternate currency in invoice templates
 # [HIGH] Expiration control is broken
 # [MEDIUM] The Coupon API was broken (manually created coupons still worked just fine)
 # [MEDIUM] gh-180 Selecting multiple levels in a menu item leads to empty display
