@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config>
+<config addfieldpath="administrator/components/com_akeebasubs/assets/elements">
 	<fieldset name="currency" label="COM_AKEEBASUBS_CONFIG_CURRENCY_TITLE">
 		<field type="text"
 			name="currency"
@@ -245,6 +245,13 @@
 				label="COM_AKEEBASUBS_CONFIG_INVOICE_OVERRIDE_TITLE"
 				description="COM_AKEEBASUBS_CONFIG_INVOICE_OVERRIDE_DESC"
 		/>
+
+		<field name="invoice_altcurrency" type="akeebasubscurrencies"
+			   default=""
+			   label="COM_AKEEBASUBS_CONFIG_INVOICE_ALTCURRENCY_TITLE"
+			   description="COM_AKEEBASUBS_CONFIG_INVOICE_ALTCURRENCY_DESC"
+				/>
+
 		<field name="invoice_vatnote" type="text"
 				default="VAT liability is transferred to the recipient, pursuant EU Directive nr 2006/112/EC and local tax laws implementing this directive."
 				size="50"

@@ -7,6 +7,7 @@
 
 namespace Akeeba\Subscriptions\Site\Model;
 
+use Akeeba\Subscriptions\Admin\Helper\Forex;
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 use Akeeba\Subscriptions\Site\Model\Subscribe\StateData;
 use Akeeba\Subscriptions\Site\Model\Subscribe\Validation;
@@ -944,6 +945,22 @@ class Subscribe extends Model
 			// Flags
 			'_dontCheckPaymentID'		 => true
 		);
+
+		// If I have an alternate currenct, let's convert some values and store them
+		$currency_alt  = $this->container->params->get('invoice_altcurrency', '');
+
+		if($currency_alt)
+		{
+			$currency = $this->container->params->get('currency', 'EUR');
+
+			Forex::updateRates(false, $this->container);
+
+			$data['net_amount_alt'] 		= Forex::convertCurrency($currency, $currency_alt, $data['net_amount']);
+			$data['tax_amount_alt'] 		= Forex::convertCurrency($currency, $currency_alt, $data['tax_amount']);
+			$data['gross_amount_alt'] 		= Forex::convertCurrency($currency, $currency_alt, $data['gross_amount']);
+			$data['prediscount_amount_alt'] = Forex::convertCurrency($currency, $currency_alt, $data['prediscount_amount']);
+			$data['discount_amount_alt']	= Forex::convertCurrency($currency, $currency_alt, $data['discount_amount']);
+		}
 
 		/** @var Subscriptions $subscription */
 		$subscription = $this->container->factory->model('Subscriptions')->tmpInstance();
