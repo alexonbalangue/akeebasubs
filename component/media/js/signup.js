@@ -265,7 +265,10 @@ function validateForm(callback_function)
 
 				if(html && html[1] !== 'undefined' && html[1].html !== 'undefined')
 				{
+					// Before building the new payment list, let's save the select method, so I can select it again
+					var cur_method = $('input[name="paymentmethod"]:checked').val();
 					$('#paymentlist-container').html(JSON.parse(html[1]).html);
+					$('input[name="paymentmethod"][value="'+cur_method+'"]').prop('checked', true);
 				}
 
 				enableInterface();
