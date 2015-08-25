@@ -17,7 +17,7 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_viva.ini</language>
 		<language tag="en-GB">en-GB/en-GB.plg_akpayment_viva.sys.ini</language>
 	</languages>
-	<config>
+	<config addfieldpath="administrator/components/com_akeebasubs/assets/elements">
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="title" type="text" size="50" default="" label="PLG_AKPAYMENT_VIVA_TITLE_LABEL" description="PLG_AKPAYMENT_VIVA_TITLE_DESC"/>
