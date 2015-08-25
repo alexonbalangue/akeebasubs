@@ -108,19 +108,15 @@ abstract class Message
 				'tax_amount',
 				'prediscount_amount',
 				'discount_amount',
-				'affiliate_comission'
+				'affiliate_comission',
+				'net_amount_alt',
+				'gross_amount_alt',
+				'tax_amount_alt',
+				'prediscount_amount_alt',
+				'discount_amount_alt',
+				'affiliate_comission_alt'
 			)))
 			{
-				// If I have an alternate currency, I'll have to setup the _ALT tags with the alternate currency
-				if($currency_alt)
-				{
-					$alt_tag = '[SUB:' . strtoupper($k) . '_ALT]';
-					$alt_v   = Forex::convertCurrency($currency_name, $currency_alt, $v);
-					$alt_v   = sprintf('%.2f', $alt_v);
-
-					$text = str_replace($alt_tag, $alt_v, $text);
-				}
-
 				$v = sprintf('%.2f', $v);
 			}
 
