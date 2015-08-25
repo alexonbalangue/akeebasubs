@@ -73,6 +73,16 @@ abstract class Message
 			$subData = (array) $sub;
 		}
 
+		$currency_name = self::getContainer()->params->get('currency', 'EUR');
+		$currency_alt  = self::getContainer()->params->get('invoice_altcurrency', '');
+		$exchange_rate = 0;
+
+		// Let's get the exchange rate (rates are automatically updated)
+		if($currency_alt)
+		{
+			$exchange_rate = Forex::exhangeRate($currency_name, $currency_alt, self::getContainer());
+		}
+
 		foreach ($subData as $k => $v)
 		{
 			if (is_array($v) || is_object($v))
@@ -101,6 +111,16 @@ abstract class Message
 				'affiliate_comission'
 			)))
 			{
+				// If I have an alternate currency, I'll have to setup the _ALT tags with the alternate currency
+				if($currency_alt)
+				{
+					$alt_tag = '[SUB:' . strtoupper($k) . '_ALT]';
+					$alt_v   = Forex::convertCurrency($currency_name, $currency_alt, $v);
+					$alt_v   = sprintf('%.2f', $alt_v);
+
+					$text = str_replace($alt_tag, $alt_v, $text);
+				}
+
 				$v = sprintf('%.2f', $v);
 			}
 
@@ -367,7 +387,14 @@ abstract class Message
 		$renewalURL = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
 
 		// Currency
-		$currency = self::getContainer()->params->get('currencysymbol', '€');
+		$currency 	  = self::getContainer()->params->get('currencysymbol', '€');
+		$alt_symbol   = '';
+		$currency_alt = self::getContainer()->params->get('invoice_altcurrency', '');
+
+		if($currency_alt)
+		{
+			$alt_symbol = Forex::getCurrencySymbol($currency_alt);
+		}
 
 		// Dates
 		JLoader::import('joomla.utilities.date');
@@ -433,7 +460,10 @@ abstract class Message
 			'[MYSUBSURL]'              => $mysubsurl,
 			'[URL]'                    => $mysubsurl,
 			'[CURRENCY]'               => $currency,
+			'[CURRENCY_ALT]'           => $alt_symbol,
 			'[$]'                      => $currency,
+			'[$_ALT]'                  => $alt_symbol,
+			'[EXCHANGE_RATE]' 		   => $exchange_rate,
 			'[DLID]'                   => $dlid,
 			'[COUPONCODE]'             => $couponCode,
 			'[USER:STATE_FORMATTED]'   => $formatted_state,
