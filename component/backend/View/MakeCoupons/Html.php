@@ -14,8 +14,7 @@ class Html extends \FOF30\View\DataView\Html
 {
 	public function onBeforeDisplay()
 	{
-		$session = \JFactory::getSession();
-		$coupons = $session->get('makecoupons.coupons', false, 'com_akeebasubs');
+		$coupons = $this->getContainer()->session->get('makecoupons.coupons', false, 'com_akeebasubs');
 		$session->set('makecoupons.coupons', null, 'com_akeebasubs');
 
 		$this->coupons = $coupons;
