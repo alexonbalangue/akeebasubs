@@ -141,8 +141,7 @@ class MakeCoupons extends Model
 			$ret[] = $coupon;
 		}
 
-		$session = JFactory::getSession();
-		$session->set('makecoupons.coupons', $ret, 'com_akeebasubs');
+		$this->container->session->set('makecoupons.coupons', $ret, 'com_akeebasubs');
 	}
 
 	/**
