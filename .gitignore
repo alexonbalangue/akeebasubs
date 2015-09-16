@@ -1,10 +1,6 @@
 # Project management
 /.idea
 
-# Transifex
-/.tx
-/tx.sh
-
 # Build files
 /build/bin
 /build/buildlang
