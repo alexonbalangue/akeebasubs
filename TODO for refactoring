@@ -1,18 +1,5 @@
-Migrate plugins
-
-Migrate CLI
-
-Migrate script.akeebasubs.php
-
 + Trigger integrations for a specific user
 
 + EU VAT country prefix tag for invoices + modify invoice to have it before the VAT number
-
-+ upgrade from multiple levels with old subs expiration
-
-+ GitHub integration
-
-+ Front-end showing discounts, mark upgrade and renewal discounts differently.
-    If the active discount rule is for the same level show a “Special RENEWAL price” label. Otherwise show it as “Upgrade price”.
 
 + Option to consolidate subscriptions
