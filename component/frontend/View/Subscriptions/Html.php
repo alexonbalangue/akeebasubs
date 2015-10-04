@@ -25,7 +25,6 @@ class Html extends \FOF30\View\DataView\Html
 		$levelsModel = $this->container->factory->model('Levels')->tmpInstance();
 
 		$rawActiveLevels = $levelsModel
-			->enabled(1)
 			->get(true);
 
 		$activeLevels = array();
@@ -50,8 +49,12 @@ class Html extends \FOF30\View\DataView\Html
 			/** @var Levels $l */
 			foreach ($rawActiveLevels as $l)
 			{
-				$activeLevels[] = $l->akeebasubs_level_id;
 				$allLevels[$l->akeebasubs_level_id] = $l;
+
+				if ($l->enabled)
+				{
+					$activeLevels[] = $l->akeebasubs_level_id;
+				}
 			}
 		}
 
