@@ -232,6 +232,11 @@ class plgAkpaymentPaypal extends AkpaymentBase
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
 				$isValid = ($gross - $mc_gross) < 0.01;
+				if (!$isValid)
+		                {
+		                    $mc_fee = floatval($data['mc_fee']);
+		                    $isValid = ($gross - $mc_gross - $mc_fee) < 0.01;
+		                }
 			}
 			else
 			{
@@ -253,7 +258,15 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			{
 				if ($subscription->state == 'C')
 				{
-					if (strtolower($data['payment_status']) != 'refunded')
+					if (!in_array(strtolower($data['payment_status']), array('refunded', 'reversed', 'canceled_reversal')))
+					{
+						$isValid = false;
+						$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
+					}
+				}
+                		elseif ($subscription->state == 'X')
+                		{
+					if (strtolower($data['payment_status']) != 'canceled_reversal')
 					{
 						$isValid = false;
 						$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
@@ -412,6 +425,42 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			// Save the record for the old subscription
 			$table = $subscription->tmpInstance();
 			$table->save($oldData);
+
+			// On recurring subscriptions recalculate the net, tax and gross price by removing the signup fee
+			if ($subscription->recurring_amount >= 0.01)
+			{
+				// Calculate amounts minimising rounding errors
+				$updates['gross_amount'] = $subscription->recurring_amount;
+				$updates['recurring_amount'] = 0;
+				$updates['prediscount_amount'] = $updates['gross_amount'];
+				$updates['discount_amount'] = 0;
+				if ($subscription->tax_percent > 0)
+				{
+					$updates['net_amount'] = ($updates['gross_amount'] * 100) / ($subscription->tax_percent + 100);
+					$updates['tax_amount'] = 0.01 * (100 * $updates['gross_amount'] - 100 * $updates['net_amount']);
+				}
+				else
+				{
+					$updates['net_amount'] = $updates['gross_amount'];
+				}
+			}
+
+			// Fix an invoice if there was any for the old subscription 
+			// and allow to create a new one for the new subscription
+			if ($oldData['akeebasubs_invoice_id'])
+			{
+				$updates['akeebasubs_invoice_id'] = 0;
+				if ($oldData['akeebasubs_subscription_id'] == $table->getId())
+				{
+					$db = $subscription->getDbo();
+					$query = $db->getQuery(true)
+						->update($db->qn('#__akeebasubs_invoices'))
+						->set($db->qn('akeebasubs_subscription_id') . '=' . $db->q($oldData['akeebasubs_subscription_id']))
+						->where($db->qn('akeebasubs_invoice_id') . '=' . $db->q($oldData['akeebasubs_invoice_id']));
+					$db->setQuery($query);
+					$db->execute();
+				}
+			}
 		}
 		elseif ($recurring && ($newStatus != 'C'))
 		{
