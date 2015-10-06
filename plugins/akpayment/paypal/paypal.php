@@ -391,6 +391,23 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 					$updates['net_amount'] = $updates['gross_amount'];
 				}
 			}
+
+			// Fix an invoice if there was any for the old subscription 
+			// and allow to create a new one for the new subscription
+			if ($oldData['akeebasubs_invoice_id'])
+			{
+				$updates['akeebasubs_invoice_id'] = 0;
+				if ($oldData['akeebasubs_subscription_id'] == $table->getId())
+				{
+					$db = $subscription->getDbo();
+					$query = $db->getQuery(true)
+						->update($db->qn('#__akeebasubs_invoices'))
+						->set($db->qn('akeebasubs_subscription_id') . '=' . $db->q($oldData['akeebasubs_subscription_id']))
+						->where($db->qn('akeebasubs_invoice_id') . '=' . $db->q($oldData['akeebasubs_invoice_id']));
+					$db->setQuery($query);
+					$db->execute();
+				}
+			}
 		} elseif($recurring && ($newStatus != 'C')) {
 			// Recurring payment, but payment_status is not Completed. We have
 			// stop right now and not save the changes. Otherwise the status of
