@@ -223,7 +223,14 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 		if($isValid && !is_null($subscription) && !$isPartialRefund) {
 			if($subscription->processor_key == $data['txn_id']) {
 				if($subscription->state == 'C') {
-					if(strtolower($data['payment_status']) != 'refunded')
+					if(!in_array(strtolower($data['payment_status']), array('refunded', 'reversed', 'canceled_reversal')))
+					{
+						$isValid = false;
+						$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
+					}
+				}
+                		elseif($subscription->state == 'X') {
+					if(strtolower($data['payment_status']) != 'canceled_reversal')
 					{
 						$isValid = false;
 						$data['akeebasubs_failure_reason'] = "I will not process the same txn_id twice";
