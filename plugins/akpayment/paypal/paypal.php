@@ -205,6 +205,11 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 				// A positive value means "payment". The prices MUST match!
 				// Important: NEVER, EVER compare two floating point values for equality.
 				$isValid = ($gross - $mc_gross) < 0.01;
+				if (!$isValid)
+		                {
+		                    $mc_fee = floatval($data['mc_fee']);
+		                    $isValid = ($gross - $mc_gross - $mc_fee) < 0.01;
+		                }
 			}
             else
             {
@@ -367,6 +372,25 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 			$table->reset();
 			$table->bind($oldData);
 			$table->store();
+
+			// On recurring subscriptions recalculate the net, tax and gross price by removing the signup fee
+			if ($subscription->recurring_amount >= 0.01)
+			{
+				// Calculate amounts minimising rounding errors
+				$updates['gross_amount'] = $subscription->recurring_amount;
+				$updates['recurring_amount'] = 0;
+				$updates['prediscount_amount'] = $updates['gross_amount'];
+				$updates['discount_amount'] = 0;
+				if ($subscription->tax_percent > 0)
+				{
+					$updates['net_amount'] = ($updates['gross_amount'] * 100) / ($subscription->tax_percent + 100);
+					$updates['tax_amount'] = 0.01 * (100 * $updates['gross_amount'] - 100 * $updates['net_amount']);
+				}
+				else
+				{
+					$updates['net_amount'] = $updates['gross_amount'];
+				}
+			}
 		} elseif($recurring && ($newStatus != 'C')) {
 			// Recurring payment, but payment_status is not Completed. We have
 			// stop right now and not save the changes. Otherwise the status of
