@@ -96,29 +96,28 @@ class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstract
 			return;
 		}
 
-		// Get credit information for the user
-		if (!class_exists('AtsHelperCredits'))
-		{
-			@include_once JPATH_ADMINISTRATOR . '/components/com_ats/helpers/credits.php';
-		}
+        // Let's register the autoloader for ATS component
+        $ats_container = \FOF30\Container\Container::getInstance('com_ats');
 
-		if (!class_exists('AtsHelperCredits'))
+		// Get credit information for the user
+		if (!class_exists('Akeeba\TicketSystem\Admin\Helper\Credits'))
 		{
 			return;
 		}
 
-		$userCreditAnalysis = AtsHelperCredits::creditsLeft($user_id, false);
+		$userCreditAnalysis = \Akeeba\TicketSystem\Admin\Helper\Credits::creditsLeft($user_id, false);
 
 		// Get all #__ats_credittransactions entries
-		$atsCreditEntries = F0FModel::getTmpInstance('Credittransactions', 'AtsModel')
+        $transModel = $ats_container->factory->model('CreditTransactions')->tmpInstance();
+		$atsCreditEntries = $transModel
 			->user_id($user_id)
 			->type('akeebasubs')
-			->getList(true);
+			->get(true);
 
 		// Create a map of #__ats_credittransactions per subscription ID
 		$creditTransactions = array();
 
-		if (!empty($atsCreditEntries))
+		if (count($atsCreditEntries))
 		{
 			foreach ($atsCreditEntries as $ce)
 			{
@@ -176,10 +175,8 @@ class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstract
 						'value'            => $value
 					);
 
-					$table = F0FModel::getTmpInstance('Credittransactions', 'AtsModel')
-						->getTable();
-					$table->reset();
-					$table->save($data);
+                    $transModel->reset();
+					$transModel->save($data);
 				}
 				else
 				{
@@ -200,11 +197,19 @@ class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstract
 
 					if (!empty($data))
 					{
-						$record = F0FModel::getTmpInstance('Credittransactions', 'AtsModel')
+                        $transModel->reset();
+						$collection = $transModel
 							->type('akeebasubs')
 							->unique_id($sub->akeebasubs_subscription_id)
-							->getFirstItem(true);
-						$record->save($data);
+                            ->limit(1)
+							->get();
+
+                        if($collection)
+                        {
+                            $transModel = $collection->first();
+                        }
+
+						$transModel->save($data);
 					}
 				}
 			}
@@ -215,11 +220,20 @@ class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstract
 				$data = array(
 					'enabled' => 0
 				);
-				$record = F0FModel::getTmpInstance('Credittransactions', 'AtsModel')
-					->type('akeebasubs')
-					->unique_id($sub->akeebasubs_subscription_id)
-					->getFirstItem(true);
-				$record->save($data);
+
+                $transModel->reset();
+                $collection = $transModel
+                    ->type('akeebasubs')
+                    ->unique_id($sub->akeebasubs_subscription_id)
+                    ->limit(1)
+                    ->get();
+
+                if($collection)
+                {
+                    $transModel = $collection->first();
+                }
+
+                $transModel->save($data);
 			}
 		} // end foreach subscription
 	}
