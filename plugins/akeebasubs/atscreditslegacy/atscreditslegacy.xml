@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.3.0" type="plugin" group="akeebasubs" method="upgrade">
-	<name>PLG_AKEEBASUBS_ATSCREDITS</name>
+	<name>PLG_AKEEBASUBS_ATSCREDITS_LEGACY</name>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
@@ -8,13 +8,13 @@
 	<license>GNU General Public License version 3, or later</license>
 	<creationDate>April 2015</creationDate>
 	<version>5.0</version>
-	<description>PLG_AKEEBASUBS_ATSCREDITS_DESCRIPTION</description>
+	<description>PLG_AKEEBASUBS_ATSCREDITS_LEGACY_DESCRIPTION</description>
 	<files>
-		<filename plugin="atscredits">atscredits.php</filename>
+		<filename plugin="atscreditslegacy">atscreditslegacy.php</filename>
 		<folder>tmpl</folder>
 	</files>
 	<languages folder="language">
-		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_atscredits.ini</language>
-		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_atscredits.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_atscreditslegacy.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_atscreditslegacy.sys.ini</language>
 	</languages>
 </extension>

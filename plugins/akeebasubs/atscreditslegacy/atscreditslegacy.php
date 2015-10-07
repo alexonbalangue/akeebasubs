@@ -17,7 +17,7 @@ if (!JComponentHelper::isEnabled('com_ats', true))
 	return;
 }
 
-class plgAkeebasubsAtscredits extends \Akeeba\Subscriptions\Admin\PluginAbstracts\AkeebasubsBase
+class plgAkeebasubsAtscreditsLegacy extends \Akeeba\Subscriptions\Admin\PluginAbstracts\AkeebasubsBase
 {
 	/** @var array Levels to number of credits added mapping */
 	private $credits = array();

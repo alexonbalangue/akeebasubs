@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 	<div class="span6">
 		<div class="control-group">
 			<label for="params_atscredits_credits" class="control-label">
-				<?php echo JText::_('PLG_AKEEBASUBS_ATSCREDITS_CREDITS_TITLE'); ?>
+				<?php echo JText::_('PLG_AKEEBASUBS_ATSCREDITS_LEGACY_CREDITS_TITLE'); ?>
 			</label>
 			<div class="controls">
 				<input type="text" name="params[atscredits_credits]" id="params_atscredits_credits"
@@ -20,12 +20,12 @@ defined('_JEXEC') or die();
 					   class="input-small"
 					   />
 				<span class="help-block">
-					<?php echo JText::_('PLG_AKEEBASUBS_ATSCREDITS_CREDITS_DESC') ?>
+					<?php echo JText::_('PLG_AKEEBASUBS_ATSCREDITS_LEGACY_CREDITS_DESC') ?>
 				</span>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="alert alert-warning">
-	<p><?php echo JText::_('PLG_AKEEBASUBS_ATSCREDITS_USAGENOTE'); ?></p>
+	<p><?php echo JText::_('PLG_AKEEBASUBS_ATSCREDITS_LEGACY_USAGENOTE'); ?></p>
 </div>
