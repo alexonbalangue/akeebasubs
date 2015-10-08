@@ -7,6 +7,7 @@ Akeeba Subscriptions 5.0.1
 + Added support for alternate currency in invoice templates
 # [HIGH] gh-194 Cannot download invoice from the front-end
 # [HIGH] Expiration control is broken
+# [MEDIUM] Possible missing akeeba.jquery Javascript errors when using Akeeba Strapper
 # [MEDIUM] The Coupon API was broken (manually created coupons still worked just fine)
 # [MEDIUM] gh-180 Selecting multiple levels in a menu item leads to empty display
 # [MEDIUM] Missing subscription level title in front-end user history (unpublished levels)

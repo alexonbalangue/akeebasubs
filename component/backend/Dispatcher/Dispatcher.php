@@ -36,6 +36,7 @@ class Dispatcher extends \FOF30\Dispatcher\Dispatcher
 			if (class_exists('\\AkeebaStrapper30', false))
 			{
 				\AkeebaStrapper30::bootstrap();
+				\AkeebaStrapper30Loader();
 			}
 		}
 		// Render submenus as drop-down navigation bars powered by Bootstrap
