@@ -177,35 +177,80 @@ class AkeebasubsHelperEuVATInfo
 		}
 		else
 		{
-			if (!class_exists('SoapClient'))
-			{
-				$ret = false;
-			}
-			else
+			if (class_exists('SoapClient'))
 			{
 				// Using the SOAP API
 				// Code credits: Angel Melguiz / KMELWEBDESIGN SLNE (www.kmelwebdesign.com)
 				try
 				{
 					$sOptions = array(
-						'user_agent' => 'PHP'
+						'user_agent' => 'PHP',
+						'connection_timeout' => 5,
 					);
 					$sClient = new SoapClient('http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl', $sOptions);
 					$params = array('countryCode' => $prefix, 'vatNumber' => $vat);
-					$response = $sClient->checkVat($params);
-					if ($response->valid)
+
+					for ($i = 0; $i < 2; $i++)
 					{
-						$ret = true;
-					}
-					else
-					{
-						$ret = false;
+						$response = $sClient->checkVat($params);
+						if (is_object($response))
+						{
+							$ret = ($response->valid ? true : false);
+							break;
+						}
+						else
+						{
+							sleep(1);
+						}
 					}
 				}
 				catch (SoapFault $e)
 				{
-					$ret = false;
+
 				}
+			}
+
+			if ($ret === null)
+			{
+				try
+				{
+					$http = JHttpFactory::getHttp();
+					$url  = 'http://ec.europa.eu/taxation_customs/vies/viesquer.do?locale=en'
+						. '&ms=' . urlencode($prefix)
+						. '&iso=' . urlencode($prefix)
+						. '&vat=' . urlencode($vat);
+					
+					for ($i = 0; $i < 2; $i++)
+					{
+						$response = $http->get($url, null, 5);
+						if ($response->code >= 200 && $response->code < 400)
+						{
+							if (preg_match('/invalid VAT number/i', $response->body))
+							{
+								$ret = false;
+								break;
+							}
+							elseif (preg_match('/valid VAT number/i', $response->body))
+							{
+								$ret = true;
+								break;
+							}
+						}
+						else
+						{
+							sleep(1);
+						}
+					}
+				}
+				catch (RuntimeException $e)
+				{
+
+				}
+			}
+
+			if ($ret === null)
+			{
+				$ret = false;
 			}
 		}
 
