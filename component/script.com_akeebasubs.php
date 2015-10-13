@@ -71,7 +71,6 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/cache/com_akeebasubs.updates.php',
 			'administrator/cache/com_akeebasubs.updates.ini',
 
-			'administrator/components/com_akeebasubs/akeebasubs.xml',
 			'administrator/components/com_akeebasubs/install.akeebasubs.php',
 			'administrator/components/com_akeebasubs/uninstall.akeebasubs.php',
 			'administrator/components/com_akeebasubs/config.json',
@@ -160,7 +159,7 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 
 		parent::uninstall($parent);
 	}
-	
+
 	/**
 	 * Renders the post-installation message
 	 */
