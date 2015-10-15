@@ -242,6 +242,18 @@ class Pkg_AkeebasubsInstallerScript
 	 */
 	private function uninstallFOF($parent)
 	{
+		// Check dependencies on FOF
+		$dependencyCount = count($this->getDependencies('fof30'));
+
+		if ($dependencyCount)
+		{
+			$msg = "<p>You have $dependencyCount extension(s) depending on this version of FOF. The package cannot be uninstalled unless these extensions are uninstalled first.</p>";
+
+			JLog::add($msg, JLog::WARNING, 'jerror');
+
+			return;
+		}
+
 		$tmpInstaller = new JInstaller;
 
 		$db = $parent->getParent()->getDbo();
