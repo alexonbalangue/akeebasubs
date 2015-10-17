@@ -167,7 +167,7 @@
         />
 
         <field
-            name="onle_once"
+            name="only_once"
             type="BooleanToggle"
             label="COM_AKEEBASUBS_LEVELS_FIELD_ONLY_ONCE"
         />
