@@ -12,6 +12,7 @@ Akeeba Subscriptions 5.0.1
 # [MEDIUM] The Coupon API was broken (manually created coupons still worked just fine)
 # [MEDIUM] gh-180 Selecting multiple levels in a menu item leads to empty display
 # [MEDIUM] Missing subscription level title in front-end user history (unpublished levels)
+# [LOW] Custom user fields not shown when editing a user in the back-end
 # [LOW] Country code not cleared in signup form for non-EU VAT entry
 # [LOW] FOF 3 would be uninstalled on package uninstallation even when there are other dependencies on it
 

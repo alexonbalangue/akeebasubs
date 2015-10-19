@@ -11,14 +11,14 @@ defined('_JEXEC') or die();
 JLoader::import('joomla.plugin.helper');
 JPluginHelper::importPlugin('akeebasubs');
 $app = JFactory::getApplication();
-$params = @json_decode($fieldValue->params);
+$params = $model->params;
 
 if (empty($params))
 {
-	$params = new stdClass();
+	$params = [];
 }
 
-$userparams = (object)array('params' => $params);
+$userparams = (object)array('params' => (object)$params);
 $jResponse = $app->triggerEvent('onSubscriptionFormRender', array($userparams, array('subscriptionlevel' => -1, 'custom' => array())));
 if (is_array($jResponse) && !empty($jResponse))
 {
