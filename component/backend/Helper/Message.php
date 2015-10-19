@@ -25,6 +25,13 @@ defined('_JEXEC') or die;
 abstract class Message
 {
 	/**
+	 * The component container used by this class
+	 *
+	 * @var  Container
+	 */
+	static $container = null;
+
+	/**
 	 * Pre-processes the message text in $text, replacing merge tags with those
 	 * fetched based on subscription $sub
 	 *
@@ -56,21 +63,21 @@ abstract class Message
 		{
 			/** @var Levels $levelModel */
 			$levelModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
-			$level = $levelModel->id($sub->akeebasubs_level_id)->firstOrNew();
+			$level      = $levelModel->id($sub->akeebasubs_level_id)->firstOrNew();
 		}
 
 		// Merge the user objects
-		$userData = array_merge((array) $joomlaUser, (array) ($subsUser->getData()));
+		$userData = array_merge((array)$joomlaUser, (array)($subsUser->getData()));
 
 		// Create and replace merge tags for subscriptions. Format [SUB:KEYNAME]
 		if ($sub instanceof DataModel)
 		{
-			$subData = (array) ($sub->getData());
+			$subData = (array)($sub->getData());
 		}
 		else
 		{
 			// Why am I here?!
-			$subData = (array) $sub;
+			$subData = (array)$sub;
 		}
 
 		$currency_name = self::getContainer()->params->get('currency', 'EUR');
@@ -78,7 +85,7 @@ abstract class Message
 		$exchange_rate = 0;
 
 		// Let's get the exchange rate (rates are automatically updated)
-		if($currency_alt)
+		if ($currency_alt)
 		{
 			$exchange_rate = Forex::exhangeRate($currency_name, $currency_alt, self::getContainer());
 		}
@@ -128,7 +135,7 @@ abstract class Message
 
 		if ($level instanceof Levels)
 		{
-			$levelData = (array) ($level->getData());
+			$levelData = (array)($level->getData());
 		}
 
 		foreach ($levelData as $k => $v)
@@ -165,7 +172,7 @@ abstract class Message
 			}
 			elseif (is_object($subData['params']))
 			{
-				$custom = (array) $subData['params'];
+				$custom = (array)$subData['params'];
 			}
 			else
 			{
@@ -181,7 +188,7 @@ abstract class Message
 
 			if (is_object($custom))
 			{
-				$custom = (array) $custom;
+				$custom = (array)$custom;
 			}
 
 			if (!empty($custom))
@@ -259,7 +266,7 @@ abstract class Message
 			}
 			elseif (is_object($userData['params']))
 			{
-				$custom = (array) $userData['params'];
+				$custom = (array)$userData['params'];
 			}
 			else
 			{
@@ -279,7 +286,7 @@ abstract class Message
 
 					if ($v instanceof \stdClass)
 					{
-						$v = (array) $v;
+						$v = (array)$v;
 					}
 
 					if (is_array($v))
@@ -300,7 +307,8 @@ abstract class Message
 		{
 			try
 			{
-				$couponData = Container::getInstance('com_akeebasubs')->factory->model('Coupons')->tmpInstance()
+				$couponData = Container::getInstance('com_akeebasubs')
+					->factory->model('Coupons')->tmpInstance()
 					->findOrFail($sub->akeebasubs_coupon_id);
 
 				$couponCode = $couponData->coupon;
@@ -323,8 +331,8 @@ abstract class Message
 
 		// -- Site URL
 		$container = Container::getInstance('com_akeebasubs');
-		$isCli = $container->platform->isCli();
-		$isAdmin = $container->platform->isBackend();
+		$isCli     = $container->platform->isCli();
+		$isAdmin   = $container->platform->isBackend();
 
 		if ($isCli)
 		{
@@ -352,7 +360,8 @@ abstract class Message
 		}
 		else
 		{
-			$url = str_replace('&amp;', '&', \JRoute::_('index.php?option=com_akeebasubs&view=Subscriptions&layout=default'));
+			$url =
+				str_replace('&amp;', '&', \JRoute::_('index.php?option=com_akeebasubs&view=Subscriptions&layout=default'));
 		}
 
 		$url = ltrim($url, '/');
@@ -383,11 +392,11 @@ abstract class Message
 		$renewalURL = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
 
 		// Currency
-		$currency 	  = self::getContainer()->params->get('currencysymbol', '€');
+		$currency     = self::getContainer()->params->get('currencysymbol', '€');
 		$alt_symbol   = '';
 		$currency_alt = self::getContainer()->params->get('invoice_altcurrency', '');
 
-		if($currency_alt)
+		if ($currency_alt)
 		{
 			$alt_symbol = Forex::getCurrencySymbol($currency_alt);
 		}
@@ -443,7 +452,8 @@ abstract class Message
 			'[SLUG]'                   => $level->slug,
 			'[RENEWALURL]'             => $renewalURL,
 			'[RENEWALURL:]'            => $renewalURL, // Malformed tag without a coupon code...
-			'[ENABLED]'                => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_COMMON_' . ($sub->enabled ? 'ENABLED' : 'DISABLED')),
+			'[ENABLED]'                => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_COMMON_' . ($sub->enabled ? 'ENABLED' :
+					'DISABLED')),
 			'[PAYSTATE]'               => JText::_('COM_AKEEBASUBS_SUBSCRIPTION_STATE_' . $sub->getFieldValue('state', 'N')),
 			'[PUBLISH_UP]'             => $jFrom->format(JText::_('DATE_FORMAT_LC2'), true),
 			'[PUBLISH_UP_EU]'          => $jFrom->format('d/m/Y H:i:s', true),
@@ -459,7 +469,7 @@ abstract class Message
 			'[CURRENCY_ALT]'           => $alt_symbol,
 			'[$]'                      => $currency,
 			'[$_ALT]'                  => $alt_symbol,
-			'[EXCHANGE_RATE]' 		   => $exchange_rate,
+			'[EXCHANGE_RATE]'          => $exchange_rate,
 			'[DLID]'                   => $dlid,
 			'[COUPONCODE]'             => $couponCode,
 			'[USER:STATE_FORMATTED]'   => $formatted_state,
@@ -586,10 +596,10 @@ abstract class Message
 	/**
 	 * Substitutes the [RENEWALURL:couponcode] tag in messages
 	 *
-	 * @param string $text       The message text
-	 * @param string $renewalURL The base renewal URL (without a coupon code)
+	 * @param   string  $text        The message text
+	 * @param   string  $renewalURL  The base renewal URL (without a coupon code)
 	 *
-	 * @return string The text with the tag replaced with the proper URLs
+	 * @return  string  The text with the tag replaced with the proper URLs
 	 */
 	public static function substituteRenewalURLWithCoupon($text, $renewalURL)
 	{
@@ -649,13 +659,23 @@ abstract class Message
 	 */
 	protected static function getContainer()
 	{
-		static $container = null;
-
-		if (is_null($container))
+		if (is_null(self::$container))
 		{
-			$container = Container::getInstance('com_akeebasubs');
+			self::$container = Container::getInstance('com_akeebasubs');
 		}
 
-		return $container;
+		return self::$container;
+	}
+
+	/**
+	 * Set the Akeeba Subscriptions container
+	 *
+	 * @param   Container  $container
+	 *
+	 * @return  void
+	 */
+	protected static function setContainer(Container $container)
+	{
+		self::$container = $container;
 	}
 }
