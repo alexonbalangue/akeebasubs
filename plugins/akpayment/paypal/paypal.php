@@ -425,6 +425,7 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			// Save the record for the old subscription
 			$table = $subscription->tmpInstance();
 			$table->save($oldData);
+			$oldData['akeebasubs_subscription_id'] = $table->getId();
 
 			// On recurring subscriptions recalculate the net, tax and gross price by removing the signup fee
 			if ($subscription->recurring_amount >= 0.01)
@@ -450,16 +451,14 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			if ($oldData['akeebasubs_invoice_id'])
 			{
 				$updates['akeebasubs_invoice_id'] = 0;
-				if ($oldData['akeebasubs_subscription_id'] == $table->getId())
-				{
-					$db = $subscription->getDbo();
-					$query = $db->getQuery(true)
-						->update($db->qn('#__akeebasubs_invoices'))
-						->set($db->qn('akeebasubs_subscription_id') . '=' . $db->q($oldData['akeebasubs_subscription_id']))
-						->where($db->qn('akeebasubs_invoice_id') . '=' . $db->q($oldData['akeebasubs_invoice_id']));
-					$db->setQuery($query);
-					$db->execute();
-				}
+
+				$db = $subscription->getDbo();
+				$query = $db->getQuery(true)
+					->update($db->qn('#__akeebasubs_invoices'))
+					->set($db->qn('akeebasubs_subscription_id') . '=' . $db->q($oldData['akeebasubs_subscription_id']))
+					->where($db->qn('akeebasubs_invoice_id') . '=' . $db->q($oldData['akeebasubs_invoice_id']));
+				$db->setQuery($query);
+				$db->execute();
 			}
 		}
 		elseif ($recurring && ($newStatus != 'C'))
