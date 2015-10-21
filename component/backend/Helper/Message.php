@@ -50,7 +50,11 @@ abstract class Message
 		/** @var Users $subsUser */
 		$subsUser = $sub->user;
 
-		if (!is_object($subsUser))
+		if (
+			!is_object($subsUser)
+			||
+			(($sub->user instanceof Users) && ($sub->user->user_id != $sub->user_id))
+		)
 		{
 			$subsUser = Container::getInstance('com_akeebasubs')->factory->model('Users')->tmpInstance();
 		}
@@ -59,7 +63,11 @@ abstract class Message
 		/** @var Levels $level */
 		$level = $sub->level;
 
-		if (!is_object($level))
+		if (
+			!is_object($level)
+			||
+			(($sub->level instanceof Levels) && ($sub->level->akeebasubs_level_id != $sub->akeebasubs_level_id))
+		)
 		{
 			/** @var Levels $levelModel */
 			$levelModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
