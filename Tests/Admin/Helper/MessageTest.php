@@ -175,6 +175,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 			['[SUB:FIRST_CONTACT]', true, '0000-00-00 00:00:00'],
 			['[SUB:SECOND_CONTACT]', true, '0000-00-00 00:00:00'],
 			['[SUB:AFTER_CONTACT]', true, '0000-00-00 00:00:00'],
+			// SUBCUSTOM:
+			['[SUBCUSTOM:LOL]', true, 'wut'],
+			['[SUBCUSTOM:FOO]', true, '123'],
 			// LEVEL:
 			['[LEVEL:ID]', true, '2'],
 			['[LEVEL:TITLE]', true, 'LEVEL2'],
@@ -228,10 +231,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 			['[USER:ZIP]', true, '90210'],
 			['[USER:COUNTRY]', true, 'US'],
 			['[USER:NOTES]', true, 'This is a user note'],
-
-			// SUBCUSTOM:
-
 			// CUSTOM:
+			['[CUSTOM:BAZ]', true, 'bat'],
+			['[CUSTOM:SOMETHING]', true, '12.34'],
 		];
 	}
 }

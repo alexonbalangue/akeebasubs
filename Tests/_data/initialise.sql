@@ -68,7 +68,7 @@ INSERT INTO `#__akeebasubs_users` (`akeebasubs_user_id`, `user_id`, `isbusiness`
 VALUES
   (1, 1010, 1, 'Η Εταιρία', 'Κατασκευή προγραμμάτων', '', 0, NULL, 'Μεγάλου Αλεξάνδρου 1', 'Γραφείο 101', 'Κωλοπετινίτσα', 'GR-ATT', '99999', 'GR', '[]', '', 0),
   (2, 1011, 1, 'Τρία Κιλά Κώδικα ΑΕ', 'Εμπορία λογισμικού', '123456789', 2, NULL, 'Μακρυγιάννη 13', '', 'Μικρό Πεύκο', 'GR-ATT', '99888', 'GR', '[]', '', 0),
-  (3, 1000, 1, 'Unit Test Ltd', 'Software TEsting', '123456789', 1, NULL, '123 Someplace Drive', 'Suite 404', 'Beverly Hills', 'CA', '90210', 'US', '[]', 'This is a user note', 0);
+  (3, 1000, 1, 'Unit Test Ltd', 'Software TEsting', '123456789', 1, NULL, '123 Someplace Drive', 'Suite 404', 'Beverly Hills', 'CA', '90210', 'US', '{"baz": "bat", "something": 12.34}', 'This is a user note', 0);
 
 # Akeeba Subscriptions: Tax Rules (Cyprus, 19% VAT, VIES registered)
 
@@ -164,7 +164,7 @@ TRUNCATE TABLE `#__akeebasubs_subscriptions`;
 INSERT INTO `#__akeebasubs_subscriptions` (`akeebasubs_subscription_id`, `user_id`, `akeebasubs_level_id`, `publish_up`, `publish_down`, `notes`, `enabled`, `processor`, `processor_key`, `state`, `net_amount`, `tax_amount`, `gross_amount`, `recurring_amount`, `tax_percent`, `created_on`, `params`, `ip`, `ip_country`, `akeebasubs_coupon_id`, `akeebasubs_upgrade_id`, `akeebasubs_affiliate_id`, `affiliate_comission`, `akeebasubs_invoice_id`, `prediscount_amount`, `discount_amount`, `contact_flag`, `first_contact`, `second_contact`, `after_contact`)
 VALUES
   (1, 1000, 1, '2013-04-30 00:00:00', '2014-04-30 00:00:00', '', 0, 'none', '20130430000000', 'C', 80, 0, 80, 0, 0, '2013-04-30 00:00:00', '[]', '', '', 14, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-  (2, 1000, 2, '2014-04-30 00:00:00', '2015-04-29 00:00:00', '', 0, 'none', '20140430000000', 'C', 90, 0, 90, 0, 0, '2014-04-30 00:00:00', '[]', '', '', 15, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+  (2, 1000, 2, '2014-04-30 00:00:00', '2015-04-29 00:00:00', '', 0, 'none', '20140430000000', 'C', 90, 0, 90, 0, 0, '2014-04-30 00:00:00', '{"subcustom":{"lol": "wut", "foo": 123}}', '', '', 15, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
   (3, 1010, 1, '2013-04-30 00:00:00', '2014-04-30 00:00:00', '', 0, 'none', '20130430001010', 'C', 80, 0, 80, 0, 0, '2013-04-30 00:00:00', '[]', '', '', 17, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
   (4, 1010, 1, '2014-04-30 00:00:00', '2015-04-29 00:00:00', '', 0, 'none', '20140430001010', 'C', 90, 0, 90, 0, 0, '2014-04-30 00:00:00', '[]', '', '', 17, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
   (5, 1010, 2, '2013-04-30 00:00:00', '2014-04-29 00:00:00', '', 0, 'none', '20140430101010', 'C', 90, 0, 90, 0, 0, '2014-04-30 00:00:00', '[]', '', '', 12, NULL, NULL, 0, NULL, NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
