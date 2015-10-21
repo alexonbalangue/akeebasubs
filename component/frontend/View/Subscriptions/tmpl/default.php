@@ -211,7 +211,7 @@ if (!property_exists($this, 'extensions'))
 	            	<?php endif;?>
 
 		            <?php
-		                if ($level->recurring && $subscription->allow_cancel):
+		                if ($level->recurring):
 			                $cancelURL = JRoute::_('index.php?option=com_akeebasubs&view=callback&task=cancel&paymentmethod='.$subscription->processor.'&sid='.$subscription->akeebasubs_subscription_id);
 			        ?>
 		            <a class="btn btn-mini btn-danger" href="<?php echo $cancelURL?>">
