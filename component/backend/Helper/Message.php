@@ -392,7 +392,8 @@ abstract class Message
 		$renewalURL = rtrim($baseURL, '/') . '/' . ltrim($url, '/');
 
 		// Currency
-		$currency     = self::getContainer()->params->get('currencysymbol', '€');
+		$currency     = self::getContainer()->params->get('currency', 'EUR');
+		$symbol       = self::getContainer()->params->get('currencysymbol', 'EUR');
 		$alt_symbol   = '';
 		$currency_alt = self::getContainer()->params->get('invoice_altcurrency', '');
 
@@ -466,8 +467,8 @@ abstract class Message
 			'[MYSUBSURL]'              => $mysubsurl,
 			'[URL]'                    => $mysubsurl,
 			'[CURRENCY]'               => $currency,
-			'[CURRENCY_ALT]'           => $alt_symbol,
-			'[$]'                      => $currency,
+			'[CURRENCY_ALT]'           => $currency_alt,
+			'[$]'                      => $symbol,
 			'[$_ALT]'                  => $alt_symbol,
 			'[EXCHANGE_RATE]'          => $exchange_rate,
 			'[DLID]'                   => $dlid,

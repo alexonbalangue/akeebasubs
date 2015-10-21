@@ -7,6 +7,7 @@ Akeeba Subscriptions 5.0.1
 + Added support for alternate currency in invoice templates
 # [HIGH] gh-194 Cannot download invoice from the front-end
 # [HIGH] Expiration control is broken
+# [MEDIUM] Currency and currency symbol merge codes for messages and invoices were mixed up
 # [MEDIUM] You could not set the Forbid renewals flag when editing a subscription level
 # [MEDIUM] Possible missing akeeba.jquery Javascript errors when using Akeeba Strapper
 # [MEDIUM] The Coupon API was broken (manually created coupons still worked just fine)
