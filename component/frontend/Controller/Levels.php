@@ -10,7 +10,7 @@ namespace Akeeba\Subscriptions\Site\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Controller\Mixin;
-use Akeeba\Subscriptions\Site\Model\Subscribe;
+use Akeeba\Subscriptions\Site\Model\Subscribe as SubscribeModel;
 use Akeeba\Subscriptions\Site\Model\TaxHelper;
 use Akeeba\Subscriptions\Site\Model\Users;
 use FOF30\Container\Container;
@@ -226,7 +226,7 @@ class Levels extends DataController
 		$view->userparams = $userparams;
 
 		// Load any cached user supplied information
-		/** @var Subscribe $vModel */
+		/** @var SubscribeModel $vModel */
 		$vModel = $this->getModel('Subscribe');
 		$vModel->slug($slug)->id($id);
 
