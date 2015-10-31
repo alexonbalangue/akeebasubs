@@ -154,7 +154,7 @@ function validateForm(callback_function)
 				'state':         $('#signupForm select[name$="state"]').val(),
 				'city':          $('#city').val(),
 				'zip':           $('#zip').val(),
-				'isbusiness':    $('#isbusiness1').is(':checked') ? 1 : 0,
+				'isbusiness':    $('#isbusiness').val(),
 				'businessname':  $('#businessname').val(),
 				'occupation':    $('#occupation').val(),
 				'vatnumber':     $('#vatnumber').val(),
@@ -651,7 +651,7 @@ function validateBusiness()
 		if (akeebasubs_personalinfo == 1)
 		{
 			// Do I have to show the business fields?
-			if ($('#isbusiness1').is(':checked'))
+			if ($('#isbusiness').val())
 			{
 				$('#businessfields').show();
 			}
@@ -722,7 +722,7 @@ function validateBusiness()
 				state:        $('#signupForm select[name$="state"]').val(),
 				city:         $('#city').val(),
 				zip:          $('#zip').val(),
-				isbusiness:   $('#isbusiness1').is(':checked') ? 1 : 0,
+				isbusiness:   $('#isbusiness').val(),
 				businessname: $('#businessname').val(),
 				occupation:   $('#occupation').val(),
 				vatnumber:    vatnumber,
@@ -767,6 +767,22 @@ function validateIsNotBusiness(e)
 		akeebasubs_cached_response.novatrequired = true;
 		applyValidation(akeebasubs_cached_response);
 		akeebasubs_isbusiness = false;
+	})(akeeba.jQuery);
+}
+
+function onIsBusinessClick(e)
+{
+	(function ($) {
+		var isBusiness = $('#isbusiness').val();
+
+		if (isBusiness == 1)
+		{
+			validateBusiness();
+
+			return;
+		}
+
+		validateIsNotBusiness();
 	})(akeeba.jQuery);
 }
 
@@ -939,7 +955,7 @@ function applyValidation(response, callback)
 				else
 				{
 					$('#businessname').parents('div.control-group').addClass('error has-error');
-					if ($('#isbusiness1').is(':checked'))
+					if ($('#isbusiness').val())
 					{
 						akeebasubs_valid_form = false;
 					}
@@ -955,7 +971,7 @@ function applyValidation(response, callback)
 				else
 				{
 					$('#occupation').parents('div.control-group').addClass('error has-error');
-					if ($('#isbusiness1').is(':checked'))
+					if ($('#isbusiness').val())
 					{
 						akeebasubs_valid_form = false;
 					}
@@ -1162,8 +1178,7 @@ function addToSubValidationQueue(myfunction)
 			$('#city').blur(validateBusiness);
 			$('#zip').blur(validateBusiness);
 			$('#businessname').blur(validateBusiness);
-			$('#isbusiness0').click(validateIsNotBusiness);
-			$('#isbusiness1').click(validateBusiness);
+			$('#signupForm select[name$="isbusiness"]').change(onIsBusinessClick);
 			$('#vatnumber').blur(validateBusiness);
 		}
 		if ($('#coupon').length > 0)
@@ -1205,24 +1220,9 @@ function addToSubValidationQueue(myfunction)
 			return false;
 		}).change(validateForm);
 
-		// Workaround for RocketTheme's fancy option hider
-		var rokkedLabel = $('label[for="isbusiness1"]');
-		if (rokkedLabel)
-		{
-			rokkedLabel.removeClass('rokradios');
-			$('#isbusiness0').attr('style', '');
-		}
-
 		if (akeebasubs_personalinfo)
 		{
-			if ($('#isbusiness1').is(':checked'))
-			{
-				$('#isbusiness1').click();
-			}
-			else
-			{
-				$('#isbusiness0').click();
-			}
+			setTimeout('onIsBusinessClick();', 1500);
 		}
 
 		// Disable form submit when ENTER is hit in the coupon field

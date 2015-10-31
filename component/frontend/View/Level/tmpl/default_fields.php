@@ -498,12 +498,17 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 				<label for="isbusiness" class="control-label col-sm-2">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS') ?>
 				</label>
-				<?php echo JHTML::_('select.booleanlist', 'isbusiness', array(), $isBusiness); ?>
+				<span class="col-sm-2">
+					<?php echo JHTML::_('select.genericlist', [
+						JHtml::_('select.option', '0', JText::_('JNO')),
+						JHtml::_('select.option', '1', JText::_('JYES'))
+					], 'isbusiness', ['class' => 'form-control'], 'value', 'text', $isBusiness, 'isbusiness'); ?>
+				</span>
 			</div>
 
 			<?php if ($businessFields == 'none'): ?>
 			<div style="display: none;">
-				<?php endif; ?>
+			<?php endif; ?>
 				<div id="businessfields">
 					<div class="control-group form-group <?php echo $group_classes['businessname'] ?>">
 						<label for="businessname" class="control-label col-sm-2">
@@ -567,7 +572,7 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 				</div>
 				<?php if ($businessFields == 'none'): ?>
 			</div>
-		<?php endif; ?>
+				<?php endif; ?>
 
 			<?php endif; ?>
 
