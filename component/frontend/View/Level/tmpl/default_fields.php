@@ -72,9 +72,12 @@ $field_data = array(
 	'city'         => !empty($this->userparams->city) ? $this->userparams->city : $this->cache['city'],
 	'state'        => !empty($this->userparams->state) ? $this->userparams->state : $this->cache['state'],
 	'zip'          => !empty($this->userparams->zip) ? $this->userparams->zip : $this->cache['zip'],
-	'country'      => !empty($this->userparams->country) && ($this->userparams->country != 'XX') ? $this->userparams->country : $this->cache['country'],
-	'businessname' => !empty($this->userparams->businessname) ? $this->userparams->businessname : $this->cache['businessname'],
-	'occupation'   => !empty($this->userparams->occupation) ? $this->userparams->occupation : $this->cache['occupation'],
+	'country'      => !empty($this->userparams->country) && ($this->userparams->country != 'XX') ?
+		$this->userparams->country : $this->cache['country'],
+	'businessname' => !empty($this->userparams->businessname) ? $this->userparams->businessname :
+		$this->cache['businessname'],
+	'occupation'   => !empty($this->userparams->occupation) ? $this->userparams->occupation :
+		$this->cache['occupation'],
 	'vatnumber'    => !empty($this->userparams->vatnumber) ? $this->userparams->vatnumber : $this->cache['vatnumber'],
 );
 
@@ -97,16 +100,19 @@ $group_classes = array(
 
 if (JFactory::getUser()->guest)
 {
-	$group_classes['username'] = ($this->cache['username']) ? (($this->validation->validation->username) ? 'success has-success' : 'error has-error') : '';
-	$group_classes['password'] = !$this->cache['password'] ? 'error has-error' : '';
-	$group_classes['password2'] = (!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'error has-error' : '';
+	$group_classes['username']  = ($this->cache['username']) ?
+		(($this->validation->validation->username) ? 'success has-success' : 'error has-error') : '';
+	$group_classes['password']  = !$this->cache['password'] ? 'error has-error' : '';
+	$group_classes['password2'] =
+		(!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'error has-error' :
+			'';
 }
 
-$styleStateField = $this->container->params->get('showstatefield', 1) ? '' : 'display: none';
-$businessFields = $this->container->params->get('businessfields', 'auto');
+$styleStateField     = $this->container->params->get('showstatefield', 1) ? '' : 'display: none';
+$businessFields      = $this->container->params->get('businessfields', 'auto');
 $cparamShowCountries = $this->container->params->get('showcountries', '');
 $cparamHideCountries = $this->container->params->get('hidecountries', '');
-$emailasusername = $this->container->params->get('emailasusername', 0);
+$emailasusername     = $this->container->params->get('emailasusername', 0);
 ?>
 
 	<div class="form form-horizontal">
@@ -121,18 +127,18 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 					</label>
 
 					<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="username" id="username"
-					   value="<?php echo $this->escape($this->cache['username']) ?>"/>
-            </span>
-			<span id="username_valid" class="help-inline help-block"
-				  <?php if (strpos($group_classes['username'], 'success') == false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME_VALID') ?>
-			</span>
-			<span id="username_invalid" class="help-inline help-block"
-				  <?php if (strpos($group_classes['username'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME_INVALID') ?>
-			</span>
+						<span class="col-sm-3">
+							<input type="text" class="form-control" name="username" id="username"
+								   value="<?php echo $this->escape($this->cache['username']) ?>"/>
+						</span>
+						<span id="username_valid" class="help-inline help-block"
+							  <?php if (strpos($group_classes['username'], 'success') == false): ?>style="display:none"<?php endif ?>>
+							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME_VALID') ?>
+						</span>
+						<span id="username_invalid" class="help-inline help-block"
+							  <?php if (strpos($group_classes['username'], 'error') === false): ?>style="display:none"<?php endif ?>>
+							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME_INVALID') ?>
+						</span>
 					</div>
 				</div>
 
@@ -142,14 +148,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 					</label>
 
 					<div class="controls">
-            <span class="col-sm-3">
-			    <input type="password" class="form-control" name="password" id="password"
-					   value="<?php echo $this->escape($this->cache['password']) ?>"/>
-            </span>
-			<span id="password_invalid" class="help-inline help-block"
-				  style="<?php if (strpos($group_classes['password'], 'error') === false): ?>display:none<?php endif; ?>">
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD_EMPTY') ?>
-			</span>
+						<span class="col-sm-3">
+							<input type="password" class="form-control" name="password" id="password"
+								   value="<?php echo $this->escape($this->cache['password']) ?>"/>
+						</span>
+						<span id="password_invalid" class="help-inline help-block"
+							  style="<?php if (strpos($group_classes['password'], 'error') === false): ?>display:none<?php endif; ?>">
+							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD_EMPTY') ?>
+						</span>
 					</div>
 				</div>
 
@@ -159,19 +165,23 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 					</label>
 
 					<div class="controls">
-            <span class="col-sm-3">
-			    <input type="password" class="form-control" name="password2" id="password2"
-					   value="<?php echo $this->escape($this->cache['password2']) ?>"/>
-            </span>
-			<span id="password2_invalid" class="help-inline help-block"
-				  style="<?php if (strpos($group_classes['password2'], 'error') === false): ?>display:none<?php endif; ?>">
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD2') ?>
-			</span>
+						<span class="col-sm-3">
+							<input type="password" class="form-control" name="password2" id="password2"
+								   value="<?php echo $this->escape($this->cache['password2']) ?>"/>
+						</span>
+						<span id="password2_invalid" class="help-inline help-block"
+							  style="<?php if (strpos($group_classes['password2'], 'error') === false): ?>display:none<?php endif; ?>">
+							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD2') ?>
+						</span>
 					</div>
 				</div>
+
 			<?php elseif (JFactory::getUser()->guest && $emailasusername): ?>
+
 				<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT') ?></legend>
+
 			<?php elseif (!JFactory::getUser()->guest): ?>
+
 				<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_EXISTINGACCOUNT') ?></legend>
 
 				<div class="control-group form-group">
@@ -180,14 +190,15 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 					</label>
 
 					<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="username" id="username" disabled="disabled"
-					   value="<?php echo $this->escape($this->userparams->username) ?>"/>
-           </span>
+						<span class="col-sm-3">
+							<input type="text" class="form-control" name="username" id="username" disabled="disabled"
+								   value="<?php echo $this->escape($this->userparams->username) ?>"/>
+					   </span>
 					</div>
 				</div>
 				<br/>
 			<?php endif; ?>
+
 		</fieldset>
 
 		<fieldset>
@@ -198,14 +209,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="name" id="name"
-					   value="<?php echo $this->escape($field_data['name']); ?>"/>
-            </span>
-			<span id="name_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['name'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_NAME_INVALID') ?>
-			</span>
+					<span class="col-sm-3">
+						<input type="text" class="form-control" name="name" id="name"
+							   value="<?php echo $this->escape($field_data['name']); ?>"/>
+					</span>
+					<span id="name_empty" class="help-inline help-block"
+						  <?php if (strpos($group_classes['name'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_NAME_INVALID') ?>
+					</span>
 				</div>
 			</div>
 
@@ -215,14 +226,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="email" id="email"
-					   value="<?php echo $this->escape($field_data['email']); ?>"/>
-            </span>
-			<span id="email_invalid" class="help-inline help-block"
-				  <?php if (strpos($group_classes['email'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL') ?>
-			</span>
+					<span class="col-sm-3">
+						<input type="text" class="form-control" name="email" id="email"
+							   value="<?php echo $this->escape($field_data['email']); ?>"/>
+					</span>
+					<span id="email_invalid" class="help-inline help-block"
+						  <?php if (strpos($group_classes['email'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL') ?>
+					</span>
 				</div>
 			</div>
 
@@ -232,14 +243,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="email2" id="email2"
-					   value="<?php echo $this->escape($field_data['email2']); ?>"/>
-            </span>
-			<span id="email2_invalid" class="help-inline help-block"
-				  <?php if (strpos($group_classes['email2'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL2') ?>
-			</span>
+					<span class="col-sm-3">
+						<input type="text" class="form-control" name="email2" id="email2"
+							   value="<?php echo $this->escape($field_data['email2']); ?>"/>
+					</span>
+					<span id="email2_invalid" class="help-inline help-block"
+						  <?php if (strpos($group_classes['email2'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL2') ?>
+					</span>
 				</div>
 			</div>
 
@@ -250,14 +261,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 					</label>
 
 					<div class="controls">
-            <span class="col-sm-3">
-			    <input type="password" class="form-control" name="password" id="password"
-					   value="<?php echo $this->escape($this->cache['password']) ?>"/>
-            </span>
-			<span id="password_invalid" class="help-inline help-block"
-				  style="<?php if (strpos($group_classes['password'], 'error') === false): ?>display:none<?php endif; ?>">
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD_EMPTY') ?>
-			</span>
+						<span class="col-sm-3">
+							<input type="password" class="form-control" name="password" id="password"
+								   value="<?php echo $this->escape($this->cache['password']) ?>"/>
+						</span>
+						<span id="password_invalid" class="help-inline help-block"
+							  style="<?php if (strpos($group_classes['password'], 'error') === false): ?>display:none<?php endif; ?>">
+							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD_EMPTY') ?>
+						</span>
 					</div>
 				</div>
 
@@ -267,14 +278,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 					</label>
 
 					<div class="controls">
-            <span class="col-sm-3">
-			    <input type="password" class="form-control" name="password2" id="password2"
-					   value="<?php echo $this->escape($this->cache['password2']) ?>"/>
-            </span>
-			<span id="password2_invalid" class="help-inline help-block"
-				  style="<?php if (strpos($group_classes['password2'], 'error') === false): ?>display:none<?php endif; ?>">
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD2') ?>
-			</span>
+						<span class="col-sm-3">
+							<input type="password" class="form-control" name="password2" id="password2"
+								   value="<?php echo $this->escape($this->cache['password2']) ?>"/>
+						</span>
+						<span id="password2_invalid" class="help-inline help-block"
+							  style="<?php if (strpos($group_classes['password2'], 'error') === false): ?>display:none<?php endif; ?>">
+							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD2') ?>
+						</span>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -297,7 +308,9 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 						foreach ($customFields as $field):
 							if ($apply_validation && array_key_exists('isValid', $field))
 							{
-								$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success has-success' : '') : 'error has-error';
+								$customField_class = $field['isValid'] ?
+									(array_key_exists('validLabel', $field) ? 'success has-success' : '') :
+									'error has-error';
 							}
 							else
 							{
@@ -305,26 +318,26 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 							}
 							?>
 							<div class="control-group form-group <?php echo $customField_class ?>">
-								<label for="<?php echo $field['id']?>" class="control-label col-sm-2">
-									<?php echo $field['label']?>
+								<label for="<?php echo $field['id'] ?>" class="control-label col-sm-2">
+									<?php echo $field['label'] ?>
 								</label>
 
 								<div class="controls">
-            <span class="col-sm-3">
-			    <?php echo $field['elementHTML']?>
-            </span>
+									<span class="col-sm-3">
+										<?php echo $field['elementHTML'] ?>
+									</span>
 									<?php if (array_key_exists('validLabel', $field)): ?>
 										<span id="<?php echo $field['id'] ?>_valid" class="help-inline help-block"
 											  style="<?php if (!$field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
-					  <?php echo $field['validLabel'] ?>
-			</span>
-									<?php endif;?>
+												  <?php echo $field['validLabel'] ?>
+										</span>
+									<?php endif; ?>
 									<?php if (array_key_exists('invalidLabel', $field)): ?>
 										<span id="<?php echo $field['id'] ?>_invalid" class="help-inline help-block"
 											  style="<?php if ($field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
-					  <?php echo $field['invalidLabel'] ?>
-			</span>
-									<?php endif;?>
+												  <?php echo $field['invalidLabel'] ?>
+										</span>
+									<?php endif; ?>
 								</div>
 							</div>
 
@@ -339,19 +352,19 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 					</label>
 
 					<div class="controls">
-            <span class="col-sm-3">
-			<?php
-			echo Select::countries($field_data['country'], 'country', array(
-				'show'  => $cparamShowCountries,
-				'hide'  => $cparamHideCountries,
-				'class' => 'form-control'
-			))
-			?>
-            </span>
-			<span id="country_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+						<span class="col-sm-3">
+						<?php
+						echo Select::countries($field_data['country'], 'country', array(
+							'show'  => $cparamShowCountries,
+							'hide'  => $cparamHideCountries,
+							'class' => 'form-control'
+						))
+						?>
+						</span>
+						<span id="country_empty" class="help-inline help-block"
+							  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
+							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+						</span>
 					</div>
 				</div>
 			<?php elseif ($this->container->params->get('personalinfo', 1) == 1): ?>
@@ -362,14 +375,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="address1" id="address1"
-					   value="<?php echo $this->escape($field_data['address1']); ?>"/>
-            </span>
-			<span id="address1_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['address1'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+					<span class="col-sm-3">
+						<input type="text" class="form-control" name="address1" id="address1"
+							   value="<?php echo $this->escape($field_data['address1']); ?>"/>
+					</span>
+					<span id="address1_empty" class="help-inline help-block"
+						  <?php if (strpos($group_classes['address1'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+					</span>
 				</div>
 			</div>
 
@@ -379,10 +392,10 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="address2" id="address2"
-					   value="<?php echo $this->escape($field_data['address2']); ?>"/>
-            </span>
+					<span class="col-sm-3">
+						<input type="text" class="form-control" name="address2" id="address2"
+							   value="<?php echo $this->escape($field_data['address2']); ?>"/>
+					</span>
 				</div>
 			</div>
 
@@ -392,14 +405,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="city" id="city"
-					   value="<?php echo $this->escape($field_data['city']); ?>"/>
-            </span>
-			<span id="city_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+					<span class="col-sm-3">
+						<input type="text" class="form-control" name="city" id="city"
+							   value="<?php echo $this->escape($field_data['city']); ?>"/>
+					</span>
+					<span id="city_empty" class="help-inline help-block"
+						  <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+					</span>
 				</div>
 			</div>
 
@@ -410,13 +423,13 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <?php echo Select::states($field_data['state'], 'state', array('class' => 'form-control advancedSelect')) ?>
-            </span>
-			<span id="state_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+					<span class="col-sm-3">
+						<?php echo Select::states($field_data['state'], 'state', array('class' => 'form-control advancedSelect')) ?>
+					</span>
+					<span id="state_empty" class="help-inline help-block"
+						  <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+					</span>
 				</div>
 			</div>
 
@@ -426,14 +439,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="zip" id="zip"
-					   value="<?php echo $this->escape($field_data['zip']); ?>"/>
-            </span>
-			<span id="zip_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['zip'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+					<span class="col-sm-3">
+						<input type="text" class="form-control" name="zip" id="zip"
+							   value="<?php echo $this->escape($field_data['zip']); ?>"/>
+					</span>
+					<span id="zip_empty" class="help-inline help-block"
+						  <?php if (strpos($group_classes['zip'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+					</span>
 				</div>
 			</div>
 
@@ -443,13 +456,15 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 				</label>
 
 				<div class="controls">
-            <span class="col-sm-3">
-			    <?php echo Select::countries($field_data['country'], 'country', array('show' => $cparamShowCountries, 'hide' => $cparamHideCountries, 'class' => 'form-control advancedSelect')) ?>
-            </span>
-			<span id="country_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+					<span class="col-sm-3">
+						<?php echo Select::countries($field_data['country'], 'country', array('show'  => $cparamShowCountries,
+																							  'hide'  => $cparamHideCountries,
+																							  'class' => 'form-control advancedSelect')) ?>
+					</span>
+					<span id="country_empty" class="help-inline help-block"
+						  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+					</span>
 				</div>
 			</div>
 
@@ -464,17 +479,18 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 			if ($businessFields == 'never')
 			{
 				$isBusiness = 0;
-				$style = 'display: none';
+				$style      = 'display: none';
 			}
 			elseif ($businessFields == 'always')
 			{
 				$isBusiness = 1;
-				$style = 'display: none';
+				$style      = 'display: none';
 			}
 			else
 			{
-				$isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness : (@array_key_exists('isbusiness', $this->cache) ? $this->cache['isbusiness'] : 0);
-				$style = '';
+				$isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness :
+					(@array_key_exists('isbusiness', $this->cache) ? $this->cache['isbusiness'] : 0);
+				$style      = '';
 			}
 			?>
 
@@ -495,14 +511,14 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 						</label>
 
 						<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="businessname" id="businessname"
-					   value="<?php echo $this->escape($field_data['businessname']); ?>"/>
-            </span>
-			<span id="businessname_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['businessname'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+							<span class="col-sm-3">
+								<input type="text" class="form-control" name="businessname" id="businessname"
+									   value="<?php echo $this->escape($field_data['businessname']); ?>"/>
+							</span>
+							<span id="businessname_empty" class="help-inline help-block"
+								  <?php if (strpos($group_classes['businessname'], 'error') === false): ?>style="display:none"<?php endif ?>>
+								<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+							</span>
 						</div>
 					</div>
 
@@ -512,36 +528,39 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 						</label>
 
 						<div class="controls">
-            <span class="col-sm-3">
-			    <input type="text" class="form-control" name="occupation" id="occupation"
-					   value="<?php echo $this->escape($field_data['occupation']); ?>"/>
-            </span>
-			<span id="occupation_empty" class="help-inline help-block"
-				  <?php if (strpos($group_classes['occupation'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-			</span>
+							<span class="col-sm-3">
+								<input type="text" class="form-control" name="occupation" id="occupation"
+									   value="<?php echo $this->escape($field_data['occupation']); ?>"/>
+							</span>
+							<span id="occupation_empty" class="help-inline help-block"
+								  <?php if (strpos($group_classes['occupation'], 'error') === false): ?>style="display:none"<?php endif ?>>
+								<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+							</span>
 						</div>
 					</div>
 
 					<div class="control-group form-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
 						<label for="vatnumber" class="control-label col-sm-2" id="vatlabel">
-							* <?php echo $this->container->params->get('noneuvat', 0) ? JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') : JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER') ?>
+							* <?php echo $this->container->params->get('noneuvat', 0) ?
+								JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') :
+								JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER') ?>
 						</label>
 
 						<div class="controls">
-			<span class="input-group input-prepend col-sm-2">
-				<span class="input-group-addon add-on" id="vatcountry">EU</span>
-				<input type="text" name="vatnumber" id="vatnumber" class="input-small form-control" size="16"
-					   value="<?php echo $this->escape($field_data['vatnumber']); ?>"/>
-			</span>
-			<span id="vat-status-invalid" class="help-inline help-block"
-				  <?php if (strpos($group_classes['vatnumber'], 'warning') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_INVALID') ?>
-			</span>
-			<span id="vat-status-valid" class="help-inline help-block"
-				  <?php if (strpos($group_classes['vatnumber'], 'success') === false): ?>style="display:none"<?php endif ?>>
-				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_VALID') ?>
-			</span>
+							<span class="input-group input-prepend col-sm-2">
+								<span class="input-group-addon add-on" id="vatcountry">EU</span>
+								<input type="text" name="vatnumber" id="vatnumber" class="input-small form-control"
+									   size="16"
+									   value="<?php echo $this->escape($field_data['vatnumber']); ?>"/>
+							</span>
+							<span id="vat-status-invalid" class="help-inline help-block"
+								  <?php if (strpos($group_classes['vatnumber'], 'warning') === false): ?>style="display:none"<?php endif ?>>
+								<?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_INVALID') ?>
+							</span>
+							<span id="vat-status-valid" class="help-inline help-block"
+								  <?php if (strpos($group_classes['vatnumber'], 'success') === false): ?>style="display:none"<?php endif ?>>
+								<?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_VALID') ?>
+							</span>
 						</div>
 					</div>
 
@@ -572,7 +591,9 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 						foreach ($customFields as $field):
 							if ($apply_validation && array_key_exists('isValid', $field))
 							{
-								$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success has-success' : '') : 'error has-error';
+								$customField_class = $field['isValid'] ?
+									(array_key_exists('validLabel', $field) ? 'success has-success' : '') :
+									'error has-error';
 							}
 							else
 							{
@@ -580,40 +601,40 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 							}
 							?>
 							<div class="control-group form-group <?php echo $customField_class ?>">
-								<label for="<?php echo $field['id']?>" class="control-label col-sm-2">
-									<?php echo $field['label']?>
+								<label for="<?php echo $field['id'] ?>" class="control-label col-sm-2">
+									<?php echo $field['label'] ?>
 								</label>
 
 								<div class="controls">
-            <span class="col-sm-3">
-			    <?php echo $field['elementHTML']?>
-            </span>
+									<span class="col-sm-3">
+										<?php echo $field['elementHTML'] ?>
+									</span>
 									<?php if (array_key_exists('validLabel', $field)): ?>
 										<span id="<?php echo $field['id'] ?>_valid" class="help-inline help-block"
 											  style="<?php if (!$field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
-					  <?php echo $field['validLabel'] ?>
-			</span>
-									<?php endif;?>
+												  <?php echo $field['validLabel'] ?>
+										</span>
+									<?php endif; ?>
 									<?php if (array_key_exists('invalidLabel', $field)): ?>
 										<span id="<?php echo $field['id'] ?>_invalid" class="help-inline help-block"
 											  style="<?php if ($field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
-					  <?php echo $field['invalidLabel'] ?>
-			</span>
-									<?php endif;?>
+												  <?php echo $field['invalidLabel'] ?>
+										</span>
+									<?php endif; ?>
 								</div>
 							</div>
 
-						<?php
+							<?php
 						endforeach;
 					}
 				endforeach;
 			}
 			$subfieldsHTML = trim(@ob_get_clean());
-			if (!empty($subfieldsHTML)):?>
+			if (!empty($subfieldsHTML)): ?>
 		</fieldset>
 		<fieldset>
 
-			<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')?></legend>
+			<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS') ?></legend>
 			<?php echo $subfieldsHTML ?>
 			<?php
 			endif;
@@ -624,10 +645,10 @@ $emailasusername = $this->container->params->get('emailasusername', 0);
 	</div>
 
 <?php
-$aks_validate_url = JURI::base() . 'index.php';
+$aks_validate_url  = JURI::base() . 'index.php';
 $aks_personal_info = $this->container->params->get('personalinfo', 1) ? 'true' : 'false';
-$aks_noneuvat = $this->container->params->get('noneuvat', 0) ? 'true' : 'false';
-$script = <<< JS
+$aks_noneuvat      = $this->container->params->get('noneuvat', 0) ? 'true' : 'false';
+$script            = <<< JS
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
 // due to missing trailing semicolon and/or newline in their code.
