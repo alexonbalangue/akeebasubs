@@ -77,20 +77,28 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			'recurring' => $level->recurring ? ($subscription->recurring_amount >= 0.01 ? 2 : 1) : 0
 		);
 
-		if ($data->recurring == 1)
+		if ($data->recurring > 0)
 		{
-			$ppDuration = $this->_toPPDuration($level->duration);
-			$data->t3 = $ppDuration->unit;
-			$data->p3 = $ppDuration->value;
-		}
-		elseif ($data->recurring == 2)
-		{
-			$ppDuration = $this->_toPPDuration($level->duration);
-			$data->t1 = $ppDuration->unit;
-			$data->p1 = $ppDuration->value;
-			$data->t3 = $ppDuration->unit;
-			$data->p3 = $ppDuration->value;
-			$data->a3 = $subscription->recurring_amount;
+			// calculate duration based on publish date 
+			// because it might have been changed by plugins event onValidateSubscriptionLength
+			$jStartDate = new JDate($subscription->publish_up);
+			$jEndDate = new JDate($subscription->publish_down);
+			$duration = floor(($jEndDate->toUnix() - $jStartDate->toUnix()) / 3600 / 24);
+			$ppDuration = $this->_toPPDuration($duration);
+
+			if ($data->recurring == 1)
+			{
+				$data->t3 = $ppDuration->unit;
+				$data->p3 = $ppDuration->value;
+			}
+			elseif ($data->recurring == 2)
+			{
+				$data->t1 = $ppDuration->unit;
+				$data->p1 = $ppDuration->value;
+				$data->t3 = $ppDuration->unit;
+				$data->p3 = $ppDuration->value;
+				$data->a3 = $subscription->recurring_amount;
+			}
 		}
 
 		$kuser = $subscription->user;
