@@ -152,7 +152,7 @@ if (!property_exists($this, 'extensions'))
 					<?php endif;?>
 	            </td>
 	            <td>
-					<a class="btn btn-mini btn-info" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=Subscription&id='.$subscription->akeebasubs_subscription_id)?>">
+					<a class="btn btn-mini btn-xs btn-info" href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=Subscription&id='.$subscription->akeebasubs_subscription_id)?>">
 						<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_VIEW')?>
 					</a>
 
@@ -177,14 +177,14 @@ if (!property_exists($this, 'extensions'))
 					}
 					if(!empty($url)):
 					?>
-					<a class="btn btn-mini" href="<?php echo $url; ?>" <?php echo $target?>>
+					<a class="btn btn-mini btn-xs btn-default" href="<?php echo $url; ?>" <?php echo $target?>>
 						<span class="icon icon-eye-open"></span>
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_INVOICE')?>
 	            	</a>
 					<?php endif; ?>
 					<?php if(!empty($url2)):
 					?>
-					<a class="btn btn-mini" href="<?php echo $url2; ?>">
+					<a class="btn btn-mini btn-xs btn-default" href="<?php echo $url2; ?>">
 						<span class="icon icon-file"></span>
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_INVOICE')?>
 	            	</a>
@@ -205,7 +205,7 @@ if (!property_exists($this, 'extensions'))
 						}
 
 					?>
-	            	<a class="btn btn-mini btn-inverse" href="<?php echo $renewURL?>">
+	            	<a class="btn btn-mini btn-xs btn-success" href="<?php echo $renewURL?>">
 	            		<?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_RENEW')?>
 	            	</a>
 	            	<?php endif;?>
@@ -214,7 +214,7 @@ if (!property_exists($this, 'extensions'))
 		                if ($level->recurring):
 			                $cancelURL = JRoute::_('index.php?option=com_akeebasubs&view=callback&task=cancel&paymentmethod='.$subscription->processor.'&sid='.$subscription->akeebasubs_subscription_id);
 			        ?>
-		            <a class="btn btn-mini btn-danger" href="<?php echo $cancelURL?>">
+		            <a class="btn btn-mini btn-xs btn-danger" href="<?php echo $cancelURL?>">
 			            <?php echo JText::_('COM_AKEEBASUBS_SUBSCRIPTIONS_ACTION_CANCEL_RECURRING')?>
 		            </a>
 		            <?php endif; ?>
