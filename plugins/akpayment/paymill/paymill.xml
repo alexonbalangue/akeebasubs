@@ -34,6 +34,11 @@
 				<field name="countryList" type="akeebasubscountries" default=""
 					   multiple="true" size="5"
 					   label="PLG_AKPAYMENT_COMMON_COUNTRYLIST_LABEL" />
+        <field name="countryPriority" type="akeebasubscountries" default=""
+               multiple="true" size="5"
+               label="PLG_AKPAYMENT_COMMON_COUNTRYPIORITY_LABEL"
+               description="PLG_AKPAYMENT_COMMON_COUNTRYPIORITY_DESC"
+        />
 
 				<field type="spacer" />
 				<field name="private_key" type="text" size="50" default="" label="PLG_AKPAYMENT_PAYMILL_PRIVKEY_LABEL" description="PLG_AKPAYMENT_PAYMILL_PRIVKEY_DESC"/>

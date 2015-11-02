@@ -33,6 +33,11 @@
 				<field name="countryList" type="akeebasubscountries" default=""
 					   multiple="true" size="5"
 					   label="PLG_AKPAYMENT_COMMON_COUNTRYLIST_LABEL" />
+        <field name="countryPriority" type="akeebasubscountries" default=""
+               multiple="true" size="5"
+               label="PLG_AKPAYMENT_COMMON_COUNTRYPIORITY_LABEL"
+               description="PLG_AKPAYMENT_COMMON_COUNTRYPIORITY_DESC"
+        />
 
 				<field type="spacer" />
 				<field name="activate" type="radio" default="0" label="PLG_AKPAYMENT_OFFLINE_ACTIVATE_LABEL" description="PLG_AKPAYMENT_OFFLINE_ACTIVATE_DESC">

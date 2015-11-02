@@ -34,11 +34,16 @@
 				<field name="countryList" type="akeebasubscountries" default=""
 					   multiple="true" size="5"
 					   label="PLG_AKPAYMENT_COMMON_COUNTRYLIST_LABEL" />
+        <field name="countryPriority" type="akeebasubscountries" default=""
+               multiple="true" size="5"
+               label="PLG_AKPAYMENT_COMMON_COUNTRYPIORITY_LABEL"
+               description="PLG_AKPAYMENT_COMMON_COUNTRYPIORITY_DESC"
+        />
 
 				<field type="spacer" />
 				<field name="merchant" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_MERCHANT_LABEL" description="PLG_AKPAYMENT_SKRILL_MERCHANT_DESC"/>
 				<field name="secret" type="text" size="50" default="" label="PLG_AKPAYMENT_SKRILL_SECRET_LABEL" description="PLG_AKPAYMENT_SKRILL_SECRET_DESC"/>
-		
+
 				<field type="spacer" />
 				<field name="company" type="text" size="30" default="" label="PLG_AKPAYMENT_SKRILL_COMPANY_LABEL" description="PLG_AKPAYMENT_SKRILL_COMPANY_DESC"/>
 				<field name="language" type="radio" default="0" label="PLG_AKPAYMENT_SKRILL_LANGUAGE_LABEL" description="PLG_AKPAYMENT_SKRILL_LANGUAGE_DESC">
@@ -65,7 +70,7 @@
 				<field name="sandbox" type="radio" default="0" label="PLG_AKPAYMENT_SKRILL_SANDBOX_LABEL" description="PLG_AKPAYMENT_SKRILL_SANDBOX_DESC">
 				  <option value="0">JNo</option>
 				  <option value="1">JYes</option>
-				</field>				
+				</field>
 			</fieldset>
 		</fields>
 	</config>
