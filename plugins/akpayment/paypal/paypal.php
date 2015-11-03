@@ -596,14 +596,29 @@ class plgAkpaymentPaypal extends plgAkpaymentAbstract
 	public function onAKPaymentCancelRecurring($paymentmethod, $data)
 	{
 		if ($paymentmethod != $this->ppName) return false;
-		
-		$app      = JFactory::getApplication();
-		$merchant = $this->getMerchantID();
-		$sandbox  = $this->params->get('sandbox');
-		
-		if ($merchant) {
-			$app->redirect('https://www.'.($sandbox ? 'sandbox.' : '').'paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias='.$merchant);
-		} else {
+
+		$app          = JFactory::getApplication();
+		$merchant     = $this->getMerchantID();
+		$sandbox      = $this->params->get('sandbox');
+		$subscription = F0FModel::getAnInstance('Subscriptions', 'AkeebasubsModel')
+			->getItem((int) $data['sid']);
+
+		if (!empty($subscription->params['recurring_id']))
+		{
+			$url = 'https://www.'.($sandbox ? 'sandbox.' : '').'paypal.com/cgi-bin/webscr?cmd=_profile-recurring-payments'
+				. '&encrypted_profile_id=' . $subscription->params['recurring_id'];
+
+			$url = 'https://www.'.($sandbox ? 'sandbox.' : '').'paypal.com/signin/?returnUri=' . urlencode($url);
+			$app->redirect($url);
+		}
+		elseif ($merchant)
+		{
+			$url = 'https://www.'.($sandbox ? 'sandbox.' : '').'paypal.com/cgi-bin/webscr?cmd=_subscr-find'
+				. '&alias=' . $merchant;
+			$app->redirect($url);
+		}
+		else
+		{
 			$app->enqueueMessage('Read PayPal FAQ '
 				.'<a href="https://www.paypal.com/us/webapps/helpcenter/helphub/article/?articleID=FAQ2327" target="_blank" rel="nofollow">'
 				.'how to cancel a recurring payment profile'
