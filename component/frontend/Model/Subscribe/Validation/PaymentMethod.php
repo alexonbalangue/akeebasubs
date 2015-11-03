@@ -32,38 +32,19 @@ class PaymentMethod extends Base
 		$pluginsModel = $this->container->factory->model('PaymentMethods')->tmpInstance();
 
 		//First of all, let's get the whole list of plugins
-		$plugins = $pluginsModel->getPaymentPlugins();
-		$current = false;
+        $country = $this->state->country;
+		$plugins = $pluginsModel->getPaymentPlugins($country);
 
 		foreach($plugins as $plugin)
 		{
+            // Did I found the payment method I was looking for? If so let's return true
 			if($plugin->name == $paymentmethod)
 			{
-				$current = $plugin;
-				break;
+				return true;
 			}
 		}
 
-		// I wasn't able to find the payment method? Let's stop here
-		if(!$current)
-		{
-			return false;
-		}
-
-		$country = $this->state->country;
-
-		// These two if statements are split so we can better understand what's going on
-		// Inclusion list and the country is in the list
-		if($current->activeCountries['type'] == 1 && in_array($country, $current->activeCountries['list']))
-		{
-			return true;
-		}
-		// Exclusion list and the country is NOT in the list
-		elseif($current->activeCountries['type'] == 2 && !in_array($country, $current->activeCountries['list']))
-		{
-			return true;
-		}
-
+        // ... otherwise false
 		return false;
 	}
 }
