@@ -184,7 +184,7 @@ abstract class plgAkpaymentAbstract extends JPlugin
 	{
 		// Take into account the params->fixdates data to determine when
 		// the new subscription should start and/or expire the old subscription
-		$subcustom = $subscription->params;
+		$subcustom = (!empty($updates['params']) ? $updates['params'] : $subscription->params);
 		if (is_string($subcustom))
 		{
 			$subcustom = json_decode($subcustom, true);
