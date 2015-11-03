@@ -19,7 +19,7 @@ class PaymentMethods extends Model
     /**
      * Gets a list of payment plugins and their titles
      *
-     * @param   string  $country    Additional filter about the country
+     * @param   string  $country    Additional filtering based on the country
      *
      * @return  array
      */
@@ -115,4 +115,59 @@ class PaymentMethods extends Model
 
 		return $ret; // name, title
 	}
+
+    /**
+     * Fetches the payment processor used in the last complted subscription
+     *
+     * @param   int     $userid     User id
+     * @param   string  $country    Additional filtering based on the country
+     *
+     * @return string
+     */
+    public function getLastPaymentPlugin($userid, $country)
+    {
+        // No userid? Well, then there's no payment plugin
+        if(!$userid)
+        {
+            return '';
+        }
+
+        // Let's get the last completed transaction
+        /** @var Subscriptions $subscriptions */
+        $subscriptions = $this->getContainer()->factory->model('Subscriptions')->tmpInstance();
+        $rows          = $subscriptions->user_id($userid)
+                                       ->state('C')
+                                       ->limit(1)
+                                       ->filter_order('created_on')
+                                       ->filter_order_Dir('DESC')
+                                       ->get();
+
+        // No completed subscription? Then no payment plugin
+        if(!$rows)
+        {
+            return '';
+        }
+
+        /** @var Subscriptions $last */
+        $last = $rows->first();
+        $processor = $last->processor;
+
+        // No stored processor? Well, that's strange, but it could happen...
+        if(!$processor)
+        {
+            return '';
+        }
+
+        $plugins = $this->getPaymentPlugins($country);
+
+        foreach($plugins as $plugin)
+        {
+            if($plugin->name == $processor)
+            {
+                return $plugin->name;
+            }
+        }
+
+        return '';
+    }
 }
