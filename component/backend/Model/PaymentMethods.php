@@ -16,10 +16,14 @@ use JPluginHelper;
 
 class PaymentMethods extends Model
 {
-	/**
-	 * Gets a list of payment plugins and their titles
-	 */
-	public function getPaymentPlugins()
+    /**
+     * Gets a list of payment plugins and their titles
+     *
+     * @param   string  $country    Additional filter about the country
+     *
+     * @return  array
+     */
+	public function getPaymentPlugins($country = '')
 	{
 		JLoader::import('joomla.plugin.helper');
 		JPluginHelper::importPlugin('akpayment');
@@ -57,6 +61,34 @@ class PaymentMethods extends Model
 				}
 			}
 		}
+
+        // No country? Good, there's no need to double check anything
+        if(!$country)
+        {
+            return $ret;
+        }
+
+        $temp = array();
+
+        // Let's double check if I have to remove any plugin due GeoIP restrictions
+        foreach($ret as $plugin)
+        {
+            // These two if statements are split so we can better understand what's going on
+            // Inclusion list and the country is in the list
+            if($plugin->activeCountries['type'] == 1 && in_array($country, $plugin->activeCountries['list']))
+            {
+                $temp[] = $plugin;
+            }
+            // Exclusion list and the country is NOT in the list
+            elseif($plugin->activeCountries['type'] == 2 && !in_array($country, $plugin->activeCountries['list']))
+            {
+                $temp[] = $plugin;
+            }
+
+            // In any other case, ignore the plugin...
+        }
+
+        $ret = $temp;
 
 		return $ret; // name, title
 	}

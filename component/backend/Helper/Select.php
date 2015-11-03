@@ -989,17 +989,17 @@ abstract class Select
 	 */
 	public static function paymentmethods($name = 'paymentmethod', $selected = '', $attribs = array())
 	{
-		/** @var PaymentMethods $pluginsModel */
-		$pluginsModel = Container::getInstance('com_akeebasubs')->factory
-			->model('PaymentMethods')->tmpInstance();
-
-		$plugins = $pluginsModel->getPaymentPlugins();
-
 		// Initialise parameters
 		$level_id        = isset($attribs['level_id']) ? $attribs['level_id'] : 0;
 		$always_dropdown = isset($attribs['always_dropdown']) ? 1 : 0;
 		$default_option  = isset($attribs['default_option']) ? 1 : 0;
 		$country		 = isset($attribs['country']) ? $attribs['country'] : '';
+
+        /** @var PaymentMethods $pluginsModel */
+        $pluginsModel = Container::getInstance('com_akeebasubs')->factory
+                            ->model('PaymentMethods')->tmpInstance();
+
+        $plugins = $pluginsModel->getPaymentPlugins($country);
 
 		// Per-level payment option filtering
 		if ($level_id > 0)
@@ -1045,27 +1045,6 @@ abstract class Select
 
 		if($country && $plugins)
 		{
-			$temp = array();
-
-			foreach($plugins as $plugin)
-			{
-				// These two if statements are split so we can better understand what's going on
-				// Inclusion list and the country is in the list
-				if($plugin->activeCountries['type'] == 1 && in_array($country, $plugin->activeCountries['list']))
-				{
-					$temp[] = $plugin;
-				}
-				// Exclusion list and the country is NOT in the list
-				elseif($plugin->activeCountries['type'] == 2 && !in_array($country, $plugin->activeCountries['list']))
-				{
-					$temp[] = $plugin;
-				}
-
-				// In any other case, ignore the plugin...
-			}
-
-			$plugins = $temp;
-
             // Good, I have the full list, now let's try to order it by country priority
             $temp = array();
             $i    = 0;
