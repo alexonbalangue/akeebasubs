@@ -215,6 +215,7 @@ class Levels extends DataController
 			}
 		}
 
+        /** @var \Akeeba\Subscriptions\Site\View\Level\Html $view */
 		$view = $this->getView();
 
 		// Get the user model and load the user data

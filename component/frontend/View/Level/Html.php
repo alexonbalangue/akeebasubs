@@ -35,6 +35,27 @@ class Html extends \FOF30\View\DataView\Html
 	 */
 	public $cparams = null;
 
+    /**
+     * Current user params
+     *
+     * @var object
+     */
+    public $userparams = null;
+
+    /**
+     * Did the user set the Do Not Track preference in his browser?
+     *
+     * @var bool
+     */
+    public $dnt = false;
+
+    /**
+     * The result of the validation
+     *
+     * @var object
+     */
+    public $validation = null;
+
 	/**
 	 * Executes before the read task, allows us to push data to the view
 	 */
