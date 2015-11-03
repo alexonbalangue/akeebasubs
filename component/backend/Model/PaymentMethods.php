@@ -90,6 +90,29 @@ class PaymentMethods extends Model
 
         $ret = $temp;
 
+        // Good, I have the full list, now let's try to order it by country priority
+        $temp = array();
+        $i    = 0;
+
+        foreach($ret as $plugin)
+        {
+            $i++;
+            $idx = $i;
+
+            // If I have a match in the priority list, let's bump the index of this plugin
+            if(in_array($country, $plugin->activeCountries['priority']))
+            {
+                $idx += 10;
+            }
+
+            $temp[$idx] = $plugin;
+        }
+
+        krsort($temp);
+        reset($temp);
+
+        $ret = $temp;
+
 		return $ret; // name, title
 	}
 }

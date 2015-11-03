@@ -1043,39 +1043,6 @@ abstract class Select
 			}
 		}
 
-		if($country && $plugins)
-		{
-            // Good, I have the full list, now let's try to order it by country priority
-            $temp = array();
-            $i    = 0;
-
-            foreach($plugins as $plugin)
-            {
-                $i++;
-                $idx = $i;
-
-                // If I have a match in the priority list, let's bump the index of this plugin
-                if(in_array($country, $plugin->activeCountries['priority']))
-                {
-                    $idx += 10;
-                }
-
-                $temp[$idx] = $plugin;
-            }
-
-            krsort($temp);
-            reset($temp);
-
-            $plugins = $temp;
-
-            // If I have no selected value let's get the first one
-            if(!$selected)
-            {
-                $default  = current($plugins);
-                $selected = $default->name;
-            }
-		}
-
 		$returnRawList = false;
 
 		if (isset($attribs['return_raw_list']))
