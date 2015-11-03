@@ -259,11 +259,22 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 						</label>
 
 						<div id="paymentlist-container" class="controls col-sm-3">
-							<?php
+                        <?php
 							$country = !empty($this->userparams->country) && ($this->userparams->country != 'XX') ? $this->userparams->country : $this->cache['country'];
+
+                            // No country? Let's get it from the user IP
+                            if(!$country)
+                            {
+                                // TODO fetch the country from the IP address
+                            }
+
+                            /** @var \Akeeba\Subscriptions\Site\Model\PaymentMethods $paymentMethods */
+                            $paymentMethods = $this->getContainer()->factory->model('PaymentMethods')->tmpInstance();
+                            $defaultPayment = $paymentMethods->getLastPaymentPlugin(JFactory::getUser()->id, $country);
+
 							echo Select::paymentmethods(
 								'paymentmethod',
-								'',
+								$defaultPayment,
 								array(
 									'id' 		=> 'paymentmethod',
 									'level_id' 	=> $this->item->akeebasubs_level_id,

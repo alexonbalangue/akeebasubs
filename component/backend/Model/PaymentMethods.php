@@ -102,13 +102,13 @@ class PaymentMethods extends Model
             // If I have a match in the priority list, let's bump the index of this plugin
             if(in_array($country, $plugin->activeCountries['priority']))
             {
-                $idx += 10;
+                $idx *= -1;
             }
 
             $temp[$idx] = $plugin;
         }
 
-        krsort($temp);
+        ksort($temp);
         reset($temp);
 
         $ret = $temp;
@@ -143,7 +143,7 @@ class PaymentMethods extends Model
                                        ->get();
 
         // No completed subscription? Then no payment plugin
-        if(!$rows)
+        if(!count($rows))
         {
             return '';
         }
