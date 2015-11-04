@@ -427,6 +427,7 @@ class plgAkpaymentPaypal extends AkpaymentBase
 			$jStart = new JDate($start);
 			$jEnd = new JDate($end);
 
+			$updates['created_on'] = $jNow->toSql();
 			$updates['publish_up'] = $jStart->toSql();
 			$updates['publish_down'] = $jEnd->toSql();
 
