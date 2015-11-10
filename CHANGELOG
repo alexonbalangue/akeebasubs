@@ -16,6 +16,7 @@ Akeeba Subscriptions 5.0.1
 # [LOW] Custom user fields not shown when editing a user in the back-end
 # [LOW] Country code not cleared in signup form for non-EU VAT entry
 # [LOW] FOF 3 would be uninstalled on package uninstallation even when there are other dependencies on it
+# [LOW] Notice thrown by the auto-update CLI script
 
 Akeeba Subscriptions 5.0.0
 ================================================================================

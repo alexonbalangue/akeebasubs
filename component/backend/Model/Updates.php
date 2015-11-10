@@ -213,7 +213,8 @@ ENDBODY;
 
 		$db = JFactory::getDbo();
 
-		$update_site = array_shift($this->getUpdateSiteIds());
+		$updateSiteIDs = $this->getUpdateSiteIds();
+		$update_site   = array_shift($updateSiteIDs);
 
 		$query = $db->getQuery(true)
 		            ->select($db->qn('update_id'))
