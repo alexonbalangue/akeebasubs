@@ -9,6 +9,7 @@ namespace Akeeba\Subscriptions\Admin\Helper;
 
 use FOF30\Container\Container;
 use JFactory;
+use JHttpFactory;
 use SoapClient;
 use SoapFault;
 
@@ -247,7 +248,7 @@ abstract class EUVATInfo
 						}
 					}
 				}
-				catch (RuntimeException $e)
+				catch (\RuntimeException $e)
 				{
 
 				}
