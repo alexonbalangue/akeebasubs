@@ -263,11 +263,7 @@ class Subscriptions extends DataModel
 			// If there are user IDs, we need to filter by them and not search for business name or VAT number
 			if (!empty($userIDs))
 			{
-				$this->whereHas('user', function (\JDatabaseQuery $q) use($userIDs) {
-					$q->where(
-						$q->qn('user_id') . ' IN (' . implode(',', array_map(array($q, 'q'), $userIDs)) . ')'
-					);
-				});
+				$query->where($query->qn('user_id') . ' IN (' . implode(',', array_map(array($query, 'q'), $userIDs)) . ')');
 
 				return;
 			}
