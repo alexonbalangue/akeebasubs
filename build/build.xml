@@ -68,7 +68,8 @@
 
 	<target name="docsdeploy-akeebasubs" >
 		<phingcall target="docbook-deploy">
-			<property name="docsdeploy.path.source" value="" />
+			<property name="docsdeploy.name" value="Akeeba Subscriptions documentation" />
+			<property name="docsdeploy.path.source" value="/" />
 			<property name="docsdeploy.path.target" value="akeeba-subscriptions" />
 		</phingcall>
 	</target>
