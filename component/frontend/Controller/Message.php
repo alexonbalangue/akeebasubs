@@ -118,6 +118,7 @@ class Message extends DataController
 		if (!$id && $slug)
 		{
 			$levelsModel->find(['slug' => $slug]);
+			$id = $levelsModel->getId();
 		}
 
 		$subid = $this->input->getInt('subid', 0);
@@ -137,7 +138,10 @@ class Message extends DataController
 		if ($subscription->akeebasubs_level_id && ($subscription->akeebasubs_level_id != $levelsModel->getId()))
 		{
 			$levelsModel->find($subscription->akeebasubs_level_id);
+			$id = $levelsModel->getId();
 		}
+
+		$levelsModel->setState('id', $id);
 
 		/**
 		 * We have to effectively "re-login" the user, otherwise his their ACL privileges are stale.
