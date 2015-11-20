@@ -241,8 +241,16 @@ class Subscriptions extends DataModel
 		// Filter by expiration date range (expires_from / expires_to)
 		$this->filterByExpirationDate($query);
 
-		// Fitler by non-free subscriptions (nozero)
+		// Filter by non-free subscriptions (nozero)
 		$this->filterByNonFree($query);
+
+		// Filter by subscription ID
+		$subId = $this->getState('akeebasubs_subscription_id', 0, 'int');
+
+		if ($subId > 0)
+		{
+			$query->where($query->qn($this->getKeyName()) . ' = ' . $query->q($subId));
+		}
 	}
 
 	/**
