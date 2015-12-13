@@ -10,6 +10,8 @@ namespace Akeeba\Subscriptions\Admin\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Helper\Email;
+use Akeeba\Subscriptions\Admin\Model\EmailTemplates;
+use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use FOF30\Controller\DataController;
 use FOF30\Model\DataModel;
 use JFactory;
@@ -19,9 +21,6 @@ class EmailTemplate extends DataController
 {
 	public function testTemplate()
 	{
-		require_once JPATH_ROOT . '/components/com_akeebasubs/helpers/email.php';
-
-		$db = JFactory::getDbo();
 		$id = $this->input->getInt('akeebasubs_emailtemplate_id', 0);
 
 		// No id? What??
@@ -33,6 +32,7 @@ class EmailTemplate extends DataController
 
 		$url = 'index.php?option=com_akeebasubs&view=emailtemplate&id=' . $id;
 
+		/** @var EmailTemplates $template */
 		$template = $this->getModel()->getClone()->savestate(false)->setIgnoreRequest(true);
 		$template->findOrFail($id);
 
@@ -50,7 +50,7 @@ class EmailTemplate extends DataController
 		}
 
 		// Let's get a dummy subscription
-		/** @var DataModel $sub */
+		/** @var Subscriptions $sub */
 		$sub = $this->container->factory
 			->model('Subscriptions')->tmpInstance();
 
