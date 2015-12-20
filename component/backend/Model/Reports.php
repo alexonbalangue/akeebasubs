@@ -64,9 +64,12 @@ class Reports extends Model
 
 		if ($params['vatmoss'])
 		{
+			$shopCountry = $this->container->params->get('invoice_country');
+
 			$this->layout = 'invoices_vatmoss';
 			$query->where($db->qn('akuser') . '.' . $db->qn('viesregistered') . ' = ' . $db->q(0));
 			$query->where($db->qn('aksub') . '.' . $db->qn('tax_amount') . ' > ' . $db->q(0.01));
+			$query->where($db->qn('akuser') . '.' . $db->qn('country') . ' <> ' . $db->q($shopCountry));
 			$query->order($db->qn('akuser') . '.' . $db->qn('country') . ' ASC');
 		}
 

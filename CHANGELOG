@@ -4,6 +4,7 @@ Akeeba Subscriptions 5.0.2
 # [HIGH] Order success or failure page not working on PHP 5.4 if the user was already logged in
 # [LOW] Back-end susbcriptions page: Filtering by subscription ID doesn't work
 # [LOW] gh-230 Could not send test emails
+# [LOW] gh-236 Shop's country included in VAT MOSS results
 
 Akeeba Subscriptions 5.0.1
 ================================================================================
