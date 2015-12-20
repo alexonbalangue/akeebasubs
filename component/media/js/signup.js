@@ -651,7 +651,7 @@ function validateBusiness()
 		if (akeebasubs_personalinfo == 1)
 		{
 			// Do I have to show the business fields?
-			if ($('#isbusiness').val())
+			if ($('#isbusiness').val() == 1)
 			{
 				$('#businessfields').show();
 			}
@@ -773,9 +773,9 @@ function validateIsNotBusiness(e)
 function onIsBusinessClick(e)
 {
 	(function ($) {
-		var isBusiness = $('#isbusiness').val();
+		var isBusiness = $('#isbusiness').val() == 1;
 
-		if (isBusiness == 1)
+		if (isBusiness)
 		{
 			validateBusiness();
 
@@ -955,7 +955,7 @@ function applyValidation(response, callback)
 				else
 				{
 					$('#businessname').parents('div.control-group').addClass('error has-error');
-					if ($('#isbusiness').val())
+					if ($('#isbusiness').val() == 1)
 					{
 						akeebasubs_valid_form = false;
 					}
@@ -971,7 +971,7 @@ function applyValidation(response, callback)
 				else
 				{
 					$('#occupation').parents('div.control-group').addClass('error has-error');
-					if ($('#isbusiness').val())
+					if ($('#isbusiness').val() == 1)
 					{
 						akeebasubs_valid_form = false;
 					}
