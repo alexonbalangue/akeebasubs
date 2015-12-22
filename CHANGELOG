@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 5.0.2
 ================================================================================
+# [HIGH] Joomla! 3.4.7 has a major bug which may prevent CLI (CRON) scripts from executing
 # [HIGH] Order success or failure page not working on PHP 5.4 if the user was already logged in
 # [MEDIUM] gh-234 Business fields appearing after form validation when business drop-down is set to No
 # [LOW] Back-end susbcriptions page: Filtering by subscription ID doesn't work

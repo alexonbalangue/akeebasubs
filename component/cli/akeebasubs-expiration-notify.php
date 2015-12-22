@@ -217,6 +217,12 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 
 		// Set the current directory.
 		$this->set('cwd', getcwd());
+
+		// Work around Joomla! 3.4.7's JSession bug
+		if (version_compare(JVERSION, '3.4.7', 'ge'))
+		{
+			JFactory::getSession()->restart();
+		}
 	}
 
 	/**
