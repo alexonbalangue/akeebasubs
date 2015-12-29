@@ -876,7 +876,7 @@ class Invoices extends DataModel
 
 		$name = $hash . '_' . $this->invoice_no . '.pdf';
 
-		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
+		$path = $this->getInvoicePath();
 
 		$ret = \JFile::write($path . $name, $pdfData);
 
@@ -912,7 +912,7 @@ class Invoices extends DataModel
 	public function emailPDF($sub)
 	{
 		\JLoader::import('joomla.filesystem.file');
-		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
+		$path = $this->getInvoicePath();
 
 		if (empty($this->filename) || !\JFile::exists($path . $this->filename))
 		{
@@ -1217,5 +1217,16 @@ class Invoices extends DataModel
 
 		return $res;
 	}
+
+	public function getInvoicePath()
+	{
+		$date = new JDate($this->invoice_date);
+		$timezone = JFactory::getConfig()->get('offset', null);
+		if ($timezone && $timezone != 'UTC')
+		{
+			$date->setTimezone(new DateTimeZone($timezone));
+		}
+		return JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/'. $date->format('Y-m', true, false) . '/';
+    	}
 
 }
