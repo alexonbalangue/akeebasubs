@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 5.0.3
 ================================================================================
++ Save invoices in a different directory per month-year
 ~ Disable CLI script workaround necessary only under Joomla! 3.4.7 on all other versions of Joomla!
 
 Akeeba Subscriptions 5.0.2
