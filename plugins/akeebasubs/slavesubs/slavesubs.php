@@ -239,7 +239,7 @@ JS;
 	 */
 	public function onValidatePerSubscription($data)
 	{
-		// Initialise the validation respone
+		// Initialise the validation response
 		$response = array(
 			'valid'                          => true,
 			'subscription_custom_validation' => array()
