@@ -90,7 +90,7 @@ class Invoices extends DataModel
 		]);
 
 		// Set up relations
-		$this->hasOne('subscription', 'Subscriptions', 'akeebasubs_subscription_id', 'subid');
+		$this->hasOne('subscription', 'Subscriptions', 'akeebasubs_subscription_id', 'akeebasubs_subscription_id');
 		$this->hasOne('template', 'InvoiceTemplates', 'akeebasubs_invoicetemplate_id', 'akeebasubs_invoicetemplate_id');
 
 		// Eager load the relations. This allows us to get rid of ugly JOINs.

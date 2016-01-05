@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 5.0.4
+================================================================================
+# [LOW] gh-246 Invoices view, user information not shown
+
 Akeeba Subscriptions 5.0.3
 ================================================================================
 + Save invoices in a different directory per month-year
