@@ -1,8 +1,9 @@
 <?php die(); ?>
 Akeeba Subscriptions 5.0.4
 ================================================================================
-# [LOW] gh-246 Invoices view, user information not shown
 # [HIGH] The third party contributed code to put invoices in different directories never worked
+# [LOW] gh-246 Invoices view, user information not shown
+# [LOW] gh-247 Generated invoices have the VAT number without the country prefix for EU countries
 
 Akeeba Subscriptions 5.0.3
 ================================================================================

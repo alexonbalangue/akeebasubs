@@ -235,6 +235,8 @@ abstract class Message
 		}
 
 		// Create and replace merge tags for user data. Format [USER:KEYNAME]
+		$EUCountryInfo = EUVATInfo::$EuropeanUnionVATInformation;
+
 		foreach ($userData as $k => $v)
 		{
 			if (is_object($v) || is_array($v))
@@ -250,6 +252,16 @@ abstract class Message
 			if ($k == 'akeebasubs_subscription_id')
 			{
 				$k = 'id';
+			}
+
+			if ($k == 'vatnumber')
+			{
+				$country = $userData['country'];
+
+				if (array_key_exists($country, $EUCountryInfo))
+				{
+					$v = $EUCountryInfo[$country][1] . $v;
+				}
 			}
 
 			if (in_array($k, $businessOnlyFields))
