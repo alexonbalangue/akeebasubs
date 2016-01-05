@@ -2,6 +2,7 @@
 Akeeba Subscriptions 5.0.4
 ================================================================================
 # [LOW] gh-246 Invoices view, user information not shown
+# [HIGH] The third party contributed code to put invoices in different directories never worked
 
 Akeeba Subscriptions 5.0.3
 ================================================================================
