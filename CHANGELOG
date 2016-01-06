@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 5.0.5
 ================================================================================
++ AcyMailing integration
 # [HIGH] Invoices view not showing when you have too many invoices
 
 Akeeba Subscriptions 5.0.4

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.3.0" type="plugin" group="akeebasubs" method="upgrade">
-	<name>Akeeba Subscriptions - AcyMailing Integration</name>
-	<author>Nicholas K. Dionysopoulos</author>
-	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
-	<authorUrl>http://www.akeebabackup.com</authorUrl>
-	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<name>PLG_AKEEBASUBS_ACYMAILING</name>
+	<author>Roy Haanen</author>
+	<copyright>Copyright (c)2015 Roy Haanen</copyright>
 	<license>GNU General Public License version 3, or later</license>
-	<creationDate>2012-01-10</creationDate>
+	<creationDate>2015-01-06</creationDate>
 	<version>1.0</version>
 	<description>PLG_AKEEBASUBS_ACYMAILING_DESCRIPTION</description>
 	<files>
