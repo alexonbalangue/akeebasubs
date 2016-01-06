@@ -179,6 +179,19 @@ class Subscriptions extends DataModel
 	 */
 	protected function onBeforeBuildQuery(\JDatabaseQuery &$query)
 	{
+		// DO NOT DELETE -- START
+		// Cache the subid and akeebasubs_subscription_id.
+		// If we remove that the Invoices view doesn't work correctly. Since the subscription relation is on the
+		// akeebasubs_subscription_id column, the Relations manager tries to filter by the
+		// akeebasubs_subscription_id state. However, the foreach below overrides the akeebasubs_subscription_id
+		// state with the contents of the subid state EVEN THOUGH subid may be null while akeebasubs_subscription_id not
+		// null. Therefore we need to cache these two model states, run the foreach and THEN decide if we have to
+		// unmask the akeebasubs_subscription_id state. Also, if anyone tells me that commenting code is discouraged
+		// I will print this comment on a dildo and stick it up their ass.
+		$subid = $this->getState('subid', null);
+		$subid2 = $this->getState('akeebasubs_subscription_id', null);
+		// DO NOT DELETE -- END
+
 		// Map state variables to what is used by automatic filters
 		foreach (
 			[
@@ -191,6 +204,14 @@ class Subscriptions extends DataModel
 		{
 			$this->setState($to, $this->getState($from, null));
 		}
+
+		// DO NOT DELETE - START
+		// See big comment block above
+		if (empty($subid) && !empty($subid2))
+		{
+			$this->setState('akeebasubs_subscription_id', $subid2);
+		}
+		// DO NOT DELETE - END
 
 		// Set the default ordering by ID, descending
 		if (is_null($this->getState('filter_order', null, 'cmd')) && is_null($this->getState('filter_order_Dir', null, 'cmd')))
