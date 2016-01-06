@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.3.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>Akeeba Subscriptions - AcyMailing Integration</name>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@dionysopoulos.me</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2011-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>GNU General Public License version 3, or later</license>
+	<creationDate>2012-01-10</creationDate>
+	<version>1.0</version>
+	<description>PLG_AKEEBASUBS_ACYMAILING_DESCRIPTION</description>
+	<files>
+		<filename plugin="acymailing">acymailing.php</filename>
+		<folder>tmpl</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_acymailing.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_acymailing.sys.ini</language>
+	</languages>
+</extension>
