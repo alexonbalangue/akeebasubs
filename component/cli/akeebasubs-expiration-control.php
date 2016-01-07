@@ -119,7 +119,7 @@ JLoader::import('joomla.application.component.helper');
 /**
  * Akeeba Subscriptions expiration notification CLI app
  */
-class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
+class AkeebaSubscriptionsExpirationControlApp extends JApplicationCli
 {
 	/**
 	 * JApplicationCli didn't want to run on PHP CGI. I have my way of becoming
@@ -257,7 +257,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		include_once JPATH_COMPONENT_ADMINISTRATOR . '/version.php';
 
 		// Load language strings
-		JFactory::getLanguage()->load('plg_system_asexpirationnotify', JPATH_ADMINISTRATOR, null, true, true);
+		JFactory::getLanguage()->load('plg_system_asexpirationcontrol', JPATH_ADMINISTRATOR, null, true, true);
 
 		// Display banner
 		$year			 = gmdate('Y');
@@ -265,7 +265,7 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 		$phpenvironment	 = PHP_SAPI;
 		$phpos			 = PHP_OS;
 
-		$this->out("Akeeba Subscriptions Expiration Notification Emails CLI " . AKEEBASUBS_VERSION . " (" . AKEEBASUBS_DATE . ")");
+		$this->out("Akeeba Subscriptions Expiration Control Emails CLI " . AKEEBASUBS_VERSION . " (" . AKEEBASUBS_DATE . ")");
 		$this->out("Copyright (C) 2010-$year Nicholas K. Dionysopoulos");
 		$this->out(str_repeat('-', 79));
 		$this->out("Akeeba Subscriptions is Free Software, distributed under the terms of the GNU General");
@@ -290,253 +290,60 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 
 		// ===== START
 
-		$this->sendNotifications();
+		$this->processExpirations();
 
 		// ===== END
 
 		$this->out("Peak memory usage: " . $this->peakMemUsage());
 	}
 
-	protected function sendNotifications()
+	protected function processExpirations()
 	{
+		$container = Container::getInstance('com_akeebasubs');
+
 		// Get today's date
 		JLoader::import('joomla.utilities.date');
 		$jNow = new JDate();
-		$now  = $jNow->toUnix();
 
-		// Get and loop all subscription levels
-		/** @var Levels $levelsModel */
-		$levelsModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
-		$levels = $levelsModel
-			->enabled(1)
-			->get(true);
+		$this->out("");
 
-		/** @var Levels $level */
-		foreach ($levels as $level)
+		// Import system plugins. Required by some integrations (system plugins provide necessary events)
+		$this->out("Importing system plugins");
+		$container->platform->importPlugin('system');
+		// Import the plugins which send the emails and perform all relevant events when we disable a subscription
+		$this->out("Importing Akeeba Subscriptions plugins");
+		$container->platform->importPlugin('akeebasubs');
+
+		$this->out("");
+
+		// Load a list of subscriptions which have to expire -- FOF does the rest magically!
+		/** @var Subscriptions $subsModel */
+		$this->out("Looking for subscriptions expiring after " . $jNow->format(JText::_('DATE_FORMAT_LC2')));
+		$subs      = $container->factory->model('Subscriptions')->tmpInstance()
+		                                ->enabled(1)
+		                                ->expires_to($jNow->toSql())
+										->with(['level', 'juser'])
+		                                ->get();
+		$count = count($subs);
+
+		$this->out("");
+
+		if (!$count)
 		{
-			$this->out("Checking for subscriptions in the \"{$level->title}\" subscription level");
-			// Load the notification thresholds and make sure they are sorted correctly!
-			$notify1     = $level->notify1;
-			$notify2     = $level->notify2;
-			$notifyAfter = $level->notifyafter;
-
-			if ($notify2 > $notify1)
-			{
-				$tmp     = $notify2;
-				$notify2 = $notify1;
-				$notify1 = $tmp;
-			}
-
-			// Make sure we are asked to notify users, at all!
-			if (($notify1 <= 0) && ($notify2 <= 0))
-			{
-				$this->out("\t!! This level specifies the users should not be notified");
-				continue;
-			}
-
-			// Get the subscriptions expiring within the next $notify1 days for
-			// users which we have not contacted yet.
-			$jFrom = new JDate($now + 1);
-			$jTo   = new JDate($now + $notify1 * 24 * 3600);
-
-			/** @var Subscriptions $subsModel */
-			$subsModel = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')->tmpInstance();
-
-			$subs1 = $subsModel->getClone()
-			                   ->contact_flag(0)
-			                   ->level($level->akeebasubs_level_id)
-			                   ->enabled(1)
-			                   ->expires_from($jFrom->toSql())
-			                   ->expires_to($jTo->toSql())
-			                   ->get(true);
-
-			// Get the subscriptions expiring within the next $notify2 days for
-			// users which we have contacted only once
-			$subs2 = array();
-
-			if ($notify2 > 0)
-			{
-				$jFrom = new JDate($now + 1);
-				$jTo   = new JDate($now + $notify2 * 24 * 3600);
-
-				$subs2 = $subsModel->getClone()
-				                   ->contact_flag(1)
-				                   ->level($level->akeebasubs_level_id)
-				                   ->enabled(1)
-				                   ->expires_from($jFrom->toSql())
-				                   ->expires_to($jTo->toSql())
-				                   ->get(true);
-			}
-
-			// Get the subscriptions expired $notifyAfter days ago
-			$subs3 = array();
-
-			if ($notifyAfter > 0)
-			{
-				// Get all subscriptions expired $notifyAfter + 2 to $notifyAfter days ago. So, if $notifyAfter is 30
-				// it will get all subscriptions expired 30 to 32 days ago. This allows us to send emails if the plugin
-				// is triggered at least once every two days. Any site with less traffic than that required for the
-				// plugin to be triggered every 48 hours doesn't need our software, it needs better marketing to get
-				// some users!
-				$jFrom = new JDate($now - ($notifyAfter + 2) * 24 * 3600);
-				$jTo   = new JDate($now - $notifyAfter * 24 * 3600);
-
-				$subs3 = $subsModel->getClone()
-				                   ->level($level->akeebasubs_level_id)
-				                   ->enabled(0)
-				                   ->expires_from($jFrom->toSql())
-				                   ->expires_to($jTo->toSql())
-				                   ->get(true);
-			}
-
-			// If there are no subscriptions, bail out
-			$subs1count = is_object($subs1) ? $subs1->count() : 0;
-			$subs2count = is_object($subs2) ? $subs2->count() : 0;
-			$subs3count = is_object($subs3) ? $subs3->count() : 0;
-
-			if (($subs1count + $subs2count + $subs3count) == 0)
-			{
-				$this->out("\tNo subscriptions to notify were found in this level");
-				continue;
-			}
-
-			// Check is some of those subscriptions have been renewed. If so, set their contactFlag to 2
-			$realSubs = array();
-
-			$this->out("\tProcessing notifications");
-
-			foreach (array($subs1, $subs2, $subs3) as $subs)
-			{
-				/** @var Subscriptions $sub */
-				foreach ($subs as $sub)
-				{
-					// Skip the subscription if the contact_flag is already 3
-					if ($sub->contact_flag == 3)
-					{
-						continue;
-					}
-
-					// Get the user and level, load similar subscriptions with start date after this subscription's expiry date
-					$renewals = $subsModel->getClone()
-					                      ->enabled(1)
-					                      ->user_id($sub->user_id)
-					                      ->level($sub->akeebasubs_level_id)
-					                      ->publish_up($sub->publish_down)
-					                      ->get(true);
-
-					if ($renewals->count())
-					{
-						// The user has already renewed. Don't send him an email; just update the row
-						$subsModel->getClone()
-						          ->find($sub->akeebasubs_subscription_id)
-						          ->save([
-							          'contact_flag' => 3
-						          ]);
-					}
-					else
-					{
-						// No renewals found. Let's nag our user.
-						$realSubs[] = $sub;
-					}
-				}
-			}
-
-			// If there are no subscriptions, bail out
-			if (empty($realSubs))
-			{
-				continue;
-			}
-
-			// Loop through subscriptions and send out emails, checking for timeout
-			$jNow = new JDate();
-			$mNow = $jNow->toSql();
+			$this->out("No expiring subscriptions were found.");
+		}
+		else
+		{
+			$this->out("$count expired subscription(s) were processed:");
 
 			/** @var Subscriptions $sub */
-			foreach ($realSubs as $sub)
+			foreach ($subs as $sub)
 			{
-				// Is it the first or the second contact?
-				if ($sub->enabled && ($sub->contact_flag == 0))
-				{
-					// First contact
-					$data = array(
-						'contact_flag'  => 1,
-						'first_contact' => $mNow
-					);
-					$result = $this->sendEmail($sub, 'first');
-				}
-				elseif ($sub->enabled && ($sub->contact_flag == 1))
-				{
-					// Second and final contact
-					$data = array(
-						'contact_flag'   => 2,
-						'second_contact' => $mNow
-					);
-					$result = $this->sendEmail($sub, 'second');
-				}
-				elseif (!$sub->enabled)
-				{
-					$data = array(
-						'contact_flag'  => 3,
-						'after_contact' => $mNow
-					);
-					$result = $this->sendEmail($sub, 'after');
-				}
-				else
-				{
-					continue;
-				}
-
-				if ($result)
-				{
-					$this->out("\t\t#{$sub->akeebasubs_subscription_id} SENT");
-
-					$table = $subsModel->getClone();
-					$table->find($sub->akeebasubs_subscription_id);
-					$table->setState('_dontNotify', true);
-					$table->save($data);
-				}
-				else
-				{
-					$this->out("\t\t#{$sub->akeebasubs_subscription_id} FAILED");
-				}
+				$this->out("\t#" . $sub->akeebasubs_subscription_id . ' – ' . $sub->level->title . ' – ' . $sub->juser->name);
 			}
 		}
-	}
 
-	/**
-	 * Sends a notification email to the user
-	 *
-	 * @param   Subscriptions  $row           The subscription row
-	 * @param   bool           $firstContact  Is this the first time we contact the user?
-	 *
-	 * @return  bool
-	 */
-	private function sendEmail($row, $firstContact)
-	{
-		// Get the user object
-		$user = JFactory::getUser($row->user_id);
-
-		$type = $firstContact ? 'first' : 'second';
-
-		// Get a preloaded mailer
-		$key	 = 'plg_system_asexpirationnotify_' . $type;
-		$mailer	 = Email::getPreloadedMailer($row, $key);
-
-		if ($mailer === false)
-		{
-			return false;
-		}
-
-		$mailer->addRecipient($user->email);
-
-		$result = $mailer->Send();
-
-		if (($result instanceof Exception) || ($result === false))
-		{
-			return false;
-		}
-
-		return true;
+		$this->out("");
 	}
 
 	function memUsage()
@@ -568,4 +375,4 @@ class AkeebaSubscriptionsExpirationNotifyApp extends JApplicationCli
 	}
 
 }
-JApplicationCli::getInstance('AkeebaSubscriptionsExpirationNotifyApp')->execute();
+JApplicationCli::getInstance('AkeebaSubscriptionsExpirationControlApp')->execute();

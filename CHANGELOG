@@ -2,6 +2,7 @@
 Akeeba Subscriptions 5.0.5
 ================================================================================
 + AcyMailing integration
++ Scheduling switch on the Expiration Notify and Expiration Control plugins. You are recommended to use proper CRON jobs instead of plugin scheduling on busy sites.
 # [HIGH] Invoices view not showing when you have too many invoices
 
 Akeeba Subscriptions 5.0.4

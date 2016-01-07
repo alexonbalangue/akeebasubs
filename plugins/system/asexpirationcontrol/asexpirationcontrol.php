@@ -157,13 +157,27 @@ class plgSystemAsexpirationcontrol extends JPlugin
 	 */
 	private function doIHaveToRun()
 	{
+		// Get the component parameters
 		$params      = $this->getComponentParameters();
+
+		// Is scheduling enabled?
+		$scheduling  = $params->get('scheduling', 1);
+
+		if (!$scheduling)
+		{
+			return false;
+		}
+
+		// Find the next execution time (midnight GMT of the next day after the last time we ran the scheduling)
 		$lastRunUnix = $params->get('plg_akeebasubs_asexpirationcontrol_timestamp', 0);
 		$dateInfo    = getdate($lastRunUnix);
 		$nextRunUnix = mktime(0, 0, 0, $dateInfo['mon'], $dateInfo['mday'], $dateInfo['year']);
 		$nextRunUnix += 24 * 3600;
+
+		// Get the current time
 		$now = time();
 
+		// have we reached the next execution time?
 		return ($now >= $nextRunUnix);
 	}
 

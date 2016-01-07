@@ -13,6 +13,7 @@
     <fileset>
         <files target="cli">
             <file>akeebasubs-expiration-notify.php</file>
+            <file>akeebasubs-expiration-control.php</file>
             <file>akeebasubs-update.php</file>
         </files>
     </fileset>
