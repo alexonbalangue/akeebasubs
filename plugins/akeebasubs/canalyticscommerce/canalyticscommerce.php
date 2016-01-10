@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        akeebasubs
- * @copyright      Copyright (c)2010-2013 Daniel Dimitrov / compojoom.com
+ * @copyright      Copyright (c)2010-2013 Daniel Dimitrov / compojoom.com, 2014-2016 Nicholas K. Dionysopoulos
  * @license        GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
