@@ -55,7 +55,7 @@
 		<field name="user_id" name_from="subscription.user_id" type="User"
 			avatar_size="48"
 			show_link="false"
-			link_url="index.php?option=com_akeebasubs&amp;view=User&amp;task=edit&amp;user_id=[ITEM:USER_ID]"
+			link_url="index.php?option=com_akeebasubs&amp;view=User&amp;task=edit&amp;user_id=[USER:ID]"
 		/>
 		
 		<field name="extension" type="GenericList"
