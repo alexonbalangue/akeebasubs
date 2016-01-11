@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaSubs
- * @copyright Copyright (c)2010-2015 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2016 Nicholas K. Dionysopoulos
  * @license   GNU General Public License version 3, or later
  */
 
@@ -155,7 +155,7 @@ class TaxConfig extends Model
 					continue;
 				}
 
-				// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
+				// New VAT MOSS rules (post-2016): Each country gets its own VAT rate
 				$data['taxrate'] = EUVATInfo::getEUVATRate($country);
 
 				$data['vies'] = 0;
@@ -181,7 +181,7 @@ class TaxConfig extends Model
 			// B. All EU countries, with or without VIES registration, taxrate%
 			foreach ($euCountries as $country)
 			{
-				// New VAT MOSS rules (post-2015): Each country gets its own VAT rate
+				// New VAT MOSS rules (post-2016): Each country gets its own VAT rate
 				$data['taxrate'] = EUVATInfo::getEUVATRate($country);
 
 				$data['country'] = $country;
