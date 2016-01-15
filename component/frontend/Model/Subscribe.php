@@ -108,11 +108,16 @@ class Subscribe extends Model
 	/**
 	 * Performs a validation
 	 */
-	public function getValidation()
+	public function getValidation($force = false)
 	{
 		$response = new \stdClass();
 
-		$state = $this->getStateVariables();
+		$state = $this->getStateVariables($force);
+
+		if ($force)
+		{
+			$this->validatorFactory->setStateData($state);
+		}
 
 		switch ($state->opt)
 		{

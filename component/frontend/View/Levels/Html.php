@@ -244,7 +244,8 @@ class Html extends \FOF30\View\DataView\Html
 			/** @var \Akeeba\Subscriptions\Site\Model\Subscribe $subscribeModel */
 			$subscribeModel = $this->getContainer()->factory->model('Subscribe')->savestate(0);
 			$subscribeModel->setState('id', $level->akeebasubs_level_id);
-			$subValidation = $subscribeModel->getValidation();
+			$subscribeModel->setState('slug', $level->slug);
+			$subValidation = $subscribeModel->getValidation(true);
 			$discount = $subValidation->price->discount;
 			$levelPrice = $level->price - $discount;
 		}

@@ -47,6 +47,16 @@ class ValidatorFactory
 	}
 
 	/**
+	 * Set the state data after the factory is created
+	 *
+	 * @param StateData $state
+	 */
+	public function setStateData(StateData $state)
+	{
+		$this->state = $state;
+	}
+
+	/**
 	 * Gets a validator object by type. If you request the same object type again the same object will be returned.
 	 *
 	 * @param   string  $type  The validator type
