@@ -1222,11 +1222,12 @@ class Invoices extends DataModel
 	{
 		$date = new \JDate($this->invoice_date);
 		$timezone = \JFactory::getConfig()->get('offset', null);
+
 		if ($timezone && $timezone != 'UTC')
 		{
 			$date->setTimezone(new \DateTimeZone($timezone));
 		}
-		return JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/'. $date->format('Y-m', true, false) . '/';
-    	}
 
+		return JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/'. $date->format('Y-m', true, false) . '/';
+    }
 }

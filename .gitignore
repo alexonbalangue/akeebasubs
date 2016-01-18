@@ -19,6 +19,7 @@ vendor
 
 # Generated invoices
 /component/backend/invoices/*.pdf
+/component/backend/invoices/*/*.pdf
 
 # Version and manifest files
 /component/akeebasubs.xml

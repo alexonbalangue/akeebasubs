@@ -52,12 +52,29 @@ class Invoice extends DataController
 
 		// Make sure we have a PDF file or try to generate one
 		\JLoader::import('joomla.filesystem.file');
-		$path = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
-		$filename = $model->filename;
 
-		if (!\JFile::exists($path . $filename))
+        // In previous versions of Akeeba Subscriptions we're storing everything inside a single folder
+		$old_path  = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/invoices/';
+        // While in new ones every year/month has its own folder
+        $year_path = $model->getInvoicePath();
+
+		$filename   = $model->filename;
+        $saved_path = '';
+
+        foreach(array($old_path, $year_path) as $path)
+        {
+            if(\JFile::exists($path.$filename))
+            {
+                $saved_path = $path;
+                break;
+            }
+        }
+
+        // Our invoice wasn't in any directory? Well, let's create it
+		if (!$saved_path)
 		{
-			$filename = $model->createPDF();
+			$filename   = $model->createPDF();
+            $saved_path = $model->getInvoicePath();
 
 			if ($filename == false)
 			{
@@ -98,7 +115,7 @@ class Invoice extends DataController
 		// Get the PDF file's data
 		@clearstatcache();
 
-		$fileData = @file_get_contents($path . $filename);
+		$fileData = @file_get_contents($saved_path . $filename);
 
 		// Disable caching
 		header("Pragma: public");
