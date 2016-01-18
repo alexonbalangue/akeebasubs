@@ -43,12 +43,14 @@
         <field
             name="publish_up"
             type="Calendar"
+            filter="NO_CONVERSION"
             label="COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_UP"
         />
 
         <field
             name="publish_down"
             type="Calendar"
+            filter="NO_CONVERSION"
             label="COM_AKEEBASUBS_SUBSCRIPTION_PUBLISH_DOWN"
         />
 
@@ -124,6 +126,7 @@
         <field
             name="created_on"
             type="Calendar"
+            filter="NO_CONVERSION"
             label="COM_AKEEBASUBS_SUBSCRIPTION_CREATED_ON"
         />
 
