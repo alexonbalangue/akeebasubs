@@ -25,6 +25,7 @@
         <field name="company_url" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_COMPANYURL_LABEL" description="PLG_AKEEBASUBS_RESELLER_COMPANYURL_DESC"/>
         <field name="api_key" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_APIKEY_LABEL" />
         <field name="api_pwd" type="password" default="" label="PLG_AKEEBASUBS_RESELLER_APIPWD_LABEL" />
+        <field name="notify_emails" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_NOTIFYEMAILS_LABEL" description="PLG_AKEEBASUBS_RESELLER_NOTIFYEMAILS_DESC"/>
       </fieldset>
     </fields>
   </config>

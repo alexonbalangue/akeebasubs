@@ -15,6 +15,7 @@ class plgAkeebasubsReseller extends JPlugin
     private $company_url;
     private $api_key;
     private $api_pwd;
+    private $emails;
 
     /**
      * Public constructor. Overridden to load the language strings.
@@ -35,6 +36,12 @@ class plgAkeebasubsReseller extends JPlugin
         $this->company_url = $this->params->get('company_url', '');
         $this->api_key     = $this->params->get('api_key', '');
         $this->api_pwd     = $this->params->get('api_pwd', '');
+
+        $emails = $this->params->get('notify_emails', '');
+        $emails = explode(',', $emails);
+        $emails = array_map('trim', $emails);
+
+        $this->emails = $emails;
 	}
 
 	/**
@@ -116,35 +123,23 @@ class plgAkeebasubsReseller extends JPlugin
 	}
 
 	/**
-	 * Notifies the component of the supported email keys by this plugin.
-	 *
-	 * @return  array
-	 *
-	 * @since 3.0
-	 */
-	public function onAKGetEmailKeys()
-	{
-		$this->loadLanguage();
-
-		return array(
-			'section' => $this->_name,
-			'title'   => JText::_('PLG_AKEEBASUBS_RESELLER_EMAILSECTION'),
-			'keys'    => array(
-				'COUPONCODE'    => JText::_('PLG_AKEEBASUBS_RESELLER_EMAIL_COUPONCODE'),
-			)
-		);
-	}
-
-    /**
      * Contacts the company site and requests for a coupon code that will be stored inside this subscription
      *
      * @param   Subscriptions   $row
      */
     private function requestCode($row)
     {
+        // I have to pass the "dontNotify" flag, otherwise the event will get into an infinite loop
+        $new_data = array(
+            '_dontNotify' => true
+        );
+
         $url  = trim($this->company_url, '/');
         $url .= '/index.php?option=com_akeebasubs&view=APICoupons&task=create';
         $url .= '&key='.$this->api_key.'&pwd='.$this->api_pwd.'&format=json';
+
+        $isValid = true;
+        $error   = '';
 
         $adapter  = new FOFDownload();
         $raw_data = $adapter->getFromURL($url);
@@ -152,42 +147,49 @@ class plgAkeebasubsReseller extends JPlugin
         // Do I get a connection error?
         if(!$raw_data)
         {
-            // TODO notifiy the administrator of the site
-            return;
+            $isValid = false;
+            $error   = JText::_('PLG_AKEEBASUBS_RESELLER_ERR_CONNECTION');
         }
 
         $data = json_decode($raw_data, true);
 
         // Did I get an invalid response?
-        if(!$data)
+        if($isValid && !$data)
         {
-            // TODO notifiy the administrator of the site
-            return;
+            $isValid = false;
+            $error   = JText::_('PLG_AKEEBASUBS_RESELLER_ERR_INVALID_DATA');
         }
 
         // Did I get an error while creating a coupon?
-        if (isset($data['error']))
+        if ($isValid && isset($data['error']))
         {
-            // TODO notifiy the administrator of the site
-            return;
+            $isValid = false;
+            $error   = $data['error'];
         }
 
         // Anyway, the coupon code is missing?
-        if(!isset($data['coupon']))
+        if($isValid && !isset($data['coupon']))
         {
-            // TODO notifiy the administrator of the site
-            return;
+            $isValid = false;
+            $error   = JText::_('PLG_AKEEBASUBS_RESELLER_ERR_MISSING_COUPON');
         }
 
-        // Ah ok, if we're here we can safely continue
-        $params = $row->params;
-        $params['reseller_coupon'] = $data['coupon'];
+        // Should I notify the user?
+        if(!$isValid)
+        {
+            $this->notifyAdministrator($error);
 
-        // I have to pass the "dontNotify" flag, otherwise the event will get into an infinite loop
-        $new_data = array(
-            'params' => $params,
-            '_dontNotify' => true
-        );
+            $new_data['state']   = 'P';
+            $new_data['enabled'] = false;
+        }
+        else
+        {
+            // Ah ok, if we're here we can safely continue
+            $params = $row->params;
+            $params['reseller_coupon'] = $data['coupon'];
+
+            $new_data['params'] = $params;
+        }
 
         try
         {
@@ -196,7 +198,115 @@ class plgAkeebasubsReseller extends JPlugin
         catch(\Exception $e)
         {
             // Wait something bad happened while saving the subscription?
-
+            $this->notifyAdministrator(JText::_('PLG_AKEEBASUBS_RESELLER_ERR_SAVING_SUBSCRIPTION'));
         }
+    }
+
+    private function notifyAdministrator($error)
+    {
+        if(!$this->emails)
+        {
+            $this->emails = $this->getSuperAdministrators();
+        }
+
+        // TODO Send the email to the administrator
+    }
+
+    private function getSuperAdministrators()
+    {
+        static $ret = null;
+
+        $db     = JFactory::getDBO();
+
+        // Let's cache the result
+        if(!is_null($ret))
+        {
+            return $ret;
+        }
+
+        $ret = array();
+
+        try
+        {
+            $query = $db->getQuery(true)
+                        ->select($db->qn('rules'))
+                        ->from($db->qn('#__assets'))
+                        ->where($db->qn('parent_id') . ' = ' . $db->q(0));
+            $db->setQuery($query, 0, 1);
+            $rulesJSON	 = $db->loadResult();
+            $rules		 = json_decode($rulesJSON, true);
+
+            $rawGroups = $rules['core.admin'];
+            $groups = array();
+
+            if (empty($rawGroups))
+            {
+                return $ret;
+            }
+
+            foreach ($rawGroups as $g => $enabled)
+            {
+                if ($enabled)
+                {
+                    $groups[] = $db->q($g);
+                }
+            }
+
+            if (empty($groups))
+            {
+                return $ret;
+            }
+        }
+        catch (Exception $exc)
+        {
+            return $ret;
+        }
+
+        // Get the user IDs of users belonging to the SA groups
+        try
+        {
+            $query = $db->getQuery(true)
+                        ->select($db->qn('user_id'))
+                        ->from($db->qn('#__user_usergroup_map'))
+                        ->where($db->qn('group_id') . ' IN(' . implode(',', $groups) . ')' );
+            $db->setQuery($query);
+            $rawUserIDs = $db->loadColumn(0);
+
+            if (empty($rawUserIDs))
+            {
+                return $ret;
+            }
+
+            $userIDs = array();
+
+            foreach ($rawUserIDs as $id)
+            {
+                $userIDs[] = $db->q($id);
+            }
+        }
+        catch (Exception $exc)
+        {
+            return $ret;
+        }
+
+        // Get the user information for the Super Administrator users
+        try
+        {
+            $query = $db->getQuery(true)
+                ->select(array(
+                    $db->qn('email'),
+                ))->from($db->qn('#__users'))
+                ->where($db->qn('id') . ' IN(' . implode(',', $userIDs) . ')')
+                ->where($db->qn('sendEmail') . ' = ' . $db->q('1'));
+
+            $db->setQuery($query);
+            $ret = $db->loadColumn();
+        }
+        catch (Exception $exc)
+        {
+            return $ret;
+        }
+
+        return $ret;
     }
 }
