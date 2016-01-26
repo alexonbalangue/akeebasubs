@@ -40,7 +40,56 @@ class plgAkeebasubsReseller extends JPlugin
 	 */
 	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
-		//
+        $payState = $row->getFieldValue('state', 'N');
+
+        // No payment has been made yet; do not contact the company site
+        if ($payState == 'N')
+        {
+            return;
+        }
+
+        // Did the payment status just change to C or P? It's a new subscription
+        if (array_key_exists('state', (array)$info['modified']) && in_array($payState, array('P', 'C')))
+        {
+            if ($row->enabled)
+            {
+                if (is_object($info['previous']) && $info['previous']->getFieldValue('state') == 'P')
+                {
+                    // A pending subscription just got paid
+                    $this->requestCode($row);
+                }
+                else
+                {
+                    // A new subscription just got paid; send new subscription notification
+                    $this->requestCode($row);
+                }
+            }
+            elseif ($payState == 'C')
+            {
+                if ($row->contact_flag <= 2)
+                {
+                    // A new subscription which is for a renewal (will be active in a future date)
+                    $this->requestCode($row);
+                }
+            }
+        }
+        elseif ($info['status'] == 'modified')
+        {
+            // If the subscription got disabled and contact_flag is 3, do not contact the user.
+            // The flag is set to 3 only when a user has already renewed his subscription.
+            if (array_key_exists('enabled', (array)$info['modified']) && !$row->enabled && ($row->contact_flag == 3))
+            {
+                return;
+            }
+            elseif (array_key_exists('enabled', (array)$info['modified']) && $row->enabled)
+            {
+                // Subscriptions just enabled, suppose date triggered
+                if (($payState == 'C'))
+                {
+                    $this->requestCode($row);
+                }
+            }
+        }
 	}
 
 	/**
@@ -62,4 +111,14 @@ class plgAkeebasubsReseller extends JPlugin
 			)
 		);
 	}
+
+    /**
+     * Contacts the company site and requests for a coupon code that will be stored inside this subscription
+     *
+     * @param   Subscriptions   $row
+     */
+    private function requestCode($row)
+    {
+        // Perform a call to the company site
+    }
 }
