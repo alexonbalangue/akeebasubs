@@ -12,6 +12,10 @@ use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 
 class plgAkeebasubsReseller extends JPlugin
 {
+    private $company_url;
+    private $api_key;
+    private $api_pwd;
+
     /**
      * Public constructor. Overridden to load the language strings.
      *
@@ -27,6 +31,10 @@ class plgAkeebasubsReseller extends JPlugin
 		}
 
 		parent::__construct($subject, $config);
+
+        $this->company_url = $this->params->get('company_url', '');
+        $this->api_key     = $this->params->get('api_key', '');
+        $this->api_pwd     = $this->params->get('api_pwd', '');
 	}
 
 	/**
@@ -40,6 +48,21 @@ class plgAkeebasubsReseller extends JPlugin
 	 */
 	public function onAKSubscriptionChange(Subscriptions $row, array $info)
 	{
+        // If I already have a reseller coupon, there's no need to continue
+        $params = $row->params;
+
+        if(isset($params['reseller_coupon']))
+        {
+            return;
+        }
+
+        // Sanity checks
+        if(!$this->company_url || !$this->api_key || !$this->api_pwd)
+        {
+            // Required info missing, let's stop here
+            return;
+        }
+
         $payState = $row->getFieldValue('state', 'N');
 
         // No payment has been made yet; do not contact the company site
@@ -119,6 +142,61 @@ class plgAkeebasubsReseller extends JPlugin
      */
     private function requestCode($row)
     {
-        // Perform a call to the company site
+        $url  = trim($this->company_url, '/');
+        $url .= '/index.php?option=com_akeebasubs&view=APICoupons&task=create';
+        $url .= '&key='.$this->api_key.'&pwd='.$this->api_pwd.'&format=json';
+
+        $adapter  = new FOFDownload();
+        $raw_data = $adapter->getFromURL($url);
+
+        // Do I get a connection error?
+        if(!$raw_data)
+        {
+            // TODO notifiy the administrator of the site
+            return;
+        }
+
+        $data = json_decode($raw_data, true);
+
+        // Did I get an invalid response?
+        if(!$data)
+        {
+            // TODO notifiy the administrator of the site
+            return;
+        }
+
+        // Did I get an error while creating a coupon?
+        if (isset($data['error']))
+        {
+            // TODO notifiy the administrator of the site
+            return;
+        }
+
+        // Anyway, the coupon code is missing?
+        if(!isset($data['coupon']))
+        {
+            // TODO notifiy the administrator of the site
+            return;
+        }
+
+        // Ah ok, if we're here we can safely continue
+        $params = $row->params;
+        $params['reseller_coupon'] = $data['coupon'];
+
+        // I have to pass the "dontNotify" flag, otherwise the event will get into an infinite loop
+        $new_data = array(
+            'params' => $params,
+            '_dontNotify' => true
+        );
+
+        try
+        {
+            $row->save($new_data);
+        }
+        catch(\Exception $e)
+        {
+            // Wait something bad happened while saving the subscription?
+
+        }
     }
 }

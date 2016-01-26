@@ -19,4 +19,14 @@
 		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_reseller.sys.ini</language>
 	</languages>
 
+  <config>
+    <fields name="params" >
+      <fieldset name="basic">
+        <field name="company_url" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_COMPANYURL_LABEL" description="PLG_AKEEBASUBS_RESELLER_COMPANYURL_DESC"/>
+        <field name="api_key" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_APIKEY_LABEL" />
+        <field name="api_pwd" type="password" default="" label="PLG_AKEEBASUBS_RESELLER_APIPWD_LABEL" />
+      </fieldset>
+    </fields>
+  </config>
+
 </extension>
