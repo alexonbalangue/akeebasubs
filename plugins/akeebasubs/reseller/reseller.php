@@ -8,6 +8,7 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Subscriptions\Admin\Helper\Email;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 
 class plgAkeebasubsReseller extends JPlugin
@@ -31,6 +32,8 @@ class plgAkeebasubsReseller extends JPlugin
 			$config['params'] = new JRegistry($config['params']);
 		}
 
+        $this->autoloadLanguage = true;
+
 		parent::__construct($subject, $config);
 
         $this->company_url = $this->params->get('company_url', '');
@@ -43,6 +46,24 @@ class plgAkeebasubsReseller extends JPlugin
 
         $this->emails = $emails;
 	}
+
+    /**
+     * Notifies the component of the supported email keys by this plugin.
+     *
+     * @return  array
+     */
+    public function onAKGetEmailKeys()
+    {
+        $this->loadLanguage();
+
+        return array(
+            'section' => $this->_name,
+            'title'   => JText::_('PLG_AKEEBASUBS_RESELLER_EMAILSECTION'),
+            'keys'    => array(
+                'emailerr' => JText::_('PLG_AKEEBASUBS_RESELLER_EMAIL_ERR_TITLE'),
+            )
+        );
+    }
 
 	/**
 	 * Called whenever a subscription is modified. Namely, when its enabled status,
@@ -177,7 +198,7 @@ class plgAkeebasubsReseller extends JPlugin
         // Should I notify the user?
         if(!$isValid)
         {
-            $this->notifyAdministrator($error);
+            $this->notifyAdministrator($row, $error);
 
             $new_data['state']   = 'P';
             $new_data['enabled'] = false;
@@ -198,18 +219,30 @@ class plgAkeebasubsReseller extends JPlugin
         catch(\Exception $e)
         {
             // Wait something bad happened while saving the subscription?
-            $this->notifyAdministrator(JText::_('PLG_AKEEBASUBS_RESELLER_ERR_SAVING_SUBSCRIPTION'));
+            $this->notifyAdministrator($row, JText::_('PLG_AKEEBASUBS_RESELLER_ERR_SAVING_SUBSCRIPTION'));
         }
     }
 
-    private function notifyAdministrator($error)
+    private function notifyAdministrator($sub, $error)
     {
         if(!$this->emails)
         {
             $this->emails = $this->getSuperAdministrators();
         }
 
-        // TODO Send the email to the administrator
+        $extra = array(
+            '[RESELLER_ERROR]' => $error
+        );
+
+        $mailer = Email::getPreloadedMailer($sub, 'PLG_AKEEBASUBS_RESELLER_EMAIL', $extra);
+
+        if(!$mailer)
+        {
+            return;
+        }
+
+        $mailer->addRecipient($this->emails);
+        $mailer->Send();
     }
 
     private function getSuperAdministrators()
