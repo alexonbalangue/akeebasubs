@@ -1083,5 +1083,16 @@ ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `discount_amount_alt` FLOAT
 ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `affiliate_comission_alt` FLOAT NOT NULL;
 				]]></query>
 			</action>
+
+      <action table="__akeebasubs_emailtemplates" canfail="1">
+        <condition type="equals" operator="not" value="1"><![CDATA[
+SELECT COUNT(*) FROM `#__akeebasubs_emailtemplates` WHERE `key` = 'reseller_emailerr';
+            ]]></condition>
+        <query><![CDATA[
+INSERT INTO `#__akeebasubs_emailtemplates` (`akeebasubs_emailtemplate_id`, `key`, `subscription_level_id`, `subject`, `body`, `language`, `enabled`)
+VALUES
+	(NULL, 'reseller_emailerr', 0, 'Error fetching the coupon for the subscription [SUB:ID]', '<div style=\"background-color: #e0e0e0; padding: 10px 20px;\">\r\n<div style=\"background-color: #f9f9f9; border-radius: 10px; padding: 5px 10px;\">\r\n<p>Hello,</p>\r\n<p>an error occurred while trying to fetch the coupon for the subscription with ID [SUB:ID]. This is the error received:<span style=\"line-height: 1.3em;\"></span></p>\r\n<p>[RESELLER_ERROR]</p>\r\n<p>Here you can find all the details of the involved subscription:</p>\r\n<table style=\"width: 100%;\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\">\r\n<tbody>\r\n<tr>\r\n<td width=\"25%\"><strong>Username</strong></td>\r\n<td>[USERNAME]</td>\r\n</tr>\r\n<tr>\r\n<td><strong>Subscription type</strong></td>\r\n<td>[LEVEL]</td>\r\n</tr>\r\n<tr>\r\n<td><strong>Subscription status</strong></td>\r\n<td>[ENABLED]</td>\r\n</tr>\r\n<tr>\r\n<td><strong>Payment status</strong></td>\r\n<td>[PAYSTATE]</td>\r\n</tr>\r\n<tr>\r\n<td><strong>Valid From</strong></td>\r\n<td>[PUBLISH_UP] GMT</td>\r\n</tr>\r\n<tr>\r\n<td><strong>Valid To</strong></td>\r\n<td>[PUBLISH_DOWN] GMT</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p><span style=\"line-height: 1.3em;\">You are receiving this email since you are a Super Administrator of your site or your email address was listed to be contacted in case of error.</span></p>\r\n</div>\r\n<p style=\"font-size: x-small; color: #667;\">Do not reply to this email, it\'s sent from an unmonitored email address.</p>\r\n</div>\r\n<p style=\"text-align: right; font-size: 7pt; color: #ccc;\">Powered by <a style=\"color: #ccf; text-decoration: none;\" href=\"products/akeeba-subscriptions.html\">Akeeba Subscriptions</a></p>', '*', 1);
+]]></query>
+      </action>
 	</sql>
 </schema>
