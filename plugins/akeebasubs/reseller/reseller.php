@@ -178,6 +178,14 @@ class plgAkeebasubsReseller extends JPlugin
 
             $html  = $this->params->get('frontend_format', '<span>[COUPONCODE]</span>');
             $html  = str_replace('[COUPONCODE]', $coupon, $html);
+
+            $href = $this->params->get('coupon_link', '');
+
+            if($href)
+            {
+                $href  = str_replace('[COUPONCODE]', $coupon, $href);
+                $html .= '<a href="'.$href.'" target="_blank" class="btn btn-success">'.JText::_('PLG_AKEEBASUBS_RESELLER_REDEEM').'</a>';
+            }
         }
         else
         {

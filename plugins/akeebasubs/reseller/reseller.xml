@@ -30,6 +30,10 @@
         <field name="frontend_label" type="text" default="-" label="PLG_AKEEBASUBS_RESELLER_FRONTEND_LABEL_LABEL" description="PLG_AKEEBASUBS_RESELLER_FRONTEND_LABEL_DESC"/>
         <field name="frontend_format" type="text" filter="safehtml" default="&lt;span&gt;[COUPONCODE]&lt;/span&gt;" label="PLG_AKEEBASUBS_RESELLER_FRONTEND_FORMAT_LABEL"
                description="PLG_AKEEBASUBS_RESELLER_FRONTEND_FORMAT_DESC"/>
+        <field name="coupon_link" type="text" filter="safehtml"
+               default=""
+               label="PLG_AKEEBASUBS_RESELLER_COUPON_LINK_LABEL"
+               description="PLG_AKEEBASUBS_RESELLER_COUPON_LINK_DESC"/>
       </fieldset>
     </fields>
   </config>
