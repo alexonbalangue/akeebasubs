@@ -143,6 +143,65 @@ class plgAkeebasubsReseller extends JPlugin
         }
 	}
 
+    public function onSubscriptionFormRenderPerSubFields($cache)
+    {
+        $fields = array();
+
+        // I don't want to display such field while purchasing a subscription
+        if(isset($cache['firstrun']))
+        {
+            return $fields;
+        }
+
+        $coupon = '';
+
+        if(isset($cache['subcustom']))
+        {
+            $subparams = $cache['subcustom'];
+
+            if(isset($subparams['subcustom']) && isset($subparams['subcustom']['reseller_coupon']))
+            {
+                $coupon = $subparams['subcustom']['reseller_coupon'];
+            }
+        }
+
+        // User is displaying his own subscription, readonly field
+        if(isset($cache['useredit']) && $cache['useredit'])
+        {
+            $label = $this->params->get('frontend_label', '');
+
+            // A single dash means "hide the label"
+            if($label == '-')
+            {
+                $label = '';
+            }
+
+            $html  = $this->params->get('frontend_format', '<span>[COUPONCODE]</span>');
+            $html  = str_replace('[COUPONCODE]', $coupon, $html);
+        }
+        else
+        {
+            // Backend layout, we will display the input field with the correct label
+            $label = JText::_('PLG_AKEEBASUBS_RESELLER_CODE_LABEL');
+            $html  = '<input type="text" name="params[subcustom][reseller_coupon]" value="'.$coupon.'" />';
+        }
+
+        // Setup the field
+        $field = array(
+            'id'              => 'reseller_coupon',
+            'label'           => $label,
+            'elementHTML'     => $html,
+            'invalidLabel'    => '',
+            'isValid'         => true,
+            'validationClass' => ''
+        );
+
+        // Add the field to the return output
+        $fields[] = $field;
+
+        return $fields;
+    }
+
 	/**
      * Contacts the company site and requests for a coupon code that will be stored inside this subscription
      *
