@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.3.0" type="plugin" group="akeebasubs" method="upgrade">
+	<name>PLG_AKEEBASUBS_RESELLER_XML_TITLE</name>
+    <author>Nicholas K. Dionysopoulos</author>
+    <authorEmail>nicholas@dionysopoulos.me</authorEmail>
+    <authorUrl>http://www.akeebabackup.com</authorUrl>
+    <copyright>Copyright (c)2011-2016 Nicholas K. Dionysopoulos</copyright>
+    <license>GNU General Public License version 3, or later</license>
+    <creationDate>January 2016</creationDate>
+    <version>5.0</version>
+	<description>PLG_AKEEBASUBS_RESELLER_DESCRIPTION</description>
+
+	<files>
+		<filename plugin="reseller">reseller.php</filename>
+	</files>
+
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_reseller.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_akeebasubs_reseller.sys.ini</language>
+	</languages>
+
+  <config>
+    <fields name="params" >
+      <fieldset name="basic">
+        <field name="company_url" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_COMPANYURL_LABEL" description="PLG_AKEEBASUBS_RESELLER_COMPANYURL_DESC"/>
+        <field name="api_key" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_APIKEY_LABEL" />
+        <field name="api_pwd" type="password" default="" label="PLG_AKEEBASUBS_RESELLER_APIPWD_LABEL" />
+        <field name="notify_emails" type="text" default="" label="PLG_AKEEBASUBS_RESELLER_NOTIFYEMAILS_LABEL" description="PLG_AKEEBASUBS_RESELLER_NOTIFYEMAILS_DESC"/>
+
+        <field name="frontend_label" type="text" default="-" label="PLG_AKEEBASUBS_RESELLER_FRONTEND_LABEL_LABEL" description="PLG_AKEEBASUBS_RESELLER_FRONTEND_LABEL_DESC"/>
+        <field name="frontend_format" type="text" filter="safehtml" default="&lt;span&gt;[COUPONCODE]&lt;/span&gt;" label="PLG_AKEEBASUBS_RESELLER_FRONTEND_FORMAT_LABEL"
+               description="PLG_AKEEBASUBS_RESELLER_FRONTEND_FORMAT_DESC"/>
+        <field name="coupon_link" type="text" filter="safehtml"
+               default=""
+               label="PLG_AKEEBASUBS_RESELLER_COUPON_LINK_LABEL"
+               description="PLG_AKEEBASUBS_RESELLER_COUPON_LINK_DESC"/>
+      </fieldset>
+    </fields>
+  </config>
+
+</extension>
