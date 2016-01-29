@@ -7,8 +7,8 @@
 
 namespace Akeeba\Subscriptions\Admin\Form\Field;
 
+use Akeeba\Subscriptions\Admin\Model\APICoupons;
 use FOF30\Form\Field\Text;
-use JFactory;
 use JText;
 
 defined('_JEXEC') or die;
@@ -28,19 +28,30 @@ class APICouponLimits extends Text
 	 */
 	public function getRepeatable()
 	{
+        /** @var APICoupons $item */
+        $item   = $this->item;
 		$limits = array();
 
-		if ($this->item->subscriptions)
+		if ($item->subscriptions)
 		{
 			$limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_LEVELS');
 		}
 
-		if ($this->item->creation_limit)
+		if ($item->creation_limit)
 		{
 			$limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_HITS');
 		}
 
-		$strLimits = implode(', ', $limits);
+        if ($item->value_limit)
+        {
+            $limits[] = JText::_('COM_AKEEBASUBS_COUPONS_LIMITS_VALUE');
+        }
+
+        $strLimits = implode(', ', $limits);
+
+        $usage = $item->getApiLimits($item->key, $item->password);
+
+        $strLimits .= '<br/><em>'.JText::_('COM_AKEEBASUBS_COUPONS_USAGE').': '.$usage['current'].'/'.$usage['limit'].'</em>';
 
 		return $strLimits;
 	}

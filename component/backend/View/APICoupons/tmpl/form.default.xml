@@ -58,7 +58,7 @@
 
 		<field name="password" type="Text" />
 
-        <field name="limits" type="APICouponLimits" />
+    <field name="limits" type="APICouponLimits" />
 
 		<field name="enabled" type="Published"/>
 	</fieldset>
