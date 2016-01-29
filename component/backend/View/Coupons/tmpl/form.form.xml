@@ -58,6 +58,17 @@
             />
 
         <field
+            name="akeebasubs_apicoupon_id"
+            type="Model"
+            model="APICoupons"
+            key_field="akeebasubs_apicoupon_id"
+            value_field="title"
+            label="COM_AKEEBASUBS_COUPON_FIELD_API"
+            none="COM_AKEEBASUBS_COMMON_SELECT"
+            required="false"
+          />
+
+        <field
             name="hits"
             type="Text"
             label="COM_AKEEBASUBS_COMMON_HITS"
