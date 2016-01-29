@@ -80,7 +80,7 @@ use JText;
  */
 class Coupons extends DataModel
 {
-	use Mixin\Assertions, Mixin\DateManipulation, Mixin\ImplodedArrays, Mixin\ImplodedLevels;
+	use Mixin\JsonData, Mixin\Assertions, Mixin\DateManipulation, Mixin\ImplodedArrays, Mixin\ImplodedLevels;
 
 	public function __construct(Container $container, array $config = array())
 	{
@@ -226,6 +226,30 @@ class Coupons extends DataModel
 	{
 		return $this->setAttributeForImplodedLevels($value);
 	}
+
+    /**
+     * Decode the JSON-encoded params field into an associative array when loading the record
+     *
+     * @param   string  $value  JSON data
+     *
+     * @return  array  The decoded array
+     */
+    protected function getParamsAttribute($value)
+    {
+        return $this->getAttributeForJson($value);
+    }
+
+    /**
+     * Encode the params array field into a JSON-encoded string when saving the record
+     *
+     * @param   array  $value  The array
+     *
+     * @return  string  The JSON-encoded data
+     */
+    protected function setParamsAttribute($value)
+    {
+        return $this->setAttributeForJson($value);
+    }
 
 	/**
 	 * Post-process the loaded items list. Used to implement automatic expiration of coupons.

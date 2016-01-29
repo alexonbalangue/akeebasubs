@@ -19,11 +19,17 @@ class Json extends \FOF30\View\DataView\Json
 		$model = $this->getModel();
 
 		// Get the key and password
-		$key = $this->input->getCmd('key', '');
-		$pwd = $this->input->getCmd('pwd', '');
+		$key   = $this->input->getCmd('key', '');
+		$pwd   = $this->input->getCmd('pwd', '');
+        $notes = $this->input->getBase64('notes', '');
+
+        if($notes)
+        {
+            $notes = base64_decode($notes);
+        }
 
 		// Create the coupon and set the response into $this->item
-		$this->item = $model->createCoupon($key, $pwd);
+		$this->item = $model->createCoupon($key, $pwd, $notes);
 		$this->alreadyLoaded = true;
 		$this->useHypermedia = false;
 

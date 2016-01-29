@@ -109,13 +109,14 @@ class APICoupons extends DataModel
 	/**
 	 * Generate a coupon via an API method
 	 *
-	 * @param   string $APIKey      API key for the partner
-	 * @param   string $APIPassword API password for the partner
+	 * @param   string  $APIKey      API key for the partner
+	 * @param   string  $APIPassword API password for the partner
+     * @param   string  $notes       Additional notes for this coupon
 	 *
 	 * @return  array  Only contains a single key, "coupon" with the generated coupon code or "error" with the error
 	 *                 message if the operation failed.
 	 */
-	public function createCoupon($APIKey, $APIPassword)
+	public function createCoupon($APIKey, $APIPassword, $notes = '')
 	{
 		// Do I have a key/pwd pair?
 		if (!$APIKey || !$APIPassword)
@@ -158,6 +159,7 @@ class APICoupons extends DataModel
 		$data['title']                   = 'API coupon for: ' . $item->title;
 		$data['coupon']                  = strtoupper(\JUserHelper::genRandomPassword(10));
 		$data['subscriptions']           = $item->subscriptions;
+        $data['params']['notes']         = $notes;
 
 		// By default I want the coupon to be single-use
 		$data['hitslimit'] = 1;
