@@ -79,7 +79,7 @@ class plgAkeebasubsReseller extends JPlugin
         // If I already have a reseller coupon, there's no need to continue
         $params = $row->params;
 
-        if(isset($params['subcustom']['reseller_coupon']))
+        if(isset($params['subcustom']['reseller_coupon']) && $params['subcustom']['reseller_coupon'])
         {
             return;
         }
