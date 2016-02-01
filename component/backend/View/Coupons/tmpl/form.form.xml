@@ -76,6 +76,15 @@
             required="false"
             />
 
+        <field
+            name="notes"
+            type="CouponNotes"
+            label="COM_AKEEBASUBS_COMMON_NOTES"
+            class="input-xlarge"
+            rows="10"
+            required="false"
+          />
+
     </fieldset>
 
     <fieldset

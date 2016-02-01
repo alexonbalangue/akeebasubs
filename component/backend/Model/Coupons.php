@@ -112,6 +112,19 @@ class Coupons extends DataModel
 		}
 	}
 
+    public function onBeforeSave(&$data)
+    {
+        $params = $this->params;
+
+        if(isset($data['notes']))
+        {
+            $params['notes'] = $data['notes'];
+            unset($data['notes']);
+        }
+
+        $this->params = $params;
+    }
+
 	/**
 	 * Check the data for validity.
 	 *
