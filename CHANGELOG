@@ -3,6 +3,8 @@ Akeeba Subscriptions 5.0.5
 ================================================================================
 + AcyMailing integration
 + Scheduling switch on the Expiration Notify and Expiration Control plugins. You are recommended to use proper CRON jobs instead of plugin scheduling on busy sites.
++ Track API coupon usage
++ Reseller plugin, allows a local Akeeba Subscriptions installation to create coupon codes for each new subscription using the Coupon API on a remote Akeeba Subscriptions installation.
 # [HIGH] Invoices view not showing when you have too many invoices
 # [HIGH] gh-251 Wrong price calculation in some cases, depending on the Subscribe model's initial state
 # [MEDIUM] Fixed download of invoices when they're stored in different directories
