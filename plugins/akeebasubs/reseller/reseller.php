@@ -222,9 +222,19 @@ class plgAkeebasubsReseller extends JPlugin
             '_dontNotify' => true
         );
 
+        // Let's pass some notes to the company site about this subscription
+        $notes = 'Reseller subscription ID: '.$row->akeebasubs_subscription_id."\n";
+
+        $juser  = $row->juser;
+        $notes .= 'User: '.$juser->name."\n";
+        $notes .= 'Email: '.$juser->email."\n";
+
+        $notes = base64_encode($notes);
+
         $url  = trim($this->company_url, '/');
         $url .= '/index.php?option=com_akeebasubs&view=APICoupons&task=create';
         $url .= '&key='.$this->api_key.'&pwd='.$this->api_pwd.'&format=json';
+        $url .= '&notes='.$notes;
 
         $isValid = true;
         $error   = '';
