@@ -319,11 +319,14 @@ class AkeebaSubscriptionsExpirationControlApp extends JApplicationCli
 		// Load a list of subscriptions which have to expire -- FOF does the rest magically!
 		/** @var Subscriptions $subsModel */
 		$this->out("Looking for subscriptions expiring after " . $jNow->format(JText::_('DATE_FORMAT_LC2')));
-		$subs      = $container->factory->model('Subscriptions')->tmpInstance()
-		                                ->enabled(1)
-		                                ->expires_to($jNow->toSql())
-										->with(['level', 'juser'])
-		                                ->get();
+
+		/** @var Subscriptions $subsModel */
+		$subsModel = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')->tmpInstance();
+		$subs = $subsModel
+			->enabled(1)
+			->expires_to($jNow->toSql())
+			->get();
+
 		$count = count($subs);
 
 		$this->out("");
