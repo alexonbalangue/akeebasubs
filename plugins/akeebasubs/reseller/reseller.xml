@@ -11,6 +11,7 @@
 	<description>PLG_AKEEBASUBS_RESELLER_DESCRIPTION</description>
 
 	<files>
+    <folder>tmpl</folder>
 		<filename plugin="reseller">reseller.php</filename>
 	</files>
 

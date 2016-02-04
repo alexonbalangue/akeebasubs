@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 use Akeeba\Subscriptions\Admin\Helper\Email;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 
-class plgAkeebasubsReseller extends JPlugin
+class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\AkeebasubsBase
 {
     private $company_url;
     private $api_key;
@@ -33,6 +33,9 @@ class plgAkeebasubsReseller extends JPlugin
 		}
 
         $this->autoloadLanguage = true;
+
+        $config['templatePath'] = dirname(__FILE__);
+        $config['name']         = 'reseller';
 
 		parent::__construct($subject, $config);
 
