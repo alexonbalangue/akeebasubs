@@ -171,6 +171,11 @@ class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\A
             return $fields;
         }
 
+        if(!isset($cache['subscriptionlevel']))
+        {
+            return $fields;
+        }
+
         $coupon = '';
 
         if(isset($cache['subcustom']))
@@ -183,10 +188,16 @@ class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\A
             }
         }
 
+        // Let's fetch the params from the subscription level
+        /** @var \Akeeba\Subscriptions\Admin\Model\Levels $level */
+        $level = $this->container->factory->model('Levels')->tmpInstance();
+        $level->find($cache['subscriptionlevel']);
+        $params = $level->params;
+
         // User is displaying his own subscription, readonly field
         if(isset($cache['useredit']) && $cache['useredit'])
         {
-            $label = $this->params->get('frontend_label', '');
+            $label = isset($params['reseller_frontend_label'])? $params['reseller_frontend_label'] : '';
 
             // A single dash means "hide the label"
             if($label == '-')
@@ -194,10 +205,10 @@ class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\A
                 $label = '';
             }
 
-            $html  = $this->params->get('frontend_format', '<span>[COUPONCODE]</span>');
+            $html  = isset($params['reseller_frontend_format'])? $params['reseller_frontend_format'] : '<span>[COUPONCODE]</span>';
             $html  = str_replace('[COUPONCODE]', $coupon, $html);
 
-            $href = $this->params->get('coupon_link', '');
+            $href = isset($params['reseller_coupon_link'])? $params['reseller_coupon_link'] : '';
 
             if($href)
             {
