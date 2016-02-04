@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 use Akeeba\Subscriptions\Admin\Helper\Email;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 
-class plgAkeebasubsReseller extends JPlugin
+class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\AkeebasubsBase
 {
     private $company_url;
     private $api_key;
@@ -34,17 +34,10 @@ class plgAkeebasubsReseller extends JPlugin
 
         $this->autoloadLanguage = true;
 
+        $config['templatePath'] = dirname(__FILE__);
+        $config['name']         = 'reseller';
+
 		parent::__construct($subject, $config);
-
-        $this->company_url = $this->params->get('company_url', '');
-        $this->api_key     = $this->params->get('api_key', '');
-        $this->api_pwd     = $this->params->get('api_pwd', '');
-
-        $emails = $this->params->get('notify_emails', '');
-        $emails = explode(',', $emails);
-        $emails = array_map('trim', $emails);
-
-        $this->emails = $emails;
 	}
 
     /**
@@ -83,6 +76,31 @@ class plgAkeebasubsReseller extends JPlugin
         {
             return;
         }
+
+        // Let's get the params from the current level
+        $level = $row->level;
+        $level_params = $level->params;
+
+        if(isset($level_params['reseller_company_url']))
+        {
+            $this->company_url = $level_params['reseller_company_url'];
+        }
+
+        if(isset($level_params['reseller_api_key']))
+        {
+            $this->api_key = $level_params['reseller_api_key'];
+        }
+
+        if(isset($level_params['reseller_api_pwd']))
+        {
+            $this->api_pwd = $level_params['reseller_api_pwd'];
+        }
+
+        $emails = isset($level_params['reseller_notify_emails']) ? $level_params['reseller_notify_emails'] : '';
+        $emails = explode(',', $emails);
+        $emails = array_map('trim', $emails);
+
+        $this->emails = $emails;
 
         // Sanity checks
         if(!$this->company_url || !$this->api_key || !$this->api_pwd)
@@ -153,6 +171,11 @@ class plgAkeebasubsReseller extends JPlugin
             return $fields;
         }
 
+        if(!isset($cache['subscriptionlevel']))
+        {
+            return $fields;
+        }
+
         $coupon = '';
 
         if(isset($cache['subcustom']))
@@ -165,10 +188,16 @@ class plgAkeebasubsReseller extends JPlugin
             }
         }
 
+        // Let's fetch the params from the subscription level
+        /** @var \Akeeba\Subscriptions\Admin\Model\Levels $level */
+        $level = $this->container->factory->model('Levels')->tmpInstance();
+        $level->find($cache['subscriptionlevel']);
+        $params = $level->params;
+
         // User is displaying his own subscription, readonly field
         if(isset($cache['useredit']) && $cache['useredit'])
         {
-            $label = $this->params->get('frontend_label', '');
+            $label = isset($params['reseller_frontend_label'])? $params['reseller_frontend_label'] : '';
 
             // A single dash means "hide the label"
             if($label == '-')
@@ -176,10 +205,10 @@ class plgAkeebasubsReseller extends JPlugin
                 $label = '';
             }
 
-            $html  = $this->params->get('frontend_format', '<span>[COUPONCODE]</span>');
+            $html  = isset($params['reseller_frontend_format'])? $params['reseller_frontend_format'] : '<span>[COUPONCODE]</span>';
             $html  = str_replace('[COUPONCODE]', $coupon, $html);
 
-            $href = $this->params->get('coupon_link', '');
+            $href = isset($params['reseller_coupon_link'])? $params['reseller_coupon_link'] : '';
 
             if($href)
             {
