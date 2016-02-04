@@ -38,16 +38,6 @@ class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\A
         $config['name']         = 'reseller';
 
 		parent::__construct($subject, $config);
-
-        $this->company_url = $this->params->get('company_url', '');
-        $this->api_key     = $this->params->get('api_key', '');
-        $this->api_pwd     = $this->params->get('api_pwd', '');
-
-        $emails = $this->params->get('notify_emails', '');
-        $emails = explode(',', $emails);
-        $emails = array_map('trim', $emails);
-
-        $this->emails = $emails;
 	}
 
     /**
@@ -86,6 +76,31 @@ class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\A
         {
             return;
         }
+
+        // Let's get the params from the current level
+        $level = $row->level;
+        $level_params = $level->params;
+
+        if(isset($level_params['reseller_company_url']))
+        {
+            $this->company_url = $level_params['reseller_company_url'];
+        }
+
+        if(isset($level_params['reseller_api_key']))
+        {
+            $this->api_key = $level_params['reseller_api_key'];
+        }
+
+        if(isset($level_params['reseller_api_pwd']))
+        {
+            $this->api_pwd = $level_params['reseller_api_pwd'];
+        }
+
+        $emails = isset($level_params['reseller_notify_emails']) ? $level_params['reseller_notify_emails'] : '';
+        $emails = explode(',', $emails);
+        $emails = array_map('trim', $emails);
+
+        $this->emails = $emails;
 
         // Sanity checks
         if(!$this->company_url || !$this->api_key || !$this->api_pwd)

@@ -55,7 +55,7 @@ $params = $level->params;
                 <?php echo JText::_('PLG_AKEEBASUBS_RESELLER_FRONTEND_LABEL_LABEL'); ?>
             </label>
             <div class="controls">
-                <input type="text" name="params[reseller_frontend_label]" class="input-medium" id="params_reseller_frontend_label" value="<?php echo isset($params['reseller_frontend_label'])? $params['reseller_frontend_label'] : ''; ?>"/>
+                <input type="text" name="params[reseller_frontend_label]" class="input-xlarge" id="params_reseller_frontend_label" value="<?php echo isset($params['reseller_frontend_label'])? htmlentities($params['reseller_frontend_label']) : ''; ?>"/>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_RESELLER_FRONTEND_LABEL_DESC') ?>
 				</span>
@@ -66,7 +66,7 @@ $params = $level->params;
                 <?php echo JText::_('PLG_AKEEBASUBS_RESELLER_FRONTEND_FORMAT_LABEL'); ?>
             </label>
             <div class="controls">
-                <input type="text" name="params[reseller_frontend_format]" class="input-medium" id="params_reseller_frontend_format" value="<?php echo isset($params['reseller_frontend_format'])? $params['reseller_frontend_format'] : ''; ?>"/>
+                <input type="text" name="params[reseller_frontend_format]" class="input-xlarge" id="params_reseller_frontend_format" value="<?php echo isset($params['reseller_frontend_format'])? htmlentities($params['reseller_frontend_format']) : ''; ?>"/>
 				<span class="help-block">
 					<?php echo JText::_('PLG_AKEEBASUBS_RESELLER_FRONTEND_FORMAT_DESC') ?>
 				</span>
