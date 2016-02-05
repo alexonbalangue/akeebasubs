@@ -11,7 +11,6 @@ defined('_JEXEC') or die;
 {{-- Include external sections. Do note how you can include sub-templates in one order and compile them in a completely
 different order using @yield later on! --}}
 @include('admin:com_akeebasubs/ControlPanel/phpversion')
-@include('admin:com_akeebasubs/ControlPanel/2copromo')
 @include('admin:com_akeebasubs/ControlPanel/graphs')
 @include('admin:com_akeebasubs/ControlPanel/stats')
 {{-- Note: Passing $this->wizardstep is not necessary, I just use it to demonstrate how you can pass forced parameters
@@ -31,8 +30,6 @@ render it. --}}
 @if ($this->wizardstep < 6)
     @yield('wizard', '')
 @endif
-
-@yield('2copromo', '')
 
 @yield('geoip', '')
 
