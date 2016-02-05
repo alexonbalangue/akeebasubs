@@ -11,8 +11,6 @@ use Akeeba\Subscriptions\Admin\Model\PaymentMethods;
 use Akeeba\Subscriptions\Admin\Model\States;
 use FOF30\Container\Container;
 use FOF30\Model\DataModel;
-use FOF30\Utils\String;
-use JFactory;
 use JFolder;
 use JHtml;
 use JLoader;
