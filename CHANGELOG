@@ -1,6 +1,7 @@
 <?php die(); ?>
 Akeeba Subscriptions 5.0.5
 ================================================================================
+! Joomla! 3.5 breaks CLI scripts, workaround applied
 + AcyMailing integration
 + Scheduling switch on the Expiration Notify and Expiration Control plugins. You are recommended to use proper CRON jobs instead of plugin scheduling on busy sites.
 + Track API coupon usage
