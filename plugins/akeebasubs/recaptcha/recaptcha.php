@@ -16,8 +16,28 @@ defined('_JEXEC') or die();
  */
 class plgAkeebasubsRecaptcha extends JPlugin
 {
+	protected $enabled = false;
+
+	public function __construct($subject, array $config)
+	{
+		parent::__construct($subject, $config);
+
+		$app = JFactory::getApplication();
+
+		if (method_exists($app, 'isAdmin'))
+		{
+			$this->enabled = !$app->isAdmin();
+		}
+
+	}
+
 	public function onSubscriptionFormRender($userparams, $cache)
 	{
+		if (!$this->enabled)
+		{
+			return array();
+		}
+
 		$this->loadLanguage();
 
 		$showCAPTCHA = true;
@@ -101,6 +121,11 @@ class plgAkeebasubsRecaptcha extends JPlugin
 			)
 		);
 
+		if (!$this->enabled)
+		{
+			return $ret;
+		}
+
 		// CAPTCHA plugin validation must only run when submitting the form. Otherwise many 3PD CAPTCHA plugins will
 		// reset their session and never validate the CAPTCHA. Whoops!
 		$view = JFactory::getApplication()->input->getCmd('view');
@@ -144,6 +169,11 @@ class plgAkeebasubsRecaptcha extends JPlugin
 
 	public function onAKSubscriptionChange($row, $info)
 	{
+		if (!$this->enabled)
+		{
+			return;
+		}
+
 		// Reset the CAPTCHA result once a successful subscription is made
 		$session = JFactory::getSession();
 		$session->set('captcha.valid', null, 'com_akeebasubs');
