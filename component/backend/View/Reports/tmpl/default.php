@@ -37,4 +37,10 @@ defined('_JEXEC') or die;
 		<br/>
 		<span><?php echo JText::_('COM_AKEEBASUBS_REPORTS_VATMOSS');?></span>
 	</a>
+
+	<a href="index.php?option=com_akeebasubs&view=Reports&task=thirdcountry" class="btn cpanel-icon">
+		<span class="icon icon-globe"></span>
+		<br/>
+		<span><?php echo JText::_('COM_AKEEBASUBS_REPORTS_THIRDCOUNTRY_TITLE');?></span>
+	</a>
 </div>

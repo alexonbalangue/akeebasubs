@@ -56,12 +56,14 @@ class Reports extends Model
 			->where('MONTH(' . $db->qn('akinv') . '.' . $db->qn('invoice_date') . ') =' . $db->q($params['month']))
 			->where($db->qn('akinv') . '.' . $db->qn('extension') . ' = ' . $db->q($params['extension']));
 
+		// VIES report: when the viesregistered flag is set
 		if ($params['vies'])
 		{
 			$this->layout = 'invoices_vies';
-			$query->where($db->qn('akuser') . '.' . $db->qn('viesregistered') . ' = ' . $db->q(1));
+			$query->where($db->qn('akuser') . '.' . $db->qn('viesregistered') . ' >= ' . $db->q(1));
 		}
 
+		// VAT MOSS: not VIES registered, non-zero tax, sort by country
 		if ($params['vatmoss'])
 		{
 			$shopCountry = $this->container->params->get('invoice_country');
@@ -70,6 +72,15 @@ class Reports extends Model
 			$query->where($db->qn('akuser') . '.' . $db->qn('viesregistered') . ' = ' . $db->q(0));
 			$query->where($db->qn('aksub') . '.' . $db->qn('tax_amount') . ' > ' . $db->q(0.01));
 			$query->where($db->qn('akuser') . '.' . $db->qn('country') . ' <> ' . $db->q($shopCountry));
+			$query->order($db->qn('akuser') . '.' . $db->qn('country') . ' ASC');
+		}
+
+		// Third countries: not VIES registered, zero tax, sort by country
+		if ($params['thirdcountry'])
+		{
+			$this->layout = 'invoices_thirdcountry';
+			$query->where($db->qn('akuser') . '.' . $db->qn('viesregistered') . ' = ' . $db->q(0));
+			$query->where($db->qn('aksub') . '.' . $db->qn('tax_amount') . ' < ' . $db->q(0.01));
 			$query->order($db->qn('akuser') . '.' . $db->qn('country') . ' ASC');
 		}
 
@@ -114,6 +125,7 @@ class Reports extends Model
 
 		$vies = false;
 		$vatmoss = false;
+		$thirdcountry = false;
 
 		switch ($this->getState('task', 'invoices'))
 		{
@@ -124,6 +136,10 @@ class Reports extends Model
 			case 'vatmoss':
 				$vatmoss = true;
 				break;
+
+			case 'thirdcountry':
+				$thirdcountry = true;
+				break;
 		}
 
 		$template = $this->getState('template_id', array());
@@ -131,12 +147,13 @@ class Reports extends Model
 		$invoiceExtension = $this->input->getCmd('extension', 'akeebasubs');
 
 		return array(
-			'month'       => $month,
-			'year'        => $year,
-			'vies'        => $vies,
-			'vatmoss'     => $vatmoss,
-			'extension'   => $invoiceExtension,
-			'template_id' => $template
+			'month'        => $month,
+			'year'         => $year,
+			'vies'         => $vies,
+			'vatmoss'      => $vatmoss,
+			'thirdcountry' => $thirdcountry,
+			'extension'    => $invoiceExtension,
+			'template_id'  => $template
 		);
 	}
 

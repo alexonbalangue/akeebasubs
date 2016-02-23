@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 5.0.6
+================================================================================
++ Non-EU country invoices report
+
 Akeeba Subscriptions 5.0.5
 ================================================================================
 ! Joomla! 3.5 breaks CLI scripts, workaround applied

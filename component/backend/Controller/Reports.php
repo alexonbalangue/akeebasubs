@@ -25,8 +25,9 @@ class Reports extends Controller
 		$this->registerTask('overview', 'display');
 		$this->registerTask('vies', 'invoices');
 		$this->registerTask('vatmoss', 'invoices');
+		$this->registerTask('thirdcountry', 'invoices');
 
-		$this->setPredefinedTaskList(['overview', 'invoices', 'vies', 'vatmoss', 'renewals']);
+		$this->setPredefinedTaskList(['overview', 'invoices', 'vies', 'vatmoss', 'thirdcountry', 'renewals']);
 		$this->cacheableTasks = array();
 	}
 
