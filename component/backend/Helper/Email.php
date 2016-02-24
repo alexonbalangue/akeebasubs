@@ -280,6 +280,43 @@ abstract class Email
 			$loadLanguage = '';
 		}
 
+		// Because SpamAssassin blacklists our domain when it falsely thinks an email is spam.
+		$replaceThat = array(
+			'<p style=\"text-align: right; font-size: 7pt; color: #ccc;\">Powered by <a href=\"https://www.akeebabackup.com/products/akeeba-subscriptions.html\" style=\"color: #ccf; text-decoration: none;\">Akeeba Subscriptions</a></p>',
+			'<p style=\"text-align: right; font-size: 7pt; color: #ccc;\">Powered by <a style=\"color: #ccf; text-decoration: none;\" href=\"products/akeeba-subscriptions.html\">Akeeba Subscriptions</a></p>',
+			'https://www.akeebabackup.com',
+			'http://www.akeebabackup.com',
+			'http://akeebabackup.com',
+			'https://akeebabackup.com',
+			'www.akeebabackup.com',
+			'akeebabackup.com',
+		);
+
+		foreach ($replaceThat as $find)
+		{
+			$subject = str_ireplace($find, '', $subject);
+			$templateText = str_ireplace($find, '', $templateText);
+		}
+
+		// Because SpamAssassin demands there is a body and surrounding html tag even though it's not necessary.
+		if (strpos($templateText, '<body') == false)
+		{
+			$templateText = '<body>' . $templateText . '</body>';
+		}
+
+		if (strpos($templateText, '<html') == false)
+		{
+			$templateText = <<< HTML
+<html>
+<head>
+<title>{$subject}</title>
+</head>
+$templateText
+</html>
+HTML;
+
+		}
+
 		return array($isHTML, $subject, $templateText, $loadLanguage);
 	}
 

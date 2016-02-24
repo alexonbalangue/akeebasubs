@@ -2,6 +2,7 @@
 Akeeba Subscriptions 5.0.6
 ================================================================================
 + Non-EU country invoices report
+~ Make sure SpamAssassin doesn't mistakenly report emails as spam
 # [LOW] Error page after clicking on "Send test email" in the email template back-end view
 
 Akeeba Subscriptions 5.0.5
