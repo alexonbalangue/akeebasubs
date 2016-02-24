@@ -26,11 +26,11 @@ class EmailTemplate extends DataController
 		// No id? What??
 		if (!$id)
 		{
-			$this->setRedirect('index.php?option=com_akeebasubs&view=emailtemplates', JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_CHOOSE_TEMPLATE'), 'notice');
+			$this->setRedirect('index.php?option=com_akeebasubs&view=EmailTemplates', JText::_('COM_AKEEBASUBS_EMAILTEMPLATES_CHOOSE_TEMPLATE'), 'notice');
 			$this->redirect();
 		}
 
-		$url = 'index.php?option=com_akeebasubs&view=emailtemplate&id=' . $id;
+		$url = 'index.php?option=com_akeebasubs&view=EmailTemplates&task=edit&id=' . $id;
 
 		/** @var EmailTemplates $template */
 		$template = $this->getModel()->getClone()->savestate(false)->setIgnoreRequest(true);
