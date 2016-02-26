@@ -38,15 +38,14 @@ class Import extends Controller
 		}
 
 		// Import ok, but maybe I have warnings (ie skipped lines)
-
 		try
 		{
-			$result = $model->import($file['tmp_name'], $field, $enclosure);
+			$model->import($file['tmp_name'], $field, $enclosure);
 		}
 		catch (\RuntimeException $e)
 		{
 			//Uh oh... import failed, let's inform the user why it happened
-			$app->enqueueMessage(JText::sprintf('COM_AKEEBASUBS_IMPORT_FAIL', $model->getError()), 'error');
+			$app->enqueueMessage(JText::sprintf('COM_AKEEBASUBS_IMPORT_FAIL', $e->getMessage()), 'error');
 		}
 
 		$this->setRedirect('index.php?option=com_akeebasubs&view=Import');

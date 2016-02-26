@@ -48,6 +48,7 @@ class Import extends Model
 	{
 		$result     = 0;
 		$i          = 0;
+        $errors     = array();
 
 		if (!$file)
 		{
@@ -172,17 +173,22 @@ class Import extends Model
 
 			if (!$check)
 			{
-				throw new \RuntimeException(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
+				$errors[] = JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i);
+
+                continue;
 			}
 
 			if (!($userid = $this->importClient()))
 			{
-				throw new \RuntimeException(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
+                $errors[] = JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i);
+
+                continue;
 			}
 
 			if (!$this->importSubscription($userid))
 			{
-				throw new \RuntimeException(JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i));
+                $errors[] = JText::sprintf('COM_AKEEBASUBS_USERS_IMPORT_ERR_LINE', $i);
+
 				continue;
 			}
 
@@ -190,6 +196,12 @@ class Import extends Model
 		}
 
 		fclose($handle);
+
+        // Did I had any errors?
+        if($errors)
+        {
+            throw new \RuntimeException(implode("<br/>", $errors));
+        }
 
 		return $result;
 	}
