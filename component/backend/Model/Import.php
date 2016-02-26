@@ -481,7 +481,16 @@ class Import extends Model
 
 		foreach ($this->columnMap as $column => $position)
 		{
-			if (!$column) continue;
+			if (!$column)
+            {
+                continue;
+            }
+
+            // If the row is missing some columns simply skip such column
+            if(!isset($this->currentData[$position]))
+            {
+                continue;
+            }
 
 			$mapping[$column] = $this->currentData[$position];
 		}
