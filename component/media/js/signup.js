@@ -69,6 +69,7 @@ var akeebasubs_fieldprefs = {
 	'showtaxfield':      1
 };
 var akeebasubs_apply_validation = false;
+var akeebasubs_form_specifier = 'signupForm';
 
 function cacheSubmitAction(e)
 {
@@ -150,8 +151,8 @@ function validateForm(callback_function)
 				'email2':        $('#email2').val(),
 				'address1':      $('#address1').val(),
 				'address2':      $('#address2').val(),
-				'country':       $('#signupForm select[name$="country"]').val(),
-				'state':         $('#signupForm select[name$="state"]').val(),
+				'country':       $('#' + akeebasubs_form_specifier + ' select[name$="country"]').val(),
+				'state':         $('#' + akeebasubs_form_specifier + ' select[name$="state"]').val(),
 				'city':          $('#city').val(),
 				'zip':           $('#zip').val(),
 				'isbusiness':    $('#isbusiness').val(),
@@ -173,7 +174,7 @@ function validateForm(callback_function)
 				'name':          $('#name').val(),
 				'email':         $('#email').val(),
 				'email2':        $('#email2').val(),
-				'country':       $('#signupForm select[name$="country"]').val(),
+				'country':       $('#' + akeebasubs_form_specifier + ' select[name$="country"]').val(),
 				'coupon':        ($("#coupon").length > 0) ? $('#coupon').val() : '',
 				'paymentmethod': paymentMethod,
 				'custom':        {},
@@ -253,31 +254,34 @@ function validateForm(callback_function)
 			}
 		});
 
-		// Fetch list of
-		$.ajax({
-			type:     'POST',
-			url: akeebasubs_validate_url + '?option=com_akeebasubs&view=Validate&task=getpayment&format=json',
-			data:     data,
-			dataType: 'text',
-			success:  function (result)
-			{
-				var html = /###(\{.*?\})###/.exec(result);
+		// Fetch list of payment methods
+		if (akeebasubs_form_specifier == 'signupForm')
+		{
+			$.ajax({
+				type:     'POST',
+				url: akeebasubs_validate_url + '?option=com_akeebasubs&view=Validate&task=getpayment&format=json',
+				data:     data,
+				dataType: 'text',
+				success:  function (result)
+						  {
+							  var html = /###(\{.*?\})###/.exec(result);
 
-				if(html && html[1] !== 'undefined' && html[1].html !== 'undefined')
-				{
-					// Before building the new payment list, let's save the select method, so I can select it again
-					var cur_method = $('input[name="paymentmethod"]:checked').val();
-					$('#paymentlist-container').html(JSON.parse(html[1]).html);
-					$('input[name="paymentmethod"][value="'+cur_method+'"]').prop('checked', true);
-				}
+							  if(html && html[1] !== 'undefined' && html[1].html !== 'undefined')
+							  {
+								  // Before building the new payment list, let's save the select method, so I can select it again
+								  var cur_method = $('input[name="paymentmethod"]:checked').val();
+								  $('#paymentlist-container').html(JSON.parse(html[1]).html);
+								  $('input[name="paymentmethod"][value="'+cur_method+'"]').prop('checked', true);
+							  }
 
-				enableInterface();
-			},
-			error:    function ()
-			{
-				enableInterface();
-			}
-		});
+							  enableInterface();
+						  },
+				error:    function ()
+						  {
+							  enableInterface();
+						  }
+			});
+		}
 
 	})(akeeba.jQuery);
 }
@@ -489,8 +493,8 @@ function validateAddress()
 	(function ($)
 	{
 		var address = $('#address1').val();
-		var country = $('#signupForm select[name$="country"]').val();
-		var state = $('#signupForm select[name$="state"]').val();
+		var country = $('#' + akeebasubs_form_specifier + ' select[name$="country"]').val();
+		var state = $('#' + akeebasubs_form_specifier + ' select[name$="state"]').val();
 		var city = $('#city').val();
 		var zip = $('#zip').val();
 
@@ -688,7 +692,7 @@ function validateBusiness()
 		}
 
 		// Do I have to show VAT fields?
-		var country = $('#signupForm select[name$="country"]').val();
+		var country = $('#' + akeebasubs_form_specifier + ' select[name$="country"]').val();
 		$('#vatfields').css('display', 'none');
 
 		if (akeebasubs_noneuvat)
@@ -718,8 +722,8 @@ function validateBusiness()
 			}
 
 			var data = {
-				country:      $('#signupForm select[name$="country"]').val(),
-				state:        $('#signupForm select[name$="state"]').val(),
+				country:      $('#' + akeebasubs_form_specifier + ' select[name$="country"]').val(),
+				state:        $('#' + akeebasubs_form_specifier + ' select[name$="state"]').val(),
 				city:         $('#city').val(),
 				zip:          $('#zip').val(),
 				isbusiness:   $('#isbusiness').val(),
@@ -1161,6 +1165,11 @@ function addToSubValidationQueue(myfunction)
 {
 	$(document).ready(function ()
 	{
+		if (jQuery('#userinfoForm').length)
+		{
+			akeebasubs_form_specifier = 'userinfoForm';
+		}
+
 		$('#username').blur(validateForm);
 		if ($('#password'))
 		{
@@ -1172,21 +1181,23 @@ function addToSubValidationQueue(myfunction)
 		$('#email2').blur(validateEmail);
 		if (akeebasubs_personalinfo)
 		{
-			$('#signupForm select[name$="country"]').change(validateBusiness);
-			$('#signupForm select[name$="state"]').change(validateBusiness);
 			$('#address1').blur(validateAddress);
 			$('#city').blur(validateBusiness);
 			$('#zip').blur(validateBusiness);
 			$('#businessname').blur(validateBusiness);
-			$('#signupForm select[name$="isbusiness"]').change(onIsBusinessClick);
 			$('#vatnumber').blur(validateBusiness);
+
+			$('#' + akeebasubs_form_specifier + ' select[name$="country"]').change(validateBusiness);
+			$('#' + akeebasubs_form_specifier + ' select[name$="state"]').change(validateBusiness);
+			$('#' + akeebasubs_form_specifier + ' select[name$="isbusiness"]').change(onIsBusinessClick);
 		}
+
 		if ($('#coupon').length > 0)
 		{
 			$('#coupon').blur(validateBusiness);
 		}
 		// Attach onBlur events to custom fields
-		$('#signupForm *[name]').filter(function (index)
+		$('#' + akeebasubs_form_specifier + ' *[name]').filter(function (index)
 		{
 			if ($(this).is('input'))
 			{
@@ -1194,7 +1205,7 @@ function addToSubValidationQueue(myfunction)
 			}
 			return false;
 		}).blur(validateForm);
-		$('#signupForm *[name]').filter(function (index)
+		$('#' + akeebasubs_form_specifier + ' *[name]').filter(function (index)
 		{
 			if ($(this).is('input'))
 			{
@@ -1203,7 +1214,7 @@ function addToSubValidationQueue(myfunction)
 			return false;
 		}).blur(validateForm);
 		// Attach onChange events to custom checkboxes
-		$('#signupForm *[name]').filter(function (index)
+		$('#' + akeebasubs_form_specifier + ' *[name]').filter(function (index)
 		{
 			if ($(this).attr('type') == 'checkbox')
 			{
