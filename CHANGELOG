@@ -5,6 +5,7 @@ Akeeba Subscriptions 5.0.6
 ~ Make sure SpamAssassin doesn't mistakenly report emails as spam
 # [MEDIUM] Avoid fatal errors when the import fails
 # [MEDIUM] Javascript issues updating user information in the front-end UserInfo view
+# [MEDIUM] gh-259 Fuzzy slug matching can show you wrong subscription level under certain conditions
 # [LOW] Error page after clicking on "Send test email" in the email template back-end view
 
 Akeeba Subscriptions 5.0.5

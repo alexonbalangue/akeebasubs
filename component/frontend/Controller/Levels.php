@@ -164,7 +164,10 @@ class Levels extends DataController
 			// work in PHP.
 			$item = $model
 				->id(0)
-				->slug($slug)
+				->slug([
+					'method' => 'exact',
+					'value' => $slug
+				])
 				->firstOrNew();
 
 			$id = $item->getId();
@@ -199,7 +202,10 @@ class Levels extends DataController
 		{
 			$levels = $model->getClone()->savestate(false)->setIgnoreRequest(true)->clearState()->reset(true, true);
 			$levels
-				->slug($model->slug)
+				->slug([
+					'method' => 'exact',
+					'value' => $model->slug
+				])
 				->only_once(1)
 				->get(true);
 

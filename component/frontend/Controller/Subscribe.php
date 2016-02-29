@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 
 use Akeeba\Subscriptions\Admin\Controller\Mixin;
 use Akeeba\Subscriptions\Site\Model\Subscribe as ModelSubscribe;
+use Akeeba\Subscriptions\Site\Model\Subscriptions;
 use FOF30\Container\Container;
 use FOF30\Controller\Controller;
 use FOF30\Controller\Exception\ItemNotFound;
@@ -64,7 +65,10 @@ class Subscribe extends Controller
 			// references work in PHP.
 			$item = $levelsModel
 				->id(0)
-				->slug($slug)
+				->slug([
+					'method' => 'exact',
+					'value' => $slug
+				])
 				->firstOrNew();
 
 			$id = $item->getId();
@@ -79,16 +83,17 @@ class Subscribe extends Controller
 		// Load the level
 		$level = $levelsModel->find($id);
 
-		// If the level is marked as only_once we need to make sure we're allowed to access it - TODO Shouldn't I be listing subscriptions?
+		// If the level is marked as only_once we need to make sure we're allowed to access it
 		if ($level->only_once)
 		{
-			$levels = $levelsModel
-				->id(0)
-				->slug($level->slug)
-				->only_once(1)
+			/** @var Subscriptions $subscriptions */
+			$subscriptions = $this->getModel('subscriptions');
+			$subscriptions
+				->level($level->akeebasubs_level_id)
+				->enabled(1)
 				->get(true);
 
-			if (!$levelsModel->count())
+			if ($subscriptions->count())
 			{
 				// User trying to renew a level which is marked as only_once
 				throw new AccessForbidden;

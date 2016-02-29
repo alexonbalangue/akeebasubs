@@ -180,7 +180,11 @@ class StateData
 		{
 			/** @var Levels $levelsModel */
 			$levelsModel = $model->getContainer()->factory->model('Levels')->tmpInstance();
-			$item = $levelsModel->slug($this->slug)->firstOrNew();
+			$item = $levelsModel
+				->slug([
+					'method' => 'exact',
+					'value' => $this->slug
+				])->firstOrNew();
 			$this->id = $item->akeebasubs_level_id;
 		}
 
