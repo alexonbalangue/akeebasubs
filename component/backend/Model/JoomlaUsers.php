@@ -112,6 +112,29 @@ use JUserHelper;
 				'(' . $db->qn('email') . ' LIKE ' . $db->q($search) . ') ' .
 				')'
 			);
+
+			return;
+		}
+
+		$username = $this->getState('username', null);
+
+		if (is_string($username) && !empty($username))
+		{
+			$query->where($db->qn('username') . ' = ' . $db->q($username));
+		}
+
+		$email = $this->getState('email', null, 'raw');
+
+		if (is_string($email) && !empty($email))
+		{
+			$query->where($db->qn('email') . ' = ' . $db->q($email));
+		}
+
+		$block = $this->getState('block', null, 'int');
+
+		if (!is_null($block))
+		{
+			$query->where($db->qn('block') . ' = ' . $db->q($block));
 		}
 	}
 

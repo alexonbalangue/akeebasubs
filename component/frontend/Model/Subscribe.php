@@ -297,12 +297,14 @@ class Subscribe extends Model
 
 			/** @var JoomlaUsers $user1 */
 			$user1 = $joomlaUsers->getClone()->reset(true, true)
+				->clearState()
 				->username($state->username)
 				->block(1)
 				->firstOrNew();
 
 			/** @var JoomlaUsers $user2 */
 			$user2 = $joomlaUsers->getClone()->reset(true, true)
+				->clearState()
 				->email($state->email)
 				->block(1)
 				->firstOrNew();
@@ -655,6 +657,7 @@ class Subscribe extends Model
 		$plugins = $paymentMethodsModel->getPaymentPlugins();
 
 		$found = false;
+
 		if (!empty($plugins))
 		{
 			foreach ($plugins as $plugin)
@@ -666,6 +669,7 @@ class Subscribe extends Model
 				}
 			}
 		}
+
 		if (!$found)
 		{
 			return false;

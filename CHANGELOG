@@ -6,6 +6,7 @@ Akeeba Subscriptions 5.0.6
 # [MEDIUM] Avoid fatal errors when the import fails
 # [MEDIUM] Javascript issues updating user information in the front-end UserInfo view
 # [MEDIUM] gh-259 Fuzzy slug matching can show you wrong subscription level under certain conditions
+# [MEDIUM] gh-260 Trying to change the username after submitting the subscription form and hitting the back button –as completely moronic as it is (FFS!)– wouldn't work.
 # [LOW] Error page after clicking on "Send test email" in the email template back-end view
 
 Akeeba Subscriptions 5.0.5
