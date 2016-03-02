@@ -23,8 +23,17 @@ class State extends Base
 		// Should I collect personal information? -1: only country, 0: none, 1: all
 		$personalInfo = $this->container->params->get('personalinfo', 1);
 
+		// Should I show the state field? 1/0 = Yes/No.
+		$stateField = $this->container->params->get('showstatefield', 1);
+
 		// I am told to not collect any personal information, the field is always valid
 		if ($personalInfo != 1)
+		{
+			return true;
+		}
+
+		// I am told to not show the state field, the field is always valid
+		if ($stateField != 1)
 		{
 			return true;
 		}
