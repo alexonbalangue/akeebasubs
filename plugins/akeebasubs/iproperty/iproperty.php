@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use Akeeba\Subscriptions\Admin\PluginAbstracts\AkeebasubsBase;
+use Akeeba\Subscriptions\Admin\Model\Levels;
 use Akeeba\Subscriptions\Admin\Model\Subscriptions;
 use Akeeba\Subscriptions\Admin\Model\Users;
 
@@ -35,6 +36,46 @@ class plgAkeebasubsIproperty extends AkeebasubsBase
 		$name         = 'iproperty';
 
 		parent::__construct($subject, $config);
+	}
+
+	/**
+	 * Renders the configuration page in the component's back-end
+	 *
+	 * @param   Levels  $level
+	 *
+	 * @return  \stdClass
+	 */
+	public function onSubscriptionLevelFormRender(Levels $level)
+	{
+		$filePath = 'plugin://akeebasubs/' . $this->name . '/default.php';
+		$filename = $this->container->template->parsePath($filePath, true);
+
+		$params = $level->params;
+
+		foreach ($this->knownParamsKeys as $key)
+		{
+			$key = $this->name . '_' . $key;
+
+			if (!isset($params[$key]))
+			{
+				$params[$key] = 0;
+			}
+		}
+
+		$level->params = $params;
+
+		@ob_start();
+
+		include_once $filename;
+
+		$html = @ob_get_clean();
+
+		$ret = (object) array(
+			'title' => JText::_('PLG_AKEEBASUBS_' . $this->name . '_TAB_TITLE'),
+			'html'  => $html
+		);
+
+		return $ret;
 	}
 
 	/**
@@ -356,39 +397,5 @@ class plgAkeebasubsIproperty extends AkeebasubsBase
 		}
 
 		return $ret;
-	}
-
-	/**
-	 * Used by the view template. Returns the value of a named parameter for this plugin and a specific subscription
-	 * level.
-	 *
-	 * @param   int     $level_id  Subscription level ID
-	 * @param   string  $paramKey  The parameter key
-	 * @param   int     $default   Default value
-	 *
-	 * @return  int  The parameter setting
-	 */
-	public function getParamValue($level_id, $paramKey, $default = 0)
-	{
-		if (array_key_exists($level_id, $this->addGroups))
-		{
-			if (!is_array($this->addGroups[ $level_id ]))
-			{
-				return $default;
-			}
-
-			if (array_key_exists($paramKey, $this->addGroups[ $level_id ]))
-			{
-				return (int) $this->addGroups[ $level_id ][ $paramKey ];
-			}
-			else
-			{
-				return $default;
-			}
-		}
-		else
-		{
-			return $default;
-		}
 	}
 }

@@ -7,7 +7,7 @@
 		<input type="text" class="input-small"
 			   name="params[iproperty_maxlistings]"
 			   id="params_iproperty_maxlistings"
-			   value="<?php echo (int)$this->getParamValue($level->akeebasubs_level_id, 'maxlistings') ?>" />
+			   value="<?php echo (int) $level->params['iproperty_maxlistings'] ?>" />
 		<span class="help-block">
 			<?php echo JText::_('PLG_AKEEBASUBS_IPROPERTY_MAXLISTINGS_DESC') ?>
 		</span>
@@ -22,7 +22,7 @@
 		<input type="text" class="input-small"
 			   name="params[iproperty_maxflistings]"
 			   id="params_iproperty_maxflistings"
-			   value="<?php echo (int)$this->getParamValue($level->akeebasubs_level_id, 'maxflistings') ?>" />
+			   value="<?php echo (int) $level->params['iproperty_maxflistings'] ?>" />
 		<span class="help-block">
 			<?php echo JText::_('PLG_AKEEBASUBS_IPROPERTY_MAXFLISTINGS_DESC') ?>
 		</span>
@@ -37,7 +37,7 @@
 		<input type="text" class="input-small"
 			   name="params[iproperty_maxagents]"
 			   id="params_iproperty_maxagents"
-			   value="<?php echo (int)$this->getParamValue($level->akeebasubs_level_id, 'maxagents') ?>" />
+			   value="<?php echo (int) $level->params['iproperty_maxagents'] ?>" />
 		<span class="help-block">
 			<?php echo JText::_('PLG_AKEEBASUBS_IPROPERTY_MAXAGENTS_DESC') ?>
 		</span>
@@ -52,7 +52,7 @@
 		<input type="text" class="input-small"
 			   name="params[iproperty_maxfagents]"
 			   id="params_iproperty_maxfagents"
-			   value="<?php echo (int)$this->getParamValue($level->akeebasubs_level_id, 'maxfagents') ?>" />
+			   value="<?php echo (int) $level->params['iproperty_maxfagents'] ?>" />
 		<span class="help-block">
 			<?php echo JText::_('PLG_AKEEBASUBS_IPROPERTY_MAXFAGENTS_DESC') ?>
 		</span>
@@ -67,7 +67,7 @@
 		<input type="text" class="input-small"
 			   name="params[iproperty_maximgs]"
 			   id="params_iproperty_maximgs"
-			   value="<?php echo (int)$this->getParamValue($level->akeebasubs_level_id, 'maximgs') ?>" />
+			   value="<?php echo (int) $level->params['iproperty_maximgs'] ?>" />
 		<span class="help-block">
 			<?php echo JText::_('PLG_AKEEBASUBS_IPROPERTY_MAXIMGS_DESC') ?>
 		</span>

@@ -8,6 +8,7 @@ Akeeba Subscriptions 5.0.6
 # [MEDIUM] gh-259 Fuzzy slug matching can show you wrong subscription level under certain conditions
 # [MEDIUM] gh-260 Trying to change the username after submitting the subscription form and hitting the back button wouldn't work.
 # [MEDIUM] gh-261 State validation fails when State field is not shown
+# [MEDIUM] The Intellectual Property integration plugin could not be configured
 # [LOW] Error page after clicking on "Send test email" in the email template back-end view
 
 Akeeba Subscriptions 5.0.5
