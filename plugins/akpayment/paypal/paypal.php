@@ -558,55 +558,84 @@ class plgAkpaymentPaypal extends AkpaymentBase
 		$sandbox = $this->params->get('sandbox', 0);
 		$hostname = $sandbox ? 'www.sandbox.paypal.com' : 'www.paypal.com';
 
-		$url = 'ssl://' . $hostname;
-		$port = 443;
+		$url = 'https://' . $hostname;
 
-		$req = 'cmd=_notify-validate';
-		foreach ($data as $key => $value)
+		$newData = array(
+			'cmd'	=> '_notify-validate'
+		);
+		$newData = array_merge($newData, $data);
+
+		$options = array(
+			CURLOPT_SSL_VERIFYPEER => true,
+			CURLOPT_SSL_VERIFYHOST => 2,
+			CURLOPT_VERBOSE        => false,
+			CURLOPT_HEADER         => false,
+			CURLINFO_HEADER_OUT    => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_CAINFO         => JPATH_LIBRARIES . '/fof30/Download/Adapter/cacert.pem',
+			CURLOPT_HTTPHEADER     => [
+				'User-Agent: AkeebaSubscriptions'
+			],
+			CURLOPT_POST           => true,
+			CURLOPT_POSTFIELDS     => $newData,
+			CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+
+		);
+
+		// TLS 1.2 is only supported in OpenSSL 1.0.1 and later AND cURL 7.34.0 and later. If these conditions are met
+		// we can use PayPal's minimum requirement of TLS 1.2 which is mandatory since June 2016.
+		$curlVersionInfo = curl_version();
+
+		if (version_compare($curlVersionInfo['version'], '7.34.0', 'ge') &&
+			version_compare(substr($curlVersionInfo['ssl_version'], 0, -1), '1.0.1', 'ge')
+		)
 		{
-			$value = urlencode($value);
-			$req .= "&$key=$value";
-		}
-		$header = '';
-		$header .= "POST /cgi-bin/webscr HTTP/1.1\r\n";
-		$header .= "Host: $hostname:$port\r\n";
-		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$header .= "Content-Length: " . strlen($req) . "\r\n";
-		$header .= "User-Agent: AkeebaSubscriptions\r\n";
-		$header .= "Connection: Close\r\n\r\n";
-
-
-		$fp = fsockopen($url, $port, $errno, $errstr, 30);
-
-		if (!$fp)
-		{
-			// HTTP ERROR
-			$data['akeebasubs_ipncheck_failure'] = 'Could not open SSL connection to ' . $hostname . ':' . $port;
-
-			return false;
+			$options[CURLOPT_SSLVERSION] = CURL_SSLVERSION_TLSv1_2;
 		}
 		else
 		{
-			fputs($fp, $header . $req);
-
-			while (!feof($fp))
-			{
-				$res = fgets($fp, 1024);
-
-				if (stristr($res, "VERIFIED"))
-				{
-					return true;
-				}
-				else if (stristr($res, "INVALID"))
-				{
-					$data['akeebasubs_ipncheck_failure'] = 'Connected to ' . $hostname . ':' . $port . '; returned data was "INVALID"';
-
-					return false;
-				}
-			}
-
-			fclose($fp);
+			$curlVersion                         = $curlVersionInfo['version'];
+			$openSSLVersion                      = $curlVersionInfo['ssl_version'];
+			$data['akeebasubs_ipncheck_warning'] =
+				"WARNING! PayPal demands that connections be made with TLS 1.2. This requires cURL 7.34.0 or later (you have $curlVersion) and OpenSSL 1.0.1 or later (you have $openSSLVersion) on your server's PHP. Please upgrade cURL and/or OpenSSL to a version newer than the stated minimum to continue using the PayPal integration.";
 		}
+
+		$ch = curl_init($url);
+		curl_setopt_array($ch, $options);
+		@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+
+		$response = curl_exec($ch);
+		$errNo = curl_errno($ch);
+		$error = curl_error($ch);
+		$lastHttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+		curl_close($ch);
+
+		if (($errNo > 0) && !empty($error))
+		{
+			$data['akeebasubs_ipncheck_failure'] = "Could not open SSL connection to $hostname:443, cURL error $errNo: $error";
+
+			return false;
+		}
+
+		if ($lastHttpCode >= 400)
+		{
+			$data['akeebasubs_ipncheck_failure'] = "Invalid HTTP status $lastHttpCode verifying PayPal's IPN";
+
+			return false;
+		}
+
+		if (stristr($response, "VERIFIED"))
+		{
+			return true;
+		}
+		else if (stristr($response, "INVALID"))
+		{
+			$data['akeebasubs_ipncheck_failure'] = 'PayPal claims the IPN data is INVALID – Possible fraud!';
+
+			return false;
+		}
+
 	}
 
 	private function _toPPDuration($days)

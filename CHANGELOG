@@ -2,6 +2,7 @@
 Akeeba Subscriptions 5.0.6
 ================================================================================
 + Non-EU country invoices report
+~ Modified PayPal plugin per PayPal's new requirements going live on June 2016
 ~ Make sure SpamAssassin doesn't mistakenly report emails as spam
 # [MEDIUM] Avoid fatal errors when the import fails
 # [MEDIUM] Javascript issues updating user information in the front-end UserInfo view
