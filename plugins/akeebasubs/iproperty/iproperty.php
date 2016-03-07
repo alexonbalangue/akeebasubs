@@ -22,6 +22,8 @@ class plgAkeebasubsIproperty extends AkeebasubsBase
 	 */
 	private $knownParamsKeys = ['maxlistings', 'maxflistings', 'maxagents', 'maxfagents', 'maximgs',];
 
+	private $paramsPerLevel = [];
+
 	/**
 	 * Public constructor
 	 *
@@ -111,15 +113,15 @@ class plgAkeebasubsIproperty extends AkeebasubsBase
 
 			if ($sub->enabled)
 			{
-				if (array_key_exists($level, $this->addGroups))
+				if (array_key_exists($level, $this->paramsPerLevel))
 				{
 					$mustActivate = true;
-					$params       = $this->mixParams($params, $this->addGroups[ $level ]);
+					$params       = $this->mixParams($params, $this->paramsPerLevel[ $level ]);
 				}
 			}
 			else
 			{
-				if (array_key_exists($level, $this->addGroups))
+				if (array_key_exists($level, $this->paramsPerLevel))
 				{
 					$mustDeactivate = true;
 				}
@@ -141,9 +143,38 @@ class plgAkeebasubsIproperty extends AkeebasubsBase
 		}
 	}
 
-	// =========================================================================
-	// INTERNAL API SECTION
-	// =========================================================================
+	/**
+	 * Load the add / remove group to level ID map from the subscription level options
+	 *
+	 * @return  void
+	 */
+	protected function loadGroupAssignments()
+	{
+		$this->addGroups    = array();
+		$this->removeGroups = array();
+
+		/** @var Levels $model */
+		$model           = $this->container->factory->model('Levels')->tmpInstance();
+		$levels          = $model->get(true);
+
+		if ($levels->count())
+		{
+			foreach ($levels as $level)
+			{
+				$level_id = $level->akeebasubs_level_id;
+
+				foreach ($this->knownParamsKeys as $paramKey)
+				{
+					$key = 'iproperty_' . $paramKey;
+
+					if (isset($level->params[$key]))
+					{
+						$this->paramsPerLevel[$level_id][$paramKey] = $level->params[$key];
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * Publish an IP Agent linked with Joomla! user ID $user_id and limit
