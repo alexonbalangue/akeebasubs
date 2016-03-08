@@ -556,7 +556,7 @@ class plgAkpaymentPaypal extends AkpaymentBase
 	private function isValidIPN(&$data)
 	{
 		$sandbox = $this->params->get('sandbox', 0);
-		$hostname = $sandbox ? 'www.sandbox.paypal.com' : 'www.paypal.com';
+		$hostname = $sandbox ? 'ipnpb.sandbox.paypal.com' : 'ipnpb.paypal.com';
 
 		$url = 'https://' . $hostname;
 
