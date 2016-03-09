@@ -28,6 +28,7 @@
         <file type="module" client="site" id="mod_aktaxcountry">mod_aktaxcountry.zip</file>
 
         <!-- Plugins: akeebasubs -->
+        <file type="plugin" group="akeebasubs" id="acymailing">plg_akeebasubs_acymailing.zip</file>
         <file type="plugin" group="akeebasubs" id="adminemails">plg_akeebasubs_adminemails.zip</file>
         <file type="plugin" group="akeebasubs" id="agreetoeu">plg_akeebasubs_agreetoeu.zip</file>
         <file type="plugin" group="akeebasubs" id="agreetotos">plg_akeebasubs_agreetotos.zip</file>
@@ -41,6 +42,7 @@
         <file type="plugin" group="akeebasubs" id="iproperty">plg_akeebasubs_iproperty.zip</file>
         <file type="plugin" group="akeebasubs" id="joomla">plg_akeebasubs_joomla.zip</file>
         <file type="plugin" group="akeebasubs" id="joomlaprofilesync">plg_akeebasubs_joomlaprofilesync.zip</file>
+        <file type="plugin" group="akeebasubs" id="kunena">plg_akeebasubs_kunena.zip</file>
         <file type="plugin" group="akeebasubs" id="needslogout">plg_akeebasubs_needslogout.zip</file>
         <file type="plugin" group="akeebasubs" id="recaptcha">plg_akeebasubs_recaptcha.zip</file>
         <file type="plugin" group="akeebasubs" id="reseller">plg_akeebasubs_reseller.zip</file>
