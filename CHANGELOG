@@ -13,6 +13,7 @@ Akeeba Subscriptions 5.0.6
 # [MEDIUM] gh-261 State validation fails when State field is not shown
 # [MEDIUM] The Intellectual Property integration plugin could not be configured
 # [LOW] Error page after clicking on "Send test email" in the email template back-end view
+# [LOW] Subscriptions page: wrong link to Level edit page
 
 Akeeba Subscriptions 5.0.5
 ================================================================================
