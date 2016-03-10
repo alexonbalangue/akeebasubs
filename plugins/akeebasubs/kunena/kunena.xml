@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5.0" type="plugin" group="akeebasubs" method="upgrade">
+<extension version="3.3.0" type="plugin" group="akeebasubs" method="upgrade">
 	<name>Akeeba Subscriptions - Kunena Integration</name>
 	<author>Roland Dalmulder</author>
 	<authorEmail>contact@csvimproved.com</authorEmail>
