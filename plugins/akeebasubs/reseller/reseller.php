@@ -268,7 +268,7 @@ class plgAkeebasubsReseller extends Akeeba\Subscriptions\Admin\PluginAbstracts\A
         $isValid = true;
         $error   = '';
 
-        $adapter  = new FOFDownload();
+        $adapter  = new F0FDownload();
         $raw_data = $adapter->getFromURL($url);
 
         // Do I get a connection error?
