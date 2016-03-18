@@ -5,6 +5,7 @@ Akeeba Subscriptions 5.1.0
 + Non-EU country invoices report
 ~ Modified PayPal plugin per PayPal's new requirements going live on June 2016
 ~ Make sure SpamAssassin doesn't mistakenly report emails as spam
+# [MEDIUM] Timed release plugin couldn't calculate the remaining subscription time when a modified was appended
 # [MEDIUM] The Intellectual Property integration was broken
 # [MEDIUM] The "Run Integrations" button didn't really work
 # [MEDIUM] Avoid fatal errors when the import fails
