@@ -585,19 +585,25 @@ class plgAkpaymentPaypal extends AkpaymentBase
 		// TLS 1.2 is only supported in OpenSSL 1.0.1 and later AND cURL 7.34.0 and later. If these conditions are met
 		// we can use PayPal's minimum requirement of TLS 1.2 which is mandatory since June 2016.
 		$curlVersionInfo = curl_version();
+		$curlVersion     = $curlVersionInfo['version'];
+		$openSSLVersion  = $curlVersionInfo['ssl_version'];
+		// OpenSSL version typically reported as "OpenSSL/1.0.1e"
+		$parts           = explode('/', $openSSLVersion, 2);
+		$openSSLVersion  = (count($parts) > 1) ? $parts[1] : $openSSLVersion;
 
-		if (version_compare($curlVersionInfo['version'], '7.34.0', 'ge') &&
-			version_compare(substr($curlVersionInfo['ssl_version'], 0, -1), '1.0.1', 'ge')
+		if (
+			version_compare($curlVersion, '7.34.0', 'ge') &&
+			version_compare(substr($openSSLVersion, 0, -1), '1.0.1', 'ge') &&
+			version_compare(PHP_VERSION, '5.6.3', 'ge')
 		)
 		{
 			$options[CURLOPT_SSLVERSION] = CURL_SSLVERSION_TLSv1_2;
 		}
 		else
 		{
-			$curlVersion                         = $curlVersionInfo['version'];
-			$openSSLVersion                      = $curlVersionInfo['ssl_version'];
+			$phpVersion = PHP_VERSION;
 			$data['akeebasubs_ipncheck_warning'] =
-				"WARNING! PayPal demands that connections be made with TLS 1.2. This requires cURL 7.34.0 or later (you have $curlVersion) and OpenSSL 1.0.1 or later (you have $openSSLVersion) on your server's PHP. Please upgrade cURL and/or OpenSSL to a version newer than the stated minimum to continue using the PayPal integration.";
+				"WARNING! PayPal demands that connections be made with TLS 1.2. This requires PHP 5.6.3+ (you have $phpVersion), libcurl 7.34.0+ (you have $curlVersion) and OpenSSL 1.0.1+ (you have $openSSLVersion) on your server's PHP. Please upgrade these requirements to meet the stated minimum or the PayPal integration will cease working.";
 		}
 
 		$ch = curl_init($url);
