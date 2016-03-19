@@ -440,8 +440,8 @@ class plgContentAstimedrelease extends JPlugin
 
 		if ($paremPos !== false)
 		{
-			$level      = $this->getId(substr($expr, 0, - $paremPos));
-			$expression = substr($expr, - $paremPos);
+			$level      = $this->getId(substr($expr, 0, $paremPos));
+			$expression = substr($expr, $paremPos);
 		}
 		else
 		{

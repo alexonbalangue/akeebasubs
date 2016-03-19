@@ -22,8 +22,3 @@ defined('_JEXEC') or die;
     <span class="icon icon-tag"></span>
     <span>@lang('COM_AKEEBASUBS_DASHBOARD_ADD_COUPON')</span>
 </a>
-
-<a href="index.php?option=com_akeebasubs&view=Tools" class="btn">
-    <span class="icon icon-cog"></span>
-    <span>@lang('COM_AKEEBASUBS_DASHBOARD_TOOLS')</span>
-</a>

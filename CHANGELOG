@@ -1,9 +1,11 @@
 <?php die(); ?>
-Akeeba Subscriptions 5.0.6
+Akeeba Subscriptions 5.1.0
 ================================================================================
++ UTF8MB4 support for our own database tables (requires Joomla! 3.5 and a PHP/MySQL environment with UTF8MB4 support)
 + Non-EU country invoices report
 ~ Modified PayPal plugin per PayPal's new requirements going live on June 2016
 ~ Make sure SpamAssassin doesn't mistakenly report emails as spam
+# [MEDIUM] Timed release plugin couldn't calculate the remaining subscription time when a modified was appended
 # [MEDIUM] The Intellectual Property integration was broken
 # [MEDIUM] The "Run Integrations" button didn't really work
 # [MEDIUM] Avoid fatal errors when the import fails
