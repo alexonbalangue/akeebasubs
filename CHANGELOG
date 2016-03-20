@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 5.1.1
+================================================================================
+! Installation errors
+
 Akeeba Subscriptions 5.1.0
 ================================================================================
 + UTF8MB4 support for our own database tables (requires Joomla! 3.5 and a PHP/MySQL environment with UTF8MB4 support)
