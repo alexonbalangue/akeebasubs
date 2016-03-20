@@ -51,7 +51,7 @@ CREATE TABLE `#__akeebasubs_levels` (
 	`notifyafter` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY ( `akeebasubs_level_id` ),
   UNIQUE KEY `slug` (`slug`(100))
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -93,7 +93,7 @@ CREATE TABLE `#__akeebasubs_subscriptions` (
 	`second_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`after_contact` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY ( `akeebasubs_subscription_id` )
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -118,7 +118,7 @@ CREATE TABLE `#__akeebasubs_taxrules` (
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY ( `akeebasubs_taxrule_id` )
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -153,7 +153,7 @@ CREATE TABLE `#__akeebasubs_coupons` (
 	`hits` BIGINT(20) unsigned NOT NULL default 0,
 	PRIMARY KEY ( `akeebasubs_coupon_id` ),
 	UNIQUE KEY `coupon` (`coupon`(100))
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -173,7 +173,7 @@ CREATE TABLE `#__akeebasubs_apicoupons` (
   `value` float NOT NULL DEFAULT '0',
   `value_limit` INT NOT NULL,
   PRIMARY KEY (`akeebasubs_apicoupon_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -201,7 +201,7 @@ CREATE TABLE `#__akeebasubs_upgrades` (
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 	`hits` BIGINT(20) unsigned NOT NULL default '0',
 	PRIMARY KEY ( `akeebasubs_upgrade_id` )
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -228,7 +228,7 @@ CREATE TABLE `#__akeebasubs_users` (
     `needs_logout` TINYINT NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `akeebasubs_user_id` ),
 	UNIQUE KEY `joomlauser` (`user_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -239,7 +239,7 @@ CREATE TABLE `#__akeebasubs_configurations` (
 	`akeebasubs_configuration_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`params` TEXT COMMENT '@Filter("json")',
 	PRIMARY KEY (`akeebasubs_configuration_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -267,7 +267,7 @@ CREATE TABLE `#__akeebasubs_invoices` (
 	`locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`akeebasubs_subscription_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -287,7 +287,7 @@ CREATE TABLE `#__akeebasubs_levelgroups` (
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 
 	PRIMARY KEY (`akeebasubs_levelgroup_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -317,7 +317,7 @@ CREATE TABLE `#__akeebasubs_invoicetemplates` (
 	`locked_by` int(11) NOT NULL DEFAULT 0,
 
 	PRIMARY KEY (`akeebasubs_invoicetemplate_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -344,7 +344,7 @@ CREATE TABLE `#__akeebasubs_customfields` (
 	`modified_by` bigint(20) NOT NULL DEFAULT '0',
 	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 	PRIMARY KEY (`akeebasubs_customfield_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -365,7 +365,7 @@ CREATE TABLE `#__akeebasubs_states` (
     `locked_by` int(11) NOT NULL DEFAULT '0',
     PRIMARY KEY (`akeebasubs_state_id`),
     UNIQUE KEY `akeebasubs_state_unique` (`state`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -401,7 +401,7 @@ CREATE TABLE `#__akeebasubs_relations` (
     PRIMARY KEY (`akeebasubs_relation_id`),
     UNIQUE KEY `akeebasubs_relation_unique` (`source_level_id`,`target_level_id`),
     KEY `akeebasubs_relations_target` (`target_level_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -424,7 +424,7 @@ CREATE TABLE `#__akeebasubs_emailtemplates` (
     `locked_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     `locked_by` bigint(20) NOT NULL DEFAULT '0',
     PRIMARY KEY (`akeebasubs_emailtemplate_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -447,7 +447,7 @@ CREATE TABLE `#__akeebasubs_blockrules` (
 	`locked_by` bigint(20) NOT NULL DEFAULT '0',
 
 	PRIMARY KEY (`akeebasubs_blockrule_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
             ]]></query>
         </action>
 
@@ -985,7 +985,7 @@ CREATE TABLE `#__akeebasubs_countrycurrencies` (
   `name` varchar(255) DEFAULT 'Euro',
   `symbol` varchar(10) DEFAULT '€',
   PRIMARY KEY (`country`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
 				]]></query>
 				<query><![CDATA[
 INSERT INTO `#__akeebasubs_countrycurrencies` (`country`, `currency`, `name`, `symbol`)
@@ -1054,7 +1054,7 @@ CREATE TABLE `#__akeebasubs_forexrates` (
   `akeebasubs_forexrate_id` char(3) NOT NULL DEFAULT '',
   `rate` double NOT NULL DEFAULT '1',
   PRIMARY KEY (`akeebasubs_forexrate_id`)
-) DEFAULT COLLATE utf8mb4_unicode_ci;
+) DEFAULT COLLATE utf8_general_ci;
 					]]></query>
 			</action>
 
@@ -1102,13 +1102,13 @@ ALTER TABE `#__akeebasubs_levels` ADD UNIQUE KEY `slug` (`slug`(100));
             ]]></query>
         </action>
 
-        <action table="XXXX" canfail="0">
+        <action table="#__akeebasubs_coupons" canfail="0">
             <condition type="utf8mb4upgrade" />
             <query><![CDATA[
 ALTER TABE `#__akeebasubs_coupons` DROP KEY `coupon`;
             ]]></query>
             <query><![CDATA[
-ALTER TABE `##__akeebasubs_coupons` ADD UNIQUE KEY `coupon` (`coupon`(100));
+ALTER TABE `#__akeebasubs_coupons` ADD UNIQUE KEY `coupon` (`coupon`(100));
             ]]></query>
         </action>
     </sql>
