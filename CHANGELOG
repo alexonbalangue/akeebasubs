@@ -2,7 +2,7 @@
 Akeeba Subscriptions 5.1.2
 ================================================================================
 # [HIGH] Typo in SQL files, prevents installation on Joomla! 3.5
-# [HIGH] We must not set TLS 1.2 explicitly in PayPal postback. cURL is supposed to figure it out itself, see https://github.com/paypal/TLS-update#php
+# [HIGH] PayPal's instructions are asinine
 
 Akeeba Subscriptions 5.1.1
 ================================================================================

@@ -13,6 +13,20 @@ use Akeeba\Subscriptions\Admin\PluginAbstracts\AkpaymentBase;
 
 class plgAkpaymentPaypal extends AkpaymentBase
 {
+	/**
+	 * According to https://www.paypal-knowledge.com/infocenter/index?page=content&id=FAQ1914&expand=true&locale=en_US
+	 * we are supposed to use www.paypal.com before June 17th and ipnpb.paypal.com after June 17th. However, they don't
+	 * clarify:
+	 * * WHICH June 17th? June 17th will occur in Australia 18 hours before it is June 17th in San Jose!
+	 * * WHAT happens if you use the wrong one in the wrong date block? You lose sales?
+	 * * HOW am I supposed to code what is not my decision to make?
+	 *
+	 * So, if you use PayPal like me you are most likely gonna be FUCKED around June 17th. Email me with anal lube
+	 * recommendations...
+	 */
+	const IPNPostbackDomain = 'www.paypal.com';
+	// const IPNPostbackDomain = 'ipnpb.paypal.com';
+
 	public function __construct(&$subject, $config = array())
 	{
 		$config = array_merge($config, array(
@@ -556,7 +570,7 @@ class plgAkpaymentPaypal extends AkpaymentBase
 	private function isValidIPN(&$data)
 	{
 		$sandbox = $this->params->get('sandbox', 0);
-		$hostname = $sandbox ? 'ipnpb.sandbox.paypal.com' : 'ipnpb.paypal.com';
+		$hostname = $sandbox ? 'ipnpb.sandbox.paypal.com' : self::IPNPostbackDomain;
 
 		$url = 'https://' . $hostname;
 
