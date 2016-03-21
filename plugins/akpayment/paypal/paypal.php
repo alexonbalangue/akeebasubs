@@ -582,30 +582,28 @@ class plgAkpaymentPaypal extends AkpaymentBase
 
 		);
 
-		// TLS 1.2 is only supported in OpenSSL 1.0.1 and later AND cURL 7.34.0 and later. If these conditions are met
-		// we can use PayPal's minimum requirement of TLS 1.2 which is mandatory since June 2016.
-		$curlVersionInfo = curl_version();
-		$curlVersion     = $curlVersionInfo['version'];
-		$openSSLVersion  = $curlVersionInfo['ssl_version'];
-		// OpenSSL version typically reported as "OpenSSL/1.0.1e"
-		$parts          = explode('/', $openSSLVersion, 2);
-		$openSSLVersion = (count($parts) > 1) ? $parts[1] : $openSSLVersion;
+		// TLS 1.2 is only supported in OpenSSL 1.0.1c and later AND cURL 7.34.0 and later running on PHP 5.5.19+ or
+		// PHP 5.6.3+. If these conditions are met we can use PayPal's minimum requirement of TLS 1.2 which is mandatory
+		// since June 2016.
+		$curlVersionInfo   = curl_version();
+		$curlVersion       = $curlVersionInfo['version'];
+		$openSSLVersionRaw = $curlVersionInfo['ssl_version'];
+		// OpenSSL version typically reported as "OpenSSL/1.0.1e", I need to convert it to 1.0.1.5
+		$parts             = explode('/', $openSSLVersionRaw, 2);
+		$openSSLVersionRaw = (count($parts) > 1) ? $parts[1] : $openSSLVersionRaw;
+		$openSSLVersion    = substr($openSSLVersionRaw, 0, -1) . '.' . (ord(substr($openSSLVersionRaw, -1)) - 96);
 		// PHP version required for TLS 1.2 is 5.5.19+ or 5.6.3+
 		$minPHPVersion = version_compare(PHP_VERSION, '5.6.0', 'ge') ? '5.6.3' : '5.5.19';
 
 		if (
-			version_compare($curlVersion, '7.34.0', 'ge') &&
-			version_compare(substr($openSSLVersion, 0, -1), '1.0.1', 'ge') &&
-			version_compare(PHP_VERSION, $minPHPVersion, 'ge')
+			!version_compare($curlVersion, '7.34.0', 'ge') ||
+			! version_compare($openSSLVersion, '1.0.1.3', 'ge') ||
+			! version_compare(PHP_VERSION, $minPHPVersion, 'ge')
 		)
-		{
-			$options[CURLOPT_SSLVERSION] = CURL_SSLVERSION_TLSv1_2;
-		}
-		else
 		{
 			$phpVersion = PHP_VERSION;
 			$data['akeebasubs_ipncheck_warning'] =
-				"WARNING! PayPal demands that connections be made with TLS 1.2. This requires PHP $minPHPVersion+ (you have $phpVersion), libcurl 7.34.0+ (you have $curlVersion) and OpenSSL 1.0.1+ (you have $openSSLVersion) on your server's PHP. Please upgrade these requirements to meet the stated minimum or the PayPal integration will cease working.";
+				"WARNING! PayPal demands that connections be made with TLS 1.2. This requires PHP $minPHPVersion+ (you have $phpVersion), libcurl 7.34.0+ (you have $curlVersion) and OpenSSL 1.0.1c+ (you have $openSSLVersionRaw) on your server's PHP. Please upgrade these requirements to meet the stated minimum or the PayPal integration will cease working.";
 		}
 
 		$ch = curl_init($url);
