@@ -1095,20 +1095,20 @@ VALUES
         <action table="#__akeebasubs_levels" canfail="0">
             <condition type="utf8mb4upgrade" />
             <query><![CDATA[
-ALTER TABE `#__akeebasubs_levels` DROP KEY `slug`;
+ALTER TABLE `#__akeebasubs_levels` DROP KEY `slug`;
             ]]></query>
             <query><![CDATA[
-ALTER TABE `#__akeebasubs_levels` ADD UNIQUE KEY `slug` (`slug`(100));
+ALTER TABLE `#__akeebasubs_levels` ADD UNIQUE KEY `slug` (`slug`(100));
             ]]></query>
         </action>
 
         <action table="#__akeebasubs_coupons" canfail="0">
             <condition type="utf8mb4upgrade" />
             <query><![CDATA[
-ALTER TABE `#__akeebasubs_coupons` DROP KEY `coupon`;
+ALTER TABLE `#__akeebasubs_coupons` DROP KEY `coupon`;
             ]]></query>
             <query><![CDATA[
-ALTER TABE `#__akeebasubs_coupons` ADD UNIQUE KEY `coupon` (`coupon`(100));
+ALTER TABLE `#__akeebasubs_coupons` ADD UNIQUE KEY `coupon` (`coupon`(100));
             ]]></query>
         </action>
     </sql>
