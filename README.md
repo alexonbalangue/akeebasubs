@@ -1,14 +1,18 @@
-# Akeeba Subscriptions 5
+# Akeeba Subscriptions
 
-**This version of Akeeba Subscriptions is written on FOF 3. It requires Joomla! 3.4 or later and PHP 5.4.0 or later.**
+This branch contains the current, in-development version of Akeeba Subscriptions based on FOF 3. Requires PHP 5.4+ (developed on 7.0) and the latest Joomla! release. 
 
-This branch contains the current, in-development version of Akeeba Subscriptions based on FOF 3. You can study this
-code as a good example of a real world application utilising the full power of FOF 3. There are things in here you won't
-find in the FOF 3 documentation.
+## NO SUPPORT
 
-If you are looking for earlier versions to build a component you can use on your Joomla! 2.5, 3.0, 3.1, 3.2 or 3.3 site
-please check out either the 4.x branch (Akeeba Subscriptions 4.x, Joomla! 3.2 and later) or the 3.x branch
-(Akeeba Subscriptions 3.x, Joomla! 2.5, 3.0, 3.1 and 3.2). Older versions can work on PHP 5.3.4 or later. 
+This software is provided **WITHOUT ANY KIND OF SUPPORT WHATSOEVER**. We have disabled Issues on this repository to stress this. Kindly note that any requests sent to us about this software will not be replied.
+ 
+## THIS REPOSITORY IS FOR DEVELOPERS ONLY
+
+No installable ZIP packages will be provided for this software since March 2016. You can build one from the source following the developer instructions in this README.
+
+## INTERNAL PROJECT
+
+This is meant to be an internal software development project for use with our site, akeebabackup.com. As such, future versions of this software will drop any features we do not wish to maintain because we do not intend or anticipate to use on our site.
 
 ## Build instructions
 
@@ -16,17 +20,17 @@ please check out either the 4.x branch (Akeeba Subscriptions 4.x, Joomla! 3.2 an
 
 In order to build the installation packages of this component you will need to have the following tools:
 
-* A command line environment. Using Bash under Linux / Mac OS X works best. On Windows you will need to run most tools through an elevated privileges (administrator) command prompt on an NTFS filesystem due to the use of symlinks.
+* A command line environment. Using Bash under Linux / Mac OS X works best. On Windows you will need to run most tools through an elevated privileges (administrator) command prompt on an NTFS filesystem due to the use of symlinks. Press WIN-X and click on "Command Prompt (Admin)" to launch an elevated command prompt.
 * A PHP CLI binary in your path
 * Command line Git executables
 * PEAR and Phing installed, with the Net_FTP and VersionControl_SVN PEAR packages installed
-* libxml and libsxlt command-line tools, only if you intend on building the documentation PDF files
+* (Optional) libxml and libsxlt command-line tools, only if you intend on building the documentation PDF files
 
 You will also need the following path structure inside a folder on your system
 
 * **akeebasubs** This repository. We will refer to this as the MAIN directory
 * **buildfiles** [Akeeba Build Tools](https://github.com/akeeba/buildfiles)
-* **fof3** [Framework on Framework](https://github.com/akeeba/fof) – WARNING! You need to check out the `fof3` branch.
+* **fof3** [Framework on Framework 3](https://github.com/akeeba/fof)
 * **strapper** [Akeeba Strapper](https://github.com/akeeba/strapper)
 
 You must use the exact folder names specified here.
@@ -86,14 +90,10 @@ This creates the installable ZIP packages of the component inside the MAIN/relea
 
 	phing git
 
-Please note that it's necessary to do a package build for FOF and Strapper with `git pull` and `phing git`commands in your copy of the FOF and Strapper repositories before building an Akeeba Subscriptions package. For more details see the package build instructions on the [FOF page](https://github.com/akeeba/fof) and [Strapper page](https://github.com/akeeba/strapper). Failure to do so will either result in a failure to create a package, an uninstallable package or will end up overwriting the already installed FOF and/or Strapper on your site with an older version, resulting in potentially severe issues in other FOF-based and Strapper-based components.
+Please note that it's necessary to do a package build for FOF and Strapper with `git pull` and `phing git` commands in your copy of the FOF and Strapper repositories before building an Akeeba Subscriptions package. For more details see the package build instructions on the [FOF page](https://github.com/akeeba/fof) and [Strapper page](https://github.com/akeeba/strapper). Failure to do so will either result in a failure to create a package, an uninstallable package or will end up overwriting the already installed FOF and/or Strapper on your site with an older version, resulting in potentially severe issues in other FOF-based and Strapper-based components.
 	
 #### Build the documentation in PDF format
 
 This builds the documentation in PDF format using the DocBook XML sources found in the documentation directory.
 
 	phing documentation
-	
-## Collaboration
-
-If you have found a bug you can submit your patch by doing a Pull Request on GitHub.
