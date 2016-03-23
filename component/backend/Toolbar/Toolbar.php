@@ -8,7 +8,7 @@
 namespace Akeeba\Subscriptions\Admin\Toolbar;
 
 use FOF30\Inflector\Inflector;
-use JToolBarHelper;
+use JToolbarHelper;
 use JText;
 
 defined('_JEXEC') or die;
