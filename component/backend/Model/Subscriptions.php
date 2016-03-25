@@ -265,10 +265,18 @@ class Subscriptions extends DataModel
 		// Filter by non-free subscriptions (nozero)
 		$this->filterByNonFree($query);
 
-		// Filter by subscription ID
+		/**
+		 * Filter by subscription ID. See onBeforeBuildQuery. When we have caught the case where subid is not set but
+		 * akeebasubs_subscription_id is we keep the latter in the state. However, this happens _after_ the Filters
+		 * behaviour has run. Therefore we have to filter again AS LONG AS the result is numeric. It will NOT be numeric
+		 * when akeebasubs_subscription_id is set as part of relation, e.g. in the Invoices model when I fetch
+		 * $invoice->subscription. In this case the relation manager sets the Subscription model's
+		 * akeebasubs_subscription_id state to an array to indicate both the filter value and the filtering mode
+		 * (exact). This is something I want to ignore here because it's already caught by the Filters behaviour.
+		 */
 		$subId = $this->getState('akeebasubs_subscription_id', 0, 'int');
 
-		if ($subId > 0)
+		if (is_numeric($subId) && ($subId > 0))
 		{
 			$query->where($query->qn($this->getKeyName()) . ' = ' . $query->q($subId));
 		}

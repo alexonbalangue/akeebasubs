@@ -1,4 +1,8 @@
 <?php die(); ?>
+Akeeba Subscriptions 5.2.x
+================================================================================
+# [HIGH] Cannot download invoice from the front-end
+
 Akeeba Subscriptions 5.1.2
 ================================================================================
 # [HIGH] Typo in SQL files, prevents installation on Joomla! 3.5
