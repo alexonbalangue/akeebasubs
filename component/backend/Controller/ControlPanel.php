@@ -162,7 +162,7 @@ ENDRESULT;
 			}
 		}
 
-		$geoip = new AkeebaGeoipProvider();
+		$geoip = new \AkeebaGeoipProvider();
 		$result = $geoip->updateDatabase();
 
 		$url = 'index.php?option=com_akeebasubs';
