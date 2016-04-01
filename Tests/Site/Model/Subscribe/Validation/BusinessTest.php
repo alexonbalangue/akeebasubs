@@ -44,7 +44,6 @@ class BusinessTest extends ValidatorTestCase
 		return [
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -65,91 +64,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => -1,
-				],
-				'loggedIn' => 'guest',
-				'state'    => [
-					'isbusiness' => 0,
-					'country' => '',
-					'vatnumber' => '',
-					'businessname' => '',
-					'occupation' => '',
-				],
-				'expected' => [
-					'businessname' => true,
-					'occupation'	=> true,
-					'vatnumber'		=> false,
-					'novatrequired' => false
-				],
-				'message'  => 'Only country information, not a business: TTFF'
-			],
-
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-				],
-				'loggedIn' => 'guest',
-				'state'    => [
-					'isbusiness' => 1,
-					'country' => '',
-					'vatnumber' => '',
-					'businessname' => '',
-					'occupation' => '',
-				],
-				'expected' => [
-					'businessname' => true,
-					'occupation'	=> true,
-					'vatnumber'		=> false,
-					'novatrequired' => false
-				],
-				'message'  => 'Only country information, is business: TTFF'
-			],
-
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-				],
-				'loggedIn' => 'guest',
-				'state'    => [
-					'isbusiness' => 0,
-					'country' => '',
-					'vatnumber' => '',
-					'businessname' => '',
-					'occupation' => '',
-				],
-				'expected' => [
-					'businessname' => true,
-					'occupation'	=> true,
-					'vatnumber'		=> false,
-					'novatrequired' => false
-				],
-				'message'  => 'No personal information, not a business: TTFF'
-			],
-
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-				],
-				'loggedIn' => 'guest',
-				'state'    => [
-					'isbusiness' => 1,
-					'country' => '',
-					'vatnumber' => '',
-					'businessname' => '',
-					'occupation' => '',
-				],
-				'expected' => [
-					'businessname' => true,
-					'occupation'	=> true,
-					'vatnumber'		=> false,
-					'novatrequired' => false
-				],
-				'message'  => 'No personal information, is business: TTFF'
-			],
-
-			[
-				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -170,7 +84,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -191,7 +104,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -212,7 +124,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -233,7 +144,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -254,7 +164,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -275,7 +184,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -297,7 +205,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -318,7 +225,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -339,7 +245,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -360,7 +265,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -381,7 +285,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -402,7 +305,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -423,7 +325,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -444,7 +345,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -465,7 +365,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -486,7 +385,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -507,7 +405,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'guest',
 				'state'    => [
@@ -528,7 +425,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'business',
 				'state'    => [
@@ -549,7 +445,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'business',
 				'state'    => [
@@ -570,7 +465,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'forcedvat',
 				'state'    => [
@@ -591,7 +485,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'forcedvat',
 				'state'    => [
@@ -612,7 +505,6 @@ class BusinessTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 				],
 				'loggedIn' => 'forcedvat',
 				'state'    => [
