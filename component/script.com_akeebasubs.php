@@ -64,8 +64,8 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 	 *
 	 * @var   array
 	 */
-	protected $removeFilesAllVersions = array(
-		'files'   => array(
+	protected $removeFilesAllVersions = [
+		'files'   => [
 			'cache/com_akeebasubs.updates.php',
 			'cache/com_akeebasubs.updates.ini',
 			'administrator/cache/com_akeebasubs.updates.php',
@@ -116,8 +116,8 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 
 			// Removed in 5.0.1
 			'administrator/components/com_akeebasubs/Helper/ComponentParams.php',
-		),
-		'folders' => array(
+		],
+		'folders' => [
 			'administrator/components/com_akeebasubs/commands',
 			'administrator/components/com_akeebasubs/controllers',
 			'administrator/components/com_akeebasubs/converter',
@@ -142,8 +142,8 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_akeebasubs/views/affiliates',
 			'administrator/components/com_akeebasubs/views/affpayment',
 			'administrator/components/com_akeebasubs/views/affpayments',
-		)
-	);
+		]
+	];
 
 	public function postflight($type, $parent)
 	{
