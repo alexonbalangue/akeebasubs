@@ -124,9 +124,6 @@ class StateData
 			$session->set('firstrun', false, 'com_akeebasubs');
 		}
 
-		// Should I use the email as username?
-		$emailasusername = Container::getInstance('com_akeebasubs')->params->get('emailasusername', 0);
-
 		// Apply the state variables from the model
 		$stateVars = array(
 			'firstrun'      => $firstRun,
@@ -186,12 +183,6 @@ class StateData
 					'value' => $this->slug
 				])->firstOrNew();
 			$this->id = $item->akeebasubs_level_id;
-		}
-
-		// If "use email as username" is selected, apply the email as the username
-		if ($emailasusername && (\JFactory::getUser()->guest))
-		{
-			$this->username = $this->email;
 		}
 	}
 

@@ -202,21 +202,6 @@ class Subscribe extends Model
 
 		foreach ($validation->validation as $key => $validData)
 		{
-			if ($this->container->params->get('personalinfo', 1) == 0)
-			{
-				if (!in_array($key, array('username', 'email', 'email2', 'name', 'coupon')))
-				{
-					continue;
-				}
-			}
-			elseif ($this->container->params->get('personalinfo', 1) == -1)
-			{
-				if (!in_array($key, array('username', 'email', 'email2', 'name', 'country', 'coupon')))
-				{
-					continue;
-				}
-			}
-
 			// An invalid (not VIES registered) VAT number is not a fatal error
 			if ($key == 'vatnumber')
 			{

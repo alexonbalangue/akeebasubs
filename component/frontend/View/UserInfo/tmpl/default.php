@@ -37,7 +37,6 @@ defined('_JEXEC') or die();
 </div>
 
 <?php
-$aks_personal_info = $this->container->params->get('personalinfo',1);
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<JS
 
@@ -51,12 +50,8 @@ $script = <<<JS
 		validatePassword();
 		validateName();
 		validateEmail();
-		if($aks_personal_info != 0) {
-			validateAddress();
-		}
-		if($aks_personal_info == 1) {
-			validateBusiness();
-		}
+		validateAddress();
+		validateBusiness();
 	});
 })(akeeba.jQuery);
 

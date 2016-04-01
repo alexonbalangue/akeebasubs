@@ -31,8 +31,6 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
 		// Reset the component configuration
 		static::$container->params->setParams([
-			'personalinfo' => 1,
-			'showcountries' => '',
 			'hidecountries' => '',
 			'reqcoupon' => 0,
 			'currency' => 'USD',

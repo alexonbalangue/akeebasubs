@@ -27,17 +27,13 @@ akeebasubs_level_id = {$this->item->akeebasubs_level_id};
 JS;
 JFactory::getDocument()->addScriptDeclaration($script);
 
-$prepend_class = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'input-append';
-
-$styleDiscount = $this->cparams->showdiscountfield <= 0 ? 'display:none' : '';
-$styleTax = $this->cparams->showtaxfield <= 0 ? 'display:none' : '';
-$styleRegular = $this->cparams->showregularfield <= 0 ? 'display:none' : '';
-$styleCoupon = (($this->cparams->showcouponfield <= 0) && empty($this->cache['coupon'])) ? 'display:none' : '';
-$requireCoupon = $this->cparams->reqcoupon;
-
-$paymentMethodsCount = count(Select::paymentmethods('paymentmethod', '', array('id' => 'paymentmethod', 'level_id' => $this->item->akeebasubs_level_id, 'return_raw_list' => 1)));
-
-$hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepaymentoption) || ($this->validation->price->gross < 0.01);
+$prepend_class       = $this->cparams->currencypos == 'before' ? 'input-prepend' : 'input-append';
+$requireCoupon       = $this->cparams->reqcoupon;
+$paymentMethodsCount = count(Select::paymentmethods('paymentmethod', '', ['id'              => 'paymentmethod',
+																		  'level_id'        => $this->item->akeebasubs_level_id,
+																		  'return_raw_list' => 1]));
+$hidePaymentMethod   =
+	(($paymentMethodsCount <= 1) && $this->cparams->hidelonepaymentoption) || ($this->validation->price->gross < 0.01);
 ?>
 
 	<div id="akeebasubs">
@@ -51,7 +47,8 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 		<?php echo $this->getContainer()->template->loadPosition('akeebasubscriptionsheader') ?>
 
 		<?php if ($this->cparams->stepsbar && ($this->validation->price->net > 0.01)): ?>
-			<?php echo $this->loadAnyTemplate('site:com_akeebasubs/Level/steps', array('step' => 'subscribe', 'akeebasubs_subscription_level' => $this->item->akeebasubs_level_id)); ?>
+			<?php echo $this->loadAnyTemplate('site:com_akeebasubs/Level/steps', array('step'                          => 'subscribe',
+																					   'akeebasubs_subscription_level' => $this->item->akeebasubs_level_id)); ?>
 		<?php endif; ?>
 
 		<?php echo $this->loadTemplate('level') ?>
@@ -64,7 +61,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 			<hr/>
 		</noscript>
 
-		<?php if (JFactory::getUser()->guest && $this->cparams->allowlogin): ?>
+		<?php if (JFactory::getUser()->guest): ?>
 			<?php echo $this->loadTemplate('login') ?>
 		<?php endif ?>
 
@@ -88,7 +85,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 						</p>
 					</noscript>
 
-					<div class="control-group form-group" style="<?php echo $styleRegular ?>"
+					<div class="control-group form-group"
 						 id="akeebasubs-sum-net-container">
 						<label class="control-label col-sm-2">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_NET') ?>
@@ -111,7 +108,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 						</div>
 					</div>
 
-					<div class="control-group form-group" style="<?php echo $styleDiscount ?>"
+					<div class="control-group form-group"
 						 id="akeebasubs-sum-discount-container">
 						<label class="control-label col-sm-2">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT') ?>
@@ -134,7 +131,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 						</div>
 					</div>
 
-					<div class="control-group form-group" style="<?php echo $styleTax ?>"
+					<div class="control-group form-group"
 						 id="akeebasubs-sum-vat-container">
 						<label class="control-label col-sm-2">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_SUM_VAT') ?>
@@ -190,7 +187,9 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 				<?php
 				// Render pre-payment custom fields
 				$this->getContainer()->platform->importPlugin('akeebasubs');
-				$jResponse = $this->getContainer()->platform->runPlugins('onSubscriptionFormPrepaymentRender', array($this->userparams, array_merge($this->cache, array('subscriptionlevel' => $this->item->akeebasubs_level_id))));
+				$jResponse =
+					$this->getContainer()->platform->runPlugins('onSubscriptionFormPrepaymentRender', array($this->userparams,
+						array_merge($this->cache, array('subscriptionlevel' => $this->item->akeebasubs_level_id))));
 
 				if (is_array($jResponse) && !empty($jResponse))
 				{
@@ -200,7 +199,9 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 							foreach ($customFields as $field):
 								if ($applyValidationBoolean && array_key_exists('isValid', $field))
 								{
-									$customField_class = $field['isValid'] ? (array_key_exists('validLabel', $field) ? 'success has-success' : '') : 'error has-error';
+									$customField_class = $field['isValid'] ?
+										(array_key_exists('validLabel', $field) ? 'success has-success' : '') :
+										'error has-error';
 								}
 								else
 								{
@@ -208,26 +209,26 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 								}
 								?>
 								<div class="control-group form-group <?php echo $customField_class ?>">
-									<label for="<?php echo $field['id']?>" class="control-label col-sm-2">
-										<?php echo $field['label']?>
+									<label for="<?php echo $field['id'] ?>" class="control-label col-sm-2">
+										<?php echo $field['label'] ?>
 									</label>
 
 									<div class="controls">
 		<span class="col-sm-3">
-			<?php echo $field['elementHTML']?>
+			<?php echo $field['elementHTML'] ?>
 		</span>
 										<?php if (array_key_exists('validLabel', $field)): ?>
 											<span id="<?php echo $field['id'] ?>_valid" class="help-inline help-block"
 												  style="<?php if (!$field['isValid'] || !$applyValidationBoolean): ?>display:none<?php endif ?>">
 				  <?php echo $field['validLabel'] ?>
 		</span>
-										<?php endif;?>
+										<?php endif; ?>
 										<?php if (array_key_exists('invalidLabel', $field)): ?>
 											<span id="<?php echo $field['id'] ?>_invalid" class="help-inline help-block"
 												  style="<?php if ($field['isValid'] || !$applyValidationBoolean): ?>display:none<?php endif ?>">
 				  <?php echo $field['invalidLabel'] ?>
 		</span>
-										<?php endif;?>
+										<?php endif; ?>
 									</div>
 								</div>
 
@@ -236,7 +237,7 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 				} ?>
 
 				<?php if ($requireCoupon || ($this->validation->price->net > 0)): ?>
-					<div class="control-group form-group" style="<?php echo $styleCoupon ?>">
+					<div class="control-group form-group">
 						<label for="coupon" class="control-label col-sm-2">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUPON') ?>
 						</label>
@@ -259,20 +260,21 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 						</label>
 
 						<div id="paymentlist-container" class="controls col-sm-3">
-                        <?php
-							$country = !empty($this->userparams->country) && ($this->userparams->country != 'XX') ? $this->userparams->country : $this->cache['country'];
+							<?php
+							$country = !empty($this->userparams->country) && ($this->userparams->country != 'XX') ?
+								$this->userparams->country : $this->cache['country'];
 
-                            /** @var \Akeeba\Subscriptions\Site\Model\PaymentMethods $paymentMethods */
-                            $paymentMethods = $this->getContainer()->factory->model('PaymentMethods')->tmpInstance();
-                            $defaultPayment = $paymentMethods->getLastPaymentPlugin(JFactory::getUser()->id, $country);
+							/** @var \Akeeba\Subscriptions\Site\Model\PaymentMethods $paymentMethods */
+							$paymentMethods = $this->getContainer()->factory->model('PaymentMethods')->tmpInstance();
+							$defaultPayment = $paymentMethods->getLastPaymentPlugin(JFactory::getUser()->id, $country);
 
 							echo Select::paymentmethods(
 								'paymentmethod',
 								$defaultPayment,
 								array(
-									'id' 		=> 'paymentmethod',
-									'level_id' 	=> $this->item->akeebasubs_level_id,
-									'country'  	=> $country
+									'id'       => 'paymentmethod',
+									'level_id' => $this->item->akeebasubs_level_id,
+									'country'  => $country
 								)
 							) ?>
 						</div>
@@ -298,18 +300,12 @@ $hidePaymentMethod = (($paymentMethodsCount <= 1) && $this->cparams->hidelonepay
 	</div>
 
 <?php
-$aks_personal_info = $this->cparams->personalinfo ? 1 : 0;
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL', true);
-$script = <<<JS
+$script                = <<<JS
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
 // due to missing trailing semicolon and/or newline in their code.
 // Akeeba Subscriptions --- START >> >> >>
-akeebasubs_fieldprefs = {
-	'showregularfield'		: {$this->cparams->showregularfield},
-	'showdiscountfield'		: {$this->cparams->showdiscountfield},
-	'showtaxfield'			: {$this->cparams->showtaxfield}
-};
 akeebasubs_apply_validation = {$this->apply_validation};
 
 (function(\$) {
@@ -319,12 +315,8 @@ akeebasubs_apply_validation = {$this->apply_validation};
 		validatePassword();
 		validateName();
 		validateEmail();
-		if($aks_personal_info != 0) {
-			validateAddress();
-		}
-		if($aks_personal_info == 1) {
-			validateBusiness();
-		}
+		validateAddress();
+		validateBusiness();
 		validateForm();
 	});
 })(akeeba.jQuery);

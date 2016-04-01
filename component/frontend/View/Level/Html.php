@@ -72,13 +72,7 @@ class Html extends \FOF30\View\DataView\Html
 		$componentParams = (object)array(
 			'currencypos'           => $this->container->params->get('currencypos', 'before'),
 			'stepsbar'              => $this->container->params->get('stepsbar', 1),
-			'allowlogin'            => $this->container->params->get('allowlogin', 1),
 			'currencysymbol'        => $this->container->params->get('currencysymbol', '€'),
-			'personalinfo'          => $this->container->params->get('personalinfo', 1),
-			'showdiscountfield'     => $this->container->params->get('showdiscountfield', 1),
-			'showtaxfield'          => $this->container->params->get('showtaxfield', 1),
-			'showregularfield'      => $this->container->params->get('showregularfield', 1),
-			'showcouponfield'       => $this->container->params->get('showcouponfield', 1),
 			'hidelonepaymentoption' => $this->container->params->get('hidelonepaymentoption', 1),
 			'reqcoupon'             => $this->container->params->get('reqcoupon', 0),
 		);

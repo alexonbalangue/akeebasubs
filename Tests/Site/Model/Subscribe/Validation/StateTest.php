@@ -54,7 +54,6 @@ class StateTest extends ValidatorTestCase
 		return [
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => true,
 					'showstatefield' => 1,
 				],
@@ -69,7 +68,6 @@ class StateTest extends ValidatorTestCase
 			// ========== Personal information: 1 (YES)
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => false,
 					'showstatefield' => 1,
 				],
@@ -82,7 +80,6 @@ class StateTest extends ValidatorTestCase
 			],
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => true,
 					'showstatefield' => 1,
 				],
@@ -95,7 +92,6 @@ class StateTest extends ValidatorTestCase
 			],
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => true,
 					'showstatefield' => 1,
 				],
@@ -108,7 +104,6 @@ class StateTest extends ValidatorTestCase
 			],
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => true,
 					'showstatefield' => 1,
 				],
@@ -121,7 +116,6 @@ class StateTest extends ValidatorTestCase
 			],
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => false,
 					'showstatefield' => 1,
 				],
@@ -134,7 +128,6 @@ class StateTest extends ValidatorTestCase
 			],
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => true,
 					'showstatefield' => 1,
 				],
@@ -147,7 +140,6 @@ class StateTest extends ValidatorTestCase
 			],
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'_expectEmpty' => true,
 					'showstatefield' => 1,
 				],
@@ -157,231 +149,6 @@ class StateTest extends ValidatorTestCase
 				],
 				'expected' => false,
 				'message' => 'Correct country, state belongs to other country: invalid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 1,
-					'_expectEmpty' => false,
-					'showstatefield' => 0,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Show state field: false. Correct country with published states, no state provided: always valid'
-			],
-
-			// ========== Personal information: -1 (Only country)
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => 'AL'
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. Correct country, state belongs to country: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => 'BC'
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. Correct country, state not belongs to country: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. Correct country, no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => '',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. Empty country, no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'XX',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. No country (XX), no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'CY',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. Country without published states, no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'GR',
-					'state' => 'AL'
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. Correct country, state belongs to other country: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'_expectEmpty' => false,
-				    'showstatefield' => 0,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: only country. Show state field: false. Correct country with published states, no state provided: always valid'
-			],
-
-			// ========== Personal information: 0 (None)
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => 'AL'
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. Correct country, state belongs to country: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => 'BC'
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. Correct country, state not belongs to country: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. Correct country, no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => '',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. Empty country, no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'XX',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. No country (XX), no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'CY',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. Country without published states, no state: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 1,
-				],
-				'state' => [
-					'country' => 'GR',
-					'state' => 'AL'
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. Correct country, state belongs to other country: always valid'
-			],
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'_expectEmpty' => false,
-					'showstatefield' => 0,
-				],
-				'state' => [
-					'country' => 'US',
-					'state' => ''
-				],
-				'expected' => true,
-				'message' => 'Personal information: none. Show state field: false. Correct country with published states, no state provided: always valid'
 			],
 
 		];

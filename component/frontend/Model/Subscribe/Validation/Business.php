@@ -29,9 +29,6 @@ class Business extends Base
 			'novatrequired' => false
 		];
 
-		// Should I collect personal information? -1: only country, 0: none, 1: all
-		$personalInfo = $this->container->params->get('personalinfo', 1);
-
 		// Get some state data
 		$country = trim($this->state->country);
 		$vatNumber = trim($this->state->vatnumber);
@@ -41,7 +38,7 @@ class Business extends Base
 
 		// If this is not a business registration (or we're not supposed to collect personal information) we have
 		// to return.
-		if (!$isBusiness || ($personalInfo != 1))
+		if (!$isBusiness)
 		{
 			$ret['businessname'] = true;
 			$ret['occupation'] = true;

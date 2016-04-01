@@ -5,39 +5,6 @@
  * @license   GNU General Public License version 3, or later
  */
 
-/*
- * WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
- *
- * ##          ##    ####    #######   ####    ##  ##  ####    ##    ######
- * ##          ##   ##  ##   ##    ##  ## ##   ##  ##  ## ##   ##   ##    ##
- * ##          ##  ##    ##  ##   ##   ##  ##  ##  ##  ##  ##  ##  ##
- * ##   ###   ##   ########  ######    ##   ## ##  ##  ##   ## ##  ##  ####
- *  ##  ###  ##    ##    ##  ##   ##   ##    ####  ##  ##    ####  ##     ##
- *   #### ####     ##    ##  ##    ##  ##     ###  ##  ##     ###   ##    ##
- *    ##   ##      ##    ##  ##    ##  ##      ##  ##  ##      ##    ######
- *
- * WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
- *
- *
- * !!! FAILURE TO ABIDE BY THIS WARNING'S INSTRUCTIONS WILL BREAK THE COMPONENT !!!
- *
- *
- * DO NOT REMOVE ANY OF THE FIELDS IN THIS FILE. ALL OF THEM MUST BE PRESENT IN
- * THE HTML OF THE PAGE FOR AKEEBA SUBSCRIPTIONS TO WORK. REMOVAL OF ANY OF THE
- * FIELDS PRESENT IN THIS FILE WILL RESULT IN INABILITY TO SUBSCRIBE, STRANGE
- * ERROR MESSAGES AND GENERAL MALFUNCTION OF THE COMPONENT.
- *
- * YOU ARE SUPPOSED TO HIDE THE FIELDS YOU DO NOT WANT DISPLAYED ON THE PAGE
- * USING CSS. THIS IS WHY EACH OF THESE FIELDS HAS A UNIQUE ID ATTRIBUTE. IF
- * YOU ARE IN DOUBT DO NOT TOUCH OR OVERRIDE THIS FILE.
- *
- * IF YOU EVER REMOVE FIELDS FROM THIS FILE YOU WILL HAVE TO MODIFY THE ENTIRE
- * COMPONENT AND ALL PAYMENT PLUGINS.
- *
- * IF YOU DECIDE TO IGNORE THIS STRICT WARNING, DO NOT FILE "BUG" REPORTS OR
- * SEEK ASSISTANCE.
- */
-
 /** @var \Akeeba\Subscriptions\Site\View\Level\Html $this */
 
 defined('_JEXEC') or die();
@@ -47,23 +14,9 @@ use Akeeba\Subscriptions\Admin\Helper\Select;
 $this->addJavascriptFile('media://com_akeebasubs/js/signup.js');
 $this->addJavascriptFile('media://com_akeebasubs/js/autosubmit.js');
 
-if (isset($this->item))
-{
-	$akeebasubs_subscription_level = $this->item->akeebasubs_level_id;
-}
-else
-{
-	$akeebasubs_subscription_level = null;
-}
-
-$apply_validation = true;
-
-if (property_exists($this, 'apply_validation'))
-{
-	$apply_validation = $this->apply_validation == 'true';
-}
-
-$field_data = array(
+$akeebasubs_subscription_level = isset($this->item) ? $this->item->akeebasubs_level_id : null;
+$apply_validation              = isset($this->apply_validation) ? ($this->apply_validation == 'true') : true;
+$field_data                    = [
 	'name'         => !empty($this->userparams->name) ? $this->userparams->name : $this->cache['name'],
 	'email'        => !empty($this->userparams->email) ? $this->userparams->email : $this->cache['email'],
 	'email2'       => !empty($this->userparams->email2) ? $this->userparams->email2 : $this->cache['email2'],
@@ -79,9 +32,8 @@ $field_data = array(
 	'occupation'   => !empty($this->userparams->occupation) ? $this->userparams->occupation :
 		$this->cache['occupation'],
 	'vatnumber'    => !empty($this->userparams->vatnumber) ? $this->userparams->vatnumber : $this->cache['vatnumber'],
-);
-
-$group_classes = array(
+];
+$group_classes                 = [
 	'username'     => '',
 	'password'     => '',
 	'password2'    => '',
@@ -96,7 +48,7 @@ $group_classes = array(
 	'businessname' => $this->validation->validation->businessname ? '' : 'error has-error',
 	'occupation'   => !empty($field_data['occupation']) ? '' : 'error has-error',
 	'vatnumber'    => $this->validation->validation->vatnumber ? '' : 'warning has-warning',
-);
+];
 
 if (JFactory::getUser()->guest)
 {
@@ -107,18 +59,12 @@ if (JFactory::getUser()->guest)
 		(!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'error has-error' :
 			'';
 }
-
-$styleStateField     = $this->container->params->get('showstatefield', 1) ? '' : 'display: none';
-$businessFields      = $this->container->params->get('businessfields', 'auto');
-$cparamShowCountries = $this->container->params->get('showcountries', '');
-$cparamHideCountries = $this->container->params->get('hidecountries', '');
-$emailasusername     = $this->container->params->get('emailasusername', 0);
 ?>
 
-	<div class="form form-horizontal">
+	<div class="form form-horizontal akeebasubs-signup-fields">
 
 		<fieldset>
-			<?php if (JFactory::getUser()->guest && !$emailasusername): ?>
+			<?php if (JFactory::getUser()->guest): ?>
 				<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT') ?></legend>
 
 				<div class="control-group form-group <?php echo $group_classes['username'] ?>">
@@ -176,11 +122,7 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 					</div>
 				</div>
 
-			<?php elseif (JFactory::getUser()->guest && $emailasusername): ?>
-
-				<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_NEWACCOUNT') ?></legend>
-
-			<?php elseif (!JFactory::getUser()->guest): ?>
+			<?php else: ?>
 
 				<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_EXISTINGACCOUNT') ?></legend>
 
@@ -254,42 +196,6 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 				</div>
 			</div>
 
-			<?php if (JFactory::getUser()->guest && $emailasusername): ?>
-				<div class="control-group form-group <?php echo $group_classes['password'] ?>">
-					<label for="password" class="control-label col-sm-2">
-						* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PASSWORD') ?>
-					</label>
-
-					<div class="controls">
-						<span class="col-sm-3">
-							<input type="password" class="form-control" name="password" id="password"
-								   value="<?php echo $this->escape($this->cache['password']) ?>"/>
-						</span>
-						<span id="password_invalid" class="help-inline help-block"
-							  style="<?php if (strpos($group_classes['password'], 'error') === false): ?>display:none<?php endif; ?>">
-							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD_EMPTY') ?>
-						</span>
-					</div>
-				</div>
-
-				<div class="control-group form-group <?php echo $group_classes['password2'] ?>">
-					<label for="password2" class="control-label col-sm-2">
-						* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PASSWORD2') ?>
-					</label>
-
-					<div class="controls">
-						<span class="col-sm-3">
-							<input type="password" class="form-control" name="password2" id="password2"
-								   value="<?php echo $this->escape($this->cache['password2']) ?>"/>
-						</span>
-						<span id="password2_invalid" class="help-inline help-block"
-							  style="<?php if (strpos($group_classes['password2'], 'error') === false): ?>display:none<?php endif; ?>">
-							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD2') ?>
-						</span>
-					</div>
-				</div>
-			<?php endif; ?>
-
 			<?php
 			// Render per-user custom fields
 			$this->getContainer()->platform->importPlugin('akeebasubs');
@@ -345,30 +251,6 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 					} endforeach;
 			} ?>
 
-			<?php if ($this->container->params->get('personalinfo', 1) == -1): ?>
-				<div class="control-group form-group <?php echo $group_classes['country'] ?>">
-					<label for="country" class="control-label col-sm-2">
-						* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY') ?>
-					</label>
-
-					<div class="controls">
-						<span class="col-sm-3">
-						<?php
-						echo Select::countries($field_data['country'], 'country', array(
-							'show'  => $cparamShowCountries,
-							'hide'  => $cparamHideCountries,
-							'class' => 'form-control'
-						))
-						?>
-						</span>
-						<span id="country_empty" class="help-inline help-block"
-							  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
-							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-						</span>
-					</div>
-				</div>
-			<?php elseif ($this->container->params->get('personalinfo', 1) == 1): ?>
-
 			<div class="control-group form-group <?php echo $group_classes['address1'] ?>">
 				<label for="address1" class="control-label col-sm-2">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS1') ?>
@@ -416,8 +298,7 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 				</div>
 			</div>
 
-			<div class="control-group form-group <?php echo $group_classes['city'] ?>"
-				 style="<?php echo $styleStateField ?>" id="stateField">
+			<div class="control-group form-group <?php echo $group_classes['city'] ?>" id="stateField">
 				<label for="state" class="control-label col-sm-2">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE') ?>
 				</label>
@@ -457,9 +338,7 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 
 				<div class="controls">
 					<span class="col-sm-3">
-						<?php echo Select::countries($field_data['country'], 'country', array('show'  => $cparamShowCountries,
-																							  'hide'  => $cparamHideCountries,
-																							  'class' => 'form-control advancedSelect')) ?>
+						<?php echo Select::countries($field_data['country'], 'country', array('class' => 'form-control advancedSelect')) ?>
 					</span>
 					<span id="country_empty" class="help-inline help-block"
 						  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
@@ -471,27 +350,12 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 		</fieldset>
 		<fieldset>
 
-			<?php if ($businessFields != 'never'): ?>
-				<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS') ?></legend>
-			<?php endif; ?>
+			<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS') ?></legend>
 
 			<?php
-			if ($businessFields == 'never')
-			{
-				$isBusiness = 0;
-				$style      = 'display: none';
-			}
-			elseif ($businessFields == 'always')
-			{
-				$isBusiness = 1;
-				$style      = 'display: none';
-			}
-			else
-			{
-				$isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness :
-					(@array_key_exists('isbusiness', $this->cache) ? $this->cache['isbusiness'] : 0);
-				$style      = '';
-			}
+			$isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusiness :
+				(@array_key_exists('isbusiness', $this->cache) ? $this->cache['isbusiness'] : 0);
+			$style      = '';
 			?>
 
 			<div class="control-group form-group" style="<?php echo $style ?>">
@@ -499,23 +363,20 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS') ?>
 				</label>
 				<span class="col-sm-2">
-					<?php echo JHTML::_('select.genericlist', [
+					<?php echo JHtml::_('select.genericlist', [
 						JHtml::_('select.option', '0', JText::_('JNO')),
 						JHtml::_('select.option', '1', JText::_('JYES'))
 					], 'isbusiness', ['class' => 'form-control'], 'value', 'text', $isBusiness, 'isbusiness'); ?>
 				</span>
 			</div>
 
-			<?php if ($businessFields == 'none'): ?>
-			<div style="display: none;">
-			<?php endif; ?>
-				<div id="businessfields">
-					<div class="control-group form-group <?php echo $group_classes['businessname'] ?>">
-						<label for="businessname" class="control-label col-sm-2">
-							* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME') ?>
-						</label>
+			<div id="businessfields">
+				<div class="control-group form-group <?php echo $group_classes['businessname'] ?>">
+					<label for="businessname" class="control-label col-sm-2">
+						* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME') ?>
+					</label>
 
-						<div class="controls">
+					<div class="controls">
 							<span class="col-sm-3">
 								<input type="text" class="form-control" name="businessname" id="businessname"
 									   value="<?php echo $this->escape($field_data['businessname']); ?>"/>
@@ -524,15 +385,15 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 								  <?php if (strpos($group_classes['businessname'], 'error') === false): ?>style="display:none"<?php endif ?>>
 								<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
 							</span>
-						</div>
 					</div>
+				</div>
 
-					<div class="control-group form-group <?php echo $group_classes['occupation'] ?>">
-						<label for="occupation" class="control-label col-sm-2">
-							* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION') ?>
-						</label>
+				<div class="control-group form-group <?php echo $group_classes['occupation'] ?>">
+					<label for="occupation" class="control-label col-sm-2">
+						* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION') ?>
+					</label>
 
-						<div class="controls">
+					<div class="controls">
 							<span class="col-sm-3">
 								<input type="text" class="form-control" name="occupation" id="occupation"
 									   value="<?php echo $this->escape($field_data['occupation']); ?>"/>
@@ -541,17 +402,17 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 								  <?php if (strpos($group_classes['occupation'], 'error') === false): ?>style="display:none"<?php endif ?>>
 								<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
 							</span>
-						</div>
 					</div>
+				</div>
 
-					<div class="control-group form-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
-						<label for="vatnumber" class="control-label col-sm-2" id="vatlabel">
-							* <?php echo $this->container->params->get('noneuvat', 0) ?
-								JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') :
-								JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER') ?>
-						</label>
+				<div class="control-group form-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
+					<label for="vatnumber" class="control-label col-sm-2" id="vatlabel">
+						* <?php echo $this->container->params->get('noneuvat', 0) ?
+							JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') :
+							JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER') ?>
+					</label>
 
-						<div class="controls">
+					<div class="controls">
 							<span class="input-group input-prepend col-sm-2">
 								<span class="input-group-addon add-on" id="vatcountry">EU</span>
 								<input type="text" name="vatnumber" id="vatnumber" class="input-small form-control"
@@ -566,15 +427,10 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 								  <?php if (strpos($group_classes['vatnumber'], 'success') === false): ?>style="display:none"<?php endif ?>>
 								<?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_VALID') ?>
 							</span>
-						</div>
 					</div>
-
 				</div>
-				<?php if ($businessFields == 'none'): ?>
-			</div>
-				<?php endif; ?>
 
-			<?php endif; ?>
+			</div>
 
 			<?php
 			// Render per-subscription fields, only when we have a valid subscription level!
@@ -650,8 +506,7 @@ $emailasusername     = $this->container->params->get('emailasusername', 0);
 	</div>
 
 <?php
-$aks_validate_url  = JURI::base() . 'index.php';
-$aks_personal_info = $this->container->params->get('personalinfo', 1) ? 'true' : 'false';
+$aks_validate_url  = JUri::base() . 'index.php';
 $aks_noneuvat      = $this->container->params->get('noneuvat', 0) ? 'true' : 'false';
 $script            = <<< JS
 
@@ -660,7 +515,6 @@ $script            = <<< JS
 // Akeeba Subscriptions --- START >> >> >>
 var akeebasubs_validate_url = "$aks_validate_url";
 var akeebasubs_valid_form = false;
-var akeebasubs_personalinfo = $aks_personal_info;
 var akeebasubs_noneuvat = $aks_noneuvat;
 // Akeeba Subscriptions --- END << << <<
 
