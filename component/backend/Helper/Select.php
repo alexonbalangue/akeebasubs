@@ -290,40 +290,6 @@ abstract class Select
 	public static $states = array();
 
 	/**
-	 * Returns a list of custom field types
-	 *
-	 * @return  array  type => description
-	 */
-	public static function getFieldTypes()
-	{
-		$fieldTypes = array();
-
-		JLoader::import('joomla.filesystem.folder');
-
-		$basepath = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/CustomField';
-
-		$files = JFolder::files($basepath, '.php');
-
-		foreach ($files as $file)
-		{
-			if ($file === 'Base.php')
-			{
-				continue;
-			}
-
-			$type      = basename($file, '.php');
-			$className = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . $type;
-
-			if (class_exists($className))
-			{
-				$fieldTypes[ strtolower($type) ] = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_' . strtoupper($type));
-			}
-		}
-
-		return $fieldTypes;
-	}
-
-	/**
 	 * Returns a list of all countries except the empty option (no country)
 	 *
 	 * @return  array
@@ -1196,27 +1162,7 @@ abstract class Select
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-
-	/**
-	 * Drop down list of when to show custom fields
-	 *
-	 * @param   string  $name      The field's name
-	 * @param   string  $selected  Pre-selected value
-	 * @param   array   $attribs   Field attributes
-	 *
-	 * @return  string  The HTML of the drop-down
-	 */
-	public static function fieldshow($name = 'show', $selected = 'all', $attribs = array())
-	{
-		$options   = array();
-		$options[] = JHtml::_('select.option', '', '- ' . JText::_('COM_AKEEBASUBS_COMMON_SELECT') . ' -');
-		$options[] = JHtml::_('select.option', 'all', JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_ALL'));
-		$options[] = JHtml::_('select.option', 'level', JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_LEVEL'));
-		$options[] = JHtml::_('select.option', 'notlevel', JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_NOTLEVEL'));
-
-		return self::genericlist($options, $name, $attribs, $selected, $name);
-	}
-
+	
 	/**
 	 * Drop down list of subscription level relation modes
 	 *

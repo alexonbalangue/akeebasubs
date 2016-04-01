@@ -109,12 +109,4 @@
         />
 
     </fieldset>
-
-    <fieldset
-        name="customparams"
-        label="COM_AKEEBASUBS_USER_CUSTOMPARAMS_TITLE"
-        class="span12"
-        source="admin:com_akeebasubs/Users/form_customparams"
-    >
-    </fieldset>
 </form>

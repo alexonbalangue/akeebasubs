@@ -321,30 +321,10 @@ CREATE TABLE `#__akeebasubs_invoicetemplates` (
             ]]></query>
         </action>
 
-        <action table="#__akeebasubs_customfields" canfail="0">
-            <condition type="missing" value="" />
+        <action table="#__akeebasubs_customfields" canfail="1">
+            <condition type="missing" operator="not" value="" />
             <query><![CDATA[
-CREATE TABLE `#__akeebasubs_customfields` (
-	`akeebasubs_customfield_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-	`title` varchar(255) NOT NULL DEFAULT '',
-	`slug` varchar(255) NOT NULL DEFAULT '',
-	`show` enum('all','level','notlevel') NOT NULL DEFAULT 'all',
-	`akeebasubs_level_id` VARCHAR(255) NOT NULL DEFAULT '0',
-	`type` varchar(100) NOT NULL DEFAULT 'text',
-	`options` mediumtext,
-	`default` varchar(255) DEFAULT '',
-	`allow_empty` tinyint(3) NOT NULL DEFAULT '0',
-	`valid_label` varchar(255) DEFAULT '',
-	`invalid_label` varchar(255) DEFAULT '',
-	`params` mediumtext,
-	`enabled` tinyint(3) NOT NULL DEFAULT '1',
-	`ordering` bigint(20) unsigned NOT NULL DEFAULT '0',
-	`created_by` bigint(20) NOT NULL DEFAULT '0',
-	`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	`modified_by` bigint(20) NOT NULL DEFAULT '0',
-	`modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-	PRIMARY KEY (`akeebasubs_customfield_id`)
-) DEFAULT COLLATE utf8_general_ci;
+DROP TABLE IF EXISTS `#__akeebasubs_customfields`;
             ]]></query>
         </action>
 
@@ -809,13 +789,6 @@ ALTER TABLE `#__akeebasubs_invoices` ADD COLUMN
             ]]></query>
         </action>
 
-        <action table="#__akeebasubs_customfields" canfail="1">
-            <condition type="true" />
-            <query><![CDATA[
-ALTER TABLE `#__akeebasubs_customfields` MODIFY COLUMN `akeebasubs_level_id` VARCHAR(255) NOT NULL DEFAULT '0';
-	         ]]></query>
-        </action>
-
         <action table="#__akeebasubs_invoicetemplates" canfail="1">
             <condition type="missing" value="isbusiness" />
             <query><![CDATA[
@@ -869,13 +842,6 @@ ALTER TABLE `#__akeebasubs_subscriptions` ADD COLUMN `recurring_amount` FLOAT NU
             <condition type="missing" value="akeebasubs_level_id" />
             <query><![CDATA[
 ALTER TABLE `#__akeebasubs_taxrules` ADD COLUMN `akeebasubs_level_id` BIGINT(20) NOT NULL DEFAULT '0' AFTER `taxrate`;
-            ]]></query>
-        </action>
-
-        <action table="#__akeebasubs_customfields" canfail="1">
-            <condition type="true" />
-            <query><![CDATA[
-ALTER TABLE `#__akeebasubs_customfields` MODIFY COLUMN `show` enum('all','level','notlevel') NOT NULL DEFAULT 'all';
             ]]></query>
         </action>
 

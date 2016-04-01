@@ -116,6 +116,12 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 
 			// Removed in 5.0.1
 			'administrator/components/com_akeebasubs/Helper/ComponentParams.php',
+
+			// Removed features no longer maintained
+			'administrator/components/com_akeebasubs/View/Users/tmpl/form_customparams.php',
+			'administrator/components/com_akeebasubs/Model/CustomFields.php',
+			'components/com_akeebasubs/Model/CustomFields.php',
+			'components/com_akeebasubs/Model/Subscribe/Validation/CustomFields.php',
 		],
 		'folders' => [
 			'administrator/components/com_akeebasubs/commands',
@@ -137,11 +143,9 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'components/com_akeebasubs/models',
 			'components/com_akeebasubs/templates',
 
-			// Affiliates feature
-			'administrator/components/com_akeebasubs/views/affiliate',
-			'administrator/components/com_akeebasubs/views/affiliates',
-			'administrator/components/com_akeebasubs/views/affpayment',
-			'administrator/components/com_akeebasubs/views/affpayments',
+			// Removed features no longer maintained
+			'administrator/components/com_akeebasubs/CustomField',
+			'administrator/components/com_akeebasubs/View/CustomFields',
 		]
 	];
 

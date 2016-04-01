@@ -317,30 +317,10 @@ CREATE TABLE "#__akeebasubs_invoicetemplates" (
             ]]></query>
         </action>
 
-        <action table="#__akeebasubs_customfields" canfail="0">
-            <condition type="missing" value="" />
+		<action table="#__akeebasubs_customfields" canfail="1">
+			<condition type="missing" operator="not" value="" />
             <query><![CDATA[
-CREATE TABLE "#__akeebasubs_customfields" (
-	"akeebasubs_customfield_id" serial NOT NULL,
-	"title" varchar(255) NOT NULL DEFAULT '',
-	"slug" varchar(255) NOT NULL DEFAULT '',
-	"show" varchar(8) CHECK ("show" IN ('all','level','notlevel')) NOT NULL DEFAULT 'all',
-	"akeebasubs_level_id" VARCHAR(255) NOT NULL DEFAULT '0',
-	"type" varchar(100) NOT NULL DEFAULT 'text',
-	"options" text,
-	"default" varchar(255) DEFAULT '',
-	"allow_empty" smallint NOT NULL DEFAULT '0',
-	"valid_label" varchar(255) DEFAULT '',
-	"invalid_label" varchar(255) DEFAULT '',
-	"params" text,
-	"enabled" smallint NOT NULL DEFAULT '1',
-	"ordering" bigint  NOT NULL DEFAULT '0',
-	"created_by" bigint NOT NULL DEFAULT '0',
-	"created_on" timestamp without time zone NOT NULL DEFAULT '1970-01-01 00:00:00',
-	"modified_by" bigint NOT NULL DEFAULT '0',
-	"modified_on" timestamp without time zone NOT NULL DEFAULT '1970-01-01 00:00:00',
-	PRIMARY KEY ("akeebasubs_customfield_id")
-);
+DROP TABLE "#__akeebasubs_customfields";
             ]]></query>
         </action>
 

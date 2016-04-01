@@ -26,7 +26,6 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 			'ControlPanel',
 			'COM_AKEEBASUBS_MAINMENU_SETUP'    => array(
 				'Levels',
-				'CustomFields',
 				'LevelGroups',
 				'Relations',
 				'Upgrades',
@@ -92,14 +91,6 @@ class Toolbar extends \FOF30\Toolbar\Toolbar
 		JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_akeebasubs&view=Coupons');
 
 		$this->renderSubmenu();
-	}
-
-	public function onCustomFieldsBrowse()
-	{
-		$this->onBrowse();
-
-		JToolBarHelper::divider();
-		JToolBarHelper::custom('copy', 'copy.png', 'copy_f2.png', 'JLIB_HTML_BATCH_COPY', false);
 	}
 
 	public function onEmailtemplatesBrowse()
