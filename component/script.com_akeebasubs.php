@@ -122,6 +122,9 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_akeebasubs/Model/CustomFields.php',
 			'components/com_akeebasubs/Model/CustomFields.php',
 			'components/com_akeebasubs/Model/Subscribe/Validation/CustomFields.php',
+
+			// Replaced PHP templates with Blade
+			'components/com_akeebasubs/View/Level/tmpl/default.php',
 		],
 		'folders' => [
 			'administrator/components/com_akeebasubs/commands',
