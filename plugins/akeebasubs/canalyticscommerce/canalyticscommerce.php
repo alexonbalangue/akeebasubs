@@ -29,9 +29,6 @@ class plgAkeebasubsCanalyticscommerce extends JPlugin
 		$script = "
 
 
-;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
-// due to missing trailing semicolon and/or newline in their code.
-
 				  var _gaq = _gaq || [];
 				  _gaq.push(['_setAccount', '" . $this->params->get('tracking_id') . "']);
 				  _gaq.push(['_trackPageview']);

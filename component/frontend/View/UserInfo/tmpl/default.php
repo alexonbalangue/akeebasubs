@@ -40,9 +40,6 @@ defined('_JEXEC') or die();
 $aks_msg_error_overall = JText::_('COM_AKEEBASUBS_LEVEL_ERR_JSVALIDATIONOVERALL',true);
 $script = <<<JS
 
-;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
-// due to missing trailing semicolon and/or newline in their code.
-// Akeeba Subscriptions --- START >> >> >>
 (function(\$) {
 	\$(document).ready(function(){
 		// Commented out until we can resolve some strange validation errors for some users
@@ -63,7 +60,6 @@ function onSignupFormSubmit()
 
 	return akeebasubs_valid_form;
 }
-// Akeeba Subscriptions --- END << << <<
 
 JS;
 JFactory::getDocument()->addScriptDeclaration($script);

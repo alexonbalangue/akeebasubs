@@ -185,8 +185,6 @@ JS;
 		{
 			$javascript = <<< JS
 
-;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
-// due to missing trailing semicolon and/or newline in their code.
 (function($) {
 	$(document).ready(function(){
 		addToSubValidationFetchQueue(plg_akeebasubs_slavesubs_fetch);

@@ -510,13 +510,9 @@ $aks_validate_url  = JUri::base() . 'index.php';
 $aks_noneuvat      = $this->container->params->get('noneuvat', 0) ? 'true' : 'false';
 $script            = <<< JS
 
-;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
-// due to missing trailing semicolon and/or newline in their code.
-// Akeeba Subscriptions --- START >> >> >>
 var akeebasubs_validate_url = "$aks_validate_url";
 var akeebasubs_valid_form = false;
 var akeebasubs_noneuvat = $aks_noneuvat;
-// Akeeba Subscriptions --- END << << <<
 
 JS;
 JFactory::getDocument()->addScriptDeclaration($script);
