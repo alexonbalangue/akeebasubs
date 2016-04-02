@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-
 /** @var  array  $field                   Field definition */
 
 $field['isValid']  = array_key_exists('isValid', $field) ? $field['isValid'] : true;

@@ -10,10 +10,6 @@ defined('_JEXEC') or die();
 
 ?>
 
-<?php if($this->container->params->get('stepsbar',1) && ($this->subscription->prediscount_amount > 0.01)):?>
-<?php echo $this->loadAnyTemplate('site:com_akeebasubs/Level/steps',array('step'=>'done')); ?>
-<?php endif; ?>
-
 <h1 class="componentheading">
 	<?php echo $this->escape(JText::_('COM_AKEEBASUBS_MESSAGE_SORRY')) ?>
 </h1>

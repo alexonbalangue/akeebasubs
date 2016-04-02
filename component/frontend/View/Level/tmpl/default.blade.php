@@ -36,14 +36,6 @@ $hidePaymentMethod   =
 	{{-- Module position 'akeebasubscriptionsheader' --}}
 	@modules('akeebasubscriptionsheader')
 
-	{{-- Steps bar --}}
-	@if ($this->cparams->stepsbar && ($this->validation->price->net > 0.01))
-	@include('site:com_akeebasubs/Level/steps', [
-	'step' => 'subscribe',
-	'akeebasubs_subscription_level' => $this->item->akeebasubs_level_id
-	])
-	@endif
-
 	{{-- Subscription level summary --}}
 	@include('site:com_akeebasubs/Level/default_level')
 

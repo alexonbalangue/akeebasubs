@@ -50,12 +50,6 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SECRET"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SECRET_DESC"
 		/>
-		<field name="stepsbar" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR_DESC">
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
 		<field name="includesignup" type="list" default="2"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_DESC">
