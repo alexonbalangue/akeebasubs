@@ -936,21 +936,20 @@ function applyPrice(response)
 {
 	(function ($)
 	{
-		if ($('#akeebasubs-sum-net').length > 0)
+		if ($('#akeebasubs-sum-total').length > 0)
 		{
-			$('#akeebasubs-sum-net').val(response.net);
-			$('#akeebasubs-sum-discount').val(response.discount);
-			$('#akeebasubs-sum-vat').val(response.tax);
-			$('#akeebasubs-sum-vat-percent').html(response.taxrate);
-			$('#akeebasubs-sum-total').val(response.gross);
+			var vatContainer = $('#akeebasubs-sum-vat-container');
 
-			$('#akeebasubs-sum-net-container').css('display', 'none');
-			$('#akeebasubs-sum-discount-container').css('display', 'none');
-			$('#akeebasubs-sum-vat-container').css('display', 'none');
-			$('#akeebasubs-sum-net-container').css('display', 'block');
-			$('#akeebasubs-sum-discount-container').css('display', 'block');
-			$('#akeebasubs-sum-vat-container').css('display', 'block');
-			
+			vatContainer.hide();
+
+			$('#akeebasubs-sum-total').val(response.gross);
+			$('#akeebasubs-sum-vat-percent').html(response.taxrate);
+
+			if (response.taxrate > 0)
+			{
+				vatContainer.show();
+			}
+
 			if (response.gross * 1 <= 0)
 			{
 				$('#paymentmethod-container').css('display', 'none');

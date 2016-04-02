@@ -20,7 +20,6 @@ akeebasubs_level_id = {$this->item->akeebasubs_level_id};
 JS;
 JFactory::getDocument()->addScriptDeclaration($script);
 
-$requireCoupon       = $this->cparams->reqcoupon;
 $paymentMethodsCount = count(Select::paymentmethods('paymentmethod', '', ['id'              => 'paymentmethod',
 																		  'level_id'        => $this->item->akeebasubs_level_id,
 																		  'return_raw_list' => 1]));
@@ -40,30 +39,18 @@ $hidePaymentMethod   =
 	<noscript>
 		<div class="alert alert-warning">
 			<h3>
-				<span class="glyphicon glyphicon-alert icon icon-warning-sign"></span>
+				<span class="glyphicon glyphicon-alert"></span>
 				@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_HEADER')
 			</h3>
 			<p>@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_BODY')</p>
 			<p>
 				<a href="http://enable-javascript.com" class="btn btn-primary" target="_blank">
-					<span class="glyphicon glyphicon-info-sign icon icon-info-sign"></span>
+					<span class="glyphicon glyphicon-info-sign"></span>
 					@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_MOREINFO')
 				</a>
 			</p>
 		</div>
 	</noscript>
-
-	{{-- Subscription level summary --}}
-	@include('site:com_akeebasubs/Level/default_level')
-
-	{{-- Login --}}
-	@if(JFactory::getUser()->guest)
-	<a href="@route('index.php?option=com_users&task=user.login&return=' . base64_encode(JUri::getInstance()->toString())))"
-	   class="btn btn-default btn-inverse" rel="nofollow,noindex">
-		<span class="icon icon-key glyphicon glyphicon-log-in"></span>
-		@lang('COM_AKEEBASUBS_LEVEL_BTN_LOGINIFALERADY')
-	</a>
-	@endif
 
 	<form
 		action="@route('index.php?option=com_akeebasubs&view=Subscribe&layout=default&slug=' . $this->input->getString('slug', ''))"
@@ -82,20 +69,6 @@ $hidePaymentMethod   =
 			<h3>@lang('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')</h3>
 
 			@include('site:com_akeebasubs/Level/default_prepayment')
-
-			{{-- Coupon code --}}
-			@if ($requireCoupon || ($this->validation->price->net > 0))
-				<div class="control-group form-group">
-					<label for="coupon" class="control-label col-sm-2">
-						@lang('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')
-					</label>
-
-					<div class="controls col-sm-3">
-						<input type="text" class="form-control input-medium" name="coupon" id="coupon"
-							   value="{{{$this->cache['coupon']}}}"/>
-					</div>
-				</div>
-			@endif
 		</div>
 
 		{{-- Payment methods --}}

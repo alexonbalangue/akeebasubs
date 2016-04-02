@@ -7,71 +7,80 @@
 
 defined('_JEXEC') or die();
 
+use Akeeba\Subscriptions\Admin\Helper\Image;
+use Akeeba\Subscriptions\Admin\Helper\Message;
+
+$requireCoupon       = $this->cparams->reqcoupon;
 ?>
 {{-- REPEATABLE CONSTRUCT priceStructure --}}
 @repeatable('priceStructure', $id, $price)
-<div class="input-group input-{{ $this->cparams->currencypos == 'before' ? 'prepend' : 'append' }}">
 	@if ($this->cparams->currencypos == 'before')
-	<span class="input-group-addon add-on">{{{ $this->cparams->currencysymbol }}}</span>
+	<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
 	@endif
-	<input id="akeebasubs-sum-{{{$id}}}" type="text" disabled="disabled"
-		   class="form-control input-small"
-		   value="{{{ $price }}}"/>
+	<span class="akeebasubs-level-price" id="akeebasubs-sum-{{{$id}}}">
+		{{{ $price }}}
+	</span>
 	@if ($this->cparams->currencypos == 'after')
-	<span class="input-group-addon add-on">{{{ $this->cparams->currencysymbol }}}</span>
+	<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
 	@endif
-</div>
 @endRepeatable
 
-{{-- COUPON AND SUMMARY AREA --}}
-<fieldset class="{{($this->validation->price->net < 0.01) ? 'hidden' : ''}}">
-	<legend>@lang('COM_AKEEBASUBS_LEVEL_COUPONANDSUMMARY')</legend>
-
-	<noscript>
-		<p class="alert alert-warning">
-			@lang('COM_AKEEBASUBS_LEVEL_SUM_NOSCRIPT')
-		</p>
-	</noscript>
-
-	<div class="control-group form-group" id="akeebasubs-sum-net-container">
-		<label class="control-label col-sm-2">
-			@lang('COM_AKEEBASUBS_LEVEL_SUM_NET')
-		</label>
-
-		<div class="controls col-sm-2">
-			@yieldRepeatable('priceStructure', 'net', $this->validation->price->net)
-		</div>
+<div class="panel panel-default" id="akeebasubs-panel-order">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			@lang('COM_AKEEBASUBS_LEVEL_LBL_YOURORDER')
+			<span class="label label-default label-inverse">{{{$this->item->title}}}</span>
+		</h3>
 	</div>
-
-	<div class="control-group form-group" id="akeebasubs-sum-discount-container">
-		<label class="control-label col-sm-2">
-			@lang('COM_AKEEBASUBS_LEVEL_SUM_DISCOUNT')
-		</label>
-
-		<div class="controls col-sm-2">
-			@yieldRepeatable('priceStructure', 'discount', $this->validation->price->discount)
+	<div class="panel-body">
+		{{-- SUBSCRIPTION LEVEL DESCRIPTION --}}
+		<div>
+			@jhtml('content.prepare', Message::processLanguage($this->item->description))
 		</div>
-	</div>
 
-	<div class="control-group form-group" id="akeebasubs-sum-vat-container">
-		<label class="control-label col-sm-2">
-			@lang('COM_AKEEBASUBS_LEVEL_SUM_VAT')
-			<span id="akeebasubs-sum-vat-percent">{{{$this->validation->price->taxrate}}}</span>%
-		</label>
+		<hr />
 
-		<div class="controls col-sm-2">
-			@yieldRepeatable('priceStructure', 'tax', $this->validation->price->tax)
-		</div>
-	</div>
-
-	<div class="control-group form-group success">
-		<label class="control-label col-sm-2">
+		{{-- PRICE INFORMATION SUMMARY AREA --}}
+		@unless($this->validation->price->net < 0.01)
+		<div class="col-xs-6 span6">
 			@lang('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')
-		</label>
 
-		<div class="controls col-sm-2">
-			@yieldRepeatable('priceStructure', 'gross', $this->validation->price->gross)
+			<span id="akeebasubs-sum-vat-container" style="display:{{ ($this->validation->price->taxrate > 0) ? 'inline' : 'none' }}">
+			(@lang('COM_AKEEBASUBS_LEVEL_SUM_VAT') <span id="akeebasubs-sum-vat-percent">{{{$this->validation->price->taxrate}}}</span>%)
+			</span>
 		</div>
-	</div>
+		<div class="col-xs-6 span6">
+			<span class="label label-success">
+				@yieldRepeatable('priceStructure', 'gross', $this->validation->price->gross)
+			</span>
+		</div>
+		<div class="clearfix"></div>
 
-</fieldset>
+		<noscript>
+			<div class="alert alert-warning">
+				<h5>
+					<span class="glyphicon glyphicon-alert"></span>
+					@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_HEADER')
+				</h5>
+				<p>
+					@lang('COM_AKEEBASUBS_LEVEL_SUM_NOSCRIPT')
+				</p>
+			</div>
+		</noscript>
+
+		<hr />
+		@endunless
+
+		{{-- Coupon code --}}
+		@if ($requireCoupon || ($this->validation->price->net > 0))
+		<h4>
+			@lang('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')
+		</h4>
+		<input type="text" class="form-control input-medium" name="coupon" id="coupon"
+			   placeholder="@lang('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')"
+			   value="{{{$this->cache['coupon']}}}"/>
+		@endif
+
+	</div>
+</div>
+
