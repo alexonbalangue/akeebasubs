@@ -36,27 +36,39 @@ $hidePaymentMethod   =
 	{{-- Module position 'akeebasubscriptionsheader' --}}
 	@modules('akeebasubscriptionsheader')
 
+	{{-- Warning when Javascript is disabled --}}
+	<noscript>
+		<div class="alert alert-warning">
+			<h3>
+				<span class="glyphicon glyphicon-alert icon icon-warning-sign"></span>
+				@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_HEADER')
+			</h3>
+			<p>@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_BODY')</p>
+			<p>
+				<a href="http://enable-javascript.com" class="btn btn-primary" target="_blank">
+					<span class="glyphicon glyphicon-info-sign icon icon-info-sign"></span>
+					@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_MOREINFO')
+				</a>
+			</p>
+		</div>
+	</noscript>
+
 	{{-- Subscription level summary --}}
 	@include('site:com_akeebasubs/Level/default_level')
 
-	{{-- Warning when Javascript is disabled --}}
-	<noscript>
-		<hr/>
-		<h1>@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_HEADER')</h1>
-		<p>@lang('COM_AKEEBASUBS_LEVEL_ERR_NOJS_BODY')</p>
-		<hr/>
-	</noscript>
-
-	{{-- Login form --}}
-	@if (JFactory::getUser()->guest)
-		@include('site:com_akeebasubs/Level/default_login')
+	{{-- Login --}}
+	@if(JFactory::getUser()->guest)
+	<a href="@route('index.php?option=com_users&task=user.login&return=' . base64_encode(JUri::getInstance()->toString())))"
+	   class="btn btn-default btn-inverse" rel="nofollow,noindex">
+		<span class="icon icon-key glyphicon glyphicon-log-in"></span>
+		@lang('COM_AKEEBASUBS_LEVEL_BTN_LOGINIFALERADY')
+	</a>
 	@endif
 
 	<form
 		action="@route('index.php?option=com_akeebasubs&view=Subscribe&layout=default&slug=' . $this->input->getString('slug', ''))"
 		method="post"
 		id="signupForm" class="form form-horizontal">
-
 		<input type="hidden" name="{{{ JFactory::getSession()->getFormToken() }}}" value="1"/>
 
 		{{-- User account & invoicing information fields --}}
@@ -66,8 +78,8 @@ $hidePaymentMethod   =
 		@include('site:com_akeebasubs/Level/default_summary')
 
 		{{-- Custom fields after payment summary --}}
-		<fieldset>
-			<legend class="subs">@lang('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')</legend>
+		<div>
+			<h3>@lang('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')</h3>
 
 			@include('site:com_akeebasubs/Level/default_prepayment')
 
@@ -84,7 +96,7 @@ $hidePaymentMethod   =
 					</div>
 				</div>
 			@endif
-		</fieldset>
+		</div>
 
 		{{-- Payment methods --}}
 		<div id="paymentmethod-container" class="{{$hidePaymentMethod ? 'hidden' : ''}}">
