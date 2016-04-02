@@ -80,7 +80,7 @@ function blockInterface()
 	(function ($)
 	{
 		$('#subscribenow').click(cacheSubmitAction);
-		$('.ui-disable-spinner').css('display', 'inline-block');
+		$('.ui-disable-spinner').show();
 		//$('#subscribenow').attr('disabled','disabled');
 		akeebasubs_blocked_gui = true;
 	})(akeeba.jQuery);
@@ -91,7 +91,7 @@ function enableInterface()
 	(function ($)
 	{
 		$('#subscribenow').unbind('click');
-		$('.ui-disable-spinner').css('display', 'none');
+		$('.ui-disable-spinner').hide();
 		$('#subscribenow').removeAttr('disabled');
 		akeebasubs_blocked_gui = false;
 		if (akeebasubs_run_validation_after_unblock)
@@ -261,38 +261,38 @@ function validatePassword()
 		var password = $('#password').val();
 		var password2 = $('#password2').val();
 
-		$('#password_invalid').css('display', 'none');
-		$('#password2_invalid').css('display', 'none');
+		$('#password_invalid').hide();
+		$('#password2_invalid').hide();
 
 		if (!akeebasubs_apply_validation)
 		{
 			if ((password == '') && (password2 == ''))
 			{
-				$('#password').parents('div.control-group').removeClass('error has-error success has-success');
-				$('#password2').parents('div.control-group').removeClass('error has-error success has-success');
+				$('#password').parents('div.form-group').removeClass('error has-error');
+				$('#password2').parents('div.form-group').removeClass('error has-error');
 				return;
 			}
 		}
 
 		if (password == '')
 		{
-			$('#password').parents('div.control-group').addClass('error has-error').removeClass('success has-success');
-			$('#password2').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#password_invalid').css('display', 'inline-block');
+			$('#password').parents('div.form-group').addClass('error has-error');
+			$('#password2').parents('div.form-group').removeClass('error has-error');
+			$('#password_invalid').show();
 			akeebasubs_valid_form = false;
 		}
 		else
 		{
-			$('#password').parents('div.control-group').removeClass('error has-error').addClass('success has-success');
+			$('#password').parents('div.form-group').removeClass('error has-error');
 			if (password2 != password)
 			{
-				$('#password2').parents('div.control-group').addClass('error has-error').removeClass('success has-success');
-				$('#password2_invalid').css('display', 'inline-block');
+				$('#password2').parents('div.form-group').addClass('error has-error');
+				$('#password2_invalid').show();
 				akeebasubs_valid_form = false;
 			}
 			else
 			{
-				$('#password2').parents('div.control-group').removeClass('error has-error').addClass('success has-success');
+				$('#password2').parents('div.form-group').removeClass('error has-error');
 			}
 		}
 	})(akeeba.jQuery);
@@ -306,10 +306,10 @@ function validateName()
 {
 	(function ($)
 	{
-		$('#name_empty').css('display', 'none');
+		$('#name_empty').hide();
 		var name = $('#name').val();
 
-		$('#name').parents('div.control-group').removeClass('error has-error success has-success');
+		$('#name').parents('div.form-group').removeClass('error has-error');
 		if (!akeebasubs_apply_validation)
 		{
 			return;
@@ -330,14 +330,14 @@ function validateName()
 
 		if (invalidName)
 		{
-			$('#name').parents('div.control-group').addClass('error has-error').removeClass('success has-success');
-			$('#name_empty').css('display', 'inline-block');
+			$('#name').parents('div.form-group').addClass('error has-error');
+			$('#name_empty').show();
 			akeebasubs_valid_form = false;
 			return;
 		}
 		else
 		{
-			$('#name').parents('div.control-group').removeClass('error has-error').addClass('success has-success');
+			$('#name').parents('div.form-group').removeClass('error has-error');
 		}
 	})(akeeba.jQuery);
 }
@@ -399,11 +399,11 @@ function validateEmail()
 {
 	(function ($)
 	{
-		$('#email_empty').css('display', 'none');
-		$('#email_invalid').css('display', 'none');
-		$('#email2_invalid').css('display', 'none');
-		$('#email').parents('div.control-group').removeClass('error has-error success has-success');
-		$('#email2').parents('div.control-group').removeClass('error has-error success has-success');
+		$('#email_empty').hide();
+		$('#email_invalid').hide();
+		$('#email2_invalid').hide();
+		$('#email').parents('div.form-group').removeClass('error has-error');
+		$('#email2').parents('div.form-group').removeClass('error has-error');
 		var email = $('#email').val();
 		var email2 = $('#email2').val();
 
@@ -414,25 +414,25 @@ function validateEmail()
 
 		if ((email == '') && (email2 == ''))
 		{
-			$('#email').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#email2').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#email_empty').css('display', 'none');
-			$('#email_invalid').css('display', 'none');
-			$('#email2_invalid').css('display', 'none');
+			$('#email').parents('div.form-group').removeClass('error has-error');
+			$('#email2').parents('div.form-group').removeClass('error has-error');
+			$('#email_empty').hide();
+			$('#email_invalid').hide();
+			$('#email2_invalid').hide();
 			return;
 		}
 
 		if (email == '')
 		{
-			$('#email').parents('div.control-group').addClass('error has-error').removeClass('success has-success');
-			$('#email_empty').css('display', 'inline-block');
+			$('#email').parents('div.form-group').addClass('error has-error');
+			$('#email_empty').show();
 			akeebasubs_valid_form = false;
 			return;
 		}
 		else if (!echeck(email))
 		{
-			$('#email').parents('div.control-group').addClass('error has-error').removeClass('success has-success');
-			$('#email_invalid').css('display', 'inline-block');
+			$('#email').parents('div.form-group').addClass('error has-error');
+			$('#email_invalid').show();
 			akeebasubs_valid_form = false;
 			return;
 		}
@@ -457,50 +457,48 @@ function validateAddress()
 
 		if (!akeebasubs_apply_validation)
 		{
-			$('#address1').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#country').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#city').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#state').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#zip').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#address1').parents('div.form-group').removeClass('error has-error');
+			$('#country').parents('div.form-group').removeClass('error has-error');
+			$('#city').parents('div.form-group').removeClass('error has-error');
+			$('#state').parents('div.form-group').removeClass('error has-error');
+			$('#zip').parents('div.form-group').removeClass('error has-error');
 
-			$('#address1_empty').css('display', 'none');
-			$('#country_empty').css('display', 'none');
-			$('#city_empty').css('display', 'none');
-			$('#state_empty').css('display', 'none');
-			$('#zip_empty').css('display', 'none');
+			$('#address1_empty').hide();
+			$('#country_empty').hide();
+			$('#city_empty').hide();
+			$('#state_empty').hide();
+			$('#zip_empty').hide();
 
 			return;
 		}
 
 
-		$('#address1').parents('div.control-group').removeClass('error has-error success has-success');
+		$('#address1').parents('div.form-group').removeClass('error has-error');
 		if (address == '')
 		{
-			$('#address1').parents('div.control-group').addClass('error has-error');
-			$('#address1_empty').css('display', 'inline-block');
+			$('#address1').parents('div.form-group').addClass('error has-error');
+			$('#address1_empty').show();
 			hasErrors = true;
 		}
 		else
 		{
-			$('#address1').parents('div.control-group').addClass('success has-success');
-			$('#address1_empty').css('display', 'none');
+			$('#address1_empty').hide();
 		}
 
-		$('#country').parents('div.control-group').removeClass('error has-error success has-success');
+		$('#country').parents('div.form-group').removeClass('error has-error');
 		if (country == '')
 		{
-			$('#country').parents('div.control-group').addClass('error has-error');
-			$('#country_empty').css('display', 'inline-block');
+			$('#country').parents('div.form-group').addClass('error has-error');
+			$('#country_empty').show();
 			hasErrors = true;
 		}
 		else
 		{
-			$('#country').parents('div.control-group').addClass('success has-success');
-			$('#country_empty').css('display', 'none');
+			$('#country_empty').hide();
 			// If that's an EU country, show and update the VAT field
 			if ($('#vatfields'))
 			{
-				$('#vatfields').css('display', 'none');
+				$('#vatfields').hide();
 
 				if (akeebasubs_noneuvat)
 				{
@@ -522,47 +520,28 @@ function validateAddress()
 			}
 		}
 
-		/*
-		 if( (country == 'US') || (country == 'CA') ) {
-		 $('#stateField').css('display','block');
-		 $('#state').parent().parent().removeClass('error').removeClass('success');
-		 if(state == '') {
-		 $('#state').parent().parent().addClass('error');
-		 $('#state_empty').css('display','inline-block');
-		 hasErrors = true;
-		 } else {
-		 $('#state').parent().parent().addClass('success');
-		 $('#state_empty').css('display','none');
-		 }
-		 } else {
-		 $('#stateField').css('display','none');
-		 }
-		 */
-
-		$('#city').parents('div.control-group').removeClass('error has-error success has-success');
+		$('#city').parents('div.form-group').removeClass('error has-error');
 		if (city == '')
 		{
-			$('#city').parents('div.control-group').addClass('error has-error');
-			$('#city_empty').css('display', 'inline-block');
+			$('#city').parents('div.form-group').addClass('error has-error');
+			$('#city_empty').show();
 			hasErrors = true;
 		}
 		else
 		{
-			$('#city').parents('div.control-group').addClass('success has-success');
-			$('#city_empty').css('display', 'none');
+			$('#city_empty').hide();
 		}
 
-		$('#zip').parents('div.control-group').removeClass('error has-error success has-success');
+		$('#zip').parents('div.form-group').removeClass('error has-error');
 		if (zip == '')
 		{
-			$('#zip').parents('div.control-group').addClass('error has-error');
-			$('#zip_empty').css('display', 'inline-block');
+			$('#zip').parents('div.form-group').addClass('error has-error');
+			$('#zip_empty').show();
 			hasErrors = true;
 		}
 		else
 		{
-			$('#zip').parents('div.control-group').addClass('success has-success');
-			$('#zip_empty').css('display', 'none');
+			$('#zip_empty').hide();
 		}
 
 
@@ -607,7 +586,7 @@ function validateBusiness()
 
 		// Do I have to show VAT fields?
 		var country = $('#' + akeebasubs_form_specifier + ' select[name$="country"]').val();
-		$('#vatfields').css('display', 'none');
+		$('#vatfields').hide();
 
 		if (akeebasubs_noneuvat)
 		{
@@ -704,14 +683,13 @@ function applyValidation(response, callback)
 		akeebasubs_valid_form = true;
 		if (akeebasubs_apply_validation)
 		{
-			$('#username').parents('div.control-group').removeClass('error has-error success has-success');
-			if ($('#username_valid'))
+			$('#username').parents('div.form-group').removeClass('error has-error');
+
+			if ($('#username_invalid'))
 			{
 				if (response.username)
 				{
-					$('#username').parents('div.control-group').addClass('success has-success');
-					$('#username_valid').css('display', 'inline-block');
-					$('#username_invalid').css('display', 'none');
+					$('#username_invalid').hide();
 				}
 				else
 				{
@@ -720,184 +698,172 @@ function applyValidation(response, callback)
 						akeebasubs_valid_form = false;
 					}
 
-					$('#username_valid').css('display', 'none');
-					$('#username_invalid').css('display', 'none');
+					$('#username_invalid').hide();
 
 					if ($('#username').val() != '')
 					{
-						$('#username').parents('div.control-group').addClass('error has-error');
-						$('#username_invalid').css('display', 'inline-block');
+						$('#username').parents('div.form-group').addClass('error has-error');
+						$('#username_invalid').show();
 					}
 				}
 			}
 
-			$('#name').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#name').parents('div.form-group').removeClass('error has-error');
 			if (response.name)
 			{
-				$('#name').parents('div.control-group').addClass('success has-success');
-				$('#name_empty').css('display', 'none');
+				$('#name_empty').hide();
 			}
 			else
 			{
-				$('#name').parents('div.control-group').addClass('error has-error');
+				$('#name').parents('div.form-group').addClass('error has-error');
 				akeebasubs_valid_form = false;
-				$('#name_empty').css('display', 'inline-block');
+				$('#name_empty').show();
 			}
 
-			$('#email').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#email').parents('div.form-group').removeClass('error has-error');
 			if (response.email)
 			{
-				$('#email').parents('div.control-group').addClass('success has-success');
-				$('#email_invalid').css('display', 'none');
+				$('#email_invalid').hide();
 			}
 			else
 			{
-				$('#email').parents('div.control-group').addClass('error has-error');
+				$('#email').parents('div.form-group').addClass('error has-error');
 				akeebasubs_valid_form = false;
-				$('#email_invalid').css('display', 'inline-block');
+				$('#email_invalid').show();
 			}
 
-			$('#email2').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#email2').parents('div.form-group').removeClass('error has-error');
 			if (response.email2)
 			{
-				$('#email2').parents('div.control-group').addClass('success has-success');
-				$('#email2_invalid').css('display', 'none');
+				$('#email2_invalid').hide();
 			}
 			else
 			{
-				$('#email2').parents('div.control-group').addClass('error has-error');
+				$('#email2').parents('div.form-group').addClass('error has-error');
 				akeebasubs_valid_form = false;
-				$('#email2_invalid').css('display', 'inline-block');
+				$('#email2_invalid').show();
 			}
 
-			$('#address1').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#address1').parents('div.form-group').removeClass('error has-error');
 			if (response.address1)
 			{
-				$('#address1').parents('div.control-group').addClass('success has-success');
-				$('#address1_empty').css('display', 'none');
+				$('#address1_empty').hide();
 			}
 			else
 			{
-				$('#address1').parents('div.control-group').addClass('error has-error');
+				$('#address1').parents('div.form-group').addClass('error has-error');
 				akeebasubs_valid_form = false;
-				$('#address1_empty').css('display', 'inline-block');
+				$('#address1_empty').show();
 			}
 
-			$('#country').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#country').parents('div.form-group').removeClass('error has-error');
 			if (response.country)
 			{
-				$('#country').parents('div.control-group').addClass('success has-success');
-				$('#country_empty').css('display', 'none');
+				$('#country_empty').hide();
 			}
 			else
 			{
 				akeebasubs_valid_form = false;
-				$('#country').parents('div.control-group').addClass('error has-error');
-				$('#country_empty').css('display', 'inline-block');
+				$('#country').parents('div.form-group').addClass('error has-error');
+				$('#country_empty').show();
 			}
 
-			$('#state').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#state').parents('div.form-group').removeClass('error has-error');
 			if (response.state)
 			{
-				$('#state').parents('div.control-group').addClass('success has-success');
-				$('#state_empty').css('display', 'none');
+				$('#state_empty').hide();
 			}
 			else
 			{
-				$('#state').parents('div.control-group').addClass('error has-error');
+				$('#state').parents('div.form-group').addClass('error has-error');
 				if ($('#state_empty').css('display') != 'none')
 				{
 					akeebasubs_valid_form = false;
 				}
-				$('#state_empty').css('display', 'inline-block');
+				$('#state_empty').show();
 			}
 
-			$('#city').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#city').parents('div.form-group').removeClass('error has-error');
 			if (response.city)
 			{
-				$('#city').parents('div.control-group').addClass('success has-success');
-				$('#city_empty').css('display', 'none');
+				$('#city_empty').hide();
 			}
 			else
 			{
-				$('#city').parents('div.control-group').addClass('error has-error');
+				$('#city').parents('div.form-group').addClass('error has-error');
 				akeebasubs_valid_form = false;
-				$('#city_empty').css('display', 'inline-block');
+				$('#city_empty').show();
 			}
 
-			$('#zip').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#zip').parents('div.form-group').removeClass('error has-error');
 			if (response.zip)
 			{
-				$('#zip').parents('div.control-group').addClass('success has-success');
-				$('#zip_empty').css('display', 'none');
+				$('#zip_empty').hide();
 			}
 			else
 			{
-				$('#zip').parents('div.control-group').addClass('error has-error');
+				$('#zip').parents('div.form-group').addClass('error has-error');
 				akeebasubs_valid_form = false;
-				$('#zip_empty').css('display', 'inline-block');
+				$('#zip_empty').show();
 			}
 
-			$('#businessname').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#businessname').parents('div.form-group').removeClass('error has-error');
 			if (response.businessname)
 			{
-				$('#businessname').parents('div.control-group').addClass('success has-success');
-				$('#businessname_empty').css('display', 'none');
+				$('#businessname_empty').hide();
 			}
 			else
 			{
-				$('#businessname').parents('div.control-group').addClass('error has-error');
+				$('#businessname').parents('div.form-group').addClass('error has-error');
 				if ($('#isbusiness').val() == 1)
 				{
 					akeebasubs_valid_form = false;
 				}
-				$('#businessname_empty').css('display', 'inline-block');
+				$('#businessname_empty').show();
 			}
 
-			$('#occupation').parents('div.control-group').removeClass('error has-error success has-success');
+			$('#occupation').parents('div.form-group').removeClass('error has-error');
 			if ($('#occupation').val())
 			{
-				$('#occupation').parents('div.control-group').addClass('success has-success');
-				$('#occupation_empty').css('display', 'none');
+				$('#occupation_empty').hide();
 			}
 			else
 			{
-				$('#occupation').parents('div.control-group').addClass('error has-error');
+				$('#occupation').parents('div.form-group').addClass('error has-error');
 				if ($('#isbusiness').val() == 1)
 				{
 					akeebasubs_valid_form = false;
 				}
-				$('#occupation_empty').css('display', 'inline-block');
+				$('#occupation_empty').show();
 			}
 		}
 		else
 		{
 			// Apply validation is false
-			$('#businessname').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#occupation').parents('div.control-group').removeClass('error has-error success has-success');
-			$('#businessname_empty').css('display', 'none');
-			$('#occupation_empty').css('display', 'none');
+			$('#businessname').parents('div.form-group').removeClass('error has-error');
+			$('#occupation').parents('div.form-group').removeClass('error has-error');
+			$('#businessname_empty').hide();
+			$('#occupation_empty').hide();
 		}
 
-		$('#vatnumber').parents('div.control-group').removeClass('warning has-warning success has-success');
+		$('#vatnumber').parents('div.form-group').removeClass('warning has-warning');
 		if (response.vatnumber)
 		{
-			$('#vatnumber').parents('div.control-group').addClass('success has-success');
-			$('#vat-status-invalid').css('display', 'none');
-			$('#vat-status-valid').css('display', 'inline-block');
+			$('#vat-status-invalid').hide();
+			$('#vat-status-valid').show();
 		}
 		else
 		{
-			$('#vatnumber').parents('div.control-group').addClass('warning has-warning');
-			$('#vat-status-invalid').css('display', 'inline-block');
-			$('#vat-status-valid').css('display', 'none');
+			$('#vatnumber').parents('div.form-group').addClass('warning has-warning');
+			$('#vat-status-invalid').show();
+			$('#vat-status-valid').hide();
 		}
 
 		if (response.novatrequired)
 		{
-			$('#vatnumber').parents('div.control-group').removeClass('warning has-warning success has-success');
-			$('#vat-status-invalid').css('display', 'none');
-			$('#vat-status-valid').css('display', 'none');
+			$('#vatnumber').parents('div.form-group').removeClass('warning has-warning');
+			$('#vat-status-invalid').hide();
+			$('#vat-status-valid').hide();
 		}
 
 		// Finally, apply the custom validation
@@ -952,7 +918,7 @@ function applyPrice(response)
 
 			if (response.gross * 1 <= 0)
 			{
-				$('#paymentmethod-container').css('display', 'none');
+				$('#paymentmethod-container').hide();
 			}
 			else
 			{

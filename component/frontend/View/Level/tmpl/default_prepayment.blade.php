@@ -30,26 +30,24 @@ if ($this->apply_validation == 'true')
 	$classInvalidLabel = !$field['isValid'] ? '' : 'hidden';
 }
 ?>
-<div class="control-group form-group {{{$customField_class}}}">
-	<label for="{{{$field['id']}}}" class="control-label col-sm-2">
+<div class="form-group {{{$customField_class}}}">
+	<label for="{{{$field['id']}}}" class="control-label col-sm-4">
 		{{$field['label']}}
 	</label>
 
-	<div class="controls">
-		<span class="col-sm-3">
-			{{$field['elementHTML']}}
-		</span>
+	<div class="col-sm-8">
+		{{$field['elementHTML']}}
 
 		@if (array_key_exists('validLabel', $field))
-			<span id="{{{$field['id']}}}_valid" class="help-inline help-block {{$classValidLabel}}">
-			{{$field['validLabel']}}
-		</span>
+			<p id="{{{$field['id']}}}_valid" class="help-block {{$classValidLabel}}">
+				{{$field['validLabel']}}
+			</p>
 		@endif
 
 		@if (array_key_exists('invalidLabel', $field))
-			<span id="{{$field['id']}}_invalid" class="help-inline help-block {{$classInvalidLabel}}">
-			{{$field['invalidLabel']}}
-		</span>
+			<p id="{{$field['id']}}_invalid" class="help-block {{$classInvalidLabel}}">
+				{{$field['invalidLabel']}}
+			</p>
 		@endif
 	</div>
 </div>

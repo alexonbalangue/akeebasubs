@@ -77,58 +77,52 @@ if (JFactory::getUser()->guest)
 			</div>
 			@endif
 
-			<div class="control-group form-group <?php echo $group_classes['username'] ?>">
-				<label for="username" class="control-label col-sm-2">
+			<div class="form-group <?php echo $group_classes['username'] ?>">
+				<label for="username" class="control-label col-sm-4">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME') ?>
 				</label>
 
-				<div class="controls">
-					<span class="col-sm-3">
-						<input type="text" class="form-control" name="username" id="username"
-							   value="<?php echo $this->escape($this->cache['username']) ?>"/>
-					</span>
-					<span id="username_valid" class="help-inline help-block"
-						  <?php if (strpos($group_classes['username'], 'success') == false): ?>style="display:none"<?php endif ?>>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" name="username" id="username"
+						   value="<?php echo $this->escape($this->cache['username']) ?>"/>
+					<p id="username_valid" class="help-block"
+					   <?php if (strpos($group_classes['username'], 'success') == false): ?>style="display:none"<?php endif ?>>
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME_VALID') ?>
-					</span>
-					<span id="username_invalid" class="help-inline help-block"
-						  <?php if (strpos($group_classes['username'], 'error') === false): ?>style="display:none"<?php endif ?>>
+					</p>
+					<p id="username_invalid" class="help-block"
+					   <?php if (strpos($group_classes['username'], 'error') === false): ?>style="display:none"<?php endif ?>>
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME_INVALID') ?>
-					</span>
+					</p>
 				</div>
 			</div>
 
-			<div class="control-group form-group <?php echo $group_classes['password'] ?>">
-				<label for="password" class="control-label col-sm-2">
+			<div class="form-group <?php echo $group_classes['password'] ?>">
+				<label for="password" class="control-label col-sm-4">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PASSWORD') ?>
 				</label>
 
-				<div class="controls">
-					<span class="col-sm-3">
-						<input type="password" class="form-control" name="password" id="password"
-							   value="<?php echo $this->escape($this->cache['password']) ?>"/>
-					</span>
-					<span id="password_invalid" class="help-inline help-block"
-						  style="<?php if (strpos($group_classes['password'], 'error') === false): ?>display:none<?php endif; ?>">
+				<div class="col-sm-8">
+					<input type="password" class="form-control" name="password" id="password"
+						   value="<?php echo $this->escape($this->cache['password']) ?>"/>
+					<p id="password_invalid" class="help-block"
+					   style="<?php if (strpos($group_classes['password'], 'error') === false): ?>display:none<?php endif; ?>">
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD_EMPTY') ?>
-					</span>
+					</p>
 				</div>
 			</div>
 
-			<div class="control-group form-group <?php echo $group_classes['password2'] ?>">
-				<label for="password2" class="control-label col-sm-2">
+			<div class="form-group <?php echo $group_classes['password2'] ?>">
+				<label for="password2" class="control-label col-sm-4">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_PASSWORD2') ?>
 				</label>
 
-				<div class="controls">
-					<span class="col-sm-3">
-						<input type="password" class="form-control" name="password2" id="password2"
-							   value="<?php echo $this->escape($this->cache['password2']) ?>"/>
-					</span>
-					<span id="password2_invalid" class="help-inline help-block"
-						  style="<?php if (strpos($group_classes['password2'], 'error') === false): ?>display:none<?php endif; ?>">
+				<div class="col-sm-8">
+					<input type="password" class="form-control" name="password2" id="password2"
+						   value="<?php echo $this->escape($this->cache['password2']) ?>"/>
+					<p id="password2_invalid" class="help-block"
+					   style="<?php if (strpos($group_classes['password2'], 'error') === false): ?>display:none<?php endif; ?>">
 						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_PASSWORD2') ?>
-					</span>
+					</p>
 				</div>
 			</div>
 
@@ -136,16 +130,14 @@ if (JFactory::getUser()->guest)
 
 			<legend><?php echo JText::_('COM_AKEEBASUBS_LEVEL_EXISTINGACCOUNT') ?></legend>
 
-			<div class="control-group form-group">
-				<label for="username" class="control-label col-sm-2">
+			<div class="form-group">
+				<label for="username" class="control-label col-sm-4">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_USERNAME') ?>
 				</label>
 
-				<div class="controls">
-					<span class="col-sm-3">
-						<input type="text" class="form-control" name="username" id="username" disabled="disabled"
-							   value="<?php echo $this->escape($this->userparams->username) ?>"/>
-				   </span>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" name="username" id="username" disabled="disabled"
+						   value="<?php echo $this->escape($this->userparams->username) ?>"/>
 				</div>
 			</div>
 			<br/>
@@ -155,150 +147,132 @@ if (JFactory::getUser()->guest)
 
 	<fieldset>
 
-		<div class="control-group form-group <?php echo $group_classes['name'] ?>">
-			<label for="name" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['name'] ?>">
+			<label for="name" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_NAME') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<input type="text" class="form-control" name="name" id="name"
-						   value="<?php echo $this->escape($field_data['name']); ?>"/>
-				</span>
-				<span id="name_empty" class="help-inline help-block"
-					  <?php if (strpos($group_classes['name'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="name" id="name"
+					   value="<?php echo $this->escape($field_data['name']); ?>"/>
+				<p id="name_empty" class="help-block"
+				   <?php if (strpos($group_classes['name'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_NAME_INVALID') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
-		<div class="control-group form-group <?php echo $group_classes['email'] ?>">
-			<label for="email" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['email'] ?>">
+			<label for="email" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<input type="text" class="form-control" name="email" id="email"
-						   value="<?php echo $this->escape($field_data['email']); ?>"/>
-				</span>
-				<span id="email_invalid" class="help-inline help-block"
-					  <?php if (strpos($group_classes['email'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="email" id="email"
+					   value="<?php echo $this->escape($field_data['email']); ?>"/>
+				<p id="email_invalid" class="help-block"
+				   <?php if (strpos($group_classes['email'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
-		<div class="control-group form-group <?php echo $group_classes['email2'] ?>">
-			<label for="email2" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['email2'] ?>">
+			<label for="email2" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_EMAIL2') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<input type="text" class="form-control" name="email2" id="email2"
-						   value="<?php echo $this->escape($field_data['email2']); ?>"/>
-				</span>
-				<span id="email2_invalid" class="help-inline help-block"
-					  <?php if (strpos($group_classes['email2'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="email2" id="email2"
+					   value="<?php echo $this->escape($field_data['email2']); ?>"/>
+				<p id="email2_invalid" class="help-block"
+				   <?php if (strpos($group_classes['email2'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_EMAIL2') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
-		<div class="control-group form-group <?php echo $group_classes['address1'] ?>">
-			<label for="address1" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['address1'] ?>">
+			<label for="address1" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS1') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<input type="text" class="form-control" name="address1" id="address1"
-						   value="<?php echo $this->escape($field_data['address1']); ?>"/>
-				</span>
-				<span id="address1_empty" class="help-inline help-block"
-					  <?php if (strpos($group_classes['address1'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="address1" id="address1"
+					   value="<?php echo $this->escape($field_data['address1']); ?>"/>
+				<p id="address1_empty" class="help-block"
+				   <?php if (strpos($group_classes['address1'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
-		<div class="control-group form-group">
-			<label for="address2" class="control-label col-sm-2">
+		<div class="form-group">
+			<label for="address2" class="control-label col-sm-4">
 				<?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ADDRESS2') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<input type="text" class="form-control" name="address2" id="address2"
-						   value="<?php echo $this->escape($field_data['address2']); ?>"/>
-				</span>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="address2" id="address2"
+					   value="<?php echo $this->escape($field_data['address2']); ?>"/>
 			</div>
 		</div>
 
-		<div class="control-group form-group <?php echo $group_classes['city'] ?>">
-			<label for="city" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['city'] ?>">
+			<label for="city" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_CITY') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<input type="text" class="form-control" name="city" id="city"
-						   value="<?php echo $this->escape($field_data['city']); ?>"/>
-				</span>
-				<span id="city_empty" class="help-inline help-block"
-					  <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="city" id="city"
+					   value="<?php echo $this->escape($field_data['city']); ?>"/>
+				<p id="city_empty" class="help-block"
+				   <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
-		<div class="control-group form-group <?php echo $group_classes['city'] ?>" id="stateField">
-			<label for="state" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['city'] ?>" id="stateField">
+			<label for="state" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<?php echo Select::states($field_data['state'], 'state', array('class' => 'form-control advancedSelect')) ?>
-				</span>
-				<span id="state_empty" class="help-inline help-block"
-					  <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<?php echo Select::states($field_data['state'], 'state', array('class' => 'form-control advancedSelect')) ?>
+				<p id="state_empty" class="help-block"
+				   <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
-		<div class="control-group form-group <?php echo $group_classes['zip'] ?>">
-			<label for="zip" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['zip'] ?>">
+			<label for="zip" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ZIP') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<input type="text" class="form-control" name="zip" id="zip"
-						   value="<?php echo $this->escape($field_data['zip']); ?>"/>
-				</span>
-				<span id="zip_empty" class="help-inline help-block"
-					  <?php if (strpos($group_classes['zip'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="zip" id="zip"
+					   value="<?php echo $this->escape($field_data['zip']); ?>"/>
+				<p id="zip_empty" class="help-block"
+				   <?php if (strpos($group_classes['zip'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
-		<div class="control-group form-group <?php echo $group_classes['country'] ?>">
-			<label for="country" class="control-label col-sm-2">
+		<div class="form-group <?php echo $group_classes['country'] ?>">
+			<label for="country" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_COUNTRY') ?>
 			</label>
 
-			<div class="controls">
-				<span class="col-sm-3">
-					<?php echo Select::countries($field_data['country'], 'country', array('class' => 'form-control advancedSelect')) ?>
-				</span>
-				<span id="country_empty" class="help-inline help-block"
-					  <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
+			<div class="col-sm-8">
+				<?php echo Select::countries($field_data['country'], 'country', array('class' => 'form-control advancedSelect')) ?>
+				<p id="country_empty" class="help-block"
+				   <?php if (strpos($group_classes['country'], 'error') === false): ?>style="display:none"<?php endif ?>>
 					<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-				</span>
+				</p>
 			</div>
 		</div>
 
@@ -313,8 +287,8 @@ if (JFactory::getUser()->guest)
 		$style      = '';
 		?>
 
-		<div class="control-group form-group" style="<?php echo $style ?>">
-			<label for="isbusiness" class="control-label col-sm-2">
+		<div class="form-group" style="<?php echo $style ?>">
+			<label for="isbusiness" class="control-label col-sm-4">
 				* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS') ?>
 			</label>
 			<span class="col-sm-2">
@@ -326,62 +300,58 @@ if (JFactory::getUser()->guest)
 		</div>
 
 		<div id="businessfields">
-			<div class="control-group form-group <?php echo $group_classes['businessname'] ?>">
-				<label for="businessname" class="control-label col-sm-2">
+			<div class="form-group <?php echo $group_classes['businessname'] ?>">
+				<label for="businessname" class="control-label col-sm-4">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME') ?>
 				</label>
 
-				<div class="controls">
-						<span class="col-sm-3">
-							<input type="text" class="form-control" name="businessname" id="businessname"
-								   value="<?php echo $this->escape($field_data['businessname']); ?>"/>
-						</span>
-						<span id="businessname_empty" class="help-inline help-block"
-							  <?php if (strpos($group_classes['businessname'], 'error') === false): ?>style="display:none"<?php endif ?>>
-							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-						</span>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" name="businessname" id="businessname"
+						   value="<?php echo $this->escape($field_data['businessname']); ?>"/>
+					<p id="businessname_empty" class="help-block"
+					   <?php if (strpos($group_classes['businessname'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+					</p>
 				</div>
 			</div>
 
-			<div class="control-group form-group <?php echo $group_classes['occupation'] ?>">
-				<label for="occupation" class="control-label col-sm-2">
+			<div class="form-group <?php echo $group_classes['occupation'] ?>">
+				<label for="occupation" class="control-label col-sm-4">
 					* <?php echo JText::_('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION') ?>
 				</label>
 
-				<div class="controls">
-						<span class="col-sm-3">
-							<input type="text" class="form-control" name="occupation" id="occupation"
-								   value="<?php echo $this->escape($field_data['occupation']); ?>"/>
-						</span>
-						<span id="occupation_empty" class="help-inline help-block"
-							  <?php if (strpos($group_classes['occupation'], 'error') === false): ?>style="display:none"<?php endif ?>>
-							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
-						</span>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" name="occupation" id="occupation"
+						   value="<?php echo $this->escape($field_data['occupation']); ?>"/>
+					<p id="occupation_empty" class="help-block"
+					   <?php if (strpos($group_classes['occupation'], 'error') === false): ?>style="display:none"<?php endif ?>>
+						<?php echo JText::_('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED') ?>
+					</p>
 				</div>
 			</div>
 
-			<div class="control-group form-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
-				<label for="vatnumber" class="control-label col-sm-2" id="vatlabel">
+			<div class="form-group <?php echo $group_classes['vatnumber'] ?>" id="vatfields">
+				<label for="vatnumber" class="control-label col-sm-4" id="vatlabel">
 					* <?php echo $this->container->params->get('noneuvat', 0) ?
 						JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL') :
 						JText::_('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER') ?>
 				</label>
 
-				<div class="controls">
-						<span class="input-group input-prepend col-sm-2">
-							<span class="input-group-addon add-on" id="vatcountry">EU</span>
-							<input type="text" name="vatnumber" id="vatnumber" class="input-small form-control"
+				<div class="col-sm-8">
+						<span class="input-group">
+							<span class="input-group-addon" id="vatcountry">EU</span>
+							<input type="text" name="vatnumber" id="vatnumber" class="form-control"
 								   size="16"
 								   value="<?php echo $this->escape($field_data['vatnumber']); ?>"/>
 						</span>
-						<span id="vat-status-invalid" class="help-inline help-block"
+						<p id="vat-status-invalid" class="help-block"
 							  <?php if (strpos($group_classes['vatnumber'], 'warning') === false): ?>style="display:none"<?php endif ?>>
 							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_INVALID') ?>
-						</span>
-						<span id="vat-status-valid" class="help-inline help-block"
+						</p>
+						<p id="vat-status-valid" class="help-block"
 							  <?php if (strpos($group_classes['vatnumber'], 'success') === false): ?>style="display:none"<?php endif ?>>
 							<?php echo JText::_('COM_AKEEBASUBS_LEVEL_VAT_VALID') ?>
-						</span>
+						</p>
 				</div>
 			</div>
 
@@ -416,26 +386,26 @@ if (JFactory::getUser()->guest)
 							$customField_class = '';
 						}
 						?>
-						<div class="control-group form-group <?php echo $customField_class ?>">
-							<label for="<?php echo $field['id'] ?>" class="control-label col-sm-2">
+						<div class="form-group <?php echo $customField_class ?>">
+							<label for="<?php echo $field['id'] ?>" class="control-label col-sm-4">
 								<?php echo $field['label'] ?>
 							</label>
 
-							<div class="controls">
-								<span class="col-sm-3">
-									<?php echo $field['elementHTML'] ?>
-								</span>
+							<div class="col-sm-8">
+								<?php echo $field['elementHTML'] ?>
+
 								<?php if (array_key_exists('validLabel', $field)): ?>
-									<span id="<?php echo $field['id'] ?>_valid" class="help-inline help-block"
-										  style="<?php if (!$field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
-											  <?php echo $field['validLabel'] ?>
-									</span>
+								<p id="<?php echo $field['id'] ?>_valid" class="help-block"
+								   style="<?php if (!$field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
+									<?php echo $field['validLabel'] ?>
+								</p>
 								<?php endif; ?>
+
 								<?php if (array_key_exists('invalidLabel', $field)): ?>
-									<span id="<?php echo $field['id'] ?>_invalid" class="help-inline help-block"
-										  style="<?php if ($field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
-											  <?php echo $field['invalidLabel'] ?>
-									</span>
+								<p id="<?php echo $field['id'] ?>_invalid" class="help-block"
+								   style="<?php if ($field['isValid'] || !$apply_validation): ?>display:none<?php endif ?>">
+									<?php echo $field['invalidLabel'] ?>
+								</p>
 								<?php endif; ?>
 							</div>
 						</div>

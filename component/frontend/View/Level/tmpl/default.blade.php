@@ -20,11 +20,6 @@ akeebasubs_level_id = {$this->item->akeebasubs_level_id};
 JS;
 JFactory::getDocument()->addScriptDeclaration($script);
 
-$paymentMethodsCount = count(Select::paymentmethods('paymentmethod', '', ['id'              => 'paymentmethod',
-																		  'level_id'        => $this->item->akeebasubs_level_id,
-																		  'return_raw_list' => 1]));
-$hidePaymentMethod   =
-	(($paymentMethodsCount <= 1) && $this->cparams->hidelonepaymentoption) || ($this->validation->price->gross < 0.01);
 ?>
 
 <div id="akeebasubs">
@@ -34,6 +29,8 @@ $hidePaymentMethod   =
 
 	{{-- Module position 'akeebasubscriptionsheader' --}}
 	@modules('akeebasubscriptionsheader')
+
+	<div class="clearfix"></div>
 
 	{{-- Warning when Javascript is disabled --}}
 	<noscript>
@@ -58,63 +55,41 @@ $hidePaymentMethod   =
 		id="signupForm" class="form form-horizontal">
 		<input type="hidden" name="{{{ JFactory::getSession()->getFormToken() }}}" value="1"/>
 
-		{{-- User account & invoicing information fields --}}
-		@include('site:com_akeebasubs/Level/default_fields')
-
-		{{-- Payment summary --}}
-		@include('site:com_akeebasubs/Level/default_summary')
-
-		{{-- Custom fields after payment summary --}}
-		<div>
-			<h3>@lang('COM_AKEEBASUBS_LEVEL_SUBSCRIBE')</h3>
-
-			@include('site:com_akeebasubs/Level/default_prepayment')
+		<div class="col-sm-12 col-md-6">
+			{{-- ACCOUNT COLUMN --}}
+			<div id="akeebasubs-panel-account" class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						@lang('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')
+					</h3>
+				</div>
+				<div class="panel-body">
+					@include('site:com_akeebasubs/Level/default_fields')
+				</div>
+			</div>
 		</div>
-
-		{{-- Payment methods --}}
-		<div id="paymentmethod-container" class="{{$hidePaymentMethod ? 'hidden' : ''}}">
-			<div class="control-group form-group">
-				<label for="paymentmethod" class="control-label col-sm-2">
-					@lang('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')
-				</label>
-
-				<div id="paymentlist-container" class="controls col-sm-3">
-					<?php
-					$country = !empty($this->userparams->country) && ($this->userparams->country != 'XX') ?
-						$this->userparams->country : $this->cache['country'];
-
-					/** @var \Akeeba\Subscriptions\Site\Model\PaymentMethods $paymentMethods */
-					$paymentMethods = $this->getContainer()->factory->model('PaymentMethods')->tmpInstance();
-					$defaultPayment = $paymentMethods->getLastPaymentPlugin(JFactory::getUser()->id, $country);
-
-					echo Select::paymentmethods(
-						'paymentmethod',
-						$defaultPayment,
-						array(
-							'id'       => 'paymentmethod',
-							'level_id' => $this->item->akeebasubs_level_id,
-							'country'  => $country
-						)
-					) ?>
+		<div class="col-sm-12 col-md-6">
+			{{-- ORDER COLUMN --}}
+			<div id="akeebasubs-panel-order" class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						@lang('COM_AKEEBASUBS_LEVEL_LBL_YOURORDER')
+						<span class="label label-default label-inverse">{{{$this->item->title}}}</span>
+					</h3>
+				</div>
+				<div class="panel-body">
+					@include('site:com_akeebasubs/Level/default_summary')
 				</div>
 			</div>
 		</div>
 
-		{{-- Subscribe Now button --}}
-		<div class="well">
-			<button id="subscribenow" class="btn btn-large btn-primary" type="submit"
-					style="display:block;margin:auto">
-				@lang('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')
-			</button>
-			<img class="ui-disable-spinner" src="{{{JUri::base()}}}media/com_akeebasubs/images/throbber.gif"
-				 style="display: none"/>
-		</div>
-
+		<div class="clearfix"></div>
 	</form>
 
 	{{-- Module position 'akeebasubscriptionsfooter' --}}
 	@modules('akeebasubscriptionsfooter')
 
+	<div class="clearfix"></div>
 </div>
 
 <?php
