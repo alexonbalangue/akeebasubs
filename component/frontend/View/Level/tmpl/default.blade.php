@@ -11,8 +11,6 @@ use Akeeba\Subscriptions\Admin\Helper\Select;
 
 /** @var \Akeeba\Subscriptions\Site\View\Level\Html $this */
 
-\JHtml::_('formbehavior.chosen');
-
 $script = <<<JS
 
 akeebasubs_level_id = {$this->item->akeebasubs_level_id};
@@ -60,7 +58,7 @@ JFactory::getDocument()->addScriptDeclaration($script);
 			<div id="akeebasubs-panel-account" class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title">
-						@lang('COM_AKEEBASUBS_LEVEL_NEWACCOUNT')
+						@lang('COM_AKEEBASUBS_LEVEL_LBL_ACCOUNTHEADER')
 					</h3>
 				</div>
 				<div class="panel-body">

@@ -502,15 +502,14 @@ function validateAddress()
 
 				if (akeebasubs_noneuvat)
 				{
-					$('#vatfields').css('display', 'block');
+					$('#vatfields').show();
 					$('#vatcountry').text('');
 				}
 
 				Object.keys(akeebasubs_eu_configuration).forEach(function(key){
 					if (key == country)
 					{
-						$('#vatfields').css('display', 'block');
-						//$('#vatcountry').css('display','inline-block');
+						$('#vatfields').show();
 
 						var ccode = akeebasubs_eu_configuration[key][1];
 						$('#vatcountry').text(ccode);
@@ -850,20 +849,17 @@ function applyValidation(response, callback)
 		if (response.vatnumber)
 		{
 			$('#vat-status-invalid').hide();
-			$('#vat-status-valid').show();
 		}
 		else
 		{
 			$('#vatnumber').parents('div.form-group').addClass('warning has-warning');
 			$('#vat-status-invalid').show();
-			$('#vat-status-valid').hide();
 		}
 
 		if (response.novatrequired)
 		{
 			$('#vatnumber').parents('div.form-group').removeClass('warning has-warning');
 			$('#vat-status-invalid').hide();
-			$('#vat-status-valid').hide();
 		}
 
 		// Finally, apply the custom validation

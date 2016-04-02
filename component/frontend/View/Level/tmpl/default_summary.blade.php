@@ -30,26 +30,28 @@ $hidePaymentMethod   =
 
 {{-- PRICE INFORMATION SUMMARY AREA --}}
 @unless($this->validation->price->net < 0.01)
-<div class="col-xs-6 span6">
-	@lang('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')
+<div id="akeebasubs-sum-container">
+	<div class="col-xs-6 span6" id="akeebasubs-sum-label">
+		@lang('COM_AKEEBASUBS_LEVEL_SUM_TOTAL')
 
-	<span id="akeebasubs-sum-vat-container" style="display:{{ ($this->validation->price->taxrate > 0) ? 'inline' : 'none' }}">
+		<span id="akeebasubs-sum-vat-container" style="display:{{ ($this->validation->price->taxrate > 0) ? 'inline' : 'none' }}">
 		(@lang('COM_AKEEBASUBS_LEVEL_SUM_VAT') <span id="akeebasubs-sum-vat-percent">{{{$this->validation->price->taxrate}}}</span>%)
 		</span>
-</div>
+	</div>
 
-<div class="col-xs-6 span6">
+	<div class="col-xs-6 span6" id="akeebasubs-sum-price">
 	<span class="label label-success">
 		@if ($this->cparams->currencypos == 'before')
-		<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
+			<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
 		@endif
 		<span class="akeebasubs-level-price" id="akeebasubs-sum-gross">{{{ $this->validation->price->gross }}}</span>
 		@if ($this->cparams->currencypos == 'after')
-		<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
+			<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
 		@endif
 	</span>
+	</div>
+	<div class="clearfix"></div>
 </div>
-<div class="clearfix"></div>
 
 <noscript>
 	<div class="alert alert-warning">

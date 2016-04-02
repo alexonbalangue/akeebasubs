@@ -4,8 +4,6 @@
  * @license		GNU GPLv3 <http://www.gnu.org/licenses/gpl.html> or later
  */
 
-@CHARSET "UTF-8";
-
 /**
  * Selective reset of Bootstrap styling
  */
@@ -44,6 +42,7 @@ div.akeebasubs-notices {
 /*
  * Subscription levels list page (default layout)
  */
+#akeebasubs #vatlabel { margin-right: 0; }
 
 #akeebasubs div.level {
 	display: block;
@@ -513,65 +512,16 @@ td.akeebasubs-strappy-prediscount span.akeebasubs-strappy-prediscount-label
 /*
  * Subscription page
  */
-
-#akeebasubs input.vat {
-	width: 10em;
+#akeebasubs-level-login {
+	padding-bottom: 1em;
 }
 
-#akeebasubs input.disabled {
-	border: none;
-	background-color: transparent;
-	font-weight: bold;
-	color: #333;
+#akeebasubs-sum-container {
+	font-size: 120%;
 }
 
-#akeebasubs .currency {
-	display: inline-block;
-	width: 5em;
-	text-align: right;
-	padding: 2px 0;
-	margin-left: -0.8em;
-}
-
-#akeebasubs .currency-symbol {
-	width: 2em;
-	text-align: left;
-	display: inline-block;
-	padding: 2px 5px;
-	margin-left: -0.3em;
-}
-
-
-#akeebasubs label.error {
-	background-color: #ffe0e0;
-}
-
-#akeebasubs input.error {
-	background-color: #ffe0e0;
-}
-
-#akeebasubs .valid {
-	font-weight: bold;
-	font-size: 9pt;
-	color: green;
-	display: none;
-	height: 18px;
-	padding: 0 3px 0 0;
-	margin: 0 0 0 5px;
-	border-left: 1px solid #090;
-	background-color: #efe;
-}
-
-#akeebasubs .invalid {
-	font-weight: normal;
-	font-size: 9pt;
-	color: red;
-	display: none;
-	height: 18px;
-	padding: 0 3px 0 0;
-	margin: 0 0 0 5px;
-	border-left: 1px solid #900;
-	background-color: #ffe;
+#akeebasubs-sum-price {
+	font-size: 140%;
 }
 
 #paymentmethod-container label {

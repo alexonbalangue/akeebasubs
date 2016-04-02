@@ -31,24 +31,12 @@ if ($this->apply_validation == 'true')
 }
 ?>
 <div class="form-group {{{$customField_class}}}">
-	<label for="{{{$field['id']}}}" class="control-label col-sm-4">
+	<label for="{{{$field['id']}}}" class="control-label col-sm-4 hidden">
 		{{$field['label']}}
 	</label>
 
 	<div class="col-sm-8">
 		{{$field['elementHTML']}}
-
-		@if (array_key_exists('validLabel', $field))
-			<p id="{{{$field['id']}}}_valid" class="help-block {{$classValidLabel}}">
-				{{$field['validLabel']}}
-			</p>
-		@endif
-
-		@if (array_key_exists('invalidLabel', $field))
-			<p id="{{$field['id']}}_invalid" class="help-block {{$classInvalidLabel}}">
-				{{$field['invalidLabel']}}
-			</p>
-		@endif
 	</div>
 </div>
 @endRepeatable
