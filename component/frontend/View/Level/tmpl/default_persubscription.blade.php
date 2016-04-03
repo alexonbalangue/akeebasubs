@@ -31,7 +31,7 @@ if (is_array($jResponse) && !empty($jResponse))
 ?>
 
 @if($hasPerSubFields)
-	<h4>@lang('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')</h4>
+	<h3>@lang('COM_AKEEBASUBS_LEVEL_PERSUBFIELDS')</h3>
 
 	@foreach ($jResponse as $customFields)
 		@foreach ($customFields as $field)

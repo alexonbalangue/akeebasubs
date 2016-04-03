@@ -512,6 +512,11 @@ td.akeebasubs-strappy-prediscount span.akeebasubs-strappy-prediscount-label
 /*
  * Subscription page
  */
+#akeebasubs-panel-order hr {
+	margin: 1.5em 0;
+	border-bottom: double #ccc;
+}
+
 #akeebasubs-level-login {
 	padding-bottom: 1em;
 }
@@ -524,29 +529,32 @@ td.akeebasubs-strappy-prediscount span.akeebasubs-strappy-prediscount-label
 	font-size: 140%;
 }
 
-#paymentmethod-container label {
-	float: left;
+input.coupon-valid {
+	color: green;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
-#akeebasubs span.akeebasubs-paymentmethod-images {
-	display: inline-block;
-	float: left;
-	width: 60%;
+input.coupon-invalid {
+	color: red;
+	font-weight: bold;
+	font-style: italic;
 }
 
-#akeebasubs span.akeebasubs-paymentmethod-images label {
-	float: left;
+div.akeebasubs-paymentmethod-images div.radio {
+	border: thin solid #ccc;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background: #fafafa;
+	padding: 1em;
+	margin: 1em 0;
 }
 
-#akeebasubs span.akeebasubs-paymentmethod-images img {
-	float: left;
-	margin-bottom: 6px;
-}
-
-#akeebasubs span.akeebasubs-paymentmethod-images span {
-	margin-left: 5px;
-	margin-top: 10px;
-	float: left;
+div.akeebasubs-paymentmethod-images div.radio img {
+	display: block;
+	clear: both;
+	margin-bottom: 0.3em;
 }
 
 /**

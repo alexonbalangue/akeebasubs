@@ -134,6 +134,9 @@ function validateForm(callback_function)
 			var paymentMethod = $('select[name=paymentmethod]').val();
 		}
 
+		var $couponField = $("#coupon");
+		var couponValue  = ($couponField.length > 0) ? $couponField.val() : '';
+
 		var data = {
 			'action':        'read',
 			'id':            akeebasubs_level_id,
@@ -151,7 +154,7 @@ function validateForm(callback_function)
 			'businessname':  $('#businessname').val(),
 			'occupation':    $('#occupation').val(),
 			'vatnumber':     $('#vatnumber').val(),
-			'coupon':        ($("#coupon").length > 0) ? $('#coupon').val() : '',
+			'coupon':        couponValue,
 			'paymentmethod': paymentMethod,
 			'custom':        {},
 			'subcustom':     {}
@@ -904,7 +907,7 @@ function applyPrice(response)
 
 			vatContainer.hide();
 
-			$('#akeebasubs-sum-total').val(response.gross);
+			$('#akeebasubs-sum-total').text(response.gross);
 			$('#akeebasubs-sum-vat-percent').html(response.taxrate);
 
 			if (response.taxrate > 0)
@@ -921,6 +924,21 @@ function applyPrice(response)
 				$('#paymentmethod-container').css('display', 'inline');
 			}
 		}
+
+		var $couponField = $("#coupon");
+
+		if ($couponField.length)
+		{
+			var couponValue  = ($couponField.length > 0) ? $couponField.val() : '';
+			$couponField.removeClass('coupon-valid coupon-invalid');
+
+			if (couponValue)
+			{
+				var couponClass = (response.couponid > 0) ? 'coupon-valid' : 'coupon-invalid';
+				$couponField.addClass(couponClass);
+			}
+		}
+
 	})(akeeba.jQuery);
 }
 

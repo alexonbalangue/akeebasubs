@@ -67,7 +67,7 @@ $isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusin
 <div class="form form-horizontal akeebasubs-signup-fields">
 
 	@if (JFactory::getUser()->guest)
-	<h4>@lang('COM_AKEEBASUBS_LEVEL_USERACCOUNT')</h4>
+	<h3>@lang('COM_AKEEBASUBS_LEVEL_USERACCOUNT')</h3>
 
 	{{-- Login button --}}
 	<div id="akeebasubs-level-login">
@@ -176,22 +176,11 @@ $isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusin
 		</div>
 	</div>
 
-	<h4><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS') ?></h4>
+	<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_COUNTRYINFO') ?></h3>
 
-	{{-- Full name --}}
-	<div class="form-group {{{$group_classes['name']}}}">
-		<label for="name" class="control-label col-sm-4">
-			@lang('COM_AKEEBASUBS_LEVEL_FIELD_NAME')
-		</label>
-
-		<div class="col-sm-8">
-			<input type="text" class="form-control" name="name" id="name"
-				   value="{{{$field_data['name']}}}"/>
-			<p id="name_empty" class="help-block"
-			   <?php if (strpos($group_classes['name'], 'error') === false): ?>style="display:none"<?php endif ?>>
-				@lang('COM_AKEEBASUBS_LEVEL_ERR_NAME_INVALID')
-			</p>
-		</div>
+	<div class="alert alert-default">
+		<span class="glyphicon glyphicon-info-sign"></span>
+		@lang('COM_AKEEBASUBS_LEVEL_COUNTRYINFO_HELP')
 	</div>
 
 	{{-- Country --}}
@@ -221,6 +210,96 @@ $isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusin
 			   <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
 				@lang('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')
 			</p>
+		</div>
+	</div>
+
+
+	<h3><?php echo JText::_('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS') ?></h3>
+
+	<div class="alert alert-default">
+		<span class="glyphicon glyphicon-info-sign"></span>
+		@lang('COM_AKEEBASUBS_LEVEL_INVOICINGPREFS_HELP')
+	</div>
+
+	{{-- Full name --}}
+	<div class="form-group {{{$group_classes['name']}}}">
+		<label for="name" class="control-label col-sm-4">
+			@lang('COM_AKEEBASUBS_LEVEL_FIELD_NAME')
+		</label>
+
+		<div class="col-sm-8">
+			<input type="text" class="form-control" name="name" id="name"
+				   value="{{{$field_data['name']}}}"/>
+			<p id="name_empty" class="help-block"
+			   <?php if (strpos($group_classes['name'], 'error') === false): ?>style="display:none"<?php endif ?>>
+				@lang('COM_AKEEBASUBS_LEVEL_ERR_NAME_INVALID')
+			</p>
+		</div>
+	</div>
+
+	{{-- Purchasing as a company --}}
+	<div class="form-group">
+		<label for="isbusiness" class="control-label col-sm-4">
+			@lang('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')
+		</label>
+<span class="col-sm-2">
+	<?php echo JHtml::_('select.genericlist', [
+			JHtml::_('select.option', '0', JText::_('JNO')),
+			JHtml::_('select.option', '1', JText::_('JYES'))
+	], 'isbusiness', ['class' => 'form-control'], 'value', 'text', $isBusiness, 'isbusiness'); ?>
+</span>
+	</div>
+
+	<div id="businessfields">
+		{{-- Business name --}}
+		<div class="form-group {{$group_classes['businessname']}}">
+			<label for="businessname" class="control-label col-sm-4">
+				@lang('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME')
+			</label>
+
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="businessname" id="businessname"
+					   value="{{{$field_data['businessname']}}}"/>
+				<p id="businessname_empty" class="help-block"
+				   <?php if (strpos($group_classes['businessname'], 'error') === false): ?>style="display:none"<?php endif ?>>
+					@lang('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')
+				</p>
+			</div>
+		</div>
+
+		{{-- Business activity --}}
+		<div class="form-group {{$group_classes['occupation']}}">
+			<label for="occupation" class="control-label col-sm-4">
+				@lang('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION')
+			</label>
+
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="occupation" id="occupation"
+					   value="{{{$field_data['occupation']}}}"/>
+				<p id="occupation_empty" class="help-block"
+				   <?php if (strpos($group_classes['occupation'], 'error') === false): ?>style="display:none"<?php endif ?>>
+					@lang('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')
+				</p>
+			</div>
+		</div>
+
+		{{-- VAT Number --}}
+		<div class="form-group {{$group_classes['vatnumber']}}" id="vatfields">
+			<label for="vatnumber" class="control-label col-sm-4" id="vatlabel">
+				@lang('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL')
+			</label>
+
+			<div class="col-sm-8">
+				<div class="input-group">
+					<span class="input-group-addon" id="vatcountry">EU</span>
+					<input type="text" name="vatnumber" id="vatnumber" class="form-control"
+						   value="<?php echo $this->escape($field_data['vatnumber']); ?>"/>
+				</div>
+				<p id="vat-status-invalid" class="help-block"
+				   <?php if (strpos($group_classes['vatnumber'], 'warning') === false): ?>style="display:none"<?php endif ?>>
+					@lang('COM_AKEEBASUBS_LEVEL_VAT_INVALID')
+				</p>
+			</div>
 		</div>
 	</div>
 
@@ -281,74 +360,6 @@ $isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusin
 			   <?php if (strpos($group_classes['zip'], 'error') === false): ?>style="display:none"<?php endif ?>>
 				@lang('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')
 			</p>
-		</div>
-	</div>
-
-	<h4>@lang('COM_AKEEBASUBS_LEVEL_LBL_COMPANYINFORMATION')</h4>
-
-	{{-- Purchasing as a company --}}
-	<div class="form-group">
-		<label for="isbusiness" class="control-label col-sm-4">
-			@lang('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')
-		</label>
-	<span class="col-sm-2">
-		<?php echo JHtml::_('select.genericlist', [
-				JHtml::_('select.option', '0', JText::_('JNO')),
-				JHtml::_('select.option', '1', JText::_('JYES'))
-		], 'isbusiness', ['class' => 'form-control'], 'value', 'text', $isBusiness, 'isbusiness'); ?>
-	</span>
-	</div>
-
-	<div id="businessfields">
-		{{-- Business name --}}
-		<div class="form-group {{$group_classes['businessname']}}">
-			<label for="businessname" class="control-label col-sm-4">
-				@lang('COM_AKEEBASUBS_LEVEL_FIELD_BUSINESSNAME')
-			</label>
-
-			<div class="col-sm-8">
-				<input type="text" class="form-control" name="businessname" id="businessname"
-					   value="{{{$field_data['businessname']}}}"/>
-				<p id="businessname_empty" class="help-block"
-				   <?php if (strpos($group_classes['businessname'], 'error') === false): ?>style="display:none"<?php endif ?>>
-					@lang('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')
-				</p>
-			</div>
-		</div>
-
-		{{-- Business activity --}}
-		<div class="form-group {{$group_classes['occupation']}}">
-			<label for="occupation" class="control-label col-sm-4">
-				@lang('COM_AKEEBASUBS_LEVEL_FIELD_OCCUPATION')
-			</label>
-
-			<div class="col-sm-8">
-				<input type="text" class="form-control" name="occupation" id="occupation"
-					   value="{{{$field_data['occupation']}}}"/>
-				<p id="occupation_empty" class="help-block"
-				   <?php if (strpos($group_classes['occupation'], 'error') === false): ?>style="display:none"<?php endif ?>>
-					@lang('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')
-				</p>
-			</div>
-		</div>
-
-		{{-- VAT Number --}}
-		<div class="form-group {{$group_classes['vatnumber']}}" id="vatfields">
-			<label for="vatnumber" class="control-label col-sm-4" id="vatlabel">
-				@lang('COM_AKEEBASUBS_LEVEL_FIELD_VATNUMBER_ALTLABEL')
-			</label>
-
-			<div class="col-sm-8">
-				<div class="input-group">
-					<span class="input-group-addon" id="vatcountry">EU</span>
-					<input type="text" name="vatnumber" id="vatnumber" class="form-control"
-						   value="<?php echo $this->escape($field_data['vatnumber']); ?>"/>
-				</div>
-				<p id="vat-status-invalid" class="help-block"
-				   <?php if (strpos($group_classes['vatnumber'], 'warning') === false): ?>style="display:none"<?php endif ?>>
-					@lang('COM_AKEEBASUBS_LEVEL_VAT_INVALID')
-				</p>
-			</div>
 		</div>
 	</div>
 

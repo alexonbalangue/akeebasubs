@@ -44,7 +44,7 @@ $hidePaymentMethod   =
 		@if ($this->cparams->currencypos == 'before')
 			<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
 		@endif
-		<span class="akeebasubs-level-price" id="akeebasubs-sum-gross">{{{ $this->validation->price->gross }}}</span>
+		<span class="akeebasubs-level-price" id="akeebasubs-sum-total">{{{ $this->validation->price->gross }}}</span>
 		@if ($this->cparams->currencypos == 'after')
 			<span class="akeebasubs-level-price-currency">{{{ $this->cparams->currencysymbol }}}</span>
 		@endif
@@ -70,12 +70,19 @@ $hidePaymentMethod   =
 
 {{-- COUPON CODE--}}
 @if ($requireCoupon || ($this->validation->price->net > 0))
-	<h4>
+	<h3>
 		@lang('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')
-	</h4>
-	<input type="text" class="form-control input-medium" name="coupon" id="coupon"
-		   placeholder="@lang('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')"
-		   value="{{{$this->cache['coupon']}}}"/>
+	</h3>
+	<div class="input-group">
+		<input type="text" class="form-control" name="coupon" id="coupon"
+			   placeholder="@lang('COM_AKEEBASUBS_LEVEL_FIELD_COUPON')"
+			   value="{{{$this->cache['coupon']}}}"/>
+		<span class="input-group-btn">
+			<button class="btn btn-default" type="button" onclick="validateBusiness()">
+				@lang('COM_AKEEBASUBS_LEVEL_FIELD_COUPON_VALIDATE')
+			</button>
+		</span>
+	</div>
 @endif
 
 {{-- CUSTOM FIELDS --}}
@@ -88,11 +95,11 @@ $hidePaymentMethod   =
 {{-- PAYMENT METHODS --}}
 <div id="paymentmethod-container" class="{{$hidePaymentMethod ? 'hidden' : ''}}">
 	<div class="form-group">
-		<label for="paymentmethod" class="control-label col-sm-4">
+		<label for="paymentmethod" class="control-label sr-only">
 			@lang('COM_AKEEBASUBS_LEVEL_FIELD_METHOD')
 		</label>
 
-		<div id="paymentlist-container" class="controls col-sm-3">
+		<div id="paymentlist-container" class="col-xs-12">
 			<?php
 			$country = !empty($this->userparams->country) && ($this->userparams->country != 'XX') ?
 					$this->userparams->country : $this->cache['country'];

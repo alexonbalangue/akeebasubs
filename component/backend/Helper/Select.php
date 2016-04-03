@@ -989,7 +989,7 @@ abstract class Select
 
 				if (self::getContainer()->params->get('useppimages', 1) == 2)
 				{
-					$innerHTML .= '<span class="pull-left">' . $plugin->title . '</span>';
+					$innerHTML .= $plugin->title;
 				}
 
 				$options[] = array(
@@ -1004,13 +1004,13 @@ abstract class Select
 				}
 			}
 
-			$html = '<span class="akeebasubs-paymentmethod-images">';
+			$html = '<div class="akeebasubs-paymentmethod-images">';
 
 			if (!empty($options))
 			{
 				foreach ($options as $o)
 				{
-					$html .= '<label class="radio input-xxlarge"><input type="radio" name="' . $name . '" id="' .
+					$html .= '<div class="radio"><label><input type="radio" name="' . $name . '" id="' .
 					         $name . $o['value'] . '" value="' . $o['value'] . '" ';
 
 					if ($o['value'] == $selected)
@@ -1018,11 +1018,11 @@ abstract class Select
 						$html .= 'checked="checked"';
 					}
 
-					$html .= '/>' . $o['label'] . '</label>';
+					$html .= '/>' . $o['label'] . '</label></div>';
 				}
 			}
 
-			$html .= '</span>';
+			$html .= '</div>';
 
 			return $html;
 		}
