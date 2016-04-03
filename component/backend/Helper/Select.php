@@ -668,6 +668,11 @@ abstract class Select
 					$data[] = JHtml::_('select.option', $code, $name);
 				}
 			}
+			else
+			{
+				$data   = [];
+				$data[] = JHtml::_('select.option', '', 'N/A');
+			}
 
 			return JHtml::_('select.genericlist', $data, $id, [
 				'id' =>$id,

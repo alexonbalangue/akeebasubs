@@ -72,7 +72,7 @@ $isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusin
 	{{-- Login button --}}
 	<div id="akeebasubs-level-login">
 		<div class="col-sm-8 pull-right">
-			<a href="@route('index.php?option=com_users&task=user.login&return=' . base64_encode(JUri::getInstance()->toString())))"
+			<a href="@route('index.php?option=com_users&return=' . base64_encode(JUri::getInstance()->toString())))"
 			   class="btn btn-primary" rel="nofollow,noindex">
 				<span class="glyphicon glyphicon-log-in"></span>
 				@lang('COM_AKEEBASUBS_LEVEL_BTN_LOGINIFALERADY')
