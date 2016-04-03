@@ -901,18 +901,54 @@ function applyPrice(response)
 {
 	(function ($)
 	{
-		if ($('#akeebasubs-sum-total').length > 0)
+		var $sumTotalField = $('#akeebasubs-sum-total');
+
+		if ($sumTotalField.length > 0)
 		{
 			var vatContainer = $('#akeebasubs-sum-vat-container');
-
 			vatContainer.hide();
 
-			$('#akeebasubs-sum-total').text(response.gross);
+			$sumTotalField.text(response.gross);
 			$('#akeebasubs-sum-vat-percent').html(response.taxrate);
 
 			if (response.taxrate > 0)
 			{
 				vatContainer.show();
+			}
+
+			var $discountFieldContainer = $('#akeebasubs-sum-discount-container');
+			var $originalFieldContainer = $('#akeebasubs-sum-original-container');
+
+			if ($discountFieldContainer.length)
+			{
+				$discountFieldContainer.hide();
+
+				if ($originalFieldContainer.length)
+				{
+					$originalFieldContainer.hide();
+				}
+
+				var $discountField = $('#akeebasubs-sum-discount');
+				var $originalField = $('#akeebasubs-sum-original');
+
+				if ((response.discount > 0) && $discountField.length)
+				{
+					$discountFieldContainer.show();
+
+					if ($originalFieldContainer.length)
+					{
+						$originalFieldContainer.show();
+					}
+
+					var discountWithVAT = response.discount * (1.00 + (response.taxrate / 100.00));
+					$discountField.html(discountWithVAT.toFixed(2));
+
+					if ($originalField.length)
+					{
+						var originalWithVAT = response.net * (1.00 + (response.taxrate / 100.00));
+						$originalField.html(originalWithVAT.toFixed(2));
+					}
+				}
 			}
 
 			if (response.gross * 1 <= 0)

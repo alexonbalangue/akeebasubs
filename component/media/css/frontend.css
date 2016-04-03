@@ -527,10 +527,20 @@ td.akeebasubs-strappy-prediscount span.akeebasubs-strappy-prediscount-label
 
 #akeebasubs-sum-container {
 	font-size: 120%;
+	margin: 0.8em 0;
 }
 
 #akeebasubs-sum-price {
 	font-size: 140%;
+}
+
+#akeebasubs-sum-discount-container,
+#akeebasubs-sum-original-container {
+	color: #999999;
+}
+
+#akeebasubs-vat-container{
+	color: #333333;
 }
 
 #akeebasubs input.coupon-valid {
