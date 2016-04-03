@@ -123,10 +123,10 @@ $hidePaymentMethod   =
 
 {{-- SUBSCRIBE BUTTON --}}
 <div class="well">
+	<img class="ui-disable-spinner pull-left" src="{{{JUri::base()}}}media/com_akeebasubs/images/throbber.gif"
+		 style="display: none"/>
 	<button id="subscribenow" class="btn btn-large btn-primary" type="submit"
 			style="display:block;margin:auto">
 		@lang('COM_AKEEBASUBS_LEVEL_BUTTON_SUBSCRIBE')
 	</button>
-	<img class="ui-disable-spinner" src="{{{JUri::base()}}}media/com_akeebasubs/images/throbber.gif"
-		 style="display: none"/>
 </div>
