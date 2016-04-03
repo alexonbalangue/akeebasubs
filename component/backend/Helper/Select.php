@@ -649,6 +649,32 @@ abstract class Select
 	public static function states($selected = null, $id = 'state', $attribs = array())
 	{
 		$data = array();
+		$country = isset($attribs['country']) ? $attribs['country'] : null;
+
+		if (!is_null($country))
+		{
+			if (isset($attribs['country']))
+			{
+				unset($attribs['country']);
+			}
+
+			$countryName = self::decodeCountry($country);
+			$data[]      = JHtml::_('select.option', '', '– ' . JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE') . ' –');
+
+			if (isset(self::$states[$countryName]))
+			{
+				foreach (self::$states[$countryName] as $code => $name)
+				{
+					$data[] = JHtml::_('select.option', $code, $name);
+				}
+			}
+
+			return JHtml::_('select.genericlist', $data, $id, [
+				'id' =>$id,
+				'list.attr' => $attribs,
+				'list.select' => $selected
+			]);
+		}
 
 		foreach (self::$states as $country => $states)
 		{

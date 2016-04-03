@@ -222,19 +222,24 @@ function validateForm(callback_function)
 		{
 			$.ajax({
 				type:     'POST',
-				url: akeebasubs_validate_url + '?option=com_akeebasubs&view=Validate&task=getpayment&format=json',
+				url:      akeebasubs_validate_url + '?option=com_akeebasubs&view=Validate&task=getpayment&format=json',
 				data:     data,
 				dataType: 'text',
 				success:  function (result)
 						  {
 							  var html = /###(\{.*?\})###/.exec(result);
 
-							  if(html && html[1] !== 'undefined' && html[1].html !== 'undefined')
+							  if (html && html[1] !== 'undefined' && html[1].html !== 'undefined')
 							  {
 								  // Before building the new payment list, let's save the select method, so I can select it again
 								  var cur_method = $('input[name="paymentmethod"]:checked').val();
 								  $('#paymentlist-container').html(JSON.parse(html[1]).html);
-								  $('input[name="paymentmethod"][value="'+cur_method+'"]').prop('checked', true);
+								  $('input[name="paymentmethod"][value="' + cur_method + '"]').prop('checked', true);
+
+								  if (html[1].states !== 'undefined')
+								  {
+									  $('#akeebasubs-statescontainer').html(JSON.parse(html[1]).states)
+								  }
 							  }
 
 							  enableInterface();

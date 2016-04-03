@@ -205,7 +205,9 @@ $isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusin
 		</label>
 
 		<div class="col-sm-8">
-			{{Select::states($field_data['state'], 'state', array('class' => 'form-control'))}}
+			<div id="akeebasubs-statescontainer">
+				{{Select::states($field_data['state'], 'state', array('class' => 'form-control', 'country' => $field_data['country']))}}
+			</div>
 			<p id="state_empty" class="help-block"
 			   <?php if (strpos($group_classes['city'], 'error') === false): ?>style="display:none"<?php endif ?>>
 				@lang('COM_AKEEBASUBS_LEVEL_ERR_REQUIRED')
