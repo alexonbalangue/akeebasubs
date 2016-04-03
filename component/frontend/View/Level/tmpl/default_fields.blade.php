@@ -51,10 +51,10 @@ $group_classes                 = [
 if (JFactory::getUser()->guest)
 {
 	$group_classes['username']  = ($this->cache['username']) ?
-		(($this->validation->validation->username) ? 'success has-success' : 'error has-error') : '';
-	$group_classes['password']  = !$this->cache['password'] ? 'error has-error' : '';
+		(($this->validation->validation->username) ? 'has-success' : 'has-error') : '';
+	$group_classes['password']  = !$this->cache['password'] ? 'has-error' : '';
 	$group_classes['password2'] =
-		(!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'error has-error' :
+		(!$this->cache['password2'] || ($this->cache['password2'] != $this->cache['password'])) ? 'has-error' :
 			'';
 }
 
@@ -242,7 +242,7 @@ $isBusiness = !empty($this->userparams->isbusiness) ? $this->userparams->isbusin
 		<label for="isbusiness" class="control-label col-sm-4">
 			@lang('COM_AKEEBASUBS_LEVEL_FIELD_ISBUSINESS')
 		</label>
-<span class="col-sm-2">
+<span class="col-sm-6 col-md-3 col-lg-2">
 	<?php echo JHtml::_('select.genericlist', [
 			JHtml::_('select.option', '0', JText::_('JNO')),
 			JHtml::_('select.option', '1', JText::_('JYES'))

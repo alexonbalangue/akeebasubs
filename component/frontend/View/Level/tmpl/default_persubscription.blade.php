@@ -40,7 +40,7 @@ if (is_array($jResponse) && !empty($jResponse))
 			if ($apply_validation && array_key_exists('isValid', $field))
 			{
 				$customField_class = (array_key_exists('validLabel', $field) ? 'has-success' : '');
-				$customField_class = $field['isValid'] ? $customField_class : 'error has-error';
+				$customField_class = $field['isValid'] ? $customField_class : 'has-error';
 			}
 			?>
 			<div class="form-group {{$customField_class}}">

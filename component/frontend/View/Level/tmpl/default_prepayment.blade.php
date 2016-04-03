@@ -25,7 +25,7 @@ $classInvalidLabel = '';
 
 if ($this->apply_validation == 'true')
 {
-	$customField_class = $field['isValid'] ? 'success has-success' : 'error has-error';
+	$customField_class = $field['isValid'] ? '' : 'has-error';
 	$classValidLabel   = $field['isValid'] ? '' : 'hidden';
 	$classInvalidLabel = !$field['isValid'] ? '' : 'hidden';
 }

@@ -512,6 +512,10 @@ td.akeebasubs-strappy-prediscount span.akeebasubs-strappy-prediscount-label
 /*
  * Subscription page
  */
+#akeebasubs label {
+	font-weight: normal;
+}
+
 #akeebasubs-panel-order hr {
 	margin: 1.5em 0;
 	border-bottom: double #ccc;
@@ -529,19 +533,19 @@ td.akeebasubs-strappy-prediscount span.akeebasubs-strappy-prediscount-label
 	font-size: 140%;
 }
 
-input.coupon-valid {
+#akeebasubs input.coupon-valid {
 	color: green;
 	font-weight: bold;
 	text-transform: uppercase;
 }
 
-input.coupon-invalid {
+#akeebasubs input.coupon-invalid {
 	color: red;
 	font-weight: bold;
 	font-style: italic;
 }
 
-div.akeebasubs-paymentmethod-images div.radio {
+#akeebasubs div.akeebasubs-paymentmethod-images div.radio {
 	border: thin solid #ccc;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -551,10 +555,18 @@ div.akeebasubs-paymentmethod-images div.radio {
 	margin: 1em 0;
 }
 
-div.akeebasubs-paymentmethod-images div.radio img {
+#akeebasubs div.akeebasubs-paymentmethod-images div.radio label {
+	width: 100%;
+}
+
+#akeebasubs div.akeebasubs-paymentmethod-images div.radio img {
 	display: block;
 	clear: both;
 	margin-bottom: 0.3em;
+}
+
+#akeebasubs label.checkbox {
+	padding-left: 20px;
 }
 
 /**
