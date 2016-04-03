@@ -125,6 +125,10 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 
 			// Replaced PHP templates with Blade
 			'components/com_akeebasubs/View/Level/tmpl/default.php',
+			'components/com_akeebasubs/View/Level/tmpl/default_fields.php',
+			'components/com_akeebasubs/View/Level/tmpl/default_level.php',
+			'components/com_akeebasubs/View/Level/tmpl/default_login.php',
+			'components/com_akeebasubs/View/Level/tmpl/steps.php',
 		],
 		'folders' => [
 			'administrator/components/com_akeebasubs/commands',
