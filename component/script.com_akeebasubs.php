@@ -121,7 +121,6 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_akeebasubs/View/Users/tmpl/form_customparams.php',
 			'administrator/components/com_akeebasubs/Model/CustomFields.php',
 			'components/com_akeebasubs/Model/CustomFields.php',
-			'components/com_akeebasubs/Model/Subscribe/Validation/CustomFields.php',
 
 			// Replaced PHP templates with Blade
 			'components/com_akeebasubs/View/Level/tmpl/default.php',
@@ -155,6 +154,37 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/components/com_akeebasubs/View/CustomFields',
 		]
 	];
+
+	/**
+	 * The list of obsolete extra modules and plugins to uninstall on component upgrade / installation.
+	 *
+	 * @var array
+	 */
+	protected $uninstallation_queue = [
+		// modules => { (folder) => { (module) }* }*
+		'modules' => array(
+			'admin' => [],
+			'site'  => []
+		),
+		// plugins => { (folder) => { (element) }* }*
+		'plugins' => [
+			'akeebasubs' => [
+				'acymailing',
+				'atscreditslegacy',
+				'autocity',
+				'canalyticscommerce',
+				'customfields',
+				'iproperty',
+				'joomlaprofilesync',
+				'kunena',
+				'recaptcha',
+				'slavesubs',
+				'sql',
+				'subscriptionemailsdebug',
+			],
+		]
+	];
+
 
 	public function postflight($type, $parent)
 	{
