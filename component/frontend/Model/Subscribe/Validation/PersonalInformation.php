@@ -28,7 +28,6 @@ class PersonalInformation extends Base
 	{
 		$state = $this->state;
 
-		$personalInfo  = $this->container->params->get('personalinfo', 1);
 		$requireCoupon = $this->container->params->get('reqcoupon', 0) ? true : false;
 
 		// 1. Basic checks
@@ -36,16 +35,16 @@ class PersonalInformation extends Base
 			'name'          => !empty($state->name),
 			'email'         => !empty($state->email),
 			'email2'        => !empty($state->email2) && ($state->email == $state->email2),
-			'address1'      => $personalInfo == 1 ? !empty($state->address1) : true,
-			'country'       => $personalInfo != 0 ? !empty($state->country) : true,
-			'state'         => $personalInfo == 1 ? !empty($state->state) : true,
-			'city'          => $personalInfo == 1 ? !empty($state->city) : true,
-			'zip'           => $personalInfo == 1 ? !empty($state->zip) : true,
-			'businessname'  => $personalInfo == 1 ? !empty($state->businessname) : true,
-			'occupation'    => $personalInfo == 1 ? !empty($state->occupation) : true,
-			'vatnumber'     => $personalInfo == 1 ? !empty($state->vatnumber) : true,
+			'address1'      => !empty($state->address1),
+			'country'       => !empty($state->country),
+			'state'         => !empty($state->state),
+			'city'          => !empty($state->city),
+			'zip'           => !empty($state->zip),
+			'businessname'  => !empty($state->businessname),
+			'occupation'    => !empty($state->occupation),
+			'vatnumber'     => !empty($state->vatnumber),
 			'novatrequired' => true,
-			'coupon'        => $personalInfo == 1 ? !empty($state->coupon) : true,
+			'coupon'        => !empty($state->coupon),
 		);
 
 		$ret['rawDataForDebug'] = (array)$state;

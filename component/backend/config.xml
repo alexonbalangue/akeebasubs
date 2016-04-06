@@ -50,12 +50,6 @@
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SECRET"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SECRET_DESC"
 		/>
-		<field name="stepsbar" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_STEPSBAR_DESC">
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
 		<field name="includesignup" type="list" default="2"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_INCLUDESIGNUP_DESC">
@@ -69,79 +63,7 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="emailasusername" type="list" default="0"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_EMAILASUSERNAME_DESC">
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-		<field name="personalinfo" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_DESC">
-			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_PERSONALINFO_ONLYCOUNTRY</option>
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-		<field name="businessfields" type="list" default="auto"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_LABEL"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_DESC">
-			<option value="auto">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_AUTO</option>
-			<option value="never">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_NEVER</option>
-			<option value="always">COM_AKEEBASUBS_CONFIG_FRONTEND_BUSINESSFIELDS_ALWAYS</option>
-		</field>
 
-		<field name="showregularfield" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWREGULARFIELD"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWREGULARFIELD_DESC">
-			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-		<field name="showdiscountfield" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWDISCOUNTFIELD"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWDISCOUNTFIELD_DESC">
-			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-		<field name="showtaxfield" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTAXFIELD"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWTAXFIELD_DESC">
-			<option value="-1">COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWFIELDCOMMON_AUTO</option>
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-		<field name="showcouponfield" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUPONFIELD"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUPONFIELD_DESC">
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-		<field name="showcountries" type="text"
-			default=""
-			size="40"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUNTRIES"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWCOUNTRIES_DESC"
-		/>
-		<field name="hidecountries" type="text"
-			default=""
-			size="40"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDECOUNTRIES"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_HIDECOUNTRIES_DESC"
-		/>
-		<field name="showstatefield" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWSTATEFIELD"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWSTATEFIELD_DESC">
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
-
-		<field name="allowlogin" type="list" default="1"
-			label="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN"
-			description="COM_AKEEBASUBS_CONFIG_FRONTEND_ALLOWLOGIN_DESC">
-			<option value="0">JNo</option>
-			<option value="1">JYes</option>
-		</field>
 		<field name="showrenew" type="list" default="1"
 			label="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_LABEL"
 			description="COM_AKEEBASUBS_CONFIG_FRONTEND_SHOWRENEW_DESC">

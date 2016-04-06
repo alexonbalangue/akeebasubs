@@ -14,9 +14,14 @@ class Json extends \FOF30\View\DataView\Json
     protected function onBeforeGetpayment($tpl = null)
     {
         $this->setLayout('paymentlist');
+        $paymentHtml = $this->loadTemplate($tpl, true);
 
-        $result = $this->loadTemplate($tpl, true);
+        $this->setLayout('statelist');
+        $stateHtml = $this->loadTemplate($tpl, true);
 
-        echo '###'.json_encode(array('html' => $result)).'###';
+        echo '###'.json_encode([
+                'html'   => $paymentHtml,
+                'states' => $stateHtml,
+            ]).'###';
     }
 }

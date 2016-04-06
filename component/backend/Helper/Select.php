@@ -290,40 +290,6 @@ abstract class Select
 	public static $states = array();
 
 	/**
-	 * Returns a list of custom field types
-	 *
-	 * @return  array  type => description
-	 */
-	public static function getFieldTypes()
-	{
-		$fieldTypes = array();
-
-		JLoader::import('joomla.filesystem.folder');
-
-		$basepath = JPATH_ADMINISTRATOR . '/components/com_akeebasubs/CustomField';
-
-		$files = JFolder::files($basepath, '.php');
-
-		foreach ($files as $file)
-		{
-			if ($file === 'Base.php')
-			{
-				continue;
-			}
-
-			$type      = basename($file, '.php');
-			$className = 'Akeeba\\Subscriptions\\Admin\\CustomField\\' . $type;
-
-			if (class_exists($className))
-			{
-				$fieldTypes[ strtolower($type) ] = JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_TYPE_' . strtoupper($type));
-			}
-		}
-
-		return $fieldTypes;
-	}
-
-	/**
 	 * Returns a list of all countries except the empty option (no country)
 	 *
 	 * @return  array
@@ -565,63 +531,6 @@ abstract class Select
 		if (is_null($countries) || $force)
 		{
 			$countries = array_merge(self::$countries);
-
-			// -- Initialisation
-			$show = trim(self::getContainer()->params->get('showcountries', ''));
-			$hide = trim(self::getContainer()->params->get('hidecountries', ''));
-
-			if (!empty($show))
-			{
-				$show = explode(',', self::getContainer()->params->get('showcountries', ''));
-			}
-
-			if (!empty($hide))
-			{
-				$hide = explode(',', self::getContainer()->params->get('hidecountries', ''));
-			}
-
-			if (!empty($show))
-			{
-				$show = array_map('trim', $show);
-			}
-
-			if (!empty($hide))
-			{
-				$hide = array_map('trim', $hide);
-			}
-
-			// -- If $show is not empty, filter the countries
-			if (!empty($show))
-			{
-				$temp = array();
-
-				foreach ($show as $key)
-				{
-					if (array_key_exists($key, $countries))
-					{
-						$temp[ $key ] = $countries[ $key ];
-					}
-				}
-
-				asort($temp);
-				$countries = $temp;
-			}
-			// -- If $show is empty but $hide is not, filter the countries
-			elseif (!empty($hide))
-			{
-				$temp = array();
-
-				foreach ($countries as $key => $v)
-				{
-					if (!in_array($key, $hide))
-					{
-						$temp[ $key ] = $v;
-					}
-				}
-
-				asort($temp);
-				$countries = $temp;
-			}
 		}
 
 		return $countries;
@@ -740,6 +649,37 @@ abstract class Select
 	public static function states($selected = null, $id = 'state', $attribs = array())
 	{
 		$data = array();
+		$country = isset($attribs['country']) ? $attribs['country'] : null;
+
+		if (!is_null($country))
+		{
+			if (isset($attribs['country']))
+			{
+				unset($attribs['country']);
+			}
+
+			$countryName = self::decodeCountry($country);
+			$data[]      = JHtml::_('select.option', '', '– ' . JText::_('COM_AKEEBASUBS_LEVEL_FIELD_STATE') . ' –');
+
+			if (isset(self::$states[$countryName]))
+			{
+				foreach (self::$states[$countryName] as $code => $name)
+				{
+					$data[] = JHtml::_('select.option', $code, $name);
+				}
+			}
+			else
+			{
+				$data   = [];
+				$data[] = JHtml::_('select.option', '', 'N/A');
+			}
+
+			return JHtml::_('select.genericlist', $data, $id, [
+				'id' =>$id,
+				'list.attr' => $attribs,
+				'list.select' => $selected
+			]);
+		}
 
 		foreach (self::$states as $country => $states)
 		{
@@ -1080,7 +1020,7 @@ abstract class Select
 
 				if (self::getContainer()->params->get('useppimages', 1) == 2)
 				{
-					$innerHTML .= '<span class="pull-left">' . $plugin->title . '</span>';
+					$innerHTML .= $plugin->title;
 				}
 
 				$options[] = array(
@@ -1095,13 +1035,13 @@ abstract class Select
 				}
 			}
 
-			$html = '<span class="akeebasubs-paymentmethod-images">';
+			$html = '<div class="akeebasubs-paymentmethod-images">';
 
 			if (!empty($options))
 			{
 				foreach ($options as $o)
 				{
-					$html .= '<label class="radio input-xxlarge"><input type="radio" name="' . $name . '" id="' .
+					$html .= '<div class="radio"><label><input type="radio" name="' . $name . '" id="' .
 					         $name . $o['value'] . '" value="' . $o['value'] . '" ';
 
 					if ($o['value'] == $selected)
@@ -1109,11 +1049,11 @@ abstract class Select
 						$html .= 'checked="checked"';
 					}
 
-					$html .= '/>' . $o['label'] . '</label>';
+					$html .= '/>' . $o['label'] . '</label></div>';
 				}
 			}
 
-			$html .= '</span>';
+			$html .= '</div>';
 
 			return $html;
 		}
@@ -1253,27 +1193,7 @@ abstract class Select
 
 		return self::genericlist($options, $name, $attribs, $selected, $name);
 	}
-
-	/**
-	 * Drop down list of when to show custom fields
-	 *
-	 * @param   string  $name      The field's name
-	 * @param   string  $selected  Pre-selected value
-	 * @param   array   $attribs   Field attributes
-	 *
-	 * @return  string  The HTML of the drop-down
-	 */
-	public static function fieldshow($name = 'show', $selected = 'all', $attribs = array())
-	{
-		$options   = array();
-		$options[] = JHtml::_('select.option', '', '- ' . JText::_('COM_AKEEBASUBS_COMMON_SELECT') . ' -');
-		$options[] = JHtml::_('select.option', 'all', JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_ALL'));
-		$options[] = JHtml::_('select.option', 'level', JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_LEVEL'));
-		$options[] = JHtml::_('select.option', 'notlevel', JText::_('COM_AKEEBASUBS_CUSTOMFIELDS_FIELD_SHOW_NOTLEVEL'));
-
-		return self::genericlist($options, $name, $attribs, $selected, $name);
-	}
-
+	
 	/**
 	 * Drop down list of subscription level relation modes
 	 *

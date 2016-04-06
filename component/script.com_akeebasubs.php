@@ -64,8 +64,8 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 	 *
 	 * @var   array
 	 */
-	protected $removeFilesAllVersions = array(
-		'files'   => array(
+	protected $removeFilesAllVersions = [
+		'files'   => [
 			'cache/com_akeebasubs.updates.php',
 			'cache/com_akeebasubs.updates.ini',
 			'administrator/cache/com_akeebasubs.updates.php',
@@ -116,8 +116,20 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 
 			// Removed in 5.0.1
 			'administrator/components/com_akeebasubs/Helper/ComponentParams.php',
-		),
-		'folders' => array(
+
+			// Removed features no longer maintained
+			'administrator/components/com_akeebasubs/View/Users/tmpl/form_customparams.php',
+			'administrator/components/com_akeebasubs/Model/CustomFields.php',
+			'components/com_akeebasubs/Model/CustomFields.php',
+
+			// Replaced PHP templates with Blade
+			'components/com_akeebasubs/View/Level/tmpl/default.php',
+			'components/com_akeebasubs/View/Level/tmpl/default_fields.php',
+			'components/com_akeebasubs/View/Level/tmpl/default_level.php',
+			'components/com_akeebasubs/View/Level/tmpl/default_login.php',
+			'components/com_akeebasubs/View/Level/tmpl/steps.php',
+		],
+		'folders' => [
 			'administrator/components/com_akeebasubs/commands',
 			'administrator/components/com_akeebasubs/controllers',
 			'administrator/components/com_akeebasubs/converter',
@@ -137,13 +149,42 @@ class Com_AkeebasubsInstallerScript extends \FOF30\Utils\InstallScript
 			'components/com_akeebasubs/models',
 			'components/com_akeebasubs/templates',
 
-			// Affiliates feature
-			'administrator/components/com_akeebasubs/views/affiliate',
-			'administrator/components/com_akeebasubs/views/affiliates',
-			'administrator/components/com_akeebasubs/views/affpayment',
-			'administrator/components/com_akeebasubs/views/affpayments',
-		)
-	);
+			// Removed features no longer maintained
+			'administrator/components/com_akeebasubs/CustomField',
+			'administrator/components/com_akeebasubs/View/CustomFields',
+		]
+	];
+
+	/**
+	 * The list of obsolete extra modules and plugins to uninstall on component upgrade / installation.
+	 *
+	 * @var array
+	 */
+	protected $uninstallation_queue = [
+		// modules => { (folder) => { (module) }* }*
+		'modules' => array(
+			'admin' => [],
+			'site'  => []
+		),
+		// plugins => { (folder) => { (element) }* }*
+		'plugins' => [
+			'akeebasubs' => [
+				'acymailing',
+				'atscreditslegacy',
+				'autocity',
+				'canalyticscommerce',
+				'customfields',
+				'iproperty',
+				'joomlaprofilesync',
+				'kunena',
+				'recaptcha',
+				'slavesubs',
+				'sql',
+				'subscriptionemailsdebug',
+			],
+		]
+	];
+
 
 	public function postflight($type, $parent)
 	{

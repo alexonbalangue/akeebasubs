@@ -21,35 +21,22 @@
         <file type="file" id="file_akeebasubs">file_akeebasubs.zip</file>
 
         <!-- Modules -->
-        <file type="module" client="administrator" id="mod_akeebasubs">mod_akeebasubs.zip</file>
         <file type="module" client="site" id="mod_aksexpires">mod_aksexpires.zip</file>
         <file type="module" client="site" id="mod_akslevels">mod_akslevels.zip</file>
         <file type="module" client="site" id="mod_aksubslist">mod_aksubslist.zip</file>
         <file type="module" client="site" id="mod_aktaxcountry">mod_aktaxcountry.zip</file>
 
         <!-- Plugins: akeebasubs -->
-        <file type="plugin" group="akeebasubs" id="acymailing">plg_akeebasubs_acymailing.zip</file>
         <file type="plugin" group="akeebasubs" id="adminemails">plg_akeebasubs_adminemails.zip</file>
         <file type="plugin" group="akeebasubs" id="agreetoeu">plg_akeebasubs_agreetoeu.zip</file>
         <file type="plugin" group="akeebasubs" id="agreetotos">plg_akeebasubs_agreetotos.zip</file>
         <file type="plugin" group="akeebasubs" id="atscredits">plg_akeebasubs_atscredits.zip</file>
-        <file type="plugin" group="akeebasubs" id="atscreditslegacy">plg_akeebasubs_atscreditslegacy.zip</file>
-        <file type="plugin" group="akeebasubs" id="autocity">plg_akeebasubs_autocity.zip</file>
-        <file type="plugin" group="akeebasubs" id="canalyticscommerce">plg_akeebasubs_canalyticscommerce.zip</file>
         <file type="plugin" group="akeebasubs" id="contentpublish">plg_akeebasubs_contentpublish.zip</file>
-        <file type="plugin" group="akeebasubs" id="customfields">plg_akeebasubs_customfields.zip</file>
         <file type="plugin" group="akeebasubs" id="invoices">plg_akeebasubs_invoices.zip</file>
-        <file type="plugin" group="akeebasubs" id="iproperty">plg_akeebasubs_iproperty.zip</file>
         <file type="plugin" group="akeebasubs" id="joomla">plg_akeebasubs_joomla.zip</file>
-        <file type="plugin" group="akeebasubs" id="joomlaprofilesync">plg_akeebasubs_joomlaprofilesync.zip</file>
-        <file type="plugin" group="akeebasubs" id="kunena">plg_akeebasubs_kunena.zip</file>
         <file type="plugin" group="akeebasubs" id="needslogout">plg_akeebasubs_needslogout.zip</file>
-        <file type="plugin" group="akeebasubs" id="recaptcha">plg_akeebasubs_recaptcha.zip</file>
         <file type="plugin" group="akeebasubs" id="reseller">plg_akeebasubs_reseller.zip</file>
-        <file type="plugin" group="akeebasubs" id="slavesubs">plg_akeebasubs_slavesubs.zip</file>
-        <file type="plugin" group="akeebasubs" id="sql">plg_akeebasubs_sql.zip</file>
         <file type="plugin" group="akeebasubs" id="subscriptionemails">plg_akeebasubs_subscriptionemails.zip</file>
-        <file type="plugin" group="akeebasubs" id="subscriptionemailsdebug">plg_akeebasubs_subscriptionemailsdebug.zip</file>
 
         <!-- Plugins: akpayment -->
         <file type="plugin" group="akpayment" id="2checkout">plg_akpayment_2checkout.zip</file>

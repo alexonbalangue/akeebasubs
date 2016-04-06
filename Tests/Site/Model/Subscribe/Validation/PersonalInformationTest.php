@@ -69,7 +69,6 @@ class PersonalInformationTest extends ValidatorTestCase
 		return [
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -108,164 +107,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => -1,
-					'reqcoupon'    => 0,
-				],
-				'loggedIn'        => 'guest',
-				'state'           => [
-					'name'         => '',
-					'email'        => '',
-					'email2'       => '',
-					'address1'     => '',
-					'country'      => '',
-					'state'        => '',
-					'city'         => '',
-					'zip'          => '',
-					'isbusiness'   => 1,
-					'businessname' => '',
-					'occupation'   => '',
-					'vatnumber'    => '',
-					'coupon'       => ''
-				],
-				'expected'        => [
-					'name'          => false,
-					'email'         => false,
-					'email2'        => false,
-					'address1'      => true,
-					'country'       => false,
-					'state'         => true,
-					'city'          => true,
-					'zip'           => true,
-					'businessname'  => true,
-					'occupation'    => true,
-					'vatnumber'     => false,
-					'novatrequired' => false,
-					'coupon'        => true,
-				],
-				'message'         => 'Collect only country; all empty'
-			],
-
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'reqcoupon'    => 0,
-				],
-				'loggedIn'        => 'guest',
-				'state'           => [
-					'name'         => '',
-					'email'        => '',
-					'email2'       => '',
-					'address1'     => '',
-					'country'      => 'US',
-					'state'        => '',
-					'city'         => '',
-					'zip'          => '',
-					'isbusiness'   => 1,
-					'businessname' => '',
-					'occupation'   => '',
-					'vatnumber'    => '',
-					'coupon'       => ''
-				],
-				'expected'        => [
-					'name'          => false,
-					'email'         => false,
-					'email2'        => false,
-					'address1'      => true,
-					'country'       => true,
-					'state'         => true,
-					'city'          => true,
-					'zip'           => true,
-					'businessname'  => true,
-					'occupation'    => true,
-					'vatnumber'     => false,
-					'novatrequired' => false,
-					'coupon'        => true,
-				],
-				'message'         => 'Collect only country; set country'
-			],
-
-			[
-				'componentParams' => [
-					'personalinfo' => -1,
-					'reqcoupon'    => 0,
-				],
-				'loggedIn'        => 'guest',
-				'state'           => [
-					'name'         => '',
-					'email'        => '',
-					'email2'       => '',
-					'address1'     => '',
-					'country'      => 'US',
-					'state'        => '',
-					'city'         => '',
-					'zip'          => '',
-					'isbusiness'   => 0,
-					'businessname' => '',
-					'occupation'   => '',
-					'vatnumber'    => '',
-					'coupon'       => ''
-				],
-				'expected'        => [
-					'name'          => false,
-					'email'         => false,
-					'email2'        => false,
-					'address1'      => true,
-					'country'       => true,
-					'state'         => true,
-					'city'          => true,
-					'zip'           => true,
-					'businessname'  => true,
-					'occupation'    => true,
-					'vatnumber'     => false,
-					'novatrequired' => false,
-					'coupon'        => true,
-				],
-				'message'         => 'Collect only country; set country; no business (same as previous)'
-			],
-
-
-			[
-				'componentParams' => [
-					'personalinfo' => 0,
-					'reqcoupon'    => 0,
-				],
-				'loggedIn'        => 'guest',
-				'state'           => [
-					'name'         => '',
-					'email'        => '',
-					'email2'       => '',
-					'address1'     => '',
-					'country'      => '',
-					'state'        => '',
-					'city'         => '',
-					'zip'          => '',
-					'isbusiness'   => 0,
-					'businessname' => '',
-					'occupation'   => '',
-					'vatnumber'    => '',
-					'coupon'       => ''
-				],
-				'expected'        => [
-					'name'          => false,
-					'email'         => false,
-					'email2'        => false,
-					'address1'      => true,
-					'country'       => true,
-					'state'         => true,
-					'city'          => true,
-					'zip'           => true,
-					'businessname'  => true,
-					'occupation'    => true,
-					'vatnumber'     => false,
-					'novatrequired' => false,
-					'coupon'        => true,
-				],
-				'message'         => 'No personal information; nothing set'
-			],
-
-			[
-				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -304,7 +145,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -343,7 +183,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -382,7 +221,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -421,7 +259,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -460,7 +297,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -499,7 +335,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -538,7 +373,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -577,7 +411,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -616,7 +449,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -655,7 +487,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -694,7 +525,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -733,7 +563,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 1,
 				],
 				'loggedIn'        => 'guest',
@@ -772,7 +601,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 1,
 				],
 				'loggedIn'        => 'guest',
@@ -811,7 +639,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -850,7 +677,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 1,
 				],
 				'loggedIn'        => 'guest',
@@ -889,7 +715,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 0,
 				],
 				'loggedIn'        => 'guest',
@@ -928,7 +753,6 @@ class PersonalInformationTest extends ValidatorTestCase
 
 			[
 				'componentParams' => [
-					'personalinfo' => 1,
 					'reqcoupon'    => 1,
 				],
 				'loggedIn'        => 'guest',

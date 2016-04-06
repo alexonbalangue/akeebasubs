@@ -20,15 +20,6 @@ class Country extends Base
 	 */
 	protected function getValidationResult()
 	{
-		// Should I collect personal information? -1: only country, 0: none, 1: all
-		$personalInfo = $this->container->params->get('personalinfo', 1);
-
-		// I am told to not collect any personal information, the field is always valid
-		if ($personalInfo == 0)
-		{
-			return true;
-		}
-
 		// Get the country
 		$country = trim($this->state->country);
 

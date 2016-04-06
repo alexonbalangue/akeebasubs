@@ -54,9 +54,6 @@ class plgAkpaymentStripe extends AkpaymentBase
 		$doc->addScript("https://js.stripe.com/v2/");
 		$doc->addScriptDeclaration("
 
-;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
-// due to missing trailing semicolon and/or newline in their code.
-
 				akeeba.jQuery(function($){
 					var stripeResponseHandler = function(status, response) {
 						$('.control-group').removeClass('error');
