@@ -189,17 +189,25 @@ ENDBODY;
 		$email_subject = str_replace(array_keys($substitutions), array_values($substitutions), $email_subject);
 		$email_body    = str_replace(array_keys($substitutions), array_values($substitutions), $email_body);
 
-		$mailer = JFactory::getMailer();
+		try
+		{
+			$mailer = JFactory::getMailer();
 
-		$mailfrom = $jconfig->get('mailfrom');
-		$fromname = $jconfig->get('fromname');
+			$mailfrom = $jconfig->get('mailfrom');
+			$fromname = $jconfig->get('fromname');
 
-		$mailer->setSender(array($mailfrom, $fromname));
-		$mailer->addRecipient($email);
-		$mailer->setSubject($email_subject);
-		$mailer->setBody($email_body);
+			$mailer->setSender(array($mailfrom, $fromname));
+			$mailer->addRecipient($email);
+			$mailer->setSubject($email_subject);
+			$mailer->setBody($email_body);
 
-		return $mailer->Send();
+			return $mailer->Send();
+		}
+		catch (\Exception $e)
+		{
+			// Joomla! 3.5 is written by incompetent bonobos
+			return false;
+		}
 	}
 
 	/**

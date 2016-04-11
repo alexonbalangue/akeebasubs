@@ -1358,7 +1358,15 @@ class Subscribe extends Model
 		}
 
 		// Send the registration email.
-		$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody);
+		try
+		{
+			$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody);
+		}
+		catch (\Exception $e)
+		{
+			// Joomla! 3.5 is written by incompetent bonobos
+			$return = false;
+		}
 
 		//Send Notification mail to administrators
 		if (($params->get('useractivation') < 2) && ($params->get('mail_to_admin') == 1))
@@ -1396,7 +1404,15 @@ class Subscribe extends Model
 			// Send mail to all superadministrators id
 			foreach ($rows as $row)
 			{
-				$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $row->email, $emailSubject, $emailBodyAdmin);
+				try
+				{
+					$return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $row->email, $emailSubject, $emailBodyAdmin);
+				}
+				catch (\Exception $e)
+				{
+					// Joomla! 3.5 is written by incompetent bonobos
+					$return = false;
+				}
 			}
 		}
 
