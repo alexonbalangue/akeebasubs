@@ -11,6 +11,7 @@ JLoader::import('joomla.plugin.plugin');
 
 use FOF30\Container\Container;
 use Akeeba\Subscriptions\Admin\Model\Levels;
+use Joomla\String\StringHelper;
 
 class plgContentAsprice extends JPlugin
 {
@@ -57,7 +58,7 @@ class plgContentAsprice extends JPlugin
 		}
 
 		// Check whether the plugin should process or not
-		if (JString::strpos($article->text, 'asprice') === false)
+		if (StringHelper::strpos($article->text, 'asprice') === false)
 		{
 			return true;
 		}
@@ -92,7 +93,7 @@ class plgContentAsprice extends JPlugin
 		if (is_null($levels))
 		{
 			/** @var Levels $levelsModel */
-			$levelsModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
+			$levelsModel = Container::getInstance('com_akeebasubs', [], 'site')->factory->model('Levels')->tmpInstance();
 			$levels      = array();
 			$slugs       = array();
 			$upperSlugs  = array();
@@ -200,7 +201,7 @@ class plgContentAsprice extends JPlugin
 
 		if (!array_key_exists($levelId, $prices))
 		{
-			$container = Container::getInstance('com_akeebasubs');
+			$container = Container::getInstance('com_akeebasubs', [], 'site');
 			/** @var \Akeeba\Subscriptions\Site\Model\Levels $level */
 			$level = $container->factory->model('Levels');
 			$level->load($levelId);

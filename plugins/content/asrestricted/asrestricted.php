@@ -105,7 +105,7 @@ class plgContentAsrestricted extends JPlugin
 		if (is_null($levels))
 		{
 			/** @var Levels $levelsModel */
-			$levelsModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
+			$levelsModel = Container::getInstance('com_akeebasubs', [], 'site')->factory->model('Levels')->tmpInstance();
 			$levels      = array();
 			$slugs       = array();
 			$upperSlugs  = array();
@@ -217,7 +217,7 @@ class plgContentAsrestricted extends JPlugin
 			$jNow = new JDate();
 
 			/** @var Subscriptions $subsModel */
-			$subsModel = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')->tmpInstance();
+			$subsModel = Container::getInstance('com_akeebasubs', [], 'site')->factory->model('Subscriptions')->tmpInstance();
 			$list = $subsModel
 	            ->user_id($user->id)
 	            ->expires_from($jNow->toSql())

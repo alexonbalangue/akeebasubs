@@ -92,7 +92,7 @@ class plgContentAslink extends JPlugin
 		if (is_null($levels))
 		{
 			/** @var Levels $levelsModel */
-			$levelsModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
+			$levelsModel = Container::getInstance('com_akeebasubs', [], 'site')->factory->model('Levels')->tmpInstance();
 			$levels      = array();
 			$slugs       = array();
 			$upperSlugs  = array();
