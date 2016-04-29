@@ -116,11 +116,11 @@ $discounts = array();
 		<tr>
 		<?php foreach($this->items as $level):?>
 			<td class="akeebasubs-strappy-subscribe">
-				<button
+				<a
 					class="btn btn-inverse btn-primary"
-					onclick="window.location='<?php echo \JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
+					href="<?php echo \JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>">
 					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
-				</button>
+				</a>
 			</td>
 		<?php endforeach ?>
 		</tr>

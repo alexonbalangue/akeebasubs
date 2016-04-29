@@ -72,9 +72,9 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 			</div>
 			<div class="level-clear"></div>
 			<div class="level-subscribe">
-				<button onclick="window.location='<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
+				<a href="<?php echo JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>" class="btn btn-inverse btn-primary">
 					<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
-				</button>
+				</a>
 			</div>
 		</div>
 	</div>

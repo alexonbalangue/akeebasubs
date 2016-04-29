@@ -92,11 +92,11 @@ use \Akeeba\Subscriptions\Admin\Helper\Message;
 				</div>
 				<div class="akeebasubs-awesome-footer">
 					<td class="akeebasubs-awesome-subscribe">
-						<button
+						<a
 							class="btn btn-inverse btn-default"
-							onclick="window.location='<?php echo \JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>'">
+							href="<?php echo \JRoute::_('index.php?option=com_akeebasubs&view=level&slug='.$level->slug.'&format=html&layout=default')?>">
 							<?php echo JText::_('COM_AKEEBASUBS_LEVELS_SUBSCRIBE')?>
-						</button>
+						</a>
 					</td>
 				</div>
 			</div>
