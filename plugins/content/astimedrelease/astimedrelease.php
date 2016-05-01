@@ -118,7 +118,7 @@ class plgContentAstimedrelease extends JPlugin
 
 		// Get level title to ID map
 		/** @var Levels $levelsModel */
-		$levelsModel = Container::getInstance('com_akeebasubs')->factory->model('Levels')->tmpInstance();
+		$levelsModel = Container::getInstance('com_akeebasubs', [], 'site')->factory->model('Levels')->tmpInstance();
 		$levels = $levelsModel->get(true);
 
 		if ($levels->count())
@@ -149,7 +149,7 @@ class plgContentAstimedrelease extends JPlugin
 		}
 
 		/** @var Subscriptions $subsModel */
-		$subsModel = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')->tmpInstance();
+		$subsModel = Container::getInstance('com_akeebasubs', [], 'site')->factory->model('Subscriptions')->tmpInstance();
 
 		$subs = $subsModel
             ->user_id($user->id)

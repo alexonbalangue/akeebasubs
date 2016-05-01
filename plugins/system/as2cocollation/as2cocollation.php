@@ -188,7 +188,7 @@ class plgSystemAs2cocollation extends JPlugin
 
 			// Load the subscription
 			/** @var Subscriptions $sub */
-			$sub = Container::getInstance('com_akeebasubs')->factory->model('Subscriptions')->tmpInstance();
+			$sub = Container::getInstance('com_akeebasubs', [], 'site')->factory->model('Subscriptions')->tmpInstance();
 			$sub->find($subId);
 
 			if ($sub->akeebasubs_subscription_id != $subId)
